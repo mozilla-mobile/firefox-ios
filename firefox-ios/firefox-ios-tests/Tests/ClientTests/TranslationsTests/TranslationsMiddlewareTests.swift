@@ -1535,13 +1535,13 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
                             canGoBack: false,
                             canGoForward: false,
                             numberOfTabs: 1,
-                            scrollAlpha: 1,
                             showMenuWarningBadge: false,
                             canShowNavigationHint: false,
                             shouldAnimate: true,
                             isTranslucent: false,
                             previousTabScreenshot: nil,
-                            nextTabScreenshot: nil
+                            nextTabScreenshot: nil,
+                            isAddressBarMinimized: false
                         )
                     )
                 ]

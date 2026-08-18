@@ -14,7 +14,7 @@
 "Addresses.Settings.SecureSaveInfo.Description.v130" = "Безбедно сачувајте своје податке да бисте им касније брзо приступили.";
 
 /* On the autofill settings screen, a label under the title label to add additional context for user in regards to what the toggle switch that allow saving and autofilling of addresses for webpages does, letting users know that this action includes phone numbers and email addresses. */
-"Addresses.Settings.Switch.Description.v124" = "Укључује бројеве телефона и адресе е-поште";
+"Addresses.Settings.Switch.Description.v124" = "Укључује телефонске бројеве и адресе е-поште";
 
 /* Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages. */
 "Addresses.Settings.Switch.Title.v124" = "Сачувај и попуни адресе";
@@ -32,7 +32,7 @@
 "CreditCard.Settings.EmptyListTitle.v122" = "Сачувај картице у %@";
 
 /* Accessibility label for a credit card list item in autofill settings screen. %1$@ is the credit card issuer (e.g. Visa), %2$@ is the name of the credit card holder, %3$@ is the last 4 digits of the credit card, %4$@ is the card's expiration date. */
-"CreditCard.Settings.ListItemA11y.v118" = "%1$@, издала %2$@, завршава се са %3$@, истиче %4$@";
+"CreditCard.Settings.ListItemA11y.v118" = "%1$@, издата на име %2$@, завршава се са %3$@, истиче %4$@";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
 "CreditCard.Settings.NotNow.v122" = "Не сада";
@@ -77,10 +77,10 @@
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Блокирано**: нећете видети нити моћи да користите ову функцију. За ВИ на уређају, сви преузети модели се уклањају.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
-"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Странице и резимеи се никада не чувају.";
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Странице и сажеци се никада не чувају.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
-"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "Резимеи страница";
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "Сажеци страница";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the Quick Answers feature */
 "Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Message.v154" = "Ваш глас, питања и одговори се никада не чувају.";
@@ -101,46 +101,46 @@
 "Settings.AIControls.BlockAIEnhancementsDescription.v151" = "Блокирање значи да нећете видети нова или тренутна ВИ побољшања у %@, нити искачуће прозоре о њима.";
 
 /* In the AI Controls settings, this is the text for the link that takes the user more information on AI features. */
-"Settings.AIControls.BlockAIEnhancementsLink.v151" = "Погледајте шта јесте, а шта није укључено";
+"Settings.AIControls.BlockAIEnhancementsLink.v151" = "Погледајте шта јесте и шта није укључено";
 
 /* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
 "Settings.AIControls.BlockAIEnhancementsTitle.v151" = "Блокирај ВИ побољшања";
 
 /* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
-"Settings.AIControls.BlockedInformation.v151" = "Нова и тренутна ВИ побољшања су блокирана по подразумеваним подешавањима. Одблокирајте одређене функције испод.";
+"Settings.AIControls.BlockedInformation.v151" = "Нова и тренутна ВИ побољшања су блокирана по подразумеваним подешавањима. Одблокирајте одређене могућности испод.";
 
 /* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
-"Settings.AIControls.HeaderCard.Link.v151" = "Сазнајте више";
+"Settings.AIControls.HeaderCard.Link.v151" = "Сазнај више";
 
 /* This is the message for the Header Card under the AI Controls settings section. */
-"Settings.AIControls.HeaderCard.Message.v151" = "То укључује и то да ли ћете користити функције побољшане вештачком интелигенцијом.";
+"Settings.AIControls.HeaderCard.Message.v151" = "То укључује и то да ли ћете користити могућности побољшане ВИ.";
 
 /* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
 "Settings.AIControls.HeaderCard.Title.v151" = "Увек имате избор у %@";
 
 /* In the settings menu, in the General section, this is the title for the AI Controls settings section */
-"Settings.AIControls.Title.v150" = "ВИ контроле";
+"Settings.AIControls.Title.v150" = "ВИ управљања";
 
 /* Section description in Appearance settings for middle button configuration of the bottom toolbar. */
-"Settings.Appearance.NavigationToolbar.Description.v145" = "Мења дугме у средини палете алата.";
+"Settings.Appearance.NavigationToolbar.Description.v145" = "Мења дугме у средини алатне траке.";
 
 /* Section header title in Appearance settings that configures the middle button of the bottom toolbar. */
-"Settings.Appearance.NavigationToolbar.SectionHeader.v145" = "Дугме палете алата";
+"Settings.Appearance.NavigationToolbar.SectionHeader.v145" = "Дугме алатне траке";
 
 /* Default section header title under page zoom settings. Indicates the default value for all websites */
 "Settings.Appearance.Zoom.Default.Title.v140" = "Подразумевано";
 
 /* Button to reset specific zoom site levels back to default */
-"Settings.Appearance.Zoom.Reset.Button.v140" = "Ресетуј подешавања веб сајта";
+"Settings.Appearance.Zoom.Reset.Button.v140" = "Врати подешавања странице";
 
 /* Page zoom section header title in Appearance settings */
 "Settings.Appearance.Zoom.SectionHeader.v140" = "Подешавања увећања";
 
 /* Specific site settings section footer title under page zoom settings. Explain how to add elements to the list */
-"Settings.Appearance.Zoom.SpecificSiteZoom.Footer.v140" = "Да бисте додали на ову листу, посетите сајт и прилагодите увећање странице из менија";
+"Settings.Appearance.Zoom.SpecificSiteZoom.Footer.v140" = "Да бисте додали на ову листу, посетите страницу и прилагодите увећање странице из менија";
 
 /* Specific site settings section header title under page zoom settings. List all websites with custom zoom level */
-"Settings.Appearance.Zoom.SpecificSiteZoom.Title.v140" = "Подешавања за одређене веб сајтове";
+"Settings.Appearance.Zoom.SpecificSiteZoom.Title.v140" = "Подешавања за одређене странице";
 
 /* Page zoom settings title in Appearance settings */
 "Settings.Appearance.Zoom.Title.v140" = "Увећање странице";
@@ -149,7 +149,7 @@
 "Settings.Appearance.Zoom.ZoomLevelTitle.v140" = "Ниво увећања";
 
 /* In the settings menu, in the General section, this is the title for Autofills & Passwords customization section. */
-"Settings.AutofillAndPassword.Title.v137" = "Аутоматско попуњавање и лозинке";
+"Settings.AutofillAndPassword.Title.v137" = "Самостално попуњавање и лозинке";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "Начини плаћања";
@@ -168,6 +168,15 @@
 
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Аутоматска репродукција";
+
+/* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
+"Settings.Browsing.AdBlocker.Description.v155" = "Смањује број огласа и пратилаца повезаних са огласима. Ако се страница не приказује правилно, покушајте да искључите ову опцију.";
+
+/* Link text below the Ad Blocker toggle description that opens a support page with more information. */
+"Settings.Browsing.AdBlocker.LearnMore.v155" = "Сазнајте више";
+
+/* Title for the Ad Blocker toggle in the Browsing settings page. */
+"Settings.Browsing.AdBlocker.Title.v155" = "Блокатор огласа";
 
 /* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
 "Settings.Browsing.BlockAds.Title.v153" = "Блокирај огласе";
@@ -188,16 +197,16 @@
 "Settings.Browsing.Title.v137" = "Прегледање";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v136" = "Сазнај више";
+"Settings.CrashReports.Link.v136" = "Сазнајте више";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Ово нам помаже да дијагностикујемо и исправимо проблеме са прегледачем.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Title.v135" = "Аутоматски шаљи извештаје о рушењу";
+"Settings.CrashReports.Title.v135" = "Самостално шаљи извештаје о рушењу";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v136" = "Сазнај више";
+"Settings.DailyUsagePing.Link.v136" = "Сазнајте више";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. %@ is the company name (e.g. Mozilla). */
 "Settings.DailyUsagePing.Message.v135" = "Ово помаже %@ да процени број активних корисника.";
@@ -239,19 +248,19 @@
 "Settings.Rollouts.Link.v148" = "Сазнај више";
 
 /* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
-"Settings.Rollouts.Message.v148" = "%@ ће побољшати функције, перформансе и стабилност између ажурирања. Измене се примењују даљински.";
+"Settings.Rollouts.Message.v148" = "%@ ће побољшати могућности, перформансе и стабилност између ажурирања. Измене се примењују даљински.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
 "Settings.Rollouts.Title.v148" = "Дозволи даљинска побољшања";
 
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
-"Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Превуците да бисте сакрили језичак и траку адреса";
+"Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Помакните да бисте сакрили језичак и траку адреса";
 
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Подразумевани претраживач";
 
 /* Accessibility label for Learn more about Firefox Suggest. */
-"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Сазнајте више о Firefox предлозима";
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Сазнајте више о Firefox предлогу";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Алтернативни претраживачи";
@@ -281,16 +290,16 @@
 "Settings.Search.PrivateSession.Setting.v124" = "Прикажи у приватним сесијама";
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
-"Settings.Search.ShowSuggestions.v121" = "Прикажи предлоге претраге";
+"Settings.Search.ShowSuggestions.v121" = "Предлози претраге";
 
 /* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
-"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Адресна трака — Firefox предлози";
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Адресна трака - Firefox предлози";
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Сазнајте више о Firefox предлозима";
 
 /* Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. */
-"Settings.Search.Suggest.PrivateSession.Description.v125" = "Приказуј предлоге из Firefox предлога у приватним сесијама";
+"Settings.Search.Suggest.PrivateSession.Description.v125" = "Приказуј предлоге Firefox Suggest-а у приватним сесијама";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
 "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Претражуј историјат прегледања";
@@ -302,7 +311,7 @@
 "Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Претражи усклађене језичке";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. %@ is the app name (e.g. Firefox). - Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "Преузмите предлоге од %@ који су повезани са вашом претрагом";
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "Добијајте предлоге од %@ повезане са вашом претрагом";
 
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "Предлози са веба";
@@ -323,7 +332,7 @@
 "Settings.Studies.Message.v136" = "Испробајте нове могућности и идеје пре него што буду доступне свима.";
 
 /* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
-"Settings.Studies.Message.v148" = "%@ насумично бира кориснике за тестирање функција, што побољшава квалитет за све.";
+"Settings.Studies.Message.v148" = "%@ насумично бира кориснике за тестирање могућности, што побољшава квалитет за све.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Инсталирај и покрени студије";
@@ -335,19 +344,19 @@
 "Settings.Summarize.FooterTitle.v142" = "Омогућава приступ сажецима страница.";
 
 /* This is the footer text for the gestures features under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Протресите свој уређај са једне на другу страну да бисте сажели страницу.";
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Протресите уређај са једне на другу страну да бисте сажели страницу.";
 
 /* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Протресите за сажимање";
 
 /* This is the section title for the gestures features under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.Title.v142" = "Гестикулације";
+"Settings.Summarize.GesturesSection.Title.v142" = "Гестови";
 
 /* The title for the language choose section for the summarizer inside the Summarize settings. */
 "Settings.Summarize.LanguageSection.Title.v149" = "Језик";
 
 /* The label for the picker option to select the website language for the summarizer inside the Summarize settings. */
-"Settings.Summarize.LanguageSection.WebsiteLanguageLabel.v149" = "Језик веб сајта";
+"Settings.Summarize.LanguageSection.WebsiteLanguageLabel.v149" = "Језик веб странице";
 
 /* This is the title for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.SummarizePagesTitle.v142" = "Сажми странице";
@@ -359,10 +368,10 @@
 "Settings.TechnicalData.Link.v136" = "Сазнајте више";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v136" = "Подаци о вашем уређају, хардверској конфигурацији и употреби помажу нам да побољшамо %@ функције, перформансе и стабилност.";
+"Settings.TechnicalData.Message.v136" = "Подаци о уређају, хардверској конфигурацији и употреби помажу нам да побољшамо могућности, перформансе и стабилност %@.";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v136" = "Слање техничких података и података о интеракцији";
+"Settings.TechnicalData.Title.v136" = "Шаљи техничке податке и податке о интеракцији";
 
 /* Terms of Use settings section title */
 "Settings.TermsOfUse.Title.v137" = "Услови коришћења";
@@ -380,7 +389,7 @@
 "Settings.Translation.AutoTranslate.Title.v151" = "Аутоматски преведи";
 
 /* Navigation bar title of the language picker shown when adding a preferred translation language. */
-"Settings.Translation.LanguagePicker.NavTitle.v151" = "Изаберите језик";
+"Settings.Translation.LanguagePicker.NavTitle.v151" = "Избор језика";
 
 /* Placeholder text for the search bar in the translation language picker. */
 "Settings.Translation.LanguagePicker.SearchPlaceholder.v151" = "Претрага";

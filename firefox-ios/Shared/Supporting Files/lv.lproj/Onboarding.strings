@@ -1,0 +1,3 @@
+/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. %@ is the app name (e.g. Firefox). */
+"Onboarding.Customization.Intro.Continue.Action.v123" = "Pielāgot %@";
+

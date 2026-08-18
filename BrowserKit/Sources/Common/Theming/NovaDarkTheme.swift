@@ -30,14 +30,14 @@ private struct NovaDarkColourPalette: ThemeColourPalette {
     // MARK: - Layer
 
     var layer1: UIColor = NovaColors.Gray75
-    var layer2: UIColor = NovaColors.Gray60
+    var layer2: UIColor = NovaColors.Gray55
     var layer3: UIColor = NovaColors.Gray55
     var layer4: UIColor = NovaColors.Gray65
     var layerSurfaceLow = NovaColors.Gray75
     var layerSurfaceMedium = NovaColors.Gray65
     var layerSurfaceMediumAlpha = NovaColors.Gray65.withAlphaComponent(0.4)
     var layerAccentSubtle: UIColor = NovaColors.VioletDesaturated70
-    var layerInverse: UIColor = NovaColors.Gray30.withAlphaComponent(0.9)
+    var layerInverse: UIColor = NovaColors.Gray30
     var layerWarning: UIColor = NovaColors.Yellow70
     var layerSuccess: UIColor = NovaColors.Green70
     var layerCritical: UIColor = NovaColors.Red70
@@ -98,6 +98,7 @@ private struct NovaDarkColourPalette: ThemeColourPalette {
     var borderPrimary: UIColor = NovaColors.Gray60
     var borderStrong: UIColor = NovaColors.Gray55
     var borderInverted: UIColor = NovaColors.Gray15
+    var borderAccentToast: UIColor = NovaColors.Violet70
     var borderRadioButtonDefault: UIColor = NovaColors.Gray45
 
     // MARK: - Shadow

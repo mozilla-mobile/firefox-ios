@@ -35,13 +35,13 @@
 "TabTrayCloseTabsOlderThanTitle.v140" = "Затвори језичке старије од…";
 
 /* The label for a button that closes tabs older than 1 day ago. Shown in a menu under the tabs tray. */
-"TabTrayOneDayAgoTitle.v140" = "пре 1 дан";
+"TabTrayOneDayAgoTitle.v140" = "Пре 1 дан";
 
 /* The label for a button that closes tabs older than 1 month ago. Shown in a menu under the tabs tray. */
-"TabTrayOneMonthAgoTitle.v140" = "пре 1 месец";
+"TabTrayOneMonthAgoTitle.v140" = "Пре 1 месец";
 
 /* The label for a button that closes tabs older than 1 week ago. Shown in a menu under the tabs tray. */
-"TabTrayOneWeekAgoTitle.v140" = "пре 1 недељу";
+"TabTrayOneWeekAgoTitle.v140" = "Пре 1 недељу";
 
 /* Message spoken by VoiceOver saying the position of the currently selected page in the tab tray selector (%1$@), along with the total number of selector (%2$@). E.g. “1 of 3” says that page 1 is visible, out of 3 pages total. */
 "TabTraySelectorAccessibilityHint.v139" = "%1$@ од %2$@";

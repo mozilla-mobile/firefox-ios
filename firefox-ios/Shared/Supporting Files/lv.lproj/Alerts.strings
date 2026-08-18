@@ -1,0 +1,6 @@
+/* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the affirmative action for the alert, confirming that you do want to add the event to the calendar. */
+"Alerts.AddToCalendar.Button.Add.v134" = "Pievienot";
+
+/* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the title for the alert. */
+"Alerts.AddToCalendar.Title.v134" = "Pievienot kalendāram?";
+

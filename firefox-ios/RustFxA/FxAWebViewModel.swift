@@ -4,11 +4,11 @@
 
 import WebKit
 import Foundation
-import Account
 import Shared
 import Common
 import PDFKit
 
+import class Account.RustFirefoxAccounts
 import enum MozillaAppServices.OAuthScope
 import struct MozillaAppServices.FxaAuthData
 

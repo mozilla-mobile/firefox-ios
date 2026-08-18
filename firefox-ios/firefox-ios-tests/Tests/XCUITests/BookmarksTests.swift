@@ -698,6 +698,23 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen.assertIdenticalFoldersNamesCreated(identifier: folderName, nrOfFolders: 2)
     }
 
+    func testSwipeBackFromBookmarkFolder() throws {
+        guard !iPad() else {
+            throw XCTSkip("XCUITest cannot drive the pop gesture in the inset iPad panel, it works manually")
+        }
+        app.launch()
+        let folderName = "Swipe Back Folder"
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
+        libraryScreen.addFreshNewFolder(text: folderName)
+        libraryScreen.tapDoneButton()
+        libraryScreen.tapOnFolder(folderName: folderName)
+        libraryScreen.assertSelectedFolderOpens(folderName: folderName)
+
+        libraryScreen.swipeBackFromFolder(folderName: folderName)
+        libraryScreen.assertReturnedToBookmarksRoot(fromFolder: folderName)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/3168590
     func testUserRedirectToMostRecentlyAccessedFolder() {
         app.launch()

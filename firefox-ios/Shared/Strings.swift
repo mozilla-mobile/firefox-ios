@@ -1631,9 +1631,9 @@ extension String {
 extension String {
     public struct NativeErrorPage {
         public static let ButtonLabel = MZLocalizedString(
-            key: "NativeErrorPage.ButtonLabel.v131",
+            key: "NativeErrorPage.ButtonLabel.v155",
             tableName: "NativeErrorPage",
-            value: "Reload",
+            value: "Try Again",
             comment: "On error page, this is the text on a button that will try to load the page again.")
         public static let GoBackButton = MZLocalizedString(
             key: "NativeErrorPage.GoBackButton.v149",
@@ -1738,9 +1738,9 @@ extension String {
                 value: "The site may be busy or unavailable. Try again later. If other pages won’t load, check your Wi-Fi or data connection. %@ can also search the Wayback Machine for an earlier version of this page.",
                 comment: "Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox).")
             public static let SearchLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.Search.v154",
+                key: "NativeErrorPage.Wayback.Error.Search.v155",
                 tableName: "NativeErrorPage",
-                value: "Check for earlier version",
+                value: "View Archived Version",
                 comment: "Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine.")
             public static let WaybackButtonA11yHint = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154",
@@ -1748,14 +1748,14 @@ extension String {
                 value: "Searches the Wayback Machine for an archived version of this page.",
                 comment: "Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked.")
             public static let CheckingLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.Checking.v154",
+                key: "NativeErrorPage.Wayback.Error.Checking.v155",
                 tableName: "NativeErrorPage",
-                value: "Checking for page…",
+                value: "Checking the Archive…",
                 comment: "Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress.")
             public static let CouldNotReachLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.CouldNotReach.v154",
+                key: "NativeErrorPage.Wayback.Error.CouldNotReach.v155",
                 tableName: "NativeErrorPage",
-                value: "Couldn’t reach Wayback Machine",
+                value: "We couldn’t reach the archive service.",
                 comment: "Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page.")
             public static let RetryButton = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Retry.v154",
@@ -1765,13 +1765,23 @@ extension String {
             public static let NotFoundLabel = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.NotFound.v155",
                 tableName: "NativeErrorPage",
-                value: "No archived version found",
+                value: "No archived version found.",
                 comment: "Label shown when wayback responds and says no snapshot was found.")
             public static let SearchButton = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Search.v155",
                 tableName: "NativeErrorPage",
                 value: "Search the web",
                 comment: "Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine.")
+            public static let FooterDescription = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.FooterDescription.v155",
+                tableName: "NativeErrorPage",
+                value: "%@ can look for an earlier version of this page from the Internet Archive’s %@.",
+                comment: "Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. %1$@ is the app name (e.g. Firefox). %2$@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org.")
+            public static let LinkText = MZLocalizedString(
+                key: "NativeErrorPage.Wayback.Error.LinkText.v155",
+                tableName: "NativeErrorPage",
+                value: "Wayback Machine",
+                comment: "The tappable link text within the Wayback footer description, opens web.archive.org.")
         }
     }
 }
@@ -4486,12 +4496,6 @@ extension String {
                 value: "URL",
                 comment: "Leading label of the editable row showing the web address being reported, in the Report a Website Issue form."
             )
-            public static let URLPlaceholder = MZLocalizedString(
-                key: "WebCompatReporter.Fields.URLPlaceholder.v154",
-                tableName: "WebCompatReporter",
-                value: "URL",
-                comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form."
-            )
             public static let DetailsPlaceholder = MZLocalizedString(
                 key: "WebCompatReporter.Fields.DetailsPlaceholder.v154",
                 tableName: "WebCompatReporter",
@@ -4564,6 +4568,94 @@ extension String {
                 value: "Close",
                 comment: "Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen."
             )
+            public static let TechnicalData = MZLocalizedString(
+                key: "WebCompatReporter.Preview.TechnicalData.v155",
+                tableName: "WebCompatReporter",
+                value: "Technical Data",
+                comment: "Row on the Report Preview screen that opens the Technical Data screen, and that screen's title."
+            )
+            /// One bullet per field the report can carry, in plain language. A bullet is shown only
+            /// when the report actually carries that field.
+            public struct Data {
+                public static let PageURL = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.PageURL.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Page URL",
+                    comment: "Bullet on the Report Preview screen. The reported page's address is shown underneath it."
+                )
+                public static let IssueAndDescription = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.IssueAndDescription.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Issue type you selected and any description you added",
+                    comment: "Bullet on the Report Preview screen, for the problem picked and the details typed."
+                )
+                public static let IsTablet = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.IsTablet.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Whether or not your device is a tablet",
+                    comment: "Bullet on the Report Preview screen. Only tablet or not is sent, no device make or model."
+                )
+                public static let UserAgent = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.UserAgent.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Your browser’s user agent, which includes your iOS version, %@ version, and browser engine version",
+                    comment: "Bullet on the Report Preview screen. Those three versions are only ever sent as tokens inside the user agent, never as fields of their own. %@ is the app name (e.g. Firefox)."
+                )
+                public static let TrackingProtectionSetting = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Enhanced Tracking Protection setting for this site",
+                    comment: "Bullet on the Report Preview screen, for the tracking protection strength the user has chosen."
+                )
+                public static let BlockedTrackers = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.BlockedTrackers.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Hostnames of trackers blocked on this page",
+                    comment: "Bullet on the Report Preview screen, for trackers blocked on the reported page."
+                )
+                public static let PrivateBrowsingStatus = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Private browsing status: on or off",
+                    comment: "Bullet on the Report Preview screen, for whether the page was open in private browsing."
+                )
+                public static let AvailableMemory = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.AvailableMemory.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Your device’s available memory",
+                    comment: "Bullet on the Report Preview screen, for the amount of memory the device has."
+                )
+                public static let PixelDensity = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.PixelDensity.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Your screen’s pixel density",
+                    comment: "Bullet on the Report Preview screen, for the screen's physical pixels per layout point."
+                )
+                public static let HasTouchscreen = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.HasTouchscreen.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Whether your device has a touchscreen",
+                    comment: "Bullet on the Report Preview screen, for whether the device has a touchscreen."
+                )
+                public static let PageLanguages = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.PageLanguages.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Language preferences sent to this page",
+                    comment: "Bullet on the Report Preview screen, for a list of the user's preferred languages for websites as they were communicated by the browser to the page"
+                )
+                public static let DeviceLocale = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.DeviceLocale.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Primary language and country of your device",
+                    comment: "Bullet on the Report Preview screen, for the device's own language and region settings."
+                )
+                public static let PageElements = MZLocalizedString(
+                    key: "WebCompatReporter.Preview.Data.PageElements.v155",
+                    tableName: "WebCompatReporter",
+                    value: "Information about page elements that have been known to cause site issues",
+                    comment: "Bullet on the Report Preview screen, for web frameworks known to break mobile pages."
+                )
+            }
         }
         public struct Toast {
             public static let ReportSent = MZLocalizedString(
@@ -9263,6 +9355,13 @@ extension String {
                 tableName: nil,
                 value: "Theme",
                 comment: "Title in main app settings for Theme settings")
+        }
+        struct v156 {
+            public static let WebCompatReporterFieldsURLPlaceholder = MZLocalizedString(
+                key: "WebCompatReporter.Fields.URLPlaceholder.v154",
+                tableName: "WebCompatReporter",
+                value: "URL",
+                comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form.")
         }
     }
 }

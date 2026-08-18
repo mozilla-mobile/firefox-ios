@@ -8,13 +8,13 @@
 "New Tab" = "Нови језичак";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox може користити вашу камеру за скенирање КР кодова и снимање фотографија и видео записа.";
+"NSCameraUsageDescription" = "Firefox може користити вашу камеру за скенирање КР кодова, прављење фотографија и снимање видео записа.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox захтева Face ID за приступ вашим сачуваним лозинкама и начинима плаћања.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "Веб сајтови које посећујете могу захтевати вашу локацију.";
+"NSLocationWhenInUseUsageDescription" = "Веб странице које посећујете могу захтевати вашу локацију.";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Firefox користи ваш микрофон за снимање и отпремање звука.";

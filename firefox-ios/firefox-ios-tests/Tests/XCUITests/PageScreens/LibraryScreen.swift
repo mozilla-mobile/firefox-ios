@@ -43,6 +43,11 @@ final class LibraryScreen {
         BaseTestCase().mozWaitForElementToExist(bookmarksTable)
     }
 
+    func bookmarkListExists(timeout: TimeInterval = TIMEOUT) -> Bool {
+        let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
+        return BaseTestCase().mozWaitForElementToExist(bookmarksTable, timeout: timeout, failOnTimeout: false)
+    }
+
     func assertBookmarkListCount(numberOfEntries: Int) {
         let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
         XCTAssertEqual(bookmarksTable.cells.count, numberOfEntries)
@@ -214,6 +219,28 @@ final class LibraryScreen {
 
     func assertSelectedFolderOpens(folderName: String) {
         BaseTestCase().mozWaitForElementToExist(app.navigationBars[folderName])
+    }
+
+    func swipeBackFromFolder(folderName: String) {
+        let folderNavigationBar = app.navigationBars[folderName]
+        BaseTestCase().mozWaitForElementToExist(folderNavigationBar)
+        // On iPad the panel is presented as a sheet, so the drag is anchored to the panel's own
+        // frame: window relative coordinates start outside of it and the gesture never registers.
+        let panelOrigin = folderNavigationBar.coordinate(withNormalizedOffset: .zero)
+        let dragHeight = folderNavigationBar.frame.height * 2
+        let swipeStart = panelOrigin.withOffset(CGVector(dx: 1, dy: dragHeight))
+        let swipeEnd = panelOrigin.withOffset(CGVector(dx: folderNavigationBar.frame.width * 0.9, dy: dragHeight))
+        // A slow drag held before lift-off gives the pop transition enough movement events to commit,
+        // a plain press-and-drag delivers one jump that UIKit cancels.
+        swipeStart.press(forDuration: 0.05,
+                         thenDragTo: swipeEnd,
+                         withVelocity: .slow,
+                         thenHoldForDuration: 0.2)
+    }
+
+    func assertReturnedToBookmarksRoot(fromFolder folderName: String) {
+        BaseTestCase().mozWaitForElementToExist(app.navigationBars["Bookmarks"])
+        XCTAssertFalse(app.navigationBars[folderName].exists)
     }
 
     func deleteFolder(folderName: String) {

@@ -4,14 +4,16 @@
 
 import Common
 import Redux
-import Account
 import Shared
+
+import class Account.RustFirefoxAccounts
 
 @MainActor
 final class MainMenuMiddleware {
     private enum TelemetryAction {
         static let addToShortcuts = "add_to_shortcuts"
         static let bookmarks = "bookmarks"
+        static let adBlocker = "ad_blocker"
         static let bookmarkThisPage = "bookmark_this_page"
         static let defaultBrowserSettings = "default_browser_settings"
         static let downloads = "downloads"
@@ -170,32 +172,6 @@ final class MainMenuMiddleware {
         telemetry.mainMenuOptionTapped(with: isHomepage, and: option)
     }
 
-    private func getAccountData() -> AccountData? {
-        let rustAccount = RustFirefoxAccounts.shared
-        let needsReAuth = rustAccount.accountNeedsReauth()
-
-        guard let userProfile = rustAccount.userProfile else { return nil }
-
-        let title: String = {
-            if needsReAuth { return .MainMenu.Account.SyncErrorTitle }
-            return userProfile.displayName ?? userProfile.email
-        }()
-
-        let subtitle: String? = needsReAuth ? .MainMenu.Account.SyncErrorDescription : nil
-        let warningIcon: String? = needsReAuth ? StandardImageIdentifiers.Large.warningFill : nil
-
-        var iconURL: URL?
-        if let str = rustAccount.userProfile?.avatarUrl,
-           let url = URL(string: str) {
-            iconURL = url
-        }
-
-        return AccountData(title: title,
-                           subtitle: subtitle,
-                           warningIcon: warningIcon,
-                           iconURL: iconURL)
-    }
-
     private func handleTelemetryFor(for navigationDestination: MainMenuNavigationDestination,
                                     isHomepage: Bool,
                                     and urlToVisit: URL?) {
@@ -245,6 +221,9 @@ final class MainMenuMiddleware {
 
         case .siteProtections:
             self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.siteProtections)
+
+        case .adBlocker:
+            self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.adBlocker)
 
         case .defaultBrowser:
             self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.defaultBrowserSettings)

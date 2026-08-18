@@ -36,6 +36,9 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func presentReportBrokenSite(url: URL?)
 
     @MainActor
+    func presentAdBlockerSettings()
+
+    @MainActor
     func showPrintSheet()
 
     @MainActor
@@ -162,6 +165,9 @@ class MainMenuCoordinator: BaseCoordinator {
 
         case .siteProtections:
             navigationHandler?.presentSiteProtections()
+
+        case .adBlocker:
+            navigationHandler?.presentAdBlockerSettings()
 
         case .defaultBrowser:
             DefaultApplicationHelper().openSettings()

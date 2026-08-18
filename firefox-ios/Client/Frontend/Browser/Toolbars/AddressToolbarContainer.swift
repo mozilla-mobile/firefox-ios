@@ -245,13 +245,7 @@ final class AddressToolbarContainer: UIView,
             accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
             accessoryViewGradient.opacity = 1
             // Dispatch action to change address bar to minimized state
-            store.dispatch(
-                ToolbarAction(
-                    scrollAlpha: 0,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-                )
-            )
+            store.dispatch(ToolbarModernAction.accessoryViewDidShow, forWindowUUID: windowUUID)
         }
         return accessoryViewOffset
     }
@@ -359,7 +353,9 @@ final class AddressToolbarContainer: UIView,
             // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
             regularToolbar.alpha = alpha
         }
-        updateSkeletonAddressBarsAlpha(to: alpha)
+
+        let isMinimizedAddressBar = alpha.isZero
+        updateSkeletonAddressBarsAlpha(isMinimizedAddressBar: isMinimizedAddressBar)
     }
 
     private func updateModel(toolbarState: ToolbarState) {
@@ -371,8 +367,7 @@ final class AddressToolbarContainer: UIView,
         shouldDisplayCompact = newModel.shouldDisplayCompact
 
         guard self.model != newModel else { return }
-
-        updateSkeletonAddressBarsAlpha(to: CGFloat(newModel.scrollAlpha))
+        updateSkeletonAddressBarsAlpha(isMinimizedAddressBar: newModel.isAddressBarMinimized)
         if #available(iOS 26.0, *), !newModel.shouldShowKeyboard, !newModel.isAddressBarMinimized {
             accessoryViewGradient.opacity = 0
         }
@@ -424,9 +419,10 @@ final class AddressToolbarContainer: UIView,
         rightSkeletonAddressBar.accessibilityIdentifier = AccessibilityIdentifiers.Browser.AddressToolbar.trailingSkeleton
     }
 
-    private func updateSkeletonAddressBarsAlpha(to alpha: CGFloat) {
+    private func updateSkeletonAddressBarsAlpha(isMinimizedAddressBar: Bool) {
         guard toolbarHelper.isSwipingTabsEnabled else { return }
 
+        let alpha: CGFloat = isMinimizedAddressBar ? 0 : 1
         leftSkeletonAddressBar.alpha = alpha
         rightSkeletonAddressBar.alpha = alpha
     }

@@ -86,6 +86,7 @@ of Mammon shall tremble. from The Book of Mozilla, 3:31 (Red Letter Edition) </s
 
         let htmlFixtures =  ["test-indexeddb-private",
                              "test-window-opener",
+                             "test-window-open-on-tap",
                              "test-password",
                              "test-password-submit",
                              "test-password-2",

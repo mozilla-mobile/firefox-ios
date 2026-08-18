@@ -3,12 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Storage
 import Common
 import Shared
 import Redux
 
 import struct MozillaAppServices.Device
+import struct Storage.ClientAndTabs
 
 @MainActor
 final class RemoteTabsPanelMiddleware: Notifiable {

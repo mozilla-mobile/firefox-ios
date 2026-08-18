@@ -14,6 +14,7 @@
   "testTargets" : [
     {
       "skippedTests" : [
+        "AIControlsTests",
         "ActivityStreamTest",
         "ActivityStreamTest\/testContextMenuInLandscape()",
         "ActivityStreamTest\/testDefaultSites()",
@@ -131,6 +132,7 @@
         "DragAndDropTests\/testRearrangeTabsTabTray()",
         "DragAndDropTests\/testRearrangeTabsTabTrayLandscape()",
         "EngagementNotificationTests",
+        "EngagementNotificationTests\/testAllowNotifications()",
         "EngagementNotificationTests\/testDontAllowNotifications()",
         "ExperimentIntegrationTests",
         "ExperimentIntegrationTests\/testHomeScreenMessageDismissesCorrectly()",
@@ -207,6 +209,12 @@
         "JumpBackInTests\/testLongTapOnJumpBackInLink()",
         "JumpBackInTests\/testPrivateTab_tabTrayExperimentOff()",
         "JumpBackInTests\/testPrivateTab_tabTrayExperimentOn()",
+        "KeyboardShortcutsTests",
+        "KeyboardShortcutsTests\/testBookmarkPageWithKeyboardShortcut()",
+        "KeyboardShortcutsTests\/testOpenAndCloseTabWithKeyboardShortcut()",
+        "KeyboardShortcutsTests\/testOpenPrivateTabWithKeyboardShortcut()",
+        "KeyboardShortcutsTests\/testShowBookmarksPanelWithKeyboardShortcut()",
+        "KeyboardShortcutsTests\/testSwitchTabWithKeyboardShortcut()",
         "LegacyOnboardingTests",
         "LibraryTests",
         "LibraryTestsIpad",
@@ -250,6 +258,7 @@
         "NavigationTest\/testSSL()",
         "NavigationTest\/testShareLink()",
         "NavigationTest\/testShareLinkPrivateMode()",
+        "NavigationTest\/testTapElementOpensDesignatedURLInNewTab()",
         "NavigationTest\/testTapSignInShowsFxAFromRemoteTabPanel()",
         "NavigationTest\/testTapSignInShowsFxAFromTour()",
         "NavigationTest\/testTapSigninShowsFxAFromSettings()",

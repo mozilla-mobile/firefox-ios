@@ -18,6 +18,7 @@ protocol BrowserSelectorsSet {
     var CANCEL_BUTTON: Selector { get }
     var LINK_RFC_2606: Selector { get }
     var BOOK_OF_MOZILLA_TEXT: Selector { get }
+    var BOOK_OF_MOZILLA_VERSE_TEXT: Selector { get }
     var ADDRESSTOOLBAR_LOCKICON: Selector { get }
     var ADDRESSTOOLBAR_LOCKICON_OFF: Selector { get }
     var TOPTABS_COLLECTIONVIEW: Selector { get }
@@ -25,10 +26,12 @@ protocol BrowserSelectorsSet {
     var BOOK_OF_MOZILLA_TEXT_IN_TABLE: Selector { get }
     var SAVE_BUTTON: Selector { get }
     var CLIPBOARD_TOAST: Selector { get }
+    var BOOKMARK_SAVED_TOAST: Selector { get }
     var PRIVATE_MODE_HOMEPAGE_TITLE: Selector { get }
     var SEARCH_SETTINGS_BUTTON: Selector { get }
     var SPONSORED_LABEL: Selector { get }
     var PASTE_BUTTON: Selector { get }
+    var OPEN_DESIGNATED_URL_BUTTON: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
@@ -53,9 +56,14 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let microsurveyCloseButton = AccessibilityIdentifiers.Microsurvey.Prompt.closeButton
         static let saveButton = "Save"
         static let clipboardToast = "Fennec pasted from CoreSimulatorBridge"
+        static let bookmarkSavedToast = "Saved in"
         static let privateModeHomepageTitle = "PrivateMode.Homepage.Title"
+        static let bookOfMozilla = "The Book of Mozilla"
+        static let bookOfMozillaVerseText = "And the beast shall come forth"
         static let searchSettingsButton = "Search Settings"
         static let sponsoredLabel = "Sponsored"
+        // In-page button of the test-window-open-on-tap fixture
+        static let openDesignatedURLButton = "Open designated URL"
     }
 
     let ADDRESS_BAR = Selector.textFieldId(
@@ -131,9 +139,17 @@ struct BrowserSelectors: BrowserSelectorsSet {
     )
 
     let BOOK_OF_MOZILLA_TEXT = Selector.staticTextByExactLabel(
-        "The Book of Mozilla",
+        IDs.bookOfMozilla,
         description: "StaticText 'The Book of Mozilla' within table",
         groups: ["browser", "visualCheck"]
+    )
+
+    // The "The Book of Mozilla" heading sits below the fold, and the accessibility tree only exposes
+    // the visible part of a web page, so the opening verse is what identifies this page on screen.
+    let BOOK_OF_MOZILLA_VERSE_TEXT = Selector.staticTextLabelContains(
+        IDs.bookOfMozillaVerseText,
+        description: "Opening verse of the Mozilla book test page",
+        groups: ["browser", "webview"]
     )
 
     let ADDRESSTOOLBAR_LOCKICON = Selector.buttonId(
@@ -178,6 +194,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "system"]
     )
 
+    let BOOKMARK_SAVED_TOAST = Selector.staticTextLabelContains(
+        IDs.bookmarkSavedToast,
+        description: "Toast notification shown after a page is saved as a bookmark",
+        groups: ["browser", "bookmarks"]
+    )
+
     let PRIVATE_MODE_HOMEPAGE_TITLE = Selector.staticTextId(
         IDs.privateModeHomepageTitle,
         description: "Private mode homepage title message",
@@ -194,6 +216,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
         IDs.sponsoredLabel,
         description: "'Sponsored' label on a sponsored search suggestion",
         groups: ["browser", "search"]
+    )
+
+    let OPEN_DESIGNATED_URL_BUTTON = Selector.buttonByLabel(
+        IDs.openDesignatedURLButton,
+        description: "In-page button that opens the designated URL in a new tab",
+        groups: ["browser", "webview"]
     )
 
     let PASTE_BUTTON = Selector.otherElementsButtonByLabel(
@@ -229,9 +257,11 @@ struct BrowserSelectors: BrowserSelectorsSet {
     var all: [Selector] { [ADDRESS_BAR, SEARCH_ENGINE_LOGO, DOWNLOADS_TOAST_BUTTON, BACK_BUTTON,
                            MENU_BUTTON, STATIC_TEXT_MOZILLA, STATIC_TEXT_EXAMPLE_DOMAIN,
                            CLEAR_TEXT_BUTTON, CANCEL_BUTTON_URL_BAR, PRIVATE_BROWSING, CANCEL_BUTTON,
-                           LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON, ADDRESSTOOLBAR_LOCKICON_OFF,
+                           LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, BOOK_OF_MOZILLA_VERSE_TEXT,
+                           ADDRESSTOOLBAR_LOCKICON, ADDRESSTOOLBAR_LOCKICON_OFF,
                            TOPTABS_COLLECTIONVIEW, MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE,
                            SAVE_BUTTON, CLIPBOARD_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE,
-                           PASTE_BUTTON, SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL]
+                           PASTE_BUTTON, SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL,
+                           OPEN_DESIGNATED_URL_BUTTON]
     }
 }

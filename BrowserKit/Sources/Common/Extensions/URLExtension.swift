@@ -333,10 +333,18 @@ extension URL {
     /// Returns the standard location of the website's favicon. (This is the base directory path with
     /// favicon.ico appended).
     public func faviconUrl() -> URL? {
-        if let host = host, let rootDirectoryURL = URL(string: (scheme ?? "https") + "://" + host) {
-            return rootDirectoryURL.appendingPathComponent("favicon.ico")
-        }
-        return nil
+        guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false),
+              let host = components.host,
+              !host.isEmpty
+        else { return nil }
+
+        components.scheme = components.scheme ?? "https"
+        components.user = nil
+        components.password = nil
+        components.path = "/favicon.ico"
+        components.query = nil
+        components.fragment = nil
+        return components.url
     }
 
     // MARK: Reader mode

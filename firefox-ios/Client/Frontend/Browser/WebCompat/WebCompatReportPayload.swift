@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 import WebCompatReporterKit
 
 /// One property per Glean metric in `broken_site_report.yaml`, so the field names
@@ -125,14 +126,73 @@ struct WebCompatReportPayload: Equatable {
         ]
     }
 
-    func makePreviewViewModel() -> WebCompatTechnicalDataViewModel {
-        return WebCompatTechnicalDataViewModel(
+    func makeReportPreviewViewModel() -> WebCompatReportPreviewViewModel {
+        return WebCompatReportPreviewViewModel(
             title: .WebCompatReporter.Preview.Title,
             closeAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
             closeA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.closeButton,
-            // Unread while the thumbnail is off; they come back with the screenshot in FXIOS-16450.
-            screenshotAccessibilityLabel: "",
-            screenshotA11yIdentifier: "",
+            bullets: summaryBullets,
+            bulletsA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.summary,
+            technicalDataTitle: .WebCompatReporter.Preview.TechnicalData,
+            technicalDataA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.technicalDataRow
+        )
+    }
+
+    private var summaryBullets: [String] {
+        let collectedKeys = Set(
+            previewGroups
+                .flatMap { $0.fields }
+                .filter { carriesData($0.value) }
+                .map { $0.key }
+        )
+        let userAgent = String(
+            format: .WebCompatReporter.Preview.Data.UserAgent,
+            AppName.shortName.rawValue
+        )
+        let bullets: [(text: String, keys: [PreviewField.Key])] = [
+            (pageURLBullet, [.url]),
+            (.WebCompatReporter.Preview.Data.IssueAndDescription, [.reason, .description]),
+            (.WebCompatReporter.Preview.Data.IsTablet, [.isTablet]),
+            (userAgent, [.useragentString, .defaultUseragentString]),
+            (.WebCompatReporter.Preview.Data.TrackingProtectionSetting, [.blockList, .etpCategory]),
+            (.WebCompatReporter.Preview.Data.BlockedTrackers, [.blockedOrigins]),
+            (.WebCompatReporter.Preview.Data.PrivateBrowsingStatus, [.isPrivateBrowsing]),
+            (.WebCompatReporter.Preview.Data.AvailableMemory, [.memory]),
+            (.WebCompatReporter.Preview.Data.PixelDensity, [.devicePixelRatio]),
+            (.WebCompatReporter.Preview.Data.HasTouchscreen, [.hasTouchScreen]),
+            (.WebCompatReporter.Preview.Data.PageLanguages, [.languages]),
+            (.WebCompatReporter.Preview.Data.DeviceLocale, [.defaultLocales]),
+            (.WebCompatReporter.Preview.Data.PageElements, [.fastclick, .marfeel, .mobify])
+        ]
+        return bullets
+            .filter { bullet in bullet.keys.contains(where: collectedKeys.contains) }
+            .map { $0.text }
+    }
+
+    /// An empty list is still sent, so it prints in Technical Data but earns no bullet here.
+    private func carriesData(_ value: WebCompatTechnicalDataViewModel.PreviewValue) -> Bool {
+        switch value {
+        case .null:
+            return false
+        case .list(let values):
+            return !values.isEmpty
+        case .string, .bool, .quantity:
+            return true
+        }
+    }
+
+    /// A line separator, not a newline: same paragraph, so the address keeps the indent and no dot.
+    private var pageURLBullet: String {
+        let label: String = .WebCompatReporter.Preview.Data.PageURL
+        guard let url else { return label }
+        return "\(label)\u{2028}[\(url)]"
+    }
+
+    func makeTechnicalDataViewModel() -> WebCompatTechnicalDataViewModel {
+        return WebCompatTechnicalDataViewModel(
+            title: .WebCompatReporter.Preview.TechnicalData,
+            closeAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
+            closeA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.closeButton,
             sections: previewGroups.map { group in
                 let groupID = group.id.rawValue
                 return WebCompatTechnicalDataViewModel.PreviewSection(

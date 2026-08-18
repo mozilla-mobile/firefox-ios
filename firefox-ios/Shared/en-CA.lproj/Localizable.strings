@@ -212,7 +212,7 @@
 "Could not add page to Reading list" = "Could not add page to Reading list";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "Could not add page to Reading List. Maybe it's already there?";
+"Could not add page to Reading List. Maybe it’s already there?" = "Could not add page to Reading List. Maybe it’s already there?";
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Could not load page.";
@@ -1501,6 +1501,9 @@
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
 "Settings.Sync.ButtonTitle.v103" = "Sync and Save Data";
 
+/* In the settings account row, shown transiently while the user is being signed out of their account. */
+"Settings.Sync.SigningOut.Title.v154" = "Signing out…";
+
 /* Title for the page where the user sign in to their Firefox Sync account. */
 "Settings.Sync.SignInView.Title.v103" = "Sync and Save Data";
 
@@ -1739,7 +1742,7 @@
 "Toolbar.Menu.CloseAllTabs" = "Close All Tabs";
 
 /* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
-"TopSites.RemovePage.Button" = "Remove page - %@";
+"TopSites.RemovePage.Button" = "Remove page — %@";
 
 /* Button to disallow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.Cancel" = "No";

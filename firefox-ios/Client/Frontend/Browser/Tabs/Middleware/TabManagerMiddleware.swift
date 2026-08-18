@@ -5,12 +5,14 @@
 import Common
 import Redux
 import Shared
-import Storage
 import Account
 import SiteImageView
 import SummarizeKit
 
 import enum MozillaAppServices.BookmarkRoots
+import protocol Storage.BookmarksHandler
+import struct Storage.ShareItem
+import struct Storage.Site
 
 @MainActor
 final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark {
@@ -858,6 +860,14 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
 
     private func getAccountData() -> AccountData {
         let rustAccount = RustFirefoxAccounts.shared
+
+        switch rustAccount.accountTransition {
+        case .signingOut:
+            return AccountData(title: .MainMenu.Account.SigningOutTitle, subtitle: nil)
+        case .idle:
+            break
+        }
+
         let needsReAuth = rustAccount.accountNeedsReauth()
 
         if let userProfile = rustAccount.userProfile {

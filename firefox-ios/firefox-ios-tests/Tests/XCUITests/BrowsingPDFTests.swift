@@ -10,7 +10,19 @@ let PDF_website = [
     "urlValue": "education.gov.yk.ca",
     "pdfValue": "storage.googleapis.com",
     "bookmarkLabel": "https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
-    "longUrlValue": "http://www.education.gov.yk.ca/"
+    "longUrlValue": "http://www.education.gov.yk.ca/",
+    "secondUrl": "https://storage.googleapis.com/mobile_test_assets/public/lorem_ipsum.pdf",
+    "tabTitle": "pdf-test.pdf",
+    "secondTabTitle": "lorem_ipsum.pdf"
+]
+
+let largePDF1 = [
+    "url": "https://storage.googleapis.com/mobile_test_assets/public/50MB-TESTFILE.ORG.pdf",
+    "pdfValue": "storage.googleapis.com"
+]
+let largePDF2 = [
+    "url": "https://storage.googleapis.com/mobile_test_assets/public/20MB-TESTFILE.ORG.pdf",
+    "pdfValue": "storage.googleapis.com"
 ]
 
 class BrowsingPDFTests: BaseTestCase {
@@ -20,6 +32,7 @@ class BrowsingPDFTests: BaseTestCase {
     private var pdf: PDFScreen!
     private var contextMenu: ContextMenuScreen!
     private var library: LibraryScreen!
+    private var tabTrayScreen: TabTrayScreen!
 
     override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out the function name
@@ -29,6 +42,7 @@ class BrowsingPDFTests: BaseTestCase {
         pdf = PDFScreen(app: app)
         browser = BrowserScreen(app: app)
         library = LibraryScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307116
@@ -178,6 +192,47 @@ class BrowsingPDFTests: BaseTestCase {
 
         // Assert that the bookmarked item exists
         library.assertBookmarkExists(named: PDF_website["bookmarkLabel"]!)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168443
+    // Regression
+    func testSwitchTabsWhileDownloadingPDF() {
+        // Step 1: Open a large PDF in a tab. The PDF starts downloading.
+        navigator.openURL(largePDF1["url"]!)
+        waitUntilDownloadStarts()
+
+        // Step 2: Switch to another tab and open another large PDF. All PDF files load properly.
+        navigator.openNewURL(urlString: largePDF2["url"]!)
+        waitUntilPageLoad()
+        browser.assertAddressBarContains(value: largePDF2["pdfValue"]!)
+
+        // Step 3: Return to the first PDF tab. It should be loading or loaded.
+        navigator.goto(TabTray)
+        tabTrayScreen.tapTabAtIndex(index: 0)
+        waitUntilPageLoad()
+        browser.assertAddressBarContains(value: largePDF1["pdfValue"]!)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168439
+    // Regression
+    func testTabNameForPDFIsTheFileName() {
+        // 1. Open a PDF and check the tab is named after the file, not after the file URL
+        navigator.openURL(PDF_website["url"]!)
+        waitUntilPageLoad()
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.assertSomeTabTitleContains(PDF_website["tabTitle"]!)
+        tabTrayScreen.assertNoTabTitleContains("file://")
+
+        // 2. Open a second PDF in a new tab, each tab keeps the name of its own file
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.openURL(PDF_website["secondUrl"]!)
+        waitUntilPageLoad()
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.assertSomeTabTitleContains(PDF_website["secondTabTitle"]!)
+        tabTrayScreen.assertSomeTabTitleContains(PDF_website["tabTitle"]!)
+        tabTrayScreen.assertNoTabTitleContains("file://")
     }
 
     private func longPressOnPdfLink() {
