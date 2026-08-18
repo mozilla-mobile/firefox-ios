@@ -10,7 +10,10 @@ let PDF_website = [
     "urlValue": "education.gov.yk.ca",
     "pdfValue": "storage.googleapis.com",
     "bookmarkLabel": "https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
-    "longUrlValue": "http://www.education.gov.yk.ca/"
+    "longUrlValue": "http://www.education.gov.yk.ca/",
+    "secondUrl": "https://storage.googleapis.com/mobile_test_assets/public/lorem_ipsum.pdf",
+    "tabTitle": "pdf-test.pdf",
+    "secondTabTitle": "lorem_ipsum.pdf"
 ]
 
 let largePDF1 = [
@@ -208,6 +211,28 @@ class BrowsingPDFTests: BaseTestCase {
         tabTrayScreen.tapTabAtIndex(index: 0)
         waitUntilPageLoad()
         browser.assertAddressBarContains(value: largePDF1["pdfValue"]!)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168439
+    // Regression
+    func testTabNameForPDFIsTheFileName() {
+        // 1. Open a PDF and check the tab is named after the file, not after the file URL
+        navigator.openURL(PDF_website["url"]!)
+        waitUntilPageLoad()
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.assertSomeTabTitleContains(PDF_website["tabTitle"]!)
+        tabTrayScreen.assertNoTabTitleContains("file://")
+
+        // 2. Open a second PDF in a new tab, each tab keeps the name of its own file
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.openURL(PDF_website["secondUrl"]!)
+        waitUntilPageLoad()
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.assertSomeTabTitleContains(PDF_website["secondTabTitle"]!)
+        tabTrayScreen.assertSomeTabTitleContains(PDF_website["tabTitle"]!)
+        tabTrayScreen.assertNoTabTitleContains("file://")
     }
 
     private func longPressOnPdfLink() {
