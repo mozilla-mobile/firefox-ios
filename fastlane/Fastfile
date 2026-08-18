@@ -31,6 +31,18 @@ platform :ios do
     setup_circle_ci
   end
 
+  desc "Upload dSYMs from the last build to Sentry"
+  lane :upload_dsym_to_sentry do
+    ensure_env_vars(env_vars: ['SENTRY_AUTH_TOKEN'])
+    dsym_path = lane_context[SharedValues::DSYM_OUTPUT_PATH]
+    UI.user_error!("No dSYM path found in DSYM_OUTPUT_PATH — run gym/build_app first") if dsym_path.to_s.empty?
+
+    sentry_cli = File.expand_path("../firefox-ios/ThirdParty/sentry-cli", __dir__)
+    # sentry-cli reads SENTRY_AUTH_TOKEN from the environment, so it's not passed on the command
+    # line here — that would leak it into CI logs and process listings.
+    sh("#{sentry_cli} upload-dif --org ecosiaorg --project browser-ios \"#{dsym_path}\"")
+  end
+
   desc "Build Ecosia App"
   lane :build_ecosia_app do
     match(
@@ -53,6 +65,8 @@ platform :ios do
       cloned_source_packages_path: "firefox-ios/SourcePackages",
       export_options: {iCloudContainerEnvironment: 'Development'}
     )
+
+    upload_dsym_to_sentry
   end
 
   desc "Upload to Browserstack AppAutomate"
@@ -112,6 +126,7 @@ platform :ios do
       export_method: "app-store",
       configuration: "Development_TestFlight"
     )
+    upload_dsym_to_sentry
     pilot(
       skip_waiting_for_build_processing: true, 
       apple_id: "1541358670",
@@ -153,11 +168,13 @@ platform :ios do
 
     gym(
       scheme: "Ecosia",
-      workspace: workspace_path,      
+      workspace: workspace_path,
       export_method: "app-store",
       configuration: "Release",
       xcargs: testflight_archive_args
     )
+
+    upload_dsym_to_sentry
 
     inject_appstore_connect_api
     

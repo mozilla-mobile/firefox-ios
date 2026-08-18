@@ -77,6 +77,39 @@ final class CrashManagerTests: XCTestCase {
         XCTAssertEqual(sentryWrapper.configureScopeCalled, 1)
     }
 
+    // Ecosia: DSN precedence and environment tag, see BrowserKitInformation.dsn/environmentName.
+    func testSetup_appInfoDSNSet_prefersAppInfoDSNOverSentryWrapperDSN() {
+        sentryWrapper.dsn = "https://wrapper@o0.ingest.sentry.io/1"
+        setupAppInformation(buildChannel: .other, dsn: "https://appinfo@o0.ingest.sentry.io/2")
+        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
+                                          isSimulator: false,
+                                          skipReleaseNameCheck: true)
+        subject.setup(sendCrashReports: true)
+
+        XCTAssertEqual(sentryWrapper.capturedOptions?.dsn, "https://appinfo@o0.ingest.sentry.io/2")
+    }
+
+    func testSetup_appInfoDSNNil_fallsBackToSentryWrapperDSN() {
+        sentryWrapper.dsn = "https://wrapper@o0.ingest.sentry.io/1"
+        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
+                                          isSimulator: false,
+                                          skipReleaseNameCheck: true)
+        subject.setup(sendCrashReports: true)
+
+        XCTAssertEqual(sentryWrapper.capturedOptions?.dsn, "https://wrapper@o0.ingest.sentry.io/1")
+    }
+
+    func testSetup_environmentNameSet_usesEnvironmentNameAsEnvironmentTag() {
+        sentryWrapper.dsn = "https://wrapper@o0.ingest.sentry.io/1"
+        setupAppInformation(buildChannel: .other, environmentName: "staging")
+        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
+                                          isSimulator: false,
+                                          skipReleaseNameCheck: true)
+        subject.setup(sendCrashReports: true)
+
+        XCTAssertEqual(sentryWrapper.capturedOptions?.environment, "staging")
+    }
+
     // MARK: - crashedLastLaunch
 
     func testCrashedLastLaunch_false() {
@@ -201,10 +234,20 @@ final class CrashManagerTests: XCTestCase {
 
 // MARK: - Helpers
 extension CrashManagerTests {
+    /* Ecosia: added environmentName and dsn params below
     private func setupAppInformation(buildChannel: AppBuildChannel) {
+    */
+    private func setupAppInformation(buildChannel: AppBuildChannel,
+                                     environmentName: String? = nil,
+                                     dsn: String? = nil) {
         BrowserKitInformation.shared.configure(buildChannel: buildChannel,
                                                nightlyAppVersion: "",
+                                               /* Ecosia: added environmentName and dsn args below
                                                sharedContainerIdentifier: "")
+                                               */
+                                               sharedContainerIdentifier: "",
+                                               environmentName: environmentName,
+                                               dsn: dsn)
     }
 }
 
@@ -218,8 +261,14 @@ private final class MockSentryWrapper: SentryWrapper, @unchecked Sendable {
     var dsn: String?
 
     var startWithConfigureOptionsCalled = 0
+    // Ecosia: Capture the configured Options so tests can assert on dsn/environment, not just call count.
+    var capturedOptions: Options?
     func startWithConfigureOptions(configure options: @escaping (Options) -> Void) {
         startWithConfigureOptionsCalled += 1
+        // Ecosia: Invoke the closure against a real Options to capture what was configured.
+        let capturedOptions = Options()
+        options(capturedOptions)
+        self.capturedOptions = capturedOptions
     }
 
     var savedMessage: String?

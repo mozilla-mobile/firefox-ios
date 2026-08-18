@@ -120,6 +120,9 @@
 	<string>$(NIMBUS_URL)</string>
 	<key>PocketEnvironmentAPIKey</key>
 	<string>$(POCKET_API_KEY)</string>
+	<!-- Ecosia: Feeds AppConstants.buildChannel, gating Sentry send/breadcrumb behavior for beta vs release builds. -->
+	<key>CHANNEL</key>
+	<string>$(CHANNEL)</string>
 	<key>SentryCloudDSN</key>
 	<string>$(SENTRY_CLOUD_DSN)</string>
 	<key>UIAppFonts</key>

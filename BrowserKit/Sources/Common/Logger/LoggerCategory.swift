@@ -23,6 +23,11 @@ public enum LoggerCategory: String {
     /// Related to coordinator navigation
     case coordinator
 
+    // Ecosia: Catch-all for Ecosia-originated errors not covered by another category (e.g. accounts/SSO
+    // failures). Add subsystem detail via the `extra` dict on `Logger.log(...)` rather than adding new
+    // categories per Ecosia feature.
+    case ecosia
+
     /// Related to experiments, nimbus and the messaging framework.
     case experiments
 

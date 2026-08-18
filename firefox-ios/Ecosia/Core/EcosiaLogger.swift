@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 /// Ecosia-specific logging levels following established patterns
 public enum LogLevel {
@@ -32,6 +33,13 @@ public extension EcosiaLoggerCategory {
 
     static func error(_ message: String) {
         EcosiaLogger.error("\(prefix) \(message)")
+    }
+
+    /// Logs locally like `.error` AND forwards to Sentry (see `EcosiaLogger.sentry(_:)`). Use for
+    /// real failures worth visibility outside a live console session — not every `.error` call needs
+    /// this. Interpolate the error into `message` yourself, same as `.error(...)` elsewhere in this file.
+    static func sentry(_ message: String) {
+        EcosiaLogger.sentry("\(prefix) \(message)")
     }
 }
 
@@ -76,6 +84,17 @@ public enum EcosiaLogger {
     /// Log an error message (available in all builds)
     public static func error(_ message: String) {
         print("[\(timestamp)] \(prefix): ❌ [ERROR] \(message)")
+    }
+
+    /// Log an error message locally like `.error`, AND forward it to Sentry via `DefaultLogger`
+    /// (category `.ecosia`). Forwarded at BrowserKit's `.fatal` level, not `.error` — that's not a
+    /// severity statement, it's required so `CrashManager.shouldSendEventFor` actually sends it as a
+    /// Sentry event instead of only a breadcrumb. Reserve for failures worth visibility outside a
+    /// live console session — not every `.error` call needs this. Not part of `LogLevel`/`log(_:level:)`
+    /// since it's a routing decision (also forward to Sentry), not a severity.
+    public static func sentry(_ message: String) {
+        print("[\(timestamp)] \(prefix): 📡 [SENTRY] \(message)")
+        DefaultLogger.shared.log(message, level: .fatal, category: .ecosia)
     }
 
     /// Generic log method with level

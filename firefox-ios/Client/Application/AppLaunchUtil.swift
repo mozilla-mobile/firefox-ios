@@ -8,6 +8,7 @@ import Shared
 import Account
 import Glean
 import MozillaAppServices
+import Ecosia
 
 final class AppLaunchUtil: Sendable {
     private let logger: Logger
@@ -149,6 +150,23 @@ final class AppLaunchUtil: Sendable {
             #if canImport(FoundationModels)
                 AppleIntelligenceUtil().processAvailabilityState()
             #endif
+        }
+    }
+
+    // Ecosia: Refreshes BrowserKitInformation's Sentry rollout flag once the `mob_ios_sentry_reporting`
+    // Unleash flag is known — called from AppDelegate after `FeatureManagement.fetchConfiguration()`
+    // resolves (both at launch and on foreground refresh). `logger.setup` is safe to call more than
+    // once; `CrashManager` checks the flag itself, covering every call site, and no-ops once already
+    // enabled.
+    func setUpCrashReportingIfEnabled() {
+        BrowserKitInformation.shared.sentryReportingEnabled = SentryReportingExperiment.isEnabled
+
+        let sendCrashReports = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendCrashReports) ?? true
+        if termsOfServiceManager.isFeatureEnabled {
+            let isTermsOfServiceAccepted = termsOfServiceManager.isAccepted || !introScreenManager.shouldShowIntroScreen
+            logger.setup(sendCrashReports: sendCrashReports && isTermsOfServiceAccepted)
+        } else {
+            logger.setup(sendCrashReports: sendCrashReports)
         }
     }
 

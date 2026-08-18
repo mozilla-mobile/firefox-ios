@@ -65,6 +65,12 @@ public enum URLProvider {
         "sdk.fra-02.braze.eu"
     }
 
+    /// Sentry DSN for the "ios-browser" project under the ecosiaorg org — same for every environment;
+    /// `CrashManager`'s own environment tag distinguishes staging/production, not a separate DSN.
+    public var sentryDSN: String {
+        "https://cc2ce4301c3eb148cdad9812d61e6e09@o28395.ingest.us.sentry.io/4511830051651585"
+    }
+
     public var statistics: URL {
         URL(string: "https://d2wfixp891z15b.cloudfront.net")!
     }

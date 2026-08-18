@@ -16,3 +16,6 @@ LEANPLUM_ENVIRONMENT = development
 CODE_SIGN_ENTITLEMENTS = Ecosia/Entitlements/EcosiaBeta.entitlements
 OTHER_SWIFT_FLAGS = $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_FENNEC
 OTHER_LDFLAGS = -ObjC -lxml2 -fprofile-instr-generate -ld_classic
+
+// Ecosia: For completeness — AppBuildChannel has no "debug" case, so this still resolves to .other.
+CHANNEL = debug

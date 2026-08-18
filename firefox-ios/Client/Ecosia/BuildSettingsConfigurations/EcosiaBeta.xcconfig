@@ -13,3 +13,6 @@ MOZ_BUNDLE_ID = com.ecosia.ecosiaapp.firefox
 CODE_SIGN_ENTITLEMENTS = Ecosia/Entitlements/EcosiaBeta.entitlements
 OTHER_SWIFT_FLAGS = $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_BETA
 OTHER_LDFLAGS = $(inherited) -ld_classic
+
+// Build channel drives AppConstants.buildChannel (MetricKit, app-hang tracking, Sentry send-gating).
+CHANNEL = beta

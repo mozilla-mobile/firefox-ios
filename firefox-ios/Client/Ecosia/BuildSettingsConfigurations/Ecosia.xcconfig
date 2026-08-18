@@ -11,3 +11,6 @@ MOZ_BUNDLE_ID = com.ecosia.ecosiaapp
 CODE_SIGN_ENTITLEMENTS = Ecosia/Entitlements/Ecosia.entitlements
 OTHER_SWIFT_FLAGS = $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_RELEASE
 OTHER_LDFLAGS = $(inherited) -ld_classic
+
+// Build channel drives AppConstants.buildChannel (MetricKit, app-hang tracking, Sentry send-gating).
+CHANNEL = release

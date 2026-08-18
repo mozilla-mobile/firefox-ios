@@ -8,6 +8,27 @@ import Shared
 import Common
 import Ecosia
 
+// MARK: - Sentry Debug Settings
+
+/// Sends a message through `EcosiaLogger.general.sentry(...)` without crashing — this logs locally like
+/// `.error` AND forwards to Sentry via `DefaultLogger`/`CrashManager` in one call. Useful to confirm the
+/// DSN/network path works without the crash+relaunch round trip.
+final class EcosiaLoggerForceErrorSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: Send Non-Crashing Error to Sentry", attributes: [:])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        EcosiaLogger.general.sentry("Ecosia debug: non-crashing test event")
+
+        let alert = AlertController(title: "Sent ✅",
+                                    message: "Check the Sentry dashboard in a minute.",
+                                    preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        navigationController?.topViewController?.present(alert, animated: true)
+    }
+}
+
 final class PushBackInstallation: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: Push back installation by 3 days (needs restart).", attributes: [:])

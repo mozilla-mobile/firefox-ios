@@ -59,8 +59,14 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
     private var isValidReleaseName: Bool {
         if skipReleaseNameCheck { return true }
 
+        /* Ecosia: No build in this fork ever produces Mozilla's bundle IDs, so scoping this to
+        Ecosia's own bundle identifiers also keeps the Sentry option tuning below (sampleRate,
+        session tracking) from ever applying to a non-Ecosia app.
         return AppInfo.bundleIdentifier == "org.mozilla.ios.Firefox"
                 || AppInfo.bundleIdentifier == "org.mozilla.ios.FirefoxBeta"
+        */
+        return AppInfo.bundleIdentifier == "com.ecosia.ecosiaapp"
+                || AppInfo.bundleIdentifier == "com.ecosia.ecosiaapp.firefox"
     }
 
     private var environment: Environment {
@@ -69,6 +75,14 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
             environment = Environment.nightly
         }
         return environment
+    }
+
+    /// Ecosia: Sentry environment tag. Uses `appInfo.environmentName` when the app has provided one
+    /// (Ecosia sets this from its own `Environment.current` at launch, giving lowercase `staging`/
+    /// `production` values matching Ecosia's web projects), falling back to Firefox's own
+    /// Nightly/Production channel naming otherwise.
+    private var environmentTag: String {
+        return appInfo.environmentName ?? environment.rawValue
     }
 
     private var releaseName: String {
@@ -111,14 +125,29 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
     }
 
     public func setup(sendCrashReports: Bool) {
+        /* Ecosia: appInfo.dsn (set by the app, e.g. from Ecosia's URLProvider) takes precedence over
+        sentryWrapper.dsn (Firefox's own Info.plist SentryCloudDSN key); Firefox call sites that
+        never set appInfo.dsn keep using sentryWrapper.dsn unchanged.
         guard shouldSetup,
               sendCrashReports,
               let dsn = sentryWrapper.dsn else {
             return
         }
+        */
+        let dsnOverride = appInfo.dsn
+
+        guard shouldSetup,
+              sendCrashReports,
+              // Ecosia: lets the app gate every setup() call site on its own rollout flag at once.
+              appInfo.sentryReportingEnabled,
+              let dsn = dsnOverride ?? sentryWrapper.dsn else { return }
 
         sentryWrapper.startWithConfigureOptions(configure: { options in
             options.dsn = dsn
+            // Ecosia: Sample a fraction of events to control volume.
+            options.sampleRate = 0.5
+            // Ecosia: Unused Release Health tracking; avoids a payload per app open.
+            options.enableAutoSessionTracking = false
             if self.shouldEnableTraceProfiling {
                 options.tracesSampleRate = 0.2
                 options.configureProfiling = {
@@ -126,7 +155,11 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
                     $0.lifecycle = .trace
                 }
             }
+            /* Ecosia: Use environmentTag (falls back to Firefox's own Nightly/Production naming
+            when Ecosia hasn't provided one) so Ecosia's staging/production tags come through.
             options.environment = self.environment.rawValue
+            */
+            options.environment = self.environmentTag
             options.releaseName = self.releaseName
             options.enableFileIOTracing = false
             options.enableNetworkTracking = false
@@ -206,6 +239,11 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
         sentryWrapper.captureMessage(message: message, with: { scope in
             scope.setEnvironment(event.environment)
             scope.setExtras(event.extra)
+            // Ecosia: event.tags (set in makeEvent from the log's category) was built but never
+            // forwarded to Sentry, making category unsearchable in the issue list. Forward it.
+            if let tags = event.tags {
+                scope.setTags(tags)
+            }
         })
     }
 
