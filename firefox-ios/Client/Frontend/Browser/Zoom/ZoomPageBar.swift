@@ -317,6 +317,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         leftSeparator.backgroundColor = separatorBackgroundColor
         rightSeparator.backgroundColor = separatorBackgroundColor
         zoomLevel.tintColor = colors.textPrimary
+        zoomLevel.textColor = colors.textPrimary
         zoomInButton.tintColor = colors.iconPrimary
         let zoomInButtonImageColorTransformer = UIConfigurationColorTransformer({ [weak zoomInButton] baseColor in
             return zoomInButton?.state == .highlighted ? colors.iconDisabled : baseColor
