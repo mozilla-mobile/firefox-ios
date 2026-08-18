@@ -275,7 +275,7 @@ class IntegrationTests: BaseTestCase {
             browserScreen.tapOnAddressBar()
             browserScreen.tapClearButtonIfExists()
             browserScreen.typeOnSearchBar(text: "exam")
-            mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
+            mozWaitForElementToNotExist(app.scrollViews.buttons["Search Settings"])
             mozWaitForElementToExist(siteTable.otherElements["Google Search"])
             // Firefox Suggest is displayed
             if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
