@@ -237,6 +237,20 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
         }
         screenState.backAction = navigationControllerBackAction(for: app)
     }
+
+    map.addScreenState(ExperimentsScreen) { screenState in
+        screenState.gesture(forAction: Action.ListAllExperiments) { userState in
+            app.buttons["Edit"].waitAndTap()
+            app.buttons["Reset"].waitAndTap()
+            app.navigationBars.buttons["BackButton"].waitAndTap()
+        }
+        screenState.gesture(forAction: Action.EnrollExperiment) { userState in
+            app.staticTexts[userState.experimentToEnroll].waitAndTap()
+            app.staticTexts["control"].waitAndTap()
+            app.navigationBars.buttons["BackButton"].waitAndTap()
+        }
+        screenState.backAction = navigationControllerBackAction(for: app)
+    }
 }
 
 @MainActor
@@ -252,4 +266,5 @@ private func registerSecretSettingsAccess(
         userState.secretSettingsRevealed = true
     }
     screenState.tap(table.cells["Firefox Suggest"], to: FirefoxSuggestSettings, if: "secretSettingsRevealed == true")
+    screenState.tap(table.cells["Experiments"], to: ExperimentsScreen, if: "secretSettingsRevealed == true")
 }

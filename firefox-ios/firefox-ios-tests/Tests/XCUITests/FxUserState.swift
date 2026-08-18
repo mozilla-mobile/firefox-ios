@@ -40,4 +40,5 @@ class FxUserState: MMUserState {
     var localeIsExpectedDifferent = false
 
     var secretSettingsRevealed = false
+    var experimentToEnroll = ""
 }
