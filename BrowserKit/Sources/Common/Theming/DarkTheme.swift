@@ -145,6 +145,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var iconOnColorDisabled: UIColor { NovaMissingToken.color("iconOnColorDisabled") }
     var iconPrivate: UIColor { NovaMissingToken.color("iconPrivate") }
     var borderStrong: UIColor { NovaMissingToken.color("borderStrong") }
+    var borderAccentToast: UIColor { NovaMissingToken.color("borderAccentToast") }
     var borderRadioButtonDefault: UIColor { NovaMissingToken.color("borderRadioButtonDefault") }
     var gradient: Gradient { NovaMissingToken.gradient("gradient") }
     var gradientAccent: Gradient { NovaMissingToken.gradient("gradientAccent") }

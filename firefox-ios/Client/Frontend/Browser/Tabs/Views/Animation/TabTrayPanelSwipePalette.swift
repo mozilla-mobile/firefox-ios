@@ -188,6 +188,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var iconOnColorDisabled: UIColor { base.iconOnColorDisabled }
     var iconPrivate: UIColor { base.iconPrivate }
     var borderStrong: UIColor { base.borderStrong }
+    var borderAccentToast: UIColor { base.borderAccentToast }
     var borderRadioButtonDefault: UIColor { base.borderRadioButtonDefault }
     var gradient: Gradient { base.gradient }
     var gradientAccent: Gradient { base.gradientAccent }

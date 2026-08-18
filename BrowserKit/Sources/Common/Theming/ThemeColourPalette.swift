@@ -118,6 +118,7 @@ public protocol ThemeColourPalette {
     var iconOnColorDisabled: UIColor { get }
     var iconPrivate: UIColor { get }
     var borderStrong: UIColor { get }
+    var borderAccentToast: UIColor { get }
     var borderRadioButtonDefault: UIColor { get }
     var gradient: Gradient { get }
     var gradientAccent: Gradient { get }

@@ -58,6 +58,7 @@ class NovaMissingTokenTests: XCTestCase {
             ("layerInverse", { _ = $0.layerInverse }),
             ("layerGlassTintNova", { _ = $0.layerGlassTintNova }),
             ("textToast", { _ = $0.textToast }),
+            ("borderAccentToast", { _ = $0.borderAccentToast }),
             ("iconInverted", { _ = $0.iconInverted }),
             ("iconOnColorDisabled", { _ = $0.iconOnColorDisabled }),
             ("iconPrivate", { _ = $0.iconPrivate }),
