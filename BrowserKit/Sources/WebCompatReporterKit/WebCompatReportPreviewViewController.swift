@@ -149,12 +149,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
             content.text = self.viewModel.technicalDataTitle
             content.textProperties.font = FXFontStyles.Regular.body.scaledFont()
             content.textProperties.color = self.theme.colors.textPrimary
-            content.directionalLayoutMargins = NSDirectionalEdgeInsets(
-                top: WebCompatReporterUX.Card.verticalInset,
-                leading: WebCompatReporterUX.Card.contentInset,
-                bottom: WebCompatReporterUX.Card.verticalInset,
-                trailing: WebCompatReporterUX.Card.contentInset
-            )
+            content.directionalLayoutMargins = WebCompatReporterUX.Card.edgeInsets
             cell.contentConfiguration = content
 
             let options = UICellAccessory.DisclosureIndicatorOptions(

@@ -35,14 +35,13 @@ final class WebCompatPreviewBulletListCell: UICollectionViewListCell,
     }
 
     private func setupLayout() {
-        let horizontalInset = WebCompatReporterUX.Card.contentInset
-        let verticalInset = WebCompatReporterUX.Card.verticalInset
+        let insets = WebCompatReporterUX.Card.edgeInsets
         contentView.addSubview(bulletsStackView)
         NSLayoutConstraint.activate([
-            bulletsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalInset),
-            bulletsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalInset),
-            bulletsStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: verticalInset),
-            bulletsStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -verticalInset)
+            bulletsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: insets.leading),
+            bulletsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -insets.trailing),
+            bulletsStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: insets.top),
+            bulletsStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -insets.bottom)
         ])
         applyScaledSpacing()
     }
