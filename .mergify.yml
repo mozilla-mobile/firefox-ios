@@ -80,3 +80,6 @@ priority_rules:
       - queue-name=rebase-queue
     priority: 2250
     allow_checks_interruption: true
+
+merge_queue:
+  queue_controls_comment: false
