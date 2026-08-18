@@ -162,12 +162,10 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         var payload = WebCompatReportPayload()
         payload.url = "https://example.com"
 
-        subject.newState(state: WebCompatReporterState(
-            windowUUID: windowUUID,
-            url: "https://example.com",
-            selectedCategory: .videoOrAudio,
-            previewPayload: payload
-        ))
+        subject.newState(state: WebCompatReporterState(windowUUID: windowUUID)
+            .copy(url: "https://example.com")
+            .copy(selectedCategory: .videoOrAudio)
+            .copy(previewPayload: payload))
 
         XCTAssertEqual(coordinator.didTapPreviewPayloads, [payload])
     }
@@ -178,11 +176,9 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         subject.reportCoordinator = coordinator
         subject.loadViewIfNeeded()
 
-        subject.newState(state: WebCompatReporterState(
-            windowUUID: windowUUID,
-            url: "https://example.com",
-            selectedCategory: .videoOrAudio
-        ))
+        subject.newState(state: WebCompatReporterState(windowUUID: windowUUID)
+            .copy(url: "https://example.com")
+            .copy(selectedCategory: .videoOrAudio))
 
         XCTAssertTrue(coordinator.didTapPreviewPayloads.isEmpty)
     }
@@ -196,7 +192,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     // MARK: - makeIssueSections
 
     func testMakeIssueSections_withoutCategory_showsPlaceholderAndNoSubOptions() {
-        let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
+        let state = WebCompatReporterState(windowUUID: windowUUID).copy(url: "https://example.com")
 
         let sections = WebCompatReportViewController.makeIssueSections(from: state)
 
@@ -212,12 +208,10 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func testMakeIssueSections_withCategory_addsSubOptionsWithCheckmarkOnSelected() {
-        let state = WebCompatReporterState(
-            windowUUID: windowUUID,
-            url: "https://example.com",
-            selectedCategory: .siteNotUsable,
-            selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue
-        )
+        let state = WebCompatReporterState(windowUUID: windowUUID)
+            .copy(url: "https://example.com")
+            .copy(selectedCategory: .siteNotUsable)
+            .copy(selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue)
 
         let sections = WebCompatReportViewController.makeIssueSections(from: state)
 
@@ -236,11 +230,9 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func testMakeIssueSections_withOtherCategory_hasNoSubOptionSection() {
-        let state = WebCompatReporterState(
-            windowUUID: windowUUID,
-            url: "https://example.com",
-            selectedCategory: .other
-        )
+        let state = WebCompatReporterState(windowUUID: windowUUID)
+            .copy(url: "https://example.com")
+            .copy(selectedCategory: .other)
 
         let sections = WebCompatReportViewController.makeIssueSections(from: state)
 
@@ -250,7 +242,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     // MARK: - makeSections
 
     func testMakeSections_withoutCategory_showsURLCategoryAdvancedAndDisabledSend() {
-        let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
+        let state = WebCompatReporterState(windowUUID: windowUUID).copy(url: "https://example.com")
 
         let sections = WebCompatReportViewController.makeSections(from: state)
 
@@ -268,15 +260,13 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func testMakeSections_withCategory_addsSubOptionsDetailsAndAdvancedWithSendLast() {
-        let state = WebCompatReporterState(
-            windowUUID: windowUUID,
-            url: "https://example.com",
-            selectedCategory: .siteNotUsable,
-            selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue,
-            additionalDetails: "Broken images",
-            includeScreenshot: false,
-            includeBlockedList: true
-        )
+        let state = WebCompatReporterState(windowUUID: windowUUID)
+            .copy(url: "https://example.com")
+            .copy(selectedCategory: .siteNotUsable)
+            .copy(selectedSubOptionID: WebCompatSubOption.pageNotLoading.rawValue)
+            .copy(additionalDetails: "Broken images")
+            .copy(includeScreenshot: false)
+            .copy(includeBlockedList: true)
 
         let sections = WebCompatReportViewController.makeSections(from: state)
 
@@ -297,7 +287,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func testMakeSections_attachesLearnMoreFooterWithATappableLink() throws {
-        let state = WebCompatReporterState(windowUUID: windowUUID, url: "https://example.com")
+        let state = WebCompatReporterState(windowUUID: windowUUID).copy(url: "https://example.com")
 
         let sections = WebCompatReportViewController.makeSections(from: state)
 
