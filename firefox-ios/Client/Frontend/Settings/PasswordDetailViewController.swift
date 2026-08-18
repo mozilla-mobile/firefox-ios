@@ -421,11 +421,24 @@ extension PasswordDetailViewController {
         guard let indexPath = viewModel.indexPath(for: LoginDetailCellType.username),
                 let cell = tableView.cellForRow(at: indexPath) as? LoginDetailTableViewCell else { return }
         cell.descriptionLabel.becomeFirstResponder()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .done,
+        let theme = currentTheme()
+        guard #available(iOS 26.0, *), theme.isNova else {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                barButtonSystemItem: .done,
+                target: self,
+                action: #selector(doneEditing)
+            )
+            return
+        }
+        let doneButton = UIBarButtonItem(
+            image: UIImage(named: StandardImageIdentifiers.Large.checkmark)?
+                .withTintColor(theme.colors.iconInverted, renderingMode: .alwaysOriginal),
+            style: .prominent,
             target: self,
             action: #selector(doneEditing)
         )
+        doneButton.tintColor = theme.colors.actionPrimary
+        navigationItem.rightBarButtonItem = doneButton
     }
 
     @objc

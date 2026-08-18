@@ -38,11 +38,25 @@ final class TranslationPickerSettingsViewController: UIViewController,
         action: #selector(didTapEdit)
     )
 
-    private lazy var doneButton = UIBarButtonItem(
-        barButtonSystemItem: .done,
-        target: self,
-        action: #selector(didTapDone)
-    )
+    private lazy var doneButton: UIBarButtonItem = {
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        guard #available(iOS 26.0, *), theme.isNova else {
+            return UIBarButtonItem(
+                barButtonSystemItem: .done,
+                target: self,
+                action: #selector(didTapDone)
+            )
+        }
+        let button = UIBarButtonItem(
+            image: UIImage(named: StandardImageIdentifiers.Large.checkmark)?
+                .withTintColor(theme.colors.iconInverted, renderingMode: .alwaysOriginal),
+            style: .prominent,
+            target: self,
+            action: #selector(didTapDone)
+        )
+        button.tintColor = theme.colors.actionPrimary
+        return button
+    }()
 
     private lazy var cancelButton = UIBarButtonItem(
         barButtonSystemItem: .cancel,
