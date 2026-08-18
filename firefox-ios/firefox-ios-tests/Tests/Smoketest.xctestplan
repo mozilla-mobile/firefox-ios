@@ -176,6 +176,7 @@
         "BrowsingPDFTests\/testOpenLinkFromPDF_TAE()",
         "BrowsingPDFTests\/testOpenPDFViewer()",
         "BrowsingPDFTests\/testPinPDFtoTopSites_TAE()",
+        "BrowsingPDFTests\/testSwitchTabsWhileDownloadingPDF()",
         "C_AddressesTests\/testAddNewAddressCityFilled()",
         "C_AddressesTests\/testAddNewAddressCountry()",
         "C_AddressesTests\/testAddNewAddressEmailFilled()",
