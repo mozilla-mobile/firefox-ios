@@ -28,6 +28,7 @@ protocol BrowserSelectorsSet {
     var CLIPBOARD_TOAST: Selector { get }
     var BOOKMARK_SAVED_TOAST: Selector { get }
     var PRIVATE_MODE_HOMEPAGE_TITLE: Selector { get }
+    var PRIVATE_MODE_HOMEPAGE_LINK: Selector { get }
     var SEARCH_SETTINGS_BUTTON: Selector { get }
     var SPONSORED_LABEL: Selector { get }
     var PASTE_BUTTON: Selector { get }
@@ -58,6 +59,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let clipboardToast = "Fennec pasted from CoreSimulatorBridge"
         static let bookmarkSavedToast = "Saved in"
         static let privateModeHomepageTitle = "PrivateMode.Homepage.Title"
+        static let privateModeHomepageLink = AccessibilityIdentifiers.PrivateMode.Homepage.link
         static let bookOfMozilla = "The Book of Mozilla"
         static let bookOfMozillaVerseText = "And the beast shall come forth"
         static let searchSettingsButton = "Search Settings"
@@ -200,6 +202,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "bookmarks"]
     )
 
+    let PRIVATE_MODE_HOMEPAGE_LINK = Selector.anyElementById(
+        IDs.privateModeHomepageLink,
+        description: "\"Who might be able to see my activity?\" link on the private homepage",
+        groups: ["browser", "private_browsing"]
+    )
+
     let PRIVATE_MODE_HOMEPAGE_TITLE = Selector.staticTextId(
         IDs.privateModeHomepageTitle,
         description: "Private mode homepage title message",
@@ -260,7 +268,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, BOOK_OF_MOZILLA_VERSE_TEXT,
                            ADDRESSTOOLBAR_LOCKICON, ADDRESSTOOLBAR_LOCKICON_OFF,
                            TOPTABS_COLLECTIONVIEW, MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE,
-                           SAVE_BUTTON, CLIPBOARD_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE,
+                           SAVE_BUTTON, CLIPBOARD_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE, PRIVATE_MODE_HOMEPAGE_LINK,
                            PASTE_BUTTON, SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL,
                            OPEN_DESIGNATED_URL_BUTTON]
     }
