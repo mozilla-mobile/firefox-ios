@@ -345,6 +345,18 @@ workflows:
     - 2_certificate_and_profile
     steps:
     - script@1:
+        title: Set daily cache key
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euxo pipefail
+            envman add --key SYNC_INTEGRATION_CACHE_DATE --value "$(date +%Y%m%d)"
+    - restore-cache@2:
+        title: Restore Sync Integration download cache
+        inputs:
+        - key: sync-integration-pytest-cache-$SYNC_INTEGRATION_CACHE_DATE
+        - paths: firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests/.pytest_cache/d
+    - script@1:
         title: Run Sync Integration smoketest
         timeout: 1200
         inputs:
@@ -356,6 +368,12 @@ workflows:
             pip install pipenv
             pipenv install --python 3.12
             pipenv run pytest -m smoketest
+    - save-cache@1:
+        title: Save Sync Integration download cache
+        is_always_run: true
+        inputs:
+        - key: sync-integration-pytest-cache-$SYNC_INTEGRATION_CACHE_DATE
+        - paths: firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests/.pytest_cache/d
     - deploy-to-bitrise-io@2:
         is_always_run: true
         inputs:
