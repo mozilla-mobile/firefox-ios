@@ -264,13 +264,19 @@ public final class HeaderView: UIView, ThemeApplicable {
     }
 
     public func applyTheme(theme: Theme) {
+        let closeButtonTint = theme.isNova ? theme.colors.iconPrimary : theme.colors.iconSecondary
         let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
-            .withTintColor(theme.colors.iconSecondary)
+            .withTintColor(closeButtonTint)
         subtitleLabel.textColor = theme.colors.textSecondary
         titleLabel.textColor = theme.colors.textPrimary
         self.tintColor = theme.colors.layer2
         closeButton.setImage(buttonImage, for: .normal)
-        closeButton.backgroundColor = theme.colors.layer2
+        if #available(iOS 26.0, *), theme.isNova {
+            closeButton.applyProminentClearGlassConfiguration(backgroundColor: theme.colors.layer2,
+                                                               foregroundColor: closeButtonTint)
+        } else {
+            closeButton.backgroundColor = theme.colors.layer2
+        }
         horizontalLine.backgroundColor = theme.colors.borderPrimary
     }
 }

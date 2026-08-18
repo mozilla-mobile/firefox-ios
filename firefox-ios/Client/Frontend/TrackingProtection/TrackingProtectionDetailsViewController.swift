@@ -266,7 +266,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 extension TrackingProtectionDetailsViewController {
     func applyTheme() {
         let theme = currentTheme()
-        view.backgroundColor =  theme.colors.layer3
+        view.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
         connectionView.connectionImage.image = model.getLockIcon(theme.type)
         verifiedByView.applyTheme(theme: theme)
         viewCertificatesButton.applyTheme(theme: theme)

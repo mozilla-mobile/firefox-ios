@@ -99,7 +99,7 @@ class TrackingProtectionButton: ResizableButton, ThemeApplicable {
     // MARK: ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        backgroundColorNormal = theme.colors.layer2
+        backgroundColorNormal = theme.isNova ? theme.colors.layerSurfaceMedium : theme.colors.layer2
         foregroundColor = theme.colors.textPrimary
         setNeedsUpdateConfiguration()
     }
