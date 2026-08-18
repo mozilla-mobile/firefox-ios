@@ -13,6 +13,15 @@ let PDF_website = [
     "longUrlValue": "http://www.education.gov.yk.ca/"
 ]
 
+let largePDF1 = [
+    "url": "https://storage.googleapis.com/mobile_test_assets/public/10MB-TESTFILE.ORG.pdf",
+    "pdfValue": "storage.googleapis.com"
+]
+let largePDF2 = [
+    "url": "https://storage.googleapis.com/mobile_test_assets/public/20MB-TESTFILE.ORG.pdf",
+    "pdfValue": "storage.googleapis.com"
+]
+
 class BrowsingPDFTests: BaseTestCase {
     let url = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
     private var topSites: TopSitesScreen!
@@ -20,6 +29,7 @@ class BrowsingPDFTests: BaseTestCase {
     private var pdf: PDFScreen!
     private var contextMenu: ContextMenuScreen!
     private var library: LibraryScreen!
+    private var tabTrayScreen: TabTrayScreen!
 
     override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out the function name
@@ -29,6 +39,7 @@ class BrowsingPDFTests: BaseTestCase {
         pdf = PDFScreen(app: app)
         browser = BrowserScreen(app: app)
         library = LibraryScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307116
@@ -178,6 +189,25 @@ class BrowsingPDFTests: BaseTestCase {
 
         // Assert that the bookmarked item exists
         library.assertBookmarkExists(named: PDF_website["bookmarkLabel"]!)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168443
+    // Regression
+    func testSwitchTabsWhileDownloadingPDF() {
+        // Step 1: Open a large PDF in a tab. The PDF starts downloading.
+        navigator.openURL(largePDF2["url"]!)
+        waitUntilDownloadStarts()
+
+        // Step 2: Switch to another tab and open another large PDF. All PDF files load properly.
+        navigator.openNewURL(urlString: largePDF1["url"]!)
+        waitUntilPageLoad()
+        browser.assertAddressBarContains(value: largePDF1["pdfValue"]!)
+
+        // Step 3: Return to the first PDF tab. It should be loading or loaded.
+        navigator.goto(TabTray)
+        tabTrayScreen.tapTabAtIndex(index: 0)
+        waitUntilPageLoad()
+        browser.assertAddressBarContains(value: largePDF2["pdfValue"]!)
     }
 
     private func longPressOnPdfLink() {
