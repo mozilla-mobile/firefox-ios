@@ -14,7 +14,6 @@ final class WebCompatURLCellTests: XCTestCase {
         subject.configure(
             title: "URL",
             text: "https://example.com",
-            placeholder: "Website address",
             a11yIdentifier: "WebCompatReporter.URLField",
             onEditingEnded: { _ in }
         )
@@ -27,18 +26,27 @@ final class WebCompatURLCellTests: XCTestCase {
 
     func testApplyStackLayout_switchesAxisAndAlignmentBetweenStandardAndAccessibilitySizes() throws {
         let subject = createSubject()
-        subject.configure(title: "URL", text: "", placeholder: "", a11yIdentifier: "url", onEditingEnded: { _ in })
+        subject.configure(title: "URL", text: "", a11yIdentifier: "url", onEditingEnded: { _ in })
         let stack = try XCTUnwrap(firstSubview(ofType: UIStackView.self, in: subject.contentView))
-        let field = try XCTUnwrap(firstSubview(ofType: UITextField.self, in: subject.contentView))
 
         subject.applyStackLayout(isAccessibilityCategory: false)
         XCTAssertEqual(stack.axis, .horizontal)
         XCTAssertEqual(stack.alignment, .center)
-        XCTAssertEqual(field.textAlignment, .right)
 
         subject.applyStackLayout(isAccessibilityCategory: true)
         XCTAssertEqual(stack.axis, .vertical)
         XCTAssertEqual(stack.alignment, .fill)
+    }
+
+    func testConfigure_clearedFieldShowsNoPlaceholderAndReadsFromTheLeadingEdge() throws {
+        let subject = createSubject()
+
+        subject.configure(title: "URL", text: "ebay.com", a11yIdentifier: "url", onEditingEnded: { _ in })
+        subject.applyTheme(theme: LightTheme())
+
+        let field = try XCTUnwrap(firstSubview(ofType: UITextField.self, in: subject.contentView))
+        XCTAssertNil(field.placeholder)
+        XCTAssertNil(field.attributedPlaceholder)
         XCTAssertEqual(field.textAlignment, .natural)
     }
 

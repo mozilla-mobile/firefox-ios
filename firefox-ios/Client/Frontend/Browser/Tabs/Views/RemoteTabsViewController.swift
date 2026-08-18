@@ -202,7 +202,7 @@ class RemoteTabsViewController: UIViewController,
         let theme = retrieveTheme()
         emptyView.applyTheme(theme: theme)
         tableView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
-        view.backgroundColor = theme.colors.layer3
+        view.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
     }
 
     private func configureEmptyView(isSyncing: Bool = false) {

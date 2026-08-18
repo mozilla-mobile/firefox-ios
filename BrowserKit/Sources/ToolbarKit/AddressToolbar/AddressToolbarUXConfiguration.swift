@@ -13,16 +13,10 @@ public struct AddressToolbarUXConfiguration {
     let locationTextFieldTrailingPadding: CGFloat
     let shouldBlur: Bool
     let backgroundAlpha: CGFloat
-    /// Alpha value that controls element visibility during scroll-based address bar transitions.
-    /// Changes between 0 (hidden) and 1 (visible) based on scroll direction.
-    let scrollAlpha: CGFloat
-
-    var isAddressBarMinimized: Bool {
-        return scrollAlpha.isZero
-    }
+    let isAddressBarMinimized: Bool
 
     public static func experiment(backgroundAlpha: CGFloat = 1.0,
-                                  scrollAlpha: CGFloat = 1.0,
+                                  isAddressBarMinimized: Bool = false,
                                   shouldBlur: Bool = false,
                                   hasAlternativeLocationColor: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
@@ -32,12 +26,12 @@ public struct AddressToolbarUXConfiguration {
             locationTextFieldTrailingPadding: 0,
             shouldBlur: shouldBlur,
             backgroundAlpha: backgroundAlpha,
-            scrollAlpha: scrollAlpha
+            isAddressBarMinimized: isAddressBarMinimized
         )
     }
 
     public static func `default`(backgroundAlpha: CGFloat = 1.0,
-                                 scrollAlpha: CGFloat = 1.0,
+                                 isAddressBarMinimized: Bool = false,
                                  shouldBlur: Bool = false,
                                  hasAlternativeLocationColor: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
@@ -48,7 +42,7 @@ public struct AddressToolbarUXConfiguration {
             locationTextFieldTrailingPadding: 8.0,
             shouldBlur: shouldBlur,
             backgroundAlpha: backgroundAlpha,
-            scrollAlpha: scrollAlpha
+            isAddressBarMinimized: isAddressBarMinimized
         )
     }
 

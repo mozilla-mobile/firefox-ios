@@ -1631,9 +1631,9 @@ extension String {
 extension String {
     public struct NativeErrorPage {
         public static let ButtonLabel = MZLocalizedString(
-            key: "NativeErrorPage.ButtonLabel.v131",
+            key: "NativeErrorPage.ButtonLabel.v155",
             tableName: "NativeErrorPage",
-            value: "Reload",
+            value: "Try Again",
             comment: "On error page, this is the text on a button that will try to load the page again.")
         public static let GoBackButton = MZLocalizedString(
             key: "NativeErrorPage.GoBackButton.v149",
@@ -1738,9 +1738,9 @@ extension String {
                 value: "The site may be busy or unavailable. Try again later. If other pages won’t load, check your Wi-Fi or data connection. %@ can also search the Wayback Machine for an earlier version of this page.",
                 comment: "Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox).")
             public static let SearchLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.Search.v154",
+                key: "NativeErrorPage.Wayback.Error.Search.v155",
                 tableName: "NativeErrorPage",
-                value: "Check for earlier version",
+                value: "View Archived Version",
                 comment: "Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine.")
             public static let WaybackButtonA11yHint = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154",
@@ -1748,14 +1748,14 @@ extension String {
                 value: "Searches the Wayback Machine for an archived version of this page.",
                 comment: "Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked.")
             public static let CheckingLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.Checking.v154",
+                key: "NativeErrorPage.Wayback.Error.Checking.v155",
                 tableName: "NativeErrorPage",
-                value: "Checking for page…",
+                value: "Checking the Archive…",
                 comment: "Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress.")
             public static let CouldNotReachLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.CouldNotReach.v154",
+                key: "NativeErrorPage.Wayback.Error.CouldNotReach.v155",
                 tableName: "NativeErrorPage",
-                value: "Couldn’t reach Wayback Machine",
+                value: "We couldn’t reach the archive service.",
                 comment: "Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page.")
             public static let RetryButton = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Retry.v154",
@@ -1765,7 +1765,7 @@ extension String {
             public static let NotFoundLabel = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.NotFound.v155",
                 tableName: "NativeErrorPage",
-                value: "No archived version found",
+                value: "No archived version found.",
                 comment: "Label shown when wayback responds and says no snapshot was found.")
             public static let SearchButton = MZLocalizedString(
                 key: "NativeErrorPage.Wayback.Error.Search.v155",
@@ -4495,12 +4495,6 @@ extension String {
                 tableName: "WebCompatReporter",
                 value: "URL",
                 comment: "Leading label of the editable row showing the web address being reported, in the Report a Website Issue form."
-            )
-            public static let URLPlaceholder = MZLocalizedString(
-                key: "WebCompatReporter.Fields.URLPlaceholder.v154",
-                tableName: "WebCompatReporter",
-                value: "URL",
-                comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form."
             )
             public static let DetailsPlaceholder = MZLocalizedString(
                 key: "WebCompatReporter.Fields.DetailsPlaceholder.v154",
@@ -9361,6 +9355,13 @@ extension String {
                 tableName: nil,
                 value: "Theme",
                 comment: "Title in main app settings for Theme settings")
+        }
+        struct v156 {
+            public static let WebCompatReporterFieldsURLPlaceholder = MZLocalizedString(
+                key: "WebCompatReporter.Fields.URLPlaceholder.v154",
+                tableName: "WebCompatReporter",
+                value: "URL",
+                comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form.")
         }
     }
 }

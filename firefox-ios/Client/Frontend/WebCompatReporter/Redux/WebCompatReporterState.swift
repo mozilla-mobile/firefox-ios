@@ -24,9 +24,9 @@ struct WebCompatReporterState: ScreenState, Equatable {
     var canPreview: Bool { selectedCategory != nil }
     var showsAdditionalDetails: Bool { selectedCategory != nil }
 
-    /// Send needs a sub-option too, except for "Other", which has none.
+    /// Send needs an address to report against and a sub-option, except for "Other", which has none.
     var canSubmit: Bool {
-        guard let selectedCategory else { return false }
+        guard let selectedCategory, !url.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return false }
         return selectedCategory.subOptions.isEmpty || selectedSubOptionID != nil
     }
 

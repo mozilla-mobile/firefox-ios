@@ -252,11 +252,10 @@ public final class WebCompatReportSheetViewController: UIViewController,
     private func urlCellRegistration()
     -> UICollectionView.CellRegistration<WebCompatURLCell, WebCompatReportViewModel.Row> {
         return UICollectionView.CellRegistration { [weak self] cell, _, row in
-            guard let self, case let .urlField(text, placeholder) = row.kind else { return }
+            guard let self, case let .urlField(text) = row.kind else { return }
             cell.configure(
                 title: row.title,
                 text: text,
-                placeholder: placeholder,
                 a11yIdentifier: row.a11yIdentifier
             ) { [weak self] text in
                 self?.delegate?.webCompatReportSheetDidEditText(id: row.id, text: text)

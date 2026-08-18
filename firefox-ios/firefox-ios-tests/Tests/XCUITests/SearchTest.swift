@@ -492,39 +492,91 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.CloseTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        let siteTable = app.tables["SiteTable"]
-
         for orientation in [UIDeviceOrientation.portrait, UIDeviceOrientation.landscapeLeft] {
             XCUIDevice.shared.orientation = orientation
 
-            // Firefox Suggest should show up for sponsored suggestion without Firefox Accounts
-            // https://github.com/mozilla-mobile/firefox-ios/issues/35171
-            let firefoxSuggestTerms = [
-                "amazon": "Amazon.com - Official Site", // Sponsored suggestion
-            ]
-            for (term, expectedTitle) in firefoxSuggestTerms {
-                browserScreen.tapOnAddressBar()
-                browserScreen.tapClearButtonIfExists()
-                browserScreen.typeOnSearchBar(text: term)
-                mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
-                mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
-                let searchEngines = [
-                    "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
-                ]
-                for searchEngine in searchEngines {
-                    mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
-                }
-                // Search engine suggestions
-                mozWaitForElementToExist(siteTable.otherElements["Google Search"])
-                mozWaitForElementToExist(siteTable.staticTexts[term])
-
-                // Firefox Suggest is displayed
-                if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
-                    siteTable.cells.firstMatch.swipeUp()
-                }
-                mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
-                mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
+            // Bug: Sponsored suggest may not show up on iPad
+            // https://github.com/mozilla-mobile/firefox-ios/issues/35243
+            if !iPad() {
+                verifySearchSuggestion(searchTerm: "amazon",
+                                       expectedMatch: "Amazon.com - Official Site",
+                                       hasFirefoxSuggest: true,
+                                       isSponsored: true)
             }
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753093
+    // Regression
+    func testFirefoxSuggestPartialSponsored() {
+        app.launch()
+        // Workaround: Sponsored suggestions do not show up intermittently.
+        // Ingesting the new suggestions forces the app to have the sponsored
+        // results for Firefox Suggest consistently.
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.performAction(Action.IngestNewSuggestionsNow)
+        navigator.goto(HomePanelsScreen)
+        verifySearchSuggestion(searchTerm: "amaz",
+                               expectedMatch: "Amazon.com - Official Site",
+                               hasFirefoxSuggest: true,
+                               isSponsored: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753076
+    // Regresssion
+    func testFirefoxSuggestPartialNonSponsored() {
+        app.launch()
+        // Precondition: Enable enhanced cross-platform suggest experiment
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.goto(ExperimentsScreen)
+        navigator.performAction(Action.ListAllExperiments)
+        navigator.userState.experimentToEnroll = "Enhanced Cross-Platform Suggest [iOS] - Phased Roll out 138+"
+        navigator.performAction(Action.EnrollExperiment)
+        navigator.goto(SettingsScreen)
+        navigator.goto(HomePanelsScreen)
+
+        verifySearchSuggestion(searchTerm: "fifa",
+                               expectedMatch: "Wikipedia - FIFA Club World Cup",
+                               hasFirefoxSuggest: true,
+                               isSponsored: false)
+    }
+
+    private func verifySearchSuggestion(searchTerm: String,
+                                        expectedMatch: String = "",
+                                        hasFirefoxSuggest: Bool = false,
+                                        isSponsored: Bool = false) {
+        let siteTable = app.tables["SiteTable"]
+        browserScreen.tapOnAddressBar()
+        browserScreen.tapClearButtonIfExists()
+        browserScreen.typeOnSearchBar(text: searchTerm)
+
+        for searchEngine in [
+            "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
+        ] {
+            mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
+        }
+
+        // Search engine suggestions
+        mozWaitForElementToExist(siteTable.otherElements["Google Search"])
+        mozWaitForElementToExist(siteTable.staticTexts[searchTerm])
+
+        // Firefox Suggest is displayed
+        if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
+            siteTable.cells.firstMatch.swipeUp()
+        }
+        if hasFirefoxSuggest {
+            mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
+            mozWaitForElementToExist(app.tables.staticTexts[expectedMatch])
+        } else {
+            mozWaitForElementToNotExist(siteTable.otherElements["Firefox Suggest"])
+        }
+
+        if isSponsored {
+            mozWaitForElementToExist(siteTable.staticTexts["Sponsored"])
+        } else {
+            mozWaitForElementToNotExist(siteTable.staticTexts["Sponsored"])
         }
     }
 

@@ -8,7 +8,6 @@ import UIKit
 import WebKit
 import Shared
 import Storage
-import Account
 import MobileCoreServices
 import Common
 import Redux
@@ -19,6 +18,7 @@ import ActivityKit
 import Glean
 import QuickAnswersKit
 
+import class Account.RustFirefoxAccounts
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
 import struct MozillaAppServices.Login
@@ -5010,21 +5010,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        // Only restore the address bar to fully shown if it wasn't collapsed by scrolling. When the
-        // keyboard is dismissed via scroll and the toolbars are already collapsed, so forcing scrollAlpha
-        // back to 1 here would leave the address bar full while the bottom containers stay collapsed
-        // (inconsistent state).
-        // This is a legacy-only patch (via the `LegacyTabScrollProvider` cast below); the scroll
-        // controller refactor (TabScrollHandler) will address the underlying issue differently
-        let isToolbarStateCollapsed = (scrollController as? LegacyTabScrollProvider)?.isToolbarStateCollapsed ?? false
-        if #available(iOS 26.0, *), isBottomSearchBar, !isToolbarStateCollapsed {
-            store.dispatch(
-                ToolbarAction(
-                    scrollAlpha: 1,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-                )
-            )
+        // Restores the address bar from its minimized "pill" shape back to its full toolbar.
+        // This undoes the minimization applied for the keyboard accessory view
+        // Only dispatch the action if the toolbar isn't currently collapsed by scrolling, if the
+        // user has scrolled previously, restore the address back here would leave the
+        // address bar full while the bottom containers stay collapsed (inconsistent state).
+        if #available(iOS 26.0, *), isBottomSearchBar, scrollController.isToolbarFullyExpanded {
+            store.dispatch(ToolbarModernAction.keyboardDidHide, forWindowUUID: windowUUID)
         }
         keyboardState = nil
         updateConstraintsForKeyboard()
