@@ -147,10 +147,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
             badgesTopFromFavicon,
             badgesStack.leadingAnchor.constraint(equalTo: favicon.leadingAnchor),
             badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor),
-            badgesStack.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-
-            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
+            badgesStack.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
 
         closeButton.layer.cornerRadius = 0.5 * UX.closeButtonSize
@@ -164,6 +161,8 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         stateImage: String,
         shouldUseRenderMode: Bool,
         stateIconTintColor: UIColor? = nil,
+        stateTextColor: UIColor? = nil,
+        stateChevronTintColor: UIColor? = nil,
         adBlocker: MenuSiteAdBlockerBadgeData? = nil
     ) {
         titleLabel.text = title
@@ -171,7 +170,9 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         siteProtectionsBadge.configure(text: state,
                                        iconName: stateImage,
                                        useTemplate: shouldUseRenderMode,
-                                       iconTintColor: stateIconTintColor)
+                                       iconTintColor: stateIconTintColor,
+                                       textColor: stateTextColor,
+                                       chevronTintColor: stateChevronTintColor)
         if let adBlocker {
             if adBlockerBadge.superview == nil {
                 badgesStack.addArrangedSubview(adBlockerBadge)

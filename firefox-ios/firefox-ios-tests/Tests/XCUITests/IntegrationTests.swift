@@ -44,6 +44,7 @@ class IntegrationTests: BaseTestCase {
             launchArguments.append(LaunchArguments.StageServer)
         }
         launchArguments.append(LaunchArguments.DisableAnimations)
+        launchArguments.append("\(LaunchArguments.ServerPort)\(serverPort)")
         try await super.setUp()
         browserScreen = BrowserScreen(app: app)
     }
@@ -261,28 +262,100 @@ class IntegrationTests: BaseTestCase {
     // [Config] orientation:portrait, orientation:landscape 
     // Smoketest
     func testFxATabsFirefoxSuggest() {
+        // Workaround: "Ingest New Suggestions Now" from the
+        // secret settings may force the suggestions to be
+        // loaded.
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.performAction(Action.IngestNewSuggestionsNow)
+        navigator.goto(HomePanelsScreen)
+
         // Precondition: Sign into Mozilla Account
         signInFxAccounts()
         waitForInitialSyncComplete()
         navigator.nowAt(SettingsScreen)
-        navigator.goto(HomePanelsScreen)
+
+        // Create an open Tab
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        navigator.openURL("localhost:\(serverPort)/test-fixture/\(TestPages.mozillaOrg)")
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        // Create some history
+        navigator.openNewURL(urlString: "https://www.iana.org/")
+        waitUntilPageLoad()
+        navigator.performAction(Action.CloseTab)
+
+        // Create a bookmark
+        navigator.openNewURL(urlString: "localhost:\(serverPort)/test-fixture/\(TestPages.mozillaBook)")
+        waitUntilPageLoad()
+        navigator.performAction(Action.Bookmark)
+        navigator.performAction(Action.CloseTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
 
         // Firefox Suggest and Google Search
         // Synced tab: example.com/
         let siteTable = app.tables["SiteTable"]
         for orientation in [UIDeviceOrientation.portrait, UIDeviceOrientation.landscapeLeft] {
             XCUIDevice.shared.orientation = orientation
+            waitForRotation(to: orientation)
+            waitForTabsButtonHittable()
+
+            // Firefox Suggest should show up for sponsored suggestion, open tab, history
+            // and bookmark.
+            let firefoxSuggestTerms = [
+                // Known bug: Sponsored suggestion not showing up when logged in to
+                // Mozilla Account.
+                // https://github.com/mozilla-mobile/firefox-ios/issues/35171
+                // "amazon": "Amazon.com - Official Site", // Sponsored suggestion
+                "internet": "Internet for people, not profit — Mozilla", // Open tab
+                "iana": "www.iana.org/", // History
+                "book": "The Book of Mozilla", // Bookmark
+                "exam": "Example Domain" // synced tab
+            ]
+            for (term, expectedTitle) in firefoxSuggestTerms {
+                browserScreen.tapOnAddressBar()
+                browserScreen.tapClearButtonIfExists()
+                browserScreen.typeOnSearchBar(text: term)
+                mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
+                mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
+                let searchEngines = [
+                    "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
+                ]
+                for searchEngine in searchEngines {
+                    mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
+                }
+                // Search engine suggestions
+                mozWaitForElementToExist(siteTable.otherElements["Google Search"])
+                mozWaitForElementToExist(siteTable.staticTexts[term])
+
+                // Firefox Suggest is displayed
+                if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
+                    siteTable.cells.firstMatch.swipeUp()
+                }
+                mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
+                mozWaitForElementToExist(siteTable.staticTexts[expectedTitle])
+            }
+
+            // Non Firefox Suggest result: A random term
+            let term = "heeeeeeellllllllllloooooooo"
             browserScreen.tapOnAddressBar()
             browserScreen.tapClearButtonIfExists()
-            browserScreen.typeOnSearchBar(text: "exam")
-            mozWaitForElementToNotExist(app.scrollViews.buttons["Search Settings"])
-            mozWaitForElementToExist(siteTable.otherElements["Google Search"])
-            // Firefox Suggest is displayed
-            if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
-                siteTable.cells.firstMatch.swipeUp()
+            browserScreen.typeOnSearchBar(text: term)
+            mozWaitForElementToExist(app.scrollViews.buttons["Search Settings"])
+            let searchEngines = [
+                "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
+            ]
+            for searchEngine in searchEngines {
+                mozWaitForElementToExist(app.scrollViews.buttons[searchEngine])
             }
-            mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
-            mozWaitForElementToExist(siteTable.staticTexts["Example Domain"])
+            // Search engine suggestions
+            mozWaitForElementToExist(siteTable.otherElements["Google Search"])
+            mozWaitForElementToExist(siteTable.staticTexts[term])
+            mozWaitForElementToNotExist(siteTable.otherElements["Firefox Suggest"])
         }
     }
 

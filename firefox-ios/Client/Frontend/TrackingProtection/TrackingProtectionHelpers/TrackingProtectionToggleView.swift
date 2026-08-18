@@ -153,7 +153,7 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        self.backgroundColor = theme.colors.layer2
+        self.backgroundColor = theme.isNova ? theme.colors.layerSurfaceMedium : theme.colors.layer2
         toggleSwitch.tintColor = theme.colors.actionPrimary
         toggleSwitch.onTintColor = theme.colors.actionPrimary
         toggleStatusLabel.textColor = theme.colors.textSecondary

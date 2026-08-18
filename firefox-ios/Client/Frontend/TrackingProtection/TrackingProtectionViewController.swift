@@ -771,7 +771,8 @@ class TrackingProtectionViewController: UIViewController,
     func applyTheme() {
         let theme = currentTheme()
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
-        view.backgroundColor = theme.colors.layer3.withAlphaComponent(backgroundAlpha)
+        let panelBackground = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
+        view.backgroundColor = panelBackground.withAlphaComponent(backgroundAlpha)
         headerContainer.applyTheme(theme: theme)
         connectionDetailsHeaderView.applyTheme(theme: theme)
         trackersView.applyTheme(theme: theme)

@@ -400,6 +400,12 @@ class BaseTestCase: XCTestCase {
         }
     }
 
+    func waitUntilDownloadStarts() {
+        let app = XCUIApplication()
+        let progressIndicator = app.progressIndicators.element(boundBy: 0)
+        mozWaitForElementToExist(progressIndicator)
+    }
+
     func waitForTabsButton() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
     }

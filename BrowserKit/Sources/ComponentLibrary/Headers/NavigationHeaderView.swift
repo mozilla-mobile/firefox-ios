@@ -142,14 +142,20 @@ public final class NavigationHeaderView: UIView {
 
     // MARK: ThemeApplicable
     public func applyTheme(theme: Theme) {
+        let closeButtonTint = theme.isNova ? theme.colors.iconPrimary : theme.colors.iconSecondary
         let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
-            .withTintColor(theme.colors.iconSecondary)
+            .withTintColor(closeButtonTint)
         closeButton.setImage(buttonImage, for: .normal)
-        closeButton.backgroundColor = theme.colors.layer2
+        if #available(iOS 26.0, *), theme.isNova {
+            closeButton.applyProminentClearGlassConfiguration(backgroundColor: theme.colors.layer2,
+                                                              foregroundColor: closeButtonTint)
+        } else {
+            closeButton.backgroundColor = theme.colors.layer2
+        }
         backButton.tintColor = theme.colors.iconAccent
         backButton.setTitleColor(theme.colors.textAccent, for: .normal)
         horizontalLine.backgroundColor = theme.colors.borderPrimary
         titleLabel.textColor = theme.colors.textPrimary
-        backgroundColor = theme.colors.layer3
+        backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
     }
 }

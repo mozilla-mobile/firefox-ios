@@ -147,7 +147,8 @@ class ButtonToast: Toast {
         descriptionLabel.textColor = theme.colors.textInverted
         imageView.tintColor = theme.colors.textInverted
         roundedButton.setTitleColor(theme.isNova ? theme.colors.textToast : theme.colors.textInverted, for: [])
-        roundedButton.layer.borderColor = theme.colors.borderInverted.cgColor
+        let borderColor = theme.isNova ? theme.colors.borderAccentToast : theme.colors.borderInverted
+        roundedButton.layer.borderColor = borderColor.cgColor
     }
 
     override func adjustLayoutForA11ySizeCategory() {
@@ -210,6 +211,7 @@ class PasteControlToast: ButtonToast {
 
     override func applyTheme(theme: Theme) {
         super.applyTheme(theme: theme)
-        pasteControl.layer.borderColor = theme.colors.borderInverted.cgColor
+        let borderColor = theme.isNova ? theme.colors.borderAccentToast : theme.colors.borderInverted
+        pasteControl.layer.borderColor = borderColor.cgColor
     }
 }
