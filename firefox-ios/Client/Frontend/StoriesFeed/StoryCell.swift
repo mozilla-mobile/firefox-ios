@@ -162,7 +162,7 @@ class StoryCell: UICollectionViewCell,
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        contentView.backgroundColor = theme.colors.layer2
+        contentView.backgroundColor = theme.isNova ? theme.colors.layerSurfaceMedium : theme.colors.layer2
         titleLabel.textColor = theme.colors.textPrimary
         attributionTitleLabel.textColor = theme.colors.textSecondary
         setupShadow(theme: theme)
