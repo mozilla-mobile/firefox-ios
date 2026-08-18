@@ -261,6 +261,46 @@ final class TabTrayScreen {
         BaseTestCase().mozWaitForElementToNotExist(cell(named: name), timeout: timeout)
     }
 
+    private func allTabTitles() -> [String] {
+        guard let collectionView = getVisibleCollectionView() else { return [] }
+        return collectionView.cells.allElementsBoundByIndex.map { $0.label }
+    }
+
+    // A document tab is only renamed once its temporary download completes, so poll the titles
+    // until the expected one shows up. Failures list every title seen, to ease debugging.
+    func assertSomeTabTitleContains(
+        _ substring: String,
+        timeout: TimeInterval = TIMEOUT,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        var titles: [String] = []
+        let deadline = Date().addingTimeInterval(timeout)
+        repeat {
+            titles = allTabTitles()
+            if titles.contains(where: { $0.contains(substring) }) { return }
+        } while Date() < deadline
+
+        XCTFail(
+            "No tab is titled after \"\(substring)\". Titles found: \(titles)",
+            file: file,
+            line: line
+        )
+    }
+
+    // Tab cell labels may carry a "Currently selected tab" suffix, so check every visible cell
+    // for the substring instead of matching a whole label.
+    func assertNoTabTitleContains(_ substring: String, file: StaticString = #filePath, line: UInt = #line) {
+        for (index, title) in allTabTitles().enumerated() {
+            XCTAssertFalse(
+                title.contains(substring),
+                "Tab at index \(index) is titled \"\(title)\", which should not contain \"\(substring)\"",
+                file: file,
+                line: line
+            )
+        }
+    }
+
     func closeFirstTab() {
         if BaseTestCase().iPad() {
             app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
