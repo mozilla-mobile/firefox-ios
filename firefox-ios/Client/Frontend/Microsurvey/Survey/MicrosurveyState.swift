@@ -61,11 +61,11 @@ struct MicrosurveyState: ScreenState {
         switch action.actionType {
         case MicrosurveyActionType.closeSurvey:
             return state
+                .resetTransientState()
                 .copy(shouldDismiss: true)
-                .copy(showPrivacy: false)
         case MicrosurveyActionType.tapPrivacyNotice:
             return state
-                .copy(shouldDismiss: false)
+                .resetTransientState()
                 .copy(showPrivacy: true)
         default:
             return defaultState(from: state)

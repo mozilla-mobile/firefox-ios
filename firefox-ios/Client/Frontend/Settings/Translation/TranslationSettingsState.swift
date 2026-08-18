@@ -67,12 +67,12 @@ struct TranslationSettingsState: ScreenState, Equatable {
 
     init(windowUUID: WindowUUID,
          isTranslationsEnabled: Bool,
-         isAutoTranslateEnabled: Bool = false,
-         isEditing: Bool = false,
-         pendingLanguages: [PreferredLanguageDetails]? = nil,
+         isAutoTranslateEnabled: Bool,
+         isEditing: Bool,
+         pendingLanguages: [PreferredLanguageDetails]?,
          preferredLanguages: [PreferredLanguageDetails],
          supportedLanguages: [String],
-         availableLanguages: [String] = []) {
+         availableLanguages: [String]) {
         self.windowUUID = windowUUID
         self.isTranslationsEnabled = isTranslationsEnabled
         self.isAutoTranslateEnabled = isAutoTranslateEnabled
@@ -171,15 +171,5 @@ struct TranslationSettingsState: ScreenState, Equatable {
             supportedLanguages: state.supportedLanguages,
             availableLanguages: state.availableLanguages
         )
-    }
-
-    static func == (lhs: TranslationSettingsState, rhs: TranslationSettingsState) -> Bool {
-        return lhs.isTranslationsEnabled == rhs.isTranslationsEnabled
-            && lhs.isAutoTranslateEnabled == rhs.isAutoTranslateEnabled
-            && lhs.isEditing == rhs.isEditing
-            && lhs.pendingLanguages == rhs.pendingLanguages
-            && lhs.preferredLanguages == rhs.preferredLanguages
-            && lhs.supportedLanguages == rhs.supportedLanguages
-            && lhs.availableLanguages == rhs.availableLanguages
     }
 }

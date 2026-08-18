@@ -370,14 +370,7 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
             presentedComponents: PresentedComponentsState(
                 components: [
                     .translationSettings(
-                        TranslationSettingsState(
-                            windowUUID: .XCTestDefaultUUID,
-                            isTranslationsEnabled: true,
-                            isEditing: false,
-                            pendingLanguages: nil,
-                            preferredLanguages: [],
-                            supportedLanguages: []
-                        )
+                        TranslationSettingsState(windowUUID: .XCTestDefaultUUID)
                     )
                 ]
             )

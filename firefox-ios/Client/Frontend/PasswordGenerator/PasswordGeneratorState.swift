@@ -30,11 +30,11 @@ struct PasswordGeneratorState: ScreenState {
         )
     }
 
-    init(
-        windowUUID: WindowUUID,
-        password: String = "",
-        passwordHidden: Bool = false
-    ) {
+    init(windowUUID: WindowUUID) {
+        self.init(windowUUID: windowUUID, password: "", passwordHidden: false)
+    }
+
+    init(windowUUID: WindowUUID, password: String, passwordHidden: Bool) {
         self.windowUUID = windowUUID
         self.password = password
         self.passwordHidden = passwordHidden

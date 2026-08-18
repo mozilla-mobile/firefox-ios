@@ -83,12 +83,9 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
             PreferredLanguageDetails(code: "en", mainText: "English", subtitleText: "Device Language"),
             PreferredLanguageDetails(code: "fr", mainText: "français", subtitleText: "French")
         ]
-        let state = TranslationSettingsState(
-            windowUUID: .XCTestDefaultUUID,
-            isTranslationsEnabled: true,
-            preferredLanguages: details,
-            supportedLanguages: ["en", "fr"]
-        )
+        let state = TranslationSettingsState(windowUUID: .XCTestDefaultUUID)
+            .copy(preferredLanguages: details)
+            .copy(supportedLanguages: ["en", "fr"])
 
         subject.applySnapshot(state: state, animated: false)
 
@@ -107,11 +104,9 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
 
     private func makeState(isEnabled: Bool, languages: [String]) -> TranslationSettingsState {
         let details = languages.map { PreferredLanguageDetails(code: $0, mainText: $0, subtitleText: nil) }
-        return TranslationSettingsState(
-            windowUUID: .XCTestDefaultUUID,
-            isTranslationsEnabled: isEnabled,
-            preferredLanguages: details,
-            supportedLanguages: languages
-        )
+        return TranslationSettingsState(windowUUID: .XCTestDefaultUUID)
+            .copy(isTranslationsEnabled: isEnabled)
+            .copy(preferredLanguages: details)
+            .copy(supportedLanguages: languages)
     }
 }
