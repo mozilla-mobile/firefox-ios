@@ -220,6 +220,16 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
     /// cleared when an account is disconnected.
     private let prefKeyCachedUserProfile = "prefKeyCachedUserProfile"
     private var cachedUserProfile: FxAUserProfile?
+
+    /// In-flight account operation the account manager applies asynchronously; UI reads it to show a
+    /// transitional label ("Signing out…") instead of stale account info during the window.
+    public enum AccountTransition {
+        case idle
+        case signingOut
+    }
+
+    public private(set) var accountTransition: AccountTransition = .idle
+
     public var userProfile: FxAUserProfile? {
         let prefs = RustFirefoxAccounts.prefs
 
@@ -242,12 +252,19 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
     }
 
     public func disconnect() {
-        guard let accountManager = accountManager else { return }
-        accountManager.logout { _ in }
-        let prefs = RustFirefoxAccounts.prefs
-        prefs?.removeObjectForKey(prefKeyCachedUserProfile)
-        prefs?.removeObjectForKey(PendingAccountDisconnectedKey)
-        cachedUserProfile = nil
+        guard let accountManager else { return }
+        // Enter the "Signing out…" transition immediately; `logout` completes asynchronously, after which
+        // the account manager's state becomes authoritative again.
+        accountTransition = .signingOut
+        NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
+        accountManager.logout { [weak self] _ in
+            guard let self else { return }
+            cachedUserProfile = nil
+            RustFirefoxAccounts.prefs?.removeObjectForKey(prefKeyCachedUserProfile)
+            accountTransition = .idle
+            NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
+        }
+        RustFirefoxAccounts.prefs?.removeObjectForKey(PendingAccountDisconnectedKey)
     }
 
     public func hasAccount() -> Bool {

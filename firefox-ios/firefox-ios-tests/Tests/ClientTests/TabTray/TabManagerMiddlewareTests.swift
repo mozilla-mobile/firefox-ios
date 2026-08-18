@@ -507,6 +507,31 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(action.currentTabInfo?.readerModeConfiguration.isActive, true)
     }
 
+    func testRequestTabInfo_dispatchesMainMenuAction_withAccountData() throws {
+        let subject = createSubject()
+        let expectation = XCTestExpectation(description: "Main Menu tab info with account data is dispatched.")
+        let tabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
+        tabManager?.selectedTab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.tabsPanelProvider.legacyMiddleware(
+            appState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuMiddlewareActionType.requestTabInfo
+            )
+        )
+        wait(for: [expectation])
+
+        // `requestTabInfo` builds the menu's tab info, which must carry the account header the menu renders
+        // (the menu reads `currentTabInfo.accountData`).
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
+        let accountData = try XCTUnwrap(action.currentTabInfo?.accountData)
+        // With no signed-in account in the test environment, the menu shows the signed-out header.
+        XCTAssertEqual(accountData.title, String.MainMenu.Account.SignedOutTitle)
+    }
+
     func test_shortcutsLibraryAction_switchTabToastButtonPressed_selectsTab() throws {
         let subject = createSubject()
         let tab = Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)

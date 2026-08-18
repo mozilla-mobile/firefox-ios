@@ -44,9 +44,16 @@ class AccountStatusSetting: WithAccountSetting,
     }
 
     override var title: NSAttributedString? {
-        guard let profile = RustFirefoxAccounts.shared.userProfile, let theme else { return nil }
+        guard let theme else { return nil }
 
-        let string = profile.displayName ?? profile.email
+        let string: String
+        switch RustFirefoxAccounts.shared.accountTransition {
+        case .signingOut:
+            string = .Settings.Sync.SigningOutTitle
+        case .idle:
+            guard let profile = RustFirefoxAccounts.shared.userProfile else { return nil }
+            string = profile.displayName ?? profile.email
+        }
 
         return NSAttributedString(
             string: string,
