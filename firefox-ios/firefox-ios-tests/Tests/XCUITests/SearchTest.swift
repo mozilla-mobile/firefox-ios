@@ -505,9 +505,9 @@ class SearchTests: FeatureFlaggedTestBase {
             // https://github.com/mozilla-mobile/firefox-ios/issues/35243
             if !iPad() {
                 verifySearchSuggestion(searchTerm: "amazon",
-                                   expectedMatch: "Amazon.com - Official Site",
-                                   hasFirefoxSuggest: true,
-                                   isSponsored: true)
+                                       expectedMatch: "Amazon.com - Official Site",
+                                       hasFirefoxSuggest: true,
+                                       isSponsored: true)
             }
             // Non-sponsored suggestions
             for (term, expectedTitle) in [
