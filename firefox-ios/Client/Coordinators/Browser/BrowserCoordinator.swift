@@ -1537,7 +1537,7 @@ final class BrowserCoordinator: BaseCoordinator,
             guard let base64 = result as? String,
                   let data = Data(base64Encoded: base64) else { return nil }
             let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
-                .appendingPathComponent(Self.shareableFilename(for: tabURL))
+                .appendingPathComponent(Self.shareableFilename(for: tabURL, mimeType: tab.mimeType))
             try data.write(to: fileURL)
             return fileURL
         } catch {
@@ -1548,12 +1548,15 @@ final class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    private static func shareableFilename(for url: URL) -> String {
+    private static func shareableFilename(for url: URL, mimeType: String?) -> String {
         let lastComponent = url.lastPathComponent
         if !lastComponent.isEmpty, !(lastComponent as NSString).pathExtension.isEmpty {
             return lastComponent
         }
-        return "document.pdf"
+        if let mimeType, let fileExtension = MIMEType.fileExtensionFromMIMEType(mimeType) {
+            return "document.\(fileExtension)"
+        }
+        return "document"
     }
 
     /// Utility. Performs the supplied action if a coordinator of the indicated type
