@@ -140,9 +140,9 @@ class NativeErrorPageHelper {
         }
     }
 
-    /// Distinguishes a true "no network" state from iOS having blocked this
-    /// app's cellular data access specifically, which surfaces as the same
-    /// NSURLErrorNotConnectedToInternet error but has a distinct fix for the user.
+    /// Distinguishes a true "no network" state from the user having blocked cellular data
+    /// access for Firefox in the system settings, which surfaces as the same
+    /// `NSURLErrorNotConnectedToInternet` error but requires a different fix from the user.
     private var noConnectionModel: ErrorPageModel {
         return cellularDataStatusProvider.isCellularDataRestricted ? .cellularDataRestricted : .internetConnection
     }

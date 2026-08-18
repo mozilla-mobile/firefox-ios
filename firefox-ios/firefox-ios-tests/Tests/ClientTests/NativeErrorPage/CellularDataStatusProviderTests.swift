@@ -22,4 +22,14 @@ final class CellularDataStatusProviderTests: XCTestCase {
 
         XCTAssertEqual(first, second)
     }
+
+    func testUpdateCachedState_updatesCachedValueForNextRead() {
+        let provider = CTCellularDataStatusProvider.shared
+
+        provider.updateCachedState(.restricted)
+        XCTAssertTrue(provider.isCellularDataRestricted)
+
+        provider.updateCachedState(.notRestricted)
+        XCTAssertFalse(provider.isCellularDataRestricted)
+    }
 }

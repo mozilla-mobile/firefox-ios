@@ -26,7 +26,7 @@ final class CTCellularDataStatusProvider: CellularDataStatusProviding, @unchecke
         }
     }
 
-    private func updateCachedState(_ state: CTCellularDataRestrictedState) {
+    func updateCachedState(_ state: CTCellularDataRestrictedState) {
         lock.lock()
         cachedState = state
         lock.unlock()
