@@ -7,38 +7,49 @@ import Foundation
 import UIKit
 import WebCompatReporterKit
 
-/// Owns the Report Preview sheet for as long as it is on screen. The report sheet is the
+/// Owns the Report Preview sheet and the Technical Data screen it pushes. The report sheet is the
 /// presenting context, so this is rooted at a router over it rather than the browser's.
-final class WebCompatReportPreviewCoordinator: BaseCoordinator, WebCompatTechnicalDataDelegate {
+final class WebCompatReportPreviewCoordinator: BaseCoordinator,
+                                               WebCompatReportPreviewDelegate,
+                                               WebCompatTechnicalDataDelegate {
+    private let payload: WebCompatReportPayload
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
     private weak var parentCoordinator: ParentCoordinatorDelegate?
+    /// A second router, over the sheet's own stack: the injected one is rooted at the report form,
+    /// so pushing through it would put Technical Data behind the sheet instead of on top of it.
+    private var previewRouter: Router?
+    /// Tracked so a second tap can't stack a duplicate on top.
+    private weak var technicalDataViewController: WebCompatTechnicalDataViewController?
 
     init(
+        payload: WebCompatReportPayload,
         router: Router,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         parentCoordinator: ParentCoordinatorDelegate?
     ) {
+        self.payload = payload
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.parentCoordinator = parentCoordinator
         super.init(router: router)
     }
 
-    func start(payload: WebCompatReportPayload) {
-        let previewViewController = WebCompatTechnicalDataViewController(
-            viewModel: payload.makePreviewViewModel(),
+    func start() {
+        let previewViewController = WebCompatReportPreviewViewController(
+            viewModel: payload.makeReportPreviewViewModel(),
             windowUUID: windowUUID,
             themeManager: themeManager
         )
         previewViewController.delegate = self
-        let previewNavigationController = UINavigationController(rootViewController: previewViewController)
-        if let sheet = previewNavigationController.sheetPresentationController {
+        let navigationController = UINavigationController(rootViewController: previewViewController)
+        previewRouter = DefaultRouter(navigationController: navigationController)
+        if let sheet = navigationController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true
         }
-        router.present(previewNavigationController, animated: true) { [weak self] in
+        router.present(navigationController, animated: true) { [weak self] in
             // Runs when we dismiss through `UIAdaptivePresentationControllerDelegate`
             self?.didFinish()
         }
@@ -50,14 +61,31 @@ final class WebCompatReportPreviewCoordinator: BaseCoordinator, WebCompatTechnic
         didFinish()
     }
 
+    // MARK: - WebCompatReportPreviewDelegate
+
+    func webCompatReportPreviewDidRequestDismiss() {
+        dismissPreview(animated: true)
+    }
+
+    func webCompatReportPreviewDidTapTechnicalData() {
+        guard technicalDataViewController == nil else { return }
+        let viewController = WebCompatTechnicalDataViewController(
+            viewModel: payload.makeTechnicalDataViewModel(),
+            windowUUID: windowUUID,
+            themeManager: themeManager
+        )
+        viewController.delegate = self
+        technicalDataViewController = viewController
+        // The completion runs when it's popped, so the row can push a fresh screen again.
+        previewRouter?.push(viewController) { [weak self] in
+            self?.technicalDataViewController = nil
+        }
+    }
+
     // MARK: - WebCompatTechnicalDataDelegate
 
     func webCompatTechnicalDataDidRequestDismiss() {
         dismissPreview(animated: true)
-    }
-
-    func webCompatTechnicalDataDidTapScreenshot() {
-        // Unreachable while the thumbnail is off; FXIOS-16450 wires up the screenshot viewer.
     }
 
     // MARK: - Private

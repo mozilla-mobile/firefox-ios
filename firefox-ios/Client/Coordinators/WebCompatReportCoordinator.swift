@@ -78,13 +78,14 @@ final class WebCompatReportCoordinator: BaseCoordinator,
         // The main router presents from the browser, which already shows the sheet, so the preview
         // goes up from the sheet itself.
         let previewCoordinator = WebCompatReportPreviewCoordinator(
+            payload: payload,
             router: DefaultRouter(navigationController: reportViewController),
             windowUUID: windowUUID,
             themeManager: themeManager,
             parentCoordinator: self
         )
         add(child: previewCoordinator)
-        previewCoordinator.start(payload: payload)
+        previewCoordinator.start()
     }
 
     // MARK: - ParentCoordinatorDelegate

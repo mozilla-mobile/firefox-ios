@@ -4,6 +4,7 @@
 
 import XCTest
 import Common
+import WebCompatReporterKit
 
 @testable import Client
 
@@ -33,7 +34,7 @@ final class WebCompatReportPreviewCoordinatorTests: XCTestCase {
     // only place the parent hears about it.
     func test_swipeDismiss_finishesTheCoordinator() {
         let subject = createSubject()
-        subject.start(payload: WebCompatReportPayload())
+        subject.start()
 
         router.savedCompletion?()
 
@@ -42,12 +43,29 @@ final class WebCompatReportPreviewCoordinatorTests: XCTestCase {
 
     func test_technicalDataDidRequestDismiss_dismissesAndNotifiesParent() {
         let subject = createSubject()
-        subject.start(payload: WebCompatReportPayload())
+        subject.start()
 
         subject.webCompatTechnicalDataDidRequestDismiss()
 
         XCTAssertEqual(router.dismissCalled, 1)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+    }
+
+    // The injected router is rooted at the report form, so pushing through it would leave Technical
+    // Data behind the sheet instead of on top of the preview.
+    func test_previewDidTapTechnicalData_pushesOntoTheSheetsOwnStack() throws {
+        let subject = createSubject()
+        subject.start()
+
+        subject.webCompatReportPreviewDidTapTechnicalData()
+
+        let navigationController = try XCTUnwrap(router.presentedViewController as? UINavigationController)
+        XCTAssertEqual(navigationController.viewControllers.count, 2)
+        XCTAssertEqual(router.pushCalled, 0)
+        let pushed = try XCTUnwrap(navigationController.topViewController as? WebCompatTechnicalDataViewController)
+        XCTAssertIdentical(pushed.delegate, subject)
+        let root = try XCTUnwrap(navigationController.viewControllers.first as? WebCompatReportPreviewViewController)
+        XCTAssertIdentical(root.delegate, subject)
     }
 
     // MARK: - Helper Methods
@@ -56,6 +74,7 @@ final class WebCompatReportPreviewCoordinatorTests: XCTestCase {
         line: UInt = #line
     ) -> WebCompatReportPreviewCoordinator {
         let subject = WebCompatReportPreviewCoordinator(
+            payload: WebCompatReportPayload(),
             router: router,
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,

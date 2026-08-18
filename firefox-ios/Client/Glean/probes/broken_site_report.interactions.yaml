@@ -78,8 +78,8 @@ broken_site_report.interactions:
   previewed:
     type: event
     description: |
-      Recorded when the user opens the report preview, which is currently
-      parked (FXIOS-16450).
+      Recorded when the user opens the Report Preview screen from the
+      reporter's Preview button.
     data_sensitivity:
       - interaction
     bugs:

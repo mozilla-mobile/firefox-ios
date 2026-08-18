@@ -88,9 +88,9 @@ final class WebCompatReportPayloadTests: XCTestCase {
         XCTAssertEqual(renderedFields(of: payload)["antiTracking.blockedOrigins"], "[]")
     }
 
-    // MARK: - makePreviewViewModel
+    // MARK: - makeTechnicalDataViewModel
 
-    func testMakePreviewViewModel_showsTheCollectedPayloadNotASecondCopyOfIt() throws {
+    func testMakeTechnicalDataViewModel_showsTheCollectedPayloadNotASecondCopyOfIt() throws {
         var payload = WebCompatReportPayload()
         payload.url = "https://example.com"
         payload.breakageCategory = WebCompatSubOption.pageNotLoading.rawValue
@@ -99,7 +99,7 @@ final class WebCompatReportPayloadTests: XCTestCase {
         payload.memory = 8192
         payload.defaultLocales = ["en-GB", "fr"]
 
-        let viewModel = payload.makePreviewViewModel()
+        let viewModel = payload.makeTechnicalDataViewModel()
 
         // Groups and labels come from the payload, so a new metric shows up without touching this file.
         XCTAssertEqual(viewModel.sections.map(\.id), payload.previewGroups.map(\.id.rawValue))
@@ -113,13 +113,13 @@ final class WebCompatReportPayloadTests: XCTestCase {
         XCTAssertTrue(rendered.contains("app.defaultLocales = [\"en-GB\", \"fr\"]"))
     }
 
-    func testMakePreviewViewModel_uncollectedMetricsReadAsNull() throws {
+    func testMakeTechnicalDataViewModel_uncollectedMetricsReadAsNull() throws {
         // What the form knows on its own; everything the collector fills in is still missing.
         let payload = WebCompatReportPayload.make(
             from: makeState(url: "https://example.com", selectedCategory: .other)
         )
 
-        let viewModel = payload.makePreviewViewModel()
+        let viewModel = payload.makeTechnicalDataViewModel()
 
         let frameworks = try XCTUnwrap(viewModel.sections.first { $0.id == "frameworks" })
         XCTAssertEqual(frameworks.rows.map { $0.value.displayText }, ["null", "null", "null"])
@@ -130,13 +130,22 @@ final class WebCompatReportPayloadTests: XCTestCase {
         XCTAssertEqual(description.value, .null)
     }
 
-    func testMakePreviewViewModel_givesEveryGroupItsOwnAccessibilityIdentifiers() {
-        let viewModel = WebCompatReportPayload().makePreviewViewModel()
+    func testMakeTechnicalDataViewModel_givesEveryGroupItsOwnAccessibilityIdentifiers() {
+        let viewModel = WebCompatReportPayload().makeTechnicalDataViewModel()
 
         // Header and card are addressed separately in UI tests, so they can't share an identifier.
         let identifiers = viewModel.sections.flatMap { [$0.a11yIdentifier, $0.contentA11yIdentifier] }
         XCTAssertEqual(Set(identifiers).count, identifiers.count)
         XCTAssertTrue(identifiers.allSatisfy { $0.hasPrefix("WebCompatReporter.Preview.") })
+    }
+
+    // MARK: - makeReportPreviewViewModel
+
+    func testMakeReportPreviewViewModel_titlesTheScreenAndTheRowFromDifferentStrings() {
+        let viewModel = WebCompatReportPayload().makeReportPreviewViewModel()
+
+        XCTAssertEqual(viewModel.title, .WebCompatReporter.Preview.Title)
+        XCTAssertEqual(viewModel.technicalDataTitle, .WebCompatReporter.Preview.TechnicalData)
     }
 
     // MARK: - Helpers
