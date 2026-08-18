@@ -580,7 +580,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
         // gives us the exact same behaviour as Safari.
         if ["sms", "tel", "facetime", "facetime-audio"].contains(url.scheme) {
-            handleSpecialSchemeNavigation(url: url)
+            handleSpecialSchemeNavigation(url: url, tab: tab)
             decisionHandler(.cancel)
             return
         }
@@ -652,7 +652,6 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.allow)
             return
         }
-
         decisionHandler(.cancel)
     }
 
@@ -687,7 +686,10 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.allow)
     }
 
-    private func handleSpecialSchemeNavigation(url: URL) {
+    private func handleSpecialSchemeNavigation(url: URL, tab: Tab) {
+        guard tab.popupThrottler.canShowAlert(type: .externalScheme) else { return }
+        tab.popupThrottler.willShowAlert(type: .externalScheme)
+
         if url.scheme == "sms" { // All the other types show a native prompt
             showExternalAlert(withText: .ExternalSmsLinkConfirmation) { _ in
                 UIApplication.shared.open(url, options: [:])

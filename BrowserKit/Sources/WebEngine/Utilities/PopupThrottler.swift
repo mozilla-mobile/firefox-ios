@@ -15,6 +15,9 @@ public enum PopupType: Sendable {
     case alert
     /// Popup window (window.open)
     case popupWindow
+    /// Navigation to a scheme handled outside the app (sms, tel, facetime), each
+    /// of which shows either our own confirmation alert or a native system prompt.
+    case externalScheme
 
     /// Max consecutive popups allowed within a given time period (below)
     /// after which throttling begins.
@@ -22,6 +25,7 @@ public enum PopupType: Sendable {
         switch self {
         case .alert: return 5
         case .popupWindow: return 2
+        case .externalScheme: return 2
         }
     }
 
@@ -31,18 +35,22 @@ public enum PopupType: Sendable {
         switch self {
         case .alert: return 20
         case .popupWindow: return 2
+        case .externalScheme: return 10
         }
     }
 
     public static let defaultResetTimes = [PopupType.alert: PopupType.alert.resetTime,
-                                           PopupType.popupWindow: PopupType.popupWindow.resetTime]
+                                           PopupType.popupWindow: PopupType.popupWindow.resetTime,
+                                           PopupType.externalScheme: PopupType.externalScheme.resetTime]
 }
 
 /// Utility for tracking various types of popups that may be presented
 /// over a short time. Used to prevent Javascript abuse or DOS attacks.
 public final class DefaultPopupThrottler: PopupThrottler {
-    private var alertCount = [PopupType.alert: 0, PopupType.popupWindow: 0]
-    private var lastAlertDate = [PopupType.alert: Date.distantPast, PopupType.popupWindow: Date.distantPast]
+    private var alertCount = [PopupType.alert: 0, PopupType.popupWindow: 0, PopupType.externalScheme: 0]
+    private var lastAlertDate = [PopupType.alert: Date.distantPast,
+                                 PopupType.popupWindow: Date.distantPast,
+                                 PopupType.externalScheme: Date.distantPast]
     private let resetTime: [PopupType: TimeInterval]
 
     public init(resetTime: [PopupType: TimeInterval] = PopupType.defaultResetTimes) {
