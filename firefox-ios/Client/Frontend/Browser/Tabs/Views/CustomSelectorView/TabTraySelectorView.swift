@@ -384,7 +384,7 @@ class TabTraySelectorView: UIView, ThemeApplicable {
             backgroundColor = trackColor.withAlphaComponent(tabTrayUtils.backgroundAlpha())
         } else if theme.isNova, !DeviceInfo.isRunningLiquidGlassEarlyBeta, !(theme is TabTrayPanelSwipeTheme) {
             let glass = UIGlassEffect(style: .regular)
-            glass.tintColor = theme.colors.layerGlassTintNova
+            glass.tintColor = theme.type == .light ? UIColor.clear : theme.colors.layerGlassTintNova
             visualEffectView.effect = glass
         }
 
