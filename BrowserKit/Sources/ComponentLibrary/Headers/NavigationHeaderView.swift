@@ -148,7 +148,7 @@ public final class NavigationHeaderView: UIView {
         closeButton.setImage(buttonImage, for: .normal)
         if #available(iOS 26.0, *), theme.isNova {
             closeButton.applyProminentClearGlassConfiguration(backgroundColor: theme.colors.layer2,
-                                                               foregroundColor: closeButtonTint)
+                                                              foregroundColor: closeButtonTint)
         } else {
             closeButton.backgroundColor = theme.colors.layer2
         }
