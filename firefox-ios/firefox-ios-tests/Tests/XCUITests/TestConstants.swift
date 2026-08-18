@@ -15,4 +15,5 @@ enum TestPages {
 
 enum TestLabels {
     static let exampleDomain = "Example Domain"
+    static let mozillaBook = "The Book of Mozilla"
 }

@@ -278,13 +278,13 @@ final class TabTrayScreen {
                 app.navigationBars.segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl],
                 timeout: timeout
             )
-            closeButton = app.cells[title].buttons[StandardImageIdentifiers.Large.cross]
+            closeButton = cell(named: title).buttons[StandardImageIdentifiers.Large.cross]
         } else {
             BaseTestCase().mozWaitForElementToExist(
                 app.otherElements[AccessibilityIdentifiers.TabTray.navBarSegmentedControl],
                 timeout: timeout
             )
-            closeButton = app.cells[title].buttons[AccessibilityIdentifiers.TabTray.closeButton]
+            closeButton = cell(named: title).buttons[AccessibilityIdentifiers.TabTray.closeButton]
         }
 
         BaseTestCase().mozWaitForElementToExist(closeButton, timeout: timeout)
