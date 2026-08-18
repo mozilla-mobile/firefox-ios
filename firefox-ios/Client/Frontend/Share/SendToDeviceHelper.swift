@@ -15,11 +15,6 @@ class SendToDeviceHelper {
         let iconColor: UIColor
     }
 
-    enum ViewType {
-        case instructions
-        case picker
-    }
-
     private var shareItem: ShareItem
     private var profile: Profile
     private var colors: Colors

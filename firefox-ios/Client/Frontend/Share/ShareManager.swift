@@ -9,12 +9,6 @@ import UniformTypeIdentifiers
 import Common
 
 class ShareManager: NSObject, FeatureFlaggable {
-    private struct ActivityIdentifiers {
-        static let pocketIconExtension = "com.ideashower.ReadItLaterPro.AddToPocketExtension"
-        static let pocketActionExtension = "com.ideashower.ReadItLaterPro.Action-Extension"
-        static let whatsApp = "net.whatsapp.WhatsApp.ShareExtension"
-    }
-
     // Black list for activities to which we don't want to share
     private static let excludingActivities: [UIActivity.ActivityType] = [
         UIActivity.ActivityType.addToReadingList
