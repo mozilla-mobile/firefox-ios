@@ -16,6 +16,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
                                                         Themeable,
                                                         UICollectionViewDelegate {
     private enum SectionID: Hashable {
+        case bullets
         case technicalData
     }
 
@@ -28,6 +29,10 @@ public final class WebCompatReportPreviewViewController: UIViewController,
 
     private var viewModel: WebCompatReportPreviewViewModel
     private var theme: Theme
+
+    private var visibleSectionIDs: [SectionID] {
+        return viewModel.bullets.isEmpty ? [.technicalData] : [.bullets, .technicalData]
+    }
 
     private lazy var closeButton: UIBarButtonItem = {
         let image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
@@ -115,6 +120,17 @@ public final class WebCompatReportPreviewViewController: UIViewController,
 
     // Registrations go here, not inside the provider: UIKit crashes on one built lazily per cell.
     private func makeDataSource() -> UICollectionViewDiffableDataSource<SectionID, SectionID> {
+        let bulletsRegistration = UICollectionView.CellRegistration<
+            WebCompatPreviewBulletListCell, SectionID
+        > { [weak self] cell, _, _ in
+            guard let self else { return }
+            cell.configure(
+                bullets: self.viewModel.bullets,
+                accessibilityIdentifier: self.viewModel.bulletsA11yIdentifier
+            )
+            cell.applyTheme(theme: self.theme)
+        }
+
         let technicalDataRegistration = UICollectionView.CellRegistration<
             UICollectionViewListCell, SectionID
         > { [weak self] cell, _, _ in
@@ -133,12 +149,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
             content.text = self.viewModel.technicalDataTitle
             content.textProperties.font = FXFontStyles.Regular.body.scaledFont()
             content.textProperties.color = self.theme.colors.textPrimary
-            content.directionalLayoutMargins = NSDirectionalEdgeInsets(
-                top: WebCompatReporterUX.Card.verticalInset,
-                leading: WebCompatReporterUX.Card.contentInset,
-                bottom: WebCompatReporterUX.Card.verticalInset,
-                trailing: WebCompatReporterUX.Card.contentInset
-            )
+            content.directionalLayoutMargins = WebCompatReporterUX.Card.edgeInsets
             cell.contentConfiguration = content
 
             let options = UICellAccessory.DisclosureIndicatorOptions(
@@ -153,6 +164,10 @@ public final class WebCompatReportPreviewViewController: UIViewController,
             collectionView: collectionView
         ) { collectionView, indexPath, itemID in
             switch itemID {
+            case .bullets:
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: bulletsRegistration, for: indexPath, item: itemID
+                )
             case .technicalData:
                 return collectionView.dequeueConfiguredReusableCell(
                     using: technicalDataRegistration, for: indexPath, item: itemID
@@ -162,7 +177,7 @@ public final class WebCompatReportPreviewViewController: UIViewController,
     }
 
     private func updateSections(reconfiguringItems: Bool) {
-        let sectionIDs: [SectionID] = [.technicalData]
+        let sectionIDs = visibleSectionIDs
 
         // An unchanged apply would rebuild every cell, so only apply when the sections moved.
         if dataSource.snapshot().sectionIdentifiers != sectionIDs {

@@ -31,8 +31,7 @@ final class WebCompatTechnicalDataSectionCell: UICollectionViewListCell, ThemeAp
     }
 
     private func setupLayout() {
-        let horizontalInset = WebCompatReporterUX.Card.contentInset
-        let verticalInset = WebCompatReporterUX.Card.verticalInset
+        let insets = WebCompatReporterUX.Card.edgeInsets
         contentView.addSubview(cardView)
         cardView.addSubview(keyValueLabel)
         NSLayoutConstraint.activate([
@@ -41,10 +40,10 @@ final class WebCompatTechnicalDataSectionCell: UICollectionViewListCell, ThemeAp
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
             cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
-            keyValueLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: horizontalInset),
-            keyValueLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -horizontalInset),
-            keyValueLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: verticalInset),
-            keyValueLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -verticalInset)
+            keyValueLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: insets.leading),
+            keyValueLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -insets.trailing),
+            keyValueLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: insets.top),
+            keyValueLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -insets.bottom)
         ])
     }
 
