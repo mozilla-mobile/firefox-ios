@@ -133,7 +133,7 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer2
+        backgroundColor = theme.isNova ? theme.colors.layerSurfaceMedium : theme.colors.layer2
         connectionDetailArrow.tintColor = theme.colors.iconSecondary
         connectionStatusImage.tintColor = theme.colors.iconSecondary
     }

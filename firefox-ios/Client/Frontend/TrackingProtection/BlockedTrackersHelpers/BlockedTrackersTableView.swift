@@ -54,7 +54,7 @@ class BlockedTrackersTableView: UITableView,
 
     // MARK: Themable
     func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer3
+        backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
         layer.borderColor = theme.colors.borderPrimary.cgColor
     }
 }

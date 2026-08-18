@@ -292,6 +292,6 @@ class BlockedTrackersTableViewController: UIViewController,
         let theme = currentTheme()
         navigationView.applyTheme(theme: theme)
         trackersTable.applyTheme(theme: theme)
-        view.backgroundColor = theme.colors.layer3
+        view.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
     }
 }

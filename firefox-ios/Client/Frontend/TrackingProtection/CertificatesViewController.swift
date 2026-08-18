@@ -319,12 +319,13 @@ extension CertificatesViewController {
     func applyTheme() {
         let theme = currentTheme()
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
-        view.backgroundColor = theme.colors.layer3
+        let panelBackground = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
+        view.backgroundColor = panelBackground
         titleLabel.textColor = theme.colors.textPrimary
         titleLabel.backgroundColor = theme.colors.layer5
         headerView.applyTheme(theme: theme)
 
-        certificatesTableView.backgroundColor = theme.colors.layer3
+        certificatesTableView.backgroundColor = panelBackground
         certificatesTableView.separatorColor = theme.colors.borderPrimary
 
         for case let cell as CertificatesCell in certificatesTableView.visibleCells {
