@@ -46,6 +46,11 @@ enum WebCompatReporterUX {
         static let focusPadding: CGFloat = 16
     }
 
+    /// The Report Preview screen.
+    enum Preview {
+        static let cardHorizontalInset: CGFloat = 24
+    }
+
     /// The tilted page card on the Report Preview screen.
     enum Thumbnail {
         static let size = CGSize(width: 150, height: 180)

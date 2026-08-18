@@ -125,9 +125,19 @@ struct WebCompatReportPayload: Equatable {
         ]
     }
 
-    func makePreviewViewModel() -> WebCompatTechnicalDataViewModel {
-        return WebCompatTechnicalDataViewModel(
+    func makeReportPreviewViewModel() -> WebCompatReportPreviewViewModel {
+        return WebCompatReportPreviewViewModel(
             title: .WebCompatReporter.Preview.Title,
+            closeAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
+            closeA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.closeButton,
+            technicalDataTitle: .WebCompatReporter.Preview.TechnicalData,
+            technicalDataA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.technicalDataRow
+        )
+    }
+
+    func makeTechnicalDataViewModel() -> WebCompatTechnicalDataViewModel {
+        return WebCompatTechnicalDataViewModel(
+            title: .WebCompatReporter.Preview.TechnicalData,
             closeAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
             closeA11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.Preview.closeButton,
             sections: previewGroups.map { group in
