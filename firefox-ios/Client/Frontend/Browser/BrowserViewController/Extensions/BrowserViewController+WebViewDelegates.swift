@@ -1239,7 +1239,9 @@ extension BrowserViewController: WKNavigationDelegate {
 
         searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
+        let previousURL = tab.url
         tab.url = webView.url
+        hideStaleContentOnCrossOriginPopupCommit(for: tab, previousURL: previousURL)
         if let handler = tab.onNextCommit {
             tab.onNextCommit = nil
             handler()
@@ -1280,6 +1282,8 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
+        // Reveal content hidden on a cross-origin popup commit now that the page has presented.
+        webView.isHidden = false
         webviewTelemetry.stop()
         recordGoogleLensSearchCompletedIfNeeded(for: tabManager[webView], succeeded: true)
 
@@ -1355,6 +1359,16 @@ extension BrowserViewController {
 
 // MARK: - Private
 private extension BrowserViewController {
+    // Makes sure a popup never shows one page while the address bar says a different site.
+    /// When a popup switches to another site, we hide its content and show it again only after the
+    /// new page has actually loaded (see `didFinish`). Only affects popups (`window.open`), so normal
+    /// browsing looks the same.
+    func hideStaleContentOnCrossOriginPopupCommit(for tab: Tab, previousURL: URL?) {
+        guard tab.parent != nil, let committedURL = tab.url, let previousURL,
+              committedURL.origin != previousURL.origin else { return }
+        tab.webView?.isHidden = true
+    }
+
     // Handle Universal link for Firefox wallpaper setting
     func isFirefoxUniversalWallpaperSetting(_ url: URL) -> Bool {
         guard let scheme = url.scheme,
