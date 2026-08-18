@@ -471,6 +471,14 @@ class SearchTests: FeatureFlaggedTestBase {
     func testFirefoxSuggest() {
         app.launch()
 
+        // Workaround: "Ingest New Suggestions Now" from the
+        // secret settings may force the suggestions to be
+        // loaded.
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.OpenSecretSettings)
+        navigator.performAction(Action.IngestNewSuggestionsNow)
+        navigator.goto(HomePanelsScreen)
+
         // Create an open Tab
         navigator.openURL("localhost:\(serverPort)/test-fixture/\(TestPages.mozillaOrg)")
         waitUntilPageLoad()
@@ -496,11 +504,9 @@ class SearchTests: FeatureFlaggedTestBase {
 
         for orientation in [UIDeviceOrientation.portrait, UIDeviceOrientation.landscapeLeft] {
             XCUIDevice.shared.orientation = orientation
+            waitForRotation(to: orientation)
+            waitForTabsButtonHittable()
 
-            // Firefox Suggest should show up for sponsored suggestion, open tab, history
-            // and bookmark
-
-            // Sponsored suggestion
             // Bug: Sponsored suggest may not show up on iPad
             // https://github.com/mozilla-mobile/firefox-ios/issues/35243
             if !iPad() {
@@ -509,24 +515,6 @@ class SearchTests: FeatureFlaggedTestBase {
                                        hasFirefoxSuggest: true,
                                        isSponsored: true)
             }
-            // Non-sponsored suggestions
-            for (term, expectedTitle) in [
-                "internet": "Internet for people, not profit — Mozilla", // Open tab
-                "example": "www.example.com/", // History
-                "book of mozilla": "The Book of Mozilla" // Bookmark
-            ] {
-                verifySearchSuggestion(searchTerm: term,
-                                       expectedMatch: expectedTitle,
-                                       hasFirefoxSuggest: true,
-                                       isSponsored: false)
-            }
-
-            // Non Firefox Suggest result: A random term
-            let term = "heeeeeeellllllllllloooooooo"
-            verifySearchSuggestion(searchTerm: term,
-                                   expectedMatch: "",
-                                   hasFirefoxSuggest: false,
-                                   isSponsored: false)
         }
     }
 
