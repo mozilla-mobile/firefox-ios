@@ -98,9 +98,6 @@ struct WebCompatReporterState: ScreenState, Equatable {
             return defaultState(from: state)
         }
 
-        // shouldDismiss and previewPayload are one-shot, so neither survives into the next state.
-        let state = state.resetTransientState()
-
         switch action {
         case let action as WebCompatReporterMiddlewareAction:
             return reduceMiddlewareAction(state: state, action: action)
@@ -119,11 +116,17 @@ struct WebCompatReporterState: ScreenState, Equatable {
     ) -> WebCompatReporterState {
         switch action.actionType {
         case WebCompatReporterMiddlewareActionType.didLoadInitialDraft:
-            return state.copy(url: action.url ?? state.url)
+            return state
+                .resetTransientState()
+                .copy(url: action.url ?? state.url)
         case WebCompatReporterMiddlewareActionType.didBuildPreview:
-            return state.copy(previewPayload: action.previewPayload)
+            return state
+                .resetTransientState()
+                .copy(previewPayload: action.previewPayload)
         case WebCompatReporterMiddlewareActionType.didSubmit:
-            return state.copy(shouldDismiss: true)
+            return state
+                .resetTransientState()
+                .copy(shouldDismiss: true)
         default:
             return defaultState(from: state)
         }
@@ -135,7 +138,9 @@ struct WebCompatReporterState: ScreenState, Equatable {
     ) -> WebCompatReporterState {
         switch action.actionType {
         case WebCompatReporterViewActionType.editURL:
-            return state.copy(url: action.url ?? state.url)
+            return state
+                .resetTransientState()
+                .copy(url: action.url ?? state.url)
 
         case WebCompatReporterViewActionType.selectCategory:
             guard let category = action.category, category != state.selectedCategory else {
@@ -143,20 +148,29 @@ struct WebCompatReporterState: ScreenState, Equatable {
             }
             // A new category clears the previous sub-option.
             return state
+                .resetTransientState()
                 .copy(selectedCategory: category)
                 .copy(selectedSubOptionID: nil)
 
         case WebCompatReporterViewActionType.selectSubOption:
-            return state.copy(selectedSubOptionID: action.subOptionID)
+            return state
+                .resetTransientState()
+                .copy(selectedSubOptionID: action.subOptionID)
 
         case WebCompatReporterViewActionType.setAdditionalDetails:
-            return state.copy(additionalDetails: action.additionalDetails ?? state.additionalDetails)
+            return state
+                .resetTransientState()
+                .copy(additionalDetails: action.additionalDetails ?? state.additionalDetails)
 
         case WebCompatReporterViewActionType.toggleScreenshot:
-            return state.copy(includeScreenshot: action.includeScreenshot ?? !state.includeScreenshot)
+            return state
+                .resetTransientState()
+                .copy(includeScreenshot: action.includeScreenshot ?? !state.includeScreenshot)
 
         case WebCompatReporterViewActionType.toggleBlockedList:
-            return state.copy(includeBlockedList: action.includeBlockedList ?? !state.includeBlockedList)
+            return state
+                .resetTransientState()
+                .copy(includeBlockedList: action.includeBlockedList ?? !state.includeBlockedList)
 
         default:
             return defaultState(from: state)
