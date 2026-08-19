@@ -140,6 +140,11 @@
           "containerPath" : "container:..\/BrowserKit",
           "identifier" : "QuickAnswersKit",
           "name" : "QuickAnswersKit"
+        },
+        {
+          "containerPath" : "container:..\/MozillaRustComponents",
+          "identifier" : "MozillaRustComponents",
+          "name" : "MozillaRustComponents"
         }
       ]
     },
