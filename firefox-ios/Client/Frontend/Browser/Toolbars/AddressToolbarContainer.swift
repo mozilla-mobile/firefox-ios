@@ -362,7 +362,7 @@ final class AddressToolbarContainer: UIView,
 
         guard self.model != newModel else { return }
         updateSkeletonAddressBarsAlpha(forMinimizedAddressBar: newModel.isAddressBarMinimized)
-        if #available(iOS 26.0, *), !newModel.shouldShowKeyboard, !newModel.isAddressBarMinimized {
+        if #available(iOS 26.0, *), !newModel.isAccessoryViewVisible, !newModel.isAddressBarMinimized {
             accessoryViewGradient.opacity = 0
         }
         // in case we are in edit mode but overlay is not active yet we have to activate it

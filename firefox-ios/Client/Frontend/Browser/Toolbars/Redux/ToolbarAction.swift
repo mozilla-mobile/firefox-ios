@@ -108,9 +108,6 @@ struct ToolbarAction: Action {
 }
 
 enum ToolbarModernAction: ModernAction {
-    // Three distinct user/system triggers drive `ToolbarState.isAddressBarMinimized`
-    // (renders the address bar as its full toolbar vs. its minimized "pill" shape).
-
     /// The user scrolled the page. `true` collapses the toolbar to the pill as the page
     /// scrolls down; `false` restores it when scrolling back up.
     case userDidScroll(minimizeAddressBar: Bool)
@@ -122,6 +119,8 @@ enum ToolbarModernAction: ModernAction {
     /// The keyboard was dismissed. Dispatched to restore the address bar after it was minimized by
     /// `accessoryViewVisibilityChanged`.
     case keyboardDidHide
+
+    case keyboardStateDidChange(isVisible: Bool)
 }
 
 enum ToolbarActionType: ActionType {
@@ -137,7 +136,6 @@ enum ToolbarActionType: ActionType {
     case didStartEditingUrl
     case cancelEditOnHomepage
     case cancelEdit
-//    case keyboardStateDidChange
     case animationStateChanged
     case readerModeStateChanged
     case backForwardButtonStateChanged
