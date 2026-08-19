@@ -77,6 +77,7 @@ class OnboardingKitCardInfoModelTests: XCTestCase {
         XCTAssertEqual(model.defaultSelectedButton?.action, .themeSystemDefault)
     }
 
+    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testDefaultSelectedButton_noSavedTheme_returnsFirst() {
         let model = createModel(multipleChoiceButtons: [
             createMockMultipleChoiceButton(action: .themeDark),

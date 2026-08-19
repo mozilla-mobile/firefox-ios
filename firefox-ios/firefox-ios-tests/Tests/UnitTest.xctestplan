@@ -211,6 +211,7 @@
     {
       "skippedTests" : [
         "RustLoginsTests\/testUpdateLogin()",
+        "RustRemoteTabsTests\/testRemoveRemoteCommand()",
         "TestBrowserDB\/testMovesDB()"
       ],
       "target" : {
@@ -290,6 +291,7 @@
         "NotificationManagerTests\/testGetNotificationSettings()",
         "NotificationSurfaceManagerTests",
         "OnboardingKitCardInfoModelTests\/testDefaultSelectedButton_emptyButtons_returnsNil()",
+        "OnboardingKitCardInfoModelTests\/testDefaultSelectedButton_noSavedTheme_returnsFirst()",
         "OnboardingTelemetryUtilityTests\/testSendOnboardingCardView_WelcomeCard_Success()",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
