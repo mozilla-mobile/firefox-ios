@@ -105,7 +105,6 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
 
-        // Page context is `tab_info`, so navigating away drops it even though it was read.
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
         let payload = try XCTUnwrap(dispatched.previewPayload)
         XCTAssertNil(payload.languages)

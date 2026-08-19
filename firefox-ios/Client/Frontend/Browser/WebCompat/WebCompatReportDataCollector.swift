@@ -38,8 +38,7 @@ struct WebCompatTabSnapshot: Equatable {
     var blockedOrigins: [String]?
 }
 
-/// Fills the `broken-site-report` fields readable natively, plus the page screenshot. The fields
-/// only the page can answer arrive via `WebCompatPageContextReader`.
+/// Fills the natively readable `broken-site-report` fields, plus the page screenshot.
 enum WebCompatReportDataCollector {
     /// Reads the tab into a snapshot and hands off to the pure mapping below.
     @MainActor
@@ -86,7 +85,6 @@ enum WebCompatReportDataCollector {
         return payload
     }
 
-    /// What the page saw beats the tab's `customUserAgent`, which is intent rather than what was sent.
     static func enrich(
         _ payload: WebCompatReportPayload,
         pageContext: WebCompatPageContext

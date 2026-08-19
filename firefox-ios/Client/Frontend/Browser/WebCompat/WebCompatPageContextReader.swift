@@ -6,7 +6,6 @@ import Common
 import Foundation
 import WebKit
 
-/// The `broken-site-report` fields only the page can answer.
 struct WebCompatPageContext: Equatable {
     var languages: [String]?
     var userAgent: String?
@@ -29,8 +28,6 @@ struct WebCompatPageContext: Equatable {
         self.mobify = mobify
     }
 
-    /// A page can redefine `navigator`, so an empty or wrongly-typed value is dropped per field
-    /// rather than reported as real data.
     init(from result: [String: Any]) {
         if let pageLanguages = (result["languages"] as? [Any])?.compactMap({ $0 as? String }),
            !pageLanguages.isEmpty {
@@ -49,48 +46,18 @@ protocol WebCompatPageContextReading: Sendable {
 }
 
 struct WebCompatPageContextReader: WebCompatPageContextReading {
-    /// Mirrors `FrameworkDetector` in desktop's `ReportBrokenSiteChild.sys.mjs`. `safe` keeps one
-    /// throwing accessor from costing all five fields.
-    private static let script = """
-    function safe(read) {
-      try { return read(); } catch (_) { return undefined; }
-    }
-    function hasFastClick(win) {
-      if (win.FastClick) { return true; }
-      for (const property in win) {
-        try {
-          const proto = win[property].prototype;
-          if (proto && proto.needsClick) { return true; }
-        } catch (_) {}
-      }
-      return false;
-    }
-    return {
-      languages: safe(() => Array.from(navigator.languages || [])),
-      userAgent: safe(() => navigator.userAgent),
-      fastclick: safe(() => hasFastClick(window)),
-      marfeel: safe(() => !!window.marfeel),
-      mobify: safe(() => !!window.Mobify?.Tag)
-    };
-    """
+    private static let scriptResource = "WebCompatPageContext"
 
     private let logger: Logger = DefaultLogger.shared
 
-    /// `.page`, not the client world, because page scripts set the framework globals. And
-    /// `callAsyncJavaScript`, because `evaluateJavaScript` would reject the top-level `return`.
+    /// Runs in `.page` rather than the client world, because page scripts set the framework globals.
     @MainActor
     func read(from tab: Tab) async -> WebCompatPageContext {
-        guard let webView = tab.webView else {
-            logger.log("WebCompat page context skipped: tab has no web view",
-                       level: .warning,
-                       category: .webview)
+        guard let webView = tab.webView, let script = loadScript() else {
             return WebCompatPageContext()
         }
         do {
-            let result = try await webView.callAsyncJavaScript(
-                WebCompatPageContextReader.script,
-                contentWorld: .page
-            )
+            let result = try await webView.evaluateJavaScript(script, in: nil, in: .page)
             guard let dictionary = result as? [String: Any] else {
                 logger.log("WebCompat page context returned an unexpected value",
                            level: .warning,
@@ -104,5 +71,17 @@ struct WebCompatPageContextReader: WebCompatPageContextReading {
                        category: .webview)
             return WebCompatPageContext()
         }
+    }
+
+    private func loadScript() -> String? {
+        guard let url = Bundle.main.url(forResource: WebCompatPageContextReader.scriptResource,
+                                        withExtension: "js"),
+              let script = try? String(contentsOf: url, encoding: .utf8) else {
+            logger.log("WebCompat page context script is missing from the bundle",
+                       level: .warning,
+                       category: .webview)
+            return nil
+        }
+        return script
     }
 }
