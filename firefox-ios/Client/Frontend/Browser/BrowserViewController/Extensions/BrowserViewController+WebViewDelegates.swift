@@ -1066,6 +1066,9 @@ extension BrowserViewController: WKNavigationDelegate {
         didFail navigation: WKNavigation?,
         withError error: Error
     ) {
+        // The navigation won't present; make sure content hidden on a cross-origin popup commit is
+        // not left stuck hidden.
+        webView.isHidden = false
         logger.log("Error occurred during navigation.",
                    level: .warning,
                    category: .webview)
@@ -1085,6 +1088,9 @@ extension BrowserViewController: WKNavigationDelegate {
         didFailProvisionalNavigation navigation: WKNavigation?,
         withError error: Error
     ) {
+        // The navigation won't present; make sure content hidden on a cross-origin popup commit is
+        // not left stuck hidden.
+        webView.isHidden = false
         logger.log("Error occurred during the early navigation process.",
                    level: .warning,
                    category: .webview)
@@ -1359,12 +1365,13 @@ extension BrowserViewController {
 
 // MARK: - Private
 private extension BrowserViewController {
-    // Makes sure a popup never shows one page while the address bar says a different site.
-    /// When a popup switches to another site, we hide its content and show it again only after the
-    /// new page has actually loaded (see `didFinish`). Only affects popups (`window.open`), so normal
-    /// browsing looks the same.
+    /// Makes sure a popup never shows one page while the address bar says a different site.
+    /// When a `window.open` popup switches to another site, we hide its content and show it again only
+    /// after the new page has actually loaded (see `didFinish`, `didFail`, `didFailProvisionalNavigation`).
+    /// Limited to `window.open` popups via `requiredPopupConfiguration` (which is only set for those, not
+    /// for "open in new tab"), so normal browsing and user-opened tabs are unaffected.
     func hideStaleContentOnCrossOriginPopupCommit(for tab: Tab, previousURL: URL?) {
-        guard tab.parent != nil, let committedURL = tab.url, let previousURL,
+        guard tab.requiredPopupConfiguration != nil, let committedURL = tab.url, let previousURL,
               committedURL.origin != previousURL.origin else { return }
         tab.webView?.isHidden = true
     }
