@@ -125,6 +125,11 @@ if [ ! -f "$file_path" ]; then
     echo -e "${YELLOW}Creating Staging.xcconfig...${NC}"
     touch "$file_path"
     echo -e "${GREEN}✓ Staging.xcconfig created${NC}\n"
+    {
+        echo "AUTH0_CLIENT_ID=FBaIsy0X5hIh2sSmalmf5pACZ512dIYl"
+        echo "CF_ACCESS_CLIENT_ID=$CF_ACCESS_CLIENT_ID"
+        echo "CF_ACCESS_CLIENT_SECRET=$CF_ACCESS_CLIENT_SECRET"
+    } >> $file_path
 else
     echo -e "${GREEN}✓ Staging.xcconfig already exists${NC}\n"
 fi
@@ -136,4 +141,3 @@ echo -e "Next steps:"
 echo -e "  1. Select the ${YELLOW}Ecosia${NC} or ${YELLOW}EcosiaBeta${NC} scheme"
 echo -e "  2. Build the project"
 echo -e "  3. Run on simulator/device"
-
