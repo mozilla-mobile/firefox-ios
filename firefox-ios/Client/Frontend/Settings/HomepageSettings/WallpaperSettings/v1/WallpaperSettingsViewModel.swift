@@ -73,20 +73,7 @@ final class WallpaperSettingsViewModel: @unchecked Sendable {
     ) -> WallpaperSettingsHeaderViewModel? {
         guard let collection = wallpaperCollections[safe: sectionIndex] else { return nil }
 
-        let title: String
-        var description: String?
-        var buttonTitle: String?
-
-        switch collection.id {
-        case WallpaperCollection.classicFirefoxID:
-            title = String(format: stringIds.ClassicWallpaper, AppName.shortName.rawValue)
-        case WallpaperCollection.wrexhamID:
-            title = WallpaperCollection.wrexhamTitle
-        default:
-            title = stringIds.LimitedEditionWallpaper
-            description = collection.description ?? stringIds.LimitedEditionDefaultDescription
-            buttonTitle = stringIds.LearnMoreButton
-        }
+        let presentation = collectionPresentation(for: collection)
 
         let buttonAction = { [weak self] in
             guard let strongSelf = self, let learnMoreUrl = collection.learnMoreUrl else { return }
@@ -100,11 +87,11 @@ final class WallpaperSettingsViewModel: @unchecked Sendable {
 
         return WallpaperSettingsHeaderViewModel(
             theme: theme,
-            title: title,
+            title: presentation.title,
             titleA11yIdentifier: "\(a11yIds.collectionTitle)_\(sectionIndex)",
-            description: description,
+            description: presentation.description,
             descriptionA11yIdentifier: "\(a11yIds.collectionDescription)_\(sectionIndex)",
-            buttonTitle: buttonTitle,
+            buttonTitle: presentation.buttonTitle,
             buttonA11yIdentifier: "\(a11yIds.collectionButton)_\(sectionIndex)",
             buttonAction: collection.learnMoreUrl != nil ? buttonAction : nil)
     }
@@ -122,7 +109,7 @@ final class WallpaperSettingsViewModel: @unchecked Sendable {
               let wallpaper = collection.wallpapers[safe: indexPath.row]
         else { return nil }
         return cellViewModel(for: wallpaper,
-                             collectionType: collection.type,
+                             collection: collection,
                              indexPath: indexPath)
     }
 
@@ -203,19 +190,41 @@ private extension WallpaperSettingsViewModel {
         selectedIndexPath = initialSelectedIndexPath
     }
 
+    /// How a collection names itself in the settings UI. Both the section header and the
+    /// per-card accessibility label read the title from here so the two cannot drift apart.
+    struct WallpaperCollectionPresentation {
+        let title: String
+        let description: String?
+        let buttonTitle: String?
+    }
+
+    /// Collections with a bespoke title show only that title, with no description or learn more link.
+    func collectionPresentation(for collection: WallpaperCollection) -> WallpaperCollectionPresentation {
+        switch collection.id {
+        case WallpaperCollection.classicFirefoxID:
+            return WallpaperCollectionPresentation(
+                title: String(format: stringIds.ClassicWallpaper, AppName.shortName.rawValue),
+                description: nil,
+                buttonTitle: nil)
+        case WallpaperCollection.wrexhamID:
+            return WallpaperCollectionPresentation(
+                title: WallpaperCollection.wrexhamTitle,
+                description: nil,
+                buttonTitle: nil)
+        default:
+            return WallpaperCollectionPresentation(
+                title: stringIds.LimitedEditionWallpaper,
+                description: collection.description ?? stringIds.LimitedEditionDefaultDescription,
+                buttonTitle: stringIds.LearnMoreButton)
+        }
+    }
+
     func cellViewModel(for wallpaper: Wallpaper,
-                       collectionType: WallpaperCollectionType,
+                       collection: WallpaperCollection,
                        indexPath: IndexPath
     ) -> WallpaperCellViewModel {
         let a11yId = "\(a11yIds.card)_\(indexPath.section)_\(indexPath.row)"
-        var a11yLabel: String
-
-        switch collectionType {
-        case .classic:
-            a11yLabel = "\(String(format: stringIds.ClassicWallpaper, AppName.shortName.rawValue)) \(indexPath.row + 1)"
-        case .limitedEdition:
-            a11yLabel = "\(stringIds.LimitedEditionWallpaper) \(indexPath.row + 1)"
-        }
+        let a11yLabel = "\(collectionPresentation(for: collection).title) \(indexPath.row + 1)"
 
         let cellViewModel = WallpaperCellViewModel(image: wallpaper.thumbnail,
                                                    a11yId: a11yId,

@@ -132,6 +132,42 @@ final class WallpaperSettingsViewModelTests: XCTestCase {
         XCTAssertEqual(subject.sectionHeaderViewModel(for: 2) {}?.description, "Second description")
     }
 
+    func testCellViewModel_wrexhamCollection_a11yLabelUsesBrandTitle() {
+        setCollections([
+            makeCollection(id: WallpaperCollection.classicFirefoxID),
+            makeCollection(id: WallpaperCollection.wrexhamID)
+        ])
+        let subject = createSubject()
+
+        let cellViewModel = subject.cellViewModel(for: IndexPath(row: 0, section: 1))
+
+        XCTAssertEqual(cellViewModel?.a11yLabel, "\(WallpaperCollection.wrexhamTitle) 1")
+    }
+
+    func testCellViewModel_limitedEditionCollection_a11yLabelUsesLimitedEditionTitle() {
+        setCollections([
+            makeCollection(id: WallpaperCollection.classicFirefoxID),
+            makeCollection(id: "otherCollection")
+        ])
+        let subject = createSubject()
+
+        let cellViewModel = subject.cellViewModel(for: IndexPath(row: 0, section: 1))
+
+        XCTAssertEqual(cellViewModel?.a11yLabel,
+                       "\(String.Settings.Homepage.Wallpaper.LimitedEditionWallpaper) 1")
+    }
+
+    func testCellViewModel_classicCollection_a11yLabelUsesClassicTitle() {
+        setCollections([makeCollection(id: WallpaperCollection.classicFirefoxID)])
+        let subject = createSubject()
+
+        let cellViewModel = subject.cellViewModel(for: IndexPath(row: 0, section: 0))
+
+        let expectedTitle = String(format: String.Settings.Homepage.Wallpaper.ClassicWallpaper,
+                                   AppName.shortName.rawValue)
+        XCTAssertEqual(cellViewModel?.a11yLabel, "\(expectedTitle) 1")
+    }
+
     func testDownloadAndSetWallpaper_downloaded_wallpaperIsSet() {
         guard let mockManager = wallpaperManager as? WallpaperManagerMock else { return }
         let subject = createSubject()
