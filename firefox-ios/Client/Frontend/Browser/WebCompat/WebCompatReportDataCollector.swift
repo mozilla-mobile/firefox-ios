@@ -38,8 +38,8 @@ struct WebCompatTabSnapshot: Equatable {
     var blockedOrigins: [String]?
 }
 
-/// Fills the `broken-site-report` fields readable natively, plus the page screenshot. The
-/// fields only the page can answer arrive separately, via `WebCompatPageContextReader`.
+/// Fills the `broken-site-report` fields readable natively, plus the page screenshot. The fields
+/// only the page can answer arrive via `WebCompatPageContextReader`.
 enum WebCompatReportDataCollector {
     /// Reads the tab into a snapshot and hands off to the pure mapping below.
     @MainActor
@@ -65,8 +65,7 @@ enum WebCompatReportDataCollector {
         tab: WebCompatTabSnapshot
     ) -> WebCompatReportPayload {
         var payload = payload
-        // `languages` is the page's navigator.languages; only `defaultLocales` is an
-        // app-level list.
+        // `languages` is the page's navigator.languages; this is the app-level list.
         payload.defaultLocales = device.preferredLanguages
         payload.isTablet = device.isTablet
         payload.memory = device.physicalMemoryMegabytes
@@ -87,8 +86,7 @@ enum WebCompatReportDataCollector {
         return payload
     }
 
-    /// Pure mapping for the fields the page supplies. What the page saw beats the tab's own
-    /// `customUserAgent`, which is the app's intent rather than what was actually sent.
+    /// What the page saw beats the tab's `customUserAgent`, which is intent rather than what was sent.
     static func enrich(
         _ payload: WebCompatReportPayload,
         pageContext: WebCompatPageContext

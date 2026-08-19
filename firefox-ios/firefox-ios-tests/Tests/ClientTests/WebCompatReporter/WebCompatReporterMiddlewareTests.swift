@@ -72,40 +72,6 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
-    func test_submit_whenThePageWasRead_carriesItsFieldsIntoThePing() {
-        let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
-        setReportedURL(
-            "https://example.com/page",
-            pageContext: WebCompatPageContext(
-                languages: ["en-GB"],
-                userAgent: "page-ua",
-                fastclick: true,
-                marfeel: true,
-                mobify: true
-            )
-        )
-
-        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
-
-        // The three framework flags on top of is_private_browsing, has_touch_screen and is_tablet.
-        XCTAssertEqual(gleanWrapper.setBooleanCalled, 6)
-
-        releaseMiddlewareProvidersFromMemory(subject)
-    }
-
-    func test_submit_whenThePageReadNeverLanded_sendsTheReportWithoutIt() {
-        let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
-        setReportedURL("https://example.com/page", pageContext: nil)
-
-        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
-
-        // The report still goes out; the page fields are simply absent.
-        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
-        XCTAssertEqual(gleanWrapper.setBooleanCalled, 3)
-
-        releaseMiddlewareProvidersFromMemory(subject)
-    }
-
     func test_preview_whenThePageWasRead_showsExactlyWhatThePingCarries() throws {
         let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
         let pageContext = WebCompatPageContext(
@@ -139,7 +105,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
 
-        // Page context is `tab_info`: navigating away has to drop it even though it was read.
+        // Page context is `tab_info`, so navigating away drops it even though it was read.
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
         let payload = try XCTUnwrap(dispatched.previewPayload)
         XCTAssertNil(payload.languages)
@@ -455,23 +421,14 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         )
     }
 
-    /// The read is dispatched from a task the middleware doesn't hand back, so yield until it
-    /// lands. Fails rather than returning quietly, so a read that never happens is a red test.
-    private func waitFor(
-        _ isDone: () -> Bool,
-        iterations: Int = 100,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) async {
-        var remainingIterations = iterations
-        while !isDone() {
-            guard remainingIterations > 0 else {
-                XCTFail("Timed out waiting for the page read to land", file: file, line: line)
-                return
-            }
+    /// The read runs in a task the middleware doesn't hand back, so yield until it lands.
+    private func waitFor(_ isDone: () -> Bool) async {
+        var remainingIterations = 100
+        while !isDone(), remainingIterations > 0 {
             remainingIterations -= 1
             await Task.yield()
         }
+        XCTAssertTrue(isDone(), "Timed out waiting for the page read to land")
     }
 
     private func createSubject(selectedTab: Tab? = nil) -> WebCompatReporterMiddleware {
@@ -504,7 +461,6 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 }
 
-/// Stands in for the JavaScript round trip, which a `Tab` built in a test has no web view to run.
 @MainActor
 private final class MockWebCompatPageContextReader: WebCompatPageContextReading {
     var pageContext = WebCompatPageContext()

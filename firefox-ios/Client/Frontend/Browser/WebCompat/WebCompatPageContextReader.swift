@@ -6,8 +6,7 @@ import Common
 import Foundation
 import WebKit
 
-/// The `broken-site-report` fields only the page can answer: the `navigator` values it sees
-/// and the globals desktop's `FrameworkDetector` looks for.
+/// The `broken-site-report` fields only the page can answer.
 struct WebCompatPageContext: Equatable {
     var languages: [String]?
     var userAgent: String?
@@ -15,8 +14,7 @@ struct WebCompatPageContext: Equatable {
     var marfeel: Bool?
     var mobify: Bool?
 
-    /// Spelled out because the initializer below would otherwise take the synthesized
-    /// memberwise one with it, and the tests build contexts field by field.
+    /// Spelled out because the initializer below would otherwise take the memberwise one with it.
     init(
         languages: [String]? = nil,
         userAgent: String? = nil,
@@ -31,10 +29,9 @@ struct WebCompatPageContext: Equatable {
         self.mobify = mobify
     }
 
-    /// Reads the evaluation result, dropping anything the page returned in a shape the ping
-    /// can't carry. A page can redefine `navigator`, so nothing here is assumed well-formed.
+    /// A page can redefine `navigator`, so an empty or wrongly-typed value is dropped per field
+    /// rather than reported as real data.
     init(from result: [String: Any]) {
-        // An empty list would be recorded as real data, the trap the empty user agent avoids.
         if let pageLanguages = (result["languages"] as? [Any])?.compactMap({ $0 as? String }),
            !pageLanguages.isEmpty {
             languages = pageLanguages
@@ -46,19 +43,14 @@ struct WebCompatPageContext: Equatable {
     }
 }
 
-/// A page-context read, behind a protocol so tests can stand in for the JavaScript round trip
-/// without a live `WKWebView`.
 protocol WebCompatPageContextReading: Sendable {
     @MainActor
     func read(from tab: Tab) async -> WebCompatPageContext
 }
 
-/// Reads the page context with one evaluation, rather than injecting a user script on every
-/// page load for values only a report needs.
 struct WebCompatPageContextReader: WebCompatPageContextReading {
-    /// Mirrors `FrameworkDetector` in desktop's `ReportBrokenSiteChild.sys.mjs`, including the
-    /// prototype scan for FastClick, so the two platforms report the same thing. Each field is
-    /// wrapped in `safe` so one throwing accessor costs that field rather than all five.
+    /// Mirrors `FrameworkDetector` in desktop's `ReportBrokenSiteChild.sys.mjs`. `safe` keeps one
+    /// throwing accessor from costing all five fields.
     private static let script = """
     function safe(read) {
       try { return read(); } catch (_) { return undefined; }
@@ -84,12 +76,8 @@ struct WebCompatPageContextReader: WebCompatPageContextReading {
 
     private let logger: Logger = DefaultLogger.shared
 
-    /// Runs in `WKContentWorld.page`, not the client world: the framework globals are set
-    /// by page scripts, and an isolated world has its own JS global where they aren't visible.
-    /// Desktop reaches the same objects through `window.wrappedJSObject`.
-    ///
-    /// `callAsyncJavaScript`, not the ticket's `evaluateJavaScript`, because the script is a
-    /// function body and a top-level `return` is a syntax error in a program string.
+    /// `.page`, not the client world, because page scripts set the framework globals. And
+    /// `callAsyncJavaScript`, because `evaluateJavaScript` would reject the top-level `return`.
     @MainActor
     func read(from tab: Tab) async -> WebCompatPageContext {
         guard let webView = tab.webView else {
