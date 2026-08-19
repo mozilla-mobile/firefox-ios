@@ -11,6 +11,8 @@ final class WebCompatURLCell: UICollectionViewListCell,
                               UITextFieldDelegate,
                               Notifiable {
     private var editingEndedHandler: ((String) -> Void)?
+    private var iconWidthConstraint: NSLayoutConstraint?
+    private var iconHeightConstraint: NSLayoutConstraint?
 
     private lazy var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
@@ -63,9 +65,6 @@ final class WebCompatURLCell: UICollectionViewListCell,
         return UIFontMetrics.default.scaledValue(for: WebCompatReporterUX.ErrorMessage.iconSize)
     }
 
-    private lazy var iconWidthConstraint = errorIcon.widthAnchor.constraint(equalToConstant: scaledIconSize)
-    private lazy var iconHeightConstraint = errorIcon.heightAnchor.constraint(equalToConstant: scaledIconSize)
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -94,6 +93,10 @@ final class WebCompatURLCell: UICollectionViewListCell,
         let bottomConstraint = containerStackView.bottomAnchor.constraint(equalTo: margins.bottomAnchor)
         topConstraint.priority = .defaultHigh
         bottomConstraint.priority = .defaultHigh
+        let iconWidthConstraint = errorIcon.widthAnchor.constraint(equalToConstant: scaledIconSize)
+        let iconHeightConstraint = errorIcon.heightAnchor.constraint(equalToConstant: scaledIconSize)
+        self.iconWidthConstraint = iconWidthConstraint
+        self.iconHeightConstraint = iconHeightConstraint
         NSLayoutConstraint.activate([
             containerStackView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             containerStackView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
@@ -167,8 +170,8 @@ final class WebCompatURLCell: UICollectionViewListCell,
         ensureMainThread { [weak self] in
             guard let self else { return }
             self.updateStackAxis()
-            self.iconWidthConstraint.constant = self.scaledIconSize
-            self.iconHeightConstraint.constant = self.scaledIconSize
+            self.iconWidthConstraint?.constant = self.scaledIconSize
+            self.iconHeightConstraint?.constant = self.scaledIconSize
         }
     }
 
