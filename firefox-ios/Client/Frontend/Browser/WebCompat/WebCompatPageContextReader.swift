@@ -15,20 +15,34 @@ struct WebCompatPageContext: Equatable {
     var marfeel: Bool?
     var mobify: Bool?
 
+    /// Spelled out because the initializer below would otherwise take the synthesized
+    /// memberwise one with it, and the tests build contexts field by field.
+    init(
+        languages: [String]? = nil,
+        userAgent: String? = nil,
+        fastclick: Bool? = nil,
+        marfeel: Bool? = nil,
+        mobify: Bool? = nil
+    ) {
+        self.languages = languages
+        self.userAgent = userAgent
+        self.fastclick = fastclick
+        self.marfeel = marfeel
+        self.mobify = mobify
+    }
+
     /// Reads the evaluation result, dropping anything the page returned in a shape the ping
     /// can't carry. A page can redefine `navigator`, so nothing here is assumed well-formed.
-    static func make(from result: [String: Any]) -> WebCompatPageContext {
-        var context = WebCompatPageContext()
+    init(from result: [String: Any]) {
         // An empty list would be recorded as real data, the trap the empty user agent avoids.
-        if let languages = (result["languages"] as? [Any])?.compactMap({ $0 as? String }),
-           !languages.isEmpty {
-            context.languages = languages
+        if let pageLanguages = (result["languages"] as? [Any])?.compactMap({ $0 as? String }),
+           !pageLanguages.isEmpty {
+            languages = pageLanguages
         }
-        context.userAgent = (result["userAgent"] as? String).flatMap { $0.isEmpty ? nil : $0 }
-        context.fastclick = result["fastclick"] as? Bool
-        context.marfeel = result["marfeel"] as? Bool
-        context.mobify = result["mobify"] as? Bool
-        return context
+        userAgent = (result["userAgent"] as? String).flatMap { $0.isEmpty ? nil : $0 }
+        fastclick = result["fastclick"] as? Bool
+        marfeel = result["marfeel"] as? Bool
+        mobify = result["mobify"] as? Bool
     }
 }
 
@@ -95,7 +109,7 @@ struct WebCompatPageContextReader: WebCompatPageContextReading {
                            category: .webview)
                 return WebCompatPageContext()
             }
-            return WebCompatPageContext.make(from: dictionary)
+            return WebCompatPageContext(from: dictionary)
         } catch {
             logger.log("WebCompat page context failed: \(error.localizedDescription)",
                        level: .warning,

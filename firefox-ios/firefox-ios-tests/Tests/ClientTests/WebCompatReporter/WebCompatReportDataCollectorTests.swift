@@ -183,8 +183,8 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertEqual(enriched.userAgentString, "TabUA/1.0")
     }
 
-    func test_pageContextMake_readsEveryField() {
-        let context = WebCompatPageContext.make(from: [
+    func test_pageContextInit_readsEveryField() {
+        let context = WebCompatPageContext(from: [
             "languages": ["en-GB", "fr"],
             "userAgent": "PageUA/2.0",
             "fastclick": true,
@@ -200,8 +200,8 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
     }
 
     // A page can redefine navigator, so anything of the wrong shape is dropped per field.
-    func test_pageContextMake_dropsValuesOfTheWrongType() {
-        let context = WebCompatPageContext.make(from: [
+    func test_pageContextInit_dropsValuesOfTheWrongType() {
+        let context = WebCompatPageContext(from: [
             "languages": ["en-GB", 7],
             "userAgent": 42,
             "fastclick": "yes"
@@ -212,17 +212,17 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertNil(context.fastclick)
     }
 
-    func test_pageContextMake_emptyUserAgent_isDroppedRatherThanReportedBlank() {
-        XCTAssertNil(WebCompatPageContext.make(from: ["userAgent": ""]).userAgent)
+    func test_pageContextInit_emptyUserAgent_isDroppedRatherThanReportedBlank() {
+        XCTAssertNil(WebCompatPageContext(from: ["userAgent": ""]).userAgent)
     }
 
-    func test_pageContextMake_emptyLanguages_isDroppedRatherThanReportedAsAnEmptyList() {
-        XCTAssertNil(WebCompatPageContext.make(from: ["languages": []]).languages)
-        XCTAssertNil(WebCompatPageContext.make(from: ["languages": [7, true]]).languages)
+    func test_pageContextInit_emptyLanguages_isDroppedRatherThanReportedAsAnEmptyList() {
+        XCTAssertNil(WebCompatPageContext(from: ["languages": []]).languages)
+        XCTAssertNil(WebCompatPageContext(from: ["languages": [7, true]]).languages)
     }
 
-    func test_pageContextMake_emptyResult_leavesEveryFieldNil() {
-        XCTAssertEqual(WebCompatPageContext.make(from: [:]), WebCompatPageContext())
+    func test_pageContextInit_emptyResult_leavesEveryFieldNil() {
+        XCTAssertEqual(WebCompatPageContext(from: [:]), WebCompatPageContext())
     }
 
     // MARK: - blockedOrigins opt-out
