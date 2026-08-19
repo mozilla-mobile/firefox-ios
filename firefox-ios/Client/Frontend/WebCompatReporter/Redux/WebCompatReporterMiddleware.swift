@@ -76,8 +76,7 @@ final class WebCompatReporterMiddleware {
         ))
     }
 
-    /// Reads the page while the user is still filling in the form, so the preview and the ping
-    /// can both be assembled synchronously. A read that never lands leaves the page fields nil.
+    /// Read while the user fills in the form, so the preview and the ping stay synchronous.
     private func readPageContext(windowUUID: WindowUUID) {
         guard let tab = selectedTab(for: windowUUID) else { return }
         Task {

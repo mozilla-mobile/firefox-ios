@@ -19,7 +19,6 @@ struct WebCompatReporterState: ScreenState, Equatable {
     var shouldDismiss: Bool
     /// The report as the middleware would send it.
     var previewPayload: WebCompatReportPayload?
-    /// Read from the page when the sheet opens, so building a report stays synchronous.
     var pageContext: WebCompatPageContext?
 
     var showsAdditionalDetails: Bool { selectedCategory != nil }

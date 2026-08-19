@@ -210,7 +210,6 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertNil(context.fastclick)
     }
 
-    // Empty is not data: a blank UA or `[]` must stay nil rather than reach the ping.
     func test_pageContextInit_dropsEmptyValues() {
         XCTAssertNil(WebCompatPageContext(from: ["userAgent": ""]).userAgent)
         XCTAssertNil(WebCompatPageContext(from: ["languages": []]).languages)
