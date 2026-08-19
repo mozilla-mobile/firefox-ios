@@ -68,6 +68,7 @@ final class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessagePressedCalled, 0)
     }
 
+    // Disabled: not passing on Xcode 27. Skipped in UnitTest.xctestplan.
     func testDidTapNotification_noMessageFound() {
         let subject = createSubject()
         subject.didTapNotification("test")
