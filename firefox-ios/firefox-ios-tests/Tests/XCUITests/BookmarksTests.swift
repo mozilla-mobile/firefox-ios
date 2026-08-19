@@ -698,6 +698,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen.assertIdenticalFoldersNamesCreated(identifier: folderName, nrOfFolders: 2)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4313009
     func testSwipeBackFromBookmarkFolder() throws {
         guard !iPad() else {
             throw XCTSkip("XCUITest cannot drive the pop gesture in the inset iPad panel, it works manually")
