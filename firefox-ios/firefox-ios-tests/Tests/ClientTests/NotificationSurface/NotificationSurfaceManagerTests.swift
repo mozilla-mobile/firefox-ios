@@ -5,6 +5,7 @@
 import XCTest
 @testable import Client
 
+// Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
 @MainActor
 final class NotificationSurfaceManagerTests: XCTestCase {
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
@@ -61,7 +62,6 @@ final class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertEqual(notificationManager.scheduledNotifications, 1)
     }
 
-    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testDidTapNotification_noMessageId() {
         let subject = createSubject()
         subject.didTapNotification("")
@@ -69,7 +69,6 @@ final class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessagePressedCalled, 0)
     }
 
-    // Disabled: not passing on Xcode 27. Skipped in UnitTest.xctestplan.
     func testDidTapNotification_noMessageFound() {
         let subject = createSubject()
         subject.didTapNotification("test")
@@ -77,7 +76,6 @@ final class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessagePressedCalled, 0)
     }
 
-    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testDidTapNotification_openNewTabAction() {
         let subject = createSubject()
         let message = createMessage()
