@@ -28,15 +28,20 @@ final class VPNManager: VPNManaging {
     private let logger: Logger
     private let guardian: VPNGuardian
     private let windowManager: WindowManager
+    private let userPreferences: UserFeaturePreferring
 
-    private(set) var isRunning = false
+    var isRunning: Bool {
+        self.userPreferences.getPreferenceFor(.vpnFeature)
+    }
+
     private var activeServer: VPNGuardian.Server?
     private var rotationTask: Task<Void, Never>?
 
     init(
         logger: Logger = DefaultLogger.shared,
         clientConfig: VPNGuardian.Configuration = .staging,
-        windowManager: WindowManager = AppContainer.shared.resolve()
+        windowManager: WindowManager = AppContainer.shared.resolve(),
+        userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
     ) {
         self.logger = logger
         self.guardian = VPNGuardian(
@@ -45,6 +50,7 @@ final class VPNManager: VPNManaging {
             logger: logger
         )
         self.windowManager = windowManager
+        self.userPreferences = userPreferences
     }
 
     /// Guardian's shared auth secret, supplied at runtime via the `VPN_GUARDIAN_SECRET` environment
@@ -78,7 +84,7 @@ final class VPNManager: VPNManaging {
             let config = self.buildProxyConfig(server: server, pass: pass)
             await self.applyProxyAndRebuildWebViews(configs: [config])
             self.activeServer = server
-            self.isRunning = true
+            self.userPreferences.setPreferenceFor(.vpnFeature, to: true)
             self.startPassRotation(after: pass)
         } catch {
             self.logger.log("VPN start failed: \(error)", level: .warning, category: .sync)
@@ -90,7 +96,7 @@ final class VPNManager: VPNManaging {
         self.rotationTask = nil
         await self.applyProxyAndRebuildWebViews(configs: [])
         self.activeServer = nil
-        self.isRunning = false
+        self.userPreferences.setPreferenceFor(.vpnFeature, to: false)
     }
 
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the
