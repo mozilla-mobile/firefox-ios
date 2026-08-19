@@ -144,7 +144,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertNil(payload.blockedOrigins)
     }
 
-    // MARK: - blockedOrigins opt-in
+    // MARK: - blockedOrigins opt-out
 
     func test_blockedOrigins_whenNotIncluded_isNil() {
         XCTAssertNil(WebCompatReportDataCollector.blockedOrigins(from: makeStats(), includeBlockedList: false))
@@ -156,7 +156,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertEqual(origins, ["a.example", "b.example", "c.example"])
     }
 
-    // No content blocker means no blocked list, even if the user opted in.
+    // No content blocker means no blocked list, even with the row left checked.
     func test_enrich_blockedOriginsWithoutBlockingStrength_areDropped() {
         let snapshot = makeSnapshot(blockingStrength: nil, blockedOrigins: ["a.example"])
 
