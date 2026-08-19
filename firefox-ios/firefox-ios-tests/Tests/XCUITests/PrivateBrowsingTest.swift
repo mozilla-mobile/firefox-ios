@@ -207,6 +207,65 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertEqual(numPrivTabsOpen, 1, "The number of private tabs is not correct")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3168524
+    // Regression
+    func testWhoMightSeeMyActivityLink() {
+        let toolbarScreen = ToolbarScreen(app: app)
+
+        // Step 1: private browsing mode is displayed
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+
+        // Step 2: the "Leave no traces on this device" card is shown on the homepage
+        browserScreen.assertPrivateModeMessageCardExists()
+
+        // Step 3: the link opens the common myths support page in a new private tab
+        browserScreen.tapPrivateModeActivityLink()
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: "support.mozilla.org")
+        toolbarScreen.assertTabsButtonValue(expectedCount: "2")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168528
+    // Regression
+    func testPrivateTabCounterIsUpdated() {
+        let toolbarScreen = ToolbarScreen(app: app)
+
+        // Step 1: private browsing mode is displayed
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+
+        // Step 2: the search is performed
+        browserScreen.tapOnAddressBar()
+        browserScreen.typeOnSearchBar(text: "mozilla\r")
+        waitUntilPageLoad()
+        waitForTabsButton()
+
+        // Step 3: the counter displays the single open private tab
+        toolbarScreen.assertTabsButtonValue(expectedCount: "1")
+
+        // Steps 4 and 5: the counter increments for every new private tab
+        for expectedCount in ["2", "3", "4"] {
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            navigator.nowAt(BrowserTab)
+            waitForTabsButton()
+            toolbarScreen.assertTabsButtonValue(expectedCount: expectedCount)
+        }
+
+        // Step 6: the counter is updated after closing private tabs
+        navigator.goto(TabTray)
+        tabTray.closeFirstTab()
+        tabTray.closeFirstTab()
+        tabTray.tapDoneButton()
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "2")
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307012
     // Smoketest
     func testLongPressLinkOptionsPrivateMode() {

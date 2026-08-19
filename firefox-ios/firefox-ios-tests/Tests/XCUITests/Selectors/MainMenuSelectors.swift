@@ -13,6 +13,7 @@ protocol MainMenuSelectorSet {
 	var SIGN_IN_CELL: Selector { get }
     var SETTINGS_CELL: Selector { get }
     var BOOKMARK_PAGE: Selector { get }
+    var SITE_PROTECTIONS: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -26,6 +27,7 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         static let signIn = AccessibilityIdentifiers.MainMenu.signIn
         static let settings  = AccessibilityIdentifiers.MainMenu.settings
         static let bookmarkPage = AccessibilityIdentifiers.MainMenu.bookmarkPage
+        static let siteProtections = "Protections"
     }
 
     let DESKTOP_SITE = Selector.cellById(
@@ -69,6 +71,12 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         groups: ["MainMenu"]
     )
 
+    let SITE_PROTECTIONS = Selector.buttonByLabel(
+        IDs.siteProtections,
+        description: "Protections button in the main menu header, opens the tracking protection panel",
+        groups: ["menu", "privacy"]
+    )
+
     let BOOKMARK_PAGE = Selector.tableCellById(
         IDs.bookmarkPage,
         description: "Bookmark page in Main Menu",
@@ -76,5 +84,6 @@ struct MainMenuSelectors: MainMenuSelectorSet {
     )
 
     var all: [Selector] { [DESKTOP_SITE, BOOKMARKS_BUTTON, HISTORY_BUTTON, DOWNLOADS_BUTTON,
-                           PASSWORDS_BUTTON, SIGN_IN_CELL, SETTINGS_CELL, BOOKMARK_PAGE] }
+                           PASSWORDS_BUTTON, SIGN_IN_CELL, SETTINGS_CELL, BOOKMARK_PAGE,
+                           SITE_PROTECTIONS] }
 }

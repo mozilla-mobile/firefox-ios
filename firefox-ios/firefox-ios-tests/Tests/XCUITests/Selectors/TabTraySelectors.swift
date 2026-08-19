@@ -10,6 +10,7 @@ protocol TabTraySelectorsSet {
     var IPHONE_TAB_TRAY_COLLECTION_VIEW: Selector { get }
     var FIRST_CELL: Selector { get }
     var NEW_TAB_BUTTON: Selector { get }
+    var DONE_BUTTON: Selector { get }
     var UNDO_BUTTON: Selector { get }
     var CONTEXT_MENU_ADD_TO_BOOKMARKS: Selector { get }
     var CONTEXT_MENU_COPY_URL: Selector { get }
@@ -27,6 +28,7 @@ struct TabTraySelectors: TabTraySelectorsSet {
         static let collectionView = AccessibilityIdentifiers.TabTray.collectionView
         static let tabsTray = AccessibilityIdentifiers.TabTray.tabsTray
         static let newTabButton = AccessibilityIdentifiers.TabTray.newTabButton
+        static let doneButton = AccessibilityIdentifiers.TabTray.doneButton
     }
 
     let TABSTRAY_CONTAINER = Selector(
@@ -53,6 +55,12 @@ struct TabTraySelectors: TabTraySelectorsSet {
         "firstCell",
         description: "First Tab cell",
         groups: ["tabtray"]
+    )
+
+    let DONE_BUTTON = Selector.buttonId(
+        IDs.doneButton,
+        description: "Done button that dismisses the tab tray",
+        groups: ["tabTray"]
     )
 
     let NEW_TAB_BUTTON = Selector.buttonId(
@@ -129,7 +137,7 @@ struct TabTraySelectors: TabTraySelectorsSet {
     }
 
     var all: [Selector] { [TABSTRAY_CONTAINER, COLLECTION_VIEW,
-                           IPHONE_TAB_TRAY_COLLECTION_VIEW, FIRST_CELL, NEW_TAB_BUTTON,
+                           IPHONE_TAB_TRAY_COLLECTION_VIEW, FIRST_CELL, NEW_TAB_BUTTON, DONE_BUTTON,
                             UNDO_BUTTON, CONTEXT_MENU_ADD_TO_BOOKMARKS,
                             CONTEXT_MENU_COPY_URL, CONTEXT_MENU_CLOSE_TAB] }
 }

@@ -126,6 +126,42 @@ class TrackingProtectionTests: BaseTestCase {
         )
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307061
+    // Regression
+    func testTrackingProtectionButtonMenu() {
+        browserScreen = BrowserScreen(app: app)
+        trackingProtectionScreen = TrackingProtectionScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+        let mainMenu = MainMenuScreen(app: app)
+        let sslScreen = SSLWarningScreen(app: app)
+
+        // Step 1: the page is correctly loaded
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL("https://www.mozilla.org/")
+        waitUntilPageLoad()
+        waitForTabsButton()
+        browserScreen.assertAddressBar_LockIconExist()
+
+        // Step 2: the connection is secure and the certificate verifier is shown. The address bar
+        // lock icon is not interactive in the centered layout, so the panel opens from the menu.
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapSiteProtections()
+        trackingProtectionScreen.tapConnectionSecurityStatus()
+        trackingProtectionScreen.assertConnectionIsSecure()
+        trackingProtectionScreen.assertConnectionVerifiedByCertificate()
+
+        // Step 3: the expired certificate page loads with the lock icon disabled. Opened directly
+        // because tapping "expired" on badssl.com does not raise the interstitial reliably.
+        trackingProtectionScreen.closeConnectionDetails()
+        navigator.nowAt(BrowserTab)
+        navigator.openURL("https://expired.badssl.com/")
+        sslScreen.waitForWarning()
+        sslScreen.tapAdvanced()
+        sslScreen.tapVisitSiteAnyway()
+        sslScreen.waitForPageToLoadAfterBypass()
+        browserScreen.assertAddressBar_LockIconOffExist()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2318742
     func testProtectionLevelMoreInfoMenu() {
         navigator.nowAt(NewTabScreen)
