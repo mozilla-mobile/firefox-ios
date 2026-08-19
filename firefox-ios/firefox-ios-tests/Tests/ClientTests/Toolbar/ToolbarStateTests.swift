@@ -208,7 +208,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
 
         let newState = reducer.modernReducer(
             initialState,
-            ToolbarModernAction.keyboardStateDidChange(isVisible: true),
+            ToolbarModernAction.keyboardStateDidChange(shouldShow: true),
             windowUUID
         )
 

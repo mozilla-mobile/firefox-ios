@@ -769,7 +769,7 @@ final class BrowserCoordinator: BaseCoordinator,
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
             if isEditing {
-                store.dispatch(ToolbarModernAction.keyboardStateDidChange(isVisible: false), forWindowUUID: windowUUID)
+                store.dispatch(ToolbarModernAction.keyboardStateDidChange(shouldShow: false), forWindowUUID: windowUUID)
             }
         }
 
