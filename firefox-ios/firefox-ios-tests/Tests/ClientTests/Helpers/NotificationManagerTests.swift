@@ -29,6 +29,8 @@ class NotificationManagerTests: XCTestCase {
         }
     }
 
+    // Flaky on iOS 27.0 beta (intermittent UNErrorDomain Code=1401 "Notification has no
+    // user visible content"); temporarily skipped in UnitTest.xctestplan. See FXIOS-14977.
     func testGetNotificationSettings() async {
         _ = await notificationManager.getNotificationSettings()
         XCTAssertTrue(self.center.getSettingsWasCalled)
