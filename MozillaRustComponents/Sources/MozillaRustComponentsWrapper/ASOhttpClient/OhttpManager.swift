@@ -4,17 +4,22 @@
 
 import Foundation
 
-public class OhttpManager {
+/// Performs Oblivious HTTP round-trips via a Gateway and Relay.
+///
+/// This is an actor rather than a class because callers drive it concurrently:
+/// each Glean ping upload runs in its own task. Isolation protects the key cache
+/// below, and keeps `OhttpSession` creation in `data(for:)` from overlapping.
+public actor OhttpManager {
     // The OhttpManager communicates with the relay and key server using
     // URLSession.shared.data unless an alternative networking method is
     // provided with this signature.
     public typealias NetworkFunction = (_: URLRequest) async throws -> (Data, URLResponse)
 
-    // Global cache to caching Gateway encryption keys. Stale entries are
-    // ignored and on Gateway errors the key used should be purged and retrieved
-    // again next at next network attempt.
-    // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
-    static nonisolated(unsafe) var keyCache = [URL: ([UInt8], Date)]()
+    // Cache of Gateway encryption keys, alongside the time each was stored so
+    // staleness can be evaluated on read. Stale entries are ignored, and on
+    // Gateway errors the key used is purged and retrieved again at the next
+    // network attempt.
+    private var keyCache = [URL: (key: [UInt8], storedAt: Date)]()
 
     private var configUrl: URL
     private var relayUrl: URL
@@ -27,6 +32,29 @@ public class OhttpManager {
         self.configUrl = configUrl
         self.relayUrl = relayUrl
         self.network = network
+    }
+
+    /// Returns the cached key when one is present and still within `ttl`,
+    /// dropping it when stale. `nil` means the caller should fetch a fresh key.
+    func cachedKey(for gatewayConfigUrl: URL, ttl: TimeInterval) -> [UInt8]? {
+        guard let entry = keyCache[gatewayConfigUrl] else { return nil }
+
+        guard Date() < entry.storedAt + ttl else {
+            keyCache.removeValue(forKey: gatewayConfigUrl)
+            return nil
+        }
+
+        return entry.key
+    }
+
+    func store(key: [UInt8], for gatewayConfigUrl: URL) {
+        keyCache[gatewayConfigUrl] = (key: key, storedAt: Date())
+    }
+
+    /// Purges a key so the next network attempt retrieves a fresh one, which is
+    /// how Gateway errors are recovered from.
+    func invalidateKey(for gatewayConfigUrl: URL) {
+        keyCache.removeValue(forKey: gatewayConfigUrl)
     }
 
     private func fetchKey(url: URL) async throws -> [UInt8] {
@@ -42,23 +70,15 @@ public class OhttpManager {
     }
 
     private func keyForGateway(gatewayConfigUrl: URL, ttl: TimeInterval) async throws -> [UInt8] {
-        if let (data, timestamp) = Self.keyCache[gatewayConfigUrl] {
-            if Date() < timestamp + ttl {
-                // Cache Hit!
-                return data
-            }
-
-            Self.keyCache.removeValue(forKey: gatewayConfigUrl)
+        if let key = cachedKey(for: gatewayConfigUrl, ttl: ttl) {
+            // Cache Hit!
+            return key
         }
 
         let data = try await fetchKey(url: gatewayConfigUrl)
-        Self.keyCache[gatewayConfigUrl] = (data, Date())
+        store(key: data, for: gatewayConfigUrl)
 
         return data
-    }
-
-    private func invalidateKey() {
-        Self.keyCache.removeValue(forKey: configUrl)
     }
 
     public func data(for request: URLRequest) async throws -> (Data, HTTPURLResponse) {
@@ -66,7 +86,14 @@ public class OhttpManager {
         let config = try await keyForGateway(gatewayConfigUrl: configUrl,
                                              ttl: TimeInterval(3600))
 
-        // Create an encryption session for a request-response round-trip
+        // Create an encryption session for a request-response round-trip.
+        //
+        // Actor isolation is load-bearing here: this synchronous call cannot
+        // interleave with another, and the first session created in a process
+        // triggers one-time NSS initialization inside the Rust component, which
+        // crashes when entered from two threads at once. That holds as long as a
+        // single OhttpManager serves the process; a process-wide guarantee needs
+        // application-services to initialize NSS up front.
         let session = try OhttpSession(config: config)
 
         // Encapsulate the URLRequest for the Target
@@ -91,7 +118,7 @@ public class OhttpManager {
            httpResponse.statusCode == 400 ||
            httpResponse.statusCode == 401
         {
-            invalidateKey()
+            invalidateKey(for: configUrl)
         }
 
         guard let httpResponse = response as? HTTPURLResponse,
