@@ -443,10 +443,11 @@ class LoginTest: BaseTestCase {
         let passwordCell = app.tables.cells["Password"]
         let editButton = app.buttons["Edit"]
         savedCredentials.waitAndTap()
+        // The passwords list has an "Edit" button of its own, so tapping before the detail screen has
+        // pushed puts the list into selection mode instead of editing the login.
+        mozWaitForElementToExist(app.tables["Login Detail List"])
         editButton.waitAndTap()
         // Focus the username field explicitly; relying on auto-focus after Edit is flaky on CI.
-        // Wait for the detail list to finish presenting first, otherwise the Username cell is
-        // queried mid edit-mode transition and the tap times out (matches testEditOneLoginEntry).
         mozWaitForElementToExist(app.tables["Login Detail List"])
         app.tables["Login Detail List"].cells.elementContainingText("Username").waitAndTap()
         clearAndEnterText(text: "test")
@@ -530,41 +531,47 @@ class LoginTest: BaseTestCase {
         // Long tap on the field and then tap on Copy
         let fieldCell = app.tables.cells.element(boundBy: indexField)
         mozWaitForElementToExist(fieldCell)
-        let copyMenuItem = app.staticTexts["Copy"]
-        revealCalloutMenuItem(copyMenuItem) {
+        revealCalloutMenuItem(labelled: "Copy") {
             fieldCell.press(forDuration: 1.5)
-        }
-        copyMenuItem.waitAndTap()
+        }.waitAndTap()
         // Validate text was copied
         app.buttons["Passwords"].waitAndTap()
         let passwordSearchField = app.searchFields[passwordssQuery.searchPasswords]
-        let pasteMenuItem = app.staticTexts["Paste"]
-        revealCalloutMenuItem(pasteMenuItem) {
+        revealCalloutMenuItem(labelled: "Paste") {
             if #available(iOS 17, *) {
                 passwordSearchField.press(forDuration: 1.5)
             } else {
                 passwordSearchField.waitAndTap()
                 passwordSearchField.waitAndTap()
             }
-        }
-        pasteMenuItem.waitAndTap()
+        }.waitAndTap()
         mozWaitForElementToExist(passwordSearchField)
         XCTAssertEqual(passwordSearchField.value! as? String,
                        copiedText,
                        "The \(field)) text was not copied")
     }
 
-    /// Repeats `gesture` until `menuItem` (an edit-callout entry such as Copy/Paste) appears.
-    /// The callout menu does not reliably show on the first gesture on CI, so retry a few times.
-    private func revealCalloutMenuItem(_ menuItem: XCUIElement, maxAttempts: Int = 3, gesture: () -> Void) {
-        var attempts = maxAttempts
-        repeat {
+    /// Repeats `gesture` until the edit-callout entry named `label` appears, and returns it. The entry
+    /// is a menuItem on some iOS versions and a staticText on others, so both types are polled.
+    private func revealCalloutMenuItem(labelled label: String,
+                                       maxAttempts: Int = 3,
+                                       gesture: () -> Void) -> XCUIElement {
+        let candidates = [app.menuItems[label], app.staticTexts[label]]
+        for _ in 0..<maxAttempts {
             gesture()
-            if menuItem.mozWaitForElementToExist(timeout: 5, failOnTimeout: false) {
-                return
-            }
-            attempts -= 1
-        } while attempts > 0
+            if let revealed = waitForFirstToExist(candidates, timeout: 5) { return revealed }
+        }
+        XCTFail("The '\(label)' callout entry did not appear after \(maxAttempts) gestures")
+        return candidates[0]
+    }
+
+    private func waitForFirstToExist(_ elements: [XCUIElement], timeout: TimeInterval) -> XCUIElement? {
+        let deadline = Date().addingTimeInterval(timeout)
+        repeat {
+            if let existing = elements.first(where: { $0.exists }) { return existing }
+            usleep(10000)
+        } while Date() < deadline
+        return nil
     }
 
     private func clearAndEnterText(text: String) {

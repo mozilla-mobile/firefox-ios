@@ -180,28 +180,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
     }
 
     private func validateMarkupTool() {
-        // The Markup tool opens. It can take a little longer to load, so wait longer.
-        if #available(iOS 26, *) {
-            if !iPad() {
-                // Share "Markup" sometimes opens QuickLook in preview mode (a "Markup" pen button, no
-                // palette); tap it to enter markup, then verify the PencilKit Drawing-Palette + Pen.
-                let palette = app.otherElements["Drawing-Palette"]
-                if !palette.mozWaitForElementToExist(timeout: TIMEOUT_LONG, failOnTimeout: false) {
-                    app.switches["QLOverlayMarkupButtonAccessibilityIdentifier"].firstMatch.waitAndTap()
-                }
-                mozWaitForElementToExist(palette, timeout: TIMEOUT_LONG)
-                mozWaitForElementToExist(app.buttons["Pen"], timeout: TIMEOUT_LONG)
-            } else {
-                // On iPad the Markup palette renders inline with no navbar overflow button;
-                // the Markup control is a switch, not a button.
-                mozWaitForElementToExist(app.switches["Markup"], timeout: TIMEOUT_LONG)
-                mozWaitForElementToExist(app.buttons["close"], timeout: TIMEOUT_LONG)
-            }
-        } else {
-            if !app.switches["Markup"].mozWaitForElementToExist(timeout: TIMEOUT_LONG, failOnTimeout: false) {
-                mozWaitForElementToExist(app.buttons["Markup"], timeout: TIMEOUT_LONG)
-            }
-        }
+        MarkupScreen(app: app).assertMarkupToolIsOpen()
     }
 
     private func reachReaderModeShareMenuLayoutAndSelectOption(option: String) {

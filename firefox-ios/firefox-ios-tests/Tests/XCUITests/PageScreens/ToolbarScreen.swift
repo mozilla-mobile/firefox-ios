@@ -199,10 +199,21 @@ final class ToolbarScreen {
     /// Selects English in the translation language picker action sheet when it is shown.
     /// The picker only appears when the language picker feature is enabled and multiple
     /// target languages are available, so this is a no-op when the sheet doesn't show.
-    func selectTranslationLanguageIfPresented(timeout: TimeInterval = TIMEOUT) {
+    /// The probe is short on purpose: waiting the full TIMEOUT lets the translation finish before the
+    /// caller can observe the spinner.
+    func selectTranslationLanguageIfPresented(timeout: TimeInterval = TIMEOUT_PICKER_PROBE) {
         if translateLanguageEnglishOption.mozWaitForElementToExist(timeout: timeout, failOnTimeout: false) {
             translateLanguageEnglishOption.waitAndTap()
         }
+    }
+
+    /// The spinner is transient and a fast translation can pass through it between UI samples, so the
+    /// active button counts too.
+    func assertTranslationInProgressOrCompleted(timeout: TimeInterval = TIMEOUT) {
+        guard !translateLoadingButton.mozWaitForElementToExist(timeout: timeout, failOnTimeout: false) else {
+            return
+        }
+        BaseTestCase().mozWaitForElementToExist(translateActiveButton, timeout: timeout)
     }
 
     func assertTranslateButtonExists(with mode: TranslationButtonType, timeout: TimeInterval = TIMEOUT) {
