@@ -16,6 +16,7 @@ struct CreditCardSettingsEmptyView: View {
     @State var subTextColor: Color = .clear
     @State var toggleTextColor: Color = .clear
     @State var imageColor: Color = .clear
+    @State var toggleBackgroundOverride: Color = .white
 
     @ObservedObject var toggleModel: ToggleModel
 
@@ -57,7 +58,7 @@ struct CreditCardSettingsEmptyView: View {
             windowUUID: windowUUID,
             textColor: toggleTextColor,
             model: toggleModel)
-        .background(Color.white)
+        .background(toggleBackgroundOverride)
         .padding(.top, 25)
     }
 
@@ -99,6 +100,7 @@ struct CreditCardSettingsEmptyView: View {
         subTextColor = Color(color.textSecondary)
         toggleTextColor = Color(color.textPrimary)
         imageColor = Color(color.iconSecondary)
+        toggleBackgroundOverride = theme.isNova ? .clear : .white
     }
 }
 

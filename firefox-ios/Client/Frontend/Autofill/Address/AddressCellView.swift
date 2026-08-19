@@ -125,7 +125,7 @@ struct AddressCellView: View {
         textColor = Color(color.textPrimary)
         customLightGray = Color(color.textSecondary)
         iconPrimary = Color(color.iconPrimary)
-        backgroundColor = Color(color.layer2)
+        backgroundColor = Color(theme.isNova ? color.layerSurfaceMedium : color.layer2)
         highlightColor = Color(color.layer5Hover)
     }
 }
