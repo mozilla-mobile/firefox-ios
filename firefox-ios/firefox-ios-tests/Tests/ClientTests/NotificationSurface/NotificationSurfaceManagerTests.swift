@@ -61,6 +61,7 @@ final class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertEqual(notificationManager.scheduledNotifications, 1)
     }
 
+    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testDidTapNotification_noMessageId() {
         let subject = createSubject()
         subject.didTapNotification("")
