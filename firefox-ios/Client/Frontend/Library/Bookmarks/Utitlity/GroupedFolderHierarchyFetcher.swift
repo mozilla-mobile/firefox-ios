@@ -39,7 +39,7 @@ struct GroupedFolder: Equatable, Hashable {
 struct FolderGroup: Equatable, Identifiable {
     let id: String
     let title: String
-    var folders: [GroupedFolder]
+    let folders: [GroupedFolder]
     var isExpanded: Bool
     let blocks: [Block]
 
