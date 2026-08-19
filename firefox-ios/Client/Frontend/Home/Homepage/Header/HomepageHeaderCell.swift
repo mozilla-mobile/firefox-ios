@@ -14,7 +14,7 @@ import TipKit
 class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, FeatureFlaggable {
     enum UX {
         static let firefoxLogoImageSize = CGSize(width: 40, height: 40)
-        static let privateLogoImageSize = CGSize(width: 72, height: 72)
+        static let privateNovaLogoImageSize = CGSize(width: 72, height: 72)
         static let firefoxTextImageSize = CGSize(width: 90, height: 40)
         static let interImageSpacing: CGFloat = 10
         static let quickAnswersButtonSize: CGFloat = 44
@@ -134,7 +134,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
         let isNovaPrivate = featureFlagsProvider.isEnabled(.novaDesign) && headerState.isPrivate
 
-        let logoSize = isNovaPrivate ? UX.privateLogoImageSize : UX.firefoxLogoImageSize
+        let logoSize = isNovaPrivate ? UX.privateNovaLogoImageSize : UX.firefoxLogoImageSize
         logoImageWidthConstraint.constant = logoSize.width
         logoImageHeightConstraint.constant = logoSize.height
         logoTextImage.isHidden = isNovaPrivate
