@@ -13,7 +13,7 @@ public protocol WebCompatReportSheetDelegate: AnyObject {
     func webCompatReportSheetDidSelectCategory(id: String)
     func webCompatReportSheetDidSelectSubOption(id: String)
     func webCompatReportSheetDidTapButton(id: String)
-    func webCompatReportSheetDidToggle(id: String, isOn: Bool)
+    func webCompatReportSheetDidToggleCheckbox(id: String, isChecked: Bool)
     func webCompatReportSheetDidTapLearnMore(url: URL)
     func webCompatReportSheetDidEditText(id: String, text: String)
 }
@@ -184,7 +184,7 @@ public final class WebCompatReportSheetViewController: UIViewController,
         let url = urlCellRegistration()
         let details = detailsCellRegistration()
         let sendButton = sendButtonCellRegistration()
-        let toggle = toggleCellRegistration()
+        let checkbox = checkboxCellRegistration()
 
         let dataSource = UICollectionViewDiffableDataSource<String, String>(
             collectionView: collectionView
@@ -201,8 +201,8 @@ public final class WebCompatReportSheetViewController: UIViewController,
                 return collectionView.dequeueConfiguredReusableCell(using: details, for: indexPath, item: row)
             case .sendButton:
                 return collectionView.dequeueConfiguredReusableCell(using: sendButton, for: indexPath, item: row)
-            case .toggle:
-                return collectionView.dequeueConfiguredReusableCell(using: toggle, for: indexPath, item: row)
+            case .checkbox:
+                return collectionView.dequeueConfiguredReusableCell(using: checkbox, for: indexPath, item: row)
             case .plain:
                 return collectionView.dequeueConfiguredReusableCell(using: plain, for: indexPath, item: row)
             }
@@ -301,13 +301,11 @@ public final class WebCompatReportSheetViewController: UIViewController,
         }
     }
 
-    private func toggleCellRegistration()
-    -> UICollectionView.CellRegistration<WebCompatToggleCell, WebCompatReportViewModel.Row> {
+    private func checkboxCellRegistration()
+    -> UICollectionView.CellRegistration<WebCompatCheckboxCell, WebCompatReportViewModel.Row> {
         return UICollectionView.CellRegistration { [weak self] cell, _, row in
-            guard let self, case let .toggle(isOn) = row.kind else { return }
-            cell.configure(title: row.title, isOn: isOn, a11yIdentifier: row.a11yIdentifier) { [weak self] isOn in
-                self?.delegate?.webCompatReportSheetDidToggle(id: row.id, isOn: isOn)
-            }
+            guard let self, case let .checkbox(isChecked) = row.kind else { return }
+            cell.configure(title: row.title, isChecked: isChecked, a11yIdentifier: row.a11yIdentifier)
             cell.applyTheme(theme: self.theme)
         }
     }
@@ -381,9 +379,15 @@ public final class WebCompatReportSheetViewController: UIViewController,
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         guard let rowID = dataSource.itemIdentifier(for: indexPath),
-              let row = rowsByID[rowID],
-              case .subOption = row.kind else { return }
-        delegate?.webCompatReportSheetDidSelectSubOption(id: row.id)
+              let row = rowsByID[rowID] else { return }
+        switch row.kind {
+        case .subOption:
+            delegate?.webCompatReportSheetDidSelectSubOption(id: row.id)
+        case let .checkbox(isChecked):
+            delegate?.webCompatReportSheetDidToggleCheckbox(id: row.id, isChecked: !isChecked)
+        case .plain, .categoryMenu, .urlField, .detailsField, .sendButton:
+            break
+        }
     }
 
     // MARK: - Actions

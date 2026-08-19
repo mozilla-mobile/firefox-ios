@@ -62,7 +62,7 @@ public struct WebCompatReportViewModel: Equatable, Sendable {
             case urlField(text: String)
             case detailsField(text: String, placeholder: String)
             case sendButton(isEnabled: Bool)
-            case toggle(isOn: Bool)
+            case checkbox(isChecked: Bool)
         }
 
         public let id: String

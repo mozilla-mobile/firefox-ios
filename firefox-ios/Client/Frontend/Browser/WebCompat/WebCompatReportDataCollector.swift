@@ -29,7 +29,7 @@ struct WebCompatDeviceInfoProvider: WebCompatDeviceInfoProviding {
 }
 
 /// Tab inputs as a plain value, so tests don't need a live `Tab`/`WKWebView`. Nil
-/// `blockingStrength` means no content blocker; `blockedOrigins` is filled only on opt-in.
+/// `blockingStrength` means no content blocker; `blockedOrigins` is nil once the user unchecks Additional Info.
 struct WebCompatTabSnapshot: Equatable {
     var isPrivate: Bool?
     var pageUserAgent: String?
@@ -87,7 +87,7 @@ enum WebCompatReportDataCollector {
         return payload
     }
 
-    /// Blocked trackers, or nil without opt-in. Kept out of `makeSnapshot` so the
+    /// Blocked trackers, or nil once the user opts out. Kept out of `makeSnapshot` so the
     /// opt-out is testable without a live `Tab`.
     static func blockedOrigins(from stats: TPPageStats, includeBlockedList: Bool) -> [String]? {
         guard includeBlockedList else { return nil }
