@@ -945,8 +945,16 @@ extension BrowserViewController: WKNavigationDelegate {
                 handlePDFDownloadRequest(request: request, tab: tab, filename: response.suggestedFilename)
                 return .cancel
             }
-            if response.mimeType != MIMEType.HTML, let request {
-                tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
+            if response.mimeType != MIMEType.HTML {
+                if webViewDocFetchEnabled {
+                    // WebView fetch reads the document directly from the view, so no request is required.
+                    tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response)
+                } else if let request {
+                    tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response,
+                                                                     request: request)
+                } else {
+                    tab.temporaryDocument = nil
+                }
             } else {
                 tab.temporaryDocument = nil
             }

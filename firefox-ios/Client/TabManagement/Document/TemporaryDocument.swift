@@ -103,7 +103,7 @@ final class DefaultTemporaryDocument: NSObject,
                                       URLSessionDownloadDelegate,
                                       @unchecked Sendable {
     private let session: URLSession
-    private let request: URLRequest
+    private let request: URLRequest?
     private let cookies: [HTTPCookie]
     private let credential: URLCredential?
     private var currentDownloadTask: URLSessionDownloadTask?
@@ -122,7 +122,7 @@ final class DefaultTemporaryDocument: NSObject,
     private let logger: Logger
 
     var sourceURL: URL? {
-        return request.url
+        return request?.url
     }
 
     init(
@@ -147,7 +147,7 @@ final class DefaultTemporaryDocument: NSObject,
 
     init(
         preflightResponse: URLResponse,
-        request: URLRequest,
+        request: URLRequest? = nil,
         mimeType: String? = nil,
         session: URLSession = .shared,
         logger: Logger = DefaultLogger.shared
@@ -207,6 +207,7 @@ final class DefaultTemporaryDocument: NSObject,
         if let tempFile = queryTempFile() {
             return tempFile
         }
+        guard let request else { return nil }
         let response = try? await session.download(for: request)
         guard let location = response?.0, let tempFileURL = storeTempDownloadFile(at: location) else { return nil }
 
@@ -217,6 +218,12 @@ final class DefaultTemporaryDocument: NSObject,
         if let tempFile = queryTempFile() {
             ensureMainThread {
                 completion(tempFile)
+            }
+            return
+        }
+        guard let request else {
+            ensureMainThread {
+                completion(nil)
             }
             return
         }
@@ -314,7 +321,10 @@ final class DefaultTemporaryDocument: NSObject,
         let isHTTPAuthChallenge = method == NSURLAuthenticationMethodHTTPBasic
             || method == NSURLAuthenticationMethodHTTPDigest
             || method == NSURLAuthenticationMethodNTLM
-        if let credential, isHTTPAuthChallenge, challenge.protectionSpace.host == request.url?.host {
+        if isHTTPAuthChallenge,
+           let credential,
+           let request,
+           challenge.protectionSpace.host == request.url?.host {
             completionHandler(.useCredential, credential)
         } else {
             completionHandler(.performDefaultHandling, nil)
