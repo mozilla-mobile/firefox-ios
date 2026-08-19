@@ -14,7 +14,7 @@ import TipKit
 class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, FeatureFlaggable {
     enum UX {
         static let firefoxLogoImageSize = CGSize(width: 40, height: 40)
-        static let privateLogoImageSize = CGSize(width: 69, height: 74)
+        static let privateLogoImageSize = CGSize(width: 72, height: 72)
         static let firefoxTextImageSize = CGSize(width: 90, height: 40)
         static let interImageSpacing: CGFloat = 10
         static let quickAnswersButtonSize: CGFloat = 44
@@ -47,6 +47,29 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     private lazy var logoImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
     }
+
+    private let privateLogoCircleLayer: CALayer = {
+        let layer = CALayer()
+        layer.isHidden = true
+        return layer
+    }()
+
+    private let privateLogoGlyphGradientLayer: CAGradientLayer = {
+        let layer = CAGradientLayer()
+        layer.type = .axial
+        layer.startPoint = CGPoint(x: 0.5, y: 1)
+        layer.endPoint = CGPoint(x: 0.5, y: 0)
+        layer.isHidden = true
+        return layer
+    }()
+
+    private let privateLogoGlyphMaskLayer: CALayer = {
+        let layer = CALayer()
+        layer.contents = UIImage(
+            named: StandardImageIdentifiers.ExtraExtraExtraLarge.privateModeFill
+        )?.cgImage
+        return layer
+    }()
 
     private lazy var logoTextImage: UIImageView = .build { imageView in
         imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
@@ -91,6 +114,10 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     private func setupLayout() {
         contentView.backgroundColor = .clear
 
+        privateLogoGlyphGradientLayer.mask = privateLogoGlyphMaskLayer
+        logoImage.layer.addSublayer(privateLogoCircleLayer)
+        logoImage.layer.addSublayer(privateLogoGlyphGradientLayer)
+
         logoStackView.addArrangedSubview(logoImage)
         logoStackView.addArrangedSubview(logoTextImage)
         logoContainerView.addSubview(logoStackView)
@@ -133,15 +160,21 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         self.tipPresenter = tipPresenter
 
         let isNovaPrivate = featureFlagsProvider.isEnabled(.novaDesign) && headerState.isPrivate
-        let logoAsset = isNovaPrivate
-            ? ImageIdentifiers.privateModeCircleFillHeader
-            : ImageIdentifiers.homeHeaderLogoBall
-        logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
 
         let logoSize = isNovaPrivate ? UX.privateLogoImageSize : UX.firefoxLogoImageSize
         logoImageWidthConstraint.constant = logoSize.width
         logoImageHeightConstraint.constant = logoSize.height
         logoTextImage.isHidden = isNovaPrivate
+
+        logoImage.image = isNovaPrivate ? nil : UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
+        privateLogoCircleLayer.isHidden = !isNovaPrivate
+        privateLogoGlyphGradientLayer.isHidden = !isNovaPrivate
+
+        let logoBounds = CGRect(origin: .zero, size: logoSize)
+        privateLogoCircleLayer.frame = logoBounds
+        privateLogoCircleLayer.cornerRadius = logoSize.width / 2
+        privateLogoGlyphGradientLayer.frame = logoBounds
+        privateLogoGlyphMaskLayer.frame = logoBounds
 
         quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
 
@@ -227,6 +260,11 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         logoTextImage.tintColor = logoTextColor ?? theme.colors.textPrimary
+
+        if theme.isNova {
+            privateLogoCircleLayer.backgroundColor = theme.colors.iconPrivate.cgColor
+            privateLogoGlyphGradientLayer.colors = theme.colors.gradientPrivacyMask.cgColors
+        }
 
         quickAnswersButton.configuration?.baseBackgroundColor = theme.colors.layer4
         quickAnswersButton.configuration?.baseForegroundColor = theme.colors.actionPrimary

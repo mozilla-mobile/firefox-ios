@@ -137,4 +137,8 @@ public struct StandardImageIdentifiers {
     public struct ExtraLarge {
         public static let crossCircleFill = "crossCircleFillExtraLarge"
     }
+
+    public struct ExtraExtraExtraLarge {
+        public static let privateModeFill = "privateModeFillExtraExtraExtraLarge"
+    }
 }

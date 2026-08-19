@@ -34,10 +34,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     let isEmptySearch: Bool
     /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
     let alternativeSearchEngine: SearchEngineModel?
-
-    private static var featureFlagsProvider: FeatureFlagProviding {
-        AppContainer.shared.resolve()
-    }
+    let isNovaDesignEnabled: Bool
 
     private static let cancelEditAction = ToolbarActionConfiguration(
         actionType: .cancelEdit,
@@ -108,7 +105,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: nil,
             didStartTyping: false,
             isEmptySearch: true,
-            alternativeSearchEngine: nil
+            alternativeSearchEngine: nil,
+            isNovaDesignEnabled: false
         )
     }
 
@@ -134,7 +132,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
          translationConfiguration: TranslationConfiguration?,
          didStartTyping: Bool,
          isEmptySearch: Bool,
-         alternativeSearchEngine: SearchEngineModel?) {
+         alternativeSearchEngine: SearchEngineModel?,
+         isNovaDesignEnabled: Bool) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
         self.leadingPageActions = leadingPageActions
@@ -158,6 +157,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         self.alternativeSearchEngine = alternativeSearchEngine
         self.canSummarize = canSummarize
         self.translationConfiguration = translationConfiguration
+        self.isNovaDesignEnabled = isNovaDesignEnabled
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -295,6 +295,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             .copy(translationConfiguration: nil)
             .copy(didStartTyping: false)
             .copy(isEmptySearch: true)
+            .copy(isNovaDesignEnabled: toolbarAction.isNovaDesignEnabled ?? state.isNovaDesignEnabled)
     }
 
     @MainActor
@@ -721,7 +722,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: state.alternativeSearchEngine,
+            isNovaDesignEnabled: state.isNovaDesignEnabled
         )
     }
 
@@ -936,6 +938,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                         iconName: iconName,
                         numberOfTabs: numberOfTabs,
                         isPrivateMode: toolbarState.isPrivateMode,
+                        isNovaDesignEnabled: addressBarState.isNovaDesignEnabled,
                         previousTabScreenshot: previousTabScreenshot,
                         nextTabScreenshot: nextTabScreenshot
                     )
@@ -948,6 +951,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                         iconName: iconName,
                         numberOfTabs: numberOfTabs,
                         isPrivateMode: toolbarState.isPrivateMode,
+                        isNovaDesignEnabled: addressBarState.isNovaDesignEnabled,
                         previousTabScreenshot: previousTabScreenshot,
                         nextTabScreenshot: nextTabScreenshot
                     ),
@@ -1008,6 +1012,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         iconName: String?,
         numberOfTabs: Int = 1,
         isPrivateMode: Bool = false,
+        isNovaDesignEnabled: Bool = false,
         previousTabScreenshot: UIImage?,
         nextTabScreenshot: UIImage?)
     -> ToolbarActionConfiguration {
@@ -1015,7 +1020,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             .Toolbars.TabsButtonOverflowLargeContentTitle :
             String(format: .Toolbars.TabsButtonLargeContentTitle, NSNumber(value: numberOfTabs))
 
-        let isNovaPrivate = isPrivateMode && featureFlagsProvider.isEnabled(.novaDesign)
+        let isNovaPrivate = isPrivateMode && isNovaDesignEnabled
         let badgeImageName = isNovaPrivate
             ? StandardImageIdentifiers.Medium.privateModeCircleFillStroke
             : StandardImageIdentifiers.Medium.privateModeCircleFillPurple

@@ -112,6 +112,7 @@ final class ToolbarMiddleware {
                 displayNavBorder: displayBorder,
                 middleButton: middleButton,
                 isTranslationsEnabled: prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true,
+                isNovaDesignEnabled: featureFlagsProvider.isEnabled(.novaDesign),
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)

@@ -30,7 +30,6 @@ struct ImageIdentifiers {
     public static let menuWarningMask = "warning-mask"
     public static let noBookmarksInFolder = "noBookmarksInFolder"
     public static let noBookmarksInRoot = "noBookmarksInRoot"
-    public static let privateModeCircleFillHeader = "privateModeCircleFillHeader"
     public static let qrCodeScanBorder = "qrcode-scanBorder"
     public static let qrCodeScanLine = "qrcode-scanLine"
     public static let signinSync = "signin-sync"
