@@ -290,6 +290,7 @@
         "NotificationManagerTests\/testGetNotificationSettings()",
         "NotificationSurfaceManagerTests\/testDidTapNotification_noMessageFound()",
         "NotificationSurfaceManagerTests\/testDidTapNotification_noMessageId()",
+        "NotificationSurfaceManagerTests\/testDidTapNotification_openNewTabAction()",
         "OnboardingTelemetryUtilityTests\/testSendOnboardingCardView_WelcomeCard_Success()",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",

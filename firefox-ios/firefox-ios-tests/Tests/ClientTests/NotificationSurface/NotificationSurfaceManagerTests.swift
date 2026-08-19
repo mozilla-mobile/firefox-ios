@@ -77,6 +77,7 @@ final class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessagePressedCalled, 0)
     }
 
+    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testDidTapNotification_openNewTabAction() {
         let subject = createSubject()
         let message = createMessage()
