@@ -154,6 +154,7 @@ class RustRemoteTabsTests: XCTestCase {
         XCTAssertEqual(commands2[0].deviceId, deviceId)
     }
 
+    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testRemoveRemoteCommand() {
         // adding the record to the command queue
         let deviceId = "BBBBBB"
