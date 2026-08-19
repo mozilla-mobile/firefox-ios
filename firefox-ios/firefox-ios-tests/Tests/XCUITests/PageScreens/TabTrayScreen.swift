@@ -129,6 +129,10 @@ final class TabTrayScreen {
         regularModeButton.waitAndTap()
     }
 
+    func tapDoneButton() {
+        sel.DONE_BUTTON.element(in: app).waitAndTap()
+    }
+
     func tapTabAtIndex(index: Int) {
         let tabSelector = sel.tabCellAtIndex(index: index)
         let tabCell = tabSelector.element(in: app)

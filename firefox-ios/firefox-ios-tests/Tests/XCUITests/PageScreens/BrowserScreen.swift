@@ -322,6 +322,10 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForElementToExist(sel.ADDRESSTOOLBAR_LOCKICON.element(in: app))
     }
 
+    func tapAddressBarLockIcon() {
+        sel.ADDRESSTOOLBAR_LOCKICON.element(in: app).waitAndTap()
+    }
+
     func assertAddressBar_LockIconOffExist(timeout: TimeInterval = TIMEOUT_LONG) {
         BaseTestCase().mozWaitForElementToExist(sel.ADDRESSTOOLBAR_LOCKICON_OFF.element(in: app))
     }
@@ -513,6 +517,10 @@ final class BrowserScreen {
     func assertPrivateModeMessageCardExists(timeout: TimeInterval = TIMEOUT) {
         let privateMessage = sel.PRIVATE_MODE_HOMEPAGE_TITLE.element(in: app)
         BaseTestCase().mozWaitForElementToExist(privateMessage, timeout: timeout)
+    }
+
+    func tapPrivateModeActivityLink() {
+        sel.PRIVATE_MODE_HOMEPAGE_LINK.element(in: app).waitAndTap()
     }
 
     func assertCookiePageLoaded() {
