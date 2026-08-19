@@ -60,6 +60,7 @@ struct HomepageTelemetryState: StateType, Equatable {
             return handleEmbeddedHomepageAction(for: state, with: action)
         case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
             return state.copy(shouldTriggerImpression: true)
+        .resetTransientState()
         default:
             return defaultState(from: state)
         }
