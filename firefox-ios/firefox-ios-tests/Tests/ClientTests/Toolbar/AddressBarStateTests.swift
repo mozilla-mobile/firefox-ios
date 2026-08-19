@@ -1143,17 +1143,14 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertFalse(initialState.shouldShowKeyboard)
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                shouldShowKeyboard: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange
-            )
+            ToolbarModernAction.keyboardStateDidChange(isVisible: true),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertFalse(newState.shouldShowKeyboard)
+        XCTAssertTrue(newState.shouldShowKeyboard)
     }
 
     func test_clearSearchAction_returnsExpectedState() {

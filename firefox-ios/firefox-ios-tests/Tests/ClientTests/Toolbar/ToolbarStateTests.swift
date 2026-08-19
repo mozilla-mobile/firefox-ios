@@ -206,12 +206,10 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                shouldShowKeyboard: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange)
+            ToolbarModernAction.keyboardStateDidChange(isVisible: true),
+            windowUUID
         )
 
         XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)

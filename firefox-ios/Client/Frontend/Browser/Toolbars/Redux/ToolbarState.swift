@@ -149,14 +149,21 @@ struct ToolbarState: ScreenState, Sendable {
             return state.copy(isAddressBarMinimized: minimizeAddressBar)
 
         case .accessoryViewVisibilityChanged(let isVisible):
-            let newState = state.copy(isAccessoryViewVisible: isVisible)
             // Don't force-minimize while the user is editing the address bar — editing shows its
             // own overlay UI, and minimizing here would visibly shrink the bar mid-edit.
-            guard isVisible, !state.addressToolbar.isEditing else { return newState }
-            return newState.copy(isAddressBarMinimized: true)
+            let shouldMinimize = isVisible && !state.addressToolbar.isEditing
+            return state
+                .copy(isAccessoryViewVisible: isVisible)
+                .copy(isAddressBarMinimized: shouldMinimize ? true : state.isAddressBarMinimized)
 
         case .keyboardDidHide:
             return state.copy(isAddressBarMinimized: false)
+
+        case .keyboardStateDidChange:
+            // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
+            return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
+                                                                                    action,
+                                                                                    actionWindowUUID))
         }
     }
 
@@ -180,8 +187,7 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.lockIconChanged,
             ToolbarActionType.didSetTextInLocationView, ToolbarActionType.didPasteSearchTerm,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
-            ToolbarActionType.cancelEditOnHomepage,
-            ToolbarActionType.keyboardStateDidChange, ToolbarActionType.websiteLoadingStateDidChange,
+            ToolbarActionType.cancelEditOnHomepage, ToolbarActionType.websiteLoadingStateDidChange,
             ToolbarMiddlewareActionType.googleLensAvailabilityDidChange, ToolbarActionType.clearSearch,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
