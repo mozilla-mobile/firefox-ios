@@ -127,6 +127,23 @@ class PasswordDetailViewController: SensitiveViewController,
         let theme = currentTheme()
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
+        if #available(iOS 26.0, *), theme.isNova, isEditingFieldData {
+            navigationItem.rightBarButtonItem = makeNovaDoneButton(theme: theme)
+        }
+    }
+
+    @available(iOS 26.0, *)
+    private func makeNovaDoneButton(theme: Theme) -> UIBarButtonItem {
+        let doneButton = UIBarButtonItem(
+            image: UIImage(named: StandardImageIdentifiers.Large.checkmark)?
+                .withTintColor(theme.colors.iconInverted, renderingMode: .alwaysOriginal),
+            style: .prominent,
+            target: self,
+            action: #selector(doneEditing)
+        )
+        doneButton.tintColor = theme.colors.actionPrimary
+        doneButton.accessibilityLabel = .SettingsSearchDoneButton
+        return doneButton
     }
 
     // MARK: Notifiable
@@ -430,15 +447,7 @@ extension PasswordDetailViewController {
             )
             return
         }
-        let doneButton = UIBarButtonItem(
-            image: UIImage(named: StandardImageIdentifiers.Large.checkmark)?
-                .withTintColor(theme.colors.iconInverted, renderingMode: .alwaysOriginal),
-            style: .prominent,
-            target: self,
-            action: #selector(doneEditing)
-        )
-        doneButton.tintColor = theme.colors.actionPrimary
-        navigationItem.rightBarButtonItem = doneButton
+        navigationItem.rightBarButtonItem = makeNovaDoneButton(theme: theme)
     }
 
     @objc

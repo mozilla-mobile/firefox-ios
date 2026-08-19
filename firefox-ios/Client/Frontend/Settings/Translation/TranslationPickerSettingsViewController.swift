@@ -55,6 +55,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             action: #selector(didTapDone)
         )
         button.tintColor = theme.colors.actionPrimary
+        button.accessibilityLabel = .SettingsSearchDoneButton
         return button
     }()
 
@@ -394,6 +395,11 @@ final class TranslationPickerSettingsViewController: UIViewController,
         view.backgroundColor = theme.colors.layer1
         collectionView.setCollectionViewLayout(makeLayout(backgroundColor: theme.colors.layer1), animated: false)
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
+        if #available(iOS 26.0, *), theme.isNova {
+            doneButton.tintColor = theme.colors.actionPrimary
+            doneButton.image = UIImage(named: StandardImageIdentifiers.Large.checkmark)?
+                .withTintColor(theme.colors.iconInverted, renderingMode: .alwaysOriginal)
+        }
         collectionView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
     }
 
