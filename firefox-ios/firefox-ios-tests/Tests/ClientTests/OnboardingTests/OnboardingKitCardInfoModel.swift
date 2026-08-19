@@ -25,6 +25,7 @@ class OnboardingKitCardInfoModelTests: XCTestCase {
         try await super.tearDown()
     }
 
+    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testDefaultSelectedButton_emptyButtons_returnsNil() {
         let model = createModel(multipleChoiceButtons: [])
 
