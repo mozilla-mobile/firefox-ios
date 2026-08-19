@@ -20,19 +20,24 @@ protocol SceneDestroying {
 }
 
 struct DefaultSceneDestroyer: SceneDestroying {
+    /// Supplied by tests. Left `nil` in production and resolved to `UIApplication.shared` inside
+    /// `destroyScenes`, so that building a destroyer — which happens in a `BrowserCoordinator`
+    /// default argument — does not have to be main actor isolated just to read `shared`.
+    private let application: SceneSessionInterface?
+
+    init(application: SceneSessionInterface? = nil) {
+        self.application = application
+    }
+
     @MainActor
     func destroyScenes(for windowUUIDs: [WindowUUID],
                        errorHandler: @escaping @MainActor (WindowUUID, any Error) -> Void) {
         guard !windowUUIDs.isEmpty else { return }
-        for scene in UIApplication.shared.connectedScenes {
-            guard let delegate = scene.delegate as? SceneDelegate,
-                  let uuid = delegate.sceneCoordinator?.windowUUID,
-                  windowUUIDs.contains(uuid)
-            else { continue }
-            UIApplication.shared.requestSceneSessionDestruction(scene.session, options: nil) { error in
-                ensureMainThread {
-                    errorHandler(uuid, error)
-                }
+
+        let sceneSessions = application ?? UIApplication.shared
+        for windowUUID in sceneSessions.connectedWindowUUIDs where windowUUIDs.contains(windowUUID) {
+            sceneSessions.requestSceneSessionDestruction(for: windowUUID) { error in
+                errorHandler(windowUUID, error)
             }
         }
     }
