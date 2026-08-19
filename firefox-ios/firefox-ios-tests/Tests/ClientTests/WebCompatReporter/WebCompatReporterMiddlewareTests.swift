@@ -14,17 +14,20 @@ import XCTest
 final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockStore: MockStoreForMiddleware<AppState>!
     private var gleanWrapper: MockGleanWrapper!
+    private var pageContextReader: MockWebCompatPageContextReader!
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         gleanWrapper = MockGleanWrapper()
+        pageContextReader = MockWebCompatPageContextReader()
         setupStore()
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
         gleanWrapper = nil
+        pageContextReader = nil
         resetStore()
         try await super.tearDown()
     }
@@ -46,6 +49,101 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         let dispatchedType = try XCTUnwrap(dispatched.actionType as? WebCompatReporterMiddlewareActionType)
         XCTAssertEqual(dispatchedType, WebCompatReporterMiddlewareActionType.didLoadInitialDraft)
         XCTAssertEqual(dispatched.url, "https://example.com")
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    // MARK: - Page context
+
+    func test_viewDidLoad_readsThePageAndDispatchesDidReadPageContext() async throws {
+        let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
+        pageContextReader.pageContext = WebCompatPageContext(languages: ["en-GB"], fastclick: true)
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewDidLoadAction())
+        await waitFor { mockStore.dispatchedActions.count == 2 }
+
+        XCTAssertEqual(pageContextReader.readCallCount, 1)
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.last as? WebCompatReporterMiddlewareAction)
+        let dispatchedType = try XCTUnwrap(dispatched.actionType as? WebCompatReporterMiddlewareActionType)
+        XCTAssertEqual(dispatchedType, WebCompatReporterMiddlewareActionType.didReadPageContext)
+        XCTAssertEqual(dispatched.pageContext?.languages, ["en-GB"])
+        XCTAssertEqual(dispatched.pageContext?.fastclick, true)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func test_submit_whenThePageWasRead_carriesItsFieldsIntoThePing() {
+        let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
+        setReportedURL(
+            "https://example.com/page",
+            pageContext: WebCompatPageContext(
+                languages: ["en-GB"],
+                userAgent: "page-ua",
+                fastclick: true,
+                marfeel: true,
+                mobify: true
+            )
+        )
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
+
+        // The three framework flags on top of is_private_browsing, has_touch_screen and is_tablet.
+        XCTAssertEqual(gleanWrapper.setBooleanCalled, 6)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func test_submit_whenThePageReadNeverLanded_sendsTheReportWithoutIt() {
+        let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
+        setReportedURL("https://example.com/page", pageContext: nil)
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
+
+        // The report still goes out; the page fields are simply absent.
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
+        XCTAssertEqual(gleanWrapper.setBooleanCalled, 3)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func test_preview_whenThePageWasRead_showsExactlyWhatThePingCarries() throws {
+        let subject = createSubject(selectedTab: makeTab(url: "https://example.com/page"))
+        let pageContext = WebCompatPageContext(
+            languages: ["en-GB", "fr"],
+            userAgent: "page-ua",
+            fastclick: true,
+            marfeel: false,
+            mobify: false
+        )
+        setReportedURL("https://example.com/page", pageContext: pageContext)
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
+        let payload = try XCTUnwrap(dispatched.previewPayload)
+        XCTAssertEqual(payload.languages, ["en-GB", "fr"])
+        XCTAssertEqual(payload.userAgentString, "page-ua")
+        XCTAssertEqual(payload.fastclick, true)
+        XCTAssertEqual(payload.marfeel, false)
+        XCTAssertEqual(payload.mobify, false)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func test_preview_whenURLNoLongerMatchesTheTab_dropsThePageFieldsToo() throws {
+        let subject = createSubject(selectedTab: makeTab(url: "https://elsewhere.example/"))
+        setReportedURL(
+            "https://example.com/page",
+            pageContext: WebCompatPageContext(languages: ["en-GB"], fastclick: true)
+        )
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
+
+        // Page context is `tab_info`: navigating away has to drop it even though it was read.
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WebCompatReporterMiddlewareAction)
+        let payload = try XCTUnwrap(dispatched.previewPayload)
+        XCTAssertNil(payload.languages)
+        XCTAssertNil(payload.fastclick)
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -301,6 +399,14 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         )
     }
 
+    private func viewDidLoadAction() -> WebCompatReporterViewAction {
+        return WebCompatReporterViewAction(
+            url: "https://example.com/page",
+            windowUUID: .XCTestDefaultUUID,
+            actionType: WebCompatReporterViewActionType.viewDidLoad
+        )
+    }
+
     private func viewAction(_ actionType: WebCompatReporterViewActionType) -> WebCompatReporterViewAction {
         return WebCompatReporterViewAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
@@ -335,16 +441,37 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         return tab
     }
 
-    private func setReportedURL(_ url: String) {
+    private func setReportedURL(_ url: String, pageContext: WebCompatPageContext? = nil) {
         mockStore.state = AppState(
             presentedComponents: PresentedComponentsState(
                 components: [
                     .webCompatReporter(
-                        WebCompatReporterState(windowUUID: .XCTestDefaultUUID).copy(url: url)
+                        WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
+                            .copy(url: url)
+                            .copy(pageContext: pageContext)
                     )
                 ]
             )
         )
+    }
+
+    /// The read is dispatched from a task the middleware doesn't hand back, so yield until it
+    /// lands. Fails rather than returning quietly, so a read that never happens is a red test.
+    private func waitFor(
+        _ isDone: () -> Bool,
+        iterations: Int = 100,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async {
+        var remainingIterations = iterations
+        while !isDone() {
+            guard remainingIterations > 0 else {
+                XCTFail("Timed out waiting for the page read to land", file: file, line: line)
+                return
+            }
+            remainingIterations -= 1
+            await Task.yield()
+        }
     }
 
     private func createSubject(selectedTab: Tab? = nil) -> WebCompatReporterMiddleware {
@@ -356,7 +483,8 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
                 tabManager: tabManager
             ),
             recorder: WebCompatReportRecorder(gleanWrapper: gleanWrapper),
-            telemetry: WebCompatReporterTelemetry(gleanWrapper: gleanWrapper)
+            telemetry: WebCompatReporterTelemetry(gleanWrapper: gleanWrapper),
+            pageContextReader: pageContextReader
         )
         trackForMemoryLeaks(subject)
         return subject
@@ -373,5 +501,17 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.webCompatReporterProvider = emptyMiddlewareProviderFactory()
         subject.legacyProvider = emptyLegacyMiddlewareFactory()
         subject.modernProvider = emptyMiddlewareFactory()
+    }
+}
+
+/// Stands in for the JavaScript round trip, which a `Tab` built in a test has no web view to run.
+@MainActor
+private final class MockWebCompatPageContextReader: WebCompatPageContextReading {
+    var pageContext = WebCompatPageContext()
+    var readCallCount = 0
+
+    func read(from tab: Tab) async -> WebCompatPageContext {
+        readCallCount += 1
+        return pageContext
     }
 }
