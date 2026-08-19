@@ -74,4 +74,9 @@ final class HomepageSettingsScreen {
         let switchElement = bookmarkSwitch
         XCTAssertEqual(switchElement.value as? String, "0", "Bookmark toggle is not disabled")
     }
+
+    func assertJumpBackInToggleIsDisabled() {
+        let switchElement = jumpBackInSwitch
+        XCTAssertEqual(switchElement.value as? String, "0", "Jump Back In toggle is not disabled")
+    }
 }
