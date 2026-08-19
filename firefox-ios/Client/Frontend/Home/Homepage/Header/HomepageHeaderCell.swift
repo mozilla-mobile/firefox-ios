@@ -48,29 +48,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         imageView.contentMode = .scaleAspectFit
     }
 
-    private let privateLogoCircleLayer: CALayer = {
-        let layer = CALayer()
-        layer.isHidden = true
-        return layer
-    }()
-
-    private let privateLogoGlyphGradientLayer: CAGradientLayer = {
-        let layer = CAGradientLayer()
-        layer.type = .axial
-        layer.startPoint = CGPoint(x: 0.5, y: 1)
-        layer.endPoint = CGPoint(x: 0.5, y: 0)
-        layer.isHidden = true
-        return layer
-    }()
-
-    private let privateLogoGlyphMaskLayer: CALayer = {
-        let layer = CALayer()
-        layer.contents = UIImage(
-            named: StandardImageIdentifiers.ExtraExtraExtraLarge.privateModeFill
-        )?.cgImage
-        return layer
-    }()
-
     private lazy var logoTextImage: UIImageView = .build { imageView in
         imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
             .withRenderingMode(.alwaysTemplate)
@@ -113,10 +90,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     private func setupLayout() {
         contentView.backgroundColor = .clear
-
-        privateLogoGlyphGradientLayer.mask = privateLogoGlyphMaskLayer
-        logoImage.layer.addSublayer(privateLogoCircleLayer)
-        logoImage.layer.addSublayer(privateLogoGlyphGradientLayer)
 
         logoStackView.addArrangedSubview(logoImage)
         logoStackView.addArrangedSubview(logoTextImage)
@@ -166,15 +139,9 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         logoImageHeightConstraint.constant = logoSize.height
         logoTextImage.isHidden = isNovaPrivate
 
-        logoImage.image = isNovaPrivate ? nil : UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
-        privateLogoCircleLayer.isHidden = !isNovaPrivate
-        privateLogoGlyphGradientLayer.isHidden = !isNovaPrivate
-
-        let logoBounds = CGRect(origin: .zero, size: logoSize)
-        privateLogoCircleLayer.frame = logoBounds
-        privateLogoCircleLayer.cornerRadius = logoSize.width / 2
-        privateLogoGlyphGradientLayer.frame = logoBounds
-        privateLogoGlyphMaskLayer.frame = logoBounds
+        logoImage.image = isNovaPrivate
+            ? UIImage(named: StandardImageIdentifiers.ExtraExtraExtraLarge.privateModeCircleFillMulticolor)
+            : UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
 
         quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
 
@@ -260,11 +227,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         logoTextImage.tintColor = logoTextColor ?? theme.colors.textPrimary
-
-        if theme.isNova {
-            privateLogoCircleLayer.backgroundColor = theme.colors.iconPrivate.cgColor
-            privateLogoGlyphGradientLayer.colors = theme.colors.gradientPrivacyMask.cgColors
-        }
 
         quickAnswersButton.configuration?.baseBackgroundColor = theme.colors.layer4
         quickAnswersButton.configuration?.baseForegroundColor = theme.colors.actionPrimary

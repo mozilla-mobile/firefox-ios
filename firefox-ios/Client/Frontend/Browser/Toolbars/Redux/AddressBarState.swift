@@ -1022,7 +1022,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let isNovaPrivate = isPrivateMode && isNovaDesignEnabled
         let badgeImageName = isNovaPrivate
-            ? StandardImageIdentifiers.Medium.privateModeCircleFillStroke
+            ? StandardImageIdentifiers.Medium.privateModeCircleFillStrokeMulticolor
             : StandardImageIdentifiers.Medium.privateModeCircleFillPurple
 
         return ToolbarActionConfiguration(
