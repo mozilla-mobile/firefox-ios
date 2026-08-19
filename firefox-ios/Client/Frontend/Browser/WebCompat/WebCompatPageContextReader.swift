@@ -51,13 +51,18 @@ struct WebCompatPageContextReader: WebCompatPageContextReading {
     private let logger: Logger = DefaultLogger.shared
 
     /// Runs in `.page` rather than the client world, because page scripts set the framework globals.
+    /// The script declares a function rather than returning a value, so the file stays valid on its
+    /// own and the `return` below cannot be cut short by JavaScript's semicolon insertion.
     @MainActor
     func read(from tab: Tab) async -> WebCompatPageContext {
         guard let webView = tab.webView, let script = loadScript() else {
             return WebCompatPageContext()
         }
         do {
-            let result = try await webView.evaluateJavaScript(script, in: nil, in: .page)
+            let result = try await webView.callAsyncJavaScript(
+                "\(script)\nreturn webCompatPageContext();",
+                contentWorld: .page
+            )
             guard let dictionary = result as? [String: Any] else {
                 logger.log("WebCompat page context returned an unexpected value",
                            level: .warning,

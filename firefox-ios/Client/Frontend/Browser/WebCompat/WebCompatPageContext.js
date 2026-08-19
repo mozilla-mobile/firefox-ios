@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 // Mirrors FrameworkDetector in desktop's ReportBrokenSiteChild.sys.mjs.
-(function() {
+function webCompatPageContext() {
 "use strict";
 
 function safe(read) {
@@ -36,4 +36,4 @@ return {
   marfeel: safe(() => !!window.marfeel),
   mobify: safe(() => !!window.Mobify?.Tag)
 };
-})();
+}
