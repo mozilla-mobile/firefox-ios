@@ -130,9 +130,11 @@ final class HomepageTelemetryStateTests: XCTestCase {
         isZeroSearch: Bool = false,
         shouldTriggerImpression: Bool = false
     ) -> HomepageTelemetryState {
-        return HomepageTelemetryState(windowUUID: .XCTestDefaultUUID)
-            .copy(isZeroSearch: isZeroSearch)
-            .copy(shouldTriggerImpression: shouldTriggerImpression)
+        return HomepageTelemetryState(
+            windowUUID: .XCTestDefaultUUID,
+            isZeroSearch: isZeroSearch,
+            shouldTriggerImpression: shouldTriggerImpression
+        )
     }
 
     private func reducer() -> Reducer<HomepageTelemetryState> {

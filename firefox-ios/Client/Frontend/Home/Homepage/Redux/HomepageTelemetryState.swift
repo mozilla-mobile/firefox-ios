@@ -32,7 +32,7 @@ struct HomepageTelemetryState: StateType, Equatable {
         )
     }
 
-    private init(
+    init(
         windowUUID: WindowUUID,
         isZeroSearch: Bool,
         shouldTriggerImpression: Bool
