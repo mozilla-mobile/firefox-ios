@@ -27,6 +27,7 @@ struct AddressBarSelectionView: View {
         HStack(spacing: UX.spacing) {
             ForEach(SearchBarPosition.allCases, id: \.label) { addressBarPosition in
                 GenericImageOption(
+                    theme: theme,
                     isSelected: selectedAddressBarPosition == addressBarPosition,
                     onSelected: {
                         selectedAddressBarPosition = addressBarPosition

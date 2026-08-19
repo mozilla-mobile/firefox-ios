@@ -25,11 +25,17 @@ struct GenericImageOption: View, FeatureFlaggable {
     }
 
     // Properties
+    let theme: Theme?
     let isSelected: Bool
     let onSelected: (() -> Void)?
     let label: String
     let imageName: String
     let a11yIdentifier: String
+
+    private var selectedBorderColor: Color {
+        guard let theme, theme.isNova else { return UX.selectedBorderColor }
+        return Color(theme.colors.iconAccent)
+    }
 
     var body: some View {
         VStack(spacing: UX.spacing) {
@@ -52,7 +58,7 @@ struct GenericImageOption: View, FeatureFlaggable {
 
     private var selectableOptionVisual: some View {
         RoundedRectangle(cornerRadius: UX.cornerRadius)
-            .stroke(isSelected ? UX.selectedBorderColor : UX.unselectedBorderColor,
+            .stroke(isSelected ? selectedBorderColor : UX.unselectedBorderColor,
                     lineWidth: isSelected ? UX.selectedBorderWidth : UX.unselectedBorderWidth)
             .background(
                 Image(imageName)
