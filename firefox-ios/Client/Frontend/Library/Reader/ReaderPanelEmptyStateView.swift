@@ -155,10 +155,11 @@ final class ReaderPanelEmptyStateView: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
+        let iconColor = theme.isNova ? theme.colors.iconSecondary : theme.colors.textSecondary
         welcomeLabel.textColor = theme.colors.textSecondary
         readerModeLabel.textColor = theme.colors.textSecondary
-        readerModeImageView.tintColor = theme.colors.iconSecondary
+        readerModeImageView.tintColor = iconColor
         readingListLabel.textColor = theme.colors.textSecondary
-        readingListImageView.tintColor = theme.colors.iconSecondary
+        readingListImageView.tintColor = iconColor
     }
 }
