@@ -59,8 +59,9 @@ struct HomepageTelemetryState: StateType, Equatable {
         case HomepageActionType.embeddedHomepage:
             return handleEmbeddedHomepageAction(for: state, with: action)
         case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
-            return state.copy(shouldTriggerImpression: true)
+            return state
         .resetTransientState()
+        .copy(shouldTriggerImpression: true)
         default:
             return defaultState(from: state)
         }
@@ -77,7 +78,6 @@ struct HomepageTelemetryState: StateType, Equatable {
         return state
             .resetTransientState()
             .copy(isZeroSearch: isZeroSearch)
-            .copy(shouldTriggerImpression: false)
     }
 
     /// `shouldTriggerImpression` is reset since impressions should only be triggered once per action that requests it.
