@@ -35,6 +35,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
     /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
     let alternativeSearchEngine: SearchEngineModel?
 
+    private static var featureFlagsProvider: FeatureFlagProviding {
+        AppContainer.shared.resolve()
+    }
+
     private static let cancelEditAction = ToolbarActionConfiguration(
         actionType: .cancelEdit,
         iconName: StandardImageIdentifiers.Large.chevronLeft,
@@ -1011,10 +1015,15 @@ struct AddressBarState: StateType, Sendable, Equatable {
             .Toolbars.TabsButtonOverflowLargeContentTitle :
             String(format: .Toolbars.TabsButtonLargeContentTitle, NSNumber(value: numberOfTabs))
 
+        let isNovaPrivate = isPrivateMode && featureFlagsProvider.isEnabled(.novaDesign)
+        let badgeImageName = isNovaPrivate
+            ? StandardImageIdentifiers.Medium.privateModeCircleFillStroke
+            : StandardImageIdentifiers.Medium.privateModeCircleFillPurple
+
         return ToolbarActionConfiguration(
             actionType: .tabs,
             iconName: iconName,
-            badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
+            badgeImageName: isPrivateMode ? badgeImageName : nil,
             maskImageName: (isPrivateMode && iconName != nil) ? ImageIdentifiers.badgeMask : nil,
             numberOfTabs: numberOfTabs,
             isEnabled: true,

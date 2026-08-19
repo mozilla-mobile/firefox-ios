@@ -133,7 +133,9 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         self.tipPresenter = tipPresenter
 
         let isNovaPrivate = featureFlagsProvider.isEnabled(.novaDesign) && headerState.isPrivate
-        let logoAsset = isNovaPrivate ? ImageIdentifiers.homeHeaderLogoPrivate : ImageIdentifiers.homeHeaderLogoBall
+        let logoAsset = isNovaPrivate
+            ? ImageIdentifiers.privateModeCircleFillHeader
+            : ImageIdentifiers.homeHeaderLogoBall
         logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
 
         let logoSize = isNovaPrivate ? UX.privateLogoImageSize : UX.firefoxLogoImageSize

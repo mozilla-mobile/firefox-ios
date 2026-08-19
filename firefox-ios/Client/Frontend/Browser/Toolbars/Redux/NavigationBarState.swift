@@ -36,6 +36,10 @@ struct NavigationBarState: StateType, Equatable {
     var displayBorder: Bool
     var middleButton: NavigationBarMiddleButtonType
 
+    private static var featureFlagsProvider: FeatureFlagProviding {
+        AppContainer.shared.resolve()
+    }
+
     private static let searchAction = ToolbarActionConfiguration(
         actionType: .search,
         iconName: StandardImageIdentifiers.Large.search,
@@ -316,10 +320,15 @@ struct NavigationBarState: StateType, Equatable {
             .Toolbars.TabsButtonOverflowLargeContentTitle :
             String(format: .Toolbars.TabsButtonLargeContentTitle, NSNumber(value: numberOfTabs))
 
+        let isNovaPrivate = isPrivateMode && featureFlagsProvider.isEnabled(.novaDesign)
+        let badgeImageName = isNovaPrivate
+            ? StandardImageIdentifiers.Medium.privateModeCircleFillStroke
+            : StandardImageIdentifiers.Medium.privateModeCircleFillPurple
+
         return ToolbarActionConfiguration(
             actionType: .tabs,
             iconName: iconName,
-            badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
+            badgeImageName: isPrivateMode ? badgeImageName : nil,
             maskImageName: (isPrivateMode && iconName != nil) ? ImageIdentifiers.badgeMask : nil,
             numberOfTabs: numberOfTabs,
             isEnabled: true,
