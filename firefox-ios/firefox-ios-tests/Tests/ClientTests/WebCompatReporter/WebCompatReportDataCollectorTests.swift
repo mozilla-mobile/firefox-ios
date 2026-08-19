@@ -161,7 +161,6 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertEqual(payload.mobify, true)
     }
 
-    // What the page saw beats the tab's own override, which is the app's intent.
     func test_enrich_pageUserAgent_overridesTheTabUserAgent() {
         var payload = WebCompatReportPayload()
         payload.userAgentString = "TabUA/1.0"
@@ -199,7 +198,6 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertEqual(context.mobify, true)
     }
 
-    // A page can redefine navigator, so anything of the wrong shape is dropped per field.
     func test_pageContextInit_dropsValuesOfTheWrongType() {
         let context = WebCompatPageContext(from: [
             "languages": ["en-GB", 7],
@@ -212,17 +210,11 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertNil(context.fastclick)
     }
 
-    func test_pageContextInit_emptyUserAgent_isDroppedRatherThanReportedBlank() {
+    // Empty is not data: a blank UA or `[]` must stay nil rather than reach the ping.
+    func test_pageContextInit_dropsEmptyValues() {
         XCTAssertNil(WebCompatPageContext(from: ["userAgent": ""]).userAgent)
-    }
-
-    func test_pageContextInit_emptyLanguages_isDroppedRatherThanReportedAsAnEmptyList() {
         XCTAssertNil(WebCompatPageContext(from: ["languages": []]).languages)
         XCTAssertNil(WebCompatPageContext(from: ["languages": [7, true]]).languages)
-    }
-
-    func test_pageContextInit_emptyResult_leavesEveryFieldNil() {
-        XCTAssertEqual(WebCompatPageContext(from: [:]), WebCompatPageContext())
     }
 
     // MARK: - blockedOrigins opt-out

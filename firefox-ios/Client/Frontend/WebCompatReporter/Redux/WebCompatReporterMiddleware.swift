@@ -76,10 +76,8 @@ final class WebCompatReporterMiddleware {
         ))
     }
 
-    /// Reads the page while the user is still filling in the form, so both the preview and the
-    /// ping can be assembled synchronously from state. A read that fails or never lands leaves
-    /// the page fields nil, which is what they were before this could be read at all. Whether the
-    /// result is used at all is `makeReport`'s call, since the user can still edit the URL.
+    /// Reads the page while the user is still filling in the form, so the preview and the ping
+    /// can both be assembled synchronously. A read that never lands leaves the page fields nil.
     private func readPageContext(windowUUID: WindowUUID) {
         guard let tab = selectedTab(for: windowUUID) else { return }
         Task {

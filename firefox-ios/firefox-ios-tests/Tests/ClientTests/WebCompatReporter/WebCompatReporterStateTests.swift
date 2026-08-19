@@ -327,7 +327,7 @@ final class WebCompatReporterStateTests: XCTestCase {
         XCTAssertEqual(newState.pageContext, pageContext)
     }
 
-    // Unlike previewPayload, this has to survive every later edit or the report loses it.
+    // Unlike previewPayload, this must survive later edits or the report loses it.
     func test_pageContext_survivesLaterActions() {
         let reducer = WebCompatReporterState.reducer
         let initialState = WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
