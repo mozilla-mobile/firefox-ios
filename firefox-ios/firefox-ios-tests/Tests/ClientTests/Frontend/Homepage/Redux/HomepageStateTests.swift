@@ -39,8 +39,6 @@ final class HomepageStateTests: XCTestCase {
 
         XCTAssertFalse(initialState.headerState.isPrivate)
         XCTAssertFalse(initialState.trackerBlockerModuleState.shouldShowSection)
-        XCTAssertFalse(initialState.telemetryState.isZeroSearch)
-        XCTAssertFalse(initialState.telemetryState.shouldTriggerImpression)
     }
 
     @MainActor
@@ -58,46 +56,6 @@ final class HomepageStateTests: XCTestCase {
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(newState.headerState.isPrivate)
-        XCTAssertFalse(newState.telemetryState.isZeroSearch)
-        XCTAssertFalse(initialState.telemetryState.shouldTriggerImpression)
-    }
-
-    @MainActor
-    func test_embeddedHomepageAction_withTrueZeroSearch_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = homepageReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            HomepageAction(
-                isZeroSearch: true,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: HomepageActionType.embeddedHomepage
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertTrue(newState.telemetryState.isZeroSearch)
-        XCTAssertFalse(initialState.telemetryState.shouldTriggerImpression)
-    }
-
-    @MainActor
-    func test_embeddedHomepageAction_withFalseZeroSearch_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = homepageReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            HomepageAction(
-                isZeroSearch: false,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: HomepageActionType.embeddedHomepage
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.telemetryState.isZeroSearch)
-        XCTAssertFalse(initialState.telemetryState.shouldTriggerImpression)
     }
 
     @MainActor
@@ -114,30 +72,6 @@ final class HomepageStateTests: XCTestCase {
         )
         XCTAssertFalse(initialState.telemetryState.shouldTriggerImpression)
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.telemetryState.isZeroSearch)
-        XCTAssertTrue(newState.telemetryState.shouldTriggerImpression)
-    }
-
-    @MainActor
-    func test_handleAvailableContentHeightChangeAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = homepageReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            HomepageAction(
-                availableContentHeight: 500,
-                availableWallpaperHeight: 525,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: HomepageActionType.availableContentHeightDidChange
-            )
-        )
-
-        XCTAssertEqual(newState.wallpaperState.availableContentHeight, 500)
-        XCTAssertEqual(newState.wallpaperState.availableWallpaperHeight, 525)
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.telemetryState.shouldTriggerImpression)
-        XCTAssertEqual(newState.telemetryState.isZeroSearch, initialState.telemetryState.isZeroSearch)
     }
 
     @MainActor
