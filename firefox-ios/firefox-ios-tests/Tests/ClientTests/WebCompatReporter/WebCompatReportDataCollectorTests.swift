@@ -21,8 +21,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
 
     // MARK: - Device fields
 
-    // The native locale list must only reach `defaultLocales`. `languages` is page
-    // data and needs FXIOS-16184.
+    // The native locale list must only reach `defaultLocales`. `languages` is page data.
     func test_enrich_deviceLocales_populateDefaultLocalesButNotLanguages() {
         let device = FakeDeviceInfoProvider(preferredLanguages: ["en-US", "fr-FR"])
 
@@ -142,6 +141,88 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertNil(payload.blockList)
         XCTAssertNil(payload.etpCategory)
         XCTAssertNil(payload.blockedOrigins)
+    }
+
+    // MARK: - Page context
+
+    func test_enrich_pageContext_fillsLanguagesAndFrameworkFlags() {
+        let pageContext = WebCompatPageContext(
+            languages: ["en-GB", "fr"],
+            fastclick: true,
+            marfeel: false,
+            mobify: true
+        )
+
+        let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), pageContext: pageContext)
+
+        XCTAssertEqual(payload.languages, ["en-GB", "fr"])
+        XCTAssertEqual(payload.fastclick, true)
+        XCTAssertEqual(payload.marfeel, false)
+        XCTAssertEqual(payload.mobify, true)
+    }
+
+    // What the page saw beats the tab's own override, which is the app's intent.
+    func test_enrich_pageUserAgent_overridesTheTabUserAgent() {
+        var payload = WebCompatReportPayload()
+        payload.userAgentString = "TabUA/1.0"
+
+        let enriched = WebCompatReportDataCollector.enrich(
+            payload,
+            pageContext: WebCompatPageContext(userAgent: "PageUA/2.0")
+        )
+
+        XCTAssertEqual(enriched.userAgentString, "PageUA/2.0")
+    }
+
+    func test_enrich_missingPageUserAgent_keepsTheTabUserAgent() {
+        var payload = WebCompatReportPayload()
+        payload.userAgentString = "TabUA/1.0"
+
+        let enriched = WebCompatReportDataCollector.enrich(payload, pageContext: WebCompatPageContext())
+
+        XCTAssertEqual(enriched.userAgentString, "TabUA/1.0")
+    }
+
+    func test_pageContextMake_readsEveryField() {
+        let context = WebCompatPageContext.make(from: [
+            "languages": ["en-GB", "fr"],
+            "userAgent": "PageUA/2.0",
+            "fastclick": true,
+            "marfeel": false,
+            "mobify": true
+        ])
+
+        XCTAssertEqual(context.languages, ["en-GB", "fr"])
+        XCTAssertEqual(context.userAgent, "PageUA/2.0")
+        XCTAssertEqual(context.fastclick, true)
+        XCTAssertEqual(context.marfeel, false)
+        XCTAssertEqual(context.mobify, true)
+    }
+
+    // A page can redefine navigator, so anything of the wrong shape is dropped per field.
+    func test_pageContextMake_dropsValuesOfTheWrongType() {
+        let context = WebCompatPageContext.make(from: [
+            "languages": ["en-GB", 7],
+            "userAgent": 42,
+            "fastclick": "yes"
+        ])
+
+        XCTAssertEqual(context.languages, ["en-GB"])
+        XCTAssertNil(context.userAgent)
+        XCTAssertNil(context.fastclick)
+    }
+
+    func test_pageContextMake_emptyUserAgent_isDroppedRatherThanReportedBlank() {
+        XCTAssertNil(WebCompatPageContext.make(from: ["userAgent": ""]).userAgent)
+    }
+
+    func test_pageContextMake_emptyLanguages_isDroppedRatherThanReportedAsAnEmptyList() {
+        XCTAssertNil(WebCompatPageContext.make(from: ["languages": []]).languages)
+        XCTAssertNil(WebCompatPageContext.make(from: ["languages": [7, true]]).languages)
+    }
+
+    func test_pageContextMake_emptyResult_leavesEveryFieldNil() {
+        XCTAssertEqual(WebCompatPageContext.make(from: [:]), WebCompatPageContext())
     }
 
     // MARK: - blockedOrigins opt-out

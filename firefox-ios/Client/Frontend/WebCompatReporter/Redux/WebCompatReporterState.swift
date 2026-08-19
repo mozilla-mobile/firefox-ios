@@ -19,6 +19,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
     var shouldDismiss: Bool
     /// The report as the middleware would send it.
     var previewPayload: WebCompatReportPayload?
+    /// Read from the page when the sheet opens, so building a report stays synchronous.
+    var pageContext: WebCompatPageContext?
 
     var showsAdditionalDetails: Bool { selectedCategory != nil }
     var isURLValid: Bool { WebCompatURLValidator.isReportable(url) }
@@ -53,7 +55,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
             includeScreenshot: state.includeScreenshot,
             includeBlockedList: state.includeBlockedList,
             shouldDismiss: state.shouldDismiss,
-            previewPayload: state.previewPayload
+            previewPayload: state.previewPayload,
+            pageContext: state.pageContext
         )
     }
 
@@ -67,7 +70,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
             includeScreenshot: true,
             includeBlockedList: true,
             shouldDismiss: false,
-            previewPayload: nil
+            previewPayload: nil,
+            pageContext: nil
         )
     }
 
@@ -79,7 +83,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
          includeScreenshot: Bool,
          includeBlockedList: Bool,
          shouldDismiss: Bool,
-         previewPayload: WebCompatReportPayload?) {
+         previewPayload: WebCompatReportPayload?,
+         pageContext: WebCompatPageContext?) {
         self.windowUUID = windowUUID
         self.url = url
         self.selectedCategory = selectedCategory
@@ -89,6 +94,7 @@ struct WebCompatReporterState: ScreenState, Equatable {
         self.includeBlockedList = includeBlockedList
         self.shouldDismiss = shouldDismiss
         self.previewPayload = previewPayload
+        self.pageContext = pageContext
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -124,6 +130,10 @@ struct WebCompatReporterState: ScreenState, Equatable {
             return state
                 .resetTransientState()
                 .copy(url: action.url ?? state.url)
+        case WebCompatReporterMiddlewareActionType.didReadPageContext:
+            return state
+                .resetTransientState()
+                .copy(pageContext: action.pageContext)
         case WebCompatReporterMiddlewareActionType.didBuildPreview:
             return state
                 .resetTransientState()
@@ -192,7 +202,8 @@ struct WebCompatReporterState: ScreenState, Equatable {
             includeScreenshot: state.includeScreenshot,
             includeBlockedList: state.includeBlockedList,
             shouldDismiss: false,
-            previewPayload: nil
+            previewPayload: nil,
+            pageContext: state.pageContext
         )
     }
 }
