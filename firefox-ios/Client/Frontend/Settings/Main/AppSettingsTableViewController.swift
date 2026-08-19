@@ -597,10 +597,25 @@ class AppSettingsTableViewController: SettingsTableViewController,
         return [SettingSection(title: NSAttributedString(string: .AppSettingsSupport),
                                children: supportSettings)]
         */
-        let supportSettings: [Setting] = [
+        var supportSettings: [Setting] = [
             HelpCenterSetting(),
             EcosiaSendFeedbackSetting(settings: self)
         ]
+
+        if let profile, SentryReportingExperiment.isEnabled {
+            // Ecosia: Firefox's own send-crash-reports toggle and strings (neither string is
+            // Mozilla-branded), minus the "Learn More" link - BoolSetting instead of
+            // SendDataSetting, which is `final` and always renders one. Matches Firefox's own
+            // placement under Support. Gated on the Sentry rollout experiment.
+            supportSettings.append(BoolSetting(
+                prefs: profile.prefs,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                prefKey: AppConstants.prefSendCrashReports,
+                defaultValue: true,
+                titleText: .SendCrashReportsSettingTitle,
+                statusText: .SendCrashReportsSettingMessageV2
+            ))
+        }
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsSupport),
                                children: supportSettings)]
