@@ -53,7 +53,8 @@ class XCodeBuild(object):
             '-scheme', self.scheme,
             '-destination', self.destination,
             '-only-testing:{}'.format(identifier),
-            '-testPlan', self.testPlan]
+            '-testPlan', self.testPlan,
+            '-skipMacroValidation']
         self.logger.info('Running: {}'.format(' '.join(args)))
         try:
             out = subprocess.check_output(
