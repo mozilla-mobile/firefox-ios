@@ -14,7 +14,7 @@ import TipKit
 class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, FeatureFlaggable {
     enum UX {
         static let firefoxLogoImageSize = CGSize(width: 40, height: 40)
-        static let privateLogoImageSize = CGSize(width: 69, height: 74)
+        static let privateNovaLogoImageSize = CGSize(width: 72, height: 72)
         static let firefoxTextImageSize = CGSize(width: 90, height: 40)
         static let interImageSpacing: CGFloat = 10
         static let quickAnswersButtonSize: CGFloat = 44
@@ -133,13 +133,15 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         self.tipPresenter = tipPresenter
 
         let isNovaPrivate = featureFlagsProvider.isEnabled(.novaDesign) && headerState.isPrivate
-        let logoAsset = isNovaPrivate ? ImageIdentifiers.homeHeaderLogoPrivate : ImageIdentifiers.homeHeaderLogoBall
-        logoImage.image = UIImage(imageLiteralResourceName: logoAsset)
 
-        let logoSize = isNovaPrivate ? UX.privateLogoImageSize : UX.firefoxLogoImageSize
+        let logoSize = isNovaPrivate ? UX.privateNovaLogoImageSize : UX.firefoxLogoImageSize
         logoImageWidthConstraint.constant = logoSize.width
         logoImageHeightConstraint.constant = logoSize.height
         logoTextImage.isHidden = isNovaPrivate
+
+        logoImage.image = isNovaPrivate
+            ? UIImage(named: StandardImageIdentifiers.ExtraExtraExtraLarge.privateModeCircleFillMulticolor)
+            : UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
 
         quickAnswersButton.isHidden = !headerState.showQuickAnswersButton
 

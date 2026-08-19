@@ -326,7 +326,8 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                translationConfiguration: nil,
                                didStartTyping: false,
                                isEmptySearch: true,
-                               alternativeSearchEngine: withSearchEngine)
+                               alternativeSearchEngine: withSearchEngine,
+                               isNovaDesignEnabled: false)
     }
 
     private func makeEditingAccessoryAction(isGoogleLensEnabled: Bool) -> ToolbarActionConfiguration? {
@@ -359,7 +360,8 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         return NavigationBarState(windowUUID: windowUUID,
                                   actions: [],
                                   displayBorder: false,
-                                  middleButton: .newTab)
+                                  middleButton: .newTab,
+                                  isNovaDesignEnabled: false)
     }
 
     private func createToolbarState(toolbarPosition: AddressToolbarPosition = .top,

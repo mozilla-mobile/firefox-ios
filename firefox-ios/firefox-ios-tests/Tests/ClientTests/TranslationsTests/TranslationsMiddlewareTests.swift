@@ -1511,7 +1511,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             translationConfiguration: translationConfiguration,
             didStartTyping: false,
             isEmptySearch: true,
-            alternativeSearchEngine: nil
+            alternativeSearchEngine: nil,
+            isNovaDesignEnabled: false
         )
         return AppState(
             presentedComponents: PresentedComponentsState(
