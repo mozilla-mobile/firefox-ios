@@ -203,14 +203,15 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
+    // Opting out is the interesting direction now that the blocked list defaults to on.
     func test_submit_recordsCreatedCarryingTheBlockedListChoice() throws {
         let subject = createSubject()
-        setIncludeBlockedList(true)
+        setIncludeBlockedList(false)
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
 
         let savedExtras = try XCTUnwrap(createdExtras())
-        XCTAssertEqual(savedExtras.hasBlockedTrackersList, true)
+        XCTAssertEqual(savedExtras.hasBlockedTrackersList, false)
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -223,7 +224,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let savedExtras = try XCTUnwrap(createdExtras())
         XCTAssertEqual(savedExtras.hasScreenshot, false)
-        XCTAssertEqual(savedExtras.hasBlockedTrackersList, false)
+        XCTAssertEqual(savedExtras.hasBlockedTrackersList, true)
 
         releaseMiddlewareProvidersFromMemory(subject)
     }

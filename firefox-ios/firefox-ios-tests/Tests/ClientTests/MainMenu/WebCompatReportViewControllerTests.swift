@@ -80,7 +80,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     func testDidToggle_onScreenshotRow_dispatchesToggleScreenshotWithValue() {
         let subject = createSubject(reportedURL: nil)
 
-        subject.webCompatReportSheetDidToggle(id: "includeScreenshot", isOn: false)
+        subject.webCompatReportSheetDidToggleCheckbox(id: "includeScreenshot", isChecked: false)
 
         let action = lastViewAction()
         XCTAssertEqual(action?.actionType as? WebCompatReporterViewActionType, .toggleScreenshot)
@@ -90,7 +90,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     func testDidToggle_onBlockedListRow_dispatchesToggleBlockedListWithValue() {
         let subject = createSubject(reportedURL: nil)
 
-        subject.webCompatReportSheetDidToggle(id: "includeBlockedList", isOn: true)
+        subject.webCompatReportSheetDidToggleCheckbox(id: "includeBlockedList", isChecked: true)
 
         let action = lastViewAction()
         XCTAssertEqual(action?.actionType as? WebCompatReporterViewActionType, .toggleBlockedList)
@@ -100,7 +100,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     func testDidToggle_onSendRow_dispatchesNothing() {
         let subject = createSubject(reportedURL: nil)
 
-        subject.webCompatReportSheetDidToggle(id: "send", isOn: true)
+        subject.webCompatReportSheetDidToggleCheckbox(id: "send", isChecked: true)
 
         XCTAssertTrue(dispatchedViewActions().isEmpty)
     }
@@ -108,7 +108,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     func testDidToggle_onUnhandledRow_dispatchesNothing() {
         let subject = createSubject(reportedURL: nil)
 
-        subject.webCompatReportSheetDidToggle(id: "unknown", isOn: true)
+        subject.webCompatReportSheetDidToggleCheckbox(id: "unknown", isChecked: true)
 
         XCTAssertTrue(dispatchedViewActions().isEmpty)
     }
@@ -250,7 +250,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(sections.map(\.id), ["url", "issueCategory", "advancedOptions", "send"])
 
         let advanced = sections.first { $0.id == "advancedOptions" }
-        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: false)])
+        XCTAssertEqual(advanced?.rows.map(\.kind), [.checkbox(isChecked: true)])
         XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: false)])
 
         guard case let .urlField(text) = sections.first?.rows.first?.kind else {
@@ -276,7 +276,7 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         )
 
         let advanced = sections.first { $0.id == "advancedOptions" }
-        XCTAssertEqual(advanced?.rows.map(\.kind), [.toggle(isOn: true)])
+        XCTAssertEqual(advanced?.rows.map(\.kind), [.checkbox(isChecked: true)])
         XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: true)])
 
         let details = sections.first { $0.id == "additionalDetails" }

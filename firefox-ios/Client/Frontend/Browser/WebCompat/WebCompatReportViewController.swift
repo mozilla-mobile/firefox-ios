@@ -204,7 +204,7 @@ final class WebCompatReportViewController: UINavigationController,
                 WebCompatReportViewModel.Row(
                     id: RowID.includeBlockedList.rawValue,
                     title: .WebCompatReporter.AdditionalInfo.IncludeBlockedList,
-                    kind: .toggle(isOn: state.includeBlockedList),
+                    kind: .checkbox(isChecked: state.includeBlockedList),
                     a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.includeBlockedList
                 )
             ]
@@ -371,17 +371,17 @@ final class WebCompatReportViewController: UINavigationController,
         ))
     }
 
-    func webCompatReportSheetDidToggle(id: String, isOn: Bool) {
+    func webCompatReportSheetDidToggleCheckbox(id: String, isChecked: Bool) {
         switch RowID(rawValue: id) {
         case .includeScreenshot:
             store.dispatch(WebCompatReporterViewAction(
-                includeScreenshot: isOn,
+                includeScreenshot: isChecked,
                 windowUUID: windowUUID,
                 actionType: WebCompatReporterViewActionType.toggleScreenshot
             ))
         case .includeBlockedList:
             store.dispatch(WebCompatReporterViewAction(
-                includeBlockedList: isOn,
+                includeBlockedList: isChecked,
                 windowUUID: windowUUID,
                 actionType: WebCompatReporterViewActionType.toggleBlockedList
             ))
