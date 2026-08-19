@@ -210,7 +210,7 @@ final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
         let baseWallpaper = [Wallpaper.baseWallpaper]
 
         if availableCollections.isEmpty {
-            return [WallpaperCollection(id: "classic-firefox",
+            return [WallpaperCollection(id: WallpaperCollection.classicFirefoxID,
                                         learnMoreURL: nil,
                                         availableLocales: nil,
                                         availability: nil,

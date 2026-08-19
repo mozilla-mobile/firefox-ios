@@ -73,15 +73,19 @@ final class WallpaperSettingsViewModel: @unchecked Sendable {
     ) -> WallpaperSettingsHeaderViewModel? {
         guard let collection = wallpaperCollections[safe: sectionIndex] else { return nil }
 
-        let isClassic = collection.type == .classic
-        let classicString = String(format: stringIds.ClassicWallpaper, AppName.shortName.rawValue)
-        let title: String = isClassic ? classicString : stringIds.LimitedEditionWallpaper
-        var description: String? = isClassic ? nil : stringIds.IndependentVoicesDescription
-        let buttonTitle: String? = isClassic ? nil : stringIds.LearnMoreButton
+        let title: String
+        var description: String?
+        var buttonTitle: String?
 
-        // the first limited edition collection has a different description, any other collection uses the default
-        if sectionIndex > 1 {
-            description = stringIds.LimitedEditionDefaultDescription
+        switch collection.id {
+        case WallpaperCollection.classicFirefoxID:
+            title = String(format: stringIds.ClassicWallpaper, AppName.shortName.rawValue)
+        case WallpaperCollection.wrexhamID:
+            title = WallpaperCollection.wrexhamTitle
+        default:
+            title = stringIds.LimitedEditionWallpaper
+            description = collection.description ?? stringIds.LimitedEditionDefaultDescription
+            buttonTitle = stringIds.LearnMoreButton
         }
 
         let buttonAction = { [weak self] in
