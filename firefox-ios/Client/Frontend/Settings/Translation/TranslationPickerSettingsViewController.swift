@@ -55,7 +55,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             action: #selector(didTapDone)
         )
         button.tintColor = theme.colors.actionPrimary
-        button.accessibilityLabel = .SettingsSearchDoneButton
+        button.accessibilityLabel = .AppSettingsDone
         return button
     }()
 
