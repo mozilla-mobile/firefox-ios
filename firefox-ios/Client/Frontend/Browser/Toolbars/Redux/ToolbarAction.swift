@@ -38,6 +38,7 @@ struct ToolbarAction: Action {
     let translationConfiguration: TranslationConfiguration?
     let previousTabScreenshot: UIImage?
     let nextTabScreenshot: UIImage?
+    let isNovaDesignEnabled: Bool?
 
     init(toolbarPosition: SearchBarPosition? = nil,
          toolbarLayout: ToolbarLayoutStyle? = nil,
@@ -68,6 +69,7 @@ struct ToolbarAction: Action {
          translationConfiguration: TranslationConfiguration? = nil,
          previousTabScreenshot: UIImage? = nil,
          nextTabScreenshot: UIImage? = nil,
+         isNovaDesignEnabled: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -101,6 +103,7 @@ struct ToolbarAction: Action {
         self.translationConfiguration = translationConfiguration
         self.previousTabScreenshot = previousTabScreenshot
         self.nextTabScreenshot = nextTabScreenshot
+        self.isNovaDesignEnabled = isNovaDesignEnabled
     }
 }
 

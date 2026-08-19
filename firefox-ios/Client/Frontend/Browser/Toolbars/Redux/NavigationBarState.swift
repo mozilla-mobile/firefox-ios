@@ -35,6 +35,7 @@ struct NavigationBarState: StateType, Equatable {
     var actions: [ToolbarActionConfiguration]
     var displayBorder: Bool
     var middleButton: NavigationBarMiddleButtonType
+    var isNovaDesignEnabled: Bool
 
     private static let searchAction = ToolbarActionConfiguration(
         actionType: .search,
@@ -61,17 +62,20 @@ struct NavigationBarState: StateType, Equatable {
         self.init(windowUUID: windowUUID,
                   actions: [],
                   displayBorder: false,
-                  middleButton: .newTab)
+                  middleButton: .newTab,
+                  isNovaDesignEnabled: false)
     }
 
     init(windowUUID: WindowUUID,
          actions: [ToolbarActionConfiguration],
          displayBorder: Bool,
-         middleButton: NavigationBarMiddleButtonType) {
+         middleButton: NavigationBarMiddleButtonType,
+         isNovaDesignEnabled: Bool) {
         self.windowUUID = windowUUID
         self.actions = actions
         self.displayBorder = displayBorder
         self.middleButton = middleButton
+        self.isNovaDesignEnabled = isNovaDesignEnabled
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -127,10 +131,12 @@ struct NavigationBarState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return state
-            .copy(actions: navigationActions(action: toolbarAction, navigationBarState: state))
+        let updatedState = state
             .copy(displayBorder: displayBorder)
             .copy(middleButton: middleButton)
+            .copy(isNovaDesignEnabled: toolbarAction.isNovaDesignEnabled ?? state.isNovaDesignEnabled)
+
+        return updatedState.copy(actions: navigationActions(action: toolbarAction, navigationBarState: updatedState))
     }
 
     @MainActor
@@ -193,7 +199,8 @@ struct NavigationBarState: StateType, Equatable {
             windowUUID: state.windowUUID,
             actions: state.actions,
             displayBorder: state.displayBorder,
-            middleButton: state.middleButton
+            middleButton: state.middleButton,
+            isNovaDesignEnabled: state.isNovaDesignEnabled
         )
     }
 
@@ -252,6 +259,7 @@ struct NavigationBarState: StateType, Equatable {
             actions.append(tabsAction(iconName: iconName,
                                       numberOfTabs: numberOfTabs,
                                       isPrivateMode: toolbarState.isPrivateMode,
+                                      isNovaDesignEnabled: navigationBarState.isNovaDesignEnabled,
                                       previousTabScreenshot: previousTabScreenshot,
                                       nextTabScreenshot: nextTabScreenshot)
             )
@@ -260,6 +268,7 @@ struct NavigationBarState: StateType, Equatable {
             actions.append(tabsAction(iconName: iconName,
                                       numberOfTabs: numberOfTabs,
                                       isPrivateMode: toolbarState.isPrivateMode,
+                                      isNovaDesignEnabled: navigationBarState.isNovaDesignEnabled,
                                       previousTabScreenshot: previousTabScreenshot,
                                       nextTabScreenshot: nextTabScreenshot)
             )
@@ -310,16 +319,22 @@ struct NavigationBarState: StateType, Equatable {
     private static func tabsAction(iconName: String?,
                                    numberOfTabs: Int = 1,
                                    isPrivateMode: Bool = false,
+                                   isNovaDesignEnabled: Bool = false,
                                    previousTabScreenshot: UIImage? = nil,
                                    nextTabScreenshot: UIImage? = nil) -> ToolbarActionConfiguration {
         let largeContentTitle = numberOfTabs > 99 ?
             .Toolbars.TabsButtonOverflowLargeContentTitle :
             String(format: .Toolbars.TabsButtonLargeContentTitle, NSNumber(value: numberOfTabs))
 
+        let isNovaPrivate = isPrivateMode && isNovaDesignEnabled
+        let badgeImageName = isNovaPrivate
+            ? StandardImageIdentifiers.Medium.privateModeCircleFillStrokeMulticolor
+            : StandardImageIdentifiers.Medium.privateModeCircleFillPurple
+
         return ToolbarActionConfiguration(
             actionType: .tabs,
             iconName: iconName,
-            badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
+            badgeImageName: isPrivateMode ? badgeImageName : nil,
             maskImageName: (isPrivateMode && iconName != nil) ? ImageIdentifiers.badgeMask : nil,
             numberOfTabs: numberOfTabs,
             isEnabled: true,

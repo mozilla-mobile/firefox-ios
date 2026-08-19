@@ -35,6 +35,7 @@ public struct StandardImageIdentifiers {
         public static let lightning = "lightningMedium"
         public static let logoGoogleLens = "logoGoogleLensMedium"
         public static let privateModeCircleFillPurple = "privateModeCircleFillMediumPurple"
+        public static let privateModeCircleFillStrokeMulticolor = "privateModeCircleFillStrokeMulticolorMedium"
         public static let readerSummarize = "readerSummarizeMedium"
         public static let readerView = "readerViewMedium"
         public static let shareApple = "shareAppleMedium"
@@ -135,5 +136,10 @@ public struct StandardImageIdentifiers {
     // Icon size 30x30
     public struct ExtraLarge {
         public static let crossCircleFill = "crossCircleFillExtraLarge"
+    }
+
+    // Icon size 72x72
+    public struct ExtraExtraExtraLarge {
+        public static let privateModeCircleFillMulticolor = "privateModeCircleFillMulticolorExtraExtraExtraLarge"
     }
 }
