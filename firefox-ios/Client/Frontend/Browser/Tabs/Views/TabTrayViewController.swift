@@ -512,6 +512,7 @@ final class TabTrayViewController: UIViewController,
         activeExperimentSegmentControl.applyTheme(theme: swipeTheme)
         setupToolBarAppearance(theme: swipeTheme)
         setupNavigationBarAppearance(theme: swipeTheme)
+        updateInterfaceStyle(isPrivateMode: tabTrayState.isPrivateMode)
     }
 
     private func setupToolBarAppearance(theme: Theme) {
