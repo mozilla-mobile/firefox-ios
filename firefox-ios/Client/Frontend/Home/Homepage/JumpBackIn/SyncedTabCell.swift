@@ -307,7 +307,8 @@ class SyncedTabCell: UICollectionViewCell,
         tabItemTitle.textColor = theme.colors.textPrimary
         syncedDeviceLabel.textColor = theme.colors.textSecondary
         syncedTabsButton.tintColor = theme.colors.iconPrimary
-        syncedDeviceImage.image = syncedDeviceImage.image?.tinted(withColor: theme.colors.iconSecondary)
+        let syncedDeviceRawImage = UIImage(named: StandardImageIdentifiers.Large.syncTabs)
+        syncedDeviceImage.image = syncedDeviceRawImage?.tinted(withColor: theme.colors.iconSecondary)
 
         let heroImageColors = HeroImageViewColor(faviconTintColor: theme.colors.iconPrimary,
                                                  faviconBackgroundColor: theme.colors.layer1,
