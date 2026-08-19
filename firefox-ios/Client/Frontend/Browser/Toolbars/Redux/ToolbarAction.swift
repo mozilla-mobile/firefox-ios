@@ -120,7 +120,7 @@ enum ToolbarModernAction: ModernAction {
     /// `accessoryViewVisibilityChanged`.
     case keyboardDidHide
 
-    case keyboardStateDidChange(shouldShow: Bool)
+    case didCancelKeyboardRequest
 }
 
 enum ToolbarActionType: ActionType {

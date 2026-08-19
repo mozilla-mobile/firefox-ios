@@ -159,7 +159,7 @@ struct ToolbarState: ScreenState, Sendable {
         case .keyboardDidHide:
             return state.copy(isAddressBarMinimized: false)
 
-        case .keyboardStateDidChange:
+        case .didCancelKeyboardRequest:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
             return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
                                                                                     action,
