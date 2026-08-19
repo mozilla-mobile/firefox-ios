@@ -1,9 +1,9 @@
 // swift-tools-version: 5.10
 import PackageDescription
 
-let checksum = "d14b33bdbf8b3cb11a4402a7088bc5526f740163dde189ddec9530f7cb5cee56"
+let checksum = "940ea4bb8f6e93af2556c4d380403766f7f0a223a8eb3805660c0c644d5c66d1"
 let version = "156.0.20260815050238"
-let url = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.156.20260815050238/artifacts/public/build/MozillaRustComponents.xcframework.zip"
+let url = "https://github.com/issammani/firefox-ios/releases/download/debug-rs-logging/MozillaRustComponents.xcframework.zip"
 
 // Focus xcframework
 let focusChecksum = "edebe53dddf5922028247e873942de565ba3d6048a37b9afef597d32b8a7e1ef"
