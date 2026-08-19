@@ -86,6 +86,7 @@ enum FeatureFlagID: String, CaseIterable {
         case .sentFromFirefox: return FlagKeys.SentFromFirefox
         case .startAtHome: return FlagKeys.StartAtHome
         case .quickAnswers: return PrefsKeys.Settings.quickAnswersFeature
+        case .vpnFeature: return PrefsKeys.Settings.vpnFeature
         default: return nil
         }
     }

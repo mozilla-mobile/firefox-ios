@@ -91,6 +91,21 @@ class AppDelegate: UIResponder,
         // Then setup dependency container as it's needed for everything else
         DependencyHelper().bootstrapDependencies()
 
+        // If the VPN Pref is on then start the vpn server.
+        // NOTE: These calls need to happen after bootstrapping dependencies
+        if #available(iOS 26.0, *), featureFlagsProvider.isEnabled(.vpnFeature) {
+            Task {
+                let userFeaturePreferenceManager: UserFeaturePreferring = AppContainer.shared.resolve()
+                let vpnManager: VPNManaging = AppContainer.shared.resolve()
+                let isRunning = userFeaturePreferenceManager.getPreferenceFor(.vpnFeature)
+                if isRunning {
+                    await vpnManager.start()
+                } else {
+                    await vpnManager.stop()
+                }
+            }
+        }
+
         appLaunchUtil = AppLaunchUtil(profile: profile)
         appLaunchUtil?.setUpPreLaunchDependencies()
 
