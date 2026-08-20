@@ -1343,7 +1343,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             isTranslationsEnabled: toolbarState.isTranslationsEnabled,
             previousTabScreenshot: toolbarState.previousTabScreenshot,
             nextTabScreenshot: toolbarState.nextTabScreenshot,
-            isAddressBarMinimized: toolbarState.isAddressBarMinimized)
+            isAddressBarMinimized: toolbarState.isAddressBarMinimized,
+            isAccessoryViewVisible: toolbarState.isAccessoryViewVisible)
     }
 
     // MARK: StoreTestUtility
