@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+/// Scaffolding for the Xcode previews below. None of it ships: the view models here stand in for
+/// what the Client-side Redux layer builds at runtime.
 #if DEBUG
 import Common
 import SwiftUI
