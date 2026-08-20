@@ -28,9 +28,7 @@ struct WallpaperCollection: Codable, Equatable {
 
     static let classicFirefoxID = "classic-firefox"
     static let wrexhamID = "wrexham"
-
-    /// The Wrexham section title is a brand name, so it is deliberately not localized.
-    static let wrexhamTitle = "Wrexham A.F.C."
+    static let wrexhamTitle = String.Settings.Homepage.Wallpaper.WrexhamBrandTitle
 
     let id: String
     private let learnMoreURLString: String?
