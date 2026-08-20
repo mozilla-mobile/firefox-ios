@@ -34,6 +34,7 @@ class OnboardingKitCardInfoModelTests: XCTestCase {
 
     // MARK: - Toolbar selection reflects the saved search bar position
 
+    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testDefaultSelectedButton_savedBottomPosition_selectsToolbarBottom() {
         mockUserPreferences.searchBarPosition = .bottom
         let model = createModel(multipleChoiceButtons: [
