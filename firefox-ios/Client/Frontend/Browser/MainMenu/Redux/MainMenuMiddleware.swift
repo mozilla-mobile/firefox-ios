@@ -8,7 +8,7 @@ import Account
 import Shared
 
 @MainActor
-final class MainMenuMiddleware {
+final class MainMenuMiddleware: UserFeaturePreferenceProvider {
     private enum TelemetryAction {
         static let addToShortcuts = "add_to_shortcuts"
         static let bookmarks = "bookmarks"
@@ -32,16 +32,31 @@ final class MainMenuMiddleware {
         static let switchToDesktopSite = "switch_to_desktop_site"
         static let switchToMobileSite = "switch_to_mobile_site"
         static let translatePage = "translate_page"
+        static let vpnTurnOff = "vpn_turn_off"
+        static let vpnTurnOn = "vpn_turn_on"
         static let webpageSummary = "webpage_summary"
         static let zoom = "zoom"
     }
 
     private let logger: Logger
     private let telemetry: MainMenuTelemetry
+    private let injectedVPNManager: VPNManaging?
 
-    init(telemetry: MainMenuTelemetry = MainMenuTelemetry(), logger: Logger = DefaultLogger.shared) {
+    /// The `VPNManager` is only registered on iOS 17, where `ProxyConfiguration` is available.
+    private var vpnManager: VPNManaging? {
+        if let injectedVPNManager { return injectedVPNManager }
+        guard #available(iOS 17.0, *) else { return nil }
+        return AppContainer.shared.resolve()
+    }
+
+    init(
+        telemetry: MainMenuTelemetry = MainMenuTelemetry(),
+        logger: Logger = DefaultLogger.shared,
+        vpnManager: VPNManaging? = nil
+    ) {
         self.telemetry = telemetry
         self.logger = logger
+        self.injectedVPNManager = vpnManager
     }
 
     lazy var mainMenuProvider: Middleware<AppState> = (legacyProvider, modernProvider)
@@ -94,6 +109,11 @@ final class MainMenuMiddleware {
         case MainMenuActionType.tapToggleNightMode:
             handleTapToggleWebSiteDarkModeAction(action: action, isHomepage: isHomepage)
 
+        case MainMenuActionType.tapToggleVPN:
+            Task {
+                await handleTapToggleVPNAction(action: action, isHomepage: isHomepage)
+            }
+
         default: break
         }
     }
@@ -121,7 +141,41 @@ final class MainMenuMiddleware {
     private func handleDidInstantiateViewAction(action: MainMenuAction) {
         dispatchUpdateBannerVisibility(action: action)
         dispatchUpdateMenuAppearance(action: action)
+        dispatchUpdateVPNState(for: action.windowUUID)
         handleViewDidLoadAction(action: action)
+    }
+
+    /// Starts or stops the proxy, then republishes whatever state the `VPNManager` settled on, so a
+    /// failed start reverts the row's optimistic flip.
+    private func handleTapToggleVPNAction(action: MainMenuAction, isHomepage: Bool) async {
+        let wasOn = action.isVPNOn ?? false
+        telemetry.mainMenuOptionTapped(
+            with: isHomepage,
+            and: wasOn ? TelemetryAction.vpnTurnOff : TelemetryAction.vpnTurnOn
+        )
+
+        guard let vpnManager else {
+            logger.log("Tapped the VPN menu row but no VPNManager is registered", level: .warning, category: .mainMenu)
+            return
+        }
+
+        let windowUUID = action.windowUUID
+        if wasOn {
+            await vpnManager.stop()
+        } else {
+            await vpnManager.start()
+        }
+        dispatchUpdateVPNState(for: windowUUID)
+    }
+
+    private func dispatchUpdateVPNState(for windowUUID: WindowUUID) {
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuMiddlewareActionType.updateVPNState,
+                isVPNOn: userPreferences.getPreferenceFor(.vpnFeature)
+            )
+        )
     }
 
     private func dispatchUpdateBannerVisibility(action: MainMenuAction) {

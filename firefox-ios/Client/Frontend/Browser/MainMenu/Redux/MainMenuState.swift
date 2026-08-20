@@ -89,6 +89,7 @@ struct MainMenuState: ScreenState, Sendable {
     let isBrowserDefault: Bool
     let isPhoneLandscape: Bool
     let moreCellTapped: Bool
+    let isVPNOn: Bool
 
     let siteProtectionsData: SiteProtectionsData?
 
@@ -118,7 +119,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: mainMenuState.siteProtectionsData,
             isBrowserDefault: mainMenuState.isBrowserDefault,
             isPhoneLandscape: mainMenuState.isPhoneLandscape,
-            moreCellTapped: mainMenuState.moreCellTapped
+            moreCellTapped: mainMenuState.moreCellTapped,
+            isVPNOn: mainMenuState.isVPNOn
         )
     }
 
@@ -134,7 +136,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: nil,
             isBrowserDefault: false,
             isPhoneLandscape: false,
-            moreCellTapped: false
+            moreCellTapped: false,
+            isVPNOn: false
         )
     }
 
@@ -149,7 +152,8 @@ struct MainMenuState: ScreenState, Sendable {
         siteProtectionsData: SiteProtectionsData?,
         isBrowserDefault: Bool,
         isPhoneLandscape: Bool,
-        moreCellTapped: Bool
+        moreCellTapped: Bool,
+        isVPNOn: Bool
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
@@ -162,6 +166,7 @@ struct MainMenuState: ScreenState, Sendable {
         self.isBrowserDefault = isBrowserDefault
         self.isPhoneLandscape = isPhoneLandscape
         self.moreCellTapped = moreCellTapped
+        self.isVPNOn = isVPNOn
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -212,6 +217,12 @@ struct MainMenuState: ScreenState, Sendable {
             return handleTapZoomAction(state: state)
         case MainMenuActionType.tapToggleNightMode:
             return handleDismissMenuAction(state: state)
+        case MainMenuActionType.tapToggleVPN:
+            return handleVPNStateAction(state: state, isVPNOn: !state.isVPNOn)
+        case MainMenuMiddlewareActionType.updateVPNState:
+            guard let action = action as? MainMenuAction, let isVPNOn = action.isVPNOn
+            else { return defaultState(from: state) }
+            return handleVPNStateAction(state: state, isVPNOn: isVPNOn)
         case MainMenuActionType.tapAddToShortcuts, MainMenuActionType.tapRemoveFromShortcuts:
             return handleDismissMenuAction(state: state)
         default:
@@ -229,7 +240,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: state.isVPNOn
         )
     }
 
@@ -243,7 +255,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: state.isVPNOn
         )
     }
 
@@ -259,7 +272,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: state.isVPNOn
         )
     }
 
@@ -275,7 +289,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: action.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: state.isVPNOn
         )
     }
 
@@ -291,7 +306,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: action.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: state.isVPNOn
         )
     }
 
@@ -307,7 +323,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: action.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: state.isVPNOn
         )
     }
 
@@ -322,7 +339,8 @@ struct MainMenuState: ScreenState, Sendable {
             menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
                 and: state.windowUUID,
-                isExpanded: state.moreCellTapped
+                isExpanded: state.moreCellTapped,
+                isVPNOn: state.isVPNOn
             ),
             currentTabInfo: currentTabInfo,
             accountData: state.accountData,
@@ -330,7 +348,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: state.isVPNOn
         )
     }
 
@@ -347,6 +366,7 @@ struct MainMenuState: ScreenState, Sendable {
                 with: currentTabInfo,
                 and: state.windowUUID,
                 isExpanded: state.moreCellTapped,
+                isVPNOn: state.isVPNOn,
                 profileImage: accountProfileImage
             ),
             currentTabInfo: state.currentTabInfo,
@@ -355,7 +375,38 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: state.isVPNOn
+        )
+    }
+
+    /// Rebuilds the menu so the VPN row reflects `isVPNOn`. On tap this is an optimistic flip; the
+    /// middleware follows up with the value the `VPNManager` actually settled on.
+    @MainActor
+    private static func handleVPNStateAction(state: MainMenuState, isVPNOn: Bool) -> MainMenuState {
+        let menuElements: [MenuSection] = if let currentTabInfo = state.currentTabInfo {
+            state.menuConfigurator.generateMenuElements(
+                with: currentTabInfo,
+                and: state.windowUUID,
+                isExpanded: state.moreCellTapped,
+                isVPNOn: isVPNOn,
+                profileImage: state.accountProfileImage
+            )
+        } else {
+            state.menuElements
+        }
+
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: menuElements,
+            currentTabInfo: state.currentTabInfo,
+            accountData: state.accountData,
+            accountProfileImage: state.accountProfileImage,
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: isVPNOn
         )
     }
 
@@ -372,6 +423,7 @@ struct MainMenuState: ScreenState, Sendable {
                 with: currentTabInfo,
                 and: state.windowUUID,
                 isExpanded: !isExpanded,
+                isVPNOn: state.isVPNOn,
                 profileImage: state.accountProfileImage
             ),
             currentTabInfo: state.currentTabInfo,
@@ -380,7 +432,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: true
+            moreCellTapped: true,
+            isVPNOn: state.isVPNOn
         )
     }
 
@@ -397,7 +450,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: state.isVPNOn
         )
     }
 
@@ -412,7 +466,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: state.isVPNOn
         )
     }
 
@@ -427,7 +482,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: state.isVPNOn
         )
     }
 
@@ -442,7 +498,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: state.isVPNOn
         )
     }
 
@@ -457,7 +514,8 @@ struct MainMenuState: ScreenState, Sendable {
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped
+            moreCellTapped: state.moreCellTapped,
+            isVPNOn: state.isVPNOn
         )
     }
 }

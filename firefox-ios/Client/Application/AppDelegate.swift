@@ -93,7 +93,7 @@ class AppDelegate: UIResponder,
 
         // If the VPN Pref is on then start the vpn server.
         // NOTE: These calls need to happen after bootstrapping dependencies
-        if #available(iOS 26.0, *), featureFlagsProvider.isEnabled(.vpnFeature) {
+        if #available(iOS 17.0, *), featureFlagsProvider.isEnabled(.vpnFeature) {
             Task {
                 let userFeaturePreferenceManager: UserFeaturePreferring = AppContainer.shared.resolve()
                 let vpnManager: VPNManaging = AppContainer.shared.resolve()

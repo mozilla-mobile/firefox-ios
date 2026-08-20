@@ -6223,6 +6223,32 @@ extension String {
             }
         }
 
+        public struct VPNSection {
+            public static let VPN = MZLocalizedString(
+                key: "MainMenu.VPNSection.VPN.Title.v154",
+                tableName: "MainMenu",
+                value: "VPN",
+                comment: "On the main menu, the title for the action that turns the VPN on or off.")
+            public static let VPNOn = MZLocalizedString(
+                key: "MainMenu.VPNSection.VPNOn.Title.v154",
+                tableName: "MainMenu",
+                value: "On",
+                comment: "On the main menu, a title for a label that indicates the VPN option from the menu is ON.")
+            public static let VPNOff = MZLocalizedString(
+                key: "MainMenu.VPNSection.VPNOff.Title.v154",
+                tableName: "MainMenu",
+                value: "Off",
+                comment: "On the main menu, a title for a label that indicates the VPN option from the menu is OFF.")
+
+            public struct AccessibilityLabels {
+                public static let VPN = MZLocalizedString(
+                    key: "MainMenu.VPNSection.AccessibilityLabels.VPN.v154",
+                    tableName: "MainMenu",
+                    value: "VPN",
+                    comment: "On the main menu, the accessibility label for the action that turns the VPN on or off.")
+            }
+        }
+
         public struct ToolsSection {
             public static let DesktopSite = MZLocalizedString(
                 key: "MainMenu.ToolsSection.DesktopSite.Title.v141",

@@ -18,10 +18,13 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         setIsSummarizerLanguageExpansionEnabled(false)
+        setIsVPNFeatureEnabled(false)
         configUtility = MainMenuConfigurationUtility()
     }
 
     override func tearDown() async throws {
+        // `FxNimbus.shared` is global, so leaving the flag on would leak into other suites
+        setIsVPNFeatureEnabled(false)
         DependencyHelperMock().reset()
         configUtility = nil
         try await super.tearDown()
@@ -76,6 +79,48 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         let titles = allItems.map { $0.title }
 
         XCTAssertFalse(titles.contains(.MainMenu.ToolsSection.ReaderViewTitle))
+    }
+
+    // MARK: - VPN section
+
+    func testGenerateMenuElements_hasNoVPNSection_whenVPNFeatureDisabled() {
+        let sections = configUtility.generateMenuElements(with: getTabInfo(isHomepage: true), and: windowUUID)
+
+        let titles = sections.flatMap { $0.options }.map { $0.title }
+        XCTAssertFalse(titles.contains(String.MainMenu.VPNSection.VPN))
+    }
+
+    func testGenerateMenuElements_hasVPNSectionFirst_whenVPNFeatureEnabled() throws {
+        try skipUnlessVPNIsAvailable()
+        setIsVPNFeatureEnabled(true)
+
+        let homepageSections = configUtility.generateMenuElements(with: getTabInfo(isHomepage: true), and: windowUUID)
+        let siteSections = configUtility.generateMenuElements(with: getTabInfo(), and: windowUUID)
+
+        XCTAssertEqual(homepageSections.count, 3)
+        XCTAssertEqual(homepageSections[0].options.first?.title, String.MainMenu.VPNSection.VPN)
+        XCTAssertEqual(siteSections.count, 4)
+        XCTAssertEqual(siteSections[0].options.first?.title, String.MainMenu.VPNSection.VPN)
+    }
+
+    func testGenerateMenuElements_vpnItemIsOff_whenIsVPNOnFalse() throws {
+        try skipUnlessVPNIsAvailable()
+        setIsVPNFeatureEnabled(true)
+
+        let sections = configUtility.generateMenuElements(with: getTabInfo(), and: windowUUID, isVPNOn: false)
+        let vpnItem = try XCTUnwrap(sections.first?.options.first)
+
+        XCTAssertEqual(vpnItem.a11yHint, String.MainMenu.VPNSection.VPNOff)
+    }
+
+    func testGenerateMenuElements_vpnItemIsOn_whenIsVPNOnTrue() throws {
+        try skipUnlessVPNIsAvailable()
+        setIsVPNFeatureEnabled(true)
+
+        let sections = configUtility.generateMenuElements(with: getTabInfo(), and: windowUUID, isVPNOn: true)
+        let vpnItem = try XCTUnwrap(sections.first?.options.first)
+
+        XCTAssertEqual(vpnItem.a11yHint, String.MainMenu.VPNSection.VPNOn)
     }
 
     // MARK: - Translation item
@@ -209,6 +254,19 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         let expectedHint = locale.localizedString(forIdentifier: "fr")
 
         XCTAssertEqual(translateItem?.a11yHint, expectedHint)
+    }
+
+    private func setIsVPNFeatureEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.vpnFeature.with { _, _ in
+            return VpnFeature(enabled: enabled)
+        }
+    }
+
+    /// The VPN row is only built where `ProxyConfiguration` exists, so the flag alone isn't enough.
+    private func skipUnlessVPNIsAvailable() throws {
+        guard #available(iOS 17.0, *) else {
+            throw XCTSkip("The VPN menu row requires iOS 17 or newer")
+        }
     }
 
     private func setIsSummarizerLanguageExpansionEnabled(_ enabled: Bool) {

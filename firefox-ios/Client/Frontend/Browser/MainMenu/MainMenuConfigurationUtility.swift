@@ -40,11 +40,18 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         return DefaultSummarizerNimbusUtils().isLanguageExpansionEnabled
     }
 
+    /// The VPN proxy relies on `ProxyConfiguration`, which is unavailable before iOS 17.
+    private var isVPNAvailable: Bool {
+        guard #available(iOS 17.0, *) else { return false }
+        return featureFlagsProvider.isEnabled(.vpnFeature)
+    }
+
     @MainActor
     public func generateMenuElements(
         with tabInfo: MainMenuTabInfo,
         and uuid: WindowUUID,
         isExpanded: Bool = false,
+        isVPNOn: Bool = false,
         profileImage: UIImage? = nil,
         localeProvider: LocaleProvider = SystemLocaleProvider()
     ) -> [MenuSection] {
@@ -52,6 +59,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             with: uuid,
             and: tabInfo,
             isExpanded: isExpanded,
+            isVPNOn: isVPNOn,
             profileImage: profileImage,
             localeProvider: localeProvider
         )
@@ -64,11 +72,16 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo,
         isExpanded: Bool = false,
+        isVPNOn: Bool,
         profileImage: UIImage?,
         localeProvider: LocaleProvider
     ) -> [MenuSection] {
         // Always include these sections
         var menuSections: [MenuSection] = []
+
+        if isVPNAvailable {
+            menuSections.append(getVPNSection(with: uuid, tabInfo: tabInfo, isVPNOn: isVPNOn))
+        }
 
         if tabInfo.isHomepage {
             menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
@@ -85,6 +98,37 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     // MARK: - Menu Sections
+    // VPN Section
+    private func getVPNSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo, isVPNOn: Bool) -> MenuSection {
+        typealias Menu = String.MainMenu.VPNSection
+
+        return MenuSection(
+            isHomepage: tabInfo.isHomepage,
+            options: [
+                MenuElement(
+                    title: Menu.VPN,
+                    iconName: "",
+                    isEnabled: true,
+                    isActive: isVPNOn,
+                    a11yLabel: Menu.AccessibilityLabels.VPN,
+                    a11yHint: isVPNOn ? Menu.VPNOn : Menu.VPNOff,
+                    a11yId: AccessibilityIdentifiers.MainMenu.vpn,
+                    infoTitle: isVPNOn ? Menu.VPNOn : Menu.VPNOff,
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.tapToggleVPN,
+                                telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage,
+                                                             isActionOn: isVPNOn),
+                                isVPNOn: isVPNOn
+                            )
+                        )
+                    }
+                ),
+        ])
+    }
+
     // Horizontal Tabs Section
     private func getHorizontalTabsSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
         return MenuSection(
