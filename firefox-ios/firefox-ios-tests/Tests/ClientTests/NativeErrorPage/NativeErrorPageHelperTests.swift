@@ -4,6 +4,7 @@
 
 import TestKit
 import XCTest
+import Shared
 
 @testable import Client
 
@@ -393,8 +394,14 @@ final class NativeErrorPageHelperTests: XCTestCase {
     func testCellularDataRestrictedModel_hasCorrectComputedProperties() {
         let model = ErrorPageModel.cellularDataRestricted
 
-        XCTAssertEqual(model.title, .NativeErrorPage.CellularDataRestricted.TitleLabel)
-        XCTAssertEqual(model.description, .NativeErrorPage.CellularDataRestricted.Description)
+        XCTAssertEqual(
+            model.title,
+            String(format: .NativeErrorPage.CellularDataRestricted.TitleLabel, AppName.shortName.rawValue)
+        )
+        XCTAssertEqual(
+            model.description,
+            String(format: .NativeErrorPage.CellularDataRestricted.Description, AppName.shortName.rawValue)
+        )
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
         XCTAssertNil(model.advancedSection)

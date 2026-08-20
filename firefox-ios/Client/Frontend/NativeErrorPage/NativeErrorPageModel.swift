@@ -14,7 +14,8 @@ enum ErrorPageModel: Equatable {
     var title: String {
         switch self {
         case .internetConnection: return .NativeErrorPage.NoInternetConnection.TitleLabel
-        case .cellularDataRestricted: return .NativeErrorPage.CellularDataRestricted.TitleLabel
+        case .cellularDataRestricted:
+            return String(format: .NativeErrorPage.CellularDataRestricted.TitleLabel, AppName.shortName.rawValue)
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.TitleLabel
         case .generic: return .NativeErrorPage.GenericError.TitleLabel
         case .wayback: return .NativeErrorPage.Wayback.TitleLabel
@@ -24,7 +25,8 @@ enum ErrorPageModel: Equatable {
     var description: String {
         switch self {
         case .internetConnection: return .NativeErrorPage.NoInternetConnection.Description
-        case .cellularDataRestricted: return .NativeErrorPage.CellularDataRestricted.Description
+        case .cellularDataRestricted:
+            return String(format: .NativeErrorPage.CellularDataRestricted.Description, AppName.shortName.rawValue)
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.Description
         case .generic: return .NativeErrorPage.GenericError.Description
         case .wayback: return String(format: .NativeErrorPage.Wayback.Description, AppName.shortName.description)
