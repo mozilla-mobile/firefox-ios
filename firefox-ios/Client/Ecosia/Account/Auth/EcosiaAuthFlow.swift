@@ -13,7 +13,6 @@ public enum EcosiaAuthFlowResult {
 
 /// Orchestrates complete authentication flows with invisible tab sessions
 /// Provides core functionality for authentication operations
-/// Ecosia: @MainActor so callbacks and session/tab ops stay on main thread; avoids sending non-Sendable closures.
 @MainActor
 final class EcosiaAuthFlow {
 
@@ -214,8 +213,11 @@ final class EcosiaAuthFlow {
             throw AuthError.authFlowConfigurationError("BrowserViewController not available")
         }
 
-        // Get session transfer URL
-        let signUpURL = EcosiaEnvironment.current.urlProvider.signUpURL
+        // Get session transfer URL.
+        // Debug hook: loads /accounts/error directly instead of the real sign-up URL.
+        let signUpURL = SimulateSessionTransferFailureSetting.isEnabled
+            ? SimulateSessionTransferFailureSetting.forcedErrorPageURL
+            : EcosiaEnvironment.current.urlProvider.signUpURL
 
         EcosiaLogger.session.info("Retrieving session transfer token for SSO")
         await authService.getSessionTransferToken()
@@ -241,12 +243,28 @@ final class EcosiaAuthFlow {
         await withCheckedContinuation { continuation in
             Task { @MainActor in
                 session.startMonitoring { [weak self] success in
-                    self?.activeSession = nil // Release session
-                    EcosiaLogger.auth.info("Ecosia auth flow completed: \(success)")
-                    onFlowCompleted?(success)
-                    continuation.resume()
+                    Task { @MainActor in
+                        self?.activeSession = nil // Release session
+                        EcosiaLogger.auth.info("Ecosia auth flow completed: \(success)")
+                        if !success {
+                            await self?.logOutNativelyAfterFailedSessionTransfer()
+                        }
+                        onFlowCompleted?(success)
+                        continuation.resume()
+                    }
                 }
             }
+        }
+    }
+
+    /// A failed session transfer means the web session was never actually authenticated,
+    /// so clear native credentials too instead of leaving native "logged in" with no working web session.
+    /// `triggerWebLogout: false` since the web side already failed to authenticate; nothing there to log out of.
+    private func logOutNativelyAfterFailedSessionTransfer() async {
+        do {
+            try await authService.logout(triggerWebLogout: false)
+        } catch {
+            EcosiaLogger.auth.error("Native-only logout after failed session transfer also failed: \(error)")
         }
     }
 
@@ -257,7 +275,10 @@ final class EcosiaAuthFlow {
         }
 
         // Get logout URL
-        let logoutURL = EcosiaEnvironment.current.urlProvider.logoutURL
+        // Debug hook: loads /accounts/error directly instead of the real sign-up URL.
+        let logoutURL = SimulateSessionTransferFailureSetting.isEnabled
+            ? SimulateSessionTransferFailureSetting.forcedErrorPageURL
+            : EcosiaEnvironment.current.urlProvider.logoutURL
 
         // Create invisible tab session for logout (must be on main thread for UI operations)
         EcosiaLogger.invisibleTabs.info("Creating invisible tab session for logout")

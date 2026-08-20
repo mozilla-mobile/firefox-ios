@@ -10,6 +10,18 @@ extension URL {
         isEcosia() && path.contains("ai-chat")
     }
 
+    /// Host + path only, with query and fragment stripped. Use this instead of `absoluteString`
+    /// when logging a URL (e.g. to Sentry) - OAuth redirect URLs can carry authorization codes,
+    /// state tokens, or other user-identifying data in their query string.
+    public var redactedForLogging: String {
+        guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false) else {
+            return absoluteString
+        }
+        components.query = nil
+        components.fragment = nil
+        return components.string ?? absoluteString
+    }
+
     public enum EcosiaQueryItemName: String {
         case
         autoRedirect = "ar",

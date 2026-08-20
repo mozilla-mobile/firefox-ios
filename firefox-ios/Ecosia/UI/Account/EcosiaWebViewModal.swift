@@ -194,6 +194,13 @@ private struct WebViewRepresentable: UIViewRepresentable {
                 return
             }
 
+            // This plain WKWebView has no ASWebAuthenticationSession fallback, so a Google
+            // OAuth reauth landing here is itself the bug (Google blocks OAuth from embedded
+            // WebViews with a "disallowed_useragent"/"Use secure browsers" error). Flag it.
+            if url.host?.contains("accounts.google.com") == true {
+                EcosiaLogger.auth.sentry("🔐 [WEBVIEW] Google OAuth navigation inside profile WebView: \(url.redactedForLogging)")
+            }
+
             // If this is a back navigation to a page we loaded from a target="_blank" link,
             // prevent it and go back further (to the page before the blank link was clicked)
             if navigationAction.navigationType == .backForward,

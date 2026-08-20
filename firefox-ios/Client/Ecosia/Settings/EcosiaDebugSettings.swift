@@ -118,7 +118,7 @@ final class CreateReferralCode: HiddenSetting {
             let alertTitle = "Code created"
             let alert = AlertController(title: alertTitle, message: User.shared.referrals.code, preferredStyle: .alert)
             navigationController?.topViewController?.present(alert, animated: true) {
-                // Ecosia: Task + sleep instead of DispatchQueue for strict concurrency
+                // Task + sleep instead of DispatchQueue for strict concurrency
                 Task { @MainActor in
                     try? await Task.sleep(nanoseconds: 1_500_000_000)
                     alert.dismiss(animated: true)
@@ -130,7 +130,7 @@ final class CreateReferralCode: HiddenSetting {
 
             let alert = AlertController(title: "Code erased!", message: "Reopen app to create new one", preferredStyle: .alert)
             navigationController?.topViewController?.present(alert, animated: true) {
-                // Ecosia: Task + sleep instead of DispatchQueue for strict concurrency
+                // Task + sleep instead of DispatchQueue for strict concurrency
                 Task { @MainActor in
                     try? await Task.sleep(nanoseconds: 1_500_000_000)
                     alert.dismiss(animated: true)
@@ -152,7 +152,7 @@ final class AddReferral: HiddenSetting {
         let alertTitle = "Referral count increased by one."
         let alert = AlertController(title: alertTitle, message: "Open NTP to see spotlight", preferredStyle: .alert)
         navigationController?.topViewController?.present(alert, animated: true) {
-            // Ecosia: Task + sleep instead of DispatchQueue for strict concurrency
+            // Task + sleep instead of DispatchQueue for strict concurrency
             Task { @MainActor in
                 try? await Task.sleep(nanoseconds: 1_500_000_000)
                 alert.dismiss(animated: true)
@@ -173,7 +173,7 @@ final class AddClaim: HiddenSetting {
         let alertTitle = "User got referred."
         let alert = AlertController(title: alertTitle, message: "Open NTP to see claim", preferredStyle: .alert)
         navigationController?.topViewController?.present(alert, animated: true) {
-            // Ecosia: Task + sleep instead of DispatchQueue for strict concurrency
+            // Task + sleep instead of DispatchQueue for strict concurrency
             Task { @MainActor in
                 try? await Task.sleep(nanoseconds: 1_500_000_000)
                 alert.dismiss(animated: true)
@@ -376,7 +376,7 @@ final class AnalyticsStagingUrlSetting: HiddenSetting {
 final class SimulateAuthErrorSetting: HiddenSetting {
     /// UserDefaults key for storing auth error simulation state
     /// Note: Persists across app restarts - toggle again to disable
-    /// Ecosia: nonisolated so async/non–main-actor code can read it without crossing isolation
+    /// nonisolated so async/non–main-actor code can read it without crossing isolation
     nonisolated public static let debugKey = "DebugSimulateAuthError"
 
     override var title: NSAttributedString? {
@@ -402,7 +402,7 @@ final class SimulateAuthErrorSetting: HiddenSetting {
             preferredStyle: .alert
         )
         navigationController?.topViewController?.present(alert, animated: true) {
-            // Ecosia: Task + sleep instead of DispatchQueue for strict concurrency
+            // Task + sleep instead of DispatchQueue for strict concurrency
             Task { @MainActor in
                 try? await Task.sleep(nanoseconds: 1_500_000_000)
                 alert.dismiss(animated: true)
@@ -416,10 +416,63 @@ final class SimulateAuthErrorSetting: HiddenSetting {
     }
 }
 
+/// Forces the invisible tab used for SSO session transfer/cleanup to load /accounts/error directly
+/// instead of the normal sign-up/logout URL - mirroring Android's own QA-only shortcut
+/// (ForcedTransferError.OPEN_ERROR_PAGE), rather than trying to trigger a genuine server-side
+/// redirect there (fastify-passport appears to 401 directly on an OAuth callback error param,
+/// short-circuiting before any redirect). /accounts/error itself has no auth precondition, so this
+/// still exercises the real web page and isSessionTransferSuccessful()'s URL classification
+/// end-to-end, rather than faking the outcome natively.
+final class SimulateSessionTransferFailureSetting: HiddenSetting {
+    nonisolated public static let debugKey = "DebugSimulateSessionTransferFailure"
+
+    nonisolated public static var forcedErrorPageURL: URL {
+        let urlProvider = EcosiaEnvironment.current.urlProvider
+        var errorPath = urlProvider.errorPaths.first ?? "/accounts/error"
+        if errorPath.hasPrefix("/") { errorPath.removeFirst() }
+        return urlProvider.root.appendingPathComponent(errorPath)
+    }
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: Toggle - Simulate Session Transfer Failure", attributes: [:])
+    }
+
+    override var status: NSAttributedString? {
+        let status = Self.isEnabled ? "ON (session transfer will hit a real /accounts/error)" : "OFF"
+        return NSAttributedString(string: "\(status) (Click to toggle)", attributes: [:])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let currentValue = Self.isEnabled
+        UserDefaults.standard.set(!currentValue, forKey: Self.debugKey)
+        settings.tableView.reloadData()
+
+        let alert = AlertController(
+            title: !currentValue ? "Session Transfer Failure Enabled ✅" : "Session Transfer Failure Disabled ✅",
+            message: !currentValue
+                ? "Next login/logout will complete natively but the invisible tab will hit a real " +
+                  "/accounts/error - check Sentry for the event, until you toggle this off."
+                : "Session transfer failures disabled.",
+            preferredStyle: .alert
+        )
+        navigationController?.topViewController?.present(alert, animated: true) {
+            // Task + sleep instead of DispatchQueue for strict concurrency
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 1_500_000_000)
+                alert.dismiss(animated: true)
+            }
+        }
+    }
+
+    nonisolated public static var isEnabled: Bool {
+        UserDefaults.standard.bool(forKey: debugKey)
+    }
+}
+
 final class SimulateImpactAPIErrorSetting: HiddenSetting {
     /// UserDefaults key for storing impact API error simulation state
     /// Note: Persists across app restarts - toggle again to disable
-    /// Ecosia: nonisolated so async/non–main-actor code can read it without crossing isolation
+    /// nonisolated so async/non–main-actor code can read it without crossing isolation
     nonisolated public static let debugKey = "DebugSimulateImpactAPIError"
 
     override var title: NSAttributedString? {
@@ -654,7 +707,7 @@ final class DebugAddSeedsLoggedOut: HiddenSetting {
         )
 
         navigationController?.topViewController?.present(alert, animated: true) {
-            // Ecosia: Task + sleep instead of DispatchQueue for strict concurrency
+            // Task + sleep instead of DispatchQueue for strict concurrency
             Task { @MainActor in
                 try? await Task.sleep(nanoseconds: 2_000_000_000)
                 alert.dismiss(animated: true)
@@ -697,7 +750,7 @@ final class DebugAddSeedsLoggedIn: HiddenSetting {
         )
 
         navigationController?.topViewController?.present(alert, animated: true) {
-            // Ecosia: Task + sleep instead of DispatchQueue for strict concurrency
+            // Task + sleep instead of DispatchQueue for strict concurrency
             Task { @MainActor in
                 try? await Task.sleep(nanoseconds: 2_000_000_000)
                 alert.dismiss(animated: true)
@@ -738,7 +791,7 @@ final class DebugForceLevelUp: HiddenSetting {
         )
 
         navigationController?.topViewController?.present(alert, animated: true) {
-            // Ecosia: Task + sleep instead of DispatchQueue for strict concurrency
+            // Task + sleep instead of DispatchQueue for strict concurrency
             Task { @MainActor in
                 try? await Task.sleep(nanoseconds: 2_000_000_000)
                 alert.dismiss(animated: true)
@@ -815,7 +868,7 @@ final class DebugAddCustomSeeds: HiddenSetting {
         )
 
         navigationController?.topViewController?.present(confirmAlert, animated: true) {
-            // Ecosia: Task + sleep instead of DispatchQueue for strict concurrency
+            // Task + sleep instead of DispatchQueue for strict concurrency
             Task { @MainActor in
                 try? await Task.sleep(nanoseconds: 2_000_000_000)
                 confirmAlert.dismiss(animated: true)
@@ -873,7 +926,7 @@ final class RefreshStatisticsSetting: HiddenSetting {
                     preferredStyle: .alert
                 )
                 navigationController?.topViewController?.present(successAlert, animated: true) {
-                    // Ecosia: Task + sleep instead of DispatchQueue for strict concurrency
+                    // Task + sleep instead of DispatchQueue for strict concurrency
                     Task { @MainActor in
                         try? await Task.sleep(nanoseconds: 2_000_000_000)
                         successAlert.dismiss(animated: true)

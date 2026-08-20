@@ -109,6 +109,7 @@ extension AppSettingsTableViewController {
             DebugAddCustomSeeds(settings: self),
             DebugForceLevelUp(settings: self),
             SimulateAuthErrorSetting(settings: self),
+            SimulateSessionTransferFailureSetting(settings: self),
             SimulateImpactAPIErrorSetting(settings: self)
         ]
 

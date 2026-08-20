@@ -273,8 +273,8 @@ extension BrowserViewController {
                 configuredAuth.login()
             }
         } else {
-            EcosiaLogger.auth.notice("🔐 [WEB-AUTH] Inconsistent state detected: web thinks user is logged out but native doesn't")
-            EcosiaLogger.auth.notice("🔐 [WEB-AUTH] Failing entire process to avoid user getting locked")
+            EcosiaLogger.auth.sentry("🔐 [WEB-AUTH] Inconsistent state: web says logged out but native doesn't; " +
+                                     "forcing logout+re-login to avoid user getting locked")
 
             ecosiaAuth
                 .onAuthFlowCompleted { _ in

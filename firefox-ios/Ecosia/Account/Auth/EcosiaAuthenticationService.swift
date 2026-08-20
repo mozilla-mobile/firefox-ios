@@ -381,7 +381,7 @@ extension EcosiaAuthenticationService {
             do {
                 return try await authProvider.getSSOCredentials()
             } catch {
-                EcosiaLogger.auth.error("Failed to retrieve SSO credentials: \(error)")
+                EcosiaLogger.auth.sentry("Failed to retrieve SSO credentials: \(error)")
             }
         }
         return nil
