@@ -7,6 +7,7 @@ import UIKit
 import OnboardingKit
 @testable import Client
 
+// Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
 @MainActor
 class OnboardingKitCardInfoModelTests: XCTestCase {
     private var mockUserPreferences: MockUserFeaturePreferences!
@@ -25,7 +26,6 @@ class OnboardingKitCardInfoModelTests: XCTestCase {
         try await super.tearDown()
     }
 
-    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testDefaultSelectedButton_emptyButtons_returnsNil() {
         let model = createModel(multipleChoiceButtons: [])
 
@@ -34,7 +34,6 @@ class OnboardingKitCardInfoModelTests: XCTestCase {
 
     // MARK: - Toolbar selection reflects the saved search bar position
 
-    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testDefaultSelectedButton_savedBottomPosition_selectsToolbarBottom() {
         mockUserPreferences.searchBarPosition = .bottom
         let model = createModel(multipleChoiceButtons: [
@@ -45,7 +44,6 @@ class OnboardingKitCardInfoModelTests: XCTestCase {
         XCTAssertEqual(model.defaultSelectedButton?.action, .toolbarBottom)
     }
 
-    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testDefaultSelectedButton_savedTopPosition_selectsToolbarTop() {
         mockUserPreferences.searchBarPosition = .top
         let model = createModel(multipleChoiceButtons: [
@@ -56,7 +54,6 @@ class OnboardingKitCardInfoModelTests: XCTestCase {
         XCTAssertEqual(model.defaultSelectedButton?.action, .toolbarTop)
     }
 
-    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testDefaultSelectedButton_savedPositionMissingFromButtons_fallsBackToFirst() {
         mockUserPreferences.searchBarPosition = .bottom
         let model = createModel(multipleChoiceButtons: [
@@ -80,7 +77,6 @@ class OnboardingKitCardInfoModelTests: XCTestCase {
         XCTAssertEqual(model.defaultSelectedButton?.action, .themeSystemDefault)
     }
 
-    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testDefaultSelectedButton_noSavedTheme_returnsFirst() {
         let model = createModel(multipleChoiceButtons: [
             createMockMultipleChoiceButton(action: .themeDark),
