@@ -103,14 +103,29 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
             let mimeType = iconRecord.mimeType ?? ""
             if mimeType.hasPrefix("image/svg") {
                 fetchedIcon = SVG(data: data)?.rasterize()
+                if fetchedIcon == nil {
+                    logger.log("[SEC] Icon error: could not instantiate SVG from data.",
+                               level: .warning,
+                               category: .remoteSettings)
+                }
             } else if mimeType.hasPrefix("application/pdf") {
                 fetchedIcon = UIImage.imageFromPDF(data: data, minimumSize: CGSize(width: 64.0, height: 64.0))
+                if fetchedIcon == nil {
+                    logger.log("[SEC] Icon error: could not render PDF from data.",
+                               level: .warning,
+                               category: .remoteSettings)
+                }
             } else {
                 fetchedIcon = UIImage(data: data)
+                logger.log("[SEC] Creating icon image for MIME type: \(mimeType)",
+                           level: .info,
+                           category: .remoteSettings)
             }
             return fetchedIcon ?? fallbackEngineIcon
         } catch {
-            logger.log("[SEC] Error fetching engine icon attachment (\(iconRecord.id)).", level: .warning, category: .remoteSettings)
+            logger.log("[SEC] Error fetching engine icon attachment (\(iconRecord.id)). (Error: \(error))",
+                       level: .warning,
+                       category: .remoteSettings)
             return fallbackEngineIcon
         }
     }
