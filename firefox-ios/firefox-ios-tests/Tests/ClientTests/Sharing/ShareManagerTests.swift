@@ -228,23 +228,26 @@ final class ShareManagerTests: XCTestCase {
             itemForActivityType: testShareActivityType
         )
 
-        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+        let printInfo = try XCTUnwrap(activityItems[safe: 1] as? UIPrintInfo)
+        XCTAssertEqual(printInfo.jobName, testWebpageDisplayTitle)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabPrintPageRenderer)
 
-        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        _ = try XCTUnwrap(activityItems[safe: 3] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: testShareActivityType
         )
 
-        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 5] as? ShareTelemetryActivityItemProvider)
         let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: testShareActivityType
         )
 
-        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(activityItems.count, 6)
         XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
         XCTAssertEqual(itemForUrlActivity as? URL, testWebURL)
         XCTAssertTrue(
@@ -273,23 +276,26 @@ final class ShareManagerTests: XCTestCase {
             itemForActivityType: testShareActivityType
         )
 
-        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+        let printInfo = try XCTUnwrap(activityItems[safe: 1] as? UIPrintInfo)
+        XCTAssertEqual(printInfo.jobName, testWebpageDisplayTitle)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabPrintPageRenderer)
 
-        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        _ = try XCTUnwrap(activityItems[safe: 3] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: testShareActivityType
         )
 
-        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 5] as? ShareTelemetryActivityItemProvider)
         let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: testShareActivityType
         )
 
-        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(activityItems.count, 6)
         XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
         XCTAssertEqual(itemForUrlActivity as? URL, testWebURL)
         XCTAssertEqual(
@@ -319,13 +325,16 @@ final class ShareManagerTests: XCTestCase {
             itemForActivityType: testShareActivityType
         )
 
-        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+        let printInfo = try XCTUnwrap(activityItems[safe: 1] as? UIPrintInfo)
+        XCTAssertEqual(printInfo.jobName, testWebpageDisplayTitle)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabPrintPageRenderer)
 
-        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleSubtitleActivityItemProvider)
+        _ = try XCTUnwrap(activityItems[safe: 3] as? HomePageActivity)
 
-        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? TitleSubtitleActivityItemProvider)
+
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 5] as? ShareTelemetryActivityItemProvider)
         let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: testShareActivityType
@@ -333,7 +342,7 @@ final class ShareManagerTests: XCTestCase {
 
         XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
         XCTAssertEqual(itemForURLActivity as? URL, testWebURL)
-        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(activityItems.count, 6)
         XCTAssertEqual(
             titleActivityItemProvider.item as? String,
             testMessage,
@@ -422,23 +431,26 @@ final class ShareManagerTests: XCTestCase {
         )
 
         // The rest of the content should be unchanged from other tests:
-        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+        let printInfo = try XCTUnwrap(activityItems[safe: 1] as? UIPrintInfo)
+        XCTAssertEqual(printInfo.jobName, testWebpageDisplayTitle)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabPrintPageRenderer)
 
-        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        _ = try XCTUnwrap(activityItems[safe: 3] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: whatsAppActivity
         )
 
-        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 5] as? ShareTelemetryActivityItemProvider)
         let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: whatsAppActivity
         )
 
-        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(activityItems.count, 6)
         XCTAssertEqual(urlDataIdentifier, UTType.plainText.identifier)
         XCTAssertEqual(itemForActivity as? String, expectedShareContentA)
         XCTAssertTrue(
@@ -472,23 +484,26 @@ final class ShareManagerTests: XCTestCase {
         )
 
         // The rest of the content should be unchanged from other tests:
-        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+        let printInfo = try XCTUnwrap(activityItems[safe: 1] as? UIPrintInfo)
+        XCTAssertEqual(printInfo.jobName, testWebpageDisplayTitle)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabPrintPageRenderer)
 
-        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        _ = try XCTUnwrap(activityItems[safe: 3] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: whatsAppActivity
         )
 
-        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 5] as? ShareTelemetryActivityItemProvider)
         let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: whatsAppActivity
         )
 
-        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(activityItems.count, 6)
         XCTAssertEqual(urlDataIdentifier, UTType.plainText.identifier)
         XCTAssertEqual(itemForActivity as? String, expectedShareContentB)
         XCTAssertTrue(
@@ -520,23 +535,26 @@ final class ShareManagerTests: XCTestCase {
         )
 
         // The rest of the content should be unchanged from other tests:
-        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+        let printInfo = try XCTUnwrap(activityItems[safe: 1] as? UIPrintInfo)
+        XCTAssertEqual(printInfo.jobName, testWebpageDisplayTitle)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabPrintPageRenderer)
 
-        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        _ = try XCTUnwrap(activityItems[safe: 3] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: mailActivity
         )
 
-        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 5] as? ShareTelemetryActivityItemProvider)
         let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: mailActivity
         )
 
-        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(activityItems.count, 6)
         XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
         XCTAssertEqual(itemForActivity as? URL, testWebURL)
         XCTAssertTrue(
@@ -568,23 +586,26 @@ final class ShareManagerTests: XCTestCase {
         )
 
         // The rest of the content should be unchanged from other tests:
-        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+        let printInfo = try XCTUnwrap(activityItems[safe: 1] as? UIPrintInfo)
+        XCTAssertEqual(printInfo.jobName, testWebpageDisplayTitle)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabPrintPageRenderer)
 
-        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        _ = try XCTUnwrap(activityItems[safe: 3] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: mailActivity
         )
 
-        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 5] as? ShareTelemetryActivityItemProvider)
         let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: mailActivity
         )
 
-        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(activityItems.count, 6)
         XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
         XCTAssertEqual(itemForActivity as? URL, testWebURL)
         XCTAssertEqual(
@@ -618,23 +639,26 @@ final class ShareManagerTests: XCTestCase {
         )
 
         // The rest of the content should be unchanged from other tests:
-        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+        let printInfo = try XCTUnwrap(activityItems[safe: 1] as? UIPrintInfo)
+        XCTAssertEqual(printInfo.jobName, testWebpageDisplayTitle)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabPrintPageRenderer)
 
-        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        _ = try XCTUnwrap(activityItems[safe: 3] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: whatsAppActivity
         )
 
-        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 5] as? ShareTelemetryActivityItemProvider)
         let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: whatsAppActivity
         )
 
-        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(activityItems.count, 6)
         XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
         XCTAssertEqual(itemForActivity as? URL, testWebURL)
         XCTAssertEqual(
@@ -676,23 +700,26 @@ final class ShareManagerTests: XCTestCase {
         )
 
         // The rest of the content should be unchanged from other tests:
-        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+        let printInfo = try XCTUnwrap(activityItems[safe: 1] as? UIPrintInfo)
+        XCTAssertEqual(printInfo.jobName, testWebpageDisplayTitle)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabPrintPageRenderer)
 
-        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        _ = try XCTUnwrap(activityItems[safe: 3] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: whatsAppActivity
         )
 
-        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 5] as? ShareTelemetryActivityItemProvider)
         let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: whatsAppActivity
         )
 
-        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(activityItems.count, 6)
         XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
         XCTAssertEqual(itemForActivity as? URL, testWebURL)
         XCTAssertEqual(
@@ -736,23 +763,26 @@ final class ShareManagerTests: XCTestCase {
         )
 
         // The rest of the content should be unchanged from other tests:
-        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+        let printInfo = try XCTUnwrap(activityItems[safe: 1] as? UIPrintInfo)
+        XCTAssertEqual(printInfo.jobName, testWebpageDisplayTitle)
 
-        _ = try XCTUnwrap(activityItems[safe: 2] as? HomePageActivity)
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabPrintPageRenderer)
 
-        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        _ = try XCTUnwrap(activityItems[safe: 3] as? HomePageActivity)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? TitleActivityItemProvider)
         let itemForTitleActivity = titleActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: whatsAppActivity
         )
 
-        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 5] as? ShareTelemetryActivityItemProvider)
         let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
             createStubActivityViewController(),
             itemForActivityType: whatsAppActivity
         )
 
-        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(activityItems.count, 6)
         XCTAssertEqual(urlDataIdentifier, UTType.plainText.identifier)
         XCTAssertEqual(itemForActivity as? String, expectedShareContentA)
         XCTAssertTrue(

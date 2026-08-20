@@ -18,14 +18,16 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
         case loading
         case active
 
-        var buttonImageName: String? {
+        func buttonImageName(isNovaDesignEnabled: Bool) -> String? {
             switch self {
             case .inactive:
                 return StandardImageIdentifiers.Medium.translate
             case .loading:
                 return nil
             case .active:
-                return ImageIdentifiers.Translations.translationActive
+                return isNovaDesignEnabled
+                    ? StandardImageIdentifiers.Large.translateActiveAltMulticolor
+                    : ImageIdentifiers.Translations.translationActive
             }
         }
 

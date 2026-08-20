@@ -21,6 +21,7 @@ final class PrintContentScriptTests: XCTestCase {
 
     override func tearDown() async throws {
         webView = nil
+        UIPrintInteractionController.shared.printInfo = nil
         try await super.tearDown()
     }
 
@@ -33,11 +34,22 @@ final class PrintContentScriptTests: XCTestCase {
     }
 
     func test_userContentController_withMessage_returnsProperDelegateCall() {
+        webView.title = "Mozilla"
         let subject = createSubject()
 
         subject.userContentController(didReceiveMessage: ["any message"])
 
         XCTAssertEqual(webView.viewPrintFormatterCalled, 1)
+        XCTAssertEqual(UIPrintInteractionController.shared.printInfo?.jobName, "Mozilla")
+    }
+
+    func test_userContentController_withoutTitle_usesURLForJobName() {
+        webView.url = URL(string: "https://mozilla.org")
+        let subject = createSubject()
+
+        subject.userContentController(didReceiveMessage: [])
+
+        XCTAssertEqual(UIPrintInteractionController.shared.printInfo?.jobName, "https://mozilla.org")
     }
 
     private func createSubject() -> PrintContentScript {

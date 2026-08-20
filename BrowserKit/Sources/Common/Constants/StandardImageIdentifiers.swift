@@ -39,6 +39,8 @@ public struct StandardImageIdentifiers {
         public static let readerSummarize = "readerSummarizeMedium"
         public static let readerView = "readerViewMedium"
         public static let shareApple = "shareAppleMedium"
+        public static let shieldCheckmarkDotFillMulticolorDark = "shieldCheckmarkDotFillMulticolorMediumDark"
+        public static let shieldCheckmarkDotFillMulticolorLight = "shieldCheckmarkDotFillMulticolorMediumLight"
         public static let sun = "sunMedium"
         public static let sunFill = "sunFillMedium"
         public static let translate = "translateMedium"
@@ -129,6 +131,7 @@ public struct StandardImageIdentifiers {
         public static let syncTabs = "syncTabsLarge"
         public static let tab = "tabLarge"
         public static let tabTray = "tabTrayLarge"
+        public static let translateActiveAltMulticolor = "translateActiveAltMulticolorLarge"
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"
     }

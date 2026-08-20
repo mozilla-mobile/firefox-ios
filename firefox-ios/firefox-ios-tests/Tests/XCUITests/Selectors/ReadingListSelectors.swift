@@ -6,6 +6,7 @@ import XCTest
 
 protocol ReadingListSelectorsSet {
     var READER_VIEW_BUTTON: Selector { get }
+    var ADD_TO_READING_LIST_BUTTON: Selector { get }
     var DISPLAY_SETTINGS_BUTTON: Selector { get }
     var FENNEC_ALERT_TEXT: Selector { get }
     var READING_TABLE: Selector { get }
@@ -22,6 +23,7 @@ protocol ReadingListSelectorsSet {
 struct ReadingListSelectors: ReadingListSelectorsSet {
     private enum IDs {
         static let readerView = "Reader View"
+        static let addToReadingList = "Add to Reading List"
         static let displaySettings = "Display Settings"
         static let fennecAlert = "Fennec pasted from XCUITests-Runner"
         static let readingTable = "ReadingTable"
@@ -37,6 +39,12 @@ struct ReadingListSelectors: ReadingListSelectorsSet {
     let READER_VIEW_BUTTON = Selector.buttonByLabel(
         IDs.readerView,
         description: "Reader List button on the toolbar",
+        groups: ["reader"]
+    )
+
+    let ADD_TO_READING_LIST_BUTTON = Selector.buttonByLabel(
+        IDs.addToReadingList,
+        description: "Add to Reading List button on the reader mode bar",
         groups: ["reader"]
     )
 
@@ -117,7 +125,8 @@ struct ReadingListSelectors: ReadingListSelectorsSet {
         groups: ["reader"]
     )
 
-    var all: [Selector] { [READER_VIEW_BUTTON, DISPLAY_SETTINGS_BUTTON, FENNEC_ALERT_TEXT, READING_TABLE,
+    var all: [Selector] { [READER_VIEW_BUTTON, ADD_TO_READING_LIST_BUTTON,
+                           DISPLAY_SETTINGS_BUTTON, FENNEC_ALERT_TEXT, READING_TABLE,
                            DONE_BUTTON_READING_LIST, READERMODE_SETTINGS_BUTTON, EMPTY_READING_LIST_1, EMPTY_READING_LIST_2,
                            EMPTY_READING_LIST_3, MARK_AS_UNREAD_BUTTON, REMOVE_BUTTON] }
 }

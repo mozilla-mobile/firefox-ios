@@ -86,7 +86,6 @@ class IntegrationTests: BaseTestCase {
         navigator.performAction(Action.FxATypePasswordExistingAccount)
         navigator.performAction(Action.FxATapOnSignInButton)
         mozWaitForElementToNotExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
-        waitForTabsButton()
         allowNotifications()
     }
 
@@ -226,6 +225,30 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(BrowserTab)
         waitForInitialSyncComplete()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307042
+    // Smoketest
+    // (Steps 1-8 in testAddTabFromTabTray from TabsTests)
+    func testAddTabFromTabTray() {
+        let browserScreen = BrowserScreen(app: app)
+        let syncScreen = SyncScreen(app: app)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(TabTray)
+
+        // Step 9: Tap on the tab counter and switch to Synced Tabs
+        navigator.performAction(Action.ToggleExperimentSyncMode)
+        syncScreen.assertSignInPromptExists()
+        syncScreen.tapSyncAndSaveData()
+        navigator.nowAt(Intro_FxASignin)
+        navigator.performAction(Action.OpenEmailToSignIn)
+        completeFxASignIn()
+        mozWaitForElementToExist(app.staticTexts["Example Domain"])
+
+        // Step 10: Tap on a tab from the Synced Tabs section
+        app.staticTexts["Example Domain"].waitAndTap()
+        waitUntilPageLoad()
+        browserScreen.addressToolbarContainValue(value: "example.com")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306819

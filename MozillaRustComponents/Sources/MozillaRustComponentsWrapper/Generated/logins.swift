@@ -1561,14 +1561,15 @@ public func FfiConverterTypeLoginStore_lower(_ value: LoginStore) -> UInt64 {
 
 
 /**
- * The Desktop-facing bridged sync engine. The canonical docs are in
- * https://searchfox.org/mozilla-central/source/services/interfaces/mozIBridgedSyncEngine.idl
+ * The Desktop-facing bridged sync engine - a thin wrapper over the
+ * `sync15::engine::SyncEngine` implemented by this component (see
+ * `sync15::engine::BridgedEngineWrapper`).
  * It's only actually used on Desktop, but it's fine to expose this everywhere.
  * NOTE: all timestamps here are milliseconds.
  */
 public protocol LoginsBridgedEngineProtocol: AnyObject, Sendable {
     
-    func apply() throws  -> [String]
+    func apply(serverModifiedMillis: Int64) throws  -> [String]
     
     func ensureCurrentSyncId(newSyncId: String) throws  -> String
     
@@ -1576,9 +1577,9 @@ public protocol LoginsBridgedEngineProtocol: AnyObject, Sendable {
     
     func reset() throws 
     
-    func resetSyncId() throws  -> String
+    func resetLastSync() throws 
     
-    func setLastSync(lastSync: Int64) throws 
+    func resetSyncId() throws  -> String
     
     func setUploaded(newTimestamp: Int64, uploadedIds: [String]) throws 
     
@@ -1594,8 +1595,9 @@ public protocol LoginsBridgedEngineProtocol: AnyObject, Sendable {
     
 }
 /**
- * The Desktop-facing bridged sync engine. The canonical docs are in
- * https://searchfox.org/mozilla-central/source/services/interfaces/mozIBridgedSyncEngine.idl
+ * The Desktop-facing bridged sync engine - a thin wrapper over the
+ * `sync15::engine::SyncEngine` implemented by this component (see
+ * `sync15::engine::BridgedEngineWrapper`).
  * It's only actually used on Desktop, but it's fine to expose this everywhere.
  * NOTE: all timestamps here are milliseconds.
  */
@@ -1652,10 +1654,11 @@ open class LoginsBridgedEngine: LoginsBridgedEngineProtocol, @unchecked Sendable
     
 
     
-open func apply()throws  -> [String]  {
+open func apply(serverModifiedMillis: Int64)throws  -> [String]  {
     return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginsbridgedengine_apply(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),
+        FfiConverterInt64.lower(serverModifiedMillis),$0
     )
 })
 }
@@ -1684,20 +1687,19 @@ open func reset()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_
 }
 }
     
+open func resetLastSync()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginsbridgedengine_reset_last_sync(
+            self.uniffiCloneHandle(),$0
+    )
+}
+}
+    
 open func resetSyncId()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginsbridgedengine_reset_sync_id(
             self.uniffiCloneHandle(),$0
     )
 })
-}
-    
-open func setLastSync(lastSync: Int64)throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
-    uniffi_logins_fn_method_loginsbridgedengine_set_last_sync(
-            self.uniffiCloneHandle(),
-        FfiConverterInt64.lower(lastSync),$0
-    )
-}
 }
     
 open func setUploaded(newTimestamp: Int64, uploadedIds: [String])throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
@@ -3253,7 +3255,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_logins_checksum_method_loginstore_wipe_local_except_fxa() != 20250) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_logins_checksum_method_loginsbridgedengine_apply() != 41329) {
+    if (uniffi_logins_checksum_method_loginsbridgedengine_apply() != 47013) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginsbridgedengine_ensure_current_sync_id() != 41085) {
@@ -3265,10 +3267,10 @@ private let initializationResult: InitializationResult = {
     if (uniffi_logins_checksum_method_loginsbridgedengine_reset() != 37044) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_logins_checksum_method_loginsbridgedengine_reset_sync_id() != 63879) {
+    if (uniffi_logins_checksum_method_loginsbridgedengine_reset_last_sync() != 5595) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_logins_checksum_method_loginsbridgedengine_set_last_sync() != 28145) {
+    if (uniffi_logins_checksum_method_loginsbridgedengine_reset_sync_id() != 63879) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginsbridgedengine_set_uploaded() != 62228) {

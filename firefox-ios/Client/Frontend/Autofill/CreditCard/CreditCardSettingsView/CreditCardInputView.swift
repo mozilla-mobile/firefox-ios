@@ -81,7 +81,7 @@ struct CreditCardInputView: ThemeableView {
                     }
                     ToolbarItem(placement: .navigationBarLeading) {
                         leftBarButton()
-                            .foregroundColor(Color(theme.colors.actionPrimary))
+                            .foregroundColor(Color(theme.isNova ? theme.colors.iconPrimary : theme.colors.actionPrimary))
                     }
                 }
                 .padding(.top, 0)
@@ -90,6 +90,7 @@ struct CreditCardInputView: ThemeableView {
     }
 
     private var form: some View {
+        let listBackgroundColor = Color(theme.isNova ? theme.colors.layerSurfaceMedium : theme.colors.layer2)
         return VStack(spacing: 0) {
             if #unavailable(iOS 26.0) {
                 Divider()
@@ -98,17 +99,17 @@ struct CreditCardInputView: ThemeableView {
             }
 
             name
-                .background(Color(theme.colors.layer2))
+                .background(listBackgroundColor)
                 .modifier(NewStyleRoundedCorners(topLeadingCorner: UX.cornerRadius,
                                                  topTrailingCorner: UX.cornerRadius,
                                                  bottomLeadingCorner: nil,
                                                  bottomTrailingCorner: nil))
 
             number
-                .background(Color(theme.colors.layer2))
+                .background(listBackgroundColor)
 
             expiration
-                .background(Color(theme.colors.layer2))
+                .background(listBackgroundColor)
                 .modifier(NewStyleRoundedCorners(topLeadingCorner: nil,
                                                  topTrailingCorner: nil,
                                                  bottomLeadingCorner: UX.cornerRadius,

@@ -334,7 +334,7 @@ class ReadingListPanel: UITableViewController,
         return scrollView
     }()
 
-    private lazy var emptyStateView: UIView = {
+    private lazy var emptyStateView: ReaderPanelEmptyStateView = {
         return ReaderPanelEmptyStateView(windowUUID: self.windowUUID)
     }()
 
@@ -471,6 +471,7 @@ class ReadingListPanel: UITableViewController,
         tableView.separatorColor = currentTheme().colors.borderPrimary
         view.backgroundColor = currentTheme().colors.layer1
         tableView.backgroundColor = currentTheme().colors.layer1
+        emptyStateView.applyTheme(theme: currentTheme())
         refreshReadingList()
     }
 
