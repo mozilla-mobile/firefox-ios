@@ -116,7 +116,7 @@ struct AddressAutofillToggle: View {
         let color = theme.colors
         textColor = Color(color.textPrimary)
         descriptionTextColor = Color(color.textSecondary)
-        backgroundColor = Color(color.layer2)
+        backgroundColor = Color(theme.isNova ? color.layerSurfaceMedium : color.layer2)
         toggleTintColor = Color(color.actionPrimary)
     }
 }

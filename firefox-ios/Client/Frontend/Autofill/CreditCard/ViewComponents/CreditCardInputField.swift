@@ -127,7 +127,7 @@ struct CreditCardInputField: View {
         errorColor = Color(color.textCritical)
         titleColor = Color(color.textSecondary)
         textFieldColor = Color(color.textPrimary)
-        backgroundColor = Color(color.layer2)
+        backgroundColor = Color(theme.isNova ? color.layerSurfaceMedium : color.layer2)
     }
 
     // MARK: Views

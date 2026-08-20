@@ -72,7 +72,7 @@ struct CreditCardAutofillToggle: View {
     func applyTheme(theme: Theme) {
         let color = theme.colors
         textColor = Color(color.textPrimary)
-        backgroundColor = Color(color.layer2)
+        backgroundColor = Color(theme.isNova ? color.layerSurfaceMedium : color.layer2)
         toggleTintColor = Color(color.actionPrimary)
     }
 }
