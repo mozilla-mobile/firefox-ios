@@ -223,7 +223,7 @@ extension AddCredentialViewController: UITableViewDataSource {
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
 
-        cancelButton.tintColor = theme.colors.actionPrimary
+        cancelButton.tintColor = theme.isNova ? theme.colors.iconPrimary : theme.colors.actionPrimary
         saveButton.tintColor = theme.colors.actionPrimary
     }
 }

@@ -150,5 +150,9 @@ public final class HeaderBanner: UIView, ThemeApplicable {
         subtitleLabel.textColor = theme.colors.textSecondary
         closeButton.tintColor = theme.colors.iconSecondary
         closeButton.backgroundColor = .clear
+        if theme.isNova, #available(iOS 26.0, *) {
+            closeButton.configuration = .plain()
+            closeButton.setImage(UIImage(named: UX.crossLarge)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        }
     }
 }
