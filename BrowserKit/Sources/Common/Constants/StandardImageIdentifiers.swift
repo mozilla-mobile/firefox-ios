@@ -129,6 +129,7 @@ public struct StandardImageIdentifiers {
         public static let syncTabs = "syncTabsLarge"
         public static let tab = "tabLarge"
         public static let tabTray = "tabTrayLarge"
+        public static let translateActiveAltMulticolor = "translateActiveAltMulticolorLarge"
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"
     }
