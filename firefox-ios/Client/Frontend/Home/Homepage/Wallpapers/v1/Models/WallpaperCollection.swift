@@ -26,6 +26,10 @@ struct WallpaperCollection: Codable, Equatable {
         case heading
     }
 
+    static let classicFirefoxID = "classic-firefox"
+    static let wrexhamID = "wrexham"
+    static let wrexhamTitle = String.Settings.Homepage.Wallpaper.WrexhamBrandTitle
+
     let id: String
     private let learnMoreURLString: String?
     let availableLocales: [String]?
@@ -35,7 +39,7 @@ struct WallpaperCollection: Codable, Equatable {
     let heading: String?
 
     var type: WallpaperCollectionType {
-        return id == "classic-firefox" ? .classic : .limitedEdition
+        return id == WallpaperCollection.classicFirefoxID ? .classic : .limitedEdition
     }
 
     var learnMoreUrl: URL? {

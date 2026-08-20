@@ -78,6 +78,96 @@ final class WallpaperSettingsViewModelTests: XCTestCase {
         XCTAssertNotNil(headerViewModel?.buttonTitle)
     }
 
+    func testSectionHeaderViewModel_wrexhamCollection_hasBrandTitleWithoutDescriptionAndLink() {
+        setCollections([
+            makeCollection(id: WallpaperCollection.classicFirefoxID),
+            makeCollection(id: WallpaperCollection.wrexhamID, learnMoreURL: "https://www.mozilla.com")
+        ])
+        let subject = createSubject()
+
+        let headerViewModel = subject.sectionHeaderViewModel(for: 1) {
+        }
+
+        XCTAssertEqual(headerViewModel?.title, WallpaperCollection.wrexhamTitle)
+        XCTAssertNil(headerViewModel?.description)
+        XCTAssertNil(headerViewModel?.buttonTitle)
+    }
+
+    func testSectionHeaderViewModel_limitedCollection_usesDescriptionFromMetadata() {
+        setCollections([
+            makeCollection(id: WallpaperCollection.classicFirefoxID),
+            makeCollection(id: "otherCollection", description: "A described collection")
+        ])
+        let subject = createSubject()
+
+        let headerViewModel = subject.sectionHeaderViewModel(for: 1) {
+        }
+
+        XCTAssertEqual(headerViewModel?.description, "A described collection")
+    }
+
+    func testSectionHeaderViewModel_limitedCollectionWithoutMetadataDescription_usesDefaultDescription() {
+        setCollections([
+            makeCollection(id: WallpaperCollection.classicFirefoxID),
+            makeCollection(id: "otherCollection")
+        ])
+        let subject = createSubject()
+
+        let headerViewModel = subject.sectionHeaderViewModel(for: 1) {
+        }
+
+        XCTAssertEqual(headerViewModel?.description,
+                       String.Settings.Homepage.Wallpaper.LimitedEditionDefaultDescription)
+    }
+
+    func testSectionHeaderViewModel_descriptionIsNotDerivedFromSectionIndex() {
+        setCollections([
+            makeCollection(id: WallpaperCollection.classicFirefoxID),
+            makeCollection(id: "firstLimitedCollection", description: "First description"),
+            makeCollection(id: "secondLimitedCollection", description: "Second description")
+        ])
+        let subject = createSubject()
+
+        XCTAssertEqual(subject.sectionHeaderViewModel(for: 1) {}?.description, "First description")
+        XCTAssertEqual(subject.sectionHeaderViewModel(for: 2) {}?.description, "Second description")
+    }
+
+    func testCellViewModel_wrexhamCollection_a11yLabelUsesBrandTitle() {
+        setCollections([
+            makeCollection(id: WallpaperCollection.classicFirefoxID),
+            makeCollection(id: WallpaperCollection.wrexhamID)
+        ])
+        let subject = createSubject()
+
+        let cellViewModel = subject.cellViewModel(for: IndexPath(row: 0, section: 1))
+
+        XCTAssertEqual(cellViewModel?.a11yLabel, "\(WallpaperCollection.wrexhamTitle) 1")
+    }
+
+    func testCellViewModel_limitedEditionCollection_a11yLabelUsesLimitedEditionTitle() {
+        setCollections([
+            makeCollection(id: WallpaperCollection.classicFirefoxID),
+            makeCollection(id: "otherCollection")
+        ])
+        let subject = createSubject()
+
+        let cellViewModel = subject.cellViewModel(for: IndexPath(row: 0, section: 1))
+
+        XCTAssertEqual(cellViewModel?.a11yLabel,
+                       "\(String.Settings.Homepage.Wallpaper.LimitedEditionWallpaper) 1")
+    }
+
+    func testCellViewModel_classicCollection_a11yLabelUsesClassicTitle() {
+        setCollections([makeCollection(id: WallpaperCollection.classicFirefoxID)])
+        let subject = createSubject()
+
+        let cellViewModel = subject.cellViewModel(for: IndexPath(row: 0, section: 0))
+
+        let expectedTitle = String(format: String.Settings.Homepage.Wallpaper.ClassicWallpaper,
+                                   AppName.shortName.rawValue)
+        XCTAssertEqual(cellViewModel?.a11yLabel, "\(expectedTitle) 1")
+    }
+
     func testDownloadAndSetWallpaper_downloaded_wallpaperIsSet() {
         guard let mockManager = wallpaperManager as? WallpaperManagerMock else { return }
         let subject = createSubject()
@@ -111,6 +201,27 @@ final class WallpaperSettingsViewModelTests: XCTestCase {
         )
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    func makeCollection(id: String,
+                        learnMoreURL: String? = nil,
+                        description: String? = nil) -> WallpaperCollection {
+        return WallpaperCollection(
+            id: id,
+            learnMoreURL: learnMoreURL,
+            availableLocales: nil,
+            availability: nil,
+            wallpapers: [Wallpaper(id: "fxAmethyst",
+                                   textColor: .red,
+                                   cardColor: .red,
+                                   logoTextColor: .red)],
+            description: description,
+            heading: nil)
+    }
+
+    func setCollections(_ collections: [WallpaperCollection]) {
+        guard let mockManager = wallpaperManager as? WallpaperManagerMock else { return }
+        mockManager.mockAvailableCollections = collections
     }
 
     func addWallpaperCollections() {
@@ -147,7 +258,7 @@ final class WallpaperSettingsViewModelTests: XCTestCase {
 
         mockManager.mockAvailableCollections = [
             WallpaperCollection(
-                id: "classic-firefox",
+                id: WallpaperCollection.classicFirefoxID,
                 learnMoreURL: nil,
                 availableLocales: nil,
                 availability: nil,
