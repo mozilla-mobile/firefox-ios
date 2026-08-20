@@ -58,10 +58,15 @@ class AddCredentialViewController: UIViewController, Themeable {
             action: #selector(addCredential)
         )
         button.isEnabled = false
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         if #available(iOS 26.0, *) {
-            button.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textAccent
+            button.tintColor = theme.colors.textAccent
         } else {
-            button.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary
+            button.tintColor = theme.colors.actionPrimary
+        }
+        if theme.isNova {
+            button.setTitleTextAttributes([.foregroundColor: theme.colors.actionPrimary], for: .normal)
+            button.setTitleTextAttributes([.foregroundColor: theme.colors.textDisabled], for: .disabled)
         }
         return button
     }()
@@ -225,6 +230,10 @@ extension AddCredentialViewController: UITableViewDataSource {
 
         cancelButton.tintColor = theme.isNova ? theme.colors.iconPrimary : theme.colors.actionPrimary
         saveButton.tintColor = theme.colors.actionPrimary
+        if theme.isNova {
+            saveButton.setTitleTextAttributes([.foregroundColor: theme.colors.actionPrimary], for: .normal)
+            saveButton.setTitleTextAttributes([.foregroundColor: theme.colors.textDisabled], for: .disabled)
+        }
     }
 }
 
