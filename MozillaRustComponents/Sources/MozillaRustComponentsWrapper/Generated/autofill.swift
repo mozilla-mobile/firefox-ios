@@ -523,19 +523,15 @@ fileprivate struct FfiConverterString: FfiConverter {
  */
 public protocol AddressesBridgedEngineProtocol: AnyObject, Sendable {
     
-    func apply() throws  -> [String]
+    func apply(serverModifiedMillis: Int64) throws  -> [String]
     
     func ensureCurrentSyncId(newSyncId: String) throws  -> String
     
     func lastSync() throws  -> Int64
     
-    func prepareForSync(clientData: String) throws 
-    
     func reset() throws 
     
     func resetSyncId() throws  -> String
-    
-    func setLastSync(lastSync: Int64) throws 
     
     func setUploaded(newTimestamp: Int64, uploadedIds: [String]) throws 
     
@@ -608,10 +604,11 @@ open class AddressesBridgedEngine: AddressesBridgedEngineProtocol, @unchecked Se
     
 
     
-open func apply()throws  -> [String]  {
+open func apply(serverModifiedMillis: Int64)throws  -> [String]  {
     return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
     uniffi_autofill_fn_method_addressesbridgedengine_apply(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),
+        FfiConverterInt64.lower(serverModifiedMillis),$0
     )
 })
 }
@@ -633,14 +630,6 @@ open func lastSync()throws  -> Int64  {
 })
 }
     
-open func prepareForSync(clientData: String)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_addressesbridgedengine_prepare_for_sync(
-            self.uniffiCloneHandle(),
-        FfiConverterString.lower(clientData),$0
-    )
-}
-}
-    
 open func reset()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
     uniffi_autofill_fn_method_addressesbridgedengine_reset(
             self.uniffiCloneHandle(),$0
@@ -654,14 +643,6 @@ open func resetSyncId()throws  -> String  {
             self.uniffiCloneHandle(),$0
     )
 })
-}
-    
-open func setLastSync(lastSync: Int64)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_method_addressesbridgedengine_set_last_sync(
-            self.uniffiCloneHandle(),
-        FfiConverterInt64.lower(lastSync),$0
-    )
-}
 }
     
 open func setUploaded(newTimestamp: Int64, uploadedIds: [String])throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
@@ -2612,7 +2593,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_func_encrypt_string() != 64714) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_addressesbridgedengine_apply() != 40363) {
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_apply() != 49642) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_addressesbridgedengine_ensure_current_sync_id() != 44860) {
@@ -2621,16 +2602,10 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_method_addressesbridgedengine_last_sync() != 60618) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_addressesbridgedengine_prepare_for_sync() != 59348) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_autofill_checksum_method_addressesbridgedengine_reset() != 32130) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_addressesbridgedengine_reset_sync_id() != 61259) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_autofill_checksum_method_addressesbridgedengine_set_last_sync() != 27786) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_addressesbridgedengine_set_uploaded() != 35043) {
