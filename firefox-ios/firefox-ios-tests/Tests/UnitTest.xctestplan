@@ -291,6 +291,7 @@
         "NotificationManagerTests\/testGetNotificationSettings()",
         "NotificationSurfaceManagerTests",
         "OnboardingKitCardInfoModelTests",
+        "OnboardingLaunchScreenViewControllerTests",
         "OnboardingTelemetryUtilityTests\/testSendOnboardingCardView_WelcomeCard_Success()",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
