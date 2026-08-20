@@ -74,7 +74,8 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         if let detailColor = viewModel?.detailTextColor {
             detailTextLabel?.textColor = detailColor
         }
-        backgroundColor = viewModel?.backgroundColor ?? theme.colors.layer5
+        let defaultBackgroundColor = theme.isNova ? theme.colors.layerSurfaceMedium : theme.colors.layer5
+        backgroundColor = viewModel?.backgroundColor ?? defaultBackgroundColor
         tintColor = viewModel?.tintColor ?? theme.colors.actionPrimary
     }
 
