@@ -148,11 +148,14 @@ public final class HeaderBanner: UIView, ThemeApplicable {
         headerLabelsContainer.backgroundColor = .clear
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary
-        closeButton.tintColor = theme.colors.iconSecondary
+        closeButton.tintColor = theme.isNova ? theme.colors.textSecondary : theme.colors.iconSecondary
         closeButton.backgroundColor = .clear
         if theme.isNova, #available(iOS 26.0, *) {
-            closeButton.configuration = .plain()
-            closeButton.setImage(UIImage(named: UX.crossLarge)?.withRenderingMode(.alwaysTemplate), for: .normal)
+            var config = UIButton.Configuration.plain()
+            config.image = UIImage(named: UX.crossLarge)?.withRenderingMode(.alwaysTemplate)
+            config.background.backgroundColor = .clear
+            config.background.strokeColor = .clear
+            closeButton.configuration = config
         }
     }
 }
