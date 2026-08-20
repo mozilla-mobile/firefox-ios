@@ -2969,6 +2969,11 @@ extension String {
                     tableName: nil,
                     value: "Learn more",
                     comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user.")
+                public static let WrexhamBrandTitle = MZLocalizedString(
+                    key: "Settings.Home.Option.Wallpaper.WrexhamBrandTitle.v155",
+                    tableName: "Settings",
+                    value: "Wrexham A.F.C.",
+                    comment: "In the settings menu, on the Firefox wallpaper customization screen, this is the brand title for the section containing the Wrexham AFC wallpapers.")
             }
         }
 
