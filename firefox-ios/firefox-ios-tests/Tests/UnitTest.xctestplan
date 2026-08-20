@@ -294,6 +294,7 @@
         "OnboardingKitCardInfoModelTests\/testDefaultSelectedButton_noSavedTheme_returnsFirst()",
         "OnboardingKitCardInfoModelTests\/testDefaultSelectedButton_savedBottomPosition_selectsToolbarBottom()",
         "OnboardingKitCardInfoModelTests\/testDefaultSelectedButton_savedPositionMissingFromButtons_fallsBackToFirst()",
+        "OnboardingKitCardInfoModelTests\/testDefaultSelectedButton_savedTopPosition_selectsToolbarTop()",
         "OnboardingTelemetryUtilityTests\/testSendOnboardingCardView_WelcomeCard_Success()",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
