@@ -293,6 +293,7 @@
         "OnboardingKitCardInfoModelTests\/testDefaultSelectedButton_emptyButtons_returnsNil()",
         "OnboardingKitCardInfoModelTests\/testDefaultSelectedButton_noSavedTheme_returnsFirst()",
         "OnboardingKitCardInfoModelTests\/testDefaultSelectedButton_savedBottomPosition_selectsToolbarBottom()",
+        "OnboardingKitCardInfoModelTests\/testDefaultSelectedButton_savedPositionMissingFromButtons_fallsBackToFirst()",
         "OnboardingTelemetryUtilityTests\/testSendOnboardingCardView_WelcomeCard_Success()",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",

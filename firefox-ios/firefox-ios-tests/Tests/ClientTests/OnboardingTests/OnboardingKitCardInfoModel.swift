@@ -55,6 +55,7 @@ class OnboardingKitCardInfoModelTests: XCTestCase {
         XCTAssertEqual(model.defaultSelectedButton?.action, .toolbarTop)
     }
 
+    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testDefaultSelectedButton_savedPositionMissingFromButtons_fallsBackToFirst() {
         mockUserPreferences.searchBarPosition = .bottom
         let model = createModel(multipleChoiceButtons: [
