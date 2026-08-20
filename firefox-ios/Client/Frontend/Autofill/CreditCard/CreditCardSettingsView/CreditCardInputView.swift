@@ -81,7 +81,7 @@ struct CreditCardInputView: ThemeableView {
                     }
                     ToolbarItem(placement: .navigationBarLeading) {
                         leftBarButton()
-                            .foregroundColor(Color(theme.colors.actionPrimary))
+                            .foregroundColor(Color(theme.isNova ? theme.colors.iconPrimary : theme.colors.actionPrimary))
                     }
                 }
                 .padding(.top, 0)
