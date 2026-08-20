@@ -2880,6 +2880,42 @@ workflows:
       bitrise.io:
         machine_type_id: g2.mac.large
 
+  UpdateAppStoreReleaseNotes:
+    description: |-
+      This step writes the "What's New in This Version" text to every App Store Connect
+      locale, replacing the manual copy-paste. It is a separate manually triggered
+      workflow because release notes can only be written once the App Store version
+      record exists in App Store Connect, which happens after release_promotion_push
+      has uploaded the build.
+
+      Start a build with these env vars:
+        RELEASE_NOTES           the text to write to every locale (required, unless
+                                RELEASE_NOTES_FILE or RELEASE_NOTES_JSON is used).
+                                Write \n for a line break and \n\n for a blank line,
+                                so the whole thing fits on one line of the form.
+        RELEASE_NOTES_VERSION   App Store version string to target, for example 154.1.
+                                Optional: when omitted the one editable version is
+                                used, and an ambiguous choice fails. Deliberately not
+                                defaulted from version.txt, which follows the branch
+                                the build ran from rather than the release.
+        RELEASE_NOTES_DRY_RUN   true/1/yes/on to print what would change and write
+                                nothing. An unrecognised value fails rather than
+                                writing to the live App Store listing.
+
+      Run it once with RELEASE_NOTES_DRY_RUN=true first: the log names the target app
+      and version, which is the only check that the right record is being written.
+    before_run:
+    - SPM_Common_Steps
+    steps:
+    - script@1:
+        title: Update App Store Release Notes
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -eo pipefail
+            python3 -m pip install --upgrade pip pyjwt cryptography requests
+            python3 scripts/update_release_notes.py
+
   release_promotion_push:
     before_run:
     - SPM_Common_Steps
