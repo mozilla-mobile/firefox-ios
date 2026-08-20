@@ -80,7 +80,11 @@ class ShareManager: NSObject, FeatureFlaggable {
 
             // Only show the print activity if the tab's webview is loaded
             if tab.webView != nil {
+                let printInfo = UIPrintInfo(dictionary: nil)
+                printInfo.jobName = tab.displayTitle
+                printInfo.outputType = .general
                 let viewPrintFormatter = tab.webView?.viewPrintFormatter()
+                activityItems.append(printInfo)
                 activityItems.append(
                     TabPrintPageRenderer(
                         tabDisplayTitle: tab.displayTitle,

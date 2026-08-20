@@ -26,6 +26,10 @@ class PrintHelper: TabContentScript {
     ) {
         if let tab = tab, let webView = tab.webView {
             let printController = UIPrintInteractionController.shared
+            let printInfo = UIPrintInfo(dictionary: nil)
+            printInfo.jobName = tab.displayTitle
+            printInfo.outputType = .general
+            printController.printInfo = printInfo
             printController.printFormatter = webView.viewPrintFormatter()
             printController.present(animated: true, completionHandler: nil)
         }

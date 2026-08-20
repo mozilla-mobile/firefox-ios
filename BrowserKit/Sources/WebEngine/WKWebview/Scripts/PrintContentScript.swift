@@ -21,6 +21,10 @@ final class PrintContentScript: WKContentScript {
 
     func userContentController(didReceiveMessage message: Any) {
         let printController = UIPrintInteractionController.shared
+        let printInfo = UIPrintInfo(dictionary: nil)
+        printInfo.jobName = webView?.title ?? webView?.url?.absoluteString ?? ""
+        printInfo.outputType = .general
+        printController.printInfo = printInfo
         printController.printFormatter = webView?.viewPrintFormatter()
         printController.present(animated: true, completionHandler: nil)
     }
