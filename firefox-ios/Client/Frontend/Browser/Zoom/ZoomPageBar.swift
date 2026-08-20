@@ -14,7 +14,7 @@ protocol ZoomPageBarDelegate: AnyObject {
     func zoomPageDidPressClose()
 }
 
-final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
+final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable, FeatureFlaggable {
     // MARK: - Constants
 
     private struct UX {
@@ -233,7 +233,9 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
     func updateZoomLabel(zoomValue: CGFloat) {
         zoomLevel.text = NumberFormatter.localizedString(from: NSNumber(value: zoomValue), number: .percent)
-        zoomLevel.isEnabled = zoomValue == ZoomConstants.defaultZoomLimit ? false : true
+        if !featureFlagsProvider.isEnabled(.novaDesign) {
+            zoomLevel.isEnabled = zoomValue == ZoomConstants.defaultZoomLimit ? false : true
+        }
         gestureRecognizer.isEnabled = !(zoomValue == ZoomConstants.defaultZoomLimit)
         zoomLevel.accessibilityLabel = String(format: .LegacyAppMenu.ZoomPageCurrentZoomLevelAccessibilityLabel,
                                               zoomLevel.text ?? "")
