@@ -26,6 +26,7 @@ enum NavigationBrowserActionType: ActionType {
     case tapOnTrackingProtection
     case tapOnShareSheet
     case tapOnSettingsSection
+    case tapOnReaderMode
 
     // link related
     case tapOnLink
