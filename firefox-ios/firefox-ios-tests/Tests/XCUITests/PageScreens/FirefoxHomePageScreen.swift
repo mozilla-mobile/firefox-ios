@@ -36,4 +36,15 @@ final class FirefoxHomePageScreen {
         let bookmarks_ItemCell = sel.BOOKMARKS_ITEMCELL.element(in: app)
         BaseTestCase().mozWaitForElementToExist(bookmarks_ItemCell, timeout: timeout)
     }
+
+    func tapBookmarksShowAll() {
+        sel.BOOKMARKS_SHOW_ALL_BUTTON.element(in: app).waitAndTap()
+    }
+
+    /// Unlike `assertBookmarksItemCellToNotExist`, this checks a single entry rather than the whole
+    /// section, so it can be used while the section holds other bookmarks.
+    func assertBookmarkItemNotExists(title: String, timeout: TimeInterval = TIMEOUT) {
+        let bookmarkTitle = sel.BOOKMARKS_ITEMCELL.query(in: app).staticTexts[title].firstMatch
+        BaseTestCase().mozWaitForElementToNotExist(bookmarkTitle, timeout: timeout)
+    }
 }

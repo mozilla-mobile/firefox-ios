@@ -38,6 +38,10 @@ final class JumpBackInScreen {
         BaseTestCase().mozWaitForElementToExist(sectionTitle, timeout: timeout)
     }
 
+    func assertSectionNotExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(sectionTitle, timeout: timeout)
+    }
+
     func assertItemExists(title: String, timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(itemTitle(title), timeout: timeout)
     }
