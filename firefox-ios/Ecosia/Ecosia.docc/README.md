@@ -263,50 +263,21 @@ To run the app on a new device, register it on the Apple Developer Portal and re
    This flag makes `match` check whether the device count has changed since the last run and automatically re-generate the provisioning profiles if necessary. See the [fastlane match docs](https://docs.fastlane.tools/actions/match/#registering-new-devices) for more details.
 3. Open Xcode, select the **EcosiaBeta** (or **Ecosia**) scheme, choose your device and run (`Cmd + R`).
 
-## 🗣️ Translations
+## Translations
 
-We are using [Transifex](https://docs.transifex.com/client/introduction) for managing our translations.
+We manage translations using [Transifex](https://docs.transifex.com/client/introduction) and leverage the [Transifex GitHub Integration](https://help.transifex.com/en/articles/6265125-github-installation-and-configuration).
 
-### Install the transifex client using pip
+### Workflow
 
-```bash
-curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
-```
-
-#### Configure your `~/.transifexrc` file
-
-```bash
-[https://www.transifex.com]
-api_hostname  = https://api.transifex.com
-hostname      = https://www.transifex.com
-username      = <vault secret>
-password      = <vault secret>
-rest_hostname = https://rest.api.transifex.com
-token         = <vault secret>
-```
-
-### Translations need to be pulled and commited manually
-
-Pulling translation from the web
-
-```bash
-tx pull -fs
-```
-
-Test and commit the new translations. There exists schemes for testing other languages in the simulator.
-
-### Adding new strings
-
-#### Via CLI
-
-1. Pull the source file
-2. Add the new strings to the English source file `Client/Ecosia/L10N/en.lproj/Ecosia.strings`
-3. Push it to Transifex
-
-```bash
-tx pull -fs
-tx push -s
-```
+1. **Source Strings:** The engineer adds new English strings to the iOS project and creates a PR.
+   > **Tip:** Open the PR early during feature development to kick off translation promptly.
+2. **Sync:** Once merged to `main`, Transifex automatically detects and pulls the new strings.
+3. **Translation:**
+   - **German & French:** Follow [#translations-tier1](https://ecosia-team.slack.com/archives/C04EVKG7MV3).
+   - **Other Languages:** Handled via regular Transifex translators or Transifex AI.
+4. **Integration:** When a language reaches 100% completion, Transifex automatically opens a PR.
+   - The engineer who added the initial source strings should monitor, review, and merge this PR.
+   - Translation completeness is also validated during the release flow via CI check.
 
 ### Ecosify Mozilla Strings (only needed after upgrade)
 
