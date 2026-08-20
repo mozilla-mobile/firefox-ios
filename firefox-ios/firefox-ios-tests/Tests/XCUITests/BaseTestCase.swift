@@ -24,6 +24,8 @@ let TIMEOUT: TimeInterval = 10
 let TIMEOUT_LONG: TimeInterval = 20
 // Translation is network-bound and can take up to ~1 min to complete
 let TRANSLATION_TIMEOUT: TimeInterval = 90
+// Probe for optional UI that shows up immediately or not at all
+let TIMEOUT_PICKER_PROBE: TimeInterval = 3
 let MAX_SWIPE = 5
 
 @MainActor
@@ -391,12 +393,13 @@ class BaseTestCase: XCTestCase {
         return false
     }
 
-    func waitUntilPageLoad() {
+    /// - Parameter timeout: how long the loading indicator may stay up. Raise it for slow resources.
+    func waitUntilPageLoad(timeout: TimeInterval = 10) {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
         if progressIndicator.mozWaitForElementToExist(timeout: 5, failOnTimeout: false) {
             // Wait for the loading indicator to disappear
-            mozWaitForElementToNotExist(progressIndicator, timeout: 10, failOnTimeout: false)
+            mozWaitForElementToNotExist(progressIndicator, timeout: timeout, failOnTimeout: false)
         }
     }
 

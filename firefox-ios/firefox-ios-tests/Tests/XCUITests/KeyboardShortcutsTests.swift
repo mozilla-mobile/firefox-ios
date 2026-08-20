@@ -9,6 +9,8 @@ class KeyboardShortcutsTests: BaseTestCase {
     // without masking a shortcut that only works after several presses.
     private let shortcutAttempts = 4
     private let shortcutAttemptTimeout: TimeInterval = 5
+    // Samples the current state instead of waiting for a change
+    private let noWait: TimeInterval = 0
 
     private var toolbarScreen: ToolbarScreen!
     private var homePageScreen: HomePageScreen!
@@ -79,11 +81,13 @@ class KeyboardShortcutsTests: BaseTestCase {
     func testSwitchTabWithKeyboardShortcut() {
         openThreeTabsAndSelectTheFirstOne()
 
-        // The next tab is selected by pressing Control+Tab
+        // The next tab is selected by pressing Control+Tab. Both tab shortcuts cycle, so retrying a
+        // press that landed would step past the expected tab; only a dropped press leaves this tab up.
         pressShortcut(
             XCUIKeyboardKey.tab.rawValue,
             modifierFlags: .control,
             until: { browserScreen.bookOfMozillaPageContentExists(timeout: shortcutAttemptTimeout) },
+            retryOnlyWhile: { browserScreen.exampleDomainTextExists(timeout: noWait) },
             failureMessage: "Control+Tab did not select the next tab"
         )
 
@@ -92,6 +96,7 @@ class KeyboardShortcutsTests: BaseTestCase {
             XCUIKeyboardKey.tab.rawValue,
             modifierFlags: [.control, .shift],
             until: { browserScreen.exampleDomainTextExists(timeout: shortcutAttemptTimeout) },
+            retryOnlyWhile: { browserScreen.bookOfMozillaPageContentExists(timeout: noWait) },
             failureMessage: "Control+Shift+Tab did not select the previous tab"
         )
     }
@@ -119,21 +124,36 @@ class KeyboardShortcutsTests: BaseTestCase {
         XCTAssertTrue(browserScreen.exampleDomainTextExists(), "The first tab was not selected")
     }
 
-    // The simulator drops keyboard events sent while its keyboard connection to the app is still
-    // being established, and how many are lost varies between runs, so the shortcut is sent again
-    // whenever nothing happened. A retry can't apply the shortcut twice because it only fires when
-    // the previous press had no effect at all.
+    // The simulator drops a varying number of keyboard events, so the shortcut is sent again whenever
+    // nothing happened. Retries re-activate the app: keys the app never saw would just be lost again.
     private func pressShortcut(
         _ key: String,
         modifierFlags: XCUIElement.KeyModifierFlags = .command,
         until isSatisfied: () -> Bool,
+        retryOnlyWhile shouldRetry: () -> Bool = { true },
         failureMessage: String
     ) {
-        for _ in 0..<shortcutAttempts {
+        waitUntilAppAcceptsKeyboardShortcuts()
+
+        for attempt in 0..<shortcutAttempts {
+            if attempt > 0 { app.activate() }
             app.typeKey(key, modifierFlags: modifierFlags)
             if isSatisfied() { return }
+            if !shouldRetry() {
+                XCTFail("\(failureMessage), and the app moved to an unexpected state instead")
+                return
+            }
         }
         XCTFail("\(failureMessage) in \(shortcutAttempts) attempts")
+    }
+
+    // Key commands need the browser on screen and owning the responder chain, which setUpApp() does not
+    // wait for. Best effort: a timeout is not worth failing on, the shortcut attempts report that.
+    private func waitUntilAppAcceptsKeyboardShortcuts() {
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        let isInteractive = NSPredicate(format: "exists == true && hittable == true")
+        let expectation = XCTNSPredicateExpectation(predicate: isInteractive, object: tabsButton)
+        _ = XCTWaiter().wait(for: [expectation], timeout: TIMEOUT)
     }
 
     // Command+D only bookmarks an actual page, it is a no-op on the homepage, hence visiting one first.

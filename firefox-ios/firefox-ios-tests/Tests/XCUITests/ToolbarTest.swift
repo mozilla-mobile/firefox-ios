@@ -107,39 +107,42 @@ class ToolbarTests: FeatureFlaggedTestBase {
     // the URL bar, tapping again on the status will scroll to the top
     // Skipping for iPad for now, not sure how to implement it there
     // https://mozilla.testrail.io/index.php?/cases/view/2344431
-    func testRevealToolbarWhenTappingOnStatusbar() {
-        app.launch()
-        if !iPad() {
-            // Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
-
-            XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-
-            navigator.openURL(website1["url"]!, waitForLoading: true)
-            // Wait for the loading indicator to appear
-            waitUntilPageLoad()
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
-            let settingsMenuButton = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
-            let statusbarElement: XCUIElement = XCUIApplication(
-                bundleIdentifier: "com.apple.springboard"
-            ).statusBars.element(boundBy: 1)
-            app.swipeUp()
-            XCTAssertFalse(settingsMenuButton.isHittable)
-            statusbarElement.tap(force: true)
-            XCTAssertTrue(settingsMenuButton.isHittable)
-            statusbarElement.tap(force: true)
-            let topElement = app.webViews
-                .otherElements["Internet for people, not profit — Mozilla"]
-                .children(matching: .other)
-                .matching(identifier: "navigation")
-                .element(boundBy: 0)
-                .staticTexts["Mozilla"]
-            mozWaitForElementToExist(topElement, timeout: 10)
-            XCTAssertTrue(topElement.isHittable)
+    func testRevealToolbarWhenTappingOnStatusbar() throws {
+        if iPad() {
+            throw XCTSkip("iPhone only test")
         }
-   }
+        // Landscape makes this fail on iPhone, so launch in portrait rather than rotating afterwards.
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+        app.launch()
+
+        // Only NewTabScreen has a direct edge to URLBarOpen; from HomePanelsScreen the route detours
+        // through the tab tray and opens an extra tab.
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(URLBarOpen)
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+
+        navigator.openURL(website1["url"]!, waitForLoading: true)
+        // Wait for the loading indicator to appear
+        waitUntilPageLoad()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
+        let settingsMenuButton = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
+        let statusbarElement: XCUIElement = XCUIApplication(
+            bundleIdentifier: "com.apple.springboard"
+        ).statusBars.element(boundBy: 1)
+        app.swipeUp()
+        XCTAssertFalse(settingsMenuButton.isHittable)
+        statusbarElement.tap(force: true)
+        XCTAssertTrue(settingsMenuButton.isHittable)
+        statusbarElement.tap(force: true)
+        let topElement = app.webViews
+            .otherElements["Internet for people, not profit — Mozilla"]
+            .children(matching: .other)
+            .matching(identifier: "navigation")
+            .element(boundBy: 0)
+            .staticTexts["Mozilla"]
+        mozWaitForElementToExist(topElement, timeout: 10)
+        XCTAssertTrue(topElement.isHittable)
+    }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3197644
     func testOpenNewTabButtonOnToolbar() throws {
