@@ -140,13 +140,19 @@ final class BrowserScreen {
     }
 
     func exampleDomainTextExists(timeout: TimeInterval = TIMEOUT) -> Bool {
-        let exampleDomainText = sel.STATIC_TEXT_EXAMPLE_DOMAIN.element(in: app)
-        return BaseTestCase().mozWaitForElementToExist(exampleDomainText, timeout: timeout, failOnTimeout: false)
+        webViewShowsText(containing: sel.STATIC_TEXT_EXAMPLE_DOMAIN.value, timeout: timeout)
     }
 
     func bookOfMozillaPageContentExists(timeout: TimeInterval = TIMEOUT) -> Bool {
-        let verseText = sel.BOOK_OF_MOZILLA_VERSE_TEXT.element(in: app)
-        return BaseTestCase().mozWaitForElementToExist(verseText, timeout: timeout, failOnTimeout: false)
+        webViewShowsText(containing: sel.BOOK_OF_MOZILLA_VERSE_TEXT.value, timeout: timeout)
+    }
+
+    /// Scoped to the web view: an app-wide text search is also satisfied by a homepage tile or a tab
+    /// label carrying the same page title, which cannot tell which page is on screen.
+    private func webViewShowsText(containing text: String, timeout: TimeInterval) -> Bool {
+        let predicate = NSPredicate(format: "label CONTAINS %@", text)
+        let webViewText = app.webViews.staticTexts.containing(predicate).element(boundBy: 0)
+        return BaseTestCase().mozWaitForElementToExist(webViewText, timeout: timeout, failOnTimeout: false)
     }
 
     func assertExampleDomainTextExists(timeout: TimeInterval = TIMEOUT) {
