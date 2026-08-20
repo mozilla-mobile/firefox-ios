@@ -21,6 +21,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     private var mainMenu: MainMenuScreen!
     private var newTabsScreen: NewTabsScreen!
     private var tabTrayScreen: TabTrayScreen!
+    private var readingListScreen: ReadingListScreen!
 
     // Tests that launch with a pre-populated bookmarks/history database fixture.
     private let testsWithBookmarksFixture: Set<String> = [
@@ -53,6 +54,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         mainMenu = MainMenuScreen(app: app)
         newTabsScreen = NewTabsScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)
+        readingListScreen = ReadingListScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -612,6 +614,72 @@ class BookmarksTests: FeatureFlaggedTestBase {
         navigator.nowAt(HomeSettings)
         navigator.goto(HomePanelsScreen)
         firefoxHomeScreen.assertBookmarksItemCellExist()
+    }
+
+    /// Bookmarks one page and leaves the homepage on screen with the Bookmarks section rendered.
+    /// The section is off by default and only renders once a bookmark exists, hence both steps.
+    private func showBookmarksSectionOnHomepage() {
+        navigator.openURL(url_3)
+        toolbarScreen.assertTabsButtonExists()
+        navigator.nowAt(BrowserTab)
+        bookmark()
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(HomeSettings)
+        homepageSettingsScreen.assertBookmarkToggleExists()
+        homepageSettingsScreen.enableBookmarkToggle()
+        homepageSettingsScreen.assertBookmarkToggleIsEnabled()
+        navigator.nowAt(HomeSettings)
+
+        // A new tab is needed to reach the homepage: the tab underneath Settings is the bookmarked
+        // page, so leaving Settings would land back on it instead.
+        if !iPad() {
+            waitForTabsButton()
+        }
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        browserScreen.tapCancelButtonIfExist()
+        firefoxHomeScreen.assertBookmarksItemCellExist()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2784445
+    // Regression
+    func testBookmarksShowAllOpensBookmarksPanel() {
+        app.launch()
+        showBookmarksSectionOnHomepage()
+
+        // Tapping "Show All" in the section header opens the bookmarks panel
+        firefoxHomeScreen.tapBookmarksShowAll()
+        libraryScreen.assertBookmarkList()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2784444
+    // Regression
+    func testReadingListItemIsNotAddedToHomepageBookmarks() {
+        // The summarizer replaces the reader mode button with a combined one, so the reading list
+        // cannot be reached from the toolbar while it is enabled.
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
+        app.launch()
+        showBookmarksSectionOnHomepage()
+
+        // Add a different page to the reading list. Done here rather than with addContentToReaderView()
+        // because that rebuilds the navigator and routes to URLBarOpen through the tab tray.
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
+        waitUntilPageLoad()
+        readingListScreen.addCurrentPageToReadingList()
+
+        // Back on the homepage, the bookmarked page is still listed but the read later one is not
+        navigator.nowAt(BrowserTab)
+        if !iPad() {
+            waitForTabsButton()
+        }
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        browserScreen.tapCancelButtonIfExist()
+        firefoxHomeScreen.assertBookmarksItemCellExist()
+        firefoxHomeScreen.assertBookmarkItemNotExists(title: TestLabels.mozillaBook)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168583
