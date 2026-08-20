@@ -262,8 +262,14 @@ final class ErrorPageHandler: InternalSchemeResponse {
             && errCode == offlineErrorCode
             && components.valueForQuery(ErrorPageCellularDataRestrictedParam) == "true"
         if isCellularDataRestricted {
-            variables["error_title"] = .NativeErrorPage.CellularDataRestricted.TitleLabel
-            variables["short_description"] = .NativeErrorPage.CellularDataRestricted.Description
+            variables["error_title"] = String(
+                format: .NativeErrorPage.CellularDataRestricted.TitleLabel,
+                AppName.shortName.rawValue
+            )
+            variables["short_description"] = String(
+                format: .NativeErrorPage.CellularDataRestricted.Description,
+                AppName.shortName.rawValue
+            )
         }
 
         let tryAgain: String = .ErrorPageTryAgain

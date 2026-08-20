@@ -2051,13 +2051,15 @@ extension String {
             public static let TitleLabel = MZLocalizedString(
                 key: "NativeErrorPage.CellularDataRestricted.TitleLabel.v155",
                 tableName: "NativeErrorPage",
-                value: "Cellular data is turned off for Firefox.",
-                comment: "On the error page, this title explains that iOS is preventing Firefox from using cellular data.")
+                value: "Cellular data is turned off for %@.",
+                comment: "On error page, title shown when the app can't connect because cellular data is turned off " +
+                         "for this specific app in iOS settings. %@ is the app name (e.g. Firefox).")
             public static let Description = MZLocalizedString(
                 key: "NativeErrorPage.CellularDataRestricted.Description.v155",
                 tableName: "NativeErrorPage",
-                value: "Connect to Wi-Fi or go to iOS Settings and turn on cellular data for Firefox.",
-                comment: "On the error page, this description tells users how to browse after iOS has prevented Firefox from using cellular data.")
+                value: "Connect to Wi-Fi or go to iOS Settings and turn on cellular data for %@.",
+                comment: "On error page, message shown when the app can't connect because cellular data is turned off " +
+                         "for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox).")
         }
         public struct GenericError {
             public static let TitleLabel = MZLocalizedString(
