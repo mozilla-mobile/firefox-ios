@@ -75,12 +75,67 @@ final class OneLineTableViewCellTests: XCTestCase {
         XCTAssertNotNil(subject.editingAccessoryView, "editingAccessoryView should be set after configure")
     }
 
+    // MARK: - indentationLevel
+
+    func testIndentationLevel_zero_usesBaseMargin() {
+        let subject = createSubject()
+
+        subject.indentationLevel = 0
+        subject.layoutIfNeeded()
+
+        XCTAssertEqual(subject.leftImageView.frame.origin.x, OneLineTableViewCell.UX.borderViewMargin)
+    }
+
+    func testIndentationLevel_withinCap_scalesLinearlyPerLevel() {
+        let subject = createSubject()
+
+        subject.indentationLevel = 2
+        subject.layoutIfNeeded()
+
+        XCTAssertEqual(subject.leftImageView.frame.origin.x, expectedLeadingMargin(forLevel: 2))
+    }
+
+    func testIndentationLevel_atCap_matchesCappedMargin() {
+        let subject = createSubject()
+
+        subject.indentationLevel = OneLineTableViewCell.UX.maxIndentationLevel
+        subject.layoutIfNeeded()
+
+        XCTAssertEqual(
+            subject.leftImageView.frame.origin.x,
+            expectedLeadingMargin(forLevel: OneLineTableViewCell.UX.maxIndentationLevel)
+        )
+    }
+
+    func testIndentationLevel_beyondCap_doesNotExceedCappedMargin() {
+        let subject = createSubject()
+        let cappedMargin = expectedLeadingMargin(forLevel: OneLineTableViewCell.UX.maxIndentationLevel)
+
+        subject.indentationLevel = 20
+        subject.layoutIfNeeded()
+
+        XCTAssertEqual(
+            subject.leftImageView.frame.origin.x,
+            cappedMargin,
+            "Deeply nested rows (e.g. bookmark folders 9+ levels deep) must stay within the capped margin"
+        )
+    }
+
     // MARK: - Helpers
 
     private func createSubject() -> OneLineTableViewCell {
         let subject = OneLineTableViewCell(style: .default, reuseIdentifier: OneLineTableViewCell.cellIdentifier)
+        subject.frame = CGRect(x: 0, y: 0, width: 375, height: 44)
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func expectedLeadingMargin(forLevel level: Int) -> CGFloat {
+        let base = OneLineTableViewCell.UX.borderViewMargin
+            + OneLineTableViewCell.UX.imageSize
+            + OneLineTableViewCell.UX.longLeadingMargin
+        let perLevel = OneLineTableViewCell.UX.imageSize + OneLineTableViewCell.UX.longLeadingMargin
+        return base + perLevel * CGFloat(level - 1)
     }
 
     private func createViewModel(

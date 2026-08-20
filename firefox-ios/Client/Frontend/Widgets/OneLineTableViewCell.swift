@@ -42,6 +42,9 @@ class OneLineTableViewCell: UITableViewCell,
         static let accessoryViewIconSize: CGFloat = 24
         static let accessoryViewSize: CGFloat = 44
         static let accessoryViewTrailingPadding: CGFloat = 6
+        // Caps how far the leading margin can grow so deeply nested rows (e.g. bookmark folder
+        // hierarchies) stay on screen instead of being laid out past the trailing edge.
+        static let maxIndentationLevel = 6
     }
 
     var reorderControlImageView: UIImageView? {
@@ -124,12 +127,13 @@ class OneLineTableViewCell: UITableViewCell,
     private func setMargin() {
         // Sets the indentation so that at each level the folder icon is left
         // aligned with the label of the parent folder above it.
-        if indentationLevel == 0 {
+        let cappedIndentationLevel = min(indentationLevel, UX.maxIndentationLevel)
+        if cappedIndentationLevel == 0 {
             leftImageViewLeadingConstraint?.constant = UX.borderViewMargin
         } else {
             let indentationLevelMargin: CGFloat = UX.borderViewMargin + UX.imageSize + UX.longLeadingMargin
             let indentSize = (UX.imageSize + UX.longLeadingMargin)
-            let indentLevel = indentSize * CGFloat(indentationLevel-1)
+            let indentLevel = indentSize * CGFloat(cappedIndentationLevel - 1)
             leftImageViewLeadingConstraint?.constant = indentationLevelMargin + indentLevel
         }
     }
