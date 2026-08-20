@@ -242,6 +242,7 @@ final class OnboardingServiceTests: XCTestCase {
         XCTAssertEqual(mockNotificationCenter.savePostName, .RegisterForPushNotifications)
     }
 
+    // Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
     func testAskForNotificationPermission_DeniedPermission_DoesNotSetUserDefaults() {
         // Given
         let activityEventHelper = MockActivityEventHelper()

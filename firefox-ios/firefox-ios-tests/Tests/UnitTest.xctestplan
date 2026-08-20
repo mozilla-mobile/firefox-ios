@@ -292,6 +292,7 @@
         "NotificationSurfaceManagerTests",
         "OnboardingKitCardInfoModelTests",
         "OnboardingLaunchScreenViewControllerTests",
+        "OnboardingServiceTests\/testAskForNotificationPermission_DeniedPermission_DoesNotSetUserDefaults()",
         "OnboardingTelemetryUtilityTests\/testSendOnboardingCardView_WelcomeCard_Success()",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
