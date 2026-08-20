@@ -46,8 +46,7 @@ struct HomepageState: ScreenState, Equatable {
             bookmarkState: homepageState.bookmarkState,
             merinoState: homepageState.merinoState,
             wallpaperState: homepageState.wallpaperState,
-            telemetryState: homepageState.telemetryState,
-            shouldShowPrivacyNotice: homepageState.shouldShowPrivacyNotice
+            telemetryState: homepageState.telemetryState
         )
     }
 
