@@ -98,7 +98,7 @@
 "Menu.EnhancedTrackingProtection.Link.LearnMore.v150" = "Meer info";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. %@ is the app name (e.g. Firefox). */
-"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ heeft geen dienst. We raden u aan beschermingen weer in te schakelen.";
+"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ staat niet op wacht. We raden u aan beschermingen weer in te schakelen.";
 
 /* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "U hebt beschermingen uitgeschakeld";

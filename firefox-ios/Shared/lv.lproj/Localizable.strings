@@ -43,6 +43,9 @@
 /* Accessibility label for action adding current page to reading list. */
 "Address.Bar.ReadingList.v106" = "Pievienot lasīšanas sarakstam";
 
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "Adrešu josla";
+
 /* Used as a button label for crash dialog prompt */
 "Always Send" = "Vienmēr sūtīt";
 
@@ -690,6 +693,12 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (aizstāt vaicājums ar %s)";
+
+/* In the settings menu, in the Address Bar customization menu, this is the title of the section where the user can toggle the address bar position. */
+"Settings.AddressBar.SectionTitle.v138" = "Adrešu joslas novietojums";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
+"Settings.AddressBar.SettingsTitle.v138" = "Adrešu josla";
 
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Liegt ārēju lietotņu atvēršanu";
