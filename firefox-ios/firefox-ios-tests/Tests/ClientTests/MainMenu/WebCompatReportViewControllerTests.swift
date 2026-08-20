@@ -261,7 +261,9 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func testMakeSections_withAnUnreportableURL_carriesTheErrorAndDisablesSend() throws {
-        let state = WebCompatReporterState(windowUUID: windowUUID, url: ".com", selectedCategory: .other)
+        let state = WebCompatReporterState(windowUUID: windowUUID)
+            .copy(url: ".com")
+            .copy(selectedCategory: .other)
 
         let sections = WebCompatReportViewController.makeSections(from: state)
 
@@ -273,7 +275,9 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(sections.last?.rows.map(\.kind), [.sendButton(isEnabled: false)])
 
         let cleared = WebCompatReportViewController.makeSections(
-            from: WebCompatReporterState(windowUUID: windowUUID, url: "", selectedCategory: .other)
+            from: WebCompatReporterState(windowUUID: windowUUID)
+                .copy(url: "")
+                .copy(selectedCategory: .other)
         )
         guard case let .urlField(_, clearedError) = cleared.first?.rows.first?.kind else {
             return XCTFail("Expected a URL field row")

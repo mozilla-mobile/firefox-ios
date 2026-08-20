@@ -276,7 +276,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
             presentedComponents: PresentedComponentsState(
                 components: [
                     .webCompatReporter(
-                        WebCompatReporterState(windowUUID: .XCTestDefaultUUID, url: "https://example.com")
+                        WebCompatReporterState(windowUUID: .XCTestDefaultUUID).copy(url: "https://example.com")
                     )
                 ]
             )
