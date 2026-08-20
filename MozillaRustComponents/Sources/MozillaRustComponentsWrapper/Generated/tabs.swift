@@ -713,27 +713,29 @@ public func FfiConverterTypeRemoteCommandStore_lower(_ value: RemoteCommandStore
 
 
 /**
- * Note the canonical docs for this are in https://searchfox.org/mozilla-central/source/services/interfaces/mozIBridgedSyncEngine.idl
+ * The Desktop-facing bridged sync engine - a thin wrapper over the
+ * `sync15::engine::SyncEngine` implemented by this component (see
+ * `sync15::engine::BridgedEngineWrapper`).
  * It's only actually used in desktop, but it's fine to expose this everywhere.
  * NOTE: all timestamps here are milliseconds.
  */
 public protocol TabsBridgedEngineProtocol: AnyObject, Sendable {
     
-    func apply() throws  -> [String]
+    func apply(serverModifiedMillis: Int64) throws  -> [String]
     
     func ensureCurrentSyncId(newSyncId: String) throws  -> String
     
     func lastSync() throws  -> Int64
     
-    func prepareForSync(clientData: String) throws 
-    
     func reset() throws 
+    
+    func resetLastSync() throws 
     
     func resetSyncId() throws  -> String
     
-    func setLastSync(lastSync: Int64) throws 
+    func setClients(clientData: String) throws 
     
-    func setUploaded(newTimestamp: Int64, uploadedIds: [TabsGuid]) throws 
+    func setUploaded(newTimestamp: Int64, uploadedIds: [String]) throws 
     
     func storeIncoming(incomingEnvelopesAsJson: [String]) throws 
     
@@ -747,7 +749,9 @@ public protocol TabsBridgedEngineProtocol: AnyObject, Sendable {
     
 }
 /**
- * Note the canonical docs for this are in https://searchfox.org/mozilla-central/source/services/interfaces/mozIBridgedSyncEngine.idl
+ * The Desktop-facing bridged sync engine - a thin wrapper over the
+ * `sync15::engine::SyncEngine` implemented by this component (see
+ * `sync15::engine::BridgedEngineWrapper`).
  * It's only actually used in desktop, but it's fine to expose this everywhere.
  * NOTE: all timestamps here are milliseconds.
  */
@@ -804,10 +808,11 @@ open class TabsBridgedEngine: TabsBridgedEngineProtocol, @unchecked Sendable {
     
 
     
-open func apply()throws  -> [String]  {
+open func apply(serverModifiedMillis: Int64)throws  -> [String]  {
     return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
     uniffi_tabs_fn_method_tabsbridgedengine_apply(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),
+        FfiConverterInt64.lower(serverModifiedMillis),$0
     )
 })
 }
@@ -829,16 +834,15 @@ open func lastSync()throws  -> Int64  {
 })
 }
     
-open func prepareForSync(clientData: String)throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_prepare_for_sync(
-            self.uniffiCloneHandle(),
-        FfiConverterString.lower(clientData),$0
+open func reset()throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+    uniffi_tabs_fn_method_tabsbridgedengine_reset(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
-open func reset()throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_reset(
+open func resetLastSync()throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+    uniffi_tabs_fn_method_tabsbridgedengine_reset_last_sync(
             self.uniffiCloneHandle(),$0
     )
 }
@@ -852,19 +856,19 @@ open func resetSyncId()throws  -> String  {
 })
 }
     
-open func setLastSync(lastSync: Int64)throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_set_last_sync(
+open func setClients(clientData: String)throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+    uniffi_tabs_fn_method_tabsbridgedengine_set_clients(
             self.uniffiCloneHandle(),
-        FfiConverterInt64.lower(lastSync),$0
+        FfiConverterString.lower(clientData),$0
     )
 }
 }
     
-open func setUploaded(newTimestamp: Int64, uploadedIds: [TabsGuid])throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+open func setUploaded(newTimestamp: Int64, uploadedIds: [String])throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
     uniffi_tabs_fn_method_tabsbridgedengine_set_uploaded(
             self.uniffiCloneHandle(),
         FfiConverterInt64.lower(newTimestamp),
-        FfiConverterSequenceTypeTabsGuid.lower(uploadedIds),$0
+        FfiConverterSequenceString.lower(uploadedIds),$0
     )
 }
 }
@@ -1942,31 +1946,6 @@ fileprivate struct FfiConverterSequenceTypeRemoteTabRecord: FfiConverterRustBuff
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterSequenceTypeTabsGuid: FfiConverterRustBuffer {
-    typealias SwiftType = [TabsGuid]
-
-    public static func write(_ value: [TabsGuid], into buf: inout [UInt8]) {
-        let len = Int32(value.count)
-        writeInt(&buf, len)
-        for item in value {
-            FfiConverterTypeTabsGuid.write(item, into: &buf)
-        }
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [TabsGuid] {
-        let len: Int32 = try readInt(&buf)
-        var seq = [TabsGuid]()
-        seq.reserveCapacity(Int(len))
-        for _ in 0 ..< len {
-            seq.append(try FfiConverterTypeTabsGuid.read(from: &buf))
-        }
-        return seq
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
 fileprivate struct FfiConverterDictionaryStringTypeTabGroup: FfiConverterRustBuffer {
     public static func write(_ value: [String: TabGroup], into buf: inout [UInt8]) {
         let len = Int32(value.count)
@@ -2015,50 +1994,6 @@ fileprivate struct FfiConverterDictionaryStringTypeWindow: FfiConverterRustBuffe
         return dict
     }
 }
-
-
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- */
-public typealias TabsGuid = String
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeTabsGuid: FfiConverter {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TabsGuid {
-        return try FfiConverterString.read(from: &buf)
-    }
-
-    public static func write(_ value: TabsGuid, into buf: inout [UInt8]) {
-        return FfiConverterString.write(value, into: &buf)
-    }
-
-    public static func lift(_ value: RustBuffer) throws -> TabsGuid {
-        return try FfiConverterString.lift(value)
-    }
-
-    public static func lower(_ value: TabsGuid) -> RustBuffer {
-        return FfiConverterString.lower(value)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeTabsGuid_lift(_ value: RustBuffer) throws -> TabsGuid {
-    return try FfiConverterTypeTabsGuid.lift(value)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeTabsGuid_lower(_ value: TabsGuid) -> RustBuffer {
-    return FfiConverterTypeTabsGuid.lower(value)
-}
-
 
 
 /**
@@ -2134,7 +2069,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_tabs_checksum_method_remotecommandstore_set_pending_command_sent() != 17621) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_apply() != 22966) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_apply() != 5752) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tabs_checksum_method_tabsbridgedengine_ensure_current_sync_id() != 35742) {
@@ -2143,19 +2078,19 @@ private let initializationResult: InitializationResult = {
     if (uniffi_tabs_checksum_method_tabsbridgedengine_last_sync() != 62008) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_prepare_for_sync() != 24801) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_reset() != 8836) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_reset() != 8836) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_reset_last_sync() != 64788) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tabs_checksum_method_tabsbridgedengine_reset_sync_id() != 64041) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_set_last_sync() != 15023) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_set_clients() != 61398) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_set_uploaded() != 3213) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_set_uploaded() != 33193) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tabs_checksum_method_tabsbridgedengine_store_incoming() != 6635) {
