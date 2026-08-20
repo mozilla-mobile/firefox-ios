@@ -239,6 +239,19 @@ final class OnboardingScreen {
         }
     }
 
+    /// Handles the address bar placement card, which iPad does not show. On iPad, only `currentScreen`
+    /// advances to keep it in sync with the accessibility IDs; on iPhone, the card is asserted, the given
+    /// position selected, and the flow advanced via the primary button.
+    func handleAddressBarScreenIfNeeded(position: AddressBarPosition = .bottom) {
+        if BaseTestCase().iPad() {
+            currentScreen += 1
+            return
+        }
+        assertTitle()
+        selectAddressBarPosition(position: position)
+        goToNextScreenViaPrimary()
+    }
+
     /// Asserts the given address bar position button is selected on the modern flow's segmented control.
     func assertAddressBarPositionSelected(position: AddressBarPosition) {
         let button = sel.addressBarTopButton(rootId: rootA11yId, position: position).element(in: app)
