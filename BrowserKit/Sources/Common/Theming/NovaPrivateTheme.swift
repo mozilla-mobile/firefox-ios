@@ -20,6 +20,7 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var layer2: UIColor = NovaColors.VioletDesaturated60
     var layer3: UIColor = NovaColors.VioletDesaturated70
     var layer4: UIColor = NovaColors.VioletDesaturated80
+    var layer5Hover: UIColor = NovaColors.VioletDesaturated70
     var layerSurfaceLow = NovaColors.VioletDesaturated90
     var layerSurfaceMedium = NovaColors.VioletDesaturated80
     var layerSurfaceMediumAlpha = NovaColors.VioletDesaturated80.withAlphaComponent(0.4)
@@ -128,7 +129,6 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var layerScrim: UIColor = PrivateModeTheme().colors.layerScrim
     var layerCriticalSubdued: UIColor = PrivateModeTheme().colors.layerCriticalSubdued
     var layerEmphasis: UIColor = PrivateModeTheme().colors.layerEmphasis
-    var layer5Hover: UIColor = PrivateModeTheme().colors.layer5Hover
     var layerSurfaceMediumAlt: UIColor = PrivateModeTheme().colors.layerSurfaceMediumAlt
     var indicatorActive: UIColor = PrivateModeTheme().colors.indicatorActive
     var indicatorInactive: UIColor = PrivateModeTheme().colors.indicatorInactive
