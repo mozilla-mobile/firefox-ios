@@ -131,6 +131,7 @@ struct AccessibilityIdentifiers {
         static let signIn = "MainMenu.SignIn"
         static let summarizePage = "MainMenu.SummarizePage"
         static let translatePage = "MainMenu.TranslatePage"
+        static let vpn = "MainMenu.VPN"
         static let trackigProtection = "shieldCheckmarkLarge"
     }
 
@@ -880,7 +881,6 @@ struct AccessibilityIdentifiers {
 
         struct Debug {
             static let offloadBackgroundWebViews = "Settings.Debug.OffloadBackgroundWebViews"
-            static let toggleVPNProxy = "Settings.Debug.ToggleVPNProxy"
         }
     }
 

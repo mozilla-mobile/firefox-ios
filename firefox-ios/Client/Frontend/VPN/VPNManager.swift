@@ -21,7 +21,7 @@ enum VPNError: Error {
     case noServerFound
 }
 
-@available(iOS 26.0, *)
+@available(iOS 17.0, *)
 final class VPNManager: VPNManaging {
     private static let secretKey = "VPNGuardianSecret"
 
