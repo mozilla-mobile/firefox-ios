@@ -4500,7 +4500,7 @@ extension String {
                 key: "WebCompatReporter.Fields.URLError.v155",
                 tableName: "WebCompatReporter",
                 value: "Enter a valid URL",
-                comment: "Error message shown under the URL field when the address typed there is not one that can be reported, in the Report a Website Issue form."
+                comment: "Error message shown under the URL field when the address entered has an invalid format, in the Report a Website Issue form."
             )
             public static let DetailsPlaceholder = MZLocalizedString(
                 key: "WebCompatReporter.Fields.DetailsPlaceholder.v154",
