@@ -796,7 +796,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             if let translationAction = configureTranslationIcon(
                 translationConfiguration: resolvedTranslationConfiguration,
                 isLoading: isLoading,
-                hasAlternativeLocationColor: hasAlternativeLocationColor
+                hasAlternativeLocationColor: hasAlternativeLocationColor,
+                isNovaDesignEnabled: addressBarState.isNovaDesignEnabled
             ) {
                 actions.append(translationAction)
             }
@@ -808,7 +809,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             if let translationAction = configureTranslationIcon(
                 translationConfiguration: resolvedTranslationConfiguration,
                 isLoading: isLoading,
-                hasAlternativeLocationColor: hasAlternativeLocationColor
+                hasAlternativeLocationColor: hasAlternativeLocationColor,
+                isNovaDesignEnabled: addressBarState.isNovaDesignEnabled
             ) {
                 actions.append(translationAction)
             }
@@ -822,14 +824,16 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func configureTranslationIcon(
         translationConfiguration: TranslationConfiguration?,
         isLoading: Bool?,
-        hasAlternativeLocationColor: Bool
+        hasAlternativeLocationColor: Bool,
+        isNovaDesignEnabled: Bool
     ) -> ToolbarActionConfiguration? {
         guard let config = translationConfiguration, config.isTranslationFeatureEnabled else { return nil }
         guard let iconState = config.state else { return nil }
         return translateAction(
             enabled: isLoading == false,
             state: iconState,
-            hasAlternativeLocationColor: hasAlternativeLocationColor
+            hasAlternativeLocationColor: hasAlternativeLocationColor,
+            isNovaDesignEnabled: isNovaDesignEnabled
         )
     }
 
@@ -1150,14 +1154,15 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func translateAction(
         enabled: Bool,
         state: TranslationConfiguration.IconState,
-        hasAlternativeLocationColor: Bool
+        hasAlternativeLocationColor: Bool,
+        isNovaDesignEnabled: Bool
     ) -> ToolbarActionConfiguration {
         // We do not want to use template mode for translate active icon.
         let isActiveState = state == .active
 
         return ToolbarActionConfiguration(
             actionType: .translate,
-            iconName: state.buttonImageName,
+            iconName: state.buttonImageName(isNovaDesignEnabled: isNovaDesignEnabled),
             templateModeForImage: !isActiveState,
             loadingConfig: LoadingConfig(
                 isLoading: state == .loading,
