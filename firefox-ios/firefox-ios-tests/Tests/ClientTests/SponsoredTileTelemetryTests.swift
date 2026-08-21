@@ -27,8 +27,7 @@ class SponsoredTileGleanTelemetryTests: XCTestCase {
 
     func testImpressionTopSite() {
         TelemetryContextualIdentifier.setupContextId()
-        let tile = MockSponsoredTileData.defaultSuccessData[0]
-        let topSite = Site.createSponsoredSite(fromUnifiedTile: tile)
+        let topSite = MockSponsoredTileData.defaultSuccessData[0]
 
         let subject = createSubject()
         subject.sendImpressionTelemetry(tileSite: topSite, position: 2)
@@ -48,8 +47,7 @@ class SponsoredTileGleanTelemetryTests: XCTestCase {
 
     func testClickTopSite() {
         TelemetryContextualIdentifier.setupContextId()
-        let tile = MockSponsoredTileData.defaultSuccessData[1]
-        let topSite = Site.createSponsoredSite(fromUnifiedTile: tile)
+        let topSite = MockSponsoredTileData.defaultSuccessData[1]
 
         let subject = createSubject()
         subject.sendClickTelemetry(tileSite: topSite, position: 3)
