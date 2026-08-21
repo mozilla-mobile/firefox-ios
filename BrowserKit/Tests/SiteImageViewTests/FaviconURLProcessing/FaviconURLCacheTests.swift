@@ -95,7 +95,7 @@ class FaviconURLCacheTests: XCTestCase {
 }
 
 actor MockURLCacheFileManager: URLCacheFileManager {
-    func getURLCache() async -> Data? {
+    func getURLCache() -> Data? {
         return Data()
     }
 

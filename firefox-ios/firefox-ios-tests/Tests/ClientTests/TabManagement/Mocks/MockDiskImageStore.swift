@@ -13,7 +13,7 @@ final class MockDiskImageStore: DiskImageStore, @unchecked Sendable {
     var saveImageForKeyCallCount = 0
     var deleteImageForKeyCallCount = 0
 
-    func getImageForKey(_ key: String) async throws -> UIImage {
+    func getImageForKey(_ key: String) throws -> UIImage {
         recordGetImageForKey(key)?()
         return UIImage()
     }
@@ -26,13 +26,13 @@ final class MockDiskImageStore: DiskImageStore, @unchecked Sendable {
         return onGetImageForKey
     }
 
-    func saveImageForKey(_ key: String, image: UIImage) async throws {
+    func saveImageForKey(_ key: String, image: UIImage) throws {
         saveImageForKeyCallCount += 1
     }
 
-    func clearAllScreenshotsExcluding(_ keys: Set<String>) async throws {}
+    func clearAllScreenshotsExcluding(_ keys: Set<String>) throws {}
 
-    func deleteImageForKey(_ key: String) async {
+    func deleteImageForKey(_ key: String) {
         deleteImageForKeyCallCount += 1
     }
 }

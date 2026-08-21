@@ -16,7 +16,7 @@ public final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable
     public func requestChatCompletion<ProviderFields: Codable & Sendable>(
         messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
-    ) async throws -> LiteLLMMessage<ProviderFields> {
+    ) throws -> LiteLLMMessage<ProviderFields> {
         if let error = respondWithError { throw error }
         let content = respondWith.joined(separator: " ")
         return LiteLLMMessage(role: .assistant, content: content, providerSpecificFields: nil)

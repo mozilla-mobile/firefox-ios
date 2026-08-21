@@ -23,6 +23,9 @@ class MockASOHttpManager: ASOhttpManager {
         try await data(from: request.url!)
     }
 
+    // Kept `async` so `data(for:)` — which must stay async to satisfy `ASOhttpManager` — has
+    // something to await, rather than needing a suppression of its own.
+    // swiftlint:disable:next async_without_await
     private func data(from url: URL) async throws -> (Data, HTTPURLResponse) {
         if let error = error {
             throw error

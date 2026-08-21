@@ -234,6 +234,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         }
     }
 
+    // `@concurrent` keeps the blocking RelayClient calls off the main actor.
+    @concurrent
     nonisolated private func generateRelayMask(for websiteDomain: String,
                                                client: RelayClientProtocol) async -> (mask: String?,
                                                                                       result: RelayMaskGenerationResult) {
@@ -346,7 +348,9 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     /// Checks the current OAuth client status to determine Relay availability, and then updates the internal
     /// account status back on the main actor.
+    /// `@concurrent` keeps the blocking `getAttachedClients()` call off the main actor.
     /// - Parameter isStaging: whether we should use Staging servers.
+    @concurrent
     nonisolated private func fetchRelayAccountAvailability(isStaging: Bool) async {
         guard let result = RustFirefoxAccounts.shared.accountManager?.getAttachedClients() else { return }
 

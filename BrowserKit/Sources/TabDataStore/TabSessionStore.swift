@@ -76,6 +76,9 @@ public final class DefaultTabSessionStore: TabSessionStore {
         }
     }
 
+    // `@concurrent` keeps the file enumeration and deletion below off the caller's actor
+    // (callers await it from `Task {}` on @MainActor TabManagerImplementation).
+    @concurrent
     public func deleteUnusedTabSessionData(keeping: [UUID]) async {
         guard let directory = fileManager.tabSessionDataDirectory() else { return }
         let contents = fileManager.contentsOfDirectory(at: directory)

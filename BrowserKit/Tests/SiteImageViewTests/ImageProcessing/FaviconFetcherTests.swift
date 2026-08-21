@@ -59,7 +59,7 @@ private final class MockSiteImageDownloader: SiteImageDownloader, @unchecked Sen
     var image: UIImage?
     var error: KingfisherError?
 
-    func downloadImage(with url: URL) async throws -> SiteImageLoadingResult {
+    func downloadImage(with url: URL) throws -> SiteImageLoadingResult {
         if let error {
             throw error
         } else if let image = image {

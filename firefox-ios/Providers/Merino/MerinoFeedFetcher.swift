@@ -18,6 +18,9 @@ struct MerinoFeedFetcher: MerinoFeedFetching, FeatureFlaggable {
     let baseURL: String
     let logger: Logger
 
+    /// `@concurrent` is required: `getCuratedRecommendations` is a synchronous, blocking network
+    /// request into the Rust client, so running it on the caller's actor would hang the UI.
+    @concurrent
     func fetch(
         itemCount: Int,
         locale: CuratedRecommendationLocale,

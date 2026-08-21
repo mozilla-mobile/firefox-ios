@@ -85,7 +85,7 @@ final class SSEDataParserTests: XCTestCase {
         ])
     }
 
-    func testMultilinePayloadParsesSuccessfullyAndStopsAtDone() async throws {
+    func testMultilinePayloadParsesSuccessfullyAndStopsAtDone() throws {
         let subject = createSubject()
         let results: [EventExampleType] = try subject.parse(Self.multilineSSEPayload)
         XCTAssertEqual(results, [
@@ -107,7 +107,7 @@ final class SSEDataParserTests: XCTestCase {
         }
     }
 
-    func testParsingStopsAtDoneInMiddle() async throws {
+    func testParsingStopsAtDoneInMiddle() throws {
         let subject = createSubject()
         let results: [EventExampleType] = try subject.parse(Self.mixedSSEPayload)
         XCTAssertEqual(results, [
@@ -116,7 +116,7 @@ final class SSEDataParserTests: XCTestCase {
         ])
     }
 
-    func testParsingChunkedInput() async throws {
+    func testParsingChunkedInput() throws {
         let subject = createSubject()
         var results: [EventExampleType] = []
         results = try subject.parse(Self.partialSSEChunk1)

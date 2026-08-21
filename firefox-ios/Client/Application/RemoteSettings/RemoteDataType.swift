@@ -42,7 +42,9 @@ enum RemoteDataType: String, Codable {
 
     /// Loads the local settings for the given data type record, returning the
     /// decoded objects.
+    /// `@concurrent` keeps the bundle read and JSON decode below off the caller's actor.
     /// - Returns: settings decoded to their RemoteDataTypeRecord.
+    @concurrent
     func loadLocalSettingsFromJSON<T: RemoteDataTypeRecord>() async throws -> [T] {
         guard let fileName = self.fileNames.first else {
             assertionFailure("No filename available for setting type.")

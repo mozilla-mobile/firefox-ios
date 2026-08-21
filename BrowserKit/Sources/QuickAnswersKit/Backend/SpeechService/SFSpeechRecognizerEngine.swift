@@ -37,7 +37,7 @@ final class SFSpeechRecognizerEngine: TranscriptionEngine {
         try audioManager.configureAudioSession()
     }
 
-    func start(continuation: AsyncThrowingStream<SpeechResult, any Error>.Continuation) async throws {
+    func start(continuation: AsyncThrowingStream<SpeechResult, any Error>.Continuation) throws {
         let recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         recognitionRequest.requiresOnDeviceRecognition = true
         self.request = recognitionRequest

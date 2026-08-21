@@ -1870,7 +1870,7 @@ private final class StallingTranslationsService: TranslationsServiceProtocol {
         self.firstResponseReceivedBehavior = firstResponseReceivedBehavior
     }
 
-    func shouldOfferTranslation(for windowUUID: WindowUUID, using preferredLanguages: [String]) async throws -> Bool {
+    func shouldOfferTranslation(for windowUUID: WindowUUID, using preferredLanguages: [String]) throws -> Bool {
         false
     }
 
@@ -1879,7 +1879,7 @@ private final class StallingTranslationsService: TranslationsServiceProtocol {
         from sourceLanguage: String?,
         to targetLanguage: String,
         onLanguageIdentified: ((String, String) -> Void)?
-    ) async throws {
+    ) throws {
         onLanguageIdentified?("en", targetLanguage)
     }
 
@@ -1895,7 +1895,7 @@ private final class StallingTranslationsService: TranslationsServiceProtocol {
         }
     }
 
-    func fetchSupportedTargetLanguages() async -> [String] { [] }
+    func fetchSupportedTargetLanguages() -> [String] { [] }
 
-    func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String { "en" }
+    func detectPageLanguage(for windowUUID: WindowUUID) throws -> String { "en" }
 }

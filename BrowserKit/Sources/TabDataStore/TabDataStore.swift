@@ -52,7 +52,7 @@ public actor DefaultTabDataStore: TabDataStore {
 
     // MARK: Fetching Window Data
 
-    public func fetchWindowData(uuid: UUID) async -> WindowData? {
+    public func fetchWindowData(uuid: UUID) -> WindowData? {
         logger.log("Attempting to fetch window data", level: .debug, category: .tabs)
 
         // Adding more logging for FXIOS-9517
@@ -143,7 +143,7 @@ public actor DefaultTabDataStore: TabDataStore {
 
     // MARK: - Saving Data
 
-    public func saveWindowData(window: WindowData, forced: Bool) async {
+    public func saveWindowData(window: WindowData, forced: Bool) {
         guard let windowSavingPath = windowURLPath(for: window.id, isBackup: false) else {
             logger.log("Not saving window data. Could not build window saving path.",
                        level: .warning,
@@ -163,9 +163,9 @@ public actor DefaultTabDataStore: TabDataStore {
                    level: .debug,
                    category: .tabs)
         if forced {
-            await writeWindowDataToFile(path: windowSavingPath)
+            writeWindowDataToFile(path: windowSavingPath)
         } else {
-            await writeWindowDataToFileWithThrottle(path: windowSavingPath)
+            writeWindowDataToFileWithThrottle(path: windowSavingPath)
         }
     }
 
@@ -205,7 +205,7 @@ public actor DefaultTabDataStore: TabDataStore {
 
     // Throttles the saving of the data so that it happens every 'throttleTime' nanoseconds
     // as long as their is new data to be saved
-    private func writeWindowDataToFileWithThrottle(path: URL) async {
+    private func writeWindowDataToFileWithThrottle(path: URL) {
         // Ignore the request because a save is already scheduled to happen
         guard !nextSaveIsScheduled else { return }
 
@@ -220,11 +220,11 @@ public actor DefaultTabDataStore: TabDataStore {
             if fileManager.fileExists(atPath: path) {
                 createWindowDataBackup(windowPath: path)
             }
-            await writeWindowDataToFile(path: path)
+            writeWindowDataToFile(path: path)
         }
     }
 
-    private func writeWindowDataToFile(path: URL) async {
+    private func writeWindowDataToFile(path: URL) {
         do {
             guard let windowDataToSave = windowDataToSave else {
                 logger.log("Tried to save window data but found nil",
@@ -242,7 +242,7 @@ public actor DefaultTabDataStore: TabDataStore {
 
     // MARK: - Deleting Window Data
 
-    public func clearAllWindowsData() async {
+    public func clearAllWindowsData() {
         guard let directoryURL = fileManager.windowDataDirectory(isBackup: false),
               let backupURL = fileManager.windowDataDirectory(isBackup: true) else {
             return
@@ -251,7 +251,7 @@ public actor DefaultTabDataStore: TabDataStore {
         fileManager.removeAllFilesAt(directory: backupURL)
     }
 
-    public func removeWindowData(forUUIDs uuids: [WindowUUID]) async {
+    public func removeWindowData(forUUIDs uuids: [WindowUUID]) {
         guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else { return }
 
         let fileURLs = fileManager.contentsOfDirectory(at: directoryURL)

@@ -18,12 +18,12 @@ class MockBookmarksSaver: BookmarksSaver {
     var savedBookmarkPosition: UInt32?
 
     func save(bookmark: any FxBookmarkNode,
-              parentFolderGUID: String) async -> Result<GUID?, any Error> {
+              parentFolderGUID: String) -> Result<GUID?, any Error> {
         saveCalled += 1
         return Result.success(mockCreateGuid)
     }
 
-    func createBookmark(url: String, title: String?, position: UInt32?) async {
+    func createBookmark(url: String, title: String?, position: UInt32?) {
         savedBookmarkURL = url
         savedBookmarkTitle = title
         savedBookmarkPosition = position

@@ -12,7 +12,7 @@ final class MockLanguageSampleSource: LanguageSampleSource, @unchecked Sendable 
     var mockError: Error?
 
     @MainActor
-    func getLanguageSample(scriptEvalExpression: String) async throws -> String? {
+    func getLanguageSample(scriptEvalExpression: String) throws -> String? {
         if let error = mockError { throw error }
         if scriptEvalExpression.contains("documentElement.lang") {
             return htmlLangResult

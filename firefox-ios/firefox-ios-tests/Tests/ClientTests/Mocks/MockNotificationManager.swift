@@ -16,7 +16,7 @@ class MockNotificationManager: NotificationManagerProtocol {
         completion(shouldGrantPermission, errorToReturn)
     }
 
-    func requestAuthorization() async throws -> Bool {
+    func requestAuthorization() throws -> Bool {
         return wasAuthorizationSuccessful
     }
 
@@ -24,13 +24,13 @@ class MockNotificationManager: NotificationManagerProtocol {
         return await NotificationManager().getNotificationSettings()
     }
 
-    var hasPermission = true
+    var hasPermissionValue = true
     func hasPermission(completion: @escaping @Sendable (Bool) -> Void) {
-        completion(hasPermission)
+        completion(hasPermissionValue)
     }
 
-    func hasPermission() async -> Bool {
-        return hasPermission
+    func hasPermission() -> Bool {
+        return hasPermissionValue
     }
 
     var scheduledNotifications = 0
@@ -46,7 +46,7 @@ class MockNotificationManager: NotificationManagerProtocol {
         scheduleWithIntervalWasCalled = true
     }
 
-    func findDeliveredNotificationForId(id: String) async -> UNNotification? {
+    func findDeliveredNotificationForId(id: String) -> UNNotification? {
         return nil
     }
 }

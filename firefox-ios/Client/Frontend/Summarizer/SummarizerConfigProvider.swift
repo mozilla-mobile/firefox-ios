@@ -32,6 +32,9 @@ struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
 
     /// Returns the configuration for the Summarizer by merging the config loaded from the `sources`.
     /// First sources in the array have highest priority when the configuration are merged into one.
+    /// `@concurrent` is required: `RemoteSummarizerConfigSource` reaches Remote Settings via
+    /// `getRecords(syncIfEmpty: true)`, which blocks and can hit the network, and callers are on `@MainActor`.
+    @concurrent
     func getConfig(
         summarizerModel: SummarizerModel,
         contentType: SummarizationContentType,

@@ -10,7 +10,7 @@ final class MockStoryProvider: StoryProviderInterface, @unchecked Sendable {
     var fetchHomepageStoriesCalled = 0
     var prefetchStoriesCalled = 0
 
-    func fetchHomepageStories() async -> MerinoStoryResponse {
+    func fetchHomepageStories() -> MerinoStoryResponse {
         fetchHomepageStoriesCalled += 1
 
         return MerinoStoryResponse(
@@ -20,7 +20,7 @@ final class MockStoryProvider: StoryProviderInterface, @unchecked Sendable {
         )
     }
 
-    func prefetchStories() async {
+    func prefetchStories() {
         prefetchStoriesCalled += 1
     }
 

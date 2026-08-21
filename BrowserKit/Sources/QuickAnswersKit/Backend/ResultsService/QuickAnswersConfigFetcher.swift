@@ -20,7 +20,7 @@ public struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
         self.model = model
     }
 
-    public func fetch() async throws -> QuickAnswersConfig {
+    public func fetch() throws -> QuickAnswersConfig {
         return QuickAnswersConfig(model: model, instructions: instructions(for: model))
     }
 

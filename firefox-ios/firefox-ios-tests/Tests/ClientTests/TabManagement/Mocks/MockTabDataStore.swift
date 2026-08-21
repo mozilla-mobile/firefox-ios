@@ -20,22 +20,22 @@ final class MockTabDataStore: TabDataStore, @unchecked Sendable {
         return persistedTabWindowUUIDs
     }
 
-    func fetchWindowData(uuid: UUID) async -> WindowData? {
+    func fetchWindowData(uuid: UUID) -> WindowData? {
         fetchWindowDataCalledCount += 1
         return fetchTabWindowData
     }
 
-    func saveWindowData(window: WindowData, forced: Bool) async {
+    func saveWindowData(window: WindowData, forced: Bool) {
         saveWindowDataCalledCount += 1
         saveWindowDataForcedValue = forced
         saveWindowData = window
     }
 
-    func clearAllWindowsData() async {
+    func clearAllWindowsData() {
         clearAllWindowsDataCalled += 1
     }
 
-    func removeWindowData(forUUIDs: [WindowUUID]) async {
+    func removeWindowData(forUUIDs: [WindowUUID]) {
         removeWindowDataCalled += 1
     }
 }

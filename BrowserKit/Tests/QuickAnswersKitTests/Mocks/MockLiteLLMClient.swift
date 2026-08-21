@@ -20,7 +20,7 @@ final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     func requestChatCompletion<ProviderFields: Codable & Sendable>(
         messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
-    ) async throws -> LiteLLMMessage<ProviderFields> {
+    ) throws -> LiteLLMMessage<ProviderFields> {
         requestChatCompletionCallCount += 1
         lastMessages = messages
         lastConfig = config

@@ -30,7 +30,7 @@ actor DefaultFaviconURLCache: FaviconURLCache {
         }
     }
 
-    func getURLFromCache(cacheKey: String) async throws -> URL {
+    func getURLFromCache(cacheKey: String) throws -> URL {
         guard let favicon = urlCache[cacheKey],
               let url = URL(string: favicon.faviconURL)
         else { throw SiteImageError.noURLInCache }
@@ -38,13 +38,13 @@ actor DefaultFaviconURLCache: FaviconURLCache {
         // Update the element in the cache so it's time to expire is reset
         // We don't need to wait for this to finish
         Task {
-            await cacheURL(cacheKey: cacheKey, faviconURL: url)
+            cacheURL(cacheKey: cacheKey, faviconURL: url)
         }
 
         return url
     }
 
-    func cacheURL(cacheKey: String, faviconURL: URL) async {
+    func cacheURL(cacheKey: String, faviconURL: URL) {
         let favicon = FaviconURL(cacheKey: cacheKey,
                                  faviconURL: faviconURL.absoluteString,
                                  createdAt: Date())
@@ -52,7 +52,7 @@ actor DefaultFaviconURLCache: FaviconURLCache {
         preserveCache()
     }
 
-    func clearCache() async {
+    func clearCache() {
         urlCache = [String: FaviconURL]()
         preserveCache()
     }

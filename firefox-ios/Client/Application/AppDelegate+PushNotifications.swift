@@ -75,6 +75,10 @@ extension AppDelegate {
 }
 
 extension AppDelegate: @MainActor UNUserNotificationCenterDelegate {
+    // `async` is load-bearing on these delegate methods: it is what bridges them to the ObjC
+    // completion-handler selectors. Dropping it would stop them from being called at all.
+    // swiftlint:disable async_without_await
+
     // Called when the user taps on a notification while in background.
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
@@ -121,6 +125,7 @@ extension AppDelegate: @MainActor UNUserNotificationCenterDelegate {
             return []
         }
     }
+    // swiftlint:enable async_without_await
 }
 
 extension AppDelegate {

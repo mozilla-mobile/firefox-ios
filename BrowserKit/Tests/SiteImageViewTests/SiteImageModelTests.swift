@@ -9,7 +9,7 @@ class SiteImageModelTests: XCTestCase {
     let siteURL = URL(string: "https://www.mozilla.org")!
     let faviconURL = URL(string: "https://www.mozilla.org/media/img/favicons/mozilla/apple-touch-icon.8cbe9c835c00.png")!
 
-    func testFaviconURL_isCacheKey_whenProvidedForFavicon() async {
+    func testFaviconURL_isCacheKey_whenProvidedForFavicon() {
         let model = SiteImageModel(
             id: UUID(),
             imageType: .favicon,
@@ -22,13 +22,13 @@ class SiteImageModelTests: XCTestCase {
         XCTAssertEqual(model.cacheKey, faviconURL.absoluteString)
     }
 
-    func testShortDomain_isCacheKey_forFavicon_withNoResourceURL() async {
+    func testShortDomain_isCacheKey_forFavicon_withNoResourceURL() {
         let model = SiteImageModel(id: UUID(), imageType: .favicon, siteURL: siteURL)
 
         XCTAssertEqual(model.cacheKey, siteURL.shortDomain)
     }
 
-    func testAbsoluteString_isCacheKey_forFavicon_withResourceURL() async {
+    func testAbsoluteString_isCacheKey_forFavicon_withResourceURL() {
         let model = SiteImageModel(
             id: UUID(),
             imageType: .favicon,
@@ -39,13 +39,13 @@ class SiteImageModelTests: XCTestCase {
         XCTAssertEqual(model.cacheKey, faviconURL.absoluteString)
     }
 
-    func testAbsolutePath_isCacheKey_forHeroImage() async {
+    func testAbsolutePath_isCacheKey_forHeroImage() {
         let model = SiteImageModel(id: UUID(), imageType: .heroImage, siteURL: siteURL)
 
         XCTAssertEqual(model.cacheKey, siteURL.absoluteString)
     }
 
-    func testShortDomain_isCacheKey_whenResourceURLProvidedForHeroImage() async {
+    func testShortDomain_isCacheKey_whenResourceURLProvidedForHeroImage() {
         let model = SiteImageModel(
             id: UUID(),
             imageType: .heroImage,
@@ -60,21 +60,21 @@ class SiteImageModelTests: XCTestCase {
 
     // MARK: - Test generateCacheKey
 
-    func testGenerateCacheKey_returnsShortDomain_forFavicon() async {
+    func testGenerateCacheKey_returnsShortDomain_forFavicon() {
         let cacheKey = SiteImageModel.generateCacheKey(siteURL: siteURL, type: .favicon)
 
         XCTAssertEqual(cacheKey, siteURL.shortDomain)
         XCTAssertEqual(cacheKey, "mozilla")
     }
 
-    func testGenerateCacheKey_returnsAbsolutePath_forHeroImage() async {
+    func testGenerateCacheKey_returnsAbsolutePath_forHeroImage() {
         let cacheKey = SiteImageModel.generateCacheKey(siteURL: siteURL, type: .heroImage)
 
         XCTAssertEqual(cacheKey, siteURL.absoluteString)
         XCTAssertEqual(cacheKey, "https://www.mozilla.org")
     }
 
-    func testGenerateCacheKey_returnsLocal_forInternalURL_forFavicon() async {
+    func testGenerateCacheKey_returnsLocal_forInternalURL_forFavicon() {
         let internalSiteURL = URL(string: "internal://local/about/home#panel=0")!
 
         let cacheKey = SiteImageModel.generateCacheKey(siteURL: internalSiteURL, type: .favicon)
@@ -83,7 +83,7 @@ class SiteImageModelTests: XCTestCase {
         XCTAssertEqual(cacheKey, "local")
     }
 
-    func testGenerateCacheKey_returnsURL_forInternalURL_forFavicon() async {
+    func testGenerateCacheKey_returnsURL_forInternalURL_forFavicon() {
         let internalSiteURL = URL(string: "internal://local/about/home#panel=0")!
 
         let cacheKey = SiteImageModel.generateCacheKey(siteURL: internalSiteURL, type: .heroImage)

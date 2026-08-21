@@ -28,7 +28,7 @@ final class MockTranslationsService: TranslationsServiceProtocol {
     }
 
     // MARK: - TranslationsServiceProtocol
-    func shouldOfferTranslation(for windowUUID: WindowUUID, using preferredLanguages: [String]) async throws -> Bool {
+    func shouldOfferTranslation(for windowUUID: WindowUUID, using preferredLanguages: [String]) throws -> Bool {
         return try shouldOfferTranslationResult.get()
     }
 
@@ -37,20 +37,20 @@ final class MockTranslationsService: TranslationsServiceProtocol {
         from sourceLanguage: String? = nil,
         to targetLanguage: String,
         onLanguageIdentified: ((String, String) -> Void)?
-    ) async throws {
+    ) throws {
         try translateResult.get()
         onLanguageIdentified?(sourceLanguage ?? "en", targetLanguage)
     }
 
-    func firstResponseReceived(for windowUUID: WindowUUID) async throws {
+    func firstResponseReceived(for windowUUID: WindowUUID) throws {
         try firstResponseReceivedResult.get()
     }
 
-    func fetchSupportedTargetLanguages() async -> [String] {
+    func fetchSupportedTargetLanguages() -> [String] {
         return []
     }
 
-    func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String {
+    func detectPageLanguage(for windowUUID: WindowUUID) throws -> String {
         return try detectPageLanguageResult.get()
     }
 }

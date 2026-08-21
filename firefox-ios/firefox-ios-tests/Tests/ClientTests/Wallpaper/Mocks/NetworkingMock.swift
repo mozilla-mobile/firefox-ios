@@ -9,6 +9,9 @@ import Foundation
 final class NetworkingMock: WallpaperNetworking, @unchecked Sendable {
     var result = Result<Data, Error>.failure(URLError(.notConnectedToInternet))
 
+    // `async` mirrors the `WallpaperNetworking` requirement. Tests hold this as a concrete type, so
+    // dropping it makes their `await` redundant.
+    // swiftlint:disable:next async_without_await
     func data(from url: URL) async throws -> (Data, URLResponse) {
         switch result {
         case .success(let data):

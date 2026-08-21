@@ -97,17 +97,19 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
         return try? await getAttachment(record: record)
     }
 
+    @concurrent
     func getAttachment(record: RemoteSettingsRecord) async throws -> Data? {
         // TODO: FXIOS-14616: Should make Rust method async and remove this wrapper method
-        // We intentionally mark this method as async so that we don't block the main thread
-        // and `getAttachment` should eventually be an async method as well.
+        // `@concurrent` keeps this blocking Rust call off the caller's actor so we don't block
+        // the main thread, and `getAttachment` should eventually be an async method as well.
         return try? translatorsClient?.getAttachment(record: record)
     }
 
+    @concurrent
     func getRecordsForModels() async -> [RemoteSettingsRecord]? {
         // TODO: FXIOS-14616: Should make Rust method async and remove this wrapper method
-        // We intentionally mark this method as async so that we don't block the main thread
-        // and `getRecords` should eventually be an async method as well.
+        // `@concurrent` keeps this blocking Rust call off the caller's actor so we don't block
+        // the main thread, and `getRecords` should eventually be an async method as well.
         return modelsClient?.getRecords(syncIfEmpty: true)
     }
 
@@ -211,6 +213,8 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
     }
 
     /// Resets any local storage of models.
+    /// `@concurrent` keeps the blocking Rust `resetStorage()` call off the caller's actor.
+    @concurrent
     func resetStorage() async {
         guard let client = modelsClient else {
             logger.log("Models client not available, skipping reset.", level: .warning, category: .remoteSettings)

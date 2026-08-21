@@ -25,21 +25,21 @@ final class WKEngineTests: XCTestCase, @unchecked Sendable {
     }
 
     @MainActor
-    func testCreateViewThenCreatesView() async {
-        let subject = await createSubject()
+    func testCreateViewThenCreatesView() {
+        let subject = createSubject()
         XCTAssertNotNil(subject.createView())
     }
 
     @MainActor
-    func testCreateSessionThenCreatesSession() async throws {
-        let subject = await createSubject()
+    func testCreateSessionThenCreatesSession() throws {
+        let subject = createSubject()
         let session = try subject.createSession(dependencies: DefaultTestDependencies().sessionDependencies)
         XCTAssertNotNil(session)
     }
 
     @MainActor
-    func testWarmEngineCallsSetupEngine() async {
-        let subject = await createSubject()
+    func testWarmEngineCallsSetupEngine() {
+        let subject = createSubject()
         subject.warmEngine()
 
         XCTAssertEqual(sourceTimerFactory.dispatchSource.cancelCalled, 0)
@@ -47,8 +47,8 @@ final class WKEngineTests: XCTestCase, @unchecked Sendable {
     }
 
     @MainActor
-    func testWarmEngineAfterIdle() async {
-        let subject = await createSubject()
+    func testWarmEngineAfterIdle() {
+        let subject = createSubject()
         subject.idleEngine()
         subject.warmEngine()
 
@@ -57,8 +57,8 @@ final class WKEngineTests: XCTestCase, @unchecked Sendable {
     }
 
     @MainActor
-    func testIdleEngineCallsStopEngine() async {
-        let subject = await createSubject()
+    func testIdleEngineCallsStopEngine() {
+        let subject = createSubject()
         subject.idleEngine()
 
         XCTAssertEqual(sourceTimerFactory.dispatchSource.scheduleCalled, 1)
@@ -70,7 +70,7 @@ final class WKEngineTests: XCTestCase, @unchecked Sendable {
     // MARK: Helper
     @MainActor
     func createSubject(file: StaticString = #filePath,
-                       line: UInt = #line) async -> WKEngine {
+                       line: UInt = #line) -> WKEngine {
         let configProvider = MockWKEngineConfigurationProvider()
         let subject = WKEngine(userScriptManager: userScriptManager,
                                webServerUtil: webServerUtil,

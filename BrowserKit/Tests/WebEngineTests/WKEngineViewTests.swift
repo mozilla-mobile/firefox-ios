@@ -12,7 +12,7 @@ final class WKEngineViewTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        engineSession = await MockWKEngineSession()
+        engineSession = MockWKEngineSession()
     }
 
     override func tearDown() async throws {
@@ -28,9 +28,9 @@ final class WKEngineViewTests: XCTestCase {
         XCTAssertTrue(engineSession.isActive)
     }
 
-    func testRemoveSetsIsActiveFalse() async {
+    func testRemoveSetsIsActiveFalse() {
         let subject = createSubject()
-        let newEngineSession = await MockWKEngineSession()
+        let newEngineSession = MockWKEngineSession()
 
         subject.render(session: engineSession)
         subject.render(session: newEngineSession)

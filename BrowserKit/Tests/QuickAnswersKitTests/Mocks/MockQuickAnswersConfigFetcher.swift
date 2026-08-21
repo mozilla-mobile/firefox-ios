@@ -14,7 +14,7 @@ final class MockQuickAnswersConfigFetcher: QuickAnswersConfigFetcher, @unchecked
         self.configToReturn = configToReturn
     }
 
-    func fetch() async throws -> QuickAnswersConfig {
+    func fetch() throws -> QuickAnswersConfig {
         fetchCallCount += 1
         if let errorToThrow {
             throw errorToThrow

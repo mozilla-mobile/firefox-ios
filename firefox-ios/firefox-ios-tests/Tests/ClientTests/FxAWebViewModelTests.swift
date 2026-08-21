@@ -54,7 +54,10 @@ class FxAWebViewModelTests: XCTestCase {
         if let blobURL = URL(string: "blob://some/blob/url"),
            let webViewURL = URL(string: "https://accounts.firefox.com") {
             let result = viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webViewURL)
-            XCTAssertTrue(result, "Should return true for a valid blob URL and a webView URL with the host accounts.firefox.com.")
+            XCTAssertTrue(
+                result,
+                "Should return true for a valid blob URL and a webView URL with the host accounts.firefox.com."
+            )
         }
     }
 
@@ -62,7 +65,10 @@ class FxAWebViewModelTests: XCTestCase {
         if let blobURL = URL(string: "blob://some/blob/url"),
            let webViewURL = URL(string: "https://example.com") {
             let result = viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webViewURL)
-            XCTAssertFalse(result, "Should return false for a valid blob URL and a webView URL with a different host then accounts.firefox.com")
+            XCTAssertFalse(
+                result,
+                "Should return false for a valid blob URL and a webView URL with a different host then accounts.firefox.com"
+            )
         }
     }
 
@@ -70,7 +76,10 @@ class FxAWebViewModelTests: XCTestCase {
         if let blobURL = URL(string: "https://example.com/blob"),
            let webViewURL = URL(string: "https://accounts.firefox.com") {
             let result = viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webViewURL)
-            XCTAssertFalse(result, "Should return false for a wrong blob URL and a webView URL with the host accounts.firefox.com.")
+            XCTAssertFalse(
+                result,
+                "Should return false for a wrong blob URL and a webView URL with the host accounts.firefox.com."
+            )
         }
     }
 

@@ -26,6 +26,9 @@ class MockLegacyResponder: NSObject, WKUIDelegate {
         return nil
     }
 
+    // `async` is required to match the `WKUIDelegate` optional requirement. Without it this only
+    // "nearly matches", so WebKit never dispatches to it and the mock silently stops recording calls.
+    // swiftlint:disable async_without_await
     func webView(
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
@@ -33,6 +36,7 @@ class MockLegacyResponder: NSObject, WKUIDelegate {
     ) async {
         runJavaScriptAlertPanelCalled += 1
     }
+    // swiftlint:enable async_without_await
 
     func webView(
         _ webView: WKWebView,

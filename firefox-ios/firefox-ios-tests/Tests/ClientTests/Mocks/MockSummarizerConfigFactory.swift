@@ -11,7 +11,7 @@ final class MockSummarizerConfigFactory: SummarizerConfigFactory, @unchecked Sen
     var returnedConfig: SummarizerConfig?
     private(set) var makeConfigurationCallCount = 0
 
-    func makeConfiguration(from webView: WKWebView) async -> SummarizerConfig? {
+    func makeConfiguration(from webView: WKWebView) -> SummarizerConfig? {
         makeConfigurationCallCount += 1
         return returnedConfig
     }

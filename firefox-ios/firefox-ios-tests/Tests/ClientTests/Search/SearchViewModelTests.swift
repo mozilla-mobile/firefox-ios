@@ -295,7 +295,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(subject.historySites.count, 1)
     }
 
-    func testLoad_forHistoryAndBookmarks_doesNotTriggerReloadForSameSuggestions() async throws {
+    func testLoad_forHistoryAndBookmarks_doesNotTriggerReloadForSameSuggestions() throws {
         searchEnginesManager.shouldShowSponsoredSuggestions = false
         let subject = createSubject()
         XCTAssertEqual(subject.delegate?.searchData.count, 0)
@@ -307,7 +307,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
     }
 
-    func testLoad_multipleTimes_doesNotTriggerReloadForSameSuggestions() async throws {
+    func testLoad_multipleTimes_doesNotTriggerReloadForSameSuggestions() throws {
         searchEnginesManager.shouldShowSponsoredSuggestions = false
         let subject = createSubject()
         let data = ArrayCursor<Site>(data: [ Site.createBasicSite(url: "https://example.com?mfadid=adm", title: "Test1"),
@@ -376,7 +376,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     // MARK: Trending Searches
-    func test_shouldShowHeader_forTrendingSearches_withFFOn_andSearchTerm_doesNotShowHeader() async {
+    func test_shouldShowHeader_forTrendingSearches_withFFOn_andSearchTerm_doesNotShowHeader() {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
         let subject = createSubject()
         subject.searchQuery = "hello"
@@ -405,7 +405,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertTrue(shouldShowHeader)
     }
 
-    func test_shouldShowHeader_withNoTrendingSearches_withFFOn_andSearchTermEmpty_doesNotShowHeader() async {
+    func test_shouldShowHeader_withNoTrendingSearches_withFFOn_andSearchTermEmpty_doesNotShowHeader() {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
         let subject = createSubject()
         subject.searchQuery = ""
@@ -458,7 +458,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     // MARK: - Recent Searches
-    func test_shouldShowHeader_forRecentSearches_withFFOn_andSearchTerm_doesNotShowHeader() async {
+    func test_shouldShowHeader_forRecentSearches_withFFOn_andSearchTerm_doesNotShowHeader() {
         setupNimbusRecentSearchesTesting(isEnabled: true)
         let subject = createSubject()
         subject.searchQuery = "hello"
@@ -487,7 +487,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertTrue(shouldShowHeader)
     }
 
-    func test_shouldShowHeader_withNoRecentSearches_withFFOn_andSearchTermEmpty_doesNotShowHeader() async {
+    func test_shouldShowHeader_withNoRecentSearches_withFFOn_andSearchTermEmpty_doesNotShowHeader() {
         setupNimbusRecentSearchesTesting(isEnabled: true)
         let subject = createSubject()
         subject.searchQuery = ""
@@ -497,7 +497,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(shouldShowHeader)
     }
 
-    func test_shouldShowHeader_forRecentSearches_withoutFeatureFlagOn_doesNotShowHeader() async {
+    func test_shouldShowHeader_forRecentSearches_withoutFeatureFlagOn_doesNotShowHeader() {
         setupNimbusRecentSearchesTesting(isEnabled: false)
         let subject = createSubject()
         let recentSearchesSectionIndex = 0
