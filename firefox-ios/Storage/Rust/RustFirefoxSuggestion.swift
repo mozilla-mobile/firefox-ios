@@ -66,6 +66,7 @@ public struct RustFirefoxSuggestion: Equatable {
             clickUrlString,
             _,
             _,
+            _,
             _
         ) = suggestion {
             // This use of `URL(string:)` is OK; we don't need to use
