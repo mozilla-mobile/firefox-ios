@@ -184,8 +184,13 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     private func applyThemeChanges(for window: WindowUUID, using newTheme: ThemeType) {
         // Overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
-        let style = self.getCurrentTheme(for: window).type.getInterfaceStyle()
+        let theme = self.getCurrentTheme(for: window)
+        let style = theme.type.getInterfaceStyle()
         self.windows[window]?.overrideUserInterfaceStyle = style
+        // Nova only: highlighted text purple tint.
+        let selectedTextTint = theme.isNova ? theme.colors.layerSelectedText : nil
+        UITextField.appearance().tintColor = selectedTextTint
+        UITextView.appearance().tintColor = selectedTextTint
         notifyCurrentThemeDidChange(for: window)
     }
 
