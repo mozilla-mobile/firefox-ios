@@ -66,6 +66,30 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
+    func test_submit_withAnUnreportableURL_sendsNothing() {
+        let subject = createSubject()
+        setReportedURL(".com")
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
+
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 0)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func test_preview_withAnUnreportableURL_buildsNothing() {
+        let subject = createSubject()
+        setReportedURL(".com")
+
+        subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, viewAction(.preview))
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 0)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
     // MARK: - Tab-specific info
 
     func test_submit_whenURLStillMatchesTheTab_includesTabFields() {
@@ -251,7 +275,9 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         return AppState(
             presentedComponents: PresentedComponentsState(
                 components: [
-                    .webCompatReporter(WebCompatReporterState(windowUUID: .XCTestDefaultUUID))
+                    .webCompatReporter(
+                        WebCompatReporterState(windowUUID: .XCTestDefaultUUID).copy(url: "https://example.com")
+                    )
                 ]
             )
         )

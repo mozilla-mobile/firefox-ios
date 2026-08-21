@@ -47,6 +47,19 @@ final class WebCompatReporterStateTests: XCTestCase {
         XCTAssertFalse(makeState(category: .other, url: "   ").canSubmit)
     }
 
+    func test_isURLValid_rejectsLookalikesAndBlocksSendAndPreview() {
+        for url in ["https://example.com", "example.com", "ebay.com/deals?a=1", "https://sub.example.co.uk"] {
+            XCTAssertTrue(makeState(category: .other, url: url).isURLValid, "Expected \(url) to be reportable")
+        }
+        for url in [" .com", ".com", "example..com", "example.com.", "https://exa mple.com", "https://", "foo"] {
+            XCTAssertFalse(makeState(category: .other, url: url).isURLValid, "Expected \(url) to be rejected")
+        }
+
+        let subject = makeState(category: .other, url: ".com")
+        XCTAssertFalse(subject.canSubmit)
+        XCTAssertFalse(subject.canPreview)
+    }
+
     // MARK: - Reducer - didLoadInitialDraft
 
     func test_didLoadInitialDraft_seedsURL() {

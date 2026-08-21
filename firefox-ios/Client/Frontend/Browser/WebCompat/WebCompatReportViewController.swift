@@ -168,7 +168,10 @@ final class WebCompatReportViewController: UINavigationController,
                 WebCompatReportViewModel.Row(
                     id: RowID.url.rawValue,
                     title: .WebCompatReporter.Fields.URLLabel,
-                    kind: .urlField(text: state.url),
+                    kind: .urlField(
+                        text: state.url,
+                        errorMessage: state.showsURLError ? .WebCompatReporter.Fields.URLError : nil
+                    ),
                     a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.urlField
                 )
             ]

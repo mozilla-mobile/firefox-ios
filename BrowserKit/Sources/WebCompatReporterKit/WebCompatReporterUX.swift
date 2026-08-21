@@ -66,6 +66,10 @@ enum WebCompatReporterUX {
         static let bulletDotFontSize: CGFloat = 7
     }
 
+    enum ErrorMessage {
+        static let iconSize: CGFloat = 16
+    }
+
     /// The tilted page card on the Report Preview screen.
     enum Thumbnail {
         static let size = CGSize(width: 150, height: 180)
