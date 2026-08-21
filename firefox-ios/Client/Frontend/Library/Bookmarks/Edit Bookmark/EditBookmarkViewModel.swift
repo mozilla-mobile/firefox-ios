@@ -42,6 +42,7 @@ class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
 
     var onFolderStatusUpdate: VoidReturnCallback?
     var onBookmarkSaved: VoidReturnCallback?
+    var onBookmarkDeleted: VoidReturnCallback?
 
     var getBackNavigationButtonTitle: String {
         if parentFolder.guid == BookmarkRoots.MobileFolderGUID {
@@ -138,6 +139,18 @@ class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
             }
 
             self?.onBookmarkSaved?()
+        }
+    }
+
+    func deleteBookmark() {
+        guard let node else { return }
+        profile.places.deleteBookmarkNode(guid: node.guid).uponQueue(.main) { [weak self] _ in
+            guard let self else { return }
+            MainActor.assumeIsolated {
+                let bookmarksTelemetry = BookmarksTelemetry()
+                bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
+                self.onBookmarkDeleted?()
+            }
         }
     }
 
