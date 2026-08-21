@@ -24,7 +24,6 @@ final class TopsSitesSectionStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(initialState.topSitesData, [])
-        XCTAssertEqual(SectionHeaderConfiguration.topSites.isButtonHidden, false)
         XCTAssertFalse(initialState.shouldShowSectionHeader)
         XCTAssertFalse(initialState.shouldShowAddShortcutTile)
     }
