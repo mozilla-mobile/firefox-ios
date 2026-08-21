@@ -57,6 +57,8 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
             self.handleGeneralBrowserAction(action: action)
         } else if let action = action as? ToolbarAction {
             self.handleToolbarAction(action: action)
+        } else if let action = action as? NavigationBrowserAction {
+            self.handleNavigationBrowserAction(action: action)
         }
     }
 
@@ -74,13 +76,21 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
             fetchSummarizerConfig(windowUUID: action.windowUUID) {
                 self.handleDidTapReaderModeSummarizerButton(windowUUID: action.windowUUID, summarizerConfig: $0)
             }
-        case GeneralBrowserActionType.showReaderMode:
-            fetchSummarizerConfig(windowUUID: action.windowUUID) {
-                self.handleShowReaderMode(windowUUID: action.windowUUID, summarizerConfig: $0)
-            }
         case GeneralBrowserActionType.shakeMotionEnded:
             fetchSummarizerConfig(windowUUID: action.windowUUID) {
                 self.handleShakeMotionEnded(windowUUID: action.windowUUID, summarizerConfig: $0)
+            }
+        default:
+            break
+        }
+    }
+
+    // MARK: - NavigationBrowserAction
+    private func handleNavigationBrowserAction(action: NavigationBrowserAction) {
+        switch action.actionType {
+        case NavigationBrowserActionType.tapOnReaderMode:
+            fetchSummarizerConfig(windowUUID: action.windowUUID) {
+                self.handleShowReaderMode(windowUUID: action.windowUUID, summarizerConfig: $0)
             }
         default:
             break

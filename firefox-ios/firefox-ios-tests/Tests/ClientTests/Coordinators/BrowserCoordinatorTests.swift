@@ -1454,18 +1454,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is MainMenuViewController)
     }
 
-    func testShowReaderMode_dispatchesGeneralBrowserAction() throws {
-        let subject = createSubject()
-
-        subject.showReaderMode()
-
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionType, GeneralBrowserActionType.showReaderMode)
-    }
-
     func testMainMenuCoordinatorDelegate_didDidDismiss_removesChild() {
         let subject = createSubject()
         subject.browserHasLoaded()

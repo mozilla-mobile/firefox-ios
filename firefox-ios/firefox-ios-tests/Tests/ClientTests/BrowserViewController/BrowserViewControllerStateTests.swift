@@ -571,6 +571,20 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         )
     }
 
+    // MARK: - Reader Mode
+
+    func test_tapOnReaderMode_navigationBrowserAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let action = getNavigationBrowserAction(for: .tapOnReaderMode, destination: .readerMode)
+        let newState = reducer.legacyReducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .readerMode)
+    }
+
     func test_navigationDestinationHandled_clearsNavigationDestination() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()

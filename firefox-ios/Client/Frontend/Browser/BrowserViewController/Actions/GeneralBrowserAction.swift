@@ -78,7 +78,6 @@ enum GeneralBrowserActionType: ActionType {
     case reloadWebsiteNoCache
     case loadWaybackURL
     case showShare
-    case showReaderMode
     case addNewTab
     case showNewTabLongPressActions
     case addToReadingListLongPressAction

@@ -2354,9 +2354,10 @@ class BrowserViewController: UIViewController,
     }
 
     override func accessibilityPerformMagicTap() -> Bool {
-        let action = GeneralBrowserAction(
+        let action = NavigationBrowserAction(
+            navigationDestination: NavigationDestination(.readerMode),
             windowUUID: windowUUID,
-            actionType: GeneralBrowserActionType.showReaderMode
+            actionType: NavigationBrowserActionType.tapOnReaderMode
         )
         store.dispatch(action)
         return true
@@ -2828,6 +2829,8 @@ class BrowserViewController: UIViewController,
                 return
             }
             navigationHandler?.openLearnMoreFromNativeErrorPage(url: url)
+        case .readerMode:
+            toggleReaderMode()
         }
     }
 
@@ -2862,8 +2865,6 @@ class BrowserViewController: UIViewController,
             // User tapped the Share button in the toolbar
             guard let button = state.buttonTapped else { return }
             shareSelectedTab(fromShareButton: button)
-        case .readerMode:
-            toggleReaderMode()
         case .readerModeLongPressAction:
             _ = toggleReaderModeLongPressAction()
         case .newTabLongPressActions:

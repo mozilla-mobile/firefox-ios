@@ -38,7 +38,6 @@ struct BrowserViewControllerState: ScreenState {
         case reloadLongPressAction
         case tabTray
         case share
-        case readerMode
         case newTabLongPressActions
         case readerModeLongPressAction
         case passwordGenerator
@@ -196,7 +195,8 @@ struct BrowserViewControllerState: ScreenState {
             NavigationBrowserActionType.tapOnQuickAnswersButton,
             NavigationBrowserActionType.tapOnPrivacyNoticeLink,
             NavigationBrowserActionType.tapOnShowCertificatesFromErrorPage,
-            NavigationBrowserActionType.tapOnNativeErrorPageLearnMore:
+            NavigationBrowserActionType.tapOnNativeErrorPageLearnMore,
+            NavigationBrowserActionType.tapOnReaderMode:
             return state
                 .resetTransientState()
                 .copy(navigationDestination: action.navigationDestination)
@@ -370,8 +370,6 @@ struct BrowserViewControllerState: ScreenState {
             return handleStopLoadingWebsiteAction(state: state, action: action)
         case GeneralBrowserActionType.showShare:
             return handleShowShareAction(state: state, action: action)
-        case GeneralBrowserActionType.showReaderMode:
-            return handleShowReaderModeAction(state: state, action: action)
         case GeneralBrowserActionType.showNewTabLongPressActions:
             return handleShowNewTabLongPressAction(state: state, action: action)
         case GeneralBrowserActionType.addToReadingListLongPressAction:
@@ -597,17 +595,6 @@ struct BrowserViewControllerState: ScreenState {
             .resetTransientState()
             .copy(displayView: .share)
             .copy(buttonTapped: action.buttonTapped)
-            .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
-            .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
-                .legacyReducer(state.autoTranslatePromptState, action))
-    }
-
-    @MainActor
-    private static func handleShowReaderModeAction(state: BrowserViewControllerState,
-                                                   action: GeneralBrowserAction) -> BrowserViewControllerState {
-        return state
-            .resetTransientState()
-            .copy(displayView: .readerMode)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
                 .legacyReducer(state.autoTranslatePromptState, action))

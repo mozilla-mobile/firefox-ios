@@ -18,7 +18,6 @@ class MockMainMenuCoordinatorDelegate: MainMenuCoordinatorDelegate {
     private(set) var presentReportBrokenSiteURL: URL?
     private(set) var presentAdBlockerSettingsCalled = 0
     private(set) var showPrintSheetCalled = 0
-    private(set) var showReaderModeCalled = 0
     private(set) var showShareSheetForCurrentlySelectedTabCalled = 0
     private(set) var showSummarizePanelCalled = 0
     private(set) var showSummarizePanelTrigger: SummarizerTrigger?
@@ -66,10 +65,6 @@ class MockMainMenuCoordinatorDelegate: MainMenuCoordinatorDelegate {
 
     func showPrintSheet() {
         showPrintSheetCalled += 1
-    }
-
-    func showReaderMode() {
-        showReaderModeCalled += 1
     }
 
     func showShareSheetForCurrentlySelectedTab() {

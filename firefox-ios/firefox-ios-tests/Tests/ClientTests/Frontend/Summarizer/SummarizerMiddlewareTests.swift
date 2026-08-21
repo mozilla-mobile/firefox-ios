@@ -229,9 +229,10 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let subject = createSubject()
 
-        let action = GeneralBrowserAction(
+        let action = NavigationBrowserAction(
+            navigationDestination: NavigationDestination(.readerMode),
             windowUUID: .XCTestDefaultUUID,
-            actionType: GeneralBrowserActionType.showReaderMode
+            actionType: NavigationBrowserActionType.tapOnReaderMode
         )
         let expectation = XCTestExpectation(description: "Show reader mode action dispatched")
 
@@ -258,9 +259,10 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let subject = createSubject()
 
-        let action = GeneralBrowserAction(
+        let action = NavigationBrowserAction(
+            navigationDestination: NavigationDestination(.readerMode),
             windowUUID: .XCTestDefaultUUID,
-            actionType: GeneralBrowserActionType.showReaderMode
+            actionType: NavigationBrowserActionType.tapOnReaderMode
         )
         let expectation = XCTestExpectation(description: "Show reader mode not available dispatched")
 

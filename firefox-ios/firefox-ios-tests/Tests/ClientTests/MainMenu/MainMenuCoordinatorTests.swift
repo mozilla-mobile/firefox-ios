@@ -8,18 +8,35 @@ import XCTest
 @testable import Client
 
 @MainActor
-final class MainMenuCoordinatorTests: XCTestCase {
+final class MainMenuCoordinatorTests: XCTestCase, StoreTestUtility {
     private var mockRouter: MockRouter!
+    private var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockRouter = MockRouter(navigationController: MockNavigationController())
+        setupStore()
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
+        resetStore()
         try await super.tearDown()
+    }
+
+    // MARK: - StoreTestUtility
+    func setupAppState() -> AppState {
+        return AppState()
+    }
+
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 
     func testInitialState() {
@@ -58,15 +75,17 @@ final class MainMenuCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.dismissCalled, 1)
     }
 
-    func testHandleNavigation_readerView_callsShowReaderModeOnDelegate() {
+    func testHandleNavigation_readerView_dispatchesNavigationBrowserAction() throws {
         let subject = createSubject()
-        let mockDelegate = MockMainMenuCoordinatorDelegate()
-        subject.navigationHandler = mockDelegate
 
         subject.navigateTo(MenuNavigationDestination(.readerView), animated: false)
         mockRouter.savedCompletion?()
 
-        XCTAssertEqual(mockDelegate.showReaderModeCalled, 1)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? NavigationBrowserAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? NavigationBrowserActionType)
+
+        XCTAssertEqual(actionType, NavigationBrowserActionType.tapOnReaderMode)
+        XCTAssertEqual(actionCalled.navigationDestination.destination, .readerMode)
         XCTAssertEqual(mockRouter.dismissCalled, 1)
     }
 

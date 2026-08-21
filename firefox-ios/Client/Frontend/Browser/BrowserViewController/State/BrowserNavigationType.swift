@@ -24,6 +24,7 @@ enum BrowserNavigationDestination: Equatable {
     case summarizer(config: SummarizerConfig, trigger: SummarizerTrigger)
     case certificatesFromErrorPage
     case nativeErrorPageLearnMore
+    case readerMode
 
     // Webpage views
     case link

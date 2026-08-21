@@ -298,8 +298,9 @@ final class ToolbarMiddleware {
 
         case .readerMode, .readerModeWithSummarizer:
             recordReaderModeTelemetry(state: state, windowUUID: action.windowUUID)
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showReaderMode)
+            let action = NavigationBrowserAction(navigationDestination: NavigationDestination(.readerMode),
+                                                 windowUUID: action.windowUUID,
+                                                 actionType: NavigationBrowserActionType.tapOnReaderMode)
             store.dispatch(action)
 
         case .reload:
@@ -401,8 +402,9 @@ final class ToolbarMiddleware {
                                               actionType: GeneralBrowserActionType.addToReadingListLongPressAction)
             store.dispatch(action)
         case .summarizer:
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showReaderMode)
+            let action = NavigationBrowserAction(navigationDestination: NavigationDestination(.readerMode),
+                                                 windowUUID: action.windowUUID,
+                                                 actionType: NavigationBrowserActionType.tapOnReaderMode)
             store.dispatch(action)
         case .readerModeWithSummarizer:
             Task {
