@@ -384,7 +384,7 @@ class CreditCardBottomSheetViewController: UIViewController,
         ) else {
             // A nil means the card couldn't be decrypted. The Keychain key is unavailable.
             logger.log("Credit card autofill selection failed: unable to decrypt selected card.",
-                       level: .fatal,
+                       level: .warning,
                        category: .autofill)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillFailed)
             return
