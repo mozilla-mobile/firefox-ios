@@ -52,25 +52,20 @@
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "ดูเหมือนว่ามีปัญหาเกี่ยวกับการเชื่อมต่ออินเทอร์เน็ตของคุณ";
 
-/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
-"NativeErrorPage.Wayback.Error.Checking.v154" = "กำลังตรวจสอบหน้าเว็บ…";
-
-/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
-"NativeErrorPage.Wayback.Error.CouldNotReach.v154" = "เข้าถึง Wayback Machine ไม่สำเร็จ";
-
 /* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.Wayback.Error.Description.v154" = "ไซต์อาจมีผู้ใช้หนาแน่นหรือไม่พร้อมให้บริการ โปรดลองใหม่ภายหลัง หากหน้าเว็บอื่นก็ไม่โหลด ให้ตรวจสอบ Wi-Fi หรือการเชื่อมต่อข้อมูลของคุณ %@ ยังค้นหาหน้านี้เวอร์ชันก่อนหน้าใน Wayback Machine ได้";
 
-/* Label shown when wayback responds and says no snapshot was found. */
-"NativeErrorPage.Wayback.Error.NotFound.v155" = "ไม่พบสำเนาที่บันทึกไว้";
+/* Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. %1$@ is the app name (e.g. Firefox). %2$@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org. */
+"NativeErrorPage.Wayback.Error.FooterDescription.v155" = "%1$@ สามารถค้นหาหน้านี้เวอร์ชันก่อนหน้าใน %2$@ ของ Internet Archive ได้";
+
+/* The tappable link text within the Wayback footer description, opens web.archive.org. */
+"NativeErrorPage.Wayback.Error.LinkText.v155" = "Wayback Machine";
 
 /* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
 "NativeErrorPage.Wayback.Error.Retry.v154" = "ลองใหม่";
 
-/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
-"NativeErrorPage.Wayback.Error.Search.v154" = "ค้นหาเวอร์ชันก่อนหน้า";
-
-/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine.
+Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
 "NativeErrorPage.Wayback.Error.Search.v155" = "ค้นหาเว็บ";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */

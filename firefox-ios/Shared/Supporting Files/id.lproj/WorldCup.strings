@@ -169,6 +169,12 @@
 /* The label for the 'Quarter-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "PEREMPAT-FINAL";
 
+/* The label for the 'Round of 16' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "BABAK 16";
+
+/* The label for the 'Round of 32' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "BABAK 32";
+
 /* The label for the 'Semi-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "SEMI-FINAL";
 
@@ -186,4 +192,7 @@
 
 /* The label for the button that allows to share the selected match info in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.ShareLabel.v151" = "Bagikan";
+
+/* The description for the temporary view in the World Cup widget showing the team that has been previously selected. */
+"WorldCup.HomepageWidget.TemporaryView.Description.v151" = "Kami akan terus mengabari Anda menjelang Piala Dunia";
 

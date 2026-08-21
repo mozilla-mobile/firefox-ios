@@ -1,0 +1,3 @@
+/* On the translation feature bottom sheet, this is the subtitle for the error message that appears when a user has no internet connection when trying to translate a page. */
+"Translations.Sheet.Error.SubtitleLabel.v145" = "Jāpārbauda savienojums ar internetu un jāmēģina vēlreiz.";
+

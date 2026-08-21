@@ -22,18 +22,63 @@
 /* Title of the issue category a user picks when a site does not work at all, in the Report a Website Issue form. */
 "WebCompatReporter.Category.SiteNotUsable.v154" = "Situs tidak dapat digunakan";
 
+/* Title of the issue category a user picks when video or audio does not play on a site, in the Report a Website Issue form. */
+"WebCompatReporter.Category.VideoOrAudio.v154" = "Video atau audio tidak dapat diputar";
+
+/* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "Jelaskan masalah secara rinci";
+
 /* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.URLLabel.v154" = "URL";
 
 /* Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.URLPlaceholder.v154" = "URL";
 
+/* Placeholder shown in the issue-type pull-down before the user has picked a website problem category, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.CategoryPlaceholder.v154" = "Pilih jenis masalah…";
+
+/* Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.Title.v154" = "Masalah Situs";
+
+/* Bullet on the Report Preview screen, for the amount of memory the device has. */
+"WebCompatReporter.Preview.Data.AvailableMemory.v155" = "Memori perangkat Anda yang tersedia";
+
+/* Bullet on the Report Preview screen, for trackers blocked on the reported page. */
+"WebCompatReporter.Preview.Data.BlockedTrackers.v155" = "Nama host pelacak diblokir di laman ini";
+
+/* Bullet on the Report Preview screen. The reported page's address is shown underneath it. */
+"WebCompatReporter.Preview.Data.PageURL.v155" = "URL Laman";
+
+/* Bullet on the Report Preview screen, for whether the page was open in private browsing. */
+"WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155" = "Status penjelajahan pribadi: aktif atau tidak aktif";
+
 /* Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen. */
 "WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154" = "Tutup";
+
+/* Row on the Report Preview screen that opens the Technical Data screen, and that screen's title. */
+"WebCompatReporter.Preview.TechnicalData.v155" = "Data Teknis";
+
+/* Title of the Report Preview screen, which shows the data that will be sent with a website issue report. */
+"WebCompatReporter.Preview.Title.v154" = "Pratinjauan Laporan";
+
+/* Title of the button that submits the website issue report, in the Report a Website Issue form. */
+"WebCompatReporter.SendButton.Title.v154" = "Kirim Laporan";
 
 /* Accessibility label for the navigation bar button that dismisses the Report a Website Issue form without sending a report. */
 "WebCompatReporter.Sheet.CloseButtonAccessibilityLabel.v154" = "Tutup";
 
 /* Title of the navigation bar button that opens a preview of the report before sending, in the Report a Website Issue form. */
 "WebCompatReporter.Sheet.PreviewButton.v154" = "Pratinjau";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.BrowserBlocked.v154" = "Peramban diblokir atau tidak didukung";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.CaptionsMissing.v154" = "Teks tidak ada";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ImagesNotLoaded.v154" = "Gambar tidak dimuat";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsMisaligned.v154" = "Item tidak sejajar";
 

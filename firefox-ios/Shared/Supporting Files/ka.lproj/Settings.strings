@@ -200,7 +200,7 @@
 "Settings.CrashReports.Link.v136" = "ვრცლად";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v136" = "დაგვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
+"Settings.CrashReports.Message.v136" = "გვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "უეცარი გათიშვის მოხსენებების თვითგაგზავნა";
@@ -227,7 +227,7 @@
 "Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "გამორთული გაქვთ %1$@-შეტყობინებები. ჩართეთ მოწყობილობის პარამეტრებიდან Settings > Notifications > %2$@";
 
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. %@ is the app name (e.g. Firefox). */
-"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "გაეცანით სასარგებლო შესაძლებლობებსა რჩევებს, რომ მეტად სრულყოფილად გამოიყენოთ %@.";
+"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "გაეცანით სასარგებლო შესაძლებლობებსა თუ რჩევებს, რომ მეტად სრულყოფილად გამოიყენოთ %@.";
 
 /* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
 "Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "რჩევები და შესაძლებლობები";
@@ -272,7 +272,7 @@
 "Settings.Search.EnginesSuggestions.Title.v124" = "შემოთავაზებები საძიებოებისგან";
 
 /* In the Search settings, this is the description that describes the Google Lens feature */
-"Settings.Search.GoogleLens.Description.v153" = "გაგზავნილ სურათებს მიიღებს Google მოსაძიებლად.";
+"Settings.Search.GoogleLens.Description.v153" = "გაგზავნილ სურათებს მიიღებს Google მათ მოსაძიებლად.";
 
 /* In the Search settings, this is the disclaimer underneath the Google Lens settings toggle that explains the conditions required for Google Lens to be available. */
 "Settings.Search.GoogleLens.Footnote.v153" = "ხელმისაწვდომია მხოლოდ მაშინ, როცა Google ჩართულია ზემოთ და თქვენი მოქმედი საძიებოა გვერდების თვალიერებისას.";

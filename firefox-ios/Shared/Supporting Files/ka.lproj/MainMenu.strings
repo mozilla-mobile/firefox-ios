@@ -128,10 +128,10 @@
 "MainMenu.SiteProtection.Protections.Title.v153" = "დაცვა";
 
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF. */
-"MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "უსაფრთხოება გამორთ.";
+"MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "დაცვა გამორთულია";
 
 /* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are ON. */
-"MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "უსაფრთხოება ჩართ.";
+"MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "დაცვა ჩართულია";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "მთავარი";
