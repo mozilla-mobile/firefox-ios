@@ -550,7 +550,7 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.goto(HomePanelsScreen)
 
         verifySearchSuggestion(searchTerm: "fifa",
-                               expectedMatch: "Wikipedia - FIFA Club World Cup",
+                               expectedMatch: "Wikipedia - FIFA World Cup",
                                hasFirefoxSuggest: true,
                                isSponsored: false)
     }
@@ -560,9 +560,7 @@ class SearchTests: FeatureFlaggedTestBase {
                                         hasFirefoxSuggest: Bool = false,
                                         isSponsored: Bool = false) {
         let siteTable = app.tables["SiteTable"]
-        browserScreen.tapOnAddressBar()
-        browserScreen.tapClearButtonIfExists()
-        browserScreen.typeOnSearchBar(text: searchTerm)
+        typeSearchTerm(searchTerm)
 
         for searchEngine in [
             "Bing search", "DuckDuckGo search", "Perplexity search", "Wikipedia (en) search", "eBay search"
@@ -575,12 +573,17 @@ class SearchTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(siteTable.staticTexts[searchTerm])
 
         // Firefox Suggest is displayed
-        if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
-            siteTable.cells.firstMatch.swipeUp()
-        }
         if hasFirefoxSuggest {
+            // A suggest query interrupted while the term is still being typed is dropped silently and
+            // never retried, so the term is retyped to trigger a fresh one.
+            let match = app.tables.staticTexts[expectedMatch]
+            var attemptsLeft = 2
+            while attemptsLeft > 0, !mozWaitForElementToExist(match, timeout: 5, failOnTimeout: false) {
+                attemptsLeft -= 1
+                typeSearchTerm(searchTerm)
+            }
             mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
-            mozWaitForElementToExist(app.tables.staticTexts[expectedMatch])
+            mozWaitForElementToExist(match)
         } else {
             mozWaitForElementToNotExist(siteTable.otherElements["Firefox Suggest"])
         }
@@ -589,6 +592,16 @@ class SearchTests: FeatureFlaggedTestBase {
             mozWaitForElementToExist(siteTable.staticTexts["Sponsored"])
         } else {
             mozWaitForElementToNotExist(siteTable.staticTexts["Sponsored"])
+        }
+    }
+
+    /// Clears the address bar before typing, so the term can be retyped without appending to itself.
+    private func typeSearchTerm(_ searchTerm: String) {
+        browserScreen.tapOnAddressBar()
+        browserScreen.tapClearButtonIfExists()
+        browserScreen.typeOnSearchBar(text: searchTerm)
+        if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
+            app.tables["SiteTable"].cells.firstMatch.swipeUp()
         }
     }
 

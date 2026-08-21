@@ -22,6 +22,7 @@ func path(forTestPage page: String) -> String {
 // Extended timeout values for mozWaitForElementToExist and mozWaitForElementToNotExist
 let TIMEOUT: TimeInterval = 10
 let TIMEOUT_LONG: TimeInterval = 20
+let PDF_TIMEOUT: TimeInterval = 60
 // Translation is network-bound and can take up to ~1 min to complete
 let TRANSLATION_TIMEOUT: TimeInterval = 90
 // Probe for optional UI that shows up immediately or not at all
