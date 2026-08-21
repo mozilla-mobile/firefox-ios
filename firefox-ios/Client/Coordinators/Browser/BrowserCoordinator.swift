@@ -639,7 +639,9 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - WebCompatReportCoordinatorNavigationDelegate
 
     func webCompatReportDidSubmit() {
-        browserViewController.showPlainToast(message: .WebCompatReporter.Toast.ReportSent)
+        let message = String.WebCompatReporter.Toast.ReportSent
+        browserViewController.showPlainToast(message: message)
+        UIAccessibility.post(notification: .announcement, argument: message)
     }
 
     func presentAdBlockerSettings() {
