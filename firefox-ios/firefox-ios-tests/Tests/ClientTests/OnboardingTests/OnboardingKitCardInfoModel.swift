@@ -7,6 +7,7 @@ import UIKit
 import OnboardingKit
 @testable import Client
 
+// Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
 @MainActor
 class OnboardingKitCardInfoModelTests: XCTestCase {
     private var mockUserPreferences: MockUserFeaturePreferences!

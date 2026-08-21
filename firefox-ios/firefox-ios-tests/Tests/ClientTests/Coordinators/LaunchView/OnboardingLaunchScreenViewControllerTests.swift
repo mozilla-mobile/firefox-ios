@@ -7,6 +7,7 @@ import XCTest
 @testable import Client
 
 // MARK: - OnboardingLaunchScreenViewController Tests
+// Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
 @MainActor
 final class OnboardingLaunchScreenViewControllerTests: XCTestCase {
     // MARK: - Test Properties
