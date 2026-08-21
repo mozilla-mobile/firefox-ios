@@ -9367,7 +9367,7 @@ extension String {
                 tableName: "WebCompatReporter",
                 value: "URL",
                 comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form.")
-            public static let WebCompatReporterFieldsDetailsAccessibilityLabel = MZLocalizedString(
+             public static let DetailsAccessibilityLabel = MZLocalizedString(
                 key: "WebCompatReporter.Fields.DetailsAccessibilityLabel.v154",
                 tableName: "WebCompatReporter",
                 value: "Describe the issue in detail",
