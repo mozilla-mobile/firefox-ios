@@ -1878,6 +1878,8 @@
 		CAA3B7E62497DCB60094E3C1 /* LoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */; };
 		CAC458F1249429C20042561A /* PasswordManagerSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC458F0249429C20042561A /* PasswordManagerSelectionHelper.swift */; };
 		CB4BB1112F954E8B003A181D /* NativeErrorPageHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4BB1102F954E8B003A181D /* NativeErrorPageHelperTests.swift */; };
+		A4EAEAC4B22B0B21B04986E6 /* PasteControlToastTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAFB98AD7CFFF4965F21C157 /* PasteControlToastTests.swift */; };
+		69800B26366FB50C927D0593 /* ButtonToastTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C16907DD6522D8F88E18FBB /* ButtonToastTests.swift */; };
 		CB5541872F51E1B100256DA1 /* CertificateHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5541862F51E1B100256DA1 /* CertificateHelperTests.swift */; };
 		CBC398772F4F455E00CD4EAD /* CertificateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC398762F4F455E00CD4EAD /* CertificateHelper.swift */; };
 		CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */; };
@@ -11071,6 +11073,8 @@
 		CAB7414DA1BA84F4CD08A8F8 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		CAC458F0249429C20042561A /* PasswordManagerSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerSelectionHelper.swift; sourceTree = "<group>"; };
 		CB4BB1102F954E8B003A181D /* NativeErrorPageHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageHelperTests.swift; sourceTree = "<group>"; };
+		FAFB98AD7CFFF4965F21C157 /* PasteControlToastTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteControlToastTests.swift; sourceTree = "<group>"; };
+		2C16907DD6522D8F88E18FBB /* ButtonToastTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonToastTests.swift; sourceTree = "<group>"; };
 		CB5541862F51E1B100256DA1 /* CertificateHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateHelperTests.swift; sourceTree = "<group>"; };
 		CB664443A893E97243385395 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		CBA242528C97816D5BCF4473 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
@@ -13857,6 +13861,15 @@
 				630EBE4C301109A10046E9BC /* GradientProgressBarTests.swift */,
 			);
 			path = Widgets;
+			sourceTree = "<group>";
+		};
+		9345D88A82332CF22A1A40B8 /* Toasts */ = {
+			isa = PBXGroup;
+			children = (
+				FAFB98AD7CFFF4965F21C157 /* PasteControlToastTests.swift */,
+				2C16907DD6522D8F88E18FBB /* ButtonToastTests.swift */,
+			);
+			path = Toasts;
 			sourceTree = "<group>";
 		};
 		630FE1332C7FB42500D9D6B2 /* NativeErrorPage */ = {
@@ -16753,6 +16766,7 @@
 				21872A222E3CFEA500241A8A /* TabScrollHandlerTests.swift */,
 				21EA33802EC67FCA00D20D90 /* ToolbarAnimatorTest.swift */,
 				8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */,
+				9345D88A82332CF22A1A40B8 /* Toasts */,
 				E1AEC174286E0CF500062E29 /* WebView */,
 			);
 			path = Browser;
@@ -19147,7 +19161,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "SWIFTLINT_ROOT=\"${SRCROOT}/..\"\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\n# The version is pinned in .swiftlint-version and installed by bootstrap.sh\nSWIFTLINT=$(\"${SWIFTLINT_ROOT}/scripts/install-swiftlint.sh\" --path-only)\n\nif [ -n \"${SWIFTLINT}\" ]; then\n    # Move to the location of the root Swiftlint config file in\n    # order to use nested configurations\n    cd ${SWIFTLINT_ROOT}\n\n    \"${SWIFTLINT}\" lint ${MODIFIED_FILES}\nelse\n    echo \"warning: pinned SwiftLint not installed, run ./bootstrap.sh from the repo root\"\nfi\n";
+			shellScript = "SWIFTLINT_ROOT=\"${SRCROOT}/..\"\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\n# The version is pinned in .swiftlint-version and installed by bootstrap.sh\nSWIFTLINT=$(\"${SWIFTLINT_ROOT}/scripts/install-swiftlint.sh\" --path-only)\n\nif [ -n \"${SWIFTLINT}\" ]; then\n    # Move to the location of the root Swiftlint config file in\n    # order to use nested configurations\n    cd \"${SWIFTLINT_ROOT}\"\n\n    \"${SWIFTLINT}\" lint ${MODIFIED_FILES}\nelse\n    echo \"warning: pinned SwiftLint not installed, run ./bootstrap.sh from the repo root\"\nfi\n";
 		};
 		D48146712E26CB3300231244 /* Populate test-fixtures script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -20836,6 +20850,8 @@
 				5A70EF19295E2E1600790249 /* DependencyHelperMock.swift in Sources */,
 				61497F3C2F687B5A00BC5ACA /* AIControlsSettingTests.swift in Sources */,
 				CB4BB1112F954E8B003A181D /* NativeErrorPageHelperTests.swift in Sources */,
+				A4EAEAC4B22B0B21B04986E6 /* PasteControlToastTests.swift in Sources */,
+				69800B26366FB50C927D0593 /* ButtonToastTests.swift in Sources */,
 				8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */,
 				8A8482F02BE1602500F9007B /* MicrosurveyPromptStateTests.swift in Sources */,
 				EC4F28183011A6BF00BAD351 /* CertificatesFetcherTests.swift in Sources */,
