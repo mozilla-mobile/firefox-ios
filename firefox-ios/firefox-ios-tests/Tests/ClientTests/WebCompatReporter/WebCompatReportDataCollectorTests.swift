@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import WebKit
 import XCTest
 
 @testable import Client
@@ -216,6 +217,29 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertNil(WebCompatPageContext(from: ["languages": [7, true]]).languages)
     }
 
+    // MARK: - Bundled page-context script
+
+    /// Covers the wiring the reader cannot check on its own: the script reaching the Webcompat
+    /// bundle, that bundle being injected into the page content world, and the global keeping
+    /// the name the reader calls. The flags read `false` rather than nil once the script ran.
+    func test_bundledPageContextScript_answersTheCallTheReaderMakes() async throws {
+        let webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
+        UserScriptManager.shared.injectUserScriptsIntoWebView(webView, nightMode: false, noImageMode: false)
+        await loadBlankPage(in: webView)
+
+        let result = try await webView.callAsyncJavaScript(
+            WebCompatPageContextReader.scriptCall,
+            contentWorld: .page
+        )
+
+        let context = WebCompatPageContext(from: try XCTUnwrap(result as? [String: Any]))
+        XCTAssertFalse(try XCTUnwrap(context.languages).isEmpty)
+        XCTAssertFalse(try XCTUnwrap(context.userAgent).isEmpty)
+        XCTAssertEqual(context.fastclick, false)
+        XCTAssertEqual(context.marfeel, false)
+        XCTAssertEqual(context.mobify, false)
+    }
+
     // MARK: - blockedOrigins opt-out
 
     func test_blockedOrigins_whenNotIncluded_isNil() {
@@ -302,5 +326,41 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         var physicalMemoryMegabytes = 2048
         var defaultUserAgent = "FakeUA/1.0"
         var displayScale: CGFloat = 2.0
+    }
+
+    private func loadBlankPage(in webView: WKWebView) async {
+        let delegate = NavigationCompletionDelegate()
+        webView.navigationDelegate = delegate
+        await withCheckedContinuation { continuation in
+            delegate.onCompletion = { continuation.resume() }
+            webView.loadHTMLString("<html><body></body></html>", baseURL: URL(string: "https://example.com"))
+        }
+        webView.navigationDelegate = nil
+    }
+}
+
+/// Resumes once, whichever way the load ends, so a failed load cannot hang the test.
+@MainActor
+private final class NavigationCompletionDelegate: NSObject, WKNavigationDelegate {
+    var onCompletion: (() -> Void)?
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        complete()
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        complete()
+    }
+
+    func webView(_ webView: WKWebView,
+                 didFailProvisionalNavigation navigation: WKNavigation!,
+                 withError error: Error) {
+        complete()
+    }
+
+    private func complete() {
+        let onCompletion = self.onCompletion
+        self.onCompletion = nil
+        onCompletion?()
     }
 }
