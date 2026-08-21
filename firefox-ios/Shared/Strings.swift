@@ -7563,6 +7563,11 @@ extension String {
         tableName: "3DTouchActions",
         value: nil,
         comment: "String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch")
+    public static let QuickActionsCombineWindowsTitle = MZLocalizedString(
+        key: "QuickActions.CombineWindows.Title.v155",
+        tableName: "3DTouchActions",
+        value: "Combine Windows",
+        comment: "On iPad, label for the home screen Quick Action (long-press the app icon) that combines the tabs from all other open Firefox windows into the current window and closes those other windows.")
 }
 
 // MARK: - ClearPrivateDataAlert
