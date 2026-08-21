@@ -121,7 +121,6 @@ struct HomepageState: ScreenState, Equatable {
             wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action),
             telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action)
         )
-        .resetTransientState()
     }
 
     static func defaultState(from state: HomepageState) -> HomepageState {
