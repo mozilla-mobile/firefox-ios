@@ -114,6 +114,59 @@ final class GroupedEditFolderViewControllerTests: XCTestCase {
         XCTAssertEqual(viewModel.folderGroups[0].isExpanded, !wasExpanded)
     }
 
+    func test_toggleGroup_collapsingMultiBlockGroup_updatesSectionCountWithoutStaleCache() {
+        let folderA = GroupedFolder(title: "A", guid: "a", indentation: 0)
+        let folderB = GroupedFolder(title: "B", guid: "b", indentation: 0)
+        let fetcher = MockGroupedFolderHierarchyFetcher()
+        fetcher.mockFolderStructures = [folderA, folderB]
+        let viewModel = createViewModel(folderFetcher: fetcher)
+        let subject = createSubject(viewModel: viewModel)
+
+        beginBrowsingAndWait(viewModel, subject: subject)
+        XCTAssertEqual(subject.numberOfSections(in: subject.tableView), 3)
+
+        let header = subject.tableView(subject.tableView, viewForHeaderInSection: 1) as? FolderSectionHeaderView
+        header?.onTap?()
+
+        XCTAssertEqual(subject.numberOfSections(in: subject.tableView), 2)
+    }
+
+    func test_reload_afterNewRootFolderAdded_updatesSectionCountWithoutStaleCache() {
+        let fetcher = MockGroupedFolderHierarchyFetcher()
+        fetcher.mockFolderStructures = [GroupedFolder(title: "A", guid: "a", indentation: 0)]
+        let viewModel = createViewModel(folderFetcher: fetcher)
+        let subject = createSubject(viewModel: viewModel)
+
+        beginBrowsingAndWait(viewModel, subject: subject)
+        let sectionsBeforeReload = subject.numberOfSections(in: subject.tableView)
+
+        fetcher.mockFolderStructures = [
+            GroupedFolder(title: "A", guid: "a", indentation: 0),
+            GroupedFolder(title: "B", guid: "b", indentation: 0)
+        ]
+        beginBrowsingAndWait(viewModel, subject: subject)
+
+        XCTAssertEqual(subject.numberOfSections(in: subject.tableView), sectionsBeforeReload + 1)
+    }
+
+    func test_reload_afterNestedFolderAdded_updatesRowCountWithoutStaleCache() {
+        let fetcher = MockGroupedFolderHierarchyFetcher()
+        fetcher.mockFolderStructures = [GroupedFolder(title: "A", guid: "a", indentation: 0)]
+        let viewModel = createViewModel(folderFetcher: fetcher)
+        let subject = createSubject(viewModel: viewModel)
+
+        beginBrowsingAndWait(viewModel, subject: subject)
+        XCTAssertEqual(subject.tableView(subject.tableView, numberOfRowsInSection: 1), 1)
+
+        fetcher.mockFolderStructures = [
+            GroupedFolder(title: "A", guid: "a", indentation: 0),
+            GroupedFolder(title: "A-child", guid: "a-child", indentation: 1)
+        ]
+        beginBrowsingAndWait(viewModel, subject: subject)
+
+        XCTAssertEqual(subject.tableView(subject.tableView, numberOfRowsInSection: 1), 2)
+    }
+
     func test_saveButtonAction_popsViewController() {
         let subject = createSubject()
         let navController = UINavigationController()

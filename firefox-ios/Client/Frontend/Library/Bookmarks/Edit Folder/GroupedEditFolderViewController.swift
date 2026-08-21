@@ -385,8 +385,18 @@ final class GroupedEditFolderViewController: UIViewController,
 
     // MARK: - Helpers
 
-    // TODO: FXIOS-16414 Add a caching mechanism to avoid constant computation
+    private var cachedGroupSections: (folderGroups: [FolderGroup], sections: [(groupIndex: Int, blockIndex: Int)])?
+
     private var groupSections: [(groupIndex: Int, blockIndex: Int)] {
+        if let cachedGroupSections, cachedGroupSections.folderGroups == viewModel.folderGroups {
+            return cachedGroupSections.sections
+        }
+        let sections = computeGroupSections()
+        cachedGroupSections = (viewModel.folderGroups, sections)
+        return sections
+    }
+
+    private func computeGroupSections() -> [(groupIndex: Int, blockIndex: Int)] {
         var result: [(groupIndex: Int, blockIndex: Int)] = []
         for (groupIndex, group) in viewModel.folderGroups.enumerated() {
             guard group.isExpanded, !group.folders.isEmpty else {
