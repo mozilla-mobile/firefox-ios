@@ -46,21 +46,19 @@ protocol WebCompatPageContextReading: Sendable {
 }
 
 struct WebCompatPageContextReader: WebCompatPageContextReading {
-    private static let scriptResource = "WebCompatPageContext"
+    /// The function `WebCompatPageContext.js` puts on the page-world `window`.
+    static let scriptCall = "return window.__firefoxWebCompat__.getPageContext();"
 
     private let logger: Logger = DefaultLogger.shared
 
-    /// Runs in `.page` rather than the client world, because page scripts set the framework globals.
-    /// The script declares a function rather than returning a value, so the file stays valid on its
-    /// own and the `return` below cannot be cut short by JavaScript's semicolon insertion.
+    /// The script ships in `WebcompatAllFramesAtDocumentStart.js`, which is injected in the page
+    /// content world rather than the client one, because page scripts set the framework globals.
     @MainActor
     func read(from tab: Tab) async -> WebCompatPageContext {
-        guard let webView = tab.webView, let script = loadScript() else {
-            return WebCompatPageContext()
-        }
+        guard let webView = tab.webView else { return WebCompatPageContext() }
         do {
             let result = try await webView.callAsyncJavaScript(
-                "\(script)\nreturn webCompatPageContext();",
+                WebCompatPageContextReader.scriptCall,
                 contentWorld: .page
             )
             guard let dictionary = result as? [String: Any] else {
@@ -76,17 +74,5 @@ struct WebCompatPageContextReader: WebCompatPageContextReading {
                        category: .webview)
             return WebCompatPageContext()
         }
-    }
-
-    private func loadScript() -> String? {
-        guard let url = Bundle.main.url(forResource: WebCompatPageContextReader.scriptResource,
-                                        withExtension: "js"),
-              let script = try? String(contentsOf: url, encoding: .utf8) else {
-            logger.log("WebCompat page context script is missing from the bundle",
-                       level: .warning,
-                       category: .webview)
-            return nil
-        }
-        return script
     }
 }
