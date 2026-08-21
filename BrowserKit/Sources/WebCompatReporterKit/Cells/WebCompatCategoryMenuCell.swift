@@ -7,6 +7,7 @@ import UIKit
 
 /// Category pull-down row: a full-width button opening a `UIMenu` of categories.
 /// Selection is reported through the handler, not stored, so it re-renders on configure.
+/// The title sits on a sibling label so the menu morph has nothing visible to animate.
 final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
     private var selectionHandler: ((String) -> Void)?
     private var chevronSizeConstraints: [NSLayoutConstraint] = []
@@ -21,18 +22,16 @@ final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
         return UIFontMetrics.default.scaledValue(for: WebCompatReporterUX.Chevron.verticalOverlap)
     }
 
-    private lazy var menuButton: UIButton = {
-        var configuration = UIButton.Configuration.plain()
-        // `plain()`'s 12pt leading inset would stack on the cell's own layout margin.
-        configuration.contentInsets.leading = 0
-        let button = UIButton(configuration: configuration)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentHorizontalAlignment = .leading
+    private let categoryLabel: UILabel = .build { label in
+        label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
+        label.font = FXFontStyles.Regular.body.scaledFont()
+        label.isAccessibilityElement = false
+    }
+
+    private let menuButton: WebCompatTrailingMenuButton = .build { button in
         button.showsMenuAsPrimaryAction = true
-        button.titleLabel?.numberOfLines = 0
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        return button
-    }()
+    }
 
     private lazy var chevronUpView: UIImageView = {
         let image = UIImage(named: StandardImageIdentifiers.Large.chevronUp)?.withRenderingMode(.alwaysTemplate)
@@ -67,11 +66,8 @@ final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
     }
 
     private func setupLayout() {
-        // The button spans the whole row so tapping anywhere — including over the
-        // non-interactive chevrons layered on top — opens the pull-down.
-        contentView.addSubview(menuButton)
-        contentView.addSubview(chevronUpView)
-        contentView.addSubview(chevronDownView)
+        // The button sits beneath the non-interactive title and chevrons, so any tap opens the menu.
+        contentView.addSubviews(menuButton, categoryLabel, chevronUpView, chevronDownView)
         let margins = contentView.layoutMarginsGuide
         chevronSizeConstraints = [
             chevronUpView.widthAnchor.constraint(equalToConstant: scaledChevronSize),
@@ -80,21 +76,28 @@ final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
             chevronDownView.heightAnchor.constraint(equalToConstant: scaledChevronSize)
         ]
         // .defaultHigh (not required) avoids the self-sizing vs. min-height constraint conflict.
-        let topConstraint = menuButton.topAnchor.constraint(equalTo: margins.topAnchor)
-        let bottomConstraint = menuButton.bottomAnchor.constraint(equalTo: margins.bottomAnchor)
-        topConstraint.priority = .defaultHigh
-        bottomConstraint.priority = .defaultHigh
+        let verticalConstraints = [
+            menuButton.topAnchor.constraint(equalTo: margins.topAnchor),
+            menuButton.bottomAnchor.constraint(equalTo: margins.bottomAnchor),
+            categoryLabel.topAnchor.constraint(equalTo: margins.topAnchor),
+            categoryLabel.bottomAnchor.constraint(equalTo: margins.bottomAnchor)
+        ]
+        verticalConstraints.forEach { $0.priority = .defaultHigh }
         let chevronUpBottom = chevronUpView.bottomAnchor.constraint(equalTo: contentView.centerYAnchor)
         let chevronDownTop = chevronDownView.topAnchor.constraint(equalTo: contentView.centerYAnchor)
         chevronUpBottomConstraint = chevronUpBottom
         chevronDownTopConstraint = chevronDownTop
-        NSLayoutConstraint.activate(chevronSizeConstraints + [
+        NSLayoutConstraint.activate(chevronSizeConstraints + verticalConstraints + [
             menuButton.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
-            topConstraint,
-            bottomConstraint,
             menuButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
             menuButton.heightAnchor.constraint(
                 greaterThanOrEqualToConstant: WebCompatReporterUX.Control.minimumTapTarget
+            ),
+
+            categoryLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+            categoryLabel.trailingAnchor.constraint(
+                lessThanOrEqualTo: chevronUpView.leadingAnchor,
+                constant: -WebCompatReporterUX.Spacing.interItem
             ),
 
             chevronUpView.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
@@ -115,14 +118,12 @@ final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
         }
     }
 
-    /// Keeps the chevron metrics and the button's reserved trailing space in step with
-    /// the current Dynamic Type size.
+    /// Keeps the chevron metrics in step with the current Dynamic Type size.
     private func applyScaledMetrics() {
         chevronSizeConstraints.forEach { $0.constant = scaledChevronSize }
         let halfOverlap = scaledChevronVerticalOverlap / 2
         chevronUpBottomConstraint?.constant = halfOverlap
         chevronDownTopConstraint?.constant = -halfOverlap
-        menuButton.configuration?.contentInsets.trailing = scaledChevronSize + WebCompatReporterUX.Spacing.interItem
     }
 
     func configure(
@@ -135,17 +136,11 @@ final class WebCompatCategoryMenuCell: UICollectionViewListCell, Notifiable {
     ) {
         selectionHandler = onSelect
         menuButton.accessibilityIdentifier = a11yIdentifier
+        menuButton.accessibilityLabel = title
         backgroundConfiguration = .listGroupedCell()
         backgroundConfiguration?.backgroundColor = theme.colors.layer5
-        var configuration = menuButton.configuration ?? UIButton.Configuration.plain()
-        configuration.title = title
-        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var outgoing = incoming
-            outgoing.font = FXFontStyles.Regular.body.scaledFont()
-            return outgoing
-        }
-        configuration.baseForegroundColor = isPlaceholder ? theme.colors.textSecondary : theme.colors.textPrimary
-        menuButton.configuration = configuration
+        categoryLabel.text = title
+        categoryLabel.textColor = isPlaceholder ? theme.colors.textSecondary : theme.colors.textPrimary
         chevronUpView.tintColor = theme.colors.textSecondary
         chevronDownView.tintColor = theme.colors.textSecondary
         menuButton.menu = UIMenu(children: options.map { option in
