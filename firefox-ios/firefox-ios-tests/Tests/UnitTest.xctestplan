@@ -297,6 +297,7 @@
         "OneLineTableViewCellTests",
         "OpenSearchEngineTests",
         "OverlayModeManagerTests",
+        "PDFDocumentExtensionTests",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_addressesDisabled()",
