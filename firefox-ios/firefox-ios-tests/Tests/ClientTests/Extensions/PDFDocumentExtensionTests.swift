@@ -7,6 +7,7 @@ import XCTest
 
 @testable import Client
 
+// Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
 final class PDFDocumentExtensionTests: XCTestCase {
     private var documentsPath: String {
         let url = try? FileManager.default.url(for: .documentDirectory,
