@@ -204,13 +204,13 @@ class BrowsingPDFTests: BaseTestCase {
         // Step 2: Switch to another tab and open another large PDF. All PDF files load properly.
         navigator.openNewURL(urlString: largePDF2["url"]!)
         waitUntilPageLoad(timeout: TIMEOUT_LONG)
-        browser.assertAddressBarContains(value: largePDF2["pdfValue"]!, timeout: TIMEOUT_LONG)
+        browser.assertAddressBarContains(value: largePDF2["pdfValue"]!, timeout: PDF_TIMEOUT)
 
         // Step 3: Return to the first PDF tab. It should be loading or loaded.
         navigator.goto(TabTray)
         tabTrayScreen.tapTabAtIndex(index: 0)
         waitUntilPageLoad(timeout: TIMEOUT_LONG)
-        browser.assertAddressBarContains(value: largePDF1["pdfValue"]!, timeout: TIMEOUT_LONG)
+        browser.assertAddressBarContains(value: largePDF1["pdfValue"]!, timeout: PDF_TIMEOUT)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168439
