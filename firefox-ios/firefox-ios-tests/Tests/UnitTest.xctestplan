@@ -293,7 +293,7 @@
         "OnboardingKitCardInfoModelTests",
         "OnboardingLaunchScreenViewControllerTests",
         "OnboardingServiceTests",
-        "OnboardingTelemetryUtilityTests\/testSendOnboardingCardView_WelcomeCard_Success()",
+        "OnboardingTelemetryUtilityTests",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_addressesDisabled()",

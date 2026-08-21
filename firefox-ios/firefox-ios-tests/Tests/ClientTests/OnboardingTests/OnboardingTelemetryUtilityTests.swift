@@ -8,6 +8,7 @@ import Glean
 @testable import Client
 @testable import OnboardingKit
 
+// Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
 @MainActor
 final class OnboardingTelemetryUtilityTests: XCTestCase {
     typealias CardNames = NimbusOnboardingTestingConfigUtility.CardOrder
