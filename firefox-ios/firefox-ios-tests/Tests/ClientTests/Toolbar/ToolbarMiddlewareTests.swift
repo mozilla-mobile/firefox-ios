@@ -746,7 +746,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func testDidTapButton_tapOnReaderModeButton_dispatchesShowReaderModes() throws {
-        try didTapButton(buttonType: .readerMode, expectedActionType: GeneralBrowserActionType.showReaderMode)
+        try didTriggerReaderMode(buttonType: .readerMode, gestureType: .tap)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.ReaderModeButtonTappedExtra>
@@ -763,7 +763,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func testDidTapButton_tapOnReaderModeWithSummarizerButton_dispatchesShowReaderModes() throws {
-        try didTapButton(buttonType: .readerModeWithSummarizer, expectedActionType: .showReaderMode)
+        try didTriggerReaderMode(buttonType: .readerModeWithSummarizer, gestureType: .tap)
 
         let savedMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.ReaderModeButtonTappedExtra>
@@ -1004,7 +1004,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func testDidTapButton_longPressOnSummarizer_dispatchesShowReaderModeAction() throws {
-        try didLongPressButton(buttonType: .summarizer, expectedActionType: .showReaderMode)
+        try didTriggerReaderMode(buttonType: .summarizer, gestureType: .longPress)
     }
 
     func testDidTapButton_longPressOnReaderModeWithSummarizer_dispatchesShowSummarizerAction() throws {
@@ -1310,6 +1310,34 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, expectedActionType)
         assertAction(actionCalled)
+    }
+
+    private func didTriggerReaderMode(buttonType: ToolbarActionConfiguration.ActionType,
+                                      gestureType: ToolbarButtonGesture,
+                                      expectation: XCTestExpectation? = nil) throws {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarMiddlewareAction(
+            buttonType: buttonType,
+            gestureType: gestureType,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton)
+
+        mockStore.dispatchCalled = {
+            expectation?.fulfill()
+        }
+
+        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+
+        if let expectation {
+            wait(for: [expectation], timeout: 1.0)
+        }
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? NavigationBrowserAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? NavigationBrowserActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, NavigationBrowserActionType.tapOnReaderMode)
+        XCTAssertEqual(actionCalled.navigationDestination.destination, .readerMode)
     }
 
     private func cancelEditMode(dispatchedActionsCount: Int = 2) throws {
