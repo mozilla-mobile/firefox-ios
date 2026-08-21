@@ -30,13 +30,18 @@ class NativeErrorPageHelper {
     }
 
     var error: NSError
+    private let cellularDataStateProvider: any CellularDataStateProvider
 
     var errorDescriptionItem: String {
         return error.localizedDescription
     }
 
-    init(error: NSError) {
+    init(
+        error: NSError,
+        cellularDataStateProvider: any CellularDataStateProvider = SystemCellularDataStateProvider.shared
+    ) {
         self.error = error
+        self.cellularDataStateProvider = cellularDataStateProvider
     }
 
     // MARK: - Static Helpers
@@ -119,6 +124,11 @@ class NativeErrorPageHelper {
     // MARK: - Instance Methods
 
     func parseErrorDetails() -> ErrorPageModel {
+        if NativeErrorPageFeatureFlag().isNICErrorPageEnabled &&
+            cellularDataStateProvider.isRestrictedOfflineError(error) {
+            return .cellularDataRestricted
+        }
+
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
             switch error.code {
             case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
