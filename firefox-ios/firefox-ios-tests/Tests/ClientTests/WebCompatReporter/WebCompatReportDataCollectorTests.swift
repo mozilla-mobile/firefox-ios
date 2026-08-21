@@ -217,27 +217,35 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertNil(WebCompatPageContext(from: ["languages": [7, true]]).languages)
     }
 
-    // MARK: - Bundled page-context script
+    // MARK: - Page-context reader
 
-    /// Covers the wiring the reader cannot check on its own: the script reaching the Webcompat
-    /// bundle, that bundle being injected into the page content world, and the global keeping
-    /// the name the reader calls. The flags read `false` rather than nil once the script ran.
-    func test_bundledPageContextScript_answersTheCallTheReaderMakes() async throws {
-        let webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
+    /// Covers the wiring the parsing tests above cannot reach: the script landing in the
+    /// webcompat bundle, that bundle being injected into the page content world, and the global
+    /// keeping the name the reader calls. Flags reading `false` mean the script ran and found
+    /// none, where nil would mean it never ran.
+    func test_read_fromLoadedTab_fillsLanguagesAndClearsTheFrameworkFlags() async throws {
+        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+        tab.createWebview(configuration: WKWebViewConfiguration())
+        let webView = try XCTUnwrap(tab.webView)
         UserScriptManager.shared.injectUserScriptsIntoWebView(webView, nightMode: false, noImageMode: false)
         await loadBlankPage(in: webView)
 
-        let result = try await webView.callAsyncJavaScript(
-            WebCompatPageContextReader.scriptCall,
-            contentWorld: .page
-        )
+        let context = await WebCompatPageContextReader().read(from: tab)
 
-        let context = WebCompatPageContext(from: try XCTUnwrap(result as? [String: Any]))
         XCTAssertFalse(try XCTUnwrap(context.languages).isEmpty)
         XCTAssertFalse(try XCTUnwrap(context.userAgent).isEmpty)
         XCTAssertEqual(context.fastclick, false)
         XCTAssertEqual(context.marfeel, false)
         XCTAssertEqual(context.mobify, false)
+    }
+
+    /// Nothing to read from is not an error; the fields stay nil and the report still goes out.
+    func test_read_fromTabWithoutWebView_returnsAnEmptyContext() async {
+        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+
+        let context = await WebCompatPageContextReader().read(from: tab)
+
+        XCTAssertEqual(context, WebCompatPageContext())
     }
 
     // MARK: - blockedOrigins opt-out

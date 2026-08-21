@@ -47,7 +47,7 @@ protocol WebCompatPageContextReading: Sendable {
 
 struct WebCompatPageContextReader: WebCompatPageContextReading {
     /// The function `WebCompatPageContext.js` puts on the page-world `window`.
-    static let scriptCall = "return window.__firefoxWebCompat__.getPageContext();"
+    private static let scriptCall = "return window.__firefoxWebCompat__.getPageContext();"
 
     private let logger: Logger = DefaultLogger.shared
 
