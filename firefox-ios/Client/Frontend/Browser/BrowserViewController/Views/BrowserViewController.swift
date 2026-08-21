@@ -3925,6 +3925,12 @@ class BrowserViewController: UIViewController,
         return themeManager.getCurrentTheme(for: windowUUID)
     }
 
+    /// Recomputes the status bar overlay's visible state without resetting the user's scroll position.
+    /// Call after presenting/dismissing UI that may have left it stale (e.g. the main menu).
+    func refreshStatusBarOverlay() {
+        statusBarOverlay.refresh()
+    }
+
     func applyTheme() {
         let currentTheme = currentTheme()
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)

@@ -22,6 +22,7 @@ class MockMainMenuCoordinatorDelegate: MainMenuCoordinatorDelegate {
     private(set) var showShareSheetForCurrentlySelectedTabCalled = 0
     private(set) var showSummarizePanelCalled = 0
     private(set) var showSummarizePanelTrigger: SummarizerTrigger?
+    private(set) var mainMenuDidDismissCalled = 0
 
     func editBookmarkForCurrentTab() {
         editBookmarkForCurrentTabCalled += 1
@@ -79,5 +80,9 @@ class MockMainMenuCoordinatorDelegate: MainMenuCoordinatorDelegate {
     func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?) {
         showSummarizePanelCalled += 1
         showSummarizePanelTrigger = trigger
+    }
+
+    func mainMenuDidDismiss() {
+        mainMenuDidDismissCalled += 1
     }
 }

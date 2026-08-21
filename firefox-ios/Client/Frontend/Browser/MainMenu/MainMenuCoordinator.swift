@@ -50,6 +50,10 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
 
     @MainActor
     func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?)
+
+    /// Called after the main menu has been dismissed, however it was closed.
+    @MainActor
+    func mainMenuDidDismiss()
 }
 
 class MainMenuCoordinator: BaseCoordinator {
@@ -101,6 +105,7 @@ class MainMenuCoordinator: BaseCoordinator {
     func dismissMenuModal(animated: Bool) {
         router.dismiss(animated: animated, completion: nil)
         removeCoordinatorFromParent()
+        navigationHandler?.mainMenuDidDismiss()
     }
 
     func navigateTo(_ destination: MenuNavigationDestination, animated: Bool) {
@@ -110,6 +115,7 @@ class MainMenuCoordinator: BaseCoordinator {
             self.handleDestination(destination)
 
             removeCoordinatorFromParent()
+            navigationHandler?.mainMenuDidDismiss()
         })
     }
 
