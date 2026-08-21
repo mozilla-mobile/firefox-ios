@@ -71,7 +71,7 @@ final class RemoteTabPanelTests: XCTestCase {
                                     refreshState: .idle,
                                     allowsRefresh: true,
                                     clientAndTabs: fakeData,
-                                    showingEmptyState: nil,
+                                    contentState: .tabs,
                                     devices: [])
     }
 
