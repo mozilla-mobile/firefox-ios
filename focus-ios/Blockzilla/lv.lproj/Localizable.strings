@@ -7,11 +7,50 @@
 /* Label for row in About screen */
 "About.rowHelp" = "Palīdzība";
 
+/* Label for row in About screen */
+"About.rowRights" = "Tavas tiesības";
+
+/* Label for row in About screen */
+"About.rowTerms" = "Pakalpojuma izmantošanas nosacījumi";
+
 /* Label on About screen */
 "About.safariBullet1" = "Liegt izsekotājus uzlabotam privātumam";
 
 /* Label on About screen */
 "About.safariBullet2" = "Liegt tīmekļa fontus, lai samazinātu lapu izmēru";
+
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Par %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Labi";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Atgadījās kļūda ar caurlaides pievienošanu Wallet. Lūgums vēlāk mēģināt vēlreiz.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Neizdevās pievienot caurlaidi";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Pievienot pielāgotu URL";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Kārtīgi jāpārbauda ievadītais URL.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Piemērs: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Pievienojamais URL";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Ielīmē vai ievadi URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Pievienot pielāgotu URL";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Pievienots jauns pielāgotais URL.";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Manas vietnes";
@@ -55,6 +94,9 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Aizvērt";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Izskatās, ka interneta savienojums ir bezsaistē.";
+
 /* Save button label */
 "Save" = "Saglabāt";
 
@@ -64,12 +106,42 @@
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "Jā";
 
+/* %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Lai iegūtu ieteikumus, %@ nepieciešams adreses joslā ievadīto nosūtīt meklētājam.";
+
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Liegt satura izsekotājus";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Settings.detailTextSearchSuggestion" = "%@ adreses joslā ievadīto nosūtīs meklētājam.";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Pievienot vēl kādu meklētāju";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Pievienot meklētāju";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Pievienots jauns meklētājs.";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Liegt tīmekļa fontus";
 
 /* Label for Rollouts toggle on the settings screen */
 "Settings.toggleRollouts" = "Atļaut attālos uzlabojumus";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Pievienot īsceļiem";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"ShowMeHowOnboarding.Title.V2" = "Pievienot %@ logrīku";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Pievienot";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Pievienot Siri";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Savienojums nav drošs";
 
