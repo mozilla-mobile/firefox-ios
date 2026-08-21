@@ -44,7 +44,7 @@ final class MockTopSiteHistoryManager: TopSiteHistoryManagerProvider, @unchecked
         self.sites = sites
     }
 
-    func remove(pinnedSite: Storage.Site) async throws {
+    func remove(pinnedSite: Storage.Site) throws {
         removePinnedSiteCalled()
     }
 

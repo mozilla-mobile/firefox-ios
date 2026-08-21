@@ -7,7 +7,7 @@
 final class MockResultsService: ResultsService, @unchecked Sendable {
     var fetchResultsCallCount = 0
 
-    func fetchResults(for transcription: String) async throws -> SearchResult {
+    func fetchResults(for transcription: String) throws -> SearchResult {
         return SearchResult.empty()
     }
 }

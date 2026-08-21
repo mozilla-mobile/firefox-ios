@@ -31,7 +31,7 @@ final class LetterImageGeneratorTests: XCTestCase {
         }
     }
 
-    func testGenerateLetter_fromEmptyString_throws() async {
+    func testGenerateLetter_fromEmptyString_throws() {
         let subject = createSubject()
         let siteString = ""
 
@@ -43,7 +43,7 @@ final class LetterImageGeneratorTests: XCTestCase {
         }
     }
 
-    func testGenerateLetter_fromString_returnsCapitalizedLetter() async throws {
+    func testGenerateLetter_fromString_returnsCapitalizedLetter() throws {
         let subject = createSubject()
         let siteString = "mozilla.org"
         let expectedLetter = "M"
@@ -52,7 +52,7 @@ final class LetterImageGeneratorTests: XCTestCase {
         XCTAssertEqual(letter, expectedLetter)
     }
 
-    func testGenerateLetter_fromNonAlphanumericString_returnsFirstCharacter() async throws {
+    func testGenerateLetter_fromNonAlphanumericString_returnsFirstCharacter() throws {
         let subject = createSubject()
         let siteString = "?$!@"
         let expectedLetter = "?"
@@ -61,14 +61,14 @@ final class LetterImageGeneratorTests: XCTestCase {
         XCTAssertEqual(letter, expectedLetter)
     }
 
-    func testGenerateImageFromLetter_returnsNonEmptyImage() async {
+    func testGenerateImageFromLetter_returnsNonEmptyImage() {
         let subject = createSubject()
 
         let image = subject.generateImage(fromLetter: "H", color: .red)
         XCTAssertNotEqual(image, UIImage())
     }
 
-    func testGenerateImageFromLetter_returnsImageWithCorrectBackgroundColor() async {
+    func testGenerateImageFromLetter_returnsImageWithCorrectBackgroundColor() {
         let subject = createSubject()
         let letter = "H"
         let backgroundColor = UIColor.red

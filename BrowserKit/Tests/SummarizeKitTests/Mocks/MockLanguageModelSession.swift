@@ -29,7 +29,7 @@ final class MockLanguageModelSession: LanguageModelSessionProtocol, @unchecked S
         to prompt: Prompt,
         options: GenerationOptions,
         isolation: isolated (any Actor)?
-    ) async throws -> any LanguageModelResponseProtocol {
+    ) throws -> any LanguageModelResponseProtocol {
         if let error = respondWithError { throw error }
         return MockLanguageModelResponseProtocol(content: respondWith.joined(separator: " "), transcriptEntries: [])
     }

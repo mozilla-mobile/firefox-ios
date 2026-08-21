@@ -11,7 +11,7 @@ public struct BearerRequestAuth: RequestAuthProtocol {
         self.apiKey = apiKey
     }
 
-    public func authenticate(request: inout URLRequest) async throws {
+    public func authenticate(request: inout URLRequest) throws {
         request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
     }
 }

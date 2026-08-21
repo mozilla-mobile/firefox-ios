@@ -29,7 +29,7 @@ final class WKUserScriptManagerTests: XCTestCase, @unchecked Sendable {
         XCTAssertEqual(config.addUserScriptCalled, 9)
     }
 
-    func createSubject() async -> DefaultUserScriptManager {
+    func createSubject() -> DefaultUserScriptManager {
         let subject = DefaultUserScriptManager(scriptProvider: MockUserScriptProvider())
         trackForMemoryLeaks(subject)
         return subject

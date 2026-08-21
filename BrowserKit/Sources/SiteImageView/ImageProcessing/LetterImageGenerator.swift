@@ -26,7 +26,7 @@ final class DefaultLetterImageGenerator: LetterImageGenerator, @unchecked Sendab
     }
 
     @MainActor
-    func generateLetterImage(siteString: String) async throws -> UIImage {
+    func generateLetterImage(siteString: String) throws -> UIImage {
         let capitalizedLetter = try generateLetter(fromSiteString: siteString)
 
         let colorSet = themeManagerProvider().windowNonspecificTheme().colors.faviconLetterColorSet

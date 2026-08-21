@@ -31,11 +31,11 @@ final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol, @unc
         // no-op for now
     }
 
-    func fetchSupportedTargetLanguages() async -> [String] {
+    func fetchSupportedTargetLanguages() -> [String] {
         return supportedTargetLanguages
     }
 
-    func resetStorage() async {
+    func resetStorage() {
         resetStorageExpectation?.fulfill()
     }
 }

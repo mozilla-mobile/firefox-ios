@@ -19,7 +19,7 @@ final class MockSummarizationChecker: SummarizationCheckerProtocol, @unchecked S
         self.textContent = textContent
     }
 
-    func check(on webView: WKWebView, maxWords: Int) async -> SummarizationCheckResult {
+    func check(on webView: WKWebView, maxWords: Int) -> SummarizationCheckResult {
         SummarizationCheckResult(
             canSummarize: canSummarize,
             reason: reason,

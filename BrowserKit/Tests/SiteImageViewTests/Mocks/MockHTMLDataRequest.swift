@@ -10,7 +10,7 @@ final class MockHTMLDataRequest: HTMLDataRequest, @unchecked Sendable {
     var data: Data?
     var error: (any Error)?
 
-    func fetchDataForURL(_ url: URL) async throws -> Data {
+    func fetchDataForURL(_ url: URL) throws -> Data {
         fetchDataForURLCount += 1
 
         if let error = error {

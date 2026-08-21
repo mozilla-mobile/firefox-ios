@@ -70,7 +70,7 @@ final class WKEngineTests: XCTestCase, @unchecked Sendable {
     // MARK: Helper
     @MainActor
     func createSubject(file: StaticString = #filePath,
-                       line: UInt = #line) async -> WKEngine {
+                       line: UInt = #line) -> WKEngine {
         let configProvider = MockWKEngineConfigurationProvider()
         let subject = WKEngine(userScriptManager: userScriptManager,
                                webServerUtil: webServerUtil,

@@ -95,7 +95,7 @@ private final class MockDefaultImageCache: DefaultImageCache, @unchecked Sendabl
     var capturedStorageKey: String?
     var clearCacheCalledCount = 0
 
-    func retrieve(forKey key: String) async throws -> UIImage? {
+    func retrieve(forKey key: String) throws -> UIImage? {
         capturedRetrievalKey = key
         if let error = retrievalError {
             throw error

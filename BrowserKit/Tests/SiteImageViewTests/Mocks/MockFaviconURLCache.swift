@@ -21,7 +21,7 @@ actor MockFaviconURLCache: FaviconURLCache {
         self.error = error
     }
 
-    func getURLFromCache(cacheKey: String) async throws -> URL {
+    func getURLFromCache(cacheKey: String) throws -> URL {
         getURLFromCacheCalledCount += 1
         if let error = error {
             throw error
@@ -29,13 +29,13 @@ actor MockFaviconURLCache: FaviconURLCache {
         return url!
     }
 
-    func cacheURL(cacheKey: String, faviconURL: URL) async {
+    func cacheURL(cacheKey: String, faviconURL: URL) {
         cacheURLCalledCount += 1
         self.cacheKey = cacheKey
         self.faviconURL = faviconURL
     }
 
-    func clearCache() async {
+    func clearCache() {
         clearCacheCalledCount += 1
     }
 }

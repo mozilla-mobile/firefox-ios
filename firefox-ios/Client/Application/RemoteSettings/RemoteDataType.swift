@@ -43,7 +43,7 @@ enum RemoteDataType: String, Codable {
     /// Loads the local settings for the given data type record, returning the
     /// decoded objects.
     /// - Returns: settings decoded to their RemoteDataTypeRecord.
-    func loadLocalSettingsFromJSON<T: RemoteDataTypeRecord>() async throws -> [T] {
+    func loadLocalSettingsFromJSON<T: RemoteDataTypeRecord>() throws -> [T] {
         guard let fileName = self.fileNames.first else {
             assertionFailure("No filename available for setting type.")
             throw RemoteDataTypeError.fileNotFound(fileName: "")

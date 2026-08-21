@@ -12,7 +12,7 @@ import ComponentLibrary
 final class MockSummarizer: SummarizerProtocol, @unchecked Sendable {
     var modelName: SummarizerModel = .appleSummarizer
 
-    func summarize(_ contentToSummarize: String) async throws -> String {
+    func summarize(_ contentToSummarize: String) throws -> String {
         return ""
     }
 

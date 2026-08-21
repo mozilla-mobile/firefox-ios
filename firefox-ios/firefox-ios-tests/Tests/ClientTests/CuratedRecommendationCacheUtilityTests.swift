@@ -17,7 +17,7 @@ final class CuratedRecommendationCacheUtilityTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func testSaveAndLoadResponse() async throws {
+    func testSaveAndLoadResponse() throws {
         let cache = createCache()
         let response = generateFakeResponse(numberOfItems: 2)
 

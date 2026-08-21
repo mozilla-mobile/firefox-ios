@@ -159,7 +159,7 @@ class GroupedEditBookmarkViewModelTests: XCTestCase {
 
     // MARK: - Save bookmark
 
-    func testSaveBookmark_whenHasNoUpdateDoesntSave() async throws {
+    func testSaveBookmark_whenHasNoUpdateDoesntSave() throws {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
 
         let task = subject.saveBookmark()

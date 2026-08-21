@@ -16,11 +16,11 @@ final class MockTopSitesManager: TopSitesManagerInterface, @unchecked Sendable {
     var removeTopSiteCalled: () -> Void = {}
     var unpinTopSiteCalled: () -> Void = {}
 
-    func getOtherSites() async -> [TopSiteConfiguration] {
+    func getOtherSites() -> [TopSiteConfiguration] {
         return createSites(count: 15, subtitle: ": otherSites")
     }
 
-    func fetchSponsoredSites() async -> [Site] {
+    func fetchSponsoredSites() -> [Site] {
         let unifiedTiles = MockSponsoredTileData.defaultSuccessData
         return unifiedTiles.compactMap { Site.createSponsoredSite(fromUnifiedTile: $0) }
     }
@@ -41,7 +41,7 @@ final class MockTopSitesManager: TopSitesManagerInterface, @unchecked Sendable {
         return sites
     }
 
-    func removeTopSite(_ site: Site) async {
+    func removeTopSite(_ site: Site) {
         removeTopSiteCalled()
     }
 
@@ -49,7 +49,7 @@ final class MockTopSitesManager: TopSitesManagerInterface, @unchecked Sendable {
         pinTopSiteCalledCount += 1
     }
 
-    func unpinTopSite(_ site: Site) async {
+    func unpinTopSite(_ site: Site) {
         unpinTopSiteCalled()
     }
 }

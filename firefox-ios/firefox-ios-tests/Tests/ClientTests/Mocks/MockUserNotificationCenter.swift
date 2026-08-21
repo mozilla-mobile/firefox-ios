@@ -30,7 +30,7 @@ class MockUserNotificationCenter: UserNotificationCenterProtocol, @unchecked Sen
     }
 
     var getDeliveredWasCalled = false
-    func deliveredNotifications() async -> [UNNotification] {
+    func deliveredNotifications() -> [UNNotification] {
         getDeliveredWasCalled = true
         return []
     }

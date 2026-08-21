@@ -76,7 +76,7 @@ public final class DefaultTabSessionStore: TabSessionStore {
         }
     }
 
-    public func deleteUnusedTabSessionData(keeping: [UUID]) async {
+    public func deleteUnusedTabSessionData(keeping: [UUID]) {
         guard let directory = fileManager.tabSessionDataDirectory() else { return }
         let contents = fileManager.contentsOfDirectory(at: directory)
         guard !contents.isEmpty else { return }

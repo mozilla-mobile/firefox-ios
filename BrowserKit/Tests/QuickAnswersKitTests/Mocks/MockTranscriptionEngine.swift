@@ -26,14 +26,14 @@ final class MockTranscriptionEngine: TranscriptionEngine, @unchecked Sendable {
     var resultsToYield: [SpeechResult] = []
     var finishAfterYielding = true
 
-    func prepare() async throws {
+    func prepare() throws {
         prepareCallCount += 1
         if let prepareError { throw prepareError }
     }
 
     func start(
         continuation: AsyncThrowingStream<SpeechResult, any Error>.Continuation
-    ) async throws {
+    ) throws {
         startCallCount += 1
 
         if let startError { throw startError }
@@ -47,7 +47,7 @@ final class MockTranscriptionEngine: TranscriptionEngine, @unchecked Sendable {
         }
     }
 
-    func stop() async throws {
+    func stop() throws {
         stopCallCount += 1
         if let stopError { throw stopError }
     }

@@ -234,6 +234,9 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         }
     }
 
+    // `nonisolated async` is load-bearing: it keeps the blocking RelayClient calls off the main
+    // actor. Making this synchronous would run them on the caller's (MainActor) executor.
+    // swiftlint:disable async_without_await
     nonisolated private func generateRelayMask(for websiteDomain: String,
                                                client: RelayClientProtocol) async -> (mask: String?,
                                                                                       result: RelayMaskGenerationResult) {
@@ -273,6 +276,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         }
         return (nil, .error)
     }
+    // swiftlint:enable async_without_await
 
     private func updateRelayAccountStatus() {
         guard Self.isFeatureEnabled else { return }
@@ -344,6 +348,9 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         return accountStatus == .available
     }
 
+    // `nonisolated async` is load-bearing: it keeps the blocking `getAttachedClients()` call off
+    // the main actor. Making this synchronous would run it on the caller's (MainActor) executor.
+    // swiftlint:disable async_without_await
     /// Checks the current OAuth client status to determine Relay availability, and then updates the internal
     /// account status back on the main actor.
     /// - Parameter isStaging: whether we should use Staging servers.
@@ -369,6 +376,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             accountStatus = status
         }
     }
+    // swiftlint:enable async_without_await
 
     // MARK: - Notifications
 

@@ -31,7 +31,7 @@ public final class MockURLSession: URLSessionProtocol, @unchecked Sendable {
         self.error = error
     }
 
-    public func data(from url: URL) async throws -> (Data, URLResponse) {
+    public func data(from url: URL) throws -> (Data, URLResponse) {
         lastURLRequest = URLRequest(url: url)
 
         if let error = error {
@@ -41,7 +41,7 @@ public final class MockURLSession: URLSessionProtocol, @unchecked Sendable {
         return (data ?? Data(), response ?? URLResponse())
     }
 
-    public func data(from urlRequest: URLRequest) async throws -> (Data, URLResponse) {
+    public func data(from urlRequest: URLRequest) throws -> (Data, URLResponse) {
         lastURLRequest = urlRequest
 
         if let error = error {

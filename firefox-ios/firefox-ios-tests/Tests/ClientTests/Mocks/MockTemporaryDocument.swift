@@ -41,7 +41,7 @@ final class MockTemporaryDocument: TemporaryDocument, @unchecked Sendable {
         completion(fileURL)
     }
 
-    func download() async -> URL? {
+    func download() -> URL? {
         downloadAsyncCalled += 1
         return fileURL
     }

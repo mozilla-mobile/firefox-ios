@@ -48,12 +48,12 @@ actor DefaultSiteImageCache: SiteImageCache {
         }
     }
 
-    func cacheImage(image: UIImage, cacheKey: String, type: SiteImageType) async {
+    func cacheImage(image: UIImage, cacheKey: String, type: SiteImageType) {
         let key = createCacheKey(cacheKey, forType: type)
         imageCache.store(image: image, forKey: key)
     }
 
-    func clear() async {
+    func clear() {
         imageCache.clear()
     }
 

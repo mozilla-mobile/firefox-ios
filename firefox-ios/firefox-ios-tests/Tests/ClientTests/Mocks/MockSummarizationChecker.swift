@@ -24,7 +24,7 @@ final class MockSummarizationChecker: SummarizationCheckerProtocol, @unchecked S
 
     var overrideResponse: SummarizationCheckResult?
 
-    func check(on webView: WKWebView, maxWords: Int) async -> SummarizationCheckResult {
+    func check(on webView: WKWebView, maxWords: Int) -> SummarizationCheckResult {
         checkCalledCount += 1
         return overrideResponse ?? Self.success
     }

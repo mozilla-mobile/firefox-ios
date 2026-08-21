@@ -30,7 +30,7 @@ class MockLegacyResponder: NSObject, WKUIDelegate {
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
         initiatedByFrame frame: WKFrameInfo
-    ) async {
+    ) {
         runJavaScriptAlertPanelCalled += 1
     }
 

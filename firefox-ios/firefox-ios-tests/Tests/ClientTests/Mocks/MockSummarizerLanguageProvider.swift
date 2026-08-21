@@ -14,7 +14,7 @@ final class MockSummarizerLanguageProvider: SummarizerLanguageProvider, @uncheck
         userPreference: SummarizerLanguageExpansionConfiguration.UserPreference,
         supportedLocales: [Locale],
         languageSampleSource: any LanguageSampleSource
-    ) async -> Locale? {
+    ) -> Locale? {
         getLanguageCallCount += 1
         return shouldReturnLocale ? returnedLocale : nil
     }

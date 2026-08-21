@@ -157,7 +157,7 @@ class MockTabManager: TabManager {
     func tabDidSetScreenshot(_ tab: Client.Tab) {
         tabDidSetScreenshotCalls += 1
     }
-    func offloadBackgroundWebViews() async {}
+    func offloadBackgroundWebViews() {}
 
     var restoreScreenshotCalls: [Tab] = []
     func restoreScreenshot(for tab: Tab) {
