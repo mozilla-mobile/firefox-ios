@@ -43,11 +43,53 @@
 /* Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form. */
 "WebCompatReporter.IssueSection.Title.v154" = "Problema del sito";
 
+/* Bullet on the Report Preview screen, for the amount of memory the device has. */
+"WebCompatReporter.Preview.Data.AvailableMemory.v155" = "Memoria disponibile de tu apparato";
+
+/* Bullet on the Report Preview screen, for trackers blocked on the reported page. */
+"WebCompatReporter.Preview.Data.BlockedTrackers.v155" = "Nomine de hostes de traciatores blocate sur iste pagina";
+
+/* Bullet on the Report Preview screen, for the device's own language and region settings. */
+"WebCompatReporter.Preview.Data.DeviceLocale.v155" = "Lingua e pais principal de tu apparato";
+
+/* Bullet on the Report Preview screen, for whether the device has a touchscreen. */
+"WebCompatReporter.Preview.Data.HasTouchscreen.v155" = "Si tu apparato ha un schermo tactile";
+
+/* Bullet on the Report Preview screen, for the problem picked and the details typed. */
+"WebCompatReporter.Preview.Data.IssueAndDescription.v155" = "Typo de problema que tu seligeva e omne description que tu addeva";
+
+/* Bullet on the Report Preview screen. Only tablet or not is sent, no device make or model. */
+"WebCompatReporter.Preview.Data.IsTablet.v155" = "Si tu apparato es o non un tabletta";
+
+/* Bullet on the Report Preview screen, for web frameworks known to break mobile pages. */
+"WebCompatReporter.Preview.Data.PageElements.v155" = "Informationes re elementos del pagina que ha essite cognoscite causar problemas de sito";
+
+/* Bullet on the Report Preview screen, for a list of the user's preferred languages for websites as they were communicated by the browser to the page */
+"WebCompatReporter.Preview.Data.PageLanguages.v155" = "Preferentias linguistic inviate a iste pagina";
+
+/* Bullet on the Report Preview screen. The reported page's address is shown underneath it. */
+"WebCompatReporter.Preview.Data.PageURL.v155" = "URL del pagina";
+
+/* Bullet on the Report Preview screen, for the screen's physical pixels per layout point. */
+"WebCompatReporter.Preview.Data.PixelDensity.v155" = "Densitate de pixels de tu schermo";
+
+/* Bullet on the Report Preview screen, for whether the page was open in private browsing. */
+"WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155" = "Stato del navigation private: active o disactivate";
+
+/* Bullet on the Report Preview screen, for the tracking protection strength the user has chosen. */
+"WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155" = "Configuration del protection antitraciamento reinfortiate pro iste sito";
+
+/* Bullet on the Report Preview screen. Those three versions are only ever sent as tokens inside the user agent, never as fields of their own. %@ is the app name (e.g. Firefox). */
+"WebCompatReporter.Preview.Data.UserAgent.v155" = "Agente usator de tu navigator, includite tu version de iOS, version de %@, e version de motor de navigator";
+
 /* Accessibility label for the page screenshot thumbnail on the Report Preview screen. */
 "WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154" = "Instantaneo del pagina que tu reporta. Tocca duple pro vider in modalitate schermo plen.";
 
 /* Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen. */
 "WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154" = "Clauder";
+
+/* Row on the Report Preview screen that opens the Technical Data screen, and that screen's title. */
+"WebCompatReporter.Preview.TechnicalData.v155" = "Datos technic";
 
 /* Title of the Report Preview screen, which shows the data that will be sent with a website issue report. */
 "WebCompatReporter.Preview.Title.v154" = "Vista preliminar del reporto";
