@@ -11,7 +11,8 @@ import SummarizeKit
 @Copyable
 struct AddressBarState: StateType, Sendable, Equatable {
     var windowUUID: WindowUUID
-    var navigationActions: [ToolbarActionConfiguration]
+    // The address bar's back/forward buttons, shown only when the navigation toolbar is hidden (e.g. compact layout). 
+    var navigationActionsState: NavigationActionsState
     var leadingPageActions: [ToolbarActionConfiguration]
     var trailingPageActions: [ToolbarActionConfiguration]
     var browserActions: [ToolbarActionConfiguration]
@@ -84,7 +85,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            navigationActions: [],
+            navigationActionsState: NavigationActionsState(windowUUID: windowUUID),
             leadingPageActions: [],
             trailingPageActions: [],
             browserActions: [],
@@ -111,7 +112,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     init(windowUUID: WindowUUID,
-         navigationActions: [ToolbarActionConfiguration],
+         navigationActionsState: NavigationActionsState,
          leadingPageActions: [ToolbarActionConfiguration],
          trailingPageActions: [ToolbarActionConfiguration],
          browserActions: [ToolbarActionConfiguration],
@@ -135,7 +136,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
          alternativeSearchEngine: SearchEngineModel?,
          isNovaDesignEnabled: Bool) {
         self.windowUUID = windowUUID
-        self.navigationActions = navigationActions
+        self.navigationActionsState = navigationActionsState
         self.leadingPageActions = leadingPageActions
         self.trailingPageActions = trailingPageActions
         self.browserActions = browserActions
@@ -276,7 +277,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
 
         return state
-            .copy(navigationActions: [])
+            .copy(navigationActionsState: NavigationActionsState(windowUUID: state.windowUUID))
             .copy(leadingPageActions: [])
             .copy(trailingPageActions: [])
             .copy(browserActions: [])
@@ -367,9 +368,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return state
-            .copy(navigationActions: navigationActions(action: toolbarAction,
-                                                       addressBarState: state,
-                                                       isEditing: state.isEditing))
+            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
                                                          addressBarState: state,
                                                          isEditing: state.isEditing))
@@ -386,9 +385,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isEmptySearch = toolbarAction.url == nil
 
         return state
-            .copy(navigationActions: navigationActions(action: toolbarAction,
-                                                       addressBarState: state,
-                                                       isEditing: state.isEditing))
+            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
                                                          addressBarState: state,
                                                          isEditing: state.isEditing))
@@ -437,9 +434,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return state
-            .copy(navigationActions: navigationActions(action: toolbarAction,
-                                                       addressBarState: state,
-                                                       isEditing: state.isEditing))
+            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
                                                          addressBarState: state,
                                                          isEditing: state.isEditing))
@@ -454,9 +449,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return state
-            .copy(navigationActions: navigationActions(action: toolbarAction,
-                                                       addressBarState: state,
-                                                       isEditing: state.isEditing))
+            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
                                                          addressBarState: state,
                                                          isEditing: state.isEditing))
@@ -473,9 +466,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return state
-            .copy(navigationActions: navigationActions(action: toolbarAction,
-                                                       addressBarState: state,
-                                                       isEditing: state.isEditing))
+            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
                                                          addressBarState: state,
                                                          isEditing: state.isEditing))
@@ -492,9 +483,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return state
-            .copy(navigationActions: navigationActions(action: toolbarAction,
-                                                       addressBarState: state,
-                                                       isEditing: state.isEditing))
+            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
                                                          addressBarState: state,
                                                          isEditing: state.isEditing))
@@ -514,7 +503,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
 
         return state
-            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true))
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
@@ -538,7 +527,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isEmptySearch = locationText == nil || locationText?.isEmpty == true
 
         return state
-            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true))
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
@@ -575,7 +564,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isEmptySearch = url == nil
 
         return state
-            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state))
+            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state))
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
@@ -598,7 +587,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
 
         return state
-            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true))
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
@@ -699,7 +688,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     static func defaultState(from state: AddressBarState) -> Self {
         return AddressBarState(
             windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
+            navigationActionsState: state.navigationActionsState,
             leadingPageActions: state.leadingPageActions,
             trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
@@ -726,30 +715,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     // MARK: - Address Toolbar Actions
-    @MainActor
-    private static func navigationActions(
-        action: ToolbarAction,
-        addressBarState: AddressBarState,
-        isEditing: Bool = false
-    ) -> [ToolbarActionConfiguration] {
-        var actions = [ToolbarActionConfiguration]()
-
-        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
-        else { return actions }
-
-        let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
-
-        if !isShowingNavigationToolbar {
-            // otherwise back/forward and maybe data clearance when navigation toolbar is hidden
-            let canGoBack = action.canGoBack ?? toolbarState.canGoBack
-            let canGoForward = action.canGoForward ?? toolbarState.canGoForward
-            actions.append(backAction(enabled: canGoBack))
-            actions.append(forwardAction(enabled: canGoForward))
-        }
-
-        return actions
-    }
-
     @MainActor
     private static func leadingPageActions(
         action: Action,
@@ -1050,27 +1015,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isEnabled: true,
             a11yLabel: .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
-    }
-
-    private static func backAction(enabled: Bool) -> ToolbarActionConfiguration {
-        return ToolbarActionConfiguration(
-            actionType: .back,
-            iconName: StandardImageIdentifiers.Large.chevronLeft,
-            isFlippedForRTL: true,
-            isEnabled: enabled,
-            contextualHintType: ContextualHintType.navigation.rawValue,
-            a11yLabel: .TabToolbarBackAccessibilityLabel,
-            a11yId: AccessibilityIdentifiers.Toolbar.backButton)
-    }
-
-    private static func forwardAction(enabled: Bool) -> ToolbarActionConfiguration {
-        return ToolbarActionConfiguration(
-            actionType: .forward,
-            iconName: StandardImageIdentifiers.Large.chevronRight,
-            isFlippedForRTL: true,
-            isEnabled: enabled,
-            a11yLabel: .TabToolbarForwardAccessibilityLabel,
-            a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
     }
 
     private static func shareAction(enabled: Bool, hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {

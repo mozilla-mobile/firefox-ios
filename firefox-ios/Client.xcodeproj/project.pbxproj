@@ -291,6 +291,7 @@
 		213046BB2F212BCC007ECEDA /* CGRectExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213046BA2F212BCC007ECEDA /* CGRectExtensionsTests.swift */; };
 		213046BD2F819C9C007ECEDA /* UIAlertControllerExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213046BC2F819C9C007ECEDA /* UIAlertControllerExtensionTests.swift */; };
 		213047E62F2153B1007ECEDA /* PageZoomSettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213047E52F2153AB007ECEDA /* PageZoomSettingsViewModelTests.swift */; };
+		2132A47130378FC50040B898 /* NavigationActionsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2132A47030378FC20040B898 /* NavigationActionsState.swift */; };
 		21365E392F30FD700000C369 /* BrowserViewControllerLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365E382F30FD580000C369 /* BrowserViewControllerLayoutManager.swift */; };
 		21365E3E2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365E3C2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift */; };
 		21371FA228A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA128A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift */; };
@@ -3176,6 +3177,7 @@
 		213046BA2F212BCC007ECEDA /* CGRectExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtensionsTests.swift; sourceTree = "<group>"; };
 		213046BC2F819C9C007ECEDA /* UIAlertControllerExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertControllerExtensionTests.swift; sourceTree = "<group>"; };
 		213047E52F2153AB007ECEDA /* PageZoomSettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageZoomSettingsViewModelTests.swift; sourceTree = "<group>"; };
+		2132A47030378FC20040B898 /* NavigationActionsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationActionsState.swift; sourceTree = "<group>"; };
 		21365E382F30FD580000C369 /* BrowserViewControllerLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerLayoutManager.swift; sourceTree = "<group>"; };
 		21365E3C2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerLayoutManagerTests.swift; sourceTree = "<group>"; };
 		21371FA128A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTelemetryUtilityTests.swift; sourceTree = "<group>"; };
@@ -16817,6 +16819,7 @@
 		E1DE2F812BE394C80054BCDC /* Redux */ = {
 			isa = PBXGroup;
 			children = (
+				2132A47030378FC20040B898 /* NavigationActionsState.swift */,
 				AAD1CD862EAABA7C00BEC90A /* TranslationsConfiguration.swift */,
 				E177989B2BD7D48500F6F0EB /* ToolbarAction.swift */,
 				E177989D2BD7D75A00F6F0EB /* ToolbarMiddleware.swift */,
@@ -19771,6 +19774,7 @@
 				8AAAB0592C1B7240008830B3 /* MockRustFirefoxSuggest.swift in Sources */,
 				0BDDB33F2CA6B1F000D501DF /* EditFolderViewModel.swift in Sources */,
 				8A2F21CB2DEDC2AB00C9F4DE /* StartAtHomeAction.swift in Sources */,
+				2132A47130378FC50040B898 /* NavigationActionsState.swift in Sources */,
 				602B3D6729B0E1DB0066DEF8 /* ConversionValue.swift in Sources */,
 				7AC7E0502C160FF800051D4D /* ReaderPanelEmptyStateView.swift in Sources */,
 				C283EED02E4D4FE7008EB540 /* SummarizerConfigProvider.swift in Sources */,
