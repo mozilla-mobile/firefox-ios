@@ -8,6 +8,7 @@ import XCTest
 import Shared
 import Storage
 
+// Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
 class OpenSearchEngineTests: XCTestCase {
     func testEncodeDecodeOpenSearchEngine_withBundledImages_Single() throws {
         let searchEngine = try Self.generateOpenSearchEngine(type: .wikipedia)
