@@ -628,6 +628,9 @@ final class BookmarksViewController: SiteTableViewController,
 
             cell.configure(viewModel: viewModel)
             cell.applyTheme(theme: currentTheme())
+            if currentTheme().isNova {
+                cell.editingAccessoryView?.tintColor = currentTheme().colors.textSecondary
+            }
             return cell
         } else {
             if let cell = tableView.dequeueReusableCell(withIdentifier: SeparatorTableViewCell.cellIdentifier,
@@ -706,7 +709,9 @@ final class BookmarksViewController: SiteTableViewController,
              .bookmarks(state: .inFolder):
             bottomRightButton.tintColor = currentTheme().colors.textPrimary
         case .bookmarks(state: .inFolderEditMode):
-            bottomRightButton.tintColor = currentTheme().colors.textAccent
+            bottomRightButton.tintColor = currentTheme().isNova
+                ? currentTheme().colors.textPrimary
+                : currentTheme().colors.textAccent
         case .bookmarks(state: .itemEditMode):
             bottomRightButton.tintColor = currentTheme().colors.textAccent
         case .bookmarks(state: .itemEditModeInvalidField):
