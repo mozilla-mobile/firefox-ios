@@ -87,7 +87,7 @@ final class HomepageStateTests: XCTestCase {
             )
         )
 
-        XCTAssertTrue(newState.shouldShowPrivacyNotice)
+        XCTAssertTrue(newState.privacyNoticeState.shouldShowPrivacyNotice)
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
     }
 
@@ -104,7 +104,7 @@ final class HomepageStateTests: XCTestCase {
             )
         )
 
-        XCTAssertFalse(newState.shouldShowPrivacyNotice)
+        XCTAssertFalse(newState.privacyNoticeState.shouldShowPrivacyNotice)
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
     }
 
