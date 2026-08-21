@@ -13,7 +13,7 @@ class EngineSessionScriptResponderTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        session = await MockWKEngineSession()
+        session = MockWKEngineSession()
     }
 
     override func tearDown() async throws {

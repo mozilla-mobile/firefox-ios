@@ -13,9 +13,9 @@ class RemoteSettingsUtils {
         self.logger = logger
     }
 
-    func fetchLocalRecords<T: RemoteDataTypeRecord>(for type: RemoteDataType) -> [T]? {
+    func fetchLocalRecords<T: RemoteDataTypeRecord>(for type: RemoteDataType) async -> [T]? {
         do {
-            let records: [T] = try type.loadLocalSettingsFromJSON()
+            let records: [T] = try await type.loadLocalSettingsFromJSON()
             return records
         } catch let error as RemoteDataTypeError {
             logger.log("Failed to fetch local record(s) for \(type.name)",

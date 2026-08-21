@@ -152,7 +152,7 @@ final class PasswordGeneratorMiddleware {
 
         Task {
             let remoteSettingsUtils = RemoteSettingsUtils()
-            let rules: [PasswordRuleRecord]? = remoteSettingsUtils.fetchLocalRecords(for: .passwordRules)
+            let rules: [PasswordRuleRecord]? = await remoteSettingsUtils.fetchLocalRecords(for: .passwordRules)
             cachedPasswordRules = rules
         }
     }

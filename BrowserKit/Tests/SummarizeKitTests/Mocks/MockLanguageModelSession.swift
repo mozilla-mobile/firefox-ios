@@ -25,14 +25,18 @@ final class MockLanguageModelSession: LanguageModelSessionProtocol, @unchecked S
     var respondWith: [String] = [""]
     var respondWithError: Error?
 
+    // `async` is required to match the protocol's caller-isolation-inheriting requirement; a
+    // synchronous witness for it currently crashes the compiler while lowering the witness thunk.
+    // swiftlint:disable async_without_await
     func respond(
         to prompt: Prompt,
         options: GenerationOptions,
         isolation: isolated (any Actor)?
-    ) throws -> any LanguageModelResponseProtocol {
+    ) async throws -> any LanguageModelResponseProtocol {
         if let error = respondWithError { throw error }
         return MockLanguageModelResponseProtocol(content: respondWith.joined(separator: " "), transcriptEntries: [])
     }
+    // swiftlint:enable async_without_await
 
     func streamResponse(
         to prompt: Prompt,

@@ -8,18 +8,18 @@ import XCTest
 @MainActor
 @available(iOS 16.0, *)
 final class WKUserScriptManagerTests: XCTestCase, @unchecked Sendable {
-    func testInitThenAddsUserScripts() async {
-        let subject = await createSubject()
+    func testInitThenAddsUserScripts() {
+        let subject = createSubject()
 
         let userScripts = subject.compiledUserScripts
         XCTAssertEqual(userScripts.count, 8)
     }
 
-    func testInjectUserScriptThenScriptsAreAddedInWebView() async {
+    func testInjectUserScriptThenScriptsAreAddedInWebView() {
         let webView = MockWKEngineWebView(frame: .zero,
                                           configurationProvider: MockWKEngineConfigurationProvider(),
                                           parameters: DefaultTestDependencies().webViewParameters)!
-        let subject = await createSubject()
+        let subject = createSubject()
 
         subject.injectUserScriptsIntoWebView(webView)
         guard let config = webView.engineConfiguration as? MockWKEngineConfiguration else {

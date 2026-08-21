@@ -19,12 +19,12 @@ final class LetterImageGeneratorTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func testEmptyDomain_throws() async {
+    func testEmptyDomain_throws() {
         let subject = createSubject()
         let siteString = ""
 
         do {
-            _ = try await subject.generateLetterImage(siteString: siteString)
+            _ = try subject.generateLetterImage(siteString: siteString)
             XCTFail("Call should have thrown")
         } catch {
             XCTAssertEqual(error.localizedDescription, SiteImageError.noLetterImage.localizedDescription)
@@ -78,25 +78,25 @@ final class LetterImageGeneratorTests: XCTestCase {
         XCTAssertEqual(try? image.cgImage?.getPixelColor(pixelSamplePoint), backgroundColor)
     }
 
-    func testGenerateLetterImage_returnsImageWithCorrectBackgroundColor_forM() async throws {
+    func testGenerateLetterImage_returnsImageWithCorrectBackgroundColor_forM() throws {
         let subject = createSubject()
         let siteString = "mozilla.com"
         let expectedBackgroundColor = UIColor(red: 0.584, green: 0.803, blue: 1.0, alpha: 1.0)
         let pixelSamplePoint = CGPoint(x: 5, y: 5)
 
-        let image = try await subject.generateLetterImage(siteString: siteString)
+        let image = try subject.generateLetterImage(siteString: siteString)
         let capturedColor = try XCTUnwrap(try? image.cgImage?.getPixelColor(pixelSamplePoint))
 
         testColor(capturedColor: capturedColor, expectedColor: expectedBackgroundColor)
     }
 
-    func testGenerateLetterImage_returnsImageWithCorrectBackgroundColor_forF() async throws {
+    func testGenerateLetterImage_returnsImageWithCorrectBackgroundColor_forF() throws {
         let subject = createSubject()
         let siteString = "firefox.com"
         let expectedBackgroundColor = UIColor(red: 0.035, green: 0.588, blue: 0.973, alpha: 1.0)
         let pixelSamplePoint = CGPoint(x: 5, y: 5)
 
-        let image = try await subject.generateLetterImage(siteString: siteString)
+        let image = try subject.generateLetterImage(siteString: siteString)
         let capturedColor = try XCTUnwrap(try? image.cgImage?.getPixelColor(pixelSamplePoint))
 
         testColor(capturedColor: capturedColor, expectedColor: expectedBackgroundColor)
@@ -113,13 +113,13 @@ final class LetterImageGeneratorTests: XCTestCase {
         testColor(capturedColor: color, expectedColor: expectedLastPaletteColor)
     }
 
-    func testGenerateLetterImage_returnsImageWithCorrectBackgroundColor_forNonAlphaCharacter() async throws {
+    func testGenerateLetterImage_returnsImageWithCorrectBackgroundColor_forNonAlphaCharacter() throws {
         let subject = createSubject()
         let siteString = "?$%^"
         let expectedBackgroundColor = UIColor(red: 1.0, green: 0.655, blue: 0.573, alpha: 1.0)
         let pixelSamplePoint = CGPoint(x: 5, y: 5)
 
-        let image = try await subject.generateLetterImage(siteString: siteString)
+        let image = try subject.generateLetterImage(siteString: siteString)
         let capturedColor = try XCTUnwrap(try? image.cgImage?.getPixelColor(pixelSamplePoint))
 
         testColor(capturedColor: capturedColor, expectedColor: expectedBackgroundColor)
@@ -137,7 +137,7 @@ final class LetterImageGeneratorTests: XCTestCase {
         XCTAssertNotEqual(color, StandardFaviconColorSet().backgroundColors[index])
     }
 
-    func testGenerateLetterImage_withNovaPalette_returnsImageWithNovaBackgroundColor() async throws {
+    func testGenerateLetterImage_withNovaPalette_returnsImageWithNovaBackgroundColor() throws {
         let subject = createSubject(
             themeManager: DefaultThemeManager(sharedContainerIdentifier: "", isNovaDesignOnClosure: { true })
         )
@@ -147,7 +147,7 @@ final class LetterImageGeneratorTests: XCTestCase {
         let expectedBackgroundColor = novaColorSet.backgroundColors[index]
         let pixelSamplePoint = CGPoint(x: 5, y: 5)
 
-        let image = try await subject.generateLetterImage(siteString: siteString)
+        let image = try subject.generateLetterImage(siteString: siteString)
         let capturedColor = try XCTUnwrap(try? image.cgImage?.getPixelColor(pixelSamplePoint))
 
         testColor(capturedColor: capturedColor, expectedColor: expectedBackgroundColor)

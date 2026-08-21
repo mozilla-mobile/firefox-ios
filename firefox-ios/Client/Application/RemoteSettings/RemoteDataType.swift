@@ -40,10 +40,13 @@ enum RemoteDataType: String, Codable {
         }
     }
 
+    // `async` on this nonisolated method is load-bearing: it keeps the bundle read and JSON
+    // decode below off the caller's actor. Making it synchronous would run that I/O inline.
+    // swiftlint:disable async_without_await
     /// Loads the local settings for the given data type record, returning the
     /// decoded objects.
     /// - Returns: settings decoded to their RemoteDataTypeRecord.
-    func loadLocalSettingsFromJSON<T: RemoteDataTypeRecord>() throws -> [T] {
+    func loadLocalSettingsFromJSON<T: RemoteDataTypeRecord>() async throws -> [T] {
         guard let fileName = self.fileNames.first else {
             assertionFailure("No filename available for setting type.")
             throw RemoteDataTypeError.fileNotFound(fileName: "")
@@ -60,6 +63,7 @@ enum RemoteDataType: String, Codable {
             throw RemoteDataTypeError.decodingError(fileName: fileName, error: error)
         }
     }
+    // swiftlint:enable async_without_await
 
     /// Loads the local settings JSON for the given setting file.
     /// - Returns: the raw JSON file data.
