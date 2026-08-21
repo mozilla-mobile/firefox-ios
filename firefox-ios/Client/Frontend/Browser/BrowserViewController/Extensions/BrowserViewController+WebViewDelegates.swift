@@ -937,15 +937,24 @@ extension BrowserViewController: WKNavigationDelegate {
         // we may end up overriding the "Share Page With..." action to share a temp file that is not
         // representative of the contents of the web view.
         if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
-            if response.mimeType == MIMEType.PDF, let request {
+            let webViewDocFetchEnabled = featureFlagsProvider.isEnabled(.webViewDocumentFetchRefactor)
+            if response.mimeType == MIMEType.PDF, let request, !webViewDocFetchEnabled {
                 if !tab.shouldDownloadDocument(request) {
                     return .allow
                 }
                 handlePDFDownloadRequest(request: request, tab: tab, filename: response.suggestedFilename)
                 return .cancel
             }
-            if response.mimeType != MIMEType.HTML, let request {
-                tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
+            if response.mimeType != MIMEType.HTML {
+                if webViewDocFetchEnabled {
+                    // WebView fetch reads the document directly from the view, so no request is required.
+                    tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response)
+                } else if let request {
+                    tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response,
+                                                                     request: request)
+                } else {
+                    tab.temporaryDocument = nil
+                }
             } else {
                 tab.temporaryDocument = nil
             }
