@@ -203,18 +203,18 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_keyboardStateDidChangeAction_returnsExpectedState() {
-        let initialState = createSubject()
+        let baseState = createSubject()
+        let initialState = baseState.copy(addressToolbar: baseState.addressToolbar.copy(shouldShowKeyboard: true))
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                shouldShowKeyboard: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange)
+            ToolbarModernAction.didCancelKeyboardRequest,
+            windowUUID
         )
 
         XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
+        XCTAssertFalse(newState.addressToolbar.shouldShowKeyboard)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 

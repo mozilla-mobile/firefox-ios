@@ -992,20 +992,44 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNotEqual(initialState.isAddressBarMinimized, newState.isAddressBarMinimized)
     }
 
-    func test_accessoryViewDidShowAction_returnsExpectedState() {
+    func test_accessoryViewVisibilityChangedAction_whenVisible_returnsExpectedState() {
         setupStore()
         let initialState = ToolbarState(windowUUID: windowUUID)
         let reducer = ToolbarState.reducer
 
         let newState = reducer.modernReducer(
             initialState,
-            ToolbarModernAction.accessoryViewDidShow,
+            ToolbarModernAction.accessoryViewVisibilityChanged(isVisible: true),
             windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.isAccessoryViewVisible, true)
         XCTAssertEqual(newState.isAddressBarMinimized, true)
         XCTAssertNotEqual(initialState.isAddressBarMinimized, newState.isAddressBarMinimized)
+    }
+
+    func test_accessoryViewVisibilityChangedAction_whenNotVisible_doesNotRestoreMinimizedState() {
+        setupStore()
+        var initialState = ToolbarState(windowUUID: windowUUID)
+        let reducer = ToolbarState.reducer
+
+        // Minimize the toolbar first, independently of the accessory view
+        initialState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
+            windowUUID
+        )
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.accessoryViewVisibilityChanged(isVisible: false),
+            windowUUID
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.isAccessoryViewVisible, false)
+        XCTAssertEqual(newState.isAddressBarMinimized, true)
     }
 
     func test_cancelEditOnHomepageAction_withURL_returnsExpectedState() {
@@ -1114,18 +1138,15 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
     func test_keyboardStateDidChangeAction_returnsExpectedState() {
         setupStore()
-        let initialState = createSubject()
+        let initialState = createSubject().copy(shouldShowKeyboard: true)
         let reducer = addressBarReducer()
 
-        XCTAssertFalse(initialState.shouldShowKeyboard)
+        XCTAssertTrue(initialState.shouldShowKeyboard)
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                shouldShowKeyboard: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange
-            )
+            ToolbarModernAction.didCancelKeyboardRequest,
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
@@ -1322,7 +1343,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             isTranslationsEnabled: toolbarState.isTranslationsEnabled,
             previousTabScreenshot: toolbarState.previousTabScreenshot,
             nextTabScreenshot: toolbarState.nextTabScreenshot,
-            isAddressBarMinimized: toolbarState.isAddressBarMinimized)
+            isAddressBarMinimized: toolbarState.isAddressBarMinimized,
+            isAccessoryViewVisible: toolbarState.isAccessoryViewVisible)
     }
 
     // MARK: StoreTestUtility
