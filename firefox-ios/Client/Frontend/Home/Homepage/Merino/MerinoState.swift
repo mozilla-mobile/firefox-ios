@@ -17,10 +17,6 @@ struct MerinoState: StateType, Equatable {
     let shouldShowSection: Bool
 
     struct Constants {
-        static var sectionHeaderConfiguration: SectionHeaderConfiguration {
-            // Computed property because feature flag configuration can change after launch
-            MerinoState.initializeSectionHeaderConfiguration()
-        }
         static let footerURL = SupportUtils.URLForPocketLearnMore
     }
 
@@ -121,14 +117,6 @@ struct MerinoState: StateType, Equatable {
             merinoData: state.merinoData,
             hasMerinoResponseContent: state.hasMerinoResponseContent,
             shouldShowSection: state.shouldShowSection
-        )
-    }
-
-    private static func initializeSectionHeaderConfiguration() -> SectionHeaderConfiguration {
-        return SectionHeaderConfiguration(
-            title: .FirefoxHomepage.Pocket.NewsSectionTitle,
-            a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino,
-            style: .newsAffordance
         )
     }
 }

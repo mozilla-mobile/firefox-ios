@@ -24,7 +24,7 @@ final class MerinoStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(initialState.merinoData.stories, nil)
-        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.isButtonHidden, true)
+        XCTAssertEqual(SectionHeaderConfiguration.merino.isButtonHidden, true)
     }
 
     @MainActor
@@ -273,8 +273,8 @@ final class MerinoStateTests: XCTestCase {
     }
 
     func test_initialState_returnsExpectedSectionHeaderConfiguration() {
-        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.style, .newsAffordance)
-        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.isButtonHidden, true)
+        XCTAssertEqual(SectionHeaderConfiguration.merino.style, .newsAffordance)
+        XCTAssertEqual(SectionHeaderConfiguration.merino.isButtonHidden, true)
     }
 
     // MARK: - Private
