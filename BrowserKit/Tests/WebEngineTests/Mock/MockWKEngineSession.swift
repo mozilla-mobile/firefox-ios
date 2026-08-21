@@ -13,7 +13,7 @@ class MockWKEngineSession: WKEngineSession {
     let mockTelemetryProxy = MockEngineTelemetryProxy()
     nonisolated(unsafe) var callJavascriptMethodCalled = 0
 
-    init() async {
+    init() {
         self.webviewProvider = MockWKWebViewProvider()
         let defaultDependencies =  DefaultTestDependencies(mockTelemetryProxy: mockTelemetryProxy)
         super.init(userScriptManager: MockWKUserScriptManager(),

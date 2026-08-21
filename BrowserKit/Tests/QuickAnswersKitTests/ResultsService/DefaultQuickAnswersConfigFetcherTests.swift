@@ -8,20 +8,20 @@ import Testing
 
 struct DefaultQuickAnswersConfigFetcherTests {
     @Test
-    func test_fetch_withExaModel_syncsModelOptionAndInjectsInstructions() async throws {
+    func test_fetch_withExaModel_syncsModelOptionAndInjectsInstructions() throws {
         let fetcher = DefaultQuickAnswersConfigFetcher(model: .exa)
 
-        let config = try await fetcher.fetch()
+        let config = try fetcher.fetch()
 
         #expect(config.options["model"] as? String == "exa")
         #expect(!config.instructions.isEmpty)
     }
 
     @Test
-    func test_fetch_withLinerModel_syncsModelOptionAndOmitsInstructions() async throws {
+    func test_fetch_withLinerModel_syncsModelOptionAndOmitsInstructions() throws {
         let fetcher = DefaultQuickAnswersConfigFetcher(model: .liner)
 
-        let config = try await fetcher.fetch()
+        let config = try fetcher.fetch()
 
         #expect(config.options["model"] as? String == "liner")
         #expect(config.instructions.isEmpty)

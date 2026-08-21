@@ -25,7 +25,7 @@ protocol Clearable {
 
 extension Clearable {
     @MainActor
-    func clear(forDomain domain: String) async {
+    func clear(forDomain domain: String) {
         assertionFailure("clear(forDomain:) called on Clearable '\(String(describing: type(of: self)))' that does not support it.")
     }
 }

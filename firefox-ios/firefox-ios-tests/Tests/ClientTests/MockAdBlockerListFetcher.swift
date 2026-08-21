@@ -11,7 +11,7 @@ final class MockAdBlockerListFetcher: AdBlockerListFetcherProtocol, @unchecked S
         self.jsonToReturn = jsonToReturn
     }
 
-    func fetchAdBlockerListJSON() async -> String? {
+    func fetchAdBlockerListJSON() -> String? {
         fetchCallCount += 1
         return jsonToReturn
     }

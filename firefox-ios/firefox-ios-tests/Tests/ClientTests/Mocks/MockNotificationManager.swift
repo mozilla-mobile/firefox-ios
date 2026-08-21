@@ -16,7 +16,7 @@ class MockNotificationManager: NotificationManagerProtocol {
         completion(shouldGrantPermission, errorToReturn)
     }
 
-    func requestAuthorization() async throws -> Bool {
+    func requestAuthorization() throws -> Bool {
         return wasAuthorizationSuccessful
     }
 
@@ -29,6 +29,9 @@ class MockNotificationManager: NotificationManagerProtocol {
         completion(hasPermission)
     }
 
+    // `async` is required here: without it this collides with the `hasPermission` property above
+    // ("invalid redeclaration"). Async-ness is part of the function type for overload purposes.
+    // swiftlint:disable:next async_without_await
     func hasPermission() async -> Bool {
         return hasPermission
     }
@@ -46,7 +49,7 @@ class MockNotificationManager: NotificationManagerProtocol {
         scheduleWithIntervalWasCalled = true
     }
 
-    func findDeliveredNotificationForId(id: String) async -> UNNotification? {
+    func findDeliveredNotificationForId(id: String) -> UNNotification? {
         return nil
     }
 }

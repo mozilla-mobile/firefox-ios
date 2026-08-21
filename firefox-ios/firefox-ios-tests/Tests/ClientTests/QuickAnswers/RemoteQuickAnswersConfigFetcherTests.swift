@@ -79,7 +79,7 @@ private struct MockQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
     let model: QuickAnswersKit.QuickAnswersModel
     let instructions: String
 
-    func fetch() async throws -> QuickAnswersConfig {
+    func fetch() throws -> QuickAnswersConfig {
         return QuickAnswersConfig(model: model, instructions: instructions)
     }
 }

@@ -35,7 +35,7 @@ public protocol URLSessionProtocol: Sendable {
 /// Attempting to use the default one here will yield a runtime assertion failure.
 /// The throw is just to satisfy the async‑throws signature.
 extension URLSessionProtocol {
-    public func bytes(for request: URLRequest) async throws -> (URLSession.AsyncBytes, URLResponse) {
+    public func bytes(for request: URLRequest) throws -> (URLSession.AsyncBytes, URLResponse) {
         assertionFailure("Fallback bytes(for:) called! Conforming types provide their own implementation")
         throw URLError(.unsupportedURL)
     }

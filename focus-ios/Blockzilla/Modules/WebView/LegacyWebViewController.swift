@@ -647,6 +647,9 @@ extension LegacyWebViewController: WKScriptMessageHandler {
 }
 
 extension LegacyWebViewController {
+    // `async` is load-bearing here: it is what bridges this to the ObjC completion-handler
+    // selector. Dropping it would stop the context menu from being configured.
+    // swiftlint:disable:next async_without_await
     func webView(_ webView: WKWebView, contextMenuConfigurationFor elementInfo: WKContextMenuElementInfo) async -> UIContextMenuConfiguration? {
         guard let url = elementInfo.linkURL else { return nil }
 

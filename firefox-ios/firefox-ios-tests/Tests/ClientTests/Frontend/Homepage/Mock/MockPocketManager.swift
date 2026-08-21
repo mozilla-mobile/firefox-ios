@@ -11,7 +11,7 @@ final class MockMerinoManager: MerinoManagerProvider, @unchecked Sendable {
     var getMerinoItemsCalled = 0
     var prefetchStoriesCalled = 0
 
-    func getMerinoItems(source: StorySource) async -> MerinoStoryResponse {
+    func getMerinoItems(source: StorySource) -> MerinoStoryResponse {
         getMerinoItemsCalled += 1
         let stories: [MerinoStoryConfiguration] = [
             .makeItem("feed1"),
@@ -22,7 +22,7 @@ final class MockMerinoManager: MerinoManagerProvider, @unchecked Sendable {
         return MerinoStoryResponse(stories: stories)
     }
 
-    func prefetchStories() async {
+    func prefetchStories() {
         prefetchStoriesCalled += 1
     }
 }

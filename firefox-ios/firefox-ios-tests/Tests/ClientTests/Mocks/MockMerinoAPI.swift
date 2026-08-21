@@ -14,7 +14,7 @@ final class MockMerinoAPI: MerinoStoriesProviding {
 
     let result: Result<CuratedRecommendationsResponse, Error>
 
-    func fetchContent() async throws -> CuratedRecommendationsResponse {
+    func fetchContent() throws -> CuratedRecommendationsResponse {
         switch result {
         case .success(let value):
             return value

@@ -13,6 +13,8 @@ struct DownloadLiveActivityIntent: LiveActivityIntent {
     @Parameter(title: "WindowUUID")
     var windowUUID: String
 
+    // `async` matches the AppIntents `perform()` requirement and is kept for framework compatibility.
+    // swiftlint:disable:next async_without_await
     func perform() async throws -> some IntentResult {
         NotificationCenter.default.post(name: Notification.Name.StopDownloads,
                                         object: self,

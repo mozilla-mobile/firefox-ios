@@ -688,7 +688,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
 }
 
 private final class FallbackTopSitesManager: TopSitesManagerInterface, @unchecked Sendable {
-    func getOtherSites() async -> [TopSiteConfiguration] {
+    func getOtherSites() -> [TopSiteConfiguration] {
         return [
             TopSiteConfiguration(
                 site: Site.createBasicSite(url: "www.example.com", title: "Fallback Site")
@@ -696,7 +696,7 @@ private final class FallbackTopSitesManager: TopSitesManagerInterface, @unchecke
         ]
     }
 
-    func fetchSponsoredSites() async -> [Site] {
+    func fetchSponsoredSites() -> [Site] {
         return []
     }
 
@@ -705,9 +705,9 @@ private final class FallbackTopSitesManager: TopSitesManagerInterface, @unchecke
         return otherSites
     }
 
-    func removeTopSite(_ site: Site) async {}
+    func removeTopSite(_ site: Site) {}
 
     func pinTopSite(_ site: Site) {}
 
-    func unpinTopSite(_ site: Site) async {}
+    func unpinTopSite(_ site: Site) {}
 }

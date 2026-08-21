@@ -7,14 +7,14 @@ import Storage
 import MozillaAppServices
 
 final class MockRustFirefoxSuggest: RustFirefoxSuggestProtocol {
-    func ingest(emptyOnly: Bool) async throws {
+    func ingest(emptyOnly: Bool) throws {
     }
 
     func query(
         _ keyword: String,
         providers: [SuggestionProvider],
         limit: Int32
-    ) async throws -> [RustFirefoxSuggestion] {
+    ) throws -> [RustFirefoxSuggestion] {
         var suggestions = [RustFirefoxSuggestion]()
         if providers.contains(.amp) {
             suggestions.append(RustFirefoxSuggestion(

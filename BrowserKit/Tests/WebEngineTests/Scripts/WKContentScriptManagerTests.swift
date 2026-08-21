@@ -20,9 +20,9 @@ final class WKContentScriptManagerTests: XCTestCase {
         script = nil
     }
 
-    func testAddContentGivenAddedTwiceThenOnlyAddOnce() async {
+    func testAddContentGivenAddedTwiceThenOnlyAddOnce() {
         let subject = createSubject()
-        let session = await MockWKEngineSession()
+        let session = MockWKEngineSession()
 
         subject.addContentScript(script,
                                  name: MockWKContentScript.name(),
@@ -34,9 +34,9 @@ final class WKContentScriptManagerTests: XCTestCase {
         XCTAssertEqual(subject.scripts.count, 1)
     }
 
-    func testAddContentGivenAddedThenCallsMessageHandlers() async {
+    func testAddContentGivenAddedThenCallsMessageHandlers() {
         let subject = createSubject()
-        let session = await MockWKEngineSession()
+        let session = MockWKEngineSession()
 
         subject.addContentScript(script,
                                  name: MockWKContentScript.name(),
@@ -51,9 +51,9 @@ final class WKContentScriptManagerTests: XCTestCase {
         XCTAssertEqual(config.scriptNameAdded, "MockWKContentScriptHandler")
     }
 
-    func testAddContentToPageGivenAddedTwiceThenOnlyAddOnce() async {
+    func testAddContentToPageGivenAddedTwiceThenOnlyAddOnce() {
         let subject = createSubject()
-        let session = await MockWKEngineSession()
+        let session = MockWKEngineSession()
 
         subject.addContentScriptToPage(script,
                                        name: MockWKContentScript.name(),
@@ -65,9 +65,9 @@ final class WKContentScriptManagerTests: XCTestCase {
         XCTAssertEqual(subject.scripts.count, 1)
     }
 
-    func testAddContentToPageGivenAddedThenCallsMessageHandlers() async {
+    func testAddContentToPageGivenAddedThenCallsMessageHandlers() {
         let subject = createSubject()
-        let session = await MockWKEngineSession()
+        let session = MockWKEngineSession()
 
         subject.addContentScriptToPage(script,
                                        name: MockWKContentScript.name(),
@@ -82,9 +82,9 @@ final class WKContentScriptManagerTests: XCTestCase {
         XCTAssertEqual(config.scriptNameAdded, "MockWKContentScriptHandler")
     }
 
-    func testUninstallGivenAScriptThenCallsDeinitAndMessageHandlerNames() async {
+    func testUninstallGivenAScriptThenCallsDeinitAndMessageHandlerNames() {
         let subject = createSubject()
-        let session = await MockWKEngineSession()
+        let session = MockWKEngineSession()
         subject.addContentScript(script,
                                  name: MockWKContentScript.name(),
                                  forSession: session)

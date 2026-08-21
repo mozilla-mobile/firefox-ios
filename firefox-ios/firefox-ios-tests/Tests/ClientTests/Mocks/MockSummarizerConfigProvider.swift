@@ -13,7 +13,7 @@ final class MockSummarizerConfigProvider: SummarizerConfigProvider, @unchecked S
         summarizerModel: SummarizerModel,
         contentType: SummarizationContentType,
         locale: Locale
-    ) async -> SummarizerConfig {
+    ) -> SummarizerConfig {
         getConfigCalledCount += 1
         return SummarizerConfig.defaultConfig
     }

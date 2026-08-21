@@ -23,7 +23,7 @@ class MockASOHttpManager: ASOhttpManager {
         try await data(from: request.url!)
     }
 
-    private func data(from url: URL) async throws -> (Data, HTTPURLResponse) {
+    private func data(from url: URL) throws -> (Data, HTTPURLResponse) {
         if let error = error {
             throw error
         }

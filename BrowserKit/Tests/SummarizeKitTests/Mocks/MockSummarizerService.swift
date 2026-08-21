@@ -14,7 +14,7 @@ class MockSummarizerService: SummarizerService {
     var closeCurrentStreamedSessionCalled = 0
     var delayStreamResultInSeconds: TimeInterval = 0
 
-    func summarize(from webView: WKWebView) async throws -> String {
+    func summarize(from webView: WKWebView) throws -> String {
         summarizeCalled += 1
         return ""
     }

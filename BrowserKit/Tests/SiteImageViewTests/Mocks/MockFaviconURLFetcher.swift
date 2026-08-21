@@ -11,7 +11,7 @@ final class MockFaviconURLFetcher: FaviconURLFetcher, @unchecked Sendable {
     var fetchFaviconURLCalledCount = 0
     var siteURL: URL?
 
-    func fetchFaviconURL(siteURL: URL) async throws -> URL {
+    func fetchFaviconURL(siteURL: URL) throws -> URL {
         fetchFaviconURLCalledCount += 1
         self.siteURL = siteURL
 

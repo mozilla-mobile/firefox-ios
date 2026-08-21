@@ -15,12 +15,12 @@ public final class MockAppAttestRemoteServer: AppAttestRemoteServerProtocol, @un
 
     public init() {}
 
-    public func fetchChallenge(for keyId: String) async throws -> String {
+    public func fetchChallenge(for keyId: String) throws -> String {
         fetchChallengeCallCount += 1
         return challengeToReturn
     }
 
-    public func sendAttestation(keyId: String, attestationObject: Data, challenge: String) async throws {
+    public func sendAttestation(keyId: String, attestationObject: Data, challenge: String) throws {
         sendAttestationCallCount += 1
         if let error = sendAttestationError { throw error }
     }

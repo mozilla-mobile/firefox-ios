@@ -91,7 +91,7 @@ final class MockSiteImageHandler: SiteImageHandler, @unchecked Sendable {
     var cacheFaviconURLCalled = 0
     var clearAllCachesCalled = 0
 
-    func getImage(model: SiteImageModel) async -> UIImage {
+    func getImage(model: SiteImageModel) -> UIImage {
         getImageCalled += 1
         return image
     }

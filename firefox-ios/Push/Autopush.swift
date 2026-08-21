@@ -75,23 +75,23 @@ public actor Autopush {
 }
 
 extension Autopush: AutopushProtocol {
-    public func updateToken(withDeviceToken deviceToken: Data) async throws {
+    public func updateToken(withDeviceToken deviceToken: Data) throws {
         try pushManager.update(registrationToken: deviceToken.hexEncodedString)
     }
 
-    public func subscribe(scope: String) async throws -> SubscriptionResponse {
+    public func subscribe(scope: String) throws -> SubscriptionResponse {
         return try pushManager.subscribe(scope: scope, appServerSey: nil)
     }
 
-    public func unsubscribe(scope: String) async throws -> Bool {
+    public func unsubscribe(scope: String) throws -> Bool {
         return try pushManager.unsubscribe(scope: scope)
     }
 
-    public func unsubscribeAll() async throws {
+    public func unsubscribeAll() throws {
         try pushManager.unsubscribeAll()
     }
 
-    public func decrypt(payload: [String: String]) async throws -> DecryptResponse {
+    public func decrypt(payload: [String: String]) throws -> DecryptResponse {
         return try pushManager.decrypt(payload: payload)
     }
 }

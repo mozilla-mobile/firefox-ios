@@ -9,7 +9,7 @@ final class MockLanguageDetector: LanguageDetectorProvider, @unchecked Sendable 
     var detectedLanguage = "ja"
     var mockError: Error?
 
-    func detectLanguage(from source: LanguageSampleSource) async throws -> String? {
+    func detectLanguage(from source: LanguageSampleSource) throws -> String? {
         if let error = mockError { throw error }
         return detectedLanguage
     }

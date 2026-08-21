@@ -370,7 +370,7 @@ private final class MockHeroImageFetcher: HeroImageFetcher, @unchecked Sendable 
 
     func fetchHeroImage(from siteURL: URL,
                         metadataProvider: LPMetadataProvider = LPMetadataProvider()
-    ) async throws -> UIImage {
+    ) throws -> UIImage {
         if let image = image {
             fetchHeroImageSucceedCalled += 1
             return image
@@ -391,7 +391,7 @@ private final class MockSiteImageCache: SiteImageCache, @unchecked Sendable {
     var cachedWithType: SiteImageType?
     var clearCacheCalledCount = 0
 
-    func getImage(cacheKey: String, type: SiteImageType) async throws -> UIImage {
+    func getImage(cacheKey: String, type: SiteImageType) throws -> UIImage {
         getFromCacheWithType = type
         if let image = image {
             getImageFromCacheSucceedCalled += 1
@@ -402,12 +402,12 @@ private final class MockSiteImageCache: SiteImageCache, @unchecked Sendable {
         }
     }
 
-    func cacheImage(image: UIImage, cacheKey: String, type: SiteImageType) async {
+    func cacheImage(image: UIImage, cacheKey: String, type: SiteImageType) {
         cacheImageCalled += 1
         cachedWithType = type
     }
 
-    func clear() async {
+    func clear() {
         clearCacheCalledCount += 1
     }
 }
@@ -418,7 +418,7 @@ private final class MockFaviconFetcher: FaviconFetcher, @unchecked Sendable {
     var fetchImageSucceedCalled = 0
     var fetchImageFailedCalled = 0
 
-    func fetchFavicon(from imageURL: URL, imageDownloader: SiteImageDownloader) async throws -> UIImage {
+    func fetchFavicon(from imageURL: URL, imageDownloader: SiteImageDownloader) throws -> UIImage {
         if let image = image {
             fetchImageSucceedCalled += 1
             return image

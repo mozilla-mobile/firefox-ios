@@ -439,7 +439,7 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     @MainActor
-    func testDecreaseZoom() async {
+    func testDecreaseZoom() {
         let subject = createSubject()
         // Check default zoom of 1.0
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)

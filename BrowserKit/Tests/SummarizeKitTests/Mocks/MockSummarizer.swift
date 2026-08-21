@@ -19,7 +19,7 @@ final class MockSummarizer: SummarizerProtocol, @unchecked Sendable {
         self.shouldThrowError = shouldThrowError
     }
 
-    func summarize(_ contentToSummarize: String) async throws -> String {
+    func summarize(_ contentToSummarize: String) throws -> String {
         if let error = shouldThrowError { throw error }
         return shouldRespond.joined(separator: " ")
     }

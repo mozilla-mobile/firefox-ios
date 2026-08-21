@@ -67,7 +67,7 @@ public actor DefaultDiskImageStore: DiskImageStore {
         self.keys = Set(keys)
     }
 
-    public func getImageForKey(_ key: String) async throws -> UIImage {
+    public func getImageForKey(_ key: String) throws -> UIImage {
         if !keys.contains(key) {
             throw DiskImageStoreErrorCase.notFound(description: "Image key not found")
         }
@@ -81,7 +81,7 @@ public actor DefaultDiskImageStore: DiskImageStore {
         }
     }
 
-    public func saveImageForKey(_ key: String, image: UIImage) async throws {
+    public func saveImageForKey(_ key: String, image: UIImage) throws {
         let imageURL = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
 
         guard let data = scaleImageFrom3xTo1x(image).jpegData(compressionQuality: quality) else {
@@ -113,7 +113,7 @@ public actor DefaultDiskImageStore: DiskImageStore {
         }
     }
 
-    public func clearAllScreenshotsExcluding(_ keys: Set<String>) async throws {
+    public func clearAllScreenshotsExcluding(_ keys: Set<String>) throws {
         let keysToDelete = self.keys.subtracting(keys)
 
         for key in keysToDelete {
@@ -123,7 +123,7 @@ public actor DefaultDiskImageStore: DiskImageStore {
         self.keys = keys
     }
 
-    public func deleteImageForKey(_ key: String) async {
+    public func deleteImageForKey(_ key: String) {
         let url = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
         do {
             try FileManager.default.removeItem(at: url)

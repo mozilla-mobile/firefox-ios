@@ -11,7 +11,7 @@ final class MockTrendingSearchClient: TrendingSearchClientProvider, @unchecked S
     init(result: Result<[String], Error> = .success([])) {
         self.result = result
     }
-    func getTrendingSearches(for searchEngine: TrendingSearchEngine?) async throws -> [String] {
+    func getTrendingSearches(for searchEngine: TrendingSearchEngine?) throws -> [String] {
         getTrendingSearchesCalledCount += 1
         return try result.get()
     }

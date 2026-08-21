@@ -9,7 +9,7 @@ final class MockGroupedFolderHierarchyFetcher: GroupedFolderHierarchyFetcher, @u
     private(set) var fetchFoldersCalled = 0
     private(set) var capturedExcludedGuids: [String] = []
 
-    func fetchFolders(excludedGuids: [String]) async -> [GroupedFolder] {
+    func fetchFolders(excludedGuids: [String]) -> [GroupedFolder] {
         fetchFoldersCalled += 1
         capturedExcludedGuids = excludedGuids
         return mockFolderStructures

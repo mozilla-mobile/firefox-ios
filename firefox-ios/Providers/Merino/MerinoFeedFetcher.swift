@@ -23,7 +23,7 @@ struct MerinoFeedFetcher: MerinoFeedFetching, FeatureFlaggable {
         locale: CuratedRecommendationLocale,
         region: String?,
         userAgent: String
-    ) async -> CuratedRecommendationsResponse? {
+    ) -> CuratedRecommendationsResponse? {
         do {
             let client = try CuratedRecommendationsClient(
                 config: CuratedRecommendationsConfig(

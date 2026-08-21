@@ -140,7 +140,7 @@ final class FormAutofillHelperTests: XCTestCase {
     }
 
     // MARK: - ParseJSON
-    func test_parseFieldType_valid() async {
+    func test_parseFieldType_valid() {
         let validMockPayloadJson = """
             {
               "type" : "fill-credit-card-form",
@@ -169,7 +169,7 @@ final class FormAutofillHelperTests: XCTestCase {
         XCTAssertEqual(messageFields.creditCardPayload.ccNumber, "4520 2991 2039 6788")
     }
 
-    func test_parseFieldCaptureJsonType_valid() async {
+    func test_parseFieldCaptureJsonType_valid() {
         guard let jsonData = validMockPayloadCaptureJson.data(using: .utf8),
               let dictionary = try? JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
               let data = try? JSONSerialization.data(withJSONObject: dictionary),
@@ -188,7 +188,7 @@ final class FormAutofillHelperTests: XCTestCase {
 
     // MARK: - Retrieval
 
-    func test_getFieldTypeValues() async {
+    func test_getFieldTypeValues() {
         guard let jsonData = validMockPayloadCaptureJson.data(using: .utf8),
               let dictionary = try? JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
               let data = try? JSONSerialization.data(withJSONObject: dictionary),

@@ -28,7 +28,7 @@ class SearchBarLocationSaverTests: XCTestCase {
 
     // MARK: - Toolbar Refactor - Version layout
     @MainActor
-    func test_saveSearchBarLocation_oniPhone_withFirstRun_forVersion1_setsNoPosition() async throws {
+    func test_saveSearchBarLocation_oniPhone_withFirstRun_forVersion1_setsNoPosition() throws {
         setupNimbusToolbarLayoutTesting(isEnabled: true, layout: .version1)
         let subject = createSubject()
 
@@ -38,7 +38,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     }
 
     @MainActor
-    func test_saveSearchBarLocation_oniPhone_withSecondRun_forVersion1_setsPositionTop() async throws {
+    func test_saveSearchBarLocation_oniPhone_withSecondRun_forVersion1_setsPositionTop() throws {
         setupNimbusToolbarLayoutTesting(isEnabled: true, layout: .version1)
         let subject = createSubject()
         profile.prefs.setString(AppInfo.appVersion, forKey: PrefsKeys.AppVersion.Latest) // second run
@@ -49,7 +49,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     }
 
     @MainActor
-    func test_saveSearchBarLocation_oniPhone_withSecondRunAfterFullOnboarding_forVersion1_keepsPosition() async throws {
+    func test_saveSearchBarLocation_oniPhone_withSecondRunAfterFullOnboarding_forVersion1_keepsPosition() throws {
         setupNimbusToolbarLayoutTesting(isEnabled: true, layout: .version1)
         let subject = createSubject()
         profile.prefs.setString(AppInfo.appVersion, forKey: PrefsKeys.AppVersion.Latest) // second run
@@ -61,7 +61,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     }
 
     @MainActor
-    func test_saveSearchBarLocation_oniPad_withFirstRun_forVersion1_setsNoPosition() async throws {
+    func test_saveSearchBarLocation_oniPad_withFirstRun_forVersion1_setsNoPosition() throws {
         setupNimbusToolbarLayoutTesting(isEnabled: true, layout: .version1)
         let subject = createSubject()
 
@@ -71,7 +71,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     }
 
     @MainActor
-    func test_saveSearchBarLocation_oniPad_withSecondRun_forVersion1_setsPositionTop() async throws {
+    func test_saveSearchBarLocation_oniPad_withSecondRun_forVersion1_setsPositionTop() throws {
         setupNimbusToolbarLayoutTesting(isEnabled: true, layout: .version1)
         let subject = createSubject()
         profile.prefs.setString(AppInfo.appVersion, forKey: PrefsKeys.AppVersion.Latest) // second run
@@ -82,7 +82,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     }
 
     @MainActor
-    func test_saveSearchBarLocation_oniPad_withSecondRunAfterFullOnboarding_forVersion1_keepsPosition() async throws {
+    func test_saveSearchBarLocation_oniPad_withSecondRunAfterFullOnboarding_forVersion1_keepsPosition() throws {
         setupNimbusToolbarLayoutTesting(isEnabled: true, layout: .version1)
         let subject = createSubject()
         profile.prefs.setString(AppInfo.appVersion, forKey: PrefsKeys.AppVersion.Latest) // second run
@@ -96,7 +96,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     // MARK: - iPad bottom-bar migration (FXIOS-15653)
 
     @MainActor
-    func test_migrateBottomBarPositionToTopOnIPad_resetsBottomToTop_onIPad() async throws {
+    func test_migrateBottomBarPositionToTopOnIPad_resetsBottomToTop_onIPad() throws {
         let subject = createSubject()
         profile.prefs.setString(SearchBarPosition.bottom.rawValue,
                                 forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
@@ -108,7 +108,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     }
 
     @MainActor
-    func test_migrateBottomBarPositionToTopOnIPad_doesNothing_whenAlreadyTop_onIPad() async throws {
+    func test_migrateBottomBarPositionToTopOnIPad_doesNothing_whenAlreadyTop_onIPad() throws {
         let subject = createSubject()
         profile.prefs.setString(SearchBarPosition.top.rawValue,
                                 forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
@@ -120,7 +120,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     }
 
     @MainActor
-    func test_migrateBottomBarPositionToTopOnIPad_doesNothing_whenNoPositionSaved_onIPad() async throws {
+    func test_migrateBottomBarPositionToTopOnIPad_doesNothing_whenNoPositionSaved_onIPad() throws {
         let subject = createSubject()
 
         subject.migrateBottomBarPositionToTopOnIPad(profile: profile, userInterfaceIdiom: .pad)
@@ -129,7 +129,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     }
 
     @MainActor
-    func test_migrateBottomBarPositionToTopOnIPad_doesNothing_onIPhone_evenWhenBottom() async throws {
+    func test_migrateBottomBarPositionToTopOnIPad_doesNothing_onIPhone_evenWhenBottom() throws {
         let subject = createSubject()
         profile.prefs.setString(SearchBarPosition.bottom.rawValue,
                                 forKey: PrefsKeys.FeatureFlags.SearchBarPosition)

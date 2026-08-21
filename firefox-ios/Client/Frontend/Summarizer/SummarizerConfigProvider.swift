@@ -36,7 +36,7 @@ struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
         summarizerModel: SummarizerModel,
         contentType: SummarizationContentType,
         locale: Locale
-    ) async -> SummarizerConfig {
+    ) -> SummarizerConfig {
         let initialConfig = SummarizerConfig(instructions: "", options: [:])
         // Merge configs in reverse order (so higher priority overrides lower)
         // $0.merging(with: $1) means "merge $0 into $1" so the result will prioritize $0's values.

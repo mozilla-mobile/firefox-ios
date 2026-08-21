@@ -6,7 +6,7 @@ import XCTest
 @testable import SiteImageView
 
 class ServerErrorHelperTests {
-    func testIsClientError_whenNetworkError() async {
+    func testIsClientError_whenNetworkError() {
         let networkError = URLError(.notConnectedToInternet)
 
         let isClientError = ServerErrorHelper.isClientError(networkError)
@@ -14,7 +14,7 @@ class ServerErrorHelperTests {
         XCTAssertTrue(isClientError, "The error should be identified as a client error.")
     }
 
-    func testIsClientError_whenServerError() async {
+    func testIsClientError_whenServerError() {
         let serverError = URLError(.badServerResponse)
 
         let isClientError = ServerErrorHelper.isClientError(serverError)

@@ -15,14 +15,14 @@ public final class MockAppAttestService: AppAttestServiceProtocol, @unchecked Se
         self.isSupported = isSupported
     }
 
-    public func generateKey() async throws -> String {
+    public func generateKey() throws -> String {
         return keyToReturn
     }
 
-    public func attestKey(_ keyId: String, clientDataHash: Data) async throws -> Data {
+    public func attestKey(_ keyId: String, clientDataHash: Data) throws -> Data {
         return attestationToReturn
     }
-    public func generateAssertion(_ keyId: String, clientDataHash: Data) async throws -> Data {
+    public func generateAssertion(_ keyId: String, clientDataHash: Data) throws -> Data {
         return assertionToReturn
     }
 }

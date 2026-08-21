@@ -112,6 +112,9 @@ final class CertificateDelegate: NSObject, URLSessionDelegate {
         self.completion = completion
     }
 
+    // `async` is load-bearing here: it is what bridges this to the ObjC completion-handler
+    // selector. Dropping it would stop the challenge from being delivered.
+    // swiftlint:disable async_without_await
     func urlSession(
         _ session: URLSession,
         didReceive challenge: URLAuthenticationChallenge
@@ -128,4 +131,5 @@ final class CertificateDelegate: NSObject, URLSessionDelegate {
             return (.cancelAuthenticationChallenge, nil)
         }
     }
+    // swiftlint:enable async_without_await
 }
