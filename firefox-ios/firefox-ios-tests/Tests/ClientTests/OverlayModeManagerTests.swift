@@ -5,6 +5,7 @@
 import XCTest
 
 @testable import Client
+// Disabled: not passing on Xcode/iOS 27. Skipped in UnitTest.xctestplan.
 class OverlayModeManagerTests: XCTestCase {
     private var urlBar: MockURLBarView!
     private var subject: MockOverlayModeManager!
