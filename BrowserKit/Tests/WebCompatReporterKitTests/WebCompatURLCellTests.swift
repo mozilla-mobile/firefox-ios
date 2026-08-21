@@ -14,6 +14,7 @@ final class WebCompatURLCellTests: XCTestCase {
         subject.configure(
             title: "URL",
             text: "https://example.com",
+            errorMessage: nil,
             a11yIdentifier: "WebCompatReporter.URLField",
             onEditingEnded: { _ in }
         )
@@ -26,8 +27,8 @@ final class WebCompatURLCellTests: XCTestCase {
 
     func testApplyStackLayout_switchesAxisAndAlignmentBetweenStandardAndAccessibilitySizes() throws {
         let subject = createSubject()
-        subject.configure(title: "URL", text: "", a11yIdentifier: "url", onEditingEnded: { _ in })
-        let stack = try XCTUnwrap(firstSubview(ofType: UIStackView.self, in: subject.contentView))
+        subject.configure(title: "URL", text: "", errorMessage: nil, a11yIdentifier: "url", onEditingEnded: { _ in })
+        let stack = try fieldStackView(in: subject)
 
         subject.applyStackLayout(isAccessibilityCategory: false)
         XCTAssertEqual(stack.axis, .horizontal)
@@ -41,7 +42,7 @@ final class WebCompatURLCellTests: XCTestCase {
     func testConfigure_clearedFieldShowsNoPlaceholderAndReadsFromTheLeadingEdge() throws {
         let subject = createSubject()
 
-        subject.configure(title: "URL", text: "ebay.com", a11yIdentifier: "url", onEditingEnded: { _ in })
+        subject.configure(title: "URL", text: "ebay.com", errorMessage: nil, a11yIdentifier: "url", onEditingEnded: { _ in })
         subject.applyTheme(theme: LightTheme())
 
         let field = try XCTUnwrap(firstSubview(ofType: UITextField.self, in: subject.contentView))
@@ -50,7 +51,50 @@ final class WebCompatURLCellTests: XCTestCase {
         XCTAssertEqual(field.textAlignment, .natural)
     }
 
+    func testConfigure_showsTheErrorWithTheTypedTextThenHidesItOnRecovery() throws {
+        let subject = createSubject()
+
+        subject.configure(
+            title: "URL",
+            text: ".com",
+            errorMessage: "Enter a valid URL",
+            a11yIdentifier: "url",
+            onEditingEnded: { _ in }
+        )
+
+        let field = try XCTUnwrap(firstSubview(ofType: UITextField.self, in: subject.contentView))
+        XCTAssertEqual(field.text, ".com")
+        XCTAssertEqual(try errorLabel(in: subject).text, "Enter a valid URL")
+        XCTAssertFalse(try errorStackView(in: subject).isHidden)
+        XCTAssertEqual(field.accessibilityLabel, "URL, Enter a valid URL")
+
+        subject.configure(
+            title: "URL",
+            text: "https://example.com",
+            errorMessage: nil,
+            a11yIdentifier: "url",
+            onEditingEnded: { _ in }
+        )
+
+        XCTAssertTrue(try errorStackView(in: subject).isHidden)
+        XCTAssertEqual(field.accessibilityLabel, "URL")
+    }
+
     // MARK: - Helpers
+
+    private func fieldStackView(in subject: WebCompatURLCell) throws -> UIStackView {
+        let container = try XCTUnwrap(firstSubview(ofType: UIStackView.self, in: subject.contentView))
+        return try XCTUnwrap(container.arrangedSubviews.compactMap { $0 as? UIStackView }.first)
+    }
+
+    private func errorLabel(in subject: WebCompatURLCell) throws -> UILabel {
+        return try XCTUnwrap(errorStackView(in: subject).arrangedSubviews.compactMap { $0 as? UILabel }.first)
+    }
+
+    private func errorStackView(in subject: WebCompatURLCell) throws -> UIStackView {
+        let container = try XCTUnwrap(firstSubview(ofType: UIStackView.self, in: subject.contentView))
+        return try XCTUnwrap(container.arrangedSubviews.compactMap { $0 as? UIStackView }.last)
+    }
 
     private func createSubject() -> WebCompatURLCell {
         return WebCompatURLCell(frame: CGRect(x: 0, y: 0, width: 320, height: 60))

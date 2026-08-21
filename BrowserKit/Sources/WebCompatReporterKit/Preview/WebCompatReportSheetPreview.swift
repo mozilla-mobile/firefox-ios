@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+/// Scaffolding for the Xcode previews below. None of it ships: the view models here stand in for
+/// what the Client-side Redux layer builds at runtime.
 #if DEBUG
 import Common
 import SwiftUI
@@ -23,12 +25,15 @@ private func previewSheet(
     return UINavigationController(rootViewController: sheet)
 }
 
-private func previewURLSection() -> WebCompatReportViewModel.Section {
+private func previewURLSection(
+    text: String = "https://houseandhome.com/recipe/croque-monsieur",
+    errorMessage: String? = nil
+) -> WebCompatReportViewModel.Section {
     return WebCompatReportViewModel.Section(id: "url", rows: [
         WebCompatReportViewModel.Row(
             id: "url",
             title: "URL",
-            kind: .urlField(text: "https://houseandhome.com/recipe/croque-monsieur"),
+            kind: .urlField(text: text, errorMessage: errorMessage),
             a11yIdentifier: "url"
         )
     ])
@@ -160,6 +165,15 @@ private func previewFooterSection() -> WebCompatReportViewModel.Section {
     previewSheet(sections: [
         previewURLSection(),
         previewCategorySection(selectedTitle: nil),
+        previewSendSection(isEnabled: false)
+    ], isPreviewEnabled: false)
+}
+
+@available(iOS 17.0, *)
+#Preview("Invalid URL") {
+    previewSheet(sections: [
+        previewURLSection(text: ".com", errorMessage: "Enter a valid URL"),
+        previewCategorySection(selectedTitle: "Site is not usable"),
         previewSendSection(isEnabled: false)
     ], isPreviewEnabled: false)
 }

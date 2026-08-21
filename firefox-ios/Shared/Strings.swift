@@ -4501,6 +4501,12 @@ extension String {
                 value: "URL",
                 comment: "Leading label of the editable row showing the web address being reported, in the Report a Website Issue form."
             )
+            public static let URLError = MZLocalizedString(
+                key: "WebCompatReporter.Fields.URLError.v155",
+                tableName: "WebCompatReporter",
+                value: "Enter a valid URL",
+                comment: "Error message shown under the URL field when the address entered has an invalid format, in the Report a Website Issue form."
+            )
             public static let DetailsPlaceholder = MZLocalizedString(
                 key: "WebCompatReporter.Fields.DetailsPlaceholder.v154",
                 tableName: "WebCompatReporter",
