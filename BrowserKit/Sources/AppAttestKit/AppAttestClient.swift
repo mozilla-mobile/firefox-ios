@@ -100,9 +100,41 @@ public struct AppAttestClient: Sendable {
         )
     }
 
+    /// Generates an assertion that signs over the server challenge, proving continued possession of
+    /// the attested key (e.g. to refresh a session token).
+    ///
+    /// Unlike `generateAssertion(payload:)`, which passes the challenge alongside the signature in
+    /// plaintext, this folds it into the signed bytes so a captured assertion can't be replayed.
+    /// The client data is JSON `{"challenge":"<challenge>"}` with sorted keys, so the
+    /// server can recompute identical bytes.
+    public func generateChallengeBoundAssertion() async throws -> AssertionResult {
+        guard let keyId = keyStore.loadKeyID() else {
+            throw AppAttestServiceError.missingKeyID
+        }
+
+        let challenge = try await remoteServer.fetchChallenge(for: keyId)
+        let clientData = try JSONSerialization.data(
+            withJSONObject: [Constants.challengeKey: challenge],
+            options: [.sortedKeys]
+        )
+        let clientDataHash = Data(SHA256.hash(data: clientData))
+        let assertion = try await appAttestService.generateAssertion(keyId, clientDataHash: clientDataHash)
+
+        return AssertionResult(
+            keyId: keyId,
+            assertion: assertion,
+            challenge: challenge,
+            payload: clientData
+        )
+    }
+
     /// Clears the locally stored `keyId`, forcing re-attestation on the next call.
     /// This will be called for QA purposes to allow testers to reset the attestation state.
     public func resetKey() throws {
         try keyStore.clearKeyID()
+    }
+
+    private enum Constants {
+        static let challengeKey = "challenge"
     }
 }
