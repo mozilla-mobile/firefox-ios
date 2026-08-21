@@ -295,6 +295,7 @@
         "OnboardingServiceTests",
         "OnboardingTelemetryUtilityTests",
         "OneLineTableViewCellTests",
+        "OpenSearchEngineTests",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_addressesDisabled()",
