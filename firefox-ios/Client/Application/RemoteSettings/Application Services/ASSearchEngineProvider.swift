@@ -15,16 +15,12 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
     private let selector: ASSearchEngineSelectorProtocol?
 
     init(logger: Logger = DefaultLogger.shared,
+         remoteSettingsService: RemoteSettingsService = AppContainer.shared.resolve(),
          selector: ASSearchEngineSelectorProtocol? = nil,
          iconDataFetcher: ASSearchEngineIconDataFetcherProtocol? = ASSearchEngineIconDataFetcher()) {
         self.logger = logger
         self.iconDataFetcher = iconDataFetcher
-        let profile = (AppContainer.shared.resolve() as Profile)
-        if selector == nil {
-            self.selector = ASSearchEngineSelector(service: profile.remoteSettingsService )
-        } else {
-            self.selector = selector
-        }
+        self.selector = selector ?? ASSearchEngineSelector(service: remoteSettingsService)
     }
 
     // MARK: - SearchEngineProvider

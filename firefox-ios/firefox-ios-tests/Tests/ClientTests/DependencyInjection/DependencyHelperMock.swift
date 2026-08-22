@@ -5,6 +5,7 @@
 import Common
 import Storage
 import TestKit
+import class MozillaAppServices.RemoteSettingsService
 @testable import Client
 
 final class DependencyHelperMock {
@@ -24,6 +25,7 @@ final class DependencyHelperMock {
             localName: "profile"
         )
         AppContainer.shared.register(service: profile as Profile)
+        AppContainer.shared.register(service: profile.remoteSettingsService as RemoteSettingsService)
 
         let diskImageStore: DiskImageStore = DefaultDiskImageStore(
             files: profile.files,

@@ -4,6 +4,7 @@
 
 import Storage
 import Common
+import class MozillaAppServices.RemoteSettingsService
 
 class DependencyHelper {
     @MainActor
@@ -15,6 +16,7 @@ class DependencyHelper {
 
         let profile: Profile = appDelegate.profile
         AppContainer.shared.register(service: profile as Profile)
+        AppContainer.shared.register(service: profile.remoteSettingsService as RemoteSettingsService)
 
         AppContainer.shared.register(service: appDelegate.searchEnginesManager)
 
