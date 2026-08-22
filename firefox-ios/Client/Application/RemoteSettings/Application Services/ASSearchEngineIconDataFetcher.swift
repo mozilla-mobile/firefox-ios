@@ -23,9 +23,9 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
     let logger: Logger
     private let fallbackEngineIcon: UIImage? = UIImage(named: StandardImageIdentifiers.Large.search)
 
-    init?(logger: Logger = DefaultLogger.shared) {
-        let profile: Profile = AppContainer.shared.resolve()
-        self.service = profile.remoteSettingsService
+    init?(logger: Logger = DefaultLogger.shared,
+          remoteSettingsService: RemoteSettingsService = AppContainer.shared.resolve()) {
+        self.service = remoteSettingsService
         self.client = ASRemoteSettingsCollection.searchEngineIcons.makeClient()
         self.logger = logger
     }
