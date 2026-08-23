@@ -139,10 +139,6 @@ public struct StandardImageIdentifiers {
     // Icon size 30x30
     public struct ExtraLarge {
         public static let crossCircleFill = "crossCircleFillExtraLarge"
-    }
-
-    // Icon size 72x72
-    public struct ExtraExtraExtraLarge {
-        public static let privateModeCircleFillMulticolor = "privateModeCircleFillMulticolorExtraExtraExtraLarge"
+        public static let privateModeCircleFillMulticolorExtraExtra = "privateModeCircleFillMulticolorExtraExtraExtraLarge"
     }
 }
