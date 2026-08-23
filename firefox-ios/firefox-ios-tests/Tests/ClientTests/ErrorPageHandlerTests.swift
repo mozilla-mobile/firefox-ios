@@ -79,7 +79,8 @@ final class ErrorPageHandlerTests: XCTestCase {
 
     @MainActor
     func testLoadPage_withOfflineErrorAndRestrictedCellularData_showsCellularDataGuidance() throws {
-        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: true)
+        setupNimbusNativeErrorPageTesting(isEnabled: false, noInternetConnectionErrorIsEnabled: false)
+        setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: true)
         let subject = ErrorPageHelper(
             certStore: nil,
             cellularDataStateProvider: MockCellularDataStateProvider(isRestricted: true)
@@ -120,7 +121,8 @@ final class ErrorPageHandlerTests: XCTestCase {
 
     @MainActor
     func testResponseForErrorWebPage_withRestrictedCellularDataAndFeatureDisabled_usesDefaultContent() throws {
-        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: false)
+        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: true)
+        setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: false)
         let errorURL = try XCTUnwrap(URL(string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)" +
             "?url=https%3A%2F%2Fexample.com%2F&code=\(NSURLErrorNotConnectedToInternet)" +
             "&description=Offline&domain=NSURLErrorDomain&cellularDataRestricted=true"))
@@ -133,7 +135,36 @@ final class ErrorPageHandlerTests: XCTestCase {
     }
 
     @MainActor
+    func testLoadPage_withRestrictedCellularDataAndFeatureDisabled_keepsDefaultErrorPage() throws {
+        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: true)
+        setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: false)
+        let subject = ErrorPageHelper(
+            certStore: nil,
+            cellularDataStateProvider: MockCellularDataStateProvider(isRestricted: true)
+        )
+        let webView = MockTabWebView(
+            frame: .zero,
+            configuration: WKWebViewConfiguration(),
+            windowUUID: .XCTestDefaultUUID,
+            certStore: MockProfile().certStore
+        )
+        let failingURL = URL(string: "https://example.com/")!
+        let error = NSError(
+            domain: NSURLErrorDomain,
+            code: NSURLErrorNotConnectedToInternet,
+            userInfo: [NSURLErrorFailingURLErrorKey: failingURL]
+        )
+
+        subject.loadPage(error, forUrl: failingURL, inWebView: webView)
+
+        let loadedURL = try XCTUnwrap(webView.loadedRequest?.url)
+        let components = URLComponents(url: loadedURL, resolvingAgainstBaseURL: false)
+        XCTAssertNil(components?.queryItems?.first(where: { $0.name == "cellularDataRestricted" }))
+    }
+
+    @MainActor
     func testLoadPage_withOfflineErrorAndAvailableCellularData_keepsDefaultErrorPage() throws {
+        setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: true)
         let subject = ErrorPageHelper(
             certStore: nil,
             cellularDataStateProvider: MockCellularDataStateProvider(isRestricted: false)
@@ -201,6 +232,12 @@ private extension ErrorPageHandlerTests {
                 enabled: isEnabled,
                 noInternetConnectionError: noInternetConnectionErrorIsEnabled
             )
+        }
+    }
+
+    func setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.cellularDataRestrictedErrorPageFeature.with { _, _ in
+            return CellularDataRestrictedErrorPageFeature(enabled: isEnabled)
         }
     }
 }

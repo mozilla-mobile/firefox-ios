@@ -7,7 +7,7 @@ import Shared
 import Common
 import Security
 
-class NativeErrorPageHelper {
+class NativeErrorPageHelper: FeatureFlaggable {
     private enum Constants {
         static let certErrorQueryParam = "certerror"
         static let badCertQueryParam = "badcert"
@@ -124,7 +124,7 @@ class NativeErrorPageHelper {
     // MARK: - Instance Methods
 
     func parseErrorDetails() -> ErrorPageModel {
-        if NativeErrorPageFeatureFlag().isNICErrorPageEnabled &&
+        if featureFlagsProvider.isEnabled(.cellularDataRestrictedErrorPage) &&
             cellularDataStateProvider.isRestrictedOfflineError(error) {
             return .cellularDataRestricted
         }

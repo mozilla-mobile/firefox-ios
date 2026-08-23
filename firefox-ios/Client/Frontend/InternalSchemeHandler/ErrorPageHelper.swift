@@ -181,7 +181,7 @@ private func cfErrorToName(_ err: CFNetworkErrors) -> String {
     }
 }
 
-final class ErrorPageHandler: InternalSchemeResponse {
+final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
     static let path = InternalURL.Path.errorpage.rawValue
     // When nativeErrorPage feature flag is true, only create
     // html page with gray background similar to homepage or private homepage.
@@ -264,7 +264,7 @@ final class ErrorPageHandler: InternalSchemeResponse {
             ]
 
         let offlineErrorCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
-        let isCellularDataRestricted = NativeErrorPageFeatureFlag().isNICErrorPageEnabled
+        let isCellularDataRestricted = featureFlagsProvider.isEnabled(.cellularDataRestrictedErrorPage)
             && errCode == offlineErrorCode
             && components.valueForQuery(ErrorPageCellularDataRestrictedParam) == "true"
         if isCellularDataRestricted {
@@ -330,7 +330,7 @@ final class ErrorPageHandler: InternalSchemeResponse {
     }
 }
 
-class ErrorPageHelper {
+class ErrorPageHelper: FeatureFlaggable {
     fileprivate weak var certStore: CertStore?
     private var logger: Logger
     private let cellularDataStateProvider: any CellularDataStateProvider
@@ -363,7 +363,8 @@ class ErrorPageHelper {
             URLQueryItem(name: "timestamp", value: "\(Int(Date().timeIntervalSince1970 * 1000))")
         ]
 
-        if cellularDataStateProvider.isRestrictedOfflineError(error) {
+        if featureFlagsProvider.isEnabled(.cellularDataRestrictedErrorPage) &&
+            cellularDataStateProvider.isRestrictedOfflineError(error) {
             queryItems.append(URLQueryItem(name: ErrorPageCellularDataRestrictedParam, value: "true"))
         }
 

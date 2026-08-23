@@ -198,7 +198,8 @@ final class NativeErrorPageHelperTests: XCTestCase {
     }
 
     func testParseErrorDetails_noInternetError_whenCellularDataRestricted_returnsRestrictedModel() {
-        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: true)
+        setupNimbusNativeErrorPageTesting(isEnabled: false, noInternetConnectionErrorIsEnabled: false)
+        setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: true)
         let url = URL(string: "https://example.com")!
         let noInternetCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
         let error = NSError(domain: NSURLErrorDomain, code: noInternetCode, userInfo: [
@@ -215,7 +216,8 @@ final class NativeErrorPageHelperTests: XCTestCase {
     }
 
     func testParseErrorDetails_noInternetError_whenCellularDataRestrictionFeatureDisabled_returnsNoInternetModel() {
-        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: false)
+        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: true)
+        setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: false)
         let url = URL(string: "https://example.com")!
         let noInternetCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
         let error = NSError(domain: NSURLErrorDomain, code: noInternetCode, userInfo: [
@@ -255,6 +257,12 @@ final class NativeErrorPageHelperTests: XCTestCase {
                 enabled: isEnabled,
                 noInternetConnectionError: noInternetConnectionErrorIsEnabled
             )
+        }
+    }
+
+    private func setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.cellularDataRestrictedErrorPageFeature.with { _, _ in
+            return CellularDataRestrictedErrorPageFeature(enabled: isEnabled)
         }
     }
 
