@@ -588,4 +588,72 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
         XCTAssertTrue(subject.googleLensSearches.isEmpty)
     }
+
+    // MARK: - Context menu element resolution
+    // See FXIOS-14918: WebKit's native long-press gesture isn't synchronized with the page's
+    // touchstart/mousedown listener, so the JS-reported elements can be missing or stale by the time
+    // WebKit asks for a menu. `resolveContextMenuElements` must fall back to native-only data instead
+    // of letting the custom menu (and actions like "Open in Private Tab") be replaced by WebKit's default one.
+
+    @MainActor
+    func testResolveContextMenuElements_noContextHelper_fallsBackToLinkOnly() {
+        let url = URL(string: "https://example.com")!
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: url, from: nil)
+
+        XCTAssertEqual(elements.link, url)
+        XCTAssertNil(elements.image)
+        XCTAssertNil(elements.title)
+        XCTAssertNil(elements.alt)
+    }
+
+    @MainActor
+    func testResolveContextMenuElements_jsElementsNotYetReported_fallsBackToLinkOnly() {
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: url, from: contextHelper)
+
+        XCTAssertEqual(elements.link, url)
+        XCTAssertNil(elements.title)
+    }
+
+    @MainActor
+    func testResolveContextMenuElements_jsElementsMatchNativeURL_usesReportedElements() {
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: url, image: nil, title: "Example", alt: nil)
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: url, from: contextHelper)
+
+        XCTAssertEqual(elements.title, "Example")
+    }
+
+    @MainActor
+    func testResolveContextMenuElements_jsElementsAreStale_fallsBackToLinkOnly() {
+        let url = URL(string: "https://example.com")!
+        let staleURL = URL(string: "https://previous-long-press.example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: staleURL, image: nil, title: "Stale", alt: nil)
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: url, from: contextHelper)
+
+        XCTAssertEqual(elements.link, url)
+        XCTAssertNil(elements.title, "Stale JS-reported data for a different link must not be used")
+    }
+
+    @MainActor
+    func testContextMenuHelperReset_clearsPreviouslyReportedElements() {
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(
+            link: URL(string: "https://example.com"),
+            image: nil,
+            title: "Example",
+            alt: nil
+        )
+
+        contextHelper.reset()
+
+        XCTAssertNil(contextHelper.elements)
+    }
 }

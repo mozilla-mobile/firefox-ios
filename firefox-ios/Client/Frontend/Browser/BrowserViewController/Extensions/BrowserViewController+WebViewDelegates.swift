@@ -199,16 +199,13 @@ extension BrowserViewController: WKUIDelegate {
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
         completionHandler: @escaping @MainActor (UIContextMenuConfiguration?) -> Void
     ) {
-        guard let url = elementInfo.linkURL,
-              let currentTab = tabManager.selectedTab,
-              let contextHelper = currentTab.getContentScript(
-                name: ContextMenuHelper.name()
-              ) as? ContextMenuHelper,
-              let elements = contextHelper.elements
-        else {
+        guard let url = elementInfo.linkURL, let currentTab = tabManager.selectedTab else {
             completionHandler(nil)
             return
         }
+        let contextHelper = currentTab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper
+        let elements = Self.resolveContextMenuElements(for: url, from: contextHelper)
+
         completionHandler(contextMenuConfiguration(for: url, webView: webView, elements: elements))
         ContextMenuTelemetry().shown(origin: elements.image != nil ? .imageLink : .webLink)
     }
@@ -217,10 +214,27 @@ extension BrowserViewController: WKUIDelegate {
         guard let currentTab = tabManager.selectedTab,
               let contextHelper = currentTab.getContentScript(
                 name: ContextMenuHelper.name()
-              ) as? ContextMenuHelper,
-              let elements = contextHelper.elements
+              ) as? ContextMenuHelper
         else { return }
-        ContextMenuTelemetry().dismissed(origin: elements.image != nil ? .imageLink : .webLink)
+        let elements = contextHelper.elements
+        ContextMenuTelemetry().dismissed(origin: elements?.image != nil ? .imageLink : .webLink)
+        contextHelper.reset()
+    }
+
+    /// WebKit's native long-press gesture that triggers this delegate isn't synchronized with the page's
+    /// `touchstart`/`mousedown` listener that reports link/image details across the JS bridge, so that data
+    /// can still be missing, or belong to a previous long press, once WebKit asks for a menu. `elementInfo.linkURL`
+    /// comes straight from WebKit and is always current, so it's used as-is; the JS-sourced data is only trusted
+    /// when its link matches, and otherwise a native-only fallback keeps the custom menu (and its actions like
+    /// "Open in Private Tab") from being replaced with WebKit's default one. See FXIOS-14918.
+    static func resolveContextMenuElements(
+        for url: URL,
+        from contextHelper: ContextMenuHelper?
+    ) -> ContextMenuHelper.Elements {
+        if let elements = contextHelper?.elements, elements.link == url {
+            return elements
+        }
+        return ContextMenuHelper.Elements(link: url, image: nil, title: nil, alt: nil)
     }
 
     func webView(
@@ -1248,6 +1262,7 @@ extension BrowserViewController: WKNavigationDelegate {
         let previousURL = tab.url
         tab.url = webView.url
         hideStaleContentOnCrossOriginPopupCommit(for: tab, previousURL: previousURL)
+        (tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper)?.reset()
         if let handler = tab.onNextCommit {
             tab.onNextCommit = nil
             handler()
