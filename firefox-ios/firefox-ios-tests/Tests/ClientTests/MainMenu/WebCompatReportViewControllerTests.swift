@@ -312,6 +312,17 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(text, "Broken images")
     }
 
+    func testMakeSections_detailsRowLabelsItselfOptional() {
+        let state = WebCompatReporterState(windowUUID: windowUUID)
+            .copy(url: "https://example.com")
+            .copy(selectedCategory: .siteNotUsable)
+
+        let sections = WebCompatReportViewController.makeSections(from: state)
+
+        let details = sections.first { $0.id == "additionalDetails" }
+        XCTAssertEqual(details?.rows.first?.title, .WebCompatReporter.Fields.DetailsPlaceholder)
+    }
+
     func testMakeSections_attachesLearnMoreFooterWithATappableLink() throws {
         let state = WebCompatReporterState(windowUUID: windowUUID).copy(url: "https://example.com")
 

@@ -184,7 +184,7 @@ final class WebCompatReportViewController: UINavigationController,
             rows: [
                 WebCompatReportViewModel.Row(
                     id: RowID.additionalDetails.rawValue,
-                    title: .WebCompatReporter.Fields.DetailsAccessibilityLabel,
+                    title: .WebCompatReporter.Fields.DetailsPlaceholder,
                     kind: .detailsField(
                         text: state.additionalDetails,
                         placeholder: .WebCompatReporter.Fields.DetailsPlaceholder
