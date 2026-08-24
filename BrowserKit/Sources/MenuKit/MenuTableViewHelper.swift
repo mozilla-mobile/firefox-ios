@@ -74,8 +74,10 @@ final class MenuTableViewHelper: NSObject {
                 return UITableViewCell()
             }
             let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
-            cell.configureCellWith(model: rowOption, isFirstCell: indexPath.row == 0,
-                                   isLastCell: indexPath.row == numberOfRows - 1)
+            cell.configureCellWith(
+                model: rowOption,
+                isFirstCell: indexPath.row == 0,
+                isLastCell: indexPath.row == numberOfRows - 1)
             if let theme { cell.applyTheme(theme: theme) }
             return cell
         }
@@ -99,8 +101,10 @@ final class MenuTableViewHelper: NSObject {
             return UITableViewCell()
         }
         let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
-        cell.configureCellWith(model: rowOption, isFirstCell: indexPath.row == 0,
-                               isLastCell: indexPath.row == numberOfRows - 1)
+        cell.configureCellWith(
+            model: rowOption,
+            isFirstCell: indexPath.row == 0,
+            isLastCell: indexPath.row == numberOfRows - 1)
         if let theme { cell.applyTheme(theme: theme) }
         return cell
     }
