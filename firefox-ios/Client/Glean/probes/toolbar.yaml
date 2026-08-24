@@ -89,10 +89,10 @@ toolbar:
         type: boolean
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19327
-      - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16665
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35361
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never

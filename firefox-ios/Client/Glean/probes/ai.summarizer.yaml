@@ -88,8 +88,10 @@ ai.summarize:
           summary language in settings. Absent when no language could be resolved.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16665
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35361
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -209,11 +211,12 @@ ai.summarize:
           `summarizer-language-expansion-feature` Nimbus feature.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16665
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35361
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2026-12-01"
     no_lint:
       - COMMON_PREFIX
 
@@ -247,9 +250,9 @@ user.ai.summarize:
       Either `websiteLanguage`, or a locale identifier from the `supportedLocales`
       allowlist of the `summarizer-language-expansion-feature` Nimbus feature.
     bugs:
-    - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+    - https://mozilla-hub.atlassian.net/browse/FXIOS-16665
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35361
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2026-12-01"
