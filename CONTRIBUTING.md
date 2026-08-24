@@ -24,7 +24,7 @@ There are two supported ways to contribute to Firefox for iOS:
 
 ### 1. Work on `Contributor OK` issues (recommended)
 
-`Contributor OK` issues are specifically scoped for external contributors. You can browser our `Contributor OK` issues [here](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK).
+`Contributor OK` issues are specifically scoped for external contributors. You can browse our `Contributor OK` issues [here](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK).
 
 ### Guidelines
 * When you find an issue you would like to work on, **⚠️ do not start coding ⚠️** — first comment on the issue asking to be assigned
