@@ -34,6 +34,8 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     private var iconImageView: UIImageView = .build()
 
+    private lazy var novaSelectedBackgroundView: UIView = .build()
+
     private var horizontalMargin: CGFloat {
         if #available(iOS 26.0, *) {
             return UX.horizontalMargin
@@ -156,6 +158,12 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
     func applyTheme(theme: Theme) {
         guard let model else { return }
         backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(mainMenuHelper?.backgroundAlpha() ?? 1.0)
+        if theme.isNova {
+            novaSelectedBackgroundView.backgroundColor = theme.colors.layer5Hover
+            selectedBackgroundView = novaSelectedBackgroundView
+        } else {
+            selectedBackgroundView = nil
+        }
         if let needsReAuth = model.needsReAuth, needsReAuth {
             descriptionLabel.textColor = theme.colors.textCritical
         } else if model.iconImage != nil {
