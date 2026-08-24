@@ -33,7 +33,7 @@ public protocol URLSessionProtocol: Sendable {
 /// Types should implement their own bytes(for:) method if used.
 /// Otherwise, by default, types should not be using this method.
 /// Attempting to use the default one here will yield a runtime assertion failure.
-/// The throw is just to satisfy the async‑throws signature.
+/// The throw is just to satisfy the throwing signature.
 extension URLSessionProtocol {
     public func bytes(for request: URLRequest) throws -> (URLSession.AsyncBytes, URLResponse) {
         assertionFailure("Fallback bytes(for:) called! Conforming types provide their own implementation")

@@ -97,22 +97,21 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
         return try? await getAttachment(record: record)
     }
 
-    // The `async` on these wrappers is deliberate (see the TODOs below), so the rule is suppressed.
-    // swiftlint:disable async_without_await
+    @concurrent
     func getAttachment(record: RemoteSettingsRecord) async throws -> Data? {
         // TODO: FXIOS-14616: Should make Rust method async and remove this wrapper method
-        // We intentionally mark this method as async so that we don't block the main thread
-        // and `getAttachment` should eventually be an async method as well.
+        // `@concurrent` keeps this blocking Rust call off the caller's actor so we don't block
+        // the main thread, and `getAttachment` should eventually be an async method as well.
         return try? translatorsClient?.getAttachment(record: record)
     }
 
+    @concurrent
     func getRecordsForModels() async -> [RemoteSettingsRecord]? {
         // TODO: FXIOS-14616: Should make Rust method async and remove this wrapper method
-        // We intentionally mark this method as async so that we don't block the main thread
-        // and `getRecords` should eventually be an async method as well.
+        // `@concurrent` keeps this blocking Rust call off the caller's actor so we don't block
+        // the main thread, and `getRecords` should eventually be an async method as well.
         return modelsClient?.getRecords(syncIfEmpty: true)
     }
-    // swiftlint:enable async_without_await
 
     /// Fetches the translation model files for a given language pair matching the pinned version.
     /// If no direct model is found, attempts to find pivot models through `Constants.pivotLanguage`.
@@ -213,9 +212,9 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
             .uniqued()
     }
 
-    // `async` keeps the blocking Rust `resetStorage()` call off the caller's executor.
-    // swiftlint:disable async_without_await
     /// Resets any local storage of models.
+    /// `@concurrent` keeps the blocking Rust `resetStorage()` call off the caller's actor.
+    @concurrent
     func resetStorage() async {
         guard let client = modelsClient else {
             logger.log("Models client not available, skipping reset.", level: .warning, category: .remoteSettings)
@@ -228,7 +227,6 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
             logger.log("Resetting storage for models failed with error \(error.localizedDescription).", level: .warning, category: .remoteSettings)
         }
     }
-    // swiftlint:enable async_without_await
 
     /// Pre-warms attachments for a list of records by fetching them
     /// Calling this method multiple times for the same attachment pair is safe

@@ -76,10 +76,9 @@ public final class DefaultTabSessionStore: TabSessionStore {
         }
     }
 
-    // `async` on this nonisolated method is load-bearing: it is what keeps the file enumeration
-    // and deletion below off the main actor (callers await it from `Task {}` on @MainActor
-    // TabManagerImplementation). Making it synchronous would run that I/O on the main thread.
-    // swiftlint:disable:next async_without_await
+    // `@concurrent` keeps the file enumeration and deletion below off the caller's actor
+    // (callers await it from `Task {}` on @MainActor TabManagerImplementation).
+    @concurrent
     public func deleteUnusedTabSessionData(keeping: [UUID]) async {
         guard let directory = fileManager.tabSessionDataDirectory() else { return }
         let contents = fileManager.contentsOfDirectory(at: directory)

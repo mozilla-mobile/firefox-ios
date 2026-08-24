@@ -32,11 +32,14 @@ struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
 
     /// Returns the configuration for the Summarizer by merging the config loaded from the `sources`.
     /// First sources in the array have highest priority when the configuration are merged into one.
+    /// `@concurrent` is required: `RemoteSummarizerConfigSource` reaches Remote Settings via
+    /// `getRecords(syncIfEmpty: true)`, which blocks and can hit the network, and callers are on `@MainActor`.
+    @concurrent
     func getConfig(
         summarizerModel: SummarizerModel,
         contentType: SummarizationContentType,
         locale: Locale
-    ) -> SummarizerConfig {
+    ) async -> SummarizerConfig {
         let initialConfig = SummarizerConfig(instructions: "", options: [:])
         // Merge configs in reverse order (so higher priority overrides lower)
         // $0.merging(with: $1) means "merge $0 into $1" so the result will prioritize $0's values.
