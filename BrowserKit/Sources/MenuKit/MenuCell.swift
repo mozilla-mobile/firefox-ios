@@ -74,7 +74,6 @@ final class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     func configureCellWith(
         model: MenuElement,
-        theme: Theme,
         isFirstCell: Bool,
         isLastCell: Bool,
         mainMenuHelper: MainMenuInterface = MainMenuHelper()
