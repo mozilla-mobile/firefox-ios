@@ -39,7 +39,10 @@ final class MockCreditCardProvider: CreditCardProvider, @unchecked Sendable {
         addCreditCardCalledCount += 1
         completion(exampleCreditCard, nil)
     }
-    func decryptCreditCardNumber(encryptedCCNum: String?) -> String? { return "testCCNum" }
+    func decryptCreditCardNumber(encryptedCCNum: String?,
+                                 completion: @escaping @Sendable(String?) -> Void) {
+        completion("testCCNum")
+    }
     func deleteCreditCard(id: String, completion: @escaping @Sendable (Bool, (any Error)?) -> Void) {
         deleteCreditCardsCalledCount += 1
         lastDeletedID = id
