@@ -23,6 +23,7 @@ class MainMenuViewController: UIViewController,
         static let hintViewMargin: CGFloat = 20
         static let menuHeightTolerance: CGFloat = 20
         static let topMarginCFR: CGFloat = 100
+        static let novaBackgroundAlpha: CGFloat = 0.85
     }
     typealias SubscriberStateType = MainMenuState
 
@@ -471,7 +472,9 @@ class MainMenuViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let menuBackground = theme.isNova ? theme.colors.layer1 : theme.colors.layerSurfaceLow
-        view.backgroundColor = menuBackground.withAlphaComponent(mainMenuHelper.backgroundAlpha())
+        let shouldUseNovaAlpha = theme.isNova && !mainMenuHelper.isReduceTransparencyEnabled
+        let alpha = shouldUseNovaAlpha ? UX.novaBackgroundAlpha : mainMenuHelper.backgroundAlpha()
+        view.backgroundColor = menuBackground.withAlphaComponent(alpha)
         menuContent.applyTheme(theme: theme)
     }
 
