@@ -33,6 +33,8 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
         )
     }
 
+    private lazy var novaSelectedBackgroundView: UIView = .build()
+
     private var horizontalMargin: CGFloat {
         if #available(iOS 26.0, *) {
             return UX.horizontalMargin
@@ -115,6 +117,12 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
     func applyTheme(theme: Theme) {
         guard let model else { return }
         backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(mainMenuHelper?.backgroundAlpha() ?? 1.0)
+        if theme.isNova {
+            novaSelectedBackgroundView.backgroundColor = theme.colors.layer5Hover
+            selectedBackgroundView = novaSelectedBackgroundView
+        } else {
+            selectedBackgroundView = nil
+        }
         if model.isActive {
             titleLabel.textColor = theme.colors.textAccent
             infoLabelView.textColor = theme.isNova ? theme.colors.textInverted : theme.colors.textPrimary
