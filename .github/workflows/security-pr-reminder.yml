@@ -26,6 +26,7 @@ jobs:
       GH_REPO: ${{ github.repository }}
       NUMBER: ${{ github.event.pull_request.number }}
       PR_BODY: ${{ github.event.pull_request.body }}
+      PR_TITLE: ${{ github.event.pull_request.title }}
 
     steps:
       - name: Post security reminder if PR references Bugzilla
@@ -41,8 +42,12 @@ jobs:
           retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && return 1; sleep 2; done; }
 
           # Only act on security PRs that reference Bugzilla in the description.        
-          if ! printf '%s' "$PR_BODY" | grep -qi 'bugzilla'; then
-            echo "No 'bugzilla' reference in PR description; nothing to do."
+          title_match=false
+          body_link_match=false
+          if printf '%s' "$PR_TITLE" | grep -qi 'bugzilla'; then title_match=true; fi
+          if printf '%s' "$PR_BODY" | grep -Eiq 'https?://[^[:space:]]*bugzilla|bugzilla\.mozilla\.org'; then body_link_match=true; fi
+          if [ "$title_match" = false ] && [ "$body_link_match" = false ]; then
+            echo "No 'bugzilla' in title and no Bugzilla link in description; nothing to do."
             exit 0
           fi
 
