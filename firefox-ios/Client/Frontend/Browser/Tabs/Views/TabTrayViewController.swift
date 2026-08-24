@@ -378,7 +378,12 @@ final class TabTrayViewController: UIViewController,
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        applyTheme()
+
+        // Changing the interface style triggers a trait change, so we end up back here on the transition's first
+        // frame. Re-theming now would flash the destination colors before the animation gets a chance to start.
+        if !themeAnimator.isAnimating && swipeFromIndex == nil {
+            applyTheme()
+        }
 
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
@@ -519,13 +524,22 @@ final class TabTrayViewController: UIViewController,
 
         if shouldUsePrivateOverride {
             activeExperimentSegmentControl.applyTheme(theme: theme)
-
-            let userInterfaceStyle = tabTrayState.isPrivateMode ? .dark : theme.type.getInterfaceStyle()
-            navigationController?.overrideUserInterfaceStyle = userInterfaceStyle
+            updateInterfaceStyle(isPrivateMode: tabTrayState.isPrivateMode)
         }
 
         setupToolBarAppearance(theme: theme)
         setupNavigationBarAppearance(theme: theme)
+    }
+
+    private func updateInterfaceStyle(isPrivateMode: Bool) {
+        guard shouldUsePrivateOverride else { return }
+
+        let style: UIUserInterfaceStyle = if isPrivateMode {
+            .dark
+        } else {
+            themeManager.resolvedTheme(with: false).type.getInterfaceStyle()
+        }
+        navigationController?.overrideUserInterfaceStyle = style
     }
 
     func applyTheme(fromIndex: Int, toIndex: Int, progress: CGFloat) {
@@ -558,6 +572,7 @@ final class TabTrayViewController: UIViewController,
         }
         setupToolBarAppearance(theme: swipeTheme)
         setupNavigationBarAppearance(theme: swipeTheme)
+        updateInterfaceStyle(isPrivateMode: tabTrayState.isPrivateMode)
     }
 
     private func setupToolBarAppearance(theme: Theme) {
@@ -1076,6 +1091,7 @@ final class TabTrayViewController: UIViewController,
 
             let reduceMotionEnabled = UIAccessibility.isReduceMotionEnabled
             if !reduceMotionEnabled {
+                updateInterfaceStyle(isPrivateMode: panelType == .privateTabs)
                 themeAnimator.animateThemeTransition(fromIndex: currentIndex, toIndex: targetIndex)
             }
 
