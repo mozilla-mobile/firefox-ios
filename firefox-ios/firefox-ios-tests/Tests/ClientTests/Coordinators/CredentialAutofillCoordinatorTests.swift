@@ -15,8 +15,8 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
     private var tabManager: MockTabManager!
     private var creditCardProvider: MockCreditCardProvider!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         profile = MockProfile()
         tabManager = MockTabManager()
         router = MockRouter(navigationController: MockNavigationController())
@@ -25,7 +25,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile, injectedTabManager: tabManager)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
         profile.shutdown()
         profile = nil
@@ -33,7 +33,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
         parentCoordinator = nil
         tabManager = nil
         creditCardProvider = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testShowCreditCardAutofill_withSaveState_presentsImmediatelyWithoutPrefetchingCards() {
