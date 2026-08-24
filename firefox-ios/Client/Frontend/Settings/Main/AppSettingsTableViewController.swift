@@ -639,10 +639,18 @@ class AppSettingsTableViewController: SettingsTableViewController,
         tableView.reloadData()
     }
 
+    private func retrieveTheme() -> Theme {
+        if shouldUsePrivateOverride {
+            return themeManager.resolvedTheme(with: shouldBeInPrivateTheme)
+        } else {
+            return themeManager.getCurrentTheme(for: windowUUID)
+        }
+    }
+
     override func applyTheme() {
         super.applyTheme()
         if #available(iOS 26.0, *) {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            let theme = retrieveTheme()
             navigationItem.rightBarButtonItem?.tintColor = theme.colors.textPrimary
         }
     }
@@ -660,6 +668,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
                        extra: ["section": "\(section)"])
             return UIView()
         }
+        headerView.applyTheme(theme: currentTheme())
         return headerView
     }
 }

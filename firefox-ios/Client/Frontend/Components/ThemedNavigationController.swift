@@ -48,7 +48,7 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
         applyTheme()
     }
 
-    private func setupNavigationBarAppearance(theme: Theme) {
+    internal func setupNavigationBarAppearance(theme: Theme) {
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithDefaultBackground()
         standardAppearance.backgroundColor = theme.colors.layer1

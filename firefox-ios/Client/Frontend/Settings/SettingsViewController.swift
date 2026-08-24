@@ -18,6 +18,14 @@ class SettingsViewController: UIViewController, Themeable {
 
     var currentWindowUUID: UUID? { return windowUUID }
 
+    var shouldUsePrivateOverride: Bool {
+        return true
+    }
+
+    var shouldBeInPrivateTheme: Bool {
+        return false
+    }
+
     init(windowUUID: WindowUUID,
          profile: Profile? = nil,
          tabManager: TabManager? = nil,
