@@ -24,13 +24,13 @@ final class WebCompatReporterStateTests: XCTestCase {
         XCTAssertTrue(subject.includeBlockedList)
     }
 
-    func test_canPreview_falseUntilCategorySelected() {
+    func test_canPreview_needsASubOptionUnlessTheCategoryHasNone() {
         XCTAssertFalse(createSubject().canPreview)
-
-        let withCategory = WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
-            .copy(url: "https://example.com")
-            .copy(selectedCategory: .siteNotUsable)
-        XCTAssertTrue(withCategory.canPreview)
+        XCTAssertFalse(makeState(category: .siteNotUsable).canPreview)
+        XCTAssertTrue(
+            makeState(category: .siteNotUsable, subOption: .pageNotLoading).canPreview
+        )
+        XCTAssertTrue(makeState(category: .other).canPreview)
     }
 
     func test_canSubmit_needsASubOptionUnlessTheCategoryHasNone() {
