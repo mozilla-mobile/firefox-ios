@@ -1750,7 +1750,7 @@ workflows:
             GCLOUD_OUTPUT=$(gcloud beta firebase test ios run \
                 --type robo \
                 --app "$BITRISE_IPA_PATH" \
-                --device=model=iphonese3,version=18.4 \
+                --device=model=iphonese3,version=26.3 \
                 --results-bucket=firefox_ios_test_artifacts \
                 --no-record-video \
                 --timeout=10m \
