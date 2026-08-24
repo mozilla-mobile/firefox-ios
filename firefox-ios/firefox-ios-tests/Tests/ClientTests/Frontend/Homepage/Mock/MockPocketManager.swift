@@ -11,7 +11,10 @@ final class MockMerinoManager: MerinoManagerProvider, @unchecked Sendable {
     var getMerinoItemsCalled = 0
     var prefetchStoriesCalled = 0
 
-    func getMerinoItems(source: StorySource) -> MerinoStoryResponse {
+    // `async` mirrors the `MerinoManagerProvider` requirement. Tests hold this as a concrete type, so
+    // dropping it makes their `await` redundant and cascades `async` removal through the test helpers.
+    // swiftlint:disable:next async_without_await
+    func getMerinoItems(source: StorySource) async -> MerinoStoryResponse {
         getMerinoItemsCalled += 1
         let stories: [MerinoStoryConfiguration] = [
             .makeItem("feed1"),
