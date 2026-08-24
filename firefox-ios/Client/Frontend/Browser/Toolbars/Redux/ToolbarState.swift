@@ -157,7 +157,10 @@ struct ToolbarState: ScreenState, Sendable {
                 .copy(isAddressBarMinimized: shouldMinimize ? true : state.isAddressBarMinimized)
 
         case .keyboardDidHide:
-            return state.copy(isAddressBarMinimized: false)
+            // The accessory view visible state needs to be reseted when the keyboard hides
+            return state
+                .copy(isAddressBarMinimized: false)
+                .copy(isAccessoryViewVisible: false)
 
         case .didCancelKeyboardRequest:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
