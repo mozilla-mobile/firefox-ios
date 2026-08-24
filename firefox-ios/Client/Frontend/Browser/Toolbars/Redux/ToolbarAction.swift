@@ -31,7 +31,6 @@ struct ToolbarAction: Action {
     let lockIconNeedsTheming: Bool?
     let safeListedURLImageName: String?
     let isLoading: Bool?
-    let shouldShowKeyboard: Bool?
     let shouldAnimate: Bool?
     let middleButton: NavigationBarMiddleButtonType?
     let isTranslationsEnabled: Bool?
@@ -95,7 +94,6 @@ struct ToolbarAction: Action {
         self.lockIconNeedsTheming = lockIconNeedsTheming
         self.safeListedURLImageName = safeListedURLImageName
         self.isLoading = isLoading
-        self.shouldShowKeyboard = shouldShowKeyboard
         self.shouldAnimate = shouldAnimate
         self.canSummarize = canSummarize
         self.middleButton = middleButton
