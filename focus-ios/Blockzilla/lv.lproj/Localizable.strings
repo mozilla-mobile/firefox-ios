@@ -95,7 +95,10 @@
 "Menu.Close" = "Aizvērt";
 
 /* Error message shown when no internet connection is available */
-"Network.Offline.ErrorMessage" = "Izskatās, ka interneta savienojums ir bezsaistē.";
+"Network.Offline.ErrorMessage" = "Šķiet, ka interneta savienojums ir bezsaistē.";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Mēģināt vēlreiz";
 
 /* Save button label */
 "Save" = "Saglabāt";
