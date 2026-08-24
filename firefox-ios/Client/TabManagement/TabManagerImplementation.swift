@@ -1044,7 +1044,7 @@ final class TabManagerImplementation: NSObject,
 
     private func didSelectTab(_ url: URL?) {
         tabsTelemetry.stopTabSwitchMeasurement()
-        let isNativeErrorPage = featureFlagsProvider.isEnabled(.nativeErrorPage)
+        let isNativeErrorPage = NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
 
         // If app starts with error url, first homepage appears and
         // then error page is loaded. To directly load error page
