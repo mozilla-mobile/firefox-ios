@@ -21,10 +21,17 @@ class SummarizerTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.AiSummarize.summarizationRequested, extras: summarizationRequestedExtra)
     }
 
-    func summarizationStarted(lengthWords: Int32, lengthChars: Int32) {
+    func summarizationStarted(
+        lengthWords: Int32,
+        lengthChars: Int32,
+        language: String? = nil,
+        pageLanguage: String? = nil
+    ) {
         let summarizationStartedExtra = GleanMetrics.AiSummarize.SummarizationStartedExtra(
+            language: language,
             lengthChars: lengthChars,
-            lengthWords: lengthWords)
+            lengthWords: lengthWords,
+            pageLanguage: pageLanguage)
         summarizationTimerStart()
         gleanWrapper.recordEvent(for: GleanMetrics.AiSummarize.summarizationStarted, extras: summarizationStartedExtra)
     }
@@ -91,5 +98,15 @@ class SummarizerTelemetry {
 
     func summarizationShakeGestureEnabled(_ shakeGestureEnabled: Bool) {
         GleanMetrics.UserAiSummarize.shakeGestureEnabled.set(shakeGestureEnabled)
+    }
+
+    func summarizationSelectedLanguage(_ language: String) {
+        gleanWrapper.recordString(for: GleanMetrics.UserAiSummarize.selectedLanguage, value: language)
+    }
+
+    func summarizationLanguageSettingChanged(language: String) {
+        let languageSettingChangedExtra = GleanMetrics.AiSummarize.LanguageSettingChangedExtra(language: language)
+        gleanWrapper.recordEvent(for: GleanMetrics.AiSummarize.languageSettingChanged,
+                                 extras: languageSettingChangedExtra)
     }
 }

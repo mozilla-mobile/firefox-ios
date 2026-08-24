@@ -8,14 +8,17 @@ import Shared
 final class SummarizeSettingsViewController: SettingsTableViewController {
     let prefs: Prefs
     private let nimbusUtils: SummarizerNimbusUtils
+    private let telemetry: SummarizerTelemetry
 
     init(
         prefs: Prefs,
         summarizeNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
+        telemetry: SummarizerTelemetry = SummarizerTelemetry(),
         windowUUID: WindowUUID
     ) {
         self.prefs = prefs
         self.nimbusUtils = summarizeNimbusUtils
+        self.telemetry = telemetry
         super.init(style: .grouped, windowUUID: windowUUID)
         self.title = .Settings.Summarize.Title
     }
@@ -111,6 +114,7 @@ final class SummarizeSettingsViewController: SettingsTableViewController {
                     onOptionSelected: { [weak self] selectedOption in
                         guard let self else { return }
                         configuration.save(preference: selectedOption, prefs: prefs)
+                        telemetry.summarizationLanguageSettingChanged(language: selectedOption.saveValue)
                         tableView.reloadData()
                     }
                 )

@@ -73,6 +73,19 @@ ai.summarize:
         type: quantity
         description: |
           The length of the text to be summarized, in words.
+      language:
+        type: string
+        description: |
+          The language the summary is generated in, as a locale identifier
+          (e.g. `en`, `de-DE`). Bounded by the `supportedLocales` allowlist of the
+          `summarizer-language-expansion-feature` Nimbus feature.
+          Absent when no language could be resolved.
+      page_language:
+        type: string
+        description: |
+          The detected language of the page being summarized, as a locale identifier
+          (e.g. `en`, `de`). Differs from `language` when the user picked a specific
+          summary language in settings. Absent when no language could be resolved.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
     data_reviews:
@@ -182,6 +195,27 @@ ai.summarize:
     expires: never
     no_lint:
       - COMMON_PREFIX
+  language_setting_changed:
+    type: event
+    description: |
+      Recorded when the user changes the summary language preference in the
+      summarize settings screen.
+    extra_keys:
+      language:
+        type: string
+        description: |
+          The newly selected preference. Either `websiteLanguage`, or a locale
+          identifier from the `supportedLocales` allowlist of the
+          `summarizer-language-expansion-feature` Nimbus feature.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+    no_lint:
+      - COMMON_PREFIX
 
 user.ai.summarize:
   summarization_enabled:
@@ -199,6 +233,19 @@ user.ai.summarize:
     type: boolean
     description: |
       Records if the user has shake to summarize option enabled
+    bugs:
+    - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  selected_language:
+    type: string
+    description: |
+      Records the summary language the user selected in the summarize settings.
+      Either `websiteLanguage`, or a locale identifier from the `supportedLocales`
+      allowlist of the `summarizer-language-expansion-feature` Nimbus feature.
     bugs:
     - https://github.com/mozilla-mobile/firefox-ios/issues/27783
     data_reviews:
