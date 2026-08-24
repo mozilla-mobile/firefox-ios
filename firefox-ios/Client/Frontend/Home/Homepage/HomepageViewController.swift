@@ -762,7 +762,7 @@ final class HomepageViewController: UIViewController,
             }
 
             if case .pocket = section,
-               MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance {
+               SectionHeaderConfiguration.merino.style == .newsAffordance {
                 guard let newsTransitionHeaderCell = collectionView.dequeueSupplementary(
                     of: kind,
                     cellType: NewsTransitionHeaderCell.self,
@@ -798,7 +798,7 @@ final class HomepageViewController: UIViewController,
     ) -> NewsTransitionHeaderCell {
         let transitionEnabled = isNewsTransitionEnabled()
         newsTransitionHeaderCell.configure(
-            sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
+            sectionHeaderConfiguration: SectionHeaderConfiguration.merino,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
             theme: currentTheme,
             transitionEnabled: transitionEnabled,
@@ -822,7 +822,7 @@ final class HomepageViewController: UIViewController,
         switch section {
         case .topSites(let textColor, _, _):
             sectionLabelCell.configure(
-                sectionHeaderConfiguration: TopSitesSectionState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: SectionHeaderConfiguration.topSites,
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToShortcutsLibrary()
                 },
@@ -832,7 +832,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .jumpBackIn(let textColor, _):
             sectionLabelCell.configure(
-                sectionHeaderConfiguration: JumpBackInSectionState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: SectionHeaderConfiguration.jumpBackIn,
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToTabTray(with: .tabs)
                 },
@@ -843,7 +843,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .bookmarks(let textColor):
             sectionLabelCell.configure(
-                sectionHeaderConfiguration: BookmarksSectionState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: SectionHeaderConfiguration.bookmarks,
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToBookmarksPanel()
                 },
@@ -853,7 +853,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .pocket(let textColor):
             sectionLabelCell.configure(
-                sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: SectionHeaderConfiguration.merino,
                 textColor: textColor,
                 theme: currentTheme
             )
@@ -878,7 +878,7 @@ final class HomepageViewController: UIViewController,
     /// Returns whether there is enough room at the bottom of the unscrolled homepage for the header to transition.
     /// This is determined by the existence of the spacer with a meaningful height
     private func isNewsTransitionEnabled() -> Bool {
-        guard MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
+        guard SectionHeaderConfiguration.merino.style == .newsAffordance,
               let collectionView,
               let spacerSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
                   if case .spacer = $0 {

@@ -21,16 +21,6 @@ struct TopSitesSectionState: StateType, Equatable {
     let shouldShowSectionHeader: Bool
     let shouldShowAddShortcutTile: Bool
 
-    struct Constants {
-        static let sectionHeaderConfiguration = SectionHeaderConfiguration(
-            title: .FirefoxHomepage.Shortcuts.SectionTitle,
-            a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
-            isButtonHidden: false,
-            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.shortcuts,
-            buttonTitle: .BookmarksSavedShowAllText
-        )
-    }
-
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
         let defaultNumberOfRows = TopSitesRowCountSettingsController.defaultNumberOfRows
