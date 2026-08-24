@@ -8,6 +8,7 @@ import Common
 import Shared
 import Glean
 
+// TODO: - FXIOS-16664 Add tests to SummarizerTelemetry
 class SummarizerTelemetry {
     private let gleanWrapper: GleanWrapper
     private var summarizationTimerId: GleanTimerId?
