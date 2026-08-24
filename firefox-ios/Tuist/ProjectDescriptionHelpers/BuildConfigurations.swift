@@ -25,4 +25,10 @@ public enum BuildConfigurations {
         "CODE_SIGNING_REQUIRED": "NO",
         "CODE_SIGNING_ALLOWED": "NO",
     ], uniquingKeysWith: { _, new in new })
+
+    // These will be included in the xcode project so that they can be viewed an modified there
+    public static let additionalFiles: [FileElement] = [
+        "Client/Ecosia/BuildSettingsConfigurations/EcosiaCommon.xcconfig",
+        "Client/Ecosia/BuildSettingsConfigurations/Staging.xcconfig",
+    ]
 }

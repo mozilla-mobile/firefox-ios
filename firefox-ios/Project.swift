@@ -42,5 +42,5 @@ let project = Project(
     additionalFiles: [
         "../AGENTS.md",
         "../CLAUDE.md"
-    ]
+    ] + BuildConfigurations.additionalFiles,
 )
