@@ -4,7 +4,6 @@
 
 import Foundation
 
-/// The locales resolved for a summarization, used both to build the prompt and to report telemetry.
 struct SummarizerLanguageResolution: Equatable {
     /// The language the summary is generated in.
     let summaryLocale: Locale
