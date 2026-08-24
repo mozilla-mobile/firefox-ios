@@ -1,8 +1,6 @@
-# Contribution guidelines
+# Contribution Guidelines
 
-We welcome contributions of all kinds, including bug fixes, improvements, and new ideas. Thank you for taking the time to contribute to Firefox iOS.
-
-Note: If you are not choosing to work on one of our `contributor-friendly` issues, you should first receive approval from a maintainer before starting work on something else. Otherwise, your work may be rejected. Please see more information below.
+Thank you for taking the time to contribute to Firefox iOS. We welcome contributions of all kinds, including bug fixes, improvements, and new ideas.
 
 Before getting started, please make sure your work aligns with how we collaborate in this repository.
 
@@ -16,35 +14,50 @@ Before submitting:
 
 ## Code Contribution
 
-There are two supported ways to contribute:
+> [!CAUTION]
+> Do not work on an unassigned GitHub issue or you risk your code getting rejected. Always comment on an issue and ask to be assigned first.
+
+> [!TIP]
+> You will get a faster response if you `@` tag an issue's reference person. If no reference person is specified, you can tag @FilippoZazzeroni or @Foxbolts.
+
+There are two supported ways to contribute to Firefox for iOS:
 
 ### 1. Work on `Contributor OK` issues (recommended)
-These issues are specifically scoped for external contributors and do not require prior approval.
 
-* Browse Contributor OK issues [here](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK)
-* Leave a comment to let others know you're working on it. If the last activity is older than 3 weeks, leave a comment before picking it up.
-* A reference person is usually available if you need guidance
+`Contributor OK` issues are specifically scoped for external contributors. You can browse our `Contributor OK` issues [here](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK).
+
+### Guidelines
+* When you find an issue you would like to work on, **⚠️ do not start coding ⚠️** — first comment on the issue asking to be assigned
+  * This helps prevent your work from overlapping with other contributor PRs and our internal in-flight projects
+* Tag the issue's reference person to make sure someone sees your comment
+  * If no reference person is specified, you can tag @FilippoZazzeroni or @Foxbolts
+* Once you are assigned to the issue, you are approved to begin coding
+* If you need guidance on the issue, the reference person can help you out
+
 
 #### Issue Categories by Difficulty
-We’ve categorized Contributor OK issues by difficulty to help you get started:
+We’ve categorized `Contributor OK` issues by difficulty to help you get started:
 
 - `Good First Issue`: Beginner-friendly tasks such as simple bug fixes or minor UX improvements.
 - `Intermediate`: These involve tasks like small feature development, simple pattern implementations, or bug/UI adjustments that require some familiarity with the codebase.
 - `Advanced`: These tasks demand a deeper understanding of the project. They often include complex implementations, significant refactoring, or intricate bug fixes. 
 
 ### 2. Propose to work on other issues (requires coordination with a maintainer)
-If you want to work on something that is **not labeled `Contributor OK`**, please coordinate with the team first.
+If you want to work on something that is *not* labeled `Contributor OK`, please coordinate with the team first.
 
 * Comment on the issue and wait for confirmation before starting work.
 * For new ideas, open an issue first to discuss feasibility and priority.
 
-> ⚠️ Pull requests for unapproved work may be declined.
+> [!WARNING]
+> Pull requests for unapproved issues may be declined.
 > Our roadmap is planned in collaboration with our Product and Design teams, and not all changes can be accepted.
 
 We absolutely welcome ideas and contributions. We just ask that larger or unscoped work be discussed first so we can collaborate effectively.  
 
 ### Contributor Fix
-We add the "Contributor Fix" label on tasks that have a PR opened for it, or if a PR has been merged to fix this task. This means if you see this label on a task, it's probably fixed and cannot be picked up. Note that tasks still stay opened before we close them as it's the Quality Assurance team that will close those tasks once they approve the changes.
+We add the `Contributor Fix` label to issues that either have an open PR awaiting maintainer review or a merged PR awaiting Quality Assurance approval.
+
+If you see this label on an issue, that issue is unavailable for contributions.
 
 ## Coding Rules
 
