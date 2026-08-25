@@ -170,6 +170,7 @@ Tuist/Dependencies
 firefox-ios/Client.xcodeproj/xcshareddata/xcschemes
 firefox-ios/Client.xcodeproj/project.pbxproj
 BrowserKit/Package.resolved
+/Package.resolved
 
 # CI diagnostics written into the workspace by .github/actions/perform_unit_tests
 raw_build_for_testing.log
