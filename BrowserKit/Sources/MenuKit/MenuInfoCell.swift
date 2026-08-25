@@ -123,6 +123,12 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
         } else {
             selectedBackgroundView = nil
         }
+        let offBackground: UIColor
+        if theme.isNova, #unavailable(iOS 26.0) {
+            offBackground = theme.colors.layerSurfaceLow
+        } else {
+            offBackground = theme.colors.layer3
+        }
         if model.isActive {
             titleLabel.textColor = theme.colors.textAccent
             infoLabelView.textColor = theme.isNova ? theme.colors.textInverted : theme.colors.textPrimary
@@ -130,11 +136,11 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
         } else if !model.isEnabled {
             titleLabel.textColor = theme.colors.textDisabled
             infoLabelView.textColor = theme.colors.textDisabled
-            infoLabelView.backgroundColor = theme.colors.layer3
+            infoLabelView.backgroundColor = offBackground
         } else {
             titleLabel.textColor = theme.colors.textPrimary
             infoLabelView.textColor = theme.colors.textPrimary
-            infoLabelView.backgroundColor = theme.colors.layer3
+            infoLabelView.backgroundColor = offBackground
         }
     }
 }
