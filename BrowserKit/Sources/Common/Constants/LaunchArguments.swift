@@ -14,6 +14,9 @@ public struct LaunchArguments {
     public static let SkipSponsoredShortcuts = "FIREFOX_SKIP_SPONSORED_SHORTCUTS"
     public static let SkipTermsOfUse = "FIREFOX_SKIP_TERMS_OF_USE"
     public static let ClearProfile = "FIREFOX_CLEAR_PROFILE"
+    /// Re-enables tab session restore, which `Test` otherwise skips to give every UI test a clean
+    /// tab state. Only needed by tests that relaunch the app and assert on the restored tabs.
+    public static let EnableSessionRestore = "FIREFOX_ENABLE_SESSION_RESTORE"
     /// Clears the WKWebView website data store (cookies, local storage, cache) on launch. Web data
     /// lives in WKWebsiteDataStore, which ClearProfile does not touch.
     public static let ClearWebData = "FIREFOX_CLEAR_WEB_DATA"
