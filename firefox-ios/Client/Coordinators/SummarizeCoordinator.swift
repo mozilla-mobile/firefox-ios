@@ -202,7 +202,7 @@ final class SummarizeCoordinator: BaseCoordinator,
         summarizerTelemetry.summarizationStarted(
             lengthWords: text.numberOfWords,
             lengthChars: Int32(clamping: text.count),
-            language: config?.locale?.identifier,
+            summaryLanguage: config?.summaryLocale?.identifier,
             pageLanguage: config?.pageLocale?.identifier
         )
     }

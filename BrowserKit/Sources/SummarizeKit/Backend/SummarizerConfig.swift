@@ -17,7 +17,7 @@ public struct SummarizerConfig: LLMConfig, Equatable, Sendable {
     /// Options can include things like temperature, max tokens, and other model-specific settings.
     nonisolated(unsafe) public let options: [String: AnyHashable]
     /// The language the summary is generated in.
-    public let locale: Locale?
+    public let summaryLocale: Locale?
     /// The detected language of the content being summarized.
     public let pageLocale: Locale?
 
@@ -27,12 +27,12 @@ public struct SummarizerConfig: LLMConfig, Equatable, Sendable {
     public init(
         instructions: String,
         options: [String: AnyHashable],
-        locale: Locale? = nil,
+        summaryLocale: Locale? = nil,
         pageLocale: Locale? = nil
     ) {
         self.instructions = instructions
         self.options = options
-        self.locale = locale
+        self.summaryLocale = summaryLocale
         self.pageLocale = pageLocale
     }
 
@@ -44,7 +44,7 @@ public struct SummarizerConfig: LLMConfig, Equatable, Sendable {
         return SummarizerConfig(
             instructions: mergedInstructions,
             options: mergedOptions,
-            locale: self.locale ?? other.locale,
+            summaryLocale: self.summaryLocale ?? other.summaryLocale,
             pageLocale: self.pageLocale ?? other.pageLocale
         )
     }

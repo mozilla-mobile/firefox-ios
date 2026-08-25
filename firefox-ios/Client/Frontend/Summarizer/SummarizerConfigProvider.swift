@@ -55,7 +55,7 @@ struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
         return SummarizerConfig(
             instructions: instructionsWithLocale,
             options: config.options,
-            locale: languages.summaryLocale,
+            summaryLocale: languages.summaryLocale,
             pageLocale: languages.pageLocale
         )
     }

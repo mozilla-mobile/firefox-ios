@@ -126,7 +126,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
     func test_summarizeServiceDidStart_recordsConfigLanguages() throws {
         let subject = createSubject(config: SummarizerConfig(instructions: "",
                                                              options: [:],
-                                                             locale: Locale(identifier: "it"),
+                                                             summaryLocale: Locale(identifier: "it"),
                                                              pageLocale: Locale(identifier: "de")))
 
         subject.summarizerServiceDidStart("")

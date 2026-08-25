@@ -73,7 +73,7 @@ ai.summarize:
         type: quantity
         description: |
           The length of the text to be summarized, in words.
-      language:
+      summary_language:
         type: string
         description: |
           The language the summary is generated in, as a locale identifier
@@ -84,8 +84,9 @@ ai.summarize:
         type: string
         description: |
           The detected language of the page being summarized, as a locale identifier
-          (e.g. `en`, `de`). Differs from `language` when the user picked a specific
-          summary language in settings. Absent when no language could be resolved.
+          (e.g. `en`, `de`). Differs from `summary_language` when the user picked a
+          specific summary language in settings.
+          Absent when no language could be resolved.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
       - https://github.com/mozilla-mobile/firefox-ios/issues/35362
@@ -195,27 +196,6 @@ ai.summarize:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
-    no_lint:
-      - COMMON_PREFIX
-  language_setting_changed:
-    type: event
-    description: |
-      Recorded when the user changes the summary language preference in the
-      summarize settings screen.
-    extra_keys:
-      language:
-        type: string
-        description: |
-          The newly selected preference. Either `websiteLanguage`, or a locale
-          identifier from the `supportedLocales` allowlist of the
-          `summarizer-language-expansion-feature` Nimbus feature.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/35362
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/35361
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-12-01"
     no_lint:
       - COMMON_PREFIX
 

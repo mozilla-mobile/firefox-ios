@@ -141,7 +141,7 @@ final class SummarizerConfigProviderTests: XCTestCase {
                                              contentType: .generic,
                                              languages: languages)
 
-        XCTAssertEqual(config.locale, languages.summaryLocale)
+        XCTAssertEqual(config.summaryLocale, languages.summaryLocale)
         XCTAssertEqual(config.pageLocale, languages.pageLocale)
     }
 
