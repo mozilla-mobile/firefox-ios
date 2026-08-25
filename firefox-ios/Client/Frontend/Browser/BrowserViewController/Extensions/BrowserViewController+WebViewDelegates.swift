@@ -1151,18 +1151,18 @@ extension BrowserViewController: WKNavigationDelegate {
                 let noInternetErrorCode = Int(
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
-                let isWaybackCode = WaybackCodes.isWaybackCode(error.code)
+                let featureFlag = NativeErrorPageFeatureFlag()
 
-                let isNoInternetError = NativeErrorPageFeatureFlag().isNICErrorPageEnabled &&
-                    error.code == noInternetErrorCode
-                let isCertificateError = NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
-                    for: error,
-                    isOtherErrorPagesEnabled: NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
-                )
-                let isShowWayback = NativeErrorPageFeatureFlag().isWaybackEnabled && isWaybackCode
+                let isWaybackError = WaybackCodes.isWaybackCode(error.code)
+                let isNoInternetError = error.code == noInternetErrorCode
+                let isBadCertError = NativeErrorPageHelper.isBadCertDomainError(error)
 
-                if isNoInternetError || isCertificateError || isShowWayback {
-                    if isCertificateError {
+                let shouldShowNoInternetErrorPage = isNoInternetError && featureFlag.isNICErrorPageEnabled
+                let shouldShowBadCertErrorPage = isBadCertError && featureFlag.isBadCertDomainErrorPageEnabled
+                let shouldShowWaybackErrorPage = isWaybackError && featureFlag.isWaybackEnabled
+
+                if shouldShowNoInternetErrorPage || shouldShowBadCertErrorPage || shouldShowWaybackErrorPage {
+                    if isBadCertError {
                         NativeErrorPageHelper.logCertificateErrorDetails(error: error, logger: logger)
                     }
                     // TODO: FXIOS-15800 Move error type determination to NativeErrorPageMiddleware

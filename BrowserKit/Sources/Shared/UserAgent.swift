@@ -38,6 +38,10 @@ open class UserAgent {
         return clientUserAgent(prefix: "Firefox-iOS-FxA")
     }
 
+    public static var waybackUserAgent: String {
+        return "firefox-ios-neterr/\(AppInfo.appVersion) (+https://mzl.la/3RNfZFB)"
+    }
+
     public static var defaultClientUserAgent: String {
         return clientUserAgent(prefix: "Firefox-iOS")
     }

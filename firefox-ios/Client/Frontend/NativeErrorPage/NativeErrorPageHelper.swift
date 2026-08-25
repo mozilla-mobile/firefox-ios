@@ -58,7 +58,7 @@ class NativeErrorPageHelper {
     /// Returns true when the error is a certificate error caused by a
     /// hostname mismatch (SSL_ERROR_BAD_CERT_DOMAIN / -9843). Other certificate
     /// failures return false so they fall back to the legacy HTML error page
-    private static func isBadCertDomainError(_ error: NSError) -> Bool {
+    static func isBadCertDomainError(_ error: NSError) -> Bool {
         guard isCertificateErrorCode(error.code) else { return false }
         return certStreamErrorCode(from: error) == NativeGeckoCode.badCertDomain.rawValue
     }

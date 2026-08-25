@@ -336,21 +336,36 @@ final class SettingScreen {
     }
 
     func disableClosePrivateTabs() {
-        let switchElement = closePrivateTabsSwitch
-        BaseTestCase().mozWaitForElementToExist(switchElement)
-        BaseTestCase().scrollToElement(switchElement)
-        if switchElement.value as? String == "1" {
-            switchElement.waitAndTap()
-        }
+        setClosePrivateTabs(on: false)
     }
 
     func enableClosePrivateTabs() {
+        setClosePrivateTabs(on: true)
+    }
+
+    /// XCUITest can retry a tap that already registered, which toggles the switch straight back, so
+    /// the value is re-checked and corrected rather than toggled once.
+    private func setClosePrivateTabs(on: Bool, attempts: Int = 3) {
         let switchElement = closePrivateTabsSwitch
+        let expected = on ? "1" : "0"
         BaseTestCase().mozWaitForElementToExist(switchElement)
         BaseTestCase().scrollToElement(switchElement)
-        if switchElement.value as? String == "0" {
+        for _ in 0..<attempts {
+            if switchElement.value as? String == expected { break }
             switchElement.waitAndTap()
+            _ = switchValueSettles(switchElement, to: expected)
         }
+        XCTAssertTrue(switchValueSettles(switchElement, to: expected),
+                      "The Close Private Tabs switch did not settle on \(expected)")
+    }
+
+    private func switchValueSettles(_ element: XCUIElement, to expected: String, timeout: TimeInterval = 2) -> Bool {
+        let deadline = Date().addingTimeInterval(timeout)
+        repeat {
+            if element.value as? String == expected { return true }
+            usleep(10000)
+        } while Date() < deadline
+        return false
     }
 
     func navigateToSearchSettings() {

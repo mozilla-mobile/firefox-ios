@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 let url1 = "example.com"
@@ -21,14 +22,19 @@ class PrivateBrowsingTest: BaseTestCase {
     private var browserScreen: BrowserScreen!
     private var homePageScreen: HomePageScreen!
     private var contextMenuScreen: ContextMenuScreen!
+    private var toolbarScreen: ToolbarScreen!
 
     override func setUp() async throws {
+        // Tabs are only saved once a restore has run, so the force close tests need session restore
+        // from the very first launch, not just from the relaunch.
+        launchArguments.append(LaunchArguments.EnableSessionRestore)
         try await super.setUp()
         settingScreen = SettingScreen(app: app)
         tabTray = TabTrayScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         homePageScreen = HomePageScreen(app: app)
         contextMenuScreen = ContextMenuScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307004
@@ -280,50 +286,6 @@ class PrivateBrowsingTest: BaseTestCase {
         contextMenuScreen.assertPrivateModeOptionsVisible()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2497357
-    func testAllPrivateTabsRestore() throws {
-        // Several tabs opened in private tabs tray. Tap on the trashcan
-        throw XCTSkip("Undo toast no longer available")
-        /*
-         navigator.nowAt(HomePanelsScreen)
-         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-         for _ in 1...4 {
-         navigator.createNewTab()
-         }
-         waitForTabsButton()
-         navigator.goto(TabTray)
-         var numTab = app.otherElements[tabsTray].cells.count
-         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
-         app.buttons[AccessibilityIdentifiers.TabTray.closeAllTabsButton].waitAndTap()
-         
-         // Validate Close All Tabs and Cancel options
-         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton])
-         
-         // Tap on "Close All Tabs"
-         app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].firstMatch.waitAndTap()
-         if #unavailable(iOS 16) {
-         // Wait for the screen to refresh first.
-         mozWaitForElementToExist(
-         app.staticTexts["Firefox won’t remember any of your history or cookies, but new bookmarks will be saved."])
-         }
-         // The private tabs are closed
-         waitForElementsToExist(
-         [
-         app.staticTexts["Private Browsing"],
-         app.otherElements[tabsTray]
-         ]
-         )
-         numTab = app.otherElements[tabsTray].cells.count
-         XCTAssertEqual(0, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
-         
-         app.buttons["Undo"].waitAndTap()
-         
-         // All the private tabs are restored
-         numTab = app.otherElements[tabsTray].cells.count
-         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
-         */
-    }
-
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/3168541
     func testMultipleTabsPrivateBrowsingCloseEnabled() {
@@ -338,6 +300,51 @@ class PrivateBrowsingTest: BaseTestCase {
         openMultipleTabsInPrivateModeAndForceRestart(isClosePrivateTabEnabled: false)
         // All of the previously opened tabs are displayed
         tabTray.assertTabCount(2)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168540
+    // Regression
+    func testForceCloseDuringPrivateBrowsingSession() {
+        browseInPrivateModeAndForceCloseApp(isClosePrivateTabEnabled: true)
+        // The previously opened private browsing tabs are not displayed
+        browserScreen.assertPrivateBrowsingLabelExist()
+
+        // Repeat the steps from above but with Close Private Tabs disabled
+        tabTray.switchToRegularBrowsing()
+        tabTray.tapDoneButton()
+        browseInPrivateModeAndForceCloseApp(isClosePrivateTabEnabled: false)
+        // The previously opened private browsing tabs are displayed. The page a restored tab was left
+        // on is not asserted on, as its reload can beat the fixture server and land on an error page.
+        tabTray.assertTabCount(2)
+        tabTray.tapTabAtIndex(index: 0)
+        waitUntilPageLoad()
+        toolbarScreen.tapBackButton()
+        waitUntilPageLoad()
+        browserScreen.assertWebPageText(with: TestLabels.exampleDomain)
+    }
+
+    private func browseInPrivateModeAndForceCloseApp(isClosePrivateTabEnabled: Bool) {
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        if isClosePrivateTabEnabled {
+            settingScreen.enableClosePrivateTabs()
+        } else {
+            settingScreen.disableClosePrivateTabs()
+        }
+        // Browse several websites, one per tab. The first tab browses onwards to a second website so
+        // the private session also has back history to restore.
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        openNewTabAndLoadURL(URL: path(forTestPage: TestPages.exampleHTML))
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
+        mozWaitForElementToExist(app.webViews.firstMatch)
+        openNewTabAndLoadURL(URL: path(forTestPage: TestPages.mozillaBook))
+        waitForTabsButton()
+        // Force close Firefox while the private session is still open, then re-open it
+        forceCloseAndRelaunchApp()
+        toolbarScreen.assertTabsButtonExists()
+        toolbarScreen.tapOnTabsButton()
+        tabTray.switchToPrivateBrowsing()
     }
 
     private func openMultipleTabsInPrivateModeAndForceRestart(isClosePrivateTabEnabled: Bool = true) {

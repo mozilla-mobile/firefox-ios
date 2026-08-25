@@ -200,17 +200,23 @@ final class ErrorPageHandler: InternalSchemeResponse {
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
         )
 
-        let isNoInternetError = NativeErrorPageFeatureFlag().isNICErrorPageEnabled &&
-            (errCode == noInternetErrorCode) && !useOldErrorPage
-        let isCertificateError = NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled &&
-            NativeErrorPageHelper.isBadCertDomainErrorURL(url) && !useOldErrorPage
+        let featureFlag = NativeErrorPageFeatureFlag()
 
-        // Used for checking if current error code is one that should fall back to wayback
-        let isWaybackCode = WaybackCodes.isWaybackCode(errCode)
-        let isWaybackError = NativeErrorPageFeatureFlag().isWaybackEnabled && isWaybackCode && !useOldErrorPage
+        let isNoInternetError = errCode == noInternetErrorCode
+        let isBadCertError = NativeErrorPageHelper.isBadCertDomainErrorURL(url)
+        let isWaybackError = WaybackCodes.isWaybackCode(errCode)
 
-        // Handle No internet access or certificate errors with native error page
-        if isNoInternetError || isCertificateError || isWaybackError {
+        let shouldShowNoInternetErrorPage =
+            featureFlag.isNICErrorPageEnabled && isNoInternetError && !useOldErrorPage
+
+        let shouldShowBadCertErrorPage =
+            featureFlag.isBadCertDomainErrorPageEnabled && isBadCertError && !useOldErrorPage
+
+        let shouldShowWaybackErrorPage =
+            featureFlag.isWaybackEnabled && isWaybackError && !useOldErrorPage
+
+        // Handle no internet access, certificate, and wayback enabled errors with native error page
+        if shouldShowNoInternetErrorPage || shouldShowBadCertErrorPage || shouldShowWaybackErrorPage {
             return responseForNativeErrorPage(request: request)
         } else {
             return responseForErrorWebPage(request: request)

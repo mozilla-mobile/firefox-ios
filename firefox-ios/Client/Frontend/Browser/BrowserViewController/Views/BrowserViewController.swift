@@ -2086,26 +2086,32 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let isNICErrorCode = url.absoluteString.contains(String(Int(
-            CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
-        let isWaybackErrorCode: Bool = {
+        let featureFlag = NativeErrorPageFeatureFlag()
+
+        let isNoInternetError = url.absoluteString.contains(
+            String(Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue))
+        )
+        let isWaybackError: Bool = {
             guard
                 let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
                 let codeString = components.queryItems?.first(where: { $0.name == "code" })?.value,
                 let code = Int(codeString)
             else { return false }
+
             return WaybackCodes.isWaybackCode(code)
         }()
-        let noInternetConnectionEnabled = isNICErrorCode &&
-            NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
-        let isCertificateError = NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled &&
-            NativeErrorPageHelper.isBadCertDomainErrorURL(url)
-        let isShowWayback = isWaybackErrorCode &&
-            NativeErrorPageFeatureFlag().isWaybackEnabled
+        let isBadCertError = NativeErrorPageHelper.isBadCertDomainErrorURL(url)
+
+        let shouldShowNoInternetErrorPage =
+            isNoInternetError && featureFlag.isNativeErrorPageEnabled
+        let shouldShowBadCertErrorPage =
+            isBadCertError && featureFlag.isBadCertDomainErrorPageEnabled
+        let shouldShowWaybackErrorPage =
+            isWaybackError && featureFlag.isWaybackEnabled
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && (noInternetConnectionEnabled || isCertificateError || isShowWayback) {
+        } else if isErrorURL && (shouldShowNoInternetErrorPage || shouldShowBadCertErrorPage || shouldShowWaybackErrorPage) {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()

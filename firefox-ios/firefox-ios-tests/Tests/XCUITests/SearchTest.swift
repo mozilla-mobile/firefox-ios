@@ -14,6 +14,11 @@ private let SuggestedSite4 = "foobar buffer length"
 private let SuggestedSite5 = "foobar burn cd"
 private let SuggestedSite6 = "foobar/ b"
 
+private let IngestSuggestionsCell = "Ingest new suggestions now"
+// Nimbus applies fetched recipes on the launch after the fetch, so two attempts is the floor.
+private let SuggestRolloutLaunchAttempts = 5
+private let SuggestRolloutProbeTimeout: TimeInterval = 5
+
 class SearchTests: FeatureFlaggedTestBase {
     var toolbarScreen: ToolbarScreen!
     var browserScreen: BrowserScreen!
@@ -469,15 +474,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // [Config] orientation:portrait, orientation:landscape
     // Smoketest
     func testFirefoxSuggest() {
-        app.launch()
-
-        // Workaround: "Ingest New Suggestions Now" from the
-        // secret settings may force the suggestions to be
-        // loaded.
-        navigator.goto(SettingsScreen)
-        navigator.performAction(Action.OpenSecretSettings)
-        navigator.performAction(Action.IngestNewSuggestionsNow)
-        navigator.goto(HomePanelsScreen)
+        launchWithFirefoxSuggestRollout()
 
         // Create an open Tab
         navigator.openURL("localhost:\(serverPort)/test-fixture/\(TestPages.mozillaOrg)")
@@ -521,14 +518,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2753093
     // Regression
     func testFirefoxSuggestPartialSponsored() {
-        app.launch()
-        // Workaround: Sponsored suggestions do not show up intermittently.
-        // Ingesting the new suggestions forces the app to have the sponsored
-        // results for Firefox Suggest consistently.
-        navigator.goto(SettingsScreen)
-        navigator.performAction(Action.OpenSecretSettings)
-        navigator.performAction(Action.IngestNewSuggestionsNow)
-        navigator.goto(HomePanelsScreen)
+        launchWithFirefoxSuggestRollout()
         verifySearchSuggestion(searchTerm: "amaz",
                                expectedMatch: "Amazon.com - Official Site",
                                hasFirefoxSuggest: true,
@@ -538,17 +528,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2753076
     // Regresssion
     func testFirefoxSuggestPartialNonSponsored() {
-        app.launch()
-        // Precondition: Enable enhanced cross-platform suggest experiment
-        navigator.goto(SettingsScreen)
-        navigator.performAction(Action.OpenSecretSettings)
-        navigator.goto(ExperimentsScreen)
-        navigator.performAction(Action.ListAllExperiments)
-        navigator.userState.experimentToEnroll = "Enhanced Cross-Platform Suggest [iOS] - Phased Roll out 138+"
-        navigator.performAction(Action.EnrollExperiment)
-        navigator.goto(SettingsScreen)
-        navigator.goto(HomePanelsScreen)
-
+        launchWithFirefoxSuggestRollout()
         verifySearchSuggestion(searchTerm: "fifa",
                                expectedMatch: "Wikipedia - FIFA World Cup",
                                hasFirefoxSuggest: true,
@@ -595,6 +575,39 @@ class SearchTests: FeatureFlaggedTestBase {
         }
     }
 
+    /// On release builds Firefox Suggest is enabled by a Nimbus rollout rather than a channel default, and
+    /// Nimbus only applies fetched recipes on the launch that follows the fetch, hence the relaunches.
+    private func launchWithFirefoxSuggestRollout() {
+        app.launch()
+        waitForTabsButtonHittable()
+
+        for _ in 1...SuggestRolloutLaunchAttempts {
+            relaunchKeepingProfile()
+            navigator.goto(SettingsScreen)
+            navigator.performAction(Action.OpenSecretSettings)
+            navigator.goto(FirefoxSuggestSettings)
+            // The ingest row only exists while the feature is enabled, so it doubles as the enrollment probe.
+            guard mozWaitForElementToExist(app.cells[IngestSuggestionsCell],
+                                           timeout: SuggestRolloutProbeTimeout,
+                                           failOnTimeout: false) else { continue }
+            navigator.performAction(Action.IngestNewSuggestionsNow)
+            navigator.goto(HomePanelsScreen)
+            return
+        }
+
+        XCTFail("Firefox Suggest was not enabled after \(SuggestRolloutLaunchAttempts) launches")
+    }
+
+    /// The Nimbus database lives inside the test profile, so clearing it would discard the fetched rollout.
+    private func relaunchKeepingProfile() {
+        app.terminate()
+        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
+        app.launchArguments = app.launchArguments.filter { $0 != LaunchArguments.ClearProfile }
+        app.launch()
+        waitForTabsButtonHittable()
+        navigator.nowAt(NewTabScreen)
+    }
+
     /// Clears the address bar before typing, so the term can be retyped without appending to itself.
     private func typeSearchTerm(_ searchTerm: String) {
         browserScreen.tapOnAddressBar()
@@ -620,14 +633,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2753092
     // Regression
     func testFirefoxSuggestionsLandscapePrivate() {
-        app.launch()
-
-        // Precondition: "Ingest New Suggestions Now" from the
-        // secret settings
-        navigator.goto(SettingsScreen)
-        navigator.performAction(Action.OpenSecretSettings)
-        navigator.performAction(Action.IngestNewSuggestionsNow)
-        navigator.goto(HomePanelsScreen)
+        launchWithFirefoxSuggestRollout()
 
         // Step 1: Type a keyword that trigers a sponsored result
         browserScreen.tapOnAddressBar()

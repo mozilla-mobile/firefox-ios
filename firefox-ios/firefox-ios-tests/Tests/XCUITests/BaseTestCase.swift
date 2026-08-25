@@ -23,6 +23,8 @@ func path(forTestPage page: String) -> String {
 let TIMEOUT: TimeInterval = 10
 let TIMEOUT_LONG: TimeInterval = 20
 let PDF_TIMEOUT: TimeInterval = 60
+// TabDataStore throttles background saves by 2 seconds, plus one second of margin
+let tabPersistenceThrottleWait: UInt32 = 3
 // Translation is network-bound and can take up to ~1 min to complete
 let TRANSLATION_TIMEOUT: TimeInterval = 90
 // Probe for optional UI that shows up immediately or not at all
@@ -78,6 +80,26 @@ class BaseTestCase: XCTestCase {
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
         app.activate()
+    }
+
+    /// Kills the app and relaunches it keeping the profile, so tabs and preferences set during the
+    /// test survive the restart.
+    func forceCloseAndRelaunchApp() {
+        // Backgrounding is what saves the tabs, and the app must outlive that throttled write.
+        // It is foregrounded again first, as waiting at the home screen gets the runner killed.
+        restartInBackground()
+        sleep(tabPersistenceThrottleWait)
+        app.terminate()
+        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
+        // Session restore is opted into, as UI tests otherwise always start from a clean tab state
+        let keptArguments = app.launchArguments.filter {
+            $0 != LaunchArguments.ClearProfile && $0 != LaunchArguments.EnableSessionRestore
+        }
+        app.launchArguments = keptArguments + [LaunchArguments.EnableSessionRestore]
+        app.launch()
+        mozWaitForElementToExist(app.windows.otherElements.firstMatch)
+        // The navigator state does not survive a relaunch
+        setUpScreenGraph()
     }
 
     func removeApp() {

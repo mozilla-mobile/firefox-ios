@@ -444,7 +444,7 @@ final class TabManagerImplementation: NSObject,
                    level: .debug,
                    category: .tabs)
 
-        guard !AppConstants.isRunningUITests,
+        guard !AppConstants.isRunningUITests || AppConstants.isSessionRestoreEnabledForTests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
             ensureAtLeastOneSelectedTab()
@@ -474,7 +474,7 @@ final class TabManagerImplementation: NSObject,
                    level: .debug,
                    category: .tabs)
 
-        guard !AppConstants.isRunningUITests,
+        guard !AppConstants.isRunningUITests || AppConstants.isSessionRestoreEnabledForTests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
             ensureAtLeastOneSelectedTab()
@@ -1044,7 +1044,7 @@ final class TabManagerImplementation: NSObject,
 
     private func didSelectTab(_ url: URL?) {
         tabsTelemetry.stopTabSwitchMeasurement()
-        let isNativeErrorPage = featureFlagsProvider.isEnabled(.nativeErrorPage)
+        let isNativeErrorPage = NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
 
         // If app starts with error url, first homepage appears and
         // then error page is loaded. To directly load error page

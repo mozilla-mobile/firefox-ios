@@ -205,7 +205,6 @@
         "PhotonActionSheetTests\/testPinToShortcuts()",
         "PhotonActionSheetTests\/testPinToShortcuts_testPinToShortcuts()",
         "PhotonActionSheetTests\/testSharePageWithShareSheetOptions()",
-        "PrivateBrowsingTest\/testAllPrivateTabsRestore()",
         "PrivateBrowsingTest\/testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad()",
         "PrivateBrowsingTest\/testLongPressLinkOptionsPrivateMode_tabTrayExperimentOff()",
         "PrivateBrowsingTest\/testLongPressLinkOptionsPrivateMode_tabTrayExperimentOn()",
