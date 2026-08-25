@@ -12,7 +12,6 @@ import Common
 class AccountSyncHandlerTests: XCTestCase {
     private var profile: MockProfile!
     private var syncManager: ClientSyncManagerSpy!
-    private var queue: MockDispatchQueue!
     private var mockWindowManager: MockWindowManager!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
@@ -20,7 +19,6 @@ class AccountSyncHandlerTests: XCTestCase {
         try await super.setUp()
         self.profile = MockProfile()
         self.syncManager = profile.syncManager as? ClientSyncManagerSpy
-        self.queue = MockDispatchQueue()
         let mockTabManager =  MockTabManager()
         DependencyHelperMock().bootstrapDependencies(
             injectedWindowManager: mockWindowManager,
@@ -36,7 +34,6 @@ class AccountSyncHandlerTests: XCTestCase {
     override func tearDown() async throws {
         self.syncManager = nil
         self.profile = nil
-        self.queue = nil
         self.mockWindowManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
@@ -46,7 +43,7 @@ class AccountSyncHandlerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "sync is not called without an account")
         expectation.isInverted = true
         profile.hasSyncableAccountMock = false
-        let subject = AccountSyncHandler(with: profile, queue: queue, onSyncCompleted: {
+        let subject = AccountSyncHandler(with: profile, debounceTime: 0.1, onSyncCompleted: {
             expectation.fulfill()
         })
         let tab = createTab(profile: profile)
@@ -58,7 +55,7 @@ class AccountSyncHandlerTests: XCTestCase {
 
     func testTabDidGainFocus_syncWithAccount() {
         let expectation = XCTestExpectation(description: "storeAndSyncTabs called after listed time of tab gaining focus")
-        let subject = AccountSyncHandler(with: profile, debounceTime: 0.1, queue: queue, queueDelay: 0.1, onSyncCompleted: {
+        let subject = AccountSyncHandler(with: profile, debounceTime: 0.1, onSyncCompleted: {
             expectation.fulfill()
         })
         let tab = createTab(profile: profile)
@@ -72,7 +69,7 @@ class AccountSyncHandlerTests: XCTestCase {
         let expectation = XCTestExpectation(
             description: "storeAndSyncTabs only called once from multiple tab actions")
         let subject = AccountSyncHandler(
-            with: profile, debounceTime: 0.1, queue: DispatchQueue.global(), queueDelay: 0.1, onSyncCompleted: {
+            with: profile, debounceTime: 0.1, onSyncCompleted: {
                 expectation.fulfill()
             })
         let tab = createTab(profile: profile)
@@ -89,7 +86,7 @@ class AccountSyncHandlerTests: XCTestCase {
             description: "storeAndSyncTabs called multiple times if outside of debounce time")
         expectation.expectedFulfillmentCount = 2
         let subject = AccountSyncHandler(
-            with: profile, debounceTime: 0.1, queue: DispatchQueue.global(), queueDelay: 0.1, onSyncCompleted: {
+            with: profile, debounceTime: 0.1, onSyncCompleted: {
                 expectation.fulfill()
             })
         let tab = createTab(profile: profile)
@@ -102,6 +99,57 @@ class AccountSyncHandlerTests: XCTestCase {
 
         wait(for: [expectation], timeout: 1.0)
         XCTAssertEqual(profile.storeAndSyncTabsCalled, 2)
+    }
+
+    // MARK: - MainActorDebouncer
+
+    func testDebouncer_subSecondDelay_doesNotExecuteBeforeDelayElapses() {
+        let expectation = XCTestExpectation(description: "action does not execute before a sub-second delay elapses")
+        expectation.isInverted = true
+        let subject = MainActorDebouncer(delay: 0.5)
+
+        subject.call { expectation.fulfill() }
+
+        wait(for: [expectation], timeout: 0.2)
+    }
+
+    func testDebouncer_subSecondDelay_executesAfterDelayElapses() {
+        let expectation = XCTestExpectation(description: "action executes once a sub-second delay elapses")
+        let subject = MainActorDebouncer(delay: 0.1)
+
+        subject.call { expectation.fulfill() }
+
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    func testDebouncer_zeroDelay_executes() {
+        let expectation = XCTestExpectation(description: "action executes when the delay is zero")
+        let subject = MainActorDebouncer(delay: 0)
+
+        subject.call { expectation.fulfill() }
+
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    func testDebouncer_negativeDelay_executesWithoutTrapping() {
+        let expectation = XCTestExpectation(description: "action executes when the delay is negative")
+        let subject = MainActorDebouncer(delay: -1.0)
+
+        subject.call { expectation.fulfill() }
+
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    func testDebouncer_multipleCalls_executesOnlyTheMostRecentAction() {
+        let supersededAction = XCTestExpectation(description: "superseded action does not execute")
+        supersededAction.isInverted = true
+        let latestAction = XCTestExpectation(description: "most recent action executes")
+        let subject = MainActorDebouncer(delay: 0.1)
+
+        subject.call { supersededAction.fulfill() }
+        subject.call { latestAction.fulfill() }
+
+        wait(for: [supersededAction, latestAction], timeout: 0.5)
     }
 }
 

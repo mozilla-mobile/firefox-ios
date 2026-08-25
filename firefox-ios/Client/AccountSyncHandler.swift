@@ -7,22 +7,19 @@ import Foundation
 import Storage
 
 @MainActor
-final class Debouncer {
-    private let delay: TimeInterval
+final class MainActorDebouncer {
+    private let delayInNanoSeconds: UInt64
     private var task: Task<Void, Never>?
-    private let nanosecondsPerSecond: UInt64 = 1_000_000_000
 
     init(delay: TimeInterval) {
-        self.delay = delay
+        self.delayInNanoSeconds = delay.nanoseconds
     }
 
     func call(action: @escaping @MainActor () -> Void) {
         task?.cancel()
 
-        let nanos = UInt64(delay) * nanosecondsPerSecond
-
-        task = Task {
-            try? await Task.sleep(nanoseconds: nanos)
+        task = Task { [delayInNanoSeconds] in
+            try? await Task.sleep(nanoseconds: delayInNanoSeconds)
             guard !Task.isCancelled else { return }
             action()
         }
@@ -34,10 +31,9 @@ final class Debouncer {
 @MainActor
 final class AccountSyncHandler: TabEventHandler, Notifiable, Sendable {
     private let notificationCenter: NotificationProtocol = NotificationCenter.default
-    private let debouncer: Debouncer
+    private let debouncer: MainActorDebouncer
     private let profile: Profile
     private let logger: Logger
-    private let queueDelay: Double
     private var windowManager: WindowManager {
         return AppContainer.shared.resolve()
     }
@@ -50,15 +46,12 @@ final class AccountSyncHandler: TabEventHandler, Notifiable, Sendable {
     init(
         with profile: Profile,
         debounceTime: Double = 5.0,
-        queue: DispatchQueueInterface = DispatchQueue.global(),
-        queueDelay: Double = 0.5,
         logger: Logger = DefaultLogger.shared,
         onSyncCompleted: (@Sendable () -> Void)? = nil
     ) {
         self.profile = profile
-        self.debouncer = Debouncer(delay: debounceTime)
+        self.debouncer = MainActorDebouncer(delay: debounceTime)
         self.logger = logger
-        self.queueDelay = queueDelay
         self.onSyncCompleted = onSyncCompleted
 
         // Other clients only show urls and ordering of tabs, we can ignore everything
@@ -124,29 +117,20 @@ final class AccountSyncHandler: TabEventHandler, Notifiable, Sendable {
         // Final stored tabs for syncing
         let storedTabs = Array(storedTabsDict.values)
 
-        // It's fine if we wait until more busy work has finished. We tend to contend with more important
-        // work like querying for top sites.
-        DispatchQueue.main.asyncAfter(deadline: .now() + queueDelay) { [weak self] in
-            guard let self else { return }
+        logger.log(
+            "Storing \(storedTabs.count) total tabs for \(windowCount) windows", level: .debug, category: .sync
+        )
 
-            let logger = self.logger
-            let onSyncCompleted = self.onSyncCompleted
-
-            self.logger.log(
-                "Storing \(storedTabs.count) total tabs for \(windowCount) windows", level: .debug, category: .sync
-            )
-
-            self.profile.storeAndSyncTabs(storedTabs).upon { result in
-                switch result {
-                case .success(let tabCount):
-                    logger.log(
-                        "Successfully stored \(tabCount) tabs", level: .debug, category: .sync)
-                case .failure(let error):
-                    logger.log(
-                        "Failed to store tabs: \(error.localizedDescription)", level: .warning, category: .sync)
-                }
-                onSyncCompleted?() // callback for tests
+        profile.storeAndSyncTabs(storedTabs).upon { [logger, onSyncCompleted] result in
+            switch result {
+            case .success(let tabCount):
+                logger.log(
+                    "Successfully stored \(tabCount) tabs", level: .debug, category: .sync)
+            case .failure(let error):
+                logger.log(
+                    "Failed to store tabs: \(error.localizedDescription)", level: .warning, category: .sync)
             }
+            onSyncCompleted?() // callback for tests
         }
     }
 }
@@ -160,5 +144,13 @@ extension AccountSyncHandler {
         default:
             break
         }
+    }
+}
+
+private extension TimeInterval {
+    // Convert to nanoseconds for easy use with `Task.sleep` calls pre-iOS 16
+    var nanoseconds: UInt64 {
+        let nanosecondsPerSecond: Double = 1_000_000_000
+        return UInt64(max(0, self) * nanosecondsPerSecond)
     }
 }
