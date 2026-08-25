@@ -1267,6 +1267,21 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(browserViewController.presentSignInReferringPage, ReferringPage.none)
     }
 
+    func testHandleFxaPairingPresentsPairingFlow() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key&v=2"
+        )!
+
+        let result = testCanHandleAndHandle(subject, route: .fxaPairing(url: pairingURL))
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(browserViewController.presentPairingCount, 1)
+        XCTAssertEqual(browserViewController.presentPairingURL, pairingURL)
+    }
+
     // MARK: - App action route
 
     func testHandleClosePrivateTabs_returnsTrue() {

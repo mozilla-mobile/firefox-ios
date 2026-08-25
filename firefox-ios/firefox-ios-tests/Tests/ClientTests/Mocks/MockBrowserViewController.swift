@@ -37,6 +37,8 @@ class MockBrowserViewController: BrowserViewController {
     var presentSignInFlowType: FxAPageType?
     var presentSignInReferringPage: ReferringPage?
     var presentSignInCount = 0
+    var presentPairingURL: URL?
+    var presentPairingCount = 0
 
     var closePrivateTabsWidgetAction = 0
 
@@ -134,6 +136,11 @@ class MockBrowserViewController: BrowserViewController {
         presentSignInFlowType = flowType
         presentSignInReferringPage = referringPage
         presentSignInCount += 1
+    }
+
+    override func presentPairingViewController(_ pairingURL: URL) {
+        presentPairingURL = pairingURL
+        presentPairingCount += 1
     }
 
     override func embedContent(_ viewController: ContentContainable) -> Bool {
