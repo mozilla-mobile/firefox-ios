@@ -74,6 +74,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2436093
+    // Regression
     func testPromptPresence() {
         // Suggestion is on by default (starting on Oct 24th 2017), so the prompt should not appear
         app.launch()
@@ -242,6 +243,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2436091
+    // Regression
     func testSearchWithFirefoxOption() {
         app.launch()
         navigator.openURL(path(forTestPage: TestPages.mozillaBook))
@@ -426,6 +428,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306942
+    // Regression
     func testSearchSuggestions() throws {
         guard #available(iOS 17.0, *) else { return }
 
@@ -527,6 +530,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2753076
     // Regresssion
+    // Regression
     func testFirefoxSuggestPartialNonSponsored() {
         launchWithFirefoxSuggestRollout()
         verifySearchSuggestion(searchTerm: "fifa",
@@ -752,6 +756,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3374353
+    // Regression
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff() {
         app.launch()
         // Disable general search suggests

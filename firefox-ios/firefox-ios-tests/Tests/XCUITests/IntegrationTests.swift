@@ -432,6 +432,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306822
+    // Regression
     func testFxADisconnectConnect() {
         // Sign into Mozilla Account
         signInFxAccounts()

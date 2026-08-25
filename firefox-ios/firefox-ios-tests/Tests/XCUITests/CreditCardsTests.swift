@@ -83,6 +83,7 @@ class CreditCardsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306972
+    // Regression
     func testManageCreditCardsOption() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15")
@@ -220,6 +221,7 @@ class CreditCardsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306974
+    // Regression
     func testVerifyThatMultipleCardsCanBeAdded() throws {
         // Add multiple credit cards
         let expectedCards = 3
@@ -366,6 +368,7 @@ class CreditCardsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306979
+    // Regression
     func testSaveThisCardPrompt() throws {
         if #unavailable(iOS 17) {
             throw XCTSkip("testSaveThisCardPrompt() does not work on iOS 15 and 16")
@@ -430,6 +433,7 @@ class CreditCardsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306980
+    // Regression
     func testUpdatePrompt() throws {
         if #unavailable(iOS 17) {
             throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15 and 16")
