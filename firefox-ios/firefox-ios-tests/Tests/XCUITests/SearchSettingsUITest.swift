@@ -24,7 +24,6 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2435664
-    // Regression
     func testDefaultSearchEngine() {
         // Check the default browser
         let defaultSearchEngine = app.tables.cells.element(boundBy: 0)

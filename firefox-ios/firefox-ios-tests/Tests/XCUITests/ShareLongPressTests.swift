@@ -56,7 +56,6 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864380
-    // Regression
     func testBookmarksShareNormalWebsiteReminders() {
         app.launch()
         if #available(iOS 17, *) {
