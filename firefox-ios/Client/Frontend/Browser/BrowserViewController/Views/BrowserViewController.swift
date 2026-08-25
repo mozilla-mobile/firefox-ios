@@ -5050,13 +5050,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let isEditing = toolbarState?.addressToolbar.isEditing == true
         if !isEditing {
-            store.dispatch(
-                ToolbarAction(
-                    shouldShowKeyboard: false,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.keyboardStateDidChange
-                )
-            )
+            store.dispatch(ToolbarModernAction.didCancelKeyboardRequest, forWindowUUID: windowUUID)
         }
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
                                               doesFindInPageBarExist: iOS15FindInPageBar != nil)

@@ -37,6 +37,7 @@ final class AddressToolbarContainerModel: Equatable {
     let shouldAnimate: Bool
     let hasAlternativeLocationColor: Bool
     let isAddressBarMinimized: Bool
+    let isAccessoryViewVisible: Bool
 
     let windowUUID: UUID
 
@@ -251,6 +252,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.canShowNavigationHint = state.canShowNavigationHint
         self.shouldAnimate = state.shouldAnimate
         self.isAddressBarMinimized = state.isAddressBarMinimized
+        self.isAccessoryViewVisible = state.isAccessoryViewVisible
         self.hasAlternativeLocationColor = hasAlternativeLocationColor
         self.toolbarLayoutStyle = state.toolbarLayout
         self.toolbarHelper = toolbarHelper
@@ -386,6 +388,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.canShowNavigationHint == rhs.canShowNavigationHint &&
         lhs.shouldAnimate == rhs.shouldAnimate &&
         lhs.isAddressBarMinimized == rhs.isAddressBarMinimized &&
+        lhs.isAccessoryViewVisible == rhs.isAccessoryViewVisible &&
         lhs.hasAlternativeLocationColor == rhs.hasAlternativeLocationColor &&
 
         lhs.windowUUID == rhs.windowUUID

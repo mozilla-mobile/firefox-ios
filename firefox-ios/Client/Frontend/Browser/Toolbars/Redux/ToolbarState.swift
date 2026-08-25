@@ -30,6 +30,8 @@ struct ToolbarState: ScreenState, Sendable {
     var nextTabScreenshot: UIImage?
     // Whether the address bar renders as its full toolbar or its minimized "pill" shape
     var isAddressBarMinimized: Bool
+    // When a web form's keyboard accessory view is visible on a bottom-positioned address bar.
+    var isAccessoryViewVisible: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = appState.componentState(
@@ -60,7 +62,8 @@ struct ToolbarState: ScreenState, Sendable {
                   isTranslationsEnabled: toolbarState.isTranslationsEnabled,
                   previousTabScreenshot: toolbarState.previousTabScreenshot,
                   nextTabScreenshot: toolbarState.nextTabScreenshot,
-                  isAddressBarMinimized: toolbarState.isAddressBarMinimized
+                  isAddressBarMinimized: toolbarState.isAddressBarMinimized,
+                  isAccessoryViewVisible: toolbarState.isAccessoryViewVisible
         )
     }
 
@@ -85,7 +88,8 @@ struct ToolbarState: ScreenState, Sendable {
             isTranslationsEnabled: true,
             previousTabScreenshot: nil,
             nextTabScreenshot: nil,
-            isAddressBarMinimized: false
+            isAddressBarMinimized: false,
+            isAccessoryViewVisible: false
         )
     }
 
@@ -109,7 +113,8 @@ struct ToolbarState: ScreenState, Sendable {
         isTranslationsEnabled: Bool,
         previousTabScreenshot: UIImage?,
         nextTabScreenshot: UIImage?,
-        isAddressBarMinimized: Bool
+        isAddressBarMinimized: Bool,
+        isAccessoryViewVisible: Bool
     ) {
         self.windowUUID = windowUUID
         self.toolbarPosition = toolbarPosition
@@ -131,6 +136,7 @@ struct ToolbarState: ScreenState, Sendable {
         self.previousTabScreenshot = previousTabScreenshot
         self.nextTabScreenshot = nextTabScreenshot
         self.isAddressBarMinimized = isAddressBarMinimized
+        self.isAccessoryViewVisible = isAccessoryViewVisible
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -141,10 +147,26 @@ struct ToolbarState: ScreenState, Sendable {
         switch action {
         case .userDidScroll(let minimizeAddressBar):
             return state.copy(isAddressBarMinimized: minimizeAddressBar)
-        case .accessoryViewDidShow:
-            return state.copy(isAddressBarMinimized: true)
+
+        case .accessoryViewVisibilityChanged(let isVisible):
+            // Don't force-minimize while the user is editing the address bar — editing shows its
+            // own overlay UI, and minimizing here would visibly shrink the bar mid-edit.
+            let shouldMinimize = isVisible && !state.addressToolbar.isEditing
+            return state
+                .copy(isAccessoryViewVisible: isVisible)
+                .copy(isAddressBarMinimized: shouldMinimize ? true : state.isAddressBarMinimized)
+
         case .keyboardDidHide:
-            return state.copy(isAddressBarMinimized: false)
+            // The accessory view visible state needs to be reseted when the keyboard hides
+            return state
+                .copy(isAddressBarMinimized: false)
+                .copy(isAccessoryViewVisible: false)
+
+        case .didCancelKeyboardRequest:
+            // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
+            return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
+                                                                                    action,
+                                                                                    actionWindowUUID))
         }
     }
 
@@ -168,8 +190,7 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.lockIconChanged,
             ToolbarActionType.didSetTextInLocationView, ToolbarActionType.didPasteSearchTerm,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
-            ToolbarActionType.cancelEditOnHomepage,
-            ToolbarActionType.keyboardStateDidChange, ToolbarActionType.websiteLoadingStateDidChange,
+            ToolbarActionType.cancelEditOnHomepage, ToolbarActionType.websiteLoadingStateDidChange,
             ToolbarMiddlewareActionType.googleLensAvailabilityDidChange, ToolbarActionType.clearSearch,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
@@ -393,6 +414,7 @@ struct ToolbarState: ScreenState, Sendable {
                             isTranslationsEnabled: state.isTranslationsEnabled,
                             previousTabScreenshot: state.previousTabScreenshot,
                             nextTabScreenshot: state.nextTabScreenshot,
-                            isAddressBarMinimized: state.isAddressBarMinimized)
+                            isAddressBarMinimized: state.isAddressBarMinimized,
+                            isAccessoryViewVisible: state.isAccessoryViewVisible)
     }
 }
