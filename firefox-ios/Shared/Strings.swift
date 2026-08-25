@@ -4695,7 +4695,7 @@ extension String {
             public static let LoadingLabel = MZLocalizedString(
                 key: "GoogleLens.Interstitial.LoadingLabel.v156",
                 tableName: "GoogleLens",
-                value: "Looking this up",
+                value: "Finding Image Results…",
                 comment: "Label shown next to a loading spinner on the full screen state that appears while an image is being searched with Google Lens.")
 
             public static let CancelButtonTitle = MZLocalizedString(
