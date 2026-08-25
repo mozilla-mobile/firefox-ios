@@ -270,6 +270,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
     }
 
+    @MainActor
     private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction,
               let borderPosition = toolbarAction.addressBorderPosition else {
@@ -277,7 +278,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
 
         return state
-            .copy(navigationActionsState: NavigationActionsState(windowUUID: state.windowUUID))
+            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: [])
             .copy(trailingPageActions: [])
             .copy(browserActions: [])
