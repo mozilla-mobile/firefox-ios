@@ -390,7 +390,8 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             isTranslationsEnabled: true,
                             previousTabScreenshot: nil,
                             nextTabScreenshot: nil,
-                            isAddressBarMinimized: false)
+                            isAddressBarMinimized: false,
+                            isAccessoryViewVisible: false)
     }
 
     private func createToolbarStateWithAlternativeSearchEngine(searchEngine: SearchEngineModel) -> ToolbarState {
@@ -413,7 +414,8 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             isTranslationsEnabled: true,
                             previousTabScreenshot: nil,
                             nextTabScreenshot: nil,
-                            isAddressBarMinimized: false)
+                            isAddressBarMinimized: false,
+                            isAccessoryViewVisible: false)
     }
 
     @MainActor
