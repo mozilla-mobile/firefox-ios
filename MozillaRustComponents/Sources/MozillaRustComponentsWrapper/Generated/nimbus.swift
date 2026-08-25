@@ -3008,6 +3008,60 @@ public func FfiConverterTypeEnrollmentChangeEvent_lower(_ value: EnrollmentChang
 }
 
 
+public struct EnrollmentSlugs: Equatable, Hashable {
+    public var slug: String
+    public var branchSlug: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(slug: String, branchSlug: String) {
+        self.slug = slug
+        self.branchSlug = branchSlug
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension EnrollmentSlugs: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeEnrollmentSlugs: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> EnrollmentSlugs {
+        return
+            try EnrollmentSlugs(
+                slug: FfiConverterString.read(from: &buf), 
+                branchSlug: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: EnrollmentSlugs, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.slug, into: &buf)
+        FfiConverterString.write(value.branchSlug, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeEnrollmentSlugs_lift(_ buf: RustBuffer) throws -> EnrollmentSlugs {
+    return try FfiConverterTypeEnrollmentSlugs.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeEnrollmentSlugs_lower(_ value: EnrollmentSlugs) -> RustBuffer {
+    return FfiConverterTypeEnrollmentSlugs.lower(value)
+}
+
+
 public struct EnrollmentStatusExtraDef: Equatable, Hashable {
     public var branch: String?
     public var conflictSlug: String?
@@ -4851,6 +4905,31 @@ fileprivate struct FfiConverterSequenceTypeEnrollmentChangeEvent: FfiConverterRu
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterSequenceTypeEnrollmentSlugs: FfiConverterRustBuffer {
+    typealias SwiftType = [EnrollmentSlugs]
+
+    public static func write(_ value: [EnrollmentSlugs], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeEnrollmentSlugs.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [EnrollmentSlugs] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [EnrollmentSlugs]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeEnrollmentSlugs.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceTypeEnrollmentStatusExtraDef: FfiConverterRustBuffer {
     typealias SwiftType = [EnrollmentStatusExtraDef]
 
@@ -5190,6 +5269,19 @@ public func FfiConverterTypePrefValue_lower(_ value: PrefValue) -> RustBuffer {
 }
 
 /**
+ * Return the list of active experiments.
+ *
+ * Intended to be called in instances where a full Nimbus Client cannot be
+ * instantiated (e.g., in crash reporting infrastructure).
+ */
+public func getActiveEnrollments(dbPath: String)throws  -> [EnrollmentSlugs]  {
+    return try  FfiConverterSequenceTypeEnrollmentSlugs.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+    uniffi_nimbus_fn_func_get_active_enrollments(
+        FfiConverterString.lower(dbPath),$0
+    )
+})
+}
+/**
 
  */
 public func getCalculatedAttributes(installationDate: Int64?, dbPath: String, locale: String)throws  -> CalculatedAttributes  {
@@ -5227,6 +5319,9 @@ private let initializationResult: InitializationResult = {
     let scaffolding_contract_version = ffi_nimbus_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
+    }
+    if (uniffi_nimbus_checksum_func_get_active_enrollments() != 35070) {
+        return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_func_get_calculated_attributes() != 10534) {
         return InitializationResult.apiChecksumMismatch
