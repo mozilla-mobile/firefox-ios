@@ -134,7 +134,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
         let savedExtras = try XCTUnwrap(
             gleanWrapper.savedExtras.first as? GleanMetrics.AiSummarize.SummarizationStartedExtra
         )
-        XCTAssertEqual(savedExtras.language, "it")
+        XCTAssertEqual(savedExtras.summaryLanguage, "it")
         XCTAssertEqual(savedExtras.pageLanguage, "de")
     }
 
@@ -146,7 +146,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
         let savedExtras = try XCTUnwrap(
             gleanWrapper.savedExtras.first as? GleanMetrics.AiSummarize.SummarizationStartedExtra
         )
-        XCTAssertNil(savedExtras.language)
+        XCTAssertNil(savedExtras.summaryLanguage)
         XCTAssertNil(savedExtras.pageLanguage)
     }
 
