@@ -1565,6 +1565,7 @@
 		BA4BB9A42D7FF754006BD137 /* DarkModeToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB9A32D7FF74D006BD137 /* DarkModeToggleView.swift */; };
 		BA7A14842C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */; };
 		BA7CB0F12E4174AC0052124B /* SummarizerTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7CB0F02E4174A40052124B /* SummarizerTelemetry.swift */; };
+		FA11B0000000000000000002 /* SummarizerPrefsMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA11B0000000000000000001 /* SummarizerPrefsMigration.swift */; };
 		BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */ = {isa = PBXBuildFile; fileRef = BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */; };
 		BACE70062DC110CA00E6102C /* ASTranslationModelsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */; };
 		BB2F69F8341E538B06F25032 /* XCUIElementHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338510A2D1FFA7548E64224B /* XCUIElementHelpers.swift */; };
@@ -1664,6 +1665,7 @@
 		C28CAABF2E5C8C660049D7C7 /* InsetUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */; };
 		C28D67832F4491180032D0B2 /* DeleteAppAttestKeySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28D67822F4491160032D0B2 /* DeleteAppAttestKeySetting.swift */; };
 		C296B6E92F5ECBF4001CD179 /* SummarizerConfigProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C296B6E82F5ECBF4001CD179 /* SummarizerConfigProviderTests.swift */; };
+		FA11B0000000000000000004 /* SummarizerPrefsMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA11B0000000000000000003 /* SummarizerPrefsMigrationTests.swift */; };
 		C29B64812AD6959E00F3244B /* QRCodeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64802AD6959E00F3244B /* QRCodeCoordinator.swift */; };
 		C29B64832AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */; };
 		C29B64872AD69D0200F3244B /* QRCodeCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64862AD69D0200F3244B /* QRCodeCoordinatorTests.swift */; };
@@ -10672,6 +10674,7 @@
 		BA4BB9A32D7FF74D006BD137 /* DarkModeToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeToggleView.swift; sourceTree = "<group>"; };
 		BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressWebViewManager.swift; sourceTree = "<group>"; };
 		BA7CB0F02E4174A40052124B /* SummarizerTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerTelemetry.swift; sourceTree = "<group>"; };
+		FA11B0000000000000000001 /* SummarizerPrefsMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerPrefsMigration.swift; sourceTree = "<group>"; };
 		BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AddressFormManager.js; sourceTree = "<group>"; };
 		BA904A3B89BC820A7A802D55 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/Storage.strings"; sourceTree = "<group>"; };
 		BAA64356B54F1CD258764620 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/FindInPage.strings; sourceTree = "<group>"; };
@@ -10817,6 +10820,7 @@
 		C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetUpdatable.swift; sourceTree = "<group>"; };
 		C28D67822F4491160032D0B2 /* DeleteAppAttestKeySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAppAttestKeySetting.swift; sourceTree = "<group>"; };
 		C296B6E82F5ECBF4001CD179 /* SummarizerConfigProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigProviderTests.swift; sourceTree = "<group>"; };
+		FA11B0000000000000000003 /* SummarizerPrefsMigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerPrefsMigrationTests.swift; sourceTree = "<group>"; };
 		C29B428A81B120AFF0666037 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Menu.strings; sourceTree = "<group>"; };
 		C29B64802AD6959E00F3244B /* QRCodeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeCoordinator.swift; sourceTree = "<group>"; };
 		C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockQRCodeParentCoordinator.swift; sourceTree = "<group>"; };
@@ -12556,6 +12560,7 @@
 				BC129A2E2E4558FD004A6875 /* SummarizeAction.swift */,
 				BC129A2C2E45207F004A6875 /* SummarizeMiddleware.swift */,
 				BA7CB0F02E4174A40052124B /* SummarizerTelemetry.swift */,
+				FA11B0000000000000000001 /* SummarizerPrefsMigration.swift */,
 				0B78DC6D2E3C9CE800804872 /* SummarizerNimbusUtils.swift */,
 			);
 			path = Summarizer;
@@ -15625,6 +15630,7 @@
 			children = (
 				61D17EF22FE30B1100BCDD52 /* MockNimbusUtils.swift */,
 				C296B6E82F5ECBF4001CD179 /* SummarizerConfigProviderTests.swift */,
+				FA11B0000000000000000003 /* SummarizerPrefsMigrationTests.swift */,
 				C2126EF92F447A46001C01FE /* SummarizerNimbusUtilsTests.swift */,
 				C27470A12F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift */,
 				C21326982F5713F000746393 /* SummarizerLanguageProviderTests.swift */,
@@ -20483,6 +20489,7 @@
 				BC129A2F2E455900004A6875 /* SummarizeAction.swift in Sources */,
 				8CE1E4322B8C76AE0026530B /* LoginStorage.swift in Sources */,
 				BA7CB0F12E4174AC0052124B /* SummarizerTelemetry.swift in Sources */,
+				FA11B0000000000000000002 /* SummarizerPrefsMigration.swift in Sources */,
 				AAD1CD872EAABA8100BEC90A /* TranslationsConfiguration.swift in Sources */,
 				4347B398298D6D7B0045F677 /* CreditCardTableViewModel.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
@@ -20815,6 +20822,7 @@
 				C2E4F4C62F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift in Sources */,
 				96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */,
 				C296B6E92F5ECBF4001CD179 /* SummarizerConfigProviderTests.swift in Sources */,
+				FA11B0000000000000000004 /* SummarizerPrefsMigrationTests.swift in Sources */,
 				21FA8FB02AE856590013B815 /* RemoteTabsCoordinatorTests.swift in Sources */,
 				0E6557402D82232B00D7F017 /* DownloadProgressManagerTests.swift in Sources */,
 				AADBD0E42EBBA79B00F35E30 /* MockLanguageDetector.swift in Sources */,
