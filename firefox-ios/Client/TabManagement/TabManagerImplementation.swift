@@ -444,7 +444,7 @@ final class TabManagerImplementation: NSObject,
                    level: .debug,
                    category: .tabs)
 
-        guard !AppConstants.isRunningUITests,
+        guard !AppConstants.isRunningUITests || AppConstants.isSessionRestoreEnabledForTests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
             ensureAtLeastOneSelectedTab()
@@ -474,7 +474,7 @@ final class TabManagerImplementation: NSObject,
                    level: .debug,
                    category: .tabs)
 
-        guard !AppConstants.isRunningUITests,
+        guard !AppConstants.isRunningUITests || AppConstants.isSessionRestoreEnabledForTests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
             ensureAtLeastOneSelectedTab()

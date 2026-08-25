@@ -24,6 +24,10 @@ public final class AppConstants {
     // Only performance tests
     public static let isRunningPerfTests = ProcessInfo.processInfo.arguments.contains(LaunchArguments.PerformanceTest)
 
+    // Opt-in for the UI tests that relaunch the app and assert on the restored tabs
+    public static let isSessionRestoreEnabledForTests =
+        ProcessInfo.processInfo.arguments.contains(LaunchArguments.EnableSessionRestore)
+
     public static let scheme: String = {
         guard let identifier = Bundle.main.bundleIdentifier else {
             return "unknown"

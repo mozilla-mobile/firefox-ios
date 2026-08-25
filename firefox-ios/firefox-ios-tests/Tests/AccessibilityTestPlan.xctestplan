@@ -321,7 +321,6 @@
         "PocketTests\/testPocketEnabledByDefault()",
         "PrintTests",
         "PrivateBrowsingTest",
-        "PrivateBrowsingTest\/testAllPrivateTabsRestore()",
         "PrivateBrowsingTest\/testClearIndexedDB()",
         "PrivateBrowsingTest\/testClosePrivateTabsOptionClosesPrivateTabs()",
         "PrivateBrowsingTest\/testLongPressLinkOptionsPrivateMode_tabTrayExperimentOff()",
