@@ -65,13 +65,6 @@ final class OmniboxUploadDrawerTests: XCTestCase {
         XCTAssertEqual(OmniboxChatMode.learning.accessibilityIdentifier, "OmniboxChatModeLearningOption")
     }
 
-    func testOnlyThinkLongerChatModeIsNew() {
-        XCTAssertTrue(OmniboxChatMode.thinkLonger.isNew)
-        XCTAssertFalse(OmniboxChatMode.standard.isNew)
-        XCTAssertFalse(OmniboxChatMode.displaySources.isNew)
-        XCTAssertFalse(OmniboxChatMode.learning.isNew)
-    }
-
     func testChatModeIconsLoadFromFrameworkBundle() {
         XCTAssertNotNil(UIImage.ecosia(named: "chatmodes-standard-ai-chat"))
         XCTAssertNotNil(UIImage.ecosia(named: "chatmodes-think-longer"))

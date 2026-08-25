@@ -28,8 +28,6 @@ private enum OmniboxUploadDrawerUX {
     static var chatModeSeparatorLeadingInset: CGFloat {
         chatModeRowHorizontalPadding + chatModeIconSize + chatModeIconSpacing
     }
-    static let newBadgeHorizontalPadding: CGFloat = .ecosia.space._1s
-    static let newBadgeVerticalPadding: CGFloat = .ecosia.space._2s
     /// Opacity of chat-mode rows that are disabled for signed-out users.
     static let disabledRowOpacity: CGFloat = 0.4
     static let signInIconWidth: CGFloat = 18
@@ -275,14 +273,9 @@ struct OmniboxUploadDrawerView: View {
                     .frame(width: UX.chatModeIconSize, height: UX.chatModeIconSize)
 
                 VStack(alignment: .leading, spacing: .ecosia.space._2s) {
-                    HStack(spacing: .ecosia.space._1s) {
-                        Text(mode.title)
-                            .font(.system(size: .ecosia.font._m, weight: .regular))
-                            .foregroundColor(theme.titleColor)
-                        if mode.isNew {
-                            newBadge
-                        }
-                    }
+                    Text(mode.title)
+                        .font(.system(size: .ecosia.font._m, weight: .regular))
+                        .foregroundColor(theme.titleColor)
                     Text(mode.subtitle)
                         .font(.system(size: .ecosia.font._s, weight: .regular))
                         .foregroundColor(theme.subtitleColor)
@@ -313,17 +306,6 @@ struct OmniboxUploadDrawerView: View {
         .accessibilityHint(mode.accessibilityHint)
         .accessibilityAddTraits(mode == selectedChatMode ? [.isSelected] : [])
         .accessibilityIdentifier(mode.accessibilityIdentifier)
-    }
-
-    /// Grellow "New" pill shown inline after a mode's title (e.g. Think longer).
-    private var newBadge: some View {
-        Text(String.localized(.new))
-            .font(.system(size: .ecosia.font._s, weight: .semibold))
-            .foregroundColor(theme.badgeTextColor)
-            .padding(.horizontal, UX.newBadgeHorizontalPadding)
-            .padding(.vertical, UX.newBadgeVerticalPadding)
-            .background(Capsule().fill(theme.badgeBackgroundColor))
-            .accessibilityHidden(true)
     }
 
     // MARK: - Footer
@@ -412,8 +394,6 @@ struct OmniboxUploadDrawerViewTheme: EcosiaThemeable {
     var doneBackgroundColor = Color.gray.opacity(0.2)
     var listBackgroundColor = Color.white
     var selectedCheckmarkColor = Color.green
-    var badgeBackgroundColor = Color.green
-    var badgeTextColor = Color.black
     var signInButtonBackgroundColor = Color.green
     var signInButtonTextColor = Color.black
 
@@ -432,9 +412,6 @@ struct OmniboxUploadDrawerViewTheme: EcosiaThemeable {
         // upload tiles and iOS inset-grouped cells).
         listBackgroundColor = Color(colors.backgroundElevation1)
         selectedCheckmarkColor = Color(colors.brandPrimary)
-        // Grellow pill + dark text in both themes, matching the design-system badge.
-        badgeBackgroundColor = Color(colors.buttonBackgroundFeatured)
-        badgeTextColor = Color(colors.textStaticDark)
         // Sign-in CTA uses the same featured grellow pill as the design-system primary button.
         signInButtonBackgroundColor = Color(colors.buttonBackgroundFeatured)
         signInButtonTextColor = Color(colors.textStaticDark)
