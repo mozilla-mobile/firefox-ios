@@ -91,7 +91,8 @@ public struct PrefsKeys {
         public static let summarizeContentFeature = "summarizeContentFeature"
         public static let shakeGestureEnabled = "shakeGestureEnabledKey"
         public static let selectedLanguage = "summarizer.selectedLanguage"
-        /// Legacy pref name used to store the summarizer selected language, it is only used to migrate to the new pref `selectedLanguage`
+        /// Legacy pref name used to store the summarizer selected language.
+        /// It is only used to migrate to the new pref `selectedLanguage`
         public static let legacySelectedLanguage = "selectedLanguage"
     }
 
