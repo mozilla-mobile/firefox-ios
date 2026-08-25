@@ -8,6 +8,7 @@ protocol HomepageSettingsSelectorSet {
     var BOOKMARK_TOGGLE: Selector { get }
     var JUMP_BACK_IN_TOGGLE: Selector { get }
     var HOMEPAGE_SETTINGS_TABLE: Selector { get }
+    var CUSTOM_URL_TEXT_FIELD: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -15,6 +16,7 @@ struct HomepageSettingsSelectors: HomepageSettingsSelectorSet {
     private enum IDs {
         static let bookmarkToogle = "Bookmarks"
         static let jumpBackInToggle = "Jump Back In"
+        static let customURLTextField = "HomeAsCustomURLTextField"
     }
 
     let HOMEPAGE_SETTINGS_TABLE = Selector.firstTable(
@@ -34,5 +36,11 @@ struct HomepageSettingsSelectors: HomepageSettingsSelectorSet {
         groups: ["homepage_settings"]
     )
 
-    var all: [Selector] { [BOOKMARK_TOGGLE, HOMEPAGE_SETTINGS_TABLE, JUMP_BACK_IN_TOGGLE] }
+    let CUSTOM_URL_TEXT_FIELD = Selector.textFieldId(
+        IDs.customURLTextField,
+        description: "Custom URL text field of the current homepage section",
+        groups: ["homepage_settings"]
+    )
+
+    var all: [Selector] { [BOOKMARK_TOGGLE, HOMEPAGE_SETTINGS_TABLE, JUMP_BACK_IN_TOGGLE, CUSTOM_URL_TEXT_FIELD] }
 }
