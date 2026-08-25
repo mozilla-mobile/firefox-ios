@@ -105,4 +105,37 @@ class CreditCardBottomSheetViewControllerTests: XCTestCase {
 
         XCTAssertEqual(heightDifference, CreditCardBottomSheetViewController.UX.estimatedRowHeight * 2)
     }
+
+    @MainActor
+    func testEstimatedContentHeight_withRegularWidth_addsButtonHeight() {
+        let viewModel = CreditCardBottomSheetViewModel(
+            creditCardProvider: autofill,
+            creditCard: sampleCreditCard,
+            decryptedCreditCard: samplePlainTextCard,
+            state: .save
+        )
+        let viewController = CreditCardBottomSheetViewController(
+            viewModel: viewModel,
+            windowUUID: windowUUID
+        )
+        let container = UIViewController()
+        container.addChild(viewController)
+
+        container.setOverrideTraitCollection(
+            UITraitCollection(horizontalSizeClass: .compact),
+            forChild: viewController
+        )
+        let compactHeight = viewController.estimatedContentHeight()
+
+        container.setOverrideTraitCollection(
+            UITraitCollection(horizontalSizeClass: .regular),
+            forChild: viewController
+        )
+        let regularHeight = viewController.estimatedContentHeight()
+
+        XCTAssertEqual(
+            regularHeight - compactHeight,
+            CreditCardBottomSheetViewController.UX.yesButtonHeight
+        )
+    }
 }

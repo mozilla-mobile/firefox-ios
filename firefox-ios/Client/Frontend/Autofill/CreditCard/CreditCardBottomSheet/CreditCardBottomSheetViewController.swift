@@ -242,7 +242,7 @@ class CreditCardBottomSheetViewController: UIViewController,
         let UXSpacing = UX.yesButtonHeight + UX.bottomSpacing + UX.buttonsSpacing
         var estimatedContentHeight = headerHeight + estimatedCellHeight + estimatedFooterHeight + UXSpacing
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if traitCollection.horizontalSizeClass == .regular {
             estimatedContentHeight += UX.yesButtonHeight
         }
 
