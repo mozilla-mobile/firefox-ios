@@ -4692,6 +4692,26 @@ extension String {
     }
 }
 
+// MARK: - Google Lens
+extension String {
+    public struct GoogleLens {
+        /// The full-screen interstitial shown while a Google Lens image search is loading.
+        public struct Interstitial {
+            public static let LoadingLabel = MZLocalizedString(
+                key: "GoogleLens.Interstitial.LoadingLabel.v156",
+                tableName: "GoogleLens",
+                value: "Finding Image Results…",
+                comment: "Label shown next to a loading spinner on the full screen state that appears while an image is being searched with Google Lens.")
+
+            public static let CancelButtonTitle = MZLocalizedString(
+                key: "GoogleLens.Interstitial.CancelButtonTitle.v156",
+                tableName: "GoogleLens",
+                value: "Cancel",
+                comment: "Title of the button that stops an in-progress Google Lens image search and returns the user to what they were looking at before.")
+        }
+    }
+}
+
 // MARK: - Strings: unorganized & unchecked for use
 // Here we have the original strings. What follows below is unorganized. As
 // the team continues to work on new updates to strings, or to work on a view,
