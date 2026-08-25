@@ -20,7 +20,7 @@ final class RouteBuilderTests: XCTestCase {
     }
 
     func test_makeRoute_HandlesAnyActivityType() {
-        let routeBuilder = createSubject(mainQueue: MockDispatchQueue())
+        let routeBuilder = createSubject()
 
         let route = routeBuilder.makeRoute(
             userActivity: handoffUserActivity
@@ -60,7 +60,7 @@ final class RouteBuilderTests: XCTestCase {
     }
 
     func test_makeRoute_AppIconShortcut_ReturnsAppIconSettingsRoute() {
-        let routeBuilder = createSubject(mainQueue: MockDispatchQueue())
+        let routeBuilder = createSubject()
         let bundleId = Bundle.main.bundleIdentifier ?? ""
         let shortcut = UIApplicationShortcutItem(
             type: "\(bundleId).AppIcon",
@@ -76,18 +76,26 @@ final class RouteBuilderTests: XCTestCase {
         XCTAssertEqual(section, .appIcon)
     }
 
-    func test_makeRoute_ResetsShouldOpenNewTabAfterDelay() {
-        let routeBuilder = createSubject(mainQueue: MockDispatchQueue())
-        routeBuilder.shouldOpenNewTab = true
+    func test_makeRoute_RapidSiriOpenTabActivitiesAreThrottledAndReset() async {
+        let routeBuilder = createSubject()
         let userActivity = NSUserActivity(activityType: SiriShortcuts.activityType.openURL.rawValue)
 
-        _ = routeBuilder.makeRoute(userActivity: userActivity)
+        let firstRoute = routeBuilder.makeRoute(userActivity: userActivity)
+        XCTAssertNotNil(firstRoute)
 
-        XCTAssertTrue(routeBuilder.shouldOpenNewTab)
-     }
+        let duplicateActivityRoute = routeBuilder.makeRoute(userActivity: userActivity)
+        XCTAssertNil(duplicateActivityRoute)
 
-    private func createSubject(mainQueue: MockDispatchQueue) -> RouteBuilder {
-        let subject = RouteBuilder(mainQueue: mainQueue)
+        // Pretend time has passed by cancelling the Task.sleep and waiting for the task to finish
+        routeBuilder.siriOpenTabThrottleResetTask?.cancel()
+        await routeBuilder.siriOpenTabThrottleResetTask?.value
+
+        let routeAfterThrottleReset = routeBuilder.makeRoute(userActivity: userActivity)
+        XCTAssertNotNil(routeAfterThrottleReset)
+    }
+
+    private func createSubject() -> RouteBuilder {
+        let subject = RouteBuilder()
         trackForMemoryLeaks(subject)
         return subject
     }

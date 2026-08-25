@@ -8,21 +8,18 @@ import Glean
 import Shared
 import Common
 
-// TODO: FXIOS-14155 - RouteBuilder should not be @unchecked Sendable due to shouldOpenNewTab usage
-final class RouteBuilder: @unchecked Sendable {
+final class RouteBuilder {
     private var isPrivate = false
     private var prefs: Prefs?
-    private var mainQueue: DispatchQueueInterface
     private let actionExtensionTelemetry: ActionExtensionTelemetry
     private let shareExtensionTelemetry: ShareExtensionTelemetry
-    var shouldOpenNewTab = true
+    private var siriOpenTabThrottleIsActive = false
+    private(set) var siriOpenTabThrottleResetTask: Task<Void, Never>?
 
     init(
-        mainQueue: DispatchQueueInterface = DispatchQueue.main,
         actionExtensionTelemetry: ActionExtensionTelemetry = ActionExtensionTelemetry(),
         shareExtensionTelemetry: ShareExtensionTelemetry = ShareExtensionTelemetry()
     ) {
-        self.mainQueue = mainQueue
         self.actionExtensionTelemetry = actionExtensionTelemetry
         self.shareExtensionTelemetry = shareExtensionTelemetry
     }
@@ -177,13 +174,16 @@ final class RouteBuilder: @unchecked Sendable {
         }
     }
 
+    @MainActor
     func makeRoute(userActivity: NSUserActivity) -> Route? {
-        // If the user activity is a Siri shortcut to open the app, show a new search tab.
-        // By using shouldOpenNewTab we avoid duplicated user activities, from Siri, for new tab.
-        if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue && shouldOpenNewTab {
-            shouldOpenNewTab = false
-            mainQueue.asyncAfter(deadline: .now() + 1) { [weak self] in
-                self?.shouldOpenNewTab = true
+        // A Siri openURL activity opens a new empty tab (no navigation to a URL)
+        // The throttle flag drops additional Siri activities within a time period
+        if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
+            guard !siriOpenTabThrottleIsActive else { return nil }
+            siriOpenTabThrottleIsActive = true
+            siriOpenTabThrottleResetTask = Task { [weak self] in
+                try? await Task.sleep(nanoseconds: NSEC_PER_SEC)
+                self?.siriOpenTabThrottleIsActive = false
             }
             return .search(url: nil, isPrivate: false)
         }
