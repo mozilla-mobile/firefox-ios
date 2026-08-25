@@ -325,11 +325,12 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2549850
+    // NOTE: Autofill for email hasn't been working. https://github.com/mozilla-mobile/firefox-ios/issues/32817
     func testAutofillAddressesByTapingEmailField() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
         }
-        addAddressAndReachAutofillForm(indexField: 7)
+        throw XCTSkip("Autofill for email is not working: https://github.com/mozilla-mobile/firefox-ios/issues/32817")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2549852
