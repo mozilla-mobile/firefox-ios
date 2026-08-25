@@ -311,6 +311,40 @@ final class WebCompatReporterStateTests: XCTestCase {
 
     // MARK: - previewPayload
 
+    func test_didReadPageContext_carriesThePageContextIntoState() {
+        let reducer = WebCompatReporterState.reducer
+        let pageContext = WebCompatPageContext(languages: ["en-GB"], fastclick: true)
+
+        let newState = reducer.legacyReducer(
+            WebCompatReporterState(windowUUID: .XCTestDefaultUUID),
+            WebCompatReporterMiddlewareAction(
+                pageContext: pageContext,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WebCompatReporterMiddlewareActionType.didReadPageContext
+            )
+        )
+
+        XCTAssertEqual(newState.pageContext, pageContext)
+    }
+
+    func test_pageContext_survivesLaterActions() {
+        let reducer = WebCompatReporterState.reducer
+        let initialState = WebCompatReporterState(windowUUID: .XCTestDefaultUUID)
+            .copy(url: "https://example.com")
+            .copy(pageContext: WebCompatPageContext(languages: ["en-GB"]))
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            WebCompatReporterViewAction(
+                category: .siteNotUsable,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WebCompatReporterViewActionType.selectCategory
+            )
+        )
+
+        XCTAssertEqual(newState.pageContext?.languages, ["en-GB"])
+    }
+
     func test_didBuildPreview_carriesThePayloadIntoState() {
         var payload = WebCompatReportPayload()
         payload.url = "https://example.com"
