@@ -36,6 +36,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864323
+    // Regression
     func testShareNormalWebsiteCopyUrl() {
         app.launch()
         longPressTopSitesAndReachShareOptions(option: "Copy")
