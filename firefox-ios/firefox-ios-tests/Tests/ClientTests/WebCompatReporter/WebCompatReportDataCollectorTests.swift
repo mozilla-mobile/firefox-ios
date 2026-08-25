@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import WebKit
 import XCTest
 
 @testable import Client
@@ -21,8 +22,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
 
     // MARK: - Device fields
 
-    // The native locale list must only reach `defaultLocales`. `languages` is page
-    // data and needs FXIOS-16184.
+    // The native locale list must only reach `defaultLocales`. `languages` is page data.
     func test_enrich_deviceLocales_populateDefaultLocalesButNotLanguages() {
         let device = FakeDeviceInfoProvider(preferredLanguages: ["en-US", "fr-FR"])
 
@@ -144,6 +144,110 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertNil(payload.blockedOrigins)
     }
 
+    // MARK: - Page context
+
+    func test_enrich_pageContext_fillsLanguagesAndFrameworkFlags() {
+        let pageContext = WebCompatPageContext(
+            languages: ["en-GB", "fr"],
+            fastclick: true,
+            marfeel: false,
+            mobify: true
+        )
+
+        let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), pageContext: pageContext)
+
+        XCTAssertEqual(payload.languages, ["en-GB", "fr"])
+        XCTAssertEqual(payload.fastclick, true)
+        XCTAssertEqual(payload.marfeel, false)
+        XCTAssertEqual(payload.mobify, true)
+    }
+
+    func test_enrich_pageUserAgent_overridesTheTabUserAgent() {
+        var payload = WebCompatReportPayload()
+        payload.userAgentString = "TabUA/1.0"
+
+        let enriched = WebCompatReportDataCollector.enrich(
+            payload,
+            pageContext: WebCompatPageContext(userAgent: "PageUA/2.0")
+        )
+
+        XCTAssertEqual(enriched.userAgentString, "PageUA/2.0")
+    }
+
+    func test_enrich_missingPageUserAgent_keepsTheTabUserAgent() {
+        var payload = WebCompatReportPayload()
+        payload.userAgentString = "TabUA/1.0"
+
+        let enriched = WebCompatReportDataCollector.enrich(payload, pageContext: WebCompatPageContext())
+
+        XCTAssertEqual(enriched.userAgentString, "TabUA/1.0")
+    }
+
+    func test_pageContextInit_readsEveryField() {
+        let context = WebCompatPageContext(from: [
+            "languages": ["en-GB", "fr"],
+            "userAgent": "PageUA/2.0",
+            "fastclick": true,
+            "marfeel": false,
+            "mobify": true
+        ])
+
+        XCTAssertEqual(context.languages, ["en-GB", "fr"])
+        XCTAssertEqual(context.userAgent, "PageUA/2.0")
+        XCTAssertEqual(context.fastclick, true)
+        XCTAssertEqual(context.marfeel, false)
+        XCTAssertEqual(context.mobify, true)
+    }
+
+    func test_pageContextInit_dropsValuesOfTheWrongType() {
+        let context = WebCompatPageContext(from: [
+            "languages": ["en-GB", 7],
+            "userAgent": 42,
+            "fastclick": "yes"
+        ])
+
+        XCTAssertEqual(context.languages, ["en-GB"])
+        XCTAssertNil(context.userAgent)
+        XCTAssertNil(context.fastclick)
+    }
+
+    func test_pageContextInit_dropsEmptyValues() {
+        XCTAssertNil(WebCompatPageContext(from: ["userAgent": ""]).userAgent)
+        XCTAssertNil(WebCompatPageContext(from: ["languages": []]).languages)
+        XCTAssertNil(WebCompatPageContext(from: ["languages": [7, true]]).languages)
+    }
+
+    // MARK: - Page-context reader
+
+    /// Covers the wiring the parsing tests above cannot reach: the script landing in the
+    /// webcompat bundle, that bundle being injected into the page content world, and the global
+    /// keeping the name the reader calls. Flags reading `false` mean the script ran and found
+    /// none, where nil would mean it never ran.
+    func test_read_fromLoadedTab_fillsLanguagesAndClearsTheFrameworkFlags() async throws {
+        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+        tab.createWebview(configuration: WKWebViewConfiguration())
+        let webView = try XCTUnwrap(tab.webView)
+        UserScriptManager.shared.injectUserScriptsIntoWebView(webView, nightMode: false, noImageMode: false)
+        await loadBlankPage(in: webView)
+
+        let context = await WebCompatPageContextReader().read(from: tab)
+
+        XCTAssertFalse(try XCTUnwrap(context.languages).isEmpty)
+        XCTAssertFalse(try XCTUnwrap(context.userAgent).isEmpty)
+        XCTAssertEqual(context.fastclick, false)
+        XCTAssertEqual(context.marfeel, false)
+        XCTAssertEqual(context.mobify, false)
+    }
+
+    /// Nothing to read from is not an error; the fields stay nil and the report still goes out.
+    func test_read_fromTabWithoutWebView_returnsAnEmptyContext() async {
+        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+
+        let context = await WebCompatPageContextReader().read(from: tab)
+
+        XCTAssertEqual(context, WebCompatPageContext())
+    }
+
     // MARK: - blockedOrigins opt-out
 
     func test_blockedOrigins_whenNotIncluded_isNil() {
@@ -230,5 +334,41 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         var physicalMemoryMegabytes = 2048
         var defaultUserAgent = "FakeUA/1.0"
         var displayScale: CGFloat = 2.0
+    }
+
+    private func loadBlankPage(in webView: WKWebView) async {
+        let delegate = NavigationCompletionDelegate()
+        webView.navigationDelegate = delegate
+        await withCheckedContinuation { continuation in
+            delegate.onCompletion = { continuation.resume() }
+            webView.loadHTMLString("<html><body></body></html>", baseURL: URL(string: "https://example.com"))
+        }
+        webView.navigationDelegate = nil
+    }
+}
+
+/// Resumes once, whichever way the load ends, so a failed load cannot hang the test.
+@MainActor
+private final class NavigationCompletionDelegate: NSObject, WKNavigationDelegate {
+    var onCompletion: (() -> Void)?
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        complete()
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        complete()
+    }
+
+    func webView(_ webView: WKWebView,
+                 didFailProvisionalNavigation navigation: WKNavigation!,
+                 withError error: Error) {
+        complete()
+    }
+
+    private func complete() {
+        let onCompletion = self.onCompletion
+        self.onCompletion = nil
+        onCompletion?()
     }
 }

@@ -8,7 +8,7 @@ import WebCompatReporterKit
 
 /// One property per Glean metric in `broken_site_report.yaml`, so the field names
 /// live in one place. The struct is flat; each comment below is the Glean category
-/// the fields under it belong to. Page-context fields stay nil until FXIOS-16184.
+/// the fields under it belong to.
 struct WebCompatReportPayload: Equatable {
     // broken_site_report
     var url: String?
