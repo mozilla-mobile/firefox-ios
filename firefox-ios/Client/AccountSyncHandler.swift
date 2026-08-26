@@ -140,7 +140,13 @@ extension AccountSyncHandler {
     nonisolated func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .accountAuthenticated:
-            ensureMainThread { self.storeTabs() }
+            // Wait until more busy work has finished
+            // such as contending with querying for top sites
+            Task { @MainActor [weak self] in
+                let settleTime: TimeInterval = 0.5
+                try? await Task.sleep(nanoseconds: settleTime.nanoseconds)
+                self?.storeTabs()
+            }
         default:
             break
         }
