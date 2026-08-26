@@ -192,32 +192,11 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
         guard let url = request.url,
               let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let code = components.valueForQuery("code"),
-              let errCode = Int(code) else {
+              Int(code) != nil else {
             return nil
         }
 
-        // Used for checking if current error code is for no internet connection
-        let noInternetErrorCode = Int(
-            CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
-        )
-
-        let featureFlag = NativeErrorPageFeatureFlag()
-
-        let isNoInternetError = errCode == noInternetErrorCode
-        let isBadCertError = NativeErrorPageHelper.isBadCertDomainErrorURL(url)
-        let isWaybackError = WaybackCodes.isWaybackCode(errCode)
-
-        let shouldShowNoInternetErrorPage =
-            featureFlag.isNICErrorPageEnabled && isNoInternetError && !useOldErrorPage
-
-        let shouldShowBadCertErrorPage =
-            featureFlag.isBadCertDomainErrorPageEnabled && isBadCertError && !useOldErrorPage
-
-        let shouldShowWaybackErrorPage =
-            featureFlag.isWaybackEnabled && isWaybackError && !useOldErrorPage
-
-        // Handle no internet access, certificate, and wayback enabled errors with native error page
-        if shouldShowNoInternetErrorPage || shouldShowBadCertErrorPage || shouldShowWaybackErrorPage {
+        if NativeErrorPageFeatureFlag().isNativeErrorPageEnabled {
             return responseForNativeErrorPage(request: request)
         } else {
             return responseForErrorWebPage(request: request)

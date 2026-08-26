@@ -1160,24 +1160,13 @@ extension BrowserViewController: WKNavigationDelegate {
             )
 
             if let errorPageURL = errorPageURLComponents.url {
-                let noInternetErrorCode = Int(
-                    CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
-                )
-                let featureFlag = NativeErrorPageFeatureFlag()
-
-                let isWaybackError = WaybackCodes.isWaybackCode(error.code)
-                let isNoInternetError = error.code == noInternetErrorCode
                 let isBadCertError = NativeErrorPageHelper.isBadCertDomainError(error)
 
-                let shouldShowNoInternetErrorPage = isNoInternetError && featureFlag.isNICErrorPageEnabled
-                let shouldShowBadCertErrorPage = isBadCertError && featureFlag.isBadCertDomainErrorPageEnabled
-                let shouldShowWaybackErrorPage = isWaybackError && featureFlag.isWaybackEnabled
-
-                if shouldShowNoInternetErrorPage || shouldShowBadCertErrorPage || shouldShowWaybackErrorPage {
+                if NativeErrorPageFeatureFlag().isNativeErrorPageEnabled {
                     if isBadCertError {
                         NativeErrorPageHelper.logCertificateErrorDetails(error: error, logger: logger)
                     }
-                    // TODO: FXIOS-15800 Move error type determination to NativeErrorPageMiddleware
+
                     let action = NativeErrorPageAction(
                         networkError: error,
                         windowUUID: windowUUID,

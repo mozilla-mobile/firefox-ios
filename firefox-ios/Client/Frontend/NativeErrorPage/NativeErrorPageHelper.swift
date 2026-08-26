@@ -36,6 +36,8 @@ class NativeErrorPageHelper: FeatureFlaggable {
         return error.localizedDescription
     }
 
+    let featureFlags = NativeErrorPageFeatureFlag()
+
     init(
         error: NSError,
         cellularDataStateProvider: any CellularDataStateProvider = SystemCellularDataStateProvider.shared
@@ -131,15 +133,17 @@ class NativeErrorPageHelper: FeatureFlaggable {
 
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
             switch error.code {
-            case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
+            case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+                 where featureFlags.isNICErrorPageEnabled:
                 return .internetConnection
             case NSURLErrorServerCertificateUntrusted,
                  NSURLErrorServerCertificateHasBadDate,
                  NSURLErrorServerCertificateHasUnknownRoot,
-                 NSURLErrorServerCertificateNotYetValid:
+                 NSURLErrorServerCertificateNotYetValid
+                 where featureFlags.isBadCertDomainErrorPageEnabled:
                 return Self.buildCertificateErrorModel(for: error, url: url)
-            case _ where WaybackCodes.isWaybackCode(error.code):
-                return .wayback(WaybackErrorModel(url: url))
+            case _ where WaybackCodes.isWaybackCode(error.code) && featureFlags.isWaybackEnabled:
+                    return .wayback(WaybackErrorModel(url: url))
             default:
                 return .generic(GenericErrorModel(url: url))
             }

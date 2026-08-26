@@ -1668,15 +1668,15 @@ extension String {
         }
         public struct GenericError {
             public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.TitleLabel.v131",
+                key: "NativeErrorPage.GenericError.TitleLabel.v155",
                 tableName: "NativeErrorPage",
-                value: "Be careful. Something doesn’t look right.",
+                value: "Looks like there’s a problem with this site",
                 comment: "On error page, this is the title for generic error.")
             public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v134",
+                key: "NativeErrorPage.GenericError.Description.v155",
                 tableName: "NativeErrorPage",
-                value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
-                comment: "On error page, this is the description for a generic error. %@ is the site url.")
+                value: "%@ might have a temporary problem or it could have moved.\n\nCheck your internet connection and try again in a few moments. If you’re behind a firewall or proxy, make sure %@ is allowed to connect to the web.",
+                comment: "On error page, this is the description for a generic error. %1@ is the site name and %2@ is the app name.")
         }
         public struct BadCertDomain {
             public static let AdvancedButton = MZLocalizedString(
