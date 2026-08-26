@@ -6,7 +6,6 @@ import Common
 import ModifiedCopy
 import Redux
 
-@Copyable
 struct HomepageState: ScreenState, Equatable {
     var windowUUID: WindowUUID
 
@@ -15,13 +14,12 @@ struct HomepageState: ScreenState, Equatable {
     let privacyNoticeState: PrivacyNoticeState
     let messageState: MessageCardState
     let topSitesState: TopSitesSectionState
-    let searchState: SearchBarState
+    let searchBarState: SearchBarState
     let jumpBackInState: JumpBackInSectionState
     let trackerBlockerModuleState: TrackerBlockerModuleState
     let bookmarkState: BookmarksSectionState
     let merinoState: MerinoState
     let wallpaperState: WallpaperState
-
     let telemetryState: HomepageTelemetryState
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -40,7 +38,7 @@ struct HomepageState: ScreenState, Equatable {
             privacyNoticeState: homepageState.privacyNoticeState,
             messageState: homepageState.messageState,
             topSitesState: homepageState.topSitesState,
-            searchState: homepageState.searchState,
+            searchBarState: homepageState.searchBarState,
             jumpBackInState: homepageState.jumpBackInState,
             trackerBlockerModuleState: homepageState.trackerBlockerModuleState,
             bookmarkState: homepageState.bookmarkState,
@@ -57,7 +55,7 @@ struct HomepageState: ScreenState, Equatable {
             privacyNoticeState: PrivacyNoticeState(windowUUID: windowUUID),
             messageState: MessageCardState(windowUUID: windowUUID),
             topSitesState: TopSitesSectionState(windowUUID: windowUUID),
-            searchState: SearchBarState(windowUUID: windowUUID),
+            searchBarState: SearchBarState(windowUUID: windowUUID),
             jumpBackInState: JumpBackInSectionState(windowUUID: windowUUID),
             trackerBlockerModuleState: TrackerBlockerModuleState(windowUUID: windowUUID),
             bookmarkState: BookmarksSectionState(windowUUID: windowUUID),
@@ -73,7 +71,7 @@ struct HomepageState: ScreenState, Equatable {
         privacyNoticeState: PrivacyNoticeState,
         messageState: MessageCardState,
         topSitesState: TopSitesSectionState,
-        searchState: SearchBarState,
+        searchBarState: SearchBarState,
         jumpBackInState: JumpBackInSectionState,
         trackerBlockerModuleState: TrackerBlockerModuleState,
         bookmarkState: BookmarksSectionState,
@@ -86,7 +84,7 @@ struct HomepageState: ScreenState, Equatable {
         self.privacyNoticeState = privacyNoticeState
         self.messageState = messageState
         self.topSitesState = topSitesState
-        self.searchState = searchState
+        self.searchBarState = searchBarState
         self.jumpBackInState = jumpBackInState
         self.trackerBlockerModuleState = trackerBlockerModuleState
         self.bookmarkState = bookmarkState
@@ -103,93 +101,26 @@ struct HomepageState: ScreenState, Equatable {
     }
 
     static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
-        else {
-            return passthroughState(from: state, action: action)
-        }
-
-        switch action.actionType {
-        case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
-            return handleInitializeAndViewWillTransitionAction(state: state, action: action)
-        case HomepageActionType.embeddedHomepage:
-            return handleEmbeddedHomepageAction(state: state, action: action)
-        case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
-            return handleDidTabChangeToHomepageAction(state: state, action: action)
-        default:
-            return passthroughState(from: state, action: action)
-        }
-    }
-
-    @MainActor
-    private static func handleInitializeAndViewWillTransitionAction(state: HomepageState, action: Action) -> HomepageState {
-        return state
-            .resetTransientState()
-            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
-            .copy(privacyNoticeState: PrivacyNoticeState.reducer.legacyReducer(state.privacyNoticeState, action))
-            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
-                                             .legacyReducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
-    }
-
-    @MainActor
-    private static func handleEmbeddedHomepageAction(state: HomepageState, action: Action) -> HomepageState {
-        return state
-            .resetTransientState()
-            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
-            .copy(privacyNoticeState: PrivacyNoticeState.reducer.legacyReducer(state.privacyNoticeState, action))
-            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
-                                             .legacyReducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
-    }
-
-    @MainActor
-    private static func handleDidTabChangeToHomepageAction(state: HomepageState, action: Action) -> HomepageState {
-        return state
-            .resetTransientState()
-            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
-            .copy(privacyNoticeState: PrivacyNoticeState.reducer.legacyReducer(state.privacyNoticeState, action))
-            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
-                                             .legacyReducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
+        return passthroughState(from: state, action: action)
     }
 
     @MainActor
     private static func passthroughState(from state: HomepageState, action: Action) -> HomepageState {
-        return state
-            .resetTransientState()
-            .copy(headerState: HeaderState.reducer.legacyReducer(state.headerState, action))
-            .copy(privacyNoticeState: PrivacyNoticeState.reducer.legacyReducer(state.privacyNoticeState, action))
-            .copy(messageState: MessageCardState.reducer.legacyReducer(state.messageState, action))
-            .copy(topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action))
-            .copy(searchState: SearchBarState.reducer.legacyReducer(state.searchState, action))
-            .copy(jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action))
-            .copy(trackerBlockerModuleState: TrackerBlockerModuleState.reducer
-                                             .legacyReducer(state.trackerBlockerModuleState, action))
-            .copy(bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action))
-            .copy(merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action))
-            .copy(wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action))
-            .copy(telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action))
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: HeaderState.reducer.legacyReducer(state.headerState, action),
+            privacyNoticeState: PrivacyNoticeState.reducer.legacyReducer(state.privacyNoticeState, action),
+            messageState: MessageCardState.reducer.legacyReducer(state.messageState, action),
+            topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action),
+            searchBarState: SearchBarState.reducer.legacyReducer(state.searchBarState, action),
+            jumpBackInState: JumpBackInSectionState.reducer.legacyReducer(state.jumpBackInState, action),
+            trackerBlockerModuleState: TrackerBlockerModuleState.reducer
+                .legacyReducer(state.trackerBlockerModuleState, action),
+            bookmarkState: BookmarksSectionState.reducer.legacyReducer(state.bookmarkState, action),
+            merinoState: MerinoState.reducer.legacyReducer(state.merinoState, action),
+            wallpaperState: WallpaperState.reducer.legacyReducer(state.wallpaperState, action),
+            telemetryState: HomepageTelemetryState.reducer.legacyReducer(state.telemetryState, action)
+        )
     }
 
     static func defaultState(from state: HomepageState) -> HomepageState {
@@ -199,7 +130,7 @@ struct HomepageState: ScreenState, Equatable {
             privacyNoticeState: PrivacyNoticeState.defaultState(from: state.privacyNoticeState),
             messageState: MessageCardState.defaultState(from: state.messageState),
             topSitesState: TopSitesSectionState.defaultState(from: state.topSitesState),
-            searchState: SearchBarState.defaultState(from: state.searchState),
+            searchBarState: SearchBarState.defaultState(from: state.searchBarState),
             jumpBackInState: JumpBackInSectionState.defaultState(from: state.jumpBackInState),
             trackerBlockerModuleState: TrackerBlockerModuleState.defaultState(from: state.trackerBlockerModuleState),
             bookmarkState: BookmarksSectionState.defaultState(from: state.bookmarkState),

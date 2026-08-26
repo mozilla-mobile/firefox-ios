@@ -1345,7 +1345,7 @@ class BrowserViewController: UIViewController,
             HomepageState.self,
             for: .homepage,
             window: windowUUID
-        )?.searchState.shouldShowSearchBar ?? false
+        )?.searchBarState.shouldShowSearchBar ?? false
 
         guard shouldShowSearchBar, !isEditing, contentContainer.hasHomepage else {
             guard addressToolbarContainer.isHidden == true else { return }
