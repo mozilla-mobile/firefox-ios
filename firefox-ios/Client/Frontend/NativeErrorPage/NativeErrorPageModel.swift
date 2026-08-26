@@ -29,7 +29,7 @@ enum ErrorPageModel: Equatable {
             return String(format: .NativeErrorPage.CellularDataRestricted.Description, AppName.shortName.rawValue)
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.Description
         case .generic(let model): return String(format: .NativeErrorPage.GenericError.Description,
-                                                model.url.host ?? "",
+                                                model.url?.host ?? "",
                                                 AppName.shortName.description)
         case .wayback: return String(format: .NativeErrorPage.Wayback.Description, AppName.shortName.description)
         }
@@ -86,7 +86,7 @@ struct BadCertDomainModel: Equatable {
 }
 
 struct GenericErrorModel: Equatable {
-    let url: URL
+    let url: URL?
 }
 
 struct WaybackErrorModel: Equatable {
