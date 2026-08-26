@@ -28,9 +28,17 @@ enum ErrorPageModel: Equatable {
         case .cellularDataRestricted:
             return String(format: .NativeErrorPage.CellularDataRestricted.Description, AppName.shortName.rawValue)
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.Description
-        case .generic(let model): return String(format: .NativeErrorPage.GenericError.Description,
-                                                AppName.shortName.description,
-                                                model.url?.host ?? String.NativeErrorPage.GenericError.UnknownHost)
+        case .generic(let model):
+            if let host = model.url?.host {
+                return String(format: .NativeErrorPage.GenericError.DescriptionPrefixWithURL,
+                              AppName.shortName.description,
+                              host) + " " +
+                       String.NativeErrorPage.GenericError.DescriptionSuffix
+            } else {
+                return String(format: .NativeErrorPage.GenericError.DescriptionPrefixWithoutURL,
+                              AppName.shortName.description) + " " +
+                       String.NativeErrorPage.GenericError.DescriptionSuffix
+            }
         case .wayback: return String(format: .NativeErrorPage.Wayback.Description, AppName.shortName.description)
         }
     }
