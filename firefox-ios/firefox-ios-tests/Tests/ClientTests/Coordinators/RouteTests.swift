@@ -72,6 +72,104 @@ class RouteTests: XCTestCase {
         }
     }
 
+    func testPairingRouteFromSystemCameraDeepLink() {
+        let subject = createSubject()
+        let pairingURL = URL(
+            string: "https://accounts.stage.mozaws.net/pair#channel_id=channel&channel_key=key&v=2"
+        )!
+        let url = wrappedDeepLink(for: pairingURL)
+
+        let route = subject.makeRoute(url: url)
+
+        guard case .fxaPairing(let routedURL) = route else {
+            return XCTFail("The route should be an FxA pairing route")
+        }
+        XCTAssertEqual(routedURL, pairingURL)
+    }
+
+    func testPairingRouteFromSystemCameraUserActivity() {
+        let subject = createSubject()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key&v=2"
+        )!
+        let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
+        activity.webpageURL = pairingURL
+
+        let route = subject.makeRoute(userActivity: activity)
+
+        guard case .fxaPairing(let routedURL) = route else {
+            return XCTFail("The route should be an FxA pairing route")
+        }
+        XCTAssertEqual(routedURL, pairingURL)
+    }
+
+    func testPairingRouteFromDefaultBrowserURL() {
+        let subject = createSubject()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key&v=2"
+        )!
+
+        guard case .fxaPairing(let routedURL) = subject.makeRoute(url: pairingURL) else {
+            return XCTFail("The route should be an FxA pairing route")
+        }
+        XCTAssertEqual(routedURL, pairingURL)
+    }
+
+    func testInvalidPairingDeepLinkDoesNotOpenBrowserTab() {
+        let subject = createSubject()
+        let pairingURL = URL(string: "https://accounts.firefox.com/pair#v=2")!
+        let url = wrappedDeepLink(for: pairingURL)
+
+        XCTAssertNil(subject.makeRoute(url: url))
+    }
+
+    func testInvalidPairingUserActivityDoesNotOpenBrowserTab() {
+        let subject = createSubject()
+        let pairingURL = URL(string: "https://accounts.firefox.com/pair#v=2")!
+        let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
+        activity.webpageURL = pairingURL
+
+        XCTAssertNil(subject.makeRoute(userActivity: activity))
+    }
+
+    func testNonV2PairingUserActivityOpensBrowserTab() {
+        let subject = createSubject()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key"
+        )!
+        let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
+        activity.webpageURL = pairingURL
+
+        guard case .search(let routedURL, _, _) = subject.makeRoute(userActivity: activity) else {
+            return XCTFail("A non-v2 pairing URL should use the existing browser route")
+        }
+        XCTAssertEqual(routedURL, pairingURL)
+    }
+
+    func testNonV2DirectPairingURLOpensBrowserTab() {
+        let subject = createSubject()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key&v=1"
+        )!
+
+        guard case .search(let routedURL, _, _) = subject.makeRoute(url: pairingURL) else {
+            return XCTFail("A non-v2 pairing URL should use the existing browser route")
+        }
+        XCTAssertEqual(routedURL, pairingURL)
+    }
+
+    func testNonV2WrappedPairingDeepLinkOpensBrowserTab() {
+        let subject = createSubject()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key&v=1"
+        )!
+
+        guard case .search(let routedURL, _, _) = subject.makeRoute(url: wrappedDeepLink(for: pairingURL)) else {
+            return XCTFail("A non-v2 pairing URL should use the existing browser route")
+        }
+        XCTAssertEqual(routedURL, pairingURL)
+    }
+
     func testSettingsRouteWithClearPrivateData() {
         let subject = createSubject()
         let url = URL(string: "firefox://deep-link?url=/settings/clear-private-data")!
@@ -724,5 +822,11 @@ class RouteTests: XCTestCase {
         subject.configure(isPrivate: false, prefs: MockProfile().prefs)
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func wrappedDeepLink(for url: URL) -> URL {
+        var components = URLComponents(string: "firefox://open-url")!
+        components.queryItems = [URLQueryItem(name: "url", value: url.absoluteString)]
+        return components.url!
     }
 }

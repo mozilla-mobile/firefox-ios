@@ -37,6 +37,15 @@ final class RouteBuilder {
 
     @MainActor
     func makeRoute(url: URL) -> Route? {
+        switch FxAPairingURLParser.parse(url) {
+        case .pairing(let pairingURL):
+            return .fxaPairing(url: pairingURL)
+        case .invalidPairing:
+            return nil
+        case .notPairing:
+            break
+        }
+
         guard let urlScanner = URLScanner(url: url) else { return nil }
 
         if let host = parseURLHost(url) {
@@ -50,23 +59,7 @@ final class RouteBuilder {
 
             switch host {
             case .deepLink:
-                let deepLinkURL = urlScanner.fullURLQueryItem()?.lowercased()
-                let paths = deepLinkURL?.split(separator: "/") ?? []
-                guard let pathRaw = paths[safe: 0].flatMap(String.init),
-                      let path = DeeplinkInput.Path(rawValue: pathRaw),
-                      let subPath = paths[safe: 1].flatMap(String.init)
-                else { return nil }
-                if path == .settings, let subPath = Route.SettingsSection(rawValue: subPath) {
-                    return .settings(section: subPath)
-                } else if path == .homepanel, let subPath = Route.HomepanelSection(rawValue: subPath) {
-                    return .homepanel(section: subPath)
-                } else if path == .defaultBrowser, let subPath = Route.DefaultBrowserSection(rawValue: subPath) {
-                    return .defaultBrowser(section: subPath)
-                } else if path == .action, let subPath = Route.AppAction(rawValue: subPath) {
-                    return .action(action: subPath)
-                } else {
-                    return nil
-                }
+                return makeDeepLinkRoute(urlScanner: urlScanner)
 
             case .fxaSignIn where urlScanner.value(query: "signin") != nil:
                 return .fxaSignIn(
@@ -80,6 +73,16 @@ final class RouteBuilder {
                 let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
                 if isOpeningWithFirefoxExtension {
                     actionExtensionTelemetry.shareURL()
+                }
+                if let urlQuery {
+                    switch FxAPairingURLParser.parse(urlQuery) {
+                    case .pairing(let pairingURL):
+                        return .fxaPairing(url: pairingURL)
+                    case .invalidPairing:
+                        return nil
+                    case .notPairing:
+                        break
+                    }
                 }
                 return .search(url: urlQuery, isPrivate: isPrivate)
 
@@ -191,7 +194,14 @@ final class RouteBuilder {
         // If the user activity has a webpageURL, it's a deep link or an old history item.
         // Use the URL to create a new search tab.
         if let url = userActivity.webpageURL {
-            return .search(url: url, isPrivate: false)
+            switch FxAPairingURLParser.parse(url) {
+            case .pairing(let pairingURL):
+                return .fxaPairing(url: pairingURL)
+            case .invalidPairing:
+                return nil
+            case .notPairing:
+                return .search(url: url, isPrivate: false)
+            }
         }
 
         // If the user activity is a CoreSpotlight item, check its activity identifier to determine
@@ -241,6 +251,27 @@ final class RouteBuilder {
     private func getWidgetRoute(urlQuery: URL?, isPrivate: Bool) -> Route? {
         let isCustomLink = prefs?.stringForKey(NewTabAccessors.NewTabPrefKey) == NewTabPage.homePage.rawValue
         return .search(url: urlQuery, isPrivate: isPrivate, options: isCustomLink ? [] : [.focusLocationField])
+    }
+
+    private func makeDeepLinkRoute(urlScanner: URLScanner) -> Route? {
+        let deepLinkURL = urlScanner.fullURLQueryItem()?.lowercased()
+        let paths = deepLinkURL?.split(separator: "/") ?? []
+        guard let pathRaw = paths[safe: 0].flatMap(String.init),
+              let path = DeeplinkInput.Path(rawValue: pathRaw),
+              let subPath = paths[safe: 1].flatMap(String.init)
+        else { return nil }
+
+        if path == .settings, let subPath = Route.SettingsSection(rawValue: subPath) {
+            return .settings(section: subPath)
+        } else if path == .homepanel, let subPath = Route.HomepanelSection(rawValue: subPath) {
+            return .homepanel(section: subPath)
+        } else if path == .defaultBrowser, let subPath = Route.DefaultBrowserSection(rawValue: subPath) {
+            return .defaultBrowser(section: subPath)
+        } else if path == .action, let subPath = Route.AppAction(rawValue: subPath) {
+            return .action(action: subPath)
+        } else {
+            return nil
+        }
     }
 
     // MARK: - Telemetry
