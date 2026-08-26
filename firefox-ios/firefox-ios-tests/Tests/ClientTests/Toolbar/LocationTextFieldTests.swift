@@ -77,7 +77,8 @@ final class LocationTextFieldTests: XCTestCase {
         textField.setAutocompleteSuggestion("youtube.com")
 
         // It should complete the full text, not insert the suggestion after the cursor.
-        XCTAssertEqual(textField.text, "youtube.com",
+        XCTAssertEqual(textField.text,
+                       "youtube.com",
                        "Suggestion should be appended at end of text, not inserted at cursor position")
     }
 
