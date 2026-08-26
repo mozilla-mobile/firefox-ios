@@ -136,11 +136,14 @@ class NativeErrorPageHelper: FeatureFlaggable {
             case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
                  where featureFlags.isNICErrorPageEnabled:
                 return .internetConnection
-            case NSURLErrorServerCertificateUntrusted,
-                 NSURLErrorServerCertificateHasBadDate,
-                 NSURLErrorServerCertificateHasUnknownRoot,
-                 NSURLErrorServerCertificateNotYetValid
-                 where featureFlags.isBadCertDomainErrorPageEnabled:
+            case let errorCode
+                where [
+                    NSURLErrorServerCertificateUntrusted,
+                    NSURLErrorServerCertificateHasBadDate,
+                    NSURLErrorServerCertificateHasUnknownRoot,
+                    NSURLErrorServerCertificateNotYetValid
+                ].contains(errorCode)
+                && featureFlags.isBadCertDomainErrorPageEnabled:
                 return Self.buildCertificateErrorModel(for: error, url: url)
             case _ where WaybackCodes.isWaybackCode(error.code) && featureFlags.isWaybackEnabled:
                 return .wayback(WaybackErrorModel(url: url))
