@@ -189,7 +189,7 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
 
         let preSummarizationCheckResults = await summarizationChecker.check(on: webView, maxWords: maxWords)
         guard preSummarizationCheckResults.canSummarize else { return nil }
-        guard let summarizerLocale = await getSummarizerLocale(for: webView) else { return nil }
+        guard let summarizerLanguages = await getSummarizerLanguages(for: webView) else { return nil }
 
         let contentType = preSummarizationCheckResults.contentType ?? .generic
         let summarizerModel: SummarizerModel =
@@ -198,11 +198,11 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
         return await summarizerConfigProvider.getConfig(
             summarizerModel: summarizerModel,
             contentType: contentType,
-            locale: summarizerLocale
+            languages: summarizerLanguages
         )
     }
 
-    private func getSummarizerLocale(for webView: WKWebView) async -> Locale? {
+    private func getSummarizerLanguages(for webView: WKWebView) async -> SummarizerLanguageResolution? {
         if summarizerNimbusUtils.isLanguageExpansionEnabled {
             let langExpansionConfiguration = summarizerNimbusUtils.languageExpansionConfiguration()
             return await summarizerLanguageProvider.getLanguage(

@@ -4,6 +4,13 @@
 
 import Foundation
 
+struct SummarizerLanguageResolution: Equatable {
+    /// The language the summary is generated in.
+    let summaryLocale: Locale
+    /// The detected language of the page being summarized.
+    let pageLocale: Locale
+}
+
 /// Provides locale selection for summarization based on user preferences and website language detection.
 protocol SummarizerLanguageProvider: Sendable {
     /// Determines the appropriate locale for summarization.
@@ -16,7 +23,7 @@ protocol SummarizerLanguageProvider: Sendable {
         userPreference: SummarizerLanguageExpansionConfiguration.UserPreference,
         supportedLocales: [Locale],
         languageSampleSource: LanguageSampleSource,
-    ) async -> Locale?
+    ) async -> SummarizerLanguageResolution?
 }
 
 struct DefaultSummarizerLanguageProvider: SummarizerLanguageProvider {
@@ -26,7 +33,7 @@ struct DefaultSummarizerLanguageProvider: SummarizerLanguageProvider {
         userPreference: SummarizerLanguageExpansionConfiguration.UserPreference,
         supportedLocales: [Locale],
         languageSampleSource: any LanguageSampleSource
-    ) async -> Locale? {
+    ) async -> SummarizerLanguageResolution? {
         // Always detect website language first.
         // This ensures we only proceed if the website has detectable content in a supported language.
         guard let websiteLanguage = await getWebsiteLocale(from: languageSampleSource) else { return nil }
@@ -34,10 +41,10 @@ struct DefaultSummarizerLanguageProvider: SummarizerLanguageProvider {
 
         switch userPreference {
         case .websiteLanguage:
-            return websiteLanguage
+            return SummarizerLanguageResolution(summaryLocale: websiteLanguage, pageLocale: websiteLanguage)
         case .customLocale(let customLocale):
             guard isLocaleInSupportedLocales(customLocale, supportedLocales: supportedLocales) else { return nil }
-            return customLocale
+            return SummarizerLanguageResolution(summaryLocale: customLocale, pageLocale: websiteLanguage)
         }
     }
 

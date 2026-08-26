@@ -43,9 +43,10 @@ struct ToolbarTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.refreshButtonTapped, extras: isPrivateExtra)
     }
 
-    func readerModeButtonTapped(isPrivate: Bool, isEnabled: Bool) {
-        let readerModeExtra = GleanMetrics.Toolbar.ReaderModeButtonTappedExtra(enabled: isPrivate,
-                                                                               isPrivate: isEnabled)
+    func readerModeButtonTapped(isPrivate: Bool, isEnabled: Bool, hasSummarizer: Bool) {
+        let readerModeExtra = GleanMetrics.Toolbar.ReaderModeButtonTappedExtra(enabled: isEnabled,
+                                                                               hasSummarizer: hasSummarizer,
+                                                                               isPrivate: isPrivate)
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.readerModeButtonTapped, extras: readerModeExtra)
     }
 
