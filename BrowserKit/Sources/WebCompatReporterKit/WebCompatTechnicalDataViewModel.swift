@@ -15,6 +15,7 @@ public struct WebCompatTechnicalDataViewModel: Equatable, Sendable {
         case list([String])
         case bool(Bool)
         case quantity(Int)
+        case objectList([String])
         case null
 
         public var displayText: String {
@@ -27,6 +28,8 @@ public struct WebCompatTechnicalDataViewModel: Equatable, Sendable {
                 return value ? "true" : "false"
             case .quantity(let value):
                 return String(value)
+            case .objectList(let values):
+                return "[" + values.joined(separator: ", ") + "]"
             case .null:
                 return "null"
             }

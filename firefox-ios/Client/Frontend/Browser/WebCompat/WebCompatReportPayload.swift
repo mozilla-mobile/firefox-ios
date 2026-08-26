@@ -3,8 +3,41 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Glean
 import Shared
 import WebCompatReporterKit
+import struct MozillaAppServices.EnrolledExperiment
+
+struct WebCompatExperiment: Equatable {
+    enum Kind: String {
+        case experiment = "nimbusExperiment"
+        case rollout = "nimbusRollout"
+    }
+
+    let branch: String
+    let slug: String
+    let kind: Kind
+
+    init(_ enrollment: EnrolledExperiment) {
+        branch = enrollment.branchSlug
+        slug = enrollment.slug
+        kind = enrollment.isRollout ? .rollout : .experiment
+    }
+
+    init(branch: String, slug: String, kind: Kind) {
+        self.branch = branch
+        self.slug = slug
+        self.kind = kind
+    }
+
+    var gleanObjectItem: GleanMetrics.BrokenSiteReportBrowserInfo.ExperimentsObjectItem {
+        return GleanMetrics.BrokenSiteReportBrowserInfo.ExperimentsObjectItem(
+            branch: branch,
+            slug: slug,
+            kind: kind.rawValue
+        )
+    }
+}
 
 /// One property per Glean metric in `broken_site_report.yaml`, so the field names
 /// live in one place. The struct is flat; each comment below is the Glean category
@@ -22,10 +55,13 @@ struct WebCompatReportPayload: Equatable {
     var blockedOrigins: [String]?
     var etpCategory: String?
     var isPrivateBrowsing: Bool?
+    var hasTrackingContentBlocked: Bool?
     // broken_site_report.tab_info.frameworks
     var fastclick: Bool?
     var marfeel: Bool?
     var mobify: Bool?
+    // broken_site_report.browser_info
+    var experiments: [WebCompatExperiment]?
     // broken_site_report.browser_info.app
     var defaultLocales: [String]?
     var defaultUserAgentString: String?
@@ -58,9 +94,11 @@ struct WebCompatReportPayload: Equatable {
             case blockedOrigins
             case etpCategory
             case isPrivateBrowsing
+            case hasTrackingContentBlocked
             case fastclick
             case marfeel
             case mobify
+            case experiments
             case defaultLocales
             case defaultUseragentString
             case isTablet
@@ -79,6 +117,7 @@ struct WebCompatReportPayload: Equatable {
             case tabInfo
             case antiTracking
             case frameworks
+            case browserInfo
             case app
             case system
             case graphics
@@ -104,12 +143,16 @@ struct WebCompatReportPayload: Equatable {
                 PreviewField(key: .blockList, value: previewValue(blockList)),
                 PreviewField(key: .blockedOrigins, value: previewValue(blockedOrigins)),
                 PreviewField(key: .etpCategory, value: previewValue(etpCategory)),
-                PreviewField(key: .isPrivateBrowsing, value: previewValue(isPrivateBrowsing))
+                PreviewField(key: .isPrivateBrowsing, value: previewValue(isPrivateBrowsing)),
+                PreviewField(key: .hasTrackingContentBlocked, value: previewValue(hasTrackingContentBlocked))
             ]),
             PreviewGroup(id: .frameworks, fields: [
                 PreviewField(key: .fastclick, value: previewValue(fastclick)),
                 PreviewField(key: .marfeel, value: previewValue(marfeel)),
                 PreviewField(key: .mobify, value: previewValue(mobify))
+            ]),
+            PreviewGroup(id: .browserInfo, fields: [
+                PreviewField(key: .experiments, value: previewValue(experiments))
             ]),
             PreviewGroup(id: .app, fields: [
                 PreviewField(key: .defaultLocales, value: previewValue(defaultLocales)),
@@ -155,7 +198,7 @@ struct WebCompatReportPayload: Equatable {
             (.WebCompatReporter.Preview.Data.IsTablet, [.isTablet]),
             (userAgent, [.useragentString, .defaultUseragentString]),
             (.WebCompatReporter.Preview.Data.TrackingProtectionSetting, [.blockList, .etpCategory]),
-            (.WebCompatReporter.Preview.Data.BlockedTrackers, [.blockedOrigins]),
+            (.WebCompatReporter.Preview.Data.BlockedTrackers, [.blockedOrigins, .hasTrackingContentBlocked]),
             (.WebCompatReporter.Preview.Data.PrivateBrowsingStatus, [.isPrivateBrowsing]),
             (.WebCompatReporter.Preview.Data.AvailableMemory, [.memory]),
             (.WebCompatReporter.Preview.Data.PixelDensity, [.devicePixelRatio]),
@@ -174,7 +217,7 @@ struct WebCompatReportPayload: Equatable {
         switch value {
         case .null:
             return false
-        case .list(let values):
+        case .list(let values), .objectList(let values):
             return !values.isEmpty
         case .string, .bool, .quantity:
             return true
@@ -221,6 +264,13 @@ struct WebCompatReportPayload: Equatable {
     private func previewValue(_ values: [String]?) -> WebCompatTechnicalDataViewModel.PreviewValue {
         guard let values else { return .null }
         return .list(values)
+    }
+
+    private func previewValue(_ experiments: [WebCompatExperiment]?) -> WebCompatTechnicalDataViewModel.PreviewValue {
+        guard let experiments else { return .null }
+        return .objectList(experiments.map {
+            "{\"branch\": \"\($0.branch)\", \"slug\": \"\($0.slug)\", \"kind\": \"\($0.kind.rawValue)\"}"
+        })
     }
 
     private func previewValue(_ flag: Bool?) -> WebCompatTechnicalDataViewModel.PreviewValue {

@@ -6,6 +6,7 @@ import Common
 import WebKit
 import XCTest
 
+import struct MozillaAppServices.EnrolledExperiment
 @testable import Client
 
 @MainActor
@@ -26,7 +27,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
     func test_enrich_deviceLocales_populateDefaultLocalesButNotLanguages() {
         let device = FakeDeviceInfoProvider(preferredLanguages: ["en-US", "fr-FR"])
 
-        let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), device: device, tab: makeSnapshot())
+        let payload = enrichedPayload(device: device, tab: makeSnapshot())
 
         XCTAssertEqual(payload.defaultLocales, ["en-US", "fr-FR"])
         XCTAssertNil(payload.languages)
@@ -38,7 +39,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         let device = FakeDeviceInfoProvider(defaultUserAgent: "DefaultUA/1.0")
         let snapshot = makeSnapshot(pageUserAgent: "PageUA/2.0")
 
-        let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), device: device, tab: snapshot)
+        let payload = enrichedPayload(device: device, tab: snapshot)
 
         XCTAssertEqual(payload.userAgentString, "PageUA/2.0")
         XCTAssertEqual(payload.defaultUserAgentString, "DefaultUA/1.0")
@@ -50,7 +51,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         let device = FakeDeviceInfoProvider(defaultUserAgent: "DefaultUA/1.0")
         let snapshot = makeSnapshot(pageUserAgent: "")
 
-        let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), device: device, tab: snapshot)
+        let payload = enrichedPayload(device: device, tab: snapshot)
 
         XCTAssertNil(payload.userAgentString)
         XCTAssertEqual(payload.defaultUserAgentString, "DefaultUA/1.0")
@@ -60,7 +61,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         let device = FakeDeviceInfoProvider(defaultUserAgent: "DefaultUA/1.0")
         let snapshot = makeSnapshot(pageUserAgent: nil)
 
-        let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), device: device, tab: snapshot)
+        let payload = enrichedPayload(device: device, tab: snapshot)
 
         XCTAssertNil(payload.userAgentString)
         XCTAssertEqual(payload.defaultUserAgentString, "DefaultUA/1.0")
@@ -72,7 +73,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         let device = FakeDeviceInfoProvider(displayScale: 2.0)
         let snapshot = makeSnapshot(displayScale: 3.0)
 
-        let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), device: device, tab: snapshot)
+        let payload = enrichedPayload(device: device, tab: snapshot)
 
         XCTAssertEqual(payload.devicePixelRatio, "3")
     }
@@ -81,7 +82,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         let device = FakeDeviceInfoProvider(displayScale: 2.0)
         let snapshot = makeSnapshot(displayScale: nil)
 
-        let payload = WebCompatReportDataCollector.enrich(WebCompatReportPayload(), device: device, tab: snapshot)
+        let payload = enrichedPayload(device: device, tab: snapshot)
 
         XCTAssertEqual(payload.devicePixelRatio, "2")
     }
@@ -91,11 +92,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
     func test_enrich_strictBlocking_mapsToStrictCategory() {
         let snapshot = makeSnapshot(blockingStrength: .strict)
 
-        let payload = WebCompatReportDataCollector.enrich(
-            WebCompatReportPayload(),
-            device: FakeDeviceInfoProvider(),
-            tab: snapshot
-        )
+        let payload = enrichedPayload(device: FakeDeviceInfoProvider(), tab: snapshot)
 
         XCTAssertEqual(payload.blockList, "strict")
         XCTAssertEqual(payload.etpCategory, "strict")
@@ -104,22 +101,14 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
     func test_enrich_basicBlocking_mapsToStandardCategoryButKeepsBasicBlockList() {
         let snapshot = makeSnapshot(blockingStrength: .basic)
 
-        let payload = WebCompatReportDataCollector.enrich(
-            WebCompatReportPayload(),
-            device: FakeDeviceInfoProvider(),
-            tab: snapshot
-        )
+        let payload = enrichedPayload(device: FakeDeviceInfoProvider(), tab: snapshot)
 
         XCTAssertEqual(payload.blockList, "basic")
         XCTAssertEqual(payload.etpCategory, "standard")
     }
 
     func test_enrich_emptyTabSnapshot_keepsDeviceFieldsButDropsTabFields() {
-        let payload = WebCompatReportDataCollector.enrich(
-            WebCompatReportPayload(),
-            device: FakeDeviceInfoProvider(),
-            tab: WebCompatTabSnapshot()
-        )
+        let payload = enrichedPayload(device: FakeDeviceInfoProvider(), tab: WebCompatTabSnapshot())
 
         XCTAssertNil(payload.isPrivateBrowsing)
         XCTAssertNil(payload.blockList)
@@ -133,11 +122,7 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
     func test_enrich_noBlocker_leavesBlockListAndCategoryNil() {
         let snapshot = makeSnapshot(blockingStrength: nil)
 
-        let payload = WebCompatReportDataCollector.enrich(
-            WebCompatReportPayload(),
-            device: FakeDeviceInfoProvider(),
-            tab: snapshot
-        )
+        let payload = enrichedPayload(device: FakeDeviceInfoProvider(), tab: snapshot)
 
         XCTAssertNil(payload.blockList)
         XCTAssertNil(payload.etpCategory)
@@ -264,13 +249,92 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
     func test_enrich_blockedOriginsWithoutBlockingStrength_areDropped() {
         let snapshot = makeSnapshot(blockingStrength: nil, blockedOrigins: ["a.example"])
 
-        let payload = WebCompatReportDataCollector.enrich(
-            WebCompatReportPayload(),
-            device: FakeDeviceInfoProvider(),
-            tab: snapshot
-        )
+        let payload = enrichedPayload(device: FakeDeviceInfoProvider(), tab: snapshot)
 
         XCTAssertNil(payload.blockedOrigins)
+    }
+
+    // MARK: - hasTrackingContentBlocked
+
+    func test_hasTrackingContentBlocked_withTrackingCategories_isTrue() {
+        XCTAssertTrue(WebCompatReportDataCollector.hasTrackingContentBlocked(from: makeStats()))
+    }
+
+    func test_hasTrackingContentBlocked_withNothingBlocked_isFalse() {
+        XCTAssertFalse(WebCompatReportDataCollector.hasTrackingContentBlocked(from: TPPageStats()))
+    }
+
+    func test_hasTrackingContentBlocked_withOnlyCryptominingAndFingerprinting_isFalse() {
+        var stats = TPPageStats()
+        stats.domains = [
+            .cryptomining: ["miner.example"],
+            .fingerprinting: ["printer.example"]
+        ]
+
+        XCTAssertFalse(WebCompatReportDataCollector.hasTrackingContentBlocked(from: stats))
+    }
+
+    func test_hasTrackingContentBlocked_withSocialAlongsideCryptomining_isTrue() {
+        var stats = TPPageStats()
+        stats.domains = [
+            .social: ["social.example"],
+            .cryptomining: ["miner.example"]
+        ]
+
+        XCTAssertTrue(WebCompatReportDataCollector.hasTrackingContentBlocked(from: stats))
+    }
+
+    func test_enrich_carriesHasTrackingContentBlockedFromTheSnapshot() {
+        let snapshot = makeSnapshot(blockingStrength: .basic, hasTrackingContentBlocked: true)
+
+        let payload = enrichedPayload(device: FakeDeviceInfoProvider(), tab: snapshot)
+
+        XCTAssertEqual(payload.hasTrackingContentBlocked, true)
+    }
+
+    func test_enrich_withoutBlockedOriginsOptIn_stillReportsHasTrackingContentBlocked() {
+        let snapshot = makeSnapshot(
+            blockingStrength: .basic,
+            blockedOrigins: nil,
+            hasTrackingContentBlocked: true
+        )
+
+        let payload = enrichedPayload(device: FakeDeviceInfoProvider(), tab: snapshot)
+
+        XCTAssertNil(payload.blockedOrigins)
+        XCTAssertEqual(payload.hasTrackingContentBlocked, true)
+    }
+
+    // MARK: - experiments
+
+    func test_activeExperiments_sortsBySlugAndTagsRollouts() {
+        let provider = WebCompatExperimentsProvider(enrollments: {
+            [
+                self.makeEnrollment(slug: "z-rollout", branch: "control", isRollout: true),
+                self.makeEnrollment(slug: "a-experiment", branch: "treatment", isRollout: false)
+            ]
+        })
+
+        XCTAssertEqual(provider.activeExperiments, [
+            WebCompatExperiment(branch: "treatment", slug: "a-experiment", kind: .experiment),
+            WebCompatExperiment(branch: "control", slug: "z-rollout", kind: .rollout)
+        ])
+    }
+
+    func test_activeExperiments_withNoEnrollments_isEmptyNotNil() {
+        XCTAssertEqual(WebCompatExperimentsProvider(enrollments: { [] }).activeExperiments, [])
+    }
+
+    func test_enrich_carriesActiveExperiments() {
+        let experiments = FakeExperimentsProvider(activeExperiments: [
+            WebCompatExperiment(branch: "treatment", slug: "a-experiment", kind: .experiment),
+            WebCompatExperiment(branch: "control", slug: "b-rollout", kind: .rollout)
+        ])
+
+        let payload = enrichedPayload(tab: makeSnapshot(), experiments: experiments)
+
+        XCTAssertEqual(payload.experiments?.map { $0.slug }, ["a-experiment", "b-rollout"])
+        XCTAssertEqual(payload.experiments?.map { $0.kind }, [.experiment, .rollout])
     }
 
     // MARK: - Tab-backed collection
@@ -303,19 +367,45 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
 
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
 
+    private func makeEnrollment(slug: String, branch: String, isRollout: Bool) -> EnrolledExperiment {
+        return EnrolledExperiment(
+            featureIds: [],
+            slug: slug,
+            userFacingName: slug,
+            userFacingDescription: slug,
+            branchSlug: branch,
+            isRollout: isRollout
+        )
+    }
+
+    private func enrichedPayload(
+        device: WebCompatDeviceInfoProviding = FakeDeviceInfoProvider(),
+        tab: WebCompatTabSnapshot = WebCompatTabSnapshot(),
+        experiments: WebCompatExperimentsProviding = FakeExperimentsProvider()
+    ) -> WebCompatReportPayload {
+        return WebCompatReportDataCollector.enrich(
+            WebCompatReportPayload(),
+            device: device,
+            tab: tab,
+            experiments: experiments
+        )
+    }
+
     private func makeSnapshot(
         isPrivate: Bool = false,
         pageUserAgent: String? = nil,
         displayScale: CGFloat? = nil,
         blockingStrength: BlockingStrength? = nil,
-        blockedOrigins: [String]? = nil
+        blockedOrigins: [String]? = nil,
+        hasTrackingContentBlocked: Bool? = nil
     ) -> WebCompatTabSnapshot {
         return WebCompatTabSnapshot(
             isPrivate: isPrivate,
             pageUserAgent: pageUserAgent,
             displayScale: displayScale,
             blockingStrength: blockingStrength,
-            blockedOrigins: blockedOrigins
+            blockedOrigins: blockedOrigins,
+            hasTrackingContentBlocked: hasTrackingContentBlocked
         )
     }
 
@@ -334,6 +424,10 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         var physicalMemoryMegabytes = 2048
         var defaultUserAgent = "FakeUA/1.0"
         var displayScale: CGFloat = 2.0
+    }
+
+    private struct FakeExperimentsProvider: WebCompatExperimentsProviding {
+        var activeExperiments: [WebCompatExperiment] = []
     }
 
     private func loadBlankPage(in webView: WKWebView) async {
