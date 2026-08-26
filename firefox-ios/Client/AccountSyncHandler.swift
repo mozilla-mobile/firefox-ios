@@ -6,30 +6,6 @@ import Common
 import Foundation
 import Storage
 
-@MainActor
-final class MainActorDebouncer {
-    private let delayInNanoseconds: UInt64
-    private var task: Task<Void, Never>?
-
-    init(delay: TimeInterval) {
-        self.delayInNanoseconds = delay.nanoseconds
-    }
-
-    func call(action: @escaping @MainActor () -> Void) {
-        task?.cancel()
-
-        task = Task { [delayInNanoseconds] in
-            try? await Task.sleep(nanoseconds: delayInNanoseconds)
-            guard !Task.isCancelled else { return }
-            action()
-        }
-    }
-
-    func cancel() {
-        task?.cancel()
-    }
-}
-
 /// `AccountSyncHandler` exists to observe certain `TabEventLabel` notifications,
 /// and react accordingly.
 @MainActor
@@ -154,13 +130,5 @@ extension AccountSyncHandler {
         default:
             break
         }
-    }
-}
-
-private extension TimeInterval {
-    // Convert to nanoseconds for easy use with `Task.sleep` calls pre-iOS 16
-    var nanoseconds: UInt64 {
-        let nanosecondsPerSecond: Double = 1_000_000_000
-        return UInt64(max(0, self) * nanosecondsPerSecond)
     }
 }
