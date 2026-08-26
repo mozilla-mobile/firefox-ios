@@ -40,6 +40,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
     private let windowUUID: WindowUUID
     private var state: TrackerBlockerSheetState
     private var categoryRowViews: [TrackerCategoryRowView] = []
+    private var separatorViews: [UIView] = []
 
     // MARK: - UI
     private let backgroundGradientView: GradientView = .build()
@@ -132,7 +133,6 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
             forObserver: self,
             observing: [UIContentSizeCategory.didChangeNotification]
         )
-        setDetentSize()
     }
 
     required init?(coder: NSCoder) {
@@ -142,6 +142,9 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Set here rather than in `init` so the presentation controller isn't forced into existence before the
+        // presenting code has finished configuring `modalPresentationStyle`.
+        setDetentSize()
         setupLayout()
         setupCloseButton()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
@@ -232,7 +235,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
     }
 
     private func setupCloseButton() {
-        // TODO: FXIOS-XXXXX - Use a localized close-button a11y label once strings land.
+        // TODO: FXIOS-16429 - Use a localized close-button a11y label once strings land.
         let closeButtonViewModel = CloseButtonViewModel(
             a11yLabel: "Close",
             a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.closeButton
@@ -240,13 +243,18 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         closeButton.configure(viewModel: closeButtonViewModel, notificationCenter: notificationCenter)
     }
 
-    private func setDetentSize() {
+    /// - Parameter animated: pass `true` when the sheet is already on screen, so UIKit resizes it smoothly
+    ///   instead of snapping to the new detent.
+    private func setDetentSize(animated: Bool = false) {
         guard UIDevice.current.userInterfaceIdiom == .phone, let sheet = sheetPresentationController else { return }
-        if UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory {
-            sheet.detents = [.large()]
-        } else {
-            sheet.detents = [.medium()]
+        let isAccessibilitySize = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+        let detents: [UISheetPresentationController.Detent] = isAccessibilitySize ? [.large()] : [.medium()]
+
+        guard animated else {
+            sheet.detents = detents
+            return
         }
+        sheet.animateChanges { sheet.detents = detents }
     }
 
     // MARK: - Configuration
@@ -293,10 +301,13 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
             $0.removeFromSuperview()
         }
         categoryRowViews.removeAll()
+        separatorViews.removeAll()
 
         for (index, category) in state.categories.enumerated() {
             if index > 0 {
-                categoriesStack.addArrangedSubview(makeSeparator(theme: theme))
+                let separator = makeSeparator()
+                categoriesStack.addArrangedSubview(separator)
+                separatorViews.append(separator)
             }
             let rowView = TrackerCategoryRowView()
             rowView.accessibilityIdentifier =
@@ -316,11 +327,12 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         }
     }
 
-    private func makeSeparator(theme: Theme) -> UIView {
+    /// Separators are coloured by `applyTheme()` along with the rest of the card, so they keep up with theme
+    /// changes while the sheet is open.
+    private func makeSeparator() -> UIView {
         let separator: UIView = .build { view in
             view.isAccessibilityElement = false
         }
-        separator.backgroundColor = theme.colors.borderPrimary
         separator.heightAnchor.constraint(equalToConstant: UX.separatorHeight).isActive = true
         return separator
     }
@@ -335,7 +347,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
             ensureMainThread {
-                self.setDetentSize()
+                self.setDetentSize(animated: true)
             }
         default:
             break
@@ -360,15 +372,6 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         footerLabel.textColor = theme.colors.textSecondary
 
         categoryRowViews.forEach { $0.applyTheme(theme: theme) }
-    }
-}
-
-/// A view that always renders as a capsule (fully rounded ends), re-rounding itself whenever its bounds change.
-/// Rounding in the view's own `layoutSubviews` is reliable across presentation styles (e.g. iPhone sheet vs iPad),
-/// unlike computing the corner radius from a view controller's `viewDidLayoutSubviews`.
-private final class CapsuleView: UIView {
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        layer.cornerRadius = bounds.height / 2
+        separatorViews.forEach { $0.backgroundColor = theme.colors.borderPrimary }
     }
 }

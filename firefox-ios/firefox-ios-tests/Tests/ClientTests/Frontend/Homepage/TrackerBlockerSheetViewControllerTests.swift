@@ -4,6 +4,7 @@
 
 import XCTest
 import Common
+import ComponentLibrary
 import UIKit
 
 @testable import Client
@@ -108,8 +109,11 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
             .compactMap { $0 as? UILabel }
             .first { $0.text == 4040.formatted(.number) })
         XCTAssertGreaterThanOrEqual(widest.bounds.width, widest.intrinsicContentSize.width)
-        XCTAssertGreaterThan(progressBars(in: subject).first?.bounds.width ?? 0, 0,
-                             "Expected the bars to keep a positive width")
+        XCTAssertGreaterThan(
+            progressBars(in: subject).first?.bounds.width ?? 0,
+            0,
+            "Expected the bars to keep a positive width"
+        )
     }
 
     private func progressBars(in controller: UIViewController) -> [TrackerBlockerProgressBarView] {
@@ -257,6 +261,82 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertLessThan(barFrame.maxX, countFrame.minX, "Expected the count to trail the bar")
     }
 
+    // MARK: - Theming
+
+    func test_applyTheme_withNovaTheme_drawsBackgroundGradient() throws {
+        let theme = NovaLightTheme()
+        let subject = createSubject(themeManager: MockThemeManager(currentTheme: theme))
+
+        subject.loadViewIfNeeded()
+
+        let background = try XCTUnwrap(backgroundGradientView(in: subject))
+        XCTAssertEqual((background.layer as? CAGradientLayer)?.colors as? [CGColor],
+                       theme.colors.gradientAccentSubtle.cgColors)
+        // The gradient carries its own alpha, so the flat fill stays behind it.
+        XCTAssertEqual(background.backgroundColor, theme.colors.layer2)
+    }
+
+    /// The gradient tokens are Nova-only, so a classic theme has to fall back to the flat fill alone.
+    func test_applyTheme_withClassicTheme_drawsNoBackgroundGradient() throws {
+        let theme = LightTheme()
+        let subject = createSubject(themeManager: MockThemeManager(currentTheme: theme))
+
+        subject.loadViewIfNeeded()
+
+        let background = try XCTUnwrap(backgroundGradientView(in: subject))
+        XCTAssertNil((background.layer as? CAGradientLayer)?.colors)
+        XCTAssertEqual(background.backgroundColor, theme.colors.layer2)
+    }
+
+    func test_progressBar_withNovaTheme_usesGradientFill() throws {
+        let theme = NovaLightTheme()
+        let subject = TrackerBlockerProgressBarView()
+
+        subject.applyTheme(theme: theme)
+
+        let fill = try XCTUnwrap(allSubviews(in: subject).compactMap { $0 as? GradientView }.first)
+        XCTAssertEqual((fill.layer as? CAGradientLayer)?.colors as? [CGColor], theme.colors.gradientBorder.cgColors)
+        XCTAssertEqual(fill.backgroundColor, .clear)
+    }
+
+    func test_progressBar_withClassicTheme_usesSolidFill() throws {
+        let theme = LightTheme()
+        let subject = TrackerBlockerProgressBarView()
+
+        subject.applyTheme(theme: theme)
+
+        let fill = try XCTUnwrap(allSubviews(in: subject).compactMap { $0 as? GradientView }.first)
+        XCTAssertNil((fill.layer as? CAGradientLayer)?.colors)
+        XCTAssertEqual(fill.backgroundColor, theme.colors.actionPrimary)
+    }
+
+    /// Separators are built once per `configure(with:)` but have to keep up with later theme changes.
+    func test_applyTheme_afterThemeChange_recoloursSeparators() {
+        let themeManager = MockThemeManager(currentTheme: LightTheme())
+        let subject = createSubject(themeManager: themeManager)
+        subject.loadViewIfNeeded()
+        subject.configure(with: .dummyFilled)
+        let separators = separators(in: subject)
+
+        themeManager.setManualTheme(to: .dark)
+        subject.applyTheme()
+
+        XCTAssertEqual(separators.count, TrackerBlockerSheetState.dummyFilled.categories.count - 1)
+        XCTAssertTrue(separators.allSatisfy { $0.backgroundColor == DarkTheme().colors.borderPrimary },
+                      "Expected every separator to pick up the new theme")
+    }
+
+    private func backgroundGradientView(in controller: UIViewController) -> GradientView? {
+        // The only `GradientView` directly under the root view; the progress bars' fills sit deeper.
+        return controller.view.subviews.compactMap { $0 as? GradientView }.first
+    }
+
+    private func separators(in controller: UIViewController) -> [UIView] {
+        guard let card = view(controller, withID: A11y.categoriesCard),
+              let stack = allSubviews(in: card).compactMap({ $0 as? UIStackView }).first else { return [] }
+        return stack.arrangedSubviews.filter { !($0 is TrackerCategoryRowView) }
+    }
+
     // MARK: - Helpers
 
     /// Mirrors the private `TrackerCategoryRowView.UX` values the layout assertions depend on.
@@ -295,11 +375,12 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         ).height
     }
 
-    private func createSubject(state: TrackerBlockerSheetState = .dummyFilled) -> TrackerBlockerSheetViewController {
+    private func createSubject(state: TrackerBlockerSheetState = .dummyFilled,
+                               themeManager: MockThemeManager = MockThemeManager()) -> TrackerBlockerSheetViewController {
         let subject = TrackerBlockerSheetViewController(
             windowUUID: .XCTestDefaultUUID,
             state: state,
-            themeManager: MockThemeManager(),
+            themeManager: themeManager,
             notificationCenter: MockNotificationCenter()
         )
         trackForMemoryLeaks(subject)

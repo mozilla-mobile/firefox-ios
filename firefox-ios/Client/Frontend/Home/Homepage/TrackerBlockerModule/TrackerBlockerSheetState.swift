@@ -30,7 +30,7 @@ struct TrackerBlockerSheetState {
         let sinceDate: String
 
         var countText: String { count.formatted(.number) }
-        // TODO: FXIOS-XXXXX - Replace with a localized format string once available.
+        // TODO: FXIOS-16429 - Replace with a localized format string once available.
         var text: String { "\(countText) since \(sinceDate) 🎉" }
     }
 
@@ -53,7 +53,7 @@ struct TrackerBlockerSheetState {
 }
 
 // MARK: - Placeholder data
-// TODO: FXIOS-XXXXX - Replace with real data + localized strings once available.
+// TODO: FXIOS-16429 Replace with real data + localized strings once available.
 extension TrackerBlockerSheetState {
     private static let placeholderCategoryTitles = [
         "Cross-Site Tracking Cookies",
