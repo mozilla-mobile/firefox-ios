@@ -713,8 +713,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 UIApplication.shared.open(url, options: [:])
             }
         } else {
-            // tel/facetime/facetime-audio open a native prompt. Strip the target down to a
-            // valid phone number (or Apple ID email for FaceTime) first. We do this
+            // tel, facetime, and facetime-audio open a native prompt. Strip the url down to a
+            // valid phone number (or email for FaceTime) first. We do this
             // to avoid phishing scams or other modifications to the system prompt,
             // see https://bugzilla.mozilla.org/show_bug.cgi?id=1328815
             guard let sanitizedURL = sanitizedCallingSchemeURL(url) else {
@@ -729,7 +729,7 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     // Rebuilds tel, facetime, and facetime-audio URLs keeping only characters that are valid
-    // for its target (a phone number, or an Apple ID email for FaceTime)
+    // for its target (a phone number, or an email for FaceTime)
     private func sanitizedCallingSchemeURL(_ url: URL) -> URL? {
         guard let scheme = url.scheme?.lowercased() else { return nil }
 
@@ -742,7 +742,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         guard ["tel", "facetime", "facetime-audio"].contains(scheme) else { return nil }
 
-        // treat FaceTime targets containing an @ sign as an Apple ID email,
+        // treat FaceTime targets containing an @ sign as an email,
         // we validate it against emailPattern and keep the URL as-is when valid.
         if scheme != "tel", decodedTarget.contains("@") {
             let isValidEmail = decodedTarget.range(of: Self.emailRegex, options: .regularExpression) != nil
