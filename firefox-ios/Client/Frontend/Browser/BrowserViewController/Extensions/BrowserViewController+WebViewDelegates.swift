@@ -724,7 +724,6 @@ extension BrowserViewController: WKNavigationDelegate {
                 return
             }
             UIApplication.shared.open(sanitizedURL, options: [:])
-            print("Opening!!!")
         }
     }
 
