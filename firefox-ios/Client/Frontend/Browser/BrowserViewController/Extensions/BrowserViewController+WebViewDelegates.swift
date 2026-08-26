@@ -13,6 +13,15 @@ import WebEngine
 
 // MARK: - WKUIDelegate
 extension BrowserViewController: WKUIDelegate {
+    static let telURLAllowedCharacters = CharacterSet(charactersIn: "0123456789+-.()#*,;")
+
+    // Characters left unescaped when rebuilding a sanitized calling-scheme URL. Everything outside
+    // this set (e.g. `#`, spaces) is percent-encoded so the resulting URL is well-formed.
+    static let callingSchemeTargetAllowedCharacters = CharacterSet.alphanumerics
+        .union(CharacterSet(charactersIn: "-._~@+"))
+
+    static let emailRegex = #"\A[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}\z"#
+
     func webView(
         _ webView: WKWebView,
         createWebViewWith configuration: WKWebViewConfiguration,
@@ -691,13 +700,67 @@ extension BrowserViewController: WKNavigationDelegate {
         guard tab.popupThrottler.canShowAlert(type: .externalScheme) else { return }
         tab.popupThrottler.willShowAlert(type: .externalScheme)
 
+        // When a scheme is opened using window.open(), we move to its opener, tab.parent,
+        // otherwise move to the tab that initiated it. requiredPopupConfiguration is only set
+        // for window.open() popups
+        let originatingTab = (tab.requiredPopupConfiguration != nil ? tab.parent : nil) ?? tab
+        if tabManager.selectedTab !== originatingTab {
+            tabManager.selectTab(originatingTab)
+        }
+
         if url.scheme == "sms" { // All the other types show a native prompt
             showExternalAlert(withText: .ExternalSmsLinkConfirmation) { _ in
                 UIApplication.shared.open(url, options: [:])
             }
         } else {
-            UIApplication.shared.open(url, options: [:])
+            // tel/facetime/facetime-audio open a native prompt. Strip the target down to a
+            // valid phone number (or Apple ID email for FaceTime) first. We do this
+            // to avoid phishing scams or other modifications to the system prompt,
+            // see https://bugzilla.mozilla.org/show_bug.cgi?id=1328815
+            guard let sanitizedURL = sanitizedCallingSchemeURL(url) else {
+                logger.log("Blocked calling-scheme URL with no valid target after sanitization",
+                           level: .warning,
+                           category: .webview)
+                return
+            }
+            UIApplication.shared.open(sanitizedURL, options: [:])
+            print("Opening!!!")
         }
+    }
+
+    // Rebuilds tel, facetime, and facetime-audio URLs keeping only characters that are valid
+    // for its target (a phone number, or an Apple ID email for FaceTime)
+    private func sanitizedCallingSchemeURL(_ url: URL) -> URL? {
+        guard let scheme = url.scheme?.lowercased() else { return nil }
+
+        // strips the scheme and colon
+        var rawTarget = String(url.absoluteString.dropFirst(scheme.count + 1))
+        for _ in 0...1 where rawTarget.hasPrefix("/") {
+            rawTarget = String(rawTarget.dropFirst(1))
+        }
+        let decodedTarget = rawTarget.removingPercentEncoding ?? rawTarget
+
+        guard ["tel", "facetime", "facetime-audio"].contains(scheme) else { return nil }
+
+        // treat FaceTime targets containing an @ sign as an Apple ID email,
+        // we validate it against emailPattern and keep the URL as-is when valid.
+        if scheme != "tel", decodedTarget.contains("@") {
+            let isValidEmail = decodedTarget.range(of: Self.emailRegex, options: .regularExpression) != nil
+            return isValidEmail ? url : nil
+        }
+
+        // If using tel: scheme or there's no @ in the url, try to extract a phone number
+        let sanitizedTarget = String(String.UnicodeScalarView(
+            decodedTarget.unicodeScalars.filter { Self.telURLAllowedCharacters.contains($0) }
+        ))
+
+        guard !sanitizedTarget.isEmpty,
+              let encodedTarget = sanitizedTarget.addingPercentEncoding(
+                withAllowedCharacters: Self.callingSchemeTargetAllowedCharacters),
+              let sanitizedURL = URL(string: "\(scheme):\(encodedTarget)")
+        else { return nil }
+
+        return sanitizedURL
     }
 
     private func handleStoreURLNavigation(url: URL) {
