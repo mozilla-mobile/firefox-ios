@@ -5,8 +5,9 @@
 import Common
 import UIKit
 
-/// A single row in the tracker categories card: a leading icon placeholder, a title, an optional progress bar
-/// and an optional trailing count. The bar and count are hidden in the sheet's empty state.
+/// A single row in the tracker categories card: a leading icon placeholder with the title beside it, and
+/// underneath, a progress bar with the blocked count inline at its trailing edge. The bar and count are hidden
+/// in the sheet's empty state, where there is no count to show.
 final class TrackerCategoryRowView: UIView, ThemeApplicable {
     private struct UX {
         static let iconSize: CGFloat = 24
@@ -38,17 +39,18 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
 
     private let progressBar = TrackerBlockerProgressBarView()
 
-    private lazy var textStack: UIStackView = .build { stack in
-        stack.axis = .vertical
-        stack.spacing = UX.verticalSpacing
-        stack.alignment = .fill
-    }
-
-    private lazy var contentStack: UIStackView = .build { stack in
+    /// Holds the progress bar and the count on one line. Centre alignment sits the short bar against the middle
+    /// of the taller count label, and makes the stack's height the count's height.
+    private lazy var detailStack: UIStackView = .build { stack in
         stack.axis = .horizontal
         stack.spacing = UX.horizontalSpacing
         stack.alignment = .center
     }
+
+    /// The row's height comes from the detail stack when it is visible and from the title when it is not,
+    /// so the two are swapped in `setDetailsVisible(_:)`.
+    private var bottomWithDetails: NSLayoutConstraint?
+    private var bottomWithoutDetails: NSLayoutConstraint?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -62,24 +64,61 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
 
     private func setupLayout() {
         progressBar.translatesAutoresizingMaskIntoConstraints = false
-        textStack.addArrangedSubview(titleLabel)
-        textStack.addArrangedSubview(progressBar)
-        textStack.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        detailStack.addArrangedSubview(progressBar)
+        detailStack.addArrangedSubview(countLabel)
 
-        contentStack.addArrangedSubview(iconPlaceholder)
-        contentStack.addArrangedSubview(textStack)
-        contentStack.addArrangedSubview(countLabel)
-        addSubview(contentStack)
+        addSubview(iconPlaceholder)
+        addSubview(titleLabel)
+        addSubview(detailStack)
+
+        let bottomWithDetails = bottomAnchor.constraint(equalTo: detailStack.bottomAnchor,
+                                                        constant: UX.verticalPadding)
+        // Not required: with only the title to measure, a short title would pull the row's bottom above the
+        // icon and clash with the icon's padding constraint below.
+        let bottomWithoutDetails = bottomAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                                           constant: UX.verticalPadding).priority(.defaultHigh)
+        self.bottomWithDetails = bottomWithDetails
+        self.bottomWithoutDetails = bottomWithoutDetails
 
         NSLayoutConstraint.activate([
             iconPlaceholder.widthAnchor.constraint(equalToConstant: UX.iconSize),
             iconPlaceholder.heightAnchor.constraint(equalToConstant: UX.iconSize),
+            iconPlaceholder.leadingAnchor.constraint(equalTo: leadingAnchor),
+            // The icon tracks the title's centre rather than the row's, so it stays aligned with the text
+            // as the title grows to multiple lines.
+            iconPlaceholder.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            // The icon is taller than a single line of text, so keep it inside the row's padding.
+            iconPlaceholder.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.verticalPadding),
+            bottomAnchor.constraint(greaterThanOrEqualTo: iconPlaceholder.bottomAnchor,
+                                    constant: UX.verticalPadding),
 
-            contentStack.topAnchor.constraint(equalTo: topAnchor, constant: UX.verticalPadding),
-            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.verticalPadding),
-            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor)
+            titleLabel.topAnchor.constraint(equalTo: topAnchor,
+                                            constant: UX.verticalPadding).priority(.defaultHigh),
+            titleLabel.leadingAnchor.constraint(equalTo: iconPlaceholder.trailingAnchor,
+                                                constant: UX.horizontalSpacing),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            detailStack.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.verticalSpacing),
+            detailStack.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            detailStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            bottomWithDetails
         ])
+    }
+
+    /// Shows or hides the progress bar and count together; the empty state shows the title on its own.
+    /// The detail stack isn't itself in a stack, so hiding it leaves its constraints in place and the row's
+    /// bottom has to be moved up to the title explicitly.
+    private func setDetailsVisible(_ isVisible: Bool) {
+        detailStack.isHidden = !isVisible
+        // Deactivate first so the two bottom constraints never conflict mid-swap.
+        if isVisible {
+            bottomWithoutDetails?.isActive = false
+            bottomWithDetails?.isActive = true
+        } else {
+            bottomWithDetails?.isActive = false
+            bottomWithoutDetails?.isActive = true
+        }
     }
 
     /// - Parameter fillRatio: the category's share of the week's blocked trackers, in `0...1`.
@@ -88,13 +127,11 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
 
         if let count = category.count {
             countLabel.text = count.formatted(.number)
-            countLabel.isHidden = false
-            progressBar.isHidden = false
+            setDetailsVisible(true)
             progressBar.setFillRatio(fillRatio)
             accessibilityLabel = "\(category.title), \(count) blocked"
         } else {
-            countLabel.isHidden = true
-            progressBar.isHidden = true
+            setDetailsVisible(false)
             accessibilityLabel = category.title
         }
 

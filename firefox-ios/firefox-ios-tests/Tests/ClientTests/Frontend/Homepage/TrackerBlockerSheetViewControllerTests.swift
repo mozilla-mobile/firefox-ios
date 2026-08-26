@@ -125,7 +125,88 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(subject.fillRatio(for: subject.categories[0]), 1)
     }
 
+    // MARK: - Category row layout
+
+    func test_categoryRow_withoutCount_collapsesProgressBarHeight() {
+        let filled = makeRow(count: 12)
+        let empty = makeRow(count: nil)
+
+        XCTAssertLessThan(height(of: empty), height(of: filled))
+    }
+
+    /// The icon is taller than a single line of subheadline, so in the empty state it — not the title — sets
+    /// the row's height. Anchoring the bottom to the title alone would clip the icon's padding.
+    func test_categoryRow_emptyState_heightIsDrivenByIcon() {
+        let empty = makeRow(count: nil)
+
+        XCTAssertEqual(height(of: empty), UX.iconSize + UX.rowVerticalPadding * 2, accuracy: 0.5)
+    }
+
+    /// The icon is centred on the title rather than on the row, so it stays beside the text when the title wraps.
+    func test_categoryRow_withWrappingTitle_centersIconOnTitle() throws {
+        let title = String(repeating: "Cross-Site Tracking Cookies ", count: 4)
+        let row = laidOutRow(count: 12, title: title)
+
+        let iconFrame = try frame(of: XCTUnwrap(row.subviews.first { type(of: $0) == UIView.self }), in: row)
+        let titleFrame = try frame(of: XCTUnwrap(label(in: row, withText: title)), in: row)
+
+        XCTAssertGreaterThan(titleFrame.height, iconFrame.height, "Expected the title to wrap past the icon height")
+        XCTAssertEqual(iconFrame.midY, titleFrame.midY, accuracy: 0.5)
+        XCTAssertNotEqual(iconFrame.midY, row.bounds.midY, accuracy: 0.5)
+    }
+
+    func test_categoryRow_placesCountInlineWithProgressBar() throws {
+        let row = laidOutRow(count: 12)
+
+        let titleFrame = try frame(of: XCTUnwrap(label(in: row, withText: "Fingerprinters")), in: row)
+        let countFrame = try frame(of: XCTUnwrap(label(in: row, withText: 12.formatted(.number))), in: row)
+        let barFrame = try frame(
+            of: XCTUnwrap(allSubviews(in: row).first { $0 is TrackerBlockerProgressBarView }),
+            in: row
+        )
+
+        XCTAssertGreaterThan(countFrame.minY, titleFrame.maxY, "Expected the count to sit below the title")
+        XCTAssertEqual(countFrame.midY, barFrame.midY, accuracy: 0.5)
+        XCTAssertLessThan(barFrame.maxX, countFrame.minX, "Expected the count to trail the bar")
+    }
+
     // MARK: - Helpers
+
+    /// Mirrors the private `TrackerCategoryRowView.UX` values the layout assertions depend on.
+    private enum UX {
+        static let rowWidth: CGFloat = 320
+        static let iconSize: CGFloat = 24
+        static let rowVerticalPadding: CGFloat = 12
+    }
+
+    private func makeRow(count: Int?, title: String = "Fingerprinters") -> TrackerCategoryRowView {
+        let row = TrackerCategoryRowView()
+        row.configure(with: .init(title: title, count: count), fillRatio: 0.5, theme: LightTheme())
+        return row
+    }
+
+    private func laidOutRow(count: Int?, title: String = "Fingerprinters") -> TrackerCategoryRowView {
+        let row = makeRow(count: count, title: title)
+        row.frame = CGRect(x: 0, y: 0, width: UX.rowWidth, height: height(of: row))
+        row.layoutIfNeeded()
+        return row
+    }
+
+    private func label(in row: TrackerCategoryRowView, withText text: String) -> UILabel? {
+        return allSubviews(in: row).compactMap { $0 as? UILabel }.first { $0.text == text }
+    }
+
+    private func frame(of view: UIView, in row: TrackerCategoryRowView) -> CGRect {
+        return view.convert(view.bounds, to: row)
+    }
+
+    private func height(of row: TrackerCategoryRowView) -> CGFloat {
+        return row.systemLayoutSizeFitting(
+            CGSize(width: UX.rowWidth, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+    }
 
     private func createSubject(state: TrackerBlockerSheetState = .dummyFilled) -> TrackerBlockerSheetViewController {
         let subject = TrackerBlockerSheetViewController(
