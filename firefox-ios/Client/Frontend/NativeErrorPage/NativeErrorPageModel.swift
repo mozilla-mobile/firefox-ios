@@ -28,17 +28,18 @@ enum ErrorPageModel: Equatable {
         case .cellularDataRestricted:
             return String(format: .NativeErrorPage.CellularDataRestricted.Description, AppName.shortName.rawValue)
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.Description
-        case .generic: return .NativeErrorPage.GenericError.Description
+        case .generic(let model): return String(format: .NativeErrorPage.GenericError.Description,
+                                                model.url.host ?? "",
+                                                AppName.shortName.description)
         case .wayback: return String(format: .NativeErrorPage.Wayback.Description, AppName.shortName.description)
         }
     }
 
     var foxImageName: String {
         switch self {
-        case .internetConnection, .cellularDataRestricted:
+        case .internetConnection, .generic, .wayback, .cellularDataRestricted:
             return ImageIdentifiers.NativeErrorPage.noInternetConnection
-        case .badCertDomain, .generic: return ImageIdentifiers.NativeErrorPage.securityError
-        case .wayback: return ImageIdentifiers.NativeErrorPage.noInternetConnection
+        case .badCertDomain: return ImageIdentifiers.NativeErrorPage.securityError
         }
     }
 
@@ -85,7 +86,7 @@ struct BadCertDomainModel: Equatable {
 }
 
 struct GenericErrorModel: Equatable {
-    let url: URL?
+    let url: URL
 }
 
 struct WaybackErrorModel: Equatable {
