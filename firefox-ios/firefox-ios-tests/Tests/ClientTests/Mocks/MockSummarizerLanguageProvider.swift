@@ -8,14 +8,16 @@ import Foundation
 final class MockSummarizerLanguageProvider: SummarizerLanguageProvider, @unchecked Sendable {
     var shouldReturnLocale = false
     let returnedLocale = Locale(identifier: "en")
+    var returnedPageLocale = Locale(identifier: "en")
     private(set) var getLanguageCallCount = 0
 
     func getLanguage(
         userPreference: SummarizerLanguageExpansionConfiguration.UserPreference,
         supportedLocales: [Locale],
         languageSampleSource: any LanguageSampleSource
-    ) async -> Locale? {
+    ) async -> SummarizerLanguageResolution? {
         getLanguageCallCount += 1
-        return shouldReturnLocale ? returnedLocale : nil
+        guard shouldReturnLocale else { return nil }
+        return SummarizerLanguageResolution(summaryLocale: returnedLocale, pageLocale: returnedPageLocale)
     }
 }

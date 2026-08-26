@@ -39,6 +39,9 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
             DefaultBrowserUtility().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
         }
         DefaultBrowserUtility().migrateDefaultBrowserStatusIfNeeded(isFirstRun: introScreenManager.shouldShowIntroScreen)
+
+        SummarizerPrefsMigration(prefs: profile.prefs).migrateSelectedLanguage()
+
         if #available(iOS 26, *) {
             AppleIntelligenceUtil().processAvailabilityState()
         }

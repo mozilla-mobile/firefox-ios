@@ -297,7 +297,9 @@ final class ToolbarMiddleware {
             cancelEditMode(windowUUID: action.windowUUID)
 
         case .readerMode, .readerModeWithSummarizer:
-            recordReaderModeTelemetry(state: state, windowUUID: action.windowUUID)
+            recordReaderModeTelemetry(state: state,
+                                      windowUUID: action.windowUUID,
+                                      hasSummarizer: action.buttonType == .readerModeWithSummarizer)
             let action = NavigationBrowserAction(navigationDestination: NavigationDestination(.readerMode),
                                                  windowUUID: action.windowUUID,
                                                  actionType: NavigationBrowserActionType.tapOnReaderMode)
@@ -411,7 +413,7 @@ final class ToolbarMiddleware {
                 guard let webView = windowManager.tabManager(for: action.windowUUID)?.selectedTab?.webView else { return }
                 let summarizerConfig = await summarizerConfigFactory.makeConfiguration(from: webView)
                 let action = GeneralBrowserAction(summarizerConfig: summarizerConfig,
-                                                  summarizerTrigger: .toolbarIcon,
+                                                  summarizerTrigger: .readerModeWithSummarizerButton,
                                                   windowUUID: action.windowUUID,
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatch(action)
@@ -566,7 +568,7 @@ final class ToolbarMiddleware {
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
     }
 
-    private func recordReaderModeTelemetry(state: AppState, windowUUID: WindowUUID) {
+    private func recordReaderModeTelemetry(state: AppState, windowUUID: WindowUUID, hasSummarizer: Bool) {
         guard let toolbarState = state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
 
         let isReaderModeEnabled = switch toolbarState.addressToolbar.readerModeState {
@@ -574,7 +576,9 @@ final class ToolbarMiddleware {
         default: false
         }
 
-        toolbarTelemetry.readerModeButtonTapped(isPrivate: toolbarState.isPrivateMode, isEnabled: isReaderModeEnabled)
+        toolbarTelemetry.readerModeButtonTapped(isPrivate: toolbarState.isPrivateMode,
+                                                isEnabled: isReaderModeEnabled,
+                                                hasSummarizer: hasSummarizer)
     }
 
     private func tabManager(for uuid: WindowUUID) -> TabManager? {
