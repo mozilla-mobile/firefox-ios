@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 
 /// The content shown by `TrackerBlockerSheetViewController`.
@@ -17,9 +18,45 @@ import UIKit
 struct TrackerBlockerSheetState {
     /// A single tracker category row.
     struct Category {
+        /// The tracker categories the weekly count is broken down by. These mirror the ones the enhanced
+        /// tracking protection panel reports, so both surfaces show the same icon for the same category
+        /// (see `BlockedTrackersTableModel.getItems()`).
+        enum Kind: CaseIterable {
+            case crossSiteTrackingCookies
+            case fingerprinters
+            case trackingContent
+            case socialMediaTrackers
+
+            var imageName: String {
+                switch self {
+                case .crossSiteTrackingCookies: return StandardImageIdentifiers.Large.cookies
+                case .fingerprinters: return StandardImageIdentifiers.Large.fingerprinter
+                case .trackingContent: return StandardImageIdentifiers.Large.image
+                case .socialMediaTrackers: return StandardImageIdentifiers.Large.socialMedia
+                }
+            }
+
+            // TODO: FXIOS-16429 - Replace with localized strings once available.
+            var placeholderTitle: String {
+                switch self {
+                case .crossSiteTrackingCookies: return "Cross-Site Tracking Cookies"
+                case .fingerprinters: return "Fingerprinters"
+                case .trackingContent: return "Tracking Content"
+                case .socialMediaTrackers: return "Social Media Trackers"
+                }
+            }
+        }
+
+        let kind: Kind
         let title: String
         /// The blocked count for this category. `nil` hides both the count and the progress bar (empty state).
         let count: Int?
+
+        init(kind: Kind, count: Int?, title: String? = nil) {
+            self.kind = kind
+            self.title = title ?? kind.placeholderTitle
+            self.count = count
+        }
     }
 
     /// The lifetime total shown in the footer pill. The count is kept separate from the surrounding copy so the
@@ -55,33 +92,26 @@ struct TrackerBlockerSheetState {
 // MARK: - Placeholder data
 // TODO: FXIOS-16429 Replace with real data + localized strings once available.
 extension TrackerBlockerSheetState {
-    private static let placeholderCategoryTitles = [
-        "Cross-Site Tracking Cookies",
-        "Fingerprinters",
-        "Tracking Content",
-        "Social Media Trackers"
-    ]
-
     static var dummyEmpty: TrackerBlockerSheetState {
         TrackerBlockerSheetState(
             weeklyCount: nil,
             emptyMessage: "Firefox blocks trackers as you browse, you'll see them here.",
-            categories: placeholderCategoryTitles.map { Category(title: $0, count: nil) },
+            categories: Category.Kind.allCases.map { Category(kind: $0, count: nil) },
             total: nil
         )
     }
 
     static var dummyFilled: TrackerBlockerSheetState {
         TrackerBlockerSheetState(
-            weeklyCount: 4348,
+            weeklyCount: 2195,
             emptyMessage: nil,
             categories: [
-                Category(title: placeholderCategoryTitles[0], count: 120),
-                Category(title: placeholderCategoryTitles[1], count: 89),
-                Category(title: placeholderCategoryTitles[2], count: 99),
-                Category(title: placeholderCategoryTitles[3], count: 4040)
+                Category(kind: .crossSiteTrackingCookies, count: 1999),
+                Category(kind: .fingerprinters, count: 101),
+                Category(kind: .trackingContent, count: 90),
+                Category(kind: .socialMediaTrackers, count: 5)
             ],
-            total: Total(count: 5305, sinceDate: "02/13/26")
+            total: Total(count: 43251, sinceDate: "02/13/26")
         )
     }
 
@@ -89,7 +119,7 @@ extension TrackerBlockerSheetState {
         TrackerBlockerSheetState(
             weeklyCount: 0,
             emptyMessage: nil,
-            categories: placeholderCategoryTitles.map { Category(title: $0, count: 0) },
+            categories: Category.Kind.allCases.map { Category(kind: $0, count: 0) },
             total: Total(count: 5305, sinceDate: "02/13/26")
         )
     }

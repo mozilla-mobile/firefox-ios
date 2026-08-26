@@ -5,24 +5,24 @@
 import Common
 import UIKit
 
-/// A single row in the tracker categories card: a leading icon placeholder with the title beside it, and
+/// A single row in the tracker categories card: a leading category icon with the title beside it, and
 /// underneath, a progress bar with the blocked count inline at its trailing edge. The bar and count are hidden
 /// in the sheet's empty state, where there is no count to show.
 final class TrackerCategoryRowView: UIView, ThemeApplicable {
     private struct UX {
+        /// Matches `TPMenuUX.UX.iconSize`, so the categories are drawn at the same size here as in the
+        /// enhanced tracking protection panel.
         static let iconSize: CGFloat = 24
         static let horizontalSpacing: CGFloat = 12
         static let verticalSpacing: CGFloat = 6
         static let verticalPadding: CGFloat = 12
-        static let iconCornerRadius: CGFloat = 6
         /// Without a progress bar the row is only as tall as the icon, which reads as cramped in the card.
         static let emptyStateMinHeight: CGFloat = 55
     }
 
-    // Placeholder for the per-category icon (real icons are added separately).
-    private let iconPlaceholder: UIView = .build { view in
-        view.layer.cornerRadius = UX.iconCornerRadius
-        view.isAccessibilityElement = false
+    private let iconImageView: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFit
+        imageView.isAccessibilityElement = false
     }
 
     private let titleLabel: UILabel = .build { label in
@@ -71,7 +71,7 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
         detailStack.addArrangedSubview(progressBar)
         detailStack.addArrangedSubview(countLabel)
 
-        addSubview(iconPlaceholder)
+        addSubview(iconImageView)
         addSubview(titleLabel)
         addSubview(detailStack)
 
@@ -90,20 +90,20 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
         ]
 
         NSLayoutConstraint.activate([
-            iconPlaceholder.widthAnchor.constraint(equalToConstant: UX.iconSize),
-            iconPlaceholder.heightAnchor.constraint(equalToConstant: UX.iconSize),
-            iconPlaceholder.leadingAnchor.constraint(equalTo: leadingAnchor),
+            iconImageView.widthAnchor.constraint(equalToConstant: UX.iconSize),
+            iconImageView.heightAnchor.constraint(equalToConstant: UX.iconSize),
+            iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             // The icon tracks the title's centre rather than the row's, so it stays aligned with the text
             // as the title grows to multiple lines.
-            iconPlaceholder.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            iconImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             // The icon is taller than a single line of text, so keep it inside the row's padding.
-            iconPlaceholder.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.verticalPadding),
-            bottomAnchor.constraint(greaterThanOrEqualTo: iconPlaceholder.bottomAnchor,
+            iconImageView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.verticalPadding),
+            bottomAnchor.constraint(greaterThanOrEqualTo: iconImageView.bottomAnchor,
                                     constant: UX.verticalPadding),
             bottomAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor,
                                     constant: UX.verticalPadding),
 
-            titleLabel.leadingAnchor.constraint(equalTo: iconPlaceholder.trailingAnchor,
+            titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor,
                                                 constant: UX.horizontalSpacing),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 
@@ -132,6 +132,7 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
     /// - Parameter fillRatio: the category's share of the week's blocked trackers, in `0...1`.
     func configure(with category: TrackerBlockerSheetState.Category, fillRatio: CGFloat, theme: Theme) {
         titleLabel.text = category.title
+        iconImageView.image = UIImage(named: category.kind.imageName)?.withRenderingMode(.alwaysTemplate)
 
         if let count = category.count {
             countLabel.text = count.formatted(.number)
@@ -147,7 +148,7 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        iconPlaceholder.backgroundColor = theme.colors.layer3
+        iconImageView.tintColor = theme.colors.iconSecondary
         titleLabel.textColor = theme.colors.textPrimary
         countLabel.textColor = theme.colors.textSecondary
         progressBar.applyTheme(theme: theme)

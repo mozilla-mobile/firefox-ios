@@ -163,8 +163,8 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
             weeklyCount: 100,
             emptyMessage: nil,
             categories: [
-                .init(title: "Fingerprinters", count: 70),
-                .init(title: "Tracking Content", count: 30)
+                .init(kind: .fingerprinters, count: 70),
+                .init(kind: .trackingContent, count: 30)
             ],
             total: nil
         )
@@ -194,11 +194,53 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         let subject = TrackerBlockerSheetState(
             weeklyCount: 10,
             emptyMessage: nil,
-            categories: [.init(title: "Fingerprinters", count: 25)],
+            categories: [.init(kind: .fingerprinters, count: 25)],
             total: nil
         )
 
         XCTAssertEqual(subject.fillRatio(for: subject.categories[0]), 1)
+    }
+
+    /// The header shield is a pre-coloured asset, so it must not be tinted from the theme.
+    func test_loadView_setsUpShieldIcon() throws {
+        let subject = createSubject()
+
+        subject.loadViewIfNeeded()
+
+        let shield = try XCTUnwrap(view(subject, withID: A11y.shieldIcon) as? UIImageView)
+        XCTAssertNotNil(shield.image, "Expected \(ImageIdentifiers.shieldCheckmarkColored) to resolve to an asset")
+        XCTAssertEqual(shield.image?.renderingMode, .automatic)
+    }
+
+    // MARK: - Category icons
+
+    /// The sheet shows the same icon per category as the enhanced tracking protection panel.
+    func test_categoryRow_usesTheCategoryIconForItsKind() throws {
+        let expectedNames: [TrackerBlockerSheetState.Category.Kind: String] = [
+            .crossSiteTrackingCookies: StandardImageIdentifiers.Large.cookies,
+            .fingerprinters: StandardImageIdentifiers.Large.fingerprinter,
+            .trackingContent: StandardImageIdentifiers.Large.image,
+            .socialMediaTrackers: StandardImageIdentifiers.Large.socialMedia
+        ]
+
+        for kind in TrackerBlockerSheetState.Category.Kind.allCases {
+            let expectedName = try XCTUnwrap(expectedNames[kind])
+            XCTAssertEqual(kind.imageName, expectedName)
+
+            // Also catches a name that no longer resolves to an asset in the bundle.
+            let imageView = try XCTUnwrap(icon(in: makeRow(count: 12, kind: kind)))
+            XCTAssertNotNil(imageView.image, "Expected \(expectedName) to resolve to an asset")
+            XCTAssertEqual(imageView.image?.renderingMode, .alwaysTemplate)
+        }
+    }
+
+    func test_categoryRow_tintsIconWithSecondaryIconColour() throws {
+        let theme = LightTheme()
+        let row = makeRow(count: 12)
+
+        row.applyTheme(theme: theme)
+
+        XCTAssertEqual(try XCTUnwrap(icon(in: row)).tintColor, theme.colors.iconSecondary)
     }
 
     // MARK: - Category row layout
@@ -220,7 +262,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
     func test_categoryRow_emptyState_centersIconInRow() throws {
         let row = laidOutRow(count: nil)
 
-        let iconFrame = try frame(of: XCTUnwrap(row.subviews.first { type(of: $0) == UIView.self }), in: row)
+        let iconFrame = try frame(of: XCTUnwrap(icon(in: row)), in: row)
 
         XCTAssertEqual(iconFrame.midY, row.bounds.midY, accuracy: 0.5)
         XCTAssertGreaterThanOrEqual(iconFrame.minY, UX.rowVerticalPadding)
@@ -238,7 +280,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         let title = String(repeating: "Cross-Site Tracking Cookies ", count: 4)
         let row = laidOutRow(count: 12, title: title)
 
-        let iconFrame = try frame(of: XCTUnwrap(row.subviews.first { type(of: $0) == UIView.self }), in: row)
+        let iconFrame = try frame(of: XCTUnwrap(icon(in: row)), in: row)
         let titleFrame = try frame(of: XCTUnwrap(label(in: row, withText: title)), in: row)
 
         XCTAssertGreaterThan(titleFrame.height, iconFrame.height, "Expected the title to wrap past the icon height")
@@ -346,17 +388,23 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         static let emptyStateMinHeight: CGFloat = 55
     }
 
-    private func makeRow(count: Int?, title: String = "Fingerprinters") -> TrackerCategoryRowView {
+    private func makeRow(count: Int?,
+                         kind: TrackerBlockerSheetState.Category.Kind = .fingerprinters,
+                         title: String? = nil) -> TrackerCategoryRowView {
         let row = TrackerCategoryRowView()
-        row.configure(with: .init(title: title, count: count), fillRatio: 0.5, theme: LightTheme())
+        row.configure(with: .init(kind: kind, count: count, title: title), fillRatio: 0.5, theme: LightTheme())
         return row
     }
 
-    private func laidOutRow(count: Int?, title: String = "Fingerprinters") -> TrackerCategoryRowView {
+    private func laidOutRow(count: Int?, title: String? = nil) -> TrackerCategoryRowView {
         let row = makeRow(count: count, title: title)
         row.frame = CGRect(x: 0, y: 0, width: UX.rowWidth, height: height(of: row))
         row.layoutIfNeeded()
         return row
+    }
+
+    private func icon(in row: TrackerCategoryRowView) -> UIImageView? {
+        return allSubviews(in: row).compactMap { $0 as? UIImageView }.first
     }
 
     private func label(in row: TrackerCategoryRowView, withText text: String) -> UILabel? {
@@ -408,9 +456,9 @@ private extension TrackerBlockerSheetState {
             weeklyCount: 4135,
             emptyMessage: nil,
             categories: [
-                Category(title: "Cross-Site Tracking Cookies", count: 4040),
-                Category(title: "Fingerprinters", count: 6),
-                Category(title: "Tracking Content", count: 89)
+                Category(kind: .crossSiteTrackingCookies, count: 4040),
+                Category(kind: .fingerprinters, count: 6),
+                Category(kind: .trackingContent, count: 89)
             ],
             total: nil
         )

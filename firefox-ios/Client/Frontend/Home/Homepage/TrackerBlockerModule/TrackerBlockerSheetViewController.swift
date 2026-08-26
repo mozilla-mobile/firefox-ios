@@ -18,8 +18,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         static let contentBottomPadding: CGFloat = 16
         static let closeButtonTrailingPadding: CGFloat = 16
         static let closeButtonTopPadding: CGFloat = 16
-        static let shieldPlaceholderSize: CGFloat = 48
-        static let shieldCornerRadius: CGFloat = 12
+        static let shieldIconSize: CGFloat = 48
         static let cardCornerRadius: CGFloat = 12
         static let cardHorizontalPadding: CGFloat = 12
         static let separatorHeight: CGFloat = 1
@@ -65,11 +64,13 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
 
     private let shieldContainer: UIView = .build()
 
-    // Placeholder for the shield icon (the real icon is added separately).
-    private let shieldPlaceholder: UIView = .build { view in
-        view.layer.cornerRadius = UX.shieldCornerRadius
-        view.isAccessibilityElement = false
-        view.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.shieldIcon
+    // The asset is already coloured, so it is drawn as-is rather than tinted from the theme.
+    private let shieldImageView: UIImageView = .build { imageView in
+        imageView.image = UIImage(named: ImageIdentifiers.shieldCheckmarkColored)
+        imageView.contentMode = .scaleAspectFit
+        imageView.isAccessibilityElement = false
+        imageView.accessibilityIdentifier =
+            AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.shieldIcon
     }
 
     private let weeklyCountLabel: UILabel = .build { label in
@@ -153,7 +154,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
 
     // MARK: - Layout
     private func setupLayout() {
-        shieldContainer.addSubview(shieldPlaceholder)
+        shieldContainer.addSubview(shieldImageView)
         footerContainer.addSubview(footerPill)
         footerPill.addSubview(footerLabel)
         categoriesCardView.addSubview(categoriesStack)
@@ -208,11 +209,11 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
             contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                    constant: -UX.contentHorizontalPadding),
 
-            shieldPlaceholder.topAnchor.constraint(equalTo: shieldContainer.topAnchor),
-            shieldPlaceholder.bottomAnchor.constraint(equalTo: shieldContainer.bottomAnchor),
-            shieldPlaceholder.centerXAnchor.constraint(equalTo: shieldContainer.centerXAnchor),
-            shieldPlaceholder.widthAnchor.constraint(equalToConstant: UX.shieldPlaceholderSize),
-            shieldPlaceholder.heightAnchor.constraint(equalToConstant: UX.shieldPlaceholderSize),
+            shieldImageView.topAnchor.constraint(equalTo: shieldContainer.topAnchor),
+            shieldImageView.bottomAnchor.constraint(equalTo: shieldContainer.bottomAnchor),
+            shieldImageView.centerXAnchor.constraint(equalTo: shieldContainer.centerXAnchor),
+            shieldImageView.widthAnchor.constraint(equalToConstant: UX.shieldIconSize),
+            shieldImageView.heightAnchor.constraint(equalToConstant: UX.shieldIconSize),
 
             categoriesStack.topAnchor.constraint(equalTo: categoriesCardView.topAnchor),
             categoriesStack.bottomAnchor.constraint(equalTo: categoriesCardView.bottomAnchor),
@@ -363,7 +364,6 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         backgroundGradientView.backgroundColor = theme.colors.layer2
         backgroundGradientView.configure(gradient: theme.isNova ? theme.colors.gradientAccentSubtle : nil)
 
-        shieldPlaceholder.backgroundColor = theme.colors.layer3
         weeklyCountLabel.textColor = theme.colors.textPrimary
         headerLabel.textColor = state.isEmpty ? theme.colors.textPrimary : theme.colors.textSecondary
         categoriesCardView.backgroundColor = theme.colors.layer2
