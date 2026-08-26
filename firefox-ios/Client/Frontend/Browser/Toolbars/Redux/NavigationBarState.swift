@@ -36,6 +36,9 @@ struct NavigationBarState: StateType, Equatable {
     var displayBorder: Bool
     var middleButton: NavigationBarMiddleButtonType
     var isNovaDesignEnabled: Bool
+    var canGoBack: Bool
+    var canGoForward: Bool
+    var numberOfTabs: Int
 
     private static let searchAction = ToolbarActionConfiguration(
         actionType: .search,
@@ -63,19 +66,29 @@ struct NavigationBarState: StateType, Equatable {
                   actions: [],
                   displayBorder: false,
                   middleButton: .newTab,
-                  isNovaDesignEnabled: false)
+                  isNovaDesignEnabled: false,
+                  canGoBack: false,
+                  canGoForward: false,
+                  numberOfTabs: 1
+        )
     }
 
     init(windowUUID: WindowUUID,
          actions: [ToolbarActionConfiguration],
          displayBorder: Bool,
          middleButton: NavigationBarMiddleButtonType,
-         isNovaDesignEnabled: Bool) {
+         isNovaDesignEnabled: Bool,
+         canGoBack: Bool,
+         canGoForward: Bool,
+         numberOfTabs: Int) {
         self.windowUUID = windowUUID
         self.actions = actions
         self.displayBorder = displayBorder
         self.middleButton = middleButton
         self.isNovaDesignEnabled = isNovaDesignEnabled
+        self.canGoBack = canGoBack
+        self.canGoForward = canGoForward
+        self.numberOfTabs = numberOfTabs
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -143,14 +156,20 @@ struct NavigationBarState: StateType, Equatable {
     private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return state.copy(actions: navigationActions(action: toolbarAction, navigationBarState: state))
+        let updatedState = state
+            .copy(canGoBack: toolbarAction.canGoBack ?? state.canGoBack)
+            .copy(canGoForward: toolbarAction.canGoForward ?? state.canGoForward)
+
+        return updatedState.copy(actions: navigationActions(action: toolbarAction, navigationBarState: updatedState))
     }
 
     @MainActor
     private static func handleNumberOfTabsChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return state.copy(actions: navigationActions(action: toolbarAction, navigationBarState: state))
+        let updatedState = state.copy(numberOfTabs: toolbarAction.numberOfTabs ?? state.numberOfTabs)
+
+        return updatedState.copy(actions: navigationActions(action: toolbarAction, navigationBarState: updatedState))
     }
 
     @MainActor
@@ -164,7 +183,11 @@ struct NavigationBarState: StateType, Equatable {
     private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return state.copy(actions: navigationActions(action: toolbarAction, navigationBarState: state))
+        let updatedState = state
+            .copy(canGoBack: toolbarAction.canGoBack ?? state.canGoBack)
+            .copy(canGoForward: toolbarAction.canGoForward ?? state.canGoForward)
+
+        return updatedState.copy(actions: navigationActions(action: toolbarAction, navigationBarState: updatedState))
     }
 
     @MainActor
@@ -200,7 +223,10 @@ struct NavigationBarState: StateType, Equatable {
             actions: state.actions,
             displayBorder: state.displayBorder,
             middleButton: state.middleButton,
-            isNovaDesignEnabled: state.isNovaDesignEnabled
+            isNovaDesignEnabled: state.isNovaDesignEnabled,
+            canGoBack: state.canGoBack,
+            canGoForward: state.canGoForward,
+            numberOfTabs: state.numberOfTabs
         )
     }
 
@@ -229,9 +255,9 @@ struct NavigationBarState: StateType, Equatable {
                                                  isPrivateMode: toolbarState.isPrivateMode,
                                                  middleButton: middleButton)
 
-        let canGoBack = action.canGoBack ?? toolbarState.canGoBack
-        let canGoForward = action.canGoForward ?? toolbarState.canGoForward
-        let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
+        let canGoBack = action.canGoBack ?? navigationBarState.canGoBack
+        let canGoForward = action.canGoForward ?? navigationBarState.canGoForward
+        let numberOfTabs = action.numberOfTabs ?? navigationBarState.numberOfTabs
 
         let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
         let showActionWarningBadge = action.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge

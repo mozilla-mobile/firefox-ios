@@ -743,8 +743,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         if !isShowingNavigationToolbar {
             // otherwise back/forward and maybe data clearance when navigation toolbar is hidden
-            let canGoBack = action.canGoBack ?? toolbarState.canGoBack
-            let canGoForward = action.canGoForward ?? toolbarState.canGoForward
+            let canGoBack = action.canGoBack ?? toolbarState.navigationToolbar.canGoBack
+            let canGoForward = action.canGoForward ?? toolbarState.navigationToolbar.canGoForward
             actions.append(backAction(enabled: canGoBack))
             actions.append(forwardAction(enabled: canGoForward))
         }
@@ -918,7 +918,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             actions.append(newTabAction)
         }
 
-        let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
+        let numberOfTabs = action.numberOfTabs ?? toolbarState.navigationToolbar.numberOfTabs
         let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
         let showActionWarningBadge = action.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge
         let showWarningBadge = isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge

@@ -40,9 +40,9 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(initialState.navigationToolbar, NavigationBarState(windowUUID: windowUUID))
         XCTAssertTrue(initialState.isShowingNavigationToolbar)
         XCTAssertFalse(initialState.isShowingTopTabs)
-        XCTAssertFalse(initialState.canGoBack)
-        XCTAssertFalse(initialState.canGoForward)
-        XCTAssertEqual(initialState.numberOfTabs, 1)
+        XCTAssertFalse(initialState.navigationToolbar.canGoBack)
+        XCTAssertFalse(initialState.navigationToolbar.canGoForward)
+        XCTAssertEqual(initialState.navigationToolbar.numberOfTabs, 1)
         XCTAssertFalse(initialState.showMenuWarningBadge)
         XCTAssertFalse(initialState.canShowNavigationHint)
         XCTAssertTrue(initialState.shouldAnimate)
@@ -68,9 +68,9 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isPrivateMode)
         XCTAssertTrue(newState.isShowingNavigationToolbar)
         XCTAssertFalse(newState.isShowingTopTabs)
-        XCTAssertFalse(newState.canGoBack)
-        XCTAssertFalse(newState.canGoForward)
-        XCTAssertEqual(newState.numberOfTabs, 1)
+        XCTAssertFalse(newState.navigationToolbar.canGoBack)
+        XCTAssertFalse(newState.navigationToolbar.canGoForward)
+        XCTAssertEqual(newState.navigationToolbar.numberOfTabs, 1)
         XCTAssertFalse(newState.showMenuWarningBadge)
         XCTAssertFalse(newState.canShowNavigationHint)
         XCTAssertNil(newState.addressToolbar.translationConfiguration)
@@ -103,8 +103,8 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertFalse(newState.isPrivateMode)
         XCTAssertTrue(newState.isShowingNavigationToolbar)
-        XCTAssertTrue(newState.canGoBack)
-        XCTAssertFalse(newState.canGoForward)
+        XCTAssertTrue(newState.navigationToolbar.canGoBack)
+        XCTAssertFalse(newState.navigationToolbar.canGoForward)
         XCTAssertNil(newState.addressToolbar.translationConfiguration)
     }
 
@@ -389,7 +389,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.numberOfTabs, 2)
+        XCTAssertEqual(newState.navigationToolbar.numberOfTabs, 2)
     }
 
     func test_toolbarPositionChangedAction_returnsExpectedState() {
@@ -461,8 +461,8 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertTrue(newState.canGoBack)
-        XCTAssertFalse(newState.canGoForward)
+        XCTAssertTrue(newState.navigationToolbar.canGoBack)
+        XCTAssertFalse(newState.navigationToolbar.canGoForward)
     }
 
     func test_traitCollectionDidChangeAction_returnsExpectedState() {

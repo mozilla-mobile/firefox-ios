@@ -18,9 +18,6 @@ struct ToolbarState: ScreenState, Sendable {
     var navigationToolbar: NavigationBarState
     let isShowingNavigationToolbar: Bool
     let isShowingTopTabs: Bool
-    let canGoBack: Bool
-    let canGoForward: Bool
-    var numberOfTabs: Int
     var showMenuWarningBadge: Bool
     var canShowNavigationHint: Bool
     var shouldAnimate: Bool
@@ -50,9 +47,6 @@ struct ToolbarState: ScreenState, Sendable {
                   navigationToolbar: toolbarState.navigationToolbar,
                   isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
                   isShowingTopTabs: toolbarState.isShowingTopTabs,
-                  canGoBack: toolbarState.canGoBack,
-                  canGoForward: toolbarState.canGoForward,
-                  numberOfTabs: toolbarState.numberOfTabs,
                   showMenuWarningBadge: toolbarState.showMenuWarningBadge,
                   canShowNavigationHint: toolbarState.canShowNavigationHint,
                   shouldAnimate: toolbarState.shouldAnimate,
@@ -75,9 +69,6 @@ struct ToolbarState: ScreenState, Sendable {
             navigationToolbar: NavigationBarState(windowUUID: windowUUID),
             isShowingNavigationToolbar: true,
             isShowingTopTabs: false,
-            canGoBack: false,
-            canGoForward: false,
-            numberOfTabs: 1,
             showMenuWarningBadge: false,
             canShowNavigationHint: false,
             shouldAnimate: true,
@@ -99,9 +90,6 @@ struct ToolbarState: ScreenState, Sendable {
         navigationToolbar: NavigationBarState,
         isShowingNavigationToolbar: Bool,
         isShowingTopTabs: Bool,
-        canGoBack: Bool,
-        canGoForward: Bool,
-        numberOfTabs: Int,
         showMenuWarningBadge: Bool,
         canShowNavigationHint: Bool,
         shouldAnimate: Bool,
@@ -120,9 +108,6 @@ struct ToolbarState: ScreenState, Sendable {
         self.navigationToolbar = navigationToolbar
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
         self.isShowingTopTabs = isShowingTopTabs
-        self.canGoBack = canGoBack
-        self.canGoForward = canGoForward
-        self.numberOfTabs = numberOfTabs
         self.showMenuWarningBadge = showMenuWarningBadge
         self.canShowNavigationHint = canShowNavigationHint
         self.shouldAnimate = shouldAnimate
@@ -255,8 +240,6 @@ struct ToolbarState: ScreenState, Sendable {
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, action))
             .copy(isShowingNavigationToolbar: toolbarAction?.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar)
             .copy(isShowingTopTabs: toolbarAction?.isShowingTopTabs ?? state.isShowingTopTabs)
-            .copy(canGoBack: toolbarAction?.canGoBack ?? state.canGoBack)
-            .copy(canGoForward: toolbarAction?.canGoForward ?? state.canGoForward)
             .copy(shouldAnimate: toolbarAction?.shouldAnimate ?? state.shouldAnimate)
             .copy(isTranslucent: toolbarAction?.isTranslucent ?? state.isTranslucent)
             .copy(isTranslationsEnabled: actionIsTranslationsEnabled ?? state.isTranslationsEnabled)
@@ -288,7 +271,6 @@ struct ToolbarState: ScreenState, Sendable {
         return state
             .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
-            .copy(numberOfTabs: toolbarAction.numberOfTabs ?? state.numberOfTabs)
     }
 
     @MainActor
@@ -321,8 +303,6 @@ struct ToolbarState: ScreenState, Sendable {
         return state
             .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
-            .copy(canGoBack: toolbarAction.canGoBack ?? state.canGoBack)
-            .copy(canGoForward: toolbarAction.canGoForward ?? state.canGoForward)
     }
 
     @MainActor
@@ -383,9 +363,6 @@ struct ToolbarState: ScreenState, Sendable {
                             navigationToolbar: state.navigationToolbar,
                             isShowingNavigationToolbar: state.isShowingNavigationToolbar,
                             isShowingTopTabs: state.isShowingTopTabs,
-                            canGoBack: state.canGoBack,
-                            canGoForward: state.canGoForward,
-                            numberOfTabs: state.numberOfTabs,
                             showMenuWarningBadge: state.showMenuWarningBadge,
                             canShowNavigationHint: state.canShowNavigationHint,
                             shouldAnimate: state.shouldAnimate,
