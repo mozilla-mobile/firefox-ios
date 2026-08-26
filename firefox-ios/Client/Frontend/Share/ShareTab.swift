@@ -15,6 +15,8 @@ protocol ShareTab: Sendable {
     var canonicalURL: URL? { get }
     @MainActor
     var webView: TabWebView? { get }
+    @MainActor
+    var mimeType: String? { get }
 
     // Tabs displaying content other than a HTML MIME type can optionally be downloaded and treated as files when shared.
     @MainActor

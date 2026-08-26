@@ -353,6 +353,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             ) { [weak self] _ in
                 self?.reloadView()
             },
+            FeatureFlagsBoolSetting(
+                with: .webViewDocumentFetchRefactor,
+                titleText: format(string: "Webview Document Refactor"),
+                statusText: format(string: "Toggle to enable document sharing to fetch WebView data directly")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
         ]
 
         return SettingSection(
