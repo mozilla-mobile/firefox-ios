@@ -1676,7 +1676,7 @@ extension String {
                 key: "NativeErrorPage.GenericError.Description.v155",
                 tableName: "NativeErrorPage",
                 value: "%@ might have a temporary problem or it could have moved.\n\nCheck your internet connection and try again in a few moments. If you’re behind a firewall or proxy, make sure %@ is allowed to connect to the web.",
-                comment: "On error page, this is the description for a generic error. %1@ is the site name and %2@ is the app name.")
+                comment: "On error page, this is the description for a generic error. %1$@ is the site name and %2$@ is the app name.")
         }
         public struct BadCertDomain {
             public static let AdvancedButton = MZLocalizedString(
