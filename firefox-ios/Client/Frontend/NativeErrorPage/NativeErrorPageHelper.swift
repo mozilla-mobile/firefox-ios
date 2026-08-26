@@ -143,7 +143,7 @@ class NativeErrorPageHelper: FeatureFlaggable {
                  where featureFlags.isBadCertDomainErrorPageEnabled:
                 return Self.buildCertificateErrorModel(for: error, url: url)
             case _ where WaybackCodes.isWaybackCode(error.code) && featureFlags.isWaybackEnabled:
-                    return .wayback(WaybackErrorModel(url: url))
+                return .wayback(WaybackErrorModel(url: url))
             default:
                 return .generic(GenericErrorModel(url: url))
             }
