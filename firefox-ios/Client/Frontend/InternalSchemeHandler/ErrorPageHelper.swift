@@ -196,7 +196,7 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
             return nil
         }
 
-        if NativeErrorPageFeatureFlag().isNativeErrorPageEnabled {
+        if NativeErrorPageFeatureFlag().isNativeErrorPageEnabled && !useOldErrorPage {
             return responseForNativeErrorPage(request: request)
         } else {
             return responseForErrorWebPage(request: request)
