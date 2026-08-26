@@ -1655,12 +1655,12 @@ extension String {
         }
         public struct GenericError {
             public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.TitleLabel.v155",
+                key: "NativeErrorPage.GenericError.TitleLabel.v157",
                 tableName: "NativeErrorPage",
                 value: "Looks like there’s a problem with this site",
                 comment: "On error page, this is the title for generic error.")
             public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v155",
+                key: "NativeErrorPage.GenericError.Description.v157",
                 tableName: "NativeErrorPage",
                 value: "%1$@ might have a temporary problem or it could have moved.\n\nCheck your internet connection and try again in a few moments. If you’re behind a firewall or proxy, make sure %2$@ is allowed to connect to the web.",
                 comment: "On error page, this is the description for a generic error. %1$@ is the site name and %2$@ is the app name.")
@@ -9789,6 +9789,18 @@ extension String {
                     value: "Limited Edition Wallpaper",
                     comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
             }
+        }
+        struct v157 {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.TitleLabel.v131",
+                tableName: "NativeErrorPage",
+                value: "Be careful. Something doesn’t look right.",
+                comment: "On error page, this is the title for generic error.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v134",
+                tableName: "NativeErrorPage",
+                value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
+                comment: "On error page, this is the description for a generic error. %@ is the site url.")
         }
     }
 }
