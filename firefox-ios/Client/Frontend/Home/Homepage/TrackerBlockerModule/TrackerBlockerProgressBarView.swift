@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ComponentLibrary
 import UIKit
 
 /// A simple track + gradient-fill progress bar used in each tracker category row.
@@ -18,7 +19,7 @@ final class TrackerBlockerProgressBarView: UIView, ThemeApplicable {
         view.clipsToBounds = true
     }
 
-    private let fillView: TrackerBlockerGradientView = .build { view in
+    private let fillView: GradientView = .build { view in
         view.clipsToBounds = true
     }
 
@@ -75,12 +76,10 @@ final class TrackerBlockerProgressBarView: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         trackView.backgroundColor = theme.colors.layer3
-        // TODO: FXIOS-XXXXX - Replace with a real progress gradient token once defined in the design system.
-        let gradient = theme.type.getInterfaceStyle() == .dark
-            ? theme.colors.gradientPrivacy
-            : Gradient(colors: [UIColor(rgb: 0x764edd), UIColor(rgb: 0xb393ff)])
-        fillView.configure(colors: gradient.colors,
-                           startPoint: CGPoint(x: 0, y: 0.5),
-                           endPoint: CGPoint(x: 1, y: 0.5))
+        // The gradient tokens are Nova-only, so classic themes fall back to a solid accent fill.
+        fillView.backgroundColor = theme.isNova ? .clear : theme.colors.actionPrimary
+        fillView.configure(gradient: theme.isNova ? theme.colors.gradientBorder : nil,
+                           startPoint: CGPoint(x: 1, y: 0.5),
+                           endPoint: CGPoint(x: 0, y: 0.5))
     }
 }

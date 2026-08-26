@@ -29,8 +29,6 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         static let spacingCountToHeader: CGFloat = 4
         static let spacingHeaderToCard: CGFloat = 20
         static let spacingCardToFooter: CGFloat = 16
-        // TODO: FXIOS-XXXXX - Replace with a real design-system gradient token once defined.
-        static let backgroundGradientLight = [UIColor(rgb: 0xeaddff), UIColor(rgb: 0xffdbc5)]
     }
 
     // MARK: - Themeable
@@ -44,7 +42,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
     private var categoryRowViews: [TrackerCategoryRowView] = []
 
     // MARK: - UI
-    private let backgroundGradientView: TrackerBlockerGradientView = .build()
+    private let backgroundGradientView: GradientView = .build()
 
     private lazy var closeButton: CloseButton = .build { [weak self] button in
         button.addTarget(self, action: #selector(self?.closeButtonTapped), for: .touchUpInside)
@@ -332,13 +330,10 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
 
-        if theme.type.getInterfaceStyle() == .dark {
-            // TODO: FXIOS-XXXXX - No dark design yet; fall back to a solid private accent color.
-            let solid = theme.colors.layerAccentPrivate
-            backgroundGradientView.configure(colors: [solid, solid])
-        } else {
-            backgroundGradientView.configure(colors: UX.backgroundGradientLight)
-        }
+        // `gradientAccentSubtle` carries its own 50% alpha, so it composites over the solid fill behind it.
+        // It is Nova-only, so classic themes get the flat fill on its own.
+        backgroundGradientView.backgroundColor = theme.colors.layer2
+        backgroundGradientView.configure(gradient: theme.isNova ? theme.colors.gradientAccentSubtle : nil)
 
         shieldPlaceholder.backgroundColor = theme.colors.layer3
         weeklyCountLabel.textColor = theme.colors.textPrimary

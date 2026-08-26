@@ -1713,7 +1713,6 @@
 		C2F700A32FBC000100112233 /* TrackerBlockerModuleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F700B32FBC000100112233 /* TrackerBlockerModuleState.swift */; };
 		C2F700D42FBC000100112233 /* TrackerBlockerSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F700C32FBC000100112233 /* TrackerBlockerSheetViewController.swift */; };
 		C2F70A012FBC000100112233 /* TrackerBlockerSheetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F70B012FBC000100112233 /* TrackerBlockerSheetState.swift */; };
-		C2F70A022FBC000100112233 /* TrackerBlockerGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F70B022FBC000100112233 /* TrackerBlockerGradientView.swift */; };
 		C2F70A032FBC000100112233 /* TrackerBlockerProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F70B032FBC000100112233 /* TrackerBlockerProgressBarView.swift */; };
 		C2F70A042FBC000100112233 /* TrackerCategoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F70B042FBC000100112233 /* TrackerCategoryRowView.swift */; };
 		C2F70A052FBC000100112233 /* TrackerBlockerSheetViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F70B052FBC000100112233 /* TrackerBlockerSheetViewControllerTests.swift */; };
@@ -10896,7 +10895,6 @@
 		C2F700B32FBC000100112233 /* TrackerBlockerModuleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerModuleState.swift; sourceTree = "<group>"; };
 		C2F700C32FBC000100112233 /* TrackerBlockerSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerSheetViewController.swift; sourceTree = "<group>"; };
 		C2F70B012FBC000100112233 /* TrackerBlockerSheetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerSheetState.swift; sourceTree = "<group>"; };
-		C2F70B022FBC000100112233 /* TrackerBlockerGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerGradientView.swift; sourceTree = "<group>"; };
 		C2F70B032FBC000100112233 /* TrackerBlockerProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerProgressBarView.swift; sourceTree = "<group>"; };
 		C2F70B042FBC000100112233 /* TrackerCategoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryRowView.swift; sourceTree = "<group>"; };
 		C2F70B052FBC000100112233 /* TrackerBlockerSheetViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerSheetViewControllerTests.swift; sourceTree = "<group>"; };
@@ -13369,7 +13367,6 @@
 				C2F700B22FBC000100112233 /* TrackerBlockerModuleCell.swift */,
 				C2F700C32FBC000100112233 /* TrackerBlockerSheetViewController.swift */,
 				C2F70B012FBC000100112233 /* TrackerBlockerSheetState.swift */,
-				C2F70B022FBC000100112233 /* TrackerBlockerGradientView.swift */,
 				C2F70B032FBC000100112233 /* TrackerBlockerProgressBarView.swift */,
 				C2F70B042FBC000100112233 /* TrackerCategoryRowView.swift */,
 				C2F700B32FBC000100112233 /* TrackerBlockerModuleState.swift */,
@@ -20396,7 +20393,6 @@
 				C2F700A22FBC000100112233 /* TrackerBlockerModuleCell.swift in Sources */,
 				C2F700D42FBC000100112233 /* TrackerBlockerSheetViewController.swift in Sources */,
 				C2F70A012FBC000100112233 /* TrackerBlockerSheetState.swift in Sources */,
-				C2F70A022FBC000100112233 /* TrackerBlockerGradientView.swift in Sources */,
 				C2F70A032FBC000100112233 /* TrackerBlockerProgressBarView.swift in Sources */,
 				C2F70A042FBC000100112233 /* TrackerCategoryRowView.swift in Sources */,
 				0EBD66922DBFE41000A78532 /* ConcurrencyThrottler.swift in Sources */,
