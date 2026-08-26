@@ -73,13 +73,13 @@ extension TrackerBlockerSheetState {
 
     static var dummyFilled: TrackerBlockerSheetState {
         TrackerBlockerSheetState(
-            weeklyCount: 306,
+            weeklyCount: 4348,
             emptyMessage: nil,
             categories: [
                 Category(title: placeholderCategoryTitles[0], count: 120),
-                Category(title: placeholderCategoryTitles[1], count: 87),
+                Category(title: placeholderCategoryTitles[1], count: 89),
                 Category(title: placeholderCategoryTitles[2], count: 99),
-                Category(title: placeholderCategoryTitles[3], count: 0)
+                Category(title: placeholderCategoryTitles[3], count: 4040)
             ],
             total: Total(count: 5305, sinceDate: "02/13/26")
         )

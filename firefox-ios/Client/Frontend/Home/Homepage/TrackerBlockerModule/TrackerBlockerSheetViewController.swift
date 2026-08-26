@@ -305,6 +305,15 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
             categoriesStack.addArrangedSubview(rowView)
             categoryRowViews.append(rowView)
         }
+
+        // Pin every count to the same width so the bars are all the same length; Auto Layout settles on the
+        // widest count in the card, so a four-digit row doesn't shorten its own bar. These constraints live on
+        // `categoriesStack`, the rows' common ancestor, and are discarded with the rows on the next rebuild.
+        if let firstRow = categoryRowViews.first {
+            NSLayoutConstraint.activate(categoryRowViews.dropFirst().map {
+                $0.countWidthAnchor.constraint(equalTo: firstRow.countWidthAnchor)
+            })
+        }
     }
 
     private func makeSeparator(theme: Theme) -> UIView {

@@ -35,7 +35,9 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .right
-        label.setContentHuggingPriority(.required, for: .horizontal)
+        // Below required so the sheet can widen the label to match the widest count in the card. Compression
+        // resistance stays required so the number is never truncated to make room for the bar.
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
@@ -122,6 +124,10 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
         NSLayoutConstraint.deactivate(isVisible ? detailsHiddenConstraints : detailsVisibleConstraints)
         NSLayoutConstraint.activate(isVisible ? detailsVisibleConstraints : detailsHiddenConstraints)
     }
+
+    /// The width of the count column. Constrain this equal across the rows of a card so that every progress bar
+    /// gets the same length, whatever number of digits each row's count has.
+    var countWidthAnchor: NSLayoutDimension { countLabel.widthAnchor }
 
     /// - Parameter fillRatio: the category's share of the week's blocked trackers, in `0...1`.
     func configure(with category: TrackerBlockerSheetState.Category, fillRatio: CGFloat, theme: Theme) {

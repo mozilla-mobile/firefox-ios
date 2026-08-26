@@ -80,6 +80,42 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertNotNil(view(subject, withID: A11y.closeButton))
     }
 
+    // MARK: - Progress bar widths
+
+    /// A four-digit count is much wider than a one-digit count, but the bars beside them must still match.
+    func test_configureMixedDigitCounts_givesEveryRowTheSameBarWidth() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 700)
+
+        subject.configure(with: .mixedDigitCounts)
+        subject.view.layoutIfNeeded()
+
+        let widths = Set(progressBars(in: subject).map { $0.bounds.width.rounded() })
+        XCTAssertEqual(widths.count, 1, "Expected one shared bar width, got \(widths.sorted())")
+    }
+
+    func test_configureMixedDigitCounts_leavesRoomForTheWidestCount() throws {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 700)
+
+        subject.configure(with: .mixedDigitCounts)
+        subject.view.layoutIfNeeded()
+
+        // The shared column has to fit the widest count without truncating it.
+        let widest = try XCTUnwrap(allSubviews(in: subject.view)
+            .compactMap { $0 as? UILabel }
+            .first { $0.text == 4040.formatted(.number) })
+        XCTAssertGreaterThanOrEqual(widest.bounds.width, widest.intrinsicContentSize.width)
+        XCTAssertGreaterThan(progressBars(in: subject).first?.bounds.width ?? 0, 0,
+                             "Expected the bars to keep a positive width")
+    }
+
+    private func progressBars(in controller: UIViewController) -> [TrackerBlockerProgressBarView] {
+        return allSubviews(in: controller.view).compactMap { $0 as? TrackerBlockerProgressBarView }
+    }
+
     // MARK: - Footer pill
 
     func test_configureFilledState_boldsOnlyTheTotalCount() throws {
@@ -281,5 +317,21 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
 
     private func allSubviews(in view: UIView) -> [UIView] {
         return view.subviews + view.subviews.flatMap { allSubviews(in: $0) }
+    }
+}
+
+private extension TrackerBlockerSheetState {
+    /// Counts spanning one to four digits, so the count column has to reconcile very different widths.
+    static var mixedDigitCounts: TrackerBlockerSheetState {
+        TrackerBlockerSheetState(
+            weeklyCount: 4135,
+            emptyMessage: nil,
+            categories: [
+                Category(title: "Cross-Site Tracking Cookies", count: 4040),
+                Category(title: "Fingerprinters", count: 6),
+                Category(title: "Tracking Content", count: 89)
+            ],
+            total: nil
+        )
     }
 }
