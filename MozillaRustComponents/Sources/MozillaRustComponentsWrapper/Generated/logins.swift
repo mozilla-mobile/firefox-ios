@@ -1014,6 +1014,12 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
     
     func getByBaseDomain(baseDomain: String) throws  -> [Login]
     
+    /**
+     * Get and decrypt the logins with the given ids. Ids which don't exist are skipped, as are
+     * logins which fail to decrypt.
+     */
+    func getMany(ids: [String]) throws  -> [Login]
+    
     func hasLoginsByBaseDomain(baseDomain: String) throws  -> Bool
     
     func isEmpty() throws  -> Bool
@@ -1028,6 +1034,12 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
     func isPotentiallyVulnerablePassword(id: String) throws  -> Bool
     
     func list() throws  -> [Login]
+    
+    /**
+     * Like `list()`, but without the encrypted fields - and so without needing the encryption
+     * key. Resolve the ids you're interested in with `get_many()`.
+     */
+    func listCandidates() throws  -> [LoginCandidate]
     
     /**
      * Stores that the user dismissed the breach alert for a login.
@@ -1338,6 +1350,19 @@ open func getByBaseDomain(baseDomain: String)throws  -> [Login]  {
 })
 }
     
+    /**
+     * Get and decrypt the logins with the given ids. Ids which don't exist are skipped, as are
+     * logins which fail to decrypt.
+     */
+open func getMany(ids: [String])throws  -> [Login]  {
+    return try  FfiConverterSequenceTypeLogin.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_get_many(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceString.lower(ids),$0
+    )
+})
+}
+    
 open func hasLoginsByBaseDomain(baseDomain: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginstore_has_logins_by_base_domain(
@@ -1374,6 +1399,18 @@ open func isPotentiallyVulnerablePassword(id: String)throws  -> Bool  {
 open func list()throws  -> [Login]  {
     return try  FfiConverterSequenceTypeLogin.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginstore_list(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+    /**
+     * Like `list()`, but without the encrypted fields - and so without needing the encryption
+     * key. Resolve the ids you're interested in with `get_many()`.
+     */
+open func listCandidates()throws  -> [LoginCandidate]  {
+    return try  FfiConverterSequenceTypeLoginCandidate.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+    uniffi_logins_fn_method_loginstore_list_candidates(
             self.uniffiCloneHandle(),$0
     )
 })
@@ -2122,6 +2159,102 @@ public func FfiConverterTypeLogin_lift(_ buf: RustBuffer) throws -> Login {
 #endif
 public func FfiConverterTypeLogin_lower(_ value: Login) -> RustBuffer {
     return FfiConverterTypeLogin.lower(value)
+}
+
+
+/**
+ * A login stored in the database, minus the encrypted fields.
+ *
+ * Reading these never needs the encryption key, so consumers which filter on the cleartext
+ * fields can do so without forcing the user to authenticate. See `list_candidates()`.
+ */
+public struct LoginCandidate: Equatable, Hashable {
+    public var id: String
+    public var timesUsed: Int64
+    public var timeCreated: Int64
+    public var timeLastUsed: Int64
+    public var timePasswordChanged: Int64
+    public var timeLastBreachAlertDismissed: Int64?
+    public var origin: String
+    public var httpRealm: String?
+    public var formActionOrigin: String?
+    public var usernameField: String
+    public var passwordField: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(id: String, timesUsed: Int64, timeCreated: Int64, timeLastUsed: Int64, timePasswordChanged: Int64, timeLastBreachAlertDismissed: Int64?, origin: String, httpRealm: String?, formActionOrigin: String?, usernameField: String, passwordField: String) {
+        self.id = id
+        self.timesUsed = timesUsed
+        self.timeCreated = timeCreated
+        self.timeLastUsed = timeLastUsed
+        self.timePasswordChanged = timePasswordChanged
+        self.timeLastBreachAlertDismissed = timeLastBreachAlertDismissed
+        self.origin = origin
+        self.httpRealm = httpRealm
+        self.formActionOrigin = formActionOrigin
+        self.usernameField = usernameField
+        self.passwordField = passwordField
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension LoginCandidate: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeLoginCandidate: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> LoginCandidate {
+        return
+            try LoginCandidate(
+                id: FfiConverterString.read(from: &buf), 
+                timesUsed: FfiConverterInt64.read(from: &buf), 
+                timeCreated: FfiConverterInt64.read(from: &buf), 
+                timeLastUsed: FfiConverterInt64.read(from: &buf), 
+                timePasswordChanged: FfiConverterInt64.read(from: &buf), 
+                timeLastBreachAlertDismissed: FfiConverterOptionInt64.read(from: &buf), 
+                origin: FfiConverterString.read(from: &buf), 
+                httpRealm: FfiConverterOptionString.read(from: &buf), 
+                formActionOrigin: FfiConverterOptionString.read(from: &buf), 
+                usernameField: FfiConverterString.read(from: &buf), 
+                passwordField: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: LoginCandidate, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.id, into: &buf)
+        FfiConverterInt64.write(value.timesUsed, into: &buf)
+        FfiConverterInt64.write(value.timeCreated, into: &buf)
+        FfiConverterInt64.write(value.timeLastUsed, into: &buf)
+        FfiConverterInt64.write(value.timePasswordChanged, into: &buf)
+        FfiConverterOptionInt64.write(value.timeLastBreachAlertDismissed, into: &buf)
+        FfiConverterString.write(value.origin, into: &buf)
+        FfiConverterOptionString.write(value.httpRealm, into: &buf)
+        FfiConverterOptionString.write(value.formActionOrigin, into: &buf)
+        FfiConverterString.write(value.usernameField, into: &buf)
+        FfiConverterString.write(value.passwordField, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeLoginCandidate_lift(_ buf: RustBuffer) throws -> LoginCandidate {
+    return try FfiConverterTypeLoginCandidate.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeLoginCandidate_lower(_ value: LoginCandidate) -> RustBuffer {
+    return FfiConverterTypeLoginCandidate.lower(value)
 }
 
 
@@ -2970,6 +3103,31 @@ fileprivate struct FfiConverterSequenceTypeLogin: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterSequenceTypeLoginCandidate: FfiConverterRustBuffer {
+    typealias SwiftType = [LoginCandidate]
+
+    public static func write(_ value: [LoginCandidate], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeLoginCandidate.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [LoginCandidate] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [LoginCandidate]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeLoginCandidate.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceTypeLoginEntry: FfiConverterRustBuffer {
     typealias SwiftType = [LoginEntry]
 
@@ -3207,6 +3365,9 @@ private let initializationResult: InitializationResult = {
     if (uniffi_logins_checksum_method_loginstore_get_by_base_domain() != 30272) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_logins_checksum_method_loginstore_get_many() != 61408) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_logins_checksum_method_loginstore_has_logins_by_base_domain() != 40417) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -3217,6 +3378,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_list() != 12147) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginstore_list_candidates() != 59697) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_record_breach_alert_dismissal() != 64238) {
