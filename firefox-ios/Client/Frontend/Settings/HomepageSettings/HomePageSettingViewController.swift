@@ -47,7 +47,9 @@ class HomePageSettingViewController: SettingsTableViewController,
             action: #selector(done))
         if #available(iOS 26.0, *) {
             let theme = themeManager.getCurrentTheme(for: windowUUID)
-            navigationItem.rightBarButtonItem?.tintColor = theme.colors.textPrimary
+            navigationItem.rightBarButtonItem?.tintColor = theme.isNova
+                ? theme.colors.actionPrimary
+                : theme.colors.textPrimary
         }
     }
 
