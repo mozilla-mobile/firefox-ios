@@ -15,6 +15,8 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
         static let verticalSpacing: CGFloat = 6
         static let verticalPadding: CGFloat = 12
         static let iconCornerRadius: CGFloat = 6
+        /// Without a progress bar the row is only as tall as the icon, which reads as cramped in the card.
+        static let emptyStateMinHeight: CGFloat = 55
     }
 
     // Placeholder for the per-category icon (real icons are added separately).
@@ -47,10 +49,10 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
         stack.alignment = .center
     }
 
-    /// The row's height comes from the detail stack when it is visible and from the title when it is not,
-    /// so the two are swapped in `setDetailsVisible(_:)`.
-    private var bottomWithDetails: NSLayoutConstraint?
-    private var bottomWithoutDetails: NSLayoutConstraint?
+    /// The vertical rules that differ between the two states. Exactly one group is active at a time; see
+    /// `setDetailsVisible(_:)`.
+    private var detailsVisibleConstraints: [NSLayoutConstraint] = []
+    private var detailsHiddenConstraints: [NSLayoutConstraint] = []
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -71,14 +73,19 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
         addSubview(titleLabel)
         addSubview(detailStack)
 
-        let bottomWithDetails = bottomAnchor.constraint(equalTo: detailStack.bottomAnchor,
-                                                        constant: UX.verticalPadding)
-        // Not required: with only the title to measure, a short title would pull the row's bottom above the
-        // icon and clash with the icon's padding constraint below.
-        let bottomWithoutDetails = bottomAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-                                                           constant: UX.verticalPadding).priority(.defaultHigh)
-        self.bottomWithDetails = bottomWithDetails
-        self.bottomWithoutDetails = bottomWithoutDetails
+        detailsVisibleConstraints = [
+            titleLabel.topAnchor.constraint(equalTo: topAnchor,
+                                            constant: UX.verticalPadding).priority(.defaultHigh),
+            bottomAnchor.constraint(equalTo: detailStack.bottomAnchor, constant: UX.verticalPadding)
+        ]
+
+        detailsHiddenConstraints = [
+            // With no bar or count to give the row its height, it is padded out to a fixed minimum and the
+            // icon and title are centred in it. The `greaterThanOrEqualTo` constraints below still let the
+            // row grow past this once the title wraps.
+            heightAnchor.constraint(greaterThanOrEqualToConstant: UX.emptyStateMinHeight),
+            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ]
 
         NSLayoutConstraint.activate([
             iconPlaceholder.widthAnchor.constraint(equalToConstant: UX.iconSize),
@@ -91,34 +98,29 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
             iconPlaceholder.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.verticalPadding),
             bottomAnchor.constraint(greaterThanOrEqualTo: iconPlaceholder.bottomAnchor,
                                     constant: UX.verticalPadding),
+            bottomAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor,
+                                    constant: UX.verticalPadding),
 
-            titleLabel.topAnchor.constraint(equalTo: topAnchor,
-                                            constant: UX.verticalPadding).priority(.defaultHigh),
             titleLabel.leadingAnchor.constraint(equalTo: iconPlaceholder.trailingAnchor,
                                                 constant: UX.horizontalSpacing),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 
             detailStack.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.verticalSpacing),
             detailStack.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            detailStack.trailingAnchor.constraint(equalTo: trailingAnchor),
-
-            bottomWithDetails
+            detailStack.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
+
+        NSLayoutConstraint.activate(detailsVisibleConstraints)
     }
 
     /// Shows or hides the progress bar and count together; the empty state shows the title on its own.
     /// The detail stack isn't itself in a stack, so hiding it leaves its constraints in place and the row's
-    /// bottom has to be moved up to the title explicitly.
+    /// height has to be re-derived explicitly.
     private func setDetailsVisible(_ isVisible: Bool) {
         detailStack.isHidden = !isVisible
-        // Deactivate first so the two bottom constraints never conflict mid-swap.
-        if isVisible {
-            bottomWithoutDetails?.isActive = false
-            bottomWithDetails?.isActive = true
-        } else {
-            bottomWithDetails?.isActive = false
-            bottomWithoutDetails?.isActive = true
-        }
+        // Deactivate first so the two groups never conflict mid-swap.
+        NSLayoutConstraint.deactivate(isVisible ? detailsHiddenConstraints : detailsVisibleConstraints)
+        NSLayoutConstraint.activate(isVisible ? detailsVisibleConstraints : detailsHiddenConstraints)
     }
 
     /// - Parameter fillRatio: the category's share of the week's blocked trackers, in `0...1`.

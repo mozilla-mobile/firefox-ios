@@ -134,12 +134,27 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertLessThan(height(of: empty), height(of: filled))
     }
 
-    /// The icon is taller than a single line of subheadline, so in the empty state it — not the title — sets
-    /// the row's height. Anchoring the bottom to the title alone would clip the icon's padding.
-    func test_categoryRow_emptyState_heightIsDrivenByIcon() {
+    /// Neither the icon nor a single line of title fills the empty row, so it sits at the fixed minimum.
+    func test_categoryRow_emptyState_usesMinimumHeight() {
         let empty = makeRow(count: nil)
 
-        XCTAssertEqual(height(of: empty), UX.iconSize + UX.rowVerticalPadding * 2, accuracy: 0.5)
+        XCTAssertEqual(height(of: empty), UX.emptyStateMinHeight, accuracy: 0.5)
+    }
+
+    func test_categoryRow_emptyState_centersIconInRow() throws {
+        let row = laidOutRow(count: nil)
+
+        let iconFrame = try frame(of: XCTUnwrap(row.subviews.first { type(of: $0) == UIView.self }), in: row)
+
+        XCTAssertEqual(iconFrame.midY, row.bounds.midY, accuracy: 0.5)
+        XCTAssertGreaterThanOrEqual(iconFrame.minY, UX.rowVerticalPadding)
+    }
+
+    /// The minimum is a floor, not a fixed height: a wrapping title still grows the row past it.
+    func test_categoryRow_emptyStateWithWrappingTitle_growsPastMinimumHeight() {
+        let empty = makeRow(count: nil, title: String(repeating: "Cross-Site Tracking Cookies ", count: 4))
+
+        XCTAssertGreaterThan(height(of: empty), UX.emptyStateMinHeight)
     }
 
     /// The icon is centred on the title rather than on the row, so it stays beside the text when the title wraps.
@@ -175,8 +190,8 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
     /// Mirrors the private `TrackerCategoryRowView.UX` values the layout assertions depend on.
     private enum UX {
         static let rowWidth: CGFloat = 320
-        static let iconSize: CGFloat = 24
         static let rowVerticalPadding: CGFloat = 12
+        static let emptyStateMinHeight: CGFloat = 55
     }
 
     private func makeRow(count: Int?, title: String = "Fingerprinters") -> TrackerCategoryRowView {
