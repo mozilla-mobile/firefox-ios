@@ -111,6 +111,7 @@ class AccountSyncHandlerTests: XCTestCase {
         subject.call { expectation.fulfill() }
 
         wait(for: [expectation], timeout: 0.2)
+        subject.cancel()
     }
 
     func testDebouncer_subSecondDelay_executesAfterDelayElapses() {
@@ -135,6 +136,28 @@ class AccountSyncHandlerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "action executes when the delay is negative")
         let subject = MainActorDebouncer(delay: -1.0)
 
+        subject.call { expectation.fulfill() }
+
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    func testDebouncer_cancel_preventsPendingAction() {
+        let expectation = XCTestExpectation(description: "cancelled action does not execute")
+        expectation.isInverted = true
+        let subject = MainActorDebouncer(delay: 0.1)
+
+        subject.call { expectation.fulfill() }
+        subject.cancel()
+
+        wait(for: [expectation], timeout: 0.5)
+    }
+
+    func testDebouncer_callAfterCancel_executes() {
+        let expectation = XCTestExpectation(description: "action scheduled after a cancel executes")
+        let subject = MainActorDebouncer(delay: 0.1)
+
+        subject.call { XCTFail("the cancelled action should not execute") }
+        subject.cancel()
         subject.call { expectation.fulfill() }
 
         wait(for: [expectation], timeout: 1.0)

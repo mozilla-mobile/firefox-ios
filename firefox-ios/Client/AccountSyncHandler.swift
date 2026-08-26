@@ -24,6 +24,10 @@ final class MainActorDebouncer {
             action()
         }
     }
+
+    func cancel() {
+        task?.cancel()
+    }
 }
 
 /// `AccountSyncHandler` exists to observe certain `TabEventLabel` notifications,
