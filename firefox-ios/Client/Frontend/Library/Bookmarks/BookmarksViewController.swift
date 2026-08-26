@@ -838,6 +838,25 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         return [editAction, removeAction]
     }
 
+    /// The folder the detail view should edit `node` in. Search reaches bookmarks outside the folder
+    /// the panel is showing, and the detail view saves into whichever folder it is handed, so a hit
+    /// from elsewhere needs its own parent, not the displayed one.
+    func parentFolder(of node: FxBookmarkNode, whenDisplaying displayedFolder: FxBookmarkNode) async -> FxBookmarkNode {
+        guard let parentGUID = node.parentGUID, parentGUID != displayedFolder.guid else {
+            return displayedFolder
+        }
+        return await withCheckedContinuation { continuation in
+            bookmarksHandler.getBookmarksTree(rootGUID: parentGUID, recursive: false) { result in
+                switch result {
+                case .success(let data):
+                    continuation.resume(returning: (data as? BookmarkFolderData) ?? displayedFolder)
+                case .failure:
+                    continuation.resume(returning: displayedFolder)
+                }
+            }
+        }
+    }
+
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         guard let defaultActions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else {
             return nil
@@ -852,7 +871,10 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                   let bookmarkFolder = self.viewModel.bookmarkFolder else {
                 return
             }
-            self.bookmarkCoordinatorDelegate?.showBookmarkDetail(for: bookmarkNode, folder: bookmarkFolder)
+            Task { @MainActor in
+                let folder = await self.parentFolder(of: bookmarkNode, whenDisplaying: bookmarkFolder)
+                self.bookmarkCoordinatorDelegate?.showBookmarkDetail(for: bookmarkNode, folder: folder)
+            }
         }).items
         actions.append(editBookmark)
 
