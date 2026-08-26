@@ -295,7 +295,8 @@ final class BrowserCoordinator: BaseCoordinator,
         guard hasBrowserLoaded else { return false }
 
         switch route {
-        case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser, .sharesheet:
+        case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .fxaPairing,
+                .defaultBrowser, .sharesheet:
             return true
         case let .settings(section):
             return canHandleSettings(with: section)
@@ -338,6 +339,9 @@ final class BrowserCoordinator: BaseCoordinator,
 
         case let .fxaSignIn(params):
             handle(fxaParams: params)
+
+        case let .fxaPairing(url):
+            browserViewController.presentPairingViewController(url)
 
         case let .defaultBrowser(section):
             switch section {

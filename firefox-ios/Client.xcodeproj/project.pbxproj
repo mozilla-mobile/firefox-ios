@@ -1858,6 +1858,8 @@
 		C8E2E80C23D20FB3005AACE6 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80823D20FB3005AACE6 /* Avatar.swift */; };
 		C8E2E80D23D20FB3005AACE6 /* RustFirefoxAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80923D20FB3005AACE6 /* RustFirefoxAccounts.swift */; };
 		C8E2E80E23D20FD2005AACE6 /* FxAWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80723D20FB3005AACE6 /* FxAWebViewController.swift */; };
+		4D5041490000000000000002 /* FxAPairingURLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5041490000000000000001 /* FxAPairingURLParser.swift */; };
+		4D5041490000000000000004 /* FxAPairingURLParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5041490000000000000003 /* FxAPairingURLParserTests.swift */; };
 		C8E531C829E5EB6100E03FEF /* RouteBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E531C729E5EB6100E03FEF /* RouteBuilder.swift */; };
 		C8E531CA29E5F7D300E03FEF /* URLScannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E531C929E5F7D300E03FEF /* URLScannerTests.swift */; };
 		C8E531CC29E72A2F00E03FEF /* ShortcutRouteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E531CB29E72A2F00E03FEF /* ShortcutRouteTests.swift */; };
@@ -11052,6 +11054,8 @@
 		C8E2E80723D20FB3005AACE6 /* FxAWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAWebViewController.swift; sourceTree = "<group>"; };
 		C8E2E80823D20FB3005AACE6 /* Avatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		C8E2E80923D20FB3005AACE6 /* RustFirefoxAccounts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustFirefoxAccounts.swift; sourceTree = "<group>"; };
+		4D5041490000000000000001 /* FxAPairingURLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAPairingURLParser.swift; sourceTree = "<group>"; };
+		4D5041490000000000000003 /* FxAPairingURLParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAPairingURLParserTests.swift; sourceTree = "<group>"; };
 		C8E531C729E5EB6100E03FEF /* RouteBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBuilder.swift; sourceTree = "<group>"; };
 		C8E531C929E5F7D300E03FEF /* URLScannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLScannerTests.swift; sourceTree = "<group>"; };
 		C8E531CB29E72A2F00E03FEF /* ShortcutRouteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutRouteTests.swift; sourceTree = "<group>"; };
@@ -14731,6 +14735,7 @@
 				5AE371802A4DD0CE0092A760 /* Mocks */,
 				5A81C5DC2A4C981A00BE88C2 /* PasswordManagerCoordinatorTests.swift */,
 				C29B64862AD69D0200F3244B /* QRCodeCoordinatorTests.swift */,
+				4D5041490000000000000003 /* FxAPairingURLParserTests.swift */,
 				C8EDDBEF29DD83FC003A4C07 /* RouteTests.swift */,
 				8A7A26E229D4ACF300EA76F1 /* SceneCoordinatorTests.swift */,
 				8A83B7492A265044002FF9AC /* SettingsCoordinatorTests.swift */,
@@ -14758,6 +14763,7 @@
 				8A93F86C29D3A131004159D9 /* DefaultRouter.swift */,
 				C8124BB029D6F55400540B79 /* Route.swift */,
 				C8EDDBF329DF119F003A4C07 /* DeeplinkInput.swift */,
+				4D5041490000000000000001 /* FxAPairingURLParser.swift */,
 				C8EDDBF129DF1159003A4C07 /* URLScanner.swift */,
 				C8E531C729E5EB6100E03FEF /* RouteBuilder.swift */,
 			);
@@ -20235,6 +20241,7 @@
 				0BDDB3412CA6B23300D501DF /* EditFolderCell.swift in Sources */,
 				8A093D7D2A4B3E4F0099ABA5 /* DebugSettingsDelegate.swift in Sources */,
 				1DC372022B23C80F000F96C8 /* WindowManager.swift in Sources */,
+				4D5041490000000000000002 /* FxAPairingURLParser.swift in Sources */,
 				C8E531C829E5EB6100E03FEF /* RouteBuilder.swift in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
@@ -20991,6 +20998,7 @@
 				394615602FEC37E3003321D8 /* WebServerUtilTests.swift in Sources */,
 				C2500D7C2ECB4A600071506F /* MockTranslationModelsFetcher.swift in Sources */,
 				8AD8FF172EBB022A00FDFD78 /* MockGleanPlumbMessageManagerProtocol.swift in Sources */,
+				4D5041490000000000000004 /* FxAPairingURLParserTests.swift in Sources */,
 				C8EDDBF029DD83FC003A4C07 /* RouteTests.swift in Sources */,
 				0A7693612C7DD19600103A6D /* CertificatesViewModelTests.swift in Sources */,
 				8A454D372CB86B86009436D9 /* MerinoStateTests.swift in Sources */,
