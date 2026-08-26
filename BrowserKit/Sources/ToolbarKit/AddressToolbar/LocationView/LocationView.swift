@@ -89,7 +89,7 @@ final class LocationView: UIView,
     private var lockIconWidthAnchor: NSLayoutConstraint?
 
     // MARK: - Search Engine / Lock Image
-    private lazy var iconContainerStackView: UIStackView = .build { view in
+    lazy var iconContainerStackView: UIStackView = .build { view in
         view.alignment = .center
     }
 
@@ -97,8 +97,8 @@ final class LocationView: UIView,
     // and we can remove `PlainSearchEngineView` from the project.
     private lazy var plainSearchEngineView: PlainSearchEngineView = .build()
     private lazy var dropDownSearchEngineView: DropDownSearchEngineView = .build()
-    private lazy var searchEngineContentView: SearchEngineView = plainSearchEngineView
-    private lazy var lockIconButton: UIButton = .build { button in
+    private(set) lazy var searchEngineContentView: SearchEngineView = plainSearchEngineView
+    private(set) lazy var lockIconButton: UIButton = .build { button in
         button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(self.didTapLockIcon), for: .touchUpInside)
     }
@@ -362,8 +362,12 @@ final class LocationView: UIView,
         urlTextFieldLeadingConstraint?.constant = constant
     }
 
-    private func removeContainerIcons() {
+    /// Rebuilds the icon container only when its arrangement actually changes. `configure` runs on every
+    /// toolbar state update, and tearing the stack down to re-add the same icon just invalidates layout.
+    private func setContainerIcons(_ icons: [UIView]) {
+        guard !iconContainerStackView.arrangedSubviews.elementsEqual(icons, by: { $0 === $1 }) else { return }
         iconContainerStackView.removeAllArrangedViews()
+        icons.forEach { iconContainerStackView.addArrangedSubview($0) }
     }
 
     private func updateIconContainer(isURLTextFieldCentered: Bool,
@@ -397,23 +401,29 @@ final class LocationView: UIView,
             shouldShowLockIcon = true
         }
 
+        let searchEngineAlpha: CGFloat = shouldShowLockIcon ? 0 : 1
+        let lockIconAlpha: CGFloat = shouldShowLockIcon ? 1 : 0
+
+        // Skip the animation when both icons already sit at their target alpha, otherwise every toolbar
+        // state update kicks off an animation block that has nothing to animate.
+        guard searchEngineContentView.alpha != searchEngineAlpha || lockIconButton.alpha != lockIconAlpha
+        else { return }
+
         let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
         if isAnimationEnabled {
             UIView.animate(withDuration: UX.iconAnimationTime, delay: UX.iconAnimationDelay) {
-                self.searchEngineContentView.alpha = shouldShowLockIcon ? 0 : 1
-                self.lockIconButton.alpha = shouldShowLockIcon ? 1 : 0
+                self.searchEngineContentView.alpha = searchEngineAlpha
+                self.lockIconButton.alpha = lockIconAlpha
             }
         } else {
-            searchEngineContentView.alpha = shouldShowLockIcon ? 0 : 1
-            lockIconButton.alpha = shouldShowLockIcon ? 1 : 0
+            searchEngineContentView.alpha = searchEngineAlpha
+            lockIconButton.alpha = lockIconAlpha
         }
     }
 
     private func updateUIForSearchEngineDisplay(isURLTextFieldCentered: Bool) {
-        removeContainerIcons()
-        if !isURLTextFieldCentered || isEditing {
-            iconContainerStackView.addArrangedSubview(searchEngineContentView)
-        }
+        let shouldShowSearchEngine = !isURLTextFieldCentered || isEditing
+        setContainerIcons(shouldShowSearchEngine ? [searchEngineContentView] : [])
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
         iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
         updateGradient()
@@ -421,8 +431,7 @@ final class LocationView: UIView,
 
     private func updateUIForLockIconDisplay() {
         guard !isEditing else { return }
-        removeContainerIcons()
-        iconContainerStackView.addArrangedSubview(lockIconButton)
+        setContainerIcons([lockIconButton])
 
         updateURLTextFieldLeadingConstraintBasedOnState()
 
