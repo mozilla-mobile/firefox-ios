@@ -184,6 +184,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         }
 
         let suggestionText = String(suggestion.dropFirst(normalized.count))
+        selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
         setMarkedText(suggestionText, selectedRange: NSRange())
         hideCursor = true
     }
