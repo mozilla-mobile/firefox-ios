@@ -428,6 +428,10 @@ public final class WebCompatReportSheetViewController: UIViewController,
         collectionView.backgroundColor = theme.colors.layer1
         collectionView.setCollectionViewLayout(makeLayout(backgroundColor: theme.colors.layer1), animated: false)
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
+        if theme.isNova {
+            previewButton.tintColor = theme.colors.actionPrimary
+            previewButton.setTitleTextAttributes([.foregroundColor: theme.colors.textInverted], for: .normal)
+        }
         if hasAppliedThemeOnce {
             reconfigureAllItems()
         }
