@@ -273,9 +273,16 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
 
         // Keep the footer in the layout at all times so it doesn't affect the sizing of the rows above it;
         // in the empty state it simply has no text.
-        footerLabel.text = state.totalText
-        footerPill.isAccessibilityElement = state.totalText != nil
-        footerPill.accessibilityLabel = state.totalText
+        if let total = state.total {
+            // The lifetime count is bold; the surrounding copy is not.
+            footerLabel.attributedText = total.text.attributedText(boldString: total.countText,
+                                                                   font: footerLabel.font)
+        } else {
+            footerLabel.attributedText = nil
+            footerLabel.text = nil
+        }
+        footerPill.isAccessibilityElement = state.total != nil
+        footerPill.accessibilityLabel = state.total?.text
 
         applyTheme()
     }
@@ -340,7 +347,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         headerLabel.textColor = state.isEmpty ? theme.colors.textPrimary : theme.colors.textSecondary
         categoriesCardView.backgroundColor = theme.colors.layer2
         // The pill has no background in the empty state, where it acts as an empty spacer.
-        footerPill.backgroundColor = state.totalText != nil ? theme.colors.layerAccentPrivateNonOpaque : .clear
+        footerPill.backgroundColor = state.total != nil ? theme.colors.layerAccentPrivateNonOpaque : .clear
         footerLabel.textColor = theme.colors.textSecondary
 
         categoryRowViews.forEach { $0.applyTheme(theme: theme) }

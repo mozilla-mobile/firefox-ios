@@ -45,7 +45,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         let weeklyLabel = view(subject, withID: A11y.weeklyCountLabel) as? UILabel
         XCTAssertEqual(weeklyLabel?.isHidden, false)
         XCTAssertEqual(weeklyLabel?.text, TrackerBlockerSheetState.dummyFilled.weeklyCount?.formatted(.number))
-        XCTAssertEqual(footerPill(in: subject)?.accessibilityLabel, TrackerBlockerSheetState.dummyFilled.totalText)
+        XCTAssertEqual(footerPill(in: subject)?.accessibilityLabel, TrackerBlockerSheetState.dummyFilled.total?.text)
     }
 
     func test_configureFilledState_setsCategoryRowIdentifiers() {
@@ -69,7 +69,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         let weeklyLabel = view(subject, withID: A11y.weeklyCountLabel) as? UILabel
         XCTAssertEqual(weeklyLabel?.isHidden, false)
         XCTAssertEqual(weeklyLabel?.text, 0.formatted(.number))
-        XCTAssertEqual(footerPill(in: subject)?.accessibilityLabel, TrackerBlockerSheetState.dummyWeeklyReset.totalText)
+        XCTAssertEqual(footerPill(in: subject)?.accessibilityLabel, TrackerBlockerSheetState.dummyWeeklyReset.total?.text)
     }
 
     func test_loadView_setsUpCloseButton() {
@@ -78,6 +78,42 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         subject.loadViewIfNeeded()
 
         XCTAssertNotNil(view(subject, withID: A11y.closeButton))
+    }
+
+    // MARK: - Footer pill
+
+    func test_configureFilledState_boldsOnlyTheTotalCount() throws {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.configure(with: .dummyFilled)
+
+        let total = try XCTUnwrap(TrackerBlockerSheetState.dummyFilled.total)
+        let text = try XCTUnwrap(footerLabel(in: subject)?.attributedText)
+        let countRange = try XCTUnwrap(total.text.range(of: total.countText))
+
+        XCTAssertEqual(text.string, total.text)
+        XCTAssertTrue(isBold(text, at: NSRange(countRange, in: total.text).location),
+                      "Expected the count to be bold")
+        XCTAssertFalse(isBold(text, at: text.length - 1), "Expected the trailing copy to stay regular")
+    }
+
+    func test_configureEmptyState_clearsFooterText() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+
+        subject.configure(with: .dummyEmpty)
+
+        XCTAssertNil(footerLabel(in: subject)?.attributedText)
+        XCTAssertNil(footerLabel(in: subject)?.text)
+    }
+
+    private func footerLabel(in controller: UIViewController) -> UILabel? {
+        return footerPill(in: controller)?.subviews.compactMap { $0 as? UILabel }.first
+    }
+
+    private func isBold(_ text: NSAttributedString, at location: Int) -> Bool {
+        let font = text.attribute(.font, at: location, effectiveRange: nil) as? UIFont
+        return font?.fontDescriptor.symbolicTraits.contains(.traitBold) ?? false
     }
 
     // MARK: - Fill ratios
@@ -90,7 +126,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
                 .init(title: "Fingerprinters", count: 70),
                 .init(title: "Tracking Content", count: 30)
             ],
-            totalText: nil
+            total: nil
         )
 
         XCTAssertEqual(subject.fillRatio(for: subject.categories[0]), 0.7, accuracy: 0.0001)
@@ -119,7 +155,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
             weeklyCount: 10,
             emptyMessage: nil,
             categories: [.init(title: "Fingerprinters", count: 25)],
-            totalText: nil
+            total: nil
         )
 
         XCTAssertEqual(subject.fillRatio(for: subject.categories[0]), 1)

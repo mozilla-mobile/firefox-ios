@@ -7,11 +7,11 @@ import UIKit
 /// The content shown by `TrackerBlockerSheetViewController`.
 ///
 /// The sheet has three visual states, all represented by this type:
-/// - **Empty** – nothing has ever been blocked. `weeklyCount` and `totalText` are `nil`; the descriptive
+/// - **Empty** – nothing has ever been blocked. `weeklyCount` and `total` are `nil`; the descriptive
 ///   `emptyMessage` is shown in place of the weekly count and the category rows show titles only.
 /// - **Filled** – trackers were blocked this week. `weeklyCount` is a positive number and every category has a count.
 /// - **Weekly reset** – the same as filled but with `weeklyCount == 0` and empty category bars, while the lifetime
-///   `totalText` still exists.
+///   `total` still exists.
 ///
 /// Note: this is placeholder/dummy data. Real values are wired up separately.
 struct TrackerBlockerSheetState {
@@ -22,13 +22,25 @@ struct TrackerBlockerSheetState {
         let count: Int?
     }
 
+    /// The lifetime total shown in the footer pill. The count is kept separate from the surrounding copy so the
+    /// footer can render it in bold.
+    struct Total {
+        let count: Int
+        /// The formatted date the count is measured from.
+        let sinceDate: String
+
+        var countText: String { count.formatted(.number) }
+        // TODO: FXIOS-XXXXX - Replace with a localized format string once available.
+        var text: String { "\(countText) since \(sinceDate) 🎉" }
+    }
+
     /// Trackers blocked this week. `nil` puts the sheet in its empty state.
     let weeklyCount: Int?
     /// Message shown instead of the weekly count when the sheet is empty.
     let emptyMessage: String?
     let categories: [Category]
     /// Lifetime total shown in the footer pill. `nil` hides the footer (empty state).
-    let totalText: String?
+    let total: Total?
 
     var isEmpty: Bool { weeklyCount == nil }
 
@@ -55,7 +67,7 @@ extension TrackerBlockerSheetState {
             weeklyCount: nil,
             emptyMessage: "Firefox blocks trackers as you browse, you'll see them here.",
             categories: placeholderCategoryTitles.map { Category(title: $0, count: nil) },
-            totalText: nil
+            total: nil
         )
     }
 
@@ -69,7 +81,7 @@ extension TrackerBlockerSheetState {
                 Category(title: placeholderCategoryTitles[2], count: 99),
                 Category(title: placeholderCategoryTitles[3], count: 0)
             ],
-            totalText: "5,305 since 02/13/26 🎉"
+            total: Total(count: 5305, sinceDate: "02/13/26")
         )
     }
 
@@ -78,7 +90,7 @@ extension TrackerBlockerSheetState {
             weeklyCount: 0,
             emptyMessage: nil,
             categories: placeholderCategoryTitles.map { Category(title: $0, count: 0) },
-            totalText: "5,305 since 02/13/26 🎉"
+            total: Total(count: 5305, sinceDate: "02/13/26")
         )
     }
 }
