@@ -68,7 +68,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339257
-    // Regression
     func testTyping() throws {
         let shouldSkipTest = true
         try XCTSkipIf(shouldSkipTest,
