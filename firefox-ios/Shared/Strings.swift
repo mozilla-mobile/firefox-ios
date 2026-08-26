@@ -4523,13 +4523,13 @@ extension String {
                 key: "WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint.v156",
                 tableName: "WebCompatReporter",
                 value: "Choose an issue type first",
-                comment: "Accessibility hint spoken on the Preview and Send Report buttons while they are unavailable because no issue type has been chosen yet, in the Report a Website Issue form."
+                comment: "Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no issue type has been selected yet, in the Report a Website Issue form."
             )
             public static let ChooseSubOptionAccessibilityHint = MZLocalizedString(
                 key: "WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156",
                 tableName: "WebCompatReporter",
-                value: "Choose what went wrong first",
-                comment: "Accessibility hint spoken on the Send Report button while it is unavailable because the chosen issue type still needs a specific problem selected, in the Report a Website Issue form."
+                value: "Choose a specific problem for your selected issue type",
+                comment: "Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form."
             )
         }
         public struct AdditionalInfo {
