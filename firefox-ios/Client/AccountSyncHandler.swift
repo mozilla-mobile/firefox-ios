@@ -8,18 +8,18 @@ import Storage
 
 @MainActor
 final class MainActorDebouncer {
-    private let delayInNanoSeconds: UInt64
+    private let delayInNanoseconds: UInt64
     private var task: Task<Void, Never>?
 
     init(delay: TimeInterval) {
-        self.delayInNanoSeconds = delay.nanoseconds
+        self.delayInNanoseconds = delay.nanoseconds
     }
 
     func call(action: @escaping @MainActor () -> Void) {
         task?.cancel()
 
-        task = Task { [delayInNanoSeconds] in
-            try? await Task.sleep(nanoseconds: delayInNanoSeconds)
+        task = Task { [delayInNanoseconds] in
+            try? await Task.sleep(nanoseconds: delayInNanoseconds)
             guard !Task.isCancelled else { return }
             action()
         }
