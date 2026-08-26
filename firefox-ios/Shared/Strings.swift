@@ -1672,16 +1672,21 @@ extension String {
                 tableName: "NativeErrorPage",
                 value: "Looks like there’s a problem with this site",
                 comment: "On error page, this is the title for generic error.")
-            public static let Description = MZLocalizedString(
+            public static let DescriptionSuffix = MZLocalizedString(
                 key: "NativeErrorPage.GenericError.Description.v157",
                 tableName: "NativeErrorPage",
-                value: "%1$@ couldn’t connect to %2$@. The site may be temporarily unavailable, it may have moved to a different address, or your firewall or proxy may be blocking the connection.\n\nCheck your connection settings and try again.",
-                comment: "On error page, this is the description for a generic error. %1$@ is the app name and %2$@ is the site.")
-            public static let UnknownHost = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.AlternativeURL.v157",
+                value: "The site may be temporarily unavailable, it may have moved to a different address, or your firewall or proxy may be blocking the connection.\n\nCheck your connection settings and try again.",
+                comment: "Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again.")
+            public static let DescriptionPrefixWithURL = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v157.withURL",
                 tableName: "NativeErrorPage",
-                value: "This site",
-                comment: "On error page, this is an alternative message that gets substituted in the generic error description for the URL when the error page is not provided a URL.")
+                value: "%1$@ couldn’t connect to %2$@.",
+                comment: "First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL.")
+            public static let DescriptionPrefixWithoutURL = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v157.withoutURL",
+                tableName: "NativeErrorPage",
+                value: "%1$@ couldn’t reach the requested URL.",
+                comment: "First sentence of the generic error description when the requested URL is not available. %1$@ is the app name.")
         }
         public struct BadCertDomain {
             public static let AdvancedButton = MZLocalizedString(
