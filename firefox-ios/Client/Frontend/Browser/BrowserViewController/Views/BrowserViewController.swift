@@ -25,7 +25,6 @@ import struct MozillaAppServices.Login
 import enum MozillaAppServices.BookmarkRoots
 import struct MozillaAppServices.VisitObservation
 import enum MozillaAppServices.VisitType
-import enum MozillaAppServices.OAuthScope
 
 class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
@@ -3403,27 +3402,18 @@ class BrowserViewController: UIViewController,
     }
 
     func presentPairingViewController(_ pairingURL: URL) {
-        guard let accountManager = profile.rustFxA.accountManager else { return }
-
-        accountManager.beginPairingAuthentication(
-            pairingUrl: pairingURL.absoluteString,
-            entrypoint: "pairing_\(FxAEntrypoint.fxaDeepLinkNavigation.rawValue)",
-            scopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session]
-        ) { [weak self] result in
-            guard let self, case .success(let supplicantURL) = result else { return }
-            let viewController = FxAWebViewController(
-                pageType: .qrCode(url: supplicantURL),
-                profile: profile,
-                dismissalStyle: .dismiss,
-                deepLinkParams: FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: [:])
-            )
-            presentThemedViewController(
-                navItemLocation: .Left,
-                navItemText: .Close,
-                vcBeingPresented: viewController,
-                topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad
-            )
-        }
+        let viewController = FxAWebViewController(
+            pageType: .qrCode(url: pairingURL),
+            profile: profile,
+            dismissalStyle: .dismiss,
+            deepLinkParams: FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: [:])
+        )
+        presentThemedViewController(
+            navItemLocation: .Left,
+            navItemText: .Close,
+            vcBeingPresented: viewController,
+            topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad
+        )
     }
 
     // MARK: - Handle Deeplink open URL / query

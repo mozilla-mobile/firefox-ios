@@ -52,6 +52,7 @@ private enum RemoteCommand: String {
     case canLinkAccount = "fxaccounts:can_link_account"
     // case loaded = "fxaccounts:loaded"
     case status = "fxaccounts:fxa_status"
+    case pairOAuthStart = "fxaccounts:pair_oauth_start"
     case oauthLogin = "fxaccounts:oauth_login"
     case login = "fxaccounts:login"
     case changePassword = "fxaccounts:change_password"
@@ -74,6 +75,10 @@ class FxAWebViewModel {
     static let mobileUserAgent = UserAgent.mobileUserAgent()
 
     var userDefaults: UserDefaultsInterface = UserDefaults.standard
+    private lazy var pairingOAuthHandler = FxAPairingOAuthHandler(
+        authenticatorProvider: { [weak self] in self?.profile.rustFxA.accountManager },
+        logger: logger
+    )
 
     var blobToDataScript = """
                 async function createBlobFromUrl(url) {
@@ -268,7 +273,7 @@ extension FxAWebViewModel {
               let cmd = msg["command"] as? String
         else { return }
 
-        let id = Int(msg["messageId"] as? String ?? "")
+        let id = messageID(from: msg["messageId"])
         handleRemote(command: cmd, id: id, data: msg["data"], webView: webView)
     }
 
@@ -277,6 +282,10 @@ extension FxAWebViewModel {
         logger.log("webchannel message: \(rawValue)", level: .info, category: .sync)
         let command = RemoteCommand(rawValue: rawValue) ?? .unknown
         switch command {
+        case .pairOAuthStart:
+            if let id {
+                onPairOAuthStart(id: id, webView: webView)
+            }
         case .oauthLogin:
             if let data = data {
                 onLoginComplete(data: data, webView: webView)
@@ -320,6 +329,16 @@ extension FxAWebViewModel {
         }
     }
 
+    private func messageID(from value: Any?) -> Int? {
+        if let value = value as? Int {
+            return value
+        }
+        if let value = value as? String {
+            return Int(value)
+        }
+        return nil
+    }
+
     /// Send a message to web content using the required message structure.
     private func runJS(webView: WKWebView, typeId: String, messageId: Int, command: String, data: String = "{}") {
         let msg = """
@@ -360,6 +379,40 @@ extension FxAWebViewModel {
         }
 
         runJS(webView: webView, typeId: typeId, messageId: id, command: cmd, data: data)
+    }
+
+    private func onPairOAuthStart(id: Int, webView: WKWebView) {
+        pairingOAuthHandler.start { [weak self, weak webView] result in
+            guard let self, let webView else { return }
+
+            switch result {
+            case .success(let parameters):
+                sendPairOAuthResponse(id: id, webView: webView, data: parameters)
+            case .failure:
+                sendPairOAuthError(id: id, webView: webView, message: FxAPairingOAuthHandler.errorMessage)
+            }
+        }
+    }
+
+    private func sendPairOAuthResponse(id: Int, webView: WKWebView, data: Any) {
+        guard let dataJSON = jsonString(from: data) else { return }
+        runJS(webView: webView,
+              typeId: "account_updates",
+              messageId: id,
+              command: RemoteCommand.pairOAuthStart.rawValue,
+              data: dataJSON)
+    }
+
+    private func sendPairOAuthError(id: Int, webView: WKWebView, message: String) {
+        sendPairOAuthResponse(id: id, webView: webView, data: ["error": ["message": message]])
+    }
+
+    private func jsonString(from object: Any) -> String? {
+        guard JSONSerialization.isValidJSONObject(object),
+              let data = try? JSONSerialization.data(withJSONObject: object),
+              let json = String(data: data, encoding: .utf8)
+        else { return nil }
+        return json
     }
 
     private func onLoginComplete(data: Any, webView: WKWebView) {
