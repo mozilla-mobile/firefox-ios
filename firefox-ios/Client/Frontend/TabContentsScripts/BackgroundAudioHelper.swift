@@ -61,12 +61,17 @@ class BackgroundAudioHelper: Notifiable {
     }
 
     func configure(prefs: Prefs) {
-        if Self.isEnabled(prefs) { startObserving() }
+        guard Self.isEnabled(prefs) else { return }
+        startObserving()
     }
 
     func toggle(isEnabled: Bool, prefs: Prefs) {
         prefs.setBool(isEnabled, forKey: PrefsKeys.BackgroundAudio)
-        if isEnabled { startObserving() } else { stopObserving() }
+        if isEnabled {
+            startObserving()
+        } else {
+            stopObserving()
+        }
     }
 
     func startObserving() {
