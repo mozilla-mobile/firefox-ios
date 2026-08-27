@@ -3014,7 +3014,6 @@ extension String {
                 value: "Block Ads",
                 comment: "Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements."
             )
-
             public static let BackgroundAudio = MZLocalizedString(
                 key: "Settings.Browsing.BackgroundAudio.Title.v156",
                 tableName: "Settings",
