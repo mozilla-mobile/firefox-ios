@@ -49,6 +49,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     private var hideCursor = false
     private var isSettingMarkedText = false
     private var lastMarkedText = ""
+    private var shouldApplyAutocompleteSuggestion = true
     var clearButton: UIButton? {
         return value(forKey: "_clearButton") as? UIButton
     }
@@ -143,6 +144,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
         guard markedTextRange == nil else {
             // If we have an active completion, delete it without deleting any user-typed characters.
+            shouldApplyAutocompleteSuggestion = false
             removeCompletion()
             forceResetCursor()
             return
@@ -172,7 +174,11 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     func setAutocompleteSuggestion(_ suggestion: String?) {
         let searchText = text ?? ""
 
-        guard let suggestion = suggestion, isEditing && markedTextRange == nil else {
+        guard let suggestion = suggestion,
+              isEditing,
+              markedTextRange == nil,
+              shouldApplyAutocompleteSuggestion
+        else {
             hideCursor = false
             return
         }
@@ -340,6 +346,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     // MARK: - UITextFieldDelegate
     public func textFieldDidBeginEditing(_ textField: UITextField) {
+        shouldApplyAutocompleteSuggestion = true
         updateRightView()
         autocompleteDelegate?.locationTextFieldDidBeginEditing(self)
     }

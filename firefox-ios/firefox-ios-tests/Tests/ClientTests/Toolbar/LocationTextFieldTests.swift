@@ -106,6 +106,34 @@ final class LocationTextFieldTests: XCTestCase {
         XCTAssertEqual(textField.text, "youtube.com")
     }
 
+    func testDeleteBackward_withActiveSuggestion_suppressesFurtherSuggestions() {
+        makeTextFieldEditing()
+        textField.text = "pangram"
+        textField.setAutocompleteSuggestion("pangram.com")
+        XCTAssertNotNil(textField.markedTextRange)
+
+        textField.deleteBackward()
+        textField.setAutocompleteSuggestion("pangrampangram.com")
+
+        XCTAssertEqual(textField.text, "pangram")
+        XCTAssertNil(textField.markedTextRange)
+    }
+
+    func testBeginEditing_afterSuppressingSuggestions_allowsSuggestionsAgain() {
+        makeTextFieldEditing()
+        textField.text = "pangram"
+        textField.setAutocompleteSuggestion("pangram.com")
+        XCTAssertNotNil(textField.markedTextRange)
+        textField.deleteBackward()
+        textField.resignFirstResponder()
+
+        makeTextFieldEditing()
+        textField.setAutocompleteSuggestion("pangrampangram.com")
+
+        XCTAssertEqual(textField.text, "pangrampangram.com")
+        XCTAssertNotNil(textField.markedTextRange)
+    }
+
     func testApplyTheme_refreshesMarkedText() {
         textField.text = "github"
         // Move cursor to end of text before setting marked text
