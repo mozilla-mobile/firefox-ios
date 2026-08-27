@@ -33,6 +33,9 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(initialState.windowUUID, windowUUID)
         XCTAssertEqual(initialState.actions, [])
         XCTAssertFalse(initialState.displayBorder)
+        XCTAssertFalse(initialState.canGoBack)
+        XCTAssertFalse(initialState.canGoForward)
+        XCTAssertEqual(initialState.numberOfTabs, 1)
     }
 
     func test_didLoadToolbarsAction_returnsExpectedState() {
@@ -55,6 +58,9 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.displayBorder, true)
+        XCTAssertFalse(newState.canGoBack)
+        XCTAssertFalse(newState.canGoForward)
+        XCTAssertEqual(newState.numberOfTabs, 1)
 
         XCTAssertEqual(newState.actions.count, 5)
         XCTAssertEqual(newState.actions[0].actionType, .back)
@@ -73,6 +79,8 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         let newState = loadWebsiteAction(state: initialState, reducer: reducer)
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertTrue(newState.canGoBack)
+        XCTAssertFalse(newState.canGoForward)
 
         XCTAssertEqual(newState.actions.count, 5)
         XCTAssertEqual(newState.actions[0].actionType, .back)
@@ -99,6 +107,7 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.numberOfTabs, 2)
         XCTAssertEqual(newState.actions.count, 5)
         XCTAssertEqual(newState.actions[0].actionType, .back)
         XCTAssertEqual(newState.actions[1].actionType, .forward)
@@ -124,6 +133,8 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertTrue(newState.canGoBack)
+        XCTAssertFalse(newState.canGoForward)
         XCTAssertEqual(newState.actions[0].actionType, .back)
         XCTAssertEqual(newState.actions[0].isEnabled, true)
         XCTAssertEqual(newState.actions[1].actionType, .forward)
