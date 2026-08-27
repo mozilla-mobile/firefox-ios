@@ -27,6 +27,7 @@ class DataManagementTests: BaseTestCase {
 
     // Testing the search bar, and clear website data option
     // https://mozilla.testrail.io/index.php?/cases/view/2307015
+    // Regression
     func testWebSiteDataOptions() {
         cleanAllData()
         navigator.nowAt(BrowserTab)
@@ -82,6 +83,7 @@ class DataManagementTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2802088
+    // Regression
     func testFilterWebsiteData() {
         cleanAllData()
         navigator.nowAt(BrowserTab)

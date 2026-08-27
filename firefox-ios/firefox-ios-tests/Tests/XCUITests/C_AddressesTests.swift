@@ -65,6 +65,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2618638
+    // Regression
     func testAddNewAddressNameFilled() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
@@ -92,6 +93,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2618640
+    // Regression
     func testAddNewAddressStreetAddressFilled() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
@@ -106,6 +108,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2618641
+    // Regression
     func testAddNewAddressCityFilled() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
@@ -120,6 +123,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2618642
+    // Regression
     func testAddNewAddressPostalCodeFilled() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
@@ -134,6 +138,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2618644
+    // Regression
     func testAddNewAddressPhoneFilled() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
@@ -148,6 +153,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2618645
+    // Regression
     func testAddNewAddressEmailFilled()  throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
@@ -175,6 +181,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2618654
+    // Regression
     func testUpdateAllAddressFields() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
@@ -187,6 +194,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2618646
+    // Regression
     func testUpdateAddressFieldName() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
@@ -309,6 +317,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2549847
+    // Regression
     func testAutofillAddressesByTapingStateField() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
@@ -333,6 +342,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2549852
+    // Regression
     func testAutofillAddressesByTapingPhoneField() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
@@ -371,6 +381,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2549846
+    // Regression
     func testAutofillAddressesByTapingCityField() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
@@ -379,6 +390,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2549848
+    // Regression
     func testAutofillAddressesByTapingPostalCodeField() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
@@ -387,6 +399,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2546298
+    // Regression
     func testToggleAddressOnOff() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")

@@ -94,6 +94,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307487
+    // Regression
     func testClearHistoryFromSettings() throws {
         navigator.nowAt(NewTabScreen)
         // Browse to have an item in history list
@@ -146,6 +147,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307357
+    // Regression
     func testRecentlyClosedWebsiteOpen() {
         // Open "Book of Mozilla"
         openBookOfMozilla()
@@ -211,6 +213,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307479
+    // Regression
     func testRemoveAllTabsButtonRecentlyClosedHistory() {
         // Open "Book of Mozilla"
         openBookOfMozilla()
@@ -293,6 +296,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307484
+    // Regression
     func testOpenInNewTabRecentlyClosedItem() {
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()

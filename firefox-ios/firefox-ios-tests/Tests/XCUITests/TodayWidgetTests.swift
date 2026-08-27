@@ -392,6 +392,7 @@ class TodayWidgetTests: BaseTestCase {
 
     // TESTS
     // https://mozilla.testrail.io/index.php?/cases/view/2769289
+    // Regression
     func testNewSearchWidget() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("iOS 16 is required")
@@ -438,6 +439,7 @@ class TodayWidgetTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2769297
+    // Regression
     func testNewPrivateSearchWidget() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("iOS 16 is required")
@@ -612,6 +614,7 @@ class TodayWidgetTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2783003
+    // Regression
     func testFxShortcutGoToCopiedLinkWidget() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("iOS 16 is required")

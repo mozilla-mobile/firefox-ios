@@ -88,6 +88,7 @@ class LoginTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306961
+    // Regression
     func testLoginsListFromBrowserTabMenu() {
         closeURLBar()
         // Make sure you can access empty Login List from Browser Tab Menu
@@ -323,6 +324,7 @@ class LoginTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2798587
+    // Regression
     func testVerifyPasswordsSettingMenu() {
         // Go to Settings - Passwords
         openLoginsSettingsFromBrowserTab()
@@ -353,17 +355,20 @@ class LoginTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2798590
+    // Regression
     func testSearchSavedLoginsByURL() {
         validateSearchSavedLoginsByUrlOrUsername(searchText: "localhost")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2798591
+    // Regression
     func testSearchSavedLoginsByUsername() {
         validateSearchSavedLoginsByUrlOrUsername(searchText: "test")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2798597
     // Smoketest
+    // Regression
     func testVerifyUpdatedPasswordIsSaved() throws {
         guard #available(iOS 16, *) else {
             throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
@@ -372,6 +377,7 @@ class LoginTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2798598
+    // Regression
     func testVerifyUpdatedPasswordIsNotSaved() throws {
         guard #available(iOS 16, *) else {
             throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
@@ -380,6 +386,7 @@ class LoginTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3001341
+    // Regression
     func testLoginFreshInstallMessage() throws {
         if #unavailable(iOS 17) {
             throw XCTSkip("setUp() fails to remove app intermittently")

@@ -12,6 +12,7 @@ class ThirdPartySearchTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2443998
+    // Regression
     func testCustomSearchEngines() {
         addCustomSearchEngine()
 
@@ -36,6 +37,7 @@ class ThirdPartySearchTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2444328
+    // Regression
     func testCustomSearchEngineAsDefault() {
         addCustomSearchEngine()
 
@@ -62,6 +64,7 @@ class ThirdPartySearchTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306941
+    // Regression
     func testCustomSearchEngineDeletion() {
         addCustomSearchEngine()
 

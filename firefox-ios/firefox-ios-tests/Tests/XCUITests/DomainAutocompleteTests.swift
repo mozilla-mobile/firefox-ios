@@ -45,6 +45,7 @@ class DomainAutocompleteTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2334558
+    // Regression
     func test1Autocomplete() {
         // Basic autocompletion cases
         // The autocomplete does not display the history item from the DB. Workaround is to manually visit "mozilla.org".
@@ -73,6 +74,7 @@ class DomainAutocompleteTests: BaseTestCase {
 
     // Test that deleting characters works correctly with autocomplete
     // https://mozilla.testrail.io/index.php?/cases/view/2334647
+    // Regression
     func test3AutocompleteDeletingChars() {
         // The autocomplete does not display the history item from the DB. Workaround is to manually visit "mozilla.org".
         navigator.openURL("mozilla.org")
@@ -132,6 +134,7 @@ class DomainAutocompleteTests: BaseTestCase {
 
     // Non-matches.
     // https://mozilla.testrail.io/index.php?/cases/view/2334650
+    // Regression
     func test5NoMatches() {
         navigator.openURL("https://mozilla.github.io/form-fill-examples/basic.html")
         waitUntilPageLoad()
@@ -180,6 +183,7 @@ class DomainAutocompleteTests: BaseTestCase {
 
     // Test default domains.
     // https://mozilla.testrail.io/index.php?/cases/view/2334651
+    // Regression
     func test2DefaultDomains() {
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("a")

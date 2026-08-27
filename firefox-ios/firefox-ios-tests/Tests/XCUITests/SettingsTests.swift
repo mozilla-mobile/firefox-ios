@@ -255,6 +255,7 @@ class SettingsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2951992
+    // Regression
     func testAutofillPasswordSettingsOptionSubtitles() {
         app.launch()
         validateAutofillAndPasswordsUI()
