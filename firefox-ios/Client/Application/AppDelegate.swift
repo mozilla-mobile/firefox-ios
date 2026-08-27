@@ -144,6 +144,10 @@ class AppDelegate: UIResponder,
 
         widgetManager = TopSitesWidgetManager(topSitesProvider: topSitesProvider)
 
+        if featureFlagsProvider.isEnabled(.backgroundAudio) {
+            BackgroundAudioHelper.shared.configure(prefs: profile.prefs)
+        }
+
         addObservers()
 
         /// Prewarm translation resources off the main thread

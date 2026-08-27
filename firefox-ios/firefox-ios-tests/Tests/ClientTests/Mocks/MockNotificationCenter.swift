@@ -44,7 +44,7 @@ final class MockNotificationCenter: NotificationProtocol, @unchecked Sendable {
     }
 
     func removeObserver(_ observer: Any, name aName: NSNotification.Name?, object anObject: Any?) {
-        // Implement as needed
+        removeObserverCallCount += 1
     }
 
     func publisher(for name: Notification.Name, object: AnyObject?) -> NotificationCenter.Publisher {
