@@ -797,6 +797,7 @@ struct AccessibilityIdentifiers {
             static let blockImages = "NoImageModeStatus"
             static let adBlockerTitle = "AdBlocker"
             static let adBlockerLearnMore = "AdBlockerLearnMore"
+            static let backgroundAudio = "BackgroundAudio"
         }
 
         struct Summarize {
