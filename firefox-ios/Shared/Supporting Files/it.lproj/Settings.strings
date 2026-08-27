@@ -107,7 +107,7 @@
 "Settings.AIControls.BlockAIEnhancementsTitle.v151" = "Blocca miglioramenti basati sull’IA";
 
 /* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
-"Settings.AIControls.BlockedInformation.v151" = "Per impostazione predefinita, le funzionalità basate sull’IA sono bloccate. Sblocca funzioni specifiche qui sotto.";
+"Settings.AIControls.BlockedInformation.v151" = "Le funzionalità basate sull’IA, nuove o esistenti, sono bloccate per impostazione predefinita. Sblocca funzioni specifiche qui sotto.";
 
 /* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
 "Settings.AIControls.HeaderCard.Link.v151" = "Ulteriori informazioni";
@@ -216,6 +216,9 @@
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Account";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the brand title for the section containing the Wrexham AFC wallpapers. */
+"Settings.Home.Option.Wallpaper.WrexhamBrandTitle.v155" = "Wrexham A.F.C.";
 
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsStatus.v112" = "Questa opzione deve essere attiva per ricevere schede e notifiche quando accedi da un altro dispositivo.";
@@ -383,7 +386,7 @@
 "Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "Nuova scheda";
 
 /* Footer text below the auto-translate toggle in the Translation settings screen. */
-"Settings.Translation.AutoTranslate.Footer.v151" = "Traduce automaticamente le pagine nella tua lingua preferita.";
+"Settings.Translation.AutoTranslate.Footer.v151" = "Traduce automaticamente le pagine nella tua lingua preferita principale.";
 
 /* Title for the auto-translate toggle in the Translation settings screen. */
 "Settings.Translation.AutoTranslate.Title.v151" = "Traduzione automatica";
@@ -422,7 +425,7 @@
 "Settings.Translation.Title.v145" = "Traduzione";
 
 /* Footer text below the enable toggle in the Translation settings screen. */
-"Settings.Translation.ToggleFooter.v151" = "Disattivare questa opzione per rimuovere la traduzione dalla barra degli strumenti e dal menu.";
+"Settings.Translation.ToggleFooter.v151" = "Disattiva questa opzione per rimuovere la traduzione dalla barra degli strumenti e dal menu.";
 
 /* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
 "Settings.Translation.ToggleTitle.v145" = "Attiva traduzioni";

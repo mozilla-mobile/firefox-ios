@@ -965,7 +965,7 @@
 "Remove" = "Sil";
 
 /* Name for button removing current article from reading list in reader mode */
-"Remove from Reading List" = "Okuma Listesi’nden kaldır";
+"Remove from Reading List" = "Okuma listesinden kaldır";
 
 /* Cancel button text shown in reopen-alert at home page. */
 "ReopenAlert.Actions.Cancel" = "İptal";
@@ -1457,7 +1457,7 @@
 "Settings.Search.Edit.Button" = "Düzenle";
 
 /* title for a link that explains how mozilla collects telemetry */
-"Settings.SendUsage.Link" = "Ayrıntılı bilgi alın.";
+"Settings.SendUsage.Link" = "Daha fazla bilgi alın.";
 
 /* A short description that explains why mozilla collects usage data. */
 "Settings.SendUsage.Message" = "Mozilla, yalnızca Firefox’u daha da geliştirmek için ihtiyaç duyduğumuz verileri toplar.";

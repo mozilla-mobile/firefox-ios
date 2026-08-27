@@ -377,7 +377,7 @@
 "FirefoxHomepage.Stories.Sponsored.v140" = "Sponsored";
 
 /* Accessibility Label for the tab toolbar Forward button */
-"Forward" = "Forwards";
+"Forward" = "Forward";
 
 /* Settings section title for Firefox Account */
 "FxA.FirefoxAccount" = "Firefox Account";
@@ -464,7 +464,7 @@
 "HistoryPanel.HistoryBackButton.Title" = "History";
 
 /* Title for the Recently Closed button in the History Panel */
-"HistoryPanel.RecentlyClosedTabsButton.Title" = "Recently closed";
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Recently Closed";
 
 /* Accessibility label for the tab toolbar indicating the Home button. */
 "Home" = "Home";
@@ -500,7 +500,7 @@
 "Hotkeys.Find.DiscoveryTitle" = "Find";
 
 /* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.Forward.DiscoveryTitle" = "Forwards";
+"Hotkeys.Forward.DiscoveryTitle" = "Forward";
 
 /* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NewPrivateTab.DiscoveryTitle" = "New Private Tab";
@@ -641,7 +641,7 @@
 "Loading content…" = "Loading content…";
 
 /* Authentication prompt log in button */
-"Log in" = "Sign in";
+"Log in" = "Log in";
 
 /* Toggle logins syncing setting */
 "Logins" = "Logins";

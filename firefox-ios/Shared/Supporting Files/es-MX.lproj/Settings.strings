@@ -224,7 +224,7 @@
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Sincronizar";
 
 /* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both %1$@ and %2$@ are the app name (e.g. Firefox). */
-"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Deshabilitaste todas las notificaciones de %1$@. Habilítalas ingresando a ajustes del dispositivo > Notificaciones > %2$@$";
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Deshabilitaste todas las notificaciones de %1$@. Habilítalas ingresando a ajustes del dispositivo > Notificaciones > %2$@";
 
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. %@ is the app name (e.g. Firefox). */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Descubre funcionalidades útiles y cómo aprovechar %@ al máximo.";

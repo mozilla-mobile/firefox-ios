@@ -754,11 +754,17 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Vispārīgi";
 
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "Sākumlapa";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "Iekļaut sākumlapā";
+
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
-"Settings.HomePage.SectionName" = "Mājas lapa";
+"Settings.HomePage.SectionName" = "Sākumlapa";
 
 /* Title of the setting section containing the URL of the current home page. */
-"Settings.HomePage.URL.Title" = "Pašreizējā mājas lapa";
+"Settings.HomePage.URL.Title" = "Pašreizējā sākumlapa";
 
 /* Button in settings to use the current page as home page. */
 "Settings.HomePage.UseCurrent.Button" = "Lietot pašreizējo lapu";
@@ -770,7 +776,7 @@
 "Settings.NewTab.Option.FirefoxHome" = "Firefox sākumlapa";
 
 /* Option in settings to show your homepage when you open a new tab */
-"Settings.NewTab.Option.HomePage" = "Mājas lapa";
+"Settings.NewTab.Option.HomePage" = "Sākumlapa";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Jauna cilne";
@@ -822,6 +828,9 @@
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri saīsnes";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "Labi, sapratu";
 
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Izsekošanas aizsardzība";
@@ -960,6 +969,9 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "Lietotājvārds";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Mēģināt vēlreiz";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Tīmekļa saturs";

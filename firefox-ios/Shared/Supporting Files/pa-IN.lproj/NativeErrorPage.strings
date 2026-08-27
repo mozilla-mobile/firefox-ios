@@ -37,6 +37,9 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "ਮੁੜ-ਲੋਡ";
 
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v155" = "ਫੇਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ";
+
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "%@ ਦੇ ਮਾਲਕ ਨੇ ਇਸ ਨੂੰ ਠੀਕ ਢੰਗ ਨਾਲ ਸੈੱਟਅੱਪ ਨਹੀਂ ਕੀਤਾ ਹੈ ਅਤੇ ਸੁਰੱਖਿਅਤ ਕਨੈਕਸ਼ਨ ਬਣਾਇਆ ਨਹੀਂ ਜਾ ਸਕਦਾ ਹੈ।";
 
@@ -52,6 +55,9 @@
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "ਤੁਹਾਡੇ ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਨਾਲ ਸਮੱਸਿਆ ਜਾਪਦੀ ਹੈ।";
 
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v155" = "…ਅਕਾਇਵ ਦੀ ਜਾਂਚ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ";
+
 /* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.Wayback.Error.Description.v154" = "ਸਾਈਟ ਰੁੱਝੀ ਹੋਈ ਜਾਂ ਗ਼ੈਰ-ਮੌਜੂਦ ਹੋ ਸਕਦੀ ਹੈ। ਬਾਅਦ ਵਿੱਚ ਕੋਸ਼ਿਸ਼ ਕਰੋ। ਜੇ ਹੋਰ ਸਫ਼ੇ ਨਹੀਂ ਲੋਡ ਸਕਦੇ ਹਨ ਤਾਂ ਆਪਣੇ Wi-Fi ਜਾਂ ਡਾਟਾ ਕਨੈਕਸ਼ਨ ਦੀ ਜਾਂਚ ਕਰੋ। %@ ਇਸ ਸਫ਼ੇ ਦੇ ਪੁਰਾਣੇ ਵਰਜ਼ਨ ਵਾਸਤੇ ਵੇਬੈਕ ਮਸ਼ੀਨ ਨੂੰ ਵੀ ਵਰਤ ਸਕਦਾ ਹੈ।";
 
@@ -64,8 +70,7 @@
 /* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
 "NativeErrorPage.Wayback.Error.Retry.v154" = "ਮੁੜ-ਕੋਸ਼ਿਸ਼";
 
-/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine.
-Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
 "NativeErrorPage.Wayback.Error.Search.v155" = "ਵੈੱਬ ‘ਤੇ ਖੋਜੋ";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */

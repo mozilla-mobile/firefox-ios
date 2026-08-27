@@ -49,6 +49,9 @@
 /* Bullet on the Report Preview screen. The reported page's address is shown underneath it. */
 "WebCompatReporter.Preview.Data.PageURL.v155" = "URL Laman";
 
+/* Bullet on the Report Preview screen, for the screen's physical pixels per layout point. */
+"WebCompatReporter.Preview.Data.PixelDensity.v155" = "Kepadatan piksel layar Anda";
+
 /* Bullet on the Report Preview screen, for whether the page was open in private browsing. */
 "WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155" = "Status penjelajahan pribadi: aktif atau tidak aktif";
 
@@ -73,6 +76,9 @@
 /* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.BrowserBlocked.v154" = "Peramban diblokir atau tidak didukung";
 
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ButtonsNotWorking.v154" = "Tombol atau tautan tidak berfungsi";
+
 /* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.CaptionsMissing.v154" = "Teks tidak ada";
 
@@ -81,4 +87,19 @@
 
 /* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.ItemsMisaligned.v154" = "Item tidak sejajar";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsOverlapped.v154" = "Item tumpang tindih";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoAudio.v154" = "Tidak ada audio";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoVideo.v154" = "Tidak ada video";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PageNotLoading.v154" = "Laman tidak dimuat dengan benar";
+
+/* Message of the toast shown after the user successfully submits a website issue report. */
+"WebCompatReporter.Toast.ReportSent.v155" = "Laporan terkirim";
 

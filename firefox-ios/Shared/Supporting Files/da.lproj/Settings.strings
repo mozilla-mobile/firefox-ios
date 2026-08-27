@@ -73,6 +73,9 @@
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Sider og sammenfatninger gemmes aldrig.";
 
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "Sammenfatning af sider";
+
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the Quick Answers feature */
 "Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Message.v154" = "Din stemme, dine spørgsmål og dine svar gemmes aldrig.";
 

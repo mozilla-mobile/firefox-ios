@@ -464,7 +464,7 @@
 "HistoryPanel.HistoryBackButton.Title" = "History";
 
 /* Title for the Recently Closed button in the History Panel */
-"HistoryPanel.RecentlyClosedTabsButton.Title" = "Recently closed";
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Recently Closed";
 
 /* Accessibility label for the tab toolbar indicating the Home button. */
 "Home" = "Home";

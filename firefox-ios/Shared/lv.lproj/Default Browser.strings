@@ -1,0 +1,12 @@
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Nomaini savu noklusējuma pārlūku";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Jāpiesit “Noklusējuma pārlūka lietotne”";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "Noklusējuma pārlūka lietotne";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Iestatīt kā noklusējuma pārlūku";
+
