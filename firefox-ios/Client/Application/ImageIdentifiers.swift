@@ -82,12 +82,6 @@ struct ImageIdentifiers {
             public static let toolbarTopJapan = "onboardingToolbarIconTopJapan"
             public static let toolbarBottomJapan = "onboardingToolbarIconBottomJapan"
         }
-
-        public struct ChallengeTheDefault {
-            public static let notifications = "onboardingNotificationsCTD"
-            public static let welcome = "onboardingWelcomeCTD"
-            public static let sync = "onboardingSyncCTD"
-        }
     }
 
     public struct NativeErrorPage {
