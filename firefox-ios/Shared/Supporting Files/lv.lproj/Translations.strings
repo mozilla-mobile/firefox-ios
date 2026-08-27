@@ -1,3 +1,6 @@
+/* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
+"Translations.Sheet.Error.GeneralSubtitle.v145" = "Lūgums mēģināt vēlreiz.";
+
 /* On the translation feature bottom sheet, this is the subtitle for the error message that appears when a user has no internet connection when trying to translate a page. */
 "Translations.Sheet.Error.SubtitleLabel.v145" = "Jāpārbauda savienojums ar internetu un jāmēģina vēlreiz.";
 

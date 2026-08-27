@@ -8,7 +8,7 @@
 "TermsOfUse.CloseButton.v150" = "Κλείσιμο";
 
 /* Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox). */
-"TermsOfUse.Description.v142" = "Κυκλοφορήσαμε τους Όρους χρήσης του %@ και ενημερώσαμε τη Σημείωση απορρήτου μας.";
+"TermsOfUse.Description.v142" = "Παρουσιάσαμε τους Όρους χρήσης του %@ και ενημερώσαμε τη Δήλωση απορρήτου μας.";
 
 /* Text shown in the Terms of Use bottom sheet for variants 1 and 2. %@ is replaced with the localized 'here' link text. */
 "TermsOfUse.LearnMoreHere.v147" = "Μπορείτε να μάθετε περισσότερα %@.";
@@ -20,7 +20,7 @@
 "TermsOfUse.Link.LearnMore.v142" = "Μάθετε περισσότερα";
 
 /* Hyperlink label pointing to the Privacy Notice document from the Terms of Use sheet. */
-"TermsOfUse.Link.PrivacyNotice.v142" = "Σημείωση απορρήτου";
+"TermsOfUse.Link.PrivacyNotice.v142" = "Δήλωση απορρήτου";
 
 /* Hyperlink label for the Terms of Use document. %@ is replaced with the app name (e.g., Firefox). */
 "TermsOfUse.Link.TermsOfUse.v142" = "Όροι χρήσης του %@";

@@ -44,7 +44,7 @@
 "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Elimina";
 
 /* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. %@ is the currently visited website. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "La rimozione di cookie e dati dei siti web per %@ potrebbe disconnetterti dal sito o svuotare eventuali carrelli in sospeso.";
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "La rimozione di cookie e dati dei siti web per %@ potrebbe disconnetterti dai siti e svuotare eventuali carrelli in sospeso.";
 
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Elimina cookie e dati dei siti web";

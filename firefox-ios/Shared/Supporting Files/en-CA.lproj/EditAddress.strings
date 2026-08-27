@@ -95,7 +95,7 @@
 "Addresses.EditAddress.AutofillAddressVillageTownship.v129" = "Village or Township";
 
 /* Label for the ZIP code field, primarily used in the United States for mail sorting. Key for autofill to accurately complete addresses for shipping, billing, and service provision. */
-"Addresses.EditAddress.AutofillAddressZip.v129" = "Postal Code";
+"Addresses.EditAddress.AutofillAddressZip.v129" = "ZIP Code";
 
 /* Label for the button to cancel the current autofill operation or exit the form without saving changes. Provides users with an option to back out of a process without making any modifications. */
 "Addresses.EditAddress.AutofillCancelButton.v129" = "Cancel";
