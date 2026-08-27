@@ -22,7 +22,7 @@ final class LocationViewTests: XCTestCase {
     }
 
     // MARK: - Icon Container Arrangement
-    func testConfigure_WhenNotEditingWithURL_ShowsLockIcon() {
+    func testConfigure_whenNotEditingWithURL_showsLockIcon() {
         let subject = createSubject()
         subject.configure(makeConfig(url: testURL), delegate: delegate)
 
@@ -31,7 +31,7 @@ final class LocationViewTests: XCTestCase {
                       "A loaded page should show the lock icon in the container.")
     }
 
-    func testConfigure_WhenEditing_ShowsSearchEngineView() {
+    func testConfigure_whenEditing_showsSearchEngineView() {
         let subject = createSubject()
         subject.configure(makeConfig(url: nil, isEditing: true), delegate: delegate)
 
@@ -39,7 +39,7 @@ final class LocationViewTests: XCTestCase {
                       "Editing should show the search engine view in the container.")
     }
 
-    func testConfigure_CalledTwiceWithSameState_KeepsIdenticalArrangement() {
+    func testConfigure_walledTwiceWithSameState_seepsIdenticalArrangement() {
         let subject = createSubject()
         let config = makeConfig(url: testURL)
 
@@ -52,7 +52,7 @@ final class LocationViewTests: XCTestCase {
         XCTAssertTrue(isUnchanged, "Reconfiguring with the same state should leave the icon container untouched.")
     }
 
-    func testConfigure_WhenStateChangesFromURLToEditing_RebuildsArrangement() {
+    func testConfigure_whenStateChangesFromURLToEditing_rebuildsArrangement() {
         let subject = createSubject()
 
         subject.configure(makeConfig(url: testURL), delegate: delegate)
@@ -65,36 +65,35 @@ final class LocationViewTests: XCTestCase {
     }
 
     // MARK: - Icon Alphas
-    // `animateIconAppearance` runs inside a delayed `UIView.animate`, so the alpha lands asynchronously.
-    func testConfigure_WhenNotEditingWithURL_SettlesOnLockIconAlphas() async {
+    func testConfigure_whenNotEditingWithURL_showsLockIconAlphas() {
         let subject = createSubject()
+        invalidateIconAlphas(on: subject)
 
         subject.configure(makeConfig(url: testURL), delegate: delegate)
-        await waitForAnimations()
 
         XCTAssertEqual(subject.lockIconButton.alpha, 1, "The lock icon should be visible for a loaded page.")
         XCTAssertEqual(subject.searchEngineContentView.alpha, 0, "The search engine view should be hidden.")
     }
 
-    func testConfigure_WhenEditing_SettlesOnSearchEngineAlphas() async {
+    func testConfigure_whenEditing_showsSearchEngineAlphas() {
         let subject = createSubject()
+        invalidateIconAlphas(on: subject)
 
         subject.configure(makeConfig(url: nil, isEditing: true), delegate: delegate)
-        await waitForAnimations()
 
         XCTAssertEqual(subject.lockIconButton.alpha, 0, "The lock icon should be hidden while editing.")
         XCTAssertEqual(subject.searchEngineContentView.alpha, 1, "The search engine view should be visible.")
     }
 
-    func testConfigure_WhenStateChanges_UpdatesAlphasDespiteSkipGuard() async {
+    func testConfigure_whenStateChanges_updatesAlphasDespiteSkipGuard() {
         let subject = createSubject()
+        invalidateIconAlphas(on: subject)
 
         subject.configure(makeConfig(url: testURL), delegate: delegate)
-        await waitForAnimations()
         XCTAssertEqual(subject.lockIconButton.alpha, 1)
+        XCTAssertEqual(subject.searchEngineContentView.alpha, 0)
 
         subject.configure(makeConfig(url: nil, isEditing: true), delegate: delegate)
-        await waitForAnimations()
 
         let message = "The skip-when-unchanged guard must not block a genuine alpha change."
         XCTAssertEqual(subject.lockIconButton.alpha, 0, message)
@@ -102,6 +101,13 @@ final class LocationViewTests: XCTestCase {
     }
 
     // MARK: - Helpers
+    /// Puts both icons at an alpha no expected value matches, so the assertions fail unless the
+    /// code under test actually writes them.
+    private func invalidateIconAlphas(on subject: LocationView) {
+        subject.lockIconButton.alpha = 0.42
+        subject.searchEngineContentView.alpha = 0.42
+    }
+
     private func createSubject(file: StaticString = #filePath, line: UInt = #line) -> LocationView {
         let subject = LocationView(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
         trackForMemoryLeaks(subject, file: file, line: line)
@@ -128,11 +134,6 @@ final class LocationViewTests: XCTestCase {
             shouldShowKeyboard: false,
             shouldSelectSearchTerm: false
         )
-    }
-
-    // Wait 0.4 seconds
-    private func waitForAnimations() async {
-        try? await Task.sleep(nanoseconds: 400_000_000)
     }
 }
 

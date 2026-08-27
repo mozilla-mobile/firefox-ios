@@ -89,7 +89,7 @@ final class LocationView: UIView,
     private var lockIconWidthAnchor: NSLayoutConstraint?
 
     // MARK: - Search Engine / Lock Image
-    lazy var iconContainerStackView: UIStackView = .build { view in
+    private(set) lazy var iconContainerStackView: UIStackView = .build { view in
         view.alignment = .center
     }
 
