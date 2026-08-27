@@ -1,0 +1,22 @@
+{
+  "images" : [
+    {
+      "filename" : "Device=Android, Shape=Ellipse, Type=Solid, Variant=1-1.png",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Device=Android, Shape=Ellipse, Type=Solid, Variant=2-1.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

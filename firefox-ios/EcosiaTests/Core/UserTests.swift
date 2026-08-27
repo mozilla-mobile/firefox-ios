@@ -308,15 +308,8 @@ final class UserTests: XCTestCase, @unchecked Sendable {
     }
 
     func testSearchSettingChangeNotifiaction() {
-        var count = 0
-        let observer = NotificationCenter.default.addObserver(
-            forName: .searchSettingsChanged,
-            object: nil,
-            queue: .main
-        ) { _ in
-            count += 1
-        }
-        defer { NotificationCenter.default.removeObserver(observer) }
+        let notified = expectation(forNotification: .searchSettingsChanged, object: nil, notificationCenter: .default)
+        notified.expectedFulfillmentCount = 4
 
         // Pick values that always differ from the current state so each assignment
         // posts a notification even when earlier tests in this suite mutated `User.shared`.
@@ -326,13 +319,7 @@ final class UserTests: XCTestCase, @unchecked Sendable {
         User.shared.autoComplete = !baseline.autoComplete
         User.shared.adultFilter = baseline.adultFilter == .off ? .moderate : .off
 
-        // `User.shared` posts on the main queue asynchronously; pump the run loop so
-        // all four notifications are delivered before asserting (CI can be slower than local).
-        let deadline = Date().addingTimeInterval(3)
-        while count < 4 && Date() < deadline {
-            RunLoop.main.run(until: Date().addingTimeInterval(0.05))
-        }
-        XCTAssertEqual(count, 4, "Expected 4 searchSettingsChanged notifications, got \(count)")
+        wait(for: [notified], timeout: 3)
     }
 
     func testAnalyticsUserState() {

@@ -287,6 +287,9 @@ public enum TestTargets {
                 // BookmarksHandlerMock which import MozillaAppServices directly.
                 // RustMozillaAppServices must be linked to resolve those symbols at link time.
                 .target(name: "RustMozillaAppServices"),
+                // Ecosia: ActionExtensionKit is needed by ShareTo/FirefoxURLBuilderSchemeFallbackTests.swift, 
+                // which guards the "ecosia" scheme fallback customization against upstream regressions.
+                .package(product: "ActionExtensionKit"),
                 .package(product: "Common"),
                 .package(product: "Fuzi"),
                 .package(product: "GCDWebServers"),

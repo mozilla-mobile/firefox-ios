@@ -81,7 +81,10 @@ class ShareViewController: UIViewController {
     private var actionRowHeights = [NSLayoutConstraint]()
     private var pageInfoRowTitleLabel: UILabel?
     private var pageInfoRowUrlLabel: UILabel?
+    /* Ecosia: Swap Theme Manager with Ecosia's
     private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+     */
+    private let themeManager = EcosiaThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
     weak var delegate: ShareControllerDelegate?
 
@@ -149,25 +152,33 @@ class ShareViewController: UIViewController {
         makeSeparator(addTo: stackView)
 
         if shareItem?.isUrlType() ?? true {
-            // Ecosia: Use Ecosia app icon/logo for "Open in browser" row; ensure Icon-Small and this image reference Ecosia assets in ShareTo Images.xcassets.
             makeActionRow(
                 addTo: stackView,
                 label: .ShareOpenInFirefox,
+                /* Ecosia: use Ecosia's icon
                 imageName: StandardImageIdentifiers.Large.logoFirefox,
+                 */
+                imageName: "open-in-ecosia",
                 action: #selector(actionOpenInFirefoxNow),
                 hasNavigation: false
             )
             makeActionRow(
                 addTo: stackView,
                 label: .ShareLoadInBackground,
+                /* Ecosia: Update image iname
                 imageName: StandardImageIdentifiers.Large.tabTray,
+                 */
+                imageName: "load",
                 action: #selector(actionLoadInBackground),
                 hasNavigation: false
             )
             makeActionRow(
                 addTo: stackView,
                 label: .ShareBookmarkThisPage,
+                /* Ecosia: Update image iname
                 imageName: StandardImageIdentifiers.Large.bookmark,
+                 */
+                imageName: "bookmarkAdd",
                 action: #selector(actionBookmarkThisPage),
                 hasNavigation: false
             )
@@ -178,6 +189,7 @@ class ShareViewController: UIViewController {
                 action: #selector(actionAddToReadingList),
                 hasNavigation: false
             )
+            /* Ecosia: Remove Send To Device option as not offered
             makeSeparator(addTo: stackView)
             makeActionRow(
                 addTo: stackView,
@@ -186,6 +198,7 @@ class ShareViewController: UIViewController {
                 action: #selector(actionSendToDevice),
                 hasNavigation: true
             )
+             */
         } else {
             pageInfoRowUrlLabel?.removeFromSuperview()
             makeActionRow(
@@ -402,8 +415,10 @@ class ShareViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.isTranslucent = false
-        // Ecosia: Icon-Small should be the Ecosia app icon in ShareTo/Images.xcassets/Icon-Small.imageset (e.g. icon-40@2x.png).
+        /* Ecosia: use an Ecosia icon
         navigationItem.titleView = UIImageView(image: UIImage(named: "Icon-Small"))
+         */
+        navigationItem.titleView = UIImageView(image: UIImage(named: "ecosiaShareToIcon"))
         navigationItem.titleView?.contentMode = .scaleAspectFit
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: .SendToCancelButton,
@@ -530,11 +545,19 @@ extension ShareViewController {
         profile.prefs.setBool(true, forKey: PrefsKeys.AppExtensionTelemetryOpenUrl)
 
         func firefoxUrl(_ url: String) -> String {
+            // Ecosia: use the scheme from the bundle instead, fallback to ecosia
+            let urlScheme = (Bundle.main.object(forInfoDictionaryKey: "MozPublicURLScheme") as? String).flatMap { $0.isEmpty ? nil : $0 } ?? "ecosia"
             let encoded = url.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics) ?? ""
             if isSearch {
+                /* Ecosia: use the scheme from the bundle instead
                 return "firefox://open-text?text=\(encoded)"
+                 */
+                return "\(urlScheme)://open-text?text=\(encoded)"
             }
+            /* Ecosia: use the scheme from the bundle instead
             return "firefox://open-url?url=\(encoded)"
+             */
+            return "\(urlScheme)://open-url?url=\(encoded)"
         }
 
         guard let url = URL(string: firefoxUrl(url)) else { return }
