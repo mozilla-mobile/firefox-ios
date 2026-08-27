@@ -386,7 +386,8 @@ class Tab: NSObject,
                 webView,
                 nightMode: nightMode,
                 noImageMode: noImageMode,
-                backgroundAudio: featureFlagsProvider.isEnabled(.backgroundAudio) && BackgroundAudioHelper.isEnabled(profile.prefs)
+                backgroundAudio: featureFlagsProvider.isEnabled(.backgroundAudio)
+                    && BackgroundAudioHelper.isEnabled(profile.prefs)
             )
         }
     }
@@ -403,7 +404,8 @@ class Tab: NSObject,
                 webView,
                 nightMode: nightMode,
                 noImageMode: noImageMode,
-                backgroundAudio: featureFlagsProvider.isEnabled(.backgroundAudio) && BackgroundAudioHelper.isEnabled(profile.prefs)
+                backgroundAudio: featureFlagsProvider.isEnabled(.backgroundAudio)
+                    && BackgroundAudioHelper.isEnabled(profile.prefs)
             )
         }
     }
@@ -572,7 +574,8 @@ class Tab: NSObject,
             webView,
             nightMode: nightMode,
             noImageMode: noImageMode,
-            backgroundAudio: featureFlagsProvider.isEnabled(.backgroundAudio) && BackgroundAudioHelper.isEnabled(profile.prefs)
+            backgroundAudio: featureFlagsProvider.isEnabled(.backgroundAudio)
+                && BackgroundAudioHelper.isEnabled(profile.prefs)
         )
 
         tabDelegate?.tab(self, didCreateWebView: webView)

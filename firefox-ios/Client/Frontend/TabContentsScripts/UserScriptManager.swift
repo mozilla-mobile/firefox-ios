@@ -108,7 +108,10 @@ class UserScriptManager {
         return try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String
     }
 
-    public func injectUserScriptsIntoWebView(_ webView: WKWebView?, nightMode: Bool, noImageMode: Bool, backgroundAudio: Bool) {
+    public func injectUserScriptsIntoWebView(_ webView: WKWebView?,
+                                             nightMode: Bool,
+                                             noImageMode: Bool,
+                                             backgroundAudio: Bool) {
         // Start off by ensuring that any previously-added user scripts are
         // removed to prevent the same script from being injected twice.
         webView?.configuration.userContentController.removeAllUserScripts()
