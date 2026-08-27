@@ -12,7 +12,12 @@ class BackgroundAudioSetting: BoolSetting {
             prefKey: PrefsKeys.BackgroundAudio,
             defaultValue: FxNimbus.shared.features.backgroundAudioFeature.value().defaultOn,
             attributedTitleText: NSAttributedString(string: String.Settings.Browsing.BackgroundAudio),
-            attributedStatusText: nil
+            attributedStatusText: nil,
+            settingDidChange: { isEnabled in
+                Task { @MainActor in
+                    BackgroundAudioHelper.shared.toggle(isEnabled: isEnabled, prefs: prefs)
+                }
+            }
         )
     }
 
