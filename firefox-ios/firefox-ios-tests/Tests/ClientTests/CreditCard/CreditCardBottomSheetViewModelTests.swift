@@ -10,7 +10,7 @@ import XCTest
 
 @testable import Client
 
-class CreditCardBottomSheetViewModelTests: XCTestCase {
+final class CreditCardBottomSheetViewModelTests: XCTestCase {
     private var autofill: MockCreditCardProvider!
     private var dispatchQueue: MockDispatchQueue!
     private var samplePlainTextCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
@@ -56,7 +56,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         let subject = createSubject()
 
         let expectation = expectation(description: "wait for credit card fields to be saved")
-        let decryptedCreditCard = try XCTUnwrap(subject.getPlainCreditCardValues(bottomSheetState: .save))
+        let decryptedCreditCard = try XCTUnwrap(plainCreditCardValues(subject, state: .save))
         // Make sure the year saved is a 4 digit year and not 2 digit
         // 2000 because that is our current period
         XCTAssertTrue(decryptedCreditCard.ccExpYear > 2000)
@@ -122,7 +122,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         let subject = createSubject()
 
         subject.state = .save
-        let value = try XCTUnwrap(subject.getPlainCreditCardValues(bottomSheetState: .save))
+        let value = try XCTUnwrap(plainCreditCardValues(subject, state: .save))
         XCTAssertEqual(value.ccName, samplePlainTextCard.ccName)
         XCTAssertEqual(value.ccExpMonth, samplePlainTextCard.ccExpMonth)
         XCTAssertEqual(value.ccNumberLast4, samplePlainTextCard.ccNumberLast4)
@@ -138,7 +138,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
 
         subject.state = .save
         subject.decryptedCreditCard = nil
-        let value = subject.getPlainCreditCardValues(bottomSheetState: .save)
+        let value = plainCreditCardValues(subject, state: .save)
         XCTAssertNil(value)
     }
 
@@ -174,7 +174,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
                                                       ccExpYear: 2023,
                                                       ccType: "VISA")
         subject.decryptedCreditCard = invalidCard
-        let value = subject.getPlainCreditCardValues(bottomSheetState: .save)
+        let value = plainCreditCardValues(subject, state: .save)
         XCTAssertNotNil(value)
     }
 
@@ -219,7 +219,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
 
         subject.state = .selectSavedCard
         subject.creditCards = [sampleCreditCard]
-        let value = subject.getPlainCreditCardValues(bottomSheetState: .selectSavedCard, row: -1)
+        let value = plainCreditCardValues(subject, state: .selectSavedCard, row: -1)
         XCTAssertNil(value)
     }
 
@@ -428,6 +428,20 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
     }
 
     // MARK: Helper methods
+
+    @MainActor
+    private func plainCreditCardValues(_ subject: CreditCardBottomSheetViewModel,
+                                       state: CreditCardBottomSheetState,
+                                       row: Int? = nil) -> UnencryptedCreditCardFields? {
+        var result: UnencryptedCreditCardFields?
+        let valuesExpectation = expectation(description: "wait for the plain credit card values.")
+        subject.getPlainCreditCardValues(bottomSheetState: state, row: row) { values in
+            result = values
+            valuesExpectation.fulfill()
+        }
+        wait(for: [valuesExpectation], timeout: 1.0)
+        return result
+    }
 
     @MainActor
     private func createSubject() -> CreditCardBottomSheetViewModel {

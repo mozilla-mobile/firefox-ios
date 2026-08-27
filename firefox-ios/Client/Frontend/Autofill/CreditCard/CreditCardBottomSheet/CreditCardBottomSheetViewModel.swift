@@ -77,6 +77,13 @@ final class CreditCardBottomSheetViewModel {
     }
 
     var didUpdateCreditCard: (() -> Void)?
+
+    /// The decrypted number of `creditCard`. Cell rendering is synchronous, so the `.update`
+    /// sheet reads it from here instead of decrypting per cell.
+    private(set) var decryptedCardNumber = "" {
+        didSet { didUpdateCreditCard?() }
+    }
+
     var decryptedCreditCard: UnencryptedCreditCardFields?
     var storedCreditCards = [CreditCard]()
     var state: CreditCardBottomSheetState
@@ -98,44 +105,46 @@ final class CreditCardBottomSheetViewModel {
             self.decryptedCreditCard = decryptedCreditCard
             self.creditCard = decryptedCreditCard?.convertToTempCreditCard()
         }
+        loadDecryptedCardNumber()
     }
 
     // MARK: Main Button Action
     public func didTapMainButton(queue: DispatchQueueInterface = DispatchQueue.main,
                                  completion: @escaping @Sendable (Error?) -> Void) {
-        let decryptedCard = getPlainCreditCardValues(bottomSheetState: state)
-        switch state {
-        case .save:
-            saveCreditCard(with: decryptedCard) { [logger] _, error in
-                queue.async {
-                    guard let error = error else {
-                        completion(nil)
-                        return
+        getPlainCreditCardValues(bottomSheetState: state) { [weak self] decryptedCard in
+            guard let self else { return }
+            switch state {
+            case .save:
+                saveCreditCard(with: decryptedCard) { [logger] _, error in
+                    queue.async {
+                        guard let error else {
+                            completion(nil)
+                            return
+                        }
+                        logger.log("Unable to save credit card",
+                                   level: .fatal,
+                                   category: .autofill,
+                                   description: "\(error)")
+                        completion(error)
                     }
-                    logger.log("Unable to save credit card",
-                               level: .fatal,
-                               category: .autofill,
-                               description: "\(error)")
-                    completion(error)
                 }
-            }
-        case .update:
-            updateCreditCard(for: creditCard?.guid,
-                             with: decryptedCard) { [logger] _, error in
-                queue.async {
-                    guard let error = error else {
-                        completion(nil)
-                        return
+            case .update:
+                updateCreditCard(for: creditCard?.guid, with: decryptedCard) { [logger] _, error in
+                    queue.async {
+                        guard let error else {
+                            completion(nil)
+                            return
+                        }
+                        logger.log("Unable to save credit card",
+                                   level: .fatal,
+                                   category: .autofill,
+                                   description: "\(error)")
+                        completion(error)
                     }
-                    logger.log("Unable to save credit card",
-                               level: .fatal,
-                               category: .autofill,
-                               description: "\(error)")
-                    completion(error)
                 }
+            case .selectSavedCard:
+                break
             }
-        case .selectSavedCard:
-            break
         }
     }
 
@@ -175,44 +184,53 @@ final class CreditCardBottomSheetViewModel {
 
     // MARK: Helper Methods
     func getPlainCreditCardValues(bottomSheetState: CreditCardBottomSheetState,
-                                  row: Int? = nil) -> UnencryptedCreditCardFields? {
+                                  row: Int? = nil,
+                                  completion: @escaping @MainActor (UnencryptedCreditCardFields?) -> Void) {
         switch bottomSheetState {
         case .save:
-            guard let plainCard = decryptedCreditCard else { return nil }
-            return plainCard
+            completion(decryptedCreditCard)
         case .update:
-            guard let creditCard = creditCard,
-                  let ccNumberDecrypted = autofill.decryptCreditCardNumber(encryptedCCNum: creditCard.ccNumberEnc)
-            else {
-                return nil
+            guard let creditCard else {
+                completion(nil)
+                return
             }
-            let updatedDecryptedCreditCard = updateDecryptedCreditCard(from: creditCard,
-                                                                       with: ccNumberDecrypted,
-                                                                       fieldValues: decryptedCreditCard)
-            return updatedDecryptedCreditCard
+            autofill.decryptCreditCardNumber(encryptedCCNum: creditCard.ccNumberEnc) { [weak self] ccNumberDecrypted in
+                ensureMainThread {
+                    guard let self, let ccNumberDecrypted else {
+                        completion(nil)
+                        return
+                    }
+                    completion(self.updateDecryptedCreditCard(from: creditCard,
+                                                              with: ccNumberDecrypted,
+                                                              fieldValues: self.decryptedCreditCard))
+                }
+            }
         case .selectSavedCard:
             guard let row = row,
                   let selectedCreditCard = getSavedCreditCard(for: row)
             else {
-                return nil
+                completion(nil)
+                return
             }
 
-            let decryptedCreditCardNum = decryptCreditCardNumber(card: selectedCreditCard)
-
-            guard !decryptedCreditCardNum.isEmpty else {
-                return nil
+            autofill.decryptCreditCardNumber(encryptedCCNum: selectedCreditCard.ccNumberEnc) { ccNumberDecrypted in
+                ensureMainThread {
+                    guard let ccNumberDecrypted, !ccNumberDecrypted.isEmpty else {
+                        completion(nil)
+                        return
+                    }
+                    // We need to show only 2 digits but save full year for sync
+                    let period = Int64(Date.getCurrentPeriod())
+                    let selectedExpYear = selectedCreditCard.ccExpYear
+                    let yearVal = selectedExpYear < 1000 ? selectedExpYear + period : selectedExpYear
+                    completion(UnencryptedCreditCardFields(ccName: selectedCreditCard.ccName,
+                                                           ccNumber: ccNumberDecrypted,
+                                                           ccNumberLast4: selectedCreditCard.ccNumberLast4,
+                                                           ccExpMonth: selectedCreditCard.ccExpMonth,
+                                                           ccExpYear: yearVal,
+                                                           ccType: selectedCreditCard.ccType))
+                }
             }
-            // We need to show only 2 digits but save full year for sync
-            let period = Int64(Date.getCurrentPeriod())
-            let selectedExpYear = selectedCreditCard.ccExpYear
-            let yearVal = selectedExpYear < 1000 ? selectedExpYear + period : selectedExpYear
-            let plainTextCard = UnencryptedCreditCardFields(ccName: selectedCreditCard.ccName,
-                                                            ccNumber: decryptedCreditCardNum,
-                                                            ccNumberLast4: selectedCreditCard.ccNumberLast4,
-                                                            ccExpMonth: selectedCreditCard.ccExpMonth,
-                                                            ccExpYear: yearVal,
-                                                            ccType: selectedCreditCard.ccType)
-            return plainTextCard
         }
     }
 
@@ -290,10 +308,13 @@ final class CreditCardBottomSheetViewModel {
         return decryptedCreditCardVal
     }
 
-    func decryptCreditCardNumber(card: CreditCard?) -> String {
-        guard let card = card else { return "" }
-        let decryptedCardNum = autofill.decryptCreditCardNumber(encryptedCCNum: card.ccNumberEnc)
-        return decryptedCardNum ?? ""
+    private func loadDecryptedCardNumber() {
+        guard state == .update, let creditCard else { return }
+        autofill.decryptCreditCardNumber(encryptedCCNum: creditCard.ccNumberEnc) { [weak self] ccNumber in
+            ensureMainThread {
+                self?.decryptedCardNumber = ccNumber ?? ""
+            }
+        }
     }
 
     private func listStoredCreditCards(completionHandler: @Sendable @escaping ([CreditCard]?) -> Void) {
