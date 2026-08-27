@@ -16,6 +16,7 @@ enum FeatureFlagID: String, CaseIterable {
     case addressBarMenu
     case adsClient
     case aiKillSwitch
+    case backgroundAudio
     case badCertDomainErrorPage
     case bookmarksSearchFeature
     case customReaderModeScheme
@@ -104,6 +105,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .addressBarMenu,
                 .adsClient,
                 .aiKillSwitch,
+                .backgroundAudio,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
                 .customReaderModeScheme,

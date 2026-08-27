@@ -98,6 +98,9 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                     }
                 ))
             }
+            if featureFlagsProvider.isEnabled(.backgroundAudio) {
+                contentSection.append(BackgroundAudioSetting(prefs: profile.prefs))
+            }
             contentSection += [
                 BlockPopupSetting(prefs: profile.prefs),
                 NoImageModeSetting(profile: profile),

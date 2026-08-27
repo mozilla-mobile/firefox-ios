@@ -57,6 +57,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .aiKillSwitch:
             return checkAiKillSwitchFeature()
 
+        case .backgroundAudio:
+            return checkBackgroundAudioFeature()
+
         case .badCertDomainErrorPage:
             return checkBadCertDomainErrorPageFeature()
 
@@ -438,6 +441,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkAdBlockerFeature() -> Bool {
         return nimbus.features.adBlockerFeature.value().enabled
+    }
+
+    private func checkBackgroundAudioFeature() -> Bool {
+        return nimbus.features.backgroundAudioFeature.value().enabled
     }
 
     private func checkAdBlockerBadgeFeature() -> Bool {
