@@ -26,23 +26,16 @@ final class BackgroundAudioHelperTests: XCTestCase {
     }
 
     func testIsEnabled_defaultsToFalse() {
-        let subject = createSubject()
-        _ = subject
-
         XCTAssertFalse(BackgroundAudioHelper.isEnabled(prefs))
     }
 
     func testIsEnabled_returnsTrueWhenPrefSet() {
-        let subject = createSubject()
-        _ = subject
         prefs.setBool(true, forKey: PrefsKeys.BackgroundAudio)
 
         XCTAssertTrue(BackgroundAudioHelper.isEnabled(prefs))
     }
 
     func testIsEnabled_returnsFalseWhenPrefSetToFalse() {
-        let subject = createSubject()
-        _ = subject
         prefs.setBool(false, forKey: PrefsKeys.BackgroundAudio)
 
         XCTAssertFalse(BackgroundAudioHelper.isEnabled(prefs))
@@ -62,9 +55,10 @@ final class BackgroundAudioHelperTests: XCTestCase {
 
         subject.configure(prefs: prefs)
 
-        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 2)
+        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 3)
         XCTAssertTrue(mockNotificationCenter.observers.contains(UIApplication.willResignActiveNotification))
         XCTAssertTrue(mockNotificationCenter.observers.contains(UIApplication.didEnterBackgroundNotification))
+        XCTAssertTrue(mockNotificationCenter.observers.contains(UIApplication.didBecomeActiveNotification))
     }
 
     func testToggle_enableSetsPrefsAndStartsObserving() {
@@ -73,7 +67,7 @@ final class BackgroundAudioHelperTests: XCTestCase {
         subject.toggle(isEnabled: true, prefs: prefs)
 
         XCTAssertTrue(prefs.boolForKey(PrefsKeys.BackgroundAudio) ?? false)
-        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 2)
+        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 3)
     }
 
     func testToggle_disableSetsPrefsAndStopsObserving() {
@@ -90,9 +84,10 @@ final class BackgroundAudioHelperTests: XCTestCase {
 
         subject.startObserving()
 
-        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 2)
+        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 3)
         XCTAssertTrue(mockNotificationCenter.observers.contains(UIApplication.willResignActiveNotification))
         XCTAssertTrue(mockNotificationCenter.observers.contains(UIApplication.didEnterBackgroundNotification))
+        XCTAssertTrue(mockNotificationCenter.observers.contains(UIApplication.didBecomeActiveNotification))
     }
 
     func testStartObserving_calledTwice_doesNotDoubleRegister() {
@@ -101,7 +96,7 @@ final class BackgroundAudioHelperTests: XCTestCase {
         subject.startObserving()
         subject.startObserving()
 
-        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 2)
+        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 3)
     }
 
     func testStopObserving_whenNotObserving_doesNothing() {
