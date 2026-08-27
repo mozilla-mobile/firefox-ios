@@ -45,6 +45,19 @@ enum FileUploadAuthCookieSync {
 
         return easc ?? sharedCookies.first { $0.name == Cookie.authSession.rawValue }
     }
+
+    /// Removes any `EASC` cookie previously copied into `HTTPCookieStorage.shared`.
+    ///
+    /// `syncAuthSessionCookieToSharedStorage` copies `EASC` out of the WKWebView cookie jar so native
+    /// `URLSession` calls can see it, but that copy lives independently of the WKWebView store and isn't
+    /// cleared when the web session cookie is. Call this on logout so a stale session cookie for the
+    /// previous user can't be attached to native requests made under a different, newly logged-in user.
+    static func clearAuthSessionCookieFromSharedStorage() {
+        let cookies = HTTPCookieStorage.shared.cookies ?? []
+        cookies
+            .filter { $0.name == Cookie.authSession.rawValue }
+            .forEach { HTTPCookieStorage.shared.deleteCookie($0) }
+    }
 }
 
 enum FileUploadAuthDiagnostics {
