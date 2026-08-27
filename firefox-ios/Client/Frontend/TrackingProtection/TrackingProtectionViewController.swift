@@ -31,6 +31,7 @@ struct TPMenuUX {
             viewCornerRadius
         }
         static let backgroundAlpha: CGFloat = 0.80
+        static let novaBackgroundAlpha: CGFloat = 0.85
         struct Line {
             static let height: CGFloat = 0.5
         }
@@ -772,7 +773,7 @@ class TrackingProtectionViewController: UIViewController,
         let theme = currentTheme()
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         let panelBackground = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
-        view.backgroundColor = panelBackground.withAlphaComponent(backgroundAlpha)
+        view.backgroundColor = panelBackground.withAlphaComponent(backgroundAlpha(isNova: theme.isNova))
         headerContainer.applyTheme(theme: theme)
         connectionDetailsHeaderView.applyTheme(theme: theme)
         trackersView.applyTheme(theme: theme)
@@ -784,9 +785,13 @@ class TrackingProtectionViewController: UIViewController,
         setNeedsStatusBarAppearanceUpdate()
     }
 
-    private var backgroundAlpha: CGFloat {
+    private func backgroundAlpha(isNova: Bool) -> CGFloat {
         guard !UIAccessibility.isReduceTransparencyEnabled else {
             return 1.0
+        }
+
+        if isNova {
+            return TPMenuUX.UX.novaBackgroundAlpha
         }
 
         if #available(iOS 26.0, *) {
