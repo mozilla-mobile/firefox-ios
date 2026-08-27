@@ -55,6 +55,11 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.DisableAnimations
         ]
 
+    // Set by setUpLaunchArguments(); checked in tearDown() to catch tests that launch without a
+    // reset guarantee (neither ClearProfile nor a DB fixture), which can leak state into later tests.
+    private var setUpLaunchArgumentsWasCalled = false
+    private var launchedWithIsolation = false
+
     func restartInBackground() {
         // Send app to background, and re-enter
         XCUIDevice.shared.press(.home)
@@ -161,6 +166,9 @@ class BaseTestCase: XCTestCase {
         } else {
             app.launchArguments = [LaunchArguments.PerformanceTest] + launchArguments
         }
+        setUpLaunchArgumentsWasCalled = true
+        launchedWithIsolation = launchArguments.contains(LaunchArguments.ClearProfile)
+            || launchArguments.contains { $0.hasPrefix(LaunchArguments.LoadDatabasePrefix) }
     }
 
     override func setUp() async throws {
@@ -171,6 +179,13 @@ class BaseTestCase: XCTestCase {
     }
 
     override func tearDown() async throws {
+        if setUpLaunchArgumentsWasCalled {
+            XCTAssertTrue(
+                launchedWithIsolation,
+                "\(name) launched without ClearProfile or a DB fixture in launchArguments — " +
+                "app state may leak into the next test."
+            )
+        }
         app.terminate()
         try await super.tearDown()
     }
