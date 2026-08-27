@@ -31,6 +31,9 @@
 /* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.DetailsPlaceholder.v154" = "Beskriv problemet i detalj (valfritt)";
 
+/* Error message shown under the URL field when the address entered has an invalid format, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLError.v155" = "Ange en giltig webbadress";
+
 /* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.URLLabel.v154" = "URL";
 
@@ -47,7 +50,7 @@
 "WebCompatReporter.Preview.Data.AvailableMemory.v155" = "Enhetens tillgängliga minne";
 
 /* Bullet on the Report Preview screen, for trackers blocked on the reported page. */
-"WebCompatReporter.Preview.Data.BlockedTrackers.v155" = "Värdnamn på spårare som blockeras på den här sidan";
+"WebCompatReporter.Preview.Data.BlockedTrackers.v155" = "Värdnamn för spårare blockerade på den här sidan";
 
 /* Bullet on the Report Preview screen, for the device's own language and region settings. */
 "WebCompatReporter.Preview.Data.DeviceLocale.v155" = "Din enhets huvudspråk och land";
@@ -62,13 +65,13 @@
 "WebCompatReporter.Preview.Data.IsTablet.v155" = "Huruvida din enhet är en surfplatta eller inte";
 
 /* Bullet on the Report Preview screen, for web frameworks known to break mobile pages. */
-"WebCompatReporter.Preview.Data.PageElements.v155" = "Information om element på sidan som har varit kända för att orsaka webbplatsproblem";
+"WebCompatReporter.Preview.Data.PageElements.v155" = "Information om sidelement som har visat sig orsaka webbplatsproblem";
 
 /* Bullet on the Report Preview screen, for a list of the user's preferred languages for websites as they were communicated by the browser to the page */
-"WebCompatReporter.Preview.Data.PageLanguages.v155" = "Språkinställningar skickas till denna sida";
+"WebCompatReporter.Preview.Data.PageLanguages.v155" = "Språkinställningar skickade till den här sidan";
 
 /* Bullet on the Report Preview screen. The reported page's address is shown underneath it. */
-"WebCompatReporter.Preview.Data.PageURL.v155" = "Sidadress";
+"WebCompatReporter.Preview.Data.PageURL.v155" = "Sidans URL";
 
 /* Bullet on the Report Preview screen, for the screen's physical pixels per layout point. */
 "WebCompatReporter.Preview.Data.PixelDensity.v155" = "Skärmens pixeltäthet";
@@ -77,7 +80,7 @@
 "WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155" = "Status för privat surfning: på eller av";
 
 /* Bullet on the Report Preview screen, for the tracking protection strength the user has chosen. */
-"WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155" = "Förbättrat spårningsskydd inställning för den här webbplatsen";
+"WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155" = "Förbättrad spårningsskyddsinställning för den här webbplatsen";
 
 /* Bullet on the Report Preview screen. Those three versions are only ever sent as tokens inside the user agent, never as fields of their own. %@ is the app name (e.g. Firefox). */
 "WebCompatReporter.Preview.Data.UserAgent.v155" = "Din webbläsares användaragent, som inkluderar din iOS-version, %@-version och webbläsarmotorversion";
