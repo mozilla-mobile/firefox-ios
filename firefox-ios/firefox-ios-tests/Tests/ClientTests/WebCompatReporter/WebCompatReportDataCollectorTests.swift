@@ -227,7 +227,10 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
         tab.createWebview(configuration: WKWebViewConfiguration())
         let webView = try XCTUnwrap(tab.webView)
-        UserScriptManager.shared.injectUserScriptsIntoWebView(webView, nightMode: false, noImageMode: false)
+        UserScriptManager.shared.injectUserScriptsIntoWebView(webView,
+                                                              nightMode: false,
+                                                              noImageMode: false,
+                                                              backgroundAudio: false)
         await loadBlankPage(in: webView)
 
         let context = await WebCompatPageContextReader().read(from: tab)
