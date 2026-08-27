@@ -18,6 +18,34 @@ enum FxAPageType: Equatable {
     case settingsPage
 }
 
+enum FxAAuthenticationStatusResponse {
+    private static let pairingVersion = 2
+
+    static func json(localeProvider: LocaleProvider = SystemLocaleProvider()) -> String? {
+        let response = ["capabilities": authenticationStatusCapabilities(localeProvider: localeProvider)]
+        guard JSONSerialization.isValidJSONObject(response),
+              let data = try? JSONSerialization.data(withJSONObject: response)
+        else { return nil }
+
+        return String(data: data, encoding: .utf8)
+    }
+
+    private static func authenticationStatusCapabilities(
+        localeProvider: LocaleProvider
+    ) -> [String: Any] {
+        var engines = ["bookmarks", "history", "tabs", "passwords", "creditcards"]
+        if AddressLocaleFeatureValidator.isValidRegion(for: localeProvider.regionCode()) {
+            engines.append("addresses")
+        }
+
+        return [
+            "choose_what_to_sync": true,
+            "pairingVersion": pairingVersion,
+            "engines": engines
+        ]
+    }
+}
+
 // See https://mozilla.github.io/ecosystem-platform/docs/fxa-engineering/fxa-webchannel-protocol
 // For details on message types.
 private enum RemoteCommand: String {
@@ -313,11 +341,6 @@ extension FxAWebViewModel {
     /// user info (for settings), or by passing CWTS setup info (in case the user is
     /// signing up for an account). This latter case is also used for the sign-in state.
     private func onSessionStatus(id: Int, webView: WKWebView, localeProvider: LocaleProvider = SystemLocaleProvider()) {
-        let addressAutofillStatus = AddressLocaleFeatureValidator.isValidRegion(for: localeProvider.regionCode())
-
-        let creditCardCapability = ", \"creditcards\""
-        let addressAutofillCapability =  addressAutofillStatus ? ", \"addresses\"" : ""
-
         guard let fxa = profile.rustFxA.accountManager else { return }
         let cmd = "fxaccounts:fxa_status"
         let typeId = "account_updates"
@@ -332,11 +355,8 @@ extension FxAWebViewModel {
                 }
                 """
         case .emailLoginFlow, .qrCode:
-            data = """
-                    { capabilities:
-                        { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"\(creditCardCapability)\(addressAutofillCapability)] },
-                    }
-                """
+            guard let status = FxAAuthenticationStatusResponse.json(localeProvider: localeProvider) else { return }
+            data = status
         }
 
         runJS(webView: webView, typeId: typeId, messageId: id, command: cmd, data: data)

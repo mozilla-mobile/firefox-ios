@@ -117,6 +117,15 @@ class FxAWebViewModelTests: XCTestCase {
         let outputURL = viewModel.createURLForPDF(result: result)
         XCTAssertNil(outputURL, "Should return nil on .success with an URL but not a PDF one.")
     }
+
+    func testAuthenticationStatusResponseAdvertisesPairingVersionTwo() throws {
+        let json = try XCTUnwrap(FxAAuthenticationStatusResponse.json())
+        let data = try XCTUnwrap(json.data(using: .utf8))
+        let response = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        let capabilities = try XCTUnwrap(response["capabilities"] as? [String: Any])
+
+        XCTAssertEqual(capabilities["pairingVersion"] as? Int, 2)
+    }
 }
 
 extension FxAWebViewModelTests {
