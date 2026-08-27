@@ -110,6 +110,10 @@ public final class BrowserNavigationToolbar: UIView,
             return button
         }
 
+        // Buttons are cached and reused, so the stack often ends up with the exact same arrangement.
+        // Tearing it down and rebuilding it in that case only invalidates layout for no visible change.
+        guard !actionStack.arrangedSubviews.elementsEqual(buttons, by: { $0 === $1 }) else { return }
+
         actionStack.removeAllArrangedViews()
 
         buttons.forEach { button in
