@@ -49,6 +49,7 @@ class HomeButtonTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306881
+    // Regression
     func testAppLaunchKeyboardNotRaisedUp() {
         toolbarScreen.assertSettingsButtonExists()
         validateHomePageAndKeyboardRaisedUp()

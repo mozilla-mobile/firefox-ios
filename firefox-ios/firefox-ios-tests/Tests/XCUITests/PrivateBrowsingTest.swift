@@ -38,6 +38,7 @@ class PrivateBrowsingTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307004
+    // Regression
     func testPrivateTabDoesNotTrackHistory() {
         navigator.openURL(url1)
         waitForTabsButton()
@@ -181,6 +182,7 @@ class PrivateBrowsingTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307007
+    // Regression
     func testPrivateBrowserPanelView() {
         navigator.nowAt(NewTabScreen)
         // If no private tabs are open, there should be a initial screen with label Private Browsing
@@ -444,6 +446,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
 
     // This test is only enabled for iPad. Shortcut does not exists on iPhone
     // https://mozilla.testrail.io/index.php?/cases/view/2307008
+    // Regression
     func testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad() {
         if skipPlatform { return }
         waitForTabsButton()

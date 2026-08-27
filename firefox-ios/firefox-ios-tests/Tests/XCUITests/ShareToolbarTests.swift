@@ -26,6 +26,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864279
+    // Regression
     func testShareNormalWebsitePrint() {
         app.launch()
         tapToolbarShareButtonAndSelectOption(option: "Print")
@@ -33,6 +34,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864277
+    // Regression
     func testShareNormalWebsiteSendLinkToDevice() {
         app.launch()
         tapToolbarShareButtonAndSelectOption(option: "Send Link to Device")
@@ -53,6 +55,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864276
+    // Regression
     func testShareNormalWebsiteCopyUrl() {
         app.launch()
         tapToolbarShareButtonAndSelectOption(option: "Copy")
@@ -78,6 +81,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864310
+    // Regression
     func testShareWebsiteReaderModePrint() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
@@ -88,6 +92,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864307
+    // Regression
     func testShareWebsiteReaderModeCopy() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
@@ -98,6 +103,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864308
+    // Regression
     func testShareWebsiteReaderModeSendLink() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
@@ -124,6 +130,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864293
+    // Regression
     func testSharePdfFilePrint() {
         app.launch()
         tapToolbarShareButtonAndSelectOption(option: "Print", url: pdfUrl)
@@ -138,6 +145,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864294
+    // Regression
     func testSharePdfFileSaveToFile() {
         app.launch()
         if #available(iOS 17, *) {

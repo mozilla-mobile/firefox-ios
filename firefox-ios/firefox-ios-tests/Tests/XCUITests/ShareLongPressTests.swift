@@ -22,6 +22,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864324
+    // Regression
     func testShareNormalWebsiteSendLinkToDevice() {
         app.launch()
         longPressTopSitesAndReachShareOptions(option: "Send Link to Device")
@@ -35,6 +36,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864323
+    // Regression
     func testShareNormalWebsiteCopyUrl() {
         app.launch()
         longPressTopSitesAndReachShareOptions(option: "Copy")
@@ -186,6 +188,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864482
+    // Regression
     func testShareViaLongPressLinkCopy() {
         app.launch()
         longPressLinkAndSelectShareOption(option: "Copy")

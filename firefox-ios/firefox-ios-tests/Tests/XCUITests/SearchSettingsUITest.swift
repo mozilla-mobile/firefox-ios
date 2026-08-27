@@ -66,6 +66,7 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2353248
+    // Regression
     func testCustomSearchEngineAsDefaultIsNotEditable() {
         // Edit is disabled
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
@@ -114,6 +115,7 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2353250
+    // Regression
     func testDeletingLastCustomEngineExitsEditing() {
         // Edit is disabled
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
