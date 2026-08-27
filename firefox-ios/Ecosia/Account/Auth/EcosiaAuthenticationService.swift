@@ -185,6 +185,12 @@ public final class EcosiaAuthenticationService: @unchecked Sendable {
 
         if credentialsCleared {
             setupTokensWithCredentials(nil)
+            // Stale SSO credentials would otherwise let getSessionTokenCookie() hand out
+            // the previous user's session transfer token before the next login refreshes it.
+            ssoCredentials = nil
+            // A stale EASC cookie left in the native cookie jar (copied there for file
+            // uploads) would get attached to native requests for whichever user logs in next.
+            FileUploadAuthCookieSync.clearAuthSessionCookieFromSharedStorage()
             // Clear user profile on logout
             try await ImageCacheLoader.clearCache(for: userProfile?.pictureURL)
             userProfile = nil
