@@ -3,6 +3,16 @@
     {
       "filename" : "shieldCheckmarkDotFillMulticolorMediumLight.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "shieldCheckmarkDotFillMulticolorMediumDark.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

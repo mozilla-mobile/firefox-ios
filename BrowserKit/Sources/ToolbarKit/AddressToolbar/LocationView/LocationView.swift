@@ -615,9 +615,7 @@ final class LocationView: UIView,
 
         if let safeListedURLImageName {
             if theme.isNova {
-                let shieldDotImageName = theme.type == .light
-                    ? StandardImageIdentifiers.Medium.shieldCheckmarkDotFillMulticolorLight
-                    : StandardImageIdentifiers.Medium.shieldCheckmarkDotFillMulticolorDark
+                let shieldDotImageName = StandardImageIdentifiers.Medium.shieldCheckmarkDotFillMulticolor
                 lockIconButton.setImage(UIImage(named: shieldDotImageName), for: .normal)
                 return
             }
