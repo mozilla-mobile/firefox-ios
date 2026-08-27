@@ -70,14 +70,6 @@ class NativeErrorPageHelper: FeatureFlaggable {
         return certStreamErrorCode(from: error) == NativeGeckoCode.badCertDomain.rawValue
     }
 
-    /// Centralized predicate for whether we should show the native UI for a wrong-host certificate error.
-    static func shouldShowNativeBadCertDomainErrorPage(
-        for error: NSError,
-        isOtherErrorPagesEnabled: Bool
-    ) -> Bool {
-        return isOtherErrorPagesEnabled && isBadCertDomainError(error)
-    }
-
     /// Builds the full set of URL query items for an error page, including
     /// certificate-specific items when the error is a certificate error.
     static func buildErrorPageQueryItems(for error: NSError, url: URL) -> [URLQueryItem] {
