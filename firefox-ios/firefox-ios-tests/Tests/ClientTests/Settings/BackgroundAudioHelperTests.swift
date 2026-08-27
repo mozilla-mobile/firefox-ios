@@ -77,7 +77,9 @@ final class BackgroundAudioHelperTests: XCTestCase {
         subject.toggle(isEnabled: false, prefs: prefs)
 
         XCTAssertFalse(prefs.boolForKey(PrefsKeys.BackgroundAudio) ?? true)
-        XCTAssertEqual(mockNotificationCenter.removeObserverCallCount, 3)
+        // startObservingNotification calls remove observers as a first call on the notification center so we except
+        // 6 times the remove observer being called. 3 when isEnabled is true and 3 when it is false.
+        XCTAssertEqual(mockNotificationCenter.removeObserverCallCount, 6)
     }
 
     func testStartObserving_registersForCorrectNotifications() {
