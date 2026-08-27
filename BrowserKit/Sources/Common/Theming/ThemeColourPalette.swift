@@ -113,6 +113,7 @@ public protocol ThemeColourPalette {
     var layerAccentSubtle: UIColor { get }
     var layerInverse: UIColor { get }
     var layerGlassTintNova: UIColor { get }
+    var layerGlassSelectedFill: UIColor { get }
     var textToast: UIColor { get }
     var iconInverted: UIColor { get }
     var iconOnColorDisabled: UIColor { get }

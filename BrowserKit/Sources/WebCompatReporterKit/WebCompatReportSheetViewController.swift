@@ -430,7 +430,9 @@ public final class WebCompatReportSheetViewController: UIViewController,
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
         if theme.isNova {
             previewButton.tintColor = theme.colors.actionPrimary
-            previewButton.setTitleTextAttributes([.foregroundColor: theme.colors.textInverted], for: .normal)
+            if #available(iOS 26.0, *) {
+                previewButton.setTitleTextAttributes([.foregroundColor: theme.colors.textInverted], for: .normal)
+            }
         }
         if hasAppliedThemeOnce {
             reconfigureAllItems()
