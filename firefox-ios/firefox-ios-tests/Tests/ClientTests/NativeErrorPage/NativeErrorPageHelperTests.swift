@@ -15,7 +15,8 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
+        let profile = MockProfile()
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
     override func tearDown() async throws {
@@ -277,30 +278,8 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         let model = helper.parseErrorDetails()
 
-        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertTrue(model.isRegularUI)
-    }
-
-    func testParseErrorDetails_certErrorBadCertDomain_returnsAdvancedSection() {
-        let url = URL(string: "https://example.com")!
-        let error = NSError(
-            domain: NSURLErrorDomain,
-            code: NSURLErrorServerCertificateUntrusted,
-            userInfo: [
-                NSURLErrorFailingURLErrorKey: url,
-                NSUnderlyingErrorKey: NSError(
-                    domain: "NSURLErrorDomain",
-                    code: NSURLErrorServerCertificateUntrusted,
-                    userInfo: ["_kCFStreamErrorCodeKey": -9843]
-                )
-            ]
-        )
-        let helper = NativeErrorPageHelper(error: error)
-
-        let model = helper.parseErrorDetails()
-
-        XCTAssertNotNil(model.advancedSection)
-        XCTAssertFalse(model.isRegularUI)
     }
 
     func testParseErrorDetails_genericError_withURL_returnsGenericModel() {
@@ -312,7 +291,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         let model = helper.parseErrorDetails()
 
-        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.advancedSection)
         XCTAssertTrue(model.isRegularUI)
     }
@@ -382,7 +361,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         let model = helper.parseErrorDetails()
 
-        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.advancedSection)
     }
 
@@ -448,8 +427,12 @@ final class NativeErrorPageHelperTests: XCTestCase {
         let model = ErrorPageModel.generic(GenericErrorModel(url: testURL))
 
         XCTAssertEqual(model.title, .NativeErrorPage.GenericError.TitleLabel)
-        XCTAssertEqual(model.description, .NativeErrorPage.GenericError.Description)
-        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertEqual(model.description, String(format: .NativeErrorPage.GenericError.DescriptionPrefixWithURL,
+                                                 AppName.shortName.description,
+                                                 testURL.host!)
+                       + " " +
+                       String.NativeErrorPage.GenericError.DescriptionSuffix)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertEqual(model.url, testURL)
         XCTAssertNil(model.advancedSection)
         XCTAssertTrue(model.isRegularUI)
@@ -459,8 +442,11 @@ final class NativeErrorPageHelperTests: XCTestCase {
         let model = ErrorPageModel.generic(GenericErrorModel(url: nil))
 
         XCTAssertEqual(model.title, .NativeErrorPage.GenericError.TitleLabel)
-        XCTAssertEqual(model.description, .NativeErrorPage.GenericError.Description)
-        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertEqual(model.description, String(format: .NativeErrorPage.GenericError.DescriptionPrefixWithoutURL,
+                                                 AppName.shortName.description)
+                       + " " +
+                       String.NativeErrorPage.GenericError.DescriptionSuffix)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
         XCTAssertNil(model.advancedSection)
         XCTAssertTrue(model.isRegularUI)
