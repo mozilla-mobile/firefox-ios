@@ -31,7 +31,7 @@ struct TPMenuUX {
             viewCornerRadius
         }
         static let backgroundAlpha: CGFloat = 0.80
-        static let novaBackgroundAlpha: CGFloat = 0.85
+        static let novaBackgroundAlpha: CGFloat = 0.95
         struct Line {
             static let height: CGFloat = 0.5
         }
@@ -790,12 +790,12 @@ class TrackingProtectionViewController: UIViewController,
             return 1.0
         }
 
-        if isNova {
-            return TPMenuUX.UX.novaBackgroundAlpha
-        }
-
         if #available(iOS 26.0, *) {
             return TPMenuUX.UX.backgroundAlpha
+        }
+
+        if isNova {
+            return TPMenuUX.UX.novaBackgroundAlpha
         }
 
         return 1.0
