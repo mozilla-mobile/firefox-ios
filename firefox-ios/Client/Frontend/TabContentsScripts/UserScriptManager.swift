@@ -23,6 +23,10 @@ class UserScriptManager {
         injectionTime: .atDocumentEnd,
         forMainFrameOnly: true,
         in: .world(name: NightModeHelper.name()))
+    private let backgroundAudioUserScript = WKUserScript.createInPageContentWorld(
+        source: "window.__firefoxBackgroundAudioEnabled = true",
+        injectionTime: .atDocumentStart,
+        forMainFrameOnly: false)
     private let printHelperUserScript = WKUserScript.createInPageContentWorld(
         source: "window.print = function () { window.webkit.messageHandlers.printHandler.postMessage({}) }",
         injectionTime: .atDocumentEnd,
@@ -104,7 +108,7 @@ class UserScriptManager {
         return try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String
     }
 
-    public func injectUserScriptsIntoWebView(_ webView: WKWebView?, nightMode: Bool, noImageMode: Bool) {
+    public func injectUserScriptsIntoWebView(_ webView: WKWebView?, nightMode: Bool, noImageMode: Bool, backgroundAudio: Bool) {
         // Start off by ensuring that any previously-added user scripts are
         // removed to prevent the same script from being injected twice.
         webView?.configuration.userContentController.removeAllUserScripts()
@@ -148,6 +152,9 @@ class UserScriptManager {
         // that it gets enabled immediately when the DOM loads.
         if noImageMode {
             webView?.configuration.userContentController.addUserScript(noImageModeUserScript)
+        }
+        if backgroundAudio {
+            webView?.configuration.userContentController.addUserScript(backgroundAudioUserScript)
         }
     }
 }
