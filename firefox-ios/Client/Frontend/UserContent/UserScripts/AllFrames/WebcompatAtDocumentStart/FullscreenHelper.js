@@ -74,7 +74,7 @@ document.createElement = function (tag) {
 /// FXIOS-15411 explains why thanks to iOS changes over time.
 
 const playInline = () => {
-  document.querySelectorAll("video").forEach((el) => {
+  document.querySelectorAll("video[autoplay]").forEach((el) => {
     forceInline(el);
   });
 };
