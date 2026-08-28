@@ -76,6 +76,7 @@ document.createElement = function (tag) {
 const playInline = () => {
   document.querySelectorAll("video[autoplay]").forEach((el) => {
     forceInline(el);
+    el.controls = true;
   });
 };
 
