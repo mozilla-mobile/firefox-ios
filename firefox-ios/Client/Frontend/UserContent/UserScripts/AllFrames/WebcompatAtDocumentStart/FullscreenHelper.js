@@ -69,3 +69,14 @@ document.createElement = function (tag) {
   }
   return el;
 };
+
+/// This is also added to all autoplay videos on the page.
+/// FXIOS-15411 explains why thanks to iOS changes over time.
+
+const playInline = () => {
+  document.querySelectorAll("video").forEach((el) => {
+    forceInline(el);
+  });
+};
+
+window.addEventListener('DOMContentLoaded', playInline);
