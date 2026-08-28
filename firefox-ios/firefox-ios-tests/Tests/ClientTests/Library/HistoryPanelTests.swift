@@ -5,6 +5,7 @@
 import XCTest
 
 import Common
+import Storage
 @testable import Client
 
 @MainActor
@@ -97,6 +98,30 @@ class HistoryPanelTests: XCTestCase {
         notificationCenter.post(name: .OpenRecentlyClosedTabs)
 
         XCTAssertEqual(notificationCenter.postCallCount, 1)
+    }
+
+    func testHistoryDeleteSwipeAction_avoidsDestructiveStyleAnimation() throws {
+        let panel = createSubject()
+        panel.loadViewIfNeeded()
+        let dataSource = try XCTUnwrap(panel.diffableDataSource)
+        var snapshot = NSDiffableDataSourceSnapshot<HistoryPanel.HistoryPanelSections, HistoryPanel.HistoryItem>()
+        snapshot.appendSections([.lastHour])
+        snapshot.appendItems(
+            [.site(Site.createBasicSite(url: "https://example.com", title: "Example"))],
+            toSection: .lastHour
+        )
+        dataSource.apply(snapshot, animatingDifferences: false)
+
+        let configuration = try XCTUnwrap(
+            panel.tableView(
+                UITableView(),
+                trailingSwipeActionsConfigurationForRowAt: IndexPath(row: 0, section: 0)
+            )
+        )
+        let deleteAction = try XCTUnwrap(configuration.actions.first)
+
+        XCTAssertEqual(deleteAction.style, .normal)
+        XCTAssertEqual(deleteAction.backgroundColor, .systemRed)
     }
 
     private func createSubject() -> HistoryPanel {
