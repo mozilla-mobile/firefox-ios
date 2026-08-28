@@ -673,7 +673,7 @@ final class BookmarksViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(
-            style: .destructive,
+            style: .normal,
             title: .BookmarksPanelDeleteTableAction
         ) { [weak self] (_, _, completion) in
             guard let self else {
@@ -685,6 +685,7 @@ final class BookmarksViewController: SiteTableViewController,
             self.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
             completion(true)
         }
+        deleteAction.backgroundColor = .systemRed
 
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
