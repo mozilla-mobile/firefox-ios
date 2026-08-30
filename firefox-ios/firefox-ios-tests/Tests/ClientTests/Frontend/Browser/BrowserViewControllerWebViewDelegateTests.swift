@@ -603,7 +603,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
         XCTAssertEqual(elements.link, url)
         XCTAssertNil(elements.image)
-        XCTAssertNil(elements.title)
+        XCTAssertEqual(elements.title, url.normalizedHostWithLRI, "Must not fall back to the raw URL as a title")
         XCTAssertNil(elements.alt)
     }
 
@@ -615,7 +615,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let elements = BrowserViewController.resolveContextMenuElements(for: url, from: contextHelper)
 
         XCTAssertEqual(elements.link, url)
-        XCTAssertNil(elements.title)
+        XCTAssertEqual(elements.title, url.normalizedHostWithLRI, "Must not fall back to the raw URL as a title")
     }
 
     @MainActor
@@ -639,7 +639,11 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let elements = BrowserViewController.resolveContextMenuElements(for: url, from: contextHelper)
 
         XCTAssertEqual(elements.link, url)
-        XCTAssertNil(elements.title, "Stale JS-reported data for a different link must not be used")
+        XCTAssertEqual(
+            elements.title,
+            url.normalizedHostWithLRI,
+            "Stale JS-reported data for a different link must not be used, and must not fall back to the raw URL"
+        )
     }
 
     @MainActor
@@ -655,5 +659,64 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         contextHelper.reset()
 
         XCTAssertNil(contextHelper.elements)
+    }
+
+    // MARK: - Context menu dismiss reset guard
+    // See FXIOS-14918 review feedback: a stale dismiss callback for an earlier long press can fire after
+    // a later long press has already reported its own elements over the JS bridge. Resetting unconditionally
+    // in that case would discard the newer data.
+
+    @MainActor
+    func testShouldResetContextMenuElements_matchingLink_returnsTrue() {
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: url, image: nil, title: "Example", alt: nil)
+
+        let shouldReset = BrowserViewController.shouldResetContextMenuElements(
+            afterDismissing: url,
+            contextHelper: contextHelper
+        )
+
+        XCTAssertTrue(shouldReset)
+    }
+
+    @MainActor
+    func testShouldResetContextMenuElements_newerLongPressAlreadyOverwroteElements_returnsFalse() {
+        let dismissedURL = URL(string: "https://example.com")!
+        let newerURL = URL(string: "https://newer-long-press.example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: newerURL, image: nil, title: "Newer", alt: nil)
+
+        let shouldReset = BrowserViewController.shouldResetContextMenuElements(
+            afterDismissing: dismissedURL,
+            contextHelper: contextHelper
+        )
+
+        XCTAssertFalse(shouldReset, "Must not discard a newer long press's already-reported elements")
+    }
+
+    @MainActor
+    func testShouldResetContextMenuElements_noElements_returnsFalse() {
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+
+        let shouldReset = BrowserViewController.shouldResetContextMenuElements(
+            afterDismissing: url,
+            contextHelper: contextHelper
+        )
+
+        XCTAssertFalse(shouldReset)
+    }
+
+    @MainActor
+    func testShouldResetContextMenuElements_noContextHelper_returnsFalse() {
+        let url = URL(string: "https://example.com")!
+
+        let shouldReset = BrowserViewController.shouldResetContextMenuElements(
+            afterDismissing: url,
+            contextHelper: nil
+        )
+
+        XCTAssertFalse(shouldReset)
     }
 }

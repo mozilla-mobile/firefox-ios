@@ -211,14 +211,13 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(_ webView: WKWebView, contextMenuDidEndForElement elementInfo: WKContextMenuElementInfo) {
-        guard let currentTab = tabManager.selectedTab,
-              let contextHelper = currentTab.getContentScript(
-                name: ContextMenuHelper.name()
-              ) as? ContextMenuHelper
-        else { return }
-        let elements = contextHelper.elements
-        ContextMenuTelemetry().dismissed(origin: elements?.image != nil ? .imageLink : .webLink)
-        contextHelper.reset()
+        guard let url = elementInfo.linkURL, let currentTab = tabManager.selectedTab else { return }
+        let contextHelper = currentTab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper
+        let elements = Self.resolveContextMenuElements(for: url, from: contextHelper)
+        ContextMenuTelemetry().dismissed(origin: elements.image != nil ? .imageLink : .webLink)
+        if Self.shouldResetContextMenuElements(afterDismissing: url, contextHelper: contextHelper) {
+            contextHelper?.reset()
+        }
     }
 
     /// WebKit's native long-press gesture that triggers this delegate isn't synchronized with the page's
@@ -234,7 +233,14 @@ extension BrowserViewController: WKUIDelegate {
         if let elements = contextHelper?.elements, elements.link == url {
             return elements
         }
-        return ContextMenuHelper.Elements(link: url, image: nil, title: nil, alt: nil)
+        return ContextMenuHelper.Elements(link: url, image: nil, title: url.normalizedHostWithLRI, alt: nil)
+    }
+
+    /// Whether `contextHelper.elements` still belongs to the long press that's being dismissed. WebKit's
+    /// dismiss callback for an earlier long press can fire after a later long press has already reported
+    /// its own elements over the JS bridge; resetting unconditionally would discard that newer data. See FXIOS-14918.
+    static func shouldResetContextMenuElements(afterDismissing url: URL, contextHelper: ContextMenuHelper?) -> Bool {
+        contextHelper?.elements?.link == url
     }
 
     func webView(
@@ -1262,7 +1268,9 @@ extension BrowserViewController: WKNavigationDelegate {
         let previousURL = tab.url
         tab.url = webView.url
         hideStaleContentOnCrossOriginPopupCommit(for: tab, previousURL: previousURL)
-        (tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper)?.reset()
+        if let contextHelper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper {
+            contextHelper.reset()
+        }
         if let handler = tab.onNextCommit {
             tab.onNextCommit = nil
             handler()
