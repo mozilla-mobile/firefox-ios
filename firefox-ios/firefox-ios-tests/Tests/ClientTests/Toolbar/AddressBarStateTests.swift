@@ -236,6 +236,38 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
+    // MARK: - shouldShowSummarizeAction
+
+    private func shouldShowSummarize(idiom: UIUserInterfaceIdiom,
+                                     isLandscape: Bool,
+                                     isToolbarButtonEnabled: Bool = true,
+                                     canSummarize: Bool = true,
+                                     isReaderModeAvailable: Bool = true) -> Bool {
+        AddressBarState.shouldShowSummarizeAction(
+            isToolbarButtonEnabled: isToolbarButtonEnabled,
+            canSummarize: canSummarize,
+            isReaderModeAvailable: isReaderModeAvailable,
+            idiom: idiom,
+            isLandscape: isLandscape
+        )
+    }
+
+    func test_shouldShowSummarizeAction_onPad_isKeptInBothOrientations() {
+        XCTAssertTrue(shouldShowSummarize(idiom: .pad, isLandscape: false))
+        XCTAssertTrue(shouldShowSummarize(idiom: .pad, isLandscape: true))
+    }
+
+    func test_shouldShowSummarizeAction_onPhone_isDroppedOnlyInLandscape() {
+        XCTAssertTrue(shouldShowSummarize(idiom: .phone, isLandscape: false))
+        XCTAssertFalse(shouldShowSummarize(idiom: .phone, isLandscape: true))
+    }
+
+    func test_shouldShowSummarizeAction_requiresEveryPrecondition() {
+        XCTAssertFalse(shouldShowSummarize(idiom: .pad, isLandscape: false, isToolbarButtonEnabled: false))
+        XCTAssertFalse(shouldShowSummarize(idiom: .pad, isLandscape: false, canSummarize: false))
+        XCTAssertFalse(shouldShowSummarize(idiom: .pad, isLandscape: false, isReaderModeAvailable: false))
+    }
+
     func test_readerModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeFeatureOn() {
         setIsHostedSummarizerFeatureEnabled(enabled: true)
         setupStore()

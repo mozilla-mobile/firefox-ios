@@ -862,7 +862,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
         if isReaderModeWithSummarizerEnabled {
             actions.append(readerModeWithSummarizerAction(isSelected: readerModeState == .active,
                                                           hasAlternativeLocationColor: hasAlternativeLocationColor))
-        } else if isSummarizeFeatureForToolbarOn, canSummarize, readerModeState == .available, !UIWindow.isLandscape {
+        } else if shouldShowSummarizeAction(isToolbarButtonEnabled: isSummarizeFeatureForToolbarOn,
+                                            canSummarize: canSummarize,
+                                            isReaderModeAvailable: readerModeState == .available,
+                                            idiom: UIDevice.current.userInterfaceIdiom,
+                                            isLandscape: UIWindow.isLandscape) {
             actions.append(summaryAction(hasAlternativeLocationColor: hasAlternativeLocationColor))
         } else if readerModeState?.isEnabled == true {
             actions.append(readerModeAction(isSelected: readerModeState == .active,
@@ -1102,6 +1106,18 @@ struct AddressBarState: StateType, Sendable, Equatable {
             a11yLabel: .TabLocationReloadAccessibilityLabel,
             a11yHint: .TabLocationReloadAccessibilityHint,
             a11yId: AccessibilityIdentifiers.Toolbar.reloadButton)
+    }
+
+    /// Whether the address bar shows the summarize entry point instead of the reader-mode button.
+    /// A phone in landscape has no room for it and falls back to reader mode; an iPad has the room
+    /// in either orientation and keeps it.
+    static func shouldShowSummarizeAction(isToolbarButtonEnabled: Bool,
+                                          canSummarize: Bool,
+                                          isReaderModeAvailable: Bool,
+                                          idiom: UIUserInterfaceIdiom,
+                                          isLandscape: Bool) -> Bool {
+        guard isToolbarButtonEnabled, canSummarize, isReaderModeAvailable else { return false }
+        return !(idiom == .phone && isLandscape)
     }
 
     private static func summaryAction(hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
