@@ -230,17 +230,39 @@ extension BrowserViewController: WKUIDelegate {
         for url: URL,
         from contextHelper: ContextMenuHelper?
     ) -> ContextMenuHelper.Elements {
-        if let elements = contextHelper?.elements, elements.link == url {
-            return elements
-        }
-        return ContextMenuHelper.Elements(link: url, image: nil, title: url.normalizedHostWithLRI, alt: nil)
+        matchingContextHelperElements(contextHelper, url)
+            ?? ContextMenuHelper.Elements(link: url, image: nil, title: url.normalizedHostWithLRI, alt: nil)
     }
 
     /// Whether `contextHelper.elements` still belongs to the long press that's being dismissed. WebKit's
     /// dismiss callback for an earlier long press can fire after a later long press has already reported
     /// its own elements over the JS bridge; resetting unconditionally would discard that newer data. See FXIOS-14918.
     static func shouldResetContextMenuElements(afterDismissing url: URL, contextHelper: ContextMenuHelper?) -> Bool {
-        contextHelper?.elements?.link == url
+        matchingContextHelperElements(contextHelper, url) != nil
+    }
+
+    /// The JS bridge builds its link by percent-encoding the raw string it reads from the page, while WebKit
+    /// builds `elementInfo.linkURL` natively; for an internationalized domain the two land on different but
+    /// equivalent encodings (Unicode vs. Punycode host), so a raw `URL` equality check treats them as a mismatch.
+    /// Round-tripping the host through `URLComponents` normalizes both to the same Punycode form before comparing.
+    private static func matchingContextHelperElements(
+        _ contextHelper: ContextMenuHelper?,
+        _ url: URL
+    ) -> ContextMenuHelper.Elements? {
+        guard let elements = contextHelper?.elements,
+              let jsLink = elements.link,
+              normalizedForHostComparison(jsLink) == normalizedForHostComparison(url)
+        else { return nil }
+        return elements
+    }
+
+    private static func normalizedForHostComparison(_ url: URL) -> URL? {
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return url }
+        guard let host = components.host else { return components.url }
+        var hostOnly = URLComponents()
+        hostOnly.host = host
+        components.host = hostOnly.url?.host ?? host
+        return components.url
     }
 
     func webView(

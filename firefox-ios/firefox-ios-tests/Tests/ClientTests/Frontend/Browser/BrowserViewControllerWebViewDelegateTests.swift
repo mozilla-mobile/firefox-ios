@@ -630,6 +630,21 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     @MainActor
+    func testResolveContextMenuElements_jsElementsMatchViaDifferentHostEncoding_usesReportedElements() {
+        // WebKit's native `linkURL` for an internationalized domain is Punycode-encoded, while the JS bridge
+        // percent-encodes the raw Unicode string it reads from the page — the two must still be recognized
+        // as the same link.
+        let nativeURL = URL(string: "https://xn--mnchen-3ya.de/stra%C3%9Fe")!
+        let jsReportedURL = URL(string: "https://m%C3%BCnchen.de/stra%C3%9Fe")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: jsReportedURL, image: nil, title: "München", alt: nil)
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: nativeURL, from: contextHelper)
+
+        XCTAssertEqual(elements.title, "München")
+    }
+
+    @MainActor
     func testResolveContextMenuElements_jsElementsAreStale_fallsBackToLinkOnly() {
         let url = URL(string: "https://example.com")!
         let staleURL = URL(string: "https://previous-long-press.example.com")!
