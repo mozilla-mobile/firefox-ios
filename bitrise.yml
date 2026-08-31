@@ -2051,6 +2051,8 @@ workflows:
     envs:
     - DEVICE_MODEL: iphone14pro
     - DEVICE_VERSION: '16.6'
+    # Must be a version Test Lab supports: `gcloud firebase test ios versions list`
+    # caps at 26.2, so this cannot follow the build stack up to 27.0.
     - FIREBASE_XCODE_VERSION: '26.2'
     # gcloud firebase test ios run has NO sharding flags (unlike the android
     # variant), and the full Smoketest plan does not fit in Test Lab's 45m
@@ -2307,7 +2309,7 @@ workflows:
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
     meta:
       bitrise.io:
-        stack: osx-xcode-26.2.x
+        stack: osx-xcode-27.0.x-edge
         machine_type_id: g2.mac.large
 
   # Firefox_Unit_Tests_iOS_Versions ensures all unit tests pass on the supported iOS versions.
