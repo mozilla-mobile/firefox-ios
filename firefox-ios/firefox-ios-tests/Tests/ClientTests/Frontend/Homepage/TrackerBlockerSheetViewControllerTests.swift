@@ -5,7 +5,6 @@
 import XCTest
 import Common
 import ComponentLibrary
-import Shared
 import UIKit
 
 @testable import Client
@@ -316,7 +315,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertEqual((background.layer as? CAGradientLayer)?.colors as? [CGColor],
                        theme.colors.gradientAccentSubtle.cgColors)
         // The gradient carries its own alpha, so the flat fill stays behind it.
-        XCTAssertEqual(background.backgroundColor, theme.colors.layer2)
+        XCTAssertEqual(background.backgroundColor, theme.colors.layer1)
     }
 
     /// The gradient tokens are Nova-only, so a classic theme has to fall back to the flat fill alone.
@@ -328,48 +327,20 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
 
         let background = try XCTUnwrap(backgroundGradientView(in: subject))
         XCTAssertNil((background.layer as? CAGradientLayer)?.colors)
-        XCTAssertEqual(background.backgroundColor, theme.colors.layer2)
+        XCTAssertEqual(background.backgroundColor, theme.colors.layer1)
     }
 
-    func test_applyTheme_withNovaTheme_appliesGlassToCategoriesCard() throws {
-        guard #available(iOS 26.0, *), !DeviceInfo.isRunningLiquidGlassEarlyBeta else {
-            throw XCTSkip("The card only carries glass on iOS 26, outside the early betas")
-        }
+    /// The card is translucent so the sheet's gradient shows through it, per the Protection Dashboard design.
+    func test_applyTheme_usesTranslucentFillForCategoriesCard() throws {
         let theme = NovaDarkTheme()
         let subject = createSubject(themeManager: MockThemeManager(currentTheme: theme))
 
         subject.loadViewIfNeeded()
 
         let card = try XCTUnwrap(categoriesCard(in: subject))
-        let glass = try XCTUnwrap(card.effect as? UIGlassEffect)
-        XCTAssertEqual(glass.tintColor, theme.colors.layerGlassTintNova)
-        XCTAssertEqual(card.backgroundColor, .clear)
-    }
-
-    /// The glass tint tokens are Nova-only, so a classic theme keeps the flat card fill.
-    func test_applyTheme_withClassicTheme_drawsFlatCategoriesCard() throws {
-        let theme = LightTheme()
-        let subject = createSubject(themeManager: MockThemeManager(currentTheme: theme))
-
-        subject.loadViewIfNeeded()
-
-        let card = try XCTUnwrap(categoriesCard(in: subject))
-        XCTAssertNil(card.effect)
-        XCTAssertEqual(card.backgroundColor, theme.colors.layer2)
-    }
-
-    /// Leaving Nova has to clear the glass, otherwise the flat fill would be layered on top of it.
-    func test_applyTheme_afterLeavingNovaTheme_clearsCardGlass() throws {
-        let themeManager = MockThemeManager(currentTheme: NovaDarkTheme())
-        let subject = createSubject(themeManager: themeManager)
-        subject.loadViewIfNeeded()
-
-        themeManager.setManualTheme(to: .light)
-        subject.applyTheme()
-
-        let card = try XCTUnwrap(categoriesCard(in: subject))
-        XCTAssertNil(card.effect)
-        XCTAssertEqual(card.backgroundColor, LightTheme().colors.layer2)
+        XCTAssertEqual(card.backgroundColor, theme.colors.layerSurfaceMediumAlpha)
+        let alpha = try XCTUnwrap(card.backgroundColor?.cgColor.alpha)
+        XCTAssertLessThan(alpha, 1, "Expected the card to let the sheet background through")
     }
 
     func test_progressBar_withNovaTheme_usesGradientFill() throws {
@@ -410,24 +381,77 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
                       "Expected every separator to pick up the new theme")
     }
 
+    /// The card breathes above the first row and below the last one, rather than clipping them at its edges.
+    func test_categoriesCard_insetsRowsVertically() throws {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.view.frame = CGRect(x: 0, y: 0, width: UX.sheetWidth, height: UX.sheetHeight)
+        subject.view.layoutIfNeeded()
+
+        let card = try XCTUnwrap(categoriesCard(in: subject))
+        let stack = try XCTUnwrap(allSubviews(in: card).compactMap { $0 as? UIStackView }.first)
+        let stackFrame = stack.convert(stack.bounds, to: card)
+
+        XCTAssertEqual(stackFrame.minY, UX.cardTopPadding, accuracy: 0.5)
+        XCTAssertEqual(card.bounds.maxY - stackFrame.maxY, UX.cardBottomPadding, accuracy: 0.5)
+    }
+
+    /// The line starts where the row titles start, not at the card's edge, and runs to the card's trailing padding.
+    func test_separators_startUnderTheRowTitles() throws {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.view.frame = CGRect(x: 0, y: 0, width: UX.sheetWidth, height: UX.sheetHeight)
+        subject.view.layoutIfNeeded()
+
+        let card = try XCTUnwrap(categoriesCard(in: subject))
+        let line = try XCTUnwrap(separators(in: subject).first)
+        let row = try XCTUnwrap(allSubviews(in: card).compactMap { $0 as? TrackerCategoryRowView }.first)
+        let icon = try XCTUnwrap(icon(in: row))
+
+        let lineFrame = line.convert(line.bounds, to: card)
+        let rowFrame = row.convert(row.bounds, to: card)
+        let iconFrame = icon.convert(icon.bounds, to: card)
+
+        XCTAssertEqual(
+            lineFrame.minX,
+            iconFrame.maxX + UX.rowHorizontalSpacing,
+            accuracy: 0.5,
+            "Expected the line to start where the title does, past the icon"
+        )
+        XCTAssertEqual(
+            lineFrame.maxX,
+            rowFrame.maxX,
+            accuracy: 0.5,
+            "Expected the line to run to the trailing edge of the rows"
+        )
+    }
+
     private func backgroundGradientView(in controller: UIViewController) -> GradientView? {
         // The only `GradientView` directly under the root view; the progress bars' fills sit deeper.
         return controller.view.subviews.compactMap { $0 as? GradientView }.first
     }
 
+    /// Each separator is a transparent container holding the inset line, so the line is one level down.
     private func separators(in controller: UIViewController) -> [UIView] {
         guard let card = view(controller, withID: A11y.categoriesCard),
               let stack = allSubviews(in: card).compactMap({ $0 as? UIStackView }).first else { return [] }
-        return stack.arrangedSubviews.filter { !($0 is TrackerCategoryRowView) }
+        return stack.arrangedSubviews
+            .filter { !($0 is TrackerCategoryRowView) }
+            .compactMap { $0.subviews.first }
     }
 
     // MARK: - Helpers
 
-    /// Mirrors the private `TrackerCategoryRowView.UX` values the layout assertions depend on.
+    /// Mirrors the private `TrackerCategoryRowView.UX` and sheet `UX` values the layout assertions depend on.
     private enum UX {
         static let rowWidth: CGFloat = 320
         static let rowVerticalPadding: CGFloat = 12
+        static let rowHorizontalSpacing: CGFloat = 12
         static let emptyStateMinHeight: CGFloat = 55
+        static let sheetWidth: CGFloat = 393
+        static let sheetHeight: CGFloat = 700
+        static let cardTopPadding: CGFloat = 16
+        static let cardBottomPadding: CGFloat = 12
     }
 
     private func makeRow(count: Int?,
@@ -482,8 +506,8 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         return view(controller, withID: A11y.totalPill)
     }
 
-    private func categoriesCard(in controller: UIViewController) -> UIVisualEffectView? {
-        return view(controller, withID: A11y.categoriesCard) as? UIVisualEffectView
+    private func categoriesCard(in controller: UIViewController) -> UIView? {
+        return view(controller, withID: A11y.categoriesCard)
     }
 
     private func view(_ controller: UIViewController, withID identifier: String) -> UIView? {

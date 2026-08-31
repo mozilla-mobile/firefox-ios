@@ -92,7 +92,7 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
         NSLayoutConstraint.activate([
             iconImageView.widthAnchor.constraint(equalToConstant: UX.iconSize),
             iconImageView.heightAnchor.constraint(equalToConstant: UX.iconSize),
-            iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalSpacing),
             // The icon tracks the title's centre rather than the row's, so it stays aligned with the text
             // as the title grows to multiple lines.
             iconImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
@@ -109,7 +109,7 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
 
             detailStack.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.verticalSpacing),
             detailStack.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            detailStack.trailingAnchor.constraint(equalTo: trailingAnchor)
+            detailStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalSpacing)
         ])
 
         NSLayoutConstraint.activate(detailsVisibleConstraints)

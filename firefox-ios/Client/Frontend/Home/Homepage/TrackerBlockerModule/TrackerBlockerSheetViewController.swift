@@ -13,15 +13,20 @@ import UIKit
 /// accessibility text sizes.
 final class TrackerBlockerSheetViewController: UIViewController, Themeable, Notifiable {
     private struct UX {
-        static let contentHorizontalPadding: CGFloat = 16
+        static let contentHorizontalPadding: CGFloat = 22
         static let contentTopPadding: CGFloat = 44
         static let contentBottomPadding: CGFloat = 16
         static let closeButtonTrailingPadding: CGFloat = 16
         static let closeButtonTopPadding: CGFloat = 16
         static let shieldIconSize: CGFloat = 48
-        static let cardCornerRadius: CGFloat = 12
+        static let cardCornerRadius: CGFloat = 34
         static let cardHorizontalPadding: CGFloat = 12
+        static let cardTopPadding: CGFloat = 16
+        static let cardBottomPadding: CGFloat = 12
         static let separatorHeight: CGFloat = 1
+        /// Starts the line under the row titles: `TrackerCategoryRowView`'s icon width plus its icon-to-title spacing.
+        static let separatorLeadingInset: CGFloat = 49
+        static let separatorTrailingInset: CGFloat = 10
         static let pillHorizontalPadding: CGFloat = 12
         static let pillVerticalPadding: CGFloat = 6
         static let spacingShieldToCount: CGFloat = 12
@@ -88,9 +93,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.headerLabel
     }
 
-    /// Carries a `UIGlassEffect` under Nova on iOS 26; on older systems and the classic themes it falls back to a
-    /// flat fill, so the effect is only ever set in `applyTheme()`.
-    private let categoriesCardView: UIVisualEffectView = .build { view in
+    private let categoriesCardView: UIView = .build { view in
         view.layer.cornerRadius = UX.cardCornerRadius
         view.clipsToBounds = true
         view.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.categoriesCard
@@ -159,7 +162,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         shieldContainer.addSubview(shieldImageView)
         footerContainer.addSubview(footerPill)
         footerPill.addSubview(footerLabel)
-        categoriesCardView.contentView.addSubview(categoriesStack)
+        categoriesCardView.addSubview(categoriesStack)
 
         contentStack.addArrangedSubview(shieldContainer)
         contentStack.addArrangedSubview(weeklyCountLabel)
@@ -220,11 +223,13 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
             shieldImageView.widthAnchor.constraint(equalToConstant: UX.shieldIconSize),
             shieldImageView.heightAnchor.constraint(equalToConstant: UX.shieldIconSize),
 
-            categoriesStack.topAnchor.constraint(equalTo: categoriesCardView.contentView.topAnchor),
-            categoriesStack.bottomAnchor.constraint(equalTo: categoriesCardView.contentView.bottomAnchor),
-            categoriesStack.leadingAnchor.constraint(equalTo: categoriesCardView.contentView.leadingAnchor,
+            categoriesStack.topAnchor.constraint(equalTo: categoriesCardView.topAnchor,
+                                                 constant: UX.cardTopPadding),
+            categoriesStack.bottomAnchor.constraint(equalTo: categoriesCardView.bottomAnchor,
+                                                    constant: -UX.cardBottomPadding),
+            categoriesStack.leadingAnchor.constraint(equalTo: categoriesCardView.leadingAnchor,
                                                      constant: UX.cardHorizontalPadding),
-            categoriesStack.trailingAnchor.constraint(equalTo: categoriesCardView.contentView.trailingAnchor,
+            categoriesStack.trailingAnchor.constraint(equalTo: categoriesCardView.trailingAnchor,
                                                       constant: -UX.cardHorizontalPadding),
 
             footerPill.topAnchor.constraint(equalTo: footerContainer.topAnchor),
@@ -312,8 +317,8 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         for (index, category) in state.categories.enumerated() {
             if index > 0 {
                 let separator = makeSeparator()
-                categoriesStack.addArrangedSubview(separator)
-                separatorViews.append(separator)
+                categoriesStack.addArrangedSubview(separator.container)
+                separatorViews.append(separator.line)
             }
             let rowView = TrackerCategoryRowView()
             rowView.accessibilityIdentifier =
@@ -333,14 +338,28 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         }
     }
 
-    /// Separators are coloured by `applyTheme()` along with the rest of the card, so they keep up with theme
-    /// changes while the sheet is open.
-    private func makeSeparator() -> UIView {
-        let separator: UIView = .build { view in
+    /// The stack fills its arranged subviews, so the line is inset inside a transparent container rather than
+    /// constrained directly; that is what lets it start under the row titles instead of at the card's edge.
+    /// Only the line is themed, by `applyTheme()`, so it keeps up with theme changes while the sheet is open.
+    private func makeSeparator() -> (container: UIView, line: UIView) {
+        let container: UIView = .build { view in
             view.isAccessibilityElement = false
         }
-        separator.heightAnchor.constraint(equalToConstant: UX.separatorHeight).isActive = true
-        return separator
+        let line: UIView = .build { view in
+            view.isAccessibilityElement = false
+        }
+        container.addSubview(line)
+
+        NSLayoutConstraint.activate([
+            line.topAnchor.constraint(equalTo: container.topAnchor),
+            line.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+            line.leadingAnchor.constraint(equalTo: container.leadingAnchor,
+                                          constant: UX.separatorLeadingInset),
+            line.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                                           constant: -UX.separatorTrailingInset),
+            line.heightAnchor.constraint(equalToConstant: UX.separatorHeight)
+        ])
+        return (container, line)
     }
 
     @objc
@@ -366,40 +385,18 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
 
         // `gradientAccentSubtle` carries its own 50% alpha, so it composites over the solid fill behind it.
         // It is Nova-only, so classic themes get the flat fill on its own.
-        backgroundGradientView.backgroundColor = theme.colors.layer2
+        backgroundGradientView.backgroundColor = theme.colors.layer1
         backgroundGradientView.configure(gradient: theme.isNova ? theme.colors.gradientAccentSubtle : nil)
 
         weeklyCountLabel.textColor = theme.colors.textPrimary
         headerLabel.textColor = state.isEmpty ? theme.colors.textPrimary : theme.colors.textSecondary
-        applyCardBackground(theme: theme)
+        // The card is translucent by design, so it picks up the gradient behind it rather than covering it.
+        categoriesCardView.backgroundColor = theme.colors.layerSurfaceMediumAlpha
         // The pill has no background in the empty state, where it acts as an empty spacer.
         footerPill.backgroundColor = state.total != nil ? theme.colors.layerAccentPrivateNonOpaque : .clear
         footerLabel.textColor = theme.colors.textSecondary
 
         categoryRowViews.forEach { $0.applyTheme(theme: theme) }
         separatorViews.forEach { $0.backgroundColor = theme.colors.borderPrimary }
-    }
-
-    /// The glass tint tokens only exist in the Nova palettes, so the classic themes keep the flat `layer2` card.
-    /// `isRunningLiquidGlassEarlyBeta` covers the iOS 26 developer betas where `UIGlassEffect` is broken (FXIOS-13528).
-    private func applyCardBackground(theme: Theme) {
-        guard #available(iOS 26.0, *), theme.isNova, !DeviceInfo.isRunningLiquidGlassEarlyBeta else {
-            removeCardGlassEffect()
-            categoriesCardView.backgroundColor = theme.colors.layer2
-            return
-        }
-
-        let glassEffect = UIGlassEffect(style: .regular)
-        glassEffect.tintColor = theme.colors.layerGlassTintNova
-        categoriesCardView.effect = glassEffect
-        categoriesCardView.backgroundColor = .clear
-    }
-
-    /// Covers a theme switch out of Nova while the sheet is open, so the flat fill isn't layered over stale glass.
-    private func removeCardGlassEffect() {
-        guard #available(iOS 26.0, *), categoriesCardView.effect != nil else { return }
-        // Workaround for an iOS 26.0 bug where assigning `nil` on its own leaves the glass effect in place.
-        categoriesCardView.effect = UIBlurEffect()
-        categoriesCardView.effect = nil
     }
 }
