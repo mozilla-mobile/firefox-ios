@@ -242,8 +242,8 @@ struct NavigationBarState: StateType, Equatable {
         let nextTabScreenshot = isTabScreenshotAction ? action.nextTabScreenshot : toolbarState.nextTabScreenshot
 
         actions = [
-            backAction(enabled: canGoBack),
-            forwardAction(enabled: canGoForward)
+            NavigationActionsState.backAction(enabled: canGoBack),
+            NavigationActionsState.forwardAction(enabled: canGoForward)
         ]
 
         let iconName: String? = switch tabTrayButtonStyle {
@@ -295,27 +295,6 @@ struct NavigationBarState: StateType, Equatable {
     }
 
     // MARK: - Helper
-    private static func backAction(enabled: Bool) -> ToolbarActionConfiguration {
-        return ToolbarActionConfiguration(
-            actionType: .back,
-            iconName: StandardImageIdentifiers.Large.chevronLeft,
-            isFlippedForRTL: true,
-            isEnabled: enabled,
-            contextualHintType: ContextualHintType.navigation.rawValue,
-            a11yLabel: .TabToolbarBackAccessibilityLabel,
-            a11yId: AccessibilityIdentifiers.Toolbar.backButton)
-    }
-
-    private static func forwardAction(enabled: Bool) -> ToolbarActionConfiguration {
-        return ToolbarActionConfiguration(
-            actionType: .forward,
-            iconName: StandardImageIdentifiers.Large.chevronRight,
-            isFlippedForRTL: true,
-            isEnabled: enabled,
-            a11yLabel: .TabToolbarForwardAccessibilityLabel,
-            a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
-    }
-
     private static func tabsAction(iconName: String?,
                                    numberOfTabs: Int = 1,
                                    isPrivateMode: Bool = false,
