@@ -692,6 +692,60 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
+    func test_didSelectTargetLanguage_whenDocumentChanged_doesNotDispatchError() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let mockTranslationsService = MockTranslationsService(
+            translateResult: .failure(TranslationsServiceError.documentChanged)
+        )
+        let subject = createSubject(translationsService: mockTranslationsService)
+        let action = TranslationLanguageSelectedAction(
+            windowUUID: .XCTestDefaultUUID,
+            targetLanguage: "de",
+            actionType: TranslationsActionType.didSelectTargetLanguage
+        )
+
+        let loadingExpectation = XCTestExpectation(description: "didStartTranslatingPage dispatched")
+        mockStore.dispatchCalled = { [weak mockStore] in
+            if (mockStore?.dispatchedActions.last?.actionType as? TranslationsActionType) == .didStartTranslatingPage {
+                loadingExpectation.fulfill()
+            }
+        }
+
+        subject.translationsProvider.legacyMiddleware(mockStore.state, action)
+        wait(for: [loadingExpectation], timeout: 1.0)
+
+        // The user navigated away before the translation started. The page they are on now was
+        // never translated, so it must not be told that a translation failed.
+        let errorExpectation = XCTestExpectation(description: "didReceiveErrorTranslating should not be dispatched")
+        errorExpectation.isInverted = true
+        mockStore.dispatchCalled = { [weak mockStore] in
+            if (mockStore?.dispatchedActions.last?.actionType as? TranslationsActionType) == .didReceiveErrorTranslating {
+                errorExpectation.fulfill()
+            }
+        }
+        wait(for: [errorExpectation], timeout: 1.0)
+
+        let errorActions = mockStore.dispatchedActions.filter {
+            ($0.actionType as? TranslationsActionType) == .didReceiveErrorTranslating
+        }
+        XCTAssertTrue(errorActions.isEmpty)
+
+        let toastActions = mockStore.dispatchedActions.filter {
+            ($0.actionType as? GeneralBrowserActionType) == .showToast
+        }
+        XCTAssertTrue(toastActions.isEmpty)
+
+        XCTAssertEqual(mockTranslationsTelemetry.translationFailedCalledCount, 0)
+
+        // Dropping the request must still take the icon off `.loading`, or the spinner never ends.
+        let tab = try XCTUnwrap(mockTabManager.selectedTab)
+        XCTAssertNotEqual(tab.translationConfiguration?.state, .loading)
+        let clearActions = mockStore.dispatchedActions.filter {
+            ($0.actionType as? TranslationsActionType) == .receivedTranslationLanguage
+        }
+        XCTAssertFalse(clearActions.isEmpty)
+    }
+
     func test_didSelectTargetLanguage_withTranslationError_dispatchToastAction() throws {
         setTranslationsFeatureEnabled(enabled: true)
         enum TestError: Error { case example }
