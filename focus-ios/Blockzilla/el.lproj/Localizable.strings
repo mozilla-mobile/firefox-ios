@@ -20,7 +20,7 @@
 "About.rowHelp" = "Βοήθεια";
 
 /* Link to Privacy Notice in the About screen */
-"About.rowPrivacy" = "Σημείωση απορρήτου";
+"About.rowPrivacy" = "Δήλωση απορρήτου";
 
 /* Label for row in About screen */
 "About.rowRights" = "Τα δικαιώματά σας";
@@ -224,7 +224,7 @@
 "Onboarding.Incognito.Title" = "Κάτι παραπάνω από απλή ανωνυμία";
 
 /* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
-"Onboarding.PrivacyNotice.LinkText" = "Σημείωση απορρήτου";
+"Onboarding.PrivacyNotice.LinkText" = "Δήλωση απορρήτου";
 
 /* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
 "Onboarding.PrivacyNotice.Text" = "Το Firefox νοιάζεται για το απόρρητό σας. Διαβάστε περισσότερα στη %@.";

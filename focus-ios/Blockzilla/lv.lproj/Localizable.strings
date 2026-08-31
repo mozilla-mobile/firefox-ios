@@ -91,6 +91,9 @@
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.emailButton" = "Epasts";
 
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "Labi, sapratu.";
+
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Aizvērt";
 
@@ -99,6 +102,9 @@
 
 /* Button text for retrying network connection */
 "Network.Offline.RetryButton" = "Mēģināt vēlreiz";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Iestatīt kā noklusējuma pārlūku";
 
 /* Save button label */
 "Save" = "Saglabāt";
@@ -118,6 +124,9 @@
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ adreses joslā ievadīto nosūtīs meklētājam.";
 
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Uzzināt vairāk.";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Pievienot vēl kādu meklētāju";
 
@@ -127,6 +136,9 @@
 /* Toast displayed after adding a search engine */
 "Settings.Search.NewSearchEngineAdded" = "Pievienots jauns meklētājs.";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Iestatīt kā noklusējuma pārlūku";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Liegt tīmekļa fontus";
 
@@ -135,6 +147,9 @@
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "Pievienot īsceļiem";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Atvērt noklusējuma pārlūkā";
 
 /* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ShowMeHowOnboarding.Title.V2" = "Pievienot %@ logrīku";
