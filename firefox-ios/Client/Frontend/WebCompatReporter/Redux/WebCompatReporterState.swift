@@ -24,13 +24,13 @@ struct WebCompatReporterState: ScreenState, Equatable {
     var showsAdditionalDetails: Bool { selectedCategory != nil }
     var isURLValid: Bool { WebCompatURLValidator.isReportable(url) }
 
-    var canPreview: Bool { selectedCategory != nil && isURLValid }
-
     var showsURLError: Bool {
         return !url.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isURLValid
     }
 
-    /// Send needs a reportable address and a sub-option, except for "Other", which has none.
+    /// Preview and Send both need a reportable address and a sub-option, except for "Other", which has none.
+    var canPreview: Bool { canSubmit }
+
     var canSubmit: Bool {
         guard let selectedCategory, isURLValid else { return false }
         return selectedCategory.subOptions.isEmpty || selectedSubOptionID != nil

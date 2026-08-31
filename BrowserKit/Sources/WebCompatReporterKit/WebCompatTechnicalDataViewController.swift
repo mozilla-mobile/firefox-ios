@@ -24,7 +24,7 @@ public final class WebCompatTechnicalDataViewController: UIViewController,
     /// `header` omits `rows` deliberately. Carrying them would mark the header changed on any
     /// value edit, when it only renders the title.
     private enum ItemKind: Equatable {
-        case header(title: String, a11yIdentifier: String)
+        case header(title: String, a11yIdentifier: String, sectionID: String)
         case content(WebCompatTechnicalDataViewModel.PreviewSection)
     }
 
@@ -137,7 +137,7 @@ public final class WebCompatTechnicalDataViewController: UIViewController,
         let headerRegistration = UICollectionView.CellRegistration<
             UICollectionViewListCell, ItemKind
         > { [weak self] cell, _, item in
-            guard let self, case let .header(title, a11yIdentifier) = item else { return }
+            guard let self, case let .header(title, a11yIdentifier, _) = item else { return }
             cell.backgroundConfiguration = UIBackgroundConfiguration.clear()
             var content = cell.defaultContentConfiguration()
             content.text = title
@@ -151,7 +151,11 @@ public final class WebCompatTechnicalDataViewController: UIViewController,
             )
             cell.contentConfiguration = content
             cell.accessibilityIdentifier = a11yIdentifier
+            // One element, otherwise the disclosure accessory repeats the title as a second stop.
+            cell.isAccessibilityElement = true
+            cell.accessibilityLabel = title
             cell.accessibilityTraits.insert(.header)
+            cell.accessibilityTraits.insert(.button)
             let options = UICellAccessory.OutlineDisclosureOptions(
                 style: .header,
                 tintColor: self.theme.colors.actionPrimary
@@ -178,11 +182,11 @@ public final class WebCompatTechnicalDataViewController: UIViewController,
                 )
             }
             switch self.itemsByID[itemID] {
-            case let .header(title, a11yIdentifier):
+            case let .header(title, a11yIdentifier, sectionID):
                 return collectionView.dequeueConfiguredReusableCell(
                     using: headerRegistration,
                     for: indexPath,
-                    item: .header(title: title, a11yIdentifier: a11yIdentifier)
+                    item: .header(title: title, a11yIdentifier: a11yIdentifier, sectionID: sectionID)
                 )
             case let .content(section):
                 return collectionView.dequeueConfiguredReusableCell(
@@ -207,7 +211,8 @@ public final class WebCompatTechnicalDataViewController: UIViewController,
         for section in viewModel.sections {
             itemsByID[Self.headerDataSourceItemID(for: section.id)] = .header(
                 title: section.title,
-                a11yIdentifier: section.a11yIdentifier
+                a11yIdentifier: section.a11yIdentifier,
+                sectionID: section.id
             )
             itemsByID[Self.contentDataSourceItemID(for: section.id)] = .content(section)
             orderedSectionIDs.append(section.id)

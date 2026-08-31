@@ -100,6 +100,7 @@ public final class WebCompatReportSheetViewController: UIViewController,
         closeButton.accessibilityLabel = viewModel.closeButtonAccessibilityLabel
         previewButton.title = viewModel.previewButtonTitle
         previewButton.isEnabled = viewModel.isPreviewEnabled
+        previewButton.accessibilityHint = viewModel.previewAccessibilityHint
         navigationItem.rightBarButtonItem = viewModel.previewButtonTitle == nil ? nil : previewButton
         applySnapshot()
     }
@@ -293,7 +294,12 @@ public final class WebCompatReportSheetViewController: UIViewController,
     -> UICollectionView.CellRegistration<WebCompatSendButtonCell, WebCompatReportViewModel.Row> {
         return UICollectionView.CellRegistration { [weak self] cell, _, row in
             guard let self, case let .sendButton(isEnabled) = row.kind else { return }
-            cell.configure(title: row.title, isEnabled: isEnabled, a11yIdentifier: row.a11yIdentifier) { [weak self] in
+            cell.configure(
+                title: row.title,
+                isEnabled: isEnabled,
+                a11yIdentifier: row.a11yIdentifier,
+                accessibilityHint: row.accessibilityHint
+            ) { [weak self] in
                 // Text fields report on end-editing, so commit the active one before submitting.
                 self?.view.endEditing(true)
                 self?.delegate?.webCompatReportSheetDidTapButton(id: row.id)
