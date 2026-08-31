@@ -137,6 +137,19 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertFalse(isBold(text, at: text.length - 1), "Expected the trailing copy to stay regular")
     }
 
+    /// Reconfiguring must not compound the bolding: the base font can't be read back from the label, which
+    /// reports the attributed string's first font once one is set.
+    func test_configureFilledStateRepeatedly_keepsTheTrailingCopyRegular() throws {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+
+        subject.configure(with: .filled)
+        subject.configure(with: .filled)
+
+        let text = try XCTUnwrap(footerLabel(in: subject)?.attributedText)
+        XCTAssertFalse(isBold(text, at: text.length - 1), "Expected the trailing copy to stay regular")
+    }
+
     func test_configureEmptyState_clearsFooterText() {
         let subject = createSubject()
         subject.loadViewIfNeeded()
