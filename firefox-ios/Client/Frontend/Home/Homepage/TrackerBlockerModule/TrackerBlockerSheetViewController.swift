@@ -187,10 +187,13 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
             closeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                                                   constant: -UX.closeButtonTrailingPadding),
 
+            // The gradient stays full-bleed, but the content keeps clear of the safe area: in landscape the
+            // sheet is full screen, so the home indicator and the notch/Dynamic Island would otherwise sit on
+            // top of the footer pill and the categories card.
             contentScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             contentScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            contentScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            contentScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
             contentView.topAnchor.constraint(equalTo: contentScrollView.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: contentScrollView.bottomAnchor),
