@@ -128,9 +128,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
     // MARK: - Init
     init(
         windowUUID: WindowUUID,
-//        state: TrackerBlockerSheetState = .dummyEmpty,
-        state: TrackerBlockerSheetState = .dummyFilled,
-//        state: TrackerBlockerSheetState = .dummyWeeklyReset,
+        state: TrackerBlockerSheetState,
         themeManager: any ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: any NotificationProtocol = NotificationCenter.default
     ) {

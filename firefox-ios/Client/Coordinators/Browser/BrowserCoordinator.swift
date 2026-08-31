@@ -836,8 +836,10 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showTrackerBlockerSheet() {
+        // TODO: FXIOS-16429 - Pass the real blocked-tracker data once it is available.
         let viewController = TrackerBlockerSheetViewController(
             windowUUID: windowUUID,
+            state: .empty,
             themeManager: themeManager
         )
         router.present(viewController, animated: true)

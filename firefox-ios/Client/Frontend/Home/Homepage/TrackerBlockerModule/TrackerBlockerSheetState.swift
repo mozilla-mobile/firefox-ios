@@ -14,7 +14,8 @@ import UIKit
 /// - **Weekly reset** – the same as filled but with `weeklyCount == 0` and empty category bars, while the lifetime
 ///   `total` still exists.
 ///
-/// Note: this is placeholder/dummy data. Real values are wired up separately.
+/// Nothing populates the filled states yet: the sheet is presented with `empty` until the blocked-tracker data
+/// is wired up, which happens separately.
 struct TrackerBlockerSheetState {
     /// A single tracker category row.
     struct Category {
@@ -89,38 +90,15 @@ struct TrackerBlockerSheetState {
     }
 }
 
-// MARK: - Placeholder data
-// TODO: FXIOS-16429 Replace with real data + localized strings once available.
 extension TrackerBlockerSheetState {
-    static var dummyEmpty: TrackerBlockerSheetState {
+    // TODO: FXIOS-16429 - Replace the message with a localized string once available.
+    /// What the sheet shows until it is handed real blocked-tracker data: every category listed, no counts.
+    static var empty: TrackerBlockerSheetState {
         TrackerBlockerSheetState(
             weeklyCount: nil,
             emptyMessage: "Firefox blocks trackers as you browse, you'll see them here.",
             categories: Category.Kind.allCases.map { Category(kind: $0, count: nil) },
             total: nil
-        )
-    }
-
-    static var dummyFilled: TrackerBlockerSheetState {
-        TrackerBlockerSheetState(
-            weeklyCount: 2195,
-            emptyMessage: nil,
-            categories: [
-                Category(kind: .crossSiteTrackingCookies, count: 1999),
-                Category(kind: .fingerprinters, count: 101),
-                Category(kind: .trackingContent, count: 90),
-                Category(kind: .socialMediaTrackers, count: 5)
-            ],
-            total: Total(count: 43251, sinceDate: "02/13/26")
-        )
-    }
-
-    static var dummyWeeklyReset: TrackerBlockerSheetState {
-        TrackerBlockerSheetState(
-            weeklyCount: 0,
-            emptyMessage: nil,
-            categories: Category.Kind.allCases.map { Category(kind: $0, count: 0) },
-            total: Total(count: 5305, sinceDate: "02/13/26")
         )
     }
 }

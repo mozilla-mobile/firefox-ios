@@ -27,35 +27,35 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         let subject = createSubject()
         subject.loadViewIfNeeded()
 
-        subject.configure(with: .dummyEmpty)
+        subject.configure(with: .empty)
 
         XCTAssertEqual(view(subject, withID: A11y.weeklyCountLabel)?.isHidden, true)
         // The footer stays in the layout but is empty (no a11y label) in the empty state.
         XCTAssertEqual(footerPill(in: subject)?.isAccessibilityElement, false)
         XCTAssertNil(footerPill(in: subject)?.accessibilityLabel)
         XCTAssertEqual((view(subject, withID: A11y.headerLabel) as? UILabel)?.text,
-                       TrackerBlockerSheetState.dummyEmpty.emptyMessage)
+                       TrackerBlockerSheetState.empty.emptyMessage)
     }
 
     func test_configureFilledState_showsWeeklyCountAndFooter() {
         let subject = createSubject()
         subject.loadViewIfNeeded()
 
-        subject.configure(with: .dummyFilled)
+        subject.configure(with: .filled)
 
         let weeklyLabel = view(subject, withID: A11y.weeklyCountLabel) as? UILabel
         XCTAssertEqual(weeklyLabel?.isHidden, false)
-        XCTAssertEqual(weeklyLabel?.text, TrackerBlockerSheetState.dummyFilled.weeklyCount?.formatted(.number))
-        XCTAssertEqual(footerPill(in: subject)?.accessibilityLabel, TrackerBlockerSheetState.dummyFilled.total?.text)
+        XCTAssertEqual(weeklyLabel?.text, TrackerBlockerSheetState.filled.weeklyCount?.formatted(.number))
+        XCTAssertEqual(footerPill(in: subject)?.accessibilityLabel, TrackerBlockerSheetState.filled.total?.text)
     }
 
     func test_configureFilledState_setsCategoryRowIdentifiers() {
         let subject = createSubject()
         subject.loadViewIfNeeded()
 
-        subject.configure(with: .dummyFilled)
+        subject.configure(with: .filled)
 
-        for index in 0..<TrackerBlockerSheetState.dummyFilled.categories.count {
+        for index in 0..<TrackerBlockerSheetState.filled.categories.count {
             XCTAssertNotNil(view(subject, withID: A11y.categoryRow(index)),
                             "Expected a category row for index \(index)")
         }
@@ -65,12 +65,12 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         let subject = createSubject()
         subject.loadViewIfNeeded()
 
-        subject.configure(with: .dummyWeeklyReset)
+        subject.configure(with: .weeklyReset)
 
         let weeklyLabel = view(subject, withID: A11y.weeklyCountLabel) as? UILabel
         XCTAssertEqual(weeklyLabel?.isHidden, false)
         XCTAssertEqual(weeklyLabel?.text, 0.formatted(.number))
-        XCTAssertEqual(footerPill(in: subject)?.accessibilityLabel, TrackerBlockerSheetState.dummyWeeklyReset.total?.text)
+        XCTAssertEqual(footerPill(in: subject)?.accessibilityLabel, TrackerBlockerSheetState.weeklyReset.total?.text)
     }
 
     func test_loadView_setsUpCloseButton() {
@@ -125,9 +125,9 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
     func test_configureFilledState_boldsOnlyTheTotalCount() throws {
         let subject = createSubject()
         subject.loadViewIfNeeded()
-        subject.configure(with: .dummyFilled)
+        subject.configure(with: .filled)
 
-        let total = try XCTUnwrap(TrackerBlockerSheetState.dummyFilled.total)
+        let total = try XCTUnwrap(TrackerBlockerSheetState.filled.total)
         let text = try XCTUnwrap(footerLabel(in: subject)?.attributedText)
         let countRange = try XCTUnwrap(total.text.range(of: total.countText))
 
@@ -141,7 +141,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         let subject = createSubject()
         subject.loadViewIfNeeded()
 
-        subject.configure(with: .dummyEmpty)
+        subject.configure(with: .empty)
 
         XCTAssertNil(footerLabel(in: subject)?.attributedText)
         XCTAssertNil(footerLabel(in: subject)?.text)
@@ -174,7 +174,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
     }
 
     func test_fillRatio_withZeroWeeklyCount_isZero() {
-        let subject = TrackerBlockerSheetState.dummyWeeklyReset
+        let subject = TrackerBlockerSheetState.weeklyReset
 
         for category in subject.categories {
             XCTAssertEqual(subject.fillRatio(for: category), 0)
@@ -182,7 +182,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
     }
 
     func test_fillRatio_withNilWeeklyCount_isZero() {
-        let subject = TrackerBlockerSheetState.dummyEmpty
+        let subject = TrackerBlockerSheetState.empty
 
         for category in subject.categories {
             XCTAssertEqual(subject.fillRatio(for: category), 0)
@@ -370,13 +370,13 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         let themeManager = MockThemeManager(currentTheme: LightTheme())
         let subject = createSubject(themeManager: themeManager)
         subject.loadViewIfNeeded()
-        subject.configure(with: .dummyFilled)
+        subject.configure(with: .filled)
         let separators = separators(in: subject)
 
         themeManager.setManualTheme(to: .dark)
         subject.applyTheme()
 
-        XCTAssertEqual(separators.count, TrackerBlockerSheetState.dummyFilled.categories.count - 1)
+        XCTAssertEqual(separators.count, TrackerBlockerSheetState.filled.categories.count - 1)
         XCTAssertTrue(separators.allSatisfy { $0.backgroundColor == DarkTheme().colors.borderPrimary },
                       "Expected every separator to pick up the new theme")
     }
@@ -386,9 +386,9 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         let subject = createSubject()
         subject.loadViewIfNeeded()
 
-        subject.configure(with: .dummyEmpty)
+        subject.configure(with: .empty)
         let emptySize = subject.contentPreferredSize()
-        subject.configure(with: .dummyFilled)
+        subject.configure(with: .filled)
         let filledSize = subject.contentPreferredSize()
 
         XCTAssertEqual(emptySize.width, UX.formSheetWidth)
@@ -509,7 +509,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         ).height
     }
 
-    private func createSubject(state: TrackerBlockerSheetState = .dummyFilled,
+    private func createSubject(state: TrackerBlockerSheetState = .filled,
                                themeManager: MockThemeManager = MockThemeManager()) -> TrackerBlockerSheetViewController {
         let subject = TrackerBlockerSheetViewController(
             windowUUID: .XCTestDefaultUUID,
@@ -539,7 +539,34 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
     }
 }
 
+/// Sample data for the states the sheet can show. Only the empty state exists in the app itself
+/// (`TrackerBlockerSheetState.empty`); the populated ones live here until real data is wired up.
 private extension TrackerBlockerSheetState {
+    /// Trackers were blocked this week, with a lifetime total in the footer.
+    static var filled: TrackerBlockerSheetState {
+        TrackerBlockerSheetState(
+            weeklyCount: 2195,
+            emptyMessage: nil,
+            categories: [
+                Category(kind: .crossSiteTrackingCookies, count: 1999),
+                Category(kind: .fingerprinters, count: 101),
+                Category(kind: .trackingContent, count: 90),
+                Category(kind: .socialMediaTrackers, count: 5)
+            ],
+            total: Total(count: 43251, sinceDate: "02/13/26")
+        )
+    }
+
+    /// The week has just rolled over: the bars are empty but the lifetime total remains.
+    static var weeklyReset: TrackerBlockerSheetState {
+        TrackerBlockerSheetState(
+            weeklyCount: 0,
+            emptyMessage: nil,
+            categories: Category.Kind.allCases.map { Category(kind: $0, count: 0) },
+            total: Total(count: 5305, sinceDate: "02/13/26")
+        )
+    }
+
     /// Counts spanning one to four digits, so the count column has to reconcile very different widths.
     static var mixedDigitCounts: TrackerBlockerSheetState {
         TrackerBlockerSheetState(
