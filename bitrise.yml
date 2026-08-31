@@ -2103,26 +2103,6 @@ workflows:
 
             # Export to environment for Slack notification
             envman add --key XCODE_VERSION_INFO --value "$XCODE_VER ($BUILD_VER)"
-    - slack@4:
-        run_if: "false"
-        inputs:
-        - webhook_url: $WEBHOOK_SLACK_FIREFOX_IOS_UNIT_TESTS
-        - author_name: ''
-        - pretext: ":white_check_mark: Firefox iOS Unit Tests"
-        - pretext_on_error: ":x: Firefox iOS Unit Tests"
-        - title:
-        - title_on_error:
-        - message:
-        - message_on_error:
-        - footer: Mobile Test Engineering
-        - footer_on_error: Mobile Test Engineering
-        - footer_icon: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
-        - footer_icon_on_error: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
-        - fields: |
-            iOS Simulators | iPhone 17 - iOS 27.0 (3 repetitions), iPhone 17 - iOS 26.5
-            Xcode Version | ${XCODE_VERSION_INFO}
-        - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
-
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   #
