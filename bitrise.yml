@@ -258,6 +258,9 @@ workflows:
         is_always_run: true
     - script@1:
         title: Run Danger 2
+        # danger-js from the 27 edge stack cannot reach the GitHub API (old bundled undici
+        # vs newer Node). Non-blocking until the stack or the danger-swift pin is updated.
+        is_skippable: true
         timeout: 360
         inputs:
         - content: |
