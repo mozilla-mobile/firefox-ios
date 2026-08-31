@@ -11,12 +11,16 @@ import WebCompatReporterKit
 @MainActor
 final class WebCompatReportPreviewCoordinatorTests: XCTestCase {
     private var router: MockRouter!
+    private var previewRouter: MockRouter!
+    private var previewRouterNavigationController: UINavigationController?
     private var parentCoordinator: MockParentCoordinator!
     private var themeManager: MockThemeManager!
 
     override func setUp() async throws {
         try await super.setUp()
         router = MockRouter(navigationController: MockNavigationController())
+        previewRouter = MockRouter(navigationController: MockNavigationController())
+        previewRouterNavigationController = nil
         parentCoordinator = MockParentCoordinator()
         themeManager = MockThemeManager()
         DependencyHelperMock().bootstrapDependencies()
@@ -24,6 +28,8 @@ final class WebCompatReportPreviewCoordinatorTests: XCTestCase {
 
     override func tearDown() async throws {
         router = nil
+        previewRouter = nil
+        previewRouterNavigationController = nil
         parentCoordinator = nil
         themeManager = nil
         DependencyHelperMock().reset()
@@ -59,12 +65,15 @@ final class WebCompatReportPreviewCoordinatorTests: XCTestCase {
 
         subject.webCompatReportPreviewDidTapTechnicalData()
 
-        let navigationController = try XCTUnwrap(router.presentedViewController as? UINavigationController)
-        XCTAssertEqual(navigationController.viewControllers.count, 2)
+        let sheetNavigationController = try XCTUnwrap(router.presentedViewController as? UINavigationController)
+        XCTAssertIdentical(previewRouterNavigationController, sheetNavigationController)
         XCTAssertEqual(router.pushCalled, 0)
-        let pushed = try XCTUnwrap(navigationController.topViewController as? WebCompatTechnicalDataViewController)
+        XCTAssertEqual(previewRouter.pushCalled, 1)
+        let pushed = try XCTUnwrap(previewRouter.pushedViewController as? WebCompatTechnicalDataViewController)
         XCTAssertIdentical(pushed.delegate, subject)
-        let root = try XCTUnwrap(navigationController.viewControllers.first as? WebCompatReportPreviewViewController)
+        let root = try XCTUnwrap(
+            sheetNavigationController.viewControllers.first as? WebCompatReportPreviewViewController
+        )
         XCTAssertIdentical(root.delegate, subject)
     }
 
@@ -78,7 +87,11 @@ final class WebCompatReportPreviewCoordinatorTests: XCTestCase {
             router: router,
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
-            parentCoordinator: parentCoordinator
+            parentCoordinator: parentCoordinator,
+            previewRouterFactory: { [unowned self] navigationController in
+                previewRouterNavigationController = navigationController
+                return previewRouter
+            }
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

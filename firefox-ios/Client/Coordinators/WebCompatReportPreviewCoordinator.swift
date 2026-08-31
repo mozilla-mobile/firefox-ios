@@ -19,6 +19,7 @@ final class WebCompatReportPreviewCoordinator: BaseCoordinator,
     /// A second router, over the sheet's own stack: the injected one is rooted at the report form,
     /// so pushing through it would put Technical Data behind the sheet instead of on top of it.
     private var previewRouter: Router?
+    private let previewRouterFactory: @MainActor (UINavigationController) -> Router
     /// Tracked so a second tap can't stack a duplicate on top.
     private weak var technicalDataViewController: WebCompatTechnicalDataViewController?
 
@@ -27,12 +28,16 @@ final class WebCompatReportPreviewCoordinator: BaseCoordinator,
         router: Router,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        parentCoordinator: ParentCoordinatorDelegate?
+        parentCoordinator: ParentCoordinatorDelegate?,
+        previewRouterFactory: @MainActor @escaping (UINavigationController) -> Router = { navigationController in
+            DefaultRouter(navigationController: navigationController)
+        }
     ) {
         self.payload = payload
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.parentCoordinator = parentCoordinator
+        self.previewRouterFactory = previewRouterFactory
         super.init(router: router)
     }
 
@@ -44,7 +49,7 @@ final class WebCompatReportPreviewCoordinator: BaseCoordinator,
         )
         previewViewController.delegate = self
         let navigationController = UINavigationController(rootViewController: previewViewController)
-        previewRouter = DefaultRouter(navigationController: navigationController)
+        previewRouter = previewRouterFactory(navigationController)
         if let sheet = navigationController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true
