@@ -2101,8 +2101,6 @@ workflows:
             echo "Xcode Version: $XCODE_VER"
             echo "Build Version: $BUILD_VER"
 
-            # Export to environment for Slack notification
-            envman add --key XCODE_VERSION_INFO --value "$XCODE_VER ($BUILD_VER)"
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   #
