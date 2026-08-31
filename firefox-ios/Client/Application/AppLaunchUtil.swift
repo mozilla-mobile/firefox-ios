@@ -181,6 +181,7 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
         AppEventQueue.signal(event: .postLaunchDependenciesComplete)
     }
 
+    @MainActor
     private func setUserAgent() {
         // Record the user agent for use by search suggestion clients.
         SearchViewModel.userAgent = UserAgent.getUserAgent()

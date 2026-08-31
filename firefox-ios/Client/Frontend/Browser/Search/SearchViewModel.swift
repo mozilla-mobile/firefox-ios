@@ -36,8 +36,7 @@ class SearchViewModel: FeatureFlaggable,
     var recentSearches = [String]()
     let model: SearchEnginesManager
     var suggestions: [String]? = []
-    // TODO: FXIOS-12588 This global property is not concurrency safe
-    nonisolated(unsafe) static var userAgent: String?
+    static var userAgent: String?
     var searchFeature: FeatureHolder<Search>
     private var searchTelemetry: SearchTelemetry
 
