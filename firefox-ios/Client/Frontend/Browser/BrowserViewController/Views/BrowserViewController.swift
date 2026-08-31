@@ -4430,6 +4430,9 @@ extension BrowserViewController: LegacyTabDelegate {
         let adsHelper = AdsTelemetryHelper(tab: tab)
         tab.addContentScript(adsHelper, name: AdsTelemetryHelper.name())
 
+        let translationsPageStateHelper = TranslationsPageStateHelper(tab: tab)
+        tab.addContentScript(translationsPageStateHelper, name: TranslationsPageStateHelper.name())
+
         let noImageModeHelper = NoImageModeHelper(tab: tab)
         tab.addContentScript(noImageModeHelper, name: NoImageModeHelper.name())
 
