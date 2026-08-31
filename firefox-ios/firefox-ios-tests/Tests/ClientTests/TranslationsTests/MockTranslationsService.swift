@@ -14,6 +14,9 @@ final class MockTranslationsService: TranslationsServiceProtocol {
     private let firstResponseReceivedResult: Result<Void, Error>
     private let detectPageLanguageResult: Result<String, Error>
 
+    // MARK: - Call records
+    var shouldOfferTranslationCallCount = 0
+
     // MARK: - Init
     init(
         shouldOfferTranslationResult: Result<Bool, Error> = .success(false),
@@ -29,6 +32,7 @@ final class MockTranslationsService: TranslationsServiceProtocol {
 
     // MARK: - TranslationsServiceProtocol
     func shouldOfferTranslation(for windowUUID: WindowUUID, using preferredLanguages: [String]) async throws -> Bool {
+        shouldOfferTranslationCallCount += 1
         return try shouldOfferTranslationResult.get()
     }
 
@@ -38,8 +42,10 @@ final class MockTranslationsService: TranslationsServiceProtocol {
         to targetLanguage: String,
         onLanguageIdentified: ((String, String) -> Void)?
     ) async throws {
-        try translateResult.get()
+        // Production identifies the language before it can fail, so a thrown error must not
+        // swallow the callback — that is what emits `translationRequested` telemetry.
         onLanguageIdentified?(sourceLanguage ?? "en", targetLanguage)
+        try translateResult.get()
     }
 
     func firstResponseReceived(for windowUUID: WindowUUID) async throws {
