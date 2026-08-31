@@ -264,20 +264,17 @@ workflows:
             #!/usr/bin/env bash
             # Fail if any command fails
             set -e
-            # Extract .xcresult using xcrun xccov
-            echo "Generating coverage.json from xcresult..."
-            xcrun xccov view --report --json "$BITRISE_XCRESULT_PATH" > coverage.json
-            echo "coverage.json created successfully"
 
-            # Define a cleanup function to remove the file
-            function cleanup_coverage {
-              if [ -f coverage.json ]; then
-                echo "Removing coverage.json"
-                rm coverage.json
-              fi
-            }
-            # Register it to run on script exit
-            trap cleanup_coverage EXIT
+            # Extract .xcresult using xcrun xccov. Workflows that run no tests export no
+            # xcresult, in which case Danger skips its coverage checks.
+            if [ -n "$BITRISE_XCRESULT_PATH" ] && [ -e "$BITRISE_XCRESULT_PATH" ]; then
+              echo "Generating coverage.json from xcresult..."
+              xcrun xccov view --report --json "$BITRISE_XCRESULT_PATH" > coverage.json
+              echo "coverage.json created successfully"
+              trap 'rm -f coverage.json' EXIT
+            else
+              echo "No xcresult at BITRISE_XCRESULT_PATH; skipping coverage.json generation"
+            fi
 
             echo "Running Danger"
             swift run danger-swift ci
