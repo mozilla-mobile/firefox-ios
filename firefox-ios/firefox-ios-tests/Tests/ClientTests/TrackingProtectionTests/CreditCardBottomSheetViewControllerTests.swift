@@ -62,4 +62,80 @@ class CreditCardBottomSheetViewControllerTests: XCTestCase {
         )
         trackForMemoryLeaks(creditCardBottomSheetViewController)
     }
+
+    @MainActor
+    func testEstimatedContentHeight_withSelectSavedCard_usesLoadedCardCount() {
+        let oneCardViewModel = CreditCardBottomSheetViewModel(
+            creditCardProvider: autofill,
+            creditCard: nil,
+            decryptedCreditCard: nil,
+            preloadedCreditCards: [sampleCreditCard],
+            state: .selectSavedCard
+        )
+        let oneCardViewController = CreditCardBottomSheetViewController(
+            viewModel: oneCardViewModel,
+            windowUUID: windowUUID
+        )
+
+        let secondCreditCard = CreditCard(guid: "2",
+                                          ccName: "Jane Smith",
+                                          ccNumberEnc: "5555555555554444",
+                                          ccNumberLast4: "4444",
+                                          ccExpMonth: 12,
+                                          ccExpYear: 2040,
+                                          ccType: "MasterCard",
+                                          timeCreated: 1234678,
+                                          timeLastUsed: nil,
+                                          timeLastModified: 123123,
+                                          timesUsed: 123123)
+        let threeCardViewModel = CreditCardBottomSheetViewModel(
+            creditCardProvider: autofill,
+            creditCard: nil,
+            decryptedCreditCard: nil,
+            preloadedCreditCards: [sampleCreditCard, secondCreditCard, sampleCreditCard],
+            state: .selectSavedCard
+        )
+        let threeCardViewController = CreditCardBottomSheetViewController(
+            viewModel: threeCardViewModel,
+            windowUUID: windowUUID
+        )
+
+        let heightDifference = threeCardViewController.estimatedContentHeight() -
+            oneCardViewController.estimatedContentHeight()
+
+        XCTAssertEqual(heightDifference, CreditCardBottomSheetViewController.UX.estimatedRowHeight * 2)
+    }
+
+    @MainActor
+    func testEstimatedContentHeight_withRegularWidth_addsButtonHeight() {
+        let viewModel = CreditCardBottomSheetViewModel(
+            creditCardProvider: autofill,
+            creditCard: sampleCreditCard,
+            decryptedCreditCard: samplePlainTextCard,
+            state: .save
+        )
+        let viewController = CreditCardBottomSheetViewController(
+            viewModel: viewModel,
+            windowUUID: windowUUID
+        )
+        let container = UIViewController()
+        container.addChild(viewController)
+
+        container.setOverrideTraitCollection(
+            UITraitCollection(horizontalSizeClass: .compact),
+            forChild: viewController
+        )
+        let compactHeight = viewController.estimatedContentHeight()
+
+        container.setOverrideTraitCollection(
+            UITraitCollection(horizontalSizeClass: .regular),
+            forChild: viewController
+        )
+        let regularHeight = viewController.estimatedContentHeight()
+
+        XCTAssertEqual(
+            regularHeight - compactHeight,
+            CreditCardBottomSheetViewController.UX.yesButtonHeight
+        )
+    }
 }

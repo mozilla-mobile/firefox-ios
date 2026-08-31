@@ -413,6 +413,42 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
     }
 
     @MainActor
+    func test_preloadedCreditCards_doesNotCallListCreditCards() throws {
+        let secondCreditCard = CreditCard(guid: "2",
+                                          ccName: "Jane Smith",
+                                          ccNumberEnc: "5555555555554444",
+                                          ccNumberLast4: "4444",
+                                          ccExpMonth: 12,
+                                          ccExpYear: 2040,
+                                          ccType: "MasterCard",
+                                          timeCreated: 1234678,
+                                          timeLastUsed: nil,
+                                          timeLastModified: 123123,
+                                          timesUsed: 123123)
+        let subject = CreditCardBottomSheetViewModel(
+            creditCardProvider: autofill,
+            creditCard: nil,
+            decryptedCreditCard: nil,
+            preloadedCreditCards: [sampleCreditCard, secondCreditCard],
+            state: .selectSavedCard
+        )
+
+        XCTAssertEqual(subject.creditCards?.count, 2)
+        XCTAssertEqual(subject.creditCards?.last?.guid, "2")
+        XCTAssertEqual(autofill.listCreditCardsCalledCount, 0)
+
+        let value = try XCTUnwrap(
+            subject.getConvertedCreditCardValues(
+                bottomSheetState: .selectSavedCard,
+                ccNumberDecrypted: "",
+                row: 1
+            )
+        )
+        XCTAssertEqual(value.ccName, secondCreditCard.ccName)
+        XCTAssertEqual(value.ccNumberLast4, secondCreditCard.ccNumberLast4)
+    }
+
+    @MainActor
     func test_updateCreditCardList_withoutSelectedSavedCardState_doesNotCallListCreditCards() throws {
         let subject = createSubject()
 
