@@ -319,7 +319,7 @@ workflows:
     steps:
     - pull-intermediate-files@1: {}
     - xcode-test-without-building@0:
-        timeout: 1200
+        timeout: 1800
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
