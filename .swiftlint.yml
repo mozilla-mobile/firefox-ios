@@ -135,8 +135,6 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - firefox-ios/Client/Assets/Search/get_supported_locales.swift
   - firefox-ios/Client/Generated
   - firefox-ios/fastlane/
-  - firefox-ios/FxA
-  - firefox-ios/FxAClient
   - firefox-ios/Source/ExcludedFolder
   - firefox-ios/Source/ExcludedFile.swift
   - firefox-ios/Storage/ThirdParty/SwiftData.swift
