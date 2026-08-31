@@ -235,6 +235,7 @@
         "TabTrayTests",
         "TabTrayTests\/testAccessibility()",
         "TabsPerformanceTest",
+        "TabsTests\/testAddTabFromTabTray()",
         "TabsTests\/testAddTabFromTabTray_tabTrayExperimentOff()",
         "TabsTests\/testAddTabFromTabTray_tabTrayExperimentOn()",
         "TabsTests\/testCloseAllTabsPrivateModeUndo_tabTrayExperimentOff()",
