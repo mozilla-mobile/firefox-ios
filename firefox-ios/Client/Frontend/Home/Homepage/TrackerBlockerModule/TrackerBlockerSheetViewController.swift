@@ -28,7 +28,9 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         static let cardTopPadding: CGFloat = 16
         static let cardBottomPadding: CGFloat = 12
         static let separatorHeight: CGFloat = 1
-        /// Starts the line under the row titles: `TrackerCategoryRowView`'s icon width plus its icon-to-title spacing.
+        /// Insets the line inside the row it divides. Eyeballed: the leading edge lands just past where the row
+        /// titles begin, which `TrackerCategoryRowView` puts at 48 (its leading inset, icon and icon-to-title
+        /// spacing).
         static let separatorLeadingInset: CGFloat = 49
         static let separatorTrailingInset: CGFloat = 10
         static let pillHorizontalPadding: CGFloat = 12
@@ -37,7 +39,8 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         static let spacingCountToHeader: CGFloat = 4
         static let spacingHeaderToCard: CGFloat = 20
         static let spacingCardToFooter: CGFloat = 16
-        /// The sheet's width in the Protection Dashboard design; the iPad form sheet is sized to it.
+        /// The width the iPad form sheet asks for. Wider than the design's 377pt phone sheet, which reads as
+        /// too narrow on an iPad.
         static let formSheetWidth: CGFloat = 525
     }
 
@@ -157,8 +160,8 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Set here rather than in `init` so the presentation controller isn't forced into existence before the
-        // presenting code has finished configuring `modalPresentationStyle`.
+        // Reading `sheetPresentationController` forces the presentation controller into existence, so this waits
+        // until `modalPresentationStyle` is settled — `init` sets it, and the presenting code may override it.
         setDetentSize()
         setupLayout()
         setupCloseButton()
@@ -201,9 +204,9 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
             closeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                                                   constant: -UX.closeButtonTrailingPadding),
 
-            // The gradient stays full-bleed, but the content keeps clear of the safe area: in landscape the
-            // sheet is full screen, so the home indicator and the notch/Dynamic Island would otherwise sit on
-            // top of the footer pill and the categories card.
+            // The gradient stays full-bleed, but the content keeps clear of the safe area on the sides: in
+            // landscape the sheet is full screen, so the notch/Dynamic Island would otherwise sit on top of the
+            // categories card.
             contentScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             contentScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             contentScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -308,6 +311,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
 
         rebuildCategoryRows(with: state, theme: theme)
 
+        // TODO: FXIOS-16429 - Replace the weekly copy and its a11y label with localized strings once available.
         if let weeklyCount = state.weeklyCount {
             weeklyCountLabel.isHidden = false
             weeklyCountLabel.text = weeklyCount.formatted(.number)

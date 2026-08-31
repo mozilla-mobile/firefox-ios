@@ -28,6 +28,7 @@ final class TrackerBlockerProgressBarView: UIView, ThemeApplicable {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        translatesAutoresizingMaskIntoConstraints = false
         setupLayout()
     }
 
@@ -35,13 +36,11 @@ final class TrackerBlockerProgressBarView: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    private func setupLayout() {
+        // The bar's height is fixed, so the rounding never has to be recomputed on layout.
         trackView.layer.cornerRadius = UX.height / 2
         fillView.layer.cornerRadius = UX.height / 2
-    }
 
-    private func setupLayout() {
         addSubview(trackView)
         trackView.addSubview(fillView)
 

@@ -415,8 +415,9 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(card.bounds.maxY - stackFrame.maxY, UX.cardBottomPadding, accuracy: 0.5)
     }
 
-    /// The line starts where the row titles start, not at the card's edge, and runs to the card's trailing padding.
-    func test_separators_startUnderTheRowTitles() throws {
+    /// The line is inset from both ends of the row rather than spanning the card, and never starts before the
+    /// row titles do.
+    func test_separators_areInsetFromTheRowEdges() throws {
         let subject = createSubject()
         subject.loadViewIfNeeded()
         subject.view.frame = CGRect(x: 0, y: 0, width: UX.sheetWidth, height: UX.sheetHeight)
@@ -433,15 +434,20 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
 
         XCTAssertEqual(
             lineFrame.minX,
-            iconFrame.maxX + UX.rowHorizontalSpacing,
+            rowFrame.minX + UX.separatorLeadingInset,
             accuracy: 0.5,
-            "Expected the line to start where the title does, past the icon"
+            "Expected the line to start at the leading inset"
         )
         XCTAssertEqual(
             lineFrame.maxX,
-            rowFrame.maxX,
+            rowFrame.maxX - UX.separatorTrailingInset,
             accuracy: 0.5,
-            "Expected the line to run to the trailing edge of the rows"
+            "Expected the line to stop short of the row's trailing edge"
+        )
+        XCTAssertGreaterThanOrEqual(
+            lineFrame.minX,
+            iconFrame.maxX + UX.rowHorizontalSpacing,
+            "Expected the line to start no earlier than the title text"
         )
     }
 
@@ -471,7 +477,9 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         static let sheetHeight: CGFloat = 700
         static let cardTopPadding: CGFloat = 16
         static let cardBottomPadding: CGFloat = 12
-        static let formSheetWidth: CGFloat = 377
+        static let separatorLeadingInset: CGFloat = 49
+        static let separatorTrailingInset: CGFloat = 10
+        static let formSheetWidth: CGFloat = 525
     }
 
     private func makeRow(count: Int?,

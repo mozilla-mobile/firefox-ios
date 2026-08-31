@@ -14,8 +14,9 @@ import UIKit
 /// - **Weekly reset** – the same as filled but with `weeklyCount == 0` and empty category bars, while the lifetime
 ///   `total` still exists.
 ///
-/// Nothing populates the filled states yet: the sheet is presented with `empty` until the blocked-tracker data
-/// is wired up, which happens separately.
+/// Nothing populates the filled states yet: `empty` is the only one the app constructs, and it is what the sheet
+/// is presented with until the blocked-tracker data is wired up separately. The populated states are exercised
+/// from sample data in `TrackerBlockerSheetViewControllerTests`.
 struct TrackerBlockerSheetState {
     /// A single tracker category row.
     struct Category {
