@@ -12,6 +12,7 @@ import Storage
 final class AccountSyncHandler: TabEventHandler, Notifiable, Sendable {
     private let notificationCenter: NotificationProtocol = NotificationCenter.default
     private let debouncer: MainActorDebouncer
+    private let loginDebouncer: MainActorDebouncer
     private let profile: Profile
     private let logger: Logger
     private var windowManager: WindowManager {
@@ -26,11 +27,13 @@ final class AccountSyncHandler: TabEventHandler, Notifiable, Sendable {
     init(
         with profile: Profile,
         debounceTime: Double = 5.0,
+        loginDebounceTime: Double = 0.5,
         logger: Logger = DefaultLogger.shared,
         onSyncCompleted: (@Sendable () -> Void)? = nil
     ) {
         self.profile = profile
         self.debouncer = MainActorDebouncer(delay: debounceTime)
+        self.loginDebouncer = MainActorDebouncer(delay: loginDebounceTime)
         self.logger = logger
         self.onSyncCompleted = onSyncCompleted
 
@@ -123,9 +126,7 @@ extension AccountSyncHandler {
             // Wait until more busy work has finished
             // such as contending with querying for top sites
             Task { @MainActor [weak self] in
-                let settleTime: TimeInterval = 0.5
-                try? await Task.sleep(nanoseconds: settleTime.nanoseconds)
-                self?.storeTabs()
+                self?.loginDebouncer.call { self?.storeTabs() }
             }
         default:
             break
