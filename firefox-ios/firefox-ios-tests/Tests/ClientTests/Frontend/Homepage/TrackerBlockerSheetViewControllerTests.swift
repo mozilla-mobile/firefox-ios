@@ -381,6 +381,25 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
                       "Expected every separator to pick up the new theme")
     }
 
+    /// The iPad form sheet wraps its content, so the size it asks for has to track what the sheet is showing.
+    func test_contentPreferredSize_tracksTheContentHeight() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+
+        subject.configure(with: .dummyEmpty)
+        let emptySize = subject.contentPreferredSize()
+        subject.configure(with: .dummyFilled)
+        let filledSize = subject.contentPreferredSize()
+
+        XCTAssertEqual(emptySize.width, UX.formSheetWidth)
+        XCTAssertEqual(filledSize.width, UX.formSheetWidth)
+        XCTAssertGreaterThan(
+            filledSize.height,
+            emptySize.height,
+            "Expected the filled state to ask for a taller sheet than the empty one"
+        )
+    }
+
     /// The card breathes above the first row and below the last one, rather than clipping them at its edges.
     func test_categoriesCard_insetsRowsVertically() throws {
         let subject = createSubject()
@@ -452,6 +471,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         static let sheetHeight: CGFloat = 700
         static let cardTopPadding: CGFloat = 16
         static let cardBottomPadding: CGFloat = 12
+        static let formSheetWidth: CGFloat = 377
     }
 
     private func makeRow(count: Int?,

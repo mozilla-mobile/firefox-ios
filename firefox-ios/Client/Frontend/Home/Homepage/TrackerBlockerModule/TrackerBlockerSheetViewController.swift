@@ -11,6 +11,10 @@ import UIKit
 /// The content is wrapped in a scroll view so it becomes scrollable when it is taller than the sheet
 /// (large Dynamic Type or landscape). Detents adapt to Dynamic Type: `.medium()` normally, `.large()` for
 /// accessibility text sizes.
+///
+/// Detents only apply on iPhone. On iPad the sheet is presented as a form sheet sized to
+/// `preferredContentSize`, because the default page sheet there is a fixed-height card that would leave a gap
+/// below the content.
 final class TrackerBlockerSheetViewController: UIViewController, Themeable, Notifiable {
     private struct UX {
         static let contentHorizontalPadding: CGFloat = 22
@@ -33,6 +37,8 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         static let spacingCountToHeader: CGFloat = 4
         static let spacingHeaderToCard: CGFloat = 20
         static let spacingCardToFooter: CGFloat = 16
+        /// The sheet's width in the Protection Dashboard design; the iPad form sheet is sized to it.
+        static let formSheetWidth: CGFloat = 525
     }
 
     // MARK: - Themeable
@@ -133,6 +139,11 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
+
+        // Has to be set before the presenting code reaches `present`, so it can't wait for `viewDidLoad`.
+        if isFormSheetPresentation {
+            modalPresentationStyle = .formSheet
+        }
 
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
@@ -254,10 +265,34 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         closeButton.configure(viewModel: closeButtonViewModel, notificationCenter: notificationCenter)
     }
 
+    /// iPad gets a content-sized form sheet rather than detents; see the type's documentation.
+    private var isFormSheetPresentation: Bool {
+        return UIDevice.current.userInterfaceIdiom != .phone
+    }
+
+    /// The size the iPad form sheet asks for: the content's natural height at the design's sheet width, so the
+    /// card wraps the content instead of leaving a gap below the footer pill.
+    func contentPreferredSize() -> CGSize {
+        let stackHeight = contentStack.systemLayoutSizeFitting(
+            CGSize(width: UX.formSheetWidth - UX.contentHorizontalPadding * 2,
+                   height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+
+        return CGSize(width: UX.formSheetWidth,
+                      height: UX.contentTopPadding + stackHeight + UX.contentBottomPadding)
+    }
+
+    private func updatePreferredContentSize() {
+        guard isFormSheetPresentation else { return }
+        preferredContentSize = contentPreferredSize()
+    }
+
     /// - Parameter animated: pass `true` when the sheet is already on screen, so UIKit resizes it smoothly
     ///   instead of snapping to the new detent.
     private func setDetentSize(animated: Bool = false) {
-        guard UIDevice.current.userInterfaceIdiom == .phone, let sheet = sheetPresentationController else { return }
+        guard !isFormSheetPresentation, let sheet = sheetPresentationController else { return }
         let isAccessibilitySize = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
         let detents: [UISheetPresentationController.Detent] = isAccessibilitySize ? [.large()] : [.medium()]
 
@@ -304,6 +339,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         footerPill.accessibilityLabel = state.total?.text
 
         applyTheme()
+        updatePreferredContentSize()
     }
 
     private func rebuildCategoryRows(with state: TrackerBlockerSheetState, theme: Theme) {
@@ -373,6 +409,9 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         case UIContentSizeCategory.didChangeNotification:
             ensureMainThread {
                 self.setDetentSize(animated: true)
+                // The labels rescale themselves, so the form sheet has to re-measure around them.
+                self.view.layoutIfNeeded()
+                self.updatePreferredContentSize()
             }
         default:
             break
