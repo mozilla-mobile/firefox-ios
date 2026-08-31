@@ -5,6 +5,7 @@
 import XCTest
 import Common
 import ComponentLibrary
+import Shared
 import UIKit
 
 @testable import Client
@@ -330,6 +331,47 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(background.backgroundColor, theme.colors.layer2)
     }
 
+    func test_applyTheme_withNovaTheme_appliesGlassToCategoriesCard() throws {
+        guard #available(iOS 26.0, *), !DeviceInfo.isRunningLiquidGlassEarlyBeta else {
+            throw XCTSkip("The card only carries glass on iOS 26, outside the early betas")
+        }
+        let theme = NovaDarkTheme()
+        let subject = createSubject(themeManager: MockThemeManager(currentTheme: theme))
+
+        subject.loadViewIfNeeded()
+
+        let card = try XCTUnwrap(categoriesCard(in: subject))
+        let glass = try XCTUnwrap(card.effect as? UIGlassEffect)
+        XCTAssertEqual(glass.tintColor, theme.colors.layerGlassTintNova)
+        XCTAssertEqual(card.backgroundColor, .clear)
+    }
+
+    /// The glass tint tokens are Nova-only, so a classic theme keeps the flat card fill.
+    func test_applyTheme_withClassicTheme_drawsFlatCategoriesCard() throws {
+        let theme = LightTheme()
+        let subject = createSubject(themeManager: MockThemeManager(currentTheme: theme))
+
+        subject.loadViewIfNeeded()
+
+        let card = try XCTUnwrap(categoriesCard(in: subject))
+        XCTAssertNil(card.effect)
+        XCTAssertEqual(card.backgroundColor, theme.colors.layer2)
+    }
+
+    /// Leaving Nova has to clear the glass, otherwise the flat fill would be layered on top of it.
+    func test_applyTheme_afterLeavingNovaTheme_clearsCardGlass() throws {
+        let themeManager = MockThemeManager(currentTheme: NovaDarkTheme())
+        let subject = createSubject(themeManager: themeManager)
+        subject.loadViewIfNeeded()
+
+        themeManager.setManualTheme(to: .light)
+        subject.applyTheme()
+
+        let card = try XCTUnwrap(categoriesCard(in: subject))
+        XCTAssertNil(card.effect)
+        XCTAssertEqual(card.backgroundColor, LightTheme().colors.layer2)
+    }
+
     func test_progressBar_withNovaTheme_usesGradientFill() throws {
         let theme = NovaLightTheme()
         let subject = TrackerBlockerProgressBarView()
@@ -438,6 +480,10 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
     /// The footer pill is always in the hierarchy; in the empty state it has no total text / a11y label.
     private func footerPill(in controller: UIViewController) -> UIView? {
         return view(controller, withID: A11y.totalPill)
+    }
+
+    private func categoriesCard(in controller: UIViewController) -> UIVisualEffectView? {
+        return view(controller, withID: A11y.categoriesCard) as? UIVisualEffectView
     }
 
     private func view(_ controller: UIViewController, withID identifier: String) -> UIView? {

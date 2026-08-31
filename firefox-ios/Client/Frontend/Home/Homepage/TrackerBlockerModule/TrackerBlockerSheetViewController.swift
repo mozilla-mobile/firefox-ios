@@ -88,7 +88,9 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.headerLabel
     }
 
-    private let categoriesCardView: UIView = .build { view in
+    /// Carries a `UIGlassEffect` under Nova on iOS 26; on older systems and the classic themes it falls back to a
+    /// flat fill, so the effect is only ever set in `applyTheme()`.
+    private let categoriesCardView: UIVisualEffectView = .build { view in
         view.layer.cornerRadius = UX.cardCornerRadius
         view.clipsToBounds = true
         view.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.categoriesCard
@@ -157,7 +159,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         shieldContainer.addSubview(shieldImageView)
         footerContainer.addSubview(footerPill)
         footerPill.addSubview(footerLabel)
-        categoriesCardView.addSubview(categoriesStack)
+        categoriesCardView.contentView.addSubview(categoriesStack)
 
         contentStack.addArrangedSubview(shieldContainer)
         contentStack.addArrangedSubview(weeklyCountLabel)
@@ -218,11 +220,11 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
             shieldImageView.widthAnchor.constraint(equalToConstant: UX.shieldIconSize),
             shieldImageView.heightAnchor.constraint(equalToConstant: UX.shieldIconSize),
 
-            categoriesStack.topAnchor.constraint(equalTo: categoriesCardView.topAnchor),
-            categoriesStack.bottomAnchor.constraint(equalTo: categoriesCardView.bottomAnchor),
-            categoriesStack.leadingAnchor.constraint(equalTo: categoriesCardView.leadingAnchor,
+            categoriesStack.topAnchor.constraint(equalTo: categoriesCardView.contentView.topAnchor),
+            categoriesStack.bottomAnchor.constraint(equalTo: categoriesCardView.contentView.bottomAnchor),
+            categoriesStack.leadingAnchor.constraint(equalTo: categoriesCardView.contentView.leadingAnchor,
                                                      constant: UX.cardHorizontalPadding),
-            categoriesStack.trailingAnchor.constraint(equalTo: categoriesCardView.trailingAnchor,
+            categoriesStack.trailingAnchor.constraint(equalTo: categoriesCardView.contentView.trailingAnchor,
                                                       constant: -UX.cardHorizontalPadding),
 
             footerPill.topAnchor.constraint(equalTo: footerContainer.topAnchor),
@@ -369,12 +371,35 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
 
         weeklyCountLabel.textColor = theme.colors.textPrimary
         headerLabel.textColor = state.isEmpty ? theme.colors.textPrimary : theme.colors.textSecondary
-        categoriesCardView.backgroundColor = theme.colors.layer2
+        applyCardBackground(theme: theme)
         // The pill has no background in the empty state, where it acts as an empty spacer.
         footerPill.backgroundColor = state.total != nil ? theme.colors.layerAccentPrivateNonOpaque : .clear
         footerLabel.textColor = theme.colors.textSecondary
 
         categoryRowViews.forEach { $0.applyTheme(theme: theme) }
         separatorViews.forEach { $0.backgroundColor = theme.colors.borderPrimary }
+    }
+
+    /// The glass tint tokens only exist in the Nova palettes, so the classic themes keep the flat `layer2` card.
+    /// `isRunningLiquidGlassEarlyBeta` covers the iOS 26 developer betas where `UIGlassEffect` is broken (FXIOS-13528).
+    private func applyCardBackground(theme: Theme) {
+        guard #available(iOS 26.0, *), theme.isNova, !DeviceInfo.isRunningLiquidGlassEarlyBeta else {
+            removeCardGlassEffect()
+            categoriesCardView.backgroundColor = theme.colors.layer2
+            return
+        }
+
+        let glassEffect = UIGlassEffect(style: .regular)
+        glassEffect.tintColor = theme.colors.layerGlassTintNova
+        categoriesCardView.effect = glassEffect
+        categoriesCardView.backgroundColor = .clear
+    }
+
+    /// Covers a theme switch out of Nova while the sheet is open, so the flat fill isn't layered over stale glass.
+    private func removeCardGlassEffect() {
+        guard #available(iOS 26.0, *), categoriesCardView.effect != nil else { return }
+        // Workaround for an iOS 26.0 bug where assigning `nil` on its own leaves the glass effect in place.
+        categoriesCardView.effect = UIBlurEffect()
+        categoriesCardView.effect = nil
     }
 }
