@@ -2052,7 +2052,15 @@ workflows:
     - DEVICE_MODEL: iphone14pro
     - DEVICE_VERSION: '16.6'
     - FIREBASE_XCODE_VERSION: '26.2'
-    - NUM_SHARDS: '4'
+    # gcloud firebase test ios run has NO sharding flags (unlike the android
+    # variant), and the full Smoketest plan does not fit in Test Lab's 45m
+    # per-device limit. So restrict the run to a subset via the .xctestrun.
+    # Set to an empty string to run the whole plan.
+    - SMOKE_TEST_SUBSET: >-
+        NavigationTest/testURLBar,
+        ActivityStreamTest/testDefaultSites,
+        SearchTests/testSearchEngine,
+        FindInPageTests/testFindFromMenu
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -2115,6 +2123,54 @@ workflows:
                 exit 1
             fi
     - script@1:
+        title: Restrict .xctestrun to SMOKE_TEST_SUBSET
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -euxo pipefail
+
+            if [ -z "${SMOKE_TEST_SUBSET// /}" ]; then
+              echo "SMOKE_TEST_SUBSET is empty, running the whole test plan."
+              exit 0
+            fi
+
+            PRODUCTS_DIR="/Users/vagrant/git/DerivedData/Build/Products"
+            XCTESTRUN=$(find "$PRODUCTS_DIR" -type f -name "Fennec_Enterprise_Smoketest*.xctestrun" | head -n 1)
+
+            python3 - "$XCTESTRUN" <<'PY'
+            import os, plistlib, sys
+
+            path = sys.argv[1]
+            wanted = [t.strip() for t in os.environ["SMOKE_TEST_SUBSET"].split(",") if t.strip()]
+
+            with open(path, "rb") as f:
+                plist = plistlib.load(f)
+
+            # xctestrun v1 keys test targets at the top level, v2 nests them under
+            # TestConfigurations. Support both.
+            if "TestConfigurations" in plist:
+                targets = [t for c in plist["TestConfigurations"] for t in c["TestTargets"]]
+            else:
+                targets = [v for k, v in plist.items() if k != "__xctestrun_metadata__"]
+
+            if not targets:
+                sys.exit("No test targets found in %s" % path)
+
+            # xcodebuild writes method identifiers with parentheses, e.g.
+            # "ActivityStreamTest/testDefaultSites()".
+            ids = [t if t.endswith("()") else t + "()" for t in wanted]
+
+            for target in targets:
+                target["OnlyTestIdentifiers"] = ids
+                target.pop("SkipTestIdentifiers", None)
+                print("%s -> %s" % (target.get("BlueprintName"), ids))
+
+            with open(path, "wb") as f:
+                plistlib.dump(plist, f)
+            PY
+
+            plutil -p "$XCTESTRUN" | grep -A20 OnlyTestIdentifiers || true
+    - script@1:
         title: Create .zip artifact for Firebase Testing
         inputs:
         - content: |
@@ -2172,13 +2228,12 @@ workflows:
             $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
             $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
 
-            # 45m is the maximum test duration allowed on physical devices, hence the sharding
+            # 45m is the maximum test duration allowed on physical devices
             GCLOUD_OUTPUT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
                 --test "$TARGET_ARCHIVE" \
                 --xcode-version="$FIREBASE_XCODE_VERSION" \
                 --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
                 --client-details=matrixLabel="Bitrise" \
-                --num-uniform-shards="$NUM_SHARDS" \
                 --timeout=45m \
                 --results-bucket="$GOOGLE_CLOUD_BUCKET" \
                 --results-dir="$RESULTS_DIR" 2>&1 | tee /tmp/gcloud_output.log)
