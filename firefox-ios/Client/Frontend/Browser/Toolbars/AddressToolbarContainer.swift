@@ -367,8 +367,11 @@ final class AddressToolbarContainer: UIView,
         }
         // in case we are in edit mode but overlay is not active yet we have to activate it
         // so that `inOverlayMode` is set to true so we avoid getting stuck in overlay mode
+        // Redux already has isEditing == true here, so we only sync the local flag/UI to avoid
+        // re-dispatch didStartEditingUrl, which can race with an in-flight cancelEdit.
         if newModel.isEditing, !inOverlayMode {
-            enterOverlayMode(nil, pasted: false, search: true)
+            inOverlayMode = true
+            delegate?.addressToolbarDidEnterOverlayMode(self)
         }
         updateProgressBarPosition(toolbarState.toolbarPosition)
         // When frame is zero it means the toolbar hasn't appeared on screen yet for the first time
@@ -643,6 +646,7 @@ final class AddressToolbarContainer: UIView,
     // MARK: - Overlay Mode
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
         guard let windowUUID else { return }
+
         inOverlayMode = true
         delegate?.addressToolbarDidEnterOverlayMode(self)
 

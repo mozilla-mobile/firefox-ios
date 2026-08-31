@@ -118,6 +118,7 @@ enum ToolbarModernAction: ModernAction {
     /// `accessoryViewVisibilityChanged`.
     case keyboardDidHide
 
+    // When the keyboard hides, or a search engine is selected while isEditing, update shouldShowKeyboard
     case didCancelKeyboardRequest
 }
 
