@@ -19,6 +19,7 @@ enum FeatureFlagID: String, CaseIterable {
     case backgroundAudio
     case badCertDomainErrorPage
     case bookmarksSearchFeature
+    case cellularDataRestrictedErrorPage
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
     case downloadLiveActivities
