@@ -161,6 +161,26 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates -skipMacroValidation DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
     - script@1:
+        title: Resolve and export xctestrun paths
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euxo pipefail
+
+            # Point downstream steps at the UnitTest/Smoketest plans instead of Accessibility.
+            # Unit tests themselves run in Firefox_Unit_Tests_iOS_Versions, not in this workflow.
+            UNIT_TESTS_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator27.0-arm64.xctestrun"
+            SMOKE_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator27.0-arm64.xctestrun"
+
+            if [ ! -f "$UNIT_TESTS_XCTESTRUN" ]; then
+              echo "ERROR: .xctestrun file not found: $UNIT_TESTS_XCTESTRUN"
+              exit 1
+            fi
+
+            echo "Found UnitTest .xctestrun: $UNIT_TESTS_XCTESTRUN"
+            envman add --key BITRISE_XCTESTRUN_UNIT_TEST_FILE_PATH --value "$UNIT_TESTS_XCTESTRUN"
+            envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
+    - script@1:
         title: Detect number of warnings
         is_always_run: true
         inputs:
@@ -187,33 +207,6 @@ workflows:
         - content: |
             export PATH="${PATH#"$HOME/.bitrise-xcelerate/bin:"}"
             envman add --key PATH --value "$PATH"
-    - script@1:
-        title: Override xctestrun file to UnitTests
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -euxo pipefail
-
-            # Point to the Unit tests plan instead of Accessibility
-            UNIT_TESTS_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator27.0-arm64.xctestrun"
-            SMOKE_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator27.0-arm64.xctestrun"
-
-            if [ ! -f "$UNIT_TESTS_XCTESTRUN" ]; then
-              echo "ERROR: .xctestrun file not found: $UNIT_TESTS_XCTESTRUN"
-              exit 1
-            fi
-
-            echo "Found UnitTest .xctestrun: $UNIT_TESTS_XCTESTRUN"
-            envman add --key BITRISE_XCTESTRUN_UNIT_TEST_FILE_PATH --value "$UNIT_TESTS_XCTESTRUN"
-            envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
-
-    - xcode-test-without-building@0:
-        timeout: 1200
-        inputs:
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator27.0-arm64.xctestrun
-        - maximum_test_repetitions: 2
     - xcode-test-shard-calculation@0:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
@@ -2137,12 +2130,6 @@ workflows:
 
             echo "Found UITest .xctestrun: $FOCUS_UI_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH --value "$FOCUS_UI_XCTESTRUN"
-    - xcode-test-without-building@0:
-        timeout: 1200
-        inputs:
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_UnitTests_iphonesimulator27.0-arm64.xctestrun
     - xcode-test-shard-calculation@0:
         inputs:
         - product_path: $BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH
