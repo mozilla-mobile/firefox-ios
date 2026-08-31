@@ -361,7 +361,10 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                   actions: [],
                                   displayBorder: false,
                                   middleButton: .newTab,
-                                  isNovaDesignEnabled: false)
+                                  isNovaDesignEnabled: false,
+                                  canGoBack: true,
+                                  canGoForward: true,
+                                  numberOfTabs: 1)
     }
 
     private func createToolbarState(toolbarPosition: AddressToolbarPosition = .top,
@@ -380,9 +383,6 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             navigationToolbar: createBasicNavigationBarState(),
                             isShowingNavigationToolbar: isShowingNavigationToolbar,
                             isShowingTopTabs: isShowingTopTabs,
-                            canGoBack: true,
-                            canGoForward: true,
-                            numberOfTabs: 1,
                             showMenuWarningBadge: false,
                             canShowNavigationHint: false,
                             shouldAnimate: false,
@@ -404,9 +404,6 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             navigationToolbar: createBasicNavigationBarState(),
                             isShowingNavigationToolbar: true,
                             isShowingTopTabs: true,
-                            canGoBack: true,
-                            canGoForward: true,
-                            numberOfTabs: 1,
                             showMenuWarningBadge: false,
                             canShowNavigationHint: false,
                             shouldAnimate: false,

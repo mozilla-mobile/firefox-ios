@@ -4939,7 +4939,7 @@ extension BrowserViewController: TabManagerDelegate {
         // Only dispatch action when the number of tabs is different from what is saved in the state
         // to avoid having the toolbar re-displayed
         guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID),
-              toolbarState.numberOfTabs != count
+              toolbarState.navigationToolbar.numberOfTabs != count
         else { return }
 
         let action = ToolbarAction(numberOfTabs: count,
