@@ -633,24 +633,30 @@ class BrowserViewController: UIViewController,
     // MARK: - Translucency and blur helpers
 
     func updateBlurViews(scrollOffset: CGFloat? = nil) {
-        guard toolbarHelper.shouldBlur() else {
-            topBlurView.alpha = 0
-            bottomBlurView.isHidden = true
-            header.isClearBackground = false
-            overKeyboardContainer.isClearBackground = false
-            bottomContainer.isClearBackground = false
-            contentContainer.mask = nil
-            return
-        }
-
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let isKeyboardShowing = keyboardState != nil
-
         let isToolbarCollapsed = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID
         )?.isAddressBarMinimized == true
+
+        guard toolbarHelper.shouldBlur() else {
+            topBlurView.alpha = 0
+            bottomBlurView.isHidden = true
+            header.isClearBackground = false
+            // Without blur there is no bottom blur view, so this container paints the chrome behind
+            // a bottom address bar — except while the address bar is minimized, where the remaining
+            // pill has to float over the page instead of sitting on an opaque band. Nothing else
+            // re-themes the container while scrolling with blur off, so apply the theme here too or
+            // the flag would not reach the screen until an unrelated theme change.
+            overKeyboardContainer.isClearBackground = isToolbarCollapsed
+            overKeyboardContainer.applyTheme(theme: theme)
+            bottomContainer.isClearBackground = false
+            contentContainer.mask = nil
+            return
+        }
+
+        let isKeyboardShowing = keyboardState != nil
         let isScrollAlphaZero = if #available(iOS 26.0, *) { isToolbarCollapsed } else { false }
 
         // Prevent homepage from showing behind the keyboard when content isn't scrollable.
