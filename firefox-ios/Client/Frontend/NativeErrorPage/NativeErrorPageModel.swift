@@ -7,12 +7,15 @@ import Shared
 
 enum ErrorPageModel: Equatable {
     case internetConnection
+    case cellularDataRestricted
     case badCertDomain(BadCertDomainModel)
     case generic(GenericErrorModel)
     case wayback(WaybackErrorModel)
     var title: String {
         switch self {
         case .internetConnection: return .NativeErrorPage.NoInternetConnection.TitleLabel
+        case .cellularDataRestricted:
+            return String(format: .NativeErrorPage.CellularDataRestricted.TitleLabel, AppName.shortName.rawValue)
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.TitleLabel
         case .generic: return .NativeErrorPage.GenericError.TitleLabel
         case .wayback: return .NativeErrorPage.Wayback.TitleLabel
@@ -22,6 +25,8 @@ enum ErrorPageModel: Equatable {
     var description: String {
         switch self {
         case .internetConnection: return .NativeErrorPage.NoInternetConnection.Description
+        case .cellularDataRestricted:
+            return String(format: .NativeErrorPage.CellularDataRestricted.Description, AppName.shortName.rawValue)
         case .badCertDomain: return String.NativeErrorPage.BadCertDomain.Description
         case .generic: return .NativeErrorPage.GenericError.Description
         case .wayback: return String(format: .NativeErrorPage.Wayback.Description, AppName.shortName.description)
@@ -30,7 +35,8 @@ enum ErrorPageModel: Equatable {
 
     var foxImageName: String {
         switch self {
-        case .internetConnection: return ImageIdentifiers.NativeErrorPage.noInternetConnection
+        case .internetConnection, .cellularDataRestricted:
+            return ImageIdentifiers.NativeErrorPage.noInternetConnection
         case .badCertDomain, .generic: return ImageIdentifiers.NativeErrorPage.securityError
         case .wayback: return ImageIdentifiers.NativeErrorPage.noInternetConnection
         }
@@ -38,7 +44,7 @@ enum ErrorPageModel: Equatable {
 
     var url: URL? {
         switch self {
-        case .internetConnection: return nil
+        case .internetConnection, .cellularDataRestricted: return nil
         case .badCertDomain(let model): return model.url
         case .generic(let model): return model.url
         case .wayback(let model): return model.url
@@ -54,7 +60,7 @@ enum ErrorPageModel: Equatable {
 
     var isRegularUI: Bool {
         switch self {
-        case .internetConnection, .generic, .wayback: return true
+        case .internetConnection, .cellularDataRestricted, .generic, .wayback: return true
         case .badCertDomain: return false
         }
     }

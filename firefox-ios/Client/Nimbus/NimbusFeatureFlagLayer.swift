@@ -66,6 +66,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
 
+        case .cellularDataRestrictedErrorPage:
+            return checkCellularDataRestrictedErrorPageFeature()
+
         case .customReaderModeScheme:
             return checkCustomReaderModeSchemeFeature()
 
@@ -497,5 +500,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkPrivacyDashboardFeature() -> Bool {
         return nimbus.features.privacyDashboardFeature.value().enabled
+    }
+
+    private func checkCellularDataRestrictedErrorPageFeature() -> Bool {
+        return nimbus.features.cellularDataRestrictedErrorPageFeature.value().enabled
     }
 }
