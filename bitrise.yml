@@ -2056,7 +2056,7 @@ workflows:
             SOURCE_FILE="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator27.0-arm64.xctestrun"
             cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun"
     - xcode-test-without-building@0:
-        title: "Unit Tests - iPhone 17 (iOS 27.0), 3 repetitions"
+        title: "Unit Tests - iPhone 17 (iOS 27.0)"
         timeout: 1800
         is_always_run: true
         inputs:
@@ -2065,8 +2065,6 @@ workflows:
         - configuration: Fennec_Testing
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator27.0-arm64.xctestrun
-        - test_repetition_mode: until_failure
-        - maximum_test_repetitions: "3"
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
     - xcode-test-without-building@0:
         title: "Unit Tests - iPhone 17 (iOS 26.5)"
