@@ -4519,6 +4519,18 @@ extension String {
                 value: "Describe the issue in detail (optional)",
                 comment: "Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form."
             )
+            public static let ChooseIssueTypeAccessibilityHint = MZLocalizedString(
+                key: "WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint.v156",
+                tableName: "WebCompatReporter",
+                value: "Choose an issue type first",
+                comment: "Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no issue type has been selected yet, in the Report a Website Issue form."
+            )
+            public static let ChooseSubOptionAccessibilityHint = MZLocalizedString(
+                key: "WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156",
+                tableName: "WebCompatReporter",
+                value: "Choose a specific problem for your selected issue type",
+                comment: "Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form."
+            )
         }
         public struct AdditionalInfo {
             public static let Title = MZLocalizedString(
