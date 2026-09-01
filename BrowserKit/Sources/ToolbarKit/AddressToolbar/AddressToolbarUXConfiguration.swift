@@ -47,6 +47,8 @@ public struct AddressToolbarUXConfiguration {
     }
 
     func addressToolbarBackgroundColor(theme: some Theme) -> UIColor {
+        guard !isAddressBarMinimized else { return .clear }
+
         let backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceLow : theme.colors.layer1
         if shouldBlur {
             return backgroundColor.withAlphaComponent(backgroundAlpha)
