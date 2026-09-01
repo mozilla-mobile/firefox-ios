@@ -29,27 +29,14 @@ enum LeadingPageActionsBuilder {
         let resolvedTranslationConfiguration: TranslationConfiguration? = action is TranslationsAction
             ? actionTranslationConfiguration
             : actionTranslationConfiguration ?? toolbarState.addressToolbar.translationConfiguration
-        let isShowingNavigationToolbar = toolbarAction?.isShowingNavigationToolbar
-            ?? toolbarState.isShowingNavigationToolbar
         let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
         let isHomepage = (isURLDidChangeAction ? toolbarAction?.url : toolbarState.addressToolbar.url) == nil
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? toolbarAction?.isLoading : toolbarState.addressToolbar.isLoading
 
-        if !isHomepage, !isShowingNavigationToolbar {
-            let shareAction = shareAction(enabled: isLoading == false,
-                                          hasAlternativeLocationColor: hasAlternativeLocationColor)
-            actions.append(shareAction)
-
-            if let translationAction = configureTranslationIcon(
-                translationConfiguration: resolvedTranslationConfiguration,
-                isLoading: isLoading,
-                hasAlternativeLocationColor: hasAlternativeLocationColor,
-                isNovaDesignEnabled: toolbarState.addressToolbar.isNovaDesignEnabled
-            ) {
-                actions.append(translationAction)
-            }
-        } else if !isHomepage, isShowingNavigationToolbar {
+        // Whether the navigation toolbar is showing doesn't affect these actions — share/translate
+        // only depend on whether we're on the homepage.
+        if !isHomepage {
             let shareAction = shareAction(enabled: isLoading == false,
                                           hasAlternativeLocationColor: hasAlternativeLocationColor)
             actions.append(shareAction)
