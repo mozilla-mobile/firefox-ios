@@ -317,7 +317,8 @@ final class AddressToolbarContainer: UIView,
 
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return ToolbarState(appState: appState, uuid: windowUUID)
+//                return ToolbarState(appState: appState, uuid: windowUUID)
+                return AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
             })
         })
     }
@@ -335,9 +336,9 @@ final class AddressToolbarContainer: UIView,
         store.unsubscribe(self)
     }
 
-    func newState(state: ToolbarState) {
-        self.state = state
-        updateModel(toolbarState: state)
+    func newState(state: AddressToolbarContainerLens) {
+        self.state = state.toolbarState
+        updateModel(toolbarState: state.toolbarState)
     }
 
     // MARK: - AlphaDimmable
