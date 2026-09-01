@@ -211,16 +211,18 @@ extension XCUIElement {
         return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
     }
 
-    /// Taps and types text, but only once the field has keyboard focus.
-    ///
-    /// On CI some fields (the springboard passcode overlay, the address bar) are occasionally
-    /// presented without keyboard focus, so a plain `typeText` raises "Neither element nor any
-    /// descendant has keyboard focus" and aborts the test. This re-taps up to `tapAttempts` times
-    /// until focus is acquired before typing, and returns false (rather than failing hard) if it
-    /// never is, so callers can retry.
+    /// Waits until the element is hittable. Returns false on timeout instead of failing.
     @discardableResult
-    func tapAndTypeTextWhenFocused(
-        _ text: String,
+    func waitUntilHittable(timeout: TimeInterval = TIMEOUT) -> Bool {
+        let predicate = NSPredicate(format: "exists == true && hittable == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: self)
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    /// Re-taps until the element reports keyboard focus, since a tap is swallowed while the
+    /// keyboard animates. Returns false instead of failing when focus is never acquired.
+    @discardableResult
+    func tapUntilKeyboardFocused(
         timeout: TimeInterval? = TIMEOUT,
         focusTimeout: TimeInterval = 5,
         tapAttempts: Int = 3
@@ -228,15 +230,32 @@ extension XCUIElement {
         self.mozWaitForElementToExist(timeout: timeout)
         var attempts = tapAttempts
         repeat {
-            if !hasKeyboardFocus {
-                self.tap()
+            if hasKeyboardFocus {
+                return true
             }
+            waitUntilHittable(timeout: focusTimeout)
+            self.tap(force: true)
             if waitForKeyboardFocus(timeout: focusTimeout) {
-                self.typeText(text)
                 return true
             }
             attempts -= 1
         } while attempts > 0
-        return false
+        return hasKeyboardFocus
+    }
+
+    /// Taps and types text, but only once the field has keyboard focus.
+    /// Returns false instead of failing when focus is never acquired, so callers can retry.
+    @discardableResult
+    func tapAndTypeTextWhenFocused(
+        _ text: String,
+        timeout: TimeInterval? = TIMEOUT,
+        focusTimeout: TimeInterval = 5,
+        tapAttempts: Int = 3
+    ) -> Bool {
+        guard tapUntilKeyboardFocused(timeout: timeout,
+                                      focusTimeout: focusTimeout,
+                                      tapAttempts: tapAttempts) else { return false }
+        self.typeText(text)
+        return true
     }
 }
