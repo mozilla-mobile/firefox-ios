@@ -202,7 +202,9 @@ final class AddressToolbarContainerModel: Equatable {
 
     @MainActor
     init(
+        // TODO combine to lens
         state: ToolbarState,
+        addressToolbarContainerLens: AddressToolbarContainerLens,
         profile: Profile,
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         toolbarHelper: ToolbarHelperInterface = ToolbarHelper(),
@@ -212,7 +214,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.navigationActions = Self.mapActions(state.addressToolbar.navigationActionsState.actions,
                                                  isShowingTopTabs: state.isShowingTopTabs,
                                                  windowUUID: windowUUID)
-        self.leadingPageActions = Self.mapActions(state.addressToolbar.leadingPageActions,
+        self.leadingPageActions = Self.mapActions(addressToolbarContainerLens.leadingActions,
                                                   isShowingTopTabs: state.isShowingTopTabs,
                                                   windowUUID: windowUUID)
         self.trailingPageActions = Self.mapActions(state.addressToolbar.trailingPageActions,

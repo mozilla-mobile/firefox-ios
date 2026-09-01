@@ -13,57 +13,24 @@ protocol StateLens: Equatable {
 }
 
 struct AddressToolbarContainerLens: StateLens {
-    // From HomeScreenState, we could have a single var to the state, or map its properties directly as follows:
-//    let windowUUID: WindowUUID
-
-    // Leading Page Actions
-    let url: URL?
-    let isLoading: Bool
-    let isEditing: Bool
-    let translationConfiguration: TranslationConfiguration?
-    let isNovaDesignEnabled: Bool
-
-    // This computed value should probably live on the ToolbarState/AddressBarState
-//    let hasAlternativeLocationColor: Bool
-
     // TODO: build leading/trailing/nav actions here? Or do it in the newState.
     // Do it here if you have multiple "Lenses" (i.e. screens or visual components) using that state
     let leadingActions: [ToolbarActionConfiguration]
 
+    let toolbarState: ToolbarState
 
     // MARK: Private initializers
     private init(
-        url: URL?,
-        isLoading: Bool,
-        isEditing: Bool,
-        translationConfiguration: TranslationConfiguration?,
-        isNovaDesignEnabled: Bool,
+        toolbarState: ToolbarState,
         leadingActions: [ToolbarActionConfiguration]
     ) {
-        self.url = url
-        self.isLoading = isLoading
-        self.isEditing = isEditing
-        self.translationConfiguration = translationConfiguration
-        self.isNovaDesignEnabled = isNovaDesignEnabled
-
-        self.leadingActions = LeadingPageActionsBuilder.actions(
-            url: url,
-            isLoading: isLoading,
-            isEditing: isEditing,
-            translationConfiguration: translationConfiguration,
-            hasAlternativeLocationColor: true, // todo
-            isNovaDesignEnabled: isNovaDesignEnabled
-        )
-
+        self.toolbarState = toolbarState
+        self.leadingActions = leadingActions
     }
 
     private init(windowUUID: WindowUUID) {
         self.init(
-            url: nil,
-            isLoading: false,
-            isEditing: false,
-            translationConfiguration: nil,
-            isNovaDesignEnabled: false,
+            toolbarState: ToolbarState(windowUUID: windowUUID),
             leadingActions: []
         )
     }
@@ -79,12 +46,19 @@ struct AddressToolbarContainerLens: StateLens {
             return
         }
 
-        self.init(
+        let leadingPageActions = LeadingPageActionsBuilder.actions(
             url: toolbarState.addressToolbar.url,
             isLoading: toolbarState.addressToolbar.isLoading,
             isEditing: toolbarState.addressToolbar.isEditing,
             translationConfiguration: toolbarState.addressToolbar.translationConfiguration,
-            isNovaDesignEnabled: toolbarState.addressToolbar.isNovaDesignEnabled,
+            // TODO: If computed from ToolbarState, do that here? Otherwise add state to ToolbarState...
+            hasAlternativeLocationColor: true,
+            isNovaDesignEnabled: toolbarState.addressToolbar.isNovaDesignEnabled
+        )
+
+        self.init(
+            toolbarState: toolbarState,
+            leadingActions: leadingPageActions
         )
     }
 }

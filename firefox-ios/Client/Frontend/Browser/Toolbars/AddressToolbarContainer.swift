@@ -70,8 +70,6 @@ final class AddressToolbarContainer: UIView,
         static let accessoryViewGradientOffset: CGFloat = 74
     }
 
-    typealias SubscriberStateType = ToolbarState
-
     private let toolbarHelper: ToolbarHelperInterface
     private var windowUUID: WindowUUID?
     private var profile: Profile?
@@ -338,7 +336,7 @@ final class AddressToolbarContainer: UIView,
 
     func newState(state: AddressToolbarContainerLens) {
         self.state = state.toolbarState
-        updateModel(toolbarState: state.toolbarState)
+        updateModel(addressToolbarContainerLens: state)
     }
 
     // MARK: - AlphaDimmable
@@ -353,9 +351,10 @@ final class AddressToolbarContainer: UIView,
         updateSkeletonAddressBarsAlpha(forMinimizedAddressBar: isMinimizedAddressBar)
     }
 
-    private func updateModel(toolbarState: ToolbarState) {
+    private func updateModel(addressToolbarContainerLens: AddressToolbarContainerLens) {
         guard let windowUUID, let profile else { return }
-        let newModel = AddressToolbarContainerModel(state: toolbarState,
+        let newModel = AddressToolbarContainerModel(state: addressToolbarContainerLens.toolbarState,
+                                                    addressToolbarContainerLens: addressToolbarContainerLens,
                                                     profile: profile,
                                                     windowUUID: windowUUID)
 
@@ -374,13 +373,13 @@ final class AddressToolbarContainer: UIView,
             inOverlayMode = true
             delegate?.addressToolbarDidEnterOverlayMode(self)
         }
-        updateProgressBarPosition(toolbarState.toolbarPosition)
+        updateProgressBarPosition(addressToolbarContainerLens.toolbarState.toolbarPosition)
         // When frame is zero it means the toolbar hasn't appeared on screen yet for the first time
         // so to prevent a flashy animation on start disable the animation.
         let shouldAnimate = newModel.shouldAnimate && frame != .zero
         regularToolbar.configure(
             config: newModel.addressToolbarConfig,
-            toolbarPosition: toolbarState.toolbarPosition,
+            toolbarPosition: addressToolbarContainerLens.toolbarState.toolbarPosition,
             toolbarDelegate: self,
             leadingSpace: calculateToolbarLeadingSpace(isEditing: newModel.isEditing,
                                                        toolbarLayoutStyle: newModel.toolbarLayoutStyle),
@@ -389,7 +388,7 @@ final class AddressToolbarContainer: UIView,
             animated: shouldAnimate)
 
         let addressBarVerticalPaddings = newModel.addressToolbarConfig.uxConfiguration
-            .locationViewVerticalPaddings(addressBarPosition: toolbarState.toolbarPosition)
+            .locationViewVerticalPaddings(addressBarPosition: addressToolbarContainerLens.toolbarState.toolbarPosition)
         addNewTabTopConstraint?.constant = addressBarVerticalPaddings.top
         addNewTabBottomConstraint?.constant = -addressBarVerticalPaddings.bottom
         addNewTabView.configure(newModel.addressToolbarConfig.uxConfiguration)
