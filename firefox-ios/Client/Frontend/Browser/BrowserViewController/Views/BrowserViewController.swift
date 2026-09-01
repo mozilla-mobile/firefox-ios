@@ -644,12 +644,10 @@ class BrowserViewController: UIViewController,
             topBlurView.alpha = 0
             bottomBlurView.isHidden = true
             header.isClearBackground = false
-            // Without blur there is no bottom blur view, so this container paints the chrome behind
-            // a bottom address bar — except while the address bar is minimized, where the remaining
-            // pill has to float over the page instead of sitting on an opaque band. Nothing else
-            // re-themes the container while scrolling with blur off, so apply the theme here too or
-            // the flag would not reach the screen until an unrelated theme change.
+            // With blur off this container paints the chrome behind a bottom address bar, except while
+            // minimized — the remaining pill has to float over the page, not sit on an opaque band.
             overKeyboardContainer.isClearBackground = isToolbarCollapsed
+            // Nothing else re-themes it while scrolling with blur off.
             overKeyboardContainer.applyTheme(theme: theme)
             bottomContainer.isClearBackground = false
             contentContainer.mask = nil
