@@ -85,7 +85,7 @@ workflows:
         timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics on-failure'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_AccessibilityTestPlan_iphonesimulator27.0-arm64.xctestrun"
         - maximum_test_repetitions: 2
     - script@1:
@@ -323,7 +323,7 @@ workflows:
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -collect-test-diagnostics on-failure'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator27.0-arm64.xctestrun
     - deploy-to-bitrise-io@2: {}
   firefox_scheme_build_for_test:
@@ -404,7 +404,7 @@ workflows:
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX_SCHEME/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -collect-test-diagnostics on-failure'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Firefox_Smoketest_iphonesimulator27.0-arm64-x86_64.xctestrun
     - deploy-to-bitrise-io@2: {}
   firefox_scheme_smoke_tests:
@@ -416,7 +416,7 @@ workflows:
     - xcode-test-without-building@0:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics on-failure'
         - xctestrun: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
         - maximum_test_repetitions: 2
     - deploy-to-bitrise-io@2: {}
@@ -504,7 +504,7 @@ workflows:
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX_BETA_SCHEME/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -collect-test-diagnostics on-failure'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/FirefoxBeta_Smoketest_iphonesimulator27.0-arm64-x86_64.xctestrun
     - deploy-to-bitrise-io@2: {}
   firefox_beta_scheme_smoke_tests:
@@ -516,7 +516,7 @@ workflows:
     - xcode-test-without-building@0:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics on-failure'
         - xctestrun: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
         - maximum_test_repetitions: 2
     - deploy-to-bitrise-io@2: {}
@@ -2049,7 +2049,7 @@ workflows:
         - configuration: Fennec_Testing
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator27.0-arm64.xctestrun
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics on-failure'
     - xcode-test-without-building@0:
         title: "Unit Tests - iPhone 17 (iOS 26.5)"
         timeout: 1800
@@ -2060,7 +2060,7 @@ workflows:
         - configuration: Fennec_Testing
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics on-failure'
     - deploy-to-bitrise-io@2: {}
     - script@1:
         title: "Capture Xcode Version Info"
@@ -2156,7 +2156,7 @@ workflows:
         timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics on-failure'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Klar_UnitTests_iphonesimulator27.0-arm64.xctestrun
     - deploy-to-bitrise-io@2: {}
     - slack@4:
@@ -2193,7 +2193,7 @@ workflows:
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics on-failure'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.0-arm64.xctestrun
     - deploy-to-bitrise-io@2: {}
     - github-status@3:
