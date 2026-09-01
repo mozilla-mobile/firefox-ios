@@ -45,8 +45,11 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         guard let url = components?.url else {
             throw AppAttestServiceError.invalidKeyID
         }
+        
+        var request = URLRequest(url: url)
+        request.setValue("true", forHTTPHeaderField: "use-qa-certificates")
 
-        let (data, response) = try await urlSession.data(from: url)
+        let (data, response) = try await urlSession.data(from: request)
         try Self.validate(response: response, data: data)
         return try JSONDecoder().decode(ChallengeResponse.self, from: data).challenge
     }
@@ -79,7 +82,7 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         /// TODO(FXIOS-14902): Since signing happens at the hardware level we don't have access to the signing certificates.
         /// This means app attest attestation and assertions can only be generated on real devices, not simulators.
         /// To enable testing on simulators, we can use a special header to tell the server to accept test certificates.
-        /// request.setValue("true", forHTTPHeaderField: "use-qa-certificates")
+        request.setValue("true", forHTTPHeaderField: "use-qa-certificates")
 
         let (data, response) = try await urlSession.data(from: request)
         try Self.validate(response: response, data: data)

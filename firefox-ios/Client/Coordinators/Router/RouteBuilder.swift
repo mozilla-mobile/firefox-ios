@@ -205,14 +205,20 @@ final class RouteBuilder {
         }
 
         // If the user activity is a CoreSpotlight item, check its activity identifier to determine
-        // which URL to open.
+        // which URL to open. Items indexed as a `BrowserEntity` are identified by their entity identifier,
+        // the ones indexed while loading a page are identified by the page url.
         if userActivity.activityType == CSSearchableItemActionType {
             guard let userInfo = userActivity.userInfo,
-                  let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
-                  let url = URL(string: urlString)
+                  let identifier = userInfo[CSSearchableItemActivityIdentifier] as? String
             else {
                 return nil
             }
+
+            if let entityID = BrowserEntityID(rawValue: identifier) {
+                return .search(url: entityID.url, isPrivate: false)
+            }
+
+            guard let url = URL(string: identifier) else { return nil }
             return .search(url: url, isPrivate: false)
         }
 

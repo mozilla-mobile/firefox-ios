@@ -34,5 +34,6 @@ struct QuickAnswersConfigTests {
     func test_model_displayName() {
         #expect(QuickAnswersModel.exa.displayName == "Exa")
         #expect(QuickAnswersModel.liner.displayName == "Liner")
+        #expect(QuickAnswersModel.spotlight.displayName == "Spotlight")
     }
 }

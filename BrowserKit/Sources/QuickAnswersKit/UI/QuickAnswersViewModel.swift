@@ -14,11 +14,15 @@ final class QuickAnswersViewModel {
         case speechResult(SpeechResult, SpeechError?)
         case loadingSearchResult
         case showSearchResult(SearchResult, ResultsServiceError?)
+        /// Debug only: asks the view to collect the question by hand, for the simulator where the microphone
+        /// can't be used.
+        case requestsTypedQuestion
     }
 
     private let service: QuickAnswersService?
     private let telemetry: QuickAnswersTelemetry
     private let store: Store
+    private let usesTypedQuestion: Bool
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
     var onStateChange: ((State) -> Void)?
@@ -26,16 +30,20 @@ final class QuickAnswersViewModel {
     /// The user-facing name of the model backing the request.
     let modelDisplayName: String
 
+    /// - Parameter usesTypedQuestion: replaces the recording step with a question the user types, for the debug
+    /// builds running on the simulator where the microphone isn't usable.
     init(
         prefs: Prefs,
         telemetry: QuickAnswersTelemetry,
         configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa),
+        usesTypedQuestion: Bool = false,
         makeService: (Prefs, QuickAnswersConfigFetcher) throws -> QuickAnswersService = { prefs, configFetcher in
             try DefaultQuickAnswersService(configFetcher: configFetcher, prefs: prefs)
         }
     ) {
         self.telemetry = telemetry
         self.store = Store(prefs: prefs)
+        self.usesTypedQuestion = usesTypedQuestion
         self.modelDisplayName = configFetcher.model.displayName
         do {
             self.service = try makeService(prefs, configFetcher)
@@ -87,8 +95,27 @@ final class QuickAnswersViewModel {
         }
         searchResultTask?.cancel()
         searchResultTask = nil
+        guard !usesTypedQuestion else {
+            onStateChange?(.requestsTypedQuestion)
+            return
+        }
+
         recordVoiceTask = Task { [weak self] in
             try? await self?.recordVoiceTask(service: service)
+        }
+    }
+
+    /// Debug counterpart of the recording flow: searches a question the user typed instead of one transcribed
+    /// from the microphone.
+    func search(typedQuestion: String) {
+        guard let service else { return }
+        let text = typedQuestion.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
+
+        let result = SpeechResult(text: text, isFinal: true)
+        onStateChange?(.speechResult(result, nil))
+        searchResultTask = Task { [weak self] in
+            await self?.searchVoiceResult(result, service: service)
         }
     }
 

@@ -16,21 +16,36 @@ protocol BookmarksSaver {
     func restoreBookmarkNode(bookmarkNode: BookmarkNodeData,
                              parentFolderGUID: String,
                              completion: @escaping @Sendable(GUID?) -> Void)
+
+    /// Deletes a bookmark or a folder, removing the bookmarks it contains from the Spotlight index
+    @MainActor
+    func delete(bookmark: FxBookmarkNode) async -> Result<Void, Error>
+
+    /// Deletes every bookmark saved for the given url, removing them from the Spotlight index
+    @MainActor
+    func deleteBookmarks(withURL url: String) async -> Result<Void, Error>
 }
 
 struct DefaultBookmarksSaver: BookmarksSaver {
     enum SaveError: Error {
         case bookmarkTypeDontSupportSaving
         case saveOperationFailed
+        case deleteOperationFailed
     }
 
     let profile: Profile
+    var spotlightIndexer: BrowserEntityIndexer = DefaultBrowserEntityIndexer()
 
     @MainActor
     func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<GUID?, any Error> {
         switch bookmark.type {
         case .bookmark:
-            return await saveBookmark(bookmark: bookmark, parentFolderGUID: parentFolderGUID)
+            let previousURL = await savedURL(ofBookmarkWith: bookmark.guid)
+            let result = await saveBookmark(bookmark: bookmark, parentFolderGUID: parentFolderGUID)
+            if case .success = result {
+                await indexInSpotlight(bookmark, replacing: previousURL)
+            }
+            return result
         case .folder:
             return await saveFolder(bookmark: bookmark, parentFolderGUID: parentFolderGUID)
         default:
@@ -47,12 +62,17 @@ struct DefaultBookmarksSaver: BookmarksSaver {
                 completion(nil)
                 return
             }
+            let spotlightIndexer = spotlightIndexer
+            let entity = BrowserEntity(bookmark: bookmark)
             profile.places.createBookmark(parentGUID: parentFolderGUID,
                                           url: bookmark.url,
                                           title: bookmark.title,
                                           position: bookmark.position) { result in
                 switch result {
                 case .success(let guid):
+                    if let entity {
+                        Task { await spotlightIndexer.index([entity]) }
+                    }
                     completion(guid)
                 case .failure:
                     completion(nil)
@@ -94,6 +114,98 @@ struct DefaultBookmarksSaver: BookmarksSaver {
         // Save bookmark to recent bookmark folder
         let parentGuid = await resolvedParentFolderGuid()
         _ = await save(bookmark: bookmarkData, parentFolderGUID: parentGuid)
+    }
+
+    @MainActor
+    func delete(bookmark: FxBookmarkNode) async -> Result<Void, Error> {
+        let indexedURLs = await savedURLs(of: bookmark)
+        let result: Result<Void, Error> = await withCheckedContinuation { continuation in
+            profile.places.deleteBookmarkNode(guid: bookmark.guid).uponQueue(.main) { result in
+                continuation.resume(returning: Self.voidResult(from: result))
+            }
+        }
+
+        if case .success = result {
+            await removeFromSpotlightIndex(indexedURLs)
+        }
+        return result
+    }
+
+    @MainActor
+    func deleteBookmarks(withURL url: String) async -> Result<Void, Error> {
+        let result: Result<Void, Error> = await withCheckedContinuation { continuation in
+            profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
+                continuation.resume(returning: Self.voidResult(from: result))
+            }
+        }
+
+        if case .success = result {
+            await removeFromSpotlightIndex([url])
+        }
+        return result
+    }
+
+    private static func voidResult(from maybe: Maybe<Void>) -> Result<Void, Error> {
+        guard maybe.isSuccess else { return .failure(maybe.failureValue ?? SaveError.deleteOperationFailed) }
+
+        return .success(())
+    }
+
+    // MARK: - Spotlight index
+
+    @MainActor
+    private func indexInSpotlight(_ bookmark: FxBookmarkNode, replacing previousURL: String?) async {
+        guard let bookmark = bookmark as? BookmarkItemData else { return }
+
+        if let previousURL, previousURL != bookmark.url {
+            await removeFromSpotlightIndex([previousURL])
+        }
+        guard let entity = BrowserEntity(bookmark: bookmark) else { return }
+
+        await spotlightIndexer.index([entity])
+    }
+
+    private func removeFromSpotlightIndex(_ urls: [String]) async {
+        let identifiers = urls.compactMap { URL(string: $0) }.map { BrowserEntityID(type: .bookmark, url: $0) }
+        await spotlightIndexer.remove(identifiers)
+    }
+
+    /// The url a bookmark is currently saved with, used to drop its Spotlight entry when the url is updated.
+    @MainActor
+    private func savedURL(ofBookmarkWith guid: GUID) async -> String? {
+        guard !guid.isEmpty else { return nil }
+
+        return await withCheckedContinuation { continuation in
+            profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
+                let bookmark = (result.successValue ?? nil) as? BookmarkItemData
+                continuation.resume(returning: bookmark?.url)
+            }
+        }
+    }
+
+    /// The urls indexed for a node: its own url for a bookmark, the urls of its whole subtree for a folder.
+    @MainActor
+    private func savedURLs(of bookmark: FxBookmarkNode) async -> [String] {
+        switch bookmark.type {
+        case .bookmark:
+            return (bookmark as? BookmarkItemData).map { [$0.url] } ?? []
+        case .folder:
+            let tree: BookmarkNodeData? = await withCheckedContinuation { continuation in
+                profile.places.getBookmarksTree(rootGUID: bookmark.guid, recursive: true).uponQueue(.main) { result in
+                    continuation.resume(returning: result.successValue ?? nil)
+                }
+            }
+            return Self.savedURLs(in: tree)
+        default:
+            return []
+        }
+    }
+
+    private static func savedURLs(in node: BookmarkNodeData?) -> [String] {
+        if let bookmark = node as? BookmarkItemData { return [bookmark.url] }
+        guard let folder = node as? BookmarkFolderData else { return [] }
+
+        return (folder.children ?? []).flatMap { savedURLs(in: $0) }
     }
 
     @MainActor

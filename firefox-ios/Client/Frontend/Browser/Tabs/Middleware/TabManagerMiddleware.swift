@@ -1036,14 +1036,11 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
               let url = tab.url?.absoluteString, !url.isEmpty
         else { return }
 
-        profile.places.deleteBookmarksWithURL(url: url)
-            .uponQueue(.main) { result in
-                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-                MainActor.assumeIsolated {
-                    guard result.isSuccess else { return }
-                    Self.removeBookmarkShortcut(withBookmarksHandler: self.bookmarksHandler)
-                }
-            }
+        Task {
+            guard case .success = await self.bookmarksSaver.deleteBookmarks(withURL: url) else { return }
+
+            Self.removeBookmarkShortcut(withBookmarksHandler: self.bookmarksHandler)
+        }
     }
 
     private func addToShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {

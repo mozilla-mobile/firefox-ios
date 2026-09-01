@@ -26,4 +26,14 @@ struct DefaultQuickAnswersConfigFetcherTests {
         #expect(config.options["model"] as? String == "liner")
         #expect(config.instructions.isEmpty)
     }
+
+    @Test
+    func test_fetch_withSpotlightModel_syncsModelOptionAndInjectsInstructions() async throws {
+        let fetcher = DefaultQuickAnswersConfigFetcher(model: .spotlight)
+
+        let config = try await fetcher.fetch()
+
+        #expect(config.options["model"] as? String == "spotlight")
+        #expect(!config.instructions.isEmpty)
+    }
 }

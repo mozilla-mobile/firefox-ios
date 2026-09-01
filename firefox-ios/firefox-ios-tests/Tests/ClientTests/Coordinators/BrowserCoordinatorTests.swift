@@ -1312,6 +1312,17 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)
     }
 
+    func testHandleShowQuickAnswers_returnsTrueAndShowsQuickAnswers() {
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        let result = testCanHandleAndHandle(subject, route: .action(action: .showQuickAnswers))
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators[0] is QuickAnswersCoordinator)
+    }
+
     // MARK: - Saved route
 
     func testSavesRoute_whenLaunchFinished() throws {

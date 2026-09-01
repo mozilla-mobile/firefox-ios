@@ -450,32 +450,30 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol, FeatureFla
                 completion()
             }
         }
-        // Remove the bookmark from places (async background work)
-        bookmarksHandler.deleteBookmarkNode(guid: bookmark.guid).uponQueue(DispatchQueue.main) { _ in
-            // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-            MainActor.assumeIsolated { [weak self] in
-                guard let self else { return }
+        // Remove the bookmark from places and from the Spotlight index (async background work)
+        Task { [weak self] in
+            _ = await self?.bookmarksSaver.delete(bookmark: bookmark)
+            guard let self else { return }
 
-                // Remove this bookmark from quick actions
-                Self.removeBookmarkShortcut(withBookmarksHandler: self.bookmarksHandler, withQuickActions: self.quickActions)
+            // Remove this bookmark from quick actions
+            Self.removeBookmarkShortcut(withBookmarksHandler: self.bookmarksHandler, withQuickActions: self.quickActions)
 
-                // Remove this bookmark out of recent places
-                if let recentBookmarkFolderGuid = self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) {
-                    self.profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { node in
-                        // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-                        MainActor.assumeIsolated {
-                            guard let nodeValue = node.successValue, nodeValue == nil else {
-                                removalCompletion()
-                                return
-                            }
-
-                            self.profile.prefs.removeObjectForKey(PrefsKeys.RecentBookmarkFolder)
+            // Remove this bookmark out of recent places
+            if let recentBookmarkFolderGuid = self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) {
+                self.profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { node in
+                    // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                    MainActor.assumeIsolated {
+                        guard let nodeValue = node.successValue, nodeValue == nil else {
                             removalCompletion()
+                            return
                         }
+
+                        self.profile.prefs.removeObjectForKey(PrefsKeys.RecentBookmarkFolder)
+                        removalCompletion()
                     }
-                } else {
-                    removalCompletion()
                 }
+            } else {
+                removalCompletion()
             }
         }
 

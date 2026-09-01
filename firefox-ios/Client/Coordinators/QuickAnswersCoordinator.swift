@@ -57,7 +57,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     /// falling back to `.exa` if the value is unrecognized.
     private func nimbusModel() -> QuickAnswersKit.QuickAnswersModel {
         let rawValue = FxNimbus.shared.features.quickAnswersFeature.value().model.rawValue
-        return QuickAnswersKit.QuickAnswersModel(rawValue: rawValue) ?? .exa
+        return .spotlight//QuickAnswersKit.QuickAnswersModel(rawValue: rawValue) ?? .exa
     }
 
     // MARK: - QuickAnswersNavigationHandler

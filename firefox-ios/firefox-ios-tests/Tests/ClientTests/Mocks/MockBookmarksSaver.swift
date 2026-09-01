@@ -11,11 +11,15 @@ class MockBookmarksSaver: BookmarksSaver {
     var saveCalled = 0
     var createBookmarkCalled = 0
     var restoreBookmarkNodeCalled = 0
+    var deleteCalled = 0
+    var deleteBookmarksWithURLCalled = 0
     var mockCreateGuid: GUID?
 
     var savedBookmarkURL: String?
     var savedBookmarkTitle: String?
     var savedBookmarkPosition: UInt32?
+    var deletedBookmarkGUID: GUID?
+    var deletedBookmarkURL: String?
 
     func save(bookmark: any FxBookmarkNode,
               parentFolderGUID: String) async -> Result<GUID?, any Error> {
@@ -34,5 +38,17 @@ class MockBookmarksSaver: BookmarksSaver {
                              parentFolderGUID: String,
                              completion: @escaping (Shared.GUID?) -> Void) {
         restoreBookmarkNodeCalled += 1
+    }
+
+    func delete(bookmark: any FxBookmarkNode) async -> Result<Void, any Error> {
+        deleteCalled += 1
+        deletedBookmarkGUID = bookmark.guid
+        return .success(())
+    }
+
+    func deleteBookmarks(withURL url: String) async -> Result<Void, any Error> {
+        deleteBookmarksWithURLCalled += 1
+        deletedBookmarkURL = url
+        return .success(())
     }
 }

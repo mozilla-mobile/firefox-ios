@@ -815,6 +815,19 @@ class RouteTests: XCTestCase {
         }
     }
 
+    func testAppAction_showQuickAnswers() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://deep-link?url=/action/show-quick-answers")!
+
+        let route = subject.makeRoute(url: url)
+        switch route {
+        case .action(let action):
+            XCTAssertEqual(action, .showQuickAnswers)
+        default:
+            XCTFail("The route should be an action route")
+        }
+    }
+
     // MARK: - Helper
 
     func createSubject() -> RouteBuilder {

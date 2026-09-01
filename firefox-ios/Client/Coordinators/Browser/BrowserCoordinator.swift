@@ -335,6 +335,8 @@ final class BrowserCoordinator: BaseCoordinator,
                 handleClosePrivateTabsWidgetAction()
             case .showIntroOnboarding:
                 showIntroOnboarding()
+            case .showQuickAnswers:
+                showQuickAnswers(transitionType: .formSheet)
             }
 
         case let .fxaSignIn(params):

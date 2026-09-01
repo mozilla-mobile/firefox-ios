@@ -228,15 +228,60 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(subject.modelDisplayName, QuickAnswersModel.liner.displayName)
     }
 
+    // MARK: - Typed Question Tests
+
+    func testStartFlow_whenUsesTypedQuestion_requestsQuestionInsteadOfRecording() {
+        let subject = createSubject(prefs: optInCompletedPrefs(), usesTypedQuestion: true)
+        var state: QuickAnswersViewModel.State?
+
+        subject.onStateChange = { state = $0 }
+        subject.startFlow()
+
+        XCTAssertEqual(state, .requestsTypedQuestion)
+        XCTAssertEqual(mockService.recordVoiceCalledCount, 0)
+    }
+
+    func testSearchTypedQuestion_searchesTheTrimmedQuestion() {
+        mockService.searchResult = .success(SearchResult(resultText: "Test", sources: []))
+        let subject = createSubject(prefs: optInCompletedPrefs(), usesTypedQuestion: true)
+        let expectation = XCTestExpectation()
+        var states = [QuickAnswersViewModel.State]()
+
+        subject.onStateChange = { state in
+            states.append(state)
+            if case .showSearchResult = state { expectation.fulfill() }
+        }
+        subject.search(typedQuestion: "  How many tabs do I have open?  ")
+
+        wait(for: [expectation])
+        let expected = SpeechResult(text: "How many tabs do I have open?", isFinal: true)
+        XCTAssertEqual(states[0], .speechResult(expected, nil))
+        XCTAssertEqual(mockService.searchCalledCount, 1)
+        XCTAssertEqual(mockService.lastSearchText, "How many tabs do I have open?")
+    }
+
+    func testSearchTypedQuestion_withBlankQuestion_doesNothing() {
+        let subject = createSubject(prefs: optInCompletedPrefs(), usesTypedQuestion: true)
+        var state: QuickAnswersViewModel.State?
+
+        subject.onStateChange = { state = $0 }
+        subject.search(typedQuestion: "   ")
+
+        XCTAssertNil(state)
+        XCTAssertEqual(mockService.searchCalledCount, 0)
+    }
+
     // MARK: - Helper
     private func createSubject(
         prefs: Prefs = MockProfilePrefs(),
-        configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa)
+        configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa),
+        usesTypedQuestion: Bool = false
     ) -> QuickAnswersViewModel {
         let model = QuickAnswersViewModel(
             prefs: prefs,
             telemetry: mockTelemetry,
             configFetcher: configFetcher,
+            usesTypedQuestion: usesTypedQuestion,
             makeService: { _, _ in
                 return self.mockService
             }

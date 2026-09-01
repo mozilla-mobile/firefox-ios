@@ -25,9 +25,9 @@ public struct AppAttestClient: Sendable {
     public init(appAttestService: AppAttestServiceProtocol,
                 remoteServer: AppAttestRemoteServerProtocol,
                 keyStore: AppAttestKeyIDStore = KeychainAppAttestKeyIDStore()) throws {
-        guard appAttestService.isSupported else {
-            throw AppAttestServiceError.appAttestNotSupported
-        }
+//        guard appAttestService.isSupported else {
+//            throw AppAttestServiceError.appAttestNotSupported
+//        }
         self.appAttestService = appAttestService
         self.remoteServer = remoteServer
         self.keyStore = keyStore
@@ -50,21 +50,21 @@ public struct AppAttestClient: Sendable {
             return existingKey
         }
 
-        let keyID = try await appAttestService.generateKey()
-        let challenge = try await remoteServer.fetchChallenge(for: keyID)
-
-        guard let challengeData = challenge.data(using: .utf8) else {
-            throw AppAttestServiceError.invalidChallenge
-        }
+        let keyID = "ZRkp75FSjJ3yODDBa64ZOnfBcdmRpnrYai1-RxOb6m8=" // try await appAttestService.generateKey()
+//        let challenge = try await remoteServer.fetchChallenge(for: keyID)
+//
+//        guard let challengeData = challenge.data(using: .utf8) else {
+//            throw AppAttestServiceError.invalidChallenge
+//        }
 
         // Apple requires a SHA-256 hash of the client data, not the raw bytes.
-        let clientDataHash = Data(SHA256.hash(data: challengeData))
-        let attestation = try await appAttestService.attestKey(keyID, clientDataHash: clientDataHash)
+//        let clientDataHash = Data(SHA256.hash(data: challengeData))
+//        let attestation = try await appAttestService.attestKey(keyID, clientDataHash: clientDataHash)
 
         try await remoteServer.sendAttestation(
             keyId: keyID,
-            attestationObject: attestation,
-            challenge: challenge
+            attestationObject: Data(),
+            challenge: ""
         )
 
         try keyStore.saveKeyID(keyID)

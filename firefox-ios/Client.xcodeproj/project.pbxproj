@@ -2408,6 +2408,7 @@
 		FB16062200000000000000B2 /* CameraCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB16062200000000000000B1 /* CameraCoordinatorTests.swift */; };
 		FBADD1700000000000000002 /* LaunchPairingFromURLSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBADD1700000000000000001 /* LaunchPairingFromURLSettingTests.swift */; };
 		FC16179B00000000000000B1 /* WebCompatReportViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC16179B00000000000000B2 /* WebCompatReportViewControllerTests.swift */; };
+		FC1617BC00000000000000C2 /* BrowserEntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1617BB00000000000000C1 /* BrowserEntityTests.swift */; };
 		FF0002AA2F000002000BBBBB /* ClearablesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0002AA2F000001000BBBBB /* ClearablesTests.swift */; };
 		FF0005AD2F000004000BBBBB /* MockQuickAnswersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0005AC2F000003000BBBBB /* MockQuickAnswersStore.swift */; };
 /* End PBXBuildFile section */
@@ -12201,6 +12202,7 @@
 		FBC14D2DBDDEE2E94CD0E14E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Menu.strings; sourceTree = "<group>"; };
 		FBF24A9ABAABD821F73259BD /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		FC16179B00000000000000B2 /* WebCompatReportViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCompatReportViewControllerTests.swift; sourceTree = "<group>"; };
+		FC1617BB00000000000000C1 /* BrowserEntityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserEntityTests.swift; sourceTree = "<group>"; };
 		FC5142049E673D8E348CE7A5 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Today.strings; sourceTree = "<group>"; };
 		FC9E41DEBDA3C4945EFC2DEA /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		FCA14DC9810D573511E1CA5E /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
@@ -12251,6 +12253,7 @@
 		BCBE04E22E3A52D4004B6039 /* Summarize */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Summarize; sourceTree = "<group>"; };
 		ED85DD2C2DE669FF00487807 /* probes */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = probes; sourceTree = "<group>"; };
 		FC16179A00000000000000A1 /* WebCompat */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WebCompat; sourceTree = "<group>"; };
+		FC1617AA00000000000000B1 /* Spotlight */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Spotlight; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -17462,6 +17465,7 @@
 				C87D8B7E2818331900A6307D /* Nimbus */,
 				DFACDFAD274D4D4B00A94EEC /* Protocols */,
 				216A0D6F2A40D0E4008077BA /* Redux */,
+				FC1617AA00000000000000B1 /* Spotlight */,
 				8A590C6228C13E1D0032F1AA /* TabManagement */,
 				E69DB0B91E97E301008A67E6 /* Telemetry */,
 				E65075551E37F714006961AC /* Utils */,
@@ -17485,6 +17489,7 @@
 				B23620492B7EAF2C000B1DE7 /* Autofill */,
 				CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */,
 				8A28C627291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift */,
+				FC1617BB00000000000000C1 /* BrowserEntityTests.swift */,
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
 				391C281A3007C3D700833828 /* TrackerBlockStatsStoreTests.swift */,
 				391C281B3007C3D700833828 /* TrackingProtectionPageStatsTests.swift */,
@@ -18261,6 +18266,7 @@
 				BCBE04E22E3A52D4004B6039 /* Summarize */,
 				ED85DD2C2DE669FF00487807 /* probes */,
 				FC16179A00000000000000A1 /* WebCompat */,
+				FC1617AA00000000000000B1 /* Spotlight */,
 			);
 			name = Client;
 			packageProductDependencies = (
@@ -20844,6 +20850,7 @@
 				21365E3E2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift in Sources */,
 				8A2F21C62DEDC17900C9F4DE /* StartAtHomeMiddlewareTests.swift in Sources */,
 				03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */,
+				FC1617BC00000000000000C2 /* BrowserEntityTests.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				81DAB2F12C88F02500F4BE98 /* MainMenuViewControllerTests.swift in Sources */,
 				C25018E72ECC88440071506F /* BridgeTests.swift in Sources */,

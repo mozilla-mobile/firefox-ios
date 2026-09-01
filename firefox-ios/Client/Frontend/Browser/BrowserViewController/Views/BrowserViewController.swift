@@ -2277,14 +2277,11 @@ class BrowserViewController: UIViewController,
     }
 
     func removeBookmark(urlString: String, title: String?, site: Site? = nil) {
-        profile.places.deleteBookmarksWithURL(url: urlString)
-            .uponQueue(.main) { result in
-                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-                MainActor.assumeIsolated {
-                    guard result.isSuccess else { return }
-                    Self.removeBookmarkShortcut(withBookmarksHandler: self.bookmarksHandler)
-                }
-            }
+        Task {
+            guard case .success = await self.bookmarksSaver.deleteBookmarks(withURL: urlString) else { return }
+
+            Self.removeBookmarkShortcut(withBookmarksHandler: self.bookmarksHandler)
+        }
     }
 
     private func showBookmarkToast(urlString: String? = nil, title: String? = nil, action: BookmarkAction) {

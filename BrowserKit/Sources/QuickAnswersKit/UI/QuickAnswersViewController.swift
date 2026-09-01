@@ -68,6 +68,16 @@ public final class QuickAnswersViewController: UIViewController,
     )
     private var hasAppeared = false
 
+    /// The simulator has no usable microphone, so debug builds running there ask for the question with an alert
+    /// instead of recording it.
+    private static var usesTypedQuestion: Bool {
+        #if targetEnvironment(simulator)
+        return true
+        #else
+        return false
+        #endif
+    }
+
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
         transitionType: QuickAnswersTransitionType,
@@ -81,7 +91,12 @@ public final class QuickAnswersViewController: UIViewController,
     ) {
         self.init(
             navigationHandler: navigationHandler,
-            viewModel: QuickAnswersViewModel(prefs: prefs, telemetry: telemetry, configFetcher: configFetcher),
+            viewModel: QuickAnswersViewModel(
+                prefs: prefs,
+                telemetry: telemetry,
+                configFetcher: configFetcher,
+                usesTypedQuestion: Self.usesTypedQuestion
+            ),
             transitionType: transitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -181,6 +196,8 @@ public final class QuickAnswersViewController: UIViewController,
             switch state {
             case .showOptIn:
                 self?.contentView.showOptIn()
+            case .requestsTypedQuestion:
+                self?.presentTypedQuestionAlert()
             case .recordingStarted:
                 self?.backgroundRecordEffect.startAnimating()
                 self?.contentView.startAudioWaveformAnimation()
@@ -219,6 +236,29 @@ public final class QuickAnswersViewController: UIViewController,
                 self?.dismiss(with: url)
             }
         )
+    }
+
+    /// Debug only: collects the question by hand for the simulator. Presenting waits for the controller's own
+    /// presentation to finish, since the flow starts while that transition is still running.
+    private func presentTypedQuestionAlert() {
+        let alert = UIAlertController(title: "Quick Answers debug",
+                                      message: "Type the question to ask.",
+                                      preferredStyle: .alert)
+        alert.addTextField { $0.placeholder = "How many tabs do I have open?" }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+            self?.dismiss(with: nil)
+        })
+        alert.addAction(UIAlertAction(title: "Ask", style: .default) { [weak self, weak alert] _ in
+            self?.viewModel.search(typedQuestion: alert?.textFields?.first?.text ?? "")
+        })
+
+        guard let transitionCoordinator else {
+            present(alert, animated: true)
+            return
+        }
+        transitionCoordinator.animate(alongsideTransition: nil) { [weak self] _ in
+            self?.present(alert, animated: true)
+        }
     }
 
     private func dismiss(with url: URL?) {

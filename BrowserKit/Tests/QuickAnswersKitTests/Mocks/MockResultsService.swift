@@ -5,9 +5,18 @@
 @testable import QuickAnswersKit
 
 final class MockResultsService: ResultsService, @unchecked Sendable {
+    var resultToReturn: SearchResult = .empty()
+    var errorToThrow: Error?
     var fetchResultsCallCount = 0
+    var lastTranscription: String?
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
-        return SearchResult.empty()
+        fetchResultsCallCount += 1
+        lastTranscription = transcription
+
+        if let errorToThrow {
+            throw errorToThrow
+        }
+        return resultToReturn
     }
 }

@@ -6,12 +6,15 @@
 public enum QuickAnswersModel: String, Sendable {
     case exa
     case liner
+    /// Answers on device from the tabs and the bookmarks indexed in Spotlight.
+    case spotlight
 
     /// The user-facing name of the model.
     public var displayName: String {
         switch self {
         case .exa: return "Exa"
         case .liner: return "Liner"
+        case .spotlight: return "Spotlight"
         }
     }
 }

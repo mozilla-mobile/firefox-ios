@@ -11,6 +11,7 @@ final class MockTestQuickAnswersService: QuickAnswersService, @unchecked Sendabl
     var recordVoiceCalledCount = 0
     var stopRecordingCalledCount = 0
     var searchCalledCount = 0
+    var lastSearchText: String?
 
     func record() async throws -> AsyncThrowingStream<SpeechResult, Error> {
         recordVoiceCalledCount += 1
@@ -36,6 +37,7 @@ final class MockTestQuickAnswersService: QuickAnswersService, @unchecked Sendabl
 
     func search(text: String) async -> Result<SearchResult, ResultsServiceError> {
         searchCalledCount += 1
+        lastSearchText = text
         try? await Task.sleep(nanoseconds: 50_000_000)
         return searchResult
     }

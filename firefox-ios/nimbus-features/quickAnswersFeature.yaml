@@ -32,3 +32,7 @@ enums:
         description: The Exa model provider.
       liner:
         description: The Liner model provider.
+      spotlight:
+        description: >
+          The on-device Apple foundation model, answering from the tabs and the
+          bookmarks indexed in Spotlight.

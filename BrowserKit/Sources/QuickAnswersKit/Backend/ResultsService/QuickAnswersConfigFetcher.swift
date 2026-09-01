@@ -10,6 +10,15 @@ public protocol QuickAnswersConfigFetcher: Sendable {
 }
 
 public struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
+    private static let spotlightInstructions = """
+    You answer questions about the pages the user has in Firefox. Every item in the search index is either an open tab
+    or a bookmark, and its kind and its keywords say which of the two it is: search for "tab" or "tabs" to select the
+    open tabs, and for "bookmark" or "bookmarks" to select the saved pages. Always search the index before answering.
+    When the question asks how many, count the matching items and answer with the number. Otherwise answer only from
+    what you find, in 1 sentence, naming the pages you used. Say that you couldn't find a matching page only when the
+    search came back with nothing relevant.
+    """.replacingOccurrences(of: "\n", with: " ")
+
     private static let exaInstructions = """
     Answer in 1 sentence. Remove any superscript numbers from the response like [1], [2] and other citations numbers.
     """.replacingOccurrences(of: "\n", with: " ")
@@ -28,6 +37,7 @@ public struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
         switch model {
         case .exa: return Self.exaInstructions
         case .liner: return ""
+        case .spotlight: return Self.spotlightInstructions
         }
     }
 }

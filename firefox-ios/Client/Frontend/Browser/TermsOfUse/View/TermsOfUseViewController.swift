@@ -92,6 +92,7 @@ final class TermsOfUseViewController: UIViewController,
         ]
         textView.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.description
         textView.delegate = self
+        textView.accessibilityNavigationStyle = .separate
     }
 
     private lazy var acceptButton: PrimaryRoundedButton = .build { [self] button in

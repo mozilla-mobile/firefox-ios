@@ -10,11 +10,12 @@ enum ResultsServiceError: Error, Equatable {
     case maxUsers
     case payloadTooLarge
     case unableToCreateService
+    case modelUnavailable
     case unknown(String)
 
     var shouldRetry: Bool {
         switch self {
-        case .invalidResponse, .noMessage:
+        case .invalidResponse, .noMessage, .modelUnavailable:
             return false
         default:
             return true
@@ -30,6 +31,7 @@ enum ResultsServiceError: Error, Equatable {
         case .maxUsers: return "max_users"
         case .payloadTooLarge: return "payload_too_large"
         case .unableToCreateService: return "unable_to_create_service"
+        case .modelUnavailable: return "model_unavailable"
         case .unknown: return "unknown"
         }
     }

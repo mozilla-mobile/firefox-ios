@@ -78,6 +78,7 @@ final class TabManagerImplementation: NSObject,
     private let tabSessionStore: TabSessionStore
     nonisolated private let imageStore: DiskImageStore?
     private let windowManager: WindowManager
+    private let spotlightIndexer: BrowserEntityIndexer
     private let windowIsNew: Bool
     private let profile: Profile
     private weak var navigationDelegate: WKNavigationDelegate?
@@ -112,6 +113,7 @@ final class TabManagerImplementation: NSObject,
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          windowManager: WindowManager = AppContainer.shared.resolve(),
+         spotlightIndexer: BrowserEntityIndexer = DefaultBrowserEntityIndexer(),
          tabs: [Tab] = []
     ) {
         let dataStore =  tabDataStore ?? DefaultTabDataStore(logger: logger, fileManager: DefaultTabFileManager())
@@ -120,6 +122,7 @@ final class TabManagerImplementation: NSObject,
         self.imageStore = imageStore
         self.notificationCenter = notificationCenter
         self.windowManager = windowManager
+        self.spotlightIndexer = spotlightIndexer
         self.windowIsNew = uuid.isNew
         self.windowUUID = uuid.uuid
         self.profile = profile
@@ -289,6 +292,7 @@ final class TabManagerImplementation: NSObject,
             $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !self.tabRestoreHasFinished)
         }
         TabEvent.post(.didClose, for: tab)
+        removeFromSpotlightIndex(tab)
 
         if tab.isPrivate, hasNoPrivateTabsAcrossWindows {
             tabConfigurationProvider.endPrivateBrowsingSession()
@@ -405,6 +409,7 @@ final class TabManagerImplementation: NSObject,
     ) -> Tab {
         let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
+        indexInSpotlight(tab)
         return tab
     }
 
@@ -691,6 +696,8 @@ final class TabManagerImplementation: NSObject,
 
             selectTab(mostRecentTab)
         }
+
+        indexNormalTabsInSpotlight()
     }
 
     /// Builds a zombie `Tab` from persisted `TabData` without mutating `tabs` or notifying delegates.
@@ -910,6 +917,42 @@ final class TabManagerImplementation: NSObject,
         delegates.forEach {
             $0.get()?.tabManagerTabDidFinishLoading()
         }
+
+        if let selectedTab {
+            indexInSpotlight(selectedTab)
+        }
+    }
+
+    // MARK: - Spotlight index
+
+    private func indexInSpotlight(_ tab: Tab) {
+        guard let entity = BrowserEntity(tab: tab) else { return }
+
+        let spotlightIndexer = spotlightIndexer
+        Task {
+            await spotlightIndexer.index([entity])
+        }
+    }
+
+    private func indexNormalTabsInSpotlight() {
+        let entities = normalTabs.compactMap { BrowserEntity(tab: $0) }
+        guard !entities.isEmpty else { return }
+
+        let spotlightIndexer = spotlightIndexer
+        Task {
+            await spotlightIndexer.index(entities)
+        }
+    }
+
+    private func removeFromSpotlightIndex(_ tab: Tab) {
+        guard !tab.isPrivate, let url = tab.url else { return }
+        // The page can still be open in another tab, in which case it stays indexed.
+        guard !tabs.contains(where: { $0 !== tab && !$0.isPrivate && $0.url == url }) else { return }
+
+        let spotlightIndexer = spotlightIndexer
+        Task {
+            await spotlightIndexer.remove([BrowserEntityID(type: .tab, url: url)])
+        }
     }
 
     private func saveSessionData(forTab tab: Tab?) {
@@ -986,6 +1029,7 @@ final class TabManagerImplementation: NSObject,
         tab.resumeDocumentDownload()
 
         didSelectTab(url)
+        indexInSpotlight(tab)
         updateMenuItemsForSelectedTab()
         if isDeeplinkOptimizationRefactorEnabled {
             preloadScreenshotsAroundSelectedTab()
