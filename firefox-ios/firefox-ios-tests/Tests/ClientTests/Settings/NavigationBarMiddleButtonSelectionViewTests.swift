@@ -37,16 +37,6 @@ final class NavigationBarMiddleButtonSelectionViewTests: XCTestCase {
         XCTAssertNotNil(render(subject))
     }
 
-    /// Lays the view out inside a window so that its body is evaluated.
-    private func render(_ view: some View) -> UIView {
-        let host = UIHostingController(rootView: view)
-        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
-        window.rootViewController = host
-        window.isHidden = false
-        host.view.layoutIfNeeded()
-        return host.view
-    }
-
     private func createSubject(selectedMiddleButton: NavigationBarMiddleButtonType,
                                theme: Theme? = LightTheme(),
                                onSelected: ((NavigationBarMiddleButtonType) -> Void)? = nil)
