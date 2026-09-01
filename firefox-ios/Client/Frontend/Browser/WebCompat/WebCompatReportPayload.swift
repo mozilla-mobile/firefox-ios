@@ -268,9 +268,23 @@ struct WebCompatReportPayload: Equatable {
 
     private func previewValue(_ experiments: [WebCompatExperiment]?) -> WebCompatTechnicalDataViewModel.PreviewValue {
         guard let experiments else { return .null }
-        return .objectList(experiments.map {
-            "{\"branch\": \"\($0.branch)\", \"slug\": \"\($0.slug)\", \"kind\": \"\($0.kind.rawValue)\"}"
+        return .objectList(experiments.map { experiment in
+            let fields = [
+                "\"branch\": \(jsonQuoted(experiment.branch))",
+                "\"slug\": \(jsonQuoted(experiment.slug))",
+                "\"kind\": \(jsonQuoted(experiment.kind.rawValue))"
+            ]
+            return "{\(fields.joined(separator: ", "))}"
         })
+    }
+
+    /// Encoding the object whole reorders its keys, so only the values are encoded.
+    private func jsonQuoted(_ text: String) -> String {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .withoutEscapingSlashes
+        guard let data = try? encoder.encode(text),
+              let quoted = String(data: data, encoding: .utf8) else { return "\"\"" }
+        return quoted
     }
 
     private func previewValue(_ flag: Bool?) -> WebCompatTechnicalDataViewModel.PreviewValue {

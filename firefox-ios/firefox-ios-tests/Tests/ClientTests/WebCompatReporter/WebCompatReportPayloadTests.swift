@@ -92,6 +92,18 @@ final class WebCompatReportPayloadTests: XCTestCase {
         XCTAssertEqual(rendered["browserInfo.experiments"], expected)
     }
 
+    func testPreviewGroups_experimentWithQuotesInItsSlug_staysValidJSON() {
+        var payload = WebCompatReportPayload()
+        payload.experiments = [
+            WebCompatExperiment(branch: #"a"branch"#, slug: #"a\slug"#, kind: .experiment)
+        ]
+
+        let rendered = renderedFields(of: payload)
+
+        let expected = #"[{"branch": "a\"branch", "slug": "a\\slug", "kind": "nimbusExperiment"}]"#
+        XCTAssertEqual(rendered["browserInfo.experiments"], expected)
+    }
+
     func testPreviewGroups_optedInWithNothingBlocked_showsAnEmptyListNotNull() {
         var payload = WebCompatReportPayload()
         payload.blockedOrigins = []
