@@ -51,6 +51,38 @@ final class LocationTextFieldTests: XCTestCase {
         XCTAssertNotNil(textField.markedTextRange)
     }
 
+    func testHandleInputModeDidChange_whenSuggestionNoLongerMatchesTypedText_doesNotRestoreIt() {
+        makeTextFieldEditing()
+        textField.text = "y"
+        textField.setAutocompleteSuggestion("youtube.com")
+        XCTAssertEqual(textField.text, "youtube.com")
+
+        // The user types a second "y", replacing the completion with text that matches no suggestion.
+        _ = textField.textField(
+            textField,
+            shouldChangeCharactersIn: NSRange(location: 1, length: 10),
+            replacementString: "y"
+        )
+        textField.text = "yy"
+        textField.setAutocompleteSuggestion(nil)
+
+        textField.handleInputModeDidChange()
+
+        XCTAssertEqual(textField.text, "yy", "The dismissed suggestion should not come back on input mode change.")
+        XCTAssertNil(textField.markedTextRange)
+    }
+
+    func testHandleInputModeDidChange_whenTextDoesNotEndWithLastMarkedText_doesNothing() {
+        textField.text = "wiki"
+        textField.setMarkedText("pedia.com", selectedRange: NSRange())
+        textField.text = "yy"
+
+        textField.handleInputModeDidChange()
+
+        XCTAssertEqual(textField.text, "yy")
+        XCTAssertNil(textField.markedTextRange)
+    }
+
     func testAutocompleteSuggestion_whenInsertingAtStartOfText_appendsSuggestionAtEnd() {
         // Start with "o" already in the text field.
         makeTextFieldEditing()
