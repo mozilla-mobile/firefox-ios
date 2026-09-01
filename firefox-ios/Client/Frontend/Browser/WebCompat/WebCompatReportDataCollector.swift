@@ -8,6 +8,7 @@ import PDFKit
 import Shared
 import UIKit
 import WebKit
+import struct MozillaAppServices.EnrolledExperiment
 
 /// Device and process values, behind a protocol so tests can fake the
 /// `UIDevice`/`ProcessInfo`/`Locale` statics.
@@ -28,6 +29,20 @@ struct WebCompatDeviceInfoProvider: WebCompatDeviceInfoProviding {
     var displayScale: CGFloat { UITraitCollection.current.displayScale }
 }
 
+protocol WebCompatExperimentsProviding {
+    var activeExperiments: [WebCompatExperiment] { get }
+}
+
+struct WebCompatExperimentsProvider: WebCompatExperimentsProviding {
+    var enrollments: () -> [EnrolledExperiment] = { Experiments.shared.getActiveExperiments() }
+
+    var activeExperiments: [WebCompatExperiment] {
+        return enrollments()
+            .map(WebCompatExperiment.init)
+            .sorted { $0.slug < $1.slug }
+    }
+}
+
 /// Tab inputs as a plain value, so tests don't need a live `Tab`/`WKWebView`. Nil
 /// `blockingStrength` means no content blocker; `blockedOrigins` is nil once the user unchecks Additional Info.
 struct WebCompatTabSnapshot: Equatable {
@@ -36,6 +51,7 @@ struct WebCompatTabSnapshot: Equatable {
     var displayScale: CGFloat?
     var blockingStrength: BlockingStrength?
     var blockedOrigins: [String]?
+    var hasTrackingContentBlocked: Bool?
 }
 
 /// Fills the natively readable `broken-site-report` fields, plus the page screenshot.
@@ -47,21 +63,23 @@ enum WebCompatReportDataCollector {
         tab: Tab,
         includeBlockedList: Bool,
         includeTabSpecificInfo: Bool = true,
-        device: WebCompatDeviceInfoProviding = WebCompatDeviceInfoProvider()
+        device: WebCompatDeviceInfoProviding = WebCompatDeviceInfoProvider(),
+        experiments: WebCompatExperimentsProviding = WebCompatExperimentsProvider()
     ) -> WebCompatReportPayload {
         let snapshot = makeSnapshot(
             from: tab,
             includeBlockedList: includeBlockedList,
             includeTabSpecificInfo: includeTabSpecificInfo
         )
-        return enrich(payload, device: device, tab: snapshot)
+        return enrich(payload, device: device, tab: snapshot, experiments: experiments)
     }
 
     /// Pure mapping: no UIKit, no `Tab`, so tests can drive it with fakes.
     static func enrich(
         _ payload: WebCompatReportPayload,
         device: WebCompatDeviceInfoProviding,
-        tab: WebCompatTabSnapshot
+        tab: WebCompatTabSnapshot,
+        experiments: WebCompatExperimentsProviding
     ) -> WebCompatReportPayload {
         var payload = payload
         // `languages` is the page's navigator.languages; this is the app-level list.
@@ -70,12 +88,14 @@ enum WebCompatReportDataCollector {
         payload.memory = device.physicalMemoryMegabytes
         payload.hasTouchScreen = true
         payload.defaultUserAgentString = device.defaultUserAgent
+        payload.experiments = experiments.activeExperiments
 
         payload.userAgentString = tab.pageUserAgent.flatMap { $0.isEmpty ? nil : $0 }
         // An off-screen web view reports a display scale of 0, not nil.
         let pageScale = tab.displayScale ?? 0
         payload.devicePixelRatio = String(format: "%g", pageScale > 0 ? pageScale : device.displayScale)
         payload.isPrivateBrowsing = tab.isPrivate
+        payload.hasTrackingContentBlocked = tab.hasTrackingContentBlocked
 
         if let blockingStrength = tab.blockingStrength {
             payload.blockList = blockingStrength.rawValue
@@ -103,6 +123,18 @@ enum WebCompatReportDataCollector {
     static func blockedOrigins(from stats: TPPageStats, includeBlockedList: Bool) -> [String]? {
         guard includeBlockedList else { return nil }
         return Set(stats.domains.values.flatMap { $0 }).sorted()
+    }
+
+    /// Cryptomining and fingerprinting carry their own flags in Gecko, so they don't count here.
+    static func hasTrackingContentBlocked(from stats: TPPageStats) -> Bool {
+        return BlocklistCategory.allCases.contains { category in
+            switch category {
+            case .advertising, .analytics, .social:
+                return stats.getTrackersBlockedForCategory(category) > 0
+            case .cryptomining, .fingerprinting:
+                return false
+            }
+        }
     }
 
     /// The page as one tall image, via the same PDF route as Save as PDF. WebKit
@@ -163,7 +195,9 @@ enum WebCompatReportDataCollector {
             pageUserAgent: tab.webView?.customUserAgent,
             displayScale: tab.webView?.traitCollection.displayScale,
             blockingStrength: blocker?.blockingStrengthPref,
-            blockedOrigins: blocker.flatMap { blockedOrigins(from: $0.stats, includeBlockedList: includeBlockedList) }
+            blockedOrigins: blocker.flatMap { blockedOrigins(from: $0.stats, includeBlockedList: includeBlockedList) },
+            // Carries no origins, so it is not gated on the blocked-list opt-in.
+            hasTrackingContentBlocked: blocker.map { hasTrackingContentBlocked(from: $0.stats) }
         )
     }
 }
