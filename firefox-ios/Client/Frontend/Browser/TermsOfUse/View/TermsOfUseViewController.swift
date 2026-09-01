@@ -90,6 +90,7 @@ final class TermsOfUseViewController: UIViewController,
             .foregroundColor: currentTheme().colors.textAccent,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
+        textView.accessibilityNavigationStyle = .separate
         textView.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.description
         textView.delegate = self
     }

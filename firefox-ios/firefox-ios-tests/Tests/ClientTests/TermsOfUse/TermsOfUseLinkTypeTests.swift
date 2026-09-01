@@ -4,6 +4,7 @@
 
 import XCTest
 @testable import Client
+import Common
 import Shared
 
 final class TermsOfUseLinkTypeTests: XCTestCase {
@@ -48,5 +49,41 @@ final class TermsOfUseLinkTypeTests: XCTestCase {
             return
         }
         XCTAssertEqual(learnMoreURL, hereURL, "here link should have the same URL as Learn more")
+    }
+}
+
+@MainActor
+final class TermsOfUseViewControllerAccessibilityTests: XCTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+        let mockStore = MockStoreForMiddleware(state: AppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    override func tearDown() async throws {
+        StoreTestUtilityHelper.resetStore()
+        DependencyHelperMock().reset()
+        try await super.tearDown()
+    }
+
+    func testDescriptionTextView_SeparatesLinksForSwitchControlNavigation() throws {
+        let subject = TermsOfUseViewController(
+            themeManager: MockThemeManager(),
+            windowUUID: .XCTestDefaultUUID
+        )
+
+        subject.loadViewIfNeeded()
+
+        let textView = try XCTUnwrap(descriptionTextView(in: subject.view))
+        XCTAssertEqual(textView.accessibilityNavigationStyle, .separate)
+    }
+
+    private func descriptionTextView(in view: UIView) -> UITextView? {
+        if let textView = view as? UITextView,
+           textView.accessibilityIdentifier == AccessibilityIdentifiers.TermsOfUse.description {
+            return textView
+        }
+        return view.subviews.lazy.compactMap(descriptionTextView).first
     }
 }
