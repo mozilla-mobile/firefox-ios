@@ -89,28 +89,28 @@ final class AddCreditCardScreen {
 
     private func fillName(_ name: String) {
         let nameField = sel.NAME_FIELD_BUTTON.element(in: app)
-        nameField.waitAndTap()
+        nameField.tapUntilKeyboardFocused()
         nameField.typeText(name)
     }
 
     private func fillCardNumber(_ number: String) {
         let cardNumber = sel.CARD_NUMBER_FIELD_BUTTON.element(in: app)
-        cardNumber.waitAndTap()
+        cardNumber.tapUntilKeyboardFocused()
         cardNumber.typeTextWithDelay(number, delay: 0.1)
     }
 
     private func fillExpiration(_ expiration: String) {
-        creditCard_ExpirationFieldButton.waitAndTap()
+        creditCard_ExpirationFieldButton.tapUntilKeyboardFocused()
         creditCard_ExpirationFieldButton.typeText(expiration)
     }
 
     private func retryCardNumberIfInvalid(_ number: String) {
         if creditCard_InvalidCardNumberMessage.exists {
             let cardNumber = sel.CARD_NUMBER_FIELD_BUTTON.element(in: app)
-            cardNumber.waitAndTap()
+            cardNumber.tapUntilKeyboardFocused()
             pressDelete()
             fillCardNumber(number)
-            sel.EXPIRATION_FIELD_BUTTON.element(in: app).waitAndTap()
+            sel.EXPIRATION_FIELD_BUTTON.element(in: app).tapUntilKeyboardFocused()
         }
     }
 
@@ -131,7 +131,7 @@ final class AddCreditCardScreen {
         fillName(name)
         fillCardNumber(cardNumber)
 
-        sel.EXPIRATION_FIELD_BUTTON.element(in: app).waitAndTap()
+        sel.EXPIRATION_FIELD_BUTTON.element(in: app).tapUntilKeyboardFocused()
         retryCardNumberIfInvalid(cardNumber)
 
         fillExpiration(expirationDate)
@@ -181,16 +181,15 @@ final class AddCreditCardScreen {
     }
 
     private func pressDelete() {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            BaseTestCase().mozWaitForElementToExist(app.keyboards.keys["delete"])
-            app.keyboards.keys["delete"].press(forDuration: 2.2)
-        } else {
-            BaseTestCase().mozWaitForElementToExist(app.keyboards.keys["Delete"])
-            app.keyboards.keys["Delete"].press(forDuration: 2.2)
-        }
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let deleteKey = isPad ? app.keyboards.keys["delete"] : app.keyboards.keys["Delete"]
+        BaseTestCase().mozWaitForElementToExist(deleteKey)
+        deleteKey.waitUntilHittable()
+        deleteKey.press(forDuration: 2.2)
     }
 
     private func typeExpiration(_ expiration: String) {
+        creditCard_ExpirationFieldButton.tapUntilKeyboardFocused()
         creditCard_ExpirationFieldButton.typeText(expiration)
     }
 }
