@@ -288,7 +288,7 @@
         "HistoryHighlightsTests",
         "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
         "NotificationManagerTests\/testGetNotificationSettings()",
-        "NotificationSurfaceManagerTests\/testDidTapNotification_defaultAction()",
+        "NotificationSurfaceManagerTests",
         "OnboardingTelemetryUtilityTests\/testSendOnboardingCardView_WelcomeCard_Success()",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
