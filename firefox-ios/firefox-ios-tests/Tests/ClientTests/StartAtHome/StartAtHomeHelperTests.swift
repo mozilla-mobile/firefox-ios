@@ -37,6 +37,18 @@ class StartAtHomeHelperTests: XCTestCase {
         XCTAssertFalse(shouldSkip, "Should not skip StartAtHome")
     }
 
+    func testShouldSkipStartAtHome_RunningUITest() throws {
+        setupHelper(isRunningUITest: true)
+        let shouldSkip = helper.shouldSkipStartHome
+        XCTAssertTrue(shouldSkip, "Expected to skip because a UI test is running")
+    }
+
+    func testShouldNotSkipStartAtHome_RunningUITestWithOptIn() throws {
+        setupHelper(isRunningUITest: true, isStartAtHomeEnabledForTests: true)
+        let shouldSkip = helper.shouldSkipStartHome
+        XCTAssertFalse(shouldSkip, "Expected not to skip because the UI test opted into Start at Home")
+    }
+
     func testShouldSkipStartAtHome_RestoringTabs() throws {
         setupHelper(isRestoringTabs: true)
         let shouldSkip = helper.shouldSkipStartHome
@@ -124,13 +136,16 @@ class StartAtHomeHelperTests: XCTestCase {
     // MARK: - Private
     private func setupHelper(
         appSessionManager: MockAppSessionManager = MockAppSessionManager(),
-        isRestoringTabs: Bool = false
+        isRestoringTabs: Bool = false,
+        isRunningUITest: Bool = false,
+        isStartAtHomeEnabledForTests: Bool = false
     ) {
         helper = StartAtHomeHelper(
             appSessionManager: appSessionManager,
             prefs: profile.prefs,
             isRestoringTabs: isRestoringTabs,
-            isRunningUITest: false
+            isRunningUITest: isRunningUITest,
+            isStartAtHomeEnabledForTests: isStartAtHomeEnabledForTests
         )
 
         helper.startAtHomeSetting = .afterFourHours
