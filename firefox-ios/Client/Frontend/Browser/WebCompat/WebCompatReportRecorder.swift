@@ -73,6 +73,10 @@ struct WebCompatReportRecorder {
             gleanWrapper.setBoolean(for: GleanMetrics.BrokenSiteReportTabInfoAntitracking.isPrivateBrowsing,
                                     value: isPrivateBrowsing)
         }
+        if let hasTrackingContentBlocked = payload.hasTrackingContentBlocked {
+            gleanWrapper.setBoolean(for: GleanMetrics.BrokenSiteReportTabInfoAntitracking.hasTrackingContentBlocked,
+                                    value: hasTrackingContentBlocked)
+        }
     }
 
     private func recordFrameworks(_ payload: WebCompatReportPayload) {
@@ -91,6 +95,10 @@ struct WebCompatReportRecorder {
     }
 
     private func recordBrowserInfo(_ payload: WebCompatReportPayload) {
+        if let experiments = payload.experiments {
+            gleanWrapper.recordObject(for: GleanMetrics.BrokenSiteReportBrowserInfo.experiments,
+                                      value: experiments.map { $0.gleanObjectItem })
+        }
         if let defaultLocales = payload.defaultLocales {
             gleanWrapper.recordStringList(for: GleanMetrics.BrokenSiteReportBrowserInfoApp.defaultLocales,
                                           value: defaultLocales)

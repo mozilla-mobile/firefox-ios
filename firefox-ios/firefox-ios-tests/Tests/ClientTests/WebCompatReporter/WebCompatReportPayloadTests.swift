@@ -54,7 +54,7 @@ final class WebCompatReportPayloadTests: XCTestCase {
         // Labelled with the raw schema keys, so a renamed or reordered group misdescribes the ping.
         XCTAssertEqual(
             WebCompatReportPayload().previewGroups.map(\.id.rawValue),
-            ["basic", "tabInfo", "antiTracking", "frameworks", "app", "system", "graphics"]
+            ["basic", "tabInfo", "antiTracking", "frameworks", "browserInfo", "app", "system", "graphics"]
         )
     }
 
@@ -78,6 +78,30 @@ final class WebCompatReportPayloadTests: XCTestCase {
         XCTAssertEqual(rendered["antiTracking.isPrivateBrowsing"], "false")
         XCTAssertEqual(rendered["system.memory"], "4096")
         XCTAssertEqual(rendered["app.defaultLocales"], "[\"en-GB\", \"fr\"]")
+    }
+
+    func testPreviewGroups_renderExperimentsAsTheObjectsThePingCarries() {
+        var payload = WebCompatReportPayload()
+        payload.experiments = [
+            WebCompatExperiment(branch: "treatment", slug: "an-experiment", kind: .rollout)
+        ]
+
+        let rendered = renderedFields(of: payload)
+
+        let expected = #"[{"branch": "treatment", "slug": "an-experiment", "kind": "nimbusRollout"}]"#
+        XCTAssertEqual(rendered["browserInfo.experiments"], expected)
+    }
+
+    func testPreviewGroups_experimentWithQuotesInItsSlug_staysValidJSON() {
+        var payload = WebCompatReportPayload()
+        payload.experiments = [
+            WebCompatExperiment(branch: #"a"branch"#, slug: #"a\slug"#, kind: .experiment)
+        ]
+
+        let rendered = renderedFields(of: payload)
+
+        let expected = #"[{"branch": "a\"branch", "slug": "a\\slug", "kind": "nimbusExperiment"}]"#
+        XCTAssertEqual(rendered["browserInfo.experiments"], expected)
     }
 
     func testPreviewGroups_optedInWithNothingBlocked_showsAnEmptyListNotNull() {

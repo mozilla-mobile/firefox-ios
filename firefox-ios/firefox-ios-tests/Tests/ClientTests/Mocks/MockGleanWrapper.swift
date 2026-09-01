@@ -21,6 +21,7 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
     var recordUrlCalled = 0
     var recordDatetimeCalled = 0
     var recordUUIDCalled = 0
+    var recordObjectCalled = 0
     var startTimingCalled = 0
     var cancelTimingCalled = 0
     var stopAndAccumulateCalled = 0
@@ -122,6 +123,15 @@ class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
         savedEvents.append(metric)
         savedValues.append(value)
         recordUUIDCalled += 1
+    }
+
+    func recordObject<ObjectValue>(
+        for metric: ObjectMetricType<ObjectValue>,
+        value: ObjectValue
+    ) where ObjectValue: ObjectSerialize {
+        savedEvents.append(metric)
+        savedValues.append(value)
+        recordObjectCalled += 1
     }
 
     func startTiming(for metric: TimingDistributionMetricType) -> GleanTimerId {

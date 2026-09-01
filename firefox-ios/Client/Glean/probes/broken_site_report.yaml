@@ -27,8 +27,7 @@ $tags:
 # OMITTED (Gecko-only, no WebKit equivalent): browser_info.prefs.*,
 # graphics.{devices,drivers,features,monitors}_json, browser_info.security.*,
 # browser_info.addons, app.fission_enabled, and the Gecko-specific antitracking
-# mixed-content / bounce-tracking flags. browser_info.experiments (Nimbus,
-# object) is deferred — add later if the data team wants it.
+# mixed-content / bounce-tracking flags.
 #
 # SCREENSHOT: the iOS design includes a default-on "Include screenshot" option.
 # The image is intentionally NOT carried by this Glean ping — Glean has no
@@ -36,7 +35,7 @@ $tags:
 # capture/storage is a separate open decision (see the data-review doc); no
 # screenshot field is defined here.
 #
-# `bugs` is the impl ticket (FXIOS-16177); `data_reviews` is the
+# `bugs` is the impl ticket; `data_reviews` is the
 # data-review PR. `url` and `description` carry user-entered data.
 ###############################################################################
 
@@ -201,6 +200,29 @@ broken_site_report.tab_info.antitracking:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  has_tracking_content_blocked:
+    type: boolean
+    description: |
+      Whether tracking content was blocked on the reported page. True when the
+      content blocker recorded at least one block in the advertising, analytics
+      or social categories, matching how Gecko scopes tracking content;
+      cryptomining and fingerprinting are excluded and carry their own flags
+      there. Narrower than blocked_origins, which lists every blocked origin
+      across all categories, so the two can disagree. Carries no origins, so it
+      is sent independently of the "list of items blocked by tracking
+      protection" opt-in.
+    data_sensitivity:
+      - interaction
+    lifetime: ping
+    send_in_pings:
+      - broken-site-report
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16704
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35402
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
 
 broken_site_report.tab_info.frameworks:
   fastclick:
@@ -251,6 +273,41 @@ broken_site_report.tab_info.frameworks:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16177
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34309
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
+broken_site_report.browser_info:
+  experiments:
+    type: object
+    structure:
+      type: array
+      items:
+        type: object
+        properties:
+          branch:
+            type: string
+          slug:
+            type: string
+          kind:
+            type: string
+    description: |
+      Experiments in which the user is actively enrolled, read from Nimbus at
+      report time. List of objects with `branch`, `slug`, and `kind`, sorted by
+      slug. For instance,
+      `[{"branch":"some-branch", "slug":"some-experiment", "kind":"nimbusExperiment"}]`.
+      `kind` is "nimbusExperiment" for experiments and "nimbusRollout" for
+      rollouts, matching how desktop splits the two. Always sent with the ping;
+      an empty list means the client was enrolled in nothing at report time.
+    data_sensitivity:
+      - interaction
+    lifetime: ping
+    send_in_pings:
+      - broken-site-report
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16704
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35402
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
