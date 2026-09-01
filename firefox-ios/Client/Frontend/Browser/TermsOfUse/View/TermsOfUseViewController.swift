@@ -91,6 +91,7 @@ final class TermsOfUseViewController: UIViewController,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
         textView.accessibilityNavigationStyle = .separate
+        textView.accessibilityRespondsToUserInteraction = false
         textView.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.description
         textView.delegate = self
     }
