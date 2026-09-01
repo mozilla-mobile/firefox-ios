@@ -2188,13 +2188,15 @@ workflows:
             fi
         - title: Check if build is scheduled or regular to set the test plan
     - pull-intermediate-files@1: {}
-    - xcode-test-without-building@0:
-        timeout: 1200
-        inputs:
-        - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics on-failure'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.0-arm64.xctestrun
+    # Disabled on iOS 27: App crashes
+    # https://mozilla-hub.atlassian.net/browse/FXIOS-16730
+    # - xcode-test-without-building@0:
+    #     timeout: 1200
+    #     inputs:
+    #     - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
+    #     - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
+    #     - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics on-failure'
+    #     - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.0-arm64.xctestrun
     - deploy-to-bitrise-io@2: {}
     - github-status@3:
         inputs:
