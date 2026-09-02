@@ -14,10 +14,13 @@ let urlExampleLabel = TestLabels.exampleDomain
 let urlMozillaLabel = "Internet for people, not profit — Mozilla (US)"
 
 class HomePageSettingsUITests: FeatureFlaggedTestBase {
+    private var homepageSettingsScreen: HomepageSettingsScreen!
+    private var settingScreen: SettingScreen!
+    private var toolbarScreen: ToolbarScreen!
+    private var browserScreen: BrowserScreen!
+
     private func enterWebPageAsHomepage(text: String) {
-        app.textFields["HomeAsCustomURLTextField"].tapAndTypeText(text)
-        let value = app.textFields["HomeAsCustomURLTextField"].value
-        XCTAssertEqual(value as? String, text, "The webpage typed does not match with the one saved")
+        homepageSettingsScreen.typeCustomHomepageURL(text)
     }
     let testWithDB = ["testTopSitesCustomNumberOfRows"]
     let prefilledTopSites = "testBookmarksDatabase1000-browser.db"
@@ -37,6 +40,10 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         }
         launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         try await super.setUp()
+        homepageSettingsScreen = HomepageSettingsScreen(app: app)
+        settingScreen = SettingScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339256
@@ -68,31 +75,40 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339257
+    // Regression
     func testTyping() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest,
-                      "Skipping test based on https://github.com/mozilla-mobile/firefox-ios/issues/28117.")
+        guard !iPad() else {
+            throw XCTSkip("The navigation toolbar middle button cannot be configured on iPad")
+        }
+        app.launch()
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         // Enter a webpage
-        enterWebPageAsHomepage(text: "example.com")
+        enterWebPageAsHomepage(text: path(forTestPage: TestPages.exampleHTML))
 
         // Check if it is saved going back and then again to home settings menu
         navigator.goto(SettingsScreen)
         navigator.goto(HomeSettings)
-        mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "http://example.com")
+        homepageSettingsScreen.assertCustomHomepageURLContains(TestPages.exampleHTML)
+
+        // The custom homepage is loaded by the Home button only. It replaces the new tab button in
+        // the middle of the navigation toolbar, which follows the New Tab settings instead.
+        navigator.goto(SettingsScreen)
+        settingScreen.navigateToToolbarSettings()
+        settingScreen.selectNavigationToolbarMiddleButton(.home)
+        settingScreen.tapBackToSettings()
+        settingScreen.closeSettingsWithDoneButton()
 
         // Check that it is actually set by opening a different website and going to Home
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
 
-        // Now check open home page should load the previously saved home page
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+        // Now the home button should load the previously saved home page
+        toolbarScreen.tapHomeButton()
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                value: "example.com")
+        browserScreen.assertWebPageText(with: TestLabels.exampleDomain)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339258
