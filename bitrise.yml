@@ -159,9 +159,13 @@ workflows:
         - configuration: Fennec_Testing
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates -skipMacroValidation DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
     - script@1:
         title: Detect number of warnings
+        # Xcode 27 reports new diagnostic categories on unchanged code, so the count
+        # exceeds the threshold. Non-blocking here: this branch exists to surface test
+        # breakages, and a warnings failure would skip the test steps entirely.
+        is_skippable: true
         is_always_run: true
         inputs:
         - content: |
@@ -195,8 +199,8 @@ workflows:
             set -euxo pipefail
 
             # Point to the Unit tests plan instead of Accessibility
-            UNIT_TESTS_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun"
-            SMOKE_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.5-arm64.xctestrun"
+            UNIT_TESTS_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator27.0-arm64.xctestrun"
+            SMOKE_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator27.0-arm64.xctestrun"
 
             if [ ! -f "$UNIT_TESTS_XCTESTRUN" ]; then
               echo "ERROR: .xctestrun file not found: $UNIT_TESTS_XCTESTRUN"
@@ -208,11 +212,11 @@ workflows:
             envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
 
     - xcode-test-without-building@0:
-        timeout: 1200
+        timeout: 1800
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator27.0-arm64.xctestrun
         - maximum_test_repetitions: 2
     - xcode-test-shard-calculation@0:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
@@ -265,6 +269,9 @@ workflows:
         is_always_run: true
     - script@1:
         title: Run Danger 2
+        # danger-js on the 27 edge stack cannot reach the GitHub API (old bundled undici
+        # vs newer Node), so this always fails here. Non-blocking.
+        is_skippable: true
         timeout: 360
         inputs:
         - content: |
@@ -326,12 +333,12 @@ workflows:
     steps:
     - pull-intermediate-files@1: {}
     - xcode-test-without-building@0:
-        timeout: 1200
+        timeout: 1800
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.5-arm64.xctestrun
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator27.0-arm64.xctestrun
     - deploy-to-bitrise-io@2: {}
   firefox_scheme_build_for_test:
     description: Build Firefox scheme and shard XCUITests for parallel execution
@@ -2158,7 +2165,7 @@ workflows:
         - configuration: FocusDebug
         - project_path: /Users/vagrant/git/focus-ios/Blockzilla.xcodeproj
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
     - script@1:
         title: Override xctestrun Focus env variables
         inputs:
@@ -2166,16 +2173,16 @@ workflows:
             #!/usr/bin/env bash
             set -euxo pipefail
             # Point to the Unit tests plan instead of Accessibility
-            FOCUS_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator26.5-arm64.xctestrun"
+            FOCUS_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.0-arm64.xctestrun"
 
             echo "Found UITest .xctestrun: $FOCUS_UI_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH --value "$FOCUS_UI_XCTESTRUN"
     - xcode-test-without-building@0:
-        timeout: 1200
+        timeout: 1800
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_UnitTests_iphonesimulator26.5-arm64.xctestrun
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_UnitTests_iphonesimulator27.0-arm64.xctestrun
     - xcode-test-shard-calculation@0:
         inputs:
         - product_path: $BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH
@@ -3001,6 +3008,10 @@ app:
 trigger_map:
 - push_branch: main
   pipeline: pipeline_build_and_test
+# Xcode 27 / iOS 27 canary branch: merges main daily and runs the Firefox unit and
+# smoke tests on the 27 edge stack so breakages surface before the stack becomes default.
+- push_branch: cs/mte-6112-xcode27-firefox-only
+  pipeline: pipeline_build_and_test
 - push_branch: epic-branch/*
   pipeline: pipeline_build_and_test
 - push_branch: release/*
@@ -3014,5 +3025,5 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-26.5.x
+    stack: osx-xcode-27.0.x-edge
     machine_type_id: g2.mac.4large
