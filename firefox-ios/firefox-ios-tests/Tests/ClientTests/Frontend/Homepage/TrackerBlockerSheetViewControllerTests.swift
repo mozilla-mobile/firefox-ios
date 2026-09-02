@@ -256,6 +256,38 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(try XCTUnwrap(icon(in: row)).tintColor, theme.colors.iconSecondary)
     }
 
+    // MARK: - Weekly Count Accessibility
+
+    func test_configureFilledState_readsOutTheCountAndHeaderAsOneSentence() throws {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.configure(with: .filled)
+        let weeklyCount = try XCTUnwrap(TrackerBlockerSheetState.filled.weeklyCount)
+        XCTAssertEqual(view(subject, withID: A11y.weeklyCountLabel)?.accessibilityLabel,
+                       String(format: .PrivacyDashboard.HeaderLabelAccessibilityLabel,
+                              weeklyCount.formatted(.number)))
+        // The count already reads the header's copy, so the header isn't read a second time.
+        XCTAssertEqual(view(subject, withID: A11y.headerLabel)?.isAccessibilityElement, false)
+    }
+
+    // MARK: - Category row accessibility
+
+    func test_categoryRow_withCount_readsOutTheCategoryAndItsCount() {
+        let row = makeRow(count: 1234)
+
+        XCTAssertEqual(row.accessibilityLabel,
+                       String(format: .PrivacyDashboard.CategoryAccessibilityLabel,
+                              String.PrivacyDashboard.Fingerprinters,
+                              1234.formatted(.number)))
+    }
+
+    /// The empty state has no count to read out, so the row is just its category.
+    func test_categoryRow_withoutCount_readsOutTheCategoryOnly() {
+        let row = makeRow(count: nil)
+
+        XCTAssertEqual(row.accessibilityLabel, .PrivacyDashboard.Fingerprinters)
+    }
+
     // MARK: - Category row layout
 
     func test_categoryRow_withoutCount_collapsesProgressBarHeight() {
@@ -304,7 +336,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
     func test_categoryRow_placesCountInlineWithProgressBar() throws {
         let row = laidOutRow(count: 12)
 
-        let titleFrame = try frame(of: XCTUnwrap(label(in: row, withText: "Fingerprinters")), in: row)
+        let titleFrame = try frame(of: XCTUnwrap(label(in: row, withText: .PrivacyDashboard.Fingerprinters)), in: row)
         let countFrame = try frame(of: XCTUnwrap(label(in: row, withText: 12.formatted(.number))), in: row)
         let barFrame = try frame(
             of: XCTUnwrap(allSubviews(in: row).first { $0 is TrackerBlockerProgressBarView }),

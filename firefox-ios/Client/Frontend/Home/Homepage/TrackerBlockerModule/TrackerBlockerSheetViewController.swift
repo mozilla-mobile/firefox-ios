@@ -58,8 +58,8 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
     // MARK: - UI
     private let backgroundGradientView: GradientView = .build()
 
-    private lazy var closeButton: CloseButton = .build { [weak self] button in
-        button.addTarget(self, action: #selector(self?.closeButtonTapped), for: .touchUpInside)
+    private lazy var closeButton: CloseButton = .build { [unowned self] button in
+        button.addTarget(self, action: #selector(self.closeButtonTapped), for: .touchUpInside)
     }
 
     private let contentScrollView: UIScrollView = .build { scrollView in
@@ -261,9 +261,8 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
     }
 
     private func setupCloseButton() {
-        // TODO: FXIOS-16429 - Use a localized close-button a11y label once strings land.
         let closeButtonViewModel = CloseButtonViewModel(
-            a11yLabel: "Close",
+            a11yLabel: .CloseButtonTitle,
             a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.closeButton
         )
         closeButton.configure(viewModel: closeButtonViewModel, notificationCenter: notificationCenter)
@@ -314,13 +313,14 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
 
         rebuildCategoryRows(with: state, theme: theme)
 
-        // TODO: FXIOS-16429 - Replace the weekly copy and its a11y label with localized strings once available.
         if let weeklyCount = state.weeklyCount {
+            let countText = weeklyCount.formatted(.number)
             weeklyCountLabel.isHidden = false
-            weeklyCountLabel.text = weeklyCount.formatted(.number)
-            weeklyCountLabel.accessibilityLabel = "\(weeklyCount) trackers blocked this week"
-
-            headerLabel.text = "Trackers blocked this week"
+            weeklyCountLabel.text = countText
+            // The count and the header read as one sentence, so the count carries both for VoiceOver.
+            weeklyCountLabel.accessibilityLabel = String(format: .PrivacyDashboard.HeaderLabelAccessibilityLabel,
+                                                         countText)
+            headerLabel.text = .PrivacyDashboard.HeaderLabel
             headerLabel.font = FXFontStyles.Regular.body.scaledFont()
             headerLabel.isAccessibilityElement = false
         } else {

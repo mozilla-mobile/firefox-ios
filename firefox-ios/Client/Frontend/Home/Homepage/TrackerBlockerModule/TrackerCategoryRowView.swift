@@ -133,12 +133,14 @@ final class TrackerCategoryRowView: UIView, ThemeApplicable {
         titleLabel.text = category.title
         iconImageView.image = UIImage(named: category.kind.imageName)?.withRenderingMode(.alwaysTemplate)
 
-        // TODO: FXIOS-16429 - Replace the a11y label with a localized format string once available.
         if let count = category.count {
-            countLabel.text = count.formatted(.number)
+            let countText = count.formatted(.number)
+            countLabel.text = countText
             setDetailsVisible(true)
             progressBar.setFillRatio(fillRatio)
-            accessibilityLabel = "\(category.title), \(count) blocked"
+            accessibilityLabel = String(format: .PrivacyDashboard.CategoryAccessibilityLabel,
+                                        category.title,
+                                        countText)
         } else {
             setDetailsVisible(false)
             accessibilityLabel = category.title
