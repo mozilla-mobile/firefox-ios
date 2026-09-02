@@ -4823,9 +4823,7 @@ extension BrowserViewController: TabManagerDelegate {
                                          canGoForward: selectedTab.canGoForward,
                                          windowUUID: windowUUID)
 
-        if let url = selectedTab.webView?.url, !InternalURL.isValid(url: url) {
-            addressToolbarContainer.hideProgressBar()
-        }
+        restoreProgressBar(for: selectedTab)
 
         // When the newly selected tab is the homepage or another internal tab,
         // we need to explicitly set the reader mode state to be unavailable.
@@ -4847,6 +4845,23 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         } else if isSwipingTabsEnabled {
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+        }
+    }
+
+    // Restores the progress bar state for the newly selected tab.
+    // Shows the bar at the tab's current load progress if it is still loading a real URL,
+    // otherwise hides it.
+    private func restoreProgressBar(for tab: Tab) {
+        guard let webView = tab.webView else {
+            addressToolbarContainer.hideProgressBar()
+            return
+        }
+
+        let isInternalURL = webView.url.map { InternalURL.isValid(url: $0) } ?? true
+        if !isInternalURL && webView.isLoading {
+            addressToolbarContainer.updateProgressBar(progress: webView.estimatedProgress)
+        } else {
+            addressToolbarContainer.hideProgressBar()
         }
     }
 
