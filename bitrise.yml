@@ -2274,13 +2274,18 @@ workflows:
             fi
         - title: Check if build is scheduled or regular to set the test plan
     - pull-intermediate-files@1: {}
+    # Expected to fail on iOS 27: Focus crashes on launch, so the test runner never
+    # connects and no test executes ("Early unexpected exit, operation never finished
+    # bootstrapping"). Verified with the same build and plan - 19/19 pass on iOS 26.5.
+    # Tracked in https://mozilla-hub.atlassian.net/browse/FXIOS-16730
+    # Left enabled deliberately: this branch exists to surface breakages.
     - xcode-test-without-building@0:
-        timeout: 1200
+        timeout: 1800
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator26.5-arm64.xctestrun
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.0-arm64.xctestrun
     - deploy-to-bitrise-io@2: {}
     - github-status@3:
         inputs:
