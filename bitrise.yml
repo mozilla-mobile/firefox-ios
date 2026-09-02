@@ -162,9 +162,10 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
     - script@1:
         title: Detect number of warnings
-        # Xcode 27 reports new diagnostic categories on unchanged code, so the count
-        # exceeds the threshold. Non-blocking here: this branch exists to surface test
-        # breakages, and a warnings failure would skip the test steps entirely.
+        # Threshold raised to 52 in generate-metrics.sh for Xcode 27's new diagnostics
+        # (FXIOS-16729). Also non-blocking: 52 is an exact-equality pass, so one new
+        # warning would otherwise fail this step and skip the test steps entirely,
+        # which would defeat the purpose of this branch.
         is_skippable: true
         is_always_run: true
         inputs:
@@ -1713,6 +1714,12 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     - skip_macro_validation
+    # Pinned to the pre-Xcode-27 stack: this canary branch deliberately leaves the
+    # performance tests unchanged so their measurements stay comparable to main.
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.5.x
+        machine_type_id: g2.mac.4large
   Archive_and_Run_Robo_Test:
     before_run:
     - 1_git_clone_and_post_clone
