@@ -150,7 +150,6 @@
         "HistoryTests\/testTabHistory_tabTrayExperimentOn()",
         "HomePageSettingsTest",
         "HomePageSettingsUITests\/testRecentlyVisited()",
-        "HomePageSettingsUITests\/testTyping()",
         "HomePageUITest",
         "IntegrationTests",
         "IntegrationTests\/testFxASyncBookmark()",

@@ -1958,6 +1958,7 @@
 		D3B6923D1B9F9444004B87A4 /* FindInPageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B6923C1B9F9444004B87A4 /* FindInPageBar.swift */; };
 		D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B6923E1B9F9A58004B87A4 /* FindInPageHelper.swift */; };
 		D3BA41681BD82F2200DA5457 /* XCTestCaseExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */; };
+		DB58110000000000000006 /* SwiftUIViewTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB58110000000000000005 /* SwiftUIViewTestHelpers.swift */; };
 		D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */; };
 		D3BE7B261B054D4400641031 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B251B054D4400641031 /* main.swift */; };
 		D3BE7B461B054F8600641031 /* UITestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B451B054F8600641031 /* UITestAppDelegate.swift */; };
@@ -2027,6 +2028,8 @@
 		DA9FD88624E213CD00168D1E /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9FD88524E213CC00168D1E /* Helpers.swift */; };
 		DA9FD88824E213DD00168D1E /* QuickLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9FD88724E213DC00168D1E /* QuickLink.swift */; };
 		DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACDE995225E537900C8F37F /* VersionSettingTests.swift */; };
+		DB58110000000000000002 /* GenericSelectableItemCellViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB58110000000000000001 /* GenericSelectableItemCellViewTests.swift */; };
+		DB58110000000000000004 /* NavigationBarMiddleButtonSelectionViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB58110000000000000003 /* NavigationBarMiddleButtonSelectionViewTests.swift */; };
 		DAE6DF1B29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE6DF1A29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift */; };
 		DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */; };
 		DF8C6DD72A52EED1007FAAF2 /* ClientSyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8C6DD62A52EED1007FAAF2 /* ClientSyncManagerTests.swift */; };
@@ -11231,6 +11234,7 @@
 		D3B6923C1B9F9444004B87A4 /* FindInPageBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindInPageBar.swift; sourceTree = "<group>"; };
 		D3B6923E1B9F9A58004B87A4 /* FindInPageHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindInPageHelper.swift; sourceTree = "<group>"; };
 		D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCTestCaseExtensions.swift; sourceTree = "<group>"; };
+		DB58110000000000000005 /* SwiftUIViewTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIViewTestHelpers.swift; sourceTree = "<group>"; };
 		D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextMenuHelper.swift; sourceTree = "<group>"; };
 		D3BE7B251B054D4400641031 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		D3BE7B451B054F8600641031 /* UITestAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITestAppDelegate.swift; sourceTree = "<group>"; };
@@ -11616,6 +11620,8 @@
 		DAAE4D2BB25BB3FB7F927CBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		DAC044248882A2485365F9A2 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Menu.strings; sourceTree = "<group>"; };
 		DACDE995225E537900C8F37F /* VersionSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionSettingTests.swift; sourceTree = "<group>"; };
+		DB58110000000000000001 /* GenericSelectableItemCellViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSelectableItemCellViewTests.swift; sourceTree = "<group>"; };
+		DB58110000000000000003 /* NavigationBarMiddleButtonSelectionViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarMiddleButtonSelectionViewTests.swift; sourceTree = "<group>"; };
 		DAD46F3324A1606C001B3967 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		DAD46F3524A1606C001B3967 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		DAE6DF1A29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ZoomPage.swift"; sourceTree = "<group>"; };
@@ -14501,6 +14507,8 @@
 				BEEF00012F00000100000001 /* SearchSettingsTableViewControllerTests.swift */,
 				EDADF7832D70DAF800C39295 /* SettingsTelemetryTests.swift */,
 				DACDE995225E537900C8F37F /* VersionSettingTests.swift */,
+				DB58110000000000000001 /* GenericSelectableItemCellViewTests.swift */,
+				DB58110000000000000003 /* NavigationBarMiddleButtonSelectionViewTests.swift */,
 				FBADD1700000000000000001 /* LaunchPairingFromURLSettingTests.swift */,
 				C2FA00322FFF000100AD1FBD /* ResetTipsSettingTests.swift */,
 				C7F5684BA329455783CCB301 /* AdBlockerSettingTests.swift */,
@@ -17556,6 +17564,7 @@
 				2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */,
 				F84B21D71A090F8100AAB793 /* Supporting Files */,
 				C83B7DD129BBAF52005565C2 /* SurveySurface */,
+				DB58110000000000000005 /* SwiftUIViewTestHelpers.swift */,
 				1DDE3DB42AC360EC0039363B /* TabCellTests.swift */,
 				8AED868428CA7B1200351A50 /* TabManagement */,
 				D525DFB225FBE5E000B18763 /* TabTests.swift */,
@@ -20998,6 +21007,7 @@
 				D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */,
 				0A80C4242F3CD3F300DB85AE /* AppAuthenticatorTests.swift in Sources */,
 				D3BA41681BD82F2200DA5457 /* XCTestCaseExtensions.swift in Sources */,
+				DB58110000000000000006 /* SwiftUIViewTestHelpers.swift in Sources */,
 				8A86DAD8277298DE00D7BFFF /* ClosedTabsStoreTests.swift in Sources */,
 				03D9946A2EE821190081D209 /* TermsOfUseLinkTypeTests.swift in Sources */,
 				ED7A08E12CF679CE0035EC8F /* MockShareTab.swift in Sources */,
@@ -21037,6 +21047,8 @@
 				434CD57829F6FC4500A0D04B /* MockAppAuthenticator.swift in Sources */,
 				8A94418A2CE3E190007FF4E5 /* MockSearchEngineManager.swift in Sources */,
 				DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */,
+				DB58110000000000000002 /* GenericSelectableItemCellViewTests.swift in Sources */,
+				DB58110000000000000004 /* NavigationBarMiddleButtonSelectionViewTests.swift in Sources */,
 				FBADD1700000000000000002 /* LaunchPairingFromURLSettingTests.swift in Sources */,
 				C2FA00332FFF000100AD1FBD /* ResetTipsSettingTests.swift in Sources */,
 				C25017382ECBAE030071506F /* ASTranslationModelsFetcherTests.swift in Sources */,
