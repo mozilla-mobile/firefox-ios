@@ -6,7 +6,7 @@
 public enum QuickAnswersModel: String, Sendable {
     case exa
     case liner
-    
+
     var modelParameter: String {
         return switch self {
         case .exa:
