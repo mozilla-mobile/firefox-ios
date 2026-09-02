@@ -364,6 +364,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168587
+    // Regression
     func testAddNewFolder() {
         app.launch()
         toolbarScreen.tapSettingsMenuButton()
@@ -373,6 +374,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168596
+    // Regression
     func testDeleteEmptyFolderInEditMode() {
         app.launch()
         toolbarScreen.tapSettingsMenuButton()
@@ -424,6 +426,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168649
+    // Regression
     func testDeleteBookmarkContextMenu() {
         app.launch()
         toolbarScreen.assertTabsButtonExists()
@@ -489,6 +492,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306911
+    // Regression
     func testRecentlyBookmarked() {
         app.launch()
         navigator.openURL(path(forTestPage: url_2["url"]!))
@@ -732,6 +736,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168628
+    // Regression
     func testVerifyFolderSpecialCharacters() {
         app.launch()
         toolbarScreen.tapSettingsMenuButton()
@@ -741,6 +746,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168627
+    // Regression
     func testCreateFolderWithVeryLongName() {
         app.launch()
         let longFolderName = "A very long folder name used to verify that the title field " +
@@ -753,6 +759,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168629
+    // Regression
     func testDuplicateFoldersNames() {
         app.launch()
         let folderName = "Sample Folder."
@@ -785,6 +792,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168590
+    // Regression
     func testUserRedirectToMostRecentlyAccessedFolder() {
         app.launch()
         let secondFolder = "Folder2"

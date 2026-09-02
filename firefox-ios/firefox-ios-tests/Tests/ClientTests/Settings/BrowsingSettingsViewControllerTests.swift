@@ -59,6 +59,28 @@ final class BrowsingSettingsViewControllerTests: XCTestCase {
         XCTAssertTrue(hasAdBlocker)
     }
 
+    func testGenerateSettings_whenBackgroundAudioFlagOff_omitsBackgroundAudio() {
+        featureFlags.enabledFlags = []
+        let subject = createSubject()
+
+        let sections = subject.generateSettings()
+        let contentSection = sections.last
+        let hasBackgroundAudio = contentSection?.children.contains(where: { $0 is BackgroundAudioSetting }) ?? false
+
+        XCTAssertFalse(hasBackgroundAudio)
+    }
+
+    func testGenerateSettings_whenBackgroundAudioFlagOn_includesBackgroundAudio() {
+        featureFlags.enabledFlags = [.backgroundAudio]
+        let subject = createSubject()
+
+        let sections = subject.generateSettings()
+        let contentSection = sections.last
+        let hasBackgroundAudio = contentSection?.children.contains(where: { $0 is BackgroundAudioSetting }) ?? false
+
+        XCTAssertTrue(hasBackgroundAudio)
+    }
+
     // MARK: - Helper
     private func createSubject() -> BrowsingSettingsViewController {
         let subject = BrowsingSettingsViewController(profile: profile,

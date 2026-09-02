@@ -131,6 +131,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var layerAccentSubtle: UIColor { NovaMissingToken.color("layerAccentSubtle") }
     var layerInverse: UIColor { NovaMissingToken.color("layerInverse") }
     var layerGlassTintNova: UIColor { NovaMissingToken.color("layerGlassTintNova") }
+    var layerGlassSelectedFill: UIColor { NovaMissingToken.color("layerGlassSelectedFill") }
     var textToast: UIColor { NovaMissingToken.color("textToast") }
     var iconInverted: UIColor { NovaMissingToken.color("iconInverted") }
     var iconOnColorDisabled: UIColor { NovaMissingToken.color("iconOnColorDisabled") }

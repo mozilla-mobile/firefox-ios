@@ -8,6 +8,7 @@ import Common
 import Shared
 import Glean
 
+// TODO: - FXIOS-16664 Add tests to SummarizerTelemetry
 class SummarizerTelemetry {
     private let gleanWrapper: GleanWrapper
     private var summarizationTimerId: GleanTimerId?
@@ -21,10 +22,17 @@ class SummarizerTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.AiSummarize.summarizationRequested, extras: summarizationRequestedExtra)
     }
 
-    func summarizationStarted(lengthWords: Int32, lengthChars: Int32) {
+    func summarizationStarted(
+        lengthWords: Int32,
+        lengthChars: Int32,
+        summaryLanguage: String? = nil,
+        pageLanguage: String? = nil
+    ) {
         let summarizationStartedExtra = GleanMetrics.AiSummarize.SummarizationStartedExtra(
             lengthChars: lengthChars,
-            lengthWords: lengthWords)
+            lengthWords: lengthWords,
+            pageLanguage: pageLanguage,
+            summaryLanguage: summaryLanguage)
         summarizationTimerStart()
         gleanWrapper.recordEvent(for: GleanMetrics.AiSummarize.summarizationStarted, extras: summarizationStartedExtra)
     }
@@ -91,5 +99,9 @@ class SummarizerTelemetry {
 
     func summarizationShakeGestureEnabled(_ shakeGestureEnabled: Bool) {
         GleanMetrics.UserAiSummarize.shakeGestureEnabled.set(shakeGestureEnabled)
+    }
+
+    func summarizationSelectedLanguage(_ language: String) {
+        gleanWrapper.recordString(for: GleanMetrics.UserAiSummarize.selectedLanguage, value: language)
     }
 }

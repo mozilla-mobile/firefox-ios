@@ -16,8 +16,10 @@ enum FeatureFlagID: String, CaseIterable {
     case addressBarMenu
     case adsClient
     case aiKillSwitch
+    case backgroundAudio
     case badCertDomainErrorPage
     case bookmarksSearchFeature
+    case cellularDataRestrictedErrorPage
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
     case downloadLiveActivities
@@ -69,6 +71,7 @@ enum FeatureFlagID: String, CaseIterable {
     case videoIntroOnboarding
     case vpnFeature
     case waybackMachine
+    case webViewDocumentFetchRefactor
 
     /// The user preferences key for features that support user-togglable settings.
     /// Returns `nil` for features that are not user-configurable.
@@ -103,6 +106,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .addressBarMenu,
                 .adsClient,
                 .aiKillSwitch,
+                .backgroundAudio,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
                 .customReaderModeScheme,
@@ -139,7 +143,8 @@ enum FeatureFlagID: String, CaseIterable {
                 .trendingSearches,
                 .unifiedSearch,
                 .vpnFeature,
-                .waybackMachine:
+                .waybackMachine,
+                .webViewDocumentFetchRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil

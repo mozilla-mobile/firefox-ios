@@ -29,6 +29,19 @@ final class HomepageSettingsScreen {
         return settingTable.cells.switches[toggle]
     }
 
+    private var customURLTextField: XCUIElement { sel.CUSTOM_URL_TEXT_FIELD.element(in: app) }
+
+    func typeCustomHomepageURL(_ url: String) {
+        customURLTextField.tapAndTypeText(url)
+        XCTAssertEqual(customURLTextField.value as? String,
+                       url,
+                       "The webpage typed does not match with the one saved")
+    }
+
+    func assertCustomHomepageURLContains(_ url: String) {
+        BaseTestCase().mozWaitForValueContains(customURLTextField, value: url)
+    }
+
     func assertBookmarkToggleExists(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(bookmarkSwitch)
     }

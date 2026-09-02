@@ -31,6 +31,9 @@
 /* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.DetailsPlaceholder.v154" = "Περιγράψτε το ζήτημα λεπτομερώς (προαιρετικό)";
 
+/* Error message shown under the URL field when the address entered has an invalid format, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLError.v155" = "Εισαγάγετε ένα έγκυρο URL";
+
 /* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.URLLabel.v154" = "URL";
 
@@ -43,11 +46,53 @@
 /* Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form. */
 "WebCompatReporter.IssueSection.Title.v154" = "Ζήτημα ιστοτόπου";
 
+/* Bullet on the Report Preview screen, for the amount of memory the device has. */
+"WebCompatReporter.Preview.Data.AvailableMemory.v155" = "Τη διαθέσιμη μνήμη της συσκευής σας";
+
+/* Bullet on the Report Preview screen, for trackers blocked on the reported page. */
+"WebCompatReporter.Preview.Data.BlockedTrackers.v155" = "Τα ονόματα αποκλεισμένων ιχνηλατών σε αυτήν τη σελίδα";
+
+/* Bullet on the Report Preview screen, for the device's own language and region settings. */
+"WebCompatReporter.Preview.Data.DeviceLocale.v155" = "Την κύρια γλώσσα και τη χώρα της συσκευής σας";
+
+/* Bullet on the Report Preview screen, for whether the device has a touchscreen. */
+"WebCompatReporter.Preview.Data.HasTouchscreen.v155" = "Εάν η συσκευή σας διαθέτει οθόνη αφής";
+
+/* Bullet on the Report Preview screen, for the problem picked and the details typed. */
+"WebCompatReporter.Preview.Data.IssueAndDescription.v155" = "Τον τύπο ζητήματος που επιλέξατε και οποιαδήποτε περιγραφή προσθέσατε";
+
+/* Bullet on the Report Preview screen. Only tablet or not is sent, no device make or model. */
+"WebCompatReporter.Preview.Data.IsTablet.v155" = "Εάν η συσκευή σας είναι tablet ή όχι";
+
+/* Bullet on the Report Preview screen, for web frameworks known to break mobile pages. */
+"WebCompatReporter.Preview.Data.PageElements.v155" = "Πληροφορίες σχετικά με τα στοιχεία της σελίδας που είναι γνωστό ότι προκαλούν ζητήματα στον ιστότοπο";
+
+/* Bullet on the Report Preview screen, for a list of the user's preferred languages for websites as they were communicated by the browser to the page */
+"WebCompatReporter.Preview.Data.PageLanguages.v155" = "Τις γλωσσικές προτιμήσεις που έχουν αποσταλεί σε αυτήν τη σελίδα";
+
+/* Bullet on the Report Preview screen. The reported page's address is shown underneath it. */
+"WebCompatReporter.Preview.Data.PageURL.v155" = "Τη διεύθυνση URL της σελίδας";
+
+/* Bullet on the Report Preview screen, for the screen's physical pixels per layout point. */
+"WebCompatReporter.Preview.Data.PixelDensity.v155" = "Την πυκνότητα εικονοστοιχείων της οθόνης σας";
+
+/* Bullet on the Report Preview screen, for whether the page was open in private browsing. */
+"WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155" = "Την κατάσταση της ιδιωτικής περιήγησης: ενεργή ή ανενεργή";
+
+/* Bullet on the Report Preview screen, for the tracking protection strength the user has chosen. */
+"WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155" = "Τη ρύθμιση της Ενισχυμένης προστασίας από καταγραφή για αυτόν τον ιστότοπο";
+
+/* Bullet on the Report Preview screen. Those three versions are only ever sent as tokens inside the user agent, never as fields of their own. %@ is the app name (e.g. Firefox). */
+"WebCompatReporter.Preview.Data.UserAgent.v155" = "Τον πράκτορα χρήστη του προγράμματος περιήγησής σας, που περιλαμβάνει την έκδοση του iOS, την έκδοση του %@ και την έκδοση της μηχανής του προγράμματος περιήγησης";
+
 /* Accessibility label for the page screenshot thumbnail on the Report Preview screen. */
 "WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154" = "Στιγμιότυπο της σελίδας που αναφέρετε. Πατήστε δύο φορές για προβολή σε πλήρη οθόνη.";
 
 /* Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen. */
 "WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154" = "Κλείσιμο";
+
+/* Row on the Report Preview screen that opens the Technical Data screen, and that screen's title. */
+"WebCompatReporter.Preview.TechnicalData.v155" = "Τεχνικά δεδομένα";
 
 /* Title of the Report Preview screen, which shows the data that will be sent with a website issue report. */
 "WebCompatReporter.Preview.Title.v154" = "Προεπισκόπηση αναφοράς";

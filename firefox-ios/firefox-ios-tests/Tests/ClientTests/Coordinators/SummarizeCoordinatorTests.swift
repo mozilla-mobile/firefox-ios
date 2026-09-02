@@ -7,6 +7,7 @@ import Common
 import SummarizeKit
 import Shared
 import ComponentLibrary
+import Glean
 @testable import Client
 
 final class MockSummarizer: SummarizerProtocol, @unchecked Sendable {
@@ -122,6 +123,33 @@ final class SummarizeCoordinatorTests: XCTestCase {
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
     }
 
+    func test_summarizeServiceDidStart_recordsConfigLanguages() throws {
+        let subject = createSubject(config: SummarizerConfig(instructions: "",
+                                                             options: [:],
+                                                             summaryLocale: Locale(identifier: "it"),
+                                                             pageLocale: Locale(identifier: "de")))
+
+        subject.summarizerServiceDidStart("")
+
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras.first as? GleanMetrics.AiSummarize.SummarizationStartedExtra
+        )
+        XCTAssertEqual(savedExtras.summaryLanguage, "it")
+        XCTAssertEqual(savedExtras.pageLanguage, "de")
+    }
+
+    func test_summarizeServiceDidStart_withoutConfig_omitsLanguages() throws {
+        let subject = createSubject()
+
+        subject.summarizerServiceDidStart("")
+
+        let savedExtras = try XCTUnwrap(
+            gleanWrapper.savedExtras.first as? GleanMetrics.AiSummarize.SummarizationStartedExtra
+        )
+        XCTAssertNil(savedExtras.summaryLanguage)
+        XCTAssertNil(savedExtras.pageLanguage)
+    }
+
     func test_summarizeServiceDidComplete_recordsTelemetry() {
         let subject = createSubject()
 
@@ -146,6 +174,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
 
     private func createSubject(
         onRequestOpenURL: ((URL?) -> Void)? = nil,
+        config: SummarizerConfig? = nil,
         trigger: SummarizerTrigger = .mainMenu) -> SummarizeCoordinator {
         let subject = SummarizeCoordinator(browserSnapshot: UIImage(),
                                            browserSnapshotTopOffset: 0.0,
@@ -156,6 +185,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
                                            trigger: trigger,
                                            prefs: prefs,
                                            windowUUID: .XCTestDefaultUUID,
+                                           config: config,
                                            router: router,
                                            gleanWrapper: gleanWrapper,
                                            onRequestOpenURL: onRequestOpenURL)

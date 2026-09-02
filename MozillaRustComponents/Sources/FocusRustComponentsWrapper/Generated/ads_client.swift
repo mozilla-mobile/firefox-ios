@@ -1592,13 +1592,15 @@ public func FfiConverterTypeMozAdsPlacementRequestWithCount_lower(_ value: MozAd
 
 
 public struct MozAdsRequestOptions: Equatable, Hashable {
+    public var blocks: [String]
     public var cachePolicy: MozAdsCachePolicy?
     public var flags: [String: Bool]
     public var ohttp: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(cachePolicy: MozAdsCachePolicy?, flags: [String: Bool] = [:], ohttp: Bool = false) {
+    public init(blocks: [String] = [], cachePolicy: MozAdsCachePolicy?, flags: [String: Bool] = [:], ohttp: Bool = false) {
+        self.blocks = blocks
         self.cachePolicy = cachePolicy
         self.flags = flags
         self.ohttp = ohttp
@@ -1620,6 +1622,7 @@ public struct FfiConverterTypeMozAdsRequestOptions: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsRequestOptions {
         return
             try MozAdsRequestOptions(
+                blocks: FfiConverterSequenceString.read(from: &buf), 
                 cachePolicy: FfiConverterOptionTypeMozAdsCachePolicy.read(from: &buf), 
                 flags: FfiConverterDictionaryStringBool.read(from: &buf), 
                 ohttp: FfiConverterBool.read(from: &buf)
@@ -1627,6 +1630,7 @@ public struct FfiConverterTypeMozAdsRequestOptions: FfiConverterRustBuffer {
     }
 
     public static func write(_ value: MozAdsRequestOptions, into buf: inout [UInt8]) {
+        FfiConverterSequenceString.write(value.blocks, into: &buf)
         FfiConverterOptionTypeMozAdsCachePolicy.write(value.cachePolicy, into: &buf)
         FfiConverterDictionaryStringBool.write(value.flags, into: &buf)
         FfiConverterBool.write(value.ohttp, into: &buf)

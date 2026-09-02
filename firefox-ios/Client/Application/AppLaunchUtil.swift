@@ -39,6 +39,9 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
             DefaultBrowserUtility().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
         }
         DefaultBrowserUtility().migrateDefaultBrowserStatusIfNeeded(isFirstRun: introScreenManager.shouldShowIntroScreen)
+
+        SummarizerPrefsMigration(prefs: profile.prefs).migrateSelectedLanguage()
+
         if #available(iOS 26, *) {
             AppleIntelligenceUtil().processAvailabilityState()
         }
@@ -178,6 +181,7 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
         AppEventQueue.signal(event: .postLaunchDependenciesComplete)
     }
 
+    @MainActor
     private func setUserAgent() {
         // Record the user agent for use by search suggestion clients.
         SearchViewModel.userAgent = UserAgent.getUserAgent()

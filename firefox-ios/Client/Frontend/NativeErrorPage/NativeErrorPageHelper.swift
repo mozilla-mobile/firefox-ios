@@ -7,7 +7,7 @@ import Shared
 import Common
 import Security
 
-class NativeErrorPageHelper {
+class NativeErrorPageHelper: FeatureFlaggable {
     private enum Constants {
         static let certErrorQueryParam = "certerror"
         static let badCertQueryParam = "badcert"
@@ -30,13 +30,18 @@ class NativeErrorPageHelper {
     }
 
     var error: NSError
+    private let cellularDataStateProvider: any CellularDataStateProvider
 
     var errorDescriptionItem: String {
         return error.localizedDescription
     }
 
-    init(error: NSError) {
+    init(
+        error: NSError,
+        cellularDataStateProvider: any CellularDataStateProvider = SystemCellularDataStateProvider.shared
+    ) {
         self.error = error
+        self.cellularDataStateProvider = cellularDataStateProvider
     }
 
     // MARK: - Static Helpers
@@ -58,7 +63,7 @@ class NativeErrorPageHelper {
     /// Returns true when the error is a certificate error caused by a
     /// hostname mismatch (SSL_ERROR_BAD_CERT_DOMAIN / -9843). Other certificate
     /// failures return false so they fall back to the legacy HTML error page
-    private static func isBadCertDomainError(_ error: NSError) -> Bool {
+    static func isBadCertDomainError(_ error: NSError) -> Bool {
         guard isCertificateErrorCode(error.code) else { return false }
         return certStreamErrorCode(from: error) == NativeGeckoCode.badCertDomain.rawValue
     }
@@ -119,6 +124,11 @@ class NativeErrorPageHelper {
     // MARK: - Instance Methods
 
     func parseErrorDetails() -> ErrorPageModel {
+        if featureFlagsProvider.isEnabled(.cellularDataRestrictedErrorPage) &&
+            cellularDataStateProvider.isRestrictedOfflineError(error) {
+            return .cellularDataRestricted
+        }
+
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
             switch error.code {
             case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):

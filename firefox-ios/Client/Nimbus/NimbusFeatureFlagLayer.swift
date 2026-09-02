@@ -57,11 +57,17 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .aiKillSwitch:
             return checkAiKillSwitchFeature()
 
+        case .backgroundAudio:
+            return checkBackgroundAudioFeature()
+
         case .badCertDomainErrorPage:
             return checkBadCertDomainErrorPageFeature()
 
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
+
+        case .cellularDataRestrictedErrorPage:
+            return checkCellularDataRestrictedErrorPageFeature()
 
         case .customReaderModeScheme:
             return checkCustomReaderModeSchemeFeature()
@@ -211,6 +217,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .waybackMachine:
             return checkWaybackMachineFeature()
+
+        case .webViewDocumentFetchRefactor:
+            return checkWebViewDocumentFetchRefactor()
 
         // This feature flag has no Nimbus configuration because it is only tied to a user setting.
         // Requesting Nimbus configuration for it is a developer error.
@@ -437,6 +446,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.adBlockerFeature.value().enabled
     }
 
+    private func checkBackgroundAudioFeature() -> Bool {
+        return nimbus.features.backgroundAudioFeature.value().enabled
+    }
+
     private func checkAdBlockerBadgeFeature() -> Bool {
         return nimbus.features.adBlockerFeature.value().badgeEnabled
     }
@@ -477,11 +490,19 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.waybackMachineFeature.value().enabled
     }
 
+    private func checkWebViewDocumentFetchRefactor() -> Bool {
+        return nimbus.features.webViewDocumentFetchRefactorFeature.value().enabled
+    }
+
     private func checkVPNFeature() -> Bool {
         return nimbus.features.vpnFeature.value().enabled
     }
 
     private func checkPrivacyDashboardFeature() -> Bool {
         return nimbus.features.privacyDashboardFeature.value().enabled
+    }
+
+    private func checkCellularDataRestrictedErrorPageFeature() -> Bool {
+        return nimbus.features.cellularDataRestrictedErrorPageFeature.value().enabled
     }
 }

@@ -62,6 +62,7 @@ public struct PrefsKeys {
     public static let ShowClipboardBar = "showClipboardBar"
     public static let ShowRelayMaskSuggestions = "showRelayMaskSuggestions"
     public static let BlockOpeningExternalApps = "blockOpeningExternalApps"
+    public static let BackgroundAudio = "backgroundAudio"
     public static let BlockAds = "blockAds"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
@@ -90,7 +91,10 @@ public struct PrefsKeys {
         public static let didAgreeTermsOfService = "didAgreeTermOfService"
         public static let summarizeContentFeature = "summarizeContentFeature"
         public static let shakeGestureEnabled = "shakeGestureEnabledKey"
-        public static let selectedLanguage = "selectedLanguage"
+        public static let selectedLanguage = "summarizer.selectedLanguage"
+        /// Legacy pref name used to store the summarizer selected language.
+        /// It is only used to migrate to the new pref `selectedLanguage`
+        public static let legacySelectedLanguage = "selectedLanguage"
     }
 
     public struct AppVersion {

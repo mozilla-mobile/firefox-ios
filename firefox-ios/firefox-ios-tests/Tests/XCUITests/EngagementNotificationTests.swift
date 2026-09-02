@@ -22,6 +22,7 @@ class EngagementNotificationTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307101
+    // Regression
     func testDontAllowNotifications() throws {
         if #unavailable(iOS 17) {
             throw XCTSkip("setUp() fails to remove app intermittently")

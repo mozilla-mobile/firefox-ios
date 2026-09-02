@@ -580,7 +580,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
         // gives us the exact same behaviour as Safari.
         if ["sms", "tel", "facetime", "facetime-audio"].contains(url.scheme) {
-            handleSpecialSchemeNavigation(url: url)
+            handleSpecialSchemeNavigation(url: url, tab: tab)
             decisionHandler(.cancel)
             return
         }
@@ -687,7 +687,10 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.allow)
     }
 
-    private func handleSpecialSchemeNavigation(url: URL) {
+    private func handleSpecialSchemeNavigation(url: URL, tab: Tab) {
+        guard tab.popupThrottler.canShowAlert(type: .externalScheme) else { return }
+        tab.popupThrottler.willShowAlert(type: .externalScheme)
+
         if url.scheme == "sms" { // All the other types show a native prompt
             showExternalAlert(withText: .ExternalSmsLinkConfirmation) { _ in
                 UIApplication.shared.open(url, options: [:])
@@ -937,15 +940,24 @@ extension BrowserViewController: WKNavigationDelegate {
         // we may end up overriding the "Share Page With..." action to share a temp file that is not
         // representative of the contents of the web view.
         if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
-            if response.mimeType == MIMEType.PDF, let request {
+            let webViewDocFetchEnabled = featureFlagsProvider.isEnabled(.webViewDocumentFetchRefactor)
+            if response.mimeType == MIMEType.PDF, let request, !webViewDocFetchEnabled {
                 if !tab.shouldDownloadDocument(request) {
                     return .allow
                 }
                 handlePDFDownloadRequest(request: request, tab: tab, filename: response.suggestedFilename)
                 return .cancel
             }
-            if response.mimeType != MIMEType.HTML, let request {
-                tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
+            if response.mimeType != MIMEType.HTML {
+                if webViewDocFetchEnabled {
+                    // WebView fetch reads the document directly from the view, so no request is required.
+                    tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response)
+                } else if let request {
+                    tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response,
+                                                                     request: request)
+                } else {
+                    tab.temporaryDocument = nil
+                }
             } else {
                 tab.temporaryDocument = nil
             }
@@ -1151,18 +1163,18 @@ extension BrowserViewController: WKNavigationDelegate {
                 let noInternetErrorCode = Int(
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
-                let isWaybackCode = WaybackCodes.isWaybackCode(error.code)
+                let featureFlag = NativeErrorPageFeatureFlag()
 
-                let isNoInternetError = NativeErrorPageFeatureFlag().isNICErrorPageEnabled &&
-                    error.code == noInternetErrorCode
-                let isCertificateError = NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
-                    for: error,
-                    isOtherErrorPagesEnabled: NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
-                )
-                let isShowWayback = NativeErrorPageFeatureFlag().isWaybackEnabled && isWaybackCode
+                let isWaybackError = WaybackCodes.isWaybackCode(error.code)
+                let isNoInternetError = error.code == noInternetErrorCode
+                let isBadCertError = NativeErrorPageHelper.isBadCertDomainError(error)
 
-                if isNoInternetError || isCertificateError || isShowWayback {
-                    if isCertificateError {
+                let shouldShowNoInternetErrorPage = isNoInternetError && featureFlag.isNICErrorPageEnabled
+                let shouldShowBadCertErrorPage = isBadCertError && featureFlag.isBadCertDomainErrorPageEnabled
+                let shouldShowWaybackErrorPage = isWaybackError && featureFlag.isWaybackEnabled
+
+                if shouldShowNoInternetErrorPage || shouldShowBadCertErrorPage || shouldShowWaybackErrorPage {
+                    if isBadCertError {
                         NativeErrorPageHelper.logCertificateErrorDetails(error: error, logger: logger)
                     }
                     // TODO: FXIOS-15800 Move error type determination to NativeErrorPageMiddleware

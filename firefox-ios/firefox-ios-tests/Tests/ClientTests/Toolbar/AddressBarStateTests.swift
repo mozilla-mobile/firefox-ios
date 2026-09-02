@@ -35,7 +35,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, windowUUID)
-        XCTAssertEqual(initialState.navigationActions, [])
+        XCTAssertEqual(initialState.navigationActionsState, NavigationActionsState(windowUUID: windowUUID))
         XCTAssertEqual(initialState.trailingPageActions, [])
         XCTAssertEqual(initialState.leadingPageActions, [])
         XCTAssertEqual(initialState.browserActions, [])
@@ -69,7 +69,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.navigationActions, [])
+        XCTAssertEqual(newState.navigationActionsState, NavigationActionsState(windowUUID: windowUUID))
 
         XCTAssertEqual(newState.leadingPageActions.count, 0)
         XCTAssertEqual(newState.trailingPageActions.count, 0)
@@ -371,7 +371,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .stopLoading)
-        XCTAssertEqual(newState.navigationActions.count, 0)
+        XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
         XCTAssertEqual(newState.leadingPageActions.count, 0)
     }
 
@@ -393,7 +393,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
-        XCTAssertEqual(newState.navigationActions.count, 0)
+        XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
         XCTAssertEqual(newState.leadingPageActions.count, 0)
     }
 
@@ -420,9 +420,9 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .stopLoading)
         XCTAssertEqual(newState.leadingPageActions.count, 0)
 
-        XCTAssertEqual(newState.navigationActions.count, 2)
-        XCTAssertEqual(newState.navigationActions[0].actionType, .back)
-        XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
+        XCTAssertEqual(newState.navigationActionsState.actions.count, 2)
+        XCTAssertEqual(newState.navigationActionsState.actions[0].actionType, .back)
+        XCTAssertEqual(newState.navigationActionsState.actions[1].actionType, .forward)
     }
 
     func test_urlDidChangeAction_withNavigationToolbar_returnsExpectedState() {
@@ -477,7 +477,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.navigationActions.count, 0)
+        XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
     }
 
     func test_backForwardButtonStateChangedAction_withoutNavigationToolbar_returnsExpectedState() {
@@ -485,7 +485,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
-        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        let urlDidChangeState = loadWebsiteAction(state: initialState, isShowingNavigationToolbar: false, reducer: reducer)
         let newState = reducer.legacyReducer(
             urlDidChangeState,
             ToolbarAction(
@@ -497,11 +497,11 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.navigationActions.count, 2)
-        XCTAssertEqual(newState.navigationActions[0].actionType, .back)
-        XCTAssertEqual(newState.navigationActions[0].isEnabled, true)
-        XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
-        XCTAssertEqual(newState.navigationActions[1].isEnabled, false)
+        XCTAssertEqual(newState.navigationActionsState.actions.count, 2)
+        XCTAssertEqual(newState.navigationActionsState.actions[0].actionType, .back)
+        XCTAssertEqual(newState.navigationActionsState.actions[0].isEnabled, true)
+        XCTAssertEqual(newState.navigationActionsState.actions[1].actionType, .forward)
+        XCTAssertEqual(newState.navigationActionsState.actions[1].isEnabled, false)
     }
 
     // MARK: - Translation Configuration
@@ -757,9 +757,9 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.navigationActions.count, 2)
-        XCTAssertEqual(newState.navigationActions[0].actionType, .back)
-        XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
+        XCTAssertEqual(newState.navigationActionsState.actions.count, 2)
+        XCTAssertEqual(newState.navigationActionsState.actions[0].actionType, .back)
+        XCTAssertEqual(newState.navigationActionsState.actions[1].actionType, .forward)
 
         XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.leadingPageActions.count, 0)
@@ -780,15 +780,16 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             initialState,
             ToolbarAction(
                 showMenuWarningBadge: true,
+                isShowingNavigationToolbar: false,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.showMenuWarningBadge
             )
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.navigationActions.count, 2)
-        XCTAssertEqual(newState.navigationActions[0].actionType, .back)
-        XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
+        XCTAssertEqual(newState.navigationActionsState.actions.count, 2)
+        XCTAssertEqual(newState.navigationActionsState.actions[0].actionType, .back)
+        XCTAssertEqual(newState.navigationActionsState.actions[1].actionType, .forward)
 
         XCTAssertEqual(newState.trailingPageActions.count, 0)
 
@@ -855,7 +856,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.navigationActions.count, 0)
+        XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
 
         XCTAssertEqual(newState.leadingPageActions.count, 0)
         XCTAssertEqual(newState.trailingPageActions.count, 0)
@@ -884,7 +885,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.navigationActions.count, 0)
+        XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
 
         XCTAssertEqual(newState.leadingPageActions.count, 0)
         XCTAssertEqual(newState.trailingPageActions.count, 0)
@@ -915,7 +916,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.navigationActions.count, 0)
+        XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
 
         XCTAssertEqual(newState.leadingPageActions.count, 0)
         XCTAssertEqual(newState.trailingPageActions.count, 0)
@@ -992,20 +993,44 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNotEqual(initialState.isAddressBarMinimized, newState.isAddressBarMinimized)
     }
 
-    func test_accessoryViewDidShowAction_returnsExpectedState() {
+    func test_accessoryViewVisibilityChangedAction_whenVisible_returnsExpectedState() {
         setupStore()
         let initialState = ToolbarState(windowUUID: windowUUID)
         let reducer = ToolbarState.reducer
 
         let newState = reducer.modernReducer(
             initialState,
-            ToolbarModernAction.accessoryViewDidShow,
+            ToolbarModernAction.accessoryViewVisibilityChanged(isVisible: true),
             windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.isAccessoryViewVisible, true)
         XCTAssertEqual(newState.isAddressBarMinimized, true)
         XCTAssertNotEqual(initialState.isAddressBarMinimized, newState.isAddressBarMinimized)
+    }
+
+    func test_accessoryViewVisibilityChangedAction_whenNotVisible_doesNotRestoreMinimizedState() {
+        setupStore()
+        var initialState = ToolbarState(windowUUID: windowUUID)
+        let reducer = ToolbarState.reducer
+
+        // Minimize the toolbar first, independently of the accessory view
+        initialState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
+            windowUUID
+        )
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.accessoryViewVisibilityChanged(isVisible: false),
+            windowUUID
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.isAccessoryViewVisible, false)
+        XCTAssertEqual(newState.isAddressBarMinimized, true)
     }
 
     func test_cancelEditOnHomepageAction_withURL_returnsExpectedState() {
@@ -1066,7 +1091,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.navigationActions.count, 0)
+        XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
 
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
@@ -1098,7 +1123,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.navigationActions.count, 0)
+        XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
         XCTAssertEqual(newState.leadingPageActions.count, 0)
         XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 1)
@@ -1114,18 +1139,15 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
     func test_keyboardStateDidChangeAction_returnsExpectedState() {
         setupStore()
-        let initialState = createSubject()
+        let initialState = createSubject().copy(shouldShowKeyboard: true)
         let reducer = addressBarReducer()
 
-        XCTAssertFalse(initialState.shouldShowKeyboard)
+        XCTAssertTrue(initialState.shouldShowKeyboard)
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                shouldShowKeyboard: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange
-            )
+            ToolbarModernAction.didCancelKeyboardRequest,
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
@@ -1322,7 +1344,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             isTranslationsEnabled: toolbarState.isTranslationsEnabled,
             previousTabScreenshot: toolbarState.previousTabScreenshot,
             nextTabScreenshot: toolbarState.nextTabScreenshot,
-            isAddressBarMinimized: toolbarState.isAddressBarMinimized)
+            isAddressBarMinimized: toolbarState.isAddressBarMinimized,
+            isAccessoryViewVisible: toolbarState.isAccessoryViewVisible)
     }
 
     // MARK: StoreTestUtility

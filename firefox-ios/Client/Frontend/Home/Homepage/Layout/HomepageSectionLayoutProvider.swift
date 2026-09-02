@@ -228,7 +228,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     ) -> NSCollectionLayoutSection {
         let itemSize: NSCollectionLayoutSize
         let traitCollection = environment.traitCollection
-        let sectionHeaderConfiguration = MerinoState.Constants.sectionHeaderConfiguration
+        let sectionHeaderConfiguration = SectionHeaderConfiguration.merino
 
         let containerWidth = environment.container.effectiveContentSize.width
         let horizontalInset = UX.leadingInset(traitCollection: traitCollection)
@@ -517,7 +517,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func createSpacerSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let rawSpacerHeight = getRawSpacerHeight(environment: environment)
 
-        let merinoHeaderConfiguration = MerinoState.Constants.sectionHeaderConfiguration
+        let merinoHeaderConfiguration = SectionHeaderConfiguration.merino
         let headerHeight = getStoriesHeaderHeight(sectionHeaderConfiguration: merinoHeaderConfiguration,
                                                   environment: environment)
 
@@ -585,7 +585,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func getPrivacyNoticeSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         // Ensures we should be showing the privacy notice
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
-              state.shouldShowPrivacyNotice else { return 0 }
+              state.privacyNoticeState.shouldShowPrivacyNotice else { return 0 }
 
         var totalHeight: CGFloat = 0
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
@@ -608,7 +608,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             topSites: topSitesState.topSitesData,
             numberOfRows: topSitesState.numberOfRows,
             numberOfTilesPerRow: topSitesState.numberOfTilesPerRow,
-            headerState: TopSitesSectionState.Constants.sectionHeaderConfiguration,
+            headerState: SectionHeaderConfiguration.topSites,
             containerWidth: containerWidth,
             isLandscape: UIDevice.current.orientation.isLandscape,
             shouldShowSection: topSitesState.shouldShowSection,
@@ -643,7 +643,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         // Add header height
         if topSitesState.shouldShowSectionHeader {
             totalHeight += getHeaderHeight(
-                sectionHeaderConfiguration: TopSitesSectionState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: SectionHeaderConfiguration.topSites,
                 environment: environment
             )
         }
@@ -708,7 +708,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             syncedTabConfig: jumpBackInState.mostRecentSyncedTab,
             maxNumberOfLocalTabs: jumpBackInConfig.getMaxNumberOfLocalTabsLayout,
             numberOfLocalTabsToShow: numberOfLocalTabsToShow,
-            headerState: JumpBackInSectionState.Constants.sectionHeaderConfiguration,
+            headerState: SectionHeaderConfiguration.jumpBackIn,
             containerWidth: containerWidth,
             shouldShowSection: jumpBackInState.shouldShowSection,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
@@ -753,7 +753,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         // Add header height
         totalHeight += getHeaderHeight(
-            sectionHeaderConfiguration: JumpBackInSectionState.Constants.sectionHeaderConfiguration,
+            sectionHeaderConfiguration: SectionHeaderConfiguration.jumpBackIn,
             environment: environment
         )
 
@@ -787,7 +787,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return 0
         }
 
-        let searchState = state.searchState
+        let searchState = state.searchBarState
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let measurementKey = HomepageLayoutMeasurementCache.SearchBarMeasurement.Key(
             shouldShowSearchBar: searchState.shouldShowSearchBar,
@@ -903,7 +903,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let key = HomepageLayoutMeasurementCache.BookmarksMeasurement.Key(
             bookmarks: bookmarkState.bookmarks,
-            headerState: BookmarksSectionState.Constants.sectionHeaderConfiguration,
+            headerState: SectionHeaderConfiguration.bookmarks,
             containerWidth: containerWidth,
             shouldShowSection: bookmarkState.shouldShowSection,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
@@ -940,7 +940,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         // Get the rest of the section's height and cache and return the results
         let headerHeight = getHeaderHeight(
-            sectionHeaderConfiguration: BookmarksSectionState.Constants.sectionHeaderConfiguration,
+            sectionHeaderConfiguration: SectionHeaderConfiguration.bookmarks,
             environment: environment
         )
         let totalHeight = headerHeight

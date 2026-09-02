@@ -1652,6 +1652,20 @@ extension String {
                 value: "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi.",
                 comment: "On error page, this is the description for no internet connection.")
         }
+        public struct CellularDataRestricted {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.CellularDataRestricted.TitleLabel.v156",
+                tableName: "NativeErrorPage",
+                value: "Cellular data is turned off for %@.",
+                comment: "On error page, title shown when the app can't connect because cellular data is turned off " +
+                         "for this specific app in iOS settings. %@ is the app name (e.g. Firefox).")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.CellularDataRestricted.Description.v156",
+                tableName: "NativeErrorPage",
+                value: "Connect to Wi-Fi or go to iOS Settings and turn on cellular data for %@.",
+                comment: "On error page, message shown when the app can't connect because cellular data is turned off " +
+                         "for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox).")
+        }
         public struct GenericError {
             public static let TitleLabel = MZLocalizedString(
                 key: "NativeErrorPage.GenericError.TitleLabel.v131",
@@ -1738,7 +1752,7 @@ extension String {
                 value: "The site may be busy or unavailable. Try again later. If other pages won’t load, check your Wi-Fi or data connection. %@ can also search the Wayback Machine for an earlier version of this page.",
                 comment: "Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox).")
             public static let SearchLabel = MZLocalizedString(
-                key: "NativeErrorPage.Wayback.Error.Search.v155",
+                key: "NativeErrorPage.Wayback.Error.SearchWayback.v155",
                 tableName: "NativeErrorPage",
                 value: "View Archived Version",
                 comment: "Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine.")
@@ -3013,6 +3027,12 @@ extension String {
                 tableName: "Settings",
                 value: "Block Ads",
                 comment: "Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements."
+            )
+            public static let BackgroundAudio = MZLocalizedString(
+                key: "Settings.Browsing.BackgroundAudio.Title.v156",
+                tableName: "Settings",
+                value: "Background Audio",
+                comment: "Title for the Background Audio toggle in the Browsing settings page. When enabled, audio from web pages continues playing after the app is backgrounded."
             )
 
             public struct AdBlocker {
@@ -4513,11 +4533,17 @@ extension String {
                 value: "Describe the issue in detail (optional)",
                 comment: "Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form."
             )
-            public static let DetailsAccessibilityLabel = MZLocalizedString(
-                key: "WebCompatReporter.Fields.DetailsAccessibilityLabel.v154",
+            public static let ChooseIssueTypeAccessibilityHint = MZLocalizedString(
+                key: "WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint.v156",
                 tableName: "WebCompatReporter",
-                value: "Describe the issue in detail",
-                comment: "Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form."
+                value: "Choose an issue type first",
+                comment: "Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no issue type has been selected yet, in the Report a Website Issue form."
+            )
+            public static let ChooseSubOptionAccessibilityHint = MZLocalizedString(
+                key: "WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156",
+                tableName: "WebCompatReporter",
+                value: "Choose a specific problem for your selected issue type",
+                comment: "Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form."
             )
         }
         public struct AdditionalInfo {
@@ -4695,6 +4721,26 @@ extension String {
             value: "Loading Document",
             comment: "The accessibility label read when loading a document in the web view's custom document loading UI."
         )
+    }
+}
+
+// MARK: - Google Lens
+extension String {
+    public struct GoogleLens {
+        /// The full-screen interstitial shown while a Google Lens image search is loading.
+        public struct Interstitial {
+            public static let LoadingLabel = MZLocalizedString(
+                key: "GoogleLens.Interstitial.LoadingLabel.v156",
+                tableName: "GoogleLens",
+                value: "Finding Image Results…",
+                comment: "Label shown next to a loading spinner on the full screen state that appears while an image is being searched with Google Lens.")
+
+            public static let CancelButtonTitle = MZLocalizedString(
+                key: "GoogleLens.Interstitial.CancelButtonTitle.v156",
+                tableName: "GoogleLens",
+                value: "Cancel",
+                comment: "Title of the button that stops an in-progress Google Lens image search and returns the user to what they were looking at before.")
+        }
     }
 }
 
@@ -9373,6 +9419,11 @@ extension String {
                 tableName: "WebCompatReporter",
                 value: "URL",
                 comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form.")
+             public static let DetailsAccessibilityLabel = MZLocalizedString(
+                key: "WebCompatReporter.Fields.DetailsAccessibilityLabel.v154",
+                tableName: "WebCompatReporter",
+                value: "Describe the issue in detail",
+                comment: "Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form.")
         }
     }
 }

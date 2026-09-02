@@ -184,6 +184,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     // MARK: - Nova only tokens
     var layerAccentSubtle: UIColor { base.layerAccentSubtle }
     var layerInverse: UIColor { base.layerInverse }
+    var layerGlassSelectedFill: UIColor { base.layerGlassSelectedFill }
     var textToast: UIColor { base.textToast }
     var iconOnColorDisabled: UIColor { base.iconOnColorDisabled }
     var iconPrivate: UIColor { base.iconPrivate }

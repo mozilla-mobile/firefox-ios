@@ -385,7 +385,9 @@ class Tab: NSObject,
             UserScriptManager.shared.injectUserScriptsIntoWebView(
                 webView,
                 nightMode: nightMode,
-                noImageMode: noImageMode
+                noImageMode: noImageMode,
+                backgroundAudio: featureFlagsProvider.isEnabled(.backgroundAudio)
+                    && BackgroundAudioHelper.isEnabled(profile.prefs)
             )
         }
     }
@@ -401,7 +403,9 @@ class Tab: NSObject,
             UserScriptManager.shared.injectUserScriptsIntoWebView(
                 webView,
                 nightMode: nightMode,
-                noImageMode: noImageMode
+                noImageMode: noImageMode,
+                backgroundAudio: featureFlagsProvider.isEnabled(.backgroundAudio)
+                    && BackgroundAudioHelper.isEnabled(profile.prefs)
             )
         }
     }
@@ -569,7 +573,9 @@ class Tab: NSObject,
         UserScriptManager.shared.injectUserScriptsIntoWebView(
             webView,
             nightMode: nightMode,
-            noImageMode: noImageMode
+            noImageMode: noImageMode,
+            backgroundAudio: featureFlagsProvider.isEnabled(.backgroundAudio)
+                && BackgroundAudioHelper.isEnabled(profile.prefs)
         )
 
         tabDelegate?.tab(self, didCreateWebView: webView)

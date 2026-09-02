@@ -127,8 +127,18 @@ final class WebCompatReportViewController: UINavigationController,
             closeButtonAccessibilityLabel: .WebCompatReporter.Sheet.CloseButtonAccessibilityLabel,
             previewButtonTitle: .WebCompatReporter.Sheet.PreviewButton,
             isPreviewEnabled: state.canPreview,
+            previewAccessibilityHint: categorySelectionHint(for: state),
             sections: makeSections(from: state)
         )
+    }
+
+    /// Omits the URL error, which is already announced under the URL field.
+    private static func categorySelectionHint(for state: WebCompatReporterState) -> String? {
+        guard let selectedCategory = state.selectedCategory else {
+            return .WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint
+        }
+        guard !selectedCategory.subOptions.isEmpty, state.selectedSubOptionID == nil else { return nil }
+        return .WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint
     }
 
     private enum SectionID: String {
@@ -184,7 +194,7 @@ final class WebCompatReportViewController: UINavigationController,
             rows: [
                 WebCompatReportViewModel.Row(
                     id: RowID.additionalDetails.rawValue,
-                    title: .WebCompatReporter.Fields.DetailsAccessibilityLabel,
+                    title: .WebCompatReporter.Fields.DetailsPlaceholder,
                     kind: .detailsField(
                         text: state.additionalDetails,
                         placeholder: .WebCompatReporter.Fields.DetailsPlaceholder
@@ -236,7 +246,8 @@ final class WebCompatReportViewController: UINavigationController,
                     id: RowID.send.rawValue,
                     title: .WebCompatReporter.SendButton.Title,
                     kind: .sendButton(isEnabled: state.canSubmit),
-                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.sendButton
+                    a11yIdentifier: AccessibilityIdentifiers.WebCompatReporter.sendButton,
+                    accessibilityHint: categorySelectionHint(for: state)
                 )
             ]
         )

@@ -332,6 +332,13 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
             let summarizerTelemetry = SummarizerTelemetry()
             summarizerTelemetry.summarizationEnabled(summarizerNimbusUtils.isSummarizeFeatureToggledOn)
             summarizerTelemetry.summarizationShakeGestureEnabled(summarizerNimbusUtils.isShakeGestureEnabled)
+
+            if summarizerNimbusUtils.isLanguageExpansionEnabled {
+                let languageConfiguration = summarizerNimbusUtils.languageExpansionConfiguration()
+                summarizerTelemetry.summarizationSelectedLanguage(
+                    languageConfiguration.selectedPreference(prefs: prefs).saveValue
+                )
+            }
         }
 
         // Record Google Lens user preference

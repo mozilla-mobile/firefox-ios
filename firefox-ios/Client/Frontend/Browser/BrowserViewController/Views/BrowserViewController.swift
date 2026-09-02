@@ -25,6 +25,7 @@ import struct MozillaAppServices.Login
 import enum MozillaAppServices.BookmarkRoots
 import struct MozillaAppServices.VisitObservation
 import enum MozillaAppServices.VisitType
+import enum MozillaAppServices.OAuthScope
 
 class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
@@ -632,24 +633,28 @@ class BrowserViewController: UIViewController,
     // MARK: - Translucency and blur helpers
 
     func updateBlurViews(scrollOffset: CGFloat? = nil) {
-        guard toolbarHelper.shouldBlur() else {
-            topBlurView.alpha = 0
-            bottomBlurView.isHidden = true
-            header.isClearBackground = false
-            overKeyboardContainer.isClearBackground = false
-            bottomContainer.isClearBackground = false
-            contentContainer.mask = nil
-            return
-        }
-
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let isKeyboardShowing = keyboardState != nil
-
         let isToolbarCollapsed = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID
         )?.isAddressBarMinimized == true
+
+        guard toolbarHelper.shouldBlur() else {
+            topBlurView.alpha = 0
+            bottomBlurView.isHidden = true
+            header.isClearBackground = false
+            // With blur off this container paints the chrome behind a bottom address bar, except while
+            // minimized — the remaining pill has to float over the page, not sit on an opaque band.
+            overKeyboardContainer.isClearBackground = isToolbarCollapsed
+            // Nothing else re-themes it while scrolling with blur off.
+            overKeyboardContainer.applyTheme(theme: theme)
+            bottomContainer.isClearBackground = false
+            contentContainer.mask = nil
+            return
+        }
+
+        let isKeyboardShowing = keyboardState != nil
         let isScrollAlphaZero = if #available(iOS 26.0, *) { isToolbarCollapsed } else { false }
 
         // Prevent homepage from showing behind the keyboard when content isn't scrollable.
@@ -1345,7 +1350,7 @@ class BrowserViewController: UIViewController,
             HomepageState.self,
             for: .homepage,
             window: windowUUID
-        )?.searchState.shouldShowSearchBar ?? false
+        )?.searchBarState.shouldShowSearchBar ?? false
 
         guard shouldShowSearchBar, !isEditing, contentContainer.hasHomepage else {
             guard addressToolbarContainer.isHidden == true else { return }
@@ -2086,26 +2091,32 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let isNICErrorCode = url.absoluteString.contains(String(Int(
-            CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
-        let isWaybackErrorCode: Bool = {
+        let featureFlag = NativeErrorPageFeatureFlag()
+
+        let isNoInternetError = url.absoluteString.contains(
+            String(Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue))
+        )
+        let isWaybackError: Bool = {
             guard
                 let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
                 let codeString = components.queryItems?.first(where: { $0.name == "code" })?.value,
                 let code = Int(codeString)
             else { return false }
+
             return WaybackCodes.isWaybackCode(code)
         }()
-        let noInternetConnectionEnabled = isNICErrorCode &&
-            NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
-        let isCertificateError = NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled &&
-            NativeErrorPageHelper.isBadCertDomainErrorURL(url)
-        let isShowWayback = isWaybackErrorCode &&
-            NativeErrorPageFeatureFlag().isWaybackEnabled
+        let isBadCertError = NativeErrorPageHelper.isBadCertDomainErrorURL(url)
+
+        let shouldShowNoInternetErrorPage =
+            isNoInternetError && featureFlag.isNativeErrorPageEnabled
+        let shouldShowBadCertErrorPage =
+            isBadCertError && featureFlag.isBadCertDomainErrorPageEnabled
+        let shouldShowWaybackErrorPage =
+            isWaybackError && featureFlag.isWaybackEnabled
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && (noInternetConnectionEnabled || isCertificateError || isShowWayback) {
+        } else if isErrorURL && (shouldShowNoInternetErrorPage || shouldShowBadCertErrorPage || shouldShowWaybackErrorPage) {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
@@ -3393,6 +3404,30 @@ class BrowserViewController: UIViewController,
                                     navItemText: .Close,
                                     vcBeingPresented: vcToPresent,
                                     topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
+    }
+
+    func presentPairingViewController(_ pairingURL: URL) {
+        guard let accountManager = profile.rustFxA.accountManager else { return }
+
+        accountManager.beginPairingAuthentication(
+            pairingUrl: pairingURL.absoluteString,
+            entrypoint: "pairing_\(FxAEntrypoint.fxaDeepLinkNavigation.rawValue)",
+            scopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session]
+        ) { [weak self] result in
+            guard let self, case .success(let supplicantURL) = result else { return }
+            let viewController = FxAWebViewController(
+                pageType: .qrCode(url: supplicantURL),
+                profile: profile,
+                dismissalStyle: .dismiss,
+                deepLinkParams: FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: [:])
+            )
+            presentThemedViewController(
+                navItemLocation: .Left,
+                navItemText: .Close,
+                vcBeingPresented: viewController,
+                topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad
+            )
+        }
     }
 
     // MARK: - Handle Deeplink open URL / query
@@ -4788,9 +4823,7 @@ extension BrowserViewController: TabManagerDelegate {
                                          canGoForward: selectedTab.canGoForward,
                                          windowUUID: windowUUID)
 
-        if let url = selectedTab.webView?.url, !InternalURL.isValid(url: url) {
-            addressToolbarContainer.hideProgressBar()
-        }
+        restoreProgressBar(for: selectedTab)
 
         // When the newly selected tab is the homepage or another internal tab,
         // we need to explicitly set the reader mode state to be unavailable.
@@ -4812,6 +4845,23 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         } else if isSwipingTabsEnabled {
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+        }
+    }
+
+    // Restores the progress bar state for the newly selected tab.
+    // Shows the bar at the tab's current load progress if it is still loading a real URL,
+    // otherwise hides it.
+    private func restoreProgressBar(for tab: Tab) {
+        guard let webView = tab.webView else {
+            addressToolbarContainer.hideProgressBar()
+            return
+        }
+
+        let isInternalURL = webView.url.map { InternalURL.isValid(url: $0) } ?? true
+        if !isInternalURL && webView.isLoading {
+            addressToolbarContainer.updateProgressBar(progress: webView.estimatedProgress)
+        } else {
+            addressToolbarContainer.hideProgressBar()
         }
     }
 
@@ -5044,13 +5094,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let isEditing = toolbarState?.addressToolbar.isEditing == true
         if !isEditing {
-            store.dispatch(
-                ToolbarAction(
-                    shouldShowKeyboard: false,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.keyboardStateDidChange
-                )
-            )
+            store.dispatch(ToolbarModernAction.didCancelKeyboardRequest, forWindowUUID: windowUUID)
         }
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
                                               doesFindInPageBarExist: iOS15FindInPageBar != nil)

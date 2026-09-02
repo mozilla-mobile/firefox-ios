@@ -59,6 +59,9 @@ enum Route {
     /// - Parameter params: An instance of `FxALaunchParams` containing the parameters for the sign-in.
     case fxaSignIn(params: FxALaunchParams)
 
+    /// Represents a validated Mozilla Accounts pairing URL opened from outside Firefox.
+    case fxaPairing(url: URL)
+
     /// Represents a default browser route that takes a `DefaultBrowserSection` value indicating
     /// the section to be displayed.
     ///
