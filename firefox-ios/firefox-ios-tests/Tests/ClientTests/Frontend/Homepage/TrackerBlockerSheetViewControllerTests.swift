@@ -256,6 +256,20 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(try XCTUnwrap(icon(in: row)).tintColor, theme.colors.iconSecondary)
     }
 
+    // MARK: - Weekly Count Accessibility
+
+    func test_configureFilledState_readsOutTheCountAndHeaderAsOneSentence() throws {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.configure(with: .filled)
+        let weeklyCount = try XCTUnwrap(TrackerBlockerSheetState.filled.weeklyCount)
+        XCTAssertEqual(view(subject, withID: A11y.weeklyCountLabel)?.accessibilityLabel,
+                       String(format: .PrivacyDashboard.HeaderLabelAccessibilityLabel,
+                              weeklyCount.formatted(.number)))
+        // The count already reads the header's copy, so the header isn't read a second time.
+        XCTAssertEqual(view(subject, withID: A11y.headerLabel)?.isAccessibilityElement, false)
+    }
+
     // MARK: - Category row accessibility
 
     func test_categoryRow_withCount_readsOutTheCategoryAndItsCount() {

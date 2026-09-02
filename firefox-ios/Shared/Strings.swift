@@ -2464,6 +2464,12 @@ extension String {
             value: "Trackers blocked this week",
             comment: "On the Privacy Dashboard popup, the text for the header when we have blocked some trackers this week. This is going to have, above it, in bold letters, the number of trackers blocked this week."
         )
+        public static let HeaderLabelAccessibilityLabel = MZLocalizedString(
+            key: "PrivacyDashboard.HeaderLabelAccessibilityLabel.v156",
+            tableName: "PrivacyDashboard",
+            value: "%@ trackers blocked this week",
+            comment: "On the Privacy Dashboard popup, the accessibility label read out for the weekly count. The count and the header below it are two separate labels on screen, but are read out as this one sentence. The placeholder (%@) is how many trackers we've blocked this week, in a localized format (provided by Swift's built in number localization)."
+        )
         public static let CrossSiteTrackers = MZLocalizedString(
             key: "PrivacyDashboard.CrossSiteTrackers.v155",
             tableName: "PrivacyDashboard",

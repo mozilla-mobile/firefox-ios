@@ -318,11 +318,11 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
             weeklyCountLabel.isHidden = false
             weeklyCountLabel.text = countText
             // The count and the header read as one sentence, so the count carries both for VoiceOver.
-            weeklyCountLabel.accessibilityLabel = "\(countText) \(String.PrivacyDashboard.HeaderLabel)"
-
+            weeklyCountLabel.accessibilityLabel = String(format: .PrivacyDashboard.HeaderLabelAccessibilityLabel,
+                                                         countText)
             headerLabel.text = .PrivacyDashboard.HeaderLabel
             headerLabel.font = FXFontStyles.Regular.body.scaledFont()
-            headerLabel.isAccessibilityElement = true
+            headerLabel.isAccessibilityElement = false
         } else {
             weeklyCountLabel.isHidden = true
             headerLabel.text = state.emptyMessage

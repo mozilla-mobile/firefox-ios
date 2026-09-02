@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Shared
 import XCTest
 
 @testable import Client
@@ -122,13 +121,8 @@ final class TrackerBlockerSheetStateProviderTests: XCTestCase {
     }
 
     private func createSubject(store: MockTrackerBlockStatsStore) -> TrackerBlockerSheetStateProvider {
-        return TrackerBlockerSheetStateProvider(statsStore: store, dateProvider: MockDateProvider(date: now))
+        return TrackerBlockerSheetStateProvider(statsStore: store, dateProvider: MockDateProvider(fixedDate: now))
     }
-}
-
-private struct MockDateProvider: DateProvider {
-    let date: Date
-    func now() -> Date { return date }
 }
 
 private final class MockTrackerBlockStatsStore: TrackerBlockStatsStore {
