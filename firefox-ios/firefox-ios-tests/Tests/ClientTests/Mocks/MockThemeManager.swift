@@ -12,6 +12,12 @@ class MockThemeManager: ThemeManager {
 
     var resolvedThemeCalledCount = 0
 
+    /// - Parameter currentTheme: the theme every lookup returns. Pass a Nova theme (e.g. `NovaLightTheme()`) to
+    ///   exercise code paths gated on `Theme.isNova`.
+    init(currentTheme: Theme = LightTheme()) {
+        self.currentThemeStorage = currentTheme
+    }
+
     func getCurrentTheme(for window: UUID?) -> Theme {
         getCurrentThemeCallCount += 1
         return currentThemeStorage
