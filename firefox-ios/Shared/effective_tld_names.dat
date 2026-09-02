@@ -11305,10 +11305,6 @@ cpserver.com
 // Submitted by Ofer Kalaora <postmaster@activetrail.com>
 activetrail.biz
 
-// Adaptable.io : https://adaptable.io
-// Submitted by Mark Terrel <support@adaptable.io>
-adaptable.app
-
 // addr.tools : https://addr.tools/
 // Submitted by Brian Shea <publicsuffixlist@addr.tools>
 myaddr.dev
@@ -11348,7 +11344,7 @@ beep.pl
 // Aiven : https://aiven.io/
 // Submitted by Aiven Security Team <security+appdomains@aiven.io>
 aiven.app
-aivencloud.com
+*.aivencloud.com
 
 // Akamai : https://www.akamai.com/
 // Submitted by Akamai Team <publicsuffixlist@akamai.com>
@@ -12358,6 +12354,12 @@ antagonist.cloud
 // Anthropic : https://www.anthropic.com/
 // Submitted by Sid Bidasaria <security@anthropic.com>
 claude.app
+claudeusercontent.com
+frame.claudeusercontent.com
+
+// Anysphere Inc : https://cursor.com
+// Submitted by Benson Liu <security@cursor.com>
+*.cursorusercontent.com
 
 // Apigee : https://apigee.com/
 // Submitted by Apigee Security Team <security@apigee.com>
@@ -12767,6 +12769,11 @@ store.cv
 // Codeberg e. V. : https://codeberg.org
 // Submitted by Moritz Marquardt <git@momar.de>
 codeberg.page
+
+// CodePen : https://codepen.io
+// Submitted by Stephen Shaw <support@codepen.io>
+codepen.app
+codepen.dev
 
 // CodeSandbox B.V. : https://codesandbox.io
 // Submitted by Ives van Hoorne <abuse@codesandbox.io>
@@ -14023,6 +14030,10 @@ onhercules.app
 hercules-app.com
 hercules-dev.com
 
+// here.now : https://here.now/
+// Submitted by Adam Ludwin <hello@here.now>
+here.now
+
 // Heroku : https://www.heroku.com/
 // Submitted by Shumon Huque <public-dns@salesforce.com>
 herokuapp.com
@@ -14203,7 +14214,8 @@ botdash.xyz
 
 // IONOS SE : https://www.ionos.com/
 // IONOS Group SE : https://www.ionos-group.com/
-// Submitted by Henrik Willert <security@ionos.com>
+// Submitted by Anton Mehlmann <security@ionos.com>
+online-server.cloud
 apps-1and1.com
 live-website.com
 webspace-host.com
@@ -15626,6 +15638,9 @@ scbl.pl-waw.scw.cloud
 scalebook.scw.cloud
 smartlabeling.scw.cloud
 dedibox.fr
+scw.site
+ams.scw.site
+waw.scw.site
 
 // schokokeks.org GbR : https://schokokeks.org/
 // Submitted by Hanno Böck <hanno@schokokeks.org>
