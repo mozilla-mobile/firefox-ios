@@ -2467,8 +2467,8 @@ extension String {
         public static let HeaderLabelAccessibilityLabel = MZLocalizedString(
             key: "PrivacyDashboard.HeaderLabelAccessibilityLabel.v156",
             tableName: "PrivacyDashboard",
-            value: "%@ trackers blocked this week",
-            comment: "On the Privacy Dashboard popup, the accessibility label read out for the weekly count. The count and the header below it are two separate labels on screen, but are read out as this one sentence. The placeholder (%@) is how many trackers we've blocked this week, in a localized format (provided by Swift's built in number localization)."
+            value: "Trackers blocked this week: %@",
+            comment: "On the Privacy Dashboard popup, the accessibility label read out for the weekly count. The count and the header below it are two separate labels on screen, but are read out as this one sentence. The placeholder (%@) is how many trackers we've blocked this week."
         )
         public static let CrossSiteTrackers = MZLocalizedString(
             key: "PrivacyDashboard.CrossSiteTrackers.v155",
@@ -2497,8 +2497,8 @@ extension String {
         public static let CategoryAccessibilityLabel = MZLocalizedString(
             key: "PrivacyDashboard.CategoryAccessibilityLabel.v156",
             tableName: "PrivacyDashboard",
-            value: "%1$@, %2$@ blocked",
-            comment: "On the Privacy Dashboard popup, the accessibility label read out for one of the tracker category rows. The first placeholder (%1$@) is the category's name, such as Fingerprinters. The second placeholder (%2$@) is how many trackers of that category we've blocked this week, in a localized format (provided by Swift's built in number localization)."
+            value: "%1$@, blocked: %2$@",
+            comment: "On the Privacy Dashboard popup, the accessibility label read out for one of the tracker category rows. The first placeholder (%1$@) is the category's name, such as Fingerprinters. The second placeholder (%2$@) is how many trackers of that category we've blocked this week."
         )
         public static let TotalTrackersBlockedSince = MZLocalizedString(
             key: "PrivacyDashboard.TotalTrackersBlockedSince.v155",
