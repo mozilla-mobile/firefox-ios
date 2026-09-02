@@ -2488,6 +2488,12 @@ extension String {
             value: "Social Media Trackers",
             comment: "On the Privacy Dashboard popup, the title text for the bar & label showing how many social media trackers we've blocked."
         )
+        public static let CategoryAccessibilityLabel = MZLocalizedString(
+            key: "PrivacyDashboard.CategoryAccessibilityLabel.v156",
+            tableName: "PrivacyDashboard",
+            value: "%1$@, %2$@ blocked",
+            comment: "On the Privacy Dashboard popup, the accessibility label read out for one of the tracker category rows. The first placeholder (%1$@) is the category's name, such as Fingerprinters. The second placeholder (%2$@) is how many trackers of that category we've blocked this week, in a localized format (provided by Swift's built in number localization)."
+        )
         public static let TotalTrackersBlockedSince = MZLocalizedString(
             key: "PrivacyDashboard.TotalTrackersBlockedSince.v155",
             tableName: "PrivacyDashboard",

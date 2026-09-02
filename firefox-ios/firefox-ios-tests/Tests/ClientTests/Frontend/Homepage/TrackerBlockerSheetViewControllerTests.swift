@@ -256,6 +256,24 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertEqual(try XCTUnwrap(icon(in: row)).tintColor, theme.colors.iconSecondary)
     }
 
+    // MARK: - Category row accessibility
+
+    func test_categoryRow_withCount_readsOutTheCategoryAndItsCount() {
+        let row = makeRow(count: 1234)
+
+        XCTAssertEqual(row.accessibilityLabel,
+                       String(format: .PrivacyDashboard.CategoryAccessibilityLabel,
+                              String.PrivacyDashboard.Fingerprinters,
+                              1234.formatted(.number)))
+    }
+
+    /// The empty state has no count to read out, so the row is just its category.
+    func test_categoryRow_withoutCount_readsOutTheCategoryOnly() {
+        let row = makeRow(count: nil)
+
+        XCTAssertEqual(row.accessibilityLabel, .PrivacyDashboard.Fingerprinters)
+    }
+
     // MARK: - Category row layout
 
     func test_categoryRow_withoutCount_collapsesProgressBarHeight() {
