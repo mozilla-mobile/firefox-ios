@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Shared
 import UIKit
 
 /// The content shown by `TrackerBlockerSheetViewController`.
@@ -38,13 +39,12 @@ struct TrackerBlockerSheetState {
                 }
             }
 
-            // TODO: FXIOS-16429 - Replace with localized strings once available.
-            var placeholderTitle: String {
+            var localizedTitle: String {
                 switch self {
-                case .crossSiteTrackingCookies: return "Cross-Site Tracking Cookies"
-                case .fingerprinters: return "Fingerprinters"
-                case .trackingContent: return "Tracking Content"
-                case .socialMediaTrackers: return "Social Media Trackers"
+                case .crossSiteTrackingCookies: return .PrivacyDashboard.CrossSiteTrackers
+                case .fingerprinters: return .PrivacyDashboard.Fingerprinters
+                case .trackingContent: return .PrivacyDashboard.TrackingContent
+                case .socialMediaTrackers: return .PrivacyDashboard.SocialTrackers
                 }
             }
         }
@@ -56,7 +56,7 @@ struct TrackerBlockerSheetState {
 
         init(kind: Kind, count: Int?, title: String? = nil) {
             self.kind = kind
-            self.title = title ?? kind.placeholderTitle
+            self.title = title ?? kind.localizedTitle
             self.count = count
         }
     }
@@ -69,8 +69,9 @@ struct TrackerBlockerSheetState {
         let sinceDate: String
 
         var countText: String { count.formatted(.number) }
-        // TODO: FXIOS-16429 - Replace with a localized format string once available.
-        var text: String { "\(countText) since \(sinceDate) 🎉" }
+        var text: String {
+            String(format: .PrivacyDashboard.TotalTrackersBlockedSince, countText, sinceDate)
+        }
     }
 
     /// Trackers blocked this week. `nil` puts the sheet in its empty state.
@@ -92,12 +93,12 @@ struct TrackerBlockerSheetState {
 }
 
 extension TrackerBlockerSheetState {
-    // TODO: FXIOS-16429 - Replace the message with a localized string once available.
     /// What the sheet shows until it is handed real blocked-tracker data: every category listed, no counts.
     static var empty: TrackerBlockerSheetState {
         TrackerBlockerSheetState(
             weeklyCount: nil,
-            emptyMessage: "Firefox blocks trackers as you browse, you'll see them here.",
+            emptyMessage: String(format: .PrivacyDashboard.HeaderLabelForNoTrackersBlocked,
+                                 AppName.shortName.rawValue),
             categories: Category.Kind.allCases.map { Category(kind: $0, count: nil) },
             total: nil
         )

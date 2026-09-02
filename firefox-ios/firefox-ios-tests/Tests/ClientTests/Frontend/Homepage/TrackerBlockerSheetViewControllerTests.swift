@@ -304,7 +304,7 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
     func test_categoryRow_placesCountInlineWithProgressBar() throws {
         let row = laidOutRow(count: 12)
 
-        let titleFrame = try frame(of: XCTUnwrap(label(in: row, withText: "Fingerprinters")), in: row)
+        let titleFrame = try frame(of: XCTUnwrap(label(in: row, withText: .PrivacyDashboard.Fingerprinters)), in: row)
         let countFrame = try frame(of: XCTUnwrap(label(in: row, withText: 12.formatted(.number))), in: row)
         let barFrame = try frame(
             of: XCTUnwrap(allSubviews(in: row).first { $0 is TrackerBlockerProgressBarView }),
