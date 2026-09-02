@@ -6,6 +6,15 @@
 public enum QuickAnswersModel: String, Sendable {
     case exa
     case liner
+    
+    var modelParameter: String {
+        return switch self {
+        case .exa:
+            self.rawValue
+        case .liner:
+            "liner-answers"
+        }
+    }
 
     /// The user-facing name of the model.
     public var displayName: String {

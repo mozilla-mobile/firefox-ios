@@ -18,11 +18,11 @@ public struct EmptyProviderFields: Codable, Sendable {
 
 /// Provider-specific data for Quick Answers (using exa endpoint)
 public struct QuickAnswersProviderFields: Codable, Sendable {
-    public let citations: [Citation]?
+    public let references: [Citation]?
 }
 
 public struct Citation: Codable, Sendable {
-    public let id: String
+    public let id: String?
     public let title: String?
     public let url: String?
     public let image: String?
@@ -33,11 +33,11 @@ public struct Citation: Codable, Sendable {
         case title
         case url
         case image
-        case favicon
+        case favicon = "faviconUrl"
     }
 
     public init(
-        id: String,
+        id: String? = nil,
         title: String? = nil,
         url: String? = nil,
         image: String? = nil,
