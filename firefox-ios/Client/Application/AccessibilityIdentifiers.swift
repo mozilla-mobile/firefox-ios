@@ -330,6 +330,18 @@ struct AccessibilityIdentifiers {
             static let containerPill = "TrackerBlockerModule.containerPill"
             static let shieldIcon = "TrackerBlockerModule.shieldIcon"
             static let titleLabel = "TrackerBlockerModule.titleLabel"
+
+            struct Sheet {
+                static let closeButton = "TrackerBlockerModule.Sheet.closeButton"
+                static let shieldIcon = "TrackerBlockerModule.Sheet.shieldIcon"
+                static let weeklyCountLabel = "TrackerBlockerModule.Sheet.weeklyCountLabel"
+                static let headerLabel = "TrackerBlockerModule.Sheet.headerLabel"
+                static let categoriesCard = "TrackerBlockerModule.Sheet.categoriesCard"
+                static let totalPill = "TrackerBlockerModule.Sheet.totalPill"
+                static func categoryRow(_ index: Int) -> String {
+                    return "TrackerBlockerModule.Sheet.categoryRow.\(index)"
+                }
+            }
         }
     }
 
