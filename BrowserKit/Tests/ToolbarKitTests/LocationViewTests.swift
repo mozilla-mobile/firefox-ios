@@ -100,6 +100,27 @@ final class LocationViewTests: XCTestCase {
         XCTAssertEqual(subject.searchEngineContentView.alpha, 1, message)
     }
 
+    // MARK: - Resuming Editing
+    /// Regression test for FXIOS-16590: retapping the location view while it's already editing
+    /// (e.g. the keyboard was dismissed by scrolling the homepage) must still notify the delegate.
+    func testLocationTextFieldDidBeginEditing_whenAlreadyEditing_stillNotifiesDelegate() {
+        let subject = createSubject()
+        subject.configure(makeConfig(url: nil, isEditing: true), delegate: delegate)
+
+        subject.locationTextFieldDidBeginEditing(UITextField())
+
+        XCTAssertEqual(delegate.didBeginEditingCallCount, 1)
+    }
+
+    func testLocationTextFieldDidBeginEditing_whenNotEditing_notifiesDelegate() {
+        let subject = createSubject()
+        subject.configure(makeConfig(url: nil, isEditing: false), delegate: delegate)
+
+        subject.locationTextFieldDidBeginEditing(UITextField())
+
+        XCTAssertEqual(delegate.didBeginEditingCallCount, 1)
+    }
+
     // MARK: - Helpers
     /// Puts both icons at an alpha no expected value matches, so the assertions fail unless the
     /// code under test actually writes them.
@@ -149,9 +170,13 @@ private extension LocationView {
 
 @MainActor
 private final class MockLocationViewDelegate: LocationViewDelegate {
+    var didBeginEditingCallCount = 0
+
     func locationViewDidEnterText(_ text: String) {}
     func locationViewDidClearText() {}
-    func locationViewDidBeginEditing(_ text: String, shouldShowSuggestions: Bool) {}
+    func locationViewDidBeginEditing(_ text: String, shouldShowSuggestions: Bool) {
+        didBeginEditingCallCount += 1
+    }
     func locationViewDidSubmitText(_ text: String) {}
     func locationViewDidTapSearchEngine<T: SearchEngineView>(_ searchEngine: T) {}
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]? { return nil }

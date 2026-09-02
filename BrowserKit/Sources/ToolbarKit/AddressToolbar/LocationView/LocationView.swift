@@ -728,14 +728,17 @@ final class LocationView: UIView,
     }
 
     func locationTextFieldDidBeginEditing(_ textField: UITextField) {
-        guard !isEditing else { return }
-        updateUIForSearchEngineDisplay(isURLTextFieldCentered: isURLTextFieldCentered)
         let searchText = searchTerm != nil ? searchTerm : urlAbsolutePath
+        if !isEditing {
+            updateUIForSearchEngineDisplay(isURLTextFieldCentered: isURLTextFieldCentered)
 
-        // `attributedText` property is set to nil to remove all formatting and truncation set before.
-        textField.attributedText = nil
-        textField.text = searchText
-
+            // `attributedText` property is set to nil to remove all formatting and truncation set before.
+            textField.attributedText = nil
+            textField.text = searchText
+        }
+        // Always notify, even if `isEditing` was already true, this fires when the text field
+        // regains first responder after the keyboard was dismissed (e.g. scrolling the
+        // homepage), which is the only path that restores `shouldShowKeyboard` in that case.
         delegate?.locationViewDidBeginEditing(searchText ?? "", shouldShowSuggestions: searchTerm != nil)
     }
 

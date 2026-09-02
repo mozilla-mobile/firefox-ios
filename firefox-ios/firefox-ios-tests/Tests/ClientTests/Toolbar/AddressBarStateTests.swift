@@ -1154,6 +1154,41 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.shouldShowKeyboard)
     }
 
+    /// Regression test for FXIOS-16590: scrolling the homepage while still editing hides the
+    /// keyboard (`cancelEditOnHomepage`) but must not permanently leave `shouldShowKeyboard` at `false`
+    func test_cancelEditOnHomepageThenResumeEditing_restoresShouldShowKeyboard() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        let didStartEditingAction = ToolbarAction(
+            searchTerm: nil,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didStartEditingUrl
+        )
+        let editingState = reducer.legacyReducer(urlDidChangeState, didStartEditingAction)
+        XCTAssertTrue(editingState.isEditing)
+        XCTAssertTrue(editingState.shouldShowKeyboard)
+
+        let scrolledState = reducer.legacyReducer(
+            editingState,
+            ToolbarAction(
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.cancelEditOnHomepage
+            )
+        )
+        XCTAssertTrue(scrolledState.isEditing)
+        XCTAssertFalse(scrolledState.shouldShowKeyboard)
+
+        // Resuming: the text field regains first responder while `isEditing` is already true,
+        // which re-dispatches `didStartEditingUrl`.
+        let resumedState = reducer.legacyReducer(scrolledState, didStartEditingAction)
+
+        XCTAssertTrue(resumedState.isEditing)
+        XCTAssertTrue(resumedState.shouldShowKeyboard)
+    }
+
     func test_clearSearchAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = addressBarReducer()
