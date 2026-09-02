@@ -335,6 +335,13 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator27.0-arm64.xctestrun
     - deploy-to-bitrise-io@2: {}
+    # Larger machine for the 5 parallel smoke shards only; the app default stays
+    # g2.mac.4large. Parallel UI testing on the edge stack is the most contended
+    # workload here, so it benefits most from the extra CPU and RAM.
+    meta:
+      bitrise.io:
+        stack: osx-xcode-27.0.x-edge
+        machine_type_id: g2.mac.4x-large
   firefox_scheme_build_for_test:
     description: Build Firefox scheme and shard XCUITests for parallel execution
     before_run:
