@@ -25,7 +25,6 @@ import struct MozillaAppServices.Login
 import enum MozillaAppServices.BookmarkRoots
 import struct MozillaAppServices.VisitObservation
 import enum MozillaAppServices.VisitType
-import enum MozillaAppServices.OAuthScope
 
 class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
@@ -266,6 +265,9 @@ class BrowserViewController: UIViewController,
 
     var navigationHintDoubleTapTimer: Timer?
     var googleLensTipObservationTask: Task<Void, Never>?
+
+    /// Outstanding wait for the account manager before the pairing modal can present.
+    private var pairingWaitToken: ActionToken?
     weak var googleLensTipViewController: UIViewController?
     private(set) lazy var navigationContextHintVC: ContextualHintViewController = {
         let navigationViewProvider = ContextualHintViewProvider(forHintType: .navigation, with: profile)
@@ -509,6 +511,9 @@ class BrowserViewController: UIViewController,
             unsubscribeFromRedux()
             stopObservingAllWebViews()
             googleLensTipObservationTask?.cancel()
+            if let pairingWaitToken {
+                AppEventQueue.cancelAction(token: pairingWaitToken)
+            }
         }
     }
 
@@ -3403,27 +3408,37 @@ class BrowserViewController: UIViewController,
     }
 
     func presentPairingViewController(_ pairingURL: URL) {
-        guard let accountManager = profile.rustFxA.accountManager else { return }
-
-        accountManager.beginPairingAuthentication(
-            pairingUrl: pairingURL.absoluteString,
-            entrypoint: "pairing_\(FxAEntrypoint.fxaDeepLinkNavigation.rawValue)",
-            scopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session]
-        ) { [weak self] result in
-            guard let self, case .success(let supplicantURL) = result else { return }
-            let viewController = FxAWebViewController(
-                pageType: .qrCode(url: supplicantURL),
-                profile: profile,
-                dismissalStyle: .dismiss,
-                deepLinkParams: FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: [:])
-            )
-            presentThemedViewController(
-                navItemLocation: .Left,
-                navItemText: .Close,
-                vcBeingPresented: viewController,
-                topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad
-            )
+        // Without an account manager the web view never loads its first page, so the modal would
+        // present empty with no error and no way out. A cold-launch deep link can arrive before the
+        // account manager finishes initializing, so wait for it rather than dropping the route.
+        pairingWaitToken = AppEventQueue.wait(for: .accountManagerInitialized) { [weak self] in
+            ensureMainThread { [weak self] in
+                self?.pairingWaitToken = nil
+                self?.presentPairingWebView(pairingURL)
+            }
         }
+    }
+
+    private func presentPairingWebView(_ pairingURL: URL) {
+        guard profile.rustFxA.accountManager != nil else {
+            logger.log("Cannot present the pairing flow without an account manager",
+                       level: .warning,
+                       category: .sync)
+            return
+        }
+
+        let viewController = FxAWebViewController(
+            pageType: .pairingV2(url: pairingURL),
+            profile: profile,
+            dismissalStyle: .dismiss,
+            deepLinkParams: FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: [:])
+        )
+        presentThemedViewController(
+            navItemLocation: .Left,
+            navItemText: .Close,
+            vcBeingPresented: viewController,
+            topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad
+        )
     }
 
     // MARK: - Handle Deeplink open URL / query
