@@ -1,0 +1,84 @@
+name: Rebase Xcode 27 canary branch onto main
+
+# Keeps the Xcode 27 / iOS 27 canary branch current with main so its daily
+# Bitrise run reflects the latest code. See MTE-6112.
+#
+# The force-push that follows the rebase is what triggers Bitrise: bitrise.yml on
+# the canary branch has a trigger_map entry for push_branch on that branch, which
+# starts pipeline_build_and_test on the osx-xcode-27.0.x-edge stack.
+#
+# This file has to live on the default branch: GitHub only fires `schedule`
+# triggers for workflows on the default branch, even though the job itself
+# operates on another branch.
+
+on:
+  schedule:
+    # 11:00 UTC = 07:00 America/New_York while EDT is in effect (06:00 during EST;
+    # GitHub cron has no timezone support, so the local hour shifts with DST).
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+    inputs:
+      branchName:
+        description: 'Canary branch to rebase onto main'
+        required: true
+        default: 'cs/mte-6112-xcode27-firefox-only'
+
+permissions:
+  contents: write
+
+jobs:
+  rebase:
+    runs-on: ubuntu-latest # lightweight: this job only moves git refs
+    env:
+      CANARY_BRANCH: ${{ github.event.inputs.branchName || 'cs/mte-6112-xcode27-firefox-only' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history: a rebase needs the merge base with main.
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.branchName || 'cs/mte-6112-xcode27-firefox-only' }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Rebase onto main and push
+        run: |
+          set -euo pipefail
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+          git fetch --prune origin main "$CANARY_BRANCH"
+
+          BEFORE=$(git rev-parse HEAD)
+          echo "canary at ${BEFORE}, origin/main at $(git rev-parse origin/main)"
+
+          if git merge-base --is-ancestor origin/main HEAD; then
+              echo "Canary already contains origin/main; nothing to rebase."
+              echo "rebased=false" >> "$GITHUB_ENV"
+              exit 0
+          fi
+
+          if ! git rebase origin/main; then
+              echo "::error::Rebase onto origin/main hit a conflict. Conflicted paths:"
+              git --no-pager diff --name-only --diff-filter=U || true
+              git rebase --abort
+              exit 1
+          fi
+
+          # --force-with-lease so a concurrent push to the canary is not clobbered.
+          git push --force-with-lease origin "HEAD:refs/heads/$CANARY_BRANCH"
+
+          echo "rebased ${BEFORE} -> $(git rev-parse HEAD); Bitrise triggered."
+          echo "rebased=true" >> "$GITHUB_ENV"
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+              echo "### Xcode 27 canary rebase"
+              echo ""
+              echo "- Branch: \`${CANARY_BRANCH}\`"
+              echo "- Rebased onto main: \`${rebased:-unknown}\`"
+              echo ""
+              echo "A successful rebase force-pushes the branch, which starts"
+              echo "pipeline_build_and_test on Bitrise (osx-xcode-27.0.x-edge)."
+          } >> "$GITHUB_STEP_SUMMARY"
