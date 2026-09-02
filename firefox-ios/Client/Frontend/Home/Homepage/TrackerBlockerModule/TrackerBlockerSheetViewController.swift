@@ -58,8 +58,8 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
     // MARK: - UI
     private let backgroundGradientView: GradientView = .build()
 
-    private lazy var closeButton: CloseButton = .build { [weak self] button in
-        button.addTarget(self, action: #selector(self?.closeButtonTapped), for: .touchUpInside)
+    private lazy var closeButton: CloseButton = .build { [unowned self] button in
+        button.addTarget(self, action: #selector(self.closeButtonTapped), for: .touchUpInside)
     }
 
     private let contentScrollView: UIScrollView = .build { scrollView in
@@ -322,7 +322,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
 
             headerLabel.text = "Trackers blocked this week"
             headerLabel.font = FXFontStyles.Regular.body.scaledFont()
-            headerLabel.isAccessibilityElement = false
+            headerLabel.isAccessibilityElement = true
         } else {
             weeklyCountLabel.isHidden = true
             headerLabel.text = state.emptyMessage
