@@ -35,6 +35,14 @@ final class ReduxIntegrationTests: XCTestCase {
         fakeReduxViewController = createAndLoadViewController()
     }
 
+    override func tearDown() async throws {
+        fakeReduxViewController = nil
+        mockMiddleware = nil
+        mockState = nil
+        store = nil
+        try await super.tearDown()
+    }
+
     // MARK: Test Legacy Actions
 
     // This test will fail if actions are not completely processed before the next action is fired (i.e. action queuing).

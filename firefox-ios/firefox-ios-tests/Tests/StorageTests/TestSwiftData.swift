@@ -28,6 +28,13 @@ class TestSwiftData: XCTestCase {
         XCTAssertNil(addSite(table, url: "http://url0", title: "title0"), "Added url0.")
     }
 
+    override func tearDownWithError() throws {
+        swiftData = nil
+        testDB = nil
+        urlCounter = 1
+        try super.tearDownWithError()
+    }
+
     func testDefaultSettings() {
         let error = writeDuringRead()
         XCTAssertNil(error, "Insertion succeeded")
