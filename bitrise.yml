@@ -901,7 +901,14 @@ workflows:
                 exit 0
                 FILES_CHANGED=$(git diff --name-only $BITRISE_GIT_BRANCH..."$BITRISE_GIT_COMMIT")
             else
-                FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
+                # Branch pushes (no PR) leave $BITRISEIO_GIT_BRANCH_DEST empty, and Bitrise
+                # clones only the pushed commit - so origin/main may be missing entirely or
+                # present without a common ancestor, either of which makes the diff below
+                # fail. Fetch it, and tolerate failure: an empty FILES_CHANGED takes the
+                # "no files changed" path below and skips the blacklist check rather than
+                # failing the workflow and skipping the build and tests.
+                git fetch --no-tags origin main 2>/dev/null || true
+                FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT" 2>/dev/null || true)
             fi
 
             # Manual triggers leave empty commits.
