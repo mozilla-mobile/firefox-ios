@@ -191,7 +191,7 @@ class CreditCardsTests: BaseTestCase {
         tapCardName()
         nameOnCard.clearText()
         typeCardName(name: updatedName)
-        app.buttons["Save"].waitAndTap()
+        tapSaveAndWaitForCardFormToClose()
         // The name of the card is saved without issues
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[updatedName])
         // Go to an saved credit card and change the credit card number
@@ -204,7 +204,7 @@ class CreditCardsTests: BaseTestCase {
         tapCardNr()
         clearTextUntilEmpty(element: cardNr)
         typeCardNr(cardNo: cards[1])
-        app.buttons["Save"].waitAndTap()
+        tapSaveAndWaitForCardFormToClose()
         // The credit card number is saved without issues
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1111"))
         // Reach autofill website
@@ -358,7 +358,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToNotExist(app.otherElements.staticTexts["Enter a valid expiration date"])
         mozWaitForElementToExist(saveButton)
         XCTAssertTrue(saveButton.isEnabled)
-        saveButton.waitAndTap()
+        tapSaveAndWaitForCardFormToClose()
         // The credit card is saved
         let cardsInfo = ["Test", "5/40"]
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1252"))
@@ -596,6 +596,13 @@ class CreditCardsTests: BaseTestCase {
         expiration.typeText(exprDate)
     }
 
+    /// Taps "Save" and waits for the card form to be dismissed. The form is presented as a form
+    /// sheet, so on iPad the list behind it stays visible and cannot be used as a barrier.
+    func tapSaveAndWaitForCardFormToClose() {
+        initCardFields()
+        app.buttons[creditCardsStaticTexts.AddCreditCard.save].tapUntilElementDisappears(cardNr)
+    }
+
     private func validateAutofillCardInfo(cardNr: String, expYear: String, expMonth: String, name: String) {
         if #available(iOS 18, *) {
             XCTAssertEqual(app.textFields["Card Number:"].value! as? String, cardNr)
@@ -765,7 +772,7 @@ class CreditCardsTests: BaseTestCase {
             retryExpirationNumber(expirationDate: expirationDate)
             mozWaitForElementToExist(saveButton)
         }
-        saveButton.waitAndTap()
+        tapSaveAndWaitForCardFormToClose()
     }
 
     private func addCreditCard_TAE(name: String, cardNumber: String, expirationDate: String) {
@@ -790,7 +797,7 @@ class CreditCardsTests: BaseTestCase {
             retryExpirationNumber(expirationDate: expirationDate)
             mozWaitForElementToExist(saveButton)
         }
-        saveButton.waitAndTap()
+        tapSaveAndWaitForCardFormToClose()
     }
 
     private func retryOnCardNumber(cardNumber: String) {

@@ -219,6 +219,39 @@ extension XCUIElement {
         return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
     }
 
+    /// Waits until the element is gone. Returns false on timeout instead of failing.
+    @discardableResult
+    func waitUntilGone(timeout: TimeInterval = TIMEOUT) -> Bool {
+        let predicate = NSPredicate(format: "exists == false")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: self)
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    /// Re-taps until `element` goes away, since a tap on a view that is presented as a form sheet
+    /// is silently dropped while the sheet settles. Returns false instead of failing when it stays.
+    @discardableResult
+    func tapUntilElementDisappears(
+        _ element: XCUIElement,
+        timeout: TimeInterval? = TIMEOUT,
+        disappearTimeout: TimeInterval = 5,
+        tapAttempts: Int = 3
+    ) -> Bool {
+        self.mozWaitForElementToExist(timeout: timeout)
+        var attempts = tapAttempts
+        repeat {
+            if !element.exists {
+                return true
+            }
+            waitUntilHittable(timeout: disappearTimeout)
+            self.tap(force: true)
+            if element.waitUntilGone(timeout: disappearTimeout) {
+                return true
+            }
+            attempts -= 1
+        } while attempts > 0
+        return !element.exists
+    }
+
     /// Re-taps until the element reports keyboard focus, since a tap is swallowed while the
     /// keyboard animates. Returns false instead of failing when focus is never acquired.
     @discardableResult
