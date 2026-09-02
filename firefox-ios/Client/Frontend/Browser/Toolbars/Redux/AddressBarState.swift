@@ -522,9 +522,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
-        // Declared once and reused below (including in the `.copy(isEditing:)` call) so the actions
-        // computed here can never drift out of sync with the isEditing value this handler commits to.
-        let isEditing = true // this action always puts the address bar into editing mode
+        // This action always puts the address bar into editing mode.
+        // Declared once and reused so the actions computed here can never drift out of sync
+        let isEditing = true
 
         let leadingPageActions = LeadingPageActionsBuilder.getActions(
             action: action,
@@ -553,9 +553,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let searchTerm = toolbarAction.searchTerm ?? state.searchTerm
         let locationText = searchTerm ?? state.url?.absoluteString
         let isEmptySearch = locationText == nil || locationText?.isEmpty == true
-        // Declared once and reused below (including in the `.copy(isEditing:)` call) so the actions
-        // computed here can never drift out of sync with the isEditing value this handler commits to.
-        let isEditing = true // this action always puts the address bar into editing mode
+        // This action always puts the address bar into editing mode.
+        // Declared once and reused so the actions computed here can never drift out of sync
+        let isEditing = true
 
         let leadingPageActions = LeadingPageActionsBuilder.getActions(
             action: action,
@@ -597,9 +597,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let url = toolbarAction.url ?? state.url
         let isEmptySearch = url == nil
-        // Declared once and reused below (including in the `.copy(isEditing:)` call) so the actions
-        // computed here can never drift out of sync with the isEditing value this handler commits to.
-        let isEditing = false // this action always leaves editing mode
+        // This action always leaves editing mode. Declared once and reused so the actions computed here
+        // can never drift out of sync
+        let isEditing = false
 
         let leadingPageActions = LeadingPageActionsBuilder.getActions(
             action: action,
@@ -628,9 +628,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
-        // Declared once and reused below (including in the `.copy(isEditing:)` call) so the actions
-        // computed here can never drift out of sync with the isEditing value this handler commits to.
-        let isEditing = true // this action always puts the address bar into editing mode
+        // This action always puts the address bar into editing mode.
+        // Declared once and reused so the actions computed here can never drift out of sync
+        let isEditing = true
 
         let leadingPageActions = LeadingPageActionsBuilder.getActions(
             action: action,

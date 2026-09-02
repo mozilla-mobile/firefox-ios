@@ -6,6 +6,7 @@ import Common
 import Redux
 import ToolbarKit
 
+/// TODO: Temporarily used in Reducer side will be moved to UI side next
 /// Builds the address bar's leading page actions (share + translate icon), shown on real
 /// websites, not the homepage, and not while editing. Every input is already
 /// owned by `AddressBarState`, so there's nothing here to persist across dispatches.
