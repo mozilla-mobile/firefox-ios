@@ -13,11 +13,9 @@ name: Rebase Xcode 27 canary branch onto main
 
 on:
   schedule:
-    # GitHub cron is UTC-only, so fire at both candidate hours and let the job's
-    # timezone guard drop the wrong one. That pins the run to 07:00
-    # America/New_York year-round instead of drifting an hour with DST.
-    - cron: '0 11 * * *' # 07:00 America/New_York during EDT
-    - cron: '0 12 * * *' # 07:00 America/New_York during EST
+    # 06:00 GMT daily. GitHub cron is UTC-only, which matches GMT, so this needs
+    # no DST handling.
+    - cron: '0 6 * * *'
   workflow_dispatch:
     inputs:
       branchName:
@@ -34,18 +32,6 @@ jobs:
     env:
       CANARY_BRANCH: ${{ github.event.inputs.branchName || 'cs/mte-6112-xcode27-firefox-only' }}
     steps:
-      # Both cron entries fire year-round; only the one matching 07:00 local
-      # should proceed. Manual dispatch always proceeds.
-      - name: Skip unless it is 07:00 America/New_York
-        if: github.event_name == 'schedule'
-        run: |
-          LOCAL_HOUR=$(TZ=America/New_York date +%H)
-          echo "07:00 target; America/New_York hour is ${LOCAL_HOUR}"
-          if [ "$LOCAL_HOUR" != "07" ]; then
-              echo "Not 07:00 local (DST duplicate); stopping."
-              exit 1
-          fi
-
       - uses: actions/checkout@v4
         with:
           # Full history: a rebase needs the merge base with main.
