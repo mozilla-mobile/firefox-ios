@@ -403,6 +403,7 @@
         "NewTabSettingsTest\/testChangeNewTabSettingsShowFirefoxHome_tabTrayExperimentOff()",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowFirefoxHome_tabTrayExperimentOff_swipingTabsExperimentOff()",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowFirefoxHome_tabTrayExperimentOff_swipingTabsExperimentOn()",
+        "NewTabSettingsTest\/testKeyboardRaisedWhenBlankTabOpenedFromContextMenusAndWidget()",
         "NightModeTests",
         "O_AddressesTests\/testAddNewAddressCityFilled()",
         "O_AddressesTests\/testAddNewAddressCountry()",
