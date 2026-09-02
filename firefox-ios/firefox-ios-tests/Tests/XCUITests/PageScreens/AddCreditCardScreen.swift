@@ -145,11 +145,13 @@ final class AddCreditCardScreen {
             BaseTestCase().mozWaitForElementToExist(creditCard_SaveButton)
         }
 
-        creditCard_SaveButton.waitAndTap()
-        // We need to dismiss the number pad first on iPad()
-        if BaseTestCase().iPad() {
-            creditCard_SaveButton.tapIfExists()
-        }
+        tapSaveAndWaitForFormToClose()
+    }
+
+    /// Taps "Save" and waits for the card form to be dismissed. The form is presented as a form
+    /// sheet, so on iPad the list behind it stays visible and cannot be used as a barrier.
+    func tapSaveAndWaitForFormToClose() {
+        creditCard_SaveButton.tapUntilElementDisappears(sel.CARD_NUMBER_FIELD_BUTTON.element(in: app))
     }
 
     func interactWithCreditCardForm() {
