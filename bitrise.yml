@@ -162,11 +162,8 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
     - script@1:
         title: Detect number of warnings
-        # Threshold raised to 52 in generate-metrics.sh for Xcode 27's new diagnostics
-        # (FXIOS-16729). Also non-blocking: 52 is an exact-equality pass, so one new
-        # warning would otherwise fail this step and skip the test steps entirely,
-        # which would defeat the purpose of this branch.
-        is_skippable: true
+        # TODO: Fix the number of warnings reported by Xcode 27
+        # https://mozilla-hub.atlassian.net/browse/FXIOS-16729
         is_always_run: true
         inputs:
         - content: |
@@ -270,9 +267,6 @@ workflows:
         is_always_run: true
     - script@1:
         title: Run Danger 2
-        # danger-js on the 27 edge stack cannot reach the GitHub API (old bundled undici
-        # vs newer Node), so this always fails here. Non-blocking.
-        is_skippable: true
         timeout: 360
         inputs:
         - content: |
