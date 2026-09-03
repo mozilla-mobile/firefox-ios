@@ -118,10 +118,11 @@ enum ToolbarModernAction: ModernAction {
     /// `accessoryViewVisibilityChanged`.
     case keyboardDidHide
 
-    /// Whether the address bar's own keyboard should be shown while editing. `false` when the
+    /// Action fired when the keyboard state changes specifically whether
+    /// the address bar's keyboard should be shown while editing. shouldShow is `false` when the
     /// keyboard hides (or a search engine is selected) while isEditing. `true` when the keyboard
     /// genuinely finishes presenting while still editing. Also restores `shouldShowKeyboard` after it
-    /// was set to `false` by a path that doesn't fully leave overlay mode (e.g. scrolling the
+    /// was set to `false` by a path that doesn't fully leave overlay mode (like scrolling the
     /// homepage mid-edit via `cancelEditOnHomepage`)
     case didKeyboardRequestChange(shouldShow: Bool)
 }

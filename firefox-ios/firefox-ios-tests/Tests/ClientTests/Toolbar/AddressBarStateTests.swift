@@ -1171,7 +1171,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.shouldShowKeyboard)
     }
 
-    /// Regression test for FXIOS-16590: scrolling the homepage while still editing hides the
+    /// Regression test for FXIOS-16741: scrolling the homepage while still editing hides the
     /// keyboard (`cancelEditOnHomepage`) but must not permanently leave `shouldShowKeyboard` at
     /// `false`, once the keyboard genuinely finishes presenting again while still editing
     /// (`BrowserViewController.keyboardHelper(_:keyboardDidShowWithState:)` dispatches
