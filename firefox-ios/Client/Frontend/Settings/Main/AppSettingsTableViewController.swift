@@ -278,6 +278,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
         }
         sendTechnicalDataSetting = sendTechnicalDataSettings
 
+        // Technical data is the only setting that may drive experiment participation
+        Experiments.setTelemetrySetting(profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
+
         let sendDailyUsagePingSettings = SendDataSetting(
             prefs: profile.prefs,
             prefKey: AppConstants.prefSendDailyUsagePing,
