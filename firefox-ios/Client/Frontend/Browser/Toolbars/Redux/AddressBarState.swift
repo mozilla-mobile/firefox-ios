@@ -745,9 +745,13 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isLoading = isLoadingChangeAction ? toolbarAction?.isLoading : addressBarState.isLoading
         let hasAlternativeLocationColor: Bool
         if let toolbarAction {
-            hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction)
+            hasAlternativeLocationColor = shouldUseAlternativeLocationColor(
+                action: toolbarAction,
+                isNovaDesignEnabled: addressBarState.isNovaDesignEnabled
+            )
         } else {
-            hasAlternativeLocationColor = toolbarState.toolbarPosition == .top
+            hasAlternativeLocationColor = !addressBarState.isNovaDesignEnabled
+                && toolbarState.toolbarPosition == .top
                 && !toolbarState.isShowingTopTabs
                 && toolbarState.isShowingNavigationToolbar
         }
@@ -815,7 +819,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
         let canSummarize = isSummarizeModeAction || isReaderModeAction ? action.canSummarize : addressBarState.canSummarize
         let hasEmptySearchField = isEmptySearch ?? addressBarState.isEmptySearch
-        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: action)
+        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(
+            action: action,
+            isNovaDesignEnabled: addressBarState.isNovaDesignEnabled
+        )
 
         guard !hasEmptySearchField, // When the search field is empty we show no actions
               !isEditing
@@ -956,7 +963,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     @MainActor
-    private static func shouldUseAlternativeLocationColor(action: ToolbarAction) -> Bool {
+    private static func shouldUseAlternativeLocationColor(action: ToolbarAction, isNovaDesignEnabled: Bool) -> Bool {
+        guard !isNovaDesignEnabled else { return false }
+
         guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return false }
 
