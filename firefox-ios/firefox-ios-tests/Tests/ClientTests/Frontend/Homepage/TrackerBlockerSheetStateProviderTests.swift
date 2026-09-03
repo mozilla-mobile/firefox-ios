@@ -15,6 +15,7 @@ final class TrackerBlockerSheetStateProviderTests: XCTestCase {
         let state = createSubject(store: store).sheetState()
 
         XCTAssertTrue(state.isEmpty)
+        XCTAssertEqual(state.presentation, .empty)
         XCTAssertNil(state.weeklyCount)
         XCTAssertNil(state.total)
         XCTAssertEqual(state.categories.count, TrackerBlockerSheetState.Category.Kind.allCases.count)
@@ -35,6 +36,7 @@ final class TrackerBlockerSheetStateProviderTests: XCTestCase {
         let state = createSubject(store: store).sheetState()
 
         XCTAssertFalse(state.isEmpty)
+        XCTAssertEqual(state.presentation, .filled)
         XCTAssertEqual(state.weeklyCount, 210)
         XCTAssertNil(state.emptyMessage)
         XCTAssertEqual(counts(in: state), [100, 60, 40, 10])
@@ -84,6 +86,7 @@ final class TrackerBlockerSheetStateProviderTests: XCTestCase {
         let state = createSubject(store: store).sheetState()
 
         XCTAssertFalse(state.isEmpty)
+        XCTAssertEqual(state.presentation, .weeklyReset)
         XCTAssertEqual(state.weeklyCount, 0)
         XCTAssertEqual(state.total?.count, 5305)
         XCTAssertEqual(counts(in: state), [0, 0, 0, 0])

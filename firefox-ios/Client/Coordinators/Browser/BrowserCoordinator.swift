@@ -63,6 +63,7 @@ final class BrowserCoordinator: BaseCoordinator,
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let googleLensService: GoogleLensServicing
+    private lazy var trackerBlockerTelemetry = TrackerBlockerTelemetry(gleanWrapper: glean)
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
@@ -836,12 +837,17 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showTrackerBlockerSheet() {
-        let stateProvider = TrackerBlockerSheetStateProvider(
-            statsStore: DefaultTrackerBlockStatsStoreUtility(prefs: profile.prefs)
+        let statsStore = DefaultTrackerBlockStatsStoreUtility(prefs: profile.prefs)
+        let state = TrackerBlockerSheetStateProvider(statsStore: statsStore).sheetState()
+
+        trackerBlockerTelemetry.dashboardViewed(
+            presentation: state.presentation,
+            lifetimeCount: statsStore.lifetimeTotal()
         )
+
         let viewController = TrackerBlockerSheetViewController(
             windowUUID: windowUUID,
-            state: stateProvider.sheetState(),
+            state: state,
             themeManager: themeManager
         )
         router.present(viewController, animated: true)
