@@ -15,22 +15,25 @@ class StartAtHomeHelper: UserFeaturePreferenceProvider {
     private var isRestoringTabs: Bool
     // Override only for UI tests to test `shouldSkipStartHome` logic
     private var isRunningUITest: Bool
+    private var isStartAtHomeEnabledForTests: Bool
     private let prefs: Prefs
     var launchSessionProvider: LaunchSessionProviderProtocol
 
     init(appSessionManager: AppSessionProvider = AppContainer.shared.resolve(),
          prefs: Prefs,
          isRestoringTabs: Bool,
-         isRunningUITest: Bool = AppConstants.isRunningUITests
+         isRunningUITest: Bool = AppConstants.isRunningUITests,
+         isStartAtHomeEnabledForTests: Bool = AppConstants.isStartAtHomeEnabledForTests
     ) {
         self.launchSessionProvider = appSessionManager.launchSessionProvider
         self.prefs = prefs
         self.isRestoringTabs = isRestoringTabs
         self.isRunningUITest = isRunningUITest
+        self.isStartAtHomeEnabledForTests = isStartAtHomeEnabledForTests
     }
 
     var shouldSkipStartHome: Bool {
-        return isRunningUITest ||
+        return (isRunningUITest && !isStartAtHomeEnabledForTests) ||
         DebugSettingsBundleOptions.skipSessionRestore ||
         isRestoringTabs ||
         launchSessionProvider.openedFromExternalSource

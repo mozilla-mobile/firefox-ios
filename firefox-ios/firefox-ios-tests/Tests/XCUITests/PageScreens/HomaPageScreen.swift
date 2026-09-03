@@ -40,6 +40,10 @@ final class HomePageScreen {
         BaseTestCase().mozWaitElementHittable(element: tabsButton, timeout: timeout)
     }
 
+    func assertHomepageIsDisplayed() {
+        BaseTestCase().waitForElementsToExist([collection, homeLogo])
+    }
+
     func assertHomeLogoExists() {
         BaseTestCase().mozWaitForElementToExist(homeLogo)
     }

@@ -77,10 +77,12 @@ final class ToolbarScreen {
         BaseTestCase().mozWaitForElementToExist(newTabButton)
     }
 
-    func assertTabsButtonValue(expectedCount: String) {
+    /// Polls before failing, as the counter settles asynchronously after a tab is added or restored.
+    func assertTabsButtonValue(expectedCount: String, message: String? = nil) {
         BaseTestCase().mozWaitForElementToExist(tabsButton)
-        let tabsButtonValue = tabsButton.value as? String
-        XCTAssertEqual(expectedCount, tabsButtonValue, "Expected \(expectedCount) open tabs after switching")
+        guard !tabsButtonHasValue(expectedCount) else { return }
+        let actual = tabsButton.value as? String ?? "none"
+        XCTFail("\(message ?? "Unexpected number of open tabs"). Expected \(expectedCount), found \(actual)")
     }
 
     func tabsButtonHasValue(_ expectedCount: String, timeout: TimeInterval = TIMEOUT) -> Bool {
