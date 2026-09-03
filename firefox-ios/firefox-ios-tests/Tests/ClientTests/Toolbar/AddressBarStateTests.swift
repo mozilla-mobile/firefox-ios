@@ -1137,7 +1137,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isEmptySearch)
 }
 
-    func test_keyboardStateDidChangeAction_returnsExpectedState() {
+    func test_keyboardRequestChangeAction_whenHiding_returnsExpectedState() {
         setupStore()
         let initialState = createSubject().copy(shouldShowKeyboard: true)
         let reducer = addressBarReducer()
@@ -1146,12 +1146,71 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         let newState = reducer.modernReducer(
             initialState,
-            ToolbarModernAction.didCancelKeyboardRequest,
+            ToolbarModernAction.didKeyboardRequestChange(shouldShow: false),
             windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertFalse(newState.shouldShowKeyboard)
+    }
+
+    func test_keyboardRequestChangeAction_whenShowing_returnsExpectedState() {
+        setupStore()
+        let initialState = createSubject().copy(shouldShowKeyboard: false)
+        let reducer = addressBarReducer()
+
+        XCTAssertFalse(initialState.shouldShowKeyboard)
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.didKeyboardRequestChange(shouldShow: true),
+            windowUUID
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertTrue(newState.shouldShowKeyboard)
+    }
+
+    /// Regression test for FXIOS-16741: scrolling the homepage while still editing hides the
+    /// keyboard (`cancelEditOnHomepage`) but must not permanently leave `shouldShowKeyboard` at
+    /// `false`, once the keyboard genuinely finishes presenting again while still editing
+    /// (`BrowserViewController.keyboardHelper(_:keyboardDidShowWithState:)` dispatches
+    /// `didKeyboardRequestChange(shouldShow: true)`), it must be restored.
+    func test_cancelEditOnHomepageThenKeyboardDidShow_restoresShouldShowKeyboard() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        let editingState = reducer.legacyReducer(
+            urlDidChangeState,
+            ToolbarAction(
+                searchTerm: nil,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didStartEditingUrl
+            )
+        )
+        XCTAssertTrue(editingState.isEditing)
+        XCTAssertTrue(editingState.shouldShowKeyboard)
+
+        let scrolledState = reducer.legacyReducer(
+            editingState,
+            ToolbarAction(
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.cancelEditOnHomepage
+            )
+        )
+        XCTAssertTrue(scrolledState.isEditing)
+        XCTAssertFalse(scrolledState.shouldShowKeyboard)
+
+        let resumedState = reducer.modernReducer(
+            scrolledState,
+            ToolbarModernAction.didKeyboardRequestChange(shouldShow: true),
+            windowUUID
+        )
+
+        XCTAssertTrue(resumedState.isEditing)
+        XCTAssertTrue(resumedState.shouldShowKeyboard)
     }
 
     func test_clearSearchAction_returnsExpectedState() {
