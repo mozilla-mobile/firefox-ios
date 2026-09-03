@@ -43,9 +43,9 @@ tracker_blocker:
           1,000,000 / 10,000,000 and above). Absent when the total is below
           1,000.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-0000
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16426
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/00000
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35533
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
