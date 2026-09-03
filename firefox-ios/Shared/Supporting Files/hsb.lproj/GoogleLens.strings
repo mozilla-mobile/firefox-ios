@@ -1,0 +1,6 @@
+/* Title of the button that stops an in-progress Google Lens image search and returns the user to what they were looking at before. */
+"GoogleLens.Interstitial.CancelButtonTitle.v156" = "Přetorhnyć";
+
+/* Label shown next to a loading spinner on the full screen state that appears while an image is being searched with Google Lens. */
+"GoogleLens.Interstitial.LoadingLabel.v156" = "Wobrazowe wuslědki so pytaja…";
+

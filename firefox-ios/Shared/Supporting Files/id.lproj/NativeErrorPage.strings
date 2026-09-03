@@ -58,6 +58,9 @@
 /* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
 "NativeErrorPage.Wayback.Error.Checking.v155" = "Memeriksa Arsip…";
 
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v155" = "Kami tidak dapat menjangkau layanan arsip.";
+
 /* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.Wayback.Error.Description.v154" = "Situs mungkin sibuk atau tidak tersedia. Coba lagi nanti. Jika laman lain tidak dapat dimuat, periksa Wi-Fi atau sambungan data Anda. %@ juga dapat mencari versi sebelumnya dari laman ini di Wayback Machine.";
 
@@ -75,6 +78,9 @@
 
 /* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
 "NativeErrorPage.Wayback.Error.Search.v155" = "Cari di web";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.SearchWayback.v155" = "Lihat Versi yang Diarsipkan";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
 "NativeErrorPage.Wayback.Error.Title.v154" = "Tidak dapat tersambung";

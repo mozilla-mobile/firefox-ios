@@ -4,20 +4,56 @@
 /* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
 "Settings.AIControls.BlockAIEnhancementsTitle.v151" = "Liegt MI uzlabojumus";
 
+/* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
+"Settings.AIControls.HeaderCard.Link.v151" = "Uzzināt vairāk";
+
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio from autoplaying. */
 "Settings.Autoplay.BlockAudio.v137" = "Liegt skaņu";
 
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
 "Settings.Autoplay.BlockAudioAndVideo.v137" = "Liegt skaņu un video";
 
+/* Link text below the Ad Blocker toggle description that opens a support page with more information. */
+"Settings.Browsing.AdBlocker.LearnMore.v155" = "Uzzināt vairāk";
+
+/* Title for the Background Audio toggle in the Browsing settings page. When enabled, audio from web pages continues playing after the app is backgrounded. */
+"Settings.Browsing.BackgroundAudio.Title.v156" = "Fona skaņa";
+
 /* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
 "Settings.Browsing.BlockAds.Title.v153" = "Liegt reklāmas";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v136" = "Uzzināt vairāk";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "Uzzināt vairāk";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the brand title for the section containing the Wrexham AFC wallpapers. */
 "Settings.Home.Option.Wallpaper.WrexhamBrandTitle.v155" = "Wrexham A.F.C.";
 
+/* Title for a link that explains what Mozilla means by Rollouts */
+"Settings.Rollouts.Link.v148" = "Uzzināt vairāk";
+
+/* Accessibility label for Learn more about Firefox Suggest. */
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Uzzināt vairāk par Firefox Suggest";
+
+/* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
+"Settings.Search.EnginesSuggestions.Title.v124" = "Ieteikumi no meklētājiem";
+
 /* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Description.v125" = "Rādīt meklētāju ieteikumus privātās sesijās";
+"Settings.Search.PrivateSession.Description.v125" = "Rādīt meklētāju ieteikumus privātajās sesijās";
+
+/* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Uzzināt vairāk par Firefox Suggest";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v136" = "Uzzināt vairāk";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v148" = "Uzzināt vairāk";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "Uzzināt vairāk";
 
 /* Row label in the preferred languages list that opens the language picker to add a new preferred language for translation. */
 "Settings.Translation.PreferredLanguages.AddLanguage.v151" = "Pievienot valodu…";

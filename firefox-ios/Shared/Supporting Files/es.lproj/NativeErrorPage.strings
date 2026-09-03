@@ -37,6 +37,9 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Recargar";
 
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v155" = "Reintentar";
+
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "El propietario de %@ no lo ha configurado correctamente y no se puede crear una conexión segura.";
 
@@ -51,4 +54,37 @@
 
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Parece que hay un problema con la conexión a Internet.";
+
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v155" = "Consultando el archivo…";
+
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v155" = "No hemos podido acceder al servicio de archivo.";
+
+/* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.Wayback.Error.Description.v154" = "Es posible que el sitio esté ocupado o no disponible. Inténtalo de nuevo más tarde. Si otras páginas no cargan, comprueba tu conexión Wi-Fi o de datos. %@ también puede buscar una versión anterior de esta página en la Wayback Machine.";
+
+/* Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. %1$@ is the app name (e.g. Firefox). %2$@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org. */
+"NativeErrorPage.Wayback.Error.FooterDescription.v155" = "%1$@ puede buscar una versión anterior de esta página en %2$@ de Internet Archive.";
+
+/* The tappable link text within the Wayback footer description, opens web.archive.org. */
+"NativeErrorPage.Wayback.Error.LinkText.v155" = "Wayback Machine";
+
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "No se encontró ninguna versión archivada.";
+
+/* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
+"NativeErrorPage.Wayback.Error.Retry.v154" = "Reintentar";
+
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
+"NativeErrorPage.Wayback.Error.Search.v155" = "Buscar en la web";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.SearchWayback.v155" = "Ver versión archivada";
+
+/* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
+"NativeErrorPage.Wayback.Error.Title.v154" = "No se puede conectar";
+
+/* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
+"NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Busca en Wayback Machine una versión archivada de esta página.";
 
