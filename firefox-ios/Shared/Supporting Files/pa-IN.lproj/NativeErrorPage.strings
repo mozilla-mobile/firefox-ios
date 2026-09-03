@@ -58,6 +58,9 @@
 /* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
 "NativeErrorPage.Wayback.Error.Checking.v155" = "…ਅਕਾਇਵ ਦੀ ਜਾਂਚ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ";
 
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v155" = "ਅਸੀਂ ਅਕਾਇਵ ਸੇਵਾ ਲਈ ਪਹੁੰਚ ਨਹੀਂ ਕਰ ਸਕੇ।";
+
 /* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.Wayback.Error.Description.v154" = "ਸਾਈਟ ਰੁੱਝੀ ਹੋਈ ਜਾਂ ਗ਼ੈਰ-ਮੌਜੂਦ ਹੋ ਸਕਦੀ ਹੈ। ਬਾਅਦ ਵਿੱਚ ਕੋਸ਼ਿਸ਼ ਕਰੋ। ਜੇ ਹੋਰ ਸਫ਼ੇ ਨਹੀਂ ਲੋਡ ਸਕਦੇ ਹਨ ਤਾਂ ਆਪਣੇ Wi-Fi ਜਾਂ ਡਾਟਾ ਕਨੈਕਸ਼ਨ ਦੀ ਜਾਂਚ ਕਰੋ। %@ ਇਸ ਸਫ਼ੇ ਦੇ ਪੁਰਾਣੇ ਵਰਜ਼ਨ ਵਾਸਤੇ ਵੇਬੈਕ ਮਸ਼ੀਨ ਨੂੰ ਵੀ ਵਰਤ ਸਕਦਾ ਹੈ।";
 
@@ -67,11 +70,17 @@
 /* The tappable link text within the Wayback footer description, opens web.archive.org. */
 "NativeErrorPage.Wayback.Error.LinkText.v155" = "ਇਤਿਹਾਸ ਮਸ਼ੀਨ";
 
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "ਕੋਈ ਅਕਾਇਵ ਵਰਜ਼ਨ ਨਹੀਂ ਲੱਭਿਆ ਹੈ";
+
 /* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
 "NativeErrorPage.Wayback.Error.Retry.v154" = "ਮੁੜ-ਕੋਸ਼ਿਸ਼";
 
 /* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
 "NativeErrorPage.Wayback.Error.Search.v155" = "ਵੈੱਬ ‘ਤੇ ਖੋਜੋ";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.SearchWayback.v155" = "ਅਕਾਇਵ ਕੀਤਾ ਵਰਜ਼ਨ ਵੇਖੋ";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
 "NativeErrorPage.Wayback.Error.Title.v154" = "ਕਨੈਕਟ ਕਰਨ ਲਈ ਅਸਮਰੱਥ";

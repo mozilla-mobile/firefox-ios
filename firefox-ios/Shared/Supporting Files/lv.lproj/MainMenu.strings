@@ -1,3 +1,9 @@
+/* On the main menu, the accessibility label for the action that will take the user to the Downloads panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132" = "Lejupielādes";
+
+/* On the main menu, the title for the action that will take the user to the Downloads panel. */
+"MainMenu.PanelLinkSection.Downloads.Title.v131" = "Lejupielādes";
+
 /* On the main menu, the accessibility labels for the action that will take the user to the Customize Homepage section in the settings screen. */
 "MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "Pielāgot sākumlapu";
 

@@ -1,3 +1,12 @@
+/* Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.LearnMore.v154" = "Uzzināt vairāk";
+
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no issue type has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint.v156" = "Vispirms jāizvēlas sarežģījuma veids";
+
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156" = "Izvēlies noteiktu problēmu atlasītajam sarežģījuma veidam";
+
 /* Error message shown under the URL field when the address entered has an invalid format, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.URLError.v155" = "Jāievada derīgs URL";
 
