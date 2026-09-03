@@ -32,7 +32,7 @@ struct TrackerBlockerTelemetry {
     ///     recorded. Totals below the lowest band are recorded without the `figures` extra.
     func dashboardViewed(presentation: TrackerBlockerSheetState.Presentation, lifetimeCount: Int) {
         let extra = GleanMetrics.TrackerBlocker.DashboardViewedExtra(
-            emptyState: Self.emptyState(for: presentation),
+            dashboardState: Self.dashboardState(for: presentation),
             figures: Self.reportableFigures(for: lifetimeCount).map { Int32($0) }
         )
         gleanWrapper.recordEvent(
@@ -41,7 +41,7 @@ struct TrackerBlockerTelemetry {
         )
     }
 
-    private static func emptyState(for presentation: TrackerBlockerSheetState.Presentation) -> String {
+    private static func dashboardState(for presentation: TrackerBlockerSheetState.Presentation) -> String {
         switch presentation {
         case .empty: return "empty"
         case .weeklyReset: return "weekly_reset"

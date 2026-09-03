@@ -49,7 +49,7 @@ final class TrackerBlockerTelemetryTests: XCTestCase {
         let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<DashboardViewedExtras>)
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.emptyState, "populated")
+        XCTAssertEqual(savedExtras.dashboardState, "populated")
         XCTAssertEqual(savedExtras.figures, 5)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
@@ -57,13 +57,13 @@ final class TrackerBlockerTelemetryTests: XCTestCase {
     func testDashboardViewed_WhenSheetIsEmpty_ThenRecordsEmptyState() throws {
         subject?.dashboardViewed(presentation: .empty, lifetimeCount: 0)
 
-        XCTAssertEqual(try savedDashboardExtras().emptyState, "empty")
+        XCTAssertEqual(try savedDashboardExtras().dashboardState, "empty")
     }
 
     func testDashboardViewed_WhenWeeklyCountIsZero_ThenRecordsWeeklyReset() throws {
         subject?.dashboardViewed(presentation: .weeklyReset, lifetimeCount: 5305)
 
-        XCTAssertEqual(try savedDashboardExtras().emptyState, "weekly_reset")
+        XCTAssertEqual(try savedDashboardExtras().dashboardState, "weekly_reset")
     }
 
     // MARK: - Dashboard viewed: lifetime bands

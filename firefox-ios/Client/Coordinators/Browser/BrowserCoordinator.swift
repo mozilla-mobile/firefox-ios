@@ -837,12 +837,14 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showTrackerBlockerSheet() {
-        let statsStore = DefaultTrackerBlockStatsStoreUtility(prefs: profile.prefs)
-        let state = TrackerBlockerSheetStateProvider(statsStore: statsStore).sheetState()
+        let stateProvider = TrackerBlockerSheetStateProvider(
+            statsStore: DefaultTrackerBlockStatsStoreUtility(prefs: profile.prefs)
+        )
+        let state = stateProvider.sheetState()
 
         trackerBlockerTelemetry.dashboardViewed(
             presentation: state.presentation,
-            lifetimeCount: statsStore.lifetimeTotal()
+            lifetimeCount: state.lifetimeTotal
         )
 
         let viewController = TrackerBlockerSheetViewController(

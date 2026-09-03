@@ -28,7 +28,7 @@ tracker_blocker:
       Records each time the user opens the privacy dashboard from the homepage
       tracker blocker module.
     extra_keys:
-      empty_state:
+      dashboard_state:
         type: string
         description: |
           What the dashboard showed when it opened:

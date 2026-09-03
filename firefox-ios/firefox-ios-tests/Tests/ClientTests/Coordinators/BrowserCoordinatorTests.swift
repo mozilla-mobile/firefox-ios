@@ -311,7 +311,7 @@ final class BrowserCoordinatorTests: XCTestCase,
 //        let savedExtras = try XCTUnwrap(recorded.first)
 //        XCTAssertEqual(recorded.count, 1)
 //        // Nothing has been blocked against the test profile, so the sheet opens empty and unbanded.
-//        XCTAssertEqual(savedExtras.emptyState, "empty")
+//        XCTAssertEqual(savedExtras.dashboardState, "empty")
 //        XCTAssertNil(savedExtras.figures)
 //    }
 

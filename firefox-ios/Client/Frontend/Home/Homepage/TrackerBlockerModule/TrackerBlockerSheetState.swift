@@ -86,6 +86,21 @@ struct TrackerBlockerSheetState {
     let categories: [Category]
     /// Lifetime total shown in the footer pill. `nil` hides the footer (empty state).
     let total: Total?
+    /// Every tracker blocked so far, including this week. Unlike `total` this isn't tied to the footer, which
+    /// needs a start date to count from, so it is available whatever the sheet shows.
+    let lifetimeTotal: Int
+
+    init(weeklyCount: Int?,
+         emptyMessage: String?,
+         categories: [Category],
+         total: Total?,
+         lifetimeTotal: Int = 0) {
+        self.weeklyCount = weeklyCount
+        self.emptyMessage = emptyMessage
+        self.categories = categories
+        self.total = total
+        self.lifetimeTotal = lifetimeTotal
+    }
 
     var presentation: Presentation {
         guard let weeklyCount else { return .empty }
