@@ -18,7 +18,7 @@ public struct EmptyProviderFields: Codable, Sendable {
 
 /// Provider-specific data for Quick Answers (using exa endpoint)
 public struct QuickAnswersProviderFields: Codable, Sendable {
-    public let references: [Citation]?
+    public let citations: [Citation]?
 }
 
 public struct Citation: Codable, Sendable {

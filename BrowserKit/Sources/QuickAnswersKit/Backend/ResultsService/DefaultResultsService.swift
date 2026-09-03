@@ -28,7 +28,7 @@ final class DefaultResultsService: ResultsService {
             let config = try await configFetcher.fetch()
             let messages = makeMessages(for: transcription, config: config)
             let fullResponse = try await requestChatCompletion(for: messages, config: config)
-            let citations = fullResponse.providerSpecificFields?.references ?? []
+            let citations = fullResponse.providerSpecificFields?.citations ?? []
             return formatResult(from: fullResponse.content, and: citations)
         } catch {
             throw mapError(error)
