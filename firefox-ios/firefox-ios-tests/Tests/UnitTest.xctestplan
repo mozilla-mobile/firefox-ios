@@ -292,6 +292,7 @@
         "HistoryHighlightsDataAdaptorTests\/testReloadDataOnNotification()",
         "HistoryHighlightsTests",
         "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
+        "NotificationManagerTests",
         "NotificationSurfaceManagerTests",
         "OnboardingTelemetryUtilityTests\/testSendOnboardingCardView_WelcomeCard_Success()",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
