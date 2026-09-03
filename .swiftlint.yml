@@ -226,6 +226,16 @@ file_header:
 redundant_type_annotation:
   consider_default_literal_types_redundant: true
 
+# `balanced_xctest_lifecycle` requires a `tearDown` for every `setUp` (and vice versa), which
+# means one half of the pair is sometimes an empty passthrough to super. Exempt the XCTest
+# life cycle methods so the two rules don't contradict each other.
+unneeded_override:
+  excluded_methods:
+    - setUp
+    - setUpWithError
+    - tearDown
+    - tearDownWithError
+
 analyzer_rules: # Rules run by `swiftlint analyze`
   - unused_import
 
