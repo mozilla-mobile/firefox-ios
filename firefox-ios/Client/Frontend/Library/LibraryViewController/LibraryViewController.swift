@@ -25,6 +25,7 @@ class LibraryViewController: UIViewController, Themeable {
     var logger: Logger
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    var isNavBarHidden = false
 
     // Views
     private var controllerContainerView: UIView = .build { view in }
@@ -89,6 +90,8 @@ class LibraryViewController: UIViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        guard !isNavBarHidden else { return }
+
         setupSegmentControl()
         librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
         applyTheme()
@@ -441,6 +444,11 @@ class LibraryViewController: UIViewController, Themeable {
         let controlbarHeight = librarySegmentControl.frame.height
         librarySegmentControl.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
         controllerContainerView.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
+
+        isNavBarHidden = value
+        guard !isNavBarHidden else { return }
+        setupSegmentControl()
+        librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
 
         // Reload the current panel
         guard let index = viewModel.selectedPanel?.rawValue,
