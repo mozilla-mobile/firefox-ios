@@ -100,7 +100,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
     }
 
     /// Never follows `prefSendUsageData`: `usage-reporting` is `follows_collection_enabled: false`.
-    static func shouldSendDailyUsagePing(prefs: Prefs) -> Bool {
+    func shouldSendDailyUsagePing(prefs: Prefs) -> Bool {
         return prefs.boolForKey(AppConstants.prefSendDailyUsagePing) ?? AppConstants.defaultSendDailyUsagePing
     }
 
@@ -133,7 +133,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
         GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
         GleanMetrics.Pings.shared.onboardingOptOut.setEnabled(enabled: true)
 
-        if Self.shouldSendDailyUsagePing(prefs: profile.prefs) {
+        if shouldSendDailyUsagePing(prefs: profile.prefs) {
             gleanUsageReportingMetricsService.start()
         } else {
             gleanUsageReportingMetricsService.unsetUsageProfileId()

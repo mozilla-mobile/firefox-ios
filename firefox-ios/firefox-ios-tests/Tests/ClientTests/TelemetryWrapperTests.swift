@@ -883,7 +883,7 @@ class TelemetryWrapperTests: XCTestCase {
         let prefs = MockProfilePrefs()
         prefs.setBool(false, forKey: AppConstants.prefSendUsageData)
 
-        let result = TelemetryWrapper.shouldSendDailyUsagePing(prefs: prefs)
+        let result = TelemetryWrapper().shouldSendDailyUsagePing(prefs: prefs)
 
         XCTAssertTrue(result, "Opting out of technical data must not disable the daily usage ping")
     }
@@ -891,7 +891,7 @@ class TelemetryWrapperTests: XCTestCase {
     func testShouldSendDailyUsagePing_whenUnset_defaultsToEnabled() {
         let prefs = MockProfilePrefs()
 
-        let result = TelemetryWrapper.shouldSendDailyUsagePing(prefs: prefs)
+        let result = TelemetryWrapper().shouldSendDailyUsagePing(prefs: prefs)
 
         XCTAssertEqual(result, AppConstants.defaultSendDailyUsagePing)
         XCTAssertNil(prefs.boolForKey(AppConstants.prefSendDailyUsagePing), "Reading must not write a default")
@@ -901,7 +901,7 @@ class TelemetryWrapperTests: XCTestCase {
         let prefs = MockProfilePrefs()
         prefs.setBool(false, forKey: AppConstants.prefSendDailyUsagePing)
 
-        let result = TelemetryWrapper.shouldSendDailyUsagePing(prefs: prefs)
+        let result = TelemetryWrapper().shouldSendDailyUsagePing(prefs: prefs)
 
         XCTAssertFalse(result)
     }
