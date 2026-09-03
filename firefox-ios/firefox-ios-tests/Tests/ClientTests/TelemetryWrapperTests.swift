@@ -18,8 +18,9 @@ class TelemetryWrapperTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         profile = MockProfile()
-        Experiments.events.clearEvents()
+        // Dependencies must be bootstrapped before touching `Experiments`, which resolves from AppContainer.
         Self.setupTelemetry(with: profile)
+        Experiments.events.clearEvents()
     }
 
     override func tearDown() {
@@ -874,6 +875,32 @@ class TelemetryWrapperTests: XCTestCase {
                                           value: .webviewShowErrorPage,
                                           extras: extra)
         try testEventMetricRecordingSuccess(metric: GleanMetrics.Webview.showErrorPage)
+    }
+
+    // MARK: - Daily usage ping
+
+    func testResolveSendDailyUsagePing_whenTechnicalDataIsOptedOut_staysEnabled() {
+        profile.prefs.setBool(false, forKey: AppConstants.prefSendUsageData)
+
+        let result = TelemetryWrapper.resolveSendDailyUsagePing(prefs: profile.prefs)
+
+        XCTAssertTrue(result, "Opting out of technical data must not disable the daily usage ping")
+        XCTAssertEqual(profile.prefs.boolForKey(AppConstants.prefSendDailyUsagePing), true)
+    }
+
+    func testResolveSendDailyUsagePing_whenUnset_defaultsToEnabledAndPersists() {
+        let result = TelemetryWrapper.resolveSendDailyUsagePing(prefs: profile.prefs)
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(profile.prefs.boolForKey(AppConstants.prefSendDailyUsagePing), true)
+    }
+
+    func testResolveSendDailyUsagePing_whenExplicitlyDisabled_staysDisabled() {
+        profile.prefs.setBool(false, forKey: AppConstants.prefSendDailyUsagePing)
+
+        let result = TelemetryWrapper.resolveSendDailyUsagePing(prefs: profile.prefs)
+
+        XCTAssertFalse(result)
     }
 }
 
