@@ -281,7 +281,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         let sendDailyUsagePingSettings = SendDataSetting(
             prefs: profile.prefs,
             prefKey: AppConstants.prefSendDailyUsagePing,
-            defaultValue: true,
+            defaultValue: AppConstants.defaultSendDailyUsagePing,
             titleText: .SendDailyUsagePingSettingTitle,
             subtitleText: String(format: .SendDailyUsagePingSettingMessage, MozillaName.shortName.rawValue),
             learnMoreText: .SendDailyUsagePingSettingLinkV2,

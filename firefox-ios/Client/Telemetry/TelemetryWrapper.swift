@@ -99,16 +99,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
         initGlean(profile, sendUsageData: sendUsageData)
     }
 
-    /// Resolves the daily usage ping setting, defaulting to on and persisting it so the value is
-    /// explicit on later launches. It never follows `prefSendUsageData`: the `usage-reporting` ping is
-    /// declared `follows_collection_enabled: false`, so opting out of technical data must not silence it.
-    static func resolveSendDailyUsagePing(prefs: Prefs) -> Bool {
-        if let dailyUsagePing = prefs.boolForKey(AppConstants.prefSendDailyUsagePing) {
-            return dailyUsagePing
-        }
-
-        prefs.setBool(true, forKey: AppConstants.prefSendDailyUsagePing)
-        return true
+    /// Never follows `prefSendUsageData`: `usage-reporting` is `follows_collection_enabled: false`.
+    static func shouldSendDailyUsagePing(prefs: Prefs) -> Bool {
+        return prefs.boolForKey(AppConstants.prefSendDailyUsagePing) ?? AppConstants.defaultSendDailyUsagePing
     }
 
     @MainActor
@@ -140,9 +133,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
         GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
         GleanMetrics.Pings.shared.onboardingOptOut.setEnabled(enabled: true)
 
-        let shouldSendUsagePing = Self.resolveSendDailyUsagePing(prefs: profile.prefs)
-
-        if shouldSendUsagePing {
+        if Self.shouldSendDailyUsagePing(prefs: profile.prefs) {
             gleanUsageReportingMetricsService.start()
         } else {
             gleanUsageReportingMetricsService.unsetUsageProfileId()

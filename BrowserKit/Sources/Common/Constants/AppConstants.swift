@@ -49,6 +49,8 @@ public final class AppConstants {
     public static let prefStudiesToggle = "settings.studiesToggle"
     public static let prefRolloutsToggle = "settings.rolloutsToggle"
 
+    public static let defaultSendDailyUsagePing = true
+
     /// Build Channel.
     public static let buildChannel: AppBuildChannel = {
         let channelRaw = Bundle.main.infoDictionary?["CHANNEL"] as? String ?? "other"

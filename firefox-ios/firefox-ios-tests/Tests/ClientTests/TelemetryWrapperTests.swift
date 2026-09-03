@@ -6,6 +6,7 @@
 
 import Common
 import Glean
+import Shared
 import XCTest
 
 class TelemetryWrapperTests: XCTestCase {
@@ -18,7 +19,6 @@ class TelemetryWrapperTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         profile = MockProfile()
-        // Dependencies must be bootstrapped before touching `Experiments`, which resolves from AppContainer.
         Self.setupTelemetry(with: profile)
         Experiments.events.clearEvents()
     }
@@ -879,26 +879,29 @@ class TelemetryWrapperTests: XCTestCase {
 
     // MARK: - Daily usage ping
 
-    func testResolveSendDailyUsagePing_whenTechnicalDataIsOptedOut_staysEnabled() {
-        profile.prefs.setBool(false, forKey: AppConstants.prefSendUsageData)
+    func testShouldSendDailyUsagePing_whenTechnicalDataIsOptedOut_staysEnabled() {
+        let prefs = MockProfilePrefs()
+        prefs.setBool(false, forKey: AppConstants.prefSendUsageData)
 
-        let result = TelemetryWrapper.resolveSendDailyUsagePing(prefs: profile.prefs)
+        let result = TelemetryWrapper.shouldSendDailyUsagePing(prefs: prefs)
 
         XCTAssertTrue(result, "Opting out of technical data must not disable the daily usage ping")
-        XCTAssertEqual(profile.prefs.boolForKey(AppConstants.prefSendDailyUsagePing), true)
     }
 
-    func testResolveSendDailyUsagePing_whenUnset_defaultsToEnabledAndPersists() {
-        let result = TelemetryWrapper.resolveSendDailyUsagePing(prefs: profile.prefs)
+    func testShouldSendDailyUsagePing_whenUnset_defaultsToEnabled() {
+        let prefs = MockProfilePrefs()
 
-        XCTAssertTrue(result)
-        XCTAssertEqual(profile.prefs.boolForKey(AppConstants.prefSendDailyUsagePing), true)
+        let result = TelemetryWrapper.shouldSendDailyUsagePing(prefs: prefs)
+
+        XCTAssertEqual(result, AppConstants.defaultSendDailyUsagePing)
+        XCTAssertNil(prefs.boolForKey(AppConstants.prefSendDailyUsagePing), "Reading must not write a default")
     }
 
-    func testResolveSendDailyUsagePing_whenExplicitlyDisabled_staysDisabled() {
-        profile.prefs.setBool(false, forKey: AppConstants.prefSendDailyUsagePing)
+    func testShouldSendDailyUsagePing_whenExplicitlyDisabled_staysDisabled() {
+        let prefs = MockProfilePrefs()
+        prefs.setBool(false, forKey: AppConstants.prefSendDailyUsagePing)
 
-        let result = TelemetryWrapper.resolveSendDailyUsagePing(prefs: profile.prefs)
+        let result = TelemetryWrapper.shouldSendDailyUsagePing(prefs: prefs)
 
         XCTAssertFalse(result)
     }
