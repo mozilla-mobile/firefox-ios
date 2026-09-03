@@ -3028,10 +3028,6 @@ app:
 trigger_map:
 - push_branch: main
   pipeline: pipeline_build_and_test
-# Xcode 27 / iOS 27 canary branch: merges main daily and runs the Firefox unit and
-# smoke tests on the 27 edge stack so breakages surface before the stack becomes default.
-- push_branch: cs/mte-6112-xcode27-firefox-only
-  pipeline: pipeline_build_and_test
 - push_branch: epic-branch/*
   pipeline: pipeline_build_and_test
 - push_branch: release/*
