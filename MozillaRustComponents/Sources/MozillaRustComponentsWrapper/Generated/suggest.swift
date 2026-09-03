@@ -2797,7 +2797,7 @@ public func FfiConverterTypeSuggestProviderConfig_lower(_ value: SuggestProvider
 
 public enum Suggestion: Equatable, Hashable {
     
-    case amp(title: String, url: String, rawUrl: String, icon: Data?, iconMimetype: String?, fullKeyword: String, blockId: Int64, advertiser: String, iabCategory: String, categories: [Int32], impressionUrl: String, clickUrl: String, rawClickUrl: String, score: Double, ftsMatchInfo: FtsMatchInfo?
+    case amp(title: String, url: String, rawUrl: String, icon: Data?, iconMimetype: String?, fullKeyword: String, blockId: Int64, advertiser: String, iabCategory: String, categories: [Int32], impressionUrl: String, clickUrl: String, rawClickUrl: String, score: Double, ftsMatchInfo: FtsMatchInfo?, suggestionId: String
     )
     case wikipedia(title: String, url: String, icon: Data?, iconMimetype: String?, fullKeyword: String
     )
@@ -2838,7 +2838,7 @@ public struct FfiConverterTypeSuggestion: FfiConverterRustBuffer {
         let variant: Int32 = try readInt(&buf)
         switch variant {
         
-        case 1: return .amp(title: try FfiConverterString.read(from: &buf), url: try FfiConverterString.read(from: &buf), rawUrl: try FfiConverterString.read(from: &buf), icon: try FfiConverterOptionData.read(from: &buf), iconMimetype: try FfiConverterOptionString.read(from: &buf), fullKeyword: try FfiConverterString.read(from: &buf), blockId: try FfiConverterInt64.read(from: &buf), advertiser: try FfiConverterString.read(from: &buf), iabCategory: try FfiConverterString.read(from: &buf), categories: try FfiConverterSequenceInt32.read(from: &buf), impressionUrl: try FfiConverterString.read(from: &buf), clickUrl: try FfiConverterString.read(from: &buf), rawClickUrl: try FfiConverterString.read(from: &buf), score: try FfiConverterDouble.read(from: &buf), ftsMatchInfo: try FfiConverterOptionTypeFtsMatchInfo.read(from: &buf)
+        case 1: return .amp(title: try FfiConverterString.read(from: &buf), url: try FfiConverterString.read(from: &buf), rawUrl: try FfiConverterString.read(from: &buf), icon: try FfiConverterOptionData.read(from: &buf), iconMimetype: try FfiConverterOptionString.read(from: &buf), fullKeyword: try FfiConverterString.read(from: &buf), blockId: try FfiConverterInt64.read(from: &buf), advertiser: try FfiConverterString.read(from: &buf), iabCategory: try FfiConverterString.read(from: &buf), categories: try FfiConverterSequenceInt32.read(from: &buf), impressionUrl: try FfiConverterString.read(from: &buf), clickUrl: try FfiConverterString.read(from: &buf), rawClickUrl: try FfiConverterString.read(from: &buf), score: try FfiConverterDouble.read(from: &buf), ftsMatchInfo: try FfiConverterOptionTypeFtsMatchInfo.read(from: &buf), suggestionId: try FfiConverterString.read(from: &buf)
         )
         
         case 2: return .wikipedia(title: try FfiConverterString.read(from: &buf), url: try FfiConverterString.read(from: &buf), icon: try FfiConverterOptionData.read(from: &buf), iconMimetype: try FfiConverterOptionString.read(from: &buf), fullKeyword: try FfiConverterString.read(from: &buf)
@@ -2867,7 +2867,7 @@ public struct FfiConverterTypeSuggestion: FfiConverterRustBuffer {
         switch value {
         
         
-        case let .amp(title,url,rawUrl,icon,iconMimetype,fullKeyword,blockId,advertiser,iabCategory,categories,impressionUrl,clickUrl,rawClickUrl,score,ftsMatchInfo):
+        case let .amp(title,url,rawUrl,icon,iconMimetype,fullKeyword,blockId,advertiser,iabCategory,categories,impressionUrl,clickUrl,rawClickUrl,score,ftsMatchInfo,suggestionId):
             writeInt(&buf, Int32(1))
             FfiConverterString.write(title, into: &buf)
             FfiConverterString.write(url, into: &buf)
@@ -2884,6 +2884,7 @@ public struct FfiConverterTypeSuggestion: FfiConverterRustBuffer {
             FfiConverterString.write(rawClickUrl, into: &buf)
             FfiConverterDouble.write(score, into: &buf)
             FfiConverterOptionTypeFtsMatchInfo.write(ftsMatchInfo, into: &buf)
+            FfiConverterString.write(suggestionId, into: &buf)
             
         
         case let .wikipedia(title,url,icon,iconMimetype,fullKeyword):
