@@ -729,6 +729,7 @@ final class LocationView: UIView,
 
     func locationTextFieldDidBeginEditing(_ textField: UITextField) {
         guard !isEditing else { return }
+
         updateUIForSearchEngineDisplay(isURLTextFieldCentered: isURLTextFieldCentered)
         let searchText = searchTerm != nil ? searchTerm : urlAbsolutePath
 
