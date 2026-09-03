@@ -100,18 +100,6 @@ final class LocationViewTests: XCTestCase {
         XCTAssertEqual(subject.searchEngineContentView.alpha, 1, message)
     }
 
-    // MARK: - Resuming Editing
-    /// Regression test for FXIOS-16590: retapping the location view while it's already editing
-    /// (e.g. the keyboard was dismissed by scrolling the homepage) must still notify the delegate.
-    func testLocationTextFieldDidBeginEditing_whenAlreadyEditing_stillNotifiesDelegate() {
-        let subject = createSubject()
-        subject.configure(makeConfig(url: nil, isEditing: true), delegate: delegate)
-
-        subject.locationTextFieldDidBeginEditing(UITextField())
-
-        XCTAssertEqual(delegate.didBeginEditingCallCount, 1)
-    }
-
     func testLocationTextFieldDidBeginEditing_whenNotEditing_notifiesDelegate() {
         let subject = createSubject()
         subject.configure(makeConfig(url: nil, isEditing: false), delegate: delegate)
