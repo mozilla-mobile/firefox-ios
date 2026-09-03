@@ -10,8 +10,10 @@ only_rules: # Only enforce these rules, ignore all others
   - closure_end_indentation
   - closure_parameter_position
   - closure_spacing
+  # - collection_alignment
   - colon
   - comma
+  # - comma_inheritance
   - comment_spacing
   - compiler_protocol_init
   - computed_accessors_order
@@ -20,7 +22,17 @@ only_rules: # Only enforce these rules, ignore all others
   - contains_over_first_not_nil
   - contains_over_range_nil_comparison
   - control_statement
+  # - convenience_type
+  # - cyclomatic_complexity
+  # - deployment_target
+  # - direct_return
+  # - discarded_notification_center_observer
   - discouraged_assert
+  # - discouraged_default_parameter
+  # - discouraged_direct_init
+  # - discouraged_none_name
+  # - discouraged_object_literal
+  # - discouraged_optional_collection
   - duplicate_conditions
   - duplicate_enum_cases
   - duplicate_imports
@@ -32,19 +44,36 @@ only_rules: # Only enforce these rules, ignore all others
   - empty_parentheses_with_trailing_closure
   - empty_string
   - empty_xctest_method
+  # - enum_case_associated_values_count
   - explicit_init
+  # - fallthrough
+  # - fatal_error_message
   - file_header
+  # - file_name
+  # - file_name_no_space
+  # - file_types_order
+  # - final_test_case
   - first_where
+  # - flatmap_over_map_reduce
   - for_where
   - force_cast
   - force_try
+  # - force_unwrapping
   - function_body_length
+  # - function_default_parameter_at_end
   - function_name_whitespace
+  # - function_parameter_count
+  # - generic_type_name
+  # - ibinspectable_in_extension
+  # - identical_operands
   - implicit_getter
   - implicit_optional_initialization
   - implicitly_unwrapped_optional
   - inclusive_language
   - invalid_swiftlint_command
+  # - invisible_character
+  # - is_disjoint
+  # - joined_default_parameter
   - large_tuple
   - last_where
   - leading_whitespace
@@ -52,94 +81,23 @@ only_rules: # Only enforce these rules, ignore all others
   - legacy_constant
   - legacy_constructor
   - legacy_hashing
-  - legacy_nsgeometry_functions
-  - line_length
-  - mark
-  - modifier_order
-  - multiline_arguments
-  - multiline_parameters
-  - no_space_in_method_call
-  - ns_number_init_as_function_reference
-  - opening_brace
-  - orphaned_doc_comment
-  - overridden_super_call
-  - prefer_type_checking
-  - private_over_fileprivate
-  - protocol_property_accessors_order
-  - redundant_discardable_let
-  - redundant_objc_attribute
-  - redundant_string_enum_value
-  - redundant_type_annotation
-  - redundant_void_return
-  - return_arrow_whitespace
-  - statement_position
-  - switch_case_alignment
-  - syntactic_sugar
-  - trailing_newline
-  - trailing_semicolon
-  - trailing_whitespace
-  - unavailable_condition
-  - unneeded_break_in_switch
-  - unneeded_override
-  - unneeded_synthesized_initializer
-  - unused_optional_binding
-  - unused_setter_value
-  - vertical_parameter_alignment
-  - vertical_parameter_alignment_on_call
-  - vertical_whitespace
-  - vertical_whitespace_closing_braces
-  - vertical_whitespace_opening_braces
-  - void_function_in_ternary
-  - void_return
-  - yoda_condition
-  # - blanket_disable_command
-  # - collection_alignment
-  # - comma_inheritance
-  # - convenience_type
-  # - cyclomatic_complexity
-  # - deployment_target
-  # - direct_return
-  # - discarded_notification_center_observer
-  # - discouraged_default_parameter
-  # - discouraged_direct_init
-  # - discouraged_none_name
-  # - discouraged_object_literal
-  # - duplicate_conditions
-  # - enum_case_associated_values_count
-  # - fallthrough
-  # - fatal_error_message
-  # - file_header
-  # - file_name_no_space
-  # - file_name
-  # - file_types_order
-  # - final_test_case
-  # - flatmap_over_map_reduce
-  # - for_where
-  # - force_cast
-  # - force_try
-  # - force_unwrapping
-  # - function_default_parameter_at_end
-  # - function_name_whitespace
-  # - function_parameter_count
-  # - generic_type_name
-  # - ibinspectable_in_extension
-  # - identical_operands
-  # - invalid_swiftlint_command
-  # - invisible_character
-  # - is_disjoint
-  # - joined_default_parameter
   # - legacy_multiple
+  - legacy_nsgeometry_functions
   # - legacy_objc_type
   # - legacy_random
   # - legacy_uigraphics_function
   # - let_var_whitespace
+  - line_length
   # - literal_expression_end_indentation
   # - local_doc_comment
   # - lower_acl_than_parent
+  - mark
+  - modifier_order
+  - multiline_arguments
   # - multiline_function_chains
   # - multiline_literal_brackets
+  - multiline_parameters
   # - multiline_parameters_brackets
-  # - multiline_parameters
   # - multiple_closures_with_trailing_closure
   # - nesting
   # - nimble_operator
@@ -147,39 +105,49 @@ only_rules: # Only enforce these rules, ignore all others
   # - no_fallthrough_only
   # - no_grouping_extension
   # - no_magic_numbers
+  - no_space_in_method_call
   # - non_optional_string_data_conversion
   # - notification_center_detachment
-  # - ns_number_init_as_function_reference
+  - ns_number_init_as_function_reference
   # - nslocalizedstring_key
   # - nsobject_prefer_isequal
   # - number_separator
+  - opening_brace
   # - operator_usage_whitespace
   # - optional_data_string_conversion
+  - orphaned_doc_comment
+  - overridden_super_call
   # - override_in_extension
   # - period_spacing
   # - prefer_asset_symbols
   # - prefer_condition_list
   # - prefer_self_in_static_references
   # - prefer_self_type_over_type_of_self
-  # - prefer_type_checking
+  - prefer_type_checking
   # - prefer_zero_over_explicit_init
   # - private_action
   # - private_outlet
+  - private_over_fileprivate
   # - private_subject
   # - private_swiftui_state
   # - private_unit_test
   # - prohibited_interface_builder
   # - prohibited_super_call
+  - protocol_property_accessors_order
   # - reduce_boolean
   # - reduce_into
+  - redundant_discardable_let
   # - redundant_final
   # - redundant_nil_coalescing
+  - redundant_objc_attribute
   # - redundant_self
   # - redundant_sendable
   # - redundant_set_access_control
-  # - redundant_string_enum_value
-  # - redundant_type_annotation
+  - redundant_string_enum_value
+  - redundant_type_annotation
+  - redundant_void_return
   # - required_enum_case
+  - return_arrow_whitespace
   # - return_value_from_void_function
   # - self_binding
   # - self_in_property_initialization
@@ -188,24 +156,30 @@ only_rules: # Only enforce these rules, ignore all others
   # - shorthand_optional_binding
   # - sorted_enum_cases
   # - sorted_first_last
+  - statement_position
   # - static_operator
   # - static_over_final_class
   # - strict_fileprivate
   # - strong_iboutlet
+  - switch_case_alignment
+  - syntactic_sugar
   # - toggle_bool
   # - trailing_closure
+  - trailing_newline
+  - trailing_semicolon
+  - trailing_whitespace
   # - type_body_length
   # - type_contents_order
   # - type_name
   # - typesafe_array_init
-  # - unavailable_condition
+  - unavailable_condition
   # - unavailable_function
   # - unhandled_throwing_task
-  # - unneeded_break_in_switch
+  - unneeded_break_in_switch
   # - unneeded_escaping
-  # - unneeded_override
+  - unneeded_override
   # - unneeded_parentheses_in_closure_argument
-  # - unneeded_synthesized_initializer
+  - unneeded_synthesized_initializer
   # - unneeded_throws_rethrows
   # - unowned_variable_capture
   # - untyped_error_in_catch
@@ -213,22 +187,22 @@ only_rules: # Only enforce these rules, ignore all others
   # - unused_control_flow_label
   # - unused_declaration
   # - unused_enumerated
+  - unused_optional_binding
   # - unused_parameter
+  - unused_setter_value
   # - valid_ibinspectable
   # - variable_shadowing
-  # - void_function_in_ternary
+  - vertical_parameter_alignment
+  - vertical_parameter_alignment_on_call
+  - vertical_whitespace
+  - vertical_whitespace_closing_braces
+  - vertical_whitespace_opening_braces
+  - void_function_in_ternary
+  - void_return
   # - weak_delegate
   # - xct_specific_matcher
   # - xctfail_message
-
-# These rules were originally opted into. Disabling for now to get
-# Swiftlint up and running.
-
-# - deployment_target
-# - discouraged_optional_collection
-# - prohibited_interface_builder
-# - prohibited_super_call
-# - protocol_property_accessors_order
+  - yoda_condition
 
 line_length:
   warning: 125
