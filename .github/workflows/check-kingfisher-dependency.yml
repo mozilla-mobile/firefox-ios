@@ -16,13 +16,13 @@ jobs:
       matrix:
         python-version: [3.10.16]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       with:
         persist-credentials: false
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -61,7 +61,7 @@ jobs:
         echo "next_app_version=${next_version}" >> $GITHUB_ENV
 
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v6
+      uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
       if: env.BRANCH_CREATED == 'false' && env.kingfisher_version != ''
       with:
         commit-message: Auto update SPM with latest Kingfisher release ${{ env.kingfisher_version }}
@@ -85,7 +85,7 @@ jobs:
     - name: Send Slack notification if action fails
       if: '!cancelled()'
       id: slack
-      uses: slackapi/slack-github-action@v2.0.0
+      uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d # v2.0.0
       env:
         ACTION_NAME: Kingfisher dependency update
         JOB_STATUS: ${{ job.status == 'success' && ':white_check_mark:' || job.status == 'failure' && ':x:' }}
