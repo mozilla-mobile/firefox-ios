@@ -3716,7 +3716,7 @@ class BrowserViewController: UIViewController,
 
         // Credit card sync telemetry
         let hasSync = self.profile.hasAccount()
-        logger.log("User has sync account setup \(hasSync)",
+        logger.log("Person has sync account setup \(hasSync)",
                    level: .debug,
                    category: .setup)
 
