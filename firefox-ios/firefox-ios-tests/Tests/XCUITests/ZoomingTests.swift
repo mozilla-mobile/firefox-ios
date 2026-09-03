@@ -46,6 +46,7 @@ final class ZoomingTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3003915
+    // Expected Failure: iOS 15.5, iOS 16.4
     func testZoomingActionsLandscape() {
         openURLAndNavigateToZoom(index: 0)
 
@@ -72,6 +73,7 @@ final class ZoomingTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306949
+    // Expected Failure: iOS 15.5, iOS 16.4
     func testZoomForceCloseFirefox() {
         openURLAndNavigateToZoom(index: 0)
 
@@ -101,6 +103,7 @@ final class ZoomingTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306948
     // Regression
+    // Expected Failure: iOS 15.5, iOS 16.4
     func testSwitchingZoomedTabs() {
         validateZoomLevelOnSwitchingTabs()
         // Repeat all steps in private browsing
@@ -113,6 +116,7 @@ final class ZoomingTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2609150
+    // Expected Failure: iOS 15.5, iOS 16.4
     func testSwitchingZoomedTabsLandscape() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         validateZoomLevelOnSwitchingTabs()

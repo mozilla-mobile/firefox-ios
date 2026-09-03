@@ -70,6 +70,7 @@ extension ScreenGraphTest {
         XCTAssertTrue(currentURL?.starts(with: "mozilla.org") ?? false, "Current url recorded by from the url bar is \(currentURL ?? "nil")")
     }
 
+    // Expected Failure: iOS 15.5, iOS 16.4
     func testSimpleToggleAction() {
         navigator.userState.url = "https://mozilla.org"
         navigator.performAction(TestActions.LoadURLByTyping)

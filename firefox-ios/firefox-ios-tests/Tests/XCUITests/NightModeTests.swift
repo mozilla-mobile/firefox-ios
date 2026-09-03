@@ -31,6 +31,7 @@ class NightModeTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307056
+    // Expected Failure: iOS 15.5, iOS 16.4
     func testNightModeUI() {
         let url1 = TestPages.exampleHTML
         // Go to a webpage, and select night mode on and off, check it's applied or not

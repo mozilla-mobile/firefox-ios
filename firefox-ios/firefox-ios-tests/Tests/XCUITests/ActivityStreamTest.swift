@@ -311,6 +311,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2861436
+    // Expected Failure: iOS 15.5, iOS 16.4
     func testShortcutsToggle() {
         app.launch()
         mozWaitForElementToExist(TopSiteCellgroup, timeout: TIMEOUT_LONG)

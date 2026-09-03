@@ -502,6 +502,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/4038425
     // Regression
+    // Expected Failure: iOS 16.4, iOS 17.5, iOS 18.6
     func testModernKitOnboardingSetAsDefaultBrowser() {
         launchApp()
 
