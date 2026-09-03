@@ -17,11 +17,11 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled: true
           model: exa
       - channel: developer
         value:
-          enabled: false
+          enabled: true
           model: exa
 
 enums:
