@@ -26,7 +26,7 @@ public struct QuickAnswersConfig: LLMConfig, Sendable {
     ) {
         self.instructions = instructions
         var options = options
-        options["model"] = QuickAnswersModel.liner.modelParameter
+        options["model"] = model.rawValue
         self.options = options
     }
 }
