@@ -329,9 +329,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // Not a ToolbarAction, so shouldUseAlternativeLocationColor(action:) doesn't apply here —
         // matches its own fallback branch for non-ToolbarAction callers.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: state.windowUUID)
-        let hasAlternativeLocationColor = toolbarState.map {
-            $0.toolbarPosition == .top && !$0.isShowingTopTabs && $0.isShowingNavigationToolbar
-        } ?? false
+        let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(toolbarState: toolbarState)
         let leadingPageActions = LeadingPageActionsBuilder.getActions(
             action: action,
             isEditing: state.isEditing,
@@ -767,24 +765,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     // MARK: - Address Toolbar Actions
 
-    // Checks whether we should show the translation icon based on the translation configuration
-    // state and setups up the configuration for the translation icon on the toolbar (for iPad and iPhone)
-    private static func configureTranslationIcon(
-        translationConfiguration: TranslationConfiguration?,
-        isLoading: Bool?,
-        hasAlternativeLocationColor: Bool,
-        isNovaDesignEnabled: Bool
-    ) -> ToolbarActionConfiguration? {
-        guard let config = translationConfiguration, config.isTranslationFeatureEnabled else { return nil }
-        guard let iconState = config.state else { return nil }
-        return translateAction(
-            enabled: isLoading == false,
-            state: iconState,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            isNovaDesignEnabled: isNovaDesignEnabled
-        )
-    }
-
     @MainActor
     private static func trailingPageActions(
         action: ToolbarAction,
@@ -924,7 +904,13 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return googleLensAction
     }
 
-    // Shared between leadingPageActions (via LeadingPageActionsBuilder) and trailingPageActions.
+    /// Whether the address bar should render with the alternative "in-content" location color —
+    /// true when the toolbar is top-positioned, top tabs aren't shown, and the nav toolbar is
+    /// visible. Only accepts `ToolbarAction` because `traitCollectionDidChange` and
+    /// `toolbarPositionChanged` carry a fresher value for these fields than what's already
+    /// committed to `ToolbarState`; every other action reads `ToolbarState` directly, same as
+    /// `shouldShowAlternativeLocationColor(toolbarState:)` below. Shared between
+    /// `leadingPageActions` and `trailingPageActions`.
     @MainActor
     private static func shouldUseAlternativeLocationColor(action: ToolbarAction) -> Bool {
         guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
@@ -944,6 +930,17 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let toolbarPosition = toolbarPosition(action: action)
         return toolbarPosition == .top && !isShowingTopTabs && isShowingNavigationToolbar
+    }
+
+    /// Same check as `shouldUseAlternativeLocationColor(action:)` (top position, no top tabs, nav
+    /// toolbar visible), but reads `ToolbarState` directly with no action-specific override, for
+    /// callers that don't have a `ToolbarAction` to read overrides from like `TranslationsAction`).
+    @MainActor
+    private static func shouldShowAlternativeLocationColor(toolbarState: ToolbarState?) -> Bool {
+        guard let toolbarState else { return false }
+            return toolbarState.toolbarPosition == .top
+                && !toolbarState.isShowingTopTabs
+                && toolbarState.isShowingNavigationToolbar
     }
 
     @MainActor
@@ -1006,16 +1003,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
     }
 
-    private static func shareAction(enabled: Bool, hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
-        return ToolbarActionConfiguration(
-            actionType: .share,
-            iconName: StandardImageIdentifiers.Medium.shareApple,
-            isEnabled: enabled,
-            hasCustomColor: !hasAlternativeLocationColor,
-            a11yLabel: .TabLocationShareAccessibilityLabel,
-            a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
-    }
-
     private static func stopLoadingAction(hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
             actionType: .stopLoading,
@@ -1073,40 +1060,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             a11yLabel: .Toolbars.ReaderModeWithSummarizerButtonAccessibilityLabel,
             a11yHint: .TabLocationReloadAccessibilityHint,
             a11yId: AccessibilityIdentifiers.Toolbar.readerModeWithSummarizerButton
-        )
-    }
-
-    // Sets up translation icon on the toolbar
-    //
-    // We handle tapping differently for translation button by showing a loading icon
-    // instead of a highlighted color.
-    // If we kept the highlighted color, then it will cause the translation icon to flicker
-    // when switching from inactive icon to loading icon when user taps on it. Hence, `hasHighlightedColor: false`.
-    private static func translateAction(
-        enabled: Bool,
-        state: TranslationConfiguration.IconState,
-        hasAlternativeLocationColor: Bool,
-        isNovaDesignEnabled: Bool
-    ) -> ToolbarActionConfiguration {
-        // We do not want to use template mode for translate active icon.
-        let isActiveState = state == .active
-
-        return ToolbarActionConfiguration(
-            actionType: .translate,
-            iconName: state.buttonImageName(isNovaDesignEnabled: isNovaDesignEnabled),
-            templateModeForImage: !isActiveState,
-            loadingConfig: LoadingConfig(
-                isLoading: state == .loading,
-                a11yLabel: .Translations.Sheet.AccessibilityLabels.LoadingCompletedAccessibilityLabel
-            ),
-            isEnabled: enabled,
-            isSelected: isActiveState,
-            hasCustomColor: !hasAlternativeLocationColor,
-            hasHighlightedColor: false,
-            contextualHintType: ContextualHintType.translation.rawValue,
-            a11yLabel: state.buttonA11yLabel,
-            a11yId: state.buttonA11yIdentifier,
-            cacheId: AccessibilityIdentifiers.Toolbar.translateButton
         )
     }
 }
