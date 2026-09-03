@@ -25,6 +25,12 @@
 /* Title of the issue category a user picks when video or audio does not play on a site, in the Report a Website Issue form. */
 "WebCompatReporter.Category.VideoOrAudio.v154" = "Video of audio wordt niet afgespeeld";
 
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no issue type has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint.v156" = "Kies eerst een probleemtype";
+
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156" = "Kies een specifiek probleem voor uw geselecteerde probleemtype";
+
 /* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "Beschrijf het probleem in detail";
 

@@ -1,0 +1,3 @@
+/* Title of the button that stops an in-progress Google Lens image search and returns the user to what they were looking at before. */
+"GoogleLens.Interstitial.CancelButtonTitle.v156" = "取消";
+

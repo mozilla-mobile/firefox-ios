@@ -5,7 +5,7 @@
 "WebCompatReporter.AdditionalInfo.IncludeBlockedList.v154" = "Enviar lista dos itens bloqueados pela proteção contra a monitorização";
 
 /* Label of the toggle that includes a screenshot of the page with the report, in the Report a Website Issue form. */
-"WebCompatReporter.AdditionalInfo.IncludeScreenshot.v154" = "Inclua automaticamente uma captura de ecrã para mostrar o problema";
+"WebCompatReporter.AdditionalInfo.IncludeScreenshot.v154" = "Incluir automaticamente uma captura de ecrã para mostrar o problema";
 
 /* Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form. */
 "WebCompatReporter.AdditionalInfo.LearnMore.v154" = "Saber mais";
@@ -14,22 +14,28 @@
 "WebCompatReporter.AdditionalInfo.Title.v154" = "Informação adicional";
 
 /* Title of the issue category a user picks when a site's layout or design is broken, in the Report a Website Issue form. */
-"WebCompatReporter.Category.DesignBroken.v154" = "O design está quebrado";
+"WebCompatReporter.Category.DesignBroken.v154" = "O design está estragado";
 
 /* Title of the issue category a user picks for problems not covered by the other options, in the Report a Website Issue form. */
 "WebCompatReporter.Category.Other.v154" = "Outro";
 
 /* Title of the issue category a user picks when a site does not work at all, in the Report a Website Issue form. */
-"WebCompatReporter.Category.SiteNotUsable.v154" = "O site não é utilizável";
+"WebCompatReporter.Category.SiteNotUsable.v154" = "Não é possível utilizar o site";
 
 /* Title of the issue category a user picks when video or audio does not play on a site, in the Report a Website Issue form. */
 "WebCompatReporter.Category.VideoOrAudio.v154" = "O vídeo ou áudio não é reproduzido";
 
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no issue type has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint.v156" = "Escolha um tipo de problema primeiro";
+
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156" = "Escolha um problema específico para o tipo de problema selecionado";
+
 /* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
-"WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "Descreva o problema em detalhes";
+"WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "Descreva detalhadamente o problema";
 
 /* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
-"WebCompatReporter.Fields.DetailsPlaceholder.v154" = "Descreva o problema em detalhes (opcional)";
+"WebCompatReporter.Fields.DetailsPlaceholder.v154" = "Descreva o problema detalhadamente (opcional)";
 
 /* Error message shown under the URL field when the address entered has an invalid format, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.URLError.v155" = "Insira um URL válido";
@@ -80,10 +86,10 @@
 "WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155" = "Estado da navegação privada: ligado ou desligado";
 
 /* Bullet on the Report Preview screen, for the tracking protection strength the user has chosen. */
-"WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155" = "Configuração melhorada da proteção contra a monitorização para este site";
+"WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155" = "Configuração da Proteção Melhorada Contra Monitorização para este site";
 
 /* Bullet on the Report Preview screen. Those three versions are only ever sent as tokens inside the user agent, never as fields of their own. %@ is the app name (e.g. Firefox). */
-"WebCompatReporter.Preview.Data.UserAgent.v155" = "O agente do utilizador do seu navegador, que inclui a sua versão do iOS, %@ a versão e a versão do motor do navegador";
+"WebCompatReporter.Preview.Data.UserAgent.v155" = "O agente do utilizador do seu navegador, que inclui a sua versão do iOS, versão %@ e a versão do motor do navegador";
 
 /* Accessibility label for the page screenshot thumbnail on the Report Preview screen. */
 "WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154" = "Captura de ecrã da página que está a reportar. Toque duas vezes para ver em ecrã completo.";
@@ -92,13 +98,13 @@
 "WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154" = "Fechar";
 
 /* Row on the Report Preview screen that opens the Technical Data screen, and that screen's title. */
-"WebCompatReporter.Preview.TechnicalData.v155" = "Dados técnicos";
+"WebCompatReporter.Preview.TechnicalData.v155" = "Dados Técnicos";
 
 /* Title of the Report Preview screen, which shows the data that will be sent with a website issue report. */
-"WebCompatReporter.Preview.Title.v154" = "Pré-visualização de relatório";
+"WebCompatReporter.Preview.Title.v154" = "Pré-visualização do Relatório";
 
 /* Title of the button that submits the website issue report, in the Report a Website Issue form. */
-"WebCompatReporter.SendButton.Title.v154" = "Enviar relatório";
+"WebCompatReporter.SendButton.Title.v154" = "Enviar Relatório";
 
 /* Accessibility label for the navigation bar button that dismisses the Report a Website Issue form without sending a report. */
 "WebCompatReporter.Sheet.CloseButtonAccessibilityLabel.v154" = "Fechar";
@@ -128,13 +134,13 @@
 "WebCompatReporter.SubOption.ItemsOverlapped.v154" = "Os itens estão sobrepostos";
 
 /* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
-"WebCompatReporter.SubOption.MediaControlsBroken.v154" = "Os controlos de media estão quebrados ou em falta";
+"WebCompatReporter.SubOption.MediaControlsBroken.v154" = "Os controlos multimédia não funcionam ou estão em falta";
 
 /* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.MissingItems.v154" = "Itens em falta";
 
 /* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
-"WebCompatReporter.SubOption.NoAudio.v154" = "Sem áudio";
+"WebCompatReporter.SubOption.NoAudio.v154" = "Não há áudio";
 
 /* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.NoVideo.v154" = "Não há vídeo";

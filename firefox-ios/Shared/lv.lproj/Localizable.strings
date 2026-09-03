@@ -218,7 +218,7 @@
 "ErrorPages.CertWarning.Title" = "Šis savienojums nav uzticams";
 
 /* Label for button to go back from the error page */
-"ErrorPages.GoBack.Button" = "Iet atpakaļ";
+"ErrorPages.GoBack.Button" = "Doties atpakaļ";
 
 /* Button label to temporarily continue to the site from the certificate error page */
 "ErrorPages.VisitOnce.Button" = "Tomēr apmeklēt šo mājaslapu";
@@ -373,6 +373,9 @@
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Meklēt vēlreiz";
 
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "Rādīt lejupielādes";
+
 /* This label is meant to signify the section containing a group of items from the past thirty days. */
 "Last month" = "Pēdējā mēnesī";
 
@@ -410,7 +413,7 @@
 "LoginsHelper.Update.Button" = "Atjaunināt";
 
 /* Placeholder test for search box in logins list view. */
-"LoginsList.LoginsListSearchPlaceholder" = "Filtrs";
+"LoginsList.LoginsListSearchPlaceholder" = "Atrsijātājs";
 
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Nekas neatbilst meklētajam.";
@@ -447,6 +450,15 @@
 
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "Pielāgot sākumlapu";
+
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Lejupielādes";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Aizsardzība ir IZSLĒGTA šai vietnei";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Aizsardzība ir IESLĒGTA šai vietnei";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Ielīmēt";
@@ -700,6 +712,15 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
 "Settings.AddressBar.SettingsTitle.v138" = "Adrešu josla";
 
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Izskats";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Tīmekļvietņu izskats";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Piešķir tīmekļvietnēm tumšu izskatu. Dažas vietnes var neizskatīties pareizi.";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Liegt ārēju lietotņu atvēršanu";
 
@@ -710,7 +731,7 @@
 "Settings.ClearPrivateData.SectionName" = "Notīrīt privātos datus";
 
 /* Default text in search bar for Data Management */
-"Settings.DataManagement.SearchLabel" = "Filtrēt vietnes";
+"Settings.DataManagement.SearchLabel" = "Atsijāt vietnes";
 
 /* Body of the alert when prompting the user asking to disconnect. */
 "Settings.Disconnect.Body" = "Firefox pārstās sinhronizēt ar jūsu kontu, bet esošie dati no šīs ierīces netiks izdzēsti.";
