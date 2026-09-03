@@ -23,6 +23,27 @@ final class SettingsHomepageScreen {
         BaseTestCase().mozWaitForElementToExist(sel.START_AT_HOME_AFTER_4H.element(in: app))
     }
 
+    /// Selects "Homepage" in the Opening screen section, i.e. Start at Home set to always.
+    func selectHomepageAsOpeningScreen() {
+        sel.START_AT_HOME_ALWAYS.element(in: app).waitAndTap()
+        assertHomepageIsSelectedAsOpeningScreen()
+    }
+
+    func assertHomepageIsSelectedAsOpeningScreen() {
+        let homepageOption = sel.START_AT_HOME_ALWAYS.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(homepageOption)
+        // The checkmark is applied on a table reload, so the selected state settles asynchronously
+        let expectation = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "isSelected == true"),
+            object: homepageOption
+        )
+        XCTAssertEqual(
+            XCTWaiter().wait(for: [expectation], timeout: TIMEOUT),
+            .completed,
+            "Homepage is not selected as the opening screen"
+        )
+    }
+
     func assertStoriesSwitch(isOn expected: Bool) {
         let sw = sel.STORIES_SWITCH.element(in: app)
         BaseTestCase().mozWaitForElementToExist(sw)

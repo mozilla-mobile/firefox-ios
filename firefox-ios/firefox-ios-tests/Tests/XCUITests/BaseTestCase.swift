@@ -25,6 +25,8 @@ let TIMEOUT_LONG: TimeInterval = 20
 let PDF_TIMEOUT: TimeInterval = 60
 // TabDataStore throttles background saves by 2 seconds, plus one second of margin
 let tabPersistenceThrottleWait: UInt32 = 3
+// Start at Home set to "Homepage" triggers after 5 seconds of inactivity, plus two of margin
+let startAtHomeInactivityWait: TimeInterval = 7
 // Translation is network-bound and can take up to ~1 min to complete
 let TRANSLATION_TIMEOUT: TimeInterval = 90
 // Probe for optional UI that shows up immediately or not at all
@@ -55,13 +57,16 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.DisableAnimations
         ]
 
-    func restartInBackground() {
+    /// - Parameter inactiveFor: how long to stay backgrounded before foregrounding again, for tests
+    /// that need a minimum amount of inactivity to elapse.
+    func restartInBackground(inactiveFor seconds: TimeInterval = 0) {
         // Send app to background, and re-enter
         XCUIDevice.shared.press(.home)
         // Let's be sure the app is backgrounded
         _ = app.wait(for: XCUIApplication.State.runningBackgroundSuspended, timeout: TIMEOUT)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
+        idle(for: seconds)
         app.activate()
         // Wait until the app is fully opened (running in foreground) before continuing
         let predicate = NSPredicate(format: "state == %d", XCUIApplication.State.runningForeground.rawValue)
@@ -72,25 +77,38 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func closeFromAppSwitcherAndRelaunch() {
+    /// - Parameter inactiveFor: how long to stay closed before relaunching, for tests that need a
+    /// minimum amount of inactivity to elapse.
+    func closeFromAppSwitcherAndRelaunch(inactiveFor seconds: TimeInterval = 0) {
         let swipeStart = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.999))
         let swipeEnd = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.001))
         _ = app.wait(for: .runningForeground, timeout: TIMEOUT)
         swipeStart.press(forDuration: 0.1, thenDragTo: swipeEnd)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
+        idle(for: seconds)
         app.activate()
+    }
+
+    /// Idles without blocking the runner: a `sleep()` while the app is not in the foreground gets
+    /// the test process killed.
+    func idle(for seconds: TimeInterval) {
+        guard seconds > 0 else { return }
+        RunLoop.current.run(until: Date().addingTimeInterval(seconds))
     }
 
     /// Kills the app and relaunches it keeping the profile, so tabs and preferences set during the
     /// test survive the restart.
-    func forceCloseAndRelaunchApp() {
+    /// - Parameter inactiveFor: how long to stay closed before relaunching, for tests that need a
+    /// minimum amount of inactivity to elapse.
+    func forceCloseAndRelaunchApp(inactiveFor seconds: TimeInterval = 0) {
         // Backgrounding is what saves the tabs, and the app must outlive that throttled write.
         // It is foregrounded again first, as waiting at the home screen gets the runner killed.
         restartInBackground()
         sleep(tabPersistenceThrottleWait)
         app.terminate()
         _ = app.wait(for: .notRunning, timeout: TIMEOUT)
+        idle(for: seconds)
         // Session restore is opted into, as UI tests otherwise always start from a clean tab state
         let keptArguments = app.launchArguments.filter {
             $0 != LaunchArguments.ClearProfile && $0 != LaunchArguments.EnableSessionRestore
