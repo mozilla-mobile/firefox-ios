@@ -1841,6 +1841,8 @@
 		C87BE0A428A2ED3F00BAADF5 /* wallpaperNoLearnMoreURL.json in Resources */ = {isa = PBXBuildFile; fileRef = C87BE0A328A2ED3F00BAADF5 /* wallpaperNoLearnMoreURL.json */; };
 		C87D8B802818333F00A6307D /* NimbusManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87D8B7F2818333F00A6307D /* NimbusManager.swift */; };
 		C87DF9DB267247190097E707 /* UIConstants+BottomInset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */; };
+		C888A06B303F80EB009A09E3 /* MainActorDebouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C888A06A303F80E8009A09E3 /* MainActorDebouncer.swift */; };
+		C888A06D303F8325009A09E3 /* MainActorDebouncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C888A06C303F8325009A09E3 /* MainActorDebouncerTests.swift */; };
 		C88E7A602A05551B0072E638 /* NimbusOnboardingFeatureLayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88E7A5F2A05551B0072E638 /* NimbusOnboardingFeatureLayerProtocol.swift */; };
 		C893075D265501EE00A1DB2F /* CredentialAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C893075C265501EE00A1DB2F /* CredentialAssets.xcassets */; };
 		C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4137328BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift */; };
@@ -11057,6 +11059,8 @@
 		C87D8B7F2818333F00A6307D /* NimbusManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusManager.swift; sourceTree = "<group>"; };
 		C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIConstants+BottomInset.swift"; sourceTree = "<group>"; };
 		C88847109E62D581C497BB8E /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
+		C888A06A303F80E8009A09E3 /* MainActorDebouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActorDebouncer.swift; sourceTree = "<group>"; };
+		C888A06C303F8325009A09E3 /* MainActorDebouncerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActorDebouncerTests.swift; sourceTree = "<group>"; };
 		C88E7A5F2A05551B0072E638 /* NimbusOnboardingFeatureLayerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingFeatureLayerProtocol.swift; sourceTree = "<group>"; };
 		C893075C265501EE00A1DB2F /* CredentialAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CredentialAssets.xcassets; sourceTree = "<group>"; };
 		C8A4137328BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMetadataCodableProtocol.swift; sourceTree = "<group>"; };
@@ -14246,6 +14250,7 @@
 				C8E78BDC27F4A1E700C48BAA /* HistoryDeletionUtilityTests.swift */,
 				8A1E3BE128CBACD7003388C4 /* SponsoredContentFilterUtilityTests.swift */,
 				8ACA8F7529198D6400D3075D /* MainThreadThrottlerTests.swift */,
+				C888A06C303F8325009A09E3 /* MainActorDebouncerTests.swift */,
 				8AA8389C2CA2FEFC003FA256 /* StoreTestUtility.swift */,
 			);
 			path = Utils;
@@ -17086,6 +17091,7 @@
 				818BCC732E463BA5008309B1 /* CuratedRecommendationCacheUtility.swift */,
 				0E4AF8602D763E9D002E4238 /* DownloadLiveActivityUtil.swift */,
 				96D95015270238500079D39D /* MainThreadThrottler.swift */,
+				C888A06A303F80E8009A09E3 /* MainActorDebouncer.swift */,
 				8A48807D2E68923200AD43D5 /* GleanHttpUploader.swift */,
 				8A48807B2E68922400AD43D5 /* GleanOhttpUploader.swift */,
 				8A8F541F2E5CB8AF00C0207F /* GleanPingUploader.swift */,
@@ -20042,6 +20048,7 @@
 				EDF2C0562D693A7300723609 /* AppIconSetting.swift in Sources */,
 				FA9293D41D6580E100AC8D33 /* QRCodeViewController.swift in Sources */,
 				8AAEBA082BF52708000C02B5 /* MicrosurveyCoordinator.swift in Sources */,
+				C888A06B303F80EB009A09E3 /* MainActorDebouncer.swift in Sources */,
 				5A679E4B2B239FAE004F2B0D /* TabPeekViewController.swift in Sources */,
 				E18CE8DC2BDA3FA600EE2BCD /* NavigationToolbarContainerModel.swift in Sources */,
 				C2BA5A312FEEB54D00AD1FBD /* DefaultQuickAnswersTelemetry.swift in Sources */,
@@ -21363,6 +21370,7 @@
 				21371FA228A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift in Sources */,
 				61F7A4332D136C3A00F7317B /* RouteBuilderTests.swift in Sources */,
 				39CC6FD4301A792800164DCA /* TrackerBlockerModuleCellTests.swift in Sources */,
+				C888A06D303F8325009A09E3 /* MainActorDebouncerTests.swift in Sources */,
 				C2F70A052FBC000100112233 /* TrackerBlockerSheetViewControllerTests.swift in Sources */,
 				5AE371842A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift in Sources */,
 				8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */,
