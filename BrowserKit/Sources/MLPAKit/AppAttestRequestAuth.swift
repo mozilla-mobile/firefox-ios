@@ -46,7 +46,7 @@ public struct AppAttestRequestAuth: RequestAuthProtocol {
         ).encode()
 
         request.setValue(MLPAConstants.bearerPrefix + jwt, forHTTPHeaderField: MLPAConstants.authorizationHeader)
-        request.setValue("liner-answers", forHTTPHeaderField: MLPAConstants.serviceTypeHeader)
+        request.setValue("liner-answer", forHTTPHeaderField: MLPAConstants.serviceTypeHeader)
         request.setValue("true", forHTTPHeaderField: MLPAConstants.useAppAttestHeader)
         request.httpBody = result.payload
     }
