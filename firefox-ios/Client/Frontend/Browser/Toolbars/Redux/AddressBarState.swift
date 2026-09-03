@@ -166,8 +166,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
     static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
         guard let action = action as? ToolbarModernAction else { return defaultState(from: state) }
         switch action {
-        case .didCancelKeyboardRequest:
-            return state.copy(shouldShowKeyboard: false)
+        case .didKeyboardRequestChange(let shouldShow):
+            return state.copy(shouldShowKeyboard: shouldShow)
         default:
             return defaultState(from: state)
         }
