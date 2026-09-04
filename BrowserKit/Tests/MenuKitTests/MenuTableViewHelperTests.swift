@@ -127,4 +127,48 @@ final class MenuTableViewHelperTests: XCTestCase {
         let cell = helper.cellForRowAt(tableView, IndexPath(row: 0, section: 0))
         XCTAssertTrue(cell is MenuCell)
     }
+
+    func testCellForRow_menuCellIsConfiguredWithNilTheme() {
+        let option = MenuElement(
+            title: "Option 1",
+            iconName: "",
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: "Option 1",
+            a11yHint: "",
+            a11yId: "option1",
+            action: nil
+        )
+
+        tableView.register(MenuCell.self, forCellReuseIdentifier: MenuCell.cellIdentifier)
+        let section = MenuSection(isHorizontalTabsSection: false, isExpanded: true, options: [option])
+        helper.updateData([section], theme: nil, isBannerVisible: false)
+        helper.reload()
+
+        let cell = helper.cellForRowAt(tableView, IndexPath(row: 0, section: 0)) as? MenuCell
+        XCTAssertNotNil(cell?.model, "Cell should be configured even when theme is nil")
+    }
+
+    func testCellForRow_accountCellIsConfiguredWithNilTheme() {
+        let option = MenuElement(
+            title: "Sign In",
+            iconName: "",
+            iconImage: UIImage(),
+            needsReAuth: false,
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: "Sign In",
+            a11yHint: "",
+            a11yId: "signIn",
+            action: nil
+        )
+
+        tableView.register(MenuAccountCell.self, forCellReuseIdentifier: MenuAccountCell.cellIdentifier)
+        let section = MenuSection(isHorizontalTabsSection: false, isExpanded: true, options: [option])
+        helper.updateData([section], theme: nil, isBannerVisible: false)
+        helper.reload()
+
+        let cell = helper.cellForRowAt(tableView, IndexPath(row: 0, section: 0)) as? MenuAccountCell
+        XCTAssertNotNil(cell?.model, "Cell should be configured even when theme is nil")
+    }
 }
