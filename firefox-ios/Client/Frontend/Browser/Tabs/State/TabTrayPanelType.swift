@@ -10,6 +10,15 @@ enum TabTrayPanelType: Int, CaseIterable {
     case privateTabs
     case syncedTabs
 
+    var isPrivateMode: Bool {
+        switch self {
+        case .privateTabs:
+            return true
+        case .tabs, .syncedTabs:
+            return false
+        }
+    }
+
     var navTitle: String {
         switch self {
         case .tabs:
