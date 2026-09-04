@@ -22,7 +22,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     private let bookmarksSaver: BookmarksSaver
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizerConfigFactory: SummarizerConfigFactory
-    private let tabsPanelTelemetry: TabsPanelTelemetry
+    private let tabsPanelTelemetry: TabsPanelTelemetryProtocol
     var bookmarksHandler: BookmarksHandler
 
     private var isTabTrayUIExperimentsEnabled: Bool {
@@ -45,7 +45,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
          summarizerNimbusUtility: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          summarizerConfigFactory: SummarizerConfigFactory = SummarizerMiddleware(),
          bookmarksSaver: BookmarksSaver? = nil,
-         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
+         tabsPanelTelemetry: TabsPanelTelemetryProtocol = TabsPanelTelemetry()
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtility
         self.summarizerConfigFactory = summarizerConfigFactory
@@ -54,7 +54,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         self.logger = logger
         self.windowManager = windowManager
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
-        self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
+        self.tabsPanelTelemetry = tabsPanelTelemetry
     }
 
     lazy var tabsPanelProvider: Middleware<AppState> = (legacyProvider, modernProvider)
