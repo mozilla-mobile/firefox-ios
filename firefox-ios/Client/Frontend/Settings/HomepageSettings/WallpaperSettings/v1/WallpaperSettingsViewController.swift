@@ -67,6 +67,9 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        #if MOZ_CHANNEL_developer
+        setupStagingButton()
+        #endif
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
@@ -251,6 +254,67 @@ private extension WallpaperSettingsViewController {
         settingsDelegate?.didFinish()
         viewModel.selectHomepageTab()
     }
+
+    #if MOZ_CHANNEL_developer
+    func setupStagingButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "link"),
+            style: .plain,
+            target: self,
+            action: #selector(showStagingConfig)
+        )
+    }
+
+    @objc func showStagingConfig() {
+        let defaults = UserDefaults.standard
+        let alert = UIAlertController(
+            title: "Staging Server",
+            message: "Enter the server URL and the session token from the Figma plugin to preview wallpapers live.",
+            preferredStyle: .alert
+        )
+
+        alert.addTextField { field in
+            field.placeholder = "http://192.168.1.x:8080"
+            field.text = defaults.string(forKey: WallpaperLiveReload.serverKey) ?? ""
+            field.keyboardType = .URL
+            field.autocapitalizationType = .none
+            field.autocorrectionType = .no
+        }
+
+        alert.addTextField { field in
+            field.placeholder = "Token (e.g. ZXGS8Y)"
+            field.text = defaults.string(forKey: WallpaperLiveReload.tokenKey) ?? ""
+            field.autocapitalizationType = .allCharacters
+            field.autocorrectionType = .no
+        }
+
+        alert.addAction(UIAlertAction(title: "Connect", style: .default) { [weak self] _ in
+            let server = alert.textFields?[0].text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            let token = alert.textFields?[1].text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            guard !server.isEmpty, !token.isEmpty else { return }
+
+            defaults.set(server, forKey: WallpaperLiveReload.serverKey)
+            defaults.set(token, forKey: WallpaperLiveReload.tokenKey)
+            defaults.removeObject(forKey: "WallpaperMetadataLastCheckedUserPrefsKey")
+
+            WallpaperLiveReload.shared.start()
+            WallpaperManager().checkForUpdates()
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self?.collectionView.reloadData()
+            }
+        })
+
+        alert.addAction(UIAlertAction(title: "Disconnect", style: .destructive) { _ in
+            defaults.removeObject(forKey: WallpaperLiveReload.serverKey)
+            defaults.removeObject(forKey: WallpaperLiveReload.tokenKey)
+            WallpaperLiveReload.shared.stop()
+        })
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(alert, animated: true)
+    }
+    #endif
 
     func downloadAndSetWallpaper(at indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? WallpaperCollectionViewCell

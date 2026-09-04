@@ -357,6 +357,9 @@ class AppDelegate: UIResponder,
             let wallpaperManager = WallpaperManager()
             wallpaperManager.checkForUpdates()
         }
+        #if MOZ_CHANNEL_developer
+        WallpaperLiveReload.shared.start()
+        #endif
     }
 
     private func fixSimulatorDevBuild(_ application: UIApplication) {

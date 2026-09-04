@@ -57,6 +57,14 @@ struct WallpaperURLProvider {
     private func urlScheme() throws -> String {
         if AppConstants.isRunningTest { return WallpaperURLProvider.testURL }
 
+        #if MOZ_CHANNEL_developer
+        if let server = UserDefaults.standard.string(forKey: "WallpaperStagingServerURL"),
+           let token = UserDefaults.standard.string(forKey: "WallpaperStagingSessionToken"),
+           !server.isEmpty, !token.isEmpty {
+            return "\(server)/custom/\(token)"
+        }
+        #endif
+
         let bundle = AppInfo.applicationBundle
         guard let appToken = bundle.object(forInfoDictionaryKey: wallpaperURLScheme) as? String,
               !appToken.isEmpty

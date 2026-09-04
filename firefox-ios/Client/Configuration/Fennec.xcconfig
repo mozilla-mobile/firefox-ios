@@ -16,6 +16,7 @@ CODE_SIGN_ENTITLEMENTS = Client/Entitlements/FennecApplication.entitlements
 CHANNEL = developer
 OTHER_SWIFT_FLAGS = $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_$(CHANNEL)
 MOZ_INTERNAL_URL_SCHEME = fennec
+MOZ_WALLPAPER_ASSET_URL = http:/$()/localhost:6788
 OTHER_LDFLAGS = -ObjC -fprofile-instr-generate -Xlinker -no_application_extension
 SWIFT_OPTIMIZATION_LEVEL = -Onone
 ENABLE_NS_ASSERTIONS = YES

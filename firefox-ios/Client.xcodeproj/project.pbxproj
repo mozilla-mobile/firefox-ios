@@ -1804,6 +1804,7 @@
 		C84655F728879EF100861B4A /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655F628879EF100861B4A /* WallpaperManager.swift */; };
 		C84655FB28879FC600861B4A /* WallpaperStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655FA28879FC600861B4A /* WallpaperStorageUtility.swift */; };
 		C84655FF2887A06B00861B4A /* WallpaperFilePathProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84655FE2887A06B00861B4A /* WallpaperFilePathProvider.swift */; };
+		792D7B52F806C772CA9AA8DC /* WallpaperLiveReload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792D7B52F806C772CA9AA8DB /* WallpaperLiveReload.swift */; };
 		C84656012887A0F700861B4A /* WallpaperMetadataUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84656002887A0F700861B4A /* WallpaperMetadataUtility.swift */; };
 		C8501F5128510DA1003B09AB /* WallpaperMigrationUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8501F5028510DA1003B09AB /* WallpaperMigrationUtilityTests.swift */; };
 		C855728229AE7F1700AF32B0 /* SurveySurfaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C855728129AE7F1700AF32B0 /* SurveySurfaceManager.swift */; };
@@ -11084,6 +11085,7 @@
 		C84655F628879EF100861B4A /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
 		C84655FA28879FC600861B4A /* WallpaperStorageUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperStorageUtility.swift; sourceTree = "<group>"; };
 		C84655FE2887A06B00861B4A /* WallpaperFilePathProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperFilePathProvider.swift; sourceTree = "<group>"; };
+		792D7B52F806C772CA9AA8DB /* WallpaperLiveReload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperLiveReload.swift; sourceTree = "<group>"; };
 		C84656002887A0F700861B4A /* WallpaperMetadataUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMetadataUtility.swift; sourceTree = "<group>"; };
 		C8501F5028510DA1003B09AB /* WallpaperMigrationUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMigrationUtilityTests.swift; sourceTree = "<group>"; };
 		C855728129AE7F1700AF32B0 /* SurveySurfaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveySurfaceManager.swift; sourceTree = "<group>"; };
@@ -16000,6 +16002,7 @@
 			isa = PBXGroup;
 			children = (
 				C84655FE2887A06B00861B4A /* WallpaperFilePathProvider.swift */,
+				792D7B52F806C772CA9AA8DB /* WallpaperLiveReload.swift */,
 				C84656002887A0F700861B4A /* WallpaperMetadataUtility.swift */,
 				C84655FA28879FC600861B4A /* WallpaperStorageUtility.swift */,
 				C838FD5D289981240068F60B /* WallpaperURLProvider.swift */,
@@ -20140,6 +20143,7 @@
 				E650755C1E37F747006961AC /* Swizzling.m in Sources */,
 				B236204F2B86C56F000B1DE7 /* AddressAutofillCoordinator.swift in Sources */,
 				74821FC51DB56A2500EEEA72 /* OpenWithSettingsViewController.swift in Sources */,
+				792D7B52F806C772CA9AA8DC /* WallpaperLiveReload.swift in Sources */,
 				C84656012887A0F700861B4A /* WallpaperMetadataUtility.swift in Sources */,
 				E1B04A9D28E20A8300670E54 /* InstructionsView.swift in Sources */,
 				0B3A153A2CE1FE710049746C /* PullRefreshView.swift in Sources */,
