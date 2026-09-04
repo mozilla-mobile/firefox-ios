@@ -196,7 +196,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             TranslationsActionType.receivedTranslationLanguage,
             TranslationsActionType.didReceiveErrorTranslating,
             TranslationsActionType.didTranslationSettingsChange:
-            return handleLeadingPageChangedAction(state: state, action: action)
+            return handleLeadingPageTranslationAction(state: state, action: action)
 
         case ToolbarActionType.didSummarizeSettingsChange:
             return handleSummarizeStateChangedAction(state: state, action: action)
@@ -321,15 +321,22 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     @MainActor
-    private static func handleLeadingPageChangedAction(state: Self, action: Action) -> Self {
+    private static func handleLeadingPageTranslationAction(state: Self, action: Action) -> Self {
         guard let translationsAction = action as? TranslationsAction else {
             return defaultState(from: state)
         }
 
+        // Not a ToolbarAction, so shouldUseAlternativeLocationColor(action:isNovaDesignEnabled:)
+        // doesn't apply here, matches its own fallback branch for non-ToolbarAction callers.
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: state.windowUUID)
+        let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(toolbarState: toolbarState,
+                                                                             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let leadingPageActions = LeadingPageActionsBuilder.getActions(
+            action: action,
+            isEditing: state.isEditing,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
         return state
-            .copy(leadingPageActions: leadingPageActions(action: translationsAction,
-                                                         addressBarState: state,
-                                                         isEditing: state.isEditing))
+            .copy(leadingPageActions: leadingPageActions)
             .copy(translationConfiguration: translationsAction.translationConfiguration)
     }
 
@@ -368,11 +375,15 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handleWebsiteLoadingStateDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
+        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction,
+                                                                            isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let leadingPageActions = LeadingPageActionsBuilder.getActions(
+            action: action,
+            isEditing: state.isEditing,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
-            .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
-                                                         addressBarState: state,
-                                                         isEditing: state.isEditing))
+            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
                                                            isEditing: state.isEditing))
@@ -384,12 +395,16 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         let isEmptySearch = toolbarAction.url == nil
+        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction,
+                                                                            isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let leadingPageActions = LeadingPageActionsBuilder.getActions(
+            action: action,
+            isEditing: state.isEditing,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
 
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
-            .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
-                                                         addressBarState: state,
-                                                         isEditing: state.isEditing))
+            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
                                                            isEditing: state.isEditing,
@@ -434,11 +449,15 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
+        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction,
+                                                                            isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let leadingPageActions = LeadingPageActionsBuilder.getActions(
+            action: action,
+            isEditing: state.isEditing,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
-            .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
-                                                         addressBarState: state,
-                                                         isEditing: state.isEditing))
+            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
                                                            isEditing: state.isEditing))
@@ -449,11 +468,15 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handleTraitCollectionDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
+        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction,
+                                                                            isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let leadingPageActions = LeadingPageActionsBuilder.getActions(
+            action: action,
+            isEditing: state.isEditing,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
-            .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
-                                                         addressBarState: state,
-                                                         isEditing: state.isEditing))
+            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
                                                            isEditing: state.isEditing))
@@ -466,11 +489,15 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handleShowMenuWarningBadgeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
+        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction,
+                                                                            isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let leadingPageActions = LeadingPageActionsBuilder.getActions(
+            action: action,
+            isEditing: state.isEditing,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
-            .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
-                                                         addressBarState: state,
-                                                         isEditing: state.isEditing))
+            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
                                                            isEditing: state.isEditing))
@@ -483,11 +510,15 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
+        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction,
+                                                                            isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let leadingPageActions = LeadingPageActionsBuilder.getActions(
+            action: action,
+            isEditing: state.isEditing,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
-            .copy(leadingPageActions: leadingPageActions(action: toolbarAction,
-                                                         addressBarState: state,
-                                                         isEditing: state.isEditing))
+            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
                                                            isEditing: state.isEditing))
@@ -502,17 +533,26 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
+        // This action always puts the address bar into editing mode.
+        // Declared once and reused so the actions computed here can never drift out of sync
+        let isEditing = true
 
+        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction,
+                                                                            isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let leadingPageActions = LeadingPageActionsBuilder.getActions(
+            action: action,
+            isEditing: isEditing,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
-            .copy(leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
-                                                           isEditing: true,
+                                                           isEditing: isEditing,
                                                            isEmptySearch: isEmptySearch))
-            .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: isEditing))
             .copy(searchTerm: toolbarAction.searchTerm)
-            .copy(isEditing: true)
+            .copy(isEditing: isEditing)
             .copy(shouldShowKeyboard: true)
             .copy(shouldSelectSearchTerm: false)
             .copy(didStartTyping: false)
@@ -526,17 +566,25 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let searchTerm = toolbarAction.searchTerm ?? state.searchTerm
         let locationText = searchTerm ?? state.url?.absoluteString
         let isEmptySearch = locationText == nil || locationText?.isEmpty == true
-
+        // This action always puts the address bar into editing mode.
+        // Declared once and reused so the actions computed here can never drift out of sync
+        let isEditing = true
+        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction,
+                                                                            isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let leadingPageActions = LeadingPageActionsBuilder.getActions(
+            action: action,
+            isEditing: isEditing,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
-            .copy(leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
-                                                           isEditing: true,
+                                                           isEditing: isEditing,
                                                            isEmptySearch: isEmptySearch))
-            .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: isEditing))
             .copy(searchTerm: searchTerm)
-            .copy(isEditing: true)
+            .copy(isEditing: isEditing)
             .copy(shouldShowKeyboard: true)
             .copy(shouldSelectSearchTerm: true)
             .copy(didStartTyping: false)
@@ -563,18 +611,27 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let url = toolbarAction.url ?? state.url
         let isEmptySearch = url == nil
+        // This action always leaves editing mode. Declared once and reused so the actions computed here
+        // can never drift out of sync
+        let isEditing = false
+        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction,
+                                                                            isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let leadingPageActions = LeadingPageActionsBuilder.getActions(
+            action: action,
+            isEditing: isEditing,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
 
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
-            .copy(leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state))
+            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
-                                                           isEditing: false,
+                                                           isEditing: isEditing,
                                                            isEmptySearch: isEmptySearch))
-            .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: false))
+            .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: isEditing))
             .copy(url: url)
             .copy(searchTerm: nil)
-            .copy(isEditing: false)
+            .copy(isEditing: isEditing)
             .copy(shouldShowKeyboard: false)
             .copy(shouldSelectSearchTerm: false)
             .copy(didStartTyping: false)
@@ -586,17 +643,26 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
+        // This action always puts the address bar into editing mode.
+        // Declared once and reused so the actions computed here can never drift out of sync
+        let isEditing = true
+        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction,
+                                                                            isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let leadingPageActions = LeadingPageActionsBuilder.getActions(
+            action: action,
+            isEditing: isEditing,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
 
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
-            .copy(leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
                                                            addressBarState: state,
-                                                           isEditing: true,
+                                                           isEditing: isEditing,
                                                            isEmptySearch: isEmptySearch))
-            .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true))
+            .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: isEditing))
             .copy(searchTerm: toolbarAction.searchTerm)
-            .copy(isEditing: true)
+            .copy(isEditing: isEditing)
             .copy(shouldShowKeyboard: true)
             .copy(shouldSelectSearchTerm: false)
             .copy(didStartTyping: false)
@@ -716,94 +782,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     // MARK: - Address Toolbar Actions
-    @MainActor
-    private static func leadingPageActions(
-        action: Action,
-        addressBarState: AddressBarState,
-        isEditing: Bool = false
-    ) -> [ToolbarActionConfiguration] {
-        var actions = [ToolbarActionConfiguration]()
-
-        guard action is ToolbarAction || action is TranslationsAction else { return actions }
-
-        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
-              !isEditing
-        else { return actions }
-
-        let toolbarAction = action as? ToolbarAction
-        let actionTranslationConfiguration = TranslationConfiguration(from: action)
-        // For TranslationsAction the action's config is the sole authority — nil means "clear the icon".
-        // For ToolbarAction we fall back to state so the icon persists across unrelated toolbar updates.
-        let resolvedTranslationConfiguration: TranslationConfiguration? = action is TranslationsAction
-            ? actionTranslationConfiguration
-            : actionTranslationConfiguration ?? addressBarState.translationConfiguration
-        let isShowingNavigationToolbar = toolbarAction?.isShowingNavigationToolbar
-            ?? toolbarState.isShowingNavigationToolbar
-        let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
-        let isHomepage = (isURLDidChangeAction ? toolbarAction?.url : toolbarState.addressToolbar.url) == nil
-        let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
-        let isLoading = isLoadingChangeAction ? toolbarAction?.isLoading : addressBarState.isLoading
-        let hasAlternativeLocationColor: Bool
-        if let toolbarAction {
-            hasAlternativeLocationColor = shouldUseAlternativeLocationColor(
-                action: toolbarAction,
-                isNovaDesignEnabled: addressBarState.isNovaDesignEnabled
-            )
-        } else {
-            hasAlternativeLocationColor = !addressBarState.isNovaDesignEnabled
-                && toolbarState.toolbarPosition == .top
-                && !toolbarState.isShowingTopTabs
-                && toolbarState.isShowingNavigationToolbar
-        }
-
-        if !isHomepage, !isShowingNavigationToolbar {
-            let shareAction = shareAction(enabled: isLoading == false,
-                                          hasAlternativeLocationColor: hasAlternativeLocationColor)
-            actions.append(shareAction)
-
-            if let translationAction = configureTranslationIcon(
-                translationConfiguration: resolvedTranslationConfiguration,
-                isLoading: isLoading,
-                hasAlternativeLocationColor: hasAlternativeLocationColor,
-                isNovaDesignEnabled: addressBarState.isNovaDesignEnabled
-            ) {
-                actions.append(translationAction)
-            }
-        } else if !isHomepage, isShowingNavigationToolbar {
-            let shareAction = shareAction(enabled: isLoading == false,
-                                          hasAlternativeLocationColor: hasAlternativeLocationColor)
-            actions.append(shareAction)
-
-            if let translationAction = configureTranslationIcon(
-                translationConfiguration: resolvedTranslationConfiguration,
-                isLoading: isLoading,
-                hasAlternativeLocationColor: hasAlternativeLocationColor,
-                isNovaDesignEnabled: addressBarState.isNovaDesignEnabled
-            ) {
-                actions.append(translationAction)
-            }
-        }
-
-        return actions
-    }
-
-    // Checks whether we should show the translation icon based on the translation configuration
-    // state and setups up the configuration for the translation icon on the toolbar (for iPad and iPhone)
-    private static func configureTranslationIcon(
-        translationConfiguration: TranslationConfiguration?,
-        isLoading: Bool?,
-        hasAlternativeLocationColor: Bool,
-        isNovaDesignEnabled: Bool
-    ) -> ToolbarActionConfiguration? {
-        guard let config = translationConfiguration, config.isTranslationFeatureEnabled else { return nil }
-        guard let iconState = config.state else { return nil }
-        return translateAction(
-            enabled: isLoading == false,
-            state: iconState,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            isNovaDesignEnabled: isNovaDesignEnabled
-        )
-    }
 
     @MainActor
     private static func trailingPageActions(
@@ -944,24 +922,13 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return googleLensAction
     }
 
-    // MARK: - Helper
-    @MainActor
-    private static func toolbarPosition(action: ToolbarAction) -> AddressToolbarPosition? {
-        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
-        else { return nil }
-
-        guard action.actionType as? ToolbarActionType == .toolbarPositionChanged,
-              let toolbarPosition = action.toolbarPosition
-        else {
-            return toolbarState.toolbarPosition
-        }
-
-        switch toolbarPosition {
-        case .top: return .top
-        case .bottom: return .bottom
-        }
-    }
-
+    /// Whether the address bar should render with the alternative "in-content" location color —
+    /// true when the toolbar is top-positioned, top tabs aren't shown, and the nav toolbar is
+    /// visible. Only accepts `ToolbarAction` because `traitCollectionDidChange` and
+    /// `toolbarPositionChanged` carry a fresher value for these fields than what's already
+    /// committed to `ToolbarState`; every other action reads `ToolbarState` directly, same as
+    /// `shouldShowAlternativeLocationColor(toolbarState:)` below. Shared between
+    /// `leadingPageActions` and `trailingPageActions`. Always false on Nova.
     @MainActor
     private static func shouldUseAlternativeLocationColor(action: ToolbarAction, isNovaDesignEnabled: Bool) -> Bool {
         guard !isNovaDesignEnabled else { return false }
@@ -985,6 +952,36 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return toolbarPosition == .top && !isShowingTopTabs && isShowingNavigationToolbar
     }
 
+    /// Same check as `shouldUseAlternativeLocationColor(action:isNovaDesignEnabled:)`
+    /// (top position, no top tabs, nav toolbar visible), but reads `ToolbarState`
+    /// directly. To read overrides from  `TranslationsAction`). Always false on Nova
+    @MainActor
+    private static func shouldShowAlternativeLocationColor(toolbarState: ToolbarState?, isNovaDesignEnabled: Bool) -> Bool {
+        guard !isNovaDesignEnabled, let toolbarState else { return false }
+
+        return toolbarState.toolbarPosition == .top
+            && !toolbarState.isShowingTopTabs
+            && toolbarState.isShowingNavigationToolbar
+    }
+
+    @MainActor
+    private static func toolbarPosition(action: ToolbarAction) -> AddressToolbarPosition? {
+        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        else { return nil }
+
+        guard action.actionType as? ToolbarActionType == .toolbarPositionChanged,
+              let toolbarPosition = action.toolbarPosition
+        else {
+            return toolbarState.toolbarPosition
+        }
+
+        switch toolbarPosition {
+        case .top: return .top
+        case .bottom: return .bottom
+        }
+    }
+
+    // MARK: - Helper
     private static func tabsAction(
         iconName: String?,
         numberOfTabs: Int = 1,
@@ -1025,16 +1022,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isEnabled: true,
             a11yLabel: .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
-    }
-
-    private static func shareAction(enabled: Bool, hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
-        return ToolbarActionConfiguration(
-            actionType: .share,
-            iconName: StandardImageIdentifiers.Medium.shareApple,
-            isEnabled: enabled,
-            hasCustomColor: !hasAlternativeLocationColor,
-            a11yLabel: .TabLocationShareAccessibilityLabel,
-            a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
     }
 
     private static func stopLoadingAction(hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
@@ -1094,40 +1081,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             a11yLabel: .Toolbars.ReaderModeWithSummarizerButtonAccessibilityLabel,
             a11yHint: .TabLocationReloadAccessibilityHint,
             a11yId: AccessibilityIdentifiers.Toolbar.readerModeWithSummarizerButton
-        )
-    }
-
-    // Sets up translation icon on the toolbar
-    //
-    // We handle tapping differently for translation button by showing a loading icon
-    // instead of a highlighted color.
-    // If we kept the highlighted color, then it will cause the translation icon to flicker
-    // when switching from inactive icon to loading icon when user taps on it. Hence, `hasHighlightedColor: false`.
-    private static func translateAction(
-        enabled: Bool,
-        state: TranslationConfiguration.IconState,
-        hasAlternativeLocationColor: Bool,
-        isNovaDesignEnabled: Bool
-    ) -> ToolbarActionConfiguration {
-        // We do not want to use template mode for translate active icon.
-        let isActiveState = state == .active
-
-        return ToolbarActionConfiguration(
-            actionType: .translate,
-            iconName: state.buttonImageName(isNovaDesignEnabled: isNovaDesignEnabled),
-            templateModeForImage: !isActiveState,
-            loadingConfig: LoadingConfig(
-                isLoading: state == .loading,
-                a11yLabel: .Translations.Sheet.AccessibilityLabels.LoadingCompletedAccessibilityLabel
-            ),
-            isEnabled: enabled,
-            isSelected: isActiveState,
-            hasCustomColor: !hasAlternativeLocationColor,
-            hasHighlightedColor: false,
-            contextualHintType: ContextualHintType.translation.rawValue,
-            a11yLabel: state.buttonA11yLabel,
-            a11yId: state.buttonA11yIdentifier,
-            cacheId: AccessibilityIdentifiers.Toolbar.translateButton
         )
     }
 }
