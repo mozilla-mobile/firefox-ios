@@ -56,7 +56,7 @@ public struct AppAttestRequestAuth: RequestAuthProtocol {
         } catch {
             logger.log("Failed to authenticate the request with App Attest",
                        level: .fatal,
-                       category: .authentication,
+                       category: .mlpa,
                        extra: ["error": "\(error.telemetryDescription)",
                                "service": "\(serviceType.rawValue)"])
             throw error
