@@ -72,7 +72,7 @@ class EmbeddedNavController {
     }
 
     isolated deinit {
-        // EmbeddedNavController probably should be a real nav controller...
+        // FIXME: FXIOS-14608 EmbeddedNavController probably should be a real nav controller...
         navigationController.view.removeFromSuperview()
         navigationController.removeFromParent()
     }

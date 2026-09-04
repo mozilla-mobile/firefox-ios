@@ -147,6 +147,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
     }
 
     isolated deinit {
+        // FIXME: FXIOS-14609 We should remove Tab Manager Delegates
         tabManager.removeDelegate(topTabDisplayManager, completion: nil)
     }
 
