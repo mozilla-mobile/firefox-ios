@@ -781,6 +781,23 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(mockRouter.presentCalled, 1)
     }
 
+    func testAskedToOpen_pushesSettingsContentViewController() throws {
+        let subject = createSubject()
+        let navigationController = UINavigationController()
+        let mockNavigationController = try XCTUnwrap(mockRouter.navigationController as? MockNavigationController)
+        mockNavigationController.presentedViewController = navigationController
+        let url = try XCTUnwrap(URL(string: "https://support.mozilla.org"))
+        let title = NSAttributedString(string: "Support")
+
+        subject.askedToOpen(url: url, withTitle: title)
+
+        let contentViewController = try XCTUnwrap(
+            navigationController.topViewController as? SettingsContentViewController
+        )
+        XCTAssertEqual(contentViewController.url, url)
+        XCTAssertEqual(contentViewController.settingsTitle, title)
+    }
+
     func testPopToBVC_popsViewControllers() {
         let subject = createSubject()
 
