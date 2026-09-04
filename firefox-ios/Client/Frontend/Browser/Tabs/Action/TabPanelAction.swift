@@ -110,5 +110,7 @@ enum ScreenshotActionType: ActionType {
 
 // MARK: Modernizing actions
 enum TabPanelViewModernAction: ModernAction {
-    case addNewTab(TabTrayPanelType)
+    case addNewTab(ofType: TabsDisplayViewPanelType)
 }
+
+// MARK: ModernAction Payload Types
