@@ -910,6 +910,140 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
         releaseMiddlewareProvidersFromMemory(subject)
     }
 
+    // MARK: Test addNewTab action
+
+    func testAddNewTab_callsAddNewTabTelemetry_forNormalTabs() {
+        let addNewTabAction = TabPanelViewModernAction.addNewTab(ofType: .normal)
+        let subject = createSubject()
+
+        subject.modernProvider(appState, addNewTabAction, .XCTestDefaultUUID)
+
+        XCTAssertEqual(mockTabsPanelTelemetry.newTabButtonCalled.callCount, 1)
+        XCTAssertEqual(mockTabsPanelTelemetry.newTabButtonCalled.withMode, TabsPanelTelemetry.Mode.normal)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func testAddNewTab_callsAddNewTabTelemetry_forPrivateTabs() {
+        let addNewTabAction = TabPanelViewModernAction.addNewTab(ofType: .private)
+        let subject = createSubject()
+
+        subject.modernProvider(appState, addNewTabAction, .XCTestDefaultUUID)
+
+        XCTAssertEqual(mockTabsPanelTelemetry.newTabButtonCalled.callCount, 1)
+        XCTAssertEqual(mockTabsPanelTelemetry.newTabButtonCalled.withMode, TabsPanelTelemetry.Mode.private)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func testAddNewTab_addsNewNormalTab_andSelectsNewNormalTab() throws {
+        let mockTabManager = try XCTUnwrap(mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager)
+        let addNewTabAction = TabPanelViewModernAction.addNewTab(ofType: .normal)
+        let expectation = XCTestExpectation(description: "Tab should be selected")
+        mockTabManager.selectTabExpectation = expectation
+
+        let subject = createSubject()
+
+        XCTAssertEqual(mockTabManager.tabs.count, 0)
+        XCTAssertNil(mockTabManager.selectedTab)
+
+        subject.modernProvider(appState, addNewTabAction, .XCTestDefaultUUID)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        XCTAssertTrue(mockTabManager.addTabWasCalled)
+        XCTAssertEqual(mockTabManager.lastSelectedTabs.count, 1)
+        XCTAssertEqual(mockTabManager.lastSelectedTabs.first?.isNormal, true)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func testAddNewTab_addsNewPrivateTab_andSelectsNewPrivateTab() throws {
+        let mockTabManager = try XCTUnwrap(mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager)
+        let addNewTabAction = TabPanelViewModernAction.addNewTab(ofType: .private)
+        let expectation = XCTestExpectation(description: "Tab should be selected")
+        mockTabManager.selectTabExpectation = expectation
+
+        let subject = createSubject()
+
+        XCTAssertEqual(mockTabManager.tabs.count, 0)
+        XCTAssertNil(mockTabManager.selectedTab)
+
+        subject.modernProvider(appState, addNewTabAction, .XCTestDefaultUUID)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        XCTAssertTrue(mockTabManager.addTabWasCalled)
+        XCTAssertEqual(mockTabManager.lastSelectedTabs.count, 1)
+        XCTAssertEqual(mockTabManager.lastSelectedTabs.first?.isPrivate, true)
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func testAddNewTab_dispatchesDismissTabTrayAction() throws {
+        let addNewTabAction = TabPanelViewModernAction.addNewTab(ofType: .private)
+        let subject = createSubject()
+        let expectation = XCTestExpectation(description: "General browser action is dispatched")
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.modernProvider(appState, addNewTabAction, .XCTestDefaultUUID)
+        wait(for: [expectation])
+
+        _ = try XCTUnwrap(
+            mockStore.dispatchedActions.first(where: {
+                ($0.actionType as? TabTrayActionType) == .dismissTabTray
+            })
+        )
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func testAddNewTab_doesNotDispatchShowOverlayAction_whenTabTrayUIExperimentsEnabled() {
+        setFeatureFlag(.tabTrayUIExperiments, isEnabled: true)
+
+        let addNewTabAction = TabPanelViewModernAction.addNewTab(ofType: .private)
+        let subject = createSubject()
+        let expectation = XCTestExpectation(description: "showOverlay action dispatched")
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.modernProvider(appState, addNewTabAction, .XCTestDefaultUUID)
+        wait(for: [expectation])
+
+        XCTAssertNil(
+            mockStore.dispatchedActions.first(where: {
+                ($0.actionType as? GeneralBrowserActionType) == .showOverlay
+            })
+        )
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
+    func testAddNewTab_dispatchShowOverlayAction_whenTabTrayUIExperimentsDisabled() throws {
+        setFeatureFlag(.tabTrayUIExperiments, isEnabled: false)
+
+        let addNewTabAction = TabPanelViewModernAction.addNewTab(ofType: .private)
+        let subject = createSubject()
+        let expectation = XCTestExpectation(description: "showOverlay action dispatched")
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.modernProvider(appState, addNewTabAction, .XCTestDefaultUUID)
+        wait(for: [expectation])
+
+        _ = try XCTUnwrap(
+            mockStore.dispatchedActions.first(where: {
+                ($0.actionType as? GeneralBrowserActionType) == .showOverlay
+            })
+        )
+
+        releaseMiddlewareProvidersFromMemory(subject)
+    }
+
     // MARK: - Helpers
     private func createSubject() -> TabManagerMiddleware {
         let subject = TabManagerMiddleware(
