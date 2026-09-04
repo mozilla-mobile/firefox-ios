@@ -95,7 +95,8 @@ final class AppAttestRequestAuthTests: XCTestCase {
         try? await subject.authenticate(request: &request)
 
         XCTAssertEqual(logger.savedLevel, .fatal)
-        XCTAssertEqual(logger.savedExtra?["error"], "\(AppAttestServiceError.invalidPayload)")
+        XCTAssertEqual(logger.savedExtra?["error"], AppAttestServiceError.invalidPayload.telemetryDescription)
+        XCTAssertEqual(logger.savedExtra?["service"], MLPAServiceType.s2s.rawValue)
     }
 
     // MARK: - Helpers
