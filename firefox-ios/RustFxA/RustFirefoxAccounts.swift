@@ -117,7 +117,59 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
     }
 
     public var isChinaSyncServiceEnabled: Bool {
-        return RustFirefoxAccounts.prefs?.boolForKey(PrefsKeys.KeyEnableChinaSyncService) ?? AppInfo.isChinaEdition
+        return RustFirefoxAccounts.isChinaSyncServiceEnabled(prefs: RustFirefoxAccounts.prefs)
+    }
+
+    static func isChinaSyncServiceEnabled(prefs: Prefs?) -> Bool {
+        return prefs?.boolForKey(PrefsKeys.KeyEnableChinaSyncService) ?? AppInfo.isChinaEdition
+    }
+
+    // TODO: FXIOS-16756 These hosts are duplicated from the Rust component, which owns the real
+    // server definitions. Drop this copy once app-services exposes them through uniffi.
+    private static let releaseContentServer = "https://accounts.firefox.com"
+    private static let stageContentServer = "https://accounts.stage.mozaws.net"
+    private static let stableDevContentServer = "https://stable.dev.lcip.org"
+    private static let chinaContentServer = "https://accounts.firefox.com.cn"
+
+    /// The FxA content server this build is configured against.
+    ///
+    /// Mirrors the server selection in `createAccountManager` so that callers which must
+    /// decide whether web content is trusted, such as the WebChannel bridge and pairing URL
+    /// routing, agree with the account manager about which origin is ours.
+    public static func contentServerURL() -> URL? {
+        return contentServerURL(prefs: RustFirefoxAccounts.prefs)
+    }
+
+    /// Stays `public` so the pairing URL parser in Client can resolve the same origin, and so the
+    /// prefs seam is reachable from tests in another module.
+    public static func contentServerURL(prefs: Prefs?) -> URL? {
+        return URL(string: contentServerString(prefs: prefs))
+    }
+
+    static func isUsingCustomContentServer(prefs: Prefs?) -> Bool {
+        return prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false
+            || prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false
+    }
+
+    /// The content server exactly as `createAccountManager` hands it to `FxAConfig`. A custom value
+    /// is returned verbatim so an unparseable one still fails loudly in the Rust layer rather than
+    /// silently redirecting the account manager to a different live server.
+    static func contentServerString(prefs: Prefs?) -> String {
+        if isUsingCustomContentServer(prefs: prefs) {
+            if prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false,
+               let custom = prefs?.stringForKey(PrefsKeys.KeyCustomFxAContentServer) {
+                return custom
+            }
+            return stableDevContentServer
+        }
+
+        if prefs?.intForKey(PrefsKeys.UseStageServer) == 1 {
+            return stageContentServer
+        }
+        if isChinaSyncServiceEnabled(prefs: prefs) {
+            return chinaContentServer
+        }
+        return releaseContentServer
     }
 
     @MainActor
@@ -135,19 +187,9 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
         }
 
         let config: FxAConfig
-        let useCustom = prefs?.boolForKey(
-            PrefsKeys.KeyUseCustomFxAContentServer
-        ) ?? false || prefs?.boolForKey(
-            PrefsKeys.KeyUseCustomSyncTokenServerOverride
-        ) ?? false
+        let useCustom = RustFirefoxAccounts.isUsingCustomContentServer(prefs: prefs)
         if useCustom {
-            let contentUrl: String
-            if prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false,
-               let url = prefs?.stringForKey(PrefsKeys.KeyCustomFxAContentServer) {
-                contentUrl = url
-            } else {
-                contentUrl = "https://stable.dev.lcip.org"
-            }
+            let contentUrl = RustFirefoxAccounts.contentServerString(prefs: prefs)
 
             let serverOverride = prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false
             let tokenServer = serverOverride ? prefs?.stringForKey(PrefsKeys.KeyCustomSyncTokenServerOverride) : nil
