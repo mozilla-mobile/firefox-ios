@@ -4,8 +4,9 @@
 
 import Foundation
 import Redux
-@testable import Client
 import XCTest
+
+@testable import Client
 
 @MainActor
 protocol StoreTestUtility {

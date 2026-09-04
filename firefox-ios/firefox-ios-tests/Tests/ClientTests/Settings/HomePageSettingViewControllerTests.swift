@@ -8,23 +8,21 @@ import Shared
 @testable import Client
 
 @MainActor
-final class HomePageSettingViewControllerTests: XCTestCase {
-    private var profile: MockProfile!
+final class HomePageSettingViewControllerTests: XCTestCase, FeatureFlagTestUtility {
+    internal var mockProfile: MockProfile!
+    internal var mockNimbusLayer: MockNimbusFeatureFlagLayer!
     private var wallpaperManager: WallpaperManagerMock!
     private var delegate: MockSettingsDelegate!
-    private var mockNimbusLayer: MockNimbusFeatureFlagLayer!
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        mockProfile = MockProfile()
         mockNimbusLayer = MockNimbusFeatureFlagLayer()
-        let featureFlagProvider = FeatureFlagsProvider(prefs: profile.prefs, backendLayer: mockNimbusLayer)
-        let userFeaturePreferences = UserFeaturePreferenceManager(prefs: profile.prefs, backendLayer: mockNimbusLayer)
 
         DependencyHelperMock().bootstrapDependencies(
-            injectedProfile: profile,
-            injectedFeatureFlagProvider: featureFlagProvider,
-            injectedUserFeaturePreferences: userFeaturePreferences
+            injectedProfile: mockProfile,
+            injectedFeatureFlagProvider: featureFlagsProviderFactory(),
+            injectedUserFeaturePreferences: userFeaturePreferenceManagerFactory()
         )
 
         delegate = MockSettingsDelegate()
@@ -33,7 +31,7 @@ final class HomePageSettingViewControllerTests: XCTestCase {
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
-        profile = nil
+        mockProfile = nil
         delegate = nil
         wallpaperManager = nil
         mockNimbusLayer = nil
@@ -48,7 +46,7 @@ final class HomePageSettingViewControllerTests: XCTestCase {
 
     func testHomepageSettings_generateSettings_jumpBackInSectionDefaultValue_isFalse() throws {
         let subject = createSubject()
-        subject.profile = profile
+        subject.profile = mockProfile
 
         let settingsList = subject.generateSettings()
 
@@ -69,7 +67,7 @@ final class HomePageSettingViewControllerTests: XCTestCase {
 
     func testHomepageSettings_generateSettings_bookmarksSectionDefaultValue_isFalse() throws {
         let subject = createSubject()
-        subject.profile = profile
+        subject.profile = mockProfile
 
         let settingsList = subject.generateSettings()
 
@@ -90,7 +88,7 @@ final class HomePageSettingViewControllerTests: XCTestCase {
 
     func testHomepageSettings_generateSettings_trackerBlockerModule_whenFeatureDisabled_isHidden() throws {
         let subject = createSubject()
-        subject.profile = profile
+        subject.profile = mockProfile
 
         let settingsList = subject.generateSettings()
 
@@ -110,7 +108,7 @@ final class HomePageSettingViewControllerTests: XCTestCase {
     func testHomepageSettings_generateSettings_trackerBlockerModule_whenFeatureEnabledDefaultValue_isTrue() throws {
         setFeatureFlag(.homepageTrackerBlockerModule, isEnabled: true)
         let subject = createSubject()
-        subject.profile = profile
+        subject.profile = mockProfile
 
         let settingsList = subject.generateSettings()
 
@@ -129,17 +127,10 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         XCTAssertTrue(trackerBlockerModuleSettingValue)
     }
 
-    // MARK: - Helper
-    private func setFeatureFlag(_ flag: FeatureFlagID, isEnabled: Bool) {
-        if isEnabled {
-            mockNimbusLayer.enabledFlags.insert(flag)
-        } else {
-            mockNimbusLayer.enabledFlags.remove(flag)
-        }
-    }
+    // MARK: - Helpers
 
     private func createSubject() -> HomePageSettingViewController {
-        let subject = HomePageSettingViewController(prefs: profile.prefs,
+        let subject = HomePageSettingViewController(prefs: mockProfile.prefs,
                                                     wallpaperManager: wallpaperManager,
                                                     settingsDelegate: delegate,
                                                     tabManager: MockTabManager())

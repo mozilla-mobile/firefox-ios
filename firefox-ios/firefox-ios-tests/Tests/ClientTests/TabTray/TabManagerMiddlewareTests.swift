@@ -9,8 +9,9 @@ import TestKit
 
 @testable import Client
 
-final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
-    private var mockProfile: MockProfile!
+final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlagTestUtility {
+    internal var mockProfile: MockProfile!
+    internal var mockNimbusLayer: MockNimbusFeatureFlagLayer!
     private var mockWindowManager: MockWindowManager!
     private var mockTabsPanelTelemetry: MockTabsPanelTelemetry!
     private var mockStore: MockStoreForMiddleware<AppState>!
@@ -18,7 +19,6 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockSummarizerConfigFactory: MockSummarizerConfigFactory!
     private var appState: AppState!
     private let homepageURLString = "internal://local/about/home"
-    private var mockNimbusLayer: MockNimbusFeatureFlagLayer!
 
     @MainActor
     override func setUp() async throws {
@@ -38,11 +38,9 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         mockTabsPanelTelemetry = MockTabsPanelTelemetry()
 
-        let featureFlagProvider = FeatureFlagsProvider(prefs: mockProfile.prefs, backendLayer: mockNimbusLayer)
-
         DependencyHelperMock().bootstrapDependencies(
             injectedWindowManager: mockWindowManager,
-            injectedFeatureFlagProvider: featureFlagProvider
+            injectedFeatureFlagProvider: featureFlagsProviderFactory()
         )
 
         setupStore()
@@ -979,13 +977,5 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func resetStore() {
         StoreTestUtilityHelper.resetStore()
-    }
-
-    private func setFeatureFlag(_ flag: FeatureFlagID, isEnabled: Bool) {
-        if isEnabled {
-            mockNimbusLayer.enabledFlags.insert(flag)
-        } else {
-            mockNimbusLayer.enabledFlags.remove(flag)
-        }
     }
 }
