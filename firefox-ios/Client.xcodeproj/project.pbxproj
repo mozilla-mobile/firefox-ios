@@ -359,6 +359,7 @@
 		21996BAB2AE95AFC00E0D55F /* TabTrayPanelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */; };
 		2199A1D22DB80B6C00DC84BD /* ZoomPageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2199A1D12DB80B6C00DC84BD /* ZoomPageManagerTests.swift */; };
 		2199A1D42DB8389000DC84BD /* MockZoomStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2199A1D32DB8389000DC84BD /* MockZoomStore.swift */; };
+		2199D3E230472D2800BB96F4 /* LeadingPageActionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2199D3E130472D2800BB96F4 /* LeadingPageActionsBuilder.swift */; };
 		219AEE4A2E5E38BD00BF5F6F /* TabProviderAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219AEE492E5E38B200BF5F6F /* TabProviderAdapter.swift */; };
 		219AEECE2E5E524300BF5F6F /* MockTabProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219AEECD2E5E523600BF5F6F /* MockTabProviderProtocol.swift */; };
 		219F27152EA2956100AE4536 /* MockBrowserViewControllerWebViewDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219F27142EA2956100AE4536 /* MockBrowserViewControllerWebViewDelegates.swift */; };
@@ -3267,6 +3268,7 @@
 		21996BAA2AE95AFC00E0D55F /* TabTrayPanelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayPanelType.swift; sourceTree = "<group>"; };
 		2199A1D12DB80B6C00DC84BD /* ZoomPageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomPageManagerTests.swift; sourceTree = "<group>"; };
 		2199A1D32DB8389000DC84BD /* MockZoomStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockZoomStore.swift; sourceTree = "<group>"; };
+		2199D3E130472D2800BB96F4 /* LeadingPageActionsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadingPageActionsBuilder.swift; sourceTree = "<group>"; };
 		219AEE492E5E38B200BF5F6F /* TabProviderAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabProviderAdapter.swift; sourceTree = "<group>"; };
 		219AEECD2E5E523600BF5F6F /* MockTabProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabProviderProtocol.swift; sourceTree = "<group>"; };
 		219F27142EA2956100AE4536 /* MockBrowserViewControllerWebViewDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBrowserViewControllerWebViewDelegates.swift; sourceTree = "<group>"; };
@@ -16943,6 +16945,7 @@
 		E1DE2F812BE394C80054BCDC /* Redux */ = {
 			isa = PBXGroup;
 			children = (
+				2199D3E130472D2800BB96F4 /* LeadingPageActionsBuilder.swift */,
 				2132A47030378FC20040B898 /* NavigationActionsState.swift */,
 				AAD1CD862EAABA7C00BEC90A /* TranslationsConfiguration.swift */,
 				E177989B2BD7D48500F6F0EB /* ToolbarAction.swift */,
@@ -20882,6 +20885,7 @@
 				8AEDB11529F9F00400F2A53B /* SceneContainer.swift in Sources */,
 				B23620512B9BAAF3000B1DE7 /* AddressFormData.swift in Sources */,
 				AB42CC742A1F5240003C9594 /* CreditCardBottomSheetViewController.swift in Sources */,
+				2199D3E230472D2800BB96F4 /* LeadingPageActionsBuilder.swift in Sources */,
 				8A93F87229D3A5AD004159D9 /* BrowserCoordinator.swift in Sources */,
 				8A3233FE28627446003E1C33 /* LocalDesktopFolder.swift in Sources */,
 				0AB768FA2F3DF280009458EB /* BlockedTrackersFooterView.swift in Sources */,
