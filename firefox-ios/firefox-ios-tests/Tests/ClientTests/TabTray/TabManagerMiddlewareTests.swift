@@ -19,6 +19,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
     private var mockSummarizerConfigFactory: MockSummarizerConfigFactory!
     private var appState: AppState!
     private let homepageURLString = "internal://local/about/home"
+    private var mockNimbusLayer: MockNimbusFeatureFlagLayer!
 
     @MainActor
     override func setUp() async throws {
@@ -977,5 +978,13 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
 
     func resetStore() {
         StoreTestUtilityHelper.resetStore()
+    }
+
+    private func setFeatureFlag(_ flag: FeatureFlagID, isEnabled: Bool) {
+        if isEnabled {
+            mockNimbusLayer.enabledFlags.insert(flag)
+        } else {
+            mockNimbusLayer.enabledFlags.remove(flag)
+        }
     }
 }
