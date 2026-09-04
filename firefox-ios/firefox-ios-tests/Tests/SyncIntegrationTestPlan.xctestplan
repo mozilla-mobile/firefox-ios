@@ -150,6 +150,7 @@
         "ReadingListTests",
         "ReportSiteTests",
         "ScreenGraphTest",
+        "SearchSettingsSuggestUITests",
         "SearchSettingsUITests",
         "SearchTests",
         "SecurityTests",

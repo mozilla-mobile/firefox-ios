@@ -134,3 +134,41 @@ class SearchSettingsUITests: BaseTestCase {
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
     }
 }
+
+class SearchSettingsSuggestUITests: BaseTestCase {
+    private var toolbarScreen: ToolbarScreen!
+    private var mainMenuScreen: MainMenuScreen!
+    private var settingScreen: SettingScreen!
+    private var searchSettingsScreen: SearchSettingsScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        toolbarScreen = ToolbarScreen(app: app)
+        mainMenuScreen = MainMenuScreen(app: app)
+        settingScreen = SettingScreen(app: app)
+        searchSettingsScreen = SearchSettingsScreen(app: app)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753086
+    // Regression
+    func testSearchSettingsMenuUIWithFirefoxSuggestEnabled() {
+        enrollInFirefoxSuggestRollout(ingestingSuggestions: false)
+
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
+        settingScreen.navigateToSearchSettings()
+        searchSettingsScreen.assertNavBarVisible()
+
+        searchSettingsScreen.assertDefaultSearchEngineSectionExists()
+        searchSettingsScreen.assertAlternativeSearchEnginesSectionExists()
+        searchSettingsScreen.assertAddSearchEngineRowExists()
+        searchSettingsScreen.assertShowSearchSuggestionsSwitchIsOn()
+        searchSettingsScreen.assertShowInPrivateSessionsSwitchIsOff()
+        searchSettingsScreen.assertSearchBrowsingHistorySwitchIsOn()
+        searchSettingsScreen.assertSearchBookmarksSwitchIsOn()
+        searchSettingsScreen.assertSearchSyncedTabsSwitchIsOn()
+        searchSettingsScreen.assertSuggestionsFromTheWebSwitchIsOn()
+        searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsOn()
+        searchSettingsScreen.assertLearnMoreAboutFirefoxSuggestRowExists()
+    }
+}
