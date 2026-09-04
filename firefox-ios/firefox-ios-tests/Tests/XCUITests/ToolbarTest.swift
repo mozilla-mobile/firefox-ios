@@ -13,11 +13,9 @@ let website1: [String: String] = [
 let website2 = path(forTestPage: TestPages.exampleHTML)
 
 class ToolbarTests: FeatureFlaggedTestBase {
-    override func setUp() async throws {
-        try await super.setUp()
-        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
-    }
-
+    // Each test sets its own orientation before `app.launch()`. Don't force one here: half the tests
+    // need portrait and were overriding a class-wide landscape default, so new tests silently
+    // inherited an orientation they didn't ask for.
     override func tearDown() async throws {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         try await super.tearDown()
@@ -28,6 +26,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
      * Tests landscape page navigation enablement with the URL bar with tab switching.
      */
     func testLandscapeNavigationWithTabSwitch() {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         app.launch()
         let urlPlaceholder = "Search or enter address"
         let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
@@ -82,6 +81,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2344430
     func testClearURLTextUsingBackspace() {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         app.launch()
         mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         navigator.openURL(website1["url"]!)
@@ -111,7 +111,6 @@ class ToolbarTests: FeatureFlaggedTestBase {
         if iPad() {
             throw XCTSkip("iPhone only test")
         }
-        // Landscape makes this fail on iPhone, so launch in portrait rather than rotating afterwards.
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         app.launch()
 
@@ -146,6 +145,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3197644
     func testOpenNewTabButtonOnToolbar() throws {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         app.launch()
         if iPad() {
             throw XCTSkip("iPhone only test")

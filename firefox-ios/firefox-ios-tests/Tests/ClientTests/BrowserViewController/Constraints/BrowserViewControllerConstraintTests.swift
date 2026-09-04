@@ -254,6 +254,82 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
         }
     }
 
+    // MARK: - Keyboard Spacer Tests
+
+    /// The keyboard spacer is what fills the gap left by the keyboard while the address bar is in
+    /// edit mode. If it survives the keyboard being dismissed, the user is left with dead space
+    /// below the address bar, so these cover its full add/replace/remove lifecycle.
+    func test_addKeyboardSpacer_addsSpacerWithRequestedHeight() throws {
+        let subject = createSubject()
+
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 300)
+
+        let spacer = try XCTUnwrap(keyboardSpacer(in: subject.overKeyboardContainer))
+        XCTAssertEqual(heightConstraintConstant(of: spacer), 300)
+    }
+
+    func test_removeKeyboardSpacer_removesSpacerFromHierarchy() {
+        let subject = createSubject()
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 300)
+
+        subject.overKeyboardContainer.removeKeyboardSpacer()
+
+        // Both checks matter: removeArrangedSubview() alone would leave the view in `subviews`
+        // still holding its height constraint.
+        XCTAssertNil(keyboardSpacer(in: subject.overKeyboardContainer))
+        XCTAssertFalse(subject.overKeyboardContainer.subviews.contains { isKeyboardSpacer($0) })
+    }
+
+    /// `keyboardWillChange` fires repeatedly while the keyboard frame animates, so the spacer gets
+    /// added many times per dismissal. Stacking them would multiply the dead space.
+    func test_addKeyboardSpacerTwice_doesNotStackSpacers() {
+        let subject = createSubject()
+
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 300)
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 300)
+
+        let spacers = subject.overKeyboardContainer.arrangedSubviews.filter { isKeyboardSpacer($0) }
+        XCTAssertEqual(spacers.count, 1)
+    }
+
+    func test_addKeyboardSpacer_withNewHeight_replacesHeightConstraint() throws {
+        let subject = createSubject()
+
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 300)
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 120)
+
+        let spacer = try XCTUnwrap(keyboardSpacer(in: subject.overKeyboardContainer))
+        let heightConstraints = spacer.constraints.filter {
+            $0.firstAttribute == .height && $0.secondItem == nil
+        }
+        XCTAssertEqual(heightConstraints.count, 1, "A stale height constraint would conflict with the new one")
+        XCTAssertEqual(heightConstraints.first?.constant, 120)
+    }
+
+    /// `keyboardWillHide` can arrive without a matching show (for example after a rotation), and the
+    /// removal must stay a no-op rather than trip over missing state.
+    func test_removeKeyboardSpacer_whenNoSpacerAdded_doesNothing() {
+        let subject = createSubject()
+        let arrangedCountBefore = subject.overKeyboardContainer.arrangedSubviews.count
+
+        subject.overKeyboardContainer.removeKeyboardSpacer()
+
+        XCTAssertEqual(subject.overKeyboardContainer.arrangedSubviews.count, arrangedCountBefore)
+    }
+
+    func test_addThenRemoveKeyboardSpacer_leavesNoResidualHeight() {
+        let subject = createSubject()
+        let heightBefore = containerHeight(of: subject)
+
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 300)
+        let heightWithSpacer = containerHeight(of: subject)
+        subject.overKeyboardContainer.removeKeyboardSpacer()
+        let heightAfter = containerHeight(of: subject)
+
+        XCTAssertGreaterThan(heightWithSpacer, heightBefore, "The spacer should grow the container")
+        XCTAssertEqual(heightAfter, heightBefore, accuracy: 1.0)
+    }
+
     // MARK: - Constraint Priority Tests
 
     func test_bottomContainer_hasRequiredPriorityConstraints() {
@@ -272,6 +348,23 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
     }
 
     // MARK: - Helper Methods
+
+    private func isKeyboardSpacer(_ view: UIView) -> Bool {
+        view.accessibilityIdentifier == AccessibilityIdentifiers.Browser.keyboardSpacer
+    }
+
+    private func keyboardSpacer(in container: BaseAlphaStackView) -> UIView? {
+        container.arrangedSubviews.first { isKeyboardSpacer($0) }
+    }
+
+    private func heightConstraintConstant(of view: UIView) -> CGFloat? {
+        view.constraints.first { $0.firstAttribute == .height && $0.secondItem == nil }?.constant
+    }
+
+    private func containerHeight(of subject: BrowserViewController) -> CGFloat {
+        subject.view.layoutIfNeeded()
+        return subject.overKeyboardContainer.frame.height
+    }
 
     /// Check if a view has a constraint with the given attribute related to another view
     private func hasConstraint(for view: UIView,

@@ -27,6 +27,19 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForValueContains(addressBar, value: value, timeout: timeout)
     }
 
+    /// Exact-match variant of `assertAddressBarContains`. Needed when the point of the assertion is
+    /// that the toolbar shows *only* the domain: a substring check on the domain also passes when
+    /// the full URL is displayed, so it could never catch the difference.
+    func assertAddressBarValueEquals(_ expected: String, timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(addressBar, timeout: timeout)
+        let predicate = NSPredicate(format: "value == %@", expected)
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: addressBar)
+        guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else {
+            XCTFail("Expected the address bar to show '\(expected)', found '\(addressBar.value as? String ?? "nil")'")
+            return
+        }
+    }
+
     func assertSearchEngineLogoExists(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(searchEngineLogo, timeout: timeout)
         XCTAssertTrue(searchEngineLogo.isLeftOf(rightElement: addressBar))
@@ -346,6 +359,78 @@ final class BrowserScreen {
 
         let hasFocus = addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false
         XCTAssertTrue(hasFocus, "Expected the address bar to have keyboard focus, but it doesn't.")
+    }
+
+    /// Asserts edit mode was fully left, not just that the keyboard went away: a dismissed keyboard
+    /// with the address bar still focused (or the cancel button still up) leaves the toolbar in a
+    /// state the user can't recover from by tapping the address bar again.
+    func assertAddressBarLeftEditMode() {
+        let addressBar = sel.ADDRESS_BAR.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        BaseTestCase().mozWaitForElementToNotExist(app.keyboards.firstMatch)
+        BaseTestCase().mozWaitForElementToNotExist(cancelButton)
+
+        let hasFocus = addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false
+        XCTAssertFalse(hasFocus, "Expected the address bar to have left edit mode, but it still has focus.")
+    }
+
+    /// Re-focuses the address bar and asserts the keyboard comes back. Pairs with
+    /// `assertAddressBarLeftEditMode()`: together they catch a toolbar that looks dismissed but no
+    /// longer responds to taps.
+    func assertAddressBarRegainsKeyboardFocus() {
+        tapOnAddressBar()
+        assertAddressBarHasKeyboardFocus()
+        BaseTestCase().mozWaitForElementToExist(app.keyboards.firstMatch)
+    }
+
+    // MARK: - Address bar long press menu
+
+    /// Long presses the address bar to reveal Firefox's own context menu (Paste & Go / Paste /
+    /// Copy Address). Retries once: the first press can land before the toolbar settles.
+    func longPressAddressBar(duration: TimeInterval = 1.0) {
+        let contextMenu = sel.ADDRESS_BAR_CONTEXT_MENU.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        addressBar.press(forDuration: duration)
+        guard !contextMenu.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) else { return }
+        addressBar.press(forDuration: duration)
+        BaseTestCase().mozWaitForElementToExist(contextMenu)
+    }
+
+    /// `Paste & Go` and `Paste` are only built when the pasteboard holds a string, and
+    /// `Copy Address` only when the selected tab has a display URL, so seed both before asserting.
+    func assertAddressBarContextMenuOptionsExist() {
+        BaseTestCase().waitForElementsToExist([
+            sel.ADDRESS_BAR_CONTEXT_MENU.element(in: app),
+            sel.CONTEXT_MENU_PASTE_AND_GO.element(in: app),
+            sel.CONTEXT_MENU_PASTE.element(in: app),
+            sel.CONTEXT_MENU_COPY_ADDRESS.element(in: app)
+        ])
+    }
+
+    /// The close button is only built for the bottom-sheet style. The menu is a popover — which has
+    /// no close button — on iPad before iOS 26, so the expectation is skipped there.
+    func assertAddressBarContextMenuCloseButtonExists() {
+        if BaseTestCase().iPad() {
+            if #unavailable(iOS 26) { return }
+        }
+        BaseTestCase().mozWaitForElementToExist(sel.CONTEXT_MENU_CLOSE_BUTTON.element(in: app))
+    }
+
+    func tapContextMenuCopyAddress() {
+        sel.CONTEXT_MENU_COPY_ADDRESS.element(in: app).waitAndTap()
+        BaseTestCase().mozWaitForElementToNotExist(sel.ADDRESS_BAR_CONTEXT_MENU.element(in: app))
+    }
+
+    func dismissAddressBarContextMenu() {
+        let closeButton = sel.CONTEXT_MENU_CLOSE_BUTTON.element(in: app)
+        if closeButton.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) {
+            closeButton.waitAndTap()
+        } else {
+            // iPad popover: dismissed by tapping outside it. The bottom of the screen is safe to
+            // tap because iPad has no bottom toolbar option and the fixture has no content there.
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)).tap()
+        }
+        BaseTestCase().mozWaitForElementToNotExist(sel.ADDRESS_BAR_CONTEXT_MENU.element(in: app))
     }
 
     func longPressLink(named linkName: String, duration: TimeInterval = 2.0) {
