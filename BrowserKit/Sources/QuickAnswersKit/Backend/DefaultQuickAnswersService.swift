@@ -66,7 +66,7 @@ final class DefaultQuickAnswersService: QuickAnswersService {
             let result = try await resultsService.fetchResults(for: text)
             return .success(result)
         } catch {
-            let error = (error as? ResultsServiceError) ?? ResultsServiceError.unknown(error.localizedDescription)
+            let error = (error as? ResultsServiceError) ?? ResultsServiceError.unknown(error.telemetryDescription)
             // TODO: FXIOS-15579 Possibly add telemetry
             return .failure(error)
         }
@@ -105,7 +105,7 @@ final class DefaultQuickAnswersService: QuickAnswersService {
         let audioManager = AudioManager()
         let authorizer = AuthorizationHandler()
 
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, *), SpeechAnalyzerEngine.isTranscriberModuleAvailable() {
             return SpeechAnalyzerEngine(
                 audioManager: audioManager,
                 authorizer: authorizer

@@ -6,15 +6,8 @@ features:
       setting:
         description: This property provides a default setting for the start at home feature
         type: StartAtHome
-        default: afterFourHours
-    defaults:
-      - channel: beta
-        value:
-          setting: afterFourHours
-      - channel: developer
-        value: 
-          setting: afterFourHours
-        
+        default: disabled
+
 # These different variants must match those of StartAtHomeSetting (including casing) in FlaggableFeatureOptions.swift
 enums:
   StartAtHome:

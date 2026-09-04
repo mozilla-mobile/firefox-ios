@@ -25,7 +25,7 @@ enum SpeechError: Error, Equatable {
         case .serviceNotInitialized: return "service_not_initialized"
         case .speechRecognitionPermissionDenied: return "speech_recognition_permission_denied"
         case .unableToSupportLocale: return "unable_to_support_locale"
-        case .unknown: return "unknown"
+        case .unknown(let description): return "unknown(\(description))"
         }
     }
 }
