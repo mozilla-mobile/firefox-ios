@@ -99,6 +99,11 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
         initGlean(profile, sendUsageData: sendUsageData)
     }
 
+    /// Never follows `prefSendUsageData`: `usage-reporting` is `follows_collection_enabled: false`.
+    func shouldSendDailyUsagePing(prefs: Prefs) -> Bool {
+        return prefs.boolForKey(AppConstants.prefSendDailyUsagePing) ?? AppConstants.defaultSendDailyUsagePing
+    }
+
     @MainActor
     func initGlean(
         _ profile: Profile,
@@ -128,26 +133,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
         GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
         GleanMetrics.Pings.shared.onboardingOptOut.setEnabled(enabled: true)
 
-        let shouldSendUsagePing: Bool
-
-        if let dailyUsagePing = profile.prefs.boolForKey(AppConstants.prefSendDailyUsagePing) {
-            // If SendDailyUsagePing is explicitly set, use its value
-            shouldSendUsagePing = dailyUsagePing
-        } else if let usageData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) {
-            // If SendDailyUsagePing is not set, follow SendUsageData
-            shouldSendUsagePing = usageData
-
-            // Persist the SendDailyUsagePing value to ensure it is explicitly set for future launches
-            profile.prefs.setBool(usageData, forKey: AppConstants.prefSendDailyUsagePing)
-        } else {
-            // Default to true if neither is set
-            shouldSendUsagePing = true
-
-            // Persist the default to ensure consistency on subsequent launches
-            profile.prefs.setBool(true, forKey: AppConstants.prefSendDailyUsagePing)
-        }
-
-        if shouldSendUsagePing {
+        if shouldSendDailyUsagePing(prefs: profile.prefs) {
             gleanUsageReportingMetricsService.start()
         } else {
             gleanUsageReportingMetricsService.unsetUsageProfileId()

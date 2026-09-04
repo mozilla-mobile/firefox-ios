@@ -278,10 +278,13 @@ class AppSettingsTableViewController: SettingsTableViewController,
         }
         sendTechnicalDataSetting = sendTechnicalDataSettings
 
+        // Technical data is the only setting that drives the Nimbus telemetry setting
+        Experiments.setTelemetrySetting(profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
+
         let sendDailyUsagePingSettings = SendDataSetting(
             prefs: profile.prefs,
             prefKey: AppConstants.prefSendDailyUsagePing,
-            defaultValue: true,
+            defaultValue: AppConstants.defaultSendDailyUsagePing,
             titleText: .SendDailyUsagePingSettingTitle,
             subtitleText: String(format: .SendDailyUsagePingSettingMessage, MozillaName.shortName.rawValue),
             learnMoreText: .SendDailyUsagePingSettingLinkV2,
