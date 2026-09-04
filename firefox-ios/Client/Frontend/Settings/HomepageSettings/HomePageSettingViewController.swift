@@ -227,7 +227,7 @@ class HomePageSettingViewController: SettingsTableViewController,
 
     private func setupStartAtHomeSection() -> SettingSection {
         let pref = userPreferences.startAtHomeSetting
-        currentStartAtHomeSetting = StartAtHomeSetting(rawValue: pref.rawValue) ?? .afterFourHours
+        currentStartAtHomeSetting = StartAtHomeSetting(rawValue: pref.rawValue) ?? .disabled
 
         typealias a11y = AccessibilityIdentifiers.Settings.Homepage.StartAtHome
 
