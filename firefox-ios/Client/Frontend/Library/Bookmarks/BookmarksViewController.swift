@@ -338,10 +338,11 @@ final class BookmarksViewController: SiteTableViewController,
     /// table view data source immediately for responsiveness.
     private func deleteBookmarkNode(_ indexPath: IndexPath, bookmarkNode: FxBookmarkNode) {
         tableView.beginUpdates()
-        // Removes the bookmark from local data arrays for optimistic UI update, then re-queries and reloads the table
-        // because deleting a node while searching can alter the bookmarks tree at lower depths.
+        // Removes the bookmark from local data arrays for optimistic UI update. Search mode later refreshes the tree and
+        // table because deleting a node while searching can alter the bookmarks tree at lower depths.
         viewModel.remove(bookmark: bookmarkNode, afterAsyncRemoval: { [weak self] in
-            self?.tableView.reloadData()
+            guard let self, self.viewModel.isShowingSearchResults else { return }
+            self.tableView.reloadData()
         })
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
@@ -673,7 +674,7 @@ final class BookmarksViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(
-            style: .destructive,
+            style: .normal,
             title: .BookmarksPanelDeleteTableAction
         ) { [weak self] (_, _, completion) in
             guard let self else {
@@ -685,6 +686,7 @@ final class BookmarksViewController: SiteTableViewController,
             self.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
             completion(true)
         }
+        deleteAction.backgroundColor = .systemRed
 
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
