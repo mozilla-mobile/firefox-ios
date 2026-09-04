@@ -3384,7 +3384,7 @@ class BrowserViewController: UIViewController,
 
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
             store.dispatch(
-                TabPanelViewModernAction.addNewTab(.tabs),
+                TabPanelViewModernAction.addNewTab(ofType: .normal),
                 forWindowUUID: self.windowUUID
             )
 

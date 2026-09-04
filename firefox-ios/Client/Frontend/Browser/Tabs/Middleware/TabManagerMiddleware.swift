@@ -62,9 +62,9 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
         if let action = action as? TabPanelViewModernAction {
             switch action {
-            case .addNewTab(let panelType):
-                tabsPanelTelemetry.newTabButtonTapped(mode: panelType.modeForTelemetry)
-                addNewTab(withRequest: nil, isPrivate: panelType.isPrivateMode, showOverlay: true, for: windowUUID)
+            case .addNewTab(let type):
+                tabsPanelTelemetry.newTabButtonTapped(mode: type.modeForTelemetry)
+                addNewTab(withRequest: nil, isPrivate: type == .private, showOverlay: true, for: windowUUID)
                 dispatchRecentlyAccessedTabsAction(forWindowUUID: windowUUID)
             }
         }
