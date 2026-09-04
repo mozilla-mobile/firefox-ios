@@ -18,7 +18,7 @@ jobs:
       locales: ${{ steps.my_locales.outputs.locales }}
     steps:
       - name: Clone firefoxios-l10n repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           repository: mozilla-l10n/firefoxios-l10n
       - name: Determine locales needed
@@ -35,7 +35,7 @@ jobs:
     runs-on: macos-26
     steps:
       - name: Clone firefox-ios repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           repository: mozilla-mobile/firefox-ios
           ref: ${{ inputs.branch }}
@@ -59,7 +59,7 @@ jobs:
           ls -la *.tar.gz
       - name: Save Derived Data
         id: upload-derived-data
-        uses: actions/upload-artifact@v4.6.0
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: xcode-l10n-focus-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
           path: l10n-screenshots-dd.tar.gz
@@ -86,7 +86,7 @@ jobs:
     runs-on: macos-26
     steps:
       - name: Merge screenshots
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: FocusL10nScreenshots
           pattern: Screenshots-*
