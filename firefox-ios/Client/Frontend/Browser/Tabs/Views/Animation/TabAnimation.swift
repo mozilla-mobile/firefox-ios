@@ -217,21 +217,21 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         return backgroundView
     }
 
-    /// Finds the selected tab's cell, scales the grid and starts the shared presentation animation.
+    /// Finds the selected tab's destination frame, scales the grid and starts the shared presentation animation.
     private func presentSelectedTab(
         context: UIViewControllerContextTransitioning,
         destinationController: UIViewController,
         bvcSnapshot: UIImageView,
         backgroundView: UIView,
-        collectionView: UICollectionView,
+        tabDisplayView: TabDisplayView,
         selectedTab: Tab,
-        tabDisplayView: TabDisplayView?, // needed for interactive path only
         isInteractive: Bool
     ) {
+        let collectionView = tabDisplayView.collectionView
         guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
               let item = self.findItem(by: selectedTab.tabUUID, dataSource: dataSource)
         else {
-            tabDisplayView?.minimizingTabUUID = nil
+            tabDisplayView.minimizingTabUUID = nil
             context.containerView.addSubview(destinationController.view)
             context.completeTransition(true)
             return
@@ -239,28 +239,16 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         let theme = self.retrieveTheme()
         var cellFrame: CGRect?
-        var tabCell: ExperimentTabCell?
 
         if let indexPath = dataSource.indexPath(for: item) {
             collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-            // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
-            collectionView.layoutIfNeeded()
-            if let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell {
-                cellFrame = cell.convert(cell.backgroundHolder.bounds, to: nil)
-                cell.isHidden = true
-                if !isInteractive {
-                    tabCell = cell
-                    cell.setUnselectedState(theme: theme)
-                    cell.alpha = UX.clearAlpha
-                }
-            }
+            cellFrame = destinationFrame(for: indexPath, in: collectionView)
         }
         // Animate
         collectionView.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
         collectionView.alpha = UX.halfAlpha
         self.performPresentationAnimation(
             cellFrame: cellFrame,
-            tabCell: tabCell,
             bvcSnapshot: bvcSnapshot,
             collectionView: collectionView,
             backgroundView: backgroundView,
@@ -272,16 +260,26 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         )
     }
 
+    /// Window frame the browser snapshot animates into.
+    ///
+    /// Taken from the layout attributes rather than a realized cell, so the transition doesn't have to force a
+    /// synchronous layout pass to realize the cell it scrolls to.
+    private func destinationFrame(for indexPath: IndexPath, in collectionView: UICollectionView) -> CGRect? {
+        guard let attributes = collectionView.collectionViewLayout.layoutAttributesForItem(at: indexPath)
+        else { return nil }
+
+        return collectionView.convert(attributes.frame, to: nil)
+    }
+
     private func performPresentationAnimation(
         cellFrame: CGRect?,
-        tabCell: ExperimentTabCell?,
         bvcSnapshot: UIImageView,
         collectionView: UICollectionView,
         backgroundView: UIView,
         context: UIViewControllerContextTransitioning,
         selectedTab: Tab,
         theme: Theme,
-        tabDisplayView: TabDisplayView?,
+        tabDisplayView: TabDisplayView,
         isInteractive: Bool
     ) {
         let animator = UIViewPropertyAnimator(duration: UX.presentDuration, curve: .easeOut) {
@@ -301,7 +299,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 let settledImage = bvcSnapshot.image
                 backgroundView.removeFromSuperview()
                 bvcSnapshot.removeFromSuperview()
-                tabDisplayView?.minimizingTabUUID = nil
+                tabDisplayView.minimizingTabUUID = nil
                 self.revealSelectedCell(
                     in: collectionView,
                     selectedTab: selectedTab,
@@ -310,12 +308,15 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 )
                 context.completeTransition(true)
             }
-            animator.startAnimation()
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak tabCell] in
-                tabCell?.isHidden = false
+            DispatchQueue.main.async {
+                tabDisplayView.minimizingTabUUID = nil
+                guard let cell = self.selectedCell(in: collectionView, selectedTab: selectedTab) else { return }
+                cell.setUnselectedState(theme: theme)
+                cell.alpha = UX.clearAlpha
+                cell.isHidden = false
                 UIView.animate(withDuration: 0.1) {
-                    tabCell?.alpha = UX.opaqueAlpha
+                    cell.alpha = UX.opaqueAlpha
                 }
             }
 
@@ -323,15 +324,15 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 backgroundView.removeFromSuperview()
                 bvcSnapshot.removeFromSuperview()
                 context.completeTransition(true)
-                self.unhideCellBorder(tabCell: tabCell, isPrivate: selectedTab.isPrivate, theme: theme)
+                self.unhideCellBorder(in: collectionView, selectedTab: selectedTab, theme: theme)
             }
-            animator.startAnimation()
         }
+        animator.startAnimation()
     }
 
-    private func unhideCellBorder(tabCell: ExperimentTabCell?, isPrivate: Bool, theme: Theme) {
-        guard let tab = tabCell else { return }
-        tab.setSelectedState(isPrivate: isPrivate, theme: theme)
+    private func unhideCellBorder(in collectionView: UICollectionView, selectedTab: Tab, theme: Theme) {
+        guard let cell = selectedCell(in: collectionView, selectedTab: selectedTab) else { return }
+        cell.setSelectedState(isPrivate: selectedTab.isPrivate, theme: theme)
     }
 
     private func revealSelectedCell(
@@ -340,14 +341,20 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         settledImage: UIImage?,
         theme: Theme
     ) {
-        guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
-              let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource),
-              let indexPath = dataSource.indexPath(for: item),
-              let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell
-        else { return }
+        guard let cell = selectedCell(in: collectionView, selectedTab: selectedTab) else { return }
         cell.syncScreenshotForAnimation(settledImage)
         cell.isHidden = false
         cell.setSelectedState(isPrivate: selectedTab.isPrivate, theme: theme)
+    }
+
+    /// The selected tab's cell, when it is currently realized by the collection view.
+    private func selectedCell(in collectionView: UICollectionView, selectedTab: Tab) -> ExperimentTabCell? {
+        guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
+              let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource),
+              let indexPath = dataSource.indexPath(for: item)
+        else { return nil }
+
+        return collectionView.cellForItem(at: indexPath) as? ExperimentTabCell
     }
 
     // MARK: - Presentations
@@ -383,9 +390,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             destinationController: destinationController,
             bvcSnapshot: bvcSnapshot,
             backgroundView: backgroundView,
-            collectionView: tabDisplayView.collectionView,
-            selectedTab: selectedTab,
             tabDisplayView: tabDisplayView,
+            selectedTab: selectedTab,
             isInteractive: true
         )
     }
@@ -398,7 +404,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         finalFrame: CGRect,
         selectedTab: Tab
     ) {
-        let browserVCScreenshot = browserVC.view.screenshot(quality: UX.bvcScreenshotQuality)
+        // Keep the selected tab cell hidden for the whole animation. Going through `minimizingTabUUID`
+        // rather than the realized cell means cells that only get dequeued once the grid scrolls to the
+        // selected tab also come back hidden.
+        let tabDisplayView = panelViewController.tabDisplayView
+        tabDisplayView.minimizingTabUUID = selectedTab.tabUUID
+
+        let browserVCScreenshot = selectedTab.screenshot ?? browserVC.view.screenshot(quality: UX.bvcScreenshotQuality)
         let bvcSnapshot = makePresentationSnapshot(
             image: browserVCScreenshot,
             frame: browserVC.view.frame,
@@ -419,9 +431,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 destinationController: destinationController,
                 bvcSnapshot: bvcSnapshot,
                 backgroundView: backgroundView,
-                collectionView: panelViewController.tabDisplayView.collectionView,
+                tabDisplayView: tabDisplayView,
                 selectedTab: selectedTab,
-                tabDisplayView: nil,
                 isInteractive: false
             )
         }
