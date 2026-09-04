@@ -615,6 +615,13 @@ struct AccessibilityIdentifiers {
             // This is based on `PrefsKeys.SearchSettings.showRecentSearches`
             static let showRecentSearchesSwitch = "recentSearchesFeatureKey"
             static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
+            // These are based on the matching `PrefsKeys.SearchSettings` keys
+            static let showPrivateModeSearchSuggestionsSwitch = "ShowPrivateModeSearchSuggestionsKey"
+            static let showBrowsingHistorySuggestionsSwitch = "FirefoxSuggestBrowsingHistorySuggestions"
+            static let showBookmarksSuggestionsSwitch = "FirefoxSuggestBookmarksSuggestions"
+            static let showSyncedTabsSuggestionsSwitch = "FirefoxSuggestSyncedTabsSuggestions"
+            static let showNonSponsoredSuggestionsSwitch = "FirefoxSuggestShowNonSponsoredSuggestions"
+            static let showSponsoredSuggestionsSwitch = "FirefoxSuggestShowSponsoredSuggestions"
             static let backButtoniOS26 = "BackButton"
             static let backButton = "Settings"
         }

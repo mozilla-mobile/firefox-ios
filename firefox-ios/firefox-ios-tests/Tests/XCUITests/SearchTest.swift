@@ -14,11 +14,6 @@ private let SuggestedSite4 = "foobar buffer length"
 private let SuggestedSite5 = "foobar burn cd"
 private let SuggestedSite6 = "foobar/ b"
 
-private let IngestSuggestionsCell = "Ingest new suggestions now"
-// Nimbus applies fetched recipes on the launch after the fetch, so two attempts is the floor.
-private let SuggestRolloutLaunchAttempts = 5
-private let SuggestRolloutProbeTimeout: TimeInterval = 5
-
 class SearchTests: FeatureFlaggedTestBase {
     var toolbarScreen: ToolbarScreen!
     var browserScreen: BrowserScreen!
@@ -578,37 +573,10 @@ class SearchTests: FeatureFlaggedTestBase {
         }
     }
 
-    /// On release builds Firefox Suggest is enabled by a Nimbus rollout rather than a channel default, and
-    /// Nimbus only applies fetched recipes on the launch that follows the fetch, hence the relaunches.
     private func launchWithFirefoxSuggestRollout() {
         app.launch()
         waitForTabsButtonHittable()
-
-        for _ in 1...SuggestRolloutLaunchAttempts {
-            relaunchKeepingProfile()
-            navigator.goto(SettingsScreen)
-            navigator.performAction(Action.OpenSecretSettings)
-            navigator.goto(FirefoxSuggestSettings)
-            // The ingest row only exists while the feature is enabled, so it doubles as the enrollment probe.
-            guard mozWaitForElementToExist(app.cells[IngestSuggestionsCell],
-                                           timeout: SuggestRolloutProbeTimeout,
-                                           failOnTimeout: false) else { continue }
-            navigator.performAction(Action.IngestNewSuggestionsNow)
-            navigator.goto(HomePanelsScreen)
-            return
-        }
-
-        XCTFail("Firefox Suggest was not enabled after \(SuggestRolloutLaunchAttempts) launches")
-    }
-
-    /// The Nimbus database lives inside the test profile, so clearing it would discard the fetched rollout.
-    private func relaunchKeepingProfile() {
-        app.terminate()
-        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
-        app.launchArguments = app.launchArguments.filter { $0 != LaunchArguments.ClearProfile }
-        app.launch()
-        waitForTabsButtonHittable()
-        navigator.nowAt(NewTabScreen)
+        enrollInFirefoxSuggestRollout()
     }
 
     /// Clears the address bar before typing, so the term can be retyped without appending to itself.

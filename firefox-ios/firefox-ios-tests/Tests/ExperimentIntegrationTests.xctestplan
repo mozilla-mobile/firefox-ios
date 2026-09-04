@@ -158,6 +158,7 @@
         "PrivateBrowsingTestIpad",
         "ReportSiteTests",
         "ScreenGraphTest",
+        "SearchSettingsSuggestUITests",
         "SearchSettingsUITests",
         "SearchTests\/testDefaultSearchEngines()",
         "SearchTests\/testRecentSearchesSettingsToggleOff_recentSearchesExperimentOn()",
