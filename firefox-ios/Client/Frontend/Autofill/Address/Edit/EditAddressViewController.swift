@@ -212,7 +212,8 @@ class EditAddressViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         removeButton.applyTheme(theme: theme)
         let isDarkTheme = theme.type == .dark
-        evaluateJavaScript("setTheme(\(isDarkTheme));")
+        let caretColor = theme.colors.actionPrimary.hexString
+        evaluateJavaScript("setTheme(\(isDarkTheme), '\(caretColor)');")
     }
 
     func presentRemoveAddressAlert() {
