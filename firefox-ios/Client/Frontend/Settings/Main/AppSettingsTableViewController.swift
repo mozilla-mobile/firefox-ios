@@ -278,7 +278,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         }
         sendTechnicalDataSetting = sendTechnicalDataSettings
 
-        // Technical data is the only setting that may drive experiment participation
+        // Technical data is the only setting that drives the Nimbus telemetry setting
         Experiments.setTelemetrySetting(profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
 
         let sendDailyUsagePingSettings = SendDataSetting(
