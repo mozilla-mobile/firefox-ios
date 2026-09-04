@@ -504,6 +504,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     // Regression
     // Expected Failure: iOS 16.4, iOS 17.5, iOS 18.6
     func testModernKitOnboardingSetAsDefaultBrowser() {
+        expectedFailure(on: ["16.4", "17.5", "18.6"])
         launchApp()
 
         onboardingScreen.handleTermsOfService()

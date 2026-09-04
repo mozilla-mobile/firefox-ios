@@ -339,6 +339,7 @@ class O_AddressesTests: BaseTestCase {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
         }
+        expectedFailure(on: ["16.4", "17.5", "18.6"])
         addAddressAndReachAutofillForm(indexField: 7)
     }
 

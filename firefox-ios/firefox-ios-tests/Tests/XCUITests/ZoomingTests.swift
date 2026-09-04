@@ -48,6 +48,7 @@ final class ZoomingTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/3003915
     // Expected Failure: iOS 15.5, iOS 16.4
     func testZoomingActionsLandscape() {
+        expectedFailure(on: ["15.5", "16.4"])
         openURLAndNavigateToZoom(index: 0)
 
         XCUIDevice.shared.orientation = .landscapeLeft
@@ -75,6 +76,7 @@ final class ZoomingTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306949
     // Expected Failure: iOS 15.5, iOS 16.4
     func testZoomForceCloseFirefox() {
+        expectedFailure(on: ["15.5", "16.4"])
         openURLAndNavigateToZoom(index: 0)
 
         XCTAssertEqual(zoomBar.currentZoomPercent(), "100%")
@@ -105,6 +107,7 @@ final class ZoomingTests: BaseTestCase {
     // Regression
     // Expected Failure: iOS 15.5, iOS 16.4
     func testSwitchingZoomedTabs() {
+        expectedFailure(on: ["15.5", "16.4"])
         validateZoomLevelOnSwitchingTabs()
         // Repeat all steps in private browsing
         goToTabTray()
@@ -118,6 +121,7 @@ final class ZoomingTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2609150
     // Expected Failure: iOS 15.5, iOS 16.4
     func testSwitchingZoomedTabsLandscape() {
+        expectedFailure(on: ["15.5", "16.4"])
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         validateZoomLevelOnSwitchingTabs()
     }

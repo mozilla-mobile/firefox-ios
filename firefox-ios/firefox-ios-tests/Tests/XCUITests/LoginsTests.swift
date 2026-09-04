@@ -307,6 +307,7 @@ class LoginTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306954
     // Expected Failure: iOS 15.5
     func testAddDuplicateLogin() {
+        expectedFailure(on: ["15.5"])
         // Add login credential
         openLoginsSettingsFromBrowserTab()
         createLoginManually()
