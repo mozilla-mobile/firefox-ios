@@ -199,28 +199,70 @@ extension BrowserViewController: WKUIDelegate {
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
         completionHandler: @escaping @MainActor (UIContextMenuConfiguration?) -> Void
     ) {
-        guard let url = elementInfo.linkURL,
-              let currentTab = tabManager.selectedTab,
-              let contextHelper = currentTab.getContentScript(
-                name: ContextMenuHelper.name()
-              ) as? ContextMenuHelper,
-              let elements = contextHelper.elements
-        else {
+        guard let url = elementInfo.linkURL, let currentTab = tabManager.selectedTab else {
             completionHandler(nil)
             return
         }
+        let contextHelper = currentTab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper
+        let elements = Self.resolveContextMenuElements(for: url, from: contextHelper)
+
         completionHandler(contextMenuConfiguration(for: url, webView: webView, elements: elements))
         ContextMenuTelemetry().shown(origin: elements.image != nil ? .imageLink : .webLink)
     }
 
     func webView(_ webView: WKWebView, contextMenuDidEndForElement elementInfo: WKContextMenuElementInfo) {
-        guard let currentTab = tabManager.selectedTab,
-              let contextHelper = currentTab.getContentScript(
-                name: ContextMenuHelper.name()
-              ) as? ContextMenuHelper,
-              let elements = contextHelper.elements
-        else { return }
+        guard let url = elementInfo.linkURL, let currentTab = tabManager.selectedTab else { return }
+        let contextHelper = currentTab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper
+        let elements = Self.resolveContextMenuElements(for: url, from: contextHelper)
         ContextMenuTelemetry().dismissed(origin: elements.image != nil ? .imageLink : .webLink)
+        if Self.shouldResetContextMenuElements(afterDismissing: url, contextHelper: contextHelper) {
+            contextHelper?.reset()
+        }
+    }
+
+    /// WebKit's native long-press gesture that triggers this delegate isn't synchronized with the page's
+    /// `touchstart`/`mousedown` listener that reports link/image details across the JS bridge, so that data
+    /// can still be missing, or belong to a previous long press, once WebKit asks for a menu. `elementInfo.linkURL`
+    /// comes straight from WebKit and is always current, so it's used as-is; the JS-sourced data is only trusted
+    /// when its link matches, and otherwise a native-only fallback keeps the custom menu (and its actions like
+    /// "Open in Private Tab") from being replaced with WebKit's default one. See FXIOS-14918.
+    static func resolveContextMenuElements(
+        for url: URL,
+        from contextHelper: ContextMenuHelper?
+    ) -> ContextMenuHelper.Elements {
+        matchingContextHelperElements(contextHelper, url)
+            ?? ContextMenuHelper.Elements(link: url, image: nil, title: url.normalizedHostWithLRI, alt: nil)
+    }
+
+    /// Whether `contextHelper.elements` still belongs to the long press that's being dismissed. WebKit's
+    /// dismiss callback for an earlier long press can fire after a later long press has already reported
+    /// its own elements over the JS bridge; resetting unconditionally would discard that newer data. See FXIOS-14918.
+    static func shouldResetContextMenuElements(afterDismissing url: URL, contextHelper: ContextMenuHelper?) -> Bool {
+        matchingContextHelperElements(contextHelper, url) != nil
+    }
+
+    /// The JS bridge builds its link by percent-encoding the raw string it reads from the page, while WebKit
+    /// builds `elementInfo.linkURL` natively; for an internationalized domain the two land on different but
+    /// equivalent encodings (Unicode vs. Punycode host), so a raw `URL` equality check treats them as a mismatch.
+    /// Round-tripping the host through `URLComponents` normalizes both to the same Punycode form before comparing.
+    private static func matchingContextHelperElements(
+        _ contextHelper: ContextMenuHelper?,
+        _ url: URL
+    ) -> ContextMenuHelper.Elements? {
+        guard let elements = contextHelper?.elements,
+              let jsLink = elements.link,
+              normalizedForHostComparison(jsLink) == normalizedForHostComparison(url)
+        else { return nil }
+        return elements
+    }
+
+    private static func normalizedForHostComparison(_ url: URL) -> URL? {
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return url }
+        guard let host = components.host else { return components.url }
+        var hostOnly = URLComponents()
+        hostOnly.host = host
+        components.host = hostOnly.url?.host ?? host
+        return components.url
     }
 
     func webView(
@@ -1260,6 +1302,9 @@ extension BrowserViewController: WKNavigationDelegate {
         let previousURL = tab.url
         tab.url = webView.url
         hideStaleContentOnCrossOriginPopupCommit(for: tab, previousURL: previousURL)
+        if let contextHelper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper {
+            contextHelper.reset()
+        }
         if let handler = tab.onNextCommit {
             tab.onNextCommit = nil
             handler()
