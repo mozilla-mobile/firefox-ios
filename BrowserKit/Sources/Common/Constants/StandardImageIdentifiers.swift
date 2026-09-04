@@ -4,7 +4,7 @@
 
 import Foundation
 
-/// This struct defines all the standard image identifiers of icons and images used in the app.
+/// This struct defines all the standard image identifiers of icons used in the app.
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
 public struct StandardImageIdentifiers {
