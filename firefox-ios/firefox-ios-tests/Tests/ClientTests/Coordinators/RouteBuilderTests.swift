@@ -19,6 +19,13 @@ final class RouteBuilderTests: XCTestCase {
         randomActivity.webpageURL = testURL
     }
 
+    override func tearDown() async throws {
+        handoffUserActivity.webpageURL = nil
+        universalLinkUserActivity.webpageURL = nil
+        randomActivity.webpageURL = nil
+        try await super.tearDown()
+    }
+
     func test_makeRoute_HandlesAnyActivityType() {
         let routeBuilder = createSubject()
 

@@ -14,6 +14,14 @@ final class StoreTests: XCTestCase {
         mockState = MockState()
     }
 
+    override func tearDown() async throws {
+        MockState.midReducerActions = nil
+        MockState.runMidReducerActions = false
+        MockState.actionsReduced = []
+        MockState.modernActionsReduced = []
+        try await super.tearDown()
+    }
+
     func testDispatchBasicAction_mainThread() {
         let store = Store(state: mockState,
                           reducer: MockState.reducer,

@@ -45,6 +45,12 @@ class ScreenGraphTest: XCTestCase {
                                LaunchArguments.DisableAnimations]
         app.activate()
     }
+
+    override func tearDown() async throws {
+        navigator = nil
+        app = nil
+        try await super.tearDown()
+    }
 }
 
 extension XCTestCase {

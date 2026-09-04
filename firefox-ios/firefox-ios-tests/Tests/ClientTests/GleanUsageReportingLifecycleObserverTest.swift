@@ -13,6 +13,11 @@ class GleanUsageReportingLifecycleObserverTest: XCTestCase {
         fakeGleanUsageReportingApi = MockGleanUsageReportingApi()
     }
 
+    override func tearDown() {
+        fakeGleanUsageReportingApi = nil
+        super.tearDown()
+    }
+
     func testNoPingsSubmittedBeforeLifecycleChanges() {
         _ = createObserver()
         XCTAssertEqual(fakeGleanUsageReportingApi.pingSubmitCount, 0)
