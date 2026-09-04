@@ -16,38 +16,50 @@ public struct AppAttestRequestAuth: RequestAuthProtocol {
     private let appAttestClient: AppAttestClient
     private let bundleIdentifier: String
     private let serviceType: MLPAServiceType
+    private let logger: Logger
 
     public init(
         appAttestClient: AppAttestClient,
         bundleIdentifier: String,
-        serviceType: MLPAServiceType
+        serviceType: MLPAServiceType,
+        logger: Logger = DefaultLogger.shared
     ) {
         self.appAttestClient = appAttestClient
         self.bundleIdentifier = bundleIdentifier
         self.serviceType = serviceType
+        self.logger = logger
     }
 
     public func authenticate(request: inout URLRequest) async throws {
-        // Make sure the server trust is established before sending any requests.
-        // This should only be needed for the first request, subsequent requests will reuse the same attestation.
-        _ = try await appAttestClient.performAttestation()
+        do {
+            // Make sure the server trust is established before sending any requests.
+            // This should only be needed for the first request, subsequent requests will reuse the same attestation.
+            _ = try await appAttestClient.performAttestation()
 
-        let body = request.httpBody ?? Data()
-        let payload = try JSONSerialization.jsonObject(with: body) as? [String: Any] ?? [:]
+            let body = request.httpBody ?? Data()
+            let payload = try JSONSerialization.jsonObject(with: body) as? [String: Any] ?? [:]
 
-        let result = try await appAttestClient.generateAssertion(payload: payload)
+            let result = try await appAttestClient.generateAssertion(payload: payload)
 
-        let jwt = try MLPAJWTPayload(
-            keyId: result.keyId,
-            challenge: result.challenge,
-            objectKey: MLPAConstants.assertionObjParam,
-            objectData: result.assertion,
-            bundleIdentifier: bundleIdentifier
-        ).encode()
+            let jwt = try MLPAJWTPayload(
+                keyId: result.keyId,
+                challenge: result.challenge,
+                objectKey: MLPAConstants.assertionObjParam,
+                objectData: result.assertion,
+                bundleIdentifier: bundleIdentifier
+            ).encode()
 
-        request.setValue(MLPAConstants.bearerPrefix + jwt, forHTTPHeaderField: MLPAConstants.authorizationHeader)
-        request.setValue(serviceType.rawValue, forHTTPHeaderField: MLPAConstants.serviceTypeHeader)
-        request.setValue("true", forHTTPHeaderField: MLPAConstants.useAppAttestHeader)
-        request.httpBody = result.payload
+            request.setValue(MLPAConstants.bearerPrefix + jwt, forHTTPHeaderField: MLPAConstants.authorizationHeader)
+            request.setValue(serviceType.rawValue, forHTTPHeaderField: MLPAConstants.serviceTypeHeader)
+            request.setValue("true", forHTTPHeaderField: MLPAConstants.useAppAttestHeader)
+            request.httpBody = result.payload
+        } catch {
+            logger.log("Failed to authenticate the request with App Attest",
+                       level: .fatal,
+                       category: .mlpa,
+                       extra: ["error": "\(error.telemetryDescription)",
+                               "service": "\(serviceType.rawValue)"])
+            throw error
+        }
     }
 }

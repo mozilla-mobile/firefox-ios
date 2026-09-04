@@ -111,7 +111,7 @@ final class QuickAnswersViewModel {
             }
         } catch {
             try? await service.stopRecording()
-            let error = (error as? SpeechError) ?? SpeechError.unknown(error.localizedDescription)
+            let error = (error as? SpeechError) ?? SpeechError.unknown(error.telemetryDescription)
             telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel)
             onStateChange?(.speechResult(.empty(), error))
         }
