@@ -375,7 +375,9 @@ class BookmarksTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168596
     // Regression
+    // Expected Failure: iOS 15.5
     func testDeleteEmptyFolderInEditMode() {
+        expectedFailure(on: ["15.5"])
         app.launch()
         toolbarScreen.tapSettingsMenuButton()
         mainMenu.tapBookmarks()

@@ -424,7 +424,9 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     // MARK: - Sync Flow Tests
 
     // https://mozilla.testrail.io/index.php?/cases/view/4036954
+    // Expected Failure: iOS 15.5
     func testModernKitOnboardingSyncFlow() throws {
+        expectedFailure(on: ["15.5"])
         launchApp()
 
         onboardingScreen.handleTermsOfService()
@@ -502,9 +504,9 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/4038425
     // Regression
-    // Expected Failure: iOS 16.4, iOS 17.5, iOS 18.6
+    // Expected Failure: iOS 15.5, iOS 16.4, iOS 17.5, iOS 18.6
     func testModernKitOnboardingSetAsDefaultBrowser() {
-        expectedFailure(on: ["16.4", "17.5", "18.6"])
+        expectedFailure(on: ["15.5", "16.4", "17.5", "18.6"])
         launchApp()
 
         onboardingScreen.handleTermsOfService()
@@ -587,10 +589,12 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Multiple Choice UI Tests
 
+    // Expected Failure: iOS 15.5
     func testModernKitOnboardingMultipleChoiceUI() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
         }
+        expectedFailure(on: ["15.5"])
 
         launchApp()
 

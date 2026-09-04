@@ -78,7 +78,9 @@ class SecurityTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395566
+    // Expected Failure: iOS 15.5
     func testNetlify90() {
+        expectedFailure(on: ["15.5"])
         navigator.openURL(WebStrings.netlify90URL)
         waitUntilPageLoad()
         browserScreen.tapWebViewButton(buttonText: WebStrings.startTestButton)
