@@ -57,6 +57,12 @@ class AutopushTests: XCTestCase {
         _ = try await autopushClient?.decrypt(payload: ["key": "value"])
         XCTAssertEqual(["key": "value"], mockPushManager.decryptCalledWith)
     }
+
+    func testVerifyConnectionCallsPushManager() async throws {
+        XCTAssertFalse(mockPushManager.verifyConnectionCalled)
+        _ = try await autopushClient?.verifyActiveSubstriptions()
+        XCTAssert(mockPushManager.verifyConnectionCalled)
+    }
 }
 
 // MARK: - MockPushManager
