@@ -5,10 +5,20 @@
 import Foundation
 import Common
 
+/// Within the app's Tabs Panel, visually there are three panels: private tabs, normal tabs, and synced tabs.
 enum TabTrayPanelType: Int, CaseIterable {
     case tabs
     case privateTabs
     case syncedTabs
+
+    var isPrivateMode: Bool {
+        switch self {
+        case .privateTabs:
+            return true
+        case .tabs, .syncedTabs:
+            return false
+        }
+    }
 
     var navTitle: String {
         switch self {

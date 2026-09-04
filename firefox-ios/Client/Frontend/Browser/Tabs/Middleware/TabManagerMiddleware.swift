@@ -60,7 +60,14 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     lazy var tabsPanelProvider: Middleware<AppState> = (legacyProvider, modernProvider)
 
     lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
-        // Does not test any modern actions
+        if let action = action as? TabPanelViewModernAction {
+            switch action {
+            case .addNewTab(let type):
+                tabsPanelTelemetry.newTabButtonTapped(mode: type.modeForTelemetry)
+                addNewTab(withRequest: nil, isPrivate: type == .private, showOverlay: true, for: windowUUID)
+                dispatchRecentlyAccessedTabsAction(forWindowUUID: windowUUID)
+            }
+        }
     }
 
     lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
@@ -186,10 +193,10 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         // FXIOS-11740 - This is relate to homepage actions, so if we want to break up this middleware
         // then this action should go to the homepage specific middleware.
         case TabTrayActionType.dismissTabTray, TabTrayActionType.modalSwipedToClose:
-            dispatchRecentlyAccessedTabs(action: action)
+            dispatchRecentlyAccessedTabsAction(forWindowUUID: action.windowUUID)
         case TabTrayActionType.doneButtonTapped:
             tabsPanelTelemetry.doneButtonTapped(mode: action.panelType?.modeForTelemetry ?? .normal)
-            dispatchRecentlyAccessedTabs(action: action)
+            dispatchRecentlyAccessedTabsAction(forWindowUUID: action.windowUUID)
         default:
             break
         }
@@ -220,11 +227,6 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                                                   actionType: TabPanelMiddlewareActionType.willAppearTabPanel)
             store.dispatch(action)
 
-        case TabPanelViewActionType.addNewTab:
-            let isPrivateMode = action.panelType == .privateTabs
-            tabsPanelTelemetry.newTabButtonTapped(mode: action.panelType?.modeForTelemetry ?? .normal)
-            addNewTab(with: action.urlRequest, isPrivate: isPrivateMode, showOverlay: true, for: action.windowUUID)
-            dispatchRecentlyAccessedTabs(action: action)
         case TabPanelViewActionType.moveTab:
             guard let moveTabData = action.moveTabData else { return }
             moveTab(state: state, moveTabData: moveTabData, uuid: action.windowUUID)
@@ -314,7 +316,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                                      method: .open,
                                      object: .syncTab)
         let urlRequest = URLRequest(url: url)
-        self.addNewTab(with: urlRequest, isPrivate: false, showOverlay: showOverlay, for: windowUUID)
+        self.addNewTab(withRequest: urlRequest, isPrivate: false, showOverlay: showOverlay, for: windowUUID)
     }
 
     private func closeSelectedRemoteTab(deviceId: String, url: URL, windowUUID: WindowUUID) {
@@ -385,7 +387,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     /// - Parameters:
     ///   - urlRequest: URL request to load
     ///   - isPrivate: if the tab should be created in private mode or not
-    private func addNewTab(with urlRequest: URLRequest?, isPrivate: Bool, showOverlay: Bool, for uuid: WindowUUID) {
+    private func addNewTab(withRequest urlRequest: URLRequest?, isPrivate: Bool, showOverlay: Bool, for uuid: WindowUUID) {
         MainActor.assertIsolated("Expected to be called only on main actor.")
         // TODO: Legacy class has a guard to cancel adding new tab if dragging was enabled,
         // check if change is still needed
@@ -537,7 +539,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     }
 
     private func didTapLearnMoreAboutPrivate(with urlRequest: URLRequest, uuid: WindowUUID) {
-        addNewTab(with: urlRequest, isPrivate: true, showOverlay: false, for: uuid)
+        addNewTab(withRequest: urlRequest, isPrivate: true, showOverlay: false, for: uuid)
     }
 
     private func selectTab(
@@ -990,7 +992,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             HomepageMiddlewareActionType.jumpBackInLocalTabsUpdated,
             TopTabsActionType.didTapNewTab,
             TopTabsActionType.didTapCloseTab:
-            dispatchRecentlyAccessedTabs(action: action)
+            dispatchRecentlyAccessedTabsAction(forWindowUUID: action.windowUUID)
         case JumpBackInActionType.tapOnCell:
             guard let jumpBackInAction = action as? JumpBackInAction,
                   let tab = jumpBackInAction.tab else { return }
@@ -1089,13 +1091,13 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     }
 
     /// Sends out updated recent tabs which is currently used for the homepage jumpBackIn section
-    private func dispatchRecentlyAccessedTabs(action: Action) {
-        guard let tabManager = tabManager(for: action.windowUUID) else { return }
+    private func dispatchRecentlyAccessedTabsAction(forWindowUUID windowUUID: WindowUUID) {
+        guard let tabManager = tabManager(for: windowUUID) else { return }
         let recentTabs = tabManager.recentlyAccessedNormalTabs
         store.dispatch(
             TabManagerAction(
                 recentTabs: recentTabs,
-                windowUUID: action.windowUUID,
+                windowUUID: windowUUID,
                 actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
             )
         )

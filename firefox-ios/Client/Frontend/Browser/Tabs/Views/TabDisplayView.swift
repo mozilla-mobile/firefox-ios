@@ -170,11 +170,12 @@ final class TabDisplayView: UIView,
             scrollToTab(scrollState)
         }
 
-        if state.didTapAddTab {
-            let action = TabPanelViewAction(panelType: self.panelType,
-                                            windowUUID: self.windowUUID,
-                                            actionType: TabPanelViewActionType.addNewTab)
-            store.dispatch(action)
+        // Users can only create tabs for normal and private tab panel types, but not synced tab panel type
+        if state.didTapAddTab, let type = TabsDisplayViewPanelType(fromTabTrayPanelType: panelType) {
+            store.dispatch(
+                TabPanelViewModernAction.addNewTab(ofType: type),
+                forWindowUUID: self.windowUUID
+            )
         }
     }
 
