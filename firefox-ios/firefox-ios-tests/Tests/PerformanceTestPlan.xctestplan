@@ -122,6 +122,7 @@
         "PairingTests",
         "PairingTests\/testCaptureDebugPairingOption()",
         "PairingTests\/testPairingCancelledByUser()",
+        "PairingTests\/testPairingV2()",
         "PairingTests\/testPairingWithUrl()",
         "PerformanceTests\/testPerfTabs_3_20tabTray()",
         "PerformanceTests\/testPerfTabs_4_1280tabTray()",

@@ -293,6 +293,7 @@
         "PairingTests",
         "PairingTests\/testCaptureDebugPairingOption()",
         "PairingTests\/testPairingCancelledByUser()",
+        "PairingTests\/testPairingV2()",
         "PairingTests\/testPairingWithUrl()",
         "PerformanceTests",
         "PerformanceTests\/testAppStart()",
