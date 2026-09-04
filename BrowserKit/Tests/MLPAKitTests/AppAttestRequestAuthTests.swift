@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import AppAttestKit
+import Common
 import TestKit
 import XCTest
 
@@ -82,17 +83,35 @@ final class AppAttestRequestAuthTests: XCTestCase {
         XCTAssertNotNil(fields[MLPAConstants.bundleIDParam])
     }
 
+    func test_authenticate_logsFatalError_whenAttestationFails() async throws {
+        let logger = MockLogger()
+        let subject = try createSubject(
+            storedKeyID: nil,
+            sendAttestationError: AppAttestServiceError.invalidPayload,
+            logger: logger
+        )
+        var request = try makeRequest()
+
+        try? await subject.authenticate(request: &request)
+
+        XCTAssertEqual(logger.savedLevel, .fatal)
+        XCTAssertEqual(logger.savedExtra?["error"], "\(AppAttestServiceError.invalidPayload)")
+    }
+
     // MARK: - Helpers
 
     private func createSubject(
         storedKeyID: String? = AppAttestTestData.keyID,
         challenge: String = AppAttestTestData.challenge,
         assertionBlob: Data = AppAttestTestData.assertionBlob,
-        bundleIdentifier: String = AppAttestTestData.bundleID
+        bundleIdentifier: String = AppAttestTestData.bundleID,
+        sendAttestationError: Error? = nil,
+        logger: Logger = MockLogger()
     ) throws -> AppAttestRequestAuth {
         let keyStore = MockAppAttestKeyIDStore(initial: storedKeyID)
         let server = MockAppAttestRemoteServer()
         server.challengeToReturn = challenge
+        server.sendAttestationError = sendAttestationError
         let service = MockAppAttestService(isSupported: true)
         service.assertionToReturn = assertionBlob
 
@@ -105,7 +124,8 @@ final class AppAttestRequestAuthTests: XCTestCase {
         return AppAttestRequestAuth(
             appAttestClient: client,
             bundleIdentifier: bundleIdentifier,
-            serviceType: .s2s
+            serviceType: .s2s,
+            logger: logger
         )
     }
 

@@ -14,6 +14,9 @@ public enum LoggerCategory: String {
     /// Related to setting an alternative app icon and resetting to the default app icon.
     case appIcon
 
+    /// Related to our authentication services, like MLPA.
+    case authentication
+
     /// Related to address, credit card and password autofill
     case autofill
 
