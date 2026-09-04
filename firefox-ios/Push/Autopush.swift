@@ -51,6 +51,16 @@ public protocol AutopushProtocol {
     ///            and the scope the push notification was for
     /// - Throws: If the native push client was unable to decrypt the payload
     func decrypt(payload: [String: String]) async throws -> DecryptResponse
+
+    /// Verifies active subscriptions
+    ///
+    /// - Parameter forceVerify:A boolean value indicating whether rate limiting should be circumvented
+    ///
+    /// - Throws: In the following scenarios:
+    ///     - The PushManager does not contain a valid UAID
+    ///     - An error occurred sending an channel list retrieval request to the autopush server
+    ///     - An error occurred accessing the PushManager's persisted storage
+    func verifyActiveSubstriptions(forceVerify: Bool) async throws
 }
 
 public actor Autopush {
@@ -93,5 +103,16 @@ extension Autopush: AutopushProtocol {
 
     public func decrypt(payload: [String: String]) async throws -> DecryptResponse {
         return try pushManager.decrypt(payload: payload)
+    }
+
+    public func verifyActiveSubstriptions(forceVerify: Bool = false) async throws {
+        let subscriptionChanges = try pushManager.verifyConnection(forceVerify: forceVerify)
+
+        if subscriptionChanges.isEmpty {
+            // Re-subscribe the returned `subscriptionChanges`
+            subscriptionChanges.forEach { change in
+                // TODO: Resubscribe/Notify. On Android this is done with notifications and observers
+            }
+        }
     }
 }
