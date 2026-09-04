@@ -22,6 +22,34 @@ $tags:
 # Add your new metrics and/or events here.
 # Homepage Tracker Blocker module
 tracker_blocker:
+  dashboard_viewed:
+    type: event
+    description: |
+      Records each time the user opens the privacy dashboard from the homepage
+      tracker blocker module.
+    extra_keys:
+      dashboard_state:
+        type: string
+        description: |
+          What the dashboard showed when it opened:
+          `empty` (nothing has ever been blocked),
+          `weekly_reset` (a lifetime total exists, but nothing was blocked this
+          week), or `populated` (trackers were blocked this week).
+      figures:
+        type: quantity
+        description: |
+          The digit-count band the user's lifetime blocked total fell in when
+          the dashboard opened, from 4 to 8 (1,000 / 10,000 / 100,000 /
+          1,000,000 / 10,000,000 and above). Absent when the total is below
+          1,000.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16426
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35533
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
   lifetime_threshold_reached:
     type: event
     description: |

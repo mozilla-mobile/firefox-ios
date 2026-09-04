@@ -4,6 +4,7 @@
 
 import Common
 import ComponentLibrary
+import Glean
 import MozillaAppServices
 import Redux
 import SwiftUI
@@ -299,6 +300,20 @@ final class BrowserCoordinatorTests: XCTestCase,
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is TrackerBlockerSheetViewController)
+    }
+
+    func testShowTrackerBlockerSheet_recordsDashboardViewed() throws {
+        typealias ExtraType = GleanMetrics.TrackerBlocker.DashboardViewedExtra
+        let subject = createSubject()
+
+        subject.showTrackerBlockerSheet()
+
+        let recorded = glean.savedExtras.compactMap { $0 as? ExtraType }
+        let savedExtras = try XCTUnwrap(recorded.first)
+        XCTAssertEqual(recorded.count, 1)
+        // Nothing has been blocked against the test profile, so the sheet opens empty and unbanded.
+        XCTAssertEqual(savedExtras.dashboardState, "empty")
+        XCTAssertNil(savedExtras.figures)
     }
 
     func testStartShareSheetCoordinator_addsShareSheetCoordinator() {

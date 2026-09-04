@@ -12,9 +12,6 @@ import Redux
 /// happens off the homepage while the user browses.
 @MainActor
 final class TrackerBlockerModuleMiddleware {
-    private static let minReportableFigures = 4
-    private static let maxReportableFigures = 8
-
     private let statsStore: TrackerBlockStatsStore
     private let telemetry: TrackerBlockerTelemetry
 
@@ -65,18 +62,15 @@ final class TrackerBlockerModuleMiddleware {
     /// lifetime total has newly crossed, then persists the high-water mark so no
     /// boundary is reported more than once.
     private func recordThresholdCrossings(for count: Int) {
-        guard count > 0 else { return }
-        let figures = String(count).count
-        guard figures >= Self.minReportableFigures else { return }
+        guard let figures = TrackerBlockerTelemetry.reportableFigures(for: count) else { return }
 
-        let cappedFigures = min(figures, Self.maxReportableFigures)
         let alreadyReported = statsStore.highestReportedFigures()
-        guard cappedFigures > alreadyReported else { return }
+        guard figures > alreadyReported else { return }
 
-        let firstToReport = max(Self.minReportableFigures, alreadyReported + 1)
-        for boundary in firstToReport...cappedFigures {
+        let firstToReport = max(TrackerBlockerTelemetry.lowestReportableFigures, alreadyReported + 1)
+        for boundary in firstToReport...figures {
             telemetry.lifetimeThresholdReached(figures: boundary)
         }
-        statsStore.setHighestReportedFigures(cappedFigures)
+        statsStore.setHighestReportedFigures(figures)
     }
 }
