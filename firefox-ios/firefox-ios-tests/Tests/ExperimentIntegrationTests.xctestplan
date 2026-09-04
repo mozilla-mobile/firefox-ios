@@ -141,6 +141,7 @@
         "ModernOnboardingTests",
         "MultiWindowTests",
         "NavigationTest",
+        "NewTabSettingsTest\/testKeyboardRaisedWhenBlankTabOpenedFromContextMenusAndWidget()",
         "NightModeTests",
         "O_AddressesTests",
         "OnboardingTests\/testValidateContinueButton()",

@@ -232,6 +232,28 @@ final class BrowserScreen {
         }
     }
 
+    func tapAddressBar() {
+        addressBar.waitAndTap()
+    }
+
+    /// Taps the "<" chevron shown next to the address bar while it is being edited.
+    func tapCancelEditButton() {
+        cancelButton.waitAndTap()
+    }
+
+    /// Opening a blank new tab focuses the address bar, so the keyboard is raised on both idioms.
+    func assertAddressBarFocusedWithKeyboard() {
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        XCTAssertTrue(addressBar.waitForKeyboardFocus(), "The address bar should have keyboard focus.")
+        BaseTestCase().mozWaitForElementToExist(app.keyboards.element)
+    }
+
+    func assertAddressBarUnfocusedWithoutKeyboard() {
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        BaseTestCase().mozWaitForElementToNotExist(app.keyboards.element)
+        XCTAssertFalse(addressBar.hasKeyboardFocus, "The address bar should not have keyboard focus.")
+    }
+
     func dismissKeyboardIfVisible(maxTaps: Int = 3) {
         let keyboard = app.keyboards.firstMatch
         var remainingTaps = maxTaps
