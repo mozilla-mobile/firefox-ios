@@ -17,17 +17,28 @@ final class MockTranslationsService: TranslationsServiceProtocol {
     // MARK: - Call records
     var shouldOfferTranslationCallCount = 0
 
+    /// Parks `firstResponseReceived` until `releaseFirstResponse()` is called.
+    private var firstResponseGate: CheckedContinuation<Void, Never>?
+    private let gatesFirstResponse: Bool
+
     // MARK: - Init
     init(
         shouldOfferTranslationResult: Result<Bool, Error> = .success(false),
         translateResult: Result<Void, Error> = .success(()),
         firstResponseReceivedResult: Result<Void, Error> = .success(()),
-        detectPageLanguageResult: Result<String, Error> = .success("en")
+        detectPageLanguageResult: Result<String, Error> = .success("en"),
+        gatesFirstResponse: Bool = false
     ) {
         self.shouldOfferTranslationResult = shouldOfferTranslationResult
         self.translateResult = translateResult
         self.firstResponseReceivedResult = firstResponseReceivedResult
         self.detectPageLanguageResult = detectPageLanguageResult
+        self.gatesFirstResponse = gatesFirstResponse
+    }
+
+    func releaseFirstResponse() {
+        firstResponseGate?.resume()
+        firstResponseGate = nil
     }
 
     // MARK: - TranslationsServiceProtocol
@@ -49,6 +60,11 @@ final class MockTranslationsService: TranslationsServiceProtocol {
     }
 
     func firstResponseReceived(for windowUUID: WindowUUID) async throws {
+        if gatesFirstResponse {
+            await withCheckedContinuation { continuation in
+                firstResponseGate = continuation
+            }
+        }
         try firstResponseReceivedResult.get()
     }
 

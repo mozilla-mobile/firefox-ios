@@ -110,6 +110,42 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
+    /// Regression guard: a translation still in flight on navigation must not complete onto
+    /// the page being navigated to.
+    func test_urlDidChangeAction_withTranslationInFlight_cancelsIt() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let mockTranslationService = MockTranslationsService(gatesFirstResponse: true)
+        let subject = createSubject(translationsService: mockTranslationService)
+
+        let startAction = TranslationLanguageSelectedAction(
+            windowUUID: .XCTestDefaultUUID,
+            targetLanguage: "de",
+            actionType: TranslationsActionType.didSelectTargetLanguage
+        )
+
+        let startExpectation = XCTestExpectation(description: "didStartTranslatingPage dispatched")
+        mockStore.dispatchCalled = { startExpectation.fulfill() }
+        subject.translationsProvider.legacyMiddleware(mockStore.state, startAction)
+        wait(for: [startExpectation], timeout: 1.0)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+
+        let urlDidChangeAction = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.urlDidChange
+        )
+        subject.translationsProvider.legacyMiddleware(mockStore.state, urlDidChangeAction)
+
+        let noFurtherDispatch = XCTestExpectation(description: "no dispatch once the cancelled task resolves")
+        noFurtherDispatch.isInverted = true
+        mockStore.dispatchCalled = { noFurtherDispatch.fulfill() }
+        mockTranslationService.releaseFirstResponse()
+
+        wait(for: [noFurtherDispatch], timeout: 0.5)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+    }
+
     // MARK: - pageDidReportTranslationState tests (translated)
 
     func test_pageDidReportTranslationState_whenTranslated_dispatchesActiveStateWithLanguages() throws {

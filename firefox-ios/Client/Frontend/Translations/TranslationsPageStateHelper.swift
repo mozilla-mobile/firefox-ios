@@ -22,7 +22,8 @@ class TranslationsPageStateHelper: TabContentScript {
         _ userContentController: WKUserContentController,
         didReceiveScriptMessage message: WKScriptMessage
     ) {
-        guard let tab,
+        guard message.frameInfo.isMainFrame,
+              let tab,
               let body = message.body as? [String: Any] else { return }
 
         store.dispatch(TranslationsPageStateAction(
