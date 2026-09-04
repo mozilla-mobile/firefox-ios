@@ -333,6 +333,9 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.5-arm64.xctestrun
     - deploy-to-bitrise-io@2: {}
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.4x-large
   firefox_scheme_build_for_test:
     description: Build Firefox scheme and shard XCUITests for parallel execution
     before_run:
