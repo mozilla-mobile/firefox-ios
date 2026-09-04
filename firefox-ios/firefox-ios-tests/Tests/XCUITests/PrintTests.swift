@@ -6,7 +6,9 @@ import Foundation
 
 class PrintTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/3167647
+    // Expected Failure: iOS 15.5, iOS 16.4
     func testValidatePrintOption() {
+        expectedFailure(on: ["15.5", "16.4"])
         openUrlAndValidatePrintOptions()
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         openUrlAndValidatePrintOptions()

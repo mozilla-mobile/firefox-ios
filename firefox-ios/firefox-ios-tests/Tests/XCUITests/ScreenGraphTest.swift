@@ -8,7 +8,19 @@ import Common
 import Shared
 
 @MainActor
-class ScreenGraphTest: XCTestCase {
+class ScreenGraphTest: XCTestCase, ExpectedFailureReporting {
+    nonisolated(unsafe) var expectedFailureNote: String?
+    nonisolated(unsafe) var didReportExpectedFailure = false
+
+    override nonisolated func record(_ issue: XCTIssue) {
+        // Recorded first: with `continueAfterFailure = false` the test stops accepting failures
+        // once the real one lands, which would drop the note.
+        if let note = expectedFailureIssue() {
+            super.record(note)
+        }
+        super.record(issue)
+    }
+
     var navigator: MMNavigator<TestUserState>!
     var app: XCUIApplication!
 
@@ -70,7 +82,9 @@ extension ScreenGraphTest {
         XCTAssertTrue(currentURL?.starts(with: "mozilla.org") ?? false, "Current url recorded by from the url bar is \(currentURL ?? "nil")")
     }
 
+    // Expected Failure: iOS 15.5, iOS 16.4
     func testSimpleToggleAction() {
+        expectedFailure(on: ["15.5", "16.4"])
         navigator.userState.url = "https://mozilla.org"
         navigator.performAction(TestActions.LoadURLByTyping)
         waitUntilPageLoad()

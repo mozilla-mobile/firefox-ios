@@ -75,7 +75,9 @@ class DomainAutocompleteTests: BaseTestCase {
     // Test that deleting characters works correctly with autocomplete
     // https://mozilla.testrail.io/index.php?/cases/view/2334647
     // Regression
+    // Expected Failure: iOS 15.5
     func test3AutocompleteDeletingChars() {
+        expectedFailure(on: ["15.5"])
         // The autocomplete does not display the history item from the DB. Workaround is to manually visit "mozilla.org".
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()

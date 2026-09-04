@@ -29,7 +29,9 @@ class KeyboardShortcutsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307079
     // Regression
+    // Expected Failure: iOS 15.5
     func testOpenAndCloseTabWithKeyboardShortcut() {
+        expectedFailure(on: ["15.5"])
         toolbarScreen.assertTabsButtonValue(expectedCount: "1")
 
         // A new tab is opened by pressing Command+T
@@ -45,7 +47,9 @@ class KeyboardShortcutsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307080
     // Regression
+    // Expected Failure: iOS 15.5
     func testOpenPrivateTabWithKeyboardShortcut() {
+        expectedFailure(on: ["15.5"])
         // A new private tab is opened by pressing Command+Shift+P
         pressShortcut("p",
                       modifierFlags: [.command, .shift],
@@ -55,7 +59,9 @@ class KeyboardShortcutsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307083
     // Regression
+    // Expected Failure: iOS 15.5
     func testBookmarkPageWithKeyboardShortcut() {
+        expectedFailure(on: ["15.5"])
         visitPageAndBookmarkItWithKeyboardShortcut()
 
         // The bookmark is saved, and saved only once even if the shortcut had to be retried
@@ -66,7 +72,9 @@ class KeyboardShortcutsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307090
     // Regression
+    // Expected Failure: iOS 15.5
     func testShowBookmarksPanelWithKeyboardShortcut() {
+        expectedFailure(on: ["15.5"])
         visitPageAndBookmarkItWithKeyboardShortcut()
 
         // The bookmark panel is displayed by pressing Command+Shift+O

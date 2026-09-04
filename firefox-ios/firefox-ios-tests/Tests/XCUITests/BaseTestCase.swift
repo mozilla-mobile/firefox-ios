@@ -34,7 +34,19 @@ let TIMEOUT_PICKER_PROBE: TimeInterval = 3
 let MAX_SWIPE = 5
 
 @MainActor
-class BaseTestCase: XCTestCase {
+class BaseTestCase: XCTestCase, ExpectedFailureReporting {
+    nonisolated(unsafe) var expectedFailureNote: String?
+    nonisolated(unsafe) var didReportExpectedFailure = false
+
+    override nonisolated func record(_ issue: XCTIssue) {
+        // Recorded first: with `continueAfterFailure = false` the test stops accepting failures
+        // once the real one lands, which would drop the note.
+        if let note = expectedFailureIssue() {
+            super.record(note)
+        }
+        super.record(issue)
+    }
+
     var navigator: MMNavigator<FxUserState>!
     let app = XCUIApplication()
     var userState: FxUserState!
@@ -741,4 +753,39 @@ enum AppScheme {
     case fennec
     case firefox
     case firefoxBeta
+}
+
+/// Lets a test case carry a note that is reported alongside any failure it records.
+protocol ExpectedFailureReporting: AnyObject {
+    var expectedFailureNote: String? { get set }
+    var didReportExpectedFailure: Bool { get set }
+}
+
+extension ExpectedFailureReporting where Self: XCTestCase {
+    /// Marks the running test as a known failure on the given iOS versions, mirroring the
+    /// `// Expected Failure:` comment above it. Nothing is reported unless the test actually fails
+    /// on one of those versions, in which case the note is recorded as its own failure line in the
+    /// test results, next to the real one.
+    /// - Parameter ticket: Jira issue key tracking the failure, once one has been filed.
+    @MainActor
+    func expectedFailure(on versions: [String], ticket: String? = nil) {
+        let systemVersion = UIDevice.current.systemVersion
+        guard versions.contains(where: {
+            systemVersion == $0 || systemVersion.hasPrefix("\($0).")
+        }) else { return }
+
+        var summary = "Expected failure on iOS \(systemVersion)"
+        if let ticket {
+            summary += " - https://mozilla-hub.atlassian.net/browse/\(ticket)"
+        }
+        expectedFailureNote = summary
+    }
+
+    /// The one-off issue to record next to a real failure, or `nil` when there is nothing to add.
+    /// Reported once per test, so a test failing several times does not repeat it.
+    nonisolated func expectedFailureIssue() -> XCTIssue? {
+        guard let note = expectedFailureNote, !didReportExpectedFailure else { return nil }
+        didReportExpectedFailure = true
+        return XCTIssue(type: .assertionFailure, compactDescription: note)
+    }
 }

@@ -239,7 +239,9 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307034
+    // Expected Failure: iOS 16.4, iOS 17.5
     func testRecentlySaved() {
+        expectedFailure(on: ["16.4", "17.5"])
         addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
@@ -286,7 +288,9 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307032
+    // Expected Failure: iOS 15.5, iOS 16.4
     func testShortcutsRows() {
+        expectedFailure(on: ["15.5", "16.4"])
         app.launch()
         addWebsitesToShortcut(website: path(forTestPage: url_1))
         addWebsitesToShortcut(website: path(forTestPage: url_2["url"]!))

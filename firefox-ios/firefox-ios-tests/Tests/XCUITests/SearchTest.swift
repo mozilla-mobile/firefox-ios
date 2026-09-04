@@ -155,7 +155,9 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2436095
+    // Expected Failure: iOS 15.5
     func testCopyPasteComplete() {
+        expectedFailure(on: ["15.5"])
         // Copy, Paste and Go to url
         app.launch()
         typeOnSearchBar(text: "www.mozilla.org")

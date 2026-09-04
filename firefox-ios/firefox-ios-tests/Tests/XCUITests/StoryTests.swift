@@ -48,7 +48,9 @@ class StoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306924
+    // Expected Failure: iOS 15.5
     func testNewsStoriesEnabledByDefault() {
+        expectedFailure(on: ["15.5"])
         app.launch()
 
         navigator.goto(NewTabScreen)
@@ -77,7 +79,9 @@ class StoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2855360
+    // Expected Failure: iOS 15.5
     func testValidateNewsContextMenu() {
+        expectedFailure(on: ["15.5"])
         app.launch()
 
         navigator.goto(NewTabScreen)
@@ -100,7 +104,9 @@ class StoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/XXXXXXX
+    // Expected Failure: iOS 15.5
     func testNewsStoryCategoriesFilterStories() throws {
+        expectedFailure(on: ["15.5"])
         if !isFennec {
             throw XCTSkip("Skipping testNewsStoryCategoriesFilterStories on Firefox or FirefoxBeta schemas")
         }

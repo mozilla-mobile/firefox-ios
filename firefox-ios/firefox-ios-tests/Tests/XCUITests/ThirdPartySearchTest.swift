@@ -13,7 +13,9 @@ class ThirdPartySearchTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2443998
     // Regression
+    // Expected Failure: iOS 15.5
     func testCustomSearchEngines() {
+        expectedFailure(on: ["15.5"])
         addCustomSearchEngine()
 
         app.navigationBars["Search"].buttons["Settings"].waitAndTap()
