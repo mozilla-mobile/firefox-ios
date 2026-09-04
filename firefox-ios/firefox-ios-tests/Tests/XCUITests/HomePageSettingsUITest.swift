@@ -63,8 +63,8 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
         // Opening Screen
         XCTAssertFalse(app.tables.cells["StartAtHomeAlways"].isSelected)
-        XCTAssertFalse(app.tables.cells["StartAtHomeDisabled"].isSelected)
-        XCTAssertTrue(app.tables.cells["StartAtHomeAfterFourHours"].isSelected)
+        XCTAssertFalse(app.tables.cells["StartAtHomeAfterFourHours"].isSelected)
+        XCTAssertTrue(app.tables.cells["StartAtHomeDisabled"].isSelected)
 
         // Include on Homepage
         mozWaitForElementToExist(app.tables.cells["TopSitesSettings"].staticTexts["On"])

@@ -42,7 +42,7 @@ class StartAtHomeHelper: UserFeaturePreferenceProvider {
     var startAtHomeSetting: StartAtHomeSetting {
         get {
             let pref = userPreferences.startAtHomeSetting
-            return StartAtHomeSetting(rawValue: pref.rawValue) ?? .afterFourHours
+            return StartAtHomeSetting(rawValue: pref.rawValue) ?? .disabled
         }
         set { prefs.setString(newValue.rawValue, forKey: PrefsKeys.FeatureFlags.StartAtHome) }
     }
