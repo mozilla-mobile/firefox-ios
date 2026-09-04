@@ -27,8 +27,8 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     private var selectedTargetLanguages: [WindowUUID: String] = [:]
 
     /// Tracks windows where the user explicitly restored the original (untranslated) page.
-    /// Without this flag, the restore-triggered reload would fire urlDidChange and cause
-    /// auto-translate to immediately re-translate the page the user just opted out of.
+    /// Without this flag, the restored page would report itself on `pageshow` and auto-translate
+    /// would immediately re-translate the page the user just opted out of.
     /// Each entry is a one-shot flag: auto-translate is skipped for the immediately following
     /// page load for that window, then the entry is removed. On iPhone only one window exists.
     private var restoringWindows: Set<WindowUUID> = []
@@ -37,6 +37,8 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     /// requested language instead of the user's top preferred language.
     private var pendingLanguageSwitchTargets: [WindowUUID: String] = [:]
     private var translationTasks: [WindowUUID: Task<Void, Never>] = [:]
+    /// Lets a finishing task tell whether it still owns its `translationTasks` slot.
+    private var translationTaskTokens: [WindowUUID: UUID] = [:]
     var backgroundTimestamp: Date?
     private static let backgroundRecoveryThreshold: TimeInterval = 3
 
@@ -92,19 +94,10 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         let windowUUID = action.windowUUID
         switch action.actionType {
         case ToolbarActionType.urlDidChange:
-            guard let action = (action as? ToolbarAction) else { return }
-
-            guard action.url?.isWebPage() == true else { return }
-            // Tab-tray round-trip OR mid-translation tab switch: the action carries the tab's
-            // persisted state. Skipping eligibility keeps Redux in sync with the WKWebView —
-            // re-running would dispatch `.inactive`/`nil` and clobber `.active` (translated DOM
-            // still on screen) or `.loading` (in-flight translation we'd otherwise race against).
-            // `.inactive`/restore-flow paths still run so `restoringWindows` is consumed and
-            // auto-translate behaves correctly.
-            let persistedState = action.translationConfiguration?.state
-            if persistedState == .active || persistedState == .loading { return }
+            guard let action = action as? ToolbarAction, action.url?.isWebPage() == true else { return }
+            // Fires before the new document is presented, so it must not touch the icon.
             self.clearFlowId(for: action)
-            self.checkTranslationsAreEligible(for: action)
+            self.cancelInFlightTranslation(for: windowUUID)
 
         case ToolbarMiddlewareActionType.didTapButton:
             guard let action = (action as? ToolbarMiddlewareAction) else { return }
@@ -124,6 +117,10 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         case TranslationsActionType.didTranslationSettingsChange:
             guard let action = (action as? TranslationsAction) else { return }
             self.handleTranslationSettingsChange(action: action, windowUUID: windowUUID)
+
+        case TranslationsActionType.pageDidReportTranslationState:
+            guard let action = (action as? TranslationsPageStateAction) else { return }
+            self.handlePageDidReportTranslationState(action: action, windowUUID: windowUUID)
 
         default:
            break
@@ -153,6 +150,42 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         guard featureFlagsProvider.isEnabled(.translation),
               action.isTranslationsEnabled ?? true else { return }
         checkTranslationsAreEligible(for: action)
+    }
+
+    private func handlePageDidReportTranslationState(action: TranslationsPageStateAction, windowUUID: WindowUUID) {
+        guard featureFlagsProvider.isEnabled(.translation) else { return }
+
+        guard let reportingTab = selectedTab(for: windowUUID),
+              reportingTab.tabUUID == action.tabUUID else { return }
+
+        // Any translation still running belongs to the page we left.
+        cancelInFlightTranslation(for: windowUUID)
+
+        let translationsEnabled = store.state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.isTranslationsEnabled ?? true
+
+        switch action.pageState {
+        case .translated(let from, let to) where translationsEnabled:
+            selectedTargetLanguages[windowUUID] = to
+            dispatchAction(
+                for: TranslationsActionType.translationCompleted,
+                with: .active,
+                translatedToLanguage: to,
+                sourceLanguage: from,
+                and: windowUUID,
+                on: reportingTab
+            )
+
+        case .translated:
+            dispatchClearTranslationIcon(windowUUID: windowUUID, on: reportingTab)
+
+        case .notTranslated:
+            persistTranslationConfig(nil, on: reportingTab)
+            checkTranslationsAreEligible(for: action, on: reportingTab)
+        }
     }
 
     private func handleTappingOnTranslateButton(for action: ToolbarMiddlewareAction, and state: AppState) {
@@ -474,12 +507,12 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
 
     /// Checks whether the current page in the active tab is eligible for translation,
     /// and if so, dispatches a translation action to update the translation state.
-    private func checkTranslationsAreEligible(for action: Action) {
+    private func checkTranslationsAreEligible(for action: Action, on tab: Tab? = nil) {
         // Pre-capture the tab so a tab switch mid-flight doesn't stomp the new active tab's state.
-        let originatingTab = selectedTab(for: action.windowUUID)
+        let originatingTab = tab ?? selectedTab(for: action.windowUUID)
         // The action's `isTranslationsEnabled` carries the explicit new value for settings-change
-        // actions (where store.state hasn't been updated yet). For `urlDidChange` it is nil, so we
-        // fall back to ToolbarState which is always up-to-date by the time `urlDidChange` fires.
+        // actions (where store.state hasn't been updated yet). A page report does not carry it, so
+        // fall back to ToolbarState, which is up to date by the time the document reports.
         let translationsEnabled = isTranslationsEnabled(from: action) ?? (store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
@@ -561,6 +594,9 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         on tab: Tab? = nil
     ) {
         translationTasks[windowUUID]?.cancel()
+        // A cancelled task keeps running, so it can outlive the one that replaced it.
+        let token = UUID()
+        translationTaskTokens[windowUUID] = token
         translationTasks[windowUUID] = Task {
             await self.performTranslation(
                 windowUUID: windowUUID,
@@ -569,7 +605,9 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
                 autoTranslate: autoTranslate,
                 on: tab
             )
+            guard self.translationTaskTokens[windowUUID] == token else { return }
             self.translationTasks[windowUUID] = nil
+            self.translationTaskTokens[windowUUID] = nil
         }
     }
 
@@ -639,10 +677,17 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         clearFlowId(for: action)
     }
 
+    private func cancelInFlightTranslation(for windowUUID: WindowUUID) {
+        translationTasks[windowUUID]?.cancel()
+        translationTasks[windowUUID] = nil
+        translationTaskTokens[windowUUID] = nil
+    }
+
     private func cancelInFlightTranslations() {
         for (windowUUID, task) in translationTasks {
             task.cancel()
             translationTasks[windowUUID] = nil
+            translationTaskTokens[windowUUID] = nil
             guard let targetLanguage = selectedTargetLanguages[windowUUID] else { continue }
             let tab = selectedTab(for: windowUUID)
             pendingLanguageSwitchTargets[windowUUID] = targetLanguage
