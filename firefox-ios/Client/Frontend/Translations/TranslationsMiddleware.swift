@@ -97,6 +97,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
             guard let action = action as? ToolbarAction, action.url?.isWebPage() == true else { return }
             // Fires before the new document is presented, so it must not touch the icon.
             self.clearFlowId(for: action)
+            self.cancelInFlightTranslation(for: windowUUID)
 
         case ToolbarMiddlewareActionType.didTapButton:
             guard let action = (action as? ToolbarMiddlewareAction) else { return }
@@ -158,9 +159,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
               reportingTab.tabUUID == action.tabUUID else { return }
 
         // Any translation still running belongs to the page we left.
-        translationTasks[windowUUID]?.cancel()
-        translationTasks[windowUUID] = nil
-        translationTaskTokens[windowUUID] = nil
+        cancelInFlightTranslation(for: windowUUID)
 
         let translationsEnabled = store.state.componentState(
             ToolbarState.self,
@@ -676,6 +675,12 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         store.dispatch(reloadAction)
         translationsTelemetry.webpageRestored(translationFlowId: flowId(for: action.windowUUID))
         clearFlowId(for: action)
+    }
+
+    private func cancelInFlightTranslation(for windowUUID: WindowUUID) {
+        translationTasks[windowUUID]?.cancel()
+        translationTasks[windowUUID] = nil
+        translationTaskTokens[windowUUID] = nil
     }
 
     private func cancelInFlightTranslations() {
