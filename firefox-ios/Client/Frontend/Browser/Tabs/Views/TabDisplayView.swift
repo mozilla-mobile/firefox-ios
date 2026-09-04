@@ -379,7 +379,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
               let destinationIndexPath = coordinator.destinationIndexPath,
               let dragItem = coordinator.items.first?.dragItem,
               let tab = dragItem.localObject as? TabModel,
-              let sourceIndex = tabsState.tabs.firstIndex(of: tab)
+              let sourceIndex = tabsState.tabs.firstIndex(where: { $0.tabUUID == tab.tabUUID })
         else { return }
 
         let section = destinationIndexPath.section
