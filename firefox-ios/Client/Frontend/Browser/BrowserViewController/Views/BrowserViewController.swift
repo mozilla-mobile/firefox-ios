@@ -2083,37 +2083,9 @@ class BrowserViewController: UIViewController,
 
         let isErrorURL = url.flatMap { InternalURL($0)?.isErrorPage } ?? false
 
-        guard let url else {
-            showEmbeddedWebview()
-            return
-        }
-
-        let featureFlag = NativeErrorPageFeatureFlag()
-
-        let isNoInternetError = url.absoluteString.contains(
-            String(Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue))
-        )
-        let isWaybackError: Bool = {
-            guard
-                let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-                let codeString = components.queryItems?.first(where: { $0.name == "code" })?.value,
-                let code = Int(codeString)
-            else { return false }
-
-            return WaybackCodes.isWaybackCode(code)
-        }()
-        let isBadCertError = NativeErrorPageHelper.isBadCertDomainErrorURL(url)
-
-        let shouldShowNoInternetErrorPage =
-            isNoInternetError && featureFlag.isNativeErrorPageEnabled
-        let shouldShowBadCertErrorPage =
-            isBadCertError && featureFlag.isBadCertDomainErrorPageEnabled
-        let shouldShowWaybackErrorPage =
-            isWaybackError && featureFlag.isWaybackEnabled
-
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && (shouldShowNoInternetErrorPage || shouldShowBadCertErrorPage || shouldShowWaybackErrorPage) {
+        } else if isErrorURL && NativeErrorPageFeatureFlag().isNativeErrorPageEnabled {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
