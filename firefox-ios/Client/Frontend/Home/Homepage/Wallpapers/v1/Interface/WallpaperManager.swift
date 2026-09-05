@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import UIKit
-import Shared
 
 enum WallpaperManagerError: Error {
     case downloadFailed(Error)
@@ -32,17 +31,14 @@ final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
 
     // MARK: - Properties
     private var networkingModule: WallpaperNetworking
-    private var userDefaults: UserDefaultsInterface
     private var logger: Logger
 
     // MARK: - Initializers
     init(
         with networkingModule: WallpaperNetworking = WallpaperNetworkingModule(),
-        userDefaults: UserDefaultsInterface = UserDefaults.standard,
         logger: Logger = DefaultLogger.shared
     ) {
         self.networkingModule = networkingModule
-        self.userDefaults = userDefaults
         self.logger = logger
     }
 

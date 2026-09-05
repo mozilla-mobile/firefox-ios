@@ -40,6 +40,4 @@ final class WallpaperManagerMock: WallpaperManagerInterface, @unchecked Sendable
     }
 
     func removeUnusedAssets() {}
-
-    func migrateLegacyAssets() {}
 }

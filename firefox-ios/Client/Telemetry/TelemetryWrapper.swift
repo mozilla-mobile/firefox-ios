@@ -518,7 +518,6 @@ extension TelemetryWrapper {
         case onboardingSecondaryButton = "onboarding-card-secondary-button"
         case onboardingMultipleChoiceButton = "onboarding-multiple-choice-button"
         case onboardingClose = "onboarding-close"
-        case onboardingSelectWallpaper = "onboarding-select-wallpaper"
         // MARK: FXASignIn
         case onboarding = "onboarding"
         case upgradeOnboarding = "upgrade-onboarding"

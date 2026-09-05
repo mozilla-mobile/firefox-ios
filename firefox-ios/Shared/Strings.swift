@@ -2393,39 +2393,6 @@ extension String {
             }
         }
 
-        public struct Wallpaper {
-            public static let Title = MZLocalizedString(
-                key: "Onboarding.Wallpaper.Title.v114",
-                tableName: "Onboarding",
-                value: "Choose a %@ Wallpaper",
-                comment: "Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. %@ is the app name (e.g. Firefox).")
-            public static let Action = MZLocalizedString(
-                key: "Onboarding.Wallpaper.Action.v114",
-                tableName: "Onboarding",
-                value: "Set Wallpaper",
-                comment: "Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper.")
-            public static let SelectorTitle = MZLocalizedString(
-                key: "Onboarding.Wallpaper.SelectorTitle.v114",
-                tableName: "Onboarding",
-                value: "Try a splash of color",
-                comment: "Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
-            public static let SelectorDescription = MZLocalizedString(
-                key: "Onboarding.Wallpaper.Description.v114",
-                tableName: "Onboarding",
-                value: "Choose a wallpaper that speaks to you.",
-                comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
-            public static let ClassicWallpaper = MZLocalizedString(
-                key: "Onboarding.Wallpaper.Accessibility.Classic.v114",
-                tableName: "Onboarding",
-                value: "Classic Wallpaper",
-                comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
-            public static let LimitedEditionWallpaper = MZLocalizedString(
-                key: "Onboarding.Wallpaper.Accessibility.LimitedEdition.v114",
-                tableName: "Onboarding",
-                value: "Limited Edition Wallpaper",
-                comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
-        }
-
         public struct Sync {
             public static let SkipAction = MZLocalizedString(
                 key: "Onboarding.Sync.Skip.Action.v114",
@@ -9436,6 +9403,40 @@ extension String {
                 tableName: "WebCompatReporter",
                 value: "Describe the issue in detail",
                 comment: "Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form.")
+        }
+        struct v114 {
+            public struct Wallpaper {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Wallpaper.Title.v114",
+                    tableName: "Onboarding",
+                    value: "Choose a %@ Wallpaper",
+                    comment: "Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. %@ is the app name (e.g. Firefox).")
+                public static let Action = MZLocalizedString(
+                    key: "Onboarding.Wallpaper.Action.v114",
+                    tableName: "Onboarding",
+                    value: "Set Wallpaper",
+                    comment: "Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper.")
+                public static let SelectorTitle = MZLocalizedString(
+                    key: "Onboarding.Wallpaper.SelectorTitle.v114",
+                    tableName: "Onboarding",
+                    value: "Try a splash of color",
+                    comment: "Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
+                public static let SelectorDescription = MZLocalizedString(
+                    key: "Onboarding.Wallpaper.Description.v114",
+                    tableName: "Onboarding",
+                    value: "Choose a wallpaper that speaks to you.",
+                    comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
+                public static let ClassicWallpaper = MZLocalizedString(
+                    key: "Onboarding.Wallpaper.Accessibility.Classic.v114",
+                    tableName: "Onboarding",
+                    value: "Classic Wallpaper",
+                    comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
+                public static let LimitedEditionWallpaper = MZLocalizedString(
+                    key: "Onboarding.Wallpaper.Accessibility.LimitedEdition.v114",
+                    tableName: "Onboarding",
+                    value: "Limited Edition Wallpaper",
+                    comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
+            }
         }
     }
 }
