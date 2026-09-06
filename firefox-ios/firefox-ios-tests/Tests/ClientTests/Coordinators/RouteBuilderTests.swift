@@ -76,6 +76,29 @@ final class RouteBuilderTests: XCTestCase {
         XCTAssertEqual(section, .appIcon)
     }
 
+    func test_makeRoute_CopiedWidgetURLMarksOnlyCopiedLinkRoute() throws {
+        let routeBuilder = createSubject()
+        UIPasteboard.general.url = testURL
+        defer { UIPasteboard.general.items = [] }
+
+        let url = try XCTUnwrap(URL(string: "firefox://widget-medium-quicklink-open-copied"))
+        let route = try XCTUnwrap(routeBuilder.makeRoute(url: url))
+
+        guard case let .search(copiedURL, isPrivate, options) = route else {
+            return XCTFail("Expected copied-link search route")
+        }
+        XCTAssertEqual(copiedURL, testURL)
+        XCTAssertFalse(isPrivate)
+        XCTAssertTrue(options?.contains(.copiedLink) == true)
+        XCTAssertTrue(route.isCopiedLink)
+    }
+
+    func test_makeRoute_RegularURLDoesNotMarkCopiedLinkRoute() throws {
+        let route = try XCTUnwrap(createSubject().makeRoute(url: testURL!))
+
+        XCTAssertFalse(route.isCopiedLink)
+    }
+
     func test_makeRoute_RapidSiriOpenTabActivitiesAreThrottledAndReset() async {
         let routeBuilder = createSubject()
         let userActivity = NSUserActivity(activityType: SiriShortcuts.activityType.openURL.rawValue)

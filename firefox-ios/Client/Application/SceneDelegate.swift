@@ -58,8 +58,8 @@ class SceneDelegate: UIResponder,
         let sceneCoordinator = SceneCoordinator(scene: scene, introManager: introScreenManager)
         self.sceneCoordinator = sceneCoordinator
         self.window = sceneCoordinator.window
-        sceneCoordinator.start()
         handle(connectionOptions: connectionOptions)
+        sceneCoordinator.start()
         if !sessionManager.launchSessionProvider.openedFromExternalSource {
             shareTelemetry.cancelOpenURLTimeRecord()
         }
@@ -228,16 +228,19 @@ class SceneDelegate: UIResponder,
         }
     }
 
-    private func handle(route: Route) {
+    func handle(route: Route) {
         guard let sceneCoordinator = sceneCoordinator else {
             logger.log("Scene coordinator should exist", level: .fatal, category: .coordinator)
             return
         }
 
         logger.log("Scene coordinator will handle a route", level: .info, category: .coordinator)
+        if route.isCopiedLink {
+            sceneCoordinator.shouldDeferTabRestorationForCopiedLink = true
+        }
         sessionManager.launchSessionProvider.openedFromExternalSource = true
 
-        if isDeeplinkOptimizationRefactorEnabled {
+        if route.isCopiedLink || isDeeplinkOptimizationRefactorEnabled {
             AppEventQueue.wait(for: [.startupFlowComplete]) {
                 ensureMainThread { [weak self] in
                     self?.logger.log("Start up flow done, will handle route",

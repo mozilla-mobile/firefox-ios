@@ -105,6 +105,35 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     @MainActor
+    func testHandleCopiedLink_preservesExactOpenedTabForRestoration() throws {
+        let subject = createSubject(shouldDeferTabRestoration: true)
+        let copiedURL = URL(string: "https://example.com")!
+        tabManager.isRestoringTabs = true
+
+        subject.handle(url: copiedURL,
+                       isPrivate: true,
+                       options: [.copiedLink])
+
+        let openedTab = try XCTUnwrap(tabManager.lastAddedTab)
+        XCTAssertIdentical(tabManager.restoredPreservingTab, openedTab)
+        XCTAssertIdentical(tabManager.selectedTab, openedTab)
+        XCTAssertEqual(openedTab.url, copiedURL)
+        XCTAssertTrue(openedTab.isPrivate)
+    }
+
+    @MainActor
+    func testHandleCopiedLink_withoutColdLaunchDoesNotRestartRestoration() {
+        let subject = createSubject()
+        let copiedURL = URL(string: "https://example.com")!
+
+        subject.handle(url: copiedURL,
+                       isPrivate: false,
+                       options: [.copiedLink])
+
+        XCTAssertNil(tabManager.restoredPreservingTab)
+    }
+
+    @MainActor
     func testDidSelectedTabChange_appliesExpectedUIModeToTopTabsViewController() {
         let subject = createSubject()
         let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
@@ -822,12 +851,14 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Private
 
-    private func createSubject(file: StaticString = #filePath,
+    private func createSubject(shouldDeferTabRestoration: Bool = false,
+                               file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
                                             appStartupTelemetry: appStartupTelemetry,
-                                            recordVisitManager: recordVisitManager)
+                                            recordVisitManager: recordVisitManager,
+                                            shouldDeferTabRestoration: shouldDeferTabRestoration)
         screenshotHelper = MockScreenshotHelper(controller: subject)
         subject.screenshotHelper = screenshotHelper
         subject.navigationHandler = browserCoordinator
