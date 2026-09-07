@@ -918,6 +918,7 @@ struct AccessibilityIdentifiers {
         static let tableView = "Context Menu"
         static let pasteAction = "pasteAction"
         static let pasteAndGoAction = "pasteAndGoAction"
+        static let copyAddressAction = "copyAddressAction"
     }
 
     struct Alert {

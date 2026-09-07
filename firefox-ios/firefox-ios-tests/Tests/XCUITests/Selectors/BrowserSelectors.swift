@@ -74,9 +74,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let addressBarContextMenu = AccessibilityIdentifiers.Photon.tableView
         static let contextMenuPasteAndGo = AccessibilityIdentifiers.Photon.pasteAndGoAction
         static let contextMenuPaste = AccessibilityIdentifiers.Photon.pasteAction
-        // "Copy Address" (String.CopyAddressTitle) carries no accessibility identifier, so it is
-        // matched by its title.
-        static let contextMenuCopyAddress = "Copy Address"
+        static let contextMenuCopyAddress = AccessibilityIdentifiers.Photon.copyAddressAction
         static let contextMenuCloseButton = AccessibilityIdentifiers.Photon.closeButton
     }
 
@@ -258,19 +256,19 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "addressBarContextMenu"]
     )
 
-    let CONTEXT_MENU_PASTE_AND_GO = Selector.tableCellById(
+    let CONTEXT_MENU_PASTE_AND_GO = Selector.tableCellButtonById(
         IDs.contextMenuPasteAndGo,
         description: "'Paste & Go' option in the address bar long press menu",
         groups: ["browser", "addressBarContextMenu"]
     )
 
-    let CONTEXT_MENU_PASTE = Selector.tableCellById(
+    let CONTEXT_MENU_PASTE = Selector.tableCellButtonById(
         IDs.contextMenuPaste,
         description: "'Paste' option in the address bar long press menu",
         groups: ["browser", "addressBarContextMenu"]
     )
 
-    let CONTEXT_MENU_COPY_ADDRESS = Selector.staticTextInTablesByLabel(
+    let CONTEXT_MENU_COPY_ADDRESS = Selector.tableCellButtonById(
         IDs.contextMenuCopyAddress,
         description: "'Copy Address' option in the address bar long press menu",
         groups: ["browser", "addressBarContextMenu"]

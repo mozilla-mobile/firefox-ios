@@ -39,6 +39,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     override func setUp() async throws {
         try await super.setUp()
 
+        browserScreen = BrowserScreen(app: app)
         launchApp()
     }
 
