@@ -78,7 +78,7 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
             faviconCornerRadius: UX.faviconCornerRadius,
             faviconBorderWidth: UX.thumbnailBorderWidth,
             heroImageSize: .zero,
-            fallbackFaviconSize: CGSize(width: UX.faviconSize, height: UX.faviconSize),
+            fallbackFaviconSize: CGSize(width: UX.faviconSize, height: UX.faviconSize)
         )
         thumbnailImageView.setHeroImage(heroImageViewModel)
         let faviconSiteResource: SiteResource? = if let url = item.faviconURL {
