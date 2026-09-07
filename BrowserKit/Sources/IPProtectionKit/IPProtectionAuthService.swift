@@ -21,12 +21,12 @@ public protocol IPProtectionAuthenticating: Sendable {
 }
 
 /// Manages the device's IP Protection session.
-public struct IPProtectionAuthService: IPProtectionAuthenticating {
+struct IPProtectionAuthService: IPProtectionAuthenticating {
     private let appAttestClient: AppAttestClient
     private let sessionRefresher: IPProtectionSessionRefreshing
     private let tokenStore: IPProtectionTokenStore
 
-    public init(
+    init(
         appAttestClient: AppAttestClient,
         sessionRefresher: IPProtectionSessionRefreshing,
         tokenStore: IPProtectionTokenStore
@@ -36,7 +36,7 @@ public struct IPProtectionAuthService: IPProtectionAuthenticating {
         self.tokenStore = tokenStore
     }
 
-    public func authenticate() async throws -> String {
+    func authenticate() async throws -> String {
         let cached = tokenStore.load()
 
         if let cached, cached.isValid(), !cached.needsRenewal() {
@@ -57,7 +57,7 @@ public struct IPProtectionAuthService: IPProtectionAuthenticating {
         return try await enroll()
     }
 
-    public func refresh() async throws -> String {
+    func refresh() async throws -> String {
         let assertion: AssertionResult
         do {
             assertion = try await appAttestClient.generateChallengeBoundAssertion()
@@ -72,12 +72,12 @@ public struct IPProtectionAuthService: IPProtectionAuthenticating {
         return session.deviceSessionJwt
     }
 
-    public func reset() throws {
+    func reset() throws {
         try appAttestClient.resetKey()
         try tokenStore.clear()
     }
 
-    public func currentSession() -> IPProtectionDeviceSession? {
+    func currentSession() -> IPProtectionDeviceSession? {
         return tokenStore.load()
     }
 
