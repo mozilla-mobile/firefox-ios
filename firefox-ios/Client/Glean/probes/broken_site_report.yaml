@@ -334,9 +334,8 @@ broken_site_report.browser_info.prefs:
       - broken-site-report
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16774
-    # TODO: FXIOS-16774 swap for the data-review PR URL before landing.
     data_reviews:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-16774
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35567
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
