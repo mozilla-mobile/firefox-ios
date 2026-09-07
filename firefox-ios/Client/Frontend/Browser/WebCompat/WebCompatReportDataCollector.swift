@@ -43,6 +43,16 @@ struct WebCompatExperimentsProvider: WebCompatExperimentsProviding {
     }
 }
 
+protocol WebCompatAdBlockerStateProviding {
+    func isAdBlockerEnabled(prefs: Prefs) -> Bool
+}
+
+struct WebCompatAdBlockerStateProvider: WebCompatAdBlockerStateProviding, FeatureFlaggable {
+    func isAdBlockerEnabled(prefs: Prefs) -> Bool {
+        return featureFlagsProvider.isEnabled(.adBlocker) && (prefs.boolForKey(PrefsKeys.BlockAds) ?? false)
+    }
+}
+
 /// Tab inputs as a plain value, so tests don't need a live `Tab`/`WKWebView`. Nil
 /// `blockingStrength` means no content blocker; `blockedOrigins` is nil once the user unchecks Additional Info.
 struct WebCompatTabSnapshot: Equatable {
@@ -64,14 +74,18 @@ enum WebCompatReportDataCollector {
         includeBlockedList: Bool,
         includeTabSpecificInfo: Bool = true,
         device: WebCompatDeviceInfoProviding = WebCompatDeviceInfoProvider(),
-        experiments: WebCompatExperimentsProviding = WebCompatExperimentsProvider()
+        experiments: WebCompatExperimentsProviding = WebCompatExperimentsProvider(),
+        adBlockerState: WebCompatAdBlockerStateProviding = WebCompatAdBlockerStateProvider()
     ) -> WebCompatReportPayload {
         let snapshot = makeSnapshot(
             from: tab,
             includeBlockedList: includeBlockedList,
             includeTabSpecificInfo: includeTabSpecificInfo
         )
-        return enrich(payload, device: device, tab: snapshot, experiments: experiments)
+        var payload = enrich(payload, device: device, tab: snapshot, experiments: experiments)
+        // An app-wide pref, so it is read from the profile rather than the tab's content blocker.
+        payload.adBlockerEnabled = adBlockerState.isAdBlockerEnabled(prefs: tab.profile.prefs)
+        return payload
     }
 
     /// Pure mapping: no UIKit, no `Tab`, so tests can drive it with fakes.

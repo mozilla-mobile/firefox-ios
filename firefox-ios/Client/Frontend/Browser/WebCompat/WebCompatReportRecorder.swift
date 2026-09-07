@@ -99,6 +99,10 @@ struct WebCompatReportRecorder {
             gleanWrapper.recordObject(for: GleanMetrics.BrokenSiteReportBrowserInfo.experiments,
                                       value: experiments.map { $0.gleanObjectItem })
         }
+        if let adBlockerEnabled = payload.adBlockerEnabled {
+            gleanWrapper.setBoolean(for: GleanMetrics.BrokenSiteReportBrowserInfoPrefs.adBlockerEnabled,
+                                    value: adBlockerEnabled)
+        }
         if let defaultLocales = payload.defaultLocales {
             gleanWrapper.recordStringList(for: GleanMetrics.BrokenSiteReportBrowserInfoApp.defaultLocales,
                                           value: defaultLocales)

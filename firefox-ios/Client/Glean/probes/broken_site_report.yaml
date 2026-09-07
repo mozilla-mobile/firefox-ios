@@ -19,15 +19,20 @@ $tags:
 # files an in-app "Report a Website Issue" report. Metric names mirror the
 # cross-platform desktop/Android `broken_site_report.*` schema so iOS data
 # lands in the same family. The set matches the iOS design's "Report Preview"
-# sections: basic / tabInfo / graphics / antiTracking / frameworks /
-# browserInfo / app — restricted to fields a WebKit browser (Firefox iOS) can
+# sections: basic / tabInfo / antiTracking / frameworks / browserInfo / prefs /
+# app / system / graphics — restricted to fields a WebKit browser (Firefox iOS) can
 # populate (page-context values via on-demand JS; tracking-protection state
 # from the content blocker; device/app values natively).
 #
-# OMITTED (Gecko-only, no WebKit equivalent): browser_info.prefs.*,
-# graphics.{devices,drivers,features,monitors}_json, browser_info.security.*,
-# browser_info.addons, app.fission_enabled, and the Gecko-specific antitracking
-# mixed-content / bounce-tracking flags.
+# OMITTED (Gecko-only, no WebKit equivalent): the Gecko prefs under
+# browser_info.prefs.*, graphics.{devices,drivers,features,monitors}_json,
+# browser_info.security.*, browser_info.addons, app.fission_enabled, and the
+# Gecko-specific antitracking mixed-content / bounce-tracking flags.
+#
+# AD BLOCKER: iOS ships ad blocking in the app rather than as an extension, so
+# there is no desktop/Android metric of the same name to mirror. It is reported
+# as a pref under browser_info.prefs, where desktop keeps its own privacy
+# toggles.
 #
 # SCREENSHOT: the iOS design includes a default-on "Include screenshot" option.
 # The image is intentionally NOT carried by this Glean ping — Glean has no
@@ -308,6 +313,30 @@ broken_site_report.browser_info:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16704
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/35402
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
+broken_site_report.browser_info.prefs:
+  ad_blocker_enabled:
+    type: boolean
+    description: |
+      Whether the built-in ad blocker is on: the `blockAds` pref and the
+      `adBlocker` Nimbus feature flag together. iOS-only, since ad blocking is
+      an extension on desktop and Android and shows up in browser_info.addons
+      there. The app-wide setting, sent even when the reported URL is not the
+      current tab's page. Like `block_list` and `etp_category` it reads a pref,
+      so it does not say whether blocking was in force on the page itself.
+    data_sensitivity:
+      - interaction
+    lifetime: ping
+    send_in_pings:
+      - broken-site-report
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16774
+    # TODO: FXIOS-16774 swap for the data-review PR URL before landing.
+    data_reviews:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16774
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
