@@ -81,11 +81,18 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
             fallbackFaviconSize: CGSize(width: UX.faviconSize, height: UX.faviconSize)
         )
         thumbnailImageView.setHeroImage(heroImageViewModel)
-        faviconImageView.setFavicon(
+        let model = if let url = item.faviconURL {
+            FaviconImageViewModel(siteURLString: item.url?.absoluteString ?? "",
+                                  siteResource: .remoteURL(url: url),
+                                  faviconCornerRadius: UX.faviconCornerRadius)
+        } else {
             FaviconImageViewModel(
                 siteURLString: item.faviconURL?.absoluteString ?? item.url?.absoluteString,
                 faviconCornerRadius: UX.faviconCornerRadius
             )
+        }
+        faviconImageView.setFavicon(
+            model
         )
         titleLabel.text = item.title
         accessibilityLabel = item.title
