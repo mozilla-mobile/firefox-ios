@@ -14,19 +14,24 @@ public protocol IPProtectionAuthCreating {
 
 /// Assembles the IP Protection App Attest auth stack from `Prefs`.
 public struct IPProtectionAuthCreator: IPProtectionAuthCreating {
+    private static let keyIDKeychainService = "org.mozilla.browserkit.ipprotection.appattest.keyid"
+    private static let keyIDKeychainAccount = "default"
+
     private let keyStore: AppAttestKeyIDStore
     private let appAttestService: AppAttestServiceProtocol
     private let tokenStore: IPProtectionTokenStore
 
+    /// `keyStore` is resolved in the body rather than defaulted inline, because a public default
+    /// argument cannot reference the private constants above.
     public init(
-        keyStore: AppAttestKeyIDStore = KeychainAppAttestKeyIDStore(
-            service: "org.mozilla.browserkit.ipprotection.appattest.keyid",
-            account: "default"
-        ),
+        keyStore: AppAttestKeyIDStore? = nil,
         appAttestService: AppAttestServiceProtocol = DCAppAttestService.shared,
         tokenStore: IPProtectionTokenStore = KeychainIPProtectionTokenStore()
     ) {
-        self.keyStore = keyStore
+        self.keyStore = keyStore ?? KeychainAppAttestKeyIDStore(
+            service: Self.keyIDKeychainService,
+            account: Self.keyIDKeychainAccount
+        )
         self.appAttestService = appAttestService
         self.tokenStore = tokenStore
     }
