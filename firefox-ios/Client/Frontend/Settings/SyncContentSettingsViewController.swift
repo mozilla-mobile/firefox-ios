@@ -52,9 +52,17 @@ final class ManageFxAccountSetting: Setting {
         navigationController?.pushViewController(viewController, animated: true)
     }
 
-    isolated deinit {
-        if let notification = notification {
-            NotificationCenter.default.removeObserver(notification)
+    deinit {
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("ManageFxAccountSetting was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            if let notification = notification {
+                NotificationCenter.default.removeObserver(notification)
+            }
         }
     }
 }
@@ -162,9 +170,17 @@ class DeviceNameSetting: StringSetting {
         alignTextFieldToNatural()
     }
 
-    isolated deinit {
-        if let notification = notification {
-            NotificationCenter.default.removeObserver(notification)
+    deinit {
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("DeviceNameSetting was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            if let notification = notification {
+                NotificationCenter.default.removeObserver(notification)
+            }
         }
     }
 }

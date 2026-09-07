@@ -146,9 +146,22 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         topTabDisplayManager.refreshStore(forceReload: true)
     }
 
-    isolated deinit {
-        // FIXME: FXIOS-14609 We should remove Tab Manager Delegates
-        tabManager.removeDelegate(topTabDisplayManager, completion: nil)
+    deinit {
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits.
+        // Also we will remove Tab Manager Delegates as part of FXIOS-13097
+        guard Thread.isMainThread else {
+            assertionFailure(
+            """
+            TopTabsViewController was not deallocated on the main thread.
+            Tab manager delegate was not removed.
+            """
+            )
+            return
+        }
+
+        MainActor.assumeIsolated {
+            tabManager.removeDelegate(topTabDisplayManager, completion: nil)
+        }
     }
 
     override func viewDidLoad() {

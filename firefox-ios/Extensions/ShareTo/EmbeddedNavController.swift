@@ -71,9 +71,17 @@ class EmbeddedNavController {
         heightConstraint.isActive = true
     }
 
-    isolated deinit {
-        // FIXME: FXIOS-14608 EmbeddedNavController probably should be a real nav controller...
-        navigationController.view.removeFromSuperview()
-        navigationController.removeFromParent()
+    deinit {
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits. EmbeddedNavController probably
+        // should be a real nav controller...
+        guard Thread.isMainThread else {
+            assertionFailure("EmbeddedNavController was not deallocated on the main thread.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            navigationController.view.removeFromSuperview()
+            navigationController.removeFromParent()
+        }
     }
 }

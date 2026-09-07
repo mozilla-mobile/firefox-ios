@@ -78,12 +78,25 @@ class PhotonActionSheet: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    isolated deinit {
-        // Not sure that we need to do this clean up in the deinit but leaving this in place since
-        // this class should be going away soon
-        tableView.dataSource = nil
-        tableView.delegate = nil
-        tableView.removeFromSuperview()
+    deinit {
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            DefaultLogger.shared.log(
+                "AddressToolbarContainer was not deallocated on the main thread. Redux was not cleaned up.",
+                level: .fatal,
+                category: .lifecycle
+            )
+            assertionFailure("The view was not deallocated on the main thread. Redux was not cleaned up.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            // Not sure that we need to do this clean up in the deinit but leaving this in place since
+            // this class should be going away soon
+            tableView.dataSource = nil
+            tableView.delegate = nil
+            tableView.removeFromSuperview()
+        }
     }
 
     // MARK: - View cycle

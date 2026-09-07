@@ -499,13 +499,21 @@ class BrowserViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    isolated deinit {
-        logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
-        unsubscribeFromRedux()
-        stopObservingAllWebViews()
-        googleLensTipObservationTask?.cancel()
-        if let pairingWaitToken {
-            AppEventQueue.cancelAction(token: pairingWaitToken)
+    deinit {
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("TabSwipeGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
+            unsubscribeFromRedux()
+            stopObservingAllWebViews()
+            googleLensTipObservationTask?.cancel()
+            if let pairingWaitToken {
+                AppEventQueue.cancelAction(token: pairingWaitToken)
+            }
         }
     }
 
