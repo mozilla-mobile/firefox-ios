@@ -51,7 +51,7 @@ final class LiteLLMSummarizer: SummarizerProtocol {
                /// When `next()` returns nil, the underlying stream has no more data
                /// returning nil in turn ends the AsyncThrowingStream
                guard let chunk = try await stream.next() else { return nil }
-               accumulator += chunk
+               accumulator += chunk.content
                return accumulator
            } catch {
                throw self.mapError(error)

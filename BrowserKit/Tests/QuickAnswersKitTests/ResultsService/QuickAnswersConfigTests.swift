@@ -23,6 +23,13 @@ struct QuickAnswersConfigTests {
     }
 
     @Test
+    func test_init_defaultOptionsEnableStreaming() {
+        let config = QuickAnswersConfig()
+
+        #expect(config.options["stream"] as? Bool == true)
+    }
+
+    @Test
     func test_init_overridesModelOptionFromModelParameter() {
         let config = QuickAnswersConfig(model: .liner, options: ["model": "exa", "stream": false])
 

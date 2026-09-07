@@ -21,7 +21,7 @@ public struct QuickAnswersConfig: LLMConfig, Sendable {
         model: QuickAnswersModel = .exa,
         instructions: String = "",
         options: [String: AnyHashable] = [
-            "stream": false
+            "stream": true
         ]
     ) {
         self.instructions = instructions

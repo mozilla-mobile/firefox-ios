@@ -60,16 +60,11 @@ final class DefaultQuickAnswersService: QuickAnswersService {
         state = .idle
     }
 
-    /// Performs a search for the given transcription using the ResultsService.
-    func search(text: String) async -> Result<SearchResult, ResultsServiceError> {
-        do {
-            let result = try await resultsService.fetchResults(for: text)
-            return .success(result)
-        } catch {
-            let error = (error as? ResultsServiceError) ?? ResultsServiceError.unknown(error.localizedDescription)
-            // TODO: FXIOS-15579 Possibly add telemetry
-            return .failure(error)
-        }
+    // TODO: FXIOS-15579 Possibly add telemetry
+    /// Performs a search for the given transcription using the ResultsService, streaming partial
+    /// results as they arrive.
+    func search(text: String) async -> AsyncThrowingStream<SearchResult, Error> {
+        return resultsService.fetchResults(for: text)
     }
 
     // MARK: Private Methods

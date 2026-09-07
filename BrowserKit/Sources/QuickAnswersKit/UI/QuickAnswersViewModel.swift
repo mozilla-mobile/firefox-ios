@@ -16,11 +16,23 @@ final class QuickAnswersViewModel {
         case showSearchResult(SearchResult, ResultsServiceError?)
     }
 
+    private struct Constants {
+        /// Chunks arrive faster than the answer label can cross dissolve, so updates are throttled.
+        static let searchResultThrottleInterval: TimeInterval = 0.2
+    }
+
     private let service: QuickAnswersService?
     private let telemetry: QuickAnswersTelemetry
     private let store: Store
+    private let searchResultThrottleInterval: TimeInterval
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
+    /// Non-nil while the throttle is closed, i.e. while a result was emitted less than
+    /// `searchResultThrottleInterval` ago.
+    private var searchResultThrottleTask: Task<Void, Never>?
+    /// The latest result withheld by the throttle. Only the last one is kept, since every chunk
+    /// carries the whole answer accumulated so far.
+    private var throttledSearchResult: SearchResult?
     var onStateChange: ((State) -> Void)?
 
     /// The user-facing name of the model backing the request.
@@ -30,12 +42,14 @@ final class QuickAnswersViewModel {
         prefs: Prefs,
         telemetry: QuickAnswersTelemetry,
         configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa),
+        searchResultThrottleInterval: TimeInterval = Constants.searchResultThrottleInterval,
         makeService: (Prefs, QuickAnswersConfigFetcher) throws -> QuickAnswersService = { prefs, configFetcher in
             try DefaultQuickAnswersService(configFetcher: configFetcher, prefs: prefs)
         }
     ) {
         self.telemetry = telemetry
         self.store = Store(prefs: prefs)
+        self.searchResultThrottleInterval = searchResultThrottleInterval
         self.modelDisplayName = configFetcher.model.displayName
         do {
             self.service = try makeService(prefs, configFetcher)
@@ -87,6 +101,7 @@ final class QuickAnswersViewModel {
         }
         searchResultTask?.cancel()
         searchResultTask = nil
+        cancelSearchResultThrottle()
         recordVoiceTask = Task { [weak self] in
             try? await self?.recordVoiceTask(service: service)
         }
@@ -123,18 +138,69 @@ final class QuickAnswersViewModel {
         try await service?.stopRecording()
     }
 
+    /// Consumes the streamed search results so the view can grow the answer as it arrives, throttled
+    /// to one update per `searchResultThrottleInterval`. Telemetry is recorded once, when the stream
+    /// completes.
     private func searchVoiceResult(_ result: SpeechResult, service: QuickAnswersService) async {
         onStateChange?(.loadingSearchResult)
         telemetry.resultsStarted()
-        let searchResult = await service.search(text: result.text)
-        switch searchResult {
-        case .success(let result):
+        do {
+            for try await searchResult in await service.search(text: result.text) {
+                try Task.checkCancellation()
+                emitThrottled(searchResult)
+            }
+            flushThrottledSearchResult()
             telemetry.resultsCompleted(outcome: true, errorType: nil)
-            onStateChange?(.showSearchResult(result, nil))
-        case .failure(let error):
+        } catch is CancellationError {
+            cancelSearchResultThrottle()
+            return
+        } catch {
+            cancelSearchResultThrottle()
+            let error = (error as? ResultsServiceError) ?? ResultsServiceError.unknown(error.localizedDescription)
             telemetry.resultsCompleted(outcome: false, errorType: error.telemetryLabel)
             onStateChange?(.showSearchResult(.empty(), error))
         }
+    }
+
+    /// Emits `result` right away when the throttle is open, then closes it for
+    /// `searchResultThrottleInterval`. Results arriving while it is closed replace one another, and
+    /// the last of them is emitted as soon as the interval elapses.
+    private func emitThrottled(_ result: SearchResult) {
+        guard searchResultThrottleTask == nil else {
+            throttledSearchResult = result
+            return
+        }
+        onStateChange?(.showSearchResult(result, nil))
+        let interval = searchResultThrottleInterval
+        searchResultThrottleTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: UInt64(interval * Double(NSEC_PER_SEC)))
+            self?.openSearchResultThrottle()
+        }
+    }
+
+    /// Reopens the throttle, emitting whatever was withheld while it was closed.
+    private func openSearchResultThrottle() {
+        searchResultThrottleTask = nil
+        guard let throttledSearchResult else { return }
+        self.throttledSearchResult = nil
+        emitThrottled(throttledSearchResult)
+    }
+
+    /// Emits the withheld result without waiting for the interval to elapse, for when the stream has
+    /// no more chunks to send.
+    private func flushThrottledSearchResult() {
+        searchResultThrottleTask?.cancel()
+        searchResultThrottleTask = nil
+        guard let throttledSearchResult else { return }
+        self.throttledSearchResult = nil
+        onStateChange?(.showSearchResult(throttledSearchResult, nil))
+    }
+
+    /// Drops the throttle state without emitting, for when the flow is interrupted.
+    private func cancelSearchResultThrottle() {
+        searchResultThrottleTask?.cancel()
+        searchResultThrottleTask = nil
+        throttledSearchResult = nil
     }
 
     func recordCitationTapped() {

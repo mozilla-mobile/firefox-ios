@@ -53,12 +53,14 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     public func requestChatCompletionStreamed<ProviderFields: Codable & Sendable>(
         messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
-    ) async throws -> AsyncThrowingStream<String, Error> {
+    ) async throws -> AsyncThrowingStream<LiteLLMStreamChunk<ProviderFields>, Error> {
         let request: URLRequest
         do {
             request = try await makeRequest(messages: messages, config: config)
         } catch {
-            return AsyncThrowingStream<String, Error>(unfolding: { throw LiteLLMClientError.requestCreationFailed })
+            return AsyncThrowingStream<LiteLLMStreamChunk<ProviderFields>, Error>(
+                unfolding: { throw LiteLLMClientError.requestCreationFailed }
+            )
         }
         return handleStreamingRequest(request: request)
     }
@@ -75,7 +77,9 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
 
     /// TODO(FXIOS-12994): Add tests for streaming requests.
     /// Specifically, we need to test for the interaction with SSEDataParser and how it handles multiple requests at a time.
-    private func handleStreamingRequest(request: URLRequest) -> AsyncThrowingStream<String, Error> {
+    private func handleStreamingRequest<ProviderFields: Codable & Sendable>(
+        request: URLRequest
+    ) -> AsyncThrowingStream<LiteLLMStreamChunk<ProviderFields>, Error> {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
@@ -85,11 +89,16 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
 
                     // Process bytes as they arrive
                     for try await byteChunk in asyncBytes {
-                        let responses: [LiteLLMStreamResponse] = try sseParser.parse(Data([byteChunk]))
+                        let responses: [LiteLLMStreamResponse<ProviderFields>] = try sseParser.parse(Data([byteChunk]))
                         for response in responses {
-                            if let text = response.choices.first?.delta.content {
-                                continuation.yield(text)
-                            }
+                            guard let delta = response.choices.first?.delta,
+                                  delta.content != nil || delta.providerSpecificFields != nil else { continue }
+                            continuation.yield(
+                                LiteLLMStreamChunk(
+                                    content: delta.content ?? "",
+                                    providerSpecificFields: delta.providerSpecificFields
+                                )
+                            )
                         }
                     }
                     sseParser.flush()

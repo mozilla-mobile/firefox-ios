@@ -6,6 +6,7 @@ import Shared
 @testable import QuickAnswersKit
 
 final class MockResultsServiceFactory: ResultsServiceFactory {
+    let resultsService = MockResultsService()
     var makeCallCount = 0
     var shouldThrow = false
 
@@ -16,6 +17,6 @@ final class MockResultsServiceFactory: ResultsServiceFactory {
             throw ResultsServiceError.unableToCreateService
         }
 
-        return MockResultsService()
+        return resultsService
     }
 }

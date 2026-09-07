@@ -56,6 +56,10 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
     private let optInView: OptInView = .build()
     private var theme: Theme?
+    /// The answer streams in chunk by chunk, so the reveal animations must only run once, on the
+    /// first chunk that carries the answer and the first one that carries the sources.
+    private var isAnswerVisible = false
+    private var configuredSources: [SearchResult.Source] = []
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -194,21 +198,45 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         }
     }
 
-    func configureAnswer(_ text: String, modelName: String) {
-        searchingLabel.stopShimmering()
-        searchingLabel.alpha = 0.0
-        footerLabel.text = "Powered by \(modelName) · Answers can contain mistakes."
-        UIView.animate(withDuration: UX.animationDuration) { [self] in
+    /// Called for every streamed chunk with the answer accumulated so far. The first chunk reveals
+    /// the label, the following ones cross dissolve the new text in, as `configureTranscript` does
+    /// while recording.
+    func configureAnswer(_ text: String) {
+        guard isAnswerVisible else {
+            isAnswerVisible = true
             answerLabel.text = text
-            answerLabel.alpha = 1.0
-            footerLabel.alpha = 1.0
+            searchingLabel.stopShimmering()
+            searchingLabel.alpha = 0.0
+            UIView.animate(withDuration: UX.animationDuration) { [self] in
+                answerLabel.alpha = 1.0
+            }
+            return
+        }
+        UIView.transition(
+            with: answerLabel,
+            duration: UX.animationDuration,
+            options: .transitionCrossDissolve
+        ) { [self] in
+            answerLabel.text = text
         }
     }
 
-    func configureSources(_ items: [SearchResult.Source], onSourceTapped: @escaping (URL) -> Void) {
+    /// The footer is revealed together with the sources, since the citations arrive after the answer
+    /// has started streaming and the attribution shouldn't appear before them.
+    func configureSources(
+        _ items: [SearchResult.Source],
+        modelName: String,
+        onSourceTapped: @escaping (URL) -> Void
+    ) {
+        guard !items.isEmpty, items != configuredSources else { return }
+        let isFirstConfiguration = configuredSources.isEmpty
+        configuredSources = items
         sourceView.configure(with: items, onSourceTapped: onSourceTapped)
+        guard isFirstConfiguration else { return }
+        footerLabel.text = "Powered by \(modelName) · Answers can contain mistakes."
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             sourceView.alpha = 1.0
+            footerLabel.alpha = 1.0
         }
     }
 

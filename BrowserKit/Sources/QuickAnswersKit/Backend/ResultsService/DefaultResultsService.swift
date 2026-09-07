@@ -8,7 +8,9 @@ import MLPAKit
 
 // MARK: - Protocol
 protocol ResultsService: Sendable {
-    func fetchResults(for transcription: String) async throws -> SearchResult
+    /// Streams the answer for `transcription`, emitting the result accumulated so far every time the
+    /// backend sends a chunk. The stream fails with a `ResultsServiceError`.
+    func fetchResults(for transcription: String) -> AsyncThrowingStream<SearchResult, Error>
 }
 
 final class DefaultResultsService: ResultsService {
@@ -23,16 +25,48 @@ final class DefaultResultsService: ResultsService {
         self.configFetcher = configFetcher
     }
 
-    func fetchResults(for transcription: String) async throws -> SearchResult {
-        do {
-            let config = try await configFetcher.fetch()
-            let messages = makeMessages(for: transcription, config: config)
-            let fullResponse = try await requestChatCompletion(for: messages, config: config)
-            let citations = fullResponse.providerSpecificFields?.citations ?? []
-            return formatResult(from: fullResponse.content, and: citations)
-        } catch {
-            throw mapError(error)
+    func fetchResults(for transcription: String) -> AsyncThrowingStream<SearchResult, Error> {
+        return AsyncThrowingStream { continuation in
+            let task = Task {
+                do {
+                    try await streamResults(for: transcription, into: continuation)
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: mapError(error))
+                }
+            }
+            continuation.onTermination = { _ in task.cancel() }
         }
+    }
+
+    /// Accumulates the streamed chunks, yielding the answer built so far together with the citations
+    /// received up to that point. Providers send citations in their own chunk, usually the last one,
+    /// so the sources appear once the answer is (nearly) complete.
+    private func streamResults(
+        for transcription: String,
+        into continuation: AsyncThrowingStream<SearchResult, Error>.Continuation
+    ) async throws {
+        let config = try await configFetcher.fetch()
+        let messages = makeMessages(for: transcription, config: config)
+        // TODO: FXIOS-15198 Handle errors appropriately
+        let stream = try await client.requestChatCompletionStreamed(messages: messages, config: config)
+
+        var answer = ""
+        var citations: [Citation] = []
+        var didYieldResult = false
+        for try await chunk in stream {
+            try Task.checkCancellation()
+            let newCitations = chunk.providerSpecificFields?.citations ?? []
+            answer += chunk.content
+            if !newCitations.isEmpty {
+                citations = newCitations
+            }
+            // Skip chunks that carry neither text nor citations, they'd emit a duplicate result.
+            guard !answer.isEmpty, !chunk.content.isEmpty || !newCitations.isEmpty else { continue }
+            didYieldResult = true
+            continuation.yield(formatResult(from: answer, and: citations))
+        }
+        guard didYieldResult else { throw ResultsServiceError.noMessage }
     }
 
     private func makeMessages(for transcription: String, config: LLMConfig) -> [QuickAnswersMessage] {
@@ -42,19 +76,6 @@ final class DefaultResultsService: ResultsService {
         }
         messages.append(LiteLLMMessage(role: .user, content: transcription))
         return messages
-    }
-
-    private func requestChatCompletion(
-        for messages: [QuickAnswersMessage],
-        config: LLMConfig
-    ) async throws -> QuickAnswersMessage {
-        // TODO: FXIOS-15198 Handle errors appropriately
-        // and may need to change type and not use String,
-        // but waiting for what we get on server side
-        return try await client.requestChatCompletion(
-            messages: messages,
-            config: config
-        )
     }
 
     private func formatResult(from answer: String, and citations: [Citation]) -> SearchResult {
@@ -74,6 +95,8 @@ final class DefaultResultsService: ResultsService {
     /// Maps underlying errors to `ResultsServiceError` types.
     private func mapError(_ error: Error) -> ResultsServiceError {
         switch error {
+        case let e as ResultsServiceError:
+            return e
         case LiteLLMClientError.requestCreationFailed:
             return .requestCreationFailed
         case LiteLLMClientError.invalidResponse(let statusCode) where statusCode == 429:

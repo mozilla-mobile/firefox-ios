@@ -106,16 +106,27 @@ class DefaultQuickAnswersServiceTests {
     }
 
     @Test
-    func test_search_returnsEmptySuccess() async throws {
+    func test_search_streamsResultsFromResultsService() async throws {
         let subject = try createSubject()
 
-        let result = await subject.search(text: "hello")
+        var received: [SearchResult] = []
+        for try await result in await subject.search(text: "hello") {
+            received.append(result)
+        }
 
-        switch result {
-        case .success(let searchResult):
-            #expect(searchResult == SearchResult.empty())
-        case .failure(let error):
-            Issue.record("Expected success(.empty()), got failure: \(error)")
+        #expect(received == [SearchResult.empty()])
+        #expect(resultsServiceFactory.resultsService.fetchResultsCallCount == 1)
+    }
+
+    @Test
+    func test_search_whenResultsServiceFails_propagatesError() async throws {
+        resultsServiceFactory.resultsService.errorToThrow = ResultsServiceError.rateLimited
+        let subject = try createSubject()
+
+        await #expect(throws: ResultsServiceError.rateLimited) {
+            for try await _ in await subject.search(text: "hello") {
+                Issue.record("Expected no values; the results service should fail immediately.")
+            }
         }
     }
 

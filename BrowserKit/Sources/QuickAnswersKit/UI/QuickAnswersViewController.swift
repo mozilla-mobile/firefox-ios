@@ -67,6 +67,7 @@ public final class QuickAnswersViewController: UIViewController,
         }
     )
     private var hasAppeared = false
+    private var hasShownSearchResult = false
 
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
@@ -198,13 +199,7 @@ public final class QuickAnswersViewController: UIViewController,
                 if let error {
                     self?.errorHandler.handleSearchError(error)
                 } else {
-                    self?.triggerHaptic()
-                    self?.backgroundRecordEffect.alpha = UX.recordWaveEffectResultOpacity
-                    self?.contentView.configureAnswer(result.resultText, modelName: self?.viewModel.modelDisplayName ?? "")
-                    self?.contentView.configureSources(result.sources) { [weak self] url in
-                        self?.viewModel.recordCitationTapped()
-                        self?.dismiss(with: url)
-                    }
+                    self?.showSearchResult(result)
                 }
             }
         }
@@ -219,6 +214,21 @@ public final class QuickAnswersViewController: UIViewController,
                 self?.dismiss(with: url)
             }
         )
+    }
+
+    /// Called for every streamed chunk, so the one-off feedback only runs on the first one while the
+    /// answer text keeps updating.
+    private func showSearchResult(_ result: SearchResult) {
+        if !hasShownSearchResult {
+            hasShownSearchResult = true
+            triggerHaptic()
+            backgroundRecordEffect.alpha = UX.recordWaveEffectResultOpacity
+        }
+        contentView.configureAnswer(result.resultText)
+        contentView.configureSources(result.sources, modelName: viewModel.modelDisplayName) { [weak self] url in
+            self?.viewModel.recordCitationTapped()
+            self?.dismiss(with: url)
+        }
     }
 
     private func dismiss(with url: URL?) {

@@ -38,20 +38,27 @@ final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
         }
     }
 
+    /// Yields one chunk per entry in `respondWith`, then, when citations are set, a final chunk that
+    /// only carries them, mirroring how the providers stream citations.
     func requestChatCompletionStreamed<ProviderFields: Codable & Sendable>(
         messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
-    ) -> AsyncThrowingStream<String, Error> {
+    ) -> AsyncThrowingStream<LiteLLMStreamChunk<ProviderFields>, Error> {
         requestChatCompletionStreamedCallCount += 1
         lastMessages = messages
         lastConfig = config
 
-        return AsyncThrowingStream<String, Error> { continuation in
+        return AsyncThrowingStream { continuation in
             if let error = self.respondWithError {
                 continuation.finish(throwing: error)
             } else {
                 for chunk in self.respondWith {
-                    continuation.yield(chunk)
+                    continuation.yield(LiteLLMStreamChunk(content: chunk))
+                }
+                let providerFields = self.respondWithCitations
+                    .map { QuickAnswersProviderFields(citations: $0) } as? ProviderFields
+                if let providerFields {
+                    continuation.yield(LiteLLMStreamChunk(content: "", providerSpecificFields: providerFields))
                 }
                 continuation.finish()
             }

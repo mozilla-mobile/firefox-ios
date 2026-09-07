@@ -25,12 +25,12 @@ public final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable
     public func requestChatCompletionStreamed<ProviderFields: Codable & Sendable>(
         messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
-    ) -> AsyncThrowingStream<String, Error> {
-        AsyncThrowingStream<String, Error> { continuation in
+    ) -> AsyncThrowingStream<LiteLLMStreamChunk<ProviderFields>, Error> {
+        AsyncThrowingStream { continuation in
             if let error = respondWithError {
                 continuation.finish(throwing: error)
             } else {
-                for chunk in respondWith { continuation.yield(chunk) }
+                for chunk in respondWith { continuation.yield(LiteLLMStreamChunk(content: chunk)) }
                 continuation.finish()
             }
         }

@@ -35,6 +35,7 @@ protocol QuickAnswersService: Sendable {
 
     func stopRecording() async throws
 
-    /// Performs a search with the provided query text parameter.
-    func search(text: String) async -> Result<SearchResult, ResultsServiceError>
+    /// Performs a search with the provided query text parameter, streaming the result accumulated
+    /// so far as the backend answers. The stream fails with a `ResultsServiceError`.
+    func search(text: String) async -> AsyncThrowingStream<SearchResult, Error>
 }

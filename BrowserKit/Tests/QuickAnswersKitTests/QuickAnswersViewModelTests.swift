@@ -39,7 +39,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
             )]
         )
         mockService.speechResults = [partialResult, finalResult]
-        mockService.searchResult = .success(searchResult)
+        mockService.searchResults = [searchResult]
         let expectation = XCTestExpectation()
         var states = [QuickAnswersViewModel.State]()
         let subject = createSubject(prefs: optInCompletedPrefs())
@@ -67,6 +67,63 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.lastRecordingOutcome, true)
         XCTAssertNil(mockTelemetry.lastRecordingErrorType)
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastResultsOutcome, true)
+    }
+
+    func testStartFlow_withStreamedSearchResult_emitsStatePerChunk() {
+        let finalResult = SpeechResult(text: "Hello world", isFinal: true)
+        let partialAnswer = SearchResult(resultText: "Partial", sources: [])
+        let completeAnswer = SearchResult(
+            resultText: "Partial answer",
+            sources: [SearchResult.Source(title: "SourceTest", url: nil, thumbnailURL: nil, faviconURL: nil)]
+        )
+        mockService.speechResults = [finalResult]
+        mockService.searchResults = [partialAnswer, completeAnswer]
+        let expectation = XCTestExpectation()
+        var states = [QuickAnswersViewModel.State]()
+        let subject = createSubject(prefs: optInCompletedPrefs())
+
+        subject.onStateChange = { state in
+            states.append(state)
+            guard states.count == 5 else { return }
+            expectation.fulfill()
+        }
+        subject.startFlow()
+
+        wait(for: [expectation])
+
+        XCTAssertEqual(states[3], .showSearchResult(partialAnswer, nil))
+        XCTAssertEqual(states[4], .showSearchResult(completeAnswer, nil))
+        XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastResultsOutcome, true)
+    }
+
+    func testStartFlow_withRapidChunks_throttlesToFirstAndFinalResult() {
+        let finalSpeechResult = SpeechResult(text: "Hello world", isFinal: true)
+        let firstChunk = SearchResult(resultText: "A", sources: [])
+        let secondChunk = SearchResult(resultText: "A B", sources: [])
+        let finalChunk = SearchResult(resultText: "A B C", sources: [])
+        mockService.speechResults = [finalSpeechResult]
+        mockService.searchResults = [firstChunk, secondChunk, finalChunk]
+        let expectation = XCTestExpectation()
+        var states = [QuickAnswersViewModel.State]()
+        let subject = createSubject(prefs: optInCompletedPrefs(), searchResultThrottleInterval: 60.0)
+
+        subject.onStateChange = { state in
+            states.append(state)
+            guard states.count == 5 else { return }
+            expectation.fulfill()
+        }
+        subject.startFlow()
+
+        wait(for: [expectation])
+
+        // The middle chunk is coalesced away, the final one is always emitted.
+        XCTAssertEqual(states.count, 5)
+        XCTAssertEqual(states[3], .showSearchResult(firstChunk, nil))
+        XCTAssertEqual(states[4], .showSearchResult(finalChunk, nil))
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastResultsOutcome, true)
     }
@@ -108,7 +165,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         let speechResult = SpeechResult(text: "Hello", isFinal: true)
         let searchError = ResultsServiceError.unknown("Test error")
         mockService.speechResults = [speechResult]
-        mockService.searchResult = .failure(searchError)
+        mockService.searchError = searchError
         var states = [QuickAnswersViewModel.State]()
         let expectation = XCTestExpectation()
         let subject = createSubject(prefs: optInCompletedPrefs())
@@ -165,7 +222,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         let prefs = MockProfilePrefs()
         let finalResult = SpeechResult(text: "Hello", isFinal: true)
         mockService.speechResults = [finalResult]
-        mockService.searchResult = .success(SearchResult(resultText: "Test", sources: []))
+        mockService.searchResults = [SearchResult(resultText: "Test", sources: [])]
         let subject = createSubject(prefs: prefs)
         let expectation = XCTestExpectation()
         var states = [QuickAnswersViewModel.State]()
@@ -231,12 +288,14 @@ final class QuickAnswersViewModelTests: XCTestCase {
     // MARK: - Helper
     private func createSubject(
         prefs: Prefs = MockProfilePrefs(),
-        configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa)
+        configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa),
+        searchResultThrottleInterval: TimeInterval = 0.0
     ) -> QuickAnswersViewModel {
         let model = QuickAnswersViewModel(
             prefs: prefs,
             telemetry: mockTelemetry,
             configFetcher: configFetcher,
+            searchResultThrottleInterval: searchResultThrottleInterval,
             makeService: { _, _ in
                 return self.mockService
             }
@@ -250,6 +309,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         let model = QuickAnswersViewModel(
             prefs: prefs,
             telemetry: mockTelemetry,
+            searchResultThrottleInterval: 0.0,
             makeService: { _, _ in throw ServiceInitError() }
         )
         trackForMemoryLeaks(model)

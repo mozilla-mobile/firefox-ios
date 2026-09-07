@@ -6,8 +6,20 @@
 
 final class MockResultsService: ResultsService, @unchecked Sendable {
     var fetchResultsCallCount = 0
+    var resultsToYield: [SearchResult] = [.empty()]
+    var errorToThrow: Error?
 
-    func fetchResults(for transcription: String) async throws -> SearchResult {
-        return SearchResult.empty()
+    func fetchResults(for transcription: String) -> AsyncThrowingStream<SearchResult, Error> {
+        fetchResultsCallCount += 1
+        return AsyncThrowingStream { continuation in
+            if let errorToThrow {
+                continuation.finish(throwing: errorToThrow)
+                return
+            }
+            for result in resultsToYield {
+                continuation.yield(result)
+            }
+            continuation.finish()
+        }
     }
 }

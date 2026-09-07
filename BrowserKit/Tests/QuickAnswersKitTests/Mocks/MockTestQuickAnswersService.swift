@@ -6,7 +6,8 @@
 
 final class MockTestQuickAnswersService: QuickAnswersService, @unchecked Sendable {
     var speechResults: [SpeechResult] = []
-    var searchResult: Result<SearchResult, ResultsServiceError> = .success(.empty())
+    var searchResults: [SearchResult] = [.empty()]
+    var searchError: ResultsServiceError?
     var shouldThrowSpeechError = false
     var recordVoiceCalledCount = 0
     var stopRecordingCalledCount = 0
@@ -34,9 +35,21 @@ final class MockTestQuickAnswersService: QuickAnswersService, @unchecked Sendabl
         stopRecordingCalledCount += 1
     }
 
-    func search(text: String) async -> Result<SearchResult, ResultsServiceError> {
+    func search(text: String) async -> AsyncThrowingStream<SearchResult, Error> {
         searchCalledCount += 1
-        try? await Task.sleep(nanoseconds: 50_000_000)
-        return searchResult
+        return AsyncThrowingStream { continuation in
+            Task {
+                try await Task.sleep(nanoseconds: 50_000_000)
+                if let searchError {
+                    continuation.finish(throwing: searchError)
+                    return
+                }
+
+                for result in searchResults {
+                    continuation.yield(result)
+                }
+                continuation.finish()
+            }
+        }
     }
 }

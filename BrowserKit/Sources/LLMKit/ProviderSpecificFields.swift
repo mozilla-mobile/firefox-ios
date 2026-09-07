@@ -32,8 +32,8 @@ public struct Citation: Codable, Sendable {
         case id
         case title
         case url
-        case image
-        case favicon = "faviconUrl"
+        case image = "imageUrl"
+        case favicon
     }
 
     public init(

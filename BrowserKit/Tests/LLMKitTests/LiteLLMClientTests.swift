@@ -59,6 +59,33 @@ final class LiteLLMClientTests: XCTestCase {
     }
     """.data(using: .utf8)!
 
+    private static let streamCitationsResponsePayload = """
+    {
+      "id": "stream-123",
+      "created": 1690000000,
+      "model": "stream-model",
+      "object": "chat.completion.chunk",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "provider_specific_fields": {
+              "citations": [
+                {
+                  "id": "cite-1",
+                  "title": "Source Title",
+                  "url": "https://source.com",
+                  "image": "https://source.com/image.png",
+                  "faviconUrl": "https://source.com/favicon.ico"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+    """.data(using: .utf8)!
+
     func testLiteLLMMessageCodable() throws {
         let msg = try JSONDecoder().decode(StandardMessage.self, from: Self.liteLLMMessagePayload)
         XCTAssertEqual(msg.role, .user)
@@ -75,16 +102,36 @@ final class LiteLLMClientTests: XCTestCase {
     }
 
     func testStreamResponseCodable() throws {
-        let stream = try JSONDecoder().decode(LiteLLMStreamResponse.self, from: Self.streamResponsePayload)
+        let stream = try JSONDecoder().decode(
+            LiteLLMStreamResponse<EmptyProviderFields>.self,
+            from: Self.streamResponsePayload
+        )
         XCTAssertEqual(stream.id, "stream-123")
         XCTAssertEqual(stream.created, 1690000000)
         XCTAssertEqual(stream.model, "stream-model")
         XCTAssertEqual(stream.object, "chat.completion.chunk")
 
-        let choice = stream.choices.first!
+        let choice = try XCTUnwrap(stream.choices.first)
         XCTAssertEqual(choice.index, 100)
         XCTAssertEqual(choice.delta.role, "assistant")
         XCTAssertEqual(choice.delta.content, "Chunked text.")
+        XCTAssertNil(choice.delta.providerSpecificFields)
+    }
+
+    func testStreamResponseCodableWithCitations() throws {
+        let stream = try JSONDecoder().decode(
+            LiteLLMStreamResponse<QuickAnswersProviderFields>.self,
+            from: Self.streamCitationsResponsePayload
+        )
+
+        let delta = try XCTUnwrap(stream.choices.first?.delta)
+        XCTAssertNil(delta.content)
+        XCTAssertEqual(delta.providerSpecificFields?.citations?.count, 1)
+
+        let citation = try XCTUnwrap(delta.providerSpecificFields?.citations?.first)
+        XCTAssertEqual(citation.title, "Source Title")
+        XCTAssertEqual(citation.url, "https://source.com")
+        XCTAssertEqual(citation.favicon, "https://source.com/favicon.ico")
     }
 
     func testMakeRequestBuildsURLRequestNonStreaming() async throws {
@@ -158,7 +205,7 @@ final class LiteLLMClientTests: XCTestCase {
                 "title": "Source Title",
                 "url": "https://source.com",
                 "image": "https://source.com/image.png",
-                "favicon": "https://source.com/favicon.ico"
+                "faviconUrl": "https://source.com/favicon.ico"
               }
             ]
           }

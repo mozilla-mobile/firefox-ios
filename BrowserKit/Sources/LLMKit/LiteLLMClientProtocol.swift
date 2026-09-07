@@ -13,9 +13,9 @@ public protocol LiteLLMClientProtocol: Sendable {
         config: LLMConfig
     ) async throws -> LiteLLMMessage<ProviderFields>
 
-    /// Sends a streaming chat completion request.
+    /// Sends a streaming chat completion request, yielding every chunk the server sends.
     func requestChatCompletionStreamed<ProviderFields: Codable & Sendable>(
         messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
-    ) async throws -> AsyncThrowingStream<String, Error>
+    ) async throws -> AsyncThrowingStream<LiteLLMStreamChunk<ProviderFields>, Error>
 }
