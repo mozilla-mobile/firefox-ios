@@ -19112,7 +19112,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "SWIFTLINT_ROOT=\"${SRCROOT}/..\"\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\n# The version is pinned in .swiftlint-version and installed by bootstrap.sh\nSWIFTLINT=$(\"${SWIFTLINT_ROOT}/scripts/install-swiftlint.sh\" --path-only)\n\nif [ -n \"${SWIFTLINT}\" ]; then\n    # Move to the location of the root Swiftlint config file in\n    # order to use nested configurations\n    cd \"${SWIFTLINT_ROOT}\"\n\n    \"${SWIFTLINT}\" lint ${MODIFIED_FILES}\nelse\n    echo \"warning: pinned SwiftLint not installed, run ./bootstrap.sh from the repo root\"\nfi\n";
+			shellScript = "SWIFTLINT_ROOT=\"${SRCROOT}/..\"\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\n# The version is pinned in .swiftlint-version and installed by bootstrap.sh\nSWIFTLINT=$(\"${SWIFTLINT_ROOT}/scripts/install-swiftlint.sh\" --path-only)\n\nif [ -n \"${SWIFTLINT}\" ]; then\n    # Move to the location of the root Swiftlint config file in\n    # order to use nested configurations\n    cd ${SWIFTLINT_ROOT}\n\n    \"${SWIFTLINT}\" lint ${MODIFIED_FILES}\nelse\n    echo \"warning: pinned SwiftLint not installed, run ./bootstrap.sh from the repo root\"\nfi\n";
 		};
 		D48146712E26CB3300231244 /* Populate test-fixtures script */ = {
 			isa = PBXShellScriptBuildPhase;
