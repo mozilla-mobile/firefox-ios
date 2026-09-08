@@ -159,6 +159,21 @@ final class GroupedEditBookmarkViewControllerTests: XCTestCase {
         XCTAssertFalse(navController.viewControllers.contains(subject))
     }
 
+    func test_saveButtonAction_whenInLibrary_savesBookmark() {
+        let viewModel = createViewModel()
+        let subject = createSubject(viewModel: viewModel)
+        let navController = UINavigationController()
+        navController.pushViewController(UIViewController(), animated: false)
+        navController.pushViewController(subject, animated: false)
+
+        let expectation = XCTestExpectation(description: "bookmark saved")
+        viewModel.onBookmarkSaved = { expectation.fulfill() }
+
+        subject.saveButtonAction()
+
+        wait(for: [expectation], timeout: 1.0)
+    }
+
     // MARK: - Private
 
     private func createSubject(
