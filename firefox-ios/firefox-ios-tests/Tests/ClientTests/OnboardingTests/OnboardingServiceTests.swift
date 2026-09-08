@@ -141,7 +141,7 @@ final class OnboardingServiceTests: XCTestCase {
         mockDefaultApplicationHelper = MockApplicationHelper()
         mockNotificationCenter = MockNotificationCenter()
         mockSearchBarLocationSaver = MockSearchBarLocationSaver()
-        mockProfile = MockProfile(databasePrefix: "OnboardingServiceTests")
+        mockProfile = makeProfile()
         mockThemeManager = MockThemeManager()
         mockTelemetryUtility = MockOnboardingTelemetryUtility()
 

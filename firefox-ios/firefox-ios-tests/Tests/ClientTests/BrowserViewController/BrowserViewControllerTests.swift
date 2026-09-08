@@ -25,7 +25,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     override func setUp() async throws {
         try await super.setUp()
         tabManager = MockTabManager()
-        profile = MockProfile()
+        profile = makeProfile()
         browserCoordinator = MockBrowserCoordinator()
         appStartupTelemetry = MockAppStartupTelemetry()
         recordVisitManager = MockRecordVisitObservationManager()
@@ -37,7 +37,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
-        profile.shutdown()
         profile = nil
         tabManager = nil
         appStartupTelemetry = nil

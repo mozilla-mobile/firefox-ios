@@ -13,7 +13,7 @@ class DiskImageStoreTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        store = DefaultDiskImageStore(files: MockFiles(), namespace: "DiskImageStoreTests", quality: 1)
+        store = DefaultDiskImageStore(files: makeTemporaryFiles(), namespace: "DiskImageStoreTests", quality: 1)
 
         await clearStore()
     }

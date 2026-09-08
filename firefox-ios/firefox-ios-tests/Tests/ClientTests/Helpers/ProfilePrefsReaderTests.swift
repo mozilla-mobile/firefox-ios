@@ -42,7 +42,7 @@ class ProfilePrefsReaderTests: XCTestCase {
     }
 
     func testIsBottomToolbarUser_savesIntoProfile_thenRetrievesThePrefs() {
-        let profile = BrowserProfile(localName: "profile").makePrefs()
+        let profile = NSUserDefaultsPrefs(prefix: "profile")
         profile.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
 
         let prefs = ProfilePrefsReader()
@@ -68,7 +68,7 @@ class ProfilePrefsReaderTests: XCTestCase {
     }
 
     func testHasEnabledTipsNotifications_savesIntoProfile_thenRetrievesThePrefs() {
-        let profile = BrowserProfile(localName: "profile").makePrefs()
+        let profile = NSUserDefaultsPrefs(prefix: "profile")
         profile.setBool(true, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
 
         let prefs = ProfilePrefsReader()
