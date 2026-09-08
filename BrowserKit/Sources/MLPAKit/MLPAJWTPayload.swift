@@ -11,6 +11,7 @@ import JWTKit
 public enum MLPAServiceType: String, Sendable {
     case s2s = "s2s"
     case quickAnswers = "answer"
+    case quickAnswersLiner = "liner-answer"
 }
 
 public enum MLPAConstants {
