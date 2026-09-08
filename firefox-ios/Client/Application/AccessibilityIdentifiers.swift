@@ -536,6 +536,14 @@ struct AccessibilityIdentifiers {
             static let title = "AIControlsSettings"
         }
 
+        struct VPN {
+            static let title = "VPNSettings"
+            static let toggle = "VPNSettings.Toggle"
+            static let locationRow = "VPNSettings.LocationRow"
+            static let locationSelection = "VPNSettings.LocationSelection"
+            static let recommendedLocationRow = "VPNSettings.LocationSelection.Recommended"
+        }
+
         struct Appearance {
             static let browserThemeSectionTitle = "BrowserThemeSectionTitle"
             static let websiteAppearanceSectionTitle = "WebsiteAppearanceSectionTitle"

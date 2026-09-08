@@ -27,6 +27,7 @@ final class VPNManager: VPNManaging {
 
     private let logger: Logger
     private let guardian: VPNGuardian
+    private let serverlist: VPNServerlist
     private let windowManager: WindowManager
     private let userPreferences: UserFeaturePreferring
 
@@ -40,6 +41,7 @@ final class VPNManager: VPNManaging {
     init(
         logger: Logger = DefaultLogger.shared,
         clientConfig: VPNGuardian.Configuration = .staging,
+        profile: Profile = AppContainer.shared.resolve(),
         windowManager: WindowManager = AppContainer.shared.resolve(),
         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
     ) {
@@ -49,6 +51,7 @@ final class VPNManager: VPNManaging {
             configuration: clientConfig,
             logger: logger
         )
+        self.serverlist = VPNServerlist(rsService: profile.remoteSettingsService, logger: logger)
         self.windowManager = windowManager
         self.userPreferences = userPreferences
     }
@@ -72,6 +75,11 @@ final class VPNManager: VPNManaging {
     func start() async {
         do {
             let pass = try await self.guardian.getPass()
+
+
+//            guard let server = await self.serverlist.selectServer() else {
+//                throw VPNError.noServerFound
+//            }
 
             // TODO: Hardcode server to point at staging for this foxfooding
             let server = VPNGuardian.Server(hostname: "stage.m1.fastly-masque.net", port: 2499, city: "", countryCode: "")

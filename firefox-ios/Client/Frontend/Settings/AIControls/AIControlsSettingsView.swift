@@ -261,27 +261,6 @@ struct AIControlsSettingsView: View, ThemeApplicable {
     }
 }
 
-// TODO: FXIOS-15135 Move this out to a shared component
-private struct RoundedCard<Content: View>: View {
-    var background: Color
-    var cornerRadius: CGFloat
-    var padding: CGFloat
-    @ViewBuilder var content: () -> Content
-    var overlay: (() -> Image)?
-
-    var body: some View {
-        content()
-            .padding(.vertical, padding)
-            .padding(.horizontal, padding)
-            .background(
-                background
-            ).overlay(alignment: .bottomTrailing) {
-                overlay?()
-            }
-            .cornerRadius(cornerRadius)
-    }
-}
-
 #Preview {
     AIControlsSettingsView(
         aiControlsModel: AIControlsModel(prefs: MockProfilePrefs(), windowUUID: WindowUUID.DefaultUITestingUUID)

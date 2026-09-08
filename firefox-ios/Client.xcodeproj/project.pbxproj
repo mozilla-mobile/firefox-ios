@@ -780,6 +780,7 @@
 		610216552FBFA7100091151F /* ConversionValueUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610216512FBFA7100091151F /* ConversionValueUpdater.swift */; };
 		610216562FBFA7100091151F /* ConversionActivityLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610216502FBFA7100091151F /* ConversionActivityLogger.swift */; };
 		610216572FBFA7100091151F /* ConversionDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610216522FBFA7100091151F /* ConversionDataManager.swift */; };
+		6118EBC83048BD8900ADFAA1 /* VPNServerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6118EBC73048BD8200ADFAA1 /* VPNServerList.swift */; };
 		612194E32CE507CF001664BB /* WallpaperBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */; };
 		612194E62CE50A93001664BB /* WallpaperAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E52CE50A93001664BB /* WallpaperAction.swift */; };
 		612194E82CE50A9B001664BB /* WallpaperState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E72CE50A9B001664BB /* WallpaperState.swift */; };
@@ -800,6 +801,11 @@
 		61D17EF32FE30B1100BCDD52 /* MockNimbusUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D17EF22FE30B1100BCDD52 /* MockNimbusUtils.swift */; };
 		61DD72D12F5936C4002BFEA6 /* AIControlsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD72D02F5936AF002BFEA6 /* AIControlsSetting.swift */; };
 		61DD72D52F5937A6002BFEA6 /* AIControlsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */; };
+		CA1637300000000000002001 /* VPNSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1637300000000000001001 /* VPNSettingsModel.swift */; };
+		CA1637300000000000002002 /* VPNSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1637300000000000001002 /* VPNSettingsView.swift */; };
+		CA1637300000000000002003 /* VPNLocationSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1637300000000000001003 /* VPNLocationSelectionView.swift */; };
+		CA1637300000000000002004 /* VPNSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1637300000000000001004 /* VPNSetting.swift */; };
+		CA1637300000000000002005 /* RoundedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1637300000000000001005 /* RoundedCard.swift */; };
 		61E24E503012AD3D00F27037 /* VPNGuardian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E4F3012AD3900F27037 /* VPNGuardian.swift */; };
 		61E24E523017BF2A00F27037 /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E24E513017BF2A00F27037 /* VPNManager.swift */; };
 		61E637852D03615D00E95B63 /* LabelButtonHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E637842D03615D00E95B63 /* LabelButtonHeaderViewTests.swift */; };
@@ -9392,6 +9398,7 @@
 		610216512FBFA7100091151F /* ConversionValueUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionValueUpdater.swift; sourceTree = "<group>"; };
 		610216522FBFA7100091151F /* ConversionDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionDataManager.swift; sourceTree = "<group>"; };
 		610216532FBFA7100091151F /* ConversionEventTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionEventTracker.swift; sourceTree = "<group>"; };
+		6118EBC73048BD8200ADFAA1 /* VPNServerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNServerList.swift; sourceTree = "<group>"; };
 		612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperBackgroundView.swift; sourceTree = "<group>"; };
 		612194E52CE50A93001664BB /* WallpaperAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperAction.swift; sourceTree = "<group>"; };
 		612194E72CE50A9B001664BB /* WallpaperState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperState.swift; sourceTree = "<group>"; };
@@ -9415,6 +9422,11 @@
 		61DA4B5AB7DA505B9C992F95 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		61DD72D02F5936AF002BFEA6 /* AIControlsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSetting.swift; sourceTree = "<group>"; };
 		61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSettingsView.swift; sourceTree = "<group>"; };
+		CA1637300000000000001001 /* VPNSettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSettingsModel.swift; sourceTree = "<group>"; };
+		CA1637300000000000001002 /* VPNSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSettingsView.swift; sourceTree = "<group>"; };
+		CA1637300000000000001003 /* VPNLocationSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNLocationSelectionView.swift; sourceTree = "<group>"; };
+		CA1637300000000000001004 /* VPNSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSetting.swift; sourceTree = "<group>"; };
+		CA1637300000000000001005 /* RoundedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCard.swift; sourceTree = "<group>"; };
 		61E24E4F3012AD3900F27037 /* VPNGuardian.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNGuardian.swift; sourceTree = "<group>"; };
 		61E24E513017BF2A00F27037 /* VPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
 		61E637842D03615D00E95B63 /* LabelButtonHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelButtonHeaderViewTests.swift; sourceTree = "<group>"; };
@@ -13298,6 +13310,7 @@
 			children = (
 				AA25A74F2FB4C9C000A55859 /* QuickAnswers */,
 				61DD72D32F59374E002BFEA6 /* AIControls */,
+				CA1637300000000000003001 /* VPN */,
 				8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */,
 				BA4BB9962D7F371F006BD137 /* AppearanceSettings */,
 				ED8B49B72D6CF2AE00743444 /* AppIconSelection */,
@@ -13987,6 +14000,16 @@
 			path = Wallpaper;
 			sourceTree = "<group>";
 		};
+		CA1637300000000000003001 /* VPN */ = {
+			isa = PBXGroup;
+			children = (
+				CA1637300000000000001001 /* VPNSettingsModel.swift */,
+				CA1637300000000000001002 /* VPNSettingsView.swift */,
+				CA1637300000000000001003 /* VPNLocationSelectionView.swift */,
+			);
+			path = VPN;
+			sourceTree = "<group>";
+		};
 		61DD72D32F59374E002BFEA6 /* AIControls */ = {
 			isa = PBXGroup;
 			children = (
@@ -13999,6 +14022,7 @@
 		61E24BA63011617200F27037 /* VPN */ = {
 			isa = PBXGroup;
 			children = (
+				6118EBC73048BD8200ADFAA1 /* VPNServerList.swift */,
 				61E24E513017BF2A00F27037 /* VPNManager.swift */,
 				61E24E4F3012AD3900F27037 /* VPNGuardian.swift */,
 			);
@@ -14615,6 +14639,7 @@
 				AA25A74D2FB4C88200A55859 /* QuickAnswersSetting.swift */,
 				C7F5684AA329455783CCB201 /* AdBlockerSetting.swift */,
 				61DD72D02F5936AF002BFEA6 /* AIControlsSetting.swift */,
+				CA1637300000000000001004 /* VPNSetting.swift */,
 				AAD861A72E9E748100F6E0E0 /* TranslationSetting.swift */,
 				BCBE058B2E3A871B004B6039 /* SummarizeSetting.swift */,
 				8ADED55D2D667A7700345293 /* BrowsingSetting.swift */,
@@ -16808,6 +16833,7 @@
 			isa = PBXGroup;
 			children = (
 				E17496372991A2720096900A /* AdaptiveStack.swift */,
+				CA1637300000000000001005 /* RoundedCard.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -19991,6 +20017,11 @@
 				C2886E082EC5E025007AE6C3 /* StaticFileRoute.swift in Sources */,
 				EBB89509219398E500EB91A0 /* TabContentBlocker+ContentScript.swift in Sources */,
 				61DD72D52F5937A6002BFEA6 /* AIControlsSettingsView.swift in Sources */,
+				CA1637300000000000002001 /* VPNSettingsModel.swift in Sources */,
+				CA1637300000000000002002 /* VPNSettingsView.swift in Sources */,
+				CA1637300000000000002003 /* VPNLocationSelectionView.swift in Sources */,
+				CA1637300000000000002004 /* VPNSetting.swift in Sources */,
+				CA1637300000000000002005 /* RoundedCard.swift in Sources */,
 				614985482F6B0B6500BC5ACA /* AIControlsModel.swift in Sources */,
 				1DA710072AE7106B00677F6B /* AppDataUsageReportSetting.swift in Sources */,
 				D3BE7B461B054F8600641031 /* UITestAppDelegate.swift in Sources */,
@@ -20829,6 +20860,7 @@
 				C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */,
 				E13C07292C217D700087E404 /* NavigationBarState.swift in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
+				6118EBC83048BD8900ADFAA1 /* VPNServerList.swift in Sources */,
 				0A93C8AA2C87070300BEA143 /* TrackingProtectionConnectionStatusView.swift in Sources */,
 				39BD570E2E53F3ED00CA1317 /* MerinoFeedFetcher.swift in Sources */,
 				8AA0A6632CAC40AA00AC7EB3 /* HomepageDiffableDataSource.swift in Sources */,
