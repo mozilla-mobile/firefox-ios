@@ -10,7 +10,6 @@ import Shared
 /// Debug setting that overrides which provider model backs Quick Answers,
 /// taking precedence over the Nimbus configured model until it is cleared.
 final class QuickAnswersModelSetting: HiddenSetting {
-    private static let nimbusOptionTitle = "Nimbus"
     private let prefsKey = PrefsKeys.QuickAnswers.modelOverride
     private var prefs: Prefs? { return settings.profile?.prefs }
     private var overriddenModel: QuickAnswersKit.QuickAnswersModel? {
@@ -20,7 +19,7 @@ final class QuickAnswersModelSetting: HiddenSetting {
 
     override var title: NSAttributedString? {
         guard let theme else { return nil }
-        let current = overriddenModel?.displayName ?? Self.nimbusOptionTitle
+        let current = overriddenModel?.displayName ?? "Nimbus"
         return NSAttributedString(
             string: "Quick Answers Model: \(current)",
             attributes: [.foregroundColor: theme.colors.textPrimary]
@@ -36,7 +35,7 @@ final class QuickAnswersModelSetting: HiddenSetting {
                 self?.select(model)
             })
         }
-        alert.addAction(UIAlertAction(title: "Use \(Self.nimbusOptionTitle) value", style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: "Use Nimbus value", style: .destructive) { [weak self] _ in
             self?.select(nil)
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
