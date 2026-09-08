@@ -62,7 +62,7 @@ final class IPProtectionAppAttestServerTests: XCTestCase {
 
         XCTAssertEqual(tokenStore.saveCallCount, 1)
         XCTAssertEqual(tokenStore.load()?.deviceSessionJwt, "test-dsj")
-        XCTAssertEqual(tokenStore.load()?.expiresAt, 32503680000000)
+        XCTAssertEqual(tokenStore.load()?.expiresAtMilliseconds, 32503680000000)
     }
 
     func test_sendAttestation_buildsCorrectRequest() async throws {

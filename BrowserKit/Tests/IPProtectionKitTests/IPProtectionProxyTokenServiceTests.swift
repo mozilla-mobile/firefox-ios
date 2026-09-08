@@ -98,8 +98,8 @@ final class IPProtectionProxyTokenServiceTests: XCTestCase {
     private func session(jwt: String) -> IPProtectionDeviceSession {
         IPProtectionDeviceSession(
             deviceSessionJwt: jwt,
-            expiresAt: 32503680000000,
-            renewAfter: 32503600000000
+            expiresAtMilliseconds: 32503680000000,
+            renewAfterMilliseconds: 32503600000000
         )
     }
 
@@ -139,8 +139,8 @@ private final class MockIPProtectionAuthenticating: IPProtectionAuthenticating, 
         refreshCallCount += 1
         let refreshed = IPProtectionDeviceSession(
             deviceSessionJwt: "refreshed-dsj",
-            expiresAt: 32503680000000,
-            renewAfter: 32503600000000
+            expiresAtMilliseconds: 32503680000000,
+            renewAfterMilliseconds: 32503600000000
         )
         storedSession = refreshed
         return refreshed.deviceSessionJwt

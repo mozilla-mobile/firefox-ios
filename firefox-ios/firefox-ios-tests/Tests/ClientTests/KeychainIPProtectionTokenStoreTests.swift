@@ -14,8 +14,8 @@ final class KeychainIPProtectionTokenStoreTests: XCTestCase {
 
     private let sampleSession = IPProtectionDeviceSession(
         deviceSessionJwt: "header.payload.signature",
-        expiresAt: 32503680000000,
-        renewAfter: 32503670000000
+        expiresAtMilliseconds: 32503680000000,
+        renewAfterMilliseconds: 32503670000000
     )
 
     override func tearDown() {
@@ -40,7 +40,11 @@ final class KeychainIPProtectionTokenStoreTests: XCTestCase {
 
     func test_save_overwritesPreviousSession() throws {
         let subject = createSubject()
-        let updated = IPProtectionDeviceSession(deviceSessionJwt: "new.jwt", expiresAt: 1, renewAfter: 0)
+        let updated = IPProtectionDeviceSession(
+            deviceSessionJwt: "new.jwt",
+            expiresAtMilliseconds: 1,
+            renewAfterMilliseconds: 0
+        )
 
         try subject.save(sampleSession)
         try subject.save(updated)

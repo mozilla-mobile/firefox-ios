@@ -57,7 +57,7 @@ class IPProtectionDebugSetting: HiddenSetting {
 
         var lines = ["device (sub): \(device)"]
         if let issuedAt = claims["iat"] as? TimeInterval {
-            lines.append("issued (iat): \(Self.format(msSinceEpoch: issuedAt * 1000))")
+            lines.append("issued (iat): \(Self.format(msSinceEpoch: Int64(issuedAt * 1000)))")
         }
 
         if let previous {
@@ -77,8 +77,8 @@ class IPProtectionDebugSetting: HiddenSetting {
             lines.append("device kept: \(device == previousDevice ? "YES" : "NO ⚠️")")
         }
 
-        lines.append("expires: \(Self.format(msSinceEpoch: session.expiresAt))")
-        lines.append("renew after: \(Self.format(msSinceEpoch: session.renewAfter))")
+        lines.append("expires: \(Self.format(msSinceEpoch: session.expiresAtMilliseconds))")
+        lines.append("renew after: \(Self.format(msSinceEpoch: session.renewAfterMilliseconds))")
         lines.append("needs renewal now: \(session.needsRenewal() ? "YES" : "no")")
         return lines.joined(separator: "\n")
     }
@@ -100,10 +100,10 @@ class IPProtectionDebugSetting: HiddenSetting {
         return claims
     }
 
-    fileprivate static func format(msSinceEpoch: TimeInterval) -> String {
+    fileprivate static func format(msSinceEpoch: Int64) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return formatter.string(from: Date(timeIntervalSince1970: msSinceEpoch / 1000))
+        return formatter.string(from: Date(timeIntervalSince1970: TimeInterval(msSinceEpoch) / 1000))
     }
 
     @MainActor
@@ -177,7 +177,7 @@ final class FetchIPProtectionProxyTokenSetting: IPProtectionDebugSetting {
         lines.append("subject: \(claims["sub"] as? String ?? "?")")
         lines.append("audience: \(claims["aud"] as? String ?? "?")")
         if let exp = claims["exp"] as? TimeInterval {
-            lines.append("expires: \(format(msSinceEpoch: exp * 1000))")
+            lines.append("expires: \(format(msSinceEpoch: Int64(exp * 1000)))")
         }
         return lines.joined(separator: "\n")
     }
