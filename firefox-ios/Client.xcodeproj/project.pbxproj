@@ -33802,8 +33802,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/WilhelmOks/ModifiedCopyMacro.git";
 			requirement = {
-				kind = exactVersion;
-				version = 2.2.0;
+				kind = revision;
+				revision = d020bf8c6432d0c6aa8428b5ca1c3225a0545b3b;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
