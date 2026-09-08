@@ -96,6 +96,7 @@ class FxAWebViewModelTests: XCTestCase {
     func testCreateURLForPDFWithValidSuccessResult() {
         let result: Result<Any?, Error> = .success(MockFxAWebViewModel().validPDFDataURL)
         if let outputURL = viewModel.createURLForPDF(result: result) {
+            defer { try? FileManager.default.removeItem(at: outputURL) }
             XCTAssertNotNil(outputURL, "Should return a valid URL.")
             XCTAssertTrue(FileManager.default.fileExists(atPath: outputURL.path), "PDF File should exist.")
         }

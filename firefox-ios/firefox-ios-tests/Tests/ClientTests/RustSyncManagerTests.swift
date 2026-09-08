@@ -56,6 +56,7 @@ class RustSyncManagerTests: XCTestCase {
         rustSyncManager = nil
         UserDefaults.standard.removeObject(forKey: "fxa.cwts.declinedSyncEngines")
         profile.prefs.clearAll()
+        profile.removeDirectory()
         profile = nil
         super.tearDown()
     }

@@ -19,13 +19,10 @@ class TestHistory: XCTestCase {
         continueAfterFailure = false
 
         // Setup mock profile
-        profile = MockProfile(databasePrefix: "history-test")
-        profile.reopen()
+        profile = makeProfile()
     }
 
     override func tearDown() async throws {
-        self.clear(profile.places)
-        profile.shutdown()
         profile = nil
         try await super.tearDown()
     }
@@ -408,7 +405,6 @@ struct TestHistoryHelper {
         bool: Bool = true,
         visitType: VisitType = .link
     ) {
-        _ = places.reopenIfClosed()
         let site = Site.createBasicSite(url: url, title: title)
         let visit = VisitObservation(url: site.url, title: site.title, visitType: visitType)
         let res = places.applyObservation(visitObservation: visit).value

@@ -8,7 +8,7 @@ import XCTest
 @testable import Storage
 
 class RustAutofillTests: XCTestCase {
-    var files: FileAccessor!
+    var files: TemporaryFiles!
     var autofill: RustAutofill!
     var encryptionKey: String!
 
@@ -34,24 +34,21 @@ class RustAutofillTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        files = MockFiles()
+        files = makeTemporaryFiles()
 
-        if let rootDirectory = try? files.getAndEnsureDirectory() {
-            let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true)
-                .appendingPathComponent("testAutofill.db").path
-            try? files.remove("testAutofill.db")
-
-            if let key = try? createAutofillKey() {
-                encryptionKey = key
-            } else {
-                XCTFail("Encryption key wasn't created")
-            }
-
-            autofill = RustAutofill(databasePath: databasePath)
-            _ = autofill.reopenIfClosed()
+        if let key = try? createAutofillKey() {
+            encryptionKey = key
         } else {
-            XCTFail("Could not retrieve root directory")
+            XCTFail("Encryption key wasn't created")
         }
+
+        autofill = RustAutofill(databasePath: files.pathEnsuringRoot(for: "testAutofill.db"))
+        _ = autofill.reopenIfClosed()
+    }
+
+    override func tearDown() {
+        _ = autofill.forceClose()
+        super.tearDown()
     }
 
     func addCreditCard() async throws -> CreditCard {

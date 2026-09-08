@@ -103,17 +103,27 @@ final class MockTabQueue: TabQueue, @unchecked Sendable {
     }
 }
 
-class MockFiles: FileAccessor {
-    var rootPath: String
+/// Runs `body` with a fresh profile, then shuts it down and removes its directory, so
+/// cleanup does not depend on when ARC releases the profile.
+func withMockProfile<T>(_ body: (MockProfile) async throws -> T) async throws -> T {
+    let profile = MockProfile()
+    defer {
+        profile.removeDirectory()
+    }
+    return try await body(profile)
+}
 
-    init(rootPath: String? = nil) {
-        guard let rootPath else {
-            let docPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-            self.rootPath = (docPath as NSString).appendingPathComponent("testing")
-            return
+extension XCTestCase {
+    /// The XCTest form of `withMockProfile`: shutdown and directory removal run in teardown.
+    func makeProfile(
+        firefoxSuggest: RustFirefoxSuggestProtocol? = nil,
+        injectedPinnedSites: MockablePinnedSites? = nil
+    ) -> MockProfile {
+        let profile = MockProfile(firefoxSuggest: firefoxSuggest, injectedPinnedSites: injectedPinnedSites)
+        addTeardownBlock {
+            profile.removeDirectory()
         }
-
-        self.rootPath = rootPath
+        return profile
     }
 }
 
@@ -125,7 +135,7 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
 
     // Read/Writeable properties for mocking
 
-    public let files: FileAccessor
+    public var files: FileAccessor { temporaryFiles }
     public let syncManager: ClientSyncManager?
     public let firefoxSuggest: RustFirefoxSuggestProtocol?
     public let remoteSettingsService: RemoteSettingsService
@@ -133,29 +143,19 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
 
     fileprivate let name = "mockaccount"
 
-    private let directory: String
-    private let databasePrefix: String
+    private let temporaryFiles = TemporaryFiles(ownsRoot: true)
+    private let databases = DatabaseRegistry()
     private let injectedPinnedSites: MockablePinnedSites?
 
     init(
-        databasePrefix: String = "mock_\(UUID().uuidString.prefix(8))",
         firefoxSuggest: RustFirefoxSuggestProtocol? = nil,
         remoteSettingsService: RemoteSettingsService = RemoteSettingsService(unsafeFromHandle: 0),
         injectedPinnedSites: MockablePinnedSites? = nil
     ) {
-        files = MockFiles()
         syncManager = ClientSyncManagerSpy()
-        self.databasePrefix = databasePrefix
         self.firefoxSuggest = firefoxSuggest
         self.remoteSettingsService = remoteSettingsService
         self.injectedPinnedSites = injectedPinnedSites
-
-        do {
-            directory = try files.getAndEnsureDirectory()
-        } catch {
-            XCTFail("Could not create directory at root path: \(error)")
-            fatalError("Could not create directory at root path: \(error)")
-        }
     }
 
     deinit {
@@ -167,24 +167,24 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
     }
 
     public func reopen() {
-        isShutdown = false
-
-        database.reopenIfClosed()
-        _ = logins.reopenIfClosed()
-        _ = places.reopenIfClosed()
-        _ = tabs.reopenIfClosed()
+        databases.reopen()
     }
 
     public func shutdown() {
-        isShutdown = true
-
-        database.forceClose()
-        _ = logins.forceClose()
-        _ = places.forceClose()
-        _ = tabs.forceClose()
+        databases.shutdown()
     }
 
-    public var isShutdown = false
+    public var isShutdown: Bool { databases.isShutdown }
+
+    /// Whether Places has created its database, checked without initializing the lazy `places`.
+    var hasCreatedPlacesDatabase: Bool {
+        temporaryFiles.exists("places.db")
+    }
+
+    fileprivate func removeDirectory() {
+        shutdown()
+        temporaryFiles.removeRoot()
+    }
 
     public lazy var queue: TabQueue = {
         return MockTabQueue()
@@ -202,13 +202,9 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
         return MockProfilePrefs()
     }()
 
-    public lazy var autofill: RustAutofill = {
-        let autofillDbPath = URL(
-            fileURLWithPath: directory,
-            isDirectory: true
-        ).appendingPathComponent("autofill.db").path
-        return RustAutofill(databasePath: autofillDbPath)
-    }()
+    public lazy var autofill: RustAutofill = databases.trackLifecycle(
+        of: RustAutofill(databasePath: temporaryFiles.pathEnsuringRoot(for: "autofill.db"))
+    )
 
     public lazy var readingList: ReadingList = {
         return SQLiteReadingList(db: self.readingListDB)
@@ -218,49 +214,26 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
         return ClosedTabsStore(prefs: self.prefs)
     }()
 
-    public lazy var logins: RustLogins = {
-        let newLoginsDatabasePath = URL(
-            fileURLWithPath: directory,
-            isDirectory: true
-        ).appendingPathComponent("\(databasePrefix)_loginsPerField.db").path
-        try? files.remove("\(databasePrefix)_loginsPerField.db")
+    public lazy var logins: RustLogins = databases.trackLifecycle(
+        of: RustLogins(databasePath: temporaryFiles.pathEnsuringRoot(for: "loginsPerField.db"))
+    )
 
-        let logins = RustLogins(databasePath: newLoginsDatabasePath)
-        _ = logins.reopenIfClosed()
+    lazy var database: BrowserDB = databases.trackLifecycle(
+        of: BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+    )
 
-        return logins
-    }()
+    lazy var readingListDB: BrowserDB = databases.trackLifecycle(
+        of: BrowserDB(filename: "ReadingList.db", schema: ReadingListSchema(), files: files)
+    )
 
-    lazy var database: BrowserDB = {
-        BrowserDB(filename: "\(databasePrefix).db", schema: BrowserSchema(), files: files)
-    }()
+    public lazy var places: RustPlaces = databases.trackLifecycle(
+        of: RustPlaces(databasePath: temporaryFiles.pathEnsuringRoot(for: "places.db"),
+                       notificationCenter: mockNotificationCenter)
+    )
 
-    lazy var readingListDB: BrowserDB = {
-        BrowserDB(filename: "\(databasePrefix)_ReadingList.db", schema: ReadingListSchema(), files: files)
-    }()
-
-    public lazy var places: RustPlaces = {
-        let placesDatabasePath = URL(
-            fileURLWithPath: directory,
-            isDirectory: true
-        ).appendingPathComponent("\(databasePrefix)_places.db").path
-        try? files.remove("\(databasePrefix)_places.db")
-
-        let places = RustPlaces(databasePath: placesDatabasePath, notificationCenter: mockNotificationCenter)
-        _ = places.reopenIfClosed()
-
-        return places
-    }()
-
-    public lazy var tabs: RustRemoteTabs = {
-        let tabsDbPath = URL(
-            fileURLWithPath: directory,
-            isDirectory: true
-        ).appendingPathComponent("\(databasePrefix)_tabs.db").path
-        let tabs = RustRemoteTabs(databasePath: tabsDbPath)
-
-        return tabs
-    }()
+    public lazy var tabs: RustRemoteTabs = databases.trackLifecycle(
+        of: RustRemoteTabs(databasePath: temporaryFiles.pathEnsuringRoot(for: "tabs.db"))
+    )
 
     fileprivate lazy var legacyPlaces: PinnedSites = {
         BrowserDBSQLite(database: self.database, prefs: MockProfilePrefs())
