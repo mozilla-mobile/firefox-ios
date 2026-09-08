@@ -134,6 +134,88 @@ final class IPProtectionAuthServiceTests: XCTestCase {
         )
     }
 
+    func test_authenticate_rethrowsTransportError_andKeepsKey_whenSessionExpired() async throws {
+        let tokenStore = MockIPProtectionTokenStore(initial: expiredSession)
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
+        refresher.refreshError = URLError(.notConnectedToInternet)
+        let remoteServer = MockAppAttestRemoteServer()
+        let subject = try makeSubject(
+            remoteServer: remoteServer,
+            keyStore: keyStore,
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        do {
+            _ = try await subject.authenticate()
+            XCTFail("Expected authenticate to surface the transport error.")
+        } catch let error as URLError {
+            XCTAssertEqual(error.code, .notConnectedToInternet)
+        }
+
+        XCTAssertEqual(
+            keyStore.loadKeyID(),
+            AppAttestTestData.keyID,
+            "A transient network failure must not discard the attested key"
+        )
+        XCTAssertEqual(remoteServer.sendAttestationCallCount, 0, "Must not re-attest on a transport failure")
+        XCTAssertEqual(tokenStore.clearCallCount, 0, "Must not clear the session on a transport failure")
+    }
+
+    func test_authenticate_rethrowsTransportError_andKeepsKey_whenNoSession() async throws {
+        let tokenStore = MockIPProtectionTokenStore()
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
+        refresher.refreshError = URLError(.timedOut)
+        let remoteServer = MockAppAttestRemoteServer()
+        let subject = try makeSubject(
+            remoteServer: remoteServer,
+            keyStore: keyStore,
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        do {
+            _ = try await subject.authenticate()
+            XCTFail("Expected authenticate to surface the transport error.")
+        } catch let error as URLError {
+            XCTAssertEqual(error.code, .timedOut)
+        }
+
+        XCTAssertEqual(
+            keyStore.loadKeyID(),
+            AppAttestTestData.keyID,
+            "Having no cached session is not a reason to abandon the device identity"
+        )
+        XCTAssertEqual(remoteServer.sendAttestationCallCount, 0, "Must not re-attest on a transport failure")
+    }
+
+    func test_authenticate_keepsStaleSession_whenEnrollmentFails() async throws {
+        let tokenStore = MockIPProtectionTokenStore(initial: expiredSession)
+        let failingSession = MockURLSession(with: Data("boom".utf8), response: httpResponse(statusCode: 500))
+        let server = IPProtectionAppAttestServer(with: .dev, urlSession: failingSession, tokenStore: tokenStore)
+        let subject = try makeSubject(
+            remoteServer: server,
+            keyStore: MockAppAttestKeyIDStore(),   // no keyId, so refresh reports notEnrolled
+            refresher: server,
+            tokenStore: tokenStore
+        )
+
+        do {
+            _ = try await subject.authenticate()
+            XCTFail("Expected authenticate to throw when enrollment fails.")
+        } catch let error as AppAttestServiceError {
+            XCTAssertEqual(error, .serverError(description: "500: boom"))
+        }
+
+        XCTAssertEqual(
+            tokenStore.load(),
+            expiredSession,
+            "A failed enrollment must not leave the device with neither a key nor a session"
+        )
+    }
+
     func test_authenticate_enrolls_whenNoSessionAndNoKey() async throws {
         let tokenStore = MockIPProtectionTokenStore()
         let keyStore = MockAppAttestKeyIDStore()

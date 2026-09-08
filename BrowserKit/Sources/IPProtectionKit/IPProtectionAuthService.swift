@@ -43,18 +43,20 @@ struct IPProtectionAuthService: IPProtectionAuthenticating {
             return cached.deviceSessionJwt
         }
 
-        // Refreshing with the existing key preserves the device identity, and its quota bucket
-        if let refreshed = try? await refresh() {
-            return refreshed
-        }
+        do {
+            // Refreshing with the existing key preserves the device identity, and its quota bucket
+            return try await refresh()
+        } catch {
+            // Prefer a stale-but-valid session over re-attesting: a new attestation creates a new device
+            // record and inflates the App Attest risk metric
+            if let cached, cached.isValid() {
+                return cached.deviceSessionJwt
+            }
 
-        // Prefer a stale-but-valid session over re-attesting: a new attestation creates a new device
-        // record and inflates the App Attest risk metric
-        if let cached, cached.isValid() {
-            return cached.deviceSessionJwt
+            // Retry attesting on missing enrollment, keep the key in other error cases
+            guard case IPProtectionError.notEnrolled = error else { throw error }
+            return try await enroll()
         }
-
-        return try await enroll()
     }
 
     func refresh() async throws -> String {
@@ -81,13 +83,14 @@ struct IPProtectionAuthService: IPProtectionAuthenticating {
         return tokenStore.load()
     }
 
-    /// Resets first because a stored `keyId` can outlive the Secure Enclave key it names, and
-    /// `performAttestation()` short-circuits on any stored `keyId`.
+    /// Clears the key first because `performAttestation()` returns early if we have any stored `keyId`, which
+    /// can outlive its Secure Enclave key. The session survives until enrollment replaces it.
     private func enroll() async throws -> String {
-        try reset()
+        let staleSession = tokenStore.load()
+        try appAttestClient.resetKey()
         _ = try await appAttestClient.performAttestation()
 
-        guard let session = tokenStore.load() else {
+        guard let session = tokenStore.load(), session != staleSession else {
             throw IPProtectionError.sessionNotPersisted
         }
         return session.deviceSessionJwt
