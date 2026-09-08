@@ -7,21 +7,33 @@ import Foundation
 /// The Device Session JWT (DSJ) issued by the backend on successful App Attest enrollment.
 public struct IPProtectionDeviceSession: Codable, Equatable, Sendable {
     public let deviceSessionJwt: String
-    public let expiresAt: TimeInterval
-    public let renewAfter: TimeInterval
+    public let expiresAtMilliseconds: Int64
+    public let renewAfterMilliseconds: Int64
 
-    public init(deviceSessionJwt: String, expiresAt: TimeInterval, renewAfter: TimeInterval) {
+    private enum CodingKeys: String, CodingKey {
+        case deviceSessionJwt
+        case expiresAtMilliseconds = "expiresAt"
+        case renewAfterMilliseconds = "renewAfter"
+    }
+
+    public init(deviceSessionJwt: String, expiresAtMilliseconds: Int64, renewAfterMilliseconds: Int64) {
         self.deviceSessionJwt = deviceSessionJwt
-        self.expiresAt = expiresAt
-        self.renewAfter = renewAfter
+        self.expiresAtMilliseconds = expiresAtMilliseconds
+        self.renewAfterMilliseconds = renewAfterMilliseconds
     }
 
     public func isValid(now: Date = Date()) -> Bool {
-        return now.timeIntervalSince1970 * 1000 < expiresAt
+        return now.millisecondsSince1970 < expiresAtMilliseconds
     }
 
     /// Past the renewal window: still valid, but a refresh is due.
     public func needsRenewal(now: Date = Date()) -> Bool {
-        return now.timeIntervalSince1970 * 1000 >= renewAfter
+        return now.millisecondsSince1970 >= renewAfterMilliseconds
+    }
+}
+
+private extension Date {
+    var millisecondsSince1970: Int64 {
+        return Int64(timeIntervalSince1970 * 1000)
     }
 }

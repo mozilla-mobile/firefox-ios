@@ -269,29 +269,29 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     private var freshSession: IPProtectionDeviceSession {
         IPProtectionDeviceSession(
             deviceSessionJwt: "cached-dsj",
-            expiresAt: 32503680000000,
-            renewAfter: 32503600000000
+            expiresAtMilliseconds: 32503680000000,
+            renewAfterMilliseconds: 32503600000000
         )
     }
 
-    /// Still valid, but past renewAfter, so a proactive refresh is due.
+    /// Still valid, but past its renewal timestamp, so a proactive refresh is due.
     private var renewableSession: IPProtectionDeviceSession {
         IPProtectionDeviceSession(
             deviceSessionJwt: "renewable-dsj",
-            expiresAt: 32503680000000,
-            renewAfter: 1000
+            expiresAtMilliseconds: 32503680000000,
+            renewAfterMilliseconds: 1000
         )
     }
 
     private var expiredSession: IPProtectionDeviceSession {
-        IPProtectionDeviceSession(deviceSessionJwt: "old-dsj", expiresAt: 1000, renewAfter: 1000)
+        IPProtectionDeviceSession(deviceSessionJwt: "old-dsj", expiresAtMilliseconds: 1000, renewAfterMilliseconds: 1000)
     }
 
     private var refreshedSession: IPProtectionDeviceSession {
         IPProtectionDeviceSession(
             deviceSessionJwt: "refreshed-dsj",
-            expiresAt: 32503680000000,
-            renewAfter: 32503600000000
+            expiresAtMilliseconds: 32503680000000,
+            renewAfterMilliseconds: 32503600000000
         )
     }
 
