@@ -53,7 +53,7 @@ final class UnifiedAdsProvider: UnifiedAdsProviderInterface, Sendable {
             )
             let sponsoredSites: [Site] = TileOrder.placementOrder.compactMap { placement in
                 guard let mozAdsTile = mozAdsTiles[placement] else { return nil }
-                return Self.makeSponsoredSite(from: mozAdsTile)
+                return Site.createSponsoredSite(from: mozAdsTile)
             }
 
             logger.log("Ads client request successful", level: .info, category: .homepage)
@@ -62,14 +62,5 @@ final class UnifiedAdsProvider: UnifiedAdsProviderInterface, Sendable {
             logger.log("Ads client request failed: \(error)", level: .warning, category: .homepage)
             completion(.failure(Error.noDataAvailable))
         }
-    }
-
-    private static func makeSponsoredSite(from mozAdsTile: MozAdsTile) -> Site {
-        let siteInfo = SponsoredSiteInfo(
-            impressionURL: mozAdsTile.callbacks.impression,
-            clickURL: mozAdsTile.callbacks.click,
-            imageURL: mozAdsTile.imageUrl
-        )
-        return Site.createSponsoredSite(url: mozAdsTile.url, title: mozAdsTile.name, siteInfo: siteInfo)
     }
 }
