@@ -1470,6 +1470,9 @@
 		AA459F872F630F3500D05D04 /* QuickAnswersKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA459F862F630F3500D05D04 /* QuickAnswersKit */; };
 		AA4D99432E857AF300BB039D /* MockRecentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */; };
 		AA5001492F912F610065A279 /* ChangeMLPAEndpointSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5001482F912F530065A279 /* ChangeMLPAEndpointSetting.swift */; };
+		FEEDFACE000000000000FB01 /* ChangeIPProtectionEndpointSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEDFACE000000000000FA01 /* ChangeIPProtectionEndpointSetting.swift */; };
+		FEEDFACE000000000000FB02 /* TriggerIPProtectionAttestationSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEDFACE000000000000FA02 /* TriggerIPProtectionAttestationSetting.swift */; };
+		FEEDFACE000000000000FC01 /* IPProtectionKit in Frameworks */ = {isa = PBXBuildFile; productRef = FEEDFACE000000000000FC02 /* IPProtectionKit */; };
 		AA5E81472EB12BDC00919E60 /* TranslationsMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */; };
 		AA5E81482EF5000000000001 /* PreferredTranslationLanguagesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5E81492EF5000000000001 /* PreferredTranslationLanguagesManager.swift */; };
 		AA62FA6A2EF2F49A009785D9 /* LocaleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B67B2CF65DE300AFA1FE /* LocaleProvider.swift */; };
@@ -1630,6 +1633,7 @@
 		C23889E52A50329200429673 /* MockParentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889E42A50329200429673 /* MockParentCoordinator.swift */; };
 		C2446B312A856D13000C527D /* MockLibraryCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2446B302A856D13000C527D /* MockLibraryCoordinatorDelegate.swift */; };
 		C24A0D2F2F3A7E7E00BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24A0D2E2F3A7E7200BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift */; };
+		FEEDFACE000000000000FB03 /* KeychainIPProtectionTokenStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEDFACE000000000000FA03 /* KeychainIPProtectionTokenStoreTests.swift */; };
 		C24B31272E8686460049134A /* NavigationBarMiddleButtonSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24B31262E8686220049134A /* NavigationBarMiddleButtonSelectionView.swift */; };
 		C24B31292E86B8470049134A /* GenericSelectableItemCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24B31282E86B82E0049134A /* GenericSelectableItemCellView.swift */; };
 		C24E2D2A2ECF960000BBCFA7 /* MockTranslationsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24E2D292ECF95FA00BBCFA7 /* MockTranslationsTelemetry.swift */; };
@@ -10570,6 +10574,8 @@
 		AA3CEBAC2ECB853400DDEFEF /* SearchTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTelemetryTests.swift; sourceTree = "<group>"; };
 		AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRecentSearchProvider.swift; sourceTree = "<group>"; };
 		AA5001482F912F530065A279 /* ChangeMLPAEndpointSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMLPAEndpointSetting.swift; sourceTree = "<group>"; };
+		FEEDFACE000000000000FA01 /* ChangeIPProtectionEndpointSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeIPProtectionEndpointSetting.swift; sourceTree = "<group>"; };
+		FEEDFACE000000000000FA02 /* TriggerIPProtectionAttestationSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerIPProtectionAttestationSetting.swift; sourceTree = "<group>"; };
 		AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsMiddleware.swift; sourceTree = "<group>"; };
 		AA5E81492EF5000000000001 /* PreferredTranslationLanguagesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredTranslationLanguagesManager.swift; sourceTree = "<group>"; };
 		AA6A6F372EF57EB800D1912D /* SystemLocaleProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemLocaleProviderTests.swift; sourceTree = "<group>"; };
@@ -10876,6 +10882,7 @@
 		C23889E42A50329200429673 /* MockParentCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockParentCoordinator.swift; sourceTree = "<group>"; };
 		C2446B302A856D13000C527D /* MockLibraryCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLibraryCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		C24A0D2E2F3A7E7200BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainAppAttestKeyIDStoreTests.swift; sourceTree = "<group>"; };
+		FEEDFACE000000000000FA03 /* KeychainIPProtectionTokenStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainIPProtectionTokenStoreTests.swift; sourceTree = "<group>"; };
 		C24B31262E8686220049134A /* NavigationBarMiddleButtonSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarMiddleButtonSelectionView.swift; sourceTree = "<group>"; };
 		C24B31282E86B82E0049134A /* GenericSelectableItemCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSelectableItemCellView.swift; sourceTree = "<group>"; };
 		C24E2D292ECF95FA00BBCFA7 /* MockTranslationsTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTranslationsTelemetry.swift; sourceTree = "<group>"; };
@@ -12433,6 +12440,7 @@
 				AA459F872F630F3500D05D04 /* QuickAnswersKit in Frameworks */,
 				ED6C8DAC2CE6A4BB00D7F7F3 /* Sentry-Dynamic in Frameworks */,
 				AA93AB052F6B06BE002E5E88 /* MLPAKit in Frameworks */,
+				FEEDFACE000000000000FC01 /* IPProtectionKit in Frameworks */,
 				EDD5924A2FC1090C0015EF9E /* ModifiedCopy in Frameworks */,
 				5A984D362C8A3407007938C9 /* Kingfisher in Frameworks */,
 				819656172C80C6F300E62323 /* MenuKit in Frameworks */,
@@ -14422,6 +14430,8 @@
 				1DA710062AE7106B00677F6B /* AppDataUsageReportSetting.swift */,
 				1D1418772DC92DFC004BBFAD /* ChangeRSServerSetting.swift */,
 				AA5001482F912F530065A279 /* ChangeMLPAEndpointSetting.swift */,
+				FEEDFACE000000000000FA01 /* ChangeIPProtectionEndpointSetting.swift */,
+				FEEDFACE000000000000FA02 /* TriggerIPProtectionAttestationSetting.swift */,
 				8A3EF7FE2A2FCFBB00796E3A /* ChangeToChinaSetting.swift */,
 				8A093D7C2A4B3E4F0099ABA5 /* DebugSettingsDelegate.swift */,
 				8A3EF7F12A2FCF4000796E3A /* DeleteExportedDataSetting.swift */,
@@ -17584,6 +17594,7 @@
 				C2F2C19A30044C8700F9B916 /* MockAdBlockerListFetcher.swift */,
 				EEB965152FBCCE7B00D6C232 /* ReaderTests */,
 				C24A0D2E2F3A7E7200BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift */,
+				FEEDFACE000000000000FA03 /* KeychainIPProtectionTokenStoreTests.swift */,
 				2151EF582F2AB962007B67A6 /* BrowserViewController */,
 				218457C42F22A3FA00B4FF23 /* Downloads */,
 				EDADF7822D70D59900C39295 /* AppIconSelection */,
@@ -18394,6 +18405,7 @@
 				0B6D1C872E15456F00919F1E /* SummarizeKit */,
 				AA459F862F630F3500D05D04 /* QuickAnswersKit */,
 				AA93AB042F6B06BE002E5E88 /* MLPAKit */,
+				FEEDFACE000000000000FC02 /* IPProtectionKit */,
 				AA93B7142F6D95D6002E5E88 /* LLMKit */,
 				EDD592492FC1090C0015EF9E /* ModifiedCopy */,
 				9405F1D23013762800BF6B10 /* AppAttestKit */,
@@ -19938,6 +19950,8 @@
 				21618A8A2A4389F700A5189E /* PresentedComponentsState.swift in Sources */,
 				8CC617092C35463B001C7688 /* AddressModifiedStatus.swift in Sources */,
 				AA5001492F912F610065A279 /* ChangeMLPAEndpointSetting.swift in Sources */,
+				FEEDFACE000000000000FB01 /* ChangeIPProtectionEndpointSetting.swift in Sources */,
+				FEEDFACE000000000000FB02 /* TriggerIPProtectionAttestationSetting.swift in Sources */,
 				EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */,
 				96D95016270238500079D39D /* MainThreadThrottler.swift in Sources */,
 				8A4593C92BF7BECA002758DE /* MicrosurveyTableHeaderView.swift in Sources */,
@@ -21447,6 +21461,7 @@
 				614987AF2F6B37E300BC5ACA /* AIControlsModelTests.swift in Sources */,
 				8AEF41622D15EDBC0013925D /* TopSitesMiddlewareTests.swift in Sources */,
 				C24A0D2F2F3A7E7E00BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift in Sources */,
+				FEEDFACE000000000000FB03 /* KeychainIPProtectionTokenStoreTests.swift in Sources */,
 				ABEF80D92A2F283E003F52C4 /* CreditCardBottomSheetViewModelTests.swift in Sources */,
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
 				C20931722F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift in Sources */,
@@ -34146,6 +34161,10 @@
 		AA93AB042F6B06BE002E5E88 /* MLPAKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MLPAKit;
+		};
+		FEEDFACE000000000000FC02 /* IPProtectionKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = IPProtectionKit;
 		};
 		AA93B7142F6D95D6002E5E88 /* LLMKit */ = {
 			isa = XCSwiftPackageProductDependency;
