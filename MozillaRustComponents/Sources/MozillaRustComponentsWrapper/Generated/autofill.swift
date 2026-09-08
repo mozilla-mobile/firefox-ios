@@ -749,9 +749,15 @@ public protocol StoreProtocol: AnyObject, Sendable {
     
     func addCreditCard(cc: UpdatableCreditCardFields) throws  -> CreditCard
     
+    func addCreditCardWithMeta(entryWithMeta: UpdatableCreditCardFieldsWithMeta) throws  -> CreditCard
+    
     func addManyAddressTombstones(tombstones: [AddressTombstone]) throws  -> [AddressBulkTombstoneResultEntry]
     
     func addManyAddressesWithMeta(entriesWithMeta: [UpdatableAddressFieldsWithMeta]) throws  -> [AddressBulkResultEntry]
+    
+    func addManyCreditCardTombstones(tombstones: [CreditCardTombstone]) throws  -> [CreditCardBulkTombstoneResultEntry]
+    
+    func addManyCreditCardsWithMeta(entriesWithMeta: [UpdatableCreditCardFieldsWithMeta]) throws  -> [CreditCardBulkResultEntry]
     
     func addPassport(p: UpdatablePassportFields) throws  -> Passport
     
@@ -772,8 +778,23 @@ public protocol StoreProtocol: AnyObject, Sendable {
     
     /**
      * Removes every address and every address tombstone.
+     *
+     * A migration primitive: it leaves the sync mirror intact and produces no
+     * tombstones, so the deletions are never uploaded and a synced profile gets
+     * the records back on the next sync. Use `delete_address` to delete on the
+     * user's behalf.
      */
     func deleteAllAddresses() throws 
+    
+    /**
+     * Removes every credit card and every credit card tombstone.
+     *
+     * A migration primitive: it leaves the sync mirror intact and produces no
+     * tombstones, so the deletions are never uploaded and a synced profile gets
+     * the records back on the next sync. Use `delete_credit_card` to delete on the
+     * user's behalf.
+     */
+    func deleteAllCreditCards() throws 
     
     func deleteCreditCard(guid: String) throws  -> Bool
     
@@ -826,6 +847,8 @@ public protocol StoreProtocol: AnyObject, Sendable {
     func updateAddressWithMeta(entryWithMeta: UpdatableAddressFieldsWithMeta) throws 
     
     func updateCreditCard(guid: String, cc: UpdatableCreditCardFields) throws 
+    
+    func updateCreditCardWithMeta(entryWithMeta: UpdatableCreditCardFieldsWithMeta) throws 
     
     func updatePassport(guid: String, p: UpdatablePassportFields) throws 
     
@@ -918,6 +941,15 @@ open func addCreditCard(cc: UpdatableCreditCardFields)throws  -> CreditCard  {
 })
 }
     
+open func addCreditCardWithMeta(entryWithMeta: UpdatableCreditCardFieldsWithMeta)throws  -> CreditCard  {
+    return try  FfiConverterTypeCreditCard_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_add_credit_card_with_meta(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeUpdatableCreditCardFieldsWithMeta_lower(entryWithMeta),$0
+    )
+})
+}
+    
 open func addManyAddressTombstones(tombstones: [AddressTombstone])throws  -> [AddressBulkTombstoneResultEntry]  {
     return try  FfiConverterSequenceTypeAddressBulkTombstoneResultEntry.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
     uniffi_autofill_fn_method_store_add_many_address_tombstones(
@@ -932,6 +964,24 @@ open func addManyAddressesWithMeta(entriesWithMeta: [UpdatableAddressFieldsWithM
     uniffi_autofill_fn_method_store_add_many_addresses_with_meta(
             self.uniffiCloneHandle(),
         FfiConverterSequenceTypeUpdatableAddressFieldsWithMeta.lower(entriesWithMeta),$0
+    )
+})
+}
+    
+open func addManyCreditCardTombstones(tombstones: [CreditCardTombstone])throws  -> [CreditCardBulkTombstoneResultEntry]  {
+    return try  FfiConverterSequenceTypeCreditCardBulkTombstoneResultEntry.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_add_many_credit_card_tombstones(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceTypeCreditCardTombstone.lower(tombstones),$0
+    )
+})
+}
+    
+open func addManyCreditCardsWithMeta(entriesWithMeta: [UpdatableCreditCardFieldsWithMeta])throws  -> [CreditCardBulkResultEntry]  {
+    return try  FfiConverterSequenceTypeCreditCardBulkResultEntry.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_add_many_credit_cards_with_meta(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceTypeUpdatableCreditCardFieldsWithMeta.lower(entriesWithMeta),$0
     )
 })
 }
@@ -993,9 +1043,29 @@ open func deleteAddress(guid: String)throws  -> Bool  {
     
     /**
      * Removes every address and every address tombstone.
+     *
+     * A migration primitive: it leaves the sync mirror intact and produces no
+     * tombstones, so the deletions are never uploaded and a synced profile gets
+     * the records back on the next sync. Use `delete_address` to delete on the
+     * user's behalf.
      */
 open func deleteAllAddresses()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
     uniffi_autofill_fn_method_store_delete_all_addresses(
+            self.uniffiCloneHandle(),$0
+    )
+}
+}
+    
+    /**
+     * Removes every credit card and every credit card tombstone.
+     *
+     * A migration primitive: it leaves the sync mirror intact and produces no
+     * tombstones, so the deletions are never uploaded and a synced profile gets
+     * the records back on the next sync. Use `delete_credit_card` to delete on the
+     * user's behalf.
+     */
+open func deleteAllCreditCards()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_delete_all_credit_cards(
             self.uniffiCloneHandle(),$0
     )
 }
@@ -1167,6 +1237,14 @@ open func updateCreditCard(guid: String, cc: UpdatableCreditCardFields)throws   
             self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),
         FfiConverterTypeUpdatableCreditCardFields_lower(cc),$0
+    )
+}
+}
+    
+open func updateCreditCardWithMeta(entryWithMeta: UpdatableCreditCardFieldsWithMeta)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+    uniffi_autofill_fn_method_store_update_credit_card_with_meta(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeUpdatableCreditCardFieldsWithMeta_lower(entryWithMeta),$0
     )
 }
 }
@@ -1566,6 +1644,141 @@ public func FfiConverterTypeCreditCard_lower(_ value: CreditCard) -> RustBuffer 
 
 
 /**
+ * Metadata fields managed internally by the library: the guid, timestamps and
+ * local sync state. These are automatically set on `add_credit_card` and
+ * updated on operations like `touch` and `update_credit_card`. Not included in
+ * `UpdatableCreditCardFields`; use `add_credit_card_with_meta` when importing
+ * records that already have metadata.
+ */
+public struct CreditCardMeta: Equatable, Hashable {
+    public var guid: String
+    public var timeCreated: Int64
+    public var timeLastUsed: Int64?
+    public var timeLastModified: Int64
+    public var timesUsed: Int64
+    public var syncChangeCounter: Int64
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(guid: String, timeCreated: Int64, timeLastUsed: Int64?, timeLastModified: Int64, timesUsed: Int64, syncChangeCounter: Int64) {
+        self.guid = guid
+        self.timeCreated = timeCreated
+        self.timeLastUsed = timeLastUsed
+        self.timeLastModified = timeLastModified
+        self.timesUsed = timesUsed
+        self.syncChangeCounter = syncChangeCounter
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension CreditCardMeta: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeCreditCardMeta: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CreditCardMeta {
+        return
+            try CreditCardMeta(
+                guid: FfiConverterString.read(from: &buf), 
+                timeCreated: FfiConverterInt64.read(from: &buf), 
+                timeLastUsed: FfiConverterOptionInt64.read(from: &buf), 
+                timeLastModified: FfiConverterInt64.read(from: &buf), 
+                timesUsed: FfiConverterInt64.read(from: &buf), 
+                syncChangeCounter: FfiConverterInt64.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: CreditCardMeta, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.guid, into: &buf)
+        FfiConverterInt64.write(value.timeCreated, into: &buf)
+        FfiConverterOptionInt64.write(value.timeLastUsed, into: &buf)
+        FfiConverterInt64.write(value.timeLastModified, into: &buf)
+        FfiConverterInt64.write(value.timesUsed, into: &buf)
+        FfiConverterInt64.write(value.syncChangeCounter, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardMeta_lift(_ buf: RustBuffer) throws -> CreditCardMeta {
+    return try FfiConverterTypeCreditCardMeta.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardMeta_lower(_ value: CreditCardMeta) -> RustBuffer {
+    return FfiConverterTypeCreditCardMeta.lower(value)
+}
+
+
+/**
+ * A tombstone for a record deleted locally but not yet uploaded, supplied to
+ * `add_many_credit_card_tombstones` when migrating from another store.
+ */
+public struct CreditCardTombstone: Equatable, Hashable {
+    public var guid: String
+    public var timeDeleted: Int64
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(guid: String, timeDeleted: Int64) {
+        self.guid = guid
+        self.timeDeleted = timeDeleted
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension CreditCardTombstone: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeCreditCardTombstone: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CreditCardTombstone {
+        return
+            try CreditCardTombstone(
+                guid: FfiConverterString.read(from: &buf), 
+                timeDeleted: FfiConverterInt64.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: CreditCardTombstone, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.guid, into: &buf)
+        FfiConverterInt64.write(value.timeDeleted, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardTombstone_lift(_ buf: RustBuffer) throws -> CreditCardTombstone {
+    return try FfiConverterTypeCreditCardTombstone.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardTombstone_lower(_ value: CreditCardTombstone) -> RustBuffer {
+    return FfiConverterTypeCreditCardTombstone.lower(value)
+}
+
+
+/**
  * Metrics tracking scrubbing of credit cards that cannot be decrypted, see
  */
 public struct CreditCardsDeletionMetrics: Equatable, Hashable {
@@ -1944,6 +2157,64 @@ public func FfiConverterTypeUpdatableCreditCardFields_lower(_ value: UpdatableCr
 
 
 /**
+ * A credit card together with its metadata, passed to `add_credit_card_with_meta`
+ * and `update_credit_card_with_meta` when importing a record from another store.
+ */
+public struct UpdatableCreditCardFieldsWithMeta: Equatable, Hashable {
+    public var fields: UpdatableCreditCardFields
+    public var meta: CreditCardMeta
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(fields: UpdatableCreditCardFields, meta: CreditCardMeta) {
+        self.fields = fields
+        self.meta = meta
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension UpdatableCreditCardFieldsWithMeta: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeUpdatableCreditCardFieldsWithMeta: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UpdatableCreditCardFieldsWithMeta {
+        return
+            try UpdatableCreditCardFieldsWithMeta(
+                fields: FfiConverterTypeUpdatableCreditCardFields.read(from: &buf), 
+                meta: FfiConverterTypeCreditCardMeta.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: UpdatableCreditCardFieldsWithMeta, into buf: inout [UInt8]) {
+        FfiConverterTypeUpdatableCreditCardFields.write(value.fields, into: &buf)
+        FfiConverterTypeCreditCardMeta.write(value.meta, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeUpdatableCreditCardFieldsWithMeta_lift(_ buf: RustBuffer) throws -> UpdatableCreditCardFieldsWithMeta {
+    return try FfiConverterTypeUpdatableCreditCardFieldsWithMeta.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeUpdatableCreditCardFieldsWithMeta_lower(_ value: UpdatableCreditCardFieldsWithMeta) -> RustBuffer {
+    return FfiConverterTypeUpdatableCreditCardFieldsWithMeta.lower(value)
+}
+
+
+/**
  * What you pass to create or update a passport.
  */
 public struct UpdatablePassportFields: Equatable, Hashable {
@@ -2289,6 +2560,158 @@ public func FfiConverterTypeAutofillApiError_lower(_ value: AutofillApiError) ->
     return FfiConverterTypeAutofillApiError.lower(value)
 }
 
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+/**
+ * A bulk insert result entry, returned per input record by `add_many_credit_cards_with_meta`
+ */
+
+public enum CreditCardBulkResultEntry: Equatable, Hashable {
+    
+    case success(creditCard: CreditCard
+    )
+    case error(message: String
+    )
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension CreditCardBulkResultEntry: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeCreditCardBulkResultEntry: FfiConverterRustBuffer {
+    typealias SwiftType = CreditCardBulkResultEntry
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CreditCardBulkResultEntry {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .success(creditCard: try FfiConverterTypeCreditCard.read(from: &buf)
+        )
+        
+        case 2: return .error(message: try FfiConverterString.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: CreditCardBulkResultEntry, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .success(creditCard):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeCreditCard.write(creditCard, into: &buf)
+            
+        
+        case let .error(message):
+            writeInt(&buf, Int32(2))
+            FfiConverterString.write(message, into: &buf)
+            
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardBulkResultEntry_lift(_ buf: RustBuffer) throws -> CreditCardBulkResultEntry {
+    return try FfiConverterTypeCreditCardBulkResultEntry.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardBulkResultEntry_lower(_ value: CreditCardBulkResultEntry) -> RustBuffer {
+    return FfiConverterTypeCreditCardBulkResultEntry.lower(value)
+}
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+/**
+ * Per-record result of `add_many_credit_card_tombstones`.
+ */
+
+public enum CreditCardBulkTombstoneResultEntry: Equatable, Hashable {
+    
+    case success(guid: String
+    )
+    case error(message: String
+    )
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension CreditCardBulkTombstoneResultEntry: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeCreditCardBulkTombstoneResultEntry: FfiConverterRustBuffer {
+    typealias SwiftType = CreditCardBulkTombstoneResultEntry
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CreditCardBulkTombstoneResultEntry {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .success(guid: try FfiConverterString.read(from: &buf)
+        )
+        
+        case 2: return .error(message: try FfiConverterString.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: CreditCardBulkTombstoneResultEntry, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .success(guid):
+            writeInt(&buf, Int32(1))
+            FfiConverterString.write(guid, into: &buf)
+            
+        
+        case let .error(message):
+            writeInt(&buf, Int32(2))
+            FfiConverterString.write(message, into: &buf)
+            
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardBulkTombstoneResultEntry_lift(_ buf: RustBuffer) throws -> CreditCardBulkTombstoneResultEntry {
+    return try FfiConverterTypeCreditCardBulkTombstoneResultEntry.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardBulkTombstoneResultEntry_lower(_ value: CreditCardBulkTombstoneResultEntry) -> RustBuffer {
+    return FfiConverterTypeCreditCardBulkTombstoneResultEntry.lower(value)
+}
+
+
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
@@ -2440,6 +2863,31 @@ fileprivate struct FfiConverterSequenceTypeCreditCard: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterSequenceTypeCreditCardTombstone: FfiConverterRustBuffer {
+    typealias SwiftType = [CreditCardTombstone]
+
+    public static func write(_ value: [CreditCardTombstone], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeCreditCardTombstone.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [CreditCardTombstone] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [CreditCardTombstone]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeCreditCardTombstone.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceTypePassport: FfiConverterRustBuffer {
     typealias SwiftType = [Passport]
 
@@ -2490,6 +2938,31 @@ fileprivate struct FfiConverterSequenceTypeUpdatableAddressFieldsWithMeta: FfiCo
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterSequenceTypeUpdatableCreditCardFieldsWithMeta: FfiConverterRustBuffer {
+    typealias SwiftType = [UpdatableCreditCardFieldsWithMeta]
+
+    public static func write(_ value: [UpdatableCreditCardFieldsWithMeta], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeUpdatableCreditCardFieldsWithMeta.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [UpdatableCreditCardFieldsWithMeta] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [UpdatableCreditCardFieldsWithMeta]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeUpdatableCreditCardFieldsWithMeta.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceTypeAddressBulkResultEntry: FfiConverterRustBuffer {
     typealias SwiftType = [AddressBulkResultEntry]
 
@@ -2532,6 +3005,56 @@ fileprivate struct FfiConverterSequenceTypeAddressBulkTombstoneResultEntry: FfiC
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             seq.append(try FfiConverterTypeAddressBulkTombstoneResultEntry.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypeCreditCardBulkResultEntry: FfiConverterRustBuffer {
+    typealias SwiftType = [CreditCardBulkResultEntry]
+
+    public static func write(_ value: [CreditCardBulkResultEntry], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeCreditCardBulkResultEntry.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [CreditCardBulkResultEntry] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [CreditCardBulkResultEntry]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeCreditCardBulkResultEntry.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypeCreditCardBulkTombstoneResultEntry: FfiConverterRustBuffer {
+    typealias SwiftType = [CreditCardBulkTombstoneResultEntry]
+
+    public static func write(_ value: [CreditCardBulkTombstoneResultEntry], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeCreditCardBulkTombstoneResultEntry.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [CreditCardBulkTombstoneResultEntry] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [CreditCardBulkTombstoneResultEntry]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeCreditCardBulkTombstoneResultEntry.read(from: &buf))
         }
         return seq
     }
@@ -2635,10 +3158,19 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_method_store_add_credit_card() != 39831) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_autofill_checksum_method_store_add_credit_card_with_meta() != 12334) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_autofill_checksum_method_store_add_many_address_tombstones() != 63625) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_add_many_addresses_with_meta() != 55046) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_add_many_credit_card_tombstones() != 53039) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_add_many_credit_cards_with_meta() != 40630) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_add_passport() != 41691) {
@@ -2660,6 +3192,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_delete_all_addresses() != 25310) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_delete_all_credit_cards() != 37337) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_delete_credit_card() != 33261) {
@@ -2717,6 +3252,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_update_credit_card() != 23488) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_update_credit_card_with_meta() != 33534) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_update_passport() != 64688) {
