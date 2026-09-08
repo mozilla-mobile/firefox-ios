@@ -29,9 +29,6 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         router = nil
         parentCoordinator = nil
         themeManager = nil
-        FxNimbus.shared.features.quickAnswersFeature.with { variables, prefs in
-            QuickAnswersFeature(variables, prefs)
-        }
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
