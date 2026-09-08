@@ -13,7 +13,7 @@ public enum QuickAnswersModel: String, Sendable {
     /// routes it to the right provider.
     var serviceType: MLPAServiceType {
         switch self {
-        case .exa: return .quickAnswers
+        case .exa: return .quickAnswersExa
         case .liner: return .quickAnswersLiner
         }
     }

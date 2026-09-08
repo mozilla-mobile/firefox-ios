@@ -40,7 +40,7 @@ struct ResultsServiceFactoryTests {
     }
 
     @Test(arguments: [
-        (QuickAnswersModel.exa, MLPAServiceType.quickAnswers),
+        (QuickAnswersModel.exa, MLPAServiceType.quickAnswersExa),
         (QuickAnswersModel.liner, MLPAServiceType.quickAnswersLiner)
     ])
     func test_make_usesTheServiceTypeOfTheConfiguredModel(
