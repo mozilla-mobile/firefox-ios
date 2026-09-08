@@ -105,7 +105,9 @@ final class VPNGuardian: Sendable {
                     } catch {
                         break
                     }
-                    guard let self, !Task.isCancelled else { break }
+                    guard let self, !Task.isCancelled else {
+                        break
+                    }
                     do {
                         let new = try await self.getPass()
                         current = new
@@ -116,6 +118,8 @@ final class VPNGuardian: Sendable {
                             level: .warning,
                             category: .sync
                         )
+                        // TODO: should we ever actually be retrying rotation?
+                        // This could be where we inform the user that the rotation failed
                         try? await Task.sleep(
                             nanoseconds: UInt64(Self.rotationRetryDelay * Double(NSEC_PER_SEC))
                         )
