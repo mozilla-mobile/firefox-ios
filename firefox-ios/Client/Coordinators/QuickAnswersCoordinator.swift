@@ -53,7 +53,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         router.present(controller, animated: shouldAnimateTransition)
     }
 
-    /// The model backing Quick Answers: the zdebug override set from the hidden settings when
+    /// The model backing Quick Answers: the debug override set from the hidden settings when
     /// present, the Nimbus configured one otherwise.
     func resolvedModel() -> QuickAnswersKit.QuickAnswersModel {
         guard let rawValue = prefs.stringForKey(PrefsKeys.QuickAnswers.modelOverride),
