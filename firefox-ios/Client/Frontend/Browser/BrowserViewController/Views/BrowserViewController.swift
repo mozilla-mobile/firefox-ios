@@ -3462,7 +3462,7 @@ class BrowserViewController: UIViewController,
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
             let isFocusLocationTextFieldOption = options?.contains(.focusLocationField) == true
-
+            let isForceNewTabOption = options?.contains(.forceNewTab) == true
             // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-14406]
             // Wait for tabs restoration because we need the `selectedTab`.
             // The `selectedTab` is `nil` when open firefox from a widget.
@@ -3470,17 +3470,22 @@ class BrowserViewController: UIViewController,
                 AppEventQueue.wait(for: [.tabRestoration(tabManager.windowUUID)]) { [weak self] in
                     ensureMainThread { [weak self] in
                         guard let self, let selectedTab = self.tabManager.selectedTab else { return }
-                        self.handle(selectedTab, isPrivate, isFocusLocationTextFieldOption)
+                        self.handle(selectedTab, isPrivate, isFocusLocationTextFieldOption, isForceNewTabOption)
                     }
                 }
                 return
             }
-            handle(selectedTab, isPrivate, isFocusLocationTextFieldOption)
+            handle(selectedTab, isPrivate, isFocusLocationTextFieldOption, isForceNewTabOption)
         }
     }
 
-    private func handle(_ selectedTab: Tab, _ isPrivate: Bool, _ isFocusLocationTextFieldOption: Bool) {
-        if shouldFocusLocationTextField(for: selectedTab, isPrivate: isPrivate) {
+    private func handle(
+        _ selectedTab: Tab,
+        _ isPrivate: Bool,
+        _ isFocusLocationTextFieldOption: Bool,
+        _ isForceNewTabOption: Bool
+    ) {
+        if !isForceNewTabOption && shouldFocusLocationTextField(for: selectedTab, isPrivate: isPrivate) {
             focusLocationTextField(forTab: selectedTab)
         } else {
             openBlankNewTab(
