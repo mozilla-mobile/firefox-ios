@@ -59,7 +59,7 @@ public struct IPProtectionProxyTokenService: IPProtectionProxyTokenFetching {
             }
             guard (200..<300).contains(http.statusCode) else {
                 let message = String(data: data, encoding: .utf8) ?? "Unknown server error"
-                throw AppAttestServiceError.serverError(description: "\(http.statusCode): \(message)")
+                throw AppAttestServiceError.serverError(statusCode: http.statusCode, description: message)
             }
         }
         return try JSONDecoder().decode(IPProtectionProxyToken.self, from: data)

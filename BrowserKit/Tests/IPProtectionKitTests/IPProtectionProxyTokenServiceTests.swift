@@ -87,7 +87,7 @@ final class IPProtectionProxyTokenServiceTests: XCTestCase {
             _ = try await subject.fetchProxyToken()
             XCTFail("Expected fetchProxyToken to throw on server error.")
         } catch let error as AppAttestServiceError {
-            XCTAssertEqual(error, .serverError(description: "500: boom"))
+            XCTAssertEqual(error, .serverError(statusCode: 500, description: "boom"))
         } catch {
             XCTFail("Unexpected error type: \(error)")
         }
@@ -168,12 +168,14 @@ private final class SequencedURLSession: URLSessionProtocol, @unchecked Sendable
 
     private func next() throws -> (Data, URLResponse) {
         callCount += 1
-        guard !responses.isEmpty else { throw AppAttestServiceError.serverError(description: "no more responses") }
+        guard !responses.isEmpty else {
+            throw AppAttestServiceError.serverError(statusCode: 500, description: "no more responses")
+        }
         return responses.removeFirst()
     }
 
     func bytes(for request: URLRequest) async throws -> (URLSession.AsyncBytes, URLResponse) {
-        throw AppAttestServiceError.serverError(description: "unused")
+        throw AppAttestServiceError.serverError(statusCode: 500, description: "unused")
     }
 
     func dataTaskWith(_ url: URL, completionHandler: @escaping DataTaskResult) -> URLSessionDataTaskProtocol {
