@@ -53,8 +53,8 @@ struct IPProtectionAuthService: IPProtectionAuthenticating {
                 return cached.deviceSessionJwt
             }
 
-            // Retry attesting on missing enrollment, keep the key in other error cases
-            guard case IPProtectionError.notEnrolled = error else { throw error }
+            // Re-attest only when the enrollment is gone, keep the key in other error cases
+            guard IPProtectionError.indicatesLostEnrollment(error) else { throw error }
             return try await enroll()
         }
     }

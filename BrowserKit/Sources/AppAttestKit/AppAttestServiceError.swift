@@ -13,5 +13,5 @@ public enum AppAttestServiceError: Error, Equatable {
     case missingKeyID
     case keychain(description: String)
     case appAttestNotSupported
-    case serverError(description: String)
+    case serverError(statusCode: Int, description: String)
 }

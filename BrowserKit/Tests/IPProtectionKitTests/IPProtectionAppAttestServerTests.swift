@@ -43,7 +43,7 @@ final class IPProtectionAppAttestServerTests: XCTestCase {
             _ = try await subject.fetchChallenge(for: AppAttestTestData.keyID)
             XCTFail("Expected fetchChallenge to throw on server error.")
         } catch let error as AppAttestServiceError {
-            XCTAssertEqual(error, .serverError(description: "500: error"))
+            XCTAssertEqual(error, .serverError(statusCode: 500, description: "error"))
         } catch {
             XCTFail("Unexpected error type: \(error)")
         }
@@ -99,7 +99,7 @@ final class IPProtectionAppAttestServerTests: XCTestCase {
             )
             XCTFail("Expected sendAttestation to throw on server error.")
         } catch let error as AppAttestServiceError {
-            XCTAssertEqual(error, .serverError(description: "403: Forbidden"))
+            XCTAssertEqual(error, .serverError(statusCode: 403, description: "Forbidden"))
             XCTAssertEqual(tokenStore.saveCallCount, 0)
         } catch {
             XCTFail("Unexpected error type: \(error)")
@@ -146,7 +146,7 @@ final class IPProtectionAppAttestServerTests: XCTestCase {
             ))
             XCTFail("Expected refreshSession to throw on server error.")
         } catch let error as AppAttestServiceError {
-            XCTAssertEqual(error, .serverError(description: "401: nope"))
+            XCTAssertEqual(error, .serverError(statusCode: 401, description: "nope"))
             XCTAssertEqual(tokenStore.saveCallCount, 0)
         } catch {
             XCTFail("Unexpected error type: \(error)")

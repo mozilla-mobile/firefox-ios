@@ -115,7 +115,7 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     func test_authenticate_keepsValidCachedDSJ_whenRefreshFails() async throws {
         let tokenStore = MockIPProtectionTokenStore(initial: renewableSession)
         let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
-        refresher.refreshError = AppAttestServiceError.serverError(description: "500: down")
+        refresher.refreshError = AppAttestServiceError.serverError(statusCode: 500, description: "down")
         let remoteServer = MockAppAttestRemoteServer()
         let subject = try makeSubject(
             remoteServer: remoteServer,
@@ -191,6 +191,53 @@ final class IPProtectionAuthServiceTests: XCTestCase {
         XCTAssertEqual(remoteServer.sendAttestationCallCount, 0, "Must not re-attest on a transport failure")
     }
 
+    func test_authenticate_reEnrolls_whenRefreshIsRejected() async throws {
+        let tokenStore = MockIPProtectionTokenStore(initial: expiredSession)
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
+        // The backend answers 401 with reason `dsj-device-not-found` once its device record is gone.
+        refresher.refreshError = AppAttestServiceError.serverError(statusCode: 401, description: "dsj-device-not-found")
+        let subject = try makeSubject(
+            remoteServer: enrollingServer(tokenStore: tokenStore),
+            keyStore: keyStore,
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        let result = try await subject.authenticate()
+
+        XCTAssertEqual(result, "new-dsj", "A rejected credential is only recoverable by re-enrolling")
+        XCTAssertEqual(keyStore.loadKeyID(), "mock-key-id", "Should attest a fresh key")
+    }
+
+    func test_authenticate_rethrows_whenRefreshHitsServerOutage() async throws {
+        let tokenStore = MockIPProtectionTokenStore(initial: expiredSession)
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
+        refresher.refreshError = AppAttestServiceError.serverError(statusCode: 503, description: "unavailable")
+        let remoteServer = MockAppAttestRemoteServer()
+        let subject = try makeSubject(
+            remoteServer: remoteServer,
+            keyStore: keyStore,
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        do {
+            _ = try await subject.authenticate()
+            XCTFail("Expected authenticate to surface the outage.")
+        } catch let error as AppAttestServiceError {
+            XCTAssertEqual(error, .serverError(statusCode: 503, description: "unavailable"))
+        }
+
+        XCTAssertEqual(
+            keyStore.loadKeyID(),
+            AppAttestTestData.keyID,
+            "An outage is retryable, so the attested key must survive"
+        )
+        XCTAssertEqual(remoteServer.sendAttestationCallCount, 0, "Must not re-attest on an outage")
+    }
+
     func test_authenticate_keepsStaleSession_whenEnrollmentFails() async throws {
         let tokenStore = MockIPProtectionTokenStore(initial: expiredSession)
         let failingSession = MockURLSession(with: Data("boom".utf8), response: httpResponse(statusCode: 500))
@@ -206,7 +253,7 @@ final class IPProtectionAuthServiceTests: XCTestCase {
             _ = try await subject.authenticate()
             XCTFail("Expected authenticate to throw when enrollment fails.")
         } catch let error as AppAttestServiceError {
-            XCTAssertEqual(error, .serverError(description: "500: boom"))
+            XCTAssertEqual(error, .serverError(statusCode: 500, description: "boom"))
         }
 
         XCTAssertEqual(
@@ -243,7 +290,7 @@ final class IPProtectionAuthServiceTests: XCTestCase {
             _ = try await subject.authenticate()
             XCTFail("Expected authenticate to throw when enrollment fails.")
         } catch let error as AppAttestServiceError {
-            XCTAssertEqual(error, .serverError(description: "500: boom"))
+            XCTAssertEqual(error, .serverError(statusCode: 500, description: "boom"))
         }
     }
 
