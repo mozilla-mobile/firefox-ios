@@ -12,17 +12,17 @@ public enum QuickAnswersModel: String, Sendable {
     /// The MLPA service backing the model, sent as the service type of every request so the proxy
     /// routes it to the right provider.
     var serviceType: MLPAServiceType {
-        switch self {
-        case .exa: return .quickAnswersExa
-        case .liner: return .quickAnswersLiner
+        return switch self {
+        case .exa: .quickAnswersExa
+        case .liner: .quickAnswersLiner
         }
     }
 
     /// The user-facing name of the model.
     public var displayName: String {
-        switch self {
-        case .exa: return "Exa"
-        case .liner: return "Liner"
+        return switch self {
+        case .exa: "Exa"
+        case .liner: "Liner"
         }
     }
 }
