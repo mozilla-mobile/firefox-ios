@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 /// The provider model that backs the Quick Answers feature.
-public enum QuickAnswersModel: String, Sendable {
+public enum QuickAnswersModel: String, CaseIterable, Sendable {
     case exa
     case liner
 
