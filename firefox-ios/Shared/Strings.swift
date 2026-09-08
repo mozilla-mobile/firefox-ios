@@ -9398,13 +9398,11 @@ extension String {
                 tableName: "WebCompatReporter",
                 value: "URL",
                 comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form.")
-             public static let DetailsAccessibilityLabel = MZLocalizedString(
+            public static let DetailsAccessibilityLabel = MZLocalizedString(
                 key: "WebCompatReporter.Fields.DetailsAccessibilityLabel.v154",
                 tableName: "WebCompatReporter",
                 value: "Describe the issue in detail",
                 comment: "Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form.")
-        }
-        struct v114 {
             public struct Wallpaper {
                 public static let Title = MZLocalizedString(
                     key: "Onboarding.Wallpaper.Title.v114",
