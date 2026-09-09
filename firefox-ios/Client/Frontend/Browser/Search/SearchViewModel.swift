@@ -56,7 +56,7 @@ class SearchViewModel: FeatureFlaggable,
 
     private let maxNumOfFirefoxSuggestions: Int32 = 1
     weak var delegate: SearchViewDelegate?
-    private let isPrivate: Bool
+    let isPrivate: Bool
     public private(set) var isBottomSearchBar: Bool
     var savedQuery = ""
     @MainActor
