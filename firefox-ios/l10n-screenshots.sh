@@ -46,4 +46,12 @@ for lang in $LOCALES; do
         --xcodebuild_formatter xcbeautify \
         $EXTRA_FAST_LANE_ARGS
     echo "Fastlane exited with code: $?"
+
+    # `fastlane snapshot` catches build and test failures, prints its own summary and still
+    # exits 0, so its status cannot be relied on. Fail on the observable outcome instead:
+    # a locale that produced no screenshots did not succeed.
+    if [ -z "$(find "l10n-screenshots/$lang" -name '*.png' -print -quit)" ]; then
+        echo "ERROR: no screenshots were produced for $lang" >&2
+        exit 1
+    fi
 done
