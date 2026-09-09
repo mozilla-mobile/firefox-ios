@@ -393,7 +393,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func makeTab(url: String) -> Tab {
-        let tab = Tab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.url = URL(string: url)
         return tab
     }

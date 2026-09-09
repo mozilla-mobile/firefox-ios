@@ -17,7 +17,7 @@ class LaunchPairingFromURLSettingTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         settingsTable = SettingsTableViewController(style: .grouped, windowUUID: windowUUID)
-        settingsTable.profile = MockProfile()
+        settingsTable.profile = makeProfile()
     }
 
     override func tearDown() async throws {

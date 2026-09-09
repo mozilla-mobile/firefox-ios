@@ -11,7 +11,7 @@ import Shared
 final class NativeErrorPageHelperTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
-        let profile = MockProfile()
+        let profile = makeProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 

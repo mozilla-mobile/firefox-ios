@@ -18,7 +18,7 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
     private var profile: MockProfile!
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         await DependencyHelperMock().bootstrapDependencies()
     }
 

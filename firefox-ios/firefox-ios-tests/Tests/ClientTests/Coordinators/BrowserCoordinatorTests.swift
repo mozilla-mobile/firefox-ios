@@ -38,7 +38,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         try await super.setUp()
         let mockTabManager = MockTabManager()
         self.tabManager = mockTabManager
-        profile = MockProfile()
+        profile = makeProfile()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         setIsAppleSummarizerEnabled(false)
         setIsDeeplinkOptimizationRefactorEnabled(false)
@@ -54,7 +54,6 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     override func tearDown() async throws {
-        profile.shutdown()
         mockRouter = nil
         profile = nil
         overlayModeManager = nil

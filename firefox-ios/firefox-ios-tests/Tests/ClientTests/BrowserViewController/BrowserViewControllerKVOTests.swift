@@ -22,13 +22,12 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
     override func setUp() async throws {
         try await super.setUp()
         tabManager = MockTabManager()
-        profile = MockProfile()
+        profile = makeProfile()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
         setupStore()
     }
 
     override func tearDown() async throws {
-        profile.shutdown()
         profile = nil
         tabManager = nil
         resetStore()

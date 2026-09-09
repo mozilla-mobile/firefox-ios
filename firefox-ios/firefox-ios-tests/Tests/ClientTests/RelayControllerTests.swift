@@ -145,7 +145,7 @@ class RelayControllerTests: XCTestCase {
                        updateDelay: TimeInterval = 5.0) -> RelayController {
         let statusProvider = MockRelayAccountStatusProvider(mockValue: accountStatus)
         mockAccountStatusProvider = statusProvider
-        let profile = MockProfile()
+        let profile = makeProfile()
         mockProfile = profile
         let mockConfig = RelayController.RelayUpdateConfiguration(postLaunchUpdateDelay: updateDelay)
         let subject =  RelayController(logger: MockLogger(),

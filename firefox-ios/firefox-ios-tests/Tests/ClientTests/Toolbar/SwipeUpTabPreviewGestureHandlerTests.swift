@@ -24,7 +24,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
         tabManager = MockTabManager()
         mockVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
         themeManager = MockThemeManager()
@@ -34,7 +34,6 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
     }
 
     override func tearDown() async throws {
-        profile.shutdown()
         profile = nil
         tabManager = nil
         mockVC = nil

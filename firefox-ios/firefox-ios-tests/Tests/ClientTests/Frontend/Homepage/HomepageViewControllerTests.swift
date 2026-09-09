@@ -335,7 +335,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_restoreContentOffset_withStoredOffset_setsCollectionViewOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         homepageTabStateStore.updateState(for: tab.tabUUID) { $0.scrollOffsetY = 180 }
@@ -359,7 +359,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_restoreContentOffset_withoutStoredOffset_scrollsToTop() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         let subject = createSubject(tabManager: tabManager)
@@ -382,7 +382,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_restoreContentOffset_whenNotForcedAndSameTab_doesNotRestoreStoredOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         homepageTabStateStore.updateState(for: tab.tabUUID) { $0.scrollOffsetY = 180 }
@@ -407,7 +407,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_viewDidDisappear_savesVerticalScrollOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         let subject = createSubject(tabManager: tabManager)
@@ -431,7 +431,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_stopScrollingAndSaveVerticalScrollOffset_savesCurrentOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         let subject = createSubject(tabManager: tabManager)
@@ -455,7 +455,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_scrollViewDidEndDragging_savesVerticalScrollOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         let subject = createSubject(tabManager: tabManager)
@@ -479,7 +479,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_scrollViewDidEndDecelerating_savesVerticalScrollOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         let subject = createSubject(tabManager: tabManager)

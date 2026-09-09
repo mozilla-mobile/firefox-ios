@@ -17,7 +17,7 @@ final class RemoteTabsCoordinatorTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockRouter = MockRouter(navigationController: MockNavigationController())
         mockApplicationHelper = MockApplicationHelper()
         qrDelegate = MockQRCodeViewControllerDelegate()

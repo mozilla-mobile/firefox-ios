@@ -37,7 +37,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     @MainActor
     override func setUp() async throws {
         try await super.setUp()
-        Self.setupTelemetry(with: MockProfile())
+        Self.setupTelemetry(with: makeProfile())
         messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
         applicationHelper = MockApplicationHelper()
         subject = GleanPlumbMessageManager(
