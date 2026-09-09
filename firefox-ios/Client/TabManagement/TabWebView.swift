@@ -31,10 +31,18 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     private var uiTestLeakView: UIView? // Used for automation
     private var certStore: CertStore
 
-    isolated deinit {
-        // Note: this has no effect in production. This view is only
-        // created during automation testing as a sentinel UI element.
-        uiTestLeakView?.removeFromSuperview()
+    deinit {
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("TabWebView not deallocated on the main thread.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            // Note: this has no effect in production. This view is only
+            // created during automation testing as a sentinel UI element.
+            uiTestLeakView?.removeFromSuperview()
+        }
     }
 
     override var hasOnlySecureContent: Bool {

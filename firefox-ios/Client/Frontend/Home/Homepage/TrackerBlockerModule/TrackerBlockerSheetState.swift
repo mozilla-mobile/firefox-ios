@@ -17,6 +17,13 @@ import UIKit
 ///
 /// `TrackerBlockerSheetStateProvider` builds whichever of the three the persisted stats call for.
 struct TrackerBlockerSheetState {
+    /// Which of the three visual states described above the sheet is in.
+    enum Presentation {
+        case empty
+        case weeklyReset
+        case filled
+    }
+
     /// A single tracker category row.
     struct Category {
         /// The tracker categories the weekly count is broken down by. These mirror the ones the enhanced
@@ -79,8 +86,28 @@ struct TrackerBlockerSheetState {
     let categories: [Category]
     /// Lifetime total shown in the footer pill. `nil` hides the footer (empty state).
     let total: Total?
+    /// Every tracker blocked so far, including this week. Unlike `total` this isn't tied to the footer, which
+    /// needs a start date to count from, so it is available whatever the sheet shows.
+    let lifetimeTotal: Int
 
-    var isEmpty: Bool { weeklyCount == nil }
+    init(weeklyCount: Int?,
+         emptyMessage: String?,
+         categories: [Category],
+         total: Total?,
+         lifetimeTotal: Int = 0) {
+        self.weeklyCount = weeklyCount
+        self.emptyMessage = emptyMessage
+        self.categories = categories
+        self.total = total
+        self.lifetimeTotal = lifetimeTotal
+    }
+
+    var presentation: Presentation {
+        guard let weeklyCount else { return .empty }
+        return weeklyCount == 0 ? .weeklyReset : .filled
+    }
+
+    var isEmpty: Bool { presentation == .empty }
 
     /// The share of this week's blocked trackers that belongs to `category`, in `0...1`, used to size its
     /// progress bar. Returns `0` when nothing was blocked this week or when the category has no count.

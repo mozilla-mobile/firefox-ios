@@ -39,6 +39,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     override func setUp() async throws {
         try await super.setUp()
 
+        browserScreen = BrowserScreen(app: app)
         launchApp()
     }
 
@@ -653,7 +654,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         mozWaitForElementToExist(app.navigationBars["App Icon"])
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/edit/3408300
+    // https://mozilla.testrail.io/index.php?/cases/view/3408300
     func testLongTapFirefoxIconOpenLastBookmark() throws {
         guard #available(iOS 18, *) else {
             throw XCTSkip("Test requires iOS 18+ due to app icon springboard context menu behavior")

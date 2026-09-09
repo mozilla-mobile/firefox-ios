@@ -147,6 +147,80 @@ class NewTabSettingsTest: BaseTestCase {
         browserScreen.assertKeyboardBehaviorOnNewTab()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306878
+    // Regression
+    func testKeyboardRaisedWhenBlankTabOpenedFromContextMenusAndWidget() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior")
+        }
+        if !isFennec {
+            throw XCTSkip("The Firefox widget is only added to the home screen on the Fennec scheme")
+        }
+        browserScreen = BrowserScreen(app: app)
+        newTabSettingsScreen = NewTabSettingsScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+        topSiteScreen = TopSitesScreen(app: app)
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
+
+        // Step 1: set the new tab page to Blank
+        toolbarScreen.assertSettingsButtonExists()
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(NewTabSettings)
+        newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
+        navigator.performAction(Action.SelectNewTabAsBlankPage)
+
+        // Steps 2-3: a new tab opens blank, and tapping the address bar raises the keyboard
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        topSiteScreen.assertNotVisibleTopSites()
+        browserScreen.tapAddressBar()
+        browserScreen.assertAddressBarFocusedWithKeyboard()
+        leaveAddressBarEditing()
+
+        // Steps 4-6: the tab tray long press menu, which is not offered on iPad
+        if !iPad() {
+            navigator.nowAt(NewTabScreen)
+            navigator.performAction(Action.OpenNewTabLongPressTabsButton)
+            assertBlankTabOpenedWithKeyboardRaised()
+            leaveAddressBarEditing()
+        }
+
+        // Steps 7-9: the app icon's New Tab quick action
+        navigator.nowAt(NewTabScreen)
+        springBoardScreen.pressHomeButton()
+        springBoardScreen.assertFennecIconExists()
+        springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        springBoardScreen.tapNewTabButton()
+        assertBlankTabOpenedWithKeyboardRaised()
+        leaveAddressBarEditing()
+
+        // Steps 10-12: the Firefox widget's New Search shortcut
+        springBoardScreen.pressHomeButton()
+        springBoardScreen.goToWidgetPage()
+        if !springBoardScreen.isFirefoxWidgetPresent() {
+            springBoardScreen.addFirefoxQuickActionsWidget(named: "Fennec")
+        }
+        springBoardScreen.tapFirefoxWidget()
+        assertBlankTabOpenedWithKeyboardRaised()
+    }
+
+    /// Each entry point leaves the address bar being edited, which the screen graph has no state
+    /// for, so the editing state is dropped before navigating on.
+    private func leaveAddressBarEditing() {
+        browserScreen.tapCancelEditButton()
+        browserScreen.assertAddressBarUnfocusedWithoutKeyboard()
+    }
+
+    /// Steps 4-6, 7-9 and 10-12 all repeat: the new tab is blank with the keyboard raised, the "<"
+    /// button leaves the editing state, and tapping the address bar raises the keyboard again.
+    private func assertBlankTabOpenedWithKeyboardRaised() {
+        topSiteScreen.assertNotVisibleTopSites()
+        browserScreen.assertAddressBarFocusedWithKeyboard()
+        browserScreen.tapCancelEditButton()
+        browserScreen.assertAddressBarUnfocusedWithoutKeyboard()
+        browserScreen.tapAddressBar()
+        browserScreen.assertAddressBarFocusedWithKeyboard()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306875
     // Smoketest
     func testNewTabCustomURLKeyboardNotRaised() {

@@ -50,7 +50,8 @@ struct TrackerBlockerSheetStateProvider: TrackerBlockerSheetStateProviding {
             // The footer needs a date to count from; without one the counts are still shown on their own.
             total: statsStore.trackingStartDate().map {
                 TrackerBlockerSheetState.Total(count: lifetimeTotal, sinceDate: Self.dateText(for: $0))
-            }
+            },
+            lifetimeTotal: lifetimeTotal
         )
     }
 

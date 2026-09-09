@@ -48,6 +48,18 @@ final class SpringboardScreen {
         sel.APP_ICON_BUTTON.element(in: springboard)
     }
 
+    private var firefoxWidget: XCUIElement {
+        sel.FIREFOX_WIDGET.element(in: springboard)
+    }
+
+    private var screenTimeIcon: XCUIElement {
+        sel.SCREEN_TIME_ICON.element(in: springboard)
+    }
+
+    private var searchWidgetsField: XCUIElement {
+        sel.SEARCH_WIDGETS_FIELD.element(in: springboard)
+    }
+
     private var notificationsPermissionAlert: XCUIElement {
         sel.NOTIFICATIONS_PERMISSION_ALERT.element(in: springboard)
     }
@@ -101,6 +113,62 @@ final class SpringboardScreen {
 
     func tapAppIconButton() {
         appIconButton.waitAndTap()
+    }
+
+    // MARK: - Widget Actions
+
+    /// Swipes to the page that holds the widgets, left of the first home screen page.
+    func goToWidgetPage() {
+        if #available(iOS 26, *) {
+            springboard.swipeRight()
+            springboard.swipeRight()
+        } else {
+            while !screenTimeIcon.exists {
+                springboard.swipeRight()
+            }
+        }
+    }
+
+    func isFirefoxWidgetPresent(maxSwipes: Int = 3) -> Bool {
+        var numberOfSwipes = 0
+        while !firefoxWidget.exists && numberOfSwipes < maxSwipes {
+            springboard.swipeUp()
+            numberOfSwipes += 1
+        }
+        return firefoxWidget.exists
+    }
+
+    /// Adds the Firefox Quick Actions widget, the first one the gallery offers for the app.
+    func addFirefoxQuickActionsWidget(named widgetName: String) {
+        if BaseTestCase().iPad() {
+            springboard.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).press(forDuration: 3)
+        } else {
+            screenTimeIcon.press(forDuration: 3)
+            sel.EDIT_HOME_SCREEN_BUTTON.element(in: springboard).tapIfExists()
+            sel.EDIT_BUTTON.element(in: springboard).tapIfExists()
+        }
+        sel.ADD_WIDGET_BUTTON.element(in: springboard).waitAndTap()
+        searchWidgetsField.mozWaitElementHittable(timeout: TIMEOUT)
+        searchWidgetsField.waitAndTap()
+        searchWidgetsField.typeText(widgetName)
+        springboard.cells
+            .matching(NSPredicate(format: "label CONTAINS[c] %@", widgetName + " ("))
+            .element
+            .waitAndTap()
+        BaseTestCase().mozWaitForElementToExist(sel.QUICK_ACTIONS_LABEL.element(in: springboard))
+        sel.CONFIRM_ADD_WIDGET_BUTTON.element(in: springboard).waitAndTap()
+        springboard.swipeDown()
+        sel.DONE_BUTTON.element(in: springboard).waitAndTap()
+    }
+
+    func tapFirefoxWidget() {
+        guard isFirefoxWidgetPresent() else {
+            let labels = springboard.buttons.allElementsBoundByIndex.map { $0.label }
+            XCTFail("Firefox widget not found on the home screen. Springboard buttons: \(labels)")
+            return
+        }
+        firefoxWidget.mozWaitElementHittable(timeout: TIMEOUT)
+        firefoxWidget.waitAndTap()
     }
 
     // MARK: - Notifications Permission Actions

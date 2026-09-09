@@ -90,15 +90,48 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.dismissCalled, 1)
     }
 
+    func test_resolvedModel_withoutOverride_returnsNimbusModel() {
+        setupNimbus(model: .liner)
+        let subject = createSubject()
+
+        XCTAssertEqual(subject.resolvedModel(), QuickAnswersKit.QuickAnswersModel.liner)
+    }
+
+    func test_resolvedModel_withOverride_returnsOverriddenModel() {
+        setupNimbus(model: .liner)
+        let prefs = MockProfilePrefs()
+        prefs.setString(QuickAnswersKit.QuickAnswersModel.exa.rawValue,
+                        forKey: PrefsKeys.QuickAnswers.modelOverride)
+        let subject = createSubject(prefs: prefs)
+
+        XCTAssertEqual(subject.resolvedModel(), QuickAnswersKit.QuickAnswersModel.exa)
+    }
+
+    func test_resolvedModel_withUnknownOverride_returnsNimbusModel() {
+        setupNimbus(model: .liner)
+        let prefs = MockProfilePrefs()
+        prefs.setString("unknown-model", forKey: PrefsKeys.QuickAnswers.modelOverride)
+        let subject = createSubject(prefs: prefs)
+
+        XCTAssertEqual(subject.resolvedModel(), QuickAnswersKit.QuickAnswersModel.liner)
+    }
+
     // MARK: - Helper Methods
+    private func setupNimbus(model: Client.QuickAnswersModel) {
+        FxNimbus.shared.features.quickAnswersFeature.with { _, _ in
+            QuickAnswersFeature(enabled: true, model: model)
+        }
+    }
+
     private func createSubject(
+        prefs: Prefs = MockProfilePrefs(),
         onNavigate: @escaping (QuickAnswersNavigationType) -> Void = { _ in },
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> QuickAnswersCoordinator {
         let subject = QuickAnswersCoordinator(
             parentCoordinatorDelegate: parentCoordinator,
-            prefs: MockProfilePrefs(),
+            prefs: prefs,
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             router: router,

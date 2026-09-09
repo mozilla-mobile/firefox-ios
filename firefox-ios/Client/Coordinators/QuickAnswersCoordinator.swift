@@ -47,10 +47,20 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             windowUUID: windowUUID,
             themeManager: themeManager,
             telemetry: DefaultQuickAnswersTelemetry(),
-            configFetcher: RemoteQuickAnswersConfigFetcher(model: nimbusModel()),
+            configFetcher: RemoteQuickAnswersConfigFetcher(model: resolvedModel()),
             learnMoreURL: Self.learnMoreURL,
         )
         router.present(controller, animated: shouldAnimateTransition)
+    }
+
+    /// The model backing Quick Answers: the debug override set from the hidden settings when
+    /// present, the Nimbus configured one otherwise.
+    func resolvedModel() -> QuickAnswersKit.QuickAnswersModel {
+        guard let rawValue = prefs.stringForKey(PrefsKeys.QuickAnswers.modelOverride),
+              let overriddenModel = QuickAnswersKit.QuickAnswersModel(rawValue: rawValue) else {
+            return nimbusModel()
+        }
+        return overriddenModel
     }
 
     /// Reads the Nimbus-configured Quick Answers model and maps it to the `QuickAnswersKit` enum,

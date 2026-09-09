@@ -63,6 +63,7 @@ final class BrowserCoordinator: BaseCoordinator,
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let googleLensService: GoogleLensServicing
+    private lazy var trackerBlockerTelemetry = TrackerBlockerTelemetry(gleanWrapper: glean)
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
@@ -684,6 +685,19 @@ final class BrowserCoordinator: BaseCoordinator,
         nav.pushViewController(viewController, animated: true)
     }
 
+    func pressedOpenSupportPage(url: URL) {
+        askedToOpen(url: url, withTitle: nil)
+    }
+
+    func askedToOpen(url: URL?, withTitle title: NSAttributedString?) {
+        guard let url,
+              let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
+        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        viewController.settingsTitle = title
+        viewController.url = url
+        nav.pushViewController(viewController, animated: true)
+    }
+
     func presentSavePDFController() {
         guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
 
@@ -841,9 +855,16 @@ final class BrowserCoordinator: BaseCoordinator,
         let stateProvider = TrackerBlockerSheetStateProvider(
             statsStore: DefaultTrackerBlockStatsStoreUtility(prefs: profile.prefs)
         )
+        let state = stateProvider.sheetState()
+
+        trackerBlockerTelemetry.dashboardViewed(
+            presentation: state.presentation,
+            lifetimeCount: state.lifetimeTotal
+        )
+
         let viewController = TrackerBlockerSheetViewController(
             windowUUID: windowUUID,
-            state: stateProvider.sheetState(),
+            state: state,
             themeManager: themeManager
         )
         router.present(viewController, animated: true)

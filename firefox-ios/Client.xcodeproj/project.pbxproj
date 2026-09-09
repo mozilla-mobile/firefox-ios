@@ -935,10 +935,6 @@
 		8A19ACB62A3290F9001C2147 /* NotificationsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACB52A3290F9001C2147 /* NotificationsSetting.swift */; };
 		8A19ACB82A329128001C2147 /* PrivacyPolicySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACB72A329128001C2147 /* PrivacyPolicySetting.swift */; };
 		8A1A66072CDD168A00DD883C /* MockTopSiteHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1A66062CDD168A00DD883C /* MockTopSiteHistoryManager.swift */; };
-		8A1A93582B757C7C0069C190 /* gradient.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A1A93522B757C7B0069C190 /* gradient.json */; };
-		8A1A93592B757C7C0069C190 /* landscape.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A1A93532B757C7B0069C190 /* landscape.json */; };
-		8A1A935A2B757C7C0069C190 /* portrait.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A1A93542B757C7B0069C190 /* portrait.json */; };
-		8A1A935B2B757C7C0069C190 /* wave.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A1A93552B757C7B0069C190 /* wave.json */; };
 		8A1AB6BB2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1AB6BA2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift */; };
 		8A1C0B8F2E723EDF0030DCC8 /* AppLaunchUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1C0B8E2E723EDC0030DCC8 /* AppLaunchUtilTests.swift */; };
 		8A1C0B912FCB000100AD5DB0 /* AdsClientDocumentsDirectoryMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1C0B902FCB000100AD5DB0 /* AdsClientDocumentsDirectoryMigrationTests.swift */; };
@@ -1228,7 +1224,6 @@
 		8AAEBA062BF51141000C02B5 /* MicrosurveyMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAEBA052BF51141000C02B5 /* MicrosurveyMiddleware.swift */; };
 		8AAEBA082BF52708000C02B5 /* MicrosurveyCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAEBA072BF52708000C02B5 /* MicrosurveyCoordinator.swift */; };
 		8AAEBA0B2BF53AF6000C02B5 /* MicrosurveyStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAEBA092BF53AB5000C02B5 /* MicrosurveyStateTests.swift */; };
-		8AB30EC82B6C038600BD9A9B /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 8AB30EC72B6C038600BD9A9B /* Lottie */; };
 		8AB53B3A2D4138F200C97590 /* MessageCardMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB53B392D4138ED00C97590 /* MessageCardMiddleware.swift */; };
 		8AB53B3E2D41463900C97590 /* MessageCardAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB53B3D2D41463400C97590 /* MessageCardAction.swift */; };
 		8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */; };
@@ -1470,6 +1465,7 @@
 		AA459F872F630F3500D05D04 /* QuickAnswersKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA459F862F630F3500D05D04 /* QuickAnswersKit */; };
 		AA4D99432E857AF300BB039D /* MockRecentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */; };
 		AA5001492F912F610065A279 /* ChangeMLPAEndpointSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5001482F912F530065A279 /* ChangeMLPAEndpointSetting.swift */; };
+		AA5001512FFC000100AD1FBD /* QuickAnswersModelSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5001502FFC000100AD1FBD /* QuickAnswersModelSetting.swift */; };
 		AA5E81472EB12BDC00919E60 /* TranslationsMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */; };
 		AA5E81482EF5000000000001 /* PreferredTranslationLanguagesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5E81492EF5000000000001 /* PreferredTranslationLanguagesManager.swift */; };
 		AA62FA6A2EF2F49A009785D9 /* LocaleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B67B2CF65DE300AFA1FE /* LocaleProvider.swift */; };
@@ -9800,10 +9796,6 @@
 		8A19ACB52A3290F9001C2147 /* NotificationsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSetting.swift; sourceTree = "<group>"; };
 		8A19ACB72A329128001C2147 /* PrivacyPolicySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicySetting.swift; sourceTree = "<group>"; };
 		8A1A66062CDD168A00DD883C /* MockTopSiteHistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTopSiteHistoryManager.swift; sourceTree = "<group>"; };
-		8A1A93522B757C7B0069C190 /* gradient.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gradient.json; sourceTree = "<group>"; };
-		8A1A93532B757C7B0069C190 /* landscape.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = landscape.json; sourceTree = "<group>"; };
-		8A1A93542B757C7B0069C190 /* portrait.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = portrait.json; sourceTree = "<group>"; };
-		8A1A93552B757C7B0069C190 /* wave.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wave.json; sourceTree = "<group>"; };
 		8A1AB6BA2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTelemetry.swift; sourceTree = "<group>"; };
 		8A1C0B8E2E723EDC0030DCC8 /* AppLaunchUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtilTests.swift; sourceTree = "<group>"; };
 		8A1C0B902FCB000100AD5DB0 /* AdsClientDocumentsDirectoryMigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsClientDocumentsDirectoryMigrationTests.swift; sourceTree = "<group>"; };
@@ -10570,6 +10562,7 @@
 		AA3CEBAC2ECB853400DDEFEF /* SearchTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTelemetryTests.swift; sourceTree = "<group>"; };
 		AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRecentSearchProvider.swift; sourceTree = "<group>"; };
 		AA5001482F912F530065A279 /* ChangeMLPAEndpointSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMLPAEndpointSetting.swift; sourceTree = "<group>"; };
+		AA5001502FFC000100AD1FBD /* QuickAnswersModelSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersModelSetting.swift; sourceTree = "<group>"; };
 		AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsMiddleware.swift; sourceTree = "<group>"; };
 		AA5E81492EF5000000000001 /* PreferredTranslationLanguagesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredTranslationLanguagesManager.swift; sourceTree = "<group>"; };
 		AA6A6F372EF57EB800D1912D /* SystemLocaleProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemLocaleProviderTests.swift; sourceTree = "<group>"; };
@@ -12437,7 +12430,6 @@
 				5A984D362C8A3407007938C9 /* Kingfisher in Frameworks */,
 				819656172C80C6F300E62323 /* MenuKit in Frameworks */,
 				8CC185F72FF6A0D1004A124F /* WebCompatReporterKit in Frameworks */,
-				8AB30EC82B6C038600BD9A9B /* Lottie in Frameworks */,
 				5A871488292EA1440039A5BD /* Fuzi in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				435C85F02788F4D00072B526 /* Glean in Frameworks */,
@@ -14272,25 +14264,6 @@
 			path = Privacy;
 			sourceTree = "<group>";
 		};
-		8A1A93562B757C7B0069C190 /* DataClearanceAnimation */ = {
-			isa = PBXGroup;
-			children = (
-				8A1A93522B757C7B0069C190 /* gradient.json */,
-				8A1A93532B757C7B0069C190 /* landscape.json */,
-				8A1A93542B757C7B0069C190 /* portrait.json */,
-				8A1A93552B757C7B0069C190 /* wave.json */,
-			);
-			path = DataClearanceAnimation;
-			sourceTree = "<group>";
-		};
-		8A1A93572B757C7B0069C190 /* LottieFiles */ = {
-			isa = PBXGroup;
-			children = (
-				8A1A93562B757C7B0069C190 /* DataClearanceAnimation */,
-			);
-			path = LottieFiles;
-			sourceTree = "<group>";
-		};
 		8A1CBB932BE017BE008BE4D4 /* Prompt */ = {
 			isa = PBXGroup;
 			children = (
@@ -14422,6 +14395,7 @@
 				1DA710062AE7106B00677F6B /* AppDataUsageReportSetting.swift */,
 				1D1418772DC92DFC004BBFAD /* ChangeRSServerSetting.swift */,
 				AA5001482F912F530065A279 /* ChangeMLPAEndpointSetting.swift */,
+				AA5001502FFC000100AD1FBD /* QuickAnswersModelSetting.swift */,
 				8A3EF7FE2A2FCFBB00796E3A /* ChangeToChinaSetting.swift */,
 				8A093D7C2A4B3E4F0099ABA5 /* DebugSettingsDelegate.swift */,
 				8A3EF7F12A2FCF4000796E3A /* DeleteExportedDataSetting.swift */,
@@ -17778,7 +17752,6 @@
 				0B78DC6C2E3C9CDA00804872 /* Summarizer */,
 				AA5E81452EB12BAB00919E60 /* Translations */,
 				FB16062100000000000000E0 /* GoogleLens */,
-				8A1A93572B757C7B0069C190 /* LottieFiles */,
 				392ED7D51D0AEEEE009D9B62 /* Accessors */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
 				43D00490296FC44B00CB0F31 /* Autofill */,
@@ -18381,7 +18354,6 @@
 				5A06135929D6052E008F3D38 /* TabDataStore */,
 				216A0D752A40E7AB008077BA /* Redux */,
 				8AF2D0FB2A5F272A00C7DD69 /* ComponentLibrary */,
-				8AB30EC72B6C038600BD9A9B /* Lottie */,
 				AB2AC6622BCFD0A200022AAB /* X509 */,
 				E177989F2BD8043800F6F0EB /* ToolbarKit */,
 				5A984D352C8A3407007938C9 /* Kingfisher */,
@@ -18732,7 +18704,6 @@
 				43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */,
 				43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */,
 				5A37861729A2C337006B3A34 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
-				8AB30EC62B6C038600BD9A9B /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				AB2AC6612BCFD0A200022AAB /* XCRemoteSwiftPackageReference "swift-certificates" */,
 				5A984D322C8A31A0007938C9 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				EDD592482FC1090C0015EF9E /* XCRemoteSwiftPackageReference "ModifiedCopyMacro" */,
@@ -18969,7 +18940,6 @@
 				EDFEE3F42DE670B8005ADE03 /* gleanProbes.xcfilelist in Resources */,
 				BA1237BA2DAE55EA00BB6333 /* NightModeAllFramesAtDocumentStart.js in Resources */,
 				BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */,
-				8A1A935B2B757C7C0069C190 /* wave.json in Resources */,
 				ED9DB4202DC57DF80072FF5F /* pings.yaml in Resources */,
 				ED9DB4212DC57DF80072FF5F /* tags.yaml in Resources */,
 				C2F335342ECE33720071588A /* translations-engine.worker.js in Resources */,
@@ -18997,13 +18967,11 @@
 				1D91C17F2CF11EA500B24960 /* disconnect-block-cookies-content.json in Resources */,
 				E1AF3563286DE5F800960045 /* FullFunctionalTestPlan.xctestplan in Resources */,
 				E1AF3567286DE5F800960045 /* PerformanceTestPlan.xctestplan in Resources */,
-				8A1A935A2B757C7C0069C190 /* portrait.json in Resources */,
 				8A3709E12DC128EA004B9350 /* defaultEnabledOff.json in Resources */,
 				7B2142FE1E5E055000CDD3FC /* InfoPlist.strings in Resources */,
 				E1AF27442A17BCF700CE5991 /* engagementNotificationWithoutConditions.json in Resources */,
 				E69922171B94E3EF007C480D /* Licenses.html in Resources */,
 				8A1F6C2F2BC5A62400DA6F86 /* PrivacyInfo.xcprivacy in Resources */,
-				8A1A93592B757C7C0069C190 /* landscape.json in Resources */,
 				ED73684C2E4E61CD00DAF88E /* AppIcon_Developer.icon in Resources */,
 				ED73684D2E4E61CD00DAF88E /* AppIcon_Beta.icon in Resources */,
 				5FACA10C2D099A9E00B289BC /* AccessibilityTestPlan.xctestplan in Resources */,
@@ -19017,7 +18985,6 @@
 				8C29376C2BF79EE000146613 /* AddressFormManager.mjs in Resources */,
 				43175DB626B8774D00C41C31 /* Ads.js in Resources */,
 				D0FCF8081FE4772D004A7995 /* MainFrameAtDocumentStart.js in Resources */,
-				8A1A93582B757C7C0069C190 /* gradient.json in Resources */,
 				74821FFE1DB6D3AC00EEEA72 /* MailSchemes.plist in Resources */,
 				D308EE561CBF0BF5006843F2 /* CertError.css in Resources */,
 				E1AF3566286DE5F800960045 /* Smoketest.xctestplan in Resources */,
@@ -19938,6 +19905,7 @@
 				21618A8A2A4389F700A5189E /* PresentedComponentsState.swift in Sources */,
 				8CC617092C35463B001C7688 /* AddressModifiedStatus.swift in Sources */,
 				AA5001492F912F610065A279 /* ChangeMLPAEndpointSetting.swift in Sources */,
+				AA5001512FFC000100AD1FBD /* QuickAnswersModelSetting.swift in Sources */,
 				EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */,
 				96D95016270238500079D39D /* MainThreadThrottler.swift in Sources */,
 				8A4593C92BF7BECA002758DE /* MicrosurveyTableHeaderView.swift in Sources */,
@@ -29810,7 +29778,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		282731771ABC9BE800AA1954 /* Fennec */ = {
+		282731771ABC9BE800AA1954 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -29825,9 +29793,9 @@
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_VERSION = 6.0;
 			};
-			name = Fennec;
+			name = Debug;
 		};
-		2827317A1ABC9BE800AA1954 /* Fennec */ = {
+		2827317A1ABC9BE800AA1954 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -29837,9 +29805,9 @@
 				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = Fennec;
+			name = Debug;
 		};
-		288A2DA01AB8B3260023ABC3 /* Fennec */ = {
+		288A2DA01AB8B3260023ABC3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -29865,9 +29833,9 @@
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
 			};
-			name = Fennec;
+			name = Debug;
 		};
-		2FA436151ABB83B4008031D1 /* Fennec */ = {
+		2FA436151ABB83B4008031D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
@@ -29875,24 +29843,17 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(SRCROOT)\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
 					"\"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**\"",
-					"ThirdParty/ecec/include/**",
-					FxA/FxA/include,
 				);
 				INFOPLIST_FILE = Account/Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/FxA/FxA/lib",
-				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				SWIFT_VERSION = 6.0;
 			};
-			name = Fennec;
+			name = Debug;
 		};
-		2FA436191ABB83B4008031D1 /* Fennec */ = {
+		2FA436191ABB83B4008031D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -29902,9 +29863,9 @@
 				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = Fennec;
+			name = Debug;
 		};
-		2FCAE2341ABB51F900877008 /* Fennec */ = {
+		2FCAE2341ABB51F900877008 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEFINES_MODULE = YES;
@@ -29915,9 +29876,9 @@
 				SWIFT_VERSION = 6.0;
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = Fennec;
+			name = Debug;
 		};
-		2FCAE2381ABB51F900877008 /* Fennec */ = {
+		2FCAE2381ABB51F900877008 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -29927,7 +29888,7 @@
 				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		3958DAB01ED98DCB0054AA27 /* Fennec_Enterprise */ = {
 			isa = XCBuildConfiguration;
@@ -29955,7 +29916,7 @@
 			};
 			name = Fennec_Enterprise;
 		};
-		397848E31ED86605004C0C0B /* Fennec */ = {
+		397848E31ED86605004C0C0B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/Fennec.entitlements";
@@ -29970,7 +29931,7 @@
 				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 6.0;
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		397848E51ED86605004C0C0B /* Firefox */ = {
 			isa = XCBuildConfiguration;
@@ -30007,7 +29968,7 @@
 			};
 			name = FirefoxBeta;
 		};
-		3B43E3D71D95C48E00BBA9DB /* Fennec */ = {
+		3B43E3D71D95C48E00BBA9DB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -30017,7 +29978,7 @@
 				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		3B43E3D81D95C48E00BBA9DB /* Firefox */ = {
 			isa = XCBuildConfiguration;
@@ -30041,7 +30002,7 @@
 			};
 			name = FirefoxBeta;
 		};
-		3BFE4B0E1D342FB900DDF53F /* Fennec */ = {
+		3BFE4B0E1D342FB900DDF53F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -30056,7 +30017,7 @@
 				SWIFT_VERSION = 6.0;
 				TEST_TARGET_NAME = Client;
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		3BFE4B0F1D342FB900DDF53F /* Firefox */ = {
 			isa = XCBuildConfiguration;
@@ -30092,7 +30053,7 @@
 			};
 			name = FirefoxBeta;
 		};
-		4354D3E124EEEEC5001184F6 /* Fennec */ = {
+		4354D3E124EEEEC5001184F6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/Fennec.entitlements;
@@ -30108,7 +30069,7 @@
 				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 6.0;
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		4354D3E224EEEEC5001184F6 /* Fennec_Enterprise */ = {
 			isa = XCBuildConfiguration;
@@ -30172,7 +30133,7 @@
 			};
 			name = FirefoxBeta;
 		};
-		43BE5786278BA4D900491291 /* Fennec */ = {
+		43BE5786278BA4D900491291 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -30199,7 +30160,7 @@
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		43BE5787278BA4D900491291 /* Fennec_Enterprise */ = {
 			isa = XCBuildConfiguration;
@@ -30312,7 +30273,6 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)",
 					"$(SDKROOT)/usr/include/libxml2",
 				);
@@ -30612,18 +30572,11 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(SRCROOT)\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
 					"\"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**\"",
-					"ThirdParty/ecec/include/**",
-					FxA/FxA/include,
 				);
 				INFOPLIST_FILE = Account/Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/FxA/FxA/lib",
-				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				SWIFT_VERSION = 6.0;
 			};
@@ -31047,18 +31000,11 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(SRCROOT)\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
 					"\"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**\"",
-					"ThirdParty/ecec/include/**",
-					FxA/FxA/include,
 				);
 				INFOPLIST_FILE = Account/Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/FxA/FxA/lib",
-				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				SWIFT_VERSION = 6.0;
 			};
@@ -31280,7 +31226,7 @@
 			};
 			name = Fennec_Testing;
 		};
-		8CF609332EA8D46F00F069B6 /* Fennec */ = {
+		8CF609332EA8D46F00F069B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -31366,7 +31312,7 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		8CF609342EA8D46F00F069B6 /* Fennec_Testing */ = {
 			isa = XCBuildConfiguration;
@@ -31776,14 +31722,14 @@
 			};
 			name = FirefoxStaging;
 		};
-		C2A1EA0E2F4383F100DD202A /* Fennec */ = {
+		C2A1EA0E2F4383F100DD202A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		C2A1EA0F2F4383F100DD202A /* Fennec_Testing */ = {
 			isa = XCBuildConfiguration;
@@ -31830,7 +31776,7 @@
 			};
 			name = FirefoxStaging;
 		};
-		D39FA1681A83E0EC00EE869C /* Fennec */ = {
+		D39FA1681A83E0EC00EE869C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -31840,7 +31786,7 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		D39FA1691A83E0EC00EE869C /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -31852,7 +31798,7 @@
 			};
 			name = Release;
 		};
-		E17EFC352CD16F5B00169A1F /* Fennec */ = {
+		E17EFC352CD16F5B00169A1F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -31924,7 +31870,7 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		E17EFC362CD16F5B00169A1F /* Fennec_Testing */ = {
 			isa = XCBuildConfiguration;
@@ -32375,18 +32321,11 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(SRCROOT)\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
 					"\"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**\"",
-					"ThirdParty/ecec/include/**",
-					FxA/FxA/include,
 				);
 				INFOPLIST_FILE = Account/Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/FxA/FxA/lib",
-				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				SWIFT_VERSION = 6.0;
 			};
@@ -32434,7 +32373,7 @@
 			};
 			name = Firefox;
 		};
-		E601384C1C89EAE600DF9756 /* Fennec */ = {
+		E601384C1C89EAE600DF9756 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -32449,7 +32388,7 @@
 				TEST_TARGET_NAME = Client;
 				USES_XCTRUNNER = YES;
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		E601384D1C89EAE600DF9756 /* Firefox */ = {
 			isa = XCBuildConfiguration;
@@ -32485,7 +32424,7 @@
 			};
 			name = FirefoxBeta;
 		};
-		E69DB0931E97DEAA008A67E6 /* Fennec */ = {
+		E69DB0931E97DEAA008A67E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -32494,7 +32433,7 @@
 				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		E69DB0941E97DEAA008A67E6 /* Fennec_Enterprise */ = {
 			isa = XCBuildConfiguration;
@@ -32673,18 +32612,11 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(SRCROOT)\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
 					"\"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**\"",
-					"ThirdParty/ecec/include/**",
-					FxA/FxA/include,
 				);
 				INFOPLIST_FILE = Account/Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/FxA/FxA/lib",
-				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				SWIFT_VERSION = 6.0;
 			};
@@ -32830,7 +32762,7 @@
 			};
 			name = Fennec_Enterprise;
 		};
-		E6F965151B2F1CF20034B023 /* Fennec */ = {
+		E6F965151B2F1CF20034B023 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -32840,7 +32772,7 @@
 				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		E6F965171B2F1CF20034B023 /* Firefox */ = {
 			isa = XCBuildConfiguration;
@@ -33021,18 +32953,11 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(SRCROOT)\"",
 					"\"$(SDKROOT)/usr/include/libxml2\"",
 					"\"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**\"",
-					"ThirdParty/ecec/include/**",
-					FxA/FxA/include,
 				);
 				INFOPLIST_FILE = Account/Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/FxA/FxA/lib",
-				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				SWIFT_VERSION = 6.0;
 			};
@@ -33098,7 +33023,7 @@
 			};
 			name = FirefoxBeta;
 		};
-		F8324A132649A189007E4BFA /* Fennec */ = {
+		F8324A132649A189007E4BFA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -33175,7 +33100,7 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Fennec;
+			name = Debug;
 		};
 		F8324A142649A189007E4BFA /* Fennec_Enterprise */ = {
 			isa = XCBuildConfiguration;
@@ -33399,7 +33324,7 @@
 			};
 			name = FirefoxBeta;
 		};
-		F84B21DB1A090F8100AAB793 /* Fennec */ = {
+		F84B21DB1A090F8100AAB793 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961861B62B8A700DD640F /* Fennec.xcconfig */;
 			buildSettings = {
@@ -33425,9 +33350,9 @@
 				SWIFT_VERSION = 6.0;
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = Fennec;
+			name = Debug;
 		};
-		F84B21DE1A090F8100AAB793 /* Fennec */ = {
+		F84B21DE1A090F8100AAB793 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Alt_Color_Blue AppIcon_Alt_Color_Cyan AppIcon_Alt_Color_Green AppIcon_Alt_Color_Orange AppIcon_Alt_Color_Pink AppIcon_Alt_Color_Purple AppIcon_Alt_Color_Red AppIcon_Alt_Color_Yellow AppIcon_Alt_Gradient_BlueHour AppIcon_Alt_Gradient_GoldenHour AppIcon_Alt_Gradient_Twilight AppIcon_Alt_Gradient_Sunset AppIcon_Alt_Gradient_Sunrise AppIcon_Alt_Gradient_NorthernLights AppIcon_Alt_Gradient_Midnight AppIcon_Alt_Gradient_Midday AppIcon_Alt_DarkPurple";
@@ -33457,9 +33382,9 @@
 				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
-			name = Fennec;
+			name = Debug;
 		};
-		F84B21E11A090F8100AAB793 /* Fennec */ = {
+		F84B21E11A090F8100AAB793 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -33469,9 +33394,9 @@
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
-			name = Fennec;
+			name = Debug;
 		};
-		F84B22561A0920C600AAB793 /* Fennec */ = {
+		F84B22561A0920C600AAB793 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/Fennec.entitlements";
@@ -33486,7 +33411,7 @@
 				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 6.0;
 			};
-			name = Fennec;
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
@@ -33494,7 +33419,7 @@
 		047F9B3824E1FE1F00CD7DF7 /* Build configuration list for PBXNativeTarget "WidgetKitExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4354D3E124EEEEC5001184F6 /* Fennec */,
+				4354D3E124EEEEC5001184F6 /* Debug */,
 				8A1993712C9B5A63001F4D57 /* Fennec_Testing */,
 				4354D3E224EEEEC5001184F6 /* Fennec_Enterprise */,
 				4354D3E324EEEEC5001184F6 /* Firefox */,
@@ -33502,12 +33427,12 @@
 				5A9F8FD22D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		282731971ABC9BE800AA1954 /* Build configuration list for PBXNativeTarget "Sync" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				282731771ABC9BE800AA1954 /* Fennec */,
+				282731771ABC9BE800AA1954 /* Debug */,
 				8A1993812C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC20E1DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E448FCA81AEE7A6000869B6C /* Firefox */,
@@ -33515,12 +33440,12 @@
 				5A9F8FE32D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		282731981ABC9BE800AA1954 /* Build configuration list for PBXNativeTarget "SyncTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2827317A1ABC9BE800AA1954 /* Fennec */,
+				2827317A1ABC9BE800AA1954 /* Debug */,
 				8A19937B2C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC2151DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E448FCA91AEE7A6000869B6C /* Firefox */,
@@ -33528,12 +33453,12 @@
 				5A9F8FDD2D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		288A2D9F1AB8B3260023ABC3 /* Build configuration list for PBXNativeTarget "Localizations" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				288A2DA01AB8B3260023ABC3 /* Fennec */,
+				288A2DA01AB8B3260023ABC3 /* Debug */,
 				8A1993802C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC20B1DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E448FCA31AEE7A6000869B6C /* Firefox */,
@@ -33541,12 +33466,12 @@
 				5A9F8FE22D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		2FA436141ABB83B4008031D1 /* Build configuration list for PBXNativeTarget "Account" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2FA436151ABB83B4008031D1 /* Fennec */,
+				2FA436151ABB83B4008031D1 /* Debug */,
 				8A1993732C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC20D1DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E448FCA61AEE7A6000869B6C /* Firefox */,
@@ -33554,12 +33479,12 @@
 				5A9F8FD52D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		2FA436181ABB83B4008031D1 /* Build configuration list for PBXNativeTarget "AccountTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2FA436191ABB83B4008031D1 /* Fennec */,
+				2FA436191ABB83B4008031D1 /* Debug */,
 				8A1993752C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC2141DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E448FCA71AEE7A6000869B6C /* Firefox */,
@@ -33567,12 +33492,12 @@
 				5A9F8FD72D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		2FCAE2331ABB51F900877008 /* Build configuration list for PBXNativeTarget "Storage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2FCAE2341ABB51F900877008 /* Fennec */,
+				2FCAE2341ABB51F900877008 /* Debug */,
 				8A1993742C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC20C1DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E448FCA41AEE7A6000869B6C /* Firefox */,
@@ -33580,12 +33505,12 @@
 				5A9F8FD62D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		2FCAE2371ABB51F900877008 /* Build configuration list for PBXNativeTarget "StorageTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2FCAE2381ABB51F900877008 /* Fennec */,
+				2FCAE2381ABB51F900877008 /* Debug */,
 				8A1993782C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC2131DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E448FCA51AEE7A6000869B6C /* Firefox */,
@@ -33593,12 +33518,12 @@
 				5A9F8FDA2D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		397848F51ED86605004C0C0B /* Build configuration list for PBXNativeTarget "NotificationService" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				397848E31ED86605004C0C0B /* Fennec */,
+				397848E31ED86605004C0C0B /* Debug */,
 				8A19936F2C9B5A63001F4D57 /* Fennec_Testing */,
 				397848E51ED86605004C0C0B /* Firefox */,
 				397848E61ED86605004C0C0B /* FirefoxBeta */,
@@ -33606,12 +33531,12 @@
 				3958DAB01ED98DCB0054AA27 /* Fennec_Enterprise */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		3B43E3E91D95C48E00BBA9DB /* Build configuration list for PBXNativeTarget "StoragePerfTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3B43E3D71D95C48E00BBA9DB /* Fennec */,
+				3B43E3D71D95C48E00BBA9DB /* Debug */,
 				8A1993772C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC21B1DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				3B43E3D81D95C48E00BBA9DB /* Firefox */,
@@ -33619,12 +33544,12 @@
 				5A9F8FD92D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		3BFE4B201D342FB900DDF53F /* Build configuration list for PBXNativeTarget "XCUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3BFE4B0E1D342FB900DDF53F /* Fennec */,
+				3BFE4B0E1D342FB900DDF53F /* Debug */,
 				8A19937E2C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC21A1DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				3BFE4B0F1D342FB900DDF53F /* Firefox */,
@@ -33632,12 +33557,12 @@
 				5A9F8FE02D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RustMozillaAppServices" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				43BE5786278BA4D900491291 /* Fennec */,
+				43BE5786278BA4D900491291 /* Debug */,
 				8A19937F2C9B5A63001F4D57 /* Fennec_Testing */,
 				43BE5787278BA4D900491291 /* Fennec_Enterprise */,
 				43BE5788278BA4D900491291 /* Firefox */,
@@ -33645,12 +33570,12 @@
 				5A9F8FE12D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		8CF6093A2EA8D46F00F069B6 /* Build configuration list for PBXNativeTarget "ActionExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8CF609332EA8D46F00F069B6 /* Fennec */,
+				8CF609332EA8D46F00F069B6 /* Debug */,
 				8CF609342EA8D46F00F069B6 /* Fennec_Testing */,
 				8CF609352EA8D46F00F069B6 /* Fennec_Enterprise */,
 				8CF609362EA8D46F00F069B6 /* Firefox */,
@@ -33658,12 +33583,12 @@
 				8CF609382EA8D46F00F069B6 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		C2A1EA142F4383F100DD202A /* Build configuration list for PBXAggregateTarget "Periphery" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C2A1EA0E2F4383F100DD202A /* Fennec */,
+				C2A1EA0E2F4383F100DD202A /* Debug */,
 				C2A1EA0F2F4383F100DD202A /* Fennec_Testing */,
 				C2A1EA102F4383F100DD202A /* Fennec_Enterprise */,
 				C2A1EA112F4383F100DD202A /* Firefox */,
@@ -33671,12 +33596,12 @@
 				C2A1EA132F4383F100DD202A /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		D39FA1671A83E0EC00EE869C /* Build configuration list for PBXNativeTarget "UITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D39FA1681A83E0EC00EE869C /* Fennec */,
+				D39FA1681A83E0EC00EE869C /* Debug */,
 				8A19937C2C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC2111DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				D39FA1691A83E0EC00EE869C /* Release */,
@@ -33685,12 +33610,12 @@
 				5A9F8FDE2D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		E17EFC3A2CD16F5B00169A1F /* Build configuration list for PBXNativeTarget "Sticker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E17EFC352CD16F5B00169A1F /* Fennec */,
+				E17EFC352CD16F5B00169A1F /* Debug */,
 				E17EFC362CD16F5B00169A1F /* Fennec_Testing */,
 				E17EFC372CD16F5B00169A1F /* Fennec_Enterprise */,
 				E17EFC382CD16F5B00169A1F /* Firefox */,
@@ -33698,12 +33623,12 @@
 				5A9F8FD42D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		E60138631C89EAE700DF9756 /* Build configuration list for PBXNativeTarget "L10nSnapshotTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E601384C1C89EAE600DF9756 /* Fennec */,
+				E601384C1C89EAE600DF9756 /* Debug */,
 				8A19937D2C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC2181DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E601384D1C89EAE600DF9756 /* Firefox */,
@@ -33711,12 +33636,12 @@
 				5A9F8FDF2D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		E69DB0921E97DEAA008A67E6 /* Build configuration list for PBXNativeTarget "SyncTelemetryTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E69DB0931E97DEAA008A67E6 /* Fennec */,
+				E69DB0931E97DEAA008A67E6 /* Debug */,
 				8A19937A2C9B5A63001F4D57 /* Fennec_Testing */,
 				E69DB0941E97DEAA008A67E6 /* Fennec_Enterprise */,
 				E69DB0951E97DEAA008A67E6 /* Firefox */,
@@ -33724,12 +33649,12 @@
 				5A9F8FDC2D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		E6F965381B2F1CF20034B023 /* Build configuration list for PBXNativeTarget "SharedTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E6F965151B2F1CF20034B023 /* Fennec */,
+				E6F965151B2F1CF20034B023 /* Debug */,
 				8A1993792C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC2171DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E6F965171B2F1CF20034B023 /* Firefox */,
@@ -33737,12 +33662,12 @@
 				5A9F8FDB2D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		F8324A172649A189007E4BFA /* Build configuration list for PBXNativeTarget "CredentialProvider" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F8324A132649A189007E4BFA /* Fennec */,
+				F8324A132649A189007E4BFA /* Debug */,
 				8A1993722C9B5A63001F4D57 /* Fennec_Testing */,
 				F8324A142649A189007E4BFA /* Fennec_Enterprise */,
 				F8324A152649A189007E4BFA /* Firefox */,
@@ -33750,12 +33675,12 @@
 				5A9F8FD32D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		F84B21B91A090F8100AAB793 /* Build configuration list for PBXProject "Client" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F84B21DB1A090F8100AAB793 /* Fennec */,
+				F84B21DB1A090F8100AAB793 /* Debug */,
 				8A19936D2C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC2051DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E448FC9D1AEE7A6000869B6C /* Firefox */,
@@ -33763,12 +33688,12 @@
 				5A9F8FCE2D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		F84B21DD1A090F8100AAB793 /* Build configuration list for PBXNativeTarget "Client" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F84B21DE1A090F8100AAB793 /* Fennec */,
+				F84B21DE1A090F8100AAB793 /* Debug */,
 				8A19936E2C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC2061DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E448FC9E1AEE7A6000869B6C /* Firefox */,
@@ -33776,12 +33701,12 @@
 				5A9F8FCF2D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		F84B21E01A090F8100AAB793 /* Build configuration list for PBXNativeTarget "ClientTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F84B21E11A090F8100AAB793 /* Fennec */,
+				F84B21E11A090F8100AAB793 /* Debug */,
 				8A1993762C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC2101DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E448FC9F1AEE7A6000869B6C /* Firefox */,
@@ -33789,12 +33714,12 @@
 				5A9F8FD82D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 		F84B22551A0920C600AAB793 /* Build configuration list for PBXNativeTarget "ShareTo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F84B22561A0920C600AAB793 /* Fennec */,
+				F84B22561A0920C600AAB793 /* Debug */,
 				8A1993702C9B5A63001F4D57 /* Fennec_Testing */,
 				E6DCC2081DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E448FCA01AEE7A6000869B6C /* Firefox */,
@@ -33802,7 +33727,7 @@
 				5A9F8FD12D91C3A60019C311 /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 
@@ -33863,14 +33788,6 @@
 			requirement = {
 				kind = exactVersion;
 				version = 8.12.0;
-			};
-		};
-		8AB30EC62B6C038600BD9A9B /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
-			requirement = {
-				kind = exactVersion;
-				version = 4.6.1;
 			};
 		};
 		AB2AC6612BCFD0A200022AAB /* XCRemoteSwiftPackageReference "swift-certificates" */ = {
@@ -34109,11 +34026,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
 			productName = GCDWebServers;
-		};
-		8AB30EC72B6C038600BD9A9B /* Lottie */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8AB30EC62B6C038600BD9A9B /* XCRemoteSwiftPackageReference "lottie-ios" */;
-			productName = Lottie;
 		};
 		8AF2D0FB2A5F272A00C7DD69 /* ComponentLibrary */ = {
 			isa = XCSwiftPackageProductDependency;

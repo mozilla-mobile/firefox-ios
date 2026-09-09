@@ -22,7 +22,7 @@ public struct QuickAnswersProviderFields: Codable, Sendable {
 }
 
 public struct Citation: Codable, Sendable {
-    public let id: String
+    public let id: String?
     public let title: String?
     public let url: String?
     public let image: String?
@@ -37,7 +37,7 @@ public struct Citation: Codable, Sendable {
     }
 
     public init(
-        id: String,
+        id: String? = nil,
         title: String? = nil,
         url: String? = nil,
         image: String? = nil,

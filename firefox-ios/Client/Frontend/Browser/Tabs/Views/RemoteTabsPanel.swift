@@ -76,8 +76,16 @@ final class RemoteTabsPanel: UIViewController,
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    isolated deinit {
-        unsubscribeFromRedux()
+    deinit {
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("TabSwipeGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     var currentWindowUUID: UUID? { return windowUUID }
