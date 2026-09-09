@@ -44,9 +44,15 @@ func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
         screenState.tap(
             app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.downloads], to: LibraryPanel_Downloads
         )
-        // More Options
-        screenState.tap(
-            app.tables.cells["MainMenu.MoreLess"], to: BrowserTabMenuMore)
+        // More Options. `MainMenuConfigurationUtility` only adds this row while the menu is
+        // collapsed, so an already-expanded menu *is* this state and there is nothing to tap.
+        // `tap(_:to:)` would fail on the missing element instead.
+        screenState.gesture(to: BrowserTabMenuMore) {
+            let moreOptions = app.tables.cells[AccessibilityIdentifiers.MainMenu.moreLess]
+            if moreOptions.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
+                moreOptions.waitAndTap()
+            }
+        }
         // Tracking Protections
         screenState.tap(
             app.buttons["Protections are ON"], to: EnhancedTrackingProtection)

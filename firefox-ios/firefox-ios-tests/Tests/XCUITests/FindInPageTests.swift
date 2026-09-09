@@ -71,19 +71,19 @@ class FindInPageTests: BaseTestCase {
         findInPageScreen.waitForFindInPageBarToAppear()
         findInPageScreen.searchForText(searchTerm)
 
-        findInPageScreen.assertResultsCountIsDisplayed("1 of 6")
+        findInPageScreen.assertResultsCountIsDisplayed(current: 1, total: 6)
 
         findInPageScreen.tapNextResult()
-        findInPageScreen.assertResultsCountIsDisplayed("2 of 6")
+        findInPageScreen.assertResultsCountIsDisplayed(current: 2, total: 6)
 
         findInPageScreen.tapNextResult()
-        findInPageScreen.assertResultsCountIsDisplayed("3 of 6")
+        findInPageScreen.assertResultsCountIsDisplayed(current: 3, total: 6)
 
         findInPageScreen.tapPreviousResult()
-        findInPageScreen.assertResultsCountIsDisplayed("2 of 6")
+        findInPageScreen.assertResultsCountIsDisplayed(current: 2, total: 6)
 
         findInPageScreen.tapPreviousResult()
-        findInPageScreen.assertResultsCountIsDisplayed("1 of 6")
+        findInPageScreen.assertResultsCountIsDisplayed(current: 1, total: 6)
 
         navigator.goto(BrowserTab)
         findInPageScreen.assertSearchBarDisappeared(searchKeyword: searchTerm)
@@ -91,6 +91,7 @@ class FindInPageTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323705
     func testFindInPageTwoWordsSearch() {
+        findInPageScreen = FindInPageScreen(app: app)
         userState.url = path(forTestPage: TestPages.mozillaBook)
         openFindInPageFromMenu(openSite: userState.url!)
         // Enter some text to start finding
@@ -98,8 +99,7 @@ class FindInPageTests: BaseTestCase {
             app.searchFields["find.searchField"].typeText("The Book of")
 
             // Once there are matches, test previous/next buttons
-            mozWaitForElementToExist(app.staticTexts["1 of 6"])
-            XCTAssertTrue(app.staticTexts["1 of 6"].exists)
+            findInPageScreen.assertResultsCountIsDisplayed(current: 1, total: 6)
         } else {
             app.textFields["FindInPage.searchField"].typeText("The Book of")
         }
@@ -107,6 +107,7 @@ class FindInPageTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323714
     func testFindInPageTwoWordsSearchLargeDoc() {
+        findInPageScreen = FindInPageScreen(app: app)
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -115,16 +116,17 @@ class FindInPageTests: BaseTestCase {
         if #available(iOS 16, *) {
             app.searchFields["find.searchField"].typeText("The Book of")
             mozWaitForElementToExist(app.searchFields["The Book of"])
-            XCTAssertEqual(app.staticTexts["find.resultLabel"].label, "1 of 1,000", "The book word count does match")
         } else {
             app.textFields["FindInPage.searchField"].typeText("The Book of")
             mozWaitForElementToExist(app.textFields["The Book of"])
-            XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
         }
+        // The fixture has 1,000 matches; the legacy bar caps the total it reports at "500+".
+        findInPageScreen.assertResultsCountIsDisplayed(current: 1, total: 1_000)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323718
     func testFindInPageResultsPageShowHideContent() {
+        findInPageScreen = FindInPageScreen(app: app)
         userState.url = path(forTestPage: TestPages.mozillaBook)
         openFindInPageFromMenu(openSite: userState.url!)
         // Enter some text to start finding
@@ -132,8 +134,7 @@ class FindInPageTests: BaseTestCase {
             app.searchFields["find.searchField"].typeText("Mozilla")
 
             // There should be matches
-            mozWaitForElementToExist(app.staticTexts["1 of 6"])
-            XCTAssertTrue(app.staticTexts["1 of 6"].exists)
+            findInPageScreen.assertResultsCountIsDisplayed(current: 1, total: 6)
         } else {
             app.textFields["FindInPage.searchField"].typeText("Mozilla")
         }

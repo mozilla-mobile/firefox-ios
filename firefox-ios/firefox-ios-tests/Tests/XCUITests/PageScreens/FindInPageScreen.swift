@@ -38,7 +38,28 @@ final class FindInPageScreen {
         searchField.typeText(text)
     }
 
-    func assertResultsCountIsDisplayed(_ countText: String) {
+    /// `FindInPageBar` stops counting past this and renders the total as "500+".
+    private static let legacyTotalCap = 500
+
+    private func grouped(_ value: Int) -> String {
+        return NumberFormatter.localizedString(from: NSNumber(value: value), number: .decimal)
+    }
+
+    /// The result counter's wording depends on which find UI is in use. iOS 16+ gets the system
+    /// find interaction, which reads "1 of 6" and groups thousands ("1 of 1,000"). Earlier versions
+    /// get Firefox's own `FindInPageBar`, which reads "1/6" and caps the total at "500+".
+    private func resultsCountText(current: Int, total: Int) -> String {
+        if #available(iOS 16, *) {
+            return "\(grouped(current)) of \(grouped(total))"
+        } else if total > Self.legacyTotalCap {
+            return "\(current)/\(Self.legacyTotalCap)+"
+        } else {
+            return "\(current)/\(total)"
+        }
+    }
+
+    func assertResultsCountIsDisplayed(current: Int, total: Int) {
+        let countText = resultsCountText(current: current, total: total)
         let resultsLabel = sel.resultsCount(text: countText).element(in: app)
 
         BaseTestCase().mozWaitForElementToExist(resultsLabel)

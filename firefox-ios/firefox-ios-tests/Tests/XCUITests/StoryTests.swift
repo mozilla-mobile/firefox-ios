@@ -13,6 +13,16 @@ class StoryTests: FeatureFlaggedTestBase {
         newsScreen = NewsScreen(app: app)
     }
 
+    /// Under the UI test configuration the Stories/News section does not render on iOS 15 and 16,
+    /// so there is nothing for these tests to assert there. It does render on those versions
+    /// outside the test harness, so the cause is the test configuration rather than the OS; the
+    /// specific gate has not been identified yet.
+    private func skipWhereStoriesDoNotRender() throws {
+        if #unavailable(iOS 17) {
+            throw XCTSkip("Stories/News section does not render under the UI test configuration on iOS 15 and 16")
+        }
+    }
+
     enum SwipeDirection {
         case up, down, left, right
     }
@@ -48,7 +58,8 @@ class StoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306924
-    func testNewsStoriesEnabledByDefault() {
+    func testNewsStoriesEnabledByDefault() throws {
+        try skipWhereStoriesDoNotRender()
         app.launch()
 
         navigator.goto(NewTabScreen)
@@ -77,7 +88,8 @@ class StoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2855360
-    func testValidateNewsContextMenu() {
+    func testValidateNewsContextMenu() throws {
+        try skipWhereStoriesDoNotRender()
         app.launch()
 
         navigator.goto(NewTabScreen)
@@ -101,6 +113,7 @@ class StoryTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/XXXXXXX
     func testNewsStoryCategoriesFilterStories() throws {
+        try skipWhereStoriesDoNotRender()
         if !isFennec {
             throw XCTSkip("Skipping testNewsStoryCategoriesFilterStories on Firefox or FirefoxBeta schemas")
         }

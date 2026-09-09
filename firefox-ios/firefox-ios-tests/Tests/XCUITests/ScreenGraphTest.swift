@@ -184,10 +184,15 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
         screenState.dismissOnUse = true
         screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
 
-        // More Options
-        screenState.tap(
-            app.tables.cells["MainMenu.MoreLess"],
-            to: BrowserTabMenuMore)
+        // More Options. `MainMenuConfigurationUtility` only adds this row while the menu is
+        // collapsed, so an already-expanded menu *is* this state and there is nothing to tap.
+        // Mirrors registerTabMenuNavigation, which declares the same edge for the app's graph.
+        screenState.gesture(to: BrowserTabMenuMore) {
+            let moreOptions = app.tables.cells[AccessibilityIdentifiers.MainMenu.moreLess]
+            if moreOptions.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
+                moreOptions.waitAndTap()
+            }
+        }
 
         screenState.backAction = {
             if isTablet {
