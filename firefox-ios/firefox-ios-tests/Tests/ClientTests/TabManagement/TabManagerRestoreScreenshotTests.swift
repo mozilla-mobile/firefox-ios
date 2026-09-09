@@ -71,15 +71,4 @@ final class TabManagerRestoreScreenshotTests: TabManagerTestsBase, StoreTestUtil
     func setupAppState() -> AppState {
         return AppState()
     }
-
-    @MainActor
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    @MainActor
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
-    }
 }

@@ -10,6 +10,7 @@ import QuickAnswersKit
 @testable import Client
 
 final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
+    var mockStore: MockStoreForMiddleware<AppState>!
     let storeUtilityHelper = StoreTestUtilityHelper()
 
     override func setUp() async throws {
@@ -697,18 +698,5 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
                 ]
             )
         )
-    }
-
-    func setupStore() {
-        StoreTestUtilityHelper.setupStore(
-            with: setupAppState(),
-            middlewares: []
-        )
-    }
-
-    // In order to avoid flaky tests, we should reset the store
-    // similar to production
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }
