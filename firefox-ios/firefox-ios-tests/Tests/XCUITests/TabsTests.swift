@@ -448,6 +448,7 @@ class TabsTests: BaseTestCase {
 
     // Regression
     // https://mozilla.testrail.io/index.php?/cases/view/2306834
+    // Known failure: iOS 15.5, 16.4
     func testLongTapOnTabInTabsTray() {
         toolBarScreen = ToolbarScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)
@@ -712,6 +713,7 @@ class TabsTestsIphone: BaseTestCase {
     // This test is disabled for iPad because the toast menu is not shown there
     // https://mozilla.testrail.io/index.php?/cases/view/2306860
     // Smoketest
+    // Known failure: iOS 17.5
     func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
         if skipPlatform { return }
 

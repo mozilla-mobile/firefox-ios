@@ -24,7 +24,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3211480
-    // Expected Failure: iOS 15.5
+    // Known failure: iOS 15.5, 16.4, 17.5
     func testTranslationFlow_withDifferentStates_translationExperimentOn() {
         expectedFailure(on: ["15.5"])
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")

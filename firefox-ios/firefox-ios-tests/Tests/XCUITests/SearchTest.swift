@@ -425,6 +425,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306942
     // Regression
+    // Known failure: iOS 17.5
     func testSearchSuggestions() throws {
         guard #available(iOS 17.0, *) else { return }
 
@@ -472,6 +473,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2576803
     // [Config] orientation:portrait, orientation:landscape
     // Smoketest
+    // Known failure: iOS 17.5
     func testFirefoxSuggest() {
         launchWithFirefoxSuggestRollout()
 

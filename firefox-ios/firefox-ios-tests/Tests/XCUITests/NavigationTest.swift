@@ -562,6 +562,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2721282
+    // Known failure: iOS 17.5
     func testOpenExternalLink() {
         // Go to Settings -> Browsing and disable "Block external links" toggle
         navigator.nowAt(NewTabScreen)

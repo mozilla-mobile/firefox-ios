@@ -13,7 +13,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2443998
     // Regression
-    // Expected Failure: iOS 15.5
+    // Known failure: iOS 15.5
     func testCustomSearchEngines() {
         expectedFailure(on: ["15.5"])
         addCustomSearchEngine()
@@ -40,6 +40,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2444328
     // Regression
+    // Known failure: iOS 15.5
     func testCustomSearchEngineAsDefault() {
         addCustomSearchEngine()
 
@@ -67,6 +68,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306941
     // Regression
+    // Known failure: iOS 15.5
     func testCustomSearchEngineDeletion() {
         addCustomSearchEngine()
 

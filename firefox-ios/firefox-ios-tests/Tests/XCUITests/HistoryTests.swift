@@ -271,6 +271,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307483
+    // Known failure: iOS 17.5
     func testLongTapOptionsRecentlyClosedItem_tabTrayExperimentOn() {
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()

@@ -144,6 +144,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3197644
+    // Known failure: iOS 16.4
     func testOpenNewTabButtonOnToolbar() throws {
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         app.launch()

@@ -227,6 +227,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4035645 [Config] nav:bottombar
+    // Known failure: iOS 15.5
     func testModernKitOnboardingToolbarPlacementBottom() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -504,7 +505,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/4038425
     // Regression
-    // Expected Failure: iOS 15.5, iOS 16.4, iOS 17.5, iOS 18.6
+    // Known failure: iOS 15.5, 16.4, 17.5, 18.6
     func testModernKitOnboardingSetAsDefaultBrowser() {
         expectedFailure(on: ["15.5", "16.4", "17.5", "18.6"])
         launchApp()
