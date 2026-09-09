@@ -76,7 +76,6 @@ final class VPNManager: VPNManaging {
         do {
             let pass = try await self.guardian.getPass()
 
-
 //            guard let server = await self.serverlist.selectServer() else {
 //                throw VPNError.noServerFound
 //            }
