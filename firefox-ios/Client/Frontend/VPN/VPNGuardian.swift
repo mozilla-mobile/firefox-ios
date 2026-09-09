@@ -58,14 +58,29 @@ final class VPNGuardian: Sendable {
     enum GuardianError: Error {
         case http(status: Int)
         case bodyInvalid
+        /// A rotation exhausted `rotationTimeout` without a usable pass.
+        case rotationTimedOut
     }
 
-    /// How long before a pass's `expiresAt` we proactively rotate. The proxy pass has a
-    /// ~15 min lifetime; rotating 3 min early gives the round-trip headroom and avoids
-    /// brief windows where new requests would race the expiry.
-    static let rotateBeforeExpiry: TimeInterval = 180
-    /// Backoff delay after a failed rotation fetch.
-    static let rotationRetryDelay: TimeInterval = 30
+    /// Rotation timings mirror the desktop/Android implementation in
+    /// `toolkit/components/ipprotection/IPPProxyManager.sys.mjs`, so all three platforms
+    /// behave the same against Guardian.
+
+    /// How long before a pass's `expiresAt` we proactively rotate. Matches desktop's
+    /// `ProxyPass.ROTATION_TIME`, which puts `rotationTimePoint` two minutes before expiry.
+    static let rotateBeforeExpiry: TimeInterval = 120
+    /// Floor on the scheduled delay, so a pass that arrives already near expiry can't spin the
+    /// rotation loop. Matches `browser.ipProtection.guardian.minRotationInterval`.
+    static let minRotationInterval: TimeInterval = 1
+    /// First backoff delay after a retryable failure, doubled on each subsequent attempt.
+    /// Matches `browser.ipProtection.guardian.retryAfter`.
+    static let rotationRetryDelay: TimeInterval = 0.5
+    /// Ceiling on a single fetch attempt. Matches
+    /// `browser.ipProtection.guardian.attemptTimeout`.
+    static let rotationAttemptTimeout: TimeInterval = 10
+    /// Ceiling on a whole rotation including retries, after which we give up rather than
+    /// retry forever. Matches `browser.ipProtection.guardian.timeout`.
+    static let rotationTimeout: TimeInterval = 30
 
     private let authHeaders: [String: String]
     private let configuration: Configuration
@@ -85,9 +100,13 @@ final class VPNGuardian: Sendable {
         return try await fetchProxyPass(authHeaders: authHeaders)
     }
 
-    /// Emits a fresh `ProxyPass` shortly before the previous one expires, indefinitely.
-    /// Cancel the consuming task to stop rotation — the stream will tear down its
-    /// internal fetch loop via `onTermination`.
+    /// Emits a fresh `ProxyPass` shortly before the previous one expires. Cancel the consuming
+    /// task to stop rotation — the stream will tear down its internal fetch loop via
+    /// `onTermination`.
+    ///
+    /// The stream finishes once a rotation fails terminally, mirroring desktop's
+    /// `rotateProxyPass`, which does not reschedule its timer after a failure. The consumer
+    /// therefore treats stream completion as "rotation is no longer running".
     ///
     /// In-flight WebKit requests continue with the old bearer token thanks to the proxy's
     /// grace period; only new requests pick up the rotated header.
@@ -97,38 +116,87 @@ final class VPNGuardian: Sendable {
                 var current = initial
                 while !Task.isCancelled {
                     let refreshAt = current.expiresAt.addingTimeInterval(-Self.rotateBeforeExpiry)
-                    let sleepInterval = max(0, refreshAt.timeIntervalSinceNow)
+                    let sleepInterval = max(Self.minRotationInterval, refreshAt.timeIntervalSinceNow)
+                    guard (try? await Self.sleep(seconds: sleepInterval)) != nil else { break }
+                    guard let self, !Task.isCancelled else { break }
+
                     do {
-                        try await Task.sleep(
-                            nanoseconds: UInt64(sleepInterval * Double(NSEC_PER_SEC))
-                        )
-                    } catch {
-                        break
-                    }
-                    guard let self, !Task.isCancelled else {
-                        break
-                    }
-                    do {
-                        let new = try await self.getPass()
+                        let new = try await self.rotatePass()
                         current = new
                         continuation.yield(new)
+                    } catch is CancellationError {
+                        break
                     } catch {
+                        // Desktop surfaces this as an error state on a still-active proxy. We
+                        // stop rotating and let the consumer decide; the current pass stays
+                        // valid until it expires.
                         self.logger.log(
-                            "Pass rotation failed: \(error). Retrying in \(Self.rotationRetryDelay)s.",
+                            "Pass rotation failed terminally, stopping rotation: \(error)",
                             level: .warning,
                             category: .sync
                         )
-                        // TODO: should we ever actually be retrying rotation?
-                        // This could be where we inform the user that the rotation failed
-                        try? await Task.sleep(
-                            nanoseconds: UInt64(Self.rotationRetryDelay * Double(NSEC_PER_SEC))
-                        )
+                        break
                     }
                 }
                 continuation.finish()
             }
             continuation.onTermination = { @Sendable _ in task.cancel() }
         }
+    }
+
+    /// Fetches a replacement pass, retrying retryable failures with exponential backoff until
+    /// `rotationTimeout` is spent. Mirrors desktop's `#attemptPassRotation`: server errors,
+    /// timeouts and offline errors are retried; anything else fails the rotation immediately.
+    private func rotatePass() async throws -> ProxyPass {
+        let deadline = Date().addingTimeInterval(Self.rotationTimeout)
+        var delay = Self.rotationRetryDelay
+
+        while !Task.isCancelled {
+            do {
+                return try await getPass()
+            } catch {
+                guard Self.isRetryable(error) else { throw error }
+
+                let remaining = deadline.timeIntervalSinceNow
+                guard remaining > 0 else { throw GuardianError.rotationTimedOut }
+
+                logger.log(
+                    "Pass rotation attempt failed: \(error). Retrying in \(delay)s.",
+                    level: .warning,
+                    category: .sync
+                )
+                try await Self.sleep(seconds: min(delay, remaining))
+                delay *= 2
+            }
+        }
+
+        throw CancellationError()
+    }
+
+    /// Retryable failures are the ones desktop loops on: 5xx responses, a timed-out attempt,
+    /// and being offline. A 4xx or an unparseable body will not fix itself, so it fails fast.
+    private static func isRetryable(_ error: Error) -> Bool {
+        switch error {
+        case GuardianError.http(let status) where (500...599).contains(status):
+            return true
+        case let urlError as URLError:
+            return retryableURLErrorCodes.contains(urlError.code)
+        default:
+            return false
+        }
+    }
+
+    private static let retryableURLErrorCodes: Set<URLError.Code> = [
+        .timedOut,
+        .cannotFindHost,
+        .cannotConnectToHost,
+        .dnsLookupFailed,
+        .networkConnectionLost,
+        .notConnectedToInternet
+    ]
+
+    private static func sleep(seconds: TimeInterval) async throws {
+        try await Task.sleep(nanoseconds: UInt64(seconds * Double(NSEC_PER_SEC)))
     }
 
     private func fetchProxyPass(authHeaders: [String: String]) async throws -> ProxyPass {
@@ -140,6 +208,9 @@ final class VPNGuardian: Sendable {
             request.setValue(value, forHTTPHeaderField: name)
         }
         request.cachePolicy = .reloadIgnoringLocalCacheData
+        // Bounds a single attempt so the retry loop in `rotatePass` keeps making progress
+        // against its overall budget, as desktop's per-attempt AbortController does.
+        request.timeoutInterval = Self.rotationAttemptTimeout
 
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let http = response as? HTTPURLResponse else {
