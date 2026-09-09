@@ -192,7 +192,9 @@ class ToolbarTests: FeatureFlaggedTestBase {
             closeFromAppSwitcherAndRelaunch()
             mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-            if !isPrivate {
+            // The News section does not render under the UI test configuration on iOS 15 and 16,
+            // and it is only used here to confirm the homepage scrolled after the relaunch.
+            if !isPrivate, #available(iOS 17, *) {
                 // News scrolls in after the relaunch and loads async; retry the swipe.
                 let news = app.otherElements["News"]
                 var swipes = 3

@@ -193,9 +193,10 @@ class SearchTests: FeatureFlaggedTestBase {
         app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
         waitForTabsButton()
         typeOnSearchBar(text: "moz")
-        mozWaitForValueContains(urlBarAddress, value: "moz")
-        let value = urlBarAddress.value
-        XCTAssertEqual(value as? String, "mozilla.org")
+        // Wait for the completed value, not the typed prefix: "moz" already satisfies a
+        // contains check, so waiting on it races the autocompletion this test asserts.
+        mozWaitForValueContains(urlBarAddress, value: "mozilla.org")
+        XCTAssertEqual(urlBarAddress.value as? String, "mozilla.org")
     }
 
     private func changeSearchEngine(searchEngine: String) {
