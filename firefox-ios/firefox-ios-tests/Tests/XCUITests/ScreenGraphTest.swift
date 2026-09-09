@@ -10,15 +10,9 @@ import Shared
 @MainActor
 class ScreenGraphTest: XCTestCase, ExpectedFailureReporting {
     nonisolated(unsafe) var expectedFailureNote: String?
-    nonisolated(unsafe) var didReportExpectedFailure = false
 
     override nonisolated func record(_ issue: XCTIssue) {
-        // Recorded first: with `continueAfterFailure = false` the test stops accepting failures
-        // once the real one lands, which would drop the note.
-        if let note = expectedFailureIssue() {
-            super.record(note)
-        }
-        super.record(issue)
+        super.record(annotated(issue))
     }
 
     var navigator: MMNavigator<TestUserState>!

@@ -40,15 +40,9 @@ let SuggestRolloutProbeTimeout: TimeInterval = 5
 @MainActor
 class BaseTestCase: XCTestCase, ExpectedFailureReporting {
     nonisolated(unsafe) var expectedFailureNote: String?
-    nonisolated(unsafe) var didReportExpectedFailure = false
 
     override nonisolated func record(_ issue: XCTIssue) {
-        // Recorded first: with `continueAfterFailure = false` the test stops accepting failures
-        // once the real one lands, which would drop the note.
-        if let note = expectedFailureIssue() {
-            super.record(note)
-        }
-        super.record(issue)
+        super.record(annotated(issue))
     }
 
     var navigator: MMNavigator<FxUserState>!
@@ -797,14 +791,12 @@ enum AppScheme {
 /// Lets a test case carry a note that is reported alongside any failure it records.
 protocol ExpectedFailureReporting: AnyObject {
     var expectedFailureNote: String? { get set }
-    var didReportExpectedFailure: Bool { get set }
 }
 
 extension ExpectedFailureReporting where Self: XCTestCase {
     /// Marks the running test as a known failure on the given iOS versions, mirroring the
     /// `// Expected Failure:` comment above it. Nothing is reported unless the test actually fails
-    /// on one of those versions, in which case the note is recorded as its own failure line in the
-    /// test results, next to the real one.
+    /// on one of those versions, in which case the note is prefixed to the failure message.
     /// - Parameter ticket: Jira issue key tracking the failure, once one has been filed.
     @MainActor
     func expectedFailure(on versions: [String], ticket: String? = nil) {
@@ -820,11 +812,18 @@ extension ExpectedFailureReporting where Self: XCTestCase {
         expectedFailureNote = summary
     }
 
-    /// The one-off issue to record next to a real failure, or `nil` when there is nothing to add.
-    /// Reported once per test, so a test failing several times does not repeat it.
-    nonisolated func expectedFailureIssue() -> XCTIssue? {
-        guard let note = expectedFailureNote, !didReportExpectedFailure else { return nil }
-        didReportExpectedFailure = true
-        return XCTIssue(type: .assertionFailure, compactDescription: note)
+    /// Folds the note into the issue rather than recording a second one. With
+    /// `continueAfterFailure = false` XCTest unwinds on the first issue it is handed, so a
+    /// separate note would suppress the real assertion message entirely.
+    nonisolated func annotated(_ issue: XCTIssue) -> XCTIssue {
+        guard let note = expectedFailureNote else { return issue }
+        return XCTIssue(
+            type: issue.type,
+            compactDescription: "\(note) - \(issue.compactDescription)",
+            detailedDescription: issue.detailedDescription,
+            sourceCodeContext: issue.sourceCodeContext,
+            associatedError: issue.associatedError,
+            attachments: issue.attachments
+        )
     }
 }
