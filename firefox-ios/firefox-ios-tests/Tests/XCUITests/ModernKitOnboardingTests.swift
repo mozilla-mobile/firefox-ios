@@ -425,9 +425,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     // MARK: - Sync Flow Tests
 
     // https://mozilla.testrail.io/index.php?/cases/view/4036954
-    // Expected Failure: iOS 15.5
     func testModernKitOnboardingSyncFlow() throws {
-        expectedFailure(on: ["15.5"])
         launchApp()
 
         onboardingScreen.handleTermsOfService()
@@ -590,12 +588,10 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Multiple Choice UI Tests
 
-    // Expected Failure: iOS 15.5
     func testModernKitOnboardingMultipleChoiceUI() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
         }
-        expectedFailure(on: ["15.5"])
 
         launchApp()
 

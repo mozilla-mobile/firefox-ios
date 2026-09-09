@@ -311,9 +311,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2861436
-    // Expected Failure: iOS 16.4
     func testShortcutsToggle() {
-        expectedFailure(on: ["16.4"], ticket: "FXIOS-16791")
         app.launch()
         mozWaitForElementToExist(TopSiteCellgroup, timeout: TIMEOUT_LONG)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])

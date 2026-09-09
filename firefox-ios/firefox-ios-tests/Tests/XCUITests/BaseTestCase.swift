@@ -795,7 +795,7 @@ protocol ExpectedFailureReporting: AnyObject {
 
 extension ExpectedFailureReporting where Self: XCTestCase {
     /// Marks the running test as a known failure on the given iOS versions, mirroring the
-    /// `// Expected Failure:` comment above it. Nothing is reported unless the test actually fails
+    /// `// Known failure:` comment above it. Nothing is reported unless the test actually fails
     /// on one of those versions, in which case the note is prefixed to the failure message.
     /// - Parameter ticket: Jira issue key tracking the failure, once one has been filed.
     @MainActor
