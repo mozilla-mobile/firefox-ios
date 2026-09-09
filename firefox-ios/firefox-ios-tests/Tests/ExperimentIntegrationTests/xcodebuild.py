@@ -22,7 +22,7 @@ class XCodeBuild(object):
         self.log = log
         self.firefox_app_path = next(
             Path("/Users").glob(
-                "**/Library/Developer/Xcode/DerivedData/Client-*/Build/Products/Fennec_Testing-*/Client.app"  # noqa
+                "**/Library/Developer/Xcode/DerivedData/Client-*/Build/Products/Debug-*/Client.app"  # noqa
             )
         )
 
