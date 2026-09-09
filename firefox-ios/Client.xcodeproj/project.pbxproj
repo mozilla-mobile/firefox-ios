@@ -19394,14 +19394,18 @@
 		};
 		5FA2232C27F6FA69005B3D87 /* Nimbus Feature Manifest Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 12;
+			dependencyFile = "$(DERIVED_FILE_DIR)/nimbus-fml.d";
 			files = (
 			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
 				"$(SOURCE_ROOT)/nimbus.fml.yaml",
+				"$(SOURCE_ROOT)/bin/nimbus-fml.sh",
+				"$(SOURCE_ROOT)/bin/nimbus-fml-configuration.sh",
+				"$(SOURCE_ROOT)/bin/nimbus-fml-configuration.local.sh",
+				"$(SOURCE_ROOT)/../MozillaRustComponents/Package.swift",
 			);
 			name = "Nimbus Feature Manifest Generator Script";
 			outputFileListPaths = (
@@ -19412,7 +19416,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"$ACTION\" != \"indexbuild\" ]; then\n    /usr/bin/env -i HOME=\"$HOME\" PROJECT=\"$PROJECT\" CONFIGURATION=\"$CONFIGURATION\" SOURCE_ROOT=\"$SOURCE_ROOT\" bash \"$SOURCE_ROOT/bin/nimbus-fml.sh\" --verbose\nfi\n\n";
+			shellScript = "if [ \"$ACTION\" != \"indexbuild\" ]; then\n    /usr/bin/env -i HOME=\"$HOME\" PROJECT=\"$PROJECT\" CONFIGURATION=\"$CONFIGURATION\" SOURCE_ROOT=\"$SOURCE_ROOT\" bash \"$SOURCE_ROOT/bin/nimbus-fml.sh\" --verbose || exit\nfi\n# List the feature manifests as discovered dependencies, so editing one re-runs this phase.\n# Written on every run, index builds included: a missing dependency file fails the phase.\n{\n    printf '%s:' \"$SCRIPT_OUTPUT_FILE_0\" | sed 's/ /\\\\ /g'\n    find \"$SOURCE_ROOT/nimbus-features\" -name '*.yaml' | sort | sed 's/ /\\\\ /g; s/^/ /' | tr -d '\\n'\n    echo\n} > \"$DERIVED_FILE_DIR/nimbus-fml.d\"\n\n";
 		};
 		C2A1EA152F4383FE00DD202A /* Run Periphery */ = {
 			isa = PBXShellScriptBuildPhase;
