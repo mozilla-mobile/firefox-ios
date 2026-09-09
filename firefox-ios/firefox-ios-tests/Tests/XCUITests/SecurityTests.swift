@@ -245,13 +245,15 @@ class SecurityTests: BaseTestCase {
                        "Attacker-controlled URL should not remain displayed after tapping.")
     }
 
+    /// The form fields are matched through their rendered labels: iOS 16 WebKit does not apply the
+    /// `<label for=>` association to the input itself, leaving the field with no accessibility label.
     private func validateURLAndPageContent(URL: String, elementsShouldExists: Bool) {
         browserScreen.assertAddressBarContains(value: URL)
         browserScreen.assertWebElements(
             shouldExist: elementsShouldExists,
             app.webViews.staticTexts[WebStrings.demoText],
-            app.webViews.textFields[WebStrings.usernameField],
-            app.webViews.secureTextFields[WebStrings.passwordField2]
+            app.webViews.staticTexts[WebStrings.usernameField],
+            app.webViews.staticTexts[WebStrings.passwordField2]
         )
     }
 }

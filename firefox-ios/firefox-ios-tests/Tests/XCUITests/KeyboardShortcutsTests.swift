@@ -19,6 +19,11 @@ class KeyboardShortcutsTests: BaseTestCase {
     private var tabTrayScreen: TabTrayScreen!
 
     override func setUp() async throws {
+        // Every shortcut fails all its attempts on the iOS 16 simulator, where `typeKey` does not
+        // deliver key events to the app. The same build passes on 17.5, 18.6 and 26.5.
+        if #unavailable(iOS 17) {
+            throw XCTSkip("typeKey does not deliver key events to the app on the iOS 16 simulator")
+        }
         try await super.setUp()
         toolbarScreen = ToolbarScreen(app: app)
         homePageScreen = HomePageScreen(app: app)
