@@ -47,7 +47,7 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         }
 
         let (data, response) = try await urlSession.data(from: url)
-        try Self.validate(response: response, data: data)
+        try AppAttestServiceError.validate(response: response, data: data)
         return try JSONDecoder().decode(ChallengeResponse.self, from: data).challenge
     }
 
@@ -82,14 +82,6 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         /// request.setValue("true", forHTTPHeaderField: "use-qa-certificates")
 
         let (data, response) = try await urlSession.data(from: request)
-        try Self.validate(response: response, data: data)
-    }
-
-    private static func validate(response: URLResponse, data: Data) throws {
-        guard let http = response as? HTTPURLResponse else { return }
-        guard (200..<300).contains(http.statusCode) else {
-            let message = String(data: data, encoding: .utf8) ?? "Unknown server error"
-            throw AppAttestServiceError.serverError(statusCode: http.statusCode, description: message)
-        }
+        try AppAttestServiceError.validate(response: response, data: data)
     }
 }
