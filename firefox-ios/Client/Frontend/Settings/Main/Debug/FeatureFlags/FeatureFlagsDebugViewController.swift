@@ -200,6 +200,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .multiDayOnboarding,
+                titleText: format(string: "Multi-day Onboarding"),
+                statusText: format(string: "Toggle to enable multi-day onboarding")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .nativeErrorPage,
                 titleText: format(string: "Native Error Page"),
                 statusText: format(string: "Toggle to display natively created error pages")
