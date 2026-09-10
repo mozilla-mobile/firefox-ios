@@ -8,12 +8,7 @@ import Foundation
 ///  Responsible for fetching data from the server.
 final class WallpaperDataService: @unchecked Sendable {
     // MARK: - Properties
-    enum DataServiceError: Error {
-        case noBundledURL
-    }
-
     private let networking: WallpaperNetworking
-    private let wallpaperURLScheme = "MozWallpaperURLScheme"
 
     // MARK: - Initializers
     init(with networkingModule: WallpaperNetworking) {

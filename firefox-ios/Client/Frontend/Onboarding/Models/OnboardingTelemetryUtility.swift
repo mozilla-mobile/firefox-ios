@@ -136,29 +136,6 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         gleanWrapper.submit(ping: GleanMetrics.Pings.shared.onboarding)
     }
 
-    func sendWallpaperSelectorViewTelemetry() {
-        let extras = GleanMetrics.Onboarding.WallpaperSelectorViewExtra(
-            onboardingReason: onboardingReason.rawValue
-        )
-        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.wallpaperSelectorView, extras: extras)
-    }
-
-    func sendWallpaperSelectorCloseTelemetry() {
-        let extras = GleanMetrics.Onboarding.WallpaperSelectorCloseExtra(
-            onboardingReason: onboardingReason.rawValue
-        )
-        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.wallpaperSelectorClose, extras: extras)
-    }
-
-    func sendWallpaperSelectorSelectedTelemetry(wallpaperName: String, wallpaperType: String) {
-        let extras = GleanMetrics.Onboarding.WallpaperSelectorSelectedExtra(
-            onboardingReason: onboardingReason.rawValue,
-            wallpaperName: wallpaperName,
-            wallpaperType: wallpaperType
-        )
-        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.wallpaperSelectorSelected, extras: extras)
-    }
-
     private struct BaseExtras {
         let cardType: String
         let flowType: String
