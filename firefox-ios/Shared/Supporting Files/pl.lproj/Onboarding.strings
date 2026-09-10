@@ -152,7 +152,7 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Szybki, bezpieczny i Cię nie sprzeda. Przeglądanie właśnie stało się lepsze.";
 
 /* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Zarządzaj ustawieniami";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Ustawienia";
 
 /* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "Aby pomóc w ulepszaniu przeglądarki, %1$@ wysyła dane diagnostyczne i o interakcjach do organizacji %2$@. %3$@";
@@ -272,7 +272,7 @@
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "Zarządzaj";
 
 /* The text for the Manage settings link button. */
-"Onboarding.Modern.TermsOfService.ManageLink.v145" = "Zarządzaj ustawieniami";
+"Onboarding.Modern.TermsOfService.ManageLink.v145" = "Ustawienia";
 
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
 "Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "Aby pomóc w ulepszaniu przeglądarki, %1$@ wysyła dane diagnostyczne i o interakcjach do organizacji %2$@. %3$@";

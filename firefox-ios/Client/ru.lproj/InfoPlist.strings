@@ -23,7 +23,7 @@
 "NSPhotoLibraryAddUsageDescription" = "Это позволит вам сохранять фотографии.";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Firefox использует распознавание речи для преобразования вашего голоса в текст для голосового поиска.";
+"NSSpeechRecognitionUsageDescription" = "Это позволяет Firefox переводить вашу речь в текст.";
 
 /* (No Comment) */
 "Scan QR Code" = "Сканировать QR-код";
