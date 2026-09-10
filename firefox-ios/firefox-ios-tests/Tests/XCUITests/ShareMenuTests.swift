@@ -58,6 +58,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864046
     // Regression
+    // Known failure: iOS 15.5
     func testShareNormalWebsiteCopyUrl() {
         app.launch()
         reachShareMenuLayoutAndSelectOption(option: "Copy")
@@ -94,6 +95,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864079
+    // Known failure: iOS 15.5
     func testShareWebsiteReaderModeCopy() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
@@ -139,6 +141,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864064
+    // Known failure: iOS 17.5
     func testSharePdfFileMarkup() {
         app.launch()
         reachShareMenuLayoutAndSelectOption(option: "Markup", url: pdfUrl)

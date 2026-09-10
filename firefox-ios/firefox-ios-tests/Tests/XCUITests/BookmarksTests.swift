@@ -513,6 +513,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168623
+    // Known failure: iOS 17.5
     func testEditBookmarkLocation() {
         app.launch()
         let testFolder = "Test folder"

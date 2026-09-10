@@ -8,7 +8,13 @@ import Common
 import Shared
 
 @MainActor
-class ScreenGraphTest: XCTestCase {
+class ScreenGraphTest: XCTestCase, ExpectedFailureReporting {
+    nonisolated(unsafe) var expectedFailureNote: String?
+
+    override nonisolated func record(_ issue: XCTIssue) {
+        super.record(annotated(issue))
+    }
+
     var navigator: MMNavigator<TestUserState>!
     var app: XCUIApplication!
 

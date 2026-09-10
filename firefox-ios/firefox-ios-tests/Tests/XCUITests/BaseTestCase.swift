@@ -38,7 +38,13 @@ let SuggestRolloutLaunchAttempts = 5
 let SuggestRolloutProbeTimeout: TimeInterval = 5
 
 @MainActor
-class BaseTestCase: XCTestCase {
+class BaseTestCase: XCTestCase, ExpectedFailureReporting {
+    nonisolated(unsafe) var expectedFailureNote: String?
+
+    override nonisolated func record(_ issue: XCTIssue) {
+        super.record(annotated(issue))
+    }
+
     var navigator: MMNavigator<FxUserState>!
     let app = XCUIApplication()
     var userState: FxUserState!
@@ -780,4 +786,44 @@ enum AppScheme {
     case fennec
     case firefox
     case firefoxBeta
+}
+
+/// Lets a test case carry a note that is reported alongside any failure it records.
+protocol ExpectedFailureReporting: AnyObject {
+    var expectedFailureNote: String? { get set }
+}
+
+extension ExpectedFailureReporting where Self: XCTestCase {
+    /// Marks the running test as a known failure on the given iOS versions, mirroring the
+    /// `// Known failure:` comment above it. Nothing is reported unless the test actually fails
+    /// on one of those versions, in which case the note is prefixed to the failure message.
+    /// - Parameter ticket: Jira issue key tracking the failure, once one has been filed.
+    @MainActor
+    func expectedFailure(on versions: [String], ticket: String? = nil) {
+        let systemVersion = UIDevice.current.systemVersion
+        guard versions.contains(where: {
+            systemVersion == $0 || systemVersion.hasPrefix("\($0).")
+        }) else { return }
+
+        var summary = "Expected failure on iOS \(systemVersion)"
+        if let ticket {
+            summary += " - https://mozilla-hub.atlassian.net/browse/\(ticket)"
+        }
+        expectedFailureNote = summary
+    }
+
+    /// Folds the note into the issue rather than recording a second one. With
+    /// `continueAfterFailure = false` XCTest unwinds on the first issue it is handed, so a
+    /// separate note would suppress the real assertion message entirely.
+    nonisolated func annotated(_ issue: XCTIssue) -> XCTIssue {
+        guard let note = expectedFailureNote else { return issue }
+        return XCTIssue(
+            type: issue.type,
+            compactDescription: "\(note) - \(issue.compactDescription)",
+            detailedDescription: issue.detailedDescription,
+            sourceCodeContext: issue.sourceCodeContext,
+            associatedError: issue.associatedError,
+            attachments: issue.attachments
+        )
+    }
 }

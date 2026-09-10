@@ -180,6 +180,7 @@ class CreditCardsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306976
+    // Known failure: iOS 17.5
     func testVerifyThatTheEditedCreditCardIsSaved() throws {
         if #unavailable(iOS 17) {
             throw XCTSkip("testVerifyThatTheEditedCreditCardIsSaved() does not work on iOS 15 and iOS 16")

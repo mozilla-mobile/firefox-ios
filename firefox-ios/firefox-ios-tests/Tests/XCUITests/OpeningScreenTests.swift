@@ -46,6 +46,7 @@ class OpeningScreenTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307037
     // Regression
+    // Known failure: iOS 17.5
     func testHomepageOnOpeningScreen() {
         // Select Homepage as the opening screen
         navigator.nowAt(NewTabScreen)

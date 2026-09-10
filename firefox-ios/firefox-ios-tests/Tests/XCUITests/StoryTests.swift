@@ -48,6 +48,7 @@ class StoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306924
+    // Known failure: iOS 15.5, 16.4
     func testNewsStoriesEnabledByDefault() {
         app.launch()
 
@@ -77,6 +78,7 @@ class StoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2855360
+    // Known failure: iOS 15.5, 16.4
     func testValidateNewsContextMenu() {
         app.launch()
 
@@ -100,6 +102,7 @@ class StoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/XXXXXXX
+    // Known failure: iOS 15.5, 16.4
     func testNewsStoryCategoriesFilterStories() throws {
         if !isFennec {
             throw XCTSkip("Skipping testNewsStoryCategoriesFilterStories on Firefox or FirefoxBeta schemas")

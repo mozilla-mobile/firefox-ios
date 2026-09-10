@@ -75,6 +75,7 @@ class UrlBarTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3167400
     // https://mozilla.testrail.io/index.php?/cases/view/3167424
+    // Known failure: iOS 17.5
     func testCopyURLFromAddressBar() {
         // A decoy on the pasteboard makes the assertion meaningful: if "Copy Address" silently does
         // nothing, the paste below yields the decoy instead of the page URL and the test fails.

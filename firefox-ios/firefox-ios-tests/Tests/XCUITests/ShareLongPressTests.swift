@@ -37,6 +37,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864323
     // Regression
+    // Known failure: iOS 16.4
     func testShareNormalWebsiteCopyUrl() {
         app.launch()
         longPressTopSitesAndReachShareOptions(option: "Copy")
@@ -84,6 +85,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864386
+    // Known failure: iOS 15.5, 16.4
     func testBookmarksShareNormalWebsiteCopyURL() {
         app.launch()
         longPressBookmarkAndReachShareOptions(option: "Copy")
@@ -120,6 +122,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864402
+    // Known failure: iOS 15.5, 17.5
     func testHistoryShareNormalWebsiteCopyURL() {
         app.launch()
         longPressHistoryAndReachShareOptions(option: "Copy")
@@ -162,6 +165,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864418
+    // Known failure: iOS 15.5
     func testReaderModeShareNormalWebsiteCopy() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
@@ -173,6 +177,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864476
+    // Known failure: iOS 17.5
     func testShareViaLongPressLinkReminders() {
         app.launch()
         if #available(iOS 17, *) {
@@ -189,6 +194,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864482
     // Regression
+    // Known failure: iOS 15.5, 17.5
     func testShareViaLongPressLinkCopy() {
         app.launch()
         longPressLinkAndSelectShareOption(option: "Copy")

@@ -286,6 +286,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307032
+    // Known failure: iOS 17.5
     func testShortcutsRows() {
         app.launch()
         addWebsitesToShortcut(website: path(forTestPage: url_1))
