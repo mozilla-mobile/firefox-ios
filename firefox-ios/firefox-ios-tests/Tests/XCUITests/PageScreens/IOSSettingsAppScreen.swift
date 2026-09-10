@@ -21,10 +21,32 @@ final class IOSSettingsAppScreen {
 
     /// The Firefox option in the default-browser picker. Options are buttons whose label is the app's
     /// display name; match either scheme (Fennec "Fennec (user)" or the Firefox release "Firefox").
+    /// iOS 16/17 expose the picker options as table cells labelled with the app name, iOS 18+ as buttons.
+    /// Cells are tried first: they also rule out the back button, labelled with the app name on iOS 16/17.
     private var firefoxBrowserOption: XCUIElement {
-        settingsApp.buttons.matching(
-            NSPredicate(format: "label CONTAINS[c] %@ OR label CONTAINS[c] %@", "Fennec", "Firefox")
-        ).firstMatch
+        let predicate = NSPredicate(
+            format: "label CONTAINS[c] %@ OR label CONTAINS[c] %@",
+            "Fennec",
+            "Firefox"
+        )
+        let optionCell = settingsApp.cells.matching(predicate).firstMatch
+        return optionCell.exists ? optionCell : settingsApp.buttons.matching(predicate).firstMatch
+    }
+
+    /// The default-browser row in the app's own Settings pane, matched on its accessibility identifier so
+    /// the lookup survives localization and cannot hit the picker's identically named title.
+    private var appPaneDefaultBrowserRow: XCUIElement {
+        settingsApp.buttons["DEFAULT_BROWSER_APP"]
+    }
+
+    /// Back button in the Settings navigation bar. Only some iOS versions expose the "BackButton"
+    /// identifier; elsewhere it is labelled with the previous screen's title, so fall back to position.
+    /// Never in split view (iPad): there a leading button can be a sidebar control, and popping is not
+    /// needed anyway since re-selecting a sidebar row resets the detail pane.
+    private var settingsBackButton: XCUIElement {
+        let identified = settingsApp.navigationBars.buttons["BackButton"]
+        guard !identified.exists, settingsApp.navigationBars.count == 1 else { return identified }
+        return settingsApp.navigationBars.buttons.firstMatch
     }
 
     // MARK: - Assertions
@@ -39,8 +61,8 @@ final class IOSSettingsAppScreen {
 
     // MARK: - Actions
 
-    /// Selects Firefox in the "Default Browser App" picker, then re-opens the picker from the root to
-    /// confirm the choice was saved (still checked) — not merely registered on the initial tap.
+    /// Selects Firefox in the "Default Browser App" picker, then leaves and re-opens the picker to confirm
+    /// the choice was saved (still checked) — not merely registered on the initial tap.
     func setFirefoxAsDefaultBrowser() {
         openDefaultBrowserPicker()
         let option = firefoxBrowserOption
@@ -48,15 +70,30 @@ final class IOSSettingsAppScreen {
         option.waitAndTap()
         XCTAssertTrue(option.isSelected, "The Firefox option should be selected after tapping it")
 
+        leaveDefaultBrowserPicker()
         openDefaultBrowserPicker()
         let persisted = firefoxBrowserOption
         BaseTestCase().mozWaitForElementToExist(persisted, timeout: TIMEOUT_LONG)
         XCTAssertTrue(persisted.isSelected, "Firefox should still be the default browser after reopening the picker")
     }
 
-    /// The Settings deep link lands on the root page on Simulator, and iOS 26 nests the default-browser
-    /// choice under Settings > Apps > Default Apps, so navigate there explicitly.
+    /// Up to iOS 18.1 the choice lives in the app's own pane, which is where the Settings deep link lands.
+    /// iOS 18.2+ nests it under Settings > Apps > Default Apps, reached from the root the deep link opens.
     private func openDefaultBrowserPicker() {
+        if appPaneDefaultBrowserRow.mozWaitForElementToExist(
+            timeout: TIMEOUT_PICKER_PROBE,
+            failOnTimeout: false
+        ) {
+            tapSettingsRow(appPaneDefaultBrowserRow)
+            // Settle on the picker before the option is looked up, so a mid-push snapshot cannot decide
+            // between the cell and button shapes on the pane still being dismissed.
+            _ = settingsApp.navigationBars["Default Browser App"].mozWaitForElementToExist(
+                timeout: TIMEOUT,
+                failOnTimeout: false
+            )
+            return
+        }
+
         // Settings resumes where a prior run left it, so pop any pushed screen back to root first (on iPad
         // this pops the detail pane's own nav stack, since its back button survives sidebar re-selection).
         popToSettingsRoot()
@@ -76,12 +113,20 @@ final class IOSSettingsAppScreen {
         tapSettingsRow(browserSetting)
     }
 
+    /// Leaves the open picker so that reopening it is a real round trip rather than a re-read of the
+    /// screen the selection was made on.
+    private func leaveDefaultBrowserPicker() {
+        let backButton = settingsBackButton
+        if backButton.exists {
+            backButton.tap()
+        }
+    }
+
     /// Taps the navigation back button until the root of Settings is reached (no back button left).
     private func popToSettingsRoot() {
-        let backButton = settingsApp.navigationBars.buttons["BackButton"]
         var attempts = 0
-        while backButton.exists && attempts < 8 {
-            backButton.tap()
+        while settingsBackButton.exists && attempts < 8 {
+            settingsBackButton.tap()
             attempts += 1
         }
     }

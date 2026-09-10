@@ -46,6 +46,23 @@ final class TabDisplayDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 0)
     }
 
+    func testUpdateSnapshot_withChangedTabContent_stillResolvesAllItems() {
+        let subject = createSubject(isPrivateMode: false, numberActiveTabs: 3)
+
+        // Same UUID with changed content shares a hash with the original item
+        // (TabModel hashes only its UUID), so diffing must rely on equality.
+        var tabs = createTabs(numberOfTabs: 3)
+        let updatedTab = TabModel.emptyState(tabUUID: "tab-1", title: "Updated Title")
+        tabs[1] = updatedTab
+        let updatedState = TabsPanelState(windowUUID: .XCTestDefaultUUID, isPrivateMode: false)
+            .copy(tabs: tabs)
+
+        diffableDataSource?.updateSnapshot(state: updatedState)
+
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 3)
+        XCTAssertNotNil(diffableDataSource?.indexPath(for: .tab(updatedTab)))
+    }
+
     // MARK: - Private
     private func createSubject(isPrivateMode: Bool,
                                numberActiveTabs: Int,
@@ -77,7 +94,7 @@ final class TabDisplayDiffableDataSourceTests: XCTestCase {
 
         var tabs = [TabModel]()
         for index in 0..<numberOfTabs {
-            let tabModel = TabModel.emptyState(tabUUID: "", title: "Tab \(index)")
+            let tabModel = TabModel.emptyState(tabUUID: "tab-\(index)", title: "Tab \(index)")
             tabs.append(tabModel)
         }
         return tabs

@@ -13,9 +13,13 @@ window.getCurrentFormData = getCurrentFormData;
 /**
  * Sets the theme of the webview.
  * @param {Boolean} isDarkTheme - Set to true if the dark theme should be applied.
+ * @param {string} caretColor - Color applied to the text cursor.
  */
-const setTheme = (isDarkTheme) => {
+const setTheme = (isDarkTheme, caretColor) => {
   document.body.classList.toggle("dark", isDarkTheme);
+  if (caretColor) {
+    document.documentElement.style.setProperty("--caret-color", caretColor);
+  }
 };
 window.setTheme = setTheme;
 

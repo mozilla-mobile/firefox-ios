@@ -188,7 +188,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         let style = theme.type.getInterfaceStyle()
         self.windows[window]?.overrideUserInterfaceStyle = style
         // Nova only: highlighted text purple tint.
-        let selectedTextTint = theme.isNova ? theme.colors.layerSelectedText : nil
+        let selectedTextTint = theme.isNova ? theme.colors.actionPrimary : nil
         UITextField.appearance().tintColor = selectedTextTint
         UITextView.appearance().tintColor = selectedTextTint
         notifyCurrentThemeDidChange(for: window)
