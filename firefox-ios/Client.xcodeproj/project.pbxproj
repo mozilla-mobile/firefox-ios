@@ -6126,6 +6126,9 @@
 		436D82CC2C2053410054F138 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/AddressToolbar.strings; sourceTree = "<group>"; };
 		436D82CD2C2053410054F138 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/EnhancedTrackingProtection.strings; sourceTree = "<group>"; };
 		436D82CE2C2053410054F138 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/QRCode.strings; sourceTree = "<group>"; };
+		436D8D5D3052C75200E65E9F /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/GoogleLens.strings; sourceTree = "<group>"; };
+		436D8D5E3052C75200E65E9F /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/PrivacyDashboard.strings; sourceTree = "<group>"; };
+		436D8D5F3052C75200E65E9F /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/WebCompatReporter.strings; sourceTree = "<group>"; };
 		436DA2AF2DDB4A30002E8B7E /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/Shopping.strings; sourceTree = "<group>"; };
 		436DBFB929225A63003F8A35 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/SearchHeaderTitle.strings; sourceTree = "<group>"; };
 		436DC0C030498C090028AD1D /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/GoogleLens.strings; sourceTree = "<group>"; };
@@ -22754,6 +22757,7 @@
 				4384918530518FAB00CB1B16 /* hr */,
 				4313666B305190690071BD42 /* lv */,
 				4393C48E305191F70056CD44 /* ug */,
+				436D8D5E3052C75200E65E9F /* eo */,
 			);
 			name = PrivacyDashboard.strings;
 			sourceTree = "<group>";
@@ -23417,6 +23421,7 @@
 				4331956E30498D62000159F2 /* is */,
 				4384918630518FAB00CB1B16 /* hr */,
 				4393C48F305191F70056CD44 /* ug */,
+				436D8D5F3052C75200E65E9F /* eo */,
 			);
 			name = WebCompatReporter.strings;
 			sourceTree = "<group>";
@@ -26385,6 +26390,7 @@
 				432C24C330498F6D003EB69A /* zh-TW */,
 				430552F830518E9A00713DE0 /* da */,
 				4384918430518FAB00CB1B16 /* hr */,
+				436D8D5D3052C75200E65E9F /* eo */,
 			);
 			name = GoogleLens.strings;
 			sourceTree = "<group>";
