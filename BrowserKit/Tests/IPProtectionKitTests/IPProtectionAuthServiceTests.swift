@@ -191,6 +191,29 @@ final class IPProtectionAuthServiceTests: XCTestCase {
         XCTAssertEqual(remoteServer.sendAttestationCallCount, 0, "Must not re-attest on a transport failure")
     }
 
+    func test_authenticate_reEnrolls_whenRefreshIsRejected_evenWithValidCache() async throws {
+        // Past renewAfter but still 28 days from expiry, which is the window the ordering decides.
+        let tokenStore = MockIPProtectionTokenStore(initial: renewableSession)
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
+        refresher.refreshError = AppAttestServiceError.serverError(statusCode: 401, description: "unknown-key-id")
+        let subject = try makeSubject(
+            remoteServer: enrollingServer(tokenStore: tokenStore),
+            keyStore: keyStore,
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        let result = try await subject.authenticate()
+
+        XCTAssertEqual(
+            result,
+            "new-dsj",
+            "A session the backend no longer recognizes must not be served just because it is unexpired"
+        )
+        XCTAssertEqual(keyStore.loadKeyID(), "mock-key-id", "Should attest a fresh key")
+    }
+
     func test_authenticate_reEnrolls_whenRefreshIsRejected() async throws {
         let tokenStore = MockIPProtectionTokenStore(initial: expiredSession)
         let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
