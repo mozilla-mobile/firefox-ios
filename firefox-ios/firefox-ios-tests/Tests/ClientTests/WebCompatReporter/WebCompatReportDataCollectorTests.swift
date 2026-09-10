@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Shared
 import WebKit
 import XCTest
 
@@ -358,6 +359,24 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
         XCTAssertEqual(payload.devicePixelRatio, "2")
     }
 
+    // MARK: - Ad blocker
+
+    func test_enrich_adBlockerOn_reportsTrue() {
+        XCTAssertEqual(adBlockerPayload(isEnabled: true).adBlockerEnabled, true)
+    }
+
+    func test_enrich_adBlockerOff_reportsFalseRatherThanOmittingIt() {
+        XCTAssertEqual(adBlockerPayload(isEnabled: false).adBlockerEnabled, false)
+    }
+
+    // The pref is app-wide, so it survives the tab-specific opt-out that drops the page fields.
+    func test_enrich_withoutTabSpecificInfo_stillReportsTheAdBlockerPref() {
+        let payload = adBlockerPayload(isEnabled: true, includeTabSpecificInfo: false)
+
+        XCTAssertEqual(payload.adBlockerEnabled, true)
+        XCTAssertNil(payload.blockList)
+    }
+
     func test_captureFullPage_withoutWebView_returnsNil() async {
         let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
 
@@ -409,6 +428,20 @@ final class WebCompatReportDataCollectorTests: XCTestCase {
             blockingStrength: blockingStrength,
             blockedOrigins: blockedOrigins,
             hasTrackingContentBlocked: hasTrackingContentBlocked
+        )
+    }
+
+    private func adBlockerPayload(
+        isEnabled: Bool,
+        includeTabSpecificInfo: Bool = true
+    ) -> WebCompatReportPayload {
+        return WebCompatReportDataCollector.enrich(
+            WebCompatReportPayload(),
+            tab: Tab(profile: MockProfile(), windowUUID: windowUUID),
+            includeBlockedList: false,
+            includeTabSpecificInfo: includeTabSpecificInfo,
+            device: FakeDeviceInfoProvider(),
+            adBlockerState: FakeAdBlockerStateProvider(isEnabled: isEnabled)
         )
     }
 
@@ -467,5 +500,13 @@ private final class NavigationCompletionDelegate: NSObject, WKNavigationDelegate
         let onCompletion = self.onCompletion
         self.onCompletion = nil
         onCompletion?()
+    }
+}
+
+private struct FakeAdBlockerStateProvider: WebCompatAdBlockerStateProviding {
+    let isEnabled: Bool
+
+    func isAdBlockerEnabled(prefs: Prefs) -> Bool {
+        return isEnabled
     }
 }
