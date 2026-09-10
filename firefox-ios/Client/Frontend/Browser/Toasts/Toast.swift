@@ -141,17 +141,25 @@ class Toast: UIView, ThemeApplicable, Notifiable {
         }
     }
 
+    private lazy var glassEffect: some UIVisualEffect? = {
+        guard #available(iOS 26, *) else { return nil }
+        return UIGlassEffect()
+    }()
+
     @available(iOS 26.0, *)
     private func setupGlassEffect(theme: Theme) {
-        // Only add glass effect if it doesn't already exist
-        guard glassEffectView == nil else { return }
+        if let effect = glassEffect as? UIGlassEffect {
+            effect.tintColor = theme.isNova ? theme.colors.layerInverse : theme.colors.actionPrimary
+        }
+
+        // Only add the effect view once; later calls just refresh the tint
+        if let glassEffectView {
+            glassEffectView.effect = glassEffect
+            return
+        }
 
         let effectView = UIVisualEffectView()
-
-        let glassEffect = UIGlassEffect()
-        glassEffect.tintColor = theme.isNova ? theme.colors.layerInverse : theme.colors.actionPrimary
         effectView.effect = glassEffect
-
         effectView.layer.cornerRadius = UX.toastCornerRadius
         effectView.clipsToBounds = true
         effectView.translatesAutoresizingMaskIntoConstraints = false
