@@ -141,7 +141,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
         }
     }
 
-    private lazy var glassEffect: some UIVisualEffect? = {
+    private lazy var glassEffect: UIVisualEffect? = {
         guard #available(iOS 26, *) else { return nil }
         return UIGlassEffect()
     }()
