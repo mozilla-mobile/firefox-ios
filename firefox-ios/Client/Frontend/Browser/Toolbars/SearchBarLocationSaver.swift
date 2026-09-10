@@ -7,9 +7,6 @@ import Shared
 protocol SearchBarLocationSaverProtocol {
     @MainActor
     func saveUserSearchBarLocation(profile: Profile, userInterfaceIdiom: UIUserInterfaceIdiom)
-
-    @MainActor
-    func migrateBottomBarPositionToTopOnIPad(profile: Profile, userInterfaceIdiom: UIUserInterfaceIdiom)
 }
 
 struct SearchBarLocationSaver: SearchBarLocationProvider,
@@ -38,22 +35,5 @@ struct SearchBarLocationSaver: SearchBarLocationProvider,
         }
 
         userPreferences.setSearchBarPosition(.bottom)
-    }
-
-    /// One-shot migration: iPad users who landed on `.bottom` due to the FXIOS-15232
-    /// regression (which briefly exposed the toolbar setting on iPad) are reset to
-    /// `.top`. The pref is read directly because the regular getter clamps to `.top`
-    /// on iPad and would mask the stale write.
-    /// TODO: FXIOS-15668 Remove this migration after enough release cycles have
-    /// passed for affected users to launch a fixed build.
-    @MainActor
-    func migrateBottomBarPositionToTopOnIPad(
-        profile: Profile,
-        userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
-    ) {
-        guard userInterfaceIdiom == .pad else { return }
-        let saved = profile.prefs.stringForKey(PrefsKeys.FeatureFlags.SearchBarPosition)
-        guard saved == SearchBarPosition.bottom.rawValue else { return }
-        userPreferences.setSearchBarPosition(.top)
     }
 }

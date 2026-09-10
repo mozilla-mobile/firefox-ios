@@ -110,7 +110,6 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
 
         // Save toolbar position to user prefs
         let searchBarLocationSaver = SearchBarLocationSaver()
-        searchBarLocationSaver.migrateBottomBarPositionToTopOnIPad(profile: profile)
         searchBarLocationSaver.saveUserSearchBarLocation(profile: profile)
         let deviceName = UIDevice.current.name
 
