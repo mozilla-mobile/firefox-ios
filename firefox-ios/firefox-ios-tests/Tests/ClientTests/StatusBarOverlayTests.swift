@@ -15,7 +15,8 @@ final class StatusBarOverlayTests: XCTestCase {
     private var notificationCenter: MockNotificationCenter!
     private var toolbarHelper: ToolbarHelperInterface!
 
-    private var expectedAlpha: CGFloat = if #available(iOS 26, *) { .zero } else { 0.85 }
+    private var expectedAlpha: CGFloat = if #available(iOS 26, *) { .zero } else { 0.90 }
+    private var expectedBottomAlpha: CGFloat = if #available(iOS 26, *) { .zero } else { 0.85 }
 
     override func setUp() async throws {
         try await super.setUp()
@@ -108,7 +109,7 @@ final class StatusBarOverlayTests: XCTestCase {
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
+                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedBottomAlpha).cgColor)
     }
 
     func testOnWebpage_withoutWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
@@ -136,7 +137,7 @@ final class StatusBarOverlayTests: XCTestCase {
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
+                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedBottomAlpha).cgColor)
     }
 
     func testOnWebpage_withWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {

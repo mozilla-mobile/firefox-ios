@@ -60,10 +60,8 @@ public struct AddressToolbarUXConfiguration {
     func locationContainerBackgroundColor(theme: some Theme) -> UIColor {
         guard !isAddressBarMinimized else { return .clear }
 
-        let alternativeLocationColor = theme.isNova ? theme.colors.layerSurfaceMedium : theme.colors.layerSurfaceMediumAlt
-
         if hasAlternativeLocationColor {
-            return isLocationTextCentered ? alternativeLocationColor : theme.colors.layerEmphasis
+            return isLocationTextCentered ? theme.colors.layerSurfaceMediumAlt : theme.colors.layerEmphasis
         } else {
             return isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerEmphasis
         }

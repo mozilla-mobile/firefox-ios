@@ -774,8 +774,7 @@ final class LocationView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         let colors = theme.colors
-        let usesAlternativeLocationColor = !theme.isNova && hasAlternativeLocationColor
-        let mainBackgroundColor = usesAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
+        let mainBackgroundColor = hasAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
         let (primaryColor, secondaryColor) = getPrimaryAndSecondaryColors()
 
         gradientLayer.colors = Gradient(
