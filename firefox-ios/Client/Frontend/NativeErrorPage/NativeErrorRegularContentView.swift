@@ -54,7 +54,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
     }
 
     private lazy var waybackErrorIcon: UIImageView = .build { imageView in
-        imageView.image = UIImage(systemName: "exclamationmark.triangle.fill")
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.warning)
         imageView.contentMode = .scaleAspectFit
         imageView.setContentHuggingPriority(.required, for: .horizontal)
         imageView.isAccessibilityElement = false
