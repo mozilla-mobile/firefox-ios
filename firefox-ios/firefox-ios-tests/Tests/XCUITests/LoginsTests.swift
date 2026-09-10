@@ -678,6 +678,7 @@ class LoginTest: BaseTestCase {
             mozWaitForElementToNotExist(app.keyboards.buttons["Continue"])
             mozWaitForElementToExist(app.keyboards.keys.firstMatch)
         }
+        mozWaitElementHittable(element: app.keyboards.keys.firstMatch, timeout: TIMEOUT)
         for letter in typedText {
             print("\(letter)")
             app.keyboards.keys["\(letter)"].waitAndTap()
