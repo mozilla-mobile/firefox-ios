@@ -53,15 +53,11 @@ public struct IPProtectionProxyTokenService: IPProtectionProxyTokenFetching {
         try await requestAuth.authenticate(request: &request)
 
         let (data, response) = try await urlSession.data(from: request)
-        if let http = response as? HTTPURLResponse {
-            if http.statusCode == 401 {
-                throw IPProtectionError.sessionRejected
-            }
-            guard (200..<300).contains(http.statusCode) else {
-                let message = String(data: data, encoding: .utf8) ?? "Unknown server error"
-                throw AppAttestServiceError.serverError(statusCode: http.statusCode, description: message)
-            }
+        // A rejected session is recoverable by refreshing, so it is separated from other failures.
+        if (response as? HTTPURLResponse)?.statusCode == 401 {
+            throw IPProtectionError.sessionRejected
         }
+        try AppAttestServiceError.validate(response: response, data: data)
         return try JSONDecoder().decode(IPProtectionProxyToken.self, from: data)
     }
 }

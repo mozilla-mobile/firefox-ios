@@ -53,7 +53,7 @@ public struct IPProtectionAppAttestServer: AppAttestRemoteServerProtocol, IPProt
 
         let request = try Self.jsonRequest(url: endpoint, body: ChallengeRequest(keyId: keyId))
         let (data, response) = try await urlSession.data(from: request)
-        try Self.validate(response: response, data: data)
+        try AppAttestServiceError.validate(response: response, data: data)
         return try JSONDecoder().decode(ChallengeResponse.self, from: data).challenge
     }
 
@@ -75,7 +75,7 @@ public struct IPProtectionAppAttestServer: AppAttestRemoteServerProtocol, IPProt
         )
         let request = try Self.jsonRequest(url: endpoint, body: body)
         let (data, response) = try await urlSession.data(from: request)
-        try Self.validate(response: response, data: data)
+        try AppAttestServiceError.validate(response: response, data: data)
 
         let session = try JSONDecoder().decode(IPProtectionDeviceSession.self, from: data)
         try tokenStore.save(session)
@@ -94,7 +94,7 @@ public struct IPProtectionAppAttestServer: AppAttestRemoteServerProtocol, IPProt
         )
         let request = try Self.jsonRequest(url: endpoint, body: body)
         let (data, response) = try await urlSession.data(from: request)
-        try Self.validate(response: response, data: data)
+        try AppAttestServiceError.validate(response: response, data: data)
 
         let session = try JSONDecoder().decode(IPProtectionDeviceSession.self, from: data)
         try tokenStore.save(session)
@@ -109,13 +109,5 @@ public struct IPProtectionAppAttestServer: AppAttestRemoteServerProtocol, IPProt
         )
         request.httpBody = try JSONEncoder().encode(body)
         return request
-    }
-
-    private static func validate(response: URLResponse, data: Data) throws {
-        guard let http = response as? HTTPURLResponse else { return }
-        guard (200..<300).contains(http.statusCode) else {
-            let message = String(data: data, encoding: .utf8) ?? "Unknown server error"
-            throw AppAttestServiceError.serverError(statusCode: http.statusCode, description: message)
-        }
     }
 }
