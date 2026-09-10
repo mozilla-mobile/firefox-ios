@@ -13,11 +13,12 @@ channels:
   - beta
   - release
 include:
+
   - nimbus-features/adBlockerFeature.yaml
-  - nimbus-features/backgroundAudioFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/addressBarGestureToOpenTabTrayFeature.yaml
   - nimbus-features/aiKillSwitchFeature.yaml
+  - nimbus-features/backgroundAudioFeature.yaml
   - nimbus-features/bookmarksSearchFeature.yaml
   - nimbus-features/cellularDataRestrictedErrorPageFeature.yaml
   - nimbus-features/customReaderModeSchemeFeature.yaml
@@ -33,6 +34,7 @@ include:
   - nimbus-features/improvedAppStoreReviewTriggerFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
+  - nimbus-features/multiDayOnboardingFeature.yaml
   - nimbus-features/nativeErrorPageFeature.yaml
   - nimbus-features/newBookmarkFolderTreeFeature.yaml
   - nimbus-features/novaDesignFeature.yaml
