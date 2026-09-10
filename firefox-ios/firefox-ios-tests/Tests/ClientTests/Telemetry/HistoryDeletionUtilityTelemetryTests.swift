@@ -16,6 +16,11 @@ final class HistoryDeletionUtilityTelemetryTests: XCTestCase {
         mockGleanWrapper = MockGleanWrapper()
     }
 
+    override func tearDown() {
+        mockGleanWrapper = nil
+        super.tearDown()
+    }
+
     func testHistoryDeletedTelemetry() throws {
         // The event and event extras type under test
         let event = GleanMetrics.LibraryHistoryPanel.clearedHistory

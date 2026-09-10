@@ -19,6 +19,13 @@ final class SearchEngineSelectionCoordinatorTests: XCTestCase {
         mockParentCoordinator = MockParentCoordinator()
     }
 
+    override func tearDown() async throws {
+        mockRouter = nil
+        mockParentCoordinator = nil
+        DependencyHelperMock().reset()
+        try await super.tearDown()
+    }
+
     func testInitialState() {
         _ = createSubject()
 

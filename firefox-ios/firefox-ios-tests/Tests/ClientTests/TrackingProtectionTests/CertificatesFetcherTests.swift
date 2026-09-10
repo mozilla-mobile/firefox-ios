@@ -9,6 +9,10 @@ import Common
 @testable import Client
 
 final class CertificatesFetcherTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+    }
+
     override func tearDown() {
         MockCertificateURLProtocol.requestHandler = nil
         super.tearDown()

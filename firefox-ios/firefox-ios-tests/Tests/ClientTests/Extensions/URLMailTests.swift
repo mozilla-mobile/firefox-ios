@@ -41,7 +41,8 @@ class URLMailTests: XCTestCase {
     }
 
     func testMailToMetadata_noToAddress() {
-        let url = URL(string: "mailto:?to=&subject=mailto%20with%20examples&body=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMailto")
+        let mailto = "mailto:?to=&subject=mailto%20with%20examples&body=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FMailto"
+        let url = URL(string: mailto)
         let metadata = url!.mailToMetadata()
         XCTAssertNotNil(metadata, "Metadata should not be nil")
         XCTAssertEqual(metadata?.to, "", "Should have empty to value")

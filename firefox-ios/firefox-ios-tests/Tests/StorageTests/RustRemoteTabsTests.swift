@@ -79,6 +79,15 @@ class RustRemoteTabsTests: XCTestCase {
         }
     }
 
+    override func tearDown() {
+        _ = tabs?.forceClose()
+        _ = mockTabs?.forceClose()
+        tabs = nil
+        mockTabs = nil
+        files = nil
+        super.tearDown()
+    }
+
     func testSetLocalTabs() {
         let url = "https://example.com"
         let title = "example"
