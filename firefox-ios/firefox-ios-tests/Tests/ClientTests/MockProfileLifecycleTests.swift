@@ -106,13 +106,3 @@ struct MockProfileLifecycleTests {
             .sorted()
     }
 }
-
-private extension Deferred {
-    var asyncValue: T {
-        get async {
-            await withCheckedContinuation { continuation in
-                upon { continuation.resume(returning: $0) }
-            }
-        }
-    }
-}

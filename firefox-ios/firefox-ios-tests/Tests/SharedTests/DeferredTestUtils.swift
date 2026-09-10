@@ -21,3 +21,13 @@ extension Deferred where T: Succeedable {
         XCTAssertTrue(self.value.isFailure)
     }
 }
+
+extension Deferred {
+    var asyncValue: T {
+        get async {
+            await withCheckedContinuation { continuation in
+                upon { continuation.resume(returning: $0) }
+            }
+        }
+    }
+}
