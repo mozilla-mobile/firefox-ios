@@ -47,15 +47,19 @@ struct IPProtectionAuthService: IPProtectionAuthenticating {
             // Refreshing with the existing key preserves the device identity, and its quota bucket
             return try await refresh()
         } catch {
-            // Prefer a stale-but-valid session over re-attesting: a new attestation creates a new device
-            // record and inflates the App Attest risk metric
+            // A rejected key outranks the cache: the session is only meaningful to a backend that
+            // still has our device record, so serving it would 401 until it expires 30 days later
+            if IPProtectionError.indicatesLostEnrollment(error) {
+                return try await enroll()
+            }
+
+            // Prefer a stale-but-valid session over re-attesting: a new attestation creates a new
+            // device record and inflates the App Attest risk metric
             if let cached, cached.isValid() {
                 return cached.deviceSessionJwt
             }
 
-            // Re-attest only when the enrollment is gone, keep the key in other error cases
-            guard IPProtectionError.indicatesLostEnrollment(error) else { throw error }
-            return try await enroll()
+            throw error
         }
     }
 
