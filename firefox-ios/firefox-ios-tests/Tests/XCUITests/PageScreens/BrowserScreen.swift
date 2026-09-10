@@ -283,16 +283,26 @@ final class BrowserScreen {
     // Pastes the clipboard contents into the (already focused) address bar and asserts the resulting
     // value. Used to verify clipboard content in-app, avoiding the iOS 16+ cross-process paste prompt.
     func pasteAndAssertAddressBarContains(_ value: String) {
-        let pasteButton = sel.PASTE_BUTTON.element(in: app)
         if BaseTestCase().iPad() {
             addressBar.waitAndTap()
         } else {
             addressBar.press(forDuration: 1)
         }
-        if !pasteButton.exists {
-            addressBar.press(forDuration: 1)
+        if #unavailable(iOS 16) {
+            // The edit callout is a system menu item on iOS 15 rather than an otherElements
+            // button, and a longer press starts a drag lift instead of showing the callout.
+            let pasteMenuItem = app.menuItems["Paste"]
+            if !pasteMenuItem.exists {
+                addressBar.press(forDuration: 0.8)
+            }
+            pasteMenuItem.waitAndTap()
+        } else {
+            let pasteButton = sel.PASTE_BUTTON.element(in: app)
+            if !pasteButton.exists {
+                addressBar.press(forDuration: 1)
+            }
+            pasteButton.waitAndTap()
         }
-        pasteButton.waitAndTap()
         BaseTestCase().mozWaitForValueContains(addressBar, value: value)
     }
 

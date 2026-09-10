@@ -26,11 +26,11 @@ final class WebCompatReportRecorderTests: XCTestCase {
         XCTAssertEqual(gleanWrapper.recordStringCalled, 4)
         XCTAssertEqual(gleanWrapper.recordTextCalled, 3)
         XCTAssertEqual(gleanWrapper.recordStringListCalled, 3)
-        XCTAssertEqual(gleanWrapper.setBooleanCalled, 7)
+        XCTAssertEqual(gleanWrapper.setBooleanCalled, 8)
         XCTAssertEqual(gleanWrapper.recordQuantityCalled, 1)
         XCTAssertEqual(gleanWrapper.recordUrlCalled, 1)
         XCTAssertEqual(gleanWrapper.recordObjectCalled, 1)
-        XCTAssertEqual(gleanWrapper.savedEvents.count, 20)
+        XCTAssertEqual(gleanWrapper.savedEvents.count, 21)
         XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
     }
 
@@ -61,6 +61,28 @@ final class WebCompatReportRecorderTests: XCTestCase {
         createSubject().submit(payload)
 
         XCTAssertEqual(gleanWrapper.savedBooleans, [false, true])
+    }
+
+    // `savedBooleans` alone can't say which metric got the value, so assert the metric too.
+    func testSubmit_recordsTheAdBlockerPrefAgainstItsOwnMetric() {
+        var payload = WebCompatReportPayload()
+        payload.adBlockerEnabled = true
+
+        createSubject().submit(payload)
+
+        XCTAssertIdentical(gleanWrapper.savedEvents.last as AnyObject,
+                           GleanMetrics.BrokenSiteReportBrowserInfoPrefs.adBlockerEnabled)
+        XCTAssertEqual(gleanWrapper.savedBooleans, [true])
+    }
+
+    // `if let` on an optional Bool is one careless edit from dropping `false` as "no data".
+    func testSubmit_adBlockerPrefOff_recordsFalseRatherThanSkippingIt() {
+        var payload = WebCompatReportPayload()
+        payload.adBlockerEnabled = false
+
+        createSubject().submit(payload)
+
+        XCTAssertEqual(gleanWrapper.savedBooleans, [false])
     }
 
     func testSubmit_recordsTheValuesItWasGiven() {
@@ -111,6 +133,7 @@ final class WebCompatReportRecorderTests: XCTestCase {
         payload.etpCategory = "strict"
         payload.isPrivateBrowsing = false
         payload.hasTrackingContentBlocked = true
+        payload.adBlockerEnabled = true
         payload.fastclick = true
         payload.marfeel = false
         payload.mobify = false

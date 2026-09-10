@@ -496,8 +496,9 @@ class HistoryPanel: UIViewController,
                     assertionFailure("FXIOS-11563 We should never have duplicates! Log how you made this crash happen.")
                 }
 
+                // FXIOS-10996 Force unique while we investigate history panel crashes
                 snapshot.appendItems(
-                    sectionDataUniqued.map { HistoryItem.site($0) }, // FXIOS-10996 Force unique while we investigate history panel crashes
+                    sectionDataUniqued.map { HistoryItem.site($0) },
                     toSection: section
                 )
             }

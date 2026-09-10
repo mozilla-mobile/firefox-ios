@@ -64,8 +64,8 @@ class RustRemoteTabsTests: XCTestCase {
     }
 
     override func tearDown() {
-        _ = tabs.forceClose()
-        _ = mockTabs.forceClose()
+        _ = tabs?.forceClose()
+        _ = mockTabs?.forceClose()
         super.tearDown()
     }
 

@@ -33,7 +33,8 @@ class RustLoginsTests: XCTestCase, @unchecked Sendable {
     }
 
     override func tearDown() {
-        _ = logins.forceClose()
+        _ = logins?.forceClose()
+        MockRustKeychain.shared.removeAllKeys()
         super.tearDown()
     }
 

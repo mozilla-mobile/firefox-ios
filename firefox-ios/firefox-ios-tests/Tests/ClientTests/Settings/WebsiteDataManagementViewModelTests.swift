@@ -19,6 +19,12 @@ final class WebsiteDataManagementViewModelTests: XCTestCase {
         selectionChangedCallCount = 0
     }
 
+    override func tearDown() async throws {
+        viewModelChangedCallCount = 0
+        selectionChangedCallCount = 0
+        try await super.tearDown()
+    }
+
     func test_selectItem_notifiesSelectionChangedOnly() {
         let subject = createSubject()
         let record = MockWebsiteDataRecord(displayName: "mozilla.org")

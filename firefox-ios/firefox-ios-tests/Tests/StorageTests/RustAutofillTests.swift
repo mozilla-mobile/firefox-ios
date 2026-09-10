@@ -47,7 +47,7 @@ class RustAutofillTests: XCTestCase {
     }
 
     override func tearDown() {
-        _ = autofill.forceClose()
+        _ = autofill?.forceClose()
         super.tearDown()
     }
 

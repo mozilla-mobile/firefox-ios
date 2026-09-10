@@ -73,11 +73,20 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "توسۇلغان";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**توسۇلغان**: بۇ ئىقتىدارنى كۆرەلمەيسىز ۋە ئىشلىتەلمەيسىز. ئۈسكۈنىگە چۈشۈرۈلگەن بارلىق سۈنئىي ئەقىل مودېلى ئۆچۈرۈلىدۇ.";
+
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "بەت ۋە خۇلاسە ھەرگىز ساقلانمايدۇ.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "بەت خۇلاسىسى";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Message.v154" = "ئاۋاز، سوئال ۋە جاۋابىڭىز ھەرگىز ساقلانمايدۇ.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the Quick Answers feature */
+"Settings.AIControls.AIPoweredFeaturesSection.QuickAnswersSection.Title.v154" = "تېز جاۋاب";
 
 /* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
 "Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "سۈنئىي ئەقىلدە ئىشلەنگەن ئىقتىدار";
@@ -96,6 +105,9 @@
 
 /* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
 "Settings.AIControls.BlockAIEnhancementsTitle.v151" = "سۈنئىي ئەقىلنىڭ كۈچەيتىلگەن ئىقتىدارىنى توسىدۇ";
+
+/* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
+"Settings.AIControls.BlockedInformation.v151" = "كۆڭۈلدىكى ئەھۋالدا يېڭى ۋە نۆۋەتتىكى سۇنئىي ئەقىلنىڭ كۈچەيتىلگەن ئىقتىدارى توسۇلدى. تۆۋەندە توسۇلغان ئىقتىدارنى قايتا ئاچقىلى بولىدۇ.";
 
 /* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
 "Settings.AIControls.HeaderCard.Link.v151" = "تەپسىلاتى";
@@ -157,6 +169,18 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "ئۆزلۈكىدىن قويۇش";
 
+/* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
+"Settings.Browsing.AdBlocker.Description.v155" = "ئېلان ۋە ئېلانغا مۇناسىۋەتلىك ئىز قوغلىغۇچنى ئازايتىدۇ. ئەگەر تور بېكەت بۇزۇلغاندەك كۆرۈنسە، بۇنى تاقاپ سىناڭ.";
+
+/* Link text below the Ad Blocker toggle description that opens a support page with more information. */
+"Settings.Browsing.AdBlocker.LearnMore.v155" = "تەپسىلاتى";
+
+/* Title for the Ad Blocker toggle in the Browsing settings page. */
+"Settings.Browsing.AdBlocker.Title.v155" = "ئېلان توسقۇچ";
+
+/* Title for the Background Audio toggle in the Browsing settings page. When enabled, audio from web pages continues playing after the app is backgrounded. */
+"Settings.Browsing.BackgroundAudio.Title.v156" = "تەڭكەش ئاۋاز";
+
 /* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
 "Settings.Browsing.BlockAds.Title.v153" = "ئېلاننى توسۇش";
 
@@ -195,6 +219,9 @@
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "ھېسابات";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the brand title for the section containing the Wrexham AFC wallpapers. */
+"Settings.Home.Option.Wallpaper.WrexhamBrandTitle.v155" = "Wrexham A.F.C.";
 
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsStatus.v112" = "سىز باشقا ئۈسكۈنىدە تىزىمغا كىرگەندە بەتكۈچ تاپشۇرۇۋېلىش ۋە ئۇقتۇرۇش قىلىش چوقۇم ئوچۇق بولۇشى كېرەك.";
@@ -249,6 +276,15 @@
 
 /* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
 "Settings.Search.EnginesSuggestions.Title.v124" = "ئىزدەش موتورىنىڭ تەۋسىيەسى";
+
+/* In the Search settings, this is the description that describes the Google Lens feature */
+"Settings.Search.GoogleLens.Description.v153" = "ئىزدەش ئۈچۈن سۈرەتنى Google غا يوللايدۇ.";
+
+/* In the Search settings, this is the disclaimer underneath the Google Lens settings toggle that explains the conditions required for Google Lens to be available. */
+"Settings.Search.GoogleLens.Footnote.v153" = "پەقەت ئۈستىدە Google نى قوزغىتىپ، توركۆرگۈنىڭ ئاكتىپ ئىزدەش موتورى سۈپىتىدە ئاكتىپلاندىلا ئىشلەتكىلى بولىدۇ.";
+
+/* In the Search settings, this is the title that describes the Google Lens feature */
+"Settings.Search.GoogleLens.Title.v153" = "Google Lens";
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "ئىزدە";
@@ -390,6 +426,9 @@
 
 /* In the settings menu, in the General section, this is the title for the Translation settings section. */
 "Settings.Translation.Title.v145" = "تەرجىمە";
+
+/* Footer text below the enable toggle in the Translation settings screen. */
+"Settings.Translation.ToggleFooter.v151" = "بۇ تاللانما تاقالسا قورال بالداق ۋە تىزىملىكتىن تەرجىمىنى چىقىرىۋېتىدۇ.";
 
 /* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
 "Settings.Translation.ToggleTitle.v145" = "تەرجىمىنى قوزغات";

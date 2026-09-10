@@ -11,8 +11,6 @@ import TabDataStore
 import TipKit
 
 import class MozillaAppServices.Viaduct
-import struct MozillaAppServices.RustAdsClient
-import enum MozillaAppServices.MozAdsEnvironment
 
 class AppDelegate: UIResponder,
                    UIApplicationDelegate,

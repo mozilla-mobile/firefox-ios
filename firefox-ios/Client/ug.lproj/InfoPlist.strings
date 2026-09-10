@@ -23,7 +23,7 @@
 "NSPhotoLibraryAddUsageDescription" = "بۇ ئارقىلىق سۈرەتلەرنى ساقلىغىلى بولىدۇ.";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "ئاۋازلىق ئىزدەش ئۈچۈن Firefox ئاۋاز پەرقلەندۈرۈش ئىقتىدارىنى ئىشلىتىپ ئاۋازىڭىزنى تېكىستكە ئايلاندۇرىدۇ.";
+"NSSpeechRecognitionUsageDescription" = "بۇ Firefox نىڭ ئاۋازىڭىزنى تېكىستكە ئايلاندۇرۇشىغا يول قويىدۇ.";
 
 /* (No Comment) */
 "Scan QR Code" = "QR كودىنى تارا";

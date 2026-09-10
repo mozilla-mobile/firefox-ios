@@ -603,9 +603,17 @@ class BaseTestCase: XCTestCase {
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         let pasteAction = app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction]
         urlBar.waitAndTap()
-        urlBar.pressWithRetry(duration: 2.0, element: pasteAction)
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        pasteAction.waitAndTap()
+        if #unavailable(iOS 16) {
+            // EXPERIMENT: focusing the bar puts it in editing mode, where iOS offers the system
+            // edit menu rather than Firefox's Photon sheet, and a 2s press starts a drag lift.
+            let pasteMenuItem = app.menuItems["Paste"]
+            urlBar.pressWithRetry(duration: 0.8, element: pasteMenuItem)
+            pasteMenuItem.waitAndTap()
+        } else {
+            urlBar.pressWithRetry(duration: 2.0, element: pasteAction)
+            mozWaitForElementToExist(app.tables["Context Menu"])
+            pasteAction.waitAndTap()
+        }
         mozWaitForElementToExist(urlBar)
         waitForPastedValue(in: urlBar, contains: url)
     }

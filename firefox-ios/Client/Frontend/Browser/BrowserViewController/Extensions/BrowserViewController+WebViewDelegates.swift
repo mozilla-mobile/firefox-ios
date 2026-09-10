@@ -13,6 +13,12 @@ import WebEngine
 
 // MARK: - WKUIDelegate
 extension BrowserViewController: WKUIDelegate {
+    static let telURLAllowedCharacters = CharacterSet(charactersIn: "0123456789+-.()#*,;")
+
+    // Characters left unescaped when rebuilding the URL; everything else is percent-encoded.
+    static let callingSchemeTargetAllowedCharacters = CharacterSet.alphanumerics
+        .union(CharacterSet(charactersIn: "-._~@+"))
+
     func webView(
         _ webView: WKWebView,
         createWebViewWith configuration: WKWebViewConfiguration,
@@ -691,13 +697,79 @@ extension BrowserViewController: WKNavigationDelegate {
         guard tab.popupThrottler.canShowAlert(type: .externalScheme) else { return }
         tab.popupThrottler.willShowAlert(type: .externalScheme)
 
+        // When the scheme is opened from a window.open() popup, we move to its opener. Otherwise we
+        // move to the tab that initiated it. tab.requiredPopupConfiguration is only set if it
+        // was opened with window.open()
+        let originatingTab = (tab.requiredPopupConfiguration != nil ? tab.parent : nil) ?? tab
+        if tabManager.selectedTab !== originatingTab {
+            tabManager.selectTab(originatingTab)
+        }
+
         if url.scheme == "sms" { // All the other types show a native prompt
             showExternalAlert(withText: .ExternalSmsLinkConfirmation) { _ in
                 UIApplication.shared.open(url, options: [:])
             }
         } else {
-            UIApplication.shared.open(url, options: [:])
+            // tel, facetime, and facetime-audio open a native prompt. Strip the url down to a
+            // valid phone number (or email for FaceTime) first. We do this
+            // to avoid phishing scams or other modifications to the system prompt,
+            // see https://bugzilla.mozilla.org/show_bug.cgi?id=1328815
+            guard let sanitizedURL = sanitizedCallingSchemeURL(url) else {
+                logger.log("Blocked calling-scheme URL with no valid target after sanitization",
+                           level: .warning,
+                           category: .webview)
+                return
+            }
+            UIApplication.shared.open(sanitizedURL, options: [:])
         }
+    }
+
+    private func sanitizedCallingSchemeURL(_ url: URL) -> URL? {
+        guard let scheme = url.scheme?.lowercased(),
+              ["tel", "facetime", "facetime-audio"].contains(scheme)
+        else { return nil }
+
+        // strips the scheme, colon, and any leading slashes
+        var rawTarget = String(url.absoluteString.dropFirst(scheme.count + 1))
+        for _ in 0...1 where rawTarget.hasPrefix("/") {
+            rawTarget = String(rawTarget.dropFirst(1))
+        }
+        let decodedTarget = rawTarget.removingPercentEncoding ?? rawTarget
+
+        // Prefer an email for FaceTime targets containing an "@". If there's an "@" but no valid email,
+        // fall back to a phone number. Everything else is treated as a phone number.
+        // We rebuild the url from whatever we find
+        let matches = TextContentDetector.getTextContent(decodedTarget)
+        let email = (scheme != "tel" && decodedTarget.contains("@")) ? firstEmail(in: matches) : nil
+        let target = email ?? firstPhoneNumber(in: matches, fallback: decodedTarget)
+
+        guard let target,
+              let encodedTarget = target.addingPercentEncoding(
+                withAllowedCharacters: Self.callingSchemeTargetAllowedCharacters),
+              let sanitizedURL = URL(string: "\(scheme):\(encodedTarget)")
+        else { return nil }
+
+        return sanitizedURL
+    }
+
+    // Returns the first email address in the detected matches, or nil if none
+    private func firstEmail(in matches: [NSTextCheckingResult]?) -> String? {
+        guard let mailtoURL = matches?.first(where: { $0.url?.scheme?.lowercased() == "mailto" })?.url
+        else { return nil }
+        return String(mailtoURL.absoluteString.dropFirst("mailto:".count))
+    }
+
+    // Returns the first detected phone number. If no phone numbers are detected, we strip <fallback>
+    // of all non-phonenumber characters, returns nil if nothing remains
+    private func firstPhoneNumber(in matches: [NSTextCheckingResult]?, fallback: String) -> String? {
+        if let detected = matches?.first(where: { $0.resultType == .phoneNumber })?.phoneNumber {
+            return detected
+        }
+
+        let stripped = String(String.UnicodeScalarView(
+            fallback.unicodeScalars.filter { Self.telURLAllowedCharacters.contains($0) }
+        ))
+        return stripped.isEmpty ? nil : stripped
     }
 
     private func handleStoreURLNavigation(url: URL) {

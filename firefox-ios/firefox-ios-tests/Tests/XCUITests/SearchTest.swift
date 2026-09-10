@@ -366,11 +366,13 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306886
     // SmokeTest
-    func testBottomVIewURLBar() throws {
+    func testBottomViewURLBar_trendingRecentSearchesExperimentOff() throws {
         let toolbarScreen = ToolbarScreen(app: app)
         let browserScreen = BrowserScreen(app: app)
         let firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
 
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "trending-searches-feature")
         app.launch()
         if iPad() {
             throw XCTSkip("Toolbar option not available for iPad")
@@ -413,6 +415,64 @@ class SearchTests: FeatureFlaggedTestBase {
             // The URL bar is focused, Top Sites panel is displayed and the keyboard pops-up
             validateUrlHasFocusAndKeyboardIsDisplayed()
             firefoxHomePageScreen.assertTopSitesItemCellExist()
+
+            // Tap the back icon <
+            browserScreen.tapCancelButtonOnUrlBarExist()
+
+            // The focused is dismissed from the URL bar
+            browserScreen.assertKeyboardFocusState(isFocusedOniPad: false)
+        }
+    }
+
+    func testBottomViewURLBar_trendingRecentSearchesExperimentOn() throws {
+        let toolbarScreen = ToolbarScreen(app: app)
+        let browserScreen = BrowserScreen(app: app)
+        let searchScreen = SearchScreen(app: app)
+
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        app.launch()
+        if iPad() {
+            throw XCTSkip("Toolbar option not available for iPad")
+        } else {
+            // Tap on toolbar bottom setting
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(ToolbarSettings)
+            navigator.performAction(Action.SelectToolbarBottom)
+            navigator.goto(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+
+            // URL bar is moved to the bottom of the screen
+            let menuSettingsButton = toolbarScreen.getToolbarSettingsMenuButtonElement()
+            let firstTopSite = app.links.element(boundBy: 0)
+            toolbarScreen.assertSettingsButtonExists()
+            let urlBar = browserScreen.getAddressBarElement()
+            XCTAssertTrue(urlBar.isAbove(element: menuSettingsButton))
+            XCTAssertTrue(urlBar.isBelow(element: firstTopSite))
+
+            // In a new tab, tap on the URL bar
+            navigator.goto(NewTabScreen)
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+            urlBar.waitAndTap()
+
+            // The URL bar is focused and the keyboard is displayed
+            validateUrlHasFocusAndKeyboardIsDisplayed()
+
+            // Open a website
+            navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
+
+            // The keyboard is dismissed and page is correctly loaded
+            let keyboardCount = app.keyboards.count
+            XCTAssert(keyboardCount == 0, "The keyboard is shown")
+            waitUntilPageLoad()
+
+            // Tap on the URL bar
+            urlBar.waitAndTap()
+
+            // The URL bar is focused, Top Sites panel is displayed and the keyboard pops-up
+            validateUrlHasFocusAndKeyboardIsDisplayed()
+            searchScreen.assertTrendingSearchesSectionTitle(with: "Google")
 
             // Tap the back icon <
             browserScreen.tapCancelButtonOnUrlBarExist()
