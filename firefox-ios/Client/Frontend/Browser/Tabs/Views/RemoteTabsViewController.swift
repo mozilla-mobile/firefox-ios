@@ -159,16 +159,13 @@ class RemoteTabsViewController: UIViewController,
     }
 
     func newState(state: RemoteTabsPanelState) {
-        let currentClientAndTabs = self.state.clientAndTabs
         self.state = state
-        reloadUI(currentClientAndTabs: currentClientAndTabs)
+        reloadUI()
     }
 
-    private func reloadUI(currentClientAndTabs: [ClientAndTabs] = []) {
+    private func reloadUI() {
         updateUI()
-        if currentClientAndTabs != self.state.clientAndTabs {
-            tableView.reloadData()
-        }
+        tableView.reloadData()
     }
 
     private func updateUI() {
