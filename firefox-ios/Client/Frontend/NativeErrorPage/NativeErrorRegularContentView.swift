@@ -203,7 +203,6 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
         }
 
         waybackFooterTextView.attributedText = attributedString
-        waybackFooterTextView.accessibilityLabel = fullText
     }
 
     /// Updates the wayback area to reflect idle, loading, or failed state.
