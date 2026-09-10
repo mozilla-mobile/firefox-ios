@@ -159,7 +159,7 @@ workflows:
         - configuration: Fennec_Testing
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates -skipMacroValidation DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
+        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - script@1:
         title: Detect number of warnings
         # TODO: Fix the number of warnings reported by Xcode 27
