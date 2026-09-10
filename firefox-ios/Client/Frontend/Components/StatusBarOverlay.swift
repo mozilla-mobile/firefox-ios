@@ -27,7 +27,6 @@ final class StatusBarOverlay: UIView,
                         Notifiable {
     private struct UX {
         static let overlayAppearanceAnimationDuration: TimeInterval = 0.2
-        static let topToolbarBackgroundAlpha: CGFloat = 0.90
     }
 
     private var savedBackgroundColor: UIColor?
@@ -140,11 +139,7 @@ final class StatusBarOverlay: UIView,
     }
 
     private var backgroundAlpha: CGFloat {
-        if #available(iOS 26, *) {
-            return toolbarHelper.glassEffectAlpha
-        }
-        return !isBottomSearchBar && toolbarHelper.shouldBlur() ?
-            UX.topToolbarBackgroundAlpha : toolbarHelper.glassEffectAlpha
+        return toolbarHelper.toolbarBackgroundAlpha(isTopToolbar: !isBottomSearchBar)
     }
 
     // MARK: - ThemeApplicable

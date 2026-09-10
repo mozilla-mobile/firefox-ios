@@ -21,6 +21,9 @@ protocol ToolbarHelperInterface {
     @MainActor
     var glassEffectAlpha: CGFloat { get }
 
+    @MainActor
+    func toolbarBackgroundAlpha(isTopToolbar: Bool) -> CGFloat
+
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool
     func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool
 
@@ -33,6 +36,7 @@ protocol ToolbarHelperInterface {
 final class ToolbarHelper: ToolbarHelperInterface {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
+        static let topToolbarBackgroundAlpha: CGFloat = 0.90
     }
 
     var isSwipingTabsEnabled: Bool {
@@ -51,6 +55,14 @@ final class ToolbarHelper: ToolbarHelperInterface {
     var glassEffectAlpha: CGFloat {
         guard shouldBlur() else { return 1 }
         if #available(iOS 26, *) { return .zero } else { return UX.backgroundAlphaForBlur }
+    }
+
+    @MainActor
+    func toolbarBackgroundAlpha(isTopToolbar: Bool) -> CGFloat {
+        if #available(iOS 26, *) {
+            return glassEffectAlpha
+        }
+        return isTopToolbar && shouldBlur() ? UX.topToolbarBackgroundAlpha : glassEffectAlpha
     }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {

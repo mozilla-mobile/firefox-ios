@@ -11,6 +11,7 @@ import UIKit
 class MockToolbarHelper: ToolbarHelperInterface {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
+        static let topToolbarBackgroundAlpha: CGFloat = 0.90
     }
 
     var reduceTransparencyEnabled = false
@@ -26,6 +27,14 @@ class MockToolbarHelper: ToolbarHelperInterface {
     var glassEffectAlpha: CGFloat {
         guard shouldBlur() else { return 1 }
         if #available(iOS 26, *) { return .zero } else { return UX.backgroundAlphaForBlur }
+    }
+
+    @MainActor
+    func toolbarBackgroundAlpha(isTopToolbar: Bool) -> CGFloat {
+        if #available(iOS 26, *) {
+            return glassEffectAlpha
+        }
+        return isTopToolbar && shouldBlur() ? UX.topToolbarBackgroundAlpha : glassEffectAlpha
     }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {
