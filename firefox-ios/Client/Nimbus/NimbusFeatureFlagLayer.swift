@@ -125,6 +125,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .modernOnboardingUI:
             return checkMondernOnboardingUIFeature()
 
+        case .multiDayOnboarding:
+            return checkMultiDayOnboardingFeature()
         case .nativeErrorPage:
             return checkNativeErrorPageFeature()
 
@@ -506,5 +508,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkCellularDataRestrictedErrorPageFeature() -> Bool {
         return nimbus.features.cellularDataRestrictedErrorPageFeature.value().enabled
+    }
+
+    private func checkMultiDayOnboardingFeature() -> Bool {
+        return nimbus.features.multiDayOnboardingFeature.value().useMultiDayOnboarding
     }
 }
