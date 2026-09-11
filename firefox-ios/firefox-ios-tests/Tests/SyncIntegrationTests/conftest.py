@@ -98,22 +98,13 @@ def fxa_ci_addon(tmpdir_factory):
 
 
 @pytest.fixture
-def policies_file(tmpdir):
-    # NoDefaultBookmarks keeps the shipped bookmarks out of the profile so
-    # they are not synced alongside the ones under test.
-    path = tmpdir.join('policies.json')
-    path.write(json.dumps({'policies': {'NoDefaultBookmarks': True}}))
-    return str(path)
-
-
-@pytest.fixture
-def tps_profile(pytestconfig, tps_addon, fxa_ci_addon, tps_config, tps_log,
-                fxa_urls, policies_file):
+def tps_profile(pytestconfig, tps_addon, fxa_ci_addon, tps_config, tps_log, fxa_urls):
     preferences = {
-        'app.update.disabledForTesting': True,
+        'app.update.enabled': False,
+        'security.turn_off_all_security_so_that_viruses_can_take_over_this_computer': True,
         'browser.dom.window.dump.enabled': True,
         'devtools.console.stdout.chrome': True,
-        'browser.policies.alternatePath': policies_file,
+        'browser.onboarding.enabled': False,
         'browser.sessionstore.resume_from_crash': False,
         'browser.shell.checkDefaultBrowser': False,
         'browser.startup.homepage_override.mstone': 'ignore',
@@ -123,15 +114,13 @@ def tps_profile(pytestconfig, tps_addon, fxa_ci_addon, tps_config, tps_log,
         'datareporting.policy.dataSubmissionEnabled': False,
         # 'devtools.chrome.enabled': True,
         # 'devtools.debugger.remote-enabled': True,
+        'engine.bookmarks.repair.enabled': False,
         'extensions.autoDisableScopes': 10,
         'extensions.experiments.enabled': True,
-        'extensions.getAddons.cache.enabled': False,
-        'extensions.install.requireSecureOrigin': False,
         'extensions.update.enabled': False,
         'extensions.update.notifyUser': False,
         'identity.fxaccounts.autoconfig.uri': fxa_urls['content'],
-        'services.sync.engine.tabs.filteredSchemes':
-            'about|resource|chrome|file|blob|moz-extension',
+        'testing.tps.skipPingValidation': True,
         'services.sync.firstSync': 'notReady',
         'services.sync.lastversion': '1.0',
         'services.sync.log.appender.console': 'Trace',
@@ -145,7 +134,6 @@ def tps_profile(pytestconfig, tps_addon, fxa_ci_addon, tps_config, tps_log,
         'toolkit.startup.max_resumed_crashes': -1,
         'tps.config': json.dumps(tps_config),
         'tps.seconds_since_epoch': int(time.time()),
-        'webextensions.storage.sync.kinto': False,
         'xpinstall.signatures.required': False
     }
     profile = Profile(addons=[tps_addon, fxa_ci_addon], preferences=preferences)
