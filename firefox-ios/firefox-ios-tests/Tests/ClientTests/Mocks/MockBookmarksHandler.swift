@@ -22,6 +22,10 @@ final class MockBookmarksHandler: BookmarksHandler, @unchecked Sendable {
         children: nil)
 
     var getBookmarksTreeCalled = 0
+    var getBookmarksTreeWithCompletionCalled = 0
+    var lastGetBookmarksTreeRootGUID: GUID?
+    /// Overrides the result handed to the completion-based `getBookmarksTree`. Defaults to the folder data.
+    var getBookmarksTreeResult: Result<BookmarkNodeData?, any Error>?
     var countBookmarksTreeCalled = 0
     var getRecentBookmarksCallCount = 0
     var getRecentBookmarksResult: [BookmarkItemData]?
@@ -56,7 +60,9 @@ final class MockBookmarksHandler: BookmarksHandler, @unchecked Sendable {
         recursive: Bool,
         completion: @escaping (Result<BookmarkNodeData?, any Error>) -> Void
     ) {
-        completion(.success(folderData))
+        getBookmarksTreeWithCompletionCalled += 1
+        lastGetBookmarksTreeRootGUID = rootGUID
+        completion(getBookmarksTreeResult ?? .success(folderData))
     }
 
     func updateBookmarkNode(guid: Shared.GUID,
