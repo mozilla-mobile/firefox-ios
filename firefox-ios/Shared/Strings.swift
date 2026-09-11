@@ -2812,7 +2812,7 @@ extension String {
                 key: "QuickAnswers.ContentView.Footer.v158",
                 tableName: "QuickAnswers",
                 value: "Powered by %@ · Answers can contain mistakes.",
-                comment: "Footer text displayed below the Quick Answers result. The placeholder is the name of the AI model providing the answer. The name could be providers like Liner, Exa..."
+                comment: "Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa."
             )
 
             public static let Sources = MZLocalizedString(
@@ -2892,7 +2892,7 @@ extension String {
             public static let GenericErrorTitle = MZLocalizedString(
                 key: "QuickAnswers.Errors.GenericErrorTitle.v158",
                 tableName: "QuickAnswers",
-                value: "Couldn't get an answer",
+                value: "Couldn’t get an answer",
                 comment: "Title of the alert shown when Quick Answers encounters an unexpected error."
             )
 
