@@ -372,7 +372,9 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .stopLoading)
         XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
-        XCTAssertEqual(newState.leadingPageActions.count, 0)
+        // Still on the website loaded by loadWebsiteAction above, so share stays visible.
+        XCTAssertEqual(newState.leadingPageActions.count, 1)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
     func test_websiteLoadingStateDidChangeAction_withLoadingFalse_returnsExpectedState() {
@@ -394,7 +396,9 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
         XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
-        XCTAssertEqual(newState.leadingPageActions.count, 0)
+        // Still on the website loaded by loadWebsiteAction above, so share stays visible.
+        XCTAssertEqual(newState.leadingPageActions.count, 1)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
     func test_websiteLoadingStateDidChangeAction_withouthNavigationToolbar_returnsExcpectedState() {
@@ -418,7 +422,9 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .stopLoading)
-        XCTAssertEqual(newState.leadingPageActions.count, 0)
+        // Still on the website loaded by loadWebsiteAction above, so share stays visible.
+        XCTAssertEqual(newState.leadingPageActions.count, 1)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
 
         XCTAssertEqual(newState.navigationActionsState.actions.count, 2)
         XCTAssertEqual(newState.navigationActionsState.actions[0].actionType, .back)
@@ -1096,7 +1102,9 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
 
-        XCTAssertEqual(newState.leadingPageActions.count, 0)
+        // Still on the website loaded by loadWebsiteAction above, so share stays visible.
+        XCTAssertEqual(newState.leadingPageActions.count, 1)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
         XCTAssertEqual(newState.browserActions.count, 0)
 
         XCTAssertEqual(newState.searchTerm, nil)
