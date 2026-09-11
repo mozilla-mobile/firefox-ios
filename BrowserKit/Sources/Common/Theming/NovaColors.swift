@@ -9,7 +9,7 @@ import UIKit
 // These should never be called directly; they should only be used from a Nova theme.
 final class NovaColors {
     // MARK: - Black & White
-    static let Black = UIColor(rgb: 0x000000)
+    static let Black = UIColor(rgb: 0x000001)
     static let White = UIColor(rgb: 0xffffff)
 
     // MARK: - Gray
