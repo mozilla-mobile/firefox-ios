@@ -5,7 +5,6 @@
 import UIKit
 import Common
 
-// TODO: - FXIOS-14720 Add Strings and accessibility ids
 final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
     private struct UX {
         static let contentSpacing: CGFloat = 16.0
@@ -15,11 +14,8 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
             bottom: 13.5,
             trailing: 16.0
         )
-        static let descriptionText = """
-        Ask a question out loud, and get a short answer. \
-        We don't store your voice or questions.
-        """
-        static let learnMoreText = "Learn more"
+        static let descriptionText = String.QuickAnswers.OptIn.Description
+        static let learnMoreText = String.QuickAnswers.OptIn.LearnMore
     }
 
     private var onContinue: (() -> Void)?
@@ -28,7 +24,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
     // MARK: - Subviews
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.headline.scaledFont()
-        $0.text = "Ask With Your Voice"
+        $0.text = .QuickAnswers.OptIn.Title
         $0.numberOfLines = 0
         $0.textAlignment = .center
         $0.adjustsFontForContentSizeCategory = true
@@ -48,7 +44,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
         }
         $0.configuration?.cornerStyle = .capsule
         $0.configuration?.contentInsets = UX.buttonContentInset
-        $0.configuration?.title = "Continue"
+        $0.configuration?.title = .QuickAnswers.OptIn.ContinueButton
         $0.addAction(UIAction { [weak self] _ in self?.onContinue?() }, for: .touchUpInside)
     }
 

@@ -119,7 +119,6 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
     }
 }
 
-// TODO: - FXIOS-14720 Add Strings and accessibility ids
 final class QuickAnswersSourceView: UIView,
                                     UICollectionViewDataSource,
                                     UICollectionViewDelegateFlowLayout,
@@ -133,7 +132,7 @@ final class QuickAnswersSourceView: UIView,
 
     private let headerLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.caption1.scaledFont()
-        $0.text = "Sources"
+        $0.text = .QuickAnswers.ContentView.Sources
         $0.adjustsFontForContentSizeCategory = true
     }
     private lazy var collectionView: UICollectionView = {

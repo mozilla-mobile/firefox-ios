@@ -18,7 +18,6 @@ final class ErrorHandler {
     }
 
     // MARK: - Speech Errors
-    // TODO: - FXIOS-14720 Add Strings and accessibility ids
     func handleSpeechError(_ error: SpeechError) {
         switch error {
         // if it is the first time the permission was viewed it means the OS alert was shown
@@ -26,14 +25,14 @@ final class ErrorHandler {
         case .microphonePermissionDenied(let isFirstTime):
             handlePermissionDenied(
                 isFirstTime: isFirstTime,
-                title: "Change Settings to Use Quick Answers",
-                message: "Allow Firefox to access the Microphone."
+                title: .QuickAnswers.Errors.PermissionAlertTitle,
+                message: .QuickAnswers.Errors.MicrophonePermissionMessage
             )
         case .speechRecognitionPermissionDenied(let isFirstTime):
             handlePermissionDenied(
                 isFirstTime: isFirstTime,
-                title: "Change Settings to Use Quick Answers",
-                message: "Allow Firefox to access Speech Recognition."
+                title: .QuickAnswers.Errors.PermissionAlertTitle,
+                message: .QuickAnswers.Errors.SpeechRecognitionPermissionMessage
             )
         default:
             showCatchAllErrorAlert()
@@ -56,8 +55,8 @@ final class ErrorHandler {
         switch error {
         case .rateLimited:
             showCatchAllErrorAlert(
-                title: "Daily Limit Reached",
-                message: "Try Quick Answers again tomorrow."
+                title: .QuickAnswers.Errors.DailyLimitTitle,
+                message: .QuickAnswers.Errors.DailyLimitMessage
             )
         default:
             showCatchAllErrorAlert()
@@ -66,7 +65,6 @@ final class ErrorHandler {
 
     // MARK: - Private
 
-    // TODO: - FXIOS-14720 Add Strings and accessibility ids
     private func showPermissionAlert(title: String, message: String) {
         let alertController = UIAlertController(
             title: title,
@@ -74,7 +72,7 @@ final class ErrorHandler {
             preferredStyle: .alert
         )
         alertController.addAction(
-            UIAlertAction(title: "Open Settings", style: .default) { [weak self] _ in
+            UIAlertAction(title: .QuickAnswers.Errors.OpenSettings, style: .default) { [weak self] _ in
                 self?.onDismiss?()
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url)
@@ -82,17 +80,16 @@ final class ErrorHandler {
             }
         )
         alertController.addAction(
-            UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+            UIAlertAction(title: .QuickAnswers.Errors.Cancel, style: .cancel) { [weak self] _ in
                 self?.onDismiss?()
             }
         )
         presenter?.present(alertController, animated: true)
     }
 
-    // TODO: - FXIOS-14720 Add Strings and accessibility ids
     private func showCatchAllErrorAlert(
-        title: String = "Couldn't get an answer",
-        message: String = "Try asking again later."
+        title: String = .QuickAnswers.Errors.GenericErrorTitle,
+        message: String = .QuickAnswers.Errors.GenericErrorMessage
     ) {
         let alertController = UIAlertController(
             title: title,
@@ -100,7 +97,7 @@ final class ErrorHandler {
             preferredStyle: .alert
         )
         alertController.addAction(
-            UIAlertAction(title: "Ok", style: .default) { [weak self] _ in
+            UIAlertAction(title: .QuickAnswers.Errors.OK, style: .default) { [weak self] _ in
                 self?.onDismiss?()
             }
         )

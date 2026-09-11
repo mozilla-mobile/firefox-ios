@@ -2760,6 +2760,212 @@ extension String {
     }
 }
 
+// MARK: - Quick Answers
+extension String {
+    public struct QuickAnswers {
+        public struct OptIn {
+            public static let Title = MZLocalizedString(
+                key: "QuickAnswers.OptIn.Title.v157",
+                tableName: "QuickAnswers",
+                value: "Ask With Your Voice",
+                comment: "Title displayed on the Quick Answers opt-in screen that introduces the voice feature."
+            )
+
+            public static let Description = MZLocalizedString(
+                key: "QuickAnswers.OptIn.Description.v157",
+                tableName: "QuickAnswers",
+                value: "Ask a question out loud, and get a short answer. We don’t store your voice or questions.",
+                comment: "Description displayed on the Quick Answers opt-in screen explaining how the feature works and its privacy policy."
+            )
+
+            public static let LearnMore = MZLocalizedString(
+                key: "QuickAnswers.OptIn.LearnMore.v157",
+                tableName: "QuickAnswers",
+                value: "Learn more",
+                comment: "Link text on the Quick Answers opt-in screen that opens more information about the feature."
+            )
+
+            public static let ContinueButton = MZLocalizedString(
+                key: "QuickAnswers.OptIn.ContinueButton.v157",
+                tableName: "QuickAnswers",
+                value: "Continue",
+                comment: "Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature."
+            )
+        }
+
+        public struct ContentView {
+            public static let Placeholder = MZLocalizedString(
+                key: "QuickAnswers.ContentView.Placeholder.v157",
+                tableName: "QuickAnswers",
+                value: "Ask anything…",
+                comment: "Placeholder text shown in the Quick Answers view before the user starts speaking."
+            )
+
+            public static let Answering = MZLocalizedString(
+                key: "QuickAnswers.ContentView.Answering.v157",
+                tableName: "QuickAnswers",
+                value: "Answering…",
+                comment: "Loading label shown in the Quick Answers view while an answer is being fetched."
+            )
+
+            public static let FooterFormat = MZLocalizedString(
+                key: "QuickAnswers.ContentView.Footer.v157",
+                tableName: "QuickAnswers",
+                value: "Powered by %@ · Answers can contain mistakes.",
+                comment: "Footer text displayed below the Quick Answers result. The placeholder is the name of the AI model providing the answer. The name could be providers like Liner, Exa..."
+            )
+
+            public static let Sources = MZLocalizedString(
+                key: "QuickAnswers.ContentView.Sources.v157",
+                tableName: "QuickAnswers",
+                value: "Sources",
+                comment: "Header label for the sources section shown below a Quick Answers result."
+            )
+        }
+
+        public struct AccessibilityLabels {
+            public static let Close = MZLocalizedString(
+                key: "QuickAnswers.AccessibilityLabels.Close.v157",
+                tableName: "QuickAnswers",
+                value: "Close",
+                comment: "Accessibility label for the close button on the Quick Answers screen."
+            )
+
+            public static let OpenQuickAnswers = MZLocalizedString(
+                key: "QuickAnswers.AccessibilityLabels.OpenQuickAnswers.v157",
+                tableName: "QuickAnswers",
+                value: "Open Quick Answers",
+                comment: "Accessibility label for the button on the homepage that opens the Quick Answers feature."
+            )
+        }
+
+        public struct Errors {
+            public static let PermissionAlertTitle = MZLocalizedString(
+                key: "QuickAnswers.Errors.PermissionAlertTitle.v157",
+                tableName: "QuickAnswers",
+                value: "Change Settings to Use Quick Answers",
+                comment: "Title of the alert shown when the user has denied microphone or speech recognition permissions needed for Quick Answers."
+            )
+
+            public static let MicrophonePermissionMessage = MZLocalizedString(
+                key: "QuickAnswers.Errors.MicrophonePermissionMessage.v157",
+                tableName: "QuickAnswers",
+                value: "Allow Firefox to access the Microphone.",
+                comment: "Message shown in the permission alert when microphone access has been denied for the Quick Answers feature."
+            )
+
+            public static let SpeechRecognitionPermissionMessage = MZLocalizedString(
+                key: "QuickAnswers.Errors.SpeechRecognitionPermissionMessage.v157",
+                tableName: "QuickAnswers",
+                value: "Allow Firefox to access Speech Recognition.",
+                comment: "Message shown in the permission alert when speech recognition access has been denied for the Quick Answers feature."
+            )
+
+            public static let OpenSettings = MZLocalizedString(
+                key: "QuickAnswers.Errors.OpenSettings.v157",
+                tableName: "QuickAnswers",
+                value: "Open Settings",
+                comment: "Button label on the permission alert that opens the iOS Settings app so the user can grant permissions."
+            )
+
+            public static let Cancel = MZLocalizedString(
+                key: "QuickAnswers.Errors.Cancel.v157",
+                tableName: "QuickAnswers",
+                value: "Cancel",
+                comment: "Button label on the Quick Answers permission alert to dismiss the alert without taking action."
+            )
+
+            public static let DailyLimitTitle = MZLocalizedString(
+                key: "QuickAnswers.Errors.DailyLimitTitle.v157",
+                tableName: "QuickAnswers",
+                value: "Daily Limit Reached",
+                comment: "Title of the alert shown when the user has exceeded the daily usage limit for Quick Answers."
+            )
+
+            public static let DailyLimitMessage = MZLocalizedString(
+                key: "QuickAnswers.Errors.DailyLimitMessage.v157",
+                tableName: "QuickAnswers",
+                value: "Try Quick Answers again tomorrow.",
+                comment: "Message shown in the alert when the user has exceeded the daily usage limit for Quick Answers."
+            )
+
+            public static let GenericErrorTitle = MZLocalizedString(
+                key: "QuickAnswers.Errors.GenericErrorTitle.v157",
+                tableName: "QuickAnswers",
+                value: "Couldn't get an answer",
+                comment: "Title of the alert shown when Quick Answers encounters an unexpected error."
+            )
+
+            public static let GenericErrorMessage = MZLocalizedString(
+                key: "QuickAnswers.Errors.GenericErrorMessage.v157",
+                tableName: "QuickAnswers",
+                value: "Try asking again later.",
+                comment: "Message shown in the alert when Quick Answers encounters an unexpected error."
+            )
+
+            public static let OK = MZLocalizedString(
+                key: "QuickAnswers.Errors.OK.v157",
+                tableName: "QuickAnswers",
+                value: "Ok",
+                comment: "Button label to dismiss the Quick Answers error alert."
+            )
+        }
+
+        public struct Tip {
+            public static let Title = MZLocalizedString(
+                key: "QuickAnswers.Tip.Title.v157",
+                tableName: "QuickAnswers",
+                value: "Ask Out Loud for Quick Answers",
+                comment: "Title of the tooltip that introduces the Quick Answers feature on the homepage."
+            )
+
+            public static let Message = MZLocalizedString(
+                key: "QuickAnswers.Tip.Message.v157",
+                tableName: "QuickAnswers",
+                value: "Tap here to get started.",
+                comment: "Message of the tooltip that introduces the Quick Answers feature on the homepage."
+            )
+        }
+
+        public struct Settings {
+            public static let Title = MZLocalizedString(
+                key: "QuickAnswers.Settings.Title.v157",
+                tableName: "Settings",
+                value: "Quick Answers",
+                comment: "Title shown in the navigation bar and as the toggle label on the Quick Answers settings screen."
+            )
+
+            public static let Footer = MZLocalizedString(
+                key: "QuickAnswers.Settings.Footer.v157",
+                tableName: "Settings",
+                value: "Ask out loud and get short answers. We don’t store your voice, questions, or answers.",
+                comment: "Footer text on the Quick Answers settings screen explaining the feature and its privacy policy."
+            )
+
+            public static let LearnMore = MZLocalizedString(
+                key: "QuickAnswers.Settings.LearnMore.v157",
+                tableName: "Settings",
+                value: "Learn more",
+                comment: "Link button on the Quick Answers settings screen that opens more information about the feature."
+            )
+
+            public static let StatusOn = MZLocalizedString(
+                key: "QuickAnswers.Settings.StatusOn.v157",
+                tableName: "Settings",
+                value: "On",
+                comment: "Status text shown next to the Quick Answers row in the general settings when the feature is enabled."
+            )
+
+            public static let StatusOff = MZLocalizedString(
+                key: "QuickAnswers.Settings.StatusOff.v157",
+                tableName: "Settings",
+                value: "Off",
+                comment: "Status text shown next to the Quick Answers row in the general settings when the feature is disabled."
+            )
+        }
+    }
+}
+
 // MARK: - Settings screen
 extension String {
     public struct Settings {

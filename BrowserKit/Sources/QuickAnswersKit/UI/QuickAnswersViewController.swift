@@ -47,8 +47,7 @@ public final class QuickAnswersViewController: UIViewController,
             }),
             for: .touchUpInside
         )
-        // TODO: - FXIOS-14720 add Strings
-        $0.accessibilityLabel = "Close"
+        $0.accessibilityLabel = .QuickAnswers.AccessibilityLabels.Close
     }
     private let contentView: QuickAnswersContentView = .build()
     private let transitionAnimator: CrossDissolveTransitionAnimator?

@@ -5,7 +5,6 @@
 import UIKit
 import Common
 
-// TODO: - FXIOS-14720 Add Strings and accessibility ids
 final class QuickAnswersContentView: UIView, ThemeApplicable {
     private struct UX {
         static let contentSpacing: CGFloat = 32.0
@@ -23,7 +22,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     private let audioWaveform: AudioWaveformView = .build()
     private let placeholderLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.title2.scaledFont()
-        $0.text = "Ask anything…"
+        $0.text = .QuickAnswers.ContentView.Placeholder
         $0.numberOfLines = 0
         $0.textAlignment = .center
         $0.adjustsFontForContentSizeCategory = true
@@ -35,7 +34,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
     private let searchingLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.callout.scaledFont()
-        $0.text = "Answering…"
+        $0.text = .QuickAnswers.ContentView.Answering
         $0.alpha = 0.0
         $0.adjustsFontForContentSizeCategory = true
     }
@@ -197,7 +196,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     func configureAnswer(_ text: String, modelName: String) {
         searchingLabel.stopShimmering()
         searchingLabel.alpha = 0.0
-        footerLabel.text = "Powered by \(modelName) · Answers can contain mistakes."
+        footerLabel.text = String.localizedStringWithFormat(.QuickAnswers.ContentView.FooterFormat, modelName)
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             answerLabel.text = text
             answerLabel.alpha = 1.0
