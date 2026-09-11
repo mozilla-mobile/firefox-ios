@@ -45,21 +45,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         a11yLabel: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
         a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
 
-    private static let cancelEditTextAction = ToolbarActionConfiguration(
-        actionType: .cancelEdit,
-        actionLabel: .CancelString, // Use .AddressToolbar.CancelEditButtonLabel starting v138 (localization)
-        isFlippedForRTL: true,
-        isEnabled: true,
-        a11yLabel: .CancelString, // Use .AddressToolbar.CancelEditButtonLabel starting v138 (localization)
-        a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
-
-    private static let newTabAction = ToolbarActionConfiguration(
-        actionType: .newTab,
-        iconName: StandardImageIdentifiers.Large.plus,
-        isEnabled: true,
-        a11yLabel: .Toolbars.NewTabButton,
-        a11yId: AccessibilityIdentifiers.Toolbar.addNewTabButton)
-
     private static let googleLensAction = ToolbarActionConfiguration(
         actionType: .googleLens,
         iconName: StandardImageIdentifiers.Medium.logoGoogleLens,
@@ -930,82 +915,32 @@ struct AddressBarState: StateType, Sendable, Equatable {
         addressBarState: AddressBarState,
         isEditing: Bool
     ) -> [ToolbarActionConfiguration] {
-        var actions = [ToolbarActionConfiguration]()
-
         guard let toolbarState = store.state.componentState(ToolbarState.self,
                                                             for: .toolbar,
                                                             window: action.windowUUID)
-        else { return actions }
+        else { return [] }
 
-        let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
         let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
-        let isShowingTopTabs = action.isShowingTopTabs ?? toolbarState.isShowingTopTabs
         let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
         let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
-        let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
-        let tabTrayButtonStyle = isLoadAction ? action.tabTrayButtonStyle : toolbarState.tabTrayButtonStyle
-
-        if isEditing {
-            // cancel button when in edit mode
-            actions.append(cancelEditTextAction)
-        }
-
-        // In compact only cancel action should be shown
-        guard !isShowingNavigationToolbar else {
-            return actions
-        }
-
-        if !isShowingTopTabs, !isHomepage {
-            actions.append(newTabAction)
-        }
-
-        let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
         let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
         let showActionWarningBadge = action.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge
-        let showWarningBadge = isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge
-        let menuIcon = StandardImageIdentifiers.Large.moreHorizontalRound
-
         let isTabScreenshotAction = action.actionType as? ToolbarActionType == .didSetTabScreenshot
-        let previousTabScreenshot = isTabScreenshotAction ? action.previousTabScreenshot : toolbarState.previousTabScreenshot
-        let nextTabScreenshot = isTabScreenshotAction ? action.nextTabScreenshot : toolbarState.nextTabScreenshot
 
-        let iconName: String? = switch tabTrayButtonStyle {
-        case .number, .none: StandardImageIdentifiers.Large.tab
-        case .screenshot: nil
-        }
-
-        switch layout {
-        case .version1, .none:
-            actions.append(
-                contentsOf: [
-                    menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge),
-                    tabsAction(
-                        iconName: iconName,
-                        numberOfTabs: numberOfTabs,
-                        isPrivateMode: toolbarState.isPrivateMode,
-                        isNovaDesignEnabled: addressBarState.isNovaDesignEnabled,
-                        previousTabScreenshot: previousTabScreenshot,
-                        nextTabScreenshot: nextTabScreenshot
-                    )
-                ]
-            )
-        case .version2:
-            actions.append(
-                contentsOf: [
-                    tabsAction(
-                        iconName: iconName,
-                        numberOfTabs: numberOfTabs,
-                        isPrivateMode: toolbarState.isPrivateMode,
-                        isNovaDesignEnabled: addressBarState.isNovaDesignEnabled,
-                        previousTabScreenshot: previousTabScreenshot,
-                        nextTabScreenshot: nextTabScreenshot
-                    ),
-                    menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge)
-                ]
-            )
-        }
-
-        return actions
+        return BrowserActionsBuilder.getActions(
+            isEditing: isEditing,
+            isShowingNavigationToolbar: action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar,
+            isShowingTopTabs: action.isShowingTopTabs ?? toolbarState.isShowingTopTabs,
+            isHomepage: isHomepage,
+            toolbarLayout: isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout,
+            tabTrayButtonStyle: isLoadAction ? action.tabTrayButtonStyle : toolbarState.tabTrayButtonStyle,
+            numberOfTabs: action.numberOfTabs ?? toolbarState.numberOfTabs,
+            showWarningBadge: isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge,
+            previousTabScreenshot: isTabScreenshotAction ? action.previousTabScreenshot : toolbarState.previousTabScreenshot,
+            nextTabScreenshot: isTabScreenshotAction ? action.nextTabScreenshot : toolbarState.nextTabScreenshot,
+            isPrivateMode: toolbarState.isPrivateMode,
+            isNovaDesignEnabled: addressBarState.isNovaDesignEnabled
+        )
     }
 
     private static func editingAccessoryAction(isGoogleLensEnabled: Bool) -> ToolbarActionConfiguration? {
