@@ -775,7 +775,7 @@ final class CheckmarkSetting: Setting {
 // A helper class for prefs that deal with sync. Handles reloading the tableView data if changes to
 // the fxAccount happen.
 class AccountSetting: Setting {
-    unowned var settings: SettingsTableViewController
+    unowned let settings: SettingsTableViewController
 
     var profile: Profile? {
         return settings.profile

@@ -328,7 +328,7 @@ extension HomePageSettingViewController {
 // MARK: - WallpaperSettings
 extension HomePageSettingViewController {
     final class WallpaperSettings: Setting {
-        unowned var settings: SettingsTableViewController
+        unowned let settings: SettingsTableViewController
         var tabManager: TabManager
         var wallpaperManager: WallpaperManagerInterface
         weak var settingsDelegate: SettingsDelegate?
