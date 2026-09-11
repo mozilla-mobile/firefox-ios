@@ -30,7 +30,7 @@ final class NovaColors {
     static let Gray70 = UIColor(rgb: 0x252428)
     static let Gray75 = UIColor(rgb: 0x1d1b1f)
     static let Gray80 = UIColor(rgb: 0x171519)
-    static let Gray85 = UIColor(rgb: 0x131215)
+    static let Gray85 = UIColor(rgb: 0x131219)
     static let Gray90 = UIColor(rgb: 0x121114)
 
     // MARK: - Violet Desaturated
