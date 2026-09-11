@@ -48,6 +48,12 @@ enum RemoteTabsPanelEmptyStateReason {
     }
 }
 
+/// Tabs or an empty state, if empty then why.
+enum RemoteTabsPanelContentState: Equatable {
+    case tabs
+    case empty(RemoteTabsPanelEmptyStateReason)
+}
+
 /// State for RemoteTabsPanel. WIP.
 @Copyable
 struct RemoteTabsPanelState: ScreenState, Sendable {
@@ -55,7 +61,7 @@ struct RemoteTabsPanelState: ScreenState, Sendable {
     let refreshState: RemoteTabsPanelRefreshState
     let allowsRefresh: Bool
     let clientAndTabs: [ClientAndTabs]
-    let showingEmptyState: RemoteTabsPanelEmptyStateReason?// If showing empty (or error) state
+    let contentState: RemoteTabsPanelContentState
     let devices: [Device]
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -72,7 +78,7 @@ struct RemoteTabsPanelState: ScreenState, Sendable {
                   refreshState: panelState.refreshState,
                   allowsRefresh: panelState.allowsRefresh,
                   clientAndTabs: panelState.clientAndTabs,
-                  showingEmptyState: panelState.showingEmptyState,
+                  contentState: panelState.contentState,
                   devices: panelState.devices)
     }
 
@@ -81,7 +87,7 @@ struct RemoteTabsPanelState: ScreenState, Sendable {
                   refreshState: .idle,
                   allowsRefresh: false,
                   clientAndTabs: [],
-                  showingEmptyState: .noTabs,
+                  contentState: .empty(.noTabs),
                   devices: [])
     }
 
@@ -89,14 +95,14 @@ struct RemoteTabsPanelState: ScreenState, Sendable {
          refreshState: RemoteTabsPanelRefreshState,
          allowsRefresh: Bool,
          clientAndTabs: [ClientAndTabs],
-         showingEmptyState: RemoteTabsPanelEmptyStateReason?,
+         contentState: RemoteTabsPanelContentState,
          devices: [Device]
     ) {
         self.windowUUID = windowUUID
         self.refreshState = refreshState
         self.allowsRefresh = allowsRefresh
         self.clientAndTabs = clientAndTabs
-        self.showingEmptyState = showingEmptyState
+        self.contentState = contentState
         self.devices = devices
     }
 
@@ -143,7 +149,7 @@ struct RemoteTabsPanelState: ScreenState, Sendable {
         return state
             .copy(refreshState: .idle)
             .copy(allowsRefresh: reason.allowsRefresh)
-            .copy(showingEmptyState: reason)
+            .copy(contentState: .empty(reason))
     }
 
     private static func handleRefreshDidSucceedAction(clientAndTabs: [ClientAndTabs],
@@ -153,8 +159,20 @@ struct RemoteTabsPanelState: ScreenState, Sendable {
             .copy(refreshState: .idle)
             .copy(allowsRefresh: true)
             .copy(clientAndTabs: clientAndTabs)
-            .copy(showingEmptyState: nil)
+            .copy(contentState: contentState(for: clientAndTabs))
             .copy(devices: action.devices ?? state.devices)
+    }
+
+    private static func contentState(for clientAndTabs: [ClientAndTabs]) -> RemoteTabsPanelContentState {
+        if clientAndTabs.isEmpty {
+            return .empty(.noClients)
+        }
+
+        if clientAndTabs.allSatisfy({ $0.tabs.isEmpty }) {
+            return .empty(.noTabs)
+        }
+
+        return .tabs
     }
 
     private static func handleRemoteDevicesChangedAction(devices: [Device],
@@ -175,7 +193,7 @@ struct RemoteTabsPanelState: ScreenState, Sendable {
                                     refreshState: state.refreshState,
                                     allowsRefresh: state.allowsRefresh,
                                     clientAndTabs: state.clientAndTabs,
-                                    showingEmptyState: state.showingEmptyState,
+                                    contentState: state.contentState,
                                     devices: state.devices)
     }
 }
