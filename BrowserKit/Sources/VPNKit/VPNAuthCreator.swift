@@ -7,26 +7,26 @@ import DeviceCheck
 import Foundation
 import Shared
 
-public protocol IPProtectionAuthCreating {
-    func makeAuthService(using prefs: Prefs) -> IPProtectionAuthenticating?
-    func makeProxyTokenService(using prefs: Prefs) -> IPProtectionProxyTokenFetching?
+public protocol VPNAuthCreating {
+    func makeAuthService(using prefs: Prefs) -> VPNAuthenticating?
+    func makeProxyTokenService(using prefs: Prefs) -> VPNProxyTokenFetching?
 }
 
-/// Assembles the IP Protection App Attest auth stack from `Prefs`.
-public struct IPProtectionAuthCreator: IPProtectionAuthCreating {
-    private static let keyIDKeychainService = "org.mozilla.browserkit.ipprotection.appattest.keyid"
+/// Assembles the VPN App Attest auth stack from `Prefs`.
+public struct VPNAuthCreator: VPNAuthCreating {
+    private static let keyIDKeychainService = "org.mozilla.browserkit.vpn.appattest.keyid"
     private static let keyIDKeychainAccount = "default"
 
     private let keyStore: AppAttestKeyIDStore
     private let appAttestService: AppAttestServiceProtocol
-    private let tokenStore: IPProtectionTokenStore
+    private let tokenStore: VPNTokenStore
 
     /// `keyStore` is resolved in the body rather than defaulted inline, because a public default
     /// argument cannot reference the private constants above.
     public init(
         keyStore: AppAttestKeyIDStore? = nil,
         appAttestService: AppAttestServiceProtocol = DCAppAttestService.shared,
-        tokenStore: IPProtectionTokenStore = KeychainIPProtectionTokenStore()
+        tokenStore: VPNTokenStore = KeychainVPNTokenStore()
     ) {
         self.keyStore = keyStore ?? KeychainAppAttestKeyIDStore(
             service: Self.keyIDKeychainService,
@@ -36,11 +36,11 @@ public struct IPProtectionAuthCreator: IPProtectionAuthCreating {
         self.tokenStore = tokenStore
     }
 
-    public func makeAuthService(using prefs: Prefs) -> IPProtectionAuthenticating? {
+    public func makeAuthService(using prefs: Prefs) -> VPNAuthenticating? {
         let environment = resolveEnvironment(using: prefs)
 
         // One instance serves both the `AppAttestClient` transport and the refresh endpoint.
-        let server = IPProtectionAppAttestServer(with: environment, tokenStore: tokenStore)
+        let server = VPNAppAttestServer(with: environment, tokenStore: tokenStore)
 
         guard let client = try? AppAttestClient(
             appAttestService: appAttestService,
@@ -49,16 +49,16 @@ public struct IPProtectionAuthCreator: IPProtectionAuthCreating {
         ) else {
             return nil
         }
-        return IPProtectionAuthService(
+        return VPNAuthService(
             appAttestClient: client,
             sessionRefresher: server,
             tokenStore: tokenStore
         )
     }
 
-    public func makeProxyTokenService(using prefs: Prefs) -> IPProtectionProxyTokenFetching? {
+    public func makeProxyTokenService(using prefs: Prefs) -> VPNProxyTokenFetching? {
         guard let authService = makeAuthService(using: prefs) else { return nil }
-        return IPProtectionProxyTokenService(
+        return VPNProxyTokenService(
             with: resolveEnvironment(using: prefs),
             authService: authService
         )
@@ -66,13 +66,13 @@ public struct IPProtectionAuthCreator: IPProtectionAuthCreating {
 
     /// Also clears stored credentials when the environment changes, so the app re-attests against
     /// the correct server.
-    private func resolveEnvironment(using prefs: Prefs) -> IPProtectionEnvironment {
-        let environmentKey = prefs.stringForKey(PrefsKeys.IPProtectionSettings.endpointEnvironment) ?? ""
-        let environment = IPProtectionEnvironment(rawValue: environmentKey) ?? .prod
+    private func resolveEnvironment(using prefs: Prefs) -> VPNEnvironment {
+        let environmentKey = prefs.stringForKey(PrefsKeys.VPNSettings.endpointEnvironment) ?? ""
+        let environment = VPNEnvironment(rawValue: environmentKey) ?? .prod
 
         prefs.resetIfEnvironmentChanged(
             environment.rawValue,
-            forKey: PrefsKeys.IPProtectionSettings.lastUsedEnvironment
+            forKey: PrefsKeys.VPNSettings.lastUsedEnvironment
         ) {
             try? keyStore.clearKeyID()
             try? tokenStore.clear()

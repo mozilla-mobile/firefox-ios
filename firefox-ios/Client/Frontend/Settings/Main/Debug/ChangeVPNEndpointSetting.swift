@@ -5,27 +5,27 @@
 import UIKit
 import Common
 import Shared
-import IPProtectionKit
+import VPNKit
 
-final class ChangeIPProtectionEndpointSetting: HiddenSetting {
-    private let prefsKey = PrefsKeys.IPProtectionSettings.endpointEnvironment
+final class ChangeVPNEndpointSetting: HiddenSetting {
+    private let prefsKey = PrefsKeys.VPNSettings.endpointEnvironment
     private let prefs: Prefs = { return (AppContainer.shared.resolve() as Profile).prefs }()
 
     override var title: NSAttributedString? {
         guard let theme else { return nil }
 
-        return NSAttributedString(string: "IP Protection Endpoint",
+        return NSAttributedString(string: "VPN Endpoint",
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let currentEnvRaw = prefs.stringForKey(prefsKey) ?? IPProtectionEnvironment.prod.rawValue
+        let currentEnvRaw = prefs.stringForKey(prefsKey) ?? VPNEnvironment.prod.rawValue
         let message = """
         Current: \(currentEnvRaw.capitalized)
 
         Note: App Attest key and cached session should automatically clear when switching environments.
         """
-        let alert = UIAlertController(title: "IP Protection Endpoint",
+        let alert = UIAlertController(title: "VPN Endpoint",
                                       message: message,
                                       preferredStyle: .alert)
 
@@ -35,11 +35,11 @@ final class ChangeIPProtectionEndpointSetting: HiddenSetting {
         }))
         alert.addAction(UIAlertAction(title: "Staging", style: .default, handler: { [weak self] _ in
             guard let self else { return }
-            self.prefs.setString(IPProtectionEnvironment.stage.rawValue, forKey: self.prefsKey)
+            self.prefs.setString(VPNEnvironment.stage.rawValue, forKey: self.prefsKey)
         }))
         alert.addAction(UIAlertAction(title: "Dev", style: .default, handler: { [weak self] _ in
             guard let self else { return }
-            self.prefs.setString(IPProtectionEnvironment.dev.rawValue, forKey: self.prefsKey)
+            self.prefs.setString(VPNEnvironment.dev.rawValue, forKey: self.prefsKey)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         settings.present(alert, animated: true)

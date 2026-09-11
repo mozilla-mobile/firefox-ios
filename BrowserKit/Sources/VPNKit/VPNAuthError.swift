@@ -5,7 +5,7 @@
 import AppAttestKit
 import Foundation
 
-public enum IPProtectionError: Error, Equatable {
+public enum VPNAuthError: Error, Equatable {
     /// The backend refused the Device Session JWT; recoverable by refreshing and retrying once
     case sessionRejected
     case noStoredSession
@@ -13,12 +13,12 @@ public enum IPProtectionError: Error, Equatable {
     case sessionNotPersisted
 }
 
-extension IPProtectionError {
+extension VPNAuthError {
     /// Whether the backend no longer recognizes this device's key, making enrollment the only recovery.
     /// Retryable failures are excluded, since re-enrolling would discard a working key for nothing.
     static func indicatesLostEnrollment(_ error: Error) -> Bool {
         switch error {
-        case IPProtectionError.notEnrolled:
+        case VPNAuthError.notEnrolled:
             return true
         case AppAttestServiceError.missingKeyID, AppAttestServiceError.invalidKeyID:
             return true

@@ -4,17 +4,17 @@
 
 import AppAttestKit
 import Foundation
-@testable import IPProtectionKit
+@testable import VPNKit
 
-final class MockIPProtectionSessionRefresher: IPProtectionSessionRefreshing, @unchecked Sendable {
-    private let tokenStore: IPProtectionTokenStore
-    var sessionToReturn: IPProtectionDeviceSession?
+final class MockVPNSessionRefresher: VPNSessionRefreshing, @unchecked Sendable {
+    private let tokenStore: VPNTokenStore
+    var sessionToReturn: VPNDeviceSession?
     var refreshError: Error?
 
     private(set) var refreshCallCount = 0
     private(set) var lastAssertion: AssertionResult?
 
-    init(tokenStore: IPProtectionTokenStore, sessionToReturn: IPProtectionDeviceSession? = nil) {
+    init(tokenStore: VPNTokenStore, sessionToReturn: VPNDeviceSession? = nil) {
         self.tokenStore = tokenStore
         self.sessionToReturn = sessionToReturn
     }

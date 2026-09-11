@@ -5,23 +5,23 @@
 import UIKit
 import Common
 import Shared
-import IPProtectionKit
+import VPNKit
 
-/// Shared code for the IP Protection debug actions
-class IPProtectionDebugSetting: HiddenSetting {
+/// Shared code for the VPN debug actions
+class VPNDebugSetting: HiddenSetting {
     fileprivate let prefs: Prefs = { return (AppContainer.shared.resolve() as Profile).prefs }()
-    fileprivate let creator: IPProtectionAuthCreating
+    fileprivate let creator: VPNAuthCreating
 
-    init(settings: SettingsTableViewController, creator: IPProtectionAuthCreating = IPProtectionAuthCreator()) {
+    init(settings: SettingsTableViewController, creator: VPNAuthCreating = VPNAuthCreator()) {
         self.creator = creator
         super.init(settings: settings)
     }
 
     /// Title shown in the alert.
-    var alertTitle: String { "IP Protection" }
+    var alertTitle: String { "VPN" }
 
     /// Runs against the configured auth service and returns a success message.
-    func perform(with service: IPProtectionAuthenticating) async throws -> String {
+    func perform(with service: VPNAuthenticating) async throws -> String {
         fatalError("Subclasses must override perform(with:)")
     }
 
@@ -49,7 +49,7 @@ class IPProtectionDebugSetting: HiddenSetting {
     }
 
     /// Summary of a DSJ, highlighting what changed against a previous one
-    func summary(of session: IPProtectionDeviceSession?, comparedTo previous: IPProtectionDeviceSession?) -> String {
+    func summary(of session: VPNDeviceSession?, comparedTo previous: VPNDeviceSession?) -> String {
         guard let session else { return "No session stored." }
 
         let claims = Self.decodeClaims(session.deviceSessionJwt)
@@ -115,11 +115,11 @@ class IPProtectionDebugSetting: HiddenSetting {
 }
 
 /// Runs the full auth flow: cached DSJ, else assertion refresh, else full attestation.
-final class TriggerIPProtectionAttestationSetting: IPProtectionDebugSetting {
-    override var title: NSAttributedString? { attributedTitle("IP Protection: Authenticate") }
-    override var alertTitle: String { "IP Protection Authenticate" }
+final class TriggerVPNAttestationSetting: VPNDebugSetting {
+    override var title: NSAttributedString? { attributedTitle("VPN: Authenticate") }
+    override var alertTitle: String { "VPN Authenticate" }
 
-    override func perform(with service: IPProtectionAuthenticating) async throws -> String {
+    override func perform(with service: VPNAuthenticating) async throws -> String {
         let before = service.currentSession()
         _ = try await service.authenticate()
         return summary(of: service.currentSession(), comparedTo: before)
@@ -127,11 +127,11 @@ final class TriggerIPProtectionAttestationSetting: IPProtectionDebugSetting {
 }
 
 /// Forces an assertion-based refresh, bypassing the cached DSJ short-circuit.
-final class RefreshIPProtectionSessionSetting: IPProtectionDebugSetting {
-    override var title: NSAttributedString? { attributedTitle("IP Protection: Refresh (Assertion)") }
-    override var alertTitle: String { "IP Protection Refresh" }
+final class RefreshVPNSessionSetting: VPNDebugSetting {
+    override var title: NSAttributedString? { attributedTitle("VPN: Refresh (Assertion)") }
+    override var alertTitle: String { "VPN Refresh" }
 
-    override func perform(with service: IPProtectionAuthenticating) async throws -> String {
+    override func perform(with service: VPNAuthenticating) async throws -> String {
         let before = service.currentSession()
         _ = try await service.refresh()
         return summary(of: service.currentSession(), comparedTo: before)
@@ -139,9 +139,9 @@ final class RefreshIPProtectionSessionSetting: IPProtectionDebugSetting {
 }
 
 /// Exchanges the current DSJ for a short-lived proxy token (vpnJWT).
-final class FetchIPProtectionProxyTokenSetting: IPProtectionDebugSetting {
-    override var title: NSAttributedString? { attributedTitle("IP Protection: Fetch Proxy Token") }
-    override var alertTitle: String { "IP Protection Proxy Token" }
+final class FetchVPNProxyTokenSetting: VPNDebugSetting {
+    override var title: NSAttributedString? { attributedTitle("VPN: Fetch Proxy Token") }
+    override var alertTitle: String { "VPN Proxy Token" }
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard let service = creator.makeProxyTokenService(using: prefs) else {
@@ -153,7 +153,7 @@ final class FetchIPProtectionProxyTokenSetting: IPProtectionDebugSetting {
             do {
                 let proxyToken = try await service.fetchProxyToken()
                 present(title: "\(alertTitle) ✅", message: Self.describe(proxyToken))
-            } catch IPProtectionError.noStoredSession {
+            } catch VPNAuthError.noStoredSession {
                 present(title: "\(alertTitle) ❌",
                         message: "No stored session. Run Authenticate first.\n\nStrict mode: this button never enrolls.")
             } catch {
@@ -162,7 +162,7 @@ final class FetchIPProtectionProxyTokenSetting: IPProtectionDebugSetting {
         }
     }
 
-    private static func describe(_ proxyToken: IPProtectionProxyToken) -> String {
+    private static func describe(_ proxyToken: VPNProxyToken) -> String {
         let claims = decodeClaims(proxyToken.token)
         // Falls back to the signature tail, which is the only part that differs between two
         // otherwise-identical tokens.
@@ -184,11 +184,11 @@ final class FetchIPProtectionProxyTokenSetting: IPProtectionDebugSetting {
 }
 
 /// Clears the stored session and attestation key so the next run performs a full enrollment.
-final class ClearIPProtectionSessionSetting: IPProtectionDebugSetting {
-    override var title: NSAttributedString? { attributedTitle("IP Protection: Clear Session & Key ⚠️") }
-    override var alertTitle: String { "IP Protection Reset" }
+final class ClearVPNSessionSetting: VPNDebugSetting {
+    override var title: NSAttributedString? { attributedTitle("VPN: Clear Session & Key ⚠️") }
+    override var alertTitle: String { "VPN Reset" }
 
-    override func perform(with service: IPProtectionAuthenticating) async throws -> String {
+    override func perform(with service: VPNAuthenticating) async throws -> String {
         try service.reset()
         return "Cleared stored DSJ and App Attest key."
     }

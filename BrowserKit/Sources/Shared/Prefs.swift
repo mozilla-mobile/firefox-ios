@@ -171,9 +171,9 @@ public struct PrefsKeys {
         public static let lastUsedEnvironment = "mlpaLastUsedEnvironment"
     }
 
-    public struct IPProtectionSettings {
-        public static let endpointEnvironment = "ipProtectionEndpointEnvironment"
-        public static let lastUsedEnvironment = "ipProtectionLastUsedEnvironment"
+    public struct VPNSettings {
+        public static let endpointEnvironment = "vpnEndpointEnvironment"
+        public static let lastUsedEnvironment = "vpnLastUsedEnvironment"
     }
 
     public struct UserFeatureFlagPrefs {

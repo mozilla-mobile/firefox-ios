@@ -4,16 +4,16 @@
 
 import XCTest
 
-@testable import IPProtectionKit
+@testable import VPNKit
 
-final class IPProtectionDeviceSessionTests: XCTestCase {
+final class VPNDeviceSessionTests: XCTestCase {
     /// 2026-09-08 12:00:00 UTC, with a one hour TTL and renewal due after 45 minutes.
     private let issuedAtMilliseconds: Int64 = 1_788_004_800_000
     private var expiresAtMilliseconds: Int64 { issuedAtMilliseconds + 3_600_000 }
     private var renewAfterMilliseconds: Int64 { issuedAtMilliseconds + 2_700_000 }
 
     func test_decode_readsBackendMillisecondTimestamps() throws {
-        let session = try JSONDecoder().decode(IPProtectionDeviceSession.self, from: wireJSON)
+        let session = try JSONDecoder().decode(VPNDeviceSession.self, from: wireJSON)
 
         XCTAssertEqual(session.deviceSessionJwt, "header.payload.signature")
         XCTAssertEqual(session.expiresAtMilliseconds, expiresAtMilliseconds)
@@ -55,7 +55,7 @@ final class IPProtectionDeviceSessionTests: XCTestCase {
     /// A session issued seconds-since-epoch by mistake would look long expired, which is the failure
     /// the millisecond naming exists to prevent.
     func test_isValid_isFalse_whenTimestampsAreSeconds() {
-        let subject = IPProtectionDeviceSession(
+        let subject = VPNDeviceSession(
             deviceSessionJwt: "header.payload.signature",
             expiresAtMilliseconds: expiresAtMilliseconds / 1000,
             renewAfterMilliseconds: renewAfterMilliseconds / 1000
@@ -77,8 +77,8 @@ final class IPProtectionDeviceSessionTests: XCTestCase {
         return Data(json.utf8)
     }
 
-    private func subject() -> IPProtectionDeviceSession {
-        return IPProtectionDeviceSession(
+    private func subject() -> VPNDeviceSession {
+        return VPNDeviceSession(
             deviceSessionJwt: "header.payload.signature",
             expiresAtMilliseconds: expiresAtMilliseconds,
             renewAfterMilliseconds: renewAfterMilliseconds

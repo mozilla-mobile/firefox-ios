@@ -6,10 +6,10 @@ import AppAttestKit
 import Foundation
 import Security
 
-/// Keychain-backed implementation of `IPProtectionTokenStore`.
-public struct KeychainIPProtectionTokenStore: IPProtectionTokenStore {
+/// Keychain-backed implementation of `VPNTokenStore`.
+public struct KeychainVPNTokenStore: VPNTokenStore {
     private enum Constants {
-        static let defaultService = "org.mozilla.browserkit.ipprotection.dsj"
+        static let defaultService = "org.mozilla.browserkit.vpn.dsj"
         static let defaultAccount = "default"
 
         static let itemClass = kSecClass as String
@@ -38,7 +38,7 @@ public struct KeychainIPProtectionTokenStore: IPProtectionTokenStore {
         self.init(service: Constants.defaultService, account: Constants.defaultAccount)
     }
 
-    public func load() -> IPProtectionDeviceSession? {
+    public func load() -> VPNDeviceSession? {
         let query: [String: Any] = [
             Constants.itemClass: Constants.genericPassword,
             Constants.service: service,
@@ -52,13 +52,13 @@ public struct KeychainIPProtectionTokenStore: IPProtectionTokenStore {
 
         guard status == errSecSuccess,
               let data = item as? Data,
-              let session = try? JSONDecoder().decode(IPProtectionDeviceSession.self, from: data) else {
+              let session = try? JSONDecoder().decode(VPNDeviceSession.self, from: data) else {
             return nil
         }
         return session
     }
 
-    public func save(_ session: IPProtectionDeviceSession) throws {
+    public func save(_ session: VPNDeviceSession) throws {
         let data = try JSONEncoder().encode(session)
 
         let query: [String: Any] = [

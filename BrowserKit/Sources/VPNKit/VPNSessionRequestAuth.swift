@@ -7,20 +7,20 @@ import Foundation
 
 /// Attaches the stored session credential as a `Bearer` token, without a full attestation
 /// so we don't create a new device record and increase risk metric
-public struct IPProtectionSessionRequestAuth: RequestAuthProtocol {
-    private let authService: IPProtectionAuthenticating
+public struct VPNSessionRequestAuth: RequestAuthProtocol {
+    private let authService: VPNAuthenticating
 
-    public init(authService: IPProtectionAuthenticating) {
+    public init(authService: VPNAuthenticating) {
         self.authService = authService
     }
 
     public func authenticate(request: inout URLRequest) async throws {
         guard let session = authService.currentSession() else {
-            throw IPProtectionError.noStoredSession
+            throw VPNAuthError.noStoredSession
         }
         request.setValue(
-            IPProtectionConstants.bearerPrefix + session.deviceSessionJwt,
-            forHTTPHeaderField: IPProtectionConstants.authorizationHeader
+            VPNConstants.bearerPrefix + session.deviceSessionJwt,
+            forHTTPHeaderField: VPNConstants.authorizationHeader
         )
     }
 }

@@ -5,8 +5,8 @@
 import Foundation
 
 /// Persists the session credential across launches. Losing it forces re-enrollment
-public protocol IPProtectionTokenStore: Sendable {
-    func load() -> IPProtectionDeviceSession?
-    func save(_ session: IPProtectionDeviceSession) throws
+public protocol VPNTokenStore: Sendable {
+    func load() -> VPNDeviceSession?
+    func save(_ session: VPNDeviceSession) throws
     func clear() throws
 }
