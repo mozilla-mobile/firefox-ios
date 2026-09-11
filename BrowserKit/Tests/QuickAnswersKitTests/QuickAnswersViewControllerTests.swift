@@ -44,9 +44,30 @@ final class QuickAnswersViewControllerTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
             learnMoreURL: nil,
+            stringsConfiguration: .mock,
             notificationCenter: NotificationCenter.default
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
+}
+
+extension QuickAnswersViewConfiguration {
+    static let mock = QuickAnswersViewConfiguration(
+        optIn: .init(
+            title: "Title",
+            description: "Description",
+            learnMore: "Learn more",
+            continueButton: "Continue"
+        ),
+        contentView: .init(
+            placeholder: "Ask anything",
+            answering: "Answering",
+            footerFormat: "Powered by %@",
+            sources: "Sources"
+        ),
+        errors: .mock,
+        closeAccessibilityLabel: "Close",
+        appName: "Firefox"
+    )
 }

@@ -5,7 +5,6 @@
 import UIKit
 import Common
 
-// TODO: - FXIOS-14720 Add Strings and accessibility ids
 final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
     private struct UX {
         static let contentSpacing: CGFloat = 16.0
@@ -15,11 +14,6 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
             bottom: 13.5,
             trailing: 16.0
         )
-        static let descriptionText = """
-        Ask a question out loud, and get a short answer. \
-        We don't store your voice or questions.
-        """
-        static let learnMoreText = "Learn more"
     }
 
     private var onContinue: (() -> Void)?
@@ -28,7 +22,6 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
     // MARK: - Subviews
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.headline.scaledFont()
-        $0.text = "Ask With Your Voice"
         $0.numberOfLines = 0
         $0.textAlignment = .center
         $0.adjustsFontForContentSizeCategory = true
@@ -48,7 +41,6 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
         }
         $0.configuration?.cornerStyle = .capsule
         $0.configuration?.contentInsets = UX.buttonContentInset
-        $0.configuration?.title = "Continue"
         $0.addAction(UIAction { [weak self] _ in self?.onContinue?() }, for: .touchUpInside)
     }
 
@@ -84,6 +76,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
     }
 
     func configure(
+        strings: QuickAnswersViewConfiguration.OptInStrings,
         learnMoreURL: URL?,
         theme: Theme,
         onContinue: @escaping () -> Void,
@@ -91,20 +84,26 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
     ) {
         self.onLearnMore = onLearnMore
         self.onContinue = onContinue
-        descriptionTextView.attributedText = makeDescriptionText(url: learnMoreURL)
+        titleLabel.text = strings.title
+        continueButton.configuration?.title = strings.continueButton
+        descriptionTextView.attributedText = makeDescriptionText(
+            description: strings.description,
+            learnMore: strings.learnMore,
+            url: learnMoreURL
+        )
         applyTheme(theme: theme)
     }
 
-    private func makeDescriptionText(url: URL?) -> NSAttributedString {
+    private func makeDescriptionText(description: String, learnMore: String, url: URL?) -> NSAttributedString {
         let font = FXFontStyles.Regular.subheadline.scaledFont()
         let text = NSMutableAttributedString(
-            string: UX.descriptionText + " ",
+            string: description + " ",
             attributes: [.font: font]
         )
         if let url {
             var linkAttributes: [NSAttributedString.Key: Any] = [.font: font]
             linkAttributes[.link] = url
-            text.append(NSAttributedString(string: UX.learnMoreText, attributes: linkAttributes))
+            text.append(NSAttributedString(string: learnMore, attributes: linkAttributes))
         }
         return text
     }
