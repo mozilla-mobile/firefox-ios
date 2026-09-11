@@ -2343,6 +2343,9 @@
 		EDFEE3F42DE670B8005ADE03 /* gleanProbes.xcfilelist in Resources */ = {isa = PBXBuildFile; fileRef = EDFEE3F32DE670B8005ADE03 /* gleanProbes.xcfilelist */; };
 		EE046A75300A75D7004E3D80 /* SwipeUpTabWebViewPreviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE046A74300A75D7004E3D80 /* SwipeUpTabWebViewPreviewTests.swift */; };
 		EE046A77300A75F4004E3D80 /* SwipeUpTabPreviewGestureHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE046A76300A75F4004E3D80 /* SwipeUpTabPreviewGestureHandlerTests.swift */; };
+		EE86E740304721AD003BB5BC /* OnboardingCardSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE86E73E304721AD003BB5BC /* OnboardingCardSchedule.swift */; };
+		EE86E741304721AD003BB5BC /* OnboardingCardScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE86E73F304721AD003BB5BC /* OnboardingCardScheduler.swift */; };
+		EE86EBA430477785003BB5BC /* OnboardingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE86EBA330477785003BB5BC /* OnboardingCardView.swift */; };
 		EEB965112FBCCDFC00D6C232 /* PageRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9650E2FBCCDFC00D6C232 /* PageRoute.swift */; };
 		EEB965122FBCCDFC00D6C232 /* ReaderModeSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9650F2FBCCDFC00D6C232 /* ReaderModeSchemeHandler.swift */; };
 		EEB965162FBCCE7B00D6C232 /* ReaderModeSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB965132FBCCE7B00D6C232 /* ReaderModeSchemeHandlerTests.swift */; };
@@ -12135,6 +12138,9 @@
 		EE294A97B40C4FDBD67AE536 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		EE4D49BBA90C11374B6718A4 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		EE7B44DB8DBE14987B22A82D /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/Search.strings; sourceTree = "<group>"; };
+		EE86E73E304721AD003BB5BC /* OnboardingCardSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardSchedule.swift; sourceTree = "<group>"; };
+		EE86E73F304721AD003BB5BC /* OnboardingCardScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardScheduler.swift; sourceTree = "<group>"; };
+		EE86EBA330477785003BB5BC /* OnboardingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardView.swift; sourceTree = "<group>"; };
 		EE994F2590D706FC0ADD4B42 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		EEA34C528147F2E7C3AB52C8 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEAB4DF28099E1BEA98A0B00 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
@@ -16293,6 +16299,9 @@
 		C8BD875D2A0C23F500CD803A /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				EE86EBA330477785003BB5BC /* OnboardingCardView.swift */,
+				EE86E73E304721AD003BB5BC /* OnboardingCardSchedule.swift */,
+				EE86E73F304721AD003BB5BC /* OnboardingCardScheduler.swift */,
 				818756172BB4616B00DCD1F3 /* Views */,
 				818756182BB4617600DCD1F3 /* State */,
 				C88E7A532A0552F10072E638 /* Models */,
@@ -20087,6 +20096,7 @@
 				C888A06B303F80EB009A09E3 /* MainActorDebouncer.swift in Sources */,
 				5A679E4B2B239FAE004F2B0D /* TabPeekViewController.swift in Sources */,
 				E18CE8DC2BDA3FA600EE2BCD /* NavigationToolbarContainerModel.swift in Sources */,
+				EE86EBA430477785003BB5BC /* OnboardingCardView.swift in Sources */,
 				C2BA5A312FEEB54D00AD1FBD /* DefaultQuickAnswersTelemetry.swift in Sources */,
 				2178A6A0291454B5002EC290 /* ReaderModeThemeButton.swift in Sources */,
 				39F4C10A2045DB2E00746155 /* FocusHelper.swift in Sources */,
@@ -20236,6 +20246,8 @@
 				8AAEBA022BF5110A000C02B5 /* MicrosurveyAction.swift in Sources */,
 				8ADED55E2D667A7700345293 /* BrowsingSetting.swift in Sources */,
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
+				EE86E740304721AD003BB5BC /* OnboardingCardSchedule.swift in Sources */,
+				EE86E741304721AD003BB5BC /* OnboardingCardScheduler.swift in Sources */,
 				E17496402994302D0096900A /* PreferredFont.swift in Sources */,
 				E1442FD4294782D9003680B0 /* URL+Mail.swift in Sources */,
 				AB4FB4DD2C89FB10005EF0CC /* BlockedTrackersTableView.swift in Sources */,
