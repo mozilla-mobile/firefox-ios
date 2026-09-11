@@ -14,6 +14,32 @@ final class SettingsHomepageScreen {
         self.sel = selectors
     }
 
+    func assertSectionsAreDisplayed() {
+        BaseTestCase().waitForElementsToExist([
+            sel.NAVBAR.element(in: app),
+            sel.OPENING_SCREEN_SECTION.element(in: app),
+            sel.INCLUDE_ON_HOMEPAGE_SECTION.element(in: app),
+            sel.CURRENT_HOMEPAGE_SECTION.element(in: app)
+        ])
+    }
+
+    /// Asserts "Last tab" is the option selected in the Opening screen section, i.e. Start at Home disabled.
+    func assertLastTabIsSelectedAsOpeningScreen() {
+        assertDefaultOptionsVisible()
+        XCTAssertFalse(sel.START_AT_HOME_ALWAYS.element(in: app).isSelected,
+                       "Homepage is selected as the opening screen")
+        XCTAssertFalse(sel.START_AT_HOME_AFTER_4H.element(in: app).isSelected,
+                       "Homepage after four hours of inactivity is selected as the opening screen")
+        XCTAssertTrue(sel.START_AT_HOME_DISABLED.element(in: app).isSelected,
+                      "Last tab is not selected as the opening screen")
+    }
+
+    func assertFirefoxHomeIsSelectedAsCurrentHomepage() {
+        let firefoxHomeOption = sel.HOME_AS_FIREFOX_HOME.element(in: app)
+        BaseTestCase().waitForElementsToExist([firefoxHomeOption, sel.HOME_AS_CUSTOM_URL.element(in: app)])
+        XCTAssertTrue(firefoxHomeOption.isSelected, "Firefox Home is not selected as the current homepage")
+    }
+
     func assertDefaultOptionsVisible() {
         BaseTestCase().waitForElementsToExist([
             sel.NAVBAR.element(in: app),
