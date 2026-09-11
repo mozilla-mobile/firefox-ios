@@ -237,6 +237,15 @@ class BaseTestCase: XCTestCase {
         return UIDevice.current.userInterfaceIdiom != platform
     }
 
+    /// Below iOS 17 the locale check drops the News section and the Stories setting.
+    /// https://github.com/mozilla-mobile/firefox-ios/issues/35618
+    var isStoriesBrokenByLocaleBug: Bool {
+        if #available(iOS 17, *) {
+            return false
+        }
+        return true
+    }
+
     func restart(_ app: XCUIApplication, args: [String] = []) {
         XCUIDevice.shared.press(.home)
         var launchArguments = [LaunchArguments.Test]

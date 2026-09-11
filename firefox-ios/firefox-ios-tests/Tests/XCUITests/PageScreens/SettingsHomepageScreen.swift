@@ -6,6 +6,9 @@ import XCTest
 
 @MainActor
 final class SettingsHomepageScreen {
+    /// The settings table renders synchronously, so short probes are enough to call the row absent.
+    static let absenceProbeTimeout: TimeInterval = 2
+
     private let app: XCUIApplication
     private let sel: SettingsHomepageSelectorsSet
 
@@ -42,6 +45,33 @@ final class SettingsHomepageScreen {
             .completed,
             "Homepage is not selected as the opening screen"
         )
+    }
+
+    /// Below iOS 17 the Stories row is never added to Homepage settings, see
+    /// https://github.com/mozilla-mobile/firefox-ios/issues/35618. Fails once the bug is fixed.
+    /// Swipes while looking for the row, so one below the fold is not read as that bug.
+    @discardableResult
+    func assertStoriesSwitchIsAbsent(
+        maxSwipes: Int = 2,
+        timeout: TimeInterval = SettingsHomepageScreen.absenceProbeTimeout
+    ) -> Bool {
+        BaseTestCase().mozWaitForElementToExist(sel.NAVBAR.element(in: app))
+        let storiesSwitch = sel.STORIES_SWITCH.element(in: app)
+        var found = storiesSwitch.mozWaitForElementToExist(timeout: timeout, failOnTimeout: false)
+        var swipes = maxSwipes
+        while !found && swipes > 0 {
+            app.swipeUp()
+            swipes -= 1
+            found = storiesSwitch.mozWaitForElementToExist(
+                timeout: SettingsHomepageScreen.absenceProbeTimeout,
+                failOnTimeout: false
+            )
+        }
+        XCTAssertFalse(
+            found,
+            "Stories switch is present below iOS 17. Issue #35618 looks fixed, remove the version guard."
+        )
+        return !found
     }
 
     func assertStoriesSwitch(isOn expected: Bool) {

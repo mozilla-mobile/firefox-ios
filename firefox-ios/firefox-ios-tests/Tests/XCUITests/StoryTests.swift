@@ -7,6 +7,7 @@ import Common
 
 class StoryTests: FeatureFlaggedTestBase {
     private var newsScreen: NewsScreen!
+    private lazy var settingsHomepageScreen = SettingsHomepageScreen(app: app)
 
     override func setUp() async throws {
         try await super.setUp()
@@ -29,6 +30,25 @@ class StoryTests: FeatureFlaggedTestBase {
         navigator.goto(NewTabScreen)
     }
 
+    /// Asserts #35618 still reproduces - no stories on the homepage, no Stories row in settings -
+    /// then skips, so the run is not reported as a pass that never exercised stories.
+    /// https://github.com/mozilla-mobile/firefox-ios/issues/35618
+    private func skipBecauseStoriesAreUnavailable(includingCategories: Bool = false) throws {
+        TopSitesScreen(app: app).assertVisible()
+        newsScreen.scrollToNewsSection()
+        var reproduces = newsScreen.assertNewsSectionIsAbsent()
+        reproduces = newsScreen.assertNoStoryCellsExist() && reproduces
+        if includingCategories {
+            reproduces = newsScreen.assertNoCategoryButtonsExist() && reproduces
+        }
+        navigator.goto(HomeSettings)
+        reproduces = settingsHomepageScreen.assertStoriesSwitchIsAbsent() && reproduces
+
+        // The asserts above already failed the test if the bug is fixed, so only skip while it is not.
+        guard reproduces else { return }
+        throw XCTSkip("Stories are unavailable below iOS 17, see issue #35618")
+    }
+
     func scrollToElement(_ element: XCUIElement, direction: SwipeDirection, maxSwipes: Int = 5) {
         var swipeCount = 0
         while !element.exists && swipeCount < maxSwipes {
@@ -48,12 +68,14 @@ class StoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306924
-    // Expected failure: iOS 15
-    // https://github.com/mozilla-mobile/firefox-ios/issues/35618
-    func testNewsStoriesEnabledByDefault() {
+    func testNewsStoriesEnabledByDefault() throws {
         app.launch()
 
         navigator.goto(NewTabScreen)
+        if isStoriesBrokenByLocaleBug {
+            try skipBecauseStoriesAreUnavailable()
+            return
+        }
         app.partialSwipeUp(distance: 0.2)
         mozWaitForElementToExist(app.otherElements["News"])
 
@@ -79,12 +101,14 @@ class StoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2855360
-    // Expected failure: iOS 15
-    // https://github.com/mozilla-mobile/firefox-ios/issues/35618
-    func testValidateNewsContextMenu() {
+    func testValidateNewsContextMenu() throws {
         app.launch()
 
         navigator.goto(NewTabScreen)
+        if isStoriesBrokenByLocaleBug {
+            try skipBecauseStoriesAreUnavailable()
+            return
+        }
         app.partialSwipeUp(distance: 0.2)
         mozWaitForElementToExist(app.otherElements["News"])
         // Long tap on one of the stories
@@ -104,8 +128,6 @@ class StoryTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/XXXXXXX
-    // Expected failure: iOS 15
-    // https://github.com/mozilla-mobile/firefox-ios/issues/35618
     func testNewsStoryCategoriesFilterStories() throws {
         if !isFennec {
             throw XCTSkip("Skipping testNewsStoryCategoriesFilterStories on Firefox or FirefoxBeta schemas")
@@ -113,6 +135,10 @@ class StoryTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "homepageStoryCategoriesOn", featureName: "homepage-redesign-feature")
         app.launch()
 
+        if isStoriesBrokenByLocaleBug {
+            try skipBecauseStoriesAreUnavailable(includingCategories: true)
+            return
+        }
         newsScreen.scrollToNewsSection()
         newsScreen.assertNewsSectionExists()
         newsScreen.assertAllCategoryButtonExists()
