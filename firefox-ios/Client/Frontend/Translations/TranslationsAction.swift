@@ -24,6 +24,31 @@ struct TranslationsAction: Action {
     }
 }
 
+enum PageTranslationState: Equatable, Sendable {
+    case notTranslated
+    case translated(from: String, to: String)
+}
+
+struct TranslationsPageStateAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
+    let pageState: PageTranslationState
+    /// Reports arrive from background tabs too, so state must not go to the selected tab.
+    let tabUUID: TabUUID
+
+    init(
+        windowUUID: WindowUUID,
+        pageState: PageTranslationState,
+        tabUUID: TabUUID,
+        actionType: any ActionType
+    ) {
+        self.windowUUID = windowUUID
+        self.pageState = pageState
+        self.tabUUID = tabUUID
+        self.actionType = actionType
+    }
+}
+
 /// Carries the user-selected target language from the UIMenu picker.
 /// `targetLanguage` is always known — the user just picked it from the menu.
 struct TranslationLanguageSelectedAction: Action {
@@ -53,4 +78,5 @@ enum TranslationsActionType: ActionType {
     case receivedTranslationLanguage
     case didReceiveErrorTranslating
     case didTranslationSettingsChange
+    case pageDidReportTranslationState
 }
