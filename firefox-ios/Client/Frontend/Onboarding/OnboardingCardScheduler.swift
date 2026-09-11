@@ -28,6 +28,7 @@ struct OnboardingDripScheduler {
     }
 
     /// Advances the active-day counter at most once per calendar day
+    @discardableResult
     func recordActiveDayIfNeeded() -> Int {
         let today = dayKey(for: dateProvider())
         let storedCount = currentActiveDay
