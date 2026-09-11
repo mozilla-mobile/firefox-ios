@@ -34,6 +34,9 @@
             reference = "container:firefox-ios-tests/Tests/PerformanceTestPlan.xctestplan"
             default = "YES">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:firefox-ios-tests/Tests/Smoketest.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference
