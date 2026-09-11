@@ -14,22 +14,26 @@ final class StatusBarOverlayTests: XCTestCase {
     private var wallpaperManager: WallpaperManagerMock!
     private var notificationCenter: MockNotificationCenter!
     private var toolbarHelper: ToolbarHelperInterface!
+    private var featureFlags: MockNimbusFeatureFlags!
 
-    private var expectedAlpha: CGFloat = if #available(iOS 26, *) { .zero } else { 0.90 }
-    private var expectedBottomAlpha: CGFloat = if #available(iOS 26, *) { .zero } else { 0.85 }
+    private var expectedAlpha: CGFloat = if #available(iOS 26, *) { .zero } else { 0.85 }
+    private var expectedNovaAlpha: CGFloat = if #available(iOS 26, *) { .zero } else { 0.90 }
 
     override func setUp() async throws {
         try await super.setUp()
         self.profile = MockProfile()
         self.wallpaperManager = WallpaperManagerMock()
         self.notificationCenter = MockNotificationCenter()
-        DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
+        self.featureFlags = MockNimbusFeatureFlags()
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: profile,
+                                                     injectedFeatureFlagProvider: featureFlags)
     }
 
     override func tearDown() async throws {
         self.profile = nil
         self.wallpaperManager = nil
         self.notificationCenter = nil
+        self.featureFlags = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -100,6 +104,20 @@ final class StatusBarOverlayTests: XCTestCase {
                        LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
     }
 
+    func testOnHomepage_withNovaThemeTopURLBar_translucencyOn_usesNovaAlpha() throws {
+        featureFlags.enabledFlags = [.novaDesign]
+        let toolbarHelper = createToolbarMock()
+        let subject = createSubject(toolbarHelper: toolbarHelper)
+        profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+        subject.applyTheme(theme: NovaLightTheme())
+
+        subject.resetState(isHomepage: true)
+
+        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
+        XCTAssertEqual(backgroundColor.cgColor,
+                       NovaLightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedNovaAlpha).cgColor)
+    }
+
     func testOnWebpage_withoutWallpaperWithBottomURLBar_translucencyOn_isTranslucent() throws {
         let toolbarHelper = createToolbarMock()
         let subject = createSubject(toolbarHelper: toolbarHelper)
@@ -109,7 +127,7 @@ final class StatusBarOverlayTests: XCTestCase {
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedBottomAlpha).cgColor)
+                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
     }
 
     func testOnWebpage_withoutWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
@@ -137,7 +155,7 @@ final class StatusBarOverlayTests: XCTestCase {
 
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
         XCTAssertEqual(backgroundColor.cgColor,
-                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedBottomAlpha).cgColor)
+                       LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
     }
 
     func testOnWebpage_withWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
