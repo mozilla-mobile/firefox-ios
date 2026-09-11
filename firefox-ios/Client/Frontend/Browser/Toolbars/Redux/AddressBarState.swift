@@ -346,13 +346,21 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return defaultState(from: state)
         }
 
-        let trailingPageActions = trailingPageActions(action: toolbarAction,
-                                                      addressBarState: state,
-                                                      isEditing: state.isEditing,
-                                                      isEmptySearch: state.isEmptySearch)
+        let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
+                                                                             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let canSummarize = toolbarAction.canSummarize
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: state.isEditing,
+            isEmptySearch: state.isEmptySearch,
+            readerModeState: state.readerModeState,
+            canSummarize: canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
+
         return state
             .copy(trailingPageActions: trailingPageActions)
-            .copy(canSummarize: toolbarAction.canSummarize)
+            .copy(canSummarize: canSummarize)
     }
 
     @MainActor
@@ -360,15 +368,24 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         let lockIconImageName = toolbarAction.readerModeState == .active ? nil : state.lockIconImageName
-        let trailingPageActions = trailingPageActions(action: toolbarAction,
-                                                      addressBarState: state,
-                                                      isEditing: state.isEditing,
-                                                      isEmptySearch: state.isEmptySearch)
+        let canSummarize = toolbarAction.canSummarize
+        let readerModeState = toolbarAction.readerModeState
+        let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
+                                                                             isNovaDesignEnabled: state.isNovaDesignEnabled)
+
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: state.isEditing,
+            isEmptySearch: state.isEmptySearch,
+            readerModeState: readerModeState,
+            canSummarize: canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
         return state
             .copy(trailingPageActions: trailingPageActions)
             .copy(lockIconImageName: lockIconImageName)
-            .copy(readerModeState: toolbarAction.readerModeState)
-            .copy(canSummarize: toolbarAction.canSummarize)
+            .copy(readerModeState: readerModeState)
+            .copy(canSummarize: canSummarize)
     }
 
     @MainActor
@@ -385,12 +402,20 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor,
             isNovaDesignEnabled: state.isNovaDesignEnabled)
+
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: state.isEditing,
+            isEmptySearch: state.isEmptySearch,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            isLoading: isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
+
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions)
-            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                           addressBarState: state,
-                                                           isEditing: state.isEditing))
+            .copy(trailingPageActions: trailingPageActions)
             .copy(isLoading: isLoading)
     }
 
@@ -410,14 +435,19 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor,
             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: state.isEditing,
+            isEmptySearch: isEmptySearch,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
 
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions)
-            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                           addressBarState: state,
-                                                           isEditing: state.isEditing,
-                                                           isEmptySearch: isEmptySearch))
+            .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing))
@@ -464,12 +494,18 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor,
             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: state.isEditing,
+            isEmptySearch: state.isEmptySearch,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions)
-            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                           addressBarState: state,
-                                                           isEditing: state.isEditing))
+            .copy(trailingPageActions: trailingPageActions)
             .copy(searchTerm: nil)
     }
 
@@ -486,12 +522,18 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor,
             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: state.isEditing,
+            isEmptySearch: state.isEmptySearch,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions)
-            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                           addressBarState: state,
-                                                           isEditing: state.isEditing))
+            .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing))
@@ -510,12 +552,18 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor,
             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: state.isEditing,
+            isEmptySearch: state.isEmptySearch,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions)
-            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                           addressBarState: state,
-                                                           isEditing: state.isEditing))
+            .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing))
@@ -534,12 +582,18 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor,
             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: state.isEditing,
+            isEmptySearch: state.isEmptySearch,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions)
-            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                           addressBarState: state,
-                                                           isEditing: state.isEditing))
+            .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing))
@@ -564,13 +618,18 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor,
             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: isEditing,
+            isEmptySearch: isEmptySearch,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions)
-            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                           addressBarState: state,
-                                                           isEditing: isEditing,
-                                                           isEmptySearch: isEmptySearch))
+            .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: isEditing))
             .copy(searchTerm: toolbarAction.searchTerm)
             .copy(isEditing: isEditing)
@@ -599,13 +658,18 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor,
             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: isEditing,
+            isEmptySearch: isEmptySearch,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions)
-            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                           addressBarState: state,
-                                                           isEditing: isEditing,
-                                                           isEmptySearch: isEmptySearch))
+            .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: isEditing))
             .copy(searchTerm: searchTerm)
             .copy(isEditing: isEditing)
@@ -647,14 +711,19 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor,
             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: isEditing,
+            isEmptySearch: isEmptySearch,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
 
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions)
-            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                           addressBarState: state,
-                                                           isEditing: isEditing,
-                                                           isEmptySearch: isEmptySearch))
+            .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: isEditing))
             .copy(url: url)
             .copy(searchTerm: nil)
@@ -682,14 +751,19 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor,
             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: isEditing,
+            isEmptySearch: isEmptySearch,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
 
         return state
             .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
             .copy(leadingPageActions: leadingPageActions)
-            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                           addressBarState: state,
-                                                           isEditing: isEditing,
-                                                           isEmptySearch: isEmptySearch))
+            .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: isEditing))
             .copy(searchTerm: toolbarAction.searchTerm)
             .copy(isEditing: isEditing)
@@ -701,13 +775,20 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     @MainActor
     private static func handleClearSearchAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+        guard action is ToolbarAction else { return defaultState(from: state) }
 
+        let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
+                                                                             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: true,
+            isEmptySearch: true,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
         return state
-            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                           addressBarState: state,
-                                                           isEditing: true,
-                                                           isEmptySearch: true))
+            .copy(trailingPageActions: trailingPageActions)
             .copy(searchTerm: nil)
             .copy(isEditing: true)
             .copy(isEmptySearch: true)
@@ -715,13 +796,20 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     @MainActor
     private static func handleDidDeleteSearchTermAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+        guard action is ToolbarAction else { return defaultState(from: state) }
 
+        let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
+                                                                             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: true,
+            isEmptySearch: true,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
         return state
-            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                           addressBarState: state,
-                                                           isEditing: true,
-                                                           isEmptySearch: true))
+            .copy(trailingPageActions: trailingPageActions)
             .copy(isEditing: true)
             .copy(shouldSelectSearchTerm: false)
             .copy(didStartTyping: true)
@@ -730,13 +818,20 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     @MainActor
     private static func handleDidEnterSearchTermAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+        guard action is ToolbarAction else { return defaultState(from: state) }
 
+        let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
+                                                                             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: true,
+            isEmptySearch: false,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            isLoading: state.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor
+        )
         return state
-            .copy(trailingPageActions: trailingPageActions(action: toolbarAction,
-                                                           addressBarState: state,
-                                                           isEditing: true,
-                                                           isEmptySearch: false))
+            .copy(trailingPageActions: trailingPageActions)
             .copy(isEditing: true)
             .copy(shouldSelectSearchTerm: false)
             .copy(didStartTyping: true)
@@ -812,34 +907,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     // MARK: - Address Toolbar Actions
-
-    @MainActor
-    private static func trailingPageActions(
-        action: ToolbarAction,
-        addressBarState: AddressBarState,
-        isEditing: Bool,
-        isEmptySearch: Bool? = nil
-    ) -> [ToolbarActionConfiguration] {
-        // Will be removed once TrailingPageActionsBuilder moves to the View side
-        let isReaderModeAction = action.actionType as? ToolbarActionType == .readerModeStateChanged
-        let isSummarizeModeAction = action.actionType as? ToolbarActionType == .didSummarizeSettingsChange
-        let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
-        let canSummarize = isSummarizeModeAction || isReaderModeAction ? action.canSummarize : addressBarState.canSummarize
-        let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(
-            windowUUID: addressBarState.windowUUID,
-            isNovaDesignEnabled: addressBarState.isNovaDesignEnabled
-        )
-        let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
-        let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
-
-        return TrailingPageActionsBuilder.getActions(isEditing: isEditing,
-                                                     isEmptySearch: isEmptySearch ?? addressBarState.isEmptySearch,
-                                                     readerModeState: readerModeState,
-                                                     canSummarize: canSummarize,
-                                                     isLoading: isLoading,
-                                                     hasAlternativeLocationColor: hasAlternativeLocationColor)
-    }
-
     @MainActor
     private static func browserActions(
         action: ToolbarAction,
@@ -937,7 +1004,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     /// can read a one-dispatch-stale value here (before `ToolbarState`'s own reducer commits its
     /// new position/visibility fields) — self-corrects on the next dispatch, and won't exist once
     /// this is computed post-commit in the Lens instead of mid-dispatch here. Shared across the
-    /// leading page action handlers and `trailingPageActions`. Always false on Nova.
+    /// leading and trailing page action handlers. Always false on Nova.
     @MainActor
     private static func shouldShowAlternativeLocationColor(windowUUID: WindowUUID, isNovaDesignEnabled: Bool) -> Bool {
         guard !isNovaDesignEnabled,
