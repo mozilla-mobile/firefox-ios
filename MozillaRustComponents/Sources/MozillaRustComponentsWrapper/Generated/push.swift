@@ -39,6 +39,52 @@ fileprivate extension ForeignBytes {
     init(bufferPointer: UnsafeBufferPointer<UInt8>) {
         self.init(len: Int32(bufferPointer.count), data: bufferPointer.baseAddress)
     }
+
+    init(rawBufferPointer: UnsafeRawBufferPointer) {
+        self.init(
+            len: Int32(rawBufferPointer.count),
+            data: rawBufferPointer.baseAddress?.assumingMemoryBound(to: UInt8.self)
+        )
+    }
+}
+
+// Converter for `&[u8]` / `[ByRef] bytes` arguments.
+//
+// Conforms to `FfiConverter` so the compiler enforces the full converter
+// method set. Only the scope-bound `lower(_:_body:)` overload is sound —
+// zero-copy byte buffers only flow foreign -> Rust, and only in argument
+// position. The four protocol-witness methods (`lift`, `lower`, `read`,
+// `write`) `fatalError` at runtime if anyone reaches them.
+//
+// The scope-bound `lower` takes a closure because the `ForeignBytes`
+// pointer is only guaranteed valid for the duration of
+// `Data.withUnsafeBytes`. Callers must run the full FFI call inside
+// the closure body.
+fileprivate enum FfiConverterByRefBytes: FfiConverter {
+    typealias SwiftType = Data
+    typealias FfiType = ForeignBytes
+
+    static func lower<R>(_ value: Data, _ body: (ForeignBytes) throws -> R) rethrows -> R {
+        return try value.withUnsafeBytes { rawBuf in
+            try body(ForeignBytes(rawBufferPointer: rawBuf))
+        }
+    }
+
+    static func lower(_ value: Data) -> ForeignBytes {
+        fatalError("ByRef bytes cannot use the plain lower: returning ForeignBytes escapes the Data.withUnsafeBytes scope. Use the scope-bound lower(_:_body:) overload instead.")
+    }
+
+    static func lift(_ value: ForeignBytes) throws -> Data {
+        fatalError("ByRef bytes cannot be lifted: zero-copy &[u8] only flows foreign->Rust")
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        fatalError("ByRef bytes cannot be read from a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
+
+    static func write(_ value: Data, into buf: inout [UInt8]) {
+        fatalError("ByRef bytes cannot be written to a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
 }
 
 // For every type used in the interface, we provide helper methods for conveniently
@@ -487,7 +533,11 @@ fileprivate struct FfiConverterString: FfiConverter {
             return String()
         }
         let bytes = UnsafeBufferPointer<UInt8>(start: value.data!, count: Int(value.len))
-        return String(bytes: bytes, encoding: String.Encoding.utf8)!
+        // Use Swift's native UTF-8 decoder; `String(bytes:encoding:.utf8)` goes
+        // through Foundation's NSString and silently strips a leading U+FEFF BOM.
+        // Invalid UTF-8 substitutes U+FFFD instead of trapping (unreachable
+        // given Rust's `String` invariant).
+        return String(decoding: bytes, as: UTF8.self)
     }
 
     public static func lower(_ value: String) -> RustBuffer {
@@ -503,7 +553,8 @@ fileprivate struct FfiConverterString: FfiConverter {
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> String {
         let len: Int32 = try readInt(&buf)
-        return String(bytes: try readBytes(&buf, count: Int(len)), encoding: String.Encoding.utf8)!
+        // See `lift` above for why we avoid Foundation's NSString-backed decoder here.
+        return String(decoding: try readBytes(&buf, count: Int(len)), as: UTF8.self)
     }
 
     public static func write(_ value: String, into buf: inout [UInt8]) {
@@ -711,8 +762,9 @@ open class PushManager: PushManagerProtocol, @unchecked Sendable {
 public convenience init(config: PushConfiguration)throws  {
     let handle =
         try rustCallWithError(FfiConverterTypePushApiError_lift) {
+        uniffiCallStatus in
     uniffi_push_fn_constructor_pushmanager_new(
-        FfiConverterTypePushConfiguration_lower(config),$0
+        FfiConverterTypePushConfiguration_lower(config),uniffiCallStatus
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -749,9 +801,10 @@ public convenience init(config: PushConfiguration)throws  {
      */
 open func decrypt(payload: [String: String])throws  -> DecryptResponse  {
     return try  FfiConverterTypeDecryptResponse_lift(try rustCallWithError(FfiConverterTypePushApiError_lift) {
+        uniffiCallStatus in
     uniffi_push_fn_method_pushmanager_decrypt(
             self.uniffiCloneHandle(),
-        FfiConverterDictionaryStringString.lower(payload),$0
+        FfiConverterDictionaryStringString.lower(payload),uniffiCallStatus
     )
 })
 }
@@ -775,9 +828,10 @@ open func decrypt(payload: [String: String])throws  -> DecryptResponse  {
      */
 open func getSubscription(scope: String)throws  -> SubscriptionResponse?  {
     return try  FfiConverterOptionTypeSubscriptionResponse.lift(try rustCallWithError(FfiConverterTypePushApiError_lift) {
+        uniffiCallStatus in
     uniffi_push_fn_method_pushmanager_get_subscription(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(scope),$0
+        FfiConverterString.lower(scope),uniffiCallStatus
     )
 })
 }
@@ -803,10 +857,11 @@ open func getSubscription(scope: String)throws  -> SubscriptionResponse?  {
      */
 open func subscribe(scope: String, appServerSey: String? = nil)throws  -> SubscriptionResponse  {
     return try  FfiConverterTypeSubscriptionResponse_lift(try rustCallWithError(FfiConverterTypePushApiError_lift) {
+        uniffiCallStatus in
     uniffi_push_fn_method_pushmanager_subscribe(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(scope),
-        FfiConverterOptionString.lower(appServerSey),$0
+        FfiConverterOptionString.lower(appServerSey),uniffiCallStatus
     )
 })
 }
@@ -828,9 +883,10 @@ open func subscribe(scope: String, appServerSey: String? = nil)throws  -> Subscr
      */
 open func unsubscribe(scope: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypePushApiError_lift) {
+        uniffiCallStatus in
     uniffi_push_fn_method_pushmanager_unsubscribe(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(scope),$0
+        FfiConverterString.lower(scope),uniffiCallStatus
     )
 })
 }
@@ -845,8 +901,9 @@ open func unsubscribe(scope: String)throws  -> Bool  {
      *   - An error occurred accessing the PushManager's persisted storage
      */
 open func unsubscribeAll()throws   {try rustCallWithError(FfiConverterTypePushApiError_lift) {
+        uniffiCallStatus in
     uniffi_push_fn_method_pushmanager_unsubscribe_all(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -864,9 +921,10 @@ open func unsubscribeAll()throws   {try rustCallWithError(FfiConverterTypePushAp
      *   - An error occurred accessing the PushManager's persisted storage
      */
 open func update(registrationToken: String)throws   {try rustCallWithError(FfiConverterTypePushApiError_lift) {
+        uniffiCallStatus in
     uniffi_push_fn_method_pushmanager_update(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(registrationToken),$0
+        FfiConverterString.lower(registrationToken),uniffiCallStatus
     )
 }
 }
@@ -892,9 +950,10 @@ open func update(registrationToken: String)throws   {try rustCallWithError(FfiCo
      */
 open func verifyConnection(forceVerify: Bool = false)throws  -> [PushSubscriptionChanged]  {
     return try  FfiConverterSequenceTypePushSubscriptionChanged.lift(try rustCallWithError(FfiConverterTypePushApiError_lift) {
+        uniffiCallStatus in
     uniffi_push_fn_method_pushmanager_verify_connection(
             self.uniffiCloneHandle(),
-        FfiConverterBool.lower(forceVerify),$0
+        FfiConverterBool.lower(forceVerify),uniffiCallStatus
     )
 })
 }
@@ -1302,8 +1361,7 @@ public func FfiConverterTypeSubscriptionResponse_lower(_ value: SubscriptionResp
     return FfiConverterTypeSubscriptionResponse.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * The types of supported native bridges.
  *
@@ -1391,7 +1449,8 @@ public func FfiConverterTypeBridgeType_lower(_ value: BridgeType) -> RustBuffer 
  * The main Error returned from the Push component, each
  * variant describes a different error
  */
-public enum PushApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
+public 
+enum PushApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -1480,8 +1539,7 @@ public func FfiConverterTypePushApiError_lower(_ value: PushApiError) -> RustBuf
     return FfiConverterTypePushApiError.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * Supported protocols for push
  * "Https" is default, and "Http" is only
@@ -1715,13 +1773,13 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_push_checksum_method_pushmanager_decrypt() != 18499) {
+    if (uniffi_push_checksum_method_pushmanager_decrypt() != 12653) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_push_checksum_method_pushmanager_get_subscription() != 26476) {
+    if (uniffi_push_checksum_method_pushmanager_get_subscription() != 41253) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_push_checksum_method_pushmanager_subscribe() != 20176) {
+    if (uniffi_push_checksum_method_pushmanager_subscribe() != 49733) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_push_checksum_method_pushmanager_unsubscribe() != 32827) {
@@ -1733,7 +1791,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_push_checksum_method_pushmanager_update() != 64331) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_push_checksum_method_pushmanager_verify_connection() != 49423) {
+    if (uniffi_push_checksum_method_pushmanager_verify_connection() != 26196) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_push_checksum_constructor_pushmanager_new() != 17838) {
