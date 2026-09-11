@@ -424,6 +424,8 @@ class SearchTests: FeatureFlaggedTestBase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4367103
+    // SmokeTest
     func testBottomViewURLBar_trendingRecentSearchesExperimentOn() throws {
         let toolbarScreen = ToolbarScreen(app: app)
         let browserScreen = BrowserScreen(app: app)
