@@ -526,6 +526,50 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(wallpaperHeightConstraint.constant, 300)
     }
 
+    func test_newState_withTelemetryOnlyChange_skipsSnapshotApply_butStillTriggersImpression() throws {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+
+        // didSelectedTabChangeToHomepage only mutates telemetry state (shouldTriggerImpression).
+        let telemetryOnlyState = HomepageState.reducer.legacyReducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            GeneralBrowserAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+            )
+        )
+
+        subject.newState(state: telemetryOnlyState)
+
+        // Applying a snapshot always appends at least the header section, so an empty
+        // snapshot proves the telemetry-only update skipped the apply entirely.
+        let collectionView = try getCollectionView(from: subject)
+        let dataSource = try XCTUnwrap(collectionView.dataSource as? HomepageDiffableDataSource)
+        XCTAssertTrue(dataSource.snapshot().sectionIdentifiers.isEmpty)
+
+        // The state is still adopted, so the impression trigger it carries runs.
+        XCTAssertTrue(mockThrottler.didCallThrottle)
+    }
+
+    func test_newState_withRenderableChange_appliesSnapshot() throws {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+
+        let renderableState = HomepageState.reducer.legacyReducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            HomepageAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
+            )
+        )
+
+        subject.newState(state: renderableState)
+
+        let collectionView = try getCollectionView(from: subject)
+        let dataSource = try XCTUnwrap(collectionView.dataSource as? HomepageDiffableDataSource)
+        XCTAssertFalse(dataSource.snapshot().sectionIdentifiers.isEmpty)
+    }
+
     private func createSubject(
         tabManager: TabManager = MockTabManager(),
         statusBarScrollDelegate: StatusBarScrollDelegate? = nil

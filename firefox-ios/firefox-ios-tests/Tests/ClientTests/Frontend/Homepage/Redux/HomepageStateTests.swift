@@ -158,6 +158,53 @@ final class HomepageStateTests: XCTestCase, FeatureFlagTestUtility {
         XCTAssertFalse(newState.trackerBlockerModuleState.shouldShowSection)
     }
 
+    // MARK: - hasSameRenderableContent
+    func test_hasSameRenderableContent_withIdenticalStates_returnsTrue() {
+        let initialState = createSubject()
+        let otherState = createSubject()
+
+        XCTAssertTrue(initialState.hasSameRenderableContent(as: otherState))
+    }
+
+    @MainActor
+    func test_hasSameRenderableContent_withTelemetryOnlyChange_returnsTrue() {
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        // The embeddedHomepage action is dispatched when the address bar gains focus and
+        // only mutates telemetry bookkeeping (isZeroSearch).
+        let newState = reducer.legacyReducer(
+            initialState,
+            HomepageAction(
+                isZeroSearch: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.embeddedHomepage
+            )
+        )
+
+        // Plain equality sees a difference, but the renderable content is unchanged. This is
+        // what lets HomepageViewController skip re-applying the collection view snapshot
+        // during keyboard bring-up
+        XCTAssertNotEqual(newState, initialState)
+        XCTAssertTrue(newState.hasSameRenderableContent(as: initialState))
+    }
+
+    @MainActor
+    func test_hasSameRenderableContent_withRenderableChange_returnsFalse() {
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            HomepageAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
+            )
+        )
+
+        XCTAssertFalse(newState.hasSameRenderableContent(as: initialState))
+    }
+
     // MARK: - Private
     private func createSubject() -> HomepageState {
         return HomepageState(windowUUID: .XCTestDefaultUUID)
