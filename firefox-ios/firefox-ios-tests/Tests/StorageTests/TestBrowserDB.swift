@@ -7,34 +7,16 @@ import Shared
 @testable import Storage
 import XCTest
 
+class SupportingFiles: FileAccessor {
+    var rootPath: String
+
+    init() {
+        rootPath = Bundle.main.bundlePath + "/PlugIns/StorageTests.xctest/"
+    }
+}
+
 class TestBrowserDB: XCTestCase, @unchecked Sendable {
-    let files = MockFiles()
-
-    fileprivate func rm(_ path: String) {
-        do {
-            try files.remove(path)
-        } catch {
-        }
-    }
-
-    fileprivate func removeTestDatabaseFiles() {
-        rm("foo.db")
-        rm("foo.db-shm")
-        rm("foo.db-wal")
-        rm("foo.db.bak.1")
-        rm("foo.db.bak.1-shm")
-        rm("foo.db.bak.1-wal")
-    }
-
-    override func setUp() {
-        super.setUp()
-        removeTestDatabaseFiles()
-    }
-
-    override func tearDown() {
-        removeTestDatabaseFiles()
-        super.tearDown()
-    }
+    lazy var files = makeTemporaryFiles()
 
     class MockFailingSchema: Schema {
         var name: String { return "FAILURE" }

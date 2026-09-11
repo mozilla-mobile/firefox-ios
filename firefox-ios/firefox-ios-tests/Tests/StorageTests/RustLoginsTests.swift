@@ -10,7 +10,7 @@ import XCTest
 
 // FIXME: FXIOS-14312 Class is not thread safe
 class RustLoginsTests: XCTestCase, @unchecked Sendable {
-    var files: FileAccessor!
+    var files: TemporaryFiles!
     var logins: RustLogins!
     let login = LoginEntry(fromJSONDict: [
         "hostname": "https://example.com",
@@ -21,31 +21,19 @@ class RustLoginsTests: XCTestCase, @unchecked Sendable {
 
     override func setUp() {
         super.setUp()
-        files = MockFiles()
+        files = makeTemporaryFiles()
 
         // MockRustKeychain.shared is a process-wide singleton that otherwise leaks a
         // cached logins key across test methods, masking the first-time-key-creation
         // code path that testDeleteMultipleLogins depends on to reproduce FXIOS-14323.
         MockRustKeychain.shared.removeAllKeys()
 
-        if let rootDirectory = try? files.getAndEnsureDirectory() {
-            let databasePath = URL(
-                fileURLWithPath: rootDirectory,
-                isDirectory: true
-            ).appendingPathComponent("testLoginsPerField.db").path
-            try? files.remove("testLoginsPerField.db")
-
-            logins = RustLogins(databasePath: databasePath)
-            _ = logins.reopenIfClosed()
-        } else {
-            XCTFail("Could not retrieve root directory")
-        }
+        logins = RustLogins(databasePath: files.pathEnsuringRoot(for: "testLoginsPerField.db"))
+        _ = logins.reopenIfClosed()
     }
 
     override func tearDown() {
         _ = logins?.forceClose()
-        logins = nil
-        files = nil
         MockRustKeychain.shared.removeAllKeys()
         super.tearDown()
     }

@@ -49,42 +49,23 @@ class MockRustRemoteTabs: RustRemoteTabs, @unchecked Sendable {
 }
 
 class RustRemoteTabsTests: XCTestCase {
-    var files: FileAccessor!
+    var files: TemporaryFiles!
     var tabs: RustRemoteTabs!
     var mockTabs: MockRustRemoteTabs!
 
     override func setUp() {
         super.setUp()
-        files = MockFiles()
+        files = makeTemporaryFiles()
 
-        if let rootDirectory = try? files.getAndEnsureDirectory() {
-            let databasePath = URL(
-                fileURLWithPath: rootDirectory,
-                isDirectory: true
-            ).appendingPathComponent("testTabs.db").path
-            try? files.remove("testTabs.db")
-
-            let mockDatabasePath = URL(fileURLWithPath: rootDirectory,
-                                       isDirectory: true)
-                                        .appendingPathComponent("mockTestTabs.db")
-                                        .path
-            try? files.remove("mockTestTabs.db")
-
-            tabs = RustRemoteTabs(databasePath: databasePath)
-            mockTabs = MockRustRemoteTabs(databasePath: mockDatabasePath)
-            _ = tabs.reopenIfClosed()
-            _ = mockTabs.reopenIfClosed()
-        } else {
-            XCTFail("Could not retrieve root directory")
-        }
+        tabs = RustRemoteTabs(databasePath: files.pathEnsuringRoot(for: "testTabs.db"))
+        mockTabs = MockRustRemoteTabs(databasePath: files.pathEnsuringRoot(for: "mockTestTabs.db"))
+        _ = tabs.reopenIfClosed()
+        _ = mockTabs.reopenIfClosed()
     }
 
     override func tearDown() {
         _ = tabs?.forceClose()
         _ = mockTabs?.forceClose()
-        tabs = nil
-        mockTabs = nil
-        files = nil
         super.tearDown()
     }
 

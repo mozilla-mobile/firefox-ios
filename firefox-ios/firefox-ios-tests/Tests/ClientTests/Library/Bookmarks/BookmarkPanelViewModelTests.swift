@@ -16,7 +16,7 @@ final class BookmarksPanelViewModelTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
@@ -61,7 +61,6 @@ final class BookmarksPanelViewModelTests: XCTestCase {
     }
 
     func testShouldReload_whenMobileEmptyBookmarks() throws {
-        profile.reopen()
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
@@ -73,7 +72,6 @@ final class BookmarksPanelViewModelTests: XCTestCase {
     }
 
     func testShouldReload_whenLocalDesktopFolder() {
-        profile.reopen()
         let subject = createSubject(guid: LocalDesktopFolder.localDesktopFolderGuid)
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
@@ -85,10 +83,6 @@ final class BookmarksPanelViewModelTests: XCTestCase {
     }
 
     func testShouldReload_whenMenuFolder() {
-        // The test passes without a clean database, however
-        // it fails when run with all of ClientTest. We give it a
-        // separate databasePrefix so it isn't affected by other tests
-        profile = MockProfile(databasePrefix: "testShouldReload_whenMenuFolder")
         let subject = createSubject(guid: BookmarkRoots.MenuFolderGUID)
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
@@ -613,15 +607,6 @@ final class BookmarksPanelViewModelTests: XCTestCase {
             url: "www.firefox.com",
             title: "bookmark1"
         )
-    }
-
-    private func createBookmarksNode(count: Int) -> [FxBookmarkNode] {
-        var nodes = [FxBookmarkNode]()
-        (0..<count).forEach { index in
-            let node = MockBookmarkNode(title: "Bookmark title \(index)")
-            nodes.append(node)
-        }
-        return nodes
     }
 
     private func createDesktopBookmark(subject: BookmarksPanelViewModel, completion: @escaping @MainActor () -> Void) {

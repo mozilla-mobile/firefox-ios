@@ -12,6 +12,7 @@ import TestKit
 final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlagTestUtility {
     internal var mockProfile: MockProfile!
     internal var mockNimbusLayer: MockNimbusFeatureFlagLayer!
+    private var mockPinnedSites: MockablePinnedSites!
     private var mockWindowManager: MockWindowManager!
     private var mockTabsPanelTelemetry: MockTabsPanelTelemetry!
     private var mockStore: MockStoreForMiddleware<AppState>!
@@ -28,7 +29,8 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
         setIsHostedSummaryEnabled(false)
         mockSummarizerConfigFactory = MockSummarizerConfigFactory()
 
-        mockProfile = MockProfile()
+        mockPinnedSites = MockablePinnedSites()
+        mockProfile = makeProfile(injectedPinnedSites: mockPinnedSites)
         mockNimbusLayer = MockNimbusFeatureFlagLayer()
         mockTabManager = MockTabManager()
         mockTabManager.recentlyAccessedNormalTabs = [createTab(profile: mockProfile)]
@@ -398,7 +400,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
         let subject = createSubject()
 
         let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
-        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager?.selectedTab = tab
         mockSummarizerConfigFactory.returnedConfig = .defaultConfig
@@ -429,7 +431,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
         let subject = createSubject()
 
         let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
-        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
         mockTabManager?.selectedTab = tab
 
         mockStore.dispatchCalled = {
@@ -455,7 +457,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
         let subject = createSubject()
 
         let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
-        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
         mockTabManager?.selectedTab = tab
 
         mockStore.dispatchCalled = {
@@ -481,7 +483,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
         let subject = createSubject()
 
         let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
-        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID, isHomePage: true)
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID, isHomePage: true)
         mockTabManager?.selectedTab = tab
 
         mockStore.dispatchCalled = {
@@ -507,7 +509,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
         let subject = createSubject()
 
         let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
-        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
         mockTabManager?.selectedTab = tab
 
         mockStore.dispatchCalled = {
@@ -534,7 +536,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
         let subject = createSubject()
 
         let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
-        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
         tab.overrideReaderModeState = .active
         mockTabManager?.selectedTab = tab
 
@@ -561,7 +563,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
         let subject = createSubject()
         let expectation = XCTestExpectation(description: "Main Menu tab info with account data is dispatched.")
         let tabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
-        tabManager?.selectedTab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tabManager?.selectedTab = MockTab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
 
         mockStore.dispatchCalled = { expectation.fulfill() }
 
@@ -635,6 +637,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
 
         XCTAssertEqual(actionType, .shortcutPinned)
         XCTAssertEqual(dispatchedAction.shortcutPinnedSource, .appMenu)
+        XCTAssertEqual(mockPinnedSites.addPinnedTopSiteCalledCount, 1)
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -670,6 +673,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
 
         XCTAssertEqual(actionType, .shortcutUnpinned)
         XCTAssertEqual(dispatchedAction.shortcutUnpinnedSource, .appMenu)
+        XCTAssertEqual(mockPinnedSites.removeFromPinnedTopSitesCalledCount, 1)
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
