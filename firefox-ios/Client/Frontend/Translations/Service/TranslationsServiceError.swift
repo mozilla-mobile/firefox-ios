@@ -5,6 +5,8 @@
 /// Errors thrown by `TranslationsService` when preconditions or WebView state are invalid.
 enum TranslationsServiceError: Error, Equatable {
     case missingWebView
+    /// The page navigated before the translation started, so the request is dropped.
+    case documentChanged
     case jsEvaluationFailed(reason: String)
     case pageLanguageDetectionFailed(description: String)
     case unknown(domain: String, code: Int)
@@ -25,6 +27,8 @@ enum TranslationsServiceError: Error, Equatable {
         switch self {
         case .missingWebView:
             return "missing_webview"
+        case .documentChanged:
+            return "document_changed"
         case .jsEvaluationFailed(let reason):
             /// reason is already a stable token like "JS evaluation failed: startTranslationsJS"
             return "js_evaluation_failed(\(reason))"

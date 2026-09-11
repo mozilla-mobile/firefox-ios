@@ -72,9 +72,14 @@ const reportPageState = () => {
 
 window.addEventListener("pageshow", reportPageState);
 
+const documentId = () => innerWindowId;
+
 /// NOTE: This should be called to start the translation process for this document.
 /// This creates the TranslationsDocument instance that manages the translation lifecycle.
-const startTranslations = ({from, to}) => {
+const startTranslations = ({from, to, expectedDocumentId}) => {
+    if (expectedDocumentId !== innerWindowId) {
+        return false;
+    }
     pendingTranslation = { from, to };
     resetIsDone();
     const languagePair = {sourceLanguage: from, targetLanguage: to}
@@ -98,6 +103,7 @@ const startTranslations = ({from, to}) => {
         innerWindowId,
     };
     sendToEngine(message);
+    return true;
 };
 
 /// NOTE: This should be called when we teardown the translations for this document.
@@ -132,5 +138,5 @@ Object.defineProperty(window.__firefox__, "Translations", {
     enumerable: false,
     configurable: false,
     writable: false,
-    value: Object.freeze({ getLanguageSampleWhenReady, startTranslations, isDone, discardTranslations })
+    value: Object.freeze({ getLanguageSampleWhenReady, documentId, startTranslations, isDone, discardTranslations })
 });
