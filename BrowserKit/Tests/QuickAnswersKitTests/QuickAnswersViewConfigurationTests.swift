@@ -71,10 +71,16 @@ struct QuickAnswersViewConfigurationTests {
             optIn: .init(title: "t", description: "d", learnMore: "l", continueButton: "c"),
             contentView: .init(placeholder: "p", answering: "a", footerFormat: "f", sources: "s"),
             errors: .init(
-                permissionAlertTitle: "", microphonePermissionMessage: "",
-                speechRecognitionPermissionMessage: "", openSettings: "",
-                cancel: "", dailyLimitTitle: "", dailyLimitMessage: "",
-                genericErrorTitle: "", genericErrorMessage: "", ok: ""
+                permissionAlertTitle: "",
+                microphonePermissionMessage: "",
+                speechRecognitionPermissionMessage: "",
+                openSettings: "",
+                cancel: "",
+                dailyLimitTitle: "",
+                dailyLimitMessage: "",
+                genericErrorTitle: "",
+                genericErrorMessage: "",
+                ok: ""
             ),
             closeAccessibilityLabel: "close",
             appName: "Firefox"
