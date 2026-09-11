@@ -3,18 +3,20 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Shared
 
 @MainActor
 final class ErrorHandler {
     private weak var presenter: UIViewController?
+    private let strings: QuickAnswersViewConfiguration.ErrorStrings
     private var onDismiss: (() -> Void)?
 
     init(
         presenter: UIViewController,
+        strings: QuickAnswersViewConfiguration.ErrorStrings,
         onDismiss: (() -> Void)?
     ) {
         self.presenter = presenter
+        self.strings = strings
         self.onDismiss = onDismiss
     }
 
@@ -26,14 +28,14 @@ final class ErrorHandler {
         case .microphonePermissionDenied(let isFirstTime):
             handlePermissionDenied(
                 isFirstTime: isFirstTime,
-                title: .QuickAnswers.Errors.PermissionAlertTitle,
-                message: String(format: .QuickAnswers.Errors.MicrophonePermissionMessage, AppName.shortName.rawValue)
+                title: strings.permissionAlertTitle,
+                message: strings.microphonePermissionMessage
             )
         case .speechRecognitionPermissionDenied(let isFirstTime):
             handlePermissionDenied(
                 isFirstTime: isFirstTime,
-                title: .QuickAnswers.Errors.PermissionAlertTitle,
-                message: String(format: .QuickAnswers.Errors.SpeechRecognitionPermissionMessage, AppName.shortName.rawValue)
+                title: strings.permissionAlertTitle,
+                message: strings.speechRecognitionPermissionMessage
             )
         default:
             showCatchAllErrorAlert()
@@ -56,8 +58,8 @@ final class ErrorHandler {
         switch error {
         case .rateLimited:
             showCatchAllErrorAlert(
-                title: .QuickAnswers.Errors.DailyLimitTitle,
-                message: .QuickAnswers.Errors.DailyLimitMessage
+                title: strings.dailyLimitTitle,
+                message: strings.dailyLimitMessage
             )
         default:
             showCatchAllErrorAlert()
@@ -73,7 +75,7 @@ final class ErrorHandler {
             preferredStyle: .alert
         )
         alertController.addAction(
-            UIAlertAction(title: .QuickAnswers.Errors.OpenSettings, style: .default) { [weak self] _ in
+            UIAlertAction(title: strings.openSettings, style: .default) { [weak self] _ in
                 self?.onDismiss?()
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url)
@@ -81,24 +83,21 @@ final class ErrorHandler {
             }
         )
         alertController.addAction(
-            UIAlertAction(title: .QuickAnswers.Errors.Cancel, style: .cancel) { [weak self] _ in
+            UIAlertAction(title: strings.cancel, style: .cancel) { [weak self] _ in
                 self?.onDismiss?()
             }
         )
         presenter?.present(alertController, animated: true)
     }
 
-    private func showCatchAllErrorAlert(
-        title: String = .QuickAnswers.Errors.GenericErrorTitle,
-        message: String = .QuickAnswers.Errors.GenericErrorMessage
-    ) {
+    private func showCatchAllErrorAlert(title: String? = nil, message: String? = nil) {
         let alertController = UIAlertController(
-            title: title,
-            message: message,
+            title: title ?? strings.genericErrorTitle,
+            message: message ?? strings.genericErrorMessage,
             preferredStyle: .alert
         )
         alertController.addAction(
-            UIAlertAction(title: .QuickAnswers.Errors.OK, style: .default) { [weak self] _ in
+            UIAlertAction(title: strings.ok, style: .default) { [weak self] _ in
                 self?.onDismiss?()
             }
         )

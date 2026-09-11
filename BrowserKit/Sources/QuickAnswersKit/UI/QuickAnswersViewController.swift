@@ -47,7 +47,6 @@ public final class QuickAnswersViewController: UIViewController,
             }),
             for: .touchUpInside
         )
-        $0.accessibilityLabel = .QuickAnswers.AccessibilityLabels.Close
     }
     private let contentView: QuickAnswersContentView = .build()
     private let transitionAnimator: CrossDissolveTransitionAnimator?
@@ -59,8 +58,10 @@ public final class QuickAnswersViewController: UIViewController,
     private weak var navigationHandler: QuickAnswersNavigationHandler?
     private let viewModel: QuickAnswersViewModel
     private let learnMoreURL: URL?
+    private let stringsConfiguration: QuickAnswersViewConfiguration
     private lazy var errorHandler = ErrorHandler(
         presenter: self,
+        strings: stringsConfiguration.errors,
         onDismiss: { [weak self] in
             self?.dismiss(with: nil)
         }
@@ -76,6 +77,7 @@ public final class QuickAnswersViewController: UIViewController,
         telemetry: QuickAnswersTelemetry,
         configFetcher: QuickAnswersConfigFetcher,
         learnMoreURL: URL?,
+        stringsConfiguration: QuickAnswersViewConfiguration,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
     ) {
         self.init(
@@ -85,6 +87,7 @@ public final class QuickAnswersViewController: UIViewController,
             windowUUID: windowUUID,
             themeManager: themeManager,
             learnMoreURL: learnMoreURL,
+            stringsConfiguration: stringsConfiguration,
             notificationCenter: notificationCenter
         )
     }
@@ -96,12 +99,14 @@ public final class QuickAnswersViewController: UIViewController,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         learnMoreURL: URL?,
+        stringsConfiguration: QuickAnswersViewConfiguration,
         notificationCenter: NotificationProtocol
     ) {
         self.navigationHandler = navigationHandler
         self.currentWindowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.stringsConfiguration = stringsConfiguration
         // The custom transition animator is only used for the cross dissolve transition; the form sheet
         // relies on the system presentation.
         if case let .crossDissolve(sourceRect) = transitionType {
@@ -144,6 +149,8 @@ public final class QuickAnswersViewController: UIViewController,
     }
 
     private func setupSubviews() {
+        closeButton.accessibilityLabel = stringsConfiguration.closeAccessibilityLabel
+        contentView.configureStrings(stringsConfiguration.contentView)
         view.addSubviews(
             backgroundRecordEffect,
             backgroundBlur,
@@ -208,6 +215,7 @@ public final class QuickAnswersViewController: UIViewController,
             }
         }
         contentView.configureOptIn(
+            strings: stringsConfiguration.optIn,
             learnMoreURL: learnMoreURL,
             theme: themeManager.getCurrentTheme(for: currentWindowUUID),
             onContinue: { [weak self] in

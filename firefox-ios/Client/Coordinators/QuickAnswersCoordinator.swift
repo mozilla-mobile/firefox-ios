@@ -49,8 +49,44 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             telemetry: DefaultQuickAnswersTelemetry(),
             configFetcher: RemoteQuickAnswersConfigFetcher(model: resolvedModel()),
             learnMoreURL: Self.learnMoreURL,
+            stringsConfiguration: makeStringsConfiguration()
         )
         router.present(controller, animated: shouldAnimateTransition)
+    }
+
+    private func makeStringsConfiguration() -> QuickAnswersViewConfiguration {
+        let appName = AppName.shortName.rawValue
+        return QuickAnswersViewConfiguration(
+            optIn: .init(
+                title: .QuickAnswers.OptIn.Title,
+                description: .QuickAnswers.OptIn.Description,
+                learnMore: .QuickAnswers.OptIn.LearnMore,
+                continueButton: .QuickAnswers.OptIn.ContinueButton
+            ),
+            contentView: .init(
+                placeholder: .QuickAnswers.ContentView.Placeholder,
+                answering: .QuickAnswers.ContentView.Answering,
+                footerFormat: .QuickAnswers.ContentView.FooterFormat,
+                sources: .QuickAnswers.ContentView.Sources
+            ),
+            errors: .init(
+                permissionAlertTitle: .QuickAnswers.Errors.PermissionAlertTitle,
+                microphonePermissionMessage: String(format: .QuickAnswers.Errors.MicrophonePermissionMessage, appName),
+                speechRecognitionPermissionMessage: String(
+                    format: .QuickAnswers.Errors.SpeechRecognitionPermissionMessage,
+                    appName
+                ),
+                openSettings: .QuickAnswers.Errors.OpenSettings,
+                cancel: .QuickAnswers.Errors.Cancel,
+                dailyLimitTitle: .QuickAnswers.Errors.DailyLimitTitle,
+                dailyLimitMessage: .QuickAnswers.Errors.DailyLimitMessage,
+                genericErrorTitle: .QuickAnswers.Errors.GenericErrorTitle,
+                genericErrorMessage: .QuickAnswers.Errors.GenericErrorMessage,
+                ok: .QuickAnswers.Errors.OK
+            ),
+            closeAccessibilityLabel: .QuickAnswers.AccessibilityLabels.Close,
+            appName: appName
+        )
     }
 
     /// The model backing Quick Answers: the debug override set from the hidden settings when

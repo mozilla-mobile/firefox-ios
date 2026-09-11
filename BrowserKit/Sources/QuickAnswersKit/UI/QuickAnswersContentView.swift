@@ -22,7 +22,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     private let audioWaveform: AudioWaveformView = .build()
     private let placeholderLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.title2.scaledFont()
-        $0.text = .QuickAnswers.ContentView.Placeholder
         $0.numberOfLines = 0
         $0.textAlignment = .center
         $0.adjustsFontForContentSizeCategory = true
@@ -34,7 +33,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
     private let searchingLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.callout.scaledFont()
-        $0.text = .QuickAnswers.ContentView.Answering
         $0.alpha = 0.0
         $0.adjustsFontForContentSizeCategory = true
     }
@@ -55,6 +53,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
     private let optInView: OptInView = .build()
     private var theme: Theme?
+    private var strings: QuickAnswersViewConfiguration.ContentViewStrings?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -121,6 +120,13 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
 
     // MARK: - Configuration
+    func configureStrings(_ strings: QuickAnswersViewConfiguration.ContentViewStrings) {
+        self.strings = strings
+        placeholderLabel.text = strings.placeholder
+        searchingLabel.text = strings.answering
+        sourceView.configureStrings(sourcesHeader: strings.sources)
+    }
+
     func startAudioWaveformAnimation() {
         audioWaveform.startAnimating()
     }
@@ -130,12 +136,14 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
 
     func configureOptIn(
+        strings: QuickAnswersViewConfiguration.OptInStrings,
         learnMoreURL: URL?,
         theme: Theme,
         onContinue: @escaping () -> Void,
         onLearnMore: @escaping (URL) -> Void
     ) {
         optInView.configure(
+            strings: strings,
             learnMoreURL: learnMoreURL,
             theme: theme,
             onContinue: onContinue,
@@ -196,7 +204,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     func configureAnswer(_ text: String, modelName: String) {
         searchingLabel.stopShimmering()
         searchingLabel.alpha = 0.0
-        footerLabel.text = String.localizedStringWithFormat(.QuickAnswers.ContentView.FooterFormat, modelName)
+        footerLabel.text = String(format: strings?.footerFormat ?? "", modelName)
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             answerLabel.text = text
             answerLabel.alpha = 1.0
