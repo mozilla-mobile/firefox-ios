@@ -260,10 +260,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         )
     }
 
-    /// Window frame the browser snapshot animates into.
-    ///
-    /// Taken from the layout attributes rather than a realized cell, so the transition doesn't have to force a
-    /// synchronous layout pass to realize the cell it scrolls to.
     private func destinationFrame(for indexPath: IndexPath, in collectionView: UICollectionView) -> CGRect? {
         guard let attributes = collectionView.collectionViewLayout.layoutAttributesForItem(at: indexPath)
         else { return nil }
@@ -300,7 +296,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 backgroundView.removeFromSuperview()
                 bvcSnapshot.removeFromSuperview()
                 tabDisplayView.minimizingTabUUID = nil
-                self.revealSelectedCell(
+                self.unhideSelectedCell(
                     in: collectionView,
                     selectedTab: selectedTab,
                     settledImage: settledImage,
@@ -335,7 +331,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         cell.setSelectedState(isPrivate: selectedTab.isPrivate, theme: theme)
     }
 
-    private func revealSelectedCell(
+    private func unhideSelectedCell(
         in collectionView: UICollectionView,
         selectedTab: Tab,
         settledImage: UIImage?,
