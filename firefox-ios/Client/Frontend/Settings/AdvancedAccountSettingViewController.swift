@@ -86,8 +86,8 @@ final class AdvancedAccountSettingViewController: SettingsTableViewController {
                 string: .AdvancedAccountUseStageServer,
                 attributes: attributes)) { [weak self] isOn in
             guard let self else { return }
-            settings = generateSettings()
-            tableView.reloadData()
+            self.settings = self.generateSettings()
+            self.tableView.reloadData()
         }
 
         let useReactFxA = BoolSetting(
@@ -97,8 +97,8 @@ final class AdvancedAccountSettingViewController: SettingsTableViewController {
             attributedTitleText: NSAttributedString(string: .SettingsAdvancedAccountUseReactContentServer)
         ) { [weak self] isOn in
             guard let self else { return }
-            settings = generateSettings()
-            tableView.reloadData()
+            self.settings = self.generateSettings()
+            self.tableView.reloadData()
         }
 
         let customFxA = CustomURLSetting(prefs: prefs,
@@ -115,8 +115,8 @@ final class AdvancedAccountSettingViewController: SettingsTableViewController {
         let autoconfigSettings = [
             CustomFxAContentServerEnableSetting(prefs: prefs) { [weak self] isOn in
                 guard let self else { return }
-                settings = generateSettings()
-                tableView.reloadData()
+                self.settings = self.generateSettings()
+                self.tableView.reloadData()
             },
             customFxA
         ]
