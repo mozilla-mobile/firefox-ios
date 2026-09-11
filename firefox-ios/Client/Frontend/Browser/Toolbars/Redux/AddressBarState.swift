@@ -11,8 +11,8 @@ import SummarizeKit
 @Copyable
 struct AddressBarState: StateType, Sendable, Equatable {
     var windowUUID: WindowUUID
-    // The address bar's back/forward buttons, shown only when the navigation toolbar is hidden (e.g. compact layout). 
-    var navigationActionsState: NavigationActionsState
+    // The address bar's back/forward buttons, shown only when the navigation toolbar is hidden (e.g. compact layout).
+    var navigationActions: [ToolbarActionConfiguration]
     var leadingPageActions: [ToolbarActionConfiguration]
     var trailingPageActions: [ToolbarActionConfiguration]
     var browserActions: [ToolbarActionConfiguration]
@@ -85,7 +85,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            navigationActionsState: NavigationActionsState(windowUUID: windowUUID),
+            navigationActions: [],
             leadingPageActions: [],
             trailingPageActions: [],
             browserActions: [],
@@ -112,7 +112,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     init(windowUUID: WindowUUID,
-         navigationActionsState: NavigationActionsState,
+         navigationActions: [ToolbarActionConfiguration],
          leadingPageActions: [ToolbarActionConfiguration],
          trailingPageActions: [ToolbarActionConfiguration],
          browserActions: [ToolbarActionConfiguration],
@@ -136,7 +136,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
          alternativeSearchEngine: SearchEngineModel?,
          isNovaDesignEnabled: Bool) {
         self.windowUUID = windowUUID
-        self.navigationActionsState = navigationActionsState
+        self.navigationActions = navigationActions
         self.leadingPageActions = leadingPageActions
         self.trailingPageActions = trailingPageActions
         self.browserActions = browserActions
@@ -278,7 +278,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
 
         return state
-            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
+            .copy(navigationActions: [])
             .copy(leadingPageActions: [])
             .copy(trailingPageActions: [])
             .copy(browserActions: [])
@@ -414,7 +414,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
 
         return state
-            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state))
             .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(isLoading: isLoading)
@@ -446,7 +446,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
 
         return state
-            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state))
             .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction,
@@ -504,7 +504,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
         return state
-            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state))
             .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(searchTerm: nil)
@@ -536,7 +536,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
         return state
-            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state))
             .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction,
@@ -566,7 +566,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
         return state
-            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state))
             .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction,
@@ -604,7 +604,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
         return state
-            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state))
             .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction,
@@ -640,7 +640,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
         return state
-            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state))
             .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: isEditing))
@@ -680,7 +680,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
         return state
-            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state))
             .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: isEditing))
@@ -734,7 +734,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
 
         return state
-            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state))
             .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: isEditing))
@@ -774,7 +774,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
 
         return state
-            .copy(navigationActionsState: NavigationActionsState.reducer.legacyReducer(state.navigationActionsState, action))
+            .copy(navigationActions: navigationActions(action: toolbarAction, addressBarState: state))
             .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: isEditing))
@@ -897,7 +897,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     static func defaultState(from state: AddressBarState) -> Self {
         return AddressBarState(
             windowUUID: state.windowUUID,
-            navigationActionsState: state.navigationActionsState,
+            navigationActions: state.navigationActions,
             leadingPageActions: state.leadingPageActions,
             trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,

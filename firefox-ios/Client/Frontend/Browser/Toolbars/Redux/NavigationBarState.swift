@@ -242,8 +242,8 @@ struct NavigationBarState: StateType, Equatable {
         let nextTabScreenshot = isTabScreenshotAction ? action.nextTabScreenshot : toolbarState.nextTabScreenshot
 
         actions = [
-            NavigationActionsState.backAction(enabled: canGoBack),
-            NavigationActionsState.forwardAction(enabled: canGoForward)
+            NavigationActionsBuilder.backAction(enabled: canGoBack),
+            NavigationActionsBuilder.forwardAction(enabled: canGoForward)
         ]
 
         let iconName: String? = switch tabTrayButtonStyle {
