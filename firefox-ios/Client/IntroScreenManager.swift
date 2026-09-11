@@ -10,9 +10,11 @@ protocol IntroScreenManagerProtocol {
     var shouldShowIntroScreen: Bool { get }
     var isModernOnboardingEnabled: Bool { get }
     var shouldShowVideoIntro: Bool { get }
+    var shouldUseHardcodedOnboarding: Bool { get }
     var onboardingVariant: OnboardingVariant { get }
     var onboardingKitVariant: OnboardingKit.OnboardingVariant { get }
     func didSeeIntroScreen()
+    func recordHardcodedOnboardingActiveDay()
 }
 
 struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
@@ -32,6 +34,17 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
 
     var shouldShowVideoIntro: Bool {
         featureFlagsProvider.isEnabled(.videoIntroOnboarding)
+    }
+
+    /// Debug-only override. When true, onboarding is built from the hardcoded in-code cards
+    /// (`HardcodedOnboardingCardProvider`) instead of the Nimbus config.
+    var shouldUseHardcodedOnboarding: Bool {
+        featureFlagsProvider.isEnabled(.multiDayOnboarding)
+    }
+
+    /// Counts the current launch as an active day for the drip (idempotent per calendar day).
+    func recordHardcodedOnboardingActiveDay() {
+        OnboardingDripScheduler(prefs: prefs).recordActiveDayIfNeeded()
     }
 
     var shouldUseBrandRefreshConfiguration: Bool {
