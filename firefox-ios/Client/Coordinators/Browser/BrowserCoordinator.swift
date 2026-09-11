@@ -80,7 +80,8 @@ final class BrowserCoordinator: BaseCoordinator,
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-         googleLensService: GoogleLensServicing = GoogleLensService()) {
+         googleLensService: GoogleLensServicing = GoogleLensService(),
+         shouldDeferTabRestoration: Bool = false) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.screenshotService = screenshotService
         self.profile = profile
@@ -91,7 +92,8 @@ final class BrowserCoordinator: BaseCoordinator,
         self.homepageTabStateStore = homepageTabStateStore
         self.browserViewController = BrowserViewController(profile: profile,
                                                            tabManager: tabManager,
-                                                           gleanWrapper: glean)
+                                                           gleanWrapper: glean,
+                                                           shouldDeferTabRestoration: shouldDeferTabRestoration)
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.googleLensService = googleLensService

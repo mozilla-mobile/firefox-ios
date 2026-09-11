@@ -93,6 +93,31 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
                      "With refactor disabled route should wait for tabRestoration too")
     }
 
+    func testHandleRoute_copiedLink_dispatchesWithoutTabRestoration() throws {
+        setIsDeeplinkOptimizationRefactorEnabled(false)
+        AppEventQueue.signal(event: .startupFlowComplete)
+        let setup = try createSubjectWithCoordinator()
+
+        setup.delegate.handle(route: .search(url: URL(string: "https://example.com"),
+                                              isPrivate: false,
+                                              options: [.copiedLink]))
+
+        XCTAssertNotNil(setup.coordinator.savedRoute,
+                        "Copied-link routes should not wait for tab restoration")
+    }
+
+    func testHandleRoute_copiedLinkMarkerIsNotClearedByLaterRoute() throws {
+        let setup = try createSubjectWithCoordinator()
+
+        setup.delegate.handle(route: .search(url: URL(string: "https://example.com"),
+                                              isPrivate: false,
+                                              options: [.copiedLink]))
+        setup.delegate.handle(route: .search(url: URL(string: "https://mozilla.org"),
+                                              isPrivate: false))
+
+        XCTAssertTrue(setup.coordinator.shouldDeferTabRestorationForCopiedLink)
+    }
+
     func testHandleRoute_refactorDisabled_dispatchesAfterBothEvents() throws {
         setIsDeeplinkOptimizationRefactorEnabled(false)
         AppEventQueue.signal(event: .startupFlowComplete)
