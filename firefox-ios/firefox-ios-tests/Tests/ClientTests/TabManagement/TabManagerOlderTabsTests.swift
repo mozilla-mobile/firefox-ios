@@ -33,6 +33,23 @@ final class TabManagerOlderTabsTests: TabManagerTestsBase {
     }
 
     @MainActor
+    func testRemoveNormalTabsOlderThan_whenFreshTabClosed_thenAllOldTabsRemoved() {
+        let oldTabs = generateTabs(ofType: .normalOlder2Weeks, count: 5)
+        let tabManager = createSubject(tabs: oldTabs)
+
+        let freshTab = tabManager.addTab()
+        tabManager.selectTab(freshTab)
+
+        tabManager.removeTab(freshTab.tabUUID)
+
+        tabManager.removeNormalTabsOlderThan(period: .oneWeek, currentDate: testDate)
+
+        XCTAssertEqual(tabManager.normalTabs.count, 1)
+        XCTAssertTrue(tabManager.selectedTab?.isURLStartingPage == true)
+        XCTAssertFalse(oldTabs.contains { $0 === tabManager.selectedTab })
+    }
+
+    @MainActor
     func testRemoveNormalTabsOlderThan_whenPrivateTabs_thenNoTabsRemoved() {
         let numberPrivateTabs = 3
         let tabs = generateTabs(ofType: .privateAny, count: numberPrivateTabs)
