@@ -292,13 +292,20 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
     public func setupViewValues() {
         guard let creditCard = creditCard else { return }
         nameOnCard = creditCard.ccName
-        cardNumber = autofill.decryptCreditCardNumber(
-            encryptedCCNum: creditCard.ccNumberEnc) ?? ""
         let month = creditCard.ccExpMonth
         isRightBarButtonEnabled = initialStateToEnableTopRightButton()
         let formattedMonth = month < 10 ? String(format: "%02d", month) : String(month)
 
         expirationDate = "\(formattedMonth) / \(creditCard.ccExpYear % 100)"
+
+        autofill.decryptCreditCardNumber(encryptedCCNum: creditCard.ccNumberEnc) { [weak self] ccNumber in
+            ensureMainThread {
+                guard let self else { return }
+                self.cardNumber = ccNumber ?? ""
+                // The button state depends on the card number, so it's recomputed once it lands.
+                self.isRightBarButtonEnabled = self.initialStateToEnableTopRightButton()
+            }
+        }
     }
 
     func initialStateToEnableTopRightButton() -> Bool {
