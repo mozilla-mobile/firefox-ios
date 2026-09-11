@@ -53,7 +53,7 @@ private class CustomFxAContentServerEnableSetting: BoolSetting {
       }
   }
 
-class AdvancedAccountSettingViewController: SettingsTableViewController {
+final class AdvancedAccountSettingViewController: SettingsTableViewController {
     fileprivate var customFxAContentURI: String?
     fileprivate var customSyncTokenServerURI: String?
 
@@ -84,9 +84,10 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
             defaultValue: false,
             attributedTitleText: NSAttributedString(
                 string: .AdvancedAccountUseStageServer,
-                attributes: attributes)) { isOn in
-            self.settings = self.generateSettings()
-            self.tableView.reloadData()
+                attributes: attributes)) { [weak self] isOn in
+            guard let self else { return }
+            settings = generateSettings()
+            tableView.reloadData()
         }
 
         let useReactFxA = BoolSetting(
@@ -94,9 +95,10 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
             prefKey: PrefsKeys.KeyUseReactFxA,
             defaultValue: false,
             attributedTitleText: NSAttributedString(string: .SettingsAdvancedAccountUseReactContentServer)
-        ) { isOn in
-            self.settings = self.generateSettings()
-            self.tableView.reloadData()
+        ) { [weak self] isOn in
+            guard let self else { return }
+            settings = generateSettings()
+            tableView.reloadData()
         }
 
         let customFxA = CustomURLSetting(prefs: prefs,
@@ -111,9 +113,10 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
             accessibilityIdentifier: "CustomSyncTokenServerURISetting")
 
         let autoconfigSettings = [
-            CustomFxAContentServerEnableSetting(prefs: prefs) { isOn in
-                self.settings = self.generateSettings()
-                self.tableView.reloadData()
+            CustomFxAContentServerEnableSetting(prefs: prefs) { [weak self] isOn in
+                guard let self else { return }
+                settings = self.generateSettings()
+                tableView.reloadData()
             },
             customFxA
         ]

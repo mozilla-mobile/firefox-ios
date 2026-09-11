@@ -667,7 +667,7 @@ enum CheckmarkSettingStyle {
     case rightSide
 }
 
-class CheckmarkSetting: Setting {
+final class CheckmarkSetting: Setting {
     private struct UX {
         static let defaultInset: CGFloat = 0
         static let cellIndentationWidth: CGFloat = 42
