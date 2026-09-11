@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Shared
 
 @MainActor
 final class ErrorHandler {
@@ -26,13 +27,13 @@ final class ErrorHandler {
             handlePermissionDenied(
                 isFirstTime: isFirstTime,
                 title: .QuickAnswers.Errors.PermissionAlertTitle,
-                message: .QuickAnswers.Errors.MicrophonePermissionMessage
+                message: String(format: .QuickAnswers.Errors.MicrophonePermissionMessage, AppName.shortName.rawValue)
             )
         case .speechRecognitionPermissionDenied(let isFirstTime):
             handlePermissionDenied(
                 isFirstTime: isFirstTime,
                 title: .QuickAnswers.Errors.PermissionAlertTitle,
-                message: .QuickAnswers.Errors.SpeechRecognitionPermissionMessage
+                message: String(format: .QuickAnswers.Errors.SpeechRecognitionPermissionMessage, AppName.shortName.rawValue)
             )
         default:
             showCatchAllErrorAlert()
