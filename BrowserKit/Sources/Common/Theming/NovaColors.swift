@@ -10,7 +10,7 @@ import UIKit
 final class NovaColors {
     // MARK: - Black & White
     static let Black = UIColor(rgb: 0x000001)
-    static let White = UIColor(rgb: 0xffffff)
+    static let White = UIColor(rgb: 0xfffff4)
 
     // MARK: - Gray
     static let Gray0 = UIColor(rgb: 0xfcfbff)
