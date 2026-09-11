@@ -35,6 +35,7 @@ private struct NovaDarkColourPalette: ThemeColourPalette {
     var layer4: UIColor = NovaColors.Gray65
     var layerSurfaceLow = NovaColors.Gray75
     var layerSurfaceMedium = NovaColors.Gray65
+    var layerSurfaceMediumAlt: UIColor = NovaColors.Gray60
     var layerSurfaceMediumAlpha = NovaColors.Gray65.withAlphaComponent(0.4)
     var layerAccentSubtle: UIColor = NovaColors.VioletDesaturated70
     var layerInverse: UIColor = NovaColors.Gray30
@@ -143,7 +144,6 @@ private struct NovaDarkColourPalette: ThemeColourPalette {
     var layerCriticalSubdued: UIColor = DarkTheme().colors.layerCriticalSubdued
     var layerEmphasis: UIColor = DarkTheme().colors.layerEmphasis
     var layer5Hover: UIColor = DarkTheme().colors.layer5Hover
-    var layerSurfaceMediumAlt: UIColor = DarkTheme().colors.layerSurfaceMediumAlt
     var indicatorActive: UIColor = DarkTheme().colors.indicatorActive
     var indicatorInactive: UIColor = DarkTheme().colors.indicatorInactive
     var iconAccentViolet: UIColor = DarkTheme().colors.iconAccentViolet

@@ -37,4 +37,12 @@ final class AddressToolbarUXConfigurationTests: XCTestCase {
         XCTAssertEqual(subject.addressToolbarBackgroundColor(theme: theme),
                        theme.colors.layer1.withAlphaComponent(0.5))
     }
+
+    func testLocationContainerBackgroundColorWithAlternativeColorUsesAlternativeNovaToken() {
+        let theme = NovaLightTheme()
+        let subject = AddressToolbarUXConfiguration.experiment(hasAlternativeLocationColor: true)
+
+        XCTAssertEqual(subject.locationContainerBackgroundColor(theme: theme),
+                       theme.colors.layerSurfaceMediumAlt)
+    }
 }
