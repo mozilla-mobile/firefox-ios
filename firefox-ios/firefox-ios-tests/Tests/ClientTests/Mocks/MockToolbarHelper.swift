@@ -31,7 +31,7 @@ class MockToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
 
     @MainActor
     var novaToolbarGlassEffectAlpha: CGFloat {
-        if featureFlagsProvider.isEnabled(.novaDesign), #available(iOS 26, *) {
+        guard featureFlagsProvider.isEnabled(.novaDesign), #unavailable(iOS 26) else {
             return glassEffectAlpha
         }
         // for Nova themes on iOS 18 we want to use a different alpha for both top and bottom toolbar
