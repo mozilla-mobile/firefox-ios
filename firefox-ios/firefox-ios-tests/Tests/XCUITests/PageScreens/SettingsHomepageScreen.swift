@@ -44,6 +44,16 @@ final class SettingsHomepageScreen {
         )
     }
 
+    /// Below iOS 17 the Stories row is never added to Homepage settings, see
+    /// https://github.com/mozilla-mobile/firefox-ios/issues/35618. Fails once the bug is fixed.
+    func assertStoriesSwitchIsAbsent(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.NAVBAR.element(in: app))
+        XCTAssertFalse(
+            sel.STORIES_SWITCH.element(in: app).mozWaitForElementToExist(timeout: timeout, failOnTimeout: false),
+            "Stories switch is present below iOS 17. Issue #35618 looks fixed, remove the version guard."
+        )
+    }
+
     func assertStoriesSwitch(isOn expected: Bool) {
         let sw = sel.STORIES_SWITCH.element(in: app)
         BaseTestCase().mozWaitForElementToExist(sw)
