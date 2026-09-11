@@ -115,7 +115,7 @@ final class AdvancedAccountSettingViewController: SettingsTableViewController {
         let autoconfigSettings = [
             CustomFxAContentServerEnableSetting(prefs: prefs) { [weak self] isOn in
                 guard let self else { return }
-                settings = self.generateSettings()
+                settings = generateSettings()
                 tableView.reloadData()
             },
             customFxA
