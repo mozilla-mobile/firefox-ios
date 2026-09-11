@@ -7,4 +7,4 @@ on:
     branches: [main]
 jobs:
   glean-probe-scraper:
-    uses: mozilla/probe-scraper/.github/workflows/glean.yaml@main
+    uses: mozilla/probe-scraper/.github/workflows/glean.yaml@8babd339371f24c970c257ba9a523967c9c86a40 # main
