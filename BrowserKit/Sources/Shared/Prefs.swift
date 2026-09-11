@@ -271,6 +271,15 @@ public struct PrefsKeys {
     // Used to only show the Default Browser Banner, in Main Menu, until is dismissed by the user
     public static let defaultBrowserBannerShown = "defaultBrowserBannerShownKey"
 
+    // Count of distinct active days
+    public static let onboardingDripActiveDayCount = "onboardingDripActiveDayCount"
+
+    // The calendar day that count last advanced,
+    public static let onboardingDripLastActiveDate = "onboardingDripLastActiveDate"
+
+    // The day whose card was last shown.
+    public static let onboardingDripLastCardActiveDay = "onboardingDripLastCardActiveDay"
+
     // MARK: - Apple Intelligence
     // Used to determine if Apple Intelligence is available
     public static let appleIntelligenceAvailable = "appleIntelligenceAvailableKey"
