@@ -22,7 +22,7 @@ protocol ToolbarHelperInterface {
     var glassEffectAlpha: CGFloat { get }
 
     @MainActor
-    func toolbarBackgroundAlpha(isTopToolbar: Bool) -> CGFloat
+    var novaToolbarGlassEffectAlpha: CGFloat { get }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool
     func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool
@@ -33,10 +33,10 @@ protocol ToolbarHelperInterface {
     func getLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState
 }
 
-final class ToolbarHelper: ToolbarHelperInterface {
+final class ToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
-        static let topToolbarBackgroundAlpha: CGFloat = 0.90
+        static let novaToolbarBackgroundAlphaForBlur: CGFloat = 0.90
     }
 
     var isSwipingTabsEnabled: Bool {
@@ -58,11 +58,12 @@ final class ToolbarHelper: ToolbarHelperInterface {
     }
 
     @MainActor
-    func toolbarBackgroundAlpha(isTopToolbar: Bool) -> CGFloat {
-        if #available(iOS 26, *) {
+    var novaToolbarGlassEffectAlpha: CGFloat {
+        if featureFlagsProvider.isEnabled(.novaDesign), #available(iOS 26, *) {
             return glassEffectAlpha
         }
-        return isTopToolbar && shouldBlur() ? UX.topToolbarBackgroundAlpha : glassEffectAlpha
+        // for Nova themes on iOS 18 we want to use a different alpha for both top and bottom toolbar
+        return shouldBlur() ? UX.novaToolbarBackgroundAlphaForBlur : glassEffectAlpha
     }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {
