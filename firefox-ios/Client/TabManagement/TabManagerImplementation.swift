@@ -1258,6 +1258,7 @@ final class TabManagerImplementation: NSObject,
                 if let url = newTabChoice.url {
                     tab.loadRequest(PrivilegedRequest(url: url) as URLRequest)
                     tab.url = url
+                    closeOtherHomepageTabs(excluding: tab)
                 }
             }
         }
@@ -1267,6 +1268,31 @@ final class TabManagerImplementation: NSObject,
 
         if flushToDisk {
             commitChanges()
+        }
+    }
+
+    /// Keeps a single homepage tab per browsing mode by closing every other tab currently showing about:home.
+    /// Called when a newly added tab loads about:home, so the user doesn't accumulate duplicate homepages.
+    /// - Parameter newTab: the tab that just loaded about:home, which is kept open.
+    private func closeOtherHomepageTabs(excluding newTab: Tab) {
+        // Restoring a session routes every tab through `configureTab` before its persisted URL is applied,
+        // so sweeping here would close homepages that are being restored.
+        guard tabRestoreHasFinished else { return }
+
+        let homepageTabs = tabs.filter { $0 !== newTab && $0.isPrivate == newTab.isPrivate && $0.isFxHomeTab }
+        guard !homepageTabs.isEmpty else { return }
+
+        // `selectedIndex` is positional, so removals shift it onto an unrelated tab. Re-anchor it before
+        // returning to the caller, which may not select `newTab` itself.
+        let previouslySelectedTab = selectedTab
+        for homepageTab in homepageTabs {
+            removeTab(homepageTab, flushToDisk: false)
+        }
+
+        if let previouslySelectedTab, let index = tabs.firstIndex(of: previouslySelectedTab) {
+            selectedIndex = index
+        } else {
+            selectedIndex = tabs.firstIndex(of: newTab) ?? -1
         }
     }
 
