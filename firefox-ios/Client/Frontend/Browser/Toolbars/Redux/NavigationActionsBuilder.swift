@@ -5,6 +5,7 @@
 import Common
 import Redux
 
+/// TODO: Temporarily used in Reducer side will be moved to View side next
 /// Builds the address bar's back/forward buttons, shown only when the navigation toolbar is
 /// hidden (e.g. compact layout). Every input is already resolved by `AddressBarState`, so
 /// there's nothing here to persist across dispatches. `backAction`/`forwardAction` are also
