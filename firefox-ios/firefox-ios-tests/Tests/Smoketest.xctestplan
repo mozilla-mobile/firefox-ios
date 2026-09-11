@@ -297,7 +297,7 @@
         "HomePageSettingsUITests\/testSetFirefoxHomeAsHome()",
         "HomePageSettingsUITests\/testShortcutsRows()",
         "HomePageSettingsUITests\/testTopSitesCustomNumberOfRows()",
-        "HomePageSettingsUITests\/testTyping()",
+        "HomePageSettingsUITests\/testValidateCustomURLAsCurrentHomepage()",
         "IntegrationTests",
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",

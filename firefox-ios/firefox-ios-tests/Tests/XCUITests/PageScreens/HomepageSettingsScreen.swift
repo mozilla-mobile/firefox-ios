@@ -14,8 +14,6 @@ final class HomepageSettingsScreen {
         self.sel = selectors
     }
 
-    private var bookmarkToggle: XCUIElement { sel.BOOKMARK_TOGGLE.element(in: app) }
-
     // helper to centralize the duplicated lookup
     private var bookmarkSwitch: XCUIElement {
         let settingTable = sel.HOMEPAGE_SETTINGS_TABLE.element(in: app)
@@ -30,6 +28,8 @@ final class HomepageSettingsScreen {
     }
 
     private var customURLTextField: XCUIElement { sel.CUSTOM_URL_TEXT_FIELD.element(in: app) }
+
+    private var shortcutsSettingsCell: XCUIElement { sel.SHORTCUTS_SETTINGS_CELL.element(in: app) }
 
     func typeCustomHomepageURL(_ url: String) {
         customURLTextField.tapAndTypeText(url)
@@ -91,5 +91,11 @@ final class HomepageSettingsScreen {
     func assertJumpBackInToggleIsDisabled() {
         let switchElement = jumpBackInSwitch
         XCTAssertEqual(switchElement.value as? String, "0", "Jump Back In toggle is not disabled")
+    }
+
+    func assertShortcutsSettingIsOn() {
+        BaseTestCase().mozWaitForElementToExist(
+            shortcutsSettingsCell.staticTexts[sel.SHORTCUTS_STATUS_ON.value]
+        )
     }
 }
