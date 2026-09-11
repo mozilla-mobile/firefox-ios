@@ -4,7 +4,8 @@
   "description": "Firefox for iOS",
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "dev": "webpack --config webpack.config.js --mode development --watch"
+    "dev": "webpack --config webpack.config.js --mode development --watch",
+    "start": "npm run dev"
   },
   "repository": {
     "type": "git",
