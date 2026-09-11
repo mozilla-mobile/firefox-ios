@@ -39,6 +39,52 @@ fileprivate extension ForeignBytes {
     init(bufferPointer: UnsafeBufferPointer<UInt8>) {
         self.init(len: Int32(bufferPointer.count), data: bufferPointer.baseAddress)
     }
+
+    init(rawBufferPointer: UnsafeRawBufferPointer) {
+        self.init(
+            len: Int32(rawBufferPointer.count),
+            data: rawBufferPointer.baseAddress?.assumingMemoryBound(to: UInt8.self)
+        )
+    }
+}
+
+// Converter for `&[u8]` / `[ByRef] bytes` arguments.
+//
+// Conforms to `FfiConverter` so the compiler enforces the full converter
+// method set. Only the scope-bound `lower(_:_body:)` overload is sound —
+// zero-copy byte buffers only flow foreign -> Rust, and only in argument
+// position. The four protocol-witness methods (`lift`, `lower`, `read`,
+// `write`) `fatalError` at runtime if anyone reaches them.
+//
+// The scope-bound `lower` takes a closure because the `ForeignBytes`
+// pointer is only guaranteed valid for the duration of
+// `Data.withUnsafeBytes`. Callers must run the full FFI call inside
+// the closure body.
+fileprivate enum FfiConverterByRefBytes: FfiConverter {
+    typealias SwiftType = Data
+    typealias FfiType = ForeignBytes
+
+    static func lower<R>(_ value: Data, _ body: (ForeignBytes) throws -> R) rethrows -> R {
+        return try value.withUnsafeBytes { rawBuf in
+            try body(ForeignBytes(rawBufferPointer: rawBuf))
+        }
+    }
+
+    static func lower(_ value: Data) -> ForeignBytes {
+        fatalError("ByRef bytes cannot use the plain lower: returning ForeignBytes escapes the Data.withUnsafeBytes scope. Use the scope-bound lower(_:_body:) overload instead.")
+    }
+
+    static func lift(_ value: ForeignBytes) throws -> Data {
+        fatalError("ByRef bytes cannot be lifted: zero-copy &[u8] only flows foreign->Rust")
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        fatalError("ByRef bytes cannot be read from a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
+
+    static func write(_ value: Data, into buf: inout [UInt8]) {
+        fatalError("ByRef bytes cannot be written to a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
 }
 
 // For every type used in the interface, we provide helper methods for conveniently
@@ -525,7 +571,11 @@ fileprivate struct FfiConverterString: FfiConverter {
             return String()
         }
         let bytes = UnsafeBufferPointer<UInt8>(start: value.data!, count: Int(value.len))
-        return String(bytes: bytes, encoding: String.Encoding.utf8)!
+        // Use Swift's native UTF-8 decoder; `String(bytes:encoding:.utf8)` goes
+        // through Foundation's NSString and silently strips a leading U+FEFF BOM.
+        // Invalid UTF-8 substitutes U+FFFD instead of trapping (unreachable
+        // given Rust's `String` invariant).
+        return String(decoding: bytes, as: UTF8.self)
     }
 
     public static func lower(_ value: String) -> RustBuffer {
@@ -541,7 +591,8 @@ fileprivate struct FfiConverterString: FfiConverter {
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> String {
         let len: Int32 = try readInt(&buf)
-        return String(bytes: try readBytes(&buf, count: Int(len)), encoding: String.Encoding.utf8)!
+        // See `lift` above for why we avoid Foundation's NSString-backed decoder here.
+        return String(decoding: try readBytes(&buf, count: Int(len)), as: UTF8.self)
     }
 
     public static func write(_ value: String, into buf: inout [UInt8]) {
@@ -618,24 +669,27 @@ open class GeckoPrefHandlerImpl: GeckoPrefHandler, @unchecked Sendable {
     
 open func getPrefsWithState() -> [String: [String: GeckoPrefState]]  {
     return try!  FfiConverterDictionaryStringDictionaryStringTypeGeckoPrefState.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_geckoprefhandler_get_prefs_with_state(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func setGeckoPrefsOriginalValues(originalGeckoPrefs: [OriginalGeckoPref])  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_geckoprefhandler_set_gecko_prefs_original_values(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceTypeOriginalGeckoPref.lower(originalGeckoPrefs),$0
+        FfiConverterSequenceTypeOriginalGeckoPref.lower(originalGeckoPrefs),uniffiCallStatus
     )
 }
 }
     
 open func setGeckoPrefsState(newPrefsState: [GeckoPrefState])  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_geckoprefhandler_set_gecko_prefs_state(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceTypeGeckoPrefState.lower(newPrefsState),$0
+        FfiConverterSequenceTypeGeckoPrefState.lower(newPrefsState),uniffiCallStatus
     )
 }
 }
@@ -652,9 +706,8 @@ fileprivate struct UniffiCallbackInterfaceGeckoPrefHandler {
     // Create the VTable using a series of closures.
     // Swift automatically converts these into C callback functions.
     //
-    // This creates 1-element array, since this seems to be the only way to construct a const
-    // pointer that we can pass to the Rust code.
-    static let vtable: [UniffiVTableCallbackInterfaceGeckoPrefHandler] = [UniffiVTableCallbackInterfaceGeckoPrefHandler(
+    // Store the vtable directly.
+    static let vtable: UniffiVTableCallbackInterfaceGeckoPrefHandler = UniffiVTableCallbackInterfaceGeckoPrefHandler(
         uniffiFree: { (uniffiHandle: UInt64) -> () in
             do {
                 try FfiConverterTypeGeckoPrefHandler.handleMap.remove(handle: uniffiHandle)
@@ -739,11 +792,23 @@ fileprivate struct UniffiCallbackInterfaceGeckoPrefHandler {
                 writeReturn: writeReturn
             )
         }
-    )]
+    )
+
+    // Rust stores this pointer for future callback invocations, so it must live
+    // for the process lifetime (not just for the init function call).
+    //
+    // `nonisolated(unsafe)` is needed under Swift 6 strict concurrency.
+    // This is safe because the pointee is initialized once during static init
+    // and never mutated by either side of the FFI.  Its fields are C function pointers.
+    nonisolated(unsafe) static let vtablePtr: UnsafePointer<UniffiVTableCallbackInterfaceGeckoPrefHandler> = {
+        let ptr = UnsafeMutablePointer<UniffiVTableCallbackInterfaceGeckoPrefHandler>.allocate(capacity: 1)
+        ptr.initialize(to: vtable)
+        return UnsafePointer(ptr)
+    }()
 }
 
 private func uniffiCallbackInitGeckoPrefHandler() {
-    uniffi_nimbus_fn_init_callback_vtable_geckoprefhandler(UniffiCallbackInterfaceGeckoPrefHandler.vtable)
+    uniffi_nimbus_fn_init_callback_vtable_geckoprefhandler(UniffiCallbackInterfaceGeckoPrefHandler.vtablePtr)
 }
 
 #if swift(>=5.8)
@@ -881,25 +946,28 @@ open class MetricsHandlerImpl: MetricsHandler, @unchecked Sendable {
 
     
 open func recordDatabaseLoad(event: DatabaseLoadExtraDef)  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_metricshandler_record_database_load(
             self.uniffiCloneHandle(),
-        FfiConverterTypeDatabaseLoadExtraDef_lower(event),$0
+        FfiConverterTypeDatabaseLoadExtraDef_lower(event),uniffiCallStatus
     )
 }
 }
     
 open func recordDatabaseMigration(event: DatabaseMigrationExtraDef)  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_metricshandler_record_database_migration(
             self.uniffiCloneHandle(),
-        FfiConverterTypeDatabaseMigrationExtraDef_lower(event),$0
+        FfiConverterTypeDatabaseMigrationExtraDef_lower(event),uniffiCallStatus
     )
 }
 }
     
 open func recordEnrollmentStatuses(enrollmentStatusExtras: [EnrollmentStatusExtraDef])  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_metricshandler_record_enrollment_statuses(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceTypeEnrollmentStatusExtraDef.lower(enrollmentStatusExtras),$0
+        FfiConverterSequenceTypeEnrollmentStatusExtraDef.lower(enrollmentStatusExtras),uniffiCallStatus
     )
 }
 }
@@ -909,32 +977,36 @@ open func recordEnrollmentStatuses(enrollmentStatusExtras: [EnrollmentStatusExtr
      * the feature configuration is asked for.
      */
 open func recordFeatureActivation(event: FeatureExposureExtraDef)  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_metricshandler_record_feature_activation(
             self.uniffiCloneHandle(),
-        FfiConverterTypeFeatureExposureExtraDef_lower(event),$0
+        FfiConverterTypeFeatureExposureExtraDef_lower(event),uniffiCallStatus
     )
 }
 }
     
 open func recordFeatureExposure(event: FeatureExposureExtraDef)  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_metricshandler_record_feature_exposure(
             self.uniffiCloneHandle(),
-        FfiConverterTypeFeatureExposureExtraDef_lower(event),$0
+        FfiConverterTypeFeatureExposureExtraDef_lower(event),uniffiCallStatus
     )
 }
 }
     
 open func recordMalformedFeatureConfig(event: MalformedFeatureConfigExtraDef)  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_metricshandler_record_malformed_feature_config(
             self.uniffiCloneHandle(),
-        FfiConverterTypeMalformedFeatureConfigExtraDef_lower(event),$0
+        FfiConverterTypeMalformedFeatureConfigExtraDef_lower(event),uniffiCallStatus
     )
 }
 }
     
 open func submitTargetingContext()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_metricshandler_submit_targeting_context(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -951,9 +1023,8 @@ fileprivate struct UniffiCallbackInterfaceMetricsHandler {
     // Create the VTable using a series of closures.
     // Swift automatically converts these into C callback functions.
     //
-    // This creates 1-element array, since this seems to be the only way to construct a const
-    // pointer that we can pass to the Rust code.
-    static let vtable: [UniffiVTableCallbackInterfaceMetricsHandler] = [UniffiVTableCallbackInterfaceMetricsHandler(
+    // Store the vtable directly.
+    static let vtable: UniffiVTableCallbackInterfaceMetricsHandler = UniffiVTableCallbackInterfaceMetricsHandler(
         uniffiFree: { (uniffiHandle: UInt64) -> () in
             do {
                 try FfiConverterTypeMetricsHandler.handleMap.remove(handle: uniffiHandle)
@@ -1134,11 +1205,23 @@ fileprivate struct UniffiCallbackInterfaceMetricsHandler {
                 writeReturn: writeReturn
             )
         }
-    )]
+    )
+
+    // Rust stores this pointer for future callback invocations, so it must live
+    // for the process lifetime (not just for the init function call).
+    //
+    // `nonisolated(unsafe)` is needed under Swift 6 strict concurrency.
+    // This is safe because the pointee is initialized once during static init
+    // and never mutated by either side of the FFI.  Its fields are C function pointers.
+    nonisolated(unsafe) static let vtablePtr: UnsafePointer<UniffiVTableCallbackInterfaceMetricsHandler> = {
+        let ptr = UnsafeMutablePointer<UniffiVTableCallbackInterfaceMetricsHandler>.allocate(capacity: 1)
+        ptr.initialize(to: vtable)
+        return UnsafePointer(ptr)
+    }()
 }
 
 private func uniffiCallbackInitMetricsHandler() {
-    uniffi_nimbus_fn_init_callback_vtable_metricshandler(UniffiCallbackInterfaceMetricsHandler.vtable)
+    uniffi_nimbus_fn_init_callback_vtable_metricshandler(UniffiCallbackInterfaceMetricsHandler.vtablePtr)
 }
 
 #if swift(>=5.8)
@@ -1444,6 +1527,7 @@ open class NimbusClient: NimbusClientProtocol, @unchecked Sendable {
 public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, coenrollingFeatureIds: [String], dbpath: String, metricsHandler: MetricsHandler, geckoPrefHandler: GeckoPrefHandler?, remoteSettingsInfo: NimbusServerSettings?)throws  {
     let handle =
         try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_constructor_nimbusclient_new(
         FfiConverterTypeAppContext_lower(appCtx),
         FfiConverterOptionTypeRecordedContext.lower(recordedContext),
@@ -1451,7 +1535,7 @@ public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, c
         FfiConverterString.lower(dbpath),
         FfiConverterTypeMetricsHandler_lower(metricsHandler),
         FfiConverterOptionTypeGeckoPrefHandler.lower(geckoPrefHandler),
-        FfiConverterOptionTypeNimbusServerSettings.lower(remoteSettingsInfo),$0
+        FfiConverterOptionTypeNimbusServerSettings.lower(remoteSettingsInfo),uniffiCallStatus
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -1475,9 +1559,10 @@ public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, c
      * `by_seconds` must be positive.
      */
 open func advanceEventTime(bySeconds: Int64)throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_advance_event_time(
             self.uniffiCloneHandle(),
-        FfiConverterInt64.lower(bySeconds),$0
+        FfiConverterInt64.lower(bySeconds),uniffiCallStatus
     )
 }
 }
@@ -1489,15 +1574,17 @@ open func advanceEventTime(bySeconds: Int64)throws   {try rustCallWithError(FfiC
      */
 open func applyPendingExperiments()throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_apply_pending_experiments(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func clearEvents()throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_clear_events(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1508,9 +1595,10 @@ open func clearEvents()throws   {try rustCallWithError(FfiConverterTypeNimbusErr
      */
 open func createStringHelper(additionalContext: JsonObject? = nil)throws  -> NimbusStringHelper  {
     return try  FfiConverterTypeNimbusStringHelper_lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_create_string_helper(
             self.uniffiCloneHandle(),
-        FfiConverterOptionTypeJsonObject.lower(additionalContext),$0
+        FfiConverterOptionTypeJsonObject.lower(additionalContext),uniffiCallStatus
     )
 })
 }
@@ -1522,25 +1610,28 @@ open func createStringHelper(additionalContext: JsonObject? = nil)throws  -> Nim
      */
 open func createTargetingHelper(additionalContext: JsonObject? = nil)throws  -> NimbusTargetingHelper  {
     return try  FfiConverterTypeNimbusTargetingHelper_lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_create_targeting_helper(
             self.uniffiCloneHandle(),
-        FfiConverterOptionTypeJsonObject.lower(additionalContext),$0
+        FfiConverterOptionTypeJsonObject.lower(additionalContext),uniffiCallStatus
     )
 })
 }
     
 open func dumpStateToLog()throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_dump_state_to_log(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func enrollInFirefoxLab(slug: String)throws  -> FirefoxLabsEnrollResult  {
     return try  FfiConverterTypeFirefoxLabsEnrollResult_lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_enroll_in_firefox_lab(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(slug),$0
+        FfiConverterString.lower(slug),uniffiCallStatus
     )
 })
 }
@@ -1551,8 +1642,9 @@ open func enrollInFirefoxLab(slug: String)throws  -> FirefoxLabsEnrollResult  {
      * Fetched experiments are not applied until `apply_pending_updates()` is called.
      */
 open func fetchExperiments()throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_fetch_experiments(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1562,8 +1654,9 @@ open func fetchExperiments()throws   {try rustCallWithError(FfiConverterTypeNimb
      */
 open func getActiveExperiments()throws  -> [EnrolledExperiment]  {
     return try  FfiConverterSequenceTypeEnrolledExperiment.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_get_active_experiments(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1574,16 +1667,18 @@ open func getActiveExperiments()throws  -> [EnrolledExperiment]  {
      */
 open func getAvailableExperiments()throws  -> [AvailableExperiment]  {
     return try  FfiConverterSequenceTypeAvailableExperiment.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_get_available_experiments(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func getAvailableFirefoxLabs()throws  -> [FirefoxLabsMetadata]  {
     return try  FfiConverterSequenceTypeFirefoxLabsMetadata.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_get_available_firefox_labs(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1593,9 +1688,10 @@ open func getAvailableFirefoxLabs()throws  -> [FirefoxLabsMetadata]  {
      */
 open func getExperimentBranch(id: String)throws  -> String?  {
     return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_get_experiment_branch(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(id),$0
+        FfiConverterString.lower(id),uniffiCallStatus
     )
 })
 }
@@ -1605,9 +1701,10 @@ open func getExperimentBranch(id: String)throws  -> String?  {
      */
 open func getExperimentBranches(experimentSlug: String)throws  -> [ExperimentBranch]  {
     return try  FfiConverterSequenceTypeExperimentBranch.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_get_experiment_branches(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(experimentSlug),$0
+        FfiConverterString.lower(experimentSlug),uniffiCallStatus
     )
 })
 }
@@ -1620,26 +1717,29 @@ open func getExperimentBranches(experimentSlug: String)throws  -> [ExperimentBra
      */
 open func getExperimentParticipation()throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_get_experiment_participation(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func getFeatureConfigVariables(featureId: String)throws  -> String?  {
     return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_get_feature_config_variables(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(featureId),$0
+        FfiConverterString.lower(featureId),uniffiCallStatus
     )
 })
 }
     
 open func getPreviousGeckoPrefStates(experimentSlug: String)throws  -> [PreviousGeckoPrefState]?  {
     return try  FfiConverterOptionSequenceTypePreviousGeckoPrefState.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_get_previous_gecko_pref_states(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(experimentSlug),$0
+        FfiConverterString.lower(experimentSlug),uniffiCallStatus
     )
 })
 }
@@ -1652,8 +1752,9 @@ open func getPreviousGeckoPrefStates(experimentSlug: String)throws  -> [Previous
      */
 open func getRolloutParticipation()throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_get_rollout_participation(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1669,16 +1770,18 @@ open func getRolloutParticipation()throws  -> Bool  {
      * the minimum amount of work to achieve that.
      */
 open func initialize()throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_initialize(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func isFetchEnabled()throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_is_fetch_enabled(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1689,10 +1792,11 @@ open func isFetchEnabled()throws  -> Bool  {
      */
 open func optInWithBranch(experimentSlug: String, branch: String)throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_opt_in_with_branch(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(experimentSlug),
-        FfiConverterString.lower(branch),$0
+        FfiConverterString.lower(branch),uniffiCallStatus
     )
 })
 }
@@ -1702,9 +1806,10 @@ open func optInWithBranch(experimentSlug: String, branch: String)throws  -> [Enr
      */
 open func optOut(experimentSlug: String)throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_opt_out(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(experimentSlug),$0
+        FfiConverterString.lower(experimentSlug),uniffiCallStatus
     )
 })
 }
@@ -1715,10 +1820,11 @@ open func optOut(experimentSlug: String)throws  -> [EnrollmentChangeEvent]  {
      * targeting such as "core-active" user targeting.
      */
 open func recordEvent(eventId: String, count: Int64 = Int64(1))throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_record_event(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(eventId),
-        FfiConverterInt64.lower(count),$0
+        FfiConverterInt64.lower(count),uniffiCallStatus
     )
 }
 }
@@ -1735,10 +1841,11 @@ open func recordEvent(eventId: String, count: Int64 = Int64(1))throws   {try rus
      * the branch. This is useful for coenrolling features.
      */
 open func recordFeatureExposure(featureId: String, slug: String?)  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_record_feature_exposure(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(featureId),
-        FfiConverterOptionString.lower(slug),$0
+        FfiConverterOptionString.lower(slug),uniffiCallStatus
     )
 }
 }
@@ -1752,10 +1859,11 @@ open func recordFeatureExposure(featureId: String, slug: String?)  {try! rustCal
      * or not.
      */
 open func recordMalformedFeatureConfig(featureId: String, partId: String)  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_record_malformed_feature_config(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(featureId),
-        FfiConverterString.lower(partId),$0
+        FfiConverterString.lower(partId),uniffiCallStatus
     )
 }
 }
@@ -1766,19 +1874,21 @@ open func recordMalformedFeatureConfig(featureId: String, partId: String)  {try!
      * `seconds_ago` must be positive.
      */
 open func recordPastEvent(eventId: String, secondsAgo: Int64, count: Int64 = Int64(1))throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_record_past_event(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(eventId),
         FfiConverterInt64.lower(secondsAgo),
-        FfiConverterInt64.lower(count),$0
+        FfiConverterInt64.lower(count),uniffiCallStatus
     )
 }
 }
     
 open func registerPreviousGeckoPrefStates(geckoPrefStates: [GeckoPrefState])throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_register_previous_gecko_pref_states(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceTypeGeckoPrefState.lower(geckoPrefStates),$0
+        FfiConverterSequenceTypeGeckoPrefState.lower(geckoPrefStates),uniffiCallStatus
     )
 }
 }
@@ -1789,8 +1899,9 @@ open func registerPreviousGeckoPrefStates(geckoPrefStates: [GeckoPrefState])thro
      * Reset the enrollments and experiments in the database to an empty state.
      */
 open func resetEnrollments()throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_reset_enrollments(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1813,17 +1924,19 @@ open func resetEnrollments()throws   {try rustCallWithError(FfiConverterTypeNimb
      */
 open func resetTelemetryIdentifiers()throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_reset_telemetry_identifiers(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func setExperimentParticipation(optIn: Bool)throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_set_experiment_participation(
             self.uniffiCloneHandle(),
-        FfiConverterBool.lower(optIn),$0
+        FfiConverterBool.lower(optIn),uniffiCallStatus
     )
 })
 }
@@ -1835,9 +1948,10 @@ open func setExperimentParticipation(optIn: Bool)throws  -> [EnrollmentChangeEve
      * Experiments set with this method are not applied until `apply_pending_updates()` is called.
      */
 open func setExperimentsLocally(experimentsJson: String)throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_set_experiments_locally(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(experimentsJson),$0
+        FfiConverterString.lower(experimentsJson),uniffiCallStatus
     )
 }
 }
@@ -1849,45 +1963,50 @@ open func setExperimentsLocally(experimentsJson: String)throws   {try rustCallWi
      * `set_experiment_participation` or `set_rollout_participation` instead.
      */
 open func setFetchEnabled(flag: Bool)throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_set_fetch_enabled(
             self.uniffiCloneHandle(),
-        FfiConverterBool.lower(flag),$0
+        FfiConverterBool.lower(flag),uniffiCallStatus
     )
 }
 }
     
 open func setRolloutParticipation(optIn: Bool)throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_set_rollout_participation(
             self.uniffiCloneHandle(),
-        FfiConverterBool.lower(optIn),$0
+        FfiConverterBool.lower(optIn),uniffiCallStatus
     )
 })
 }
     
 open func unenrollForGeckoPref(prefState: GeckoPrefState, prefUnenrollReason: PrefUnenrollReason)throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_unenroll_for_gecko_pref(
             self.uniffiCloneHandle(),
         FfiConverterTypeGeckoPrefState_lower(prefState),
-        FfiConverterTypePrefUnenrollReason_lower(prefUnenrollReason),$0
+        FfiConverterTypePrefUnenrollReason_lower(prefUnenrollReason),uniffiCallStatus
     )
 })
 }
     
 open func unenrollFromAllFirefoxLabs()throws  -> [EnrollmentChangeEvent]  {
     return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_unenroll_from_all_firefox_labs(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func unenrollFromFirefoxLab(slug: String)throws  -> FirefoxLabsUnenrollResult  {
     return try  FfiConverterTypeFirefoxLabsUnenrollResult_lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusclient_unenroll_from_firefox_lab(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(slug),$0
+        FfiConverterString.lower(slug),uniffiCallStatus
     )
 })
 }
@@ -2016,9 +2135,10 @@ open class NimbusStringHelper: NimbusStringHelperProtocol, @unchecked Sendable {
      */
 open func getUuid(template: String) -> String?  {
     return try!  FfiConverterOptionString.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusstringhelper_get_uuid(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(template),$0
+        FfiConverterString.lower(template),uniffiCallStatus
     )
 })
 }
@@ -2029,10 +2149,11 @@ open func getUuid(template: String) -> String?  {
      */
 open func stringFormat(template: String, uuid: String? = nil) -> String  {
     return try!  FfiConverterString.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbusstringhelper_string_format(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(template),
-        FfiConverterOptionString.lower(uuid),$0
+        FfiConverterOptionString.lower(uuid),uniffiCallStatus
     )
 })
 }
@@ -2161,9 +2282,10 @@ open class NimbusTargetingHelper: NimbusTargetingHelperProtocol, @unchecked Send
      */
 open func evalJexl(expression: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbustargetinghelper_eval_jexl(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(expression),$0
+        FfiConverterString.lower(expression),uniffiCallStatus
     )
 })
 }
@@ -2174,9 +2296,10 @@ open func evalJexl(expression: String)throws  -> Bool  {
      */
 open func evalJexlDebug(expression: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_nimbustargetinghelper_eval_jexl_debug(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(expression),$0
+        FfiConverterString.lower(expression),uniffiCallStatus
     )
 })
 }
@@ -2297,31 +2420,35 @@ open class RecordedContextImpl: RecordedContext, @unchecked Sendable {
     
 open func getEventQueries() -> [String: String]  {
     return try!  FfiConverterDictionaryStringString.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_recordedcontext_get_event_queries(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func record()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_recordedcontext_record(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func setEventQueryValues(eventQueryValues: [String: Double])  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_recordedcontext_set_event_query_values(
             self.uniffiCloneHandle(),
-        FfiConverterDictionaryStringDouble.lower(eventQueryValues),$0
+        FfiConverterDictionaryStringDouble.lower(eventQueryValues),uniffiCallStatus
     )
 }
 }
     
 open func toJson() -> JsonObject  {
     return try!  FfiConverterTypeJsonObject_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_nimbus_fn_method_recordedcontext_to_json(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -2338,9 +2465,8 @@ fileprivate struct UniffiCallbackInterfaceRecordedContext {
     // Create the VTable using a series of closures.
     // Swift automatically converts these into C callback functions.
     //
-    // This creates 1-element array, since this seems to be the only way to construct a const
-    // pointer that we can pass to the Rust code.
-    static let vtable: [UniffiVTableCallbackInterfaceRecordedContext] = [UniffiVTableCallbackInterfaceRecordedContext(
+    // Store the vtable directly.
+    static let vtable: UniffiVTableCallbackInterfaceRecordedContext = UniffiVTableCallbackInterfaceRecordedContext(
         uniffiFree: { (uniffiHandle: UInt64) -> () in
             do {
                 try FfiConverterTypeRecordedContext.handleMap.remove(handle: uniffiHandle)
@@ -2445,11 +2571,23 @@ fileprivate struct UniffiCallbackInterfaceRecordedContext {
                 writeReturn: writeReturn
             )
         }
-    )]
+    )
+
+    // Rust stores this pointer for future callback invocations, so it must live
+    // for the process lifetime (not just for the init function call).
+    //
+    // `nonisolated(unsafe)` is needed under Swift 6 strict concurrency.
+    // This is safe because the pointee is initialized once during static init
+    // and never mutated by either side of the FFI.  Its fields are C function pointers.
+    nonisolated(unsafe) static let vtablePtr: UnsafePointer<UniffiVTableCallbackInterfaceRecordedContext> = {
+        let ptr = UnsafeMutablePointer<UniffiVTableCallbackInterfaceRecordedContext>.allocate(capacity: 1)
+        ptr.initialize(to: vtable)
+        return UnsafePointer(ptr)
+    }()
 }
 
 private func uniffiCallbackInitRecordedContext() {
-    uniffi_nimbus_fn_init_callback_vtable_recordedcontext(UniffiCallbackInterfaceRecordedContext.vtable)
+    uniffi_nimbus_fn_init_callback_vtable_recordedcontext(UniffiCallbackInterfaceRecordedContext.vtablePtr)
 }
 
 #if swift(>=5.8)
@@ -3835,8 +3973,7 @@ public func FfiConverterTypePreviousGeckoPrefState_lower(_ value: PreviousGeckoP
     return FfiConverterTypePreviousGeckoPrefState.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 
 public enum EnrollmentChangeEventType: Equatable, Hashable {
     
@@ -3923,8 +4060,7 @@ public func FfiConverterTypeEnrollmentChangeEventType_lower(_ value: EnrollmentC
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 
 public enum FirefoxLabsEnrollStatus: Equatable, Hashable {
     
@@ -4018,8 +4154,7 @@ public func FfiConverterTypeFirefoxLabsEnrollStatus_lower(_ value: FirefoxLabsEn
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 
 public enum FirefoxLabsUnenrollStatus: Equatable, Hashable {
     
@@ -4107,7 +4242,8 @@ public func FfiConverterTypeFirefoxLabsUnenrollStatus_lower(_ value: FirefoxLabs
 
 
 
-public enum NimbusError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
+public 
+enum NimbusError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -4380,8 +4516,7 @@ public func FfiConverterTypeNimbusError_lower(_ value: NimbusError) -> RustBuffe
     return FfiConverterTypeNimbusError.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 
 public enum PrefBranch: Equatable, Hashable {
     
@@ -4447,8 +4582,7 @@ public func FfiConverterTypePrefBranch_lower(_ value: PrefBranch) -> RustBuffer 
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 
 public enum PrefUnenrollReason: Equatable, Hashable {
     
@@ -5182,10 +5316,6 @@ fileprivate struct FfiConverterDictionaryStringDictionaryStringTypeGeckoPrefStat
 }
 
 
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- */
 public typealias JsonObject = String
 
 #if swift(>=5.8)
@@ -5226,10 +5356,6 @@ public func FfiConverterTypeJsonObject_lower(_ value: JsonObject) -> RustBuffer 
 
 
 
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- */
 public typealias PrefValue = String
 
 #if swift(>=5.8)
@@ -5276,8 +5402,9 @@ public func FfiConverterTypePrefValue_lower(_ value: PrefValue) -> RustBuffer {
  */
 public func getActiveEnrollments(dbPath: String)throws  -> [EnrollmentSlugs]  {
     return try  FfiConverterSequenceTypeEnrollmentSlugs.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_func_get_active_enrollments(
-        FfiConverterString.lower(dbPath),$0
+        FfiConverterString.lower(dbPath),uniffiCallStatus
     )
 })
 }
@@ -5286,10 +5413,11 @@ public func getActiveEnrollments(dbPath: String)throws  -> [EnrollmentSlugs]  {
  */
 public func getCalculatedAttributes(installationDate: Int64?, dbPath: String, locale: String)throws  -> CalculatedAttributes  {
     return try  FfiConverterTypeCalculatedAttributes_lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_func_get_calculated_attributes(
         FfiConverterOptionInt64.lower(installationDate),
         FfiConverterString.lower(dbPath),
-        FfiConverterString.lower(locale),$0
+        FfiConverterString.lower(locale),uniffiCallStatus
     )
 })
 }
@@ -5299,8 +5427,9 @@ public func getCalculatedAttributes(installationDate: Int64?, dbPath: String, lo
  * This method should only be used in tests.
  */
 public func validateEventQueries(recordedContext: RecordedContext)throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+        uniffiCallStatus in
     uniffi_nimbus_fn_func_validate_event_queries(
-        FfiConverterTypeRecordedContext_lower(recordedContext),$0
+        FfiConverterTypeRecordedContext_lower(recordedContext),uniffiCallStatus
     )
 }
 }
@@ -5320,22 +5449,22 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_nimbus_checksum_func_get_active_enrollments() != 35070) {
+    if (uniffi_nimbus_checksum_func_get_active_enrollments() != 61568) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_func_get_calculated_attributes() != 10534) {
+    if (uniffi_nimbus_checksum_func_get_calculated_attributes() != 48636) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_func_validate_event_queries() != 42746) {
+    if (uniffi_nimbus_checksum_func_validate_event_queries() != 54480) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_geckoprefhandler_get_prefs_with_state() != 27063) {
+    if (uniffi_nimbus_checksum_method_geckoprefhandler_get_prefs_with_state() != 57920) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_geckoprefhandler_set_gecko_prefs_original_values() != 37179) {
+    if (uniffi_nimbus_checksum_method_geckoprefhandler_set_gecko_prefs_original_values() != 49053) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_geckoprefhandler_set_gecko_prefs_state() != 3765) {
+    if (uniffi_nimbus_checksum_method_geckoprefhandler_set_gecko_prefs_state() != 24434) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_metricshandler_record_database_load() != 41701) {
@@ -5344,7 +5473,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_metricshandler_record_database_migration() != 30298) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_metricshandler_record_enrollment_statuses() != 14510) {
+    if (uniffi_nimbus_checksum_method_metricshandler_record_enrollment_statuses() != 59810) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_metricshandler_record_feature_activation() != 33978) {
@@ -5362,16 +5491,16 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_nimbusclient_advance_event_time() != 56101) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_apply_pending_experiments() != 49084) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_apply_pending_experiments() != 14250) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_clear_events() != 44752) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_create_string_helper() != 30632) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_create_string_helper() != 58971) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_create_targeting_helper() != 65134) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_create_targeting_helper() != 48490) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_dump_state_to_log() != 11961) {
@@ -5383,28 +5512,28 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_nimbusclient_fetch_experiments() != 19471) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_active_experiments() != 25661) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_active_experiments() != 17939) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_available_experiments() != 65080) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_available_experiments() != 57010) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_available_firefox_labs() != 58220) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_available_firefox_labs() != 22135) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_experiment_branch() != 54188) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_experiment_branch() != 13577) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_experiment_branches() != 7962) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_experiment_branches() != 17108) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_get_experiment_participation() != 29644) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_feature_config_variables() != 28098) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_feature_config_variables() != 21520) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_previous_gecko_pref_states() != 21530) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_get_previous_gecko_pref_states() != 4412) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_get_rollout_participation() != 29265) {
@@ -5416,16 +5545,16 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_nimbusclient_is_fetch_enabled() != 23770) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_opt_in_with_branch() != 9173) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_opt_in_with_branch() != 51396) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_opt_out() != 55760) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_opt_out() != 29954) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_record_event() != 48537) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_record_feature_exposure() != 38243) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_record_feature_exposure() != 34089) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_record_malformed_feature_config() != 7534) {
@@ -5434,16 +5563,16 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_nimbusclient_record_past_event() != 34127) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_register_previous_gecko_pref_states() != 53966) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_register_previous_gecko_pref_states() != 62339) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_reset_enrollments() != 11263) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_reset_telemetry_identifiers() != 27291) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_reset_telemetry_identifiers() != 44605) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_set_experiment_participation() != 56837) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_set_experiment_participation() != 9229) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_set_experiments_locally() != 12966) {
@@ -5452,22 +5581,22 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_nimbusclient_set_fetch_enabled() != 24070) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_set_rollout_participation() != 11964) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_set_rollout_participation() != 53193) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_unenroll_for_gecko_pref() != 63205) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_unenroll_for_gecko_pref() != 10854) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_unenroll_from_all_firefox_labs() != 48425) {
+    if (uniffi_nimbus_checksum_method_nimbusclient_unenroll_from_all_firefox_labs() != 43184) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_unenroll_from_firefox_lab() != 47442) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusstringhelper_get_uuid() != 61733) {
+    if (uniffi_nimbus_checksum_method_nimbusstringhelper_get_uuid() != 50935) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusstringhelper_string_format() != 23357) {
+    if (uniffi_nimbus_checksum_method_nimbusstringhelper_string_format() != 35168) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbustargetinghelper_eval_jexl() != 33153) {
@@ -5476,19 +5605,19 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_nimbustargetinghelper_eval_jexl_debug() != 38986) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_recordedcontext_get_event_queries() != 32041) {
+    if (uniffi_nimbus_checksum_method_recordedcontext_get_event_queries() != 58067) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_recordedcontext_record() != 37535) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_recordedcontext_set_event_query_values() != 29622) {
+    if (uniffi_nimbus_checksum_method_recordedcontext_set_event_query_values() != 21977) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_recordedcontext_to_json() != 52035) {
+    if (uniffi_nimbus_checksum_method_recordedcontext_to_json() != 16871) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_constructor_nimbusclient_new() != 58824) {
+    if (uniffi_nimbus_checksum_constructor_nimbusclient_new() != 17149) {
         return InitializationResult.apiChecksumMismatch
     }
 
