@@ -10,7 +10,7 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 class XCodeBuild(object):
     binary = 'xcodebuild'
-    destination = 'platform=iOS Simulator,name=iPhone 17,OS=26.5'
+    destination = 'platform=iOS Simulator,name=iPhone 17,OS=27.0'
     logger = logging.getLogger()
     scheme = 'Fennec'
     testPlan = 'SyncIntegrationTestPlan'
