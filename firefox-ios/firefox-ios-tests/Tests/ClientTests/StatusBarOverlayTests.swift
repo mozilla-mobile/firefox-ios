@@ -378,7 +378,74 @@ final class StatusBarOverlayTests: XCTestCase {
         XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.cgColor)
     }
 
+    // MARK: Refresh (non-destructive)
+
+    func testRefresh_preservesScrollOffset() throws {
+        let toolbarHelper = createToolbarMock()
+        let subject = createSubject(toolbarHelper: toolbarHelper)
+        profile.prefs.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+        subject.resetState(isHomepage: true)
+        scroll(subject, toOffsetRatio: 0.5)
+        XCTAssertEqual(subject.scrollOffset, 0.5, accuracy: 0.001)
+
+        subject.refresh()
+
+        XCTAssertEqual(subject.scrollOffset, 0.5, accuracy: 0.001)
+    }
+
+    func testResetState_discardsScrollOffset() throws {
+        let toolbarHelper = createToolbarMock()
+        let subject = createSubject(toolbarHelper: toolbarHelper)
+        profile.prefs.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+        subject.resetState(isHomepage: true)
+        scroll(subject, toOffsetRatio: 0.5)
+        XCTAssertEqual(subject.scrollOffset, 0.5, accuracy: 0.001)
+
+        subject.resetState(isHomepage: true)
+
+        XCTAssertEqual(subject.scrollOffset, 0)
+    }
+
+    // MARK: Notification handling
+
+    func testHandleNotifications_searchBarPositionDidChange_preservesScrollOffset() throws {
+        let toolbarHelper = createToolbarMock()
+        let subject = createSubject(toolbarHelper: toolbarHelper)
+        notificationCenter.notifiableListener = subject
+        profile.prefs.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+        subject.resetState(isHomepage: true)
+        scroll(subject, toOffsetRatio: 0.5)
+        XCTAssertEqual(subject.scrollOffset, 0.5, accuracy: 0.001)
+
+        notificationCenter.post(name: .SearchBarPositionDidChange, withObject: nil, withUserInfo: nil)
+
+        XCTAssertEqual(subject.scrollOffset, 0.5, accuracy: 0.001)
+    }
+
+    func testHandleNotifications_wallpaperDidChange_preservesScrollOffset() throws {
+        let toolbarHelper = createToolbarMock()
+        let subject = createSubject(toolbarHelper: toolbarHelper)
+        notificationCenter.notifiableListener = subject
+        profile.prefs.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+        subject.resetState(isHomepage: true)
+        scroll(subject, toOffsetRatio: 0.5)
+        XCTAssertEqual(subject.scrollOffset, 0.5, accuracy: 0.001)
+
+        notificationCenter.post(name: .WallpaperDidChange, withObject: nil, withUserInfo: nil)
+
+        XCTAssertEqual(subject.scrollOffset, 0.5, accuracy: 0.001)
+    }
+
     // MARK: Helper
+
+    private func scroll(_ subject: StatusBarOverlay, toOffsetRatio ratio: CGFloat) {
+        let statusBarHeight: CGFloat = 20
+        let scrollView = UIScrollView()
+        scrollView.contentOffset = CGPoint(x: 0, y: statusBarHeight * ratio)
+        subject.scrollViewDidScroll(scrollView,
+                                    statusBarFrame: CGRect(x: 0, y: 0, width: 100, height: statusBarHeight),
+                                    theme: LightTheme())
+    }
 
     private func createSubject(hasTopTabs: Bool = false,
                                toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) -> StatusBarOverlay {
