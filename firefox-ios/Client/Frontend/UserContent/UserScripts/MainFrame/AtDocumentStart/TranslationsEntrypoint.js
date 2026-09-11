@@ -22,12 +22,22 @@ const resetIsDone = () => {
 resetIsDone();
 
 /// NOTE: The way content and priviliged contexts in gecko communicate is via message channels. 
-const { port1, port2 } = new MessageChannel();
 const innerWindowId = crypto.randomUUID();
+
+let enginePort = null;
+let translatedDocument = null;
+let languagePair = null;
 
 const sendToEngine = (message) => {
     window.webkit.messageHandlers.left.postMessage({...message, channelId: innerWindowId});
 }
+
+const openPortToDocument = () => {
+    const { port1, port2 } = new MessageChannel();
+    port1.onmessage = (message) => sendToEngine(message.data);
+    enginePort = port1;
+    return port2;
+};
 
 /// NOTE: This receives messages from the engine and forwards them to the content context.
 /// For "done" messages, it resolves the isDone promise.
@@ -44,15 +54,18 @@ window.receive = (message) => {
         isDoneResolve = null;
     }
 
-    if(message.type !== "TranslationsPort:EngineTerminated") {
-        port1.postMessage(message);
-    }
+    enginePort?.postMessage(message);
 };
 
-/// NOTE: This forwards messages from the content context to the engine context.
-port1.onmessage = (message) => {
-    const payload = message.data;
-    sendToEngine(payload);
+/// NOTE: The engine closes its side of the channel when it goes idle.
+const requestNewPort = () => {
+    if (!translatedDocument) {
+        return;
+    }
+
+    /// NOTE: Order matters: `acquirePort` asks for engine status, which is dropped without a channel.
+    sendToEngine({ type: "StartTranslation", languagePair, innerWindowId });
+    translatedDocument.acquirePort(openPortToDocument());
 };
 
 
@@ -60,15 +73,15 @@ port1.onmessage = (message) => {
 /// This creates the TranslationsDocument instance that manages the translation lifecycle.
 const startTranslations = ({from, to}) => {
     resetIsDone();
-    const languagePair = {sourceLanguage: from, targetLanguage: to}
+    languagePair = {sourceLanguage: from, targetLanguage: to}
     const translationsCache = new LRUCache(languagePair);
-    const translatedDoc = new TranslationsDocument(
+    translatedDocument = new TranslationsDocument(
         document,
         from,
         to,
         innerWindowId,
-        port2,
-        () => {},
+        openPortToDocument(),
+        requestNewPort,
         () => {},
         translationsCache,
     );
@@ -85,6 +98,9 @@ const startTranslations = ({from, to}) => {
 
 /// NOTE: This should be called when we teardown the translations for this document.
 const discardTranslations = ({from, to}) => {
+    translatedDocument = null;
+    languagePair = null;
+    enginePort = null;
     resetIsDone();
     sendToEngine({ type: "DiscardTranslations", innerWindowId })
 };
