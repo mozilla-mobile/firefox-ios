@@ -1445,6 +1445,13 @@
 		A1F0D0012F70000100ABC001 /* NewsTransitionHeaderCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F0D0002F70000100ABC001 /* NewsTransitionHeaderCellTests.swift */; };
 		A5163EFB4448DCBC295F4B00 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 3802E29A8D8E43B4A359EBC5 /* GCDWebServers */; };
 		A54F6A37304B02780040449A /* TabModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54F6A36304B02780040449A /* TabModelTests.swift */; };
+		A5EC80FF3054178C005A540F /* AutoplaySettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EC80FE3054178C005A540F /* AutoplaySettingsViewControllerTests.swift */; };
+		A5EC810130541792005A540F /* NewTabContentSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EC810030541792005A540F /* NewTabContentSettingsViewControllerTests.swift */; };
+		A5EC81033054179B005A540F /* ContentBlockerSettingViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EC81023054179B005A540F /* ContentBlockerSettingViewControllerTests.swift */; };
+		A5EC81053054179F005A540F /* CustomSearchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EC81043054179F005A540F /* CustomSearchViewControllerTests.swift */; };
+		A5EC8107305417A5005A540F /* TopSitesSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EC8106305417A5005A540F /* TopSitesSettingsViewControllerTests.swift */; };
+		A5EC8109305417AA005A540F /* TopSitesRowCountSettingsControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EC8108305417AA005A540F /* TopSitesRowCountSettingsControllerTests.swift */; };
+		A5EC810B305417B0005A540F /* AdvancedAccountSettingViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EC810A305417B0005A540F /* AdvancedAccountSettingViewControllerTests.swift */; };
 		A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B181C1DA8BF0026D912 /* image.gif */; };
 		A83E5B1B1C1DA8BF0026D912 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B191C1DA8BF0026D912 /* image.png */; };
 		A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */; };
@@ -10517,6 +10524,13 @@
 		A56E4D2BB5542C88A788D957 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		A5724A80AF359D2F273F343E /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A5B742BFB5D86708C670E5F0 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Menu.strings; sourceTree = "<group>"; };
+		A5EC80FE3054178C005A540F /* AutoplaySettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoplaySettingsViewControllerTests.swift; sourceTree = "<group>"; };
+		A5EC810030541792005A540F /* NewTabContentSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTabContentSettingsViewControllerTests.swift; sourceTree = "<group>"; };
+		A5EC81023054179B005A540F /* ContentBlockerSettingViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockerSettingViewControllerTests.swift; sourceTree = "<group>"; };
+		A5EC81043054179F005A540F /* CustomSearchViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchViewControllerTests.swift; sourceTree = "<group>"; };
+		A5EC8106305417A5005A540F /* TopSitesSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesSettingsViewControllerTests.swift; sourceTree = "<group>"; };
+		A5EC8108305417AA005A540F /* TopSitesRowCountSettingsControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesRowCountSettingsControllerTests.swift; sourceTree = "<group>"; };
+		A5EC810A305417B0005A540F /* AdvancedAccountSettingViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAccountSettingViewControllerTests.swift; sourceTree = "<group>"; };
 		A6344A31A1772F2093DD5BD4 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A6744466BAAD5FCBA6D62D4A /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A67C44738E0995CB178D0A28 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
@@ -14599,6 +14613,13 @@
 				C27470A32F4C8EBB00920313 /* PickerSettingTests.swift */,
 				1DF916892F48EAAD00FA2407 /* MockRelayController.swift */,
 				D1A0B7C12F00000100000001 /* WebsiteDataManagementViewModelTests.swift */,
+				A5EC80FE3054178C005A540F /* AutoplaySettingsViewControllerTests.swift */,
+				A5EC810030541792005A540F /* NewTabContentSettingsViewControllerTests.swift */,
+				A5EC81023054179B005A540F /* ContentBlockerSettingViewControllerTests.swift */,
+				A5EC81043054179F005A540F /* CustomSearchViewControllerTests.swift */,
+				A5EC8106305417A5005A540F /* TopSitesSettingsViewControllerTests.swift */,
+				A5EC8108305417AA005A540F /* TopSitesRowCountSettingsControllerTests.swift */,
+				A5EC810A305417B0005A540F /* AdvancedAccountSettingViewControllerTests.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -20921,6 +20942,7 @@
 				21420EF92ABC75A400B28550 /* TabTrayCoordinatorTests.swift in Sources */,
 				1DDE3DB52AC360EC0039363B /* TabCellTests.swift in Sources */,
 				8AFCE50729DE0CD500B1B253 /* LaunchCoordinatorTests.swift in Sources */,
+				A5EC81033054179B005A540F /* ContentBlockerSettingViewControllerTests.swift in Sources */,
 				961D6B832995AF84001B9CF1 /* GeneralizedImageFetcherTests.swift in Sources */,
 				21ED80B32AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift in Sources */,
 				A1B2C3D12F0000010000AA01 /* TabDisplayViewGeometryTests.swift in Sources */,
@@ -20955,6 +20977,7 @@
 				ED33E3572D0A4CE9002265A7 /* URLActivityItemProviderTests.swift in Sources */,
 				281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */,
 				AA6A6F382EF57EC000D1912D /* SystemLocaleProviderTests.swift in Sources */,
+				A5EC810130541792005A540F /* NewTabContentSettingsViewControllerTests.swift in Sources */,
 				EC0FBD2D3006924A005CCA62 /* FolderTreeCellTests.swift in Sources */,
 				C2E4F4C62F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift in Sources */,
 				96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */,
@@ -20964,6 +20987,7 @@
 				0E6557402D82232B00D7F017 /* DownloadProgressManagerTests.swift in Sources */,
 				AADBD0E42EBBA79B00F35E30 /* MockLanguageDetector.swift in Sources */,
 				AAB434062E82F0600075E47F /* MockTrendingSearchProvider.swift in Sources */,
+				A5EC8107305417A5005A540F /* TopSitesSettingsViewControllerTests.swift in Sources */,
 				21050F332F7D66C00006B76C /* BrowserTabScrollHandlerDelegateTest.swift in Sources */,
 				C80C11F428B3CD580062922A /* MockUserDefaultsTests.swift in Sources */,
 				E14D6D342CCBA9FF0058B910 /* AddressBarStateTests.swift in Sources */,
@@ -21052,6 +21076,7 @@
 				2199A1D42DB8389000DC84BD /* MockZoomStore.swift in Sources */,
 				C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */,
 				E19B38B128A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift in Sources */,
+				A5EC8109305417AA005A540F /* TopSitesRowCountSettingsControllerTests.swift in Sources */,
 				EE046A77300A75F4004E3D80 /* SwipeUpTabPreviewGestureHandlerTests.swift in Sources */,
 				81DAB2F32C88F14400F4BE98 /* MainMenuCoordinatorTests.swift in Sources */,
 				FC16179B00000000000000B1 /* WebCompatReportViewControllerTests.swift in Sources */,
@@ -21069,6 +21094,7 @@
 				39E186E22F7DAA7F00FD3FFA /* MerinoCategoryConfigurationTests.swift in Sources */,
 				394615642FEC381D003321D8 /* MockReaderModeHandlers.swift in Sources */,
 				39E186E32F7DAA7F00FD3FFA /* MerinoCategoryTests.swift in Sources */,
+				A5EC810B305417B0005A540F /* AdvancedAccountSettingViewControllerTests.swift in Sources */,
 				E1442FDA294782F7003680B0 /* UIPasteboard+Extension.swift in Sources */,
 				CB5541872F51E1B100256DA1 /* CertificateHelperTests.swift in Sources */,
 				C2D80BEB2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift in Sources */,
@@ -21088,6 +21114,7 @@
 				8AFCE50529DDF38300B1B253 /* LaunchScreenViewControllerTests.swift in Sources */,
 				D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */,
 				0A80C4242F3CD3F300DB85AE /* AppAuthenticatorTests.swift in Sources */,
+				A5EC80FF3054178C005A540F /* AutoplaySettingsViewControllerTests.swift in Sources */,
 				D3BA41681BD82F2200DA5457 /* XCTestCaseExtensions.swift in Sources */,
 				DB58110000000000000006 /* SwiftUIViewTestHelpers.swift in Sources */,
 				8A86DAD8277298DE00D7BFFF /* ClosedTabsStoreTests.swift in Sources */,
@@ -21256,6 +21283,7 @@
 				617D8AC22FC8D5B700E1C7A5 /* MockConversionValueUpdater.swift in Sources */,
 				630FE1352C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift in Sources */,
 				8AAEB9FE2BF50718000C02B5 /* MicrosurveyViewControllerTests.swift in Sources */,
+				A5EC81053054179F005A540F /* CustomSearchViewControllerTests.swift in Sources */,
 				C8E531CC29E72A2F00E03FEF /* ShortcutRouteTests.swift in Sources */,
 				C83B7DD629BBB49D005565C2 /* SurveySurfaceManagerTests.swift in Sources */,
 				AA11BB22CC33DD44EE550002 /* SurveySurfaceViewModelTests.swift in Sources */,

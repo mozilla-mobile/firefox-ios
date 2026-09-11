@@ -35,8 +35,8 @@ final class ManageFxAccountSetting: Setting {
             forName: .accountLoggedOut,
             object: nil,
             queue: .main
-        ) { _ in
-            ensureMainThread { [weak settings] in
+        ) { [weak settings] _ in
+            ensureMainThread {
                 settings?.dismiss(animated: true, completion: nil)
             }
         }
@@ -67,8 +67,10 @@ final class ManageFxAccountSetting: Setting {
     }
 }
 
-class DisconnectSetting: Setting {
-    let settingsVC: SettingsTableViewController
+final class DisconnectSetting: Setting {
+    // `unowned` is chosen here because the setting can't outlive the VC that owns it.
+    // It skips the optional unwrapping that `weak` would require.
+    unowned let settingsVC: SettingsTableViewController
     let profile: Profile?
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
 
@@ -185,7 +187,7 @@ class DeviceNameSetting: StringSetting {
     }
 }
 
-class SyncContentSettingsViewController: SettingsTableViewController {
+final class SyncContentSettingsViewController: SettingsTableViewController {
     fileprivate var enginesToSyncOnExit: Set<String> = Set()
 
     init(windowUUID: WindowUUID) {

@@ -38,11 +38,11 @@ final class TopSitesSettingsViewController: SettingsTableViewController, UserFea
                     prefKey: PrefsKeys.UserFeatureFlagPrefs.TopSiteSection,
                     defaultValue: true,
                     titleText: .Settings.Homepage.Shortcuts.ShortcutsToggle
-                ) { isOn in
+                ) { [windowUUID] isOn in
                     store.dispatch(
                         TopSitesAction(
                             isEnabled: isOn,
-                            windowUUID: self.windowUUID,
+                            windowUUID: windowUUID,
                             actionType: TopSitesActionType.toggleShowSectionSetting
                         )
                     )
@@ -53,10 +53,10 @@ final class TopSitesSettingsViewController: SettingsTableViewController, UserFea
                     prefKey: PrefsKeys.FeatureFlags.SponsoredShortcuts,
                     defaultValue: userPreferences.getPreferenceFor(.hntSponsoredShortcuts),
                     titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
-                ) { _ in
+                ) { [windowUUID] _ in
                     store.dispatch(
                         TopSitesAction(
-                            windowUUID: self.windowUUID,
+                            windowUUID: windowUUID,
                             actionType: TopSitesActionType.toggleShowSponsoredSettings
                         )
                     )

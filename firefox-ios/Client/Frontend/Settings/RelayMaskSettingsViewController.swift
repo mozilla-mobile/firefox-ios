@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import ComponentLibrary
 
-class RelayMaskSettingsViewController: SettingsTableViewController {
+final class RelayMaskSettingsViewController: SettingsTableViewController {
     private lazy var linkButton: LinkButton = .build()
     private let relayController: RelayControllerProtocol
 
@@ -97,7 +97,7 @@ class RelayMaskSettingsViewController: SettingsTableViewController {
 
 final class ManageRelayMasksSetting: Setting {
     private let windowUUID: WindowUUID
-    private let parentNav: UINavigationController?
+    private weak let parentNav: UINavigationController?
     private let tabManager: TabManager
     private let relayController: RelayControllerProtocol
     private(set) var manageMasksURL: URL?
