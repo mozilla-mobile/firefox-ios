@@ -36,6 +36,7 @@ private struct NovaDarkColourPalette: ThemeColourPalette {
     var layerSurfaceLow = NovaColors.Gray75
     var layerSurfaceMedium = NovaColors.Gray65
     var layerSurfaceMediumAlt: UIColor = NovaColors.Gray60
+    var layerSurfaceMediumAltGlass = NovaColors.Gray65
     var layerSurfaceMediumAlpha = NovaColors.Gray65.withAlphaComponent(0.4)
     var layerAccentSubtle: UIColor = NovaColors.VioletDesaturated70
     var layerInverse: UIColor = NovaColors.Gray30

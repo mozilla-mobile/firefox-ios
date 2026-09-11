@@ -24,6 +24,7 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var layerSurfaceLow = NovaColors.VioletDesaturated90
     var layerSurfaceMedium = NovaColors.VioletDesaturated80
     var layerSurfaceMediumAlt: UIColor = NovaColors.VioletDesaturated70
+    var layerSurfaceMediumAltGlass = NovaColors.VioletDesaturated70
     var layerSurfaceMediumAlpha = NovaColors.VioletDesaturated80.withAlphaComponent(0.4)
     var layerAccentSubtle: UIColor = NovaColors.Violet70
     var layerInverse: UIColor = NovaColors.Gray30
