@@ -24,7 +24,7 @@ final class NovaColors {
     static let Gray40 = UIColor(rgb: 0x949297)
     static let Gray45 = UIColor(rgb: 0x817f84)
     static let Gray50 = UIColor(rgb: 0x67666a)
-    static let Gray55 = UIColor(rgb: 0x515054)
+    static let Gray55 = UIColor(rgb: 0x515056)
     static let Gray60 = UIColor(rgb: 0x3f3e42)
     static let Gray65 = UIColor(rgb: 0x312f33)
     static let Gray70 = UIColor(rgb: 0x252428)
