@@ -424,6 +424,8 @@ class SearchTests: FeatureFlaggedTestBase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4367103
+    // SmokeTest
     func testBottomViewURLBar_trendingRecentSearchesExperimentOn() throws {
         let toolbarScreen = ToolbarScreen(app: app)
         let browserScreen = BrowserScreen(app: app)
@@ -864,6 +866,7 @@ class SearchTests: FeatureFlaggedTestBase {
         }
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
 
         app.launch()
         navigator.goto(SearchSettings)
@@ -891,6 +894,7 @@ class SearchTests: FeatureFlaggedTestBase {
         }
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
         app.launch()
 
         navigator.goto(SearchSettings)
@@ -991,6 +995,7 @@ class SearchTests: FeatureFlaggedTestBase {
         }
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "trending-searches-feature")
 
         app.launch()
 
@@ -1020,6 +1025,7 @@ class SearchTests: FeatureFlaggedTestBase {
         }
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "trending-searches-feature")
         app.launch()
 
         enterTextOnSearchBar(text: "example")

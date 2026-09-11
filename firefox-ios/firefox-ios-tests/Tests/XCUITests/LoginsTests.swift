@@ -678,10 +678,12 @@ class LoginTest: BaseTestCase {
             mozWaitForElementToNotExist(app.keyboards.buttons["Continue"])
             mozWaitForElementToExist(app.keyboards.keys.firstMatch)
         }
-        mozWaitElementHittable(element: app.keyboards.keys.firstMatch, timeout: TIMEOUT)
+        // The first key match on iPad is a zero sized padding key that never becomes hittable,
+        // so the key about to be tapped is the one awaited
         for letter in typedText {
-            print("\(letter)")
-            app.keyboards.keys["\(letter)"].waitAndTap()
+            let key = app.keyboards.keys["\(letter)"]
+            mozWaitElementHittable(element: key, timeout: TIMEOUT)
+            key.tap()
         }
     }
 

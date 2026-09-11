@@ -8,13 +8,12 @@ import TipKit
 
 @available(iOS 17.0, *)
 struct QuickAnswersTip: Tip {
-    // TODO: FXIOS-14720 add Translations
     var title: Text {
-        Text(verbatim: "Ask Out Loud for Quick Answers")
+        Text(verbatim: .QuickAnswers.Tip.Title)
     }
 
     var message: Text? {
-        Text(verbatim: "Tap here to get started.")
+        Text(verbatim: .QuickAnswers.Tip.Message)
     }
 
     var options: [any TipOption] {
