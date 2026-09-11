@@ -64,24 +64,20 @@ public struct IPProtectionAuthCreator: IPProtectionAuthCreating {
         )
     }
 
+    /// Also clears stored credentials when the environment changes, so the app re-attests against
+    /// the correct server.
     private func resolveEnvironment(using prefs: Prefs) -> IPProtectionEnvironment {
         let environmentKey = prefs.stringForKey(PrefsKeys.IPProtectionSettings.endpointEnvironment) ?? ""
         let environment = IPProtectionEnvironment(rawValue: environmentKey) ?? .prod
-        resetKeyIfEnvironmentChanged(prefs: prefs, currentEnvironment: environment)
-        return environment
-    }
 
-    /// Clears stored credentials when the environment changes, so the app re-attests against the
-    /// correct server.
-    private func resetKeyIfEnvironmentChanged(prefs: Prefs, currentEnvironment: IPProtectionEnvironment) {
-        let lastUsedEnvironment = prefs.stringForKey(PrefsKeys.IPProtectionSettings.lastUsedEnvironment)
-        let currentEnvironmentValue = currentEnvironment.rawValue
-
-        if let lastUsedEnvironment, lastUsedEnvironment != currentEnvironmentValue {
+        prefs.resetIfEnvironmentChanged(
+            environment.rawValue,
+            forKey: PrefsKeys.IPProtectionSettings.lastUsedEnvironment
+        ) {
             try? keyStore.clearKeyID()
             try? tokenStore.clear()
         }
 
-        prefs.setString(currentEnvironmentValue, forKey: PrefsKeys.IPProtectionSettings.lastUsedEnvironment)
+        return environment
     }
 }
