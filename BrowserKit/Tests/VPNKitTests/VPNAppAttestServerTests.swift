@@ -6,9 +6,9 @@
 import XCTest
 import TestKit
 
-@testable import IPProtectionKit
+@testable import VPNKit
 
-final class IPProtectionAppAttestServerTests: XCTestCase {
+final class VPNAppAttestServerTests: XCTestCase {
     func test_fetchChallenge_returnsChallenge_onSuccess() async throws {
         let json = #"{"challenge":"\#(AppAttestTestData.challenge)"}"#
         let session = MockURLSession(with: Data(json.utf8), response: httpResponse(statusCode: 200))
@@ -50,7 +50,7 @@ final class IPProtectionAppAttestServerTests: XCTestCase {
     }
 
     func test_sendAttestation_savesSession_on200() async throws {
-        let tokenStore = MockIPProtectionTokenStore()
+        let tokenStore = MockVPNTokenStore()
         let session = MockURLSession(with: enrollmentJSON(), response: httpResponse(statusCode: 200))
         let subject = createSubject(urlSession: session, tokenStore: tokenStore)
 
@@ -87,7 +87,7 @@ final class IPProtectionAppAttestServerTests: XCTestCase {
     }
 
     func test_sendAttestation_throwsOnServerError_andDoesNotSave() async {
-        let tokenStore = MockIPProtectionTokenStore()
+        let tokenStore = MockVPNTokenStore()
         let session = MockURLSession(with: Data("Forbidden".utf8), response: httpResponse(statusCode: 403))
         let subject = createSubject(urlSession: session, tokenStore: tokenStore)
 
@@ -109,7 +109,7 @@ final class IPProtectionAppAttestServerTests: XCTestCase {
     // MARK: - refreshSession
 
     func test_refreshSession_buildsCorrectRequest_andSavesSession() async throws {
-        let tokenStore = MockIPProtectionTokenStore()
+        let tokenStore = MockVPNTokenStore()
         let session = MockURLSession(with: enrollmentJSON(), response: httpResponse(statusCode: 200))
         let subject = createSubject(urlSession: session, tokenStore: tokenStore)
 
@@ -133,7 +133,7 @@ final class IPProtectionAppAttestServerTests: XCTestCase {
     }
 
     func test_refreshSession_throwsOnServerError_andDoesNotSave() async {
-        let tokenStore = MockIPProtectionTokenStore()
+        let tokenStore = MockVPNTokenStore()
         let session = MockURLSession(with: Data("nope".utf8), response: httpResponse(statusCode: 401))
         let subject = createSubject(urlSession: session, tokenStore: tokenStore)
 
@@ -157,9 +157,9 @@ final class IPProtectionAppAttestServerTests: XCTestCase {
 
     private func createSubject(
         urlSession: MockURLSession = MockURLSession(),
-        tokenStore: IPProtectionTokenStore = MockIPProtectionTokenStore()
-    ) -> IPProtectionAppAttestServer {
-        return IPProtectionAppAttestServer(with: .dev, urlSession: urlSession, tokenStore: tokenStore)
+        tokenStore: VPNTokenStore = MockVPNTokenStore()
+    ) -> VPNAppAttestServer {
+        return VPNAppAttestServer(with: .dev, urlSession: urlSession, tokenStore: tokenStore)
     }
 
     private func enrollmentJSON() -> Data {

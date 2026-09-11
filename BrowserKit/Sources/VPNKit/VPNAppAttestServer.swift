@@ -6,11 +6,11 @@ import AppAttestKit
 import Foundation
 import Shared
 
-public protocol IPProtectionSessionRefreshing: Sendable {
+public protocol VPNSessionRefreshing: Sendable {
     func refreshSession(assertion: AssertionResult) async throws
 }
 
-public struct IPProtectionAppAttestServer: AppAttestRemoteServerProtocol, IPProtectionSessionRefreshing {
+public struct VPNAppAttestServer: AppAttestRemoteServerProtocol, VPNSessionRefreshing {
     private struct ChallengeRequest: Encodable {
         let keyId: String
     }
@@ -31,14 +31,14 @@ public struct IPProtectionAppAttestServer: AppAttestRemoteServerProtocol, IPProt
         let challenge: String
     }
 
-    private let environmentType: IPProtectionEnvironment
+    private let environmentType: VPNEnvironment
     private let urlSession: URLSessionProtocol
-    private let tokenStore: IPProtectionTokenStore
+    private let tokenStore: VPNTokenStore
 
     public init(
-        with type: IPProtectionEnvironment = .prod,
+        with type: VPNEnvironment = .prod,
         urlSession: URLSessionProtocol = URLSession.shared,
-        tokenStore: IPProtectionTokenStore
+        tokenStore: VPNTokenStore
     ) {
         self.environmentType = type
         self.urlSession = urlSession
@@ -47,7 +47,7 @@ public struct IPProtectionAppAttestServer: AppAttestRemoteServerProtocol, IPProt
 
     /// Fetches a random, single-use server-generated challenge for the given `keyId`.
     public func fetchChallenge(for keyId: String) async throws -> String {
-        guard let endpoint = IPProtectionConstants.challengeEndpoint(with: environmentType) else {
+        guard let endpoint = VPNConstants.challengeEndpoint(with: environmentType) else {
             throw AppAttestServiceError.invalidURL(description: "challengeEndpoint")
         }
 
@@ -64,7 +64,7 @@ public struct IPProtectionAppAttestServer: AppAttestRemoteServerProtocol, IPProt
         attestationObject: Data,
         challenge: String
     ) async throws {
-        guard let endpoint = IPProtectionConstants.enrollmentEndpoint(with: environmentType) else {
+        guard let endpoint = VPNConstants.enrollmentEndpoint(with: environmentType) else {
             throw AppAttestServiceError.invalidURL(description: "enrollmentEndpoint")
         }
 
@@ -77,13 +77,13 @@ public struct IPProtectionAppAttestServer: AppAttestRemoteServerProtocol, IPProt
         let (data, response) = try await urlSession.data(from: request)
         try AppAttestServiceError.validate(response: response, data: data)
 
-        let session = try JSONDecoder().decode(IPProtectionDeviceSession.self, from: data)
+        let session = try JSONDecoder().decode(VPNDeviceSession.self, from: data)
         try tokenStore.save(session)
     }
 
     /// Exchanges assertion for a fresh Device Session JWT. Persists the new session on success.
     public func refreshSession(assertion: AssertionResult) async throws {
-        guard let endpoint = IPProtectionConstants.refreshEndpoint(with: environmentType) else {
+        guard let endpoint = VPNConstants.refreshEndpoint(with: environmentType) else {
             throw AppAttestServiceError.invalidURL(description: "refreshEndpoint")
         }
 
@@ -96,16 +96,16 @@ public struct IPProtectionAppAttestServer: AppAttestRemoteServerProtocol, IPProt
         let (data, response) = try await urlSession.data(from: request)
         try AppAttestServiceError.validate(response: response, data: data)
 
-        let session = try JSONDecoder().decode(IPProtectionDeviceSession.self, from: data)
+        let session = try JSONDecoder().decode(VPNDeviceSession.self, from: data)
         try tokenStore.save(session)
     }
 
     private static func jsonRequest<Body: Encodable>(url: URL, body: Body) throws -> URLRequest {
         var request = URLRequest(url: url)
-        request.httpMethod = IPProtectionConstants.POST
+        request.httpMethod = VPNConstants.POST
         request.setValue(
-            IPProtectionConstants.contentTypeJSON,
-            forHTTPHeaderField: IPProtectionConstants.contentTypeHeader
+            VPNConstants.contentTypeJSON,
+            forHTTPHeaderField: VPNConstants.contentTypeHeader
         )
         request.httpBody = try JSONEncoder().encode(body)
         return request

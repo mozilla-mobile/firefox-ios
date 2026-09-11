@@ -3,25 +3,25 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-@testable import IPProtectionKit
+@testable import VPNKit
 
-/// In-memory `IPProtectionTokenStore` for tests.
-final class MockIPProtectionTokenStore: IPProtectionTokenStore, @unchecked Sendable {
-    var session: IPProtectionDeviceSession?
+/// In-memory `VPNTokenStore` for tests.
+final class MockVPNTokenStore: VPNTokenStore, @unchecked Sendable {
+    var session: VPNDeviceSession?
     var saveError: Error?
 
     private(set) var saveCallCount = 0
     private(set) var clearCallCount = 0
 
-    init(initial: IPProtectionDeviceSession? = nil) {
+    init(initial: VPNDeviceSession? = nil) {
         self.session = initial
     }
 
-    func load() -> IPProtectionDeviceSession? {
+    func load() -> VPNDeviceSession? {
         return session
     }
 
-    func save(_ session: IPProtectionDeviceSession) throws {
+    func save(_ session: VPNDeviceSession) throws {
         saveCallCount += 1
         if let saveError { throw saveError }
         self.session = session

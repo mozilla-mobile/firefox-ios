@@ -5,13 +5,14 @@
 import Foundation
 
 /// The Device Session JWT (DSJ) issued by the backend on successful App Attest enrollment.
-public struct IPProtectionDeviceSession: Codable, Equatable, Sendable {
+public struct VPNDeviceSession: Codable, Equatable, Sendable {
     public let deviceSessionJwt: String
     public let expiresAtMilliseconds: Int64
     public let renewAfterMilliseconds: Int64
 
+    // Also the keychain storage format, so these names are the backend's, not ours to rename.
     private enum CodingKeys: String, CodingKey {
-        case deviceSessionJwt
+        case deviceSessionJwt = "deviceSessionJwt"
         case expiresAtMilliseconds = "expiresAt"
         case renewAfterMilliseconds = "renewAfter"
     }

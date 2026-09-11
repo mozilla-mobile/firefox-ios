@@ -44,8 +44,8 @@ let package = Package(
             name: "MLPAKit",
             targets: ["MLPAKit"]),
         .library(
-            name: "IPProtectionKit",
-            targets: ["IPProtectionKit"]),
+            name: "VPNKit",
+            targets: ["VPNKit"]),
         .library(name: "SummarizeKit",
                  targets: ["SummarizeKit"]),
         .library(name: "JWTKit",
@@ -257,14 +257,14 @@ let package = Package(
             swiftSettings: []
         ),
         .target(
-            name: "IPProtectionKit",
+            name: "VPNKit",
             dependencies: ["AppAttestKit", "Common", "Shared"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
             ]),
         .testTarget(
-            name: "IPProtectionKitTests",
-            dependencies: ["IPProtectionKit", "AppAttestKit", "TestKit"],
+            name: "VPNKitTests",
+            dependencies: ["VPNKit", "AppAttestKit", "TestKit"],
             swiftSettings: []
         ),
         .target(

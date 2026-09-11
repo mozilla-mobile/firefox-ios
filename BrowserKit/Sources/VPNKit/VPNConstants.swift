@@ -4,14 +4,14 @@
 
 import Foundation
 
-/// The backend environment the IP Protection App Attest (IPN)
-public enum IPProtectionEnvironment: String, Sendable {
+/// The backend environment the VPN App Attest (IPN)
+public enum VPNEnvironment: String, Sendable {
     case dev
     case stage
     case prod
 
     var baseURL: URL? {
-        // TODO: Replace with the real IP Protection IPN hosts once the backend endpoints are provisioned.
+        // TODO: Replace with the real VPN IPN hosts once the backend endpoints are provisioned.
         switch self {
         case .dev:
             return URL(string: "https://dev.guardian.nonprod.cloudops.mozgcp.net")
@@ -23,8 +23,8 @@ public enum IPProtectionEnvironment: String, Sendable {
     }
 }
 
-/// HTTP constants and endpoint builders for the IP Protection App Attest (IPN) auth flow.
-public enum IPProtectionConstants {
+/// HTTP constants and endpoint builders for the VPN App Attest (IPN) auth flow.
+public enum VPNConstants {
     static let authorizationHeader = "Authorization"
     static let bearerPrefix = "Bearer "
     static let contentTypeHeader = "Content-Type"
@@ -32,19 +32,19 @@ public enum IPProtectionConstants {
     static let POST = "POST"
     static let GET = "GET"
 
-    static func challengeEndpoint(with env: IPProtectionEnvironment) -> URL? {
+    static func challengeEndpoint(with env: VPNEnvironment) -> URL? {
         env.baseURL?.appendingPathComponent("api/v1/ipn/attest/challenge")
     }
 
-    static func enrollmentEndpoint(with env: IPProtectionEnvironment) -> URL? {
+    static func enrollmentEndpoint(with env: VPNEnvironment) -> URL? {
         env.baseURL?.appendingPathComponent("api/v1/ipn/enrollment")
     }
 
-    static func refreshEndpoint(with env: IPProtectionEnvironment) -> URL? {
+    static func refreshEndpoint(with env: VPNEnvironment) -> URL? {
         env.baseURL?.appendingPathComponent("api/v1/ipn/refresh")
     }
 
-    static func tokenEndpoint(with env: IPProtectionEnvironment) -> URL? {
+    static func tokenEndpoint(with env: VPNEnvironment) -> URL? {
         env.baseURL?.appendingPathComponent("api/v1/ipn/token")
     }
 }

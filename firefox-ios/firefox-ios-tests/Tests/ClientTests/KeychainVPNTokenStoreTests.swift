@@ -3,16 +3,16 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-@testable import IPProtectionKit
+@testable import VPNKit
 
 /// NOTE: This test is intentionally in `ClientTests` instead of `BrowserKit/Tests` since bare SPM packages
 /// cannot have keychain entitlement meaning these tests will always fail for the wrong reasons.
-final class KeychainIPProtectionTokenStoreTests: XCTestCase {
+final class KeychainVPNTokenStoreTests: XCTestCase {
     // Use a unique service per test run to avoid polluting real keychain entries.
-    private static let testService = "org.mozilla.browserkit.ipprotection.dsj.test"
+    private static let testService = "org.mozilla.browserkit.vpn.dsj.test"
     private static let testAccount = "test"
 
-    private let sampleSession = IPProtectionDeviceSession(
+    private let sampleSession = VPNDeviceSession(
         deviceSessionJwt: "header.payload.signature",
         expiresAtMilliseconds: 32503680000000,
         renewAfterMilliseconds: 32503670000000
@@ -40,7 +40,7 @@ final class KeychainIPProtectionTokenStoreTests: XCTestCase {
 
     func test_save_overwritesPreviousSession() throws {
         let subject = createSubject()
-        let updated = IPProtectionDeviceSession(
+        let updated = VPNDeviceSession(
             deviceSessionJwt: "new.jwt",
             expiresAtMilliseconds: 1,
             renewAfterMilliseconds: 0
@@ -70,7 +70,7 @@ final class KeychainIPProtectionTokenStoreTests: XCTestCase {
 
     func test_separateInstances_withDifferentAccount_doNotShareState() throws {
         let subject = createSubject()
-        let other = KeychainIPProtectionTokenStore(service: Self.testService, account: "other-account")
+        let other = KeychainVPNTokenStore(service: Self.testService, account: "other-account")
 
         try subject.save(sampleSession)
 
@@ -78,7 +78,7 @@ final class KeychainIPProtectionTokenStoreTests: XCTestCase {
         try? other.clear()
     }
 
-    private func createSubject() -> KeychainIPProtectionTokenStore {
-        return KeychainIPProtectionTokenStore(service: Self.testService, account: Self.testAccount)
+    private func createSubject() -> KeychainVPNTokenStore {
+        return KeychainVPNTokenStore(service: Self.testService, account: Self.testAccount)
     }
 }

@@ -7,13 +7,13 @@ import Shared
 import XCTest
 import TestKit
 
-@testable import IPProtectionKit
+@testable import VPNKit
 
-final class IPProtectionProxyTokenServiceTests: XCTestCase {
+final class VPNProxyTokenServiceTests: XCTestCase {
     func test_fetchProxyToken_sendsStoredDSJ_andDecodesToken() async throws {
-        let auth = MockIPProtectionAuthenticating(session: session(jwt: "stored-dsj"))
+        let auth = MockVPNAuthenticating(session: session(jwt: "stored-dsj"))
         let urlSession = MockURLSession(with: tokenJSON(), response: httpResponse(statusCode: 200))
-        let subject = IPProtectionProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
+        let subject = VPNProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
 
         let result = try await subject.fetchProxyToken()
 
@@ -28,14 +28,14 @@ final class IPProtectionProxyTokenServiceTests: XCTestCase {
     }
 
     func test_fetchProxyToken_throws_whenNoStoredSession() async {
-        let auth = MockIPProtectionAuthenticating(session: nil)
+        let auth = MockVPNAuthenticating(session: nil)
         let urlSession = MockURLSession(with: tokenJSON(), response: httpResponse(statusCode: 200))
-        let subject = IPProtectionProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
+        let subject = VPNProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
 
         do {
             _ = try await subject.fetchProxyToken()
             XCTFail("Expected fetchProxyToken to throw without a stored session.")
-        } catch let error as IPProtectionError {
+        } catch let error as VPNAuthError {
             XCTAssertEqual(error, .noStoredSession)
             XCTAssertEqual(auth.authenticateCallCount, 0, "Must never escalate to enrollment")
             XCTAssertNil(urlSession.lastURLRequest, "No request should be attempted")
@@ -45,12 +45,12 @@ final class IPProtectionProxyTokenServiceTests: XCTestCase {
     }
 
     func test_fetchProxyToken_refreshesAndRetries_on401() async throws {
-        let auth = MockIPProtectionAuthenticating(session: session(jwt: "stale-dsj"))
+        let auth = MockVPNAuthenticating(session: session(jwt: "stale-dsj"))
         let urlSession = SequencedURLSession(responses: [
             (Data(#"{"reason":"dsj-superseded"}"#.utf8), httpResponse(statusCode: 401)),
             (tokenJSON(), httpResponse(statusCode: 200))
         ])
-        let subject = IPProtectionProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
+        let subject = VPNProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
 
         let result = try await subject.fetchProxyToken()
 
@@ -60,17 +60,17 @@ final class IPProtectionProxyTokenServiceTests: XCTestCase {
     }
 
     func test_fetchProxyToken_throws_whenRetryAlsoFails() async {
-        let auth = MockIPProtectionAuthenticating(session: session(jwt: "stale-dsj"))
+        let auth = MockVPNAuthenticating(session: session(jwt: "stale-dsj"))
         let urlSession = SequencedURLSession(responses: [
             (Data(), httpResponse(statusCode: 401)),
             (Data(), httpResponse(statusCode: 401))
         ])
-        let subject = IPProtectionProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
+        let subject = VPNProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
 
         do {
             _ = try await subject.fetchProxyToken()
             XCTFail("Expected fetchProxyToken to throw when the retry also fails.")
-        } catch let error as IPProtectionError {
+        } catch let error as VPNAuthError {
             XCTAssertEqual(error, .sessionRejected)
             XCTAssertEqual(auth.refreshCallCount, 1, "Should not retry more than once")
         } catch {
@@ -79,9 +79,9 @@ final class IPProtectionProxyTokenServiceTests: XCTestCase {
     }
 
     func test_fetchProxyToken_throwsOnServerError() async {
-        let auth = MockIPProtectionAuthenticating(session: session(jwt: "stored-dsj"))
+        let auth = MockVPNAuthenticating(session: session(jwt: "stored-dsj"))
         let urlSession = MockURLSession(with: Data("boom".utf8), response: httpResponse(statusCode: 500))
-        let subject = IPProtectionProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
+        let subject = VPNProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
 
         do {
             _ = try await subject.fetchProxyToken()
@@ -95,8 +95,8 @@ final class IPProtectionProxyTokenServiceTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func session(jwt: String) -> IPProtectionDeviceSession {
-        IPProtectionDeviceSession(
+    private func session(jwt: String) -> VPNDeviceSession {
+        VPNDeviceSession(
             deviceSessionJwt: jwt,
             expiresAtMilliseconds: 32503680000000,
             renewAfterMilliseconds: 32503600000000
@@ -120,24 +120,24 @@ final class IPProtectionProxyTokenServiceTests: XCTestCase {
 // MARK: - Test doubles
 
 /// Mirrors the real service: `refresh()` replaces the stored session, so a retry reads the new one.
-private final class MockIPProtectionAuthenticating: IPProtectionAuthenticating, @unchecked Sendable {
-    private var storedSession: IPProtectionDeviceSession?
+private final class MockVPNAuthenticating: VPNAuthenticating, @unchecked Sendable {
+    private var storedSession: VPNDeviceSession?
     private(set) var refreshCallCount = 0
     private(set) var authenticateCallCount = 0
 
-    init(session: IPProtectionDeviceSession?) {
+    init(session: VPNDeviceSession?) {
         self.storedSession = session
     }
 
     func authenticate() async throws -> String {
         authenticateCallCount += 1
-        guard let storedSession else { throw IPProtectionError.notEnrolled }
+        guard let storedSession else { throw VPNAuthError.notEnrolled }
         return storedSession.deviceSessionJwt
     }
 
     func refresh() async throws -> String {
         refreshCallCount += 1
-        let refreshed = IPProtectionDeviceSession(
+        let refreshed = VPNDeviceSession(
             deviceSessionJwt: "refreshed-dsj",
             expiresAtMilliseconds: 32503680000000,
             renewAfterMilliseconds: 32503600000000
@@ -148,7 +148,7 @@ private final class MockIPProtectionAuthenticating: IPProtectionAuthenticating, 
 
     func reset() throws { storedSession = nil }
 
-    func currentSession() -> IPProtectionDeviceSession? { storedSession }
+    func currentSession() -> VPNDeviceSession? { storedSession }
 }
 
 /// Returns queued responses in order, so a retry can observe a different outcome.

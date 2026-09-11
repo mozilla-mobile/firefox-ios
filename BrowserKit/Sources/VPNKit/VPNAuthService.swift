@@ -5,31 +5,31 @@
 import AppAttestKit
 import Foundation
 
-public protocol IPProtectionAuthenticating: Sendable {
+public protocol VPNAuthenticating: Sendable {
     /// Returns a valid session credential, refreshing or establishing one as needed
     func authenticate() async throws -> String
 
     /// Forces a credential refresh, bypassing the cached-credential short-circuit
-    /// Throws `IPProtectionError.notEnrolled` when there is nothing to refresh with.
+    /// Throws `VPNAuthError.notEnrolled` when there is nothing to refresh with.
     func refresh() async throws -> String
 
     /// Clears all stored credentials, forcing a full enrollment on the next call
     func reset() throws
 
     /// The currently stored session, if any
-    func currentSession() -> IPProtectionDeviceSession?
+    func currentSession() -> VPNDeviceSession?
 }
 
-/// Manages the device's IP Protection session.
-struct IPProtectionAuthService: IPProtectionAuthenticating {
+/// Manages the device's VPN session.
+struct VPNAuthService: VPNAuthenticating {
     private let appAttestClient: AppAttestClient
-    private let sessionRefresher: IPProtectionSessionRefreshing
-    private let tokenStore: IPProtectionTokenStore
+    private let sessionRefresher: VPNSessionRefreshing
+    private let tokenStore: VPNTokenStore
 
     init(
         appAttestClient: AppAttestClient,
-        sessionRefresher: IPProtectionSessionRefreshing,
-        tokenStore: IPProtectionTokenStore
+        sessionRefresher: VPNSessionRefreshing,
+        tokenStore: VPNTokenStore
     ) {
         self.appAttestClient = appAttestClient
         self.sessionRefresher = sessionRefresher
@@ -49,7 +49,7 @@ struct IPProtectionAuthService: IPProtectionAuthenticating {
         } catch {
             // A rejected key outranks the cache: the session is only meaningful to a backend that
             // still has our device record, so serving it would 401 until it expires 30 days later
-            if IPProtectionError.indicatesLostEnrollment(error) {
+            if VPNAuthError.indicatesLostEnrollment(error) {
                 return try await enroll()
             }
 
@@ -68,12 +68,12 @@ struct IPProtectionAuthService: IPProtectionAuthenticating {
         do {
             assertion = try await appAttestClient.generateChallengeBoundAssertion()
         } catch AppAttestServiceError.missingKeyID {
-            throw IPProtectionError.notEnrolled
+            throw VPNAuthError.notEnrolled
         }
         try await sessionRefresher.refreshSession(assertion: assertion)
 
         guard let session = tokenStore.load() else {
-            throw IPProtectionError.sessionNotPersisted
+            throw VPNAuthError.sessionNotPersisted
         }
         return session.deviceSessionJwt
     }
@@ -83,7 +83,7 @@ struct IPProtectionAuthService: IPProtectionAuthenticating {
         try tokenStore.clear()
     }
 
-    func currentSession() -> IPProtectionDeviceSession? {
+    func currentSession() -> VPNDeviceSession? {
         return tokenStore.load()
     }
 
@@ -95,7 +95,7 @@ struct IPProtectionAuthService: IPProtectionAuthenticating {
         _ = try await appAttestClient.performAttestation()
 
         guard let session = tokenStore.load(), session != staleSession else {
-            throw IPProtectionError.sessionNotPersisted
+            throw VPNAuthError.sessionNotPersisted
         }
         return session.deviceSessionJwt
     }

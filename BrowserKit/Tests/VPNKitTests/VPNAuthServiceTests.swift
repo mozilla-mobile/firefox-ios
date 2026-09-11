@@ -6,15 +6,15 @@
 import XCTest
 import TestKit
 
-@testable import IPProtectionKit
+@testable import VPNKit
 
-final class IPProtectionAuthServiceTests: XCTestCase {
+final class VPNAuthServiceTests: XCTestCase {
     // MARK: - Cached session
 
     func test_authenticate_returnsCachedDSJ_whenFresh_withoutNetwork() async throws {
-        let tokenStore = MockIPProtectionTokenStore(initial: freshSession)
+        let tokenStore = MockVPNTokenStore(initial: freshSession)
         let remoteServer = MockAppAttestRemoteServer()
-        let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
         let subject = try makeSubject(remoteServer: remoteServer, refresher: refresher, tokenStore: tokenStore)
 
         let result = try await subject.authenticate()
@@ -28,10 +28,10 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     // MARK: - Assertion refresh
 
     func test_authenticate_refreshesViaAssertion_whenPastRenewAfter() async throws {
-        let tokenStore = MockIPProtectionTokenStore(initial: renewableSession)
+        let tokenStore = MockVPNTokenStore(initial: renewableSession)
         let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
         let remoteServer = MockAppAttestRemoteServer()
-        let refresher = MockIPProtectionSessionRefresher(
+        let refresher = MockVPNSessionRefresher(
             tokenStore: tokenStore,
             sessionToReturn: refreshedSession
         )
@@ -51,8 +51,8 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     }
 
     func test_authenticate_refreshesViaAssertion_whenExpired() async throws {
-        let tokenStore = MockIPProtectionTokenStore(initial: expiredSession)
-        let refresher = MockIPProtectionSessionRefresher(
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
+        let refresher = MockVPNSessionRefresher(
             tokenStore: tokenStore,
             sessionToReturn: refreshedSession
         )
@@ -70,10 +70,10 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     }
 
     func test_refresh_signsChallengeBoundPayload() async throws {
-        let tokenStore = MockIPProtectionTokenStore(initial: expiredSession)
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
         let remoteServer = MockAppAttestRemoteServer()
         remoteServer.challengeToReturn = AppAttestTestData.assertionChallenge
-        let refresher = MockIPProtectionSessionRefresher(
+        let refresher = MockVPNSessionRefresher(
             tokenStore: tokenStore,
             sessionToReturn: refreshedSession
         )
@@ -94,18 +94,18 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     }
 
     func test_refresh_throws_whenNoKeyEnrolled() async throws {
-        let tokenStore = MockIPProtectionTokenStore()
+        let tokenStore = MockVPNTokenStore()
         let subject = try makeSubject(
             remoteServer: MockAppAttestRemoteServer(),
             keyStore: MockAppAttestKeyIDStore(),        // no keyId
-            refresher: MockIPProtectionSessionRefresher(tokenStore: tokenStore),
+            refresher: MockVPNSessionRefresher(tokenStore: tokenStore),
             tokenStore: tokenStore
         )
 
         do {
             _ = try await subject.refresh()
             XCTFail("Expected refresh to throw without an enrolled key.")
-        } catch let error as IPProtectionError {
+        } catch let error as VPNAuthError {
             XCTAssertEqual(error, .notEnrolled)
         }
     }
@@ -113,8 +113,8 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     // MARK: - Fallbacks
 
     func test_authenticate_keepsValidCachedDSJ_whenRefreshFails() async throws {
-        let tokenStore = MockIPProtectionTokenStore(initial: renewableSession)
-        let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
+        let tokenStore = MockVPNTokenStore(initial: renewableSession)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
         refresher.refreshError = AppAttestServiceError.serverError(statusCode: 500, description: "down")
         let remoteServer = MockAppAttestRemoteServer()
         let subject = try makeSubject(
@@ -135,9 +135,9 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     }
 
     func test_authenticate_rethrowsTransportError_andKeepsKey_whenSessionExpired() async throws {
-        let tokenStore = MockIPProtectionTokenStore(initial: expiredSession)
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
         let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
-        let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
         refresher.refreshError = URLError(.notConnectedToInternet)
         let remoteServer = MockAppAttestRemoteServer()
         let subject = try makeSubject(
@@ -164,9 +164,9 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     }
 
     func test_authenticate_rethrowsTransportError_andKeepsKey_whenNoSession() async throws {
-        let tokenStore = MockIPProtectionTokenStore()
+        let tokenStore = MockVPNTokenStore()
         let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
-        let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
         refresher.refreshError = URLError(.timedOut)
         let remoteServer = MockAppAttestRemoteServer()
         let subject = try makeSubject(
@@ -193,9 +193,9 @@ final class IPProtectionAuthServiceTests: XCTestCase {
 
     func test_authenticate_reEnrolls_whenRefreshIsRejected_evenWithValidCache() async throws {
         // Past renewAfter but still 28 days from expiry, which is the window the ordering decides.
-        let tokenStore = MockIPProtectionTokenStore(initial: renewableSession)
+        let tokenStore = MockVPNTokenStore(initial: renewableSession)
         let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
-        let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
         refresher.refreshError = AppAttestServiceError.serverError(statusCode: 401, description: "unknown-key-id")
         let subject = try makeSubject(
             remoteServer: enrollingServer(tokenStore: tokenStore),
@@ -215,9 +215,9 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     }
 
     func test_authenticate_reEnrolls_whenRefreshIsRejected() async throws {
-        let tokenStore = MockIPProtectionTokenStore(initial: expiredSession)
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
         let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
-        let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
         // The backend answers 401 with reason `dsj-device-not-found` once its device record is gone.
         refresher.refreshError = AppAttestServiceError.serverError(statusCode: 401, description: "dsj-device-not-found")
         let subject = try makeSubject(
@@ -234,9 +234,9 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     }
 
     func test_authenticate_rethrows_whenRefreshHitsServerOutage() async throws {
-        let tokenStore = MockIPProtectionTokenStore(initial: expiredSession)
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
         let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
-        let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
         refresher.refreshError = AppAttestServiceError.serverError(statusCode: 503, description: "unavailable")
         let remoteServer = MockAppAttestRemoteServer()
         let subject = try makeSubject(
@@ -262,9 +262,9 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     }
 
     func test_authenticate_keepsStaleSession_whenEnrollmentFails() async throws {
-        let tokenStore = MockIPProtectionTokenStore(initial: expiredSession)
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
         let failingSession = MockURLSession(with: Data("boom".utf8), response: httpResponse(statusCode: 500))
-        let server = IPProtectionAppAttestServer(with: .dev, urlSession: failingSession, tokenStore: tokenStore)
+        let server = VPNAppAttestServer(with: .dev, urlSession: failingSession, tokenStore: tokenStore)
         let subject = try makeSubject(
             remoteServer: server,
             keyStore: MockAppAttestKeyIDStore(),   // no keyId, so refresh reports notEnrolled
@@ -287,9 +287,9 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     }
 
     func test_authenticate_enrolls_whenNoSessionAndNoKey() async throws {
-        let tokenStore = MockIPProtectionTokenStore()
+        let tokenStore = MockVPNTokenStore()
         let keyStore = MockAppAttestKeyIDStore()
-        let refresher = MockIPProtectionSessionRefresher(tokenStore: tokenStore)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
         let subject = try makeSubject(
             remoteServer: enrollingServer(tokenStore: tokenStore),
             keyStore: keyStore,
@@ -304,9 +304,9 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     }
 
     func test_authenticate_throws_whenEnrollmentFails() async throws {
-        let tokenStore = MockIPProtectionTokenStore()
+        let tokenStore = MockVPNTokenStore()
         let failingSession = MockURLSession(with: Data("boom".utf8), response: httpResponse(statusCode: 500))
-        let server = IPProtectionAppAttestServer(with: .dev, urlSession: failingSession, tokenStore: tokenStore)
+        let server = VPNAppAttestServer(with: .dev, urlSession: failingSession, tokenStore: tokenStore)
         let subject = try makeSubject(remoteServer: server, refresher: server, tokenStore: tokenStore)
 
         do {
@@ -318,12 +318,12 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     }
 
     func test_reset_clearsKeyAndSession() async throws {
-        let tokenStore = MockIPProtectionTokenStore(initial: freshSession)
+        let tokenStore = MockVPNTokenStore(initial: freshSession)
         let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
         let subject = try makeSubject(
             remoteServer: MockAppAttestRemoteServer(),
             keyStore: keyStore,
-            refresher: MockIPProtectionSessionRefresher(tokenStore: tokenStore),
+            refresher: MockVPNSessionRefresher(tokenStore: tokenStore),
             tokenStore: tokenStore
         )
 
@@ -336,8 +336,8 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     // MARK: - Fixtures
 
     /// Valid and well inside its renewal window: no network expected.
-    private var freshSession: IPProtectionDeviceSession {
-        IPProtectionDeviceSession(
+    private var freshSession: VPNDeviceSession {
+        VPNDeviceSession(
             deviceSessionJwt: "cached-dsj",
             expiresAtMilliseconds: 32503680000000,
             renewAfterMilliseconds: 32503600000000
@@ -345,20 +345,20 @@ final class IPProtectionAuthServiceTests: XCTestCase {
     }
 
     /// Still valid, but past its renewal timestamp, so a proactive refresh is due.
-    private var renewableSession: IPProtectionDeviceSession {
-        IPProtectionDeviceSession(
+    private var renewableSession: VPNDeviceSession {
+        VPNDeviceSession(
             deviceSessionJwt: "renewable-dsj",
             expiresAtMilliseconds: 32503680000000,
             renewAfterMilliseconds: 1000
         )
     }
 
-    private var expiredSession: IPProtectionDeviceSession {
-        IPProtectionDeviceSession(deviceSessionJwt: "old-dsj", expiresAtMilliseconds: 1000, renewAfterMilliseconds: 1000)
+    private var expiredSession: VPNDeviceSession {
+        VPNDeviceSession(deviceSessionJwt: "old-dsj", expiresAtMilliseconds: 1000, renewAfterMilliseconds: 1000)
     }
 
-    private var refreshedSession: IPProtectionDeviceSession {
-        IPProtectionDeviceSession(
+    private var refreshedSession: VPNDeviceSession {
+        VPNDeviceSession(
             deviceSessionJwt: "refreshed-dsj",
             expiresAtMilliseconds: 32503680000000,
             renewAfterMilliseconds: 32503600000000
@@ -367,24 +367,24 @@ final class IPProtectionAuthServiceTests: XCTestCase {
 
     /// A real server fed combined challenge + enrollment JSON so both calls decode and a session
     /// is persisted.
-    private func enrollingServer(tokenStore: IPProtectionTokenStore) -> IPProtectionAppAttestServer {
+    private func enrollingServer(tokenStore: VPNTokenStore) -> VPNAppAttestServer {
         let json = #"{"challenge":"c","deviceSessionJwt":"new-dsj","expiresAt":32503680000000,"renewAfter":32503600000000}"#
         let urlSession = MockURLSession(with: Data(json.utf8), response: httpResponse(statusCode: 200))
-        return IPProtectionAppAttestServer(with: .dev, urlSession: urlSession, tokenStore: tokenStore)
+        return VPNAppAttestServer(with: .dev, urlSession: urlSession, tokenStore: tokenStore)
     }
 
     private func makeSubject(
         remoteServer: AppAttestRemoteServerProtocol,
         keyStore: AppAttestKeyIDStore = MockAppAttestKeyIDStore(),
-        refresher: IPProtectionSessionRefreshing,
-        tokenStore: IPProtectionTokenStore
-    ) throws -> IPProtectionAuthService {
+        refresher: VPNSessionRefreshing,
+        tokenStore: VPNTokenStore
+    ) throws -> VPNAuthService {
         let client = try AppAttestClient(
             appAttestService: MockAppAttestService(isSupported: true),
             remoteServer: remoteServer,
             keyStore: keyStore
         )
-        return IPProtectionAuthService(
+        return VPNAuthService(
             appAttestClient: client,
             sessionRefresher: refresher,
             tokenStore: tokenStore
