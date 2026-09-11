@@ -443,7 +443,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     }
 
     private func checkAdBlockerFeature() -> Bool {
-        return nimbus.features.adBlockerFeature.value().enabled
+        // Hardcoded on so the ad blocker is enabled for everyone, without risking changes to the code directly.
+        return true
     }
 
     private func checkBackgroundAudioFeature() -> Bool {
@@ -451,7 +452,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     }
 
     private func checkAdBlockerBadgeFeature() -> Bool {
-        return nimbus.features.adBlockerFeature.value().badgeEnabled
+        // Hardcoded on so the ad blocker is enabled for everyone, without risking changes to the code directly.
+        return true
     }
 
     func checkStartAtHomeConfiguration() -> StartAtHome {
