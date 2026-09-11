@@ -28,6 +28,6 @@ features:
           bad-cert-domain-error-page: false
       - channel: developer
         value:
-          enabled: true
-          no_internet_connection_error: true
+          enabled: false
+          no_internet_connection_error: false
           bad-cert-domain-error-page: false
