@@ -245,6 +245,8 @@ final class RouteBuilder {
             }
         case .appIcon:
             return .settings(section: .appIcon)
+        case .mergeWindows:
+            return .action(action: .mergeWindows)
         }
     }
 
