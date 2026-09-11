@@ -448,6 +448,7 @@ final class TabManagerImplementation: NSObject,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
             ensureAtLeastOneSelectedTab()
+            signalTabRestorationSkipped()
             return
         }
 
@@ -478,6 +479,7 @@ final class TabManagerImplementation: NSObject,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
             ensureAtLeastOneSelectedTab()
+            signalTabRestorationSkipped()
             return
         }
 
@@ -502,6 +504,15 @@ final class TabManagerImplementation: NSObject,
                        level: .debug,
                        category: .tabs)
         }
+    }
+
+    /// Releases `AppEventQueue` waiters when no restore will run, otherwise deeplink routes are stranded.
+    private func signalTabRestorationSkipped() {
+        let event = AppEvent.tabRestoration(windowUUID)
+        guard !AppEventQueue.activityIsCompleted(event) else { return }
+
+        AppEventQueue.started(event)
+        AppEventQueue.completed(event)
     }
 
     private func ensureAtLeastOneSelectedTab() {
