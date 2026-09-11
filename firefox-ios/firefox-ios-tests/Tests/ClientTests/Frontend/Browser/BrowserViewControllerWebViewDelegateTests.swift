@@ -588,4 +588,150 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
         XCTAssertTrue(subject.googleLensSearches.isEmpty)
     }
+
+    // MARK: - Context menu element resolution
+    // See FXIOS-14918: WebKit's native long-press gesture isn't synchronized with the page's
+    // touchstart/mousedown listener, so the JS-reported elements can be missing or stale by the time
+    // WebKit asks for a menu. `resolveContextMenuElements` must fall back to native-only data instead
+    // of letting the custom menu (and actions like "Open in Private Tab") be replaced by WebKit's default one.
+
+    @MainActor
+    func testResolveContextMenuElements_noContextHelper_fallsBackToLinkOnly() {
+        let url = URL(string: "https://example.com")!
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: url, from: nil)
+
+        XCTAssertEqual(elements.link, url)
+        XCTAssertNil(elements.image)
+        XCTAssertEqual(elements.title, url.normalizedHostWithLRI, "Must not fall back to the raw URL as a title")
+        XCTAssertNil(elements.alt)
+    }
+
+    @MainActor
+    func testResolveContextMenuElements_jsElementsNotYetReported_fallsBackToLinkOnly() {
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: url, from: contextHelper)
+
+        XCTAssertEqual(elements.link, url)
+        XCTAssertEqual(elements.title, url.normalizedHostWithLRI, "Must not fall back to the raw URL as a title")
+    }
+
+    @MainActor
+    func testResolveContextMenuElements_jsElementsMatchNativeURL_usesReportedElements() {
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: url, image: nil, title: "Example", alt: nil)
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: url, from: contextHelper)
+
+        XCTAssertEqual(elements.title, "Example")
+    }
+
+    @MainActor
+    func testResolveContextMenuElements_jsElementsMatchViaDifferentHostEncoding_usesReportedElements() {
+        // WebKit's native `linkURL` for an internationalized domain is Punycode-encoded, while the JS bridge
+        // percent-encodes the raw Unicode string it reads from the page — the two must still be recognized
+        // as the same link.
+        let nativeURL = URL(string: "https://xn--mnchen-3ya.de/stra%C3%9Fe")!
+        let jsReportedURL = URL(string: "https://m%C3%BCnchen.de/stra%C3%9Fe")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: jsReportedURL, image: nil, title: "München", alt: nil)
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: nativeURL, from: contextHelper)
+
+        XCTAssertEqual(elements.title, "München")
+    }
+
+    @MainActor
+    func testResolveContextMenuElements_jsElementsAreStale_fallsBackToLinkOnly() {
+        let url = URL(string: "https://example.com")!
+        let staleURL = URL(string: "https://previous-long-press.example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: staleURL, image: nil, title: "Stale", alt: nil)
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: url, from: contextHelper)
+
+        XCTAssertEqual(elements.link, url)
+        XCTAssertEqual(
+            elements.title,
+            url.normalizedHostWithLRI,
+            "Stale JS-reported data for a different link must not be used, and must not fall back to the raw URL"
+        )
+    }
+
+    @MainActor
+    func testContextMenuHelperReset_clearsPreviouslyReportedElements() {
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(
+            link: URL(string: "https://example.com"),
+            image: nil,
+            title: "Example",
+            alt: nil
+        )
+
+        contextHelper.reset()
+
+        XCTAssertNil(contextHelper.elements)
+    }
+
+    // MARK: - Context menu dismiss reset guard
+    // See FXIOS-14918 review feedback: a stale dismiss callback for an earlier long press can fire after
+    // a later long press has already reported its own elements over the JS bridge. Resetting unconditionally
+    // in that case would discard the newer data.
+
+    @MainActor
+    func testShouldResetContextMenuElements_matchingLink_returnsTrue() {
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: url, image: nil, title: "Example", alt: nil)
+
+        let shouldReset = BrowserViewController.shouldResetContextMenuElements(
+            afterDismissing: url,
+            contextHelper: contextHelper
+        )
+
+        XCTAssertTrue(shouldReset)
+    }
+
+    @MainActor
+    func testShouldResetContextMenuElements_newerLongPressAlreadyOverwroteElements_returnsFalse() {
+        let dismissedURL = URL(string: "https://example.com")!
+        let newerURL = URL(string: "https://newer-long-press.example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: newerURL, image: nil, title: "Newer", alt: nil)
+
+        let shouldReset = BrowserViewController.shouldResetContextMenuElements(
+            afterDismissing: dismissedURL,
+            contextHelper: contextHelper
+        )
+
+        XCTAssertFalse(shouldReset, "Must not discard a newer long press's already-reported elements")
+    }
+
+    @MainActor
+    func testShouldResetContextMenuElements_noElements_returnsFalse() {
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+
+        let shouldReset = BrowserViewController.shouldResetContextMenuElements(
+            afterDismissing: url,
+            contextHelper: contextHelper
+        )
+
+        XCTAssertFalse(shouldReset)
+    }
+
+    @MainActor
+    func testShouldResetContextMenuElements_noContextHelper_returnsFalse() {
+        let url = URL(string: "https://example.com")!
+
+        let shouldReset = BrowserViewController.shouldResetContextMenuElements(
+            afterDismissing: url,
+            contextHelper: nil
+        )
+
+        XCTAssertFalse(shouldReset)
+    }
 }
