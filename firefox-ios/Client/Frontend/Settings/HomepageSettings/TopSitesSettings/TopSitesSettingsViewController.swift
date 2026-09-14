@@ -53,7 +53,7 @@ final class TopSitesSettingsViewController: SettingsTableViewController, UserFea
                     prefKey: PrefsKeys.FeatureFlags.SponsoredShortcuts,
                     defaultValue: userPreferences.getPreferenceFor(.hntSponsoredShortcuts),
                     titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
-                ) { [windowUUID] _ in
+                ) { [windowUUID, weak self]  _ in
                     store.dispatch(
                         TopSitesAction(
                             windowUUID: windowUUID,
@@ -67,7 +67,7 @@ final class TopSitesSettingsViewController: SettingsTableViewController, UserFea
                     ) ?? true
                     if !isSponsoredShortcutsEnabled,
                        let contextId = TelemetryContextualIdentifier.contextId {
-                        self.deleteUserRequest(contextId: contextId)
+                        self?.deleteUserRequest(contextId: contextId)
                     }
                 }
             ]
