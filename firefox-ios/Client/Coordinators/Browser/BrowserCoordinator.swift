@@ -300,7 +300,6 @@ final class BrowserCoordinator: BaseCoordinator,
             cards: cards,
             windowUUID: windowUUID,
             themeManager: themeManager,
-            },
             onComplete: { [weak self] in
                 self?.browserViewController.dismiss(animated: true)
             }
@@ -310,7 +309,6 @@ final class BrowserCoordinator: BaseCoordinator,
         hostingController.modalPresentationStyle = .fullScreen
         hostingController.modalTransitionStyle = .crossDissolve
         browserViewController.present(hostingController, animated: true)
-    }
     }
 
     // MARK: - ETPCoordinatorSSLStatusDelegate
