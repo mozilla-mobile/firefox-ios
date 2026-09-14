@@ -58,7 +58,7 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     private static var nonPersistentStore = WKWebsiteDataStore.nonPersistent()
     public private(set) static var defaultStore = WKWebsiteDataStore.default()
     private static let defaultDataDetectorTypes: WKDataDetectorTypes = [.phoneNumber]
-    private static var areWeLockedDown: Bool = false
+    private static var areWeLockedDown = false
     private let configuration: WKWebViewConfiguration
 
     public init(configuration: WKWebViewConfiguration = WKWebViewConfiguration()) {
