@@ -2986,6 +2986,15 @@ extension String {
                     comment: "In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar."
                 )
             }
+
+            public struct Accessibility {
+                public static let LearnMoreAction = MZLocalizedString(
+                    key: "Settings.BoolSetting.LearnMoreAction.v157",
+                    tableName: "Settings",
+                    value: "Learn more about %1$@",
+                    comment: "VoiceOver custom action name for a settings row's Learn More link. %1$@ is replaced with the row's title."
+                )
+            }
         }
 
         public struct Homepage {
