@@ -12,7 +12,6 @@ import UIKit
 protocol DefaultImageCache: Sendable {
     func retrieve(forKey key: String) async throws -> UIImage?
 
-    /// Synchronous, memory-only lookup. Returns `nil` when the image is absent or only on disk.
     func retrieveFromMemory(forKey key: String) -> UIImage?
 
     func store(image: UIImage, forKey key: String)

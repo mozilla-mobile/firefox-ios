@@ -100,8 +100,8 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
         favicon.backgroundColor = .clear
 
-        // Setting the placeholder unconditionally clears `currentURLString`, which defeats the
-        // de-duplication in `setFavicon` and makes every reload blank the image before re-fetching.
+        // Setting the placeholder here would clear `currentURLString` and defeat the de-duplication
+        // in `setFavicon`, blanking the image on every reload.
         if let siteURL = tab.url?.absoluteString, !tab.isFxHomeTab {
             favicon.setFavicon(FaviconImageViewModel(siteURLString: siteURL,
                                                      faviconCornerRadius: UX.faviconCornerRadius))
