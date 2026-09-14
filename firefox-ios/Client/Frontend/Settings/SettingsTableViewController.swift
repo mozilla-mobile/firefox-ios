@@ -337,6 +337,8 @@ class BoolSetting: Setting, UserFeaturePreferenceProvider {
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
 
+        cell.accessibilityLabel = nil
+
         control.configureSwitch(
             onTintColor: theme.colors.actionPrimary,
             isEnabled: enabled
@@ -344,7 +346,6 @@ class BoolSetting: Setting, UserFeaturePreferenceProvider {
 
         displayBool(control.switchView)
         configureSwitchAccessibility(for: cell)
-        cell.accessibilityLabel = nil
 
         if cell is ThemedLearnMoreTableViewCell {
             configureLearnMoreAccessibilityAction(title: title?.string ?? "") { [weak cell] in
