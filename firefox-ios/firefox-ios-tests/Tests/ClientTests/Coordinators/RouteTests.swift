@@ -832,4 +832,53 @@ class RouteTests: XCTestCase {
         components.queryItems = [URLQueryItem(name: "url", value: url.absoluteString)]
         return components.url!
     }
+
+    // MARK: - willSelectTabOnHandling
+
+    func testWillSelectTabOnHandling_searchWithURL_returnsTrue() {
+        let route = Route.search(url: URL(string: "https://example.com"), isPrivate: false)
+        XCTAssertTrue(route.willSelectTabOnHandling)
+
+        let privateRoute = Route.search(url: URL(string: "https://example.com"), isPrivate: true)
+        XCTAssertTrue(privateRoute.willSelectTabOnHandling)
+    }
+
+    func testWillSelectTabOnHandling_searchWithoutURL_returnsFalse() {
+        let route = Route.search(url: nil, isPrivate: false)
+        XCTAssertFalse(route.willSelectTabOnHandling)
+
+        let privateRoute = Route.search(url: nil, isPrivate: true)
+        XCTAssertFalse(privateRoute.willSelectTabOnHandling)
+    }
+
+    func testWillSelectTabOnHandling_searchQuery_returnsTrue() {
+        let route = Route.searchQuery(query: "mozilla", isPrivate: false)
+        XCTAssertTrue(route.willSelectTabOnHandling)
+
+        let privateRoute = Route.searchQuery(query: "mozilla", isPrivate: true)
+        XCTAssertTrue(privateRoute.willSelectTabOnHandling)
+    }
+
+    func testWillSelectTabOnHandling_searchURL_returnsTrue() {
+        let routeWithURL = Route.searchURL(url: URL(string: "https://example.com"), tabId: "123")
+        XCTAssertTrue(routeWithURL.willSelectTabOnHandling)
+
+        let routeWithoutURL = Route.searchURL(url: nil, tabId: "123")
+        XCTAssertTrue(routeWithoutURL.willSelectTabOnHandling)
+    }
+
+    func testWillSelectTabOnHandling_otherRoutes_returnsFalse() {
+        let nonDeeplinkRoutes: [Route] = [
+            .glean(url: URL(string: "https://example.com")!),
+            .homepanel(section: .bookmarks),
+            .settings(section: .general),
+            .action(action: .closePrivateTabs),
+            .defaultBrowser(section: .tutorial),
+            .sharesheet(shareType: .url(URL(string: "https://example.com")!), shareMessage: nil)
+        ]
+
+        for route in nonDeeplinkRoutes {
+            XCTAssertFalse(route.willSelectTabOnHandling, "Expected willSelectTabOnHandling to be false for \(route)")
+        }
+    }
 }

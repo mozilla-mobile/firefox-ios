@@ -53,8 +53,8 @@ class SceneDelegate: UIResponder,
         let sceneCoordinator = SceneCoordinator(scene: scene, introManager: introScreenManager)
         self.sceneCoordinator = sceneCoordinator
         self.window = sceneCoordinator.window
-        handle(connectionOptions: connectionOptions)
         sceneCoordinator.start()
+        handle(connectionOptions: connectionOptions)
         if !sessionManager.launchSessionProvider.openedFromExternalSource {
             shareTelemetry.cancelOpenURLTimeRecord()
         }
@@ -65,6 +65,10 @@ class SceneDelegate: UIResponder,
         logger.log("SceneDelegate: scene did disconnect. UUID: \(logUUID)", level: .info, category: .lifecycle)
         // Handle clean-up here for closing windows on iPad
         guard let sceneCoordinator = (scene.delegate as? SceneDelegate)?.sceneCoordinator else { return }
+
+        if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(sceneCoordinator.windowUUID)) {
+            AppEventQueue.completed(.pendingDeeplinkTab(sceneCoordinator.windowUUID))
+        }
 
         // For now, we explicitly cancel downloads for windows that are closed.
         // On iPhone this will happen during app termination, for iPad it will
@@ -223,19 +227,20 @@ class SceneDelegate: UIResponder,
         }
     }
 
-    func handle(route: Route) {
+    private func handle(route: Route) {
         guard let sceneCoordinator = sceneCoordinator else {
             logger.log("Scene coordinator should exist", level: .fatal, category: .coordinator)
             return
         }
 
         logger.log("Scene coordinator will handle a route", level: .info, category: .coordinator)
-        if route.isCopiedLink {
-            sceneCoordinator.shouldDeferTabRestorationForCopiedLink = true
-        }
         sessionManager.launchSessionProvider.openedFromExternalSource = true
 
-        if route.isCopiedLink || isDeeplinkOptimizationRefactorEnabled {
+        if route.willSelectTabOnHandling {
+            AppEventQueue.started(.pendingDeeplinkTab(sceneCoordinator.windowUUID))
+        }
+
+        if isDeeplinkOptimizationRefactorEnabled {
             AppEventQueue.wait(for: [.startupFlowComplete]) {
                 ensureMainThread { [weak self] in
                     self?.logger.log("Start up flow done, will handle route",

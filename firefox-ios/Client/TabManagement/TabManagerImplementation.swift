@@ -83,7 +83,6 @@ final class TabManagerImplementation: NSObject,
     private weak var navigationDelegate: WKNavigationDelegate?
     private var tabsTelemetry = TabsTelemetry()
     private var delegates = [WeakTabManagerDelegate]()
-    private var pendingPreservedTab: Tab?
     var tabRestoreHasFinished = false
     private(set) var selectedIndex: Int = -1
 
@@ -423,41 +422,18 @@ final class TabManagerImplementation: NSObject,
 
     // MARK: - Restore tabs
 
-    func restoreTabs(preservingTab: Tab?) {
+    func restoreTabs() {
         assert(Thread.isMainThread)
 
-        if let preservingTab {
-            pendingPreservedTab = preservingTab
-        }
-
-        guard !isRestoringTabs else {
-            logger.log("No restore tabs running",
-                       level: .debug,
-                       category: .tabs)
-            return
-        }
-
-        let preservingTab = pendingPreservedTab
-        pendingPreservedTab = nil
-
-        if let preservingTab {
-            tabs.removeAll { $0 === preservingTab }
-        }
-
-        if preservingTab != nil {
-            legacyRestoreTabs(preservingTab: preservingTab)
-        } else if isDeeplinkOptimizationRefactorEnabled {
+        if isDeeplinkOptimizationRefactorEnabled {
             startRestoreTabs()
         } else {
             legacyRestoreTabs()
         }
     }
 
-    private func legacyRestoreTabs(preservingTab: Tab? = nil) {
-        guard tabs.isEmpty else {
-            if let preservingTab {
-                selectPreservedTab(preservingTab)
-            }
+    private func legacyRestoreTabs() {
+        guard !isRestoringTabs, tabs.isEmpty else {
             logger.log("No restore tabs running",
                        level: .debug,
                        category: .tabs)
@@ -471,18 +447,14 @@ final class TabManagerImplementation: NSObject,
         guard !AppConstants.isRunningUITests || AppConstants.isSessionRestoreEnabledForTests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
-            if let preservingTab {
-                selectPreservedTab(preservingTab)
-            } else {
-                ensureAtLeastOneSelectedTab()
-            }
+            ensureAtLeastOneSelectedTab()
             return
         }
 
         isRestoringTabs = true
         AppEventQueue.started(.tabRestoration(windowUUID))
 
-        startLegacyRestoreTabsTask(preservingTab: preservingTab)
+        startLegacyRestoreTabsTask()
     }
 
     /// Snapshot-and-merge restore path used when the deeplink-optimization refactor is enabled.
@@ -581,21 +553,18 @@ final class TabManagerImplementation: NSObject,
         }
     }
 
-    private func startLegacyRestoreTabsTask(preservingTab: Tab? = nil) {
+    private func startLegacyRestoreTabsTask() {
         Task { @MainActor in
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
             let windowData: WindowData? = windowIsNew ? nil : await tabDataStore.fetchWindowData(uuid: windowUUID)
-            legacyBuildTabRestore(window: windowData, preservingTab: preservingTab)
+            legacyBuildTabRestore(window: windowData)
             TabErrorTelemetryHelper.shared.validateTabCountAfterRestoringTabs(windowUUID)
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
             logger.log("Normal tabs count; \(normalTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
     }
 
-    private func legacyBuildTabRestore(window: WindowData?, preservingTab: Tab? = nil) {
-        let preservingTab = pendingPreservedTab ?? preservingTab
-        pendingPreservedTab = nil
-
+    private func legacyBuildTabRestore(window: WindowData?) {
         defer {
             isRestoringTabs = false
             tabRestoreHasFinished = true
@@ -607,11 +576,7 @@ final class TabManagerImplementation: NSObject,
         guard let windowData = window else {
             // Always make sure there is a single normal tab
             // Note: this is where the first tab in a newly-created browser window will be added
-            if let preservingTab {
-                selectPreservedTab(preservingTab)
-            } else {
-                legacyGenerateEmptyTab()
-            }
+            legacyGenerateEmptyTab()
             logger.log("Not restoring tabs because there is no window data.",
                        level: .warning,
                        category: .tabs)
@@ -622,18 +587,14 @@ final class TabManagerImplementation: NSObject,
               !nonPrivateTabs.isEmpty else {
             // Always make sure there is a single normal tab
             // Note: this is where the first tab in a newly-created browser window will be added
-            if let preservingTab {
-                selectPreservedTab(preservingTab)
-            } else {
-                legacyGenerateEmptyTab()
-            }
+            legacyGenerateEmptyTab()
             logger.log("Not restoring tabs because there is no tab data on the window data.",
                        level: .warning,
                        category: .tabs)
             return
         }
 
-        legacyGenerateTabs(from: windowData, preservingTab: preservingTab)
+        legacyGenerateTabs(from: windowData)
         cleanUpUnusedScreenshots()
         cleanUpTabSessionData()
 
@@ -642,15 +603,8 @@ final class TabManagerImplementation: NSObject,
         }
     }
 
-    private func selectPreservedTab(_ tab: Tab) {
-        if !tabs.contains(where: { $0 === tab }) {
-            tabs.append(tab)
-        }
-        selectTab(tab)
-    }
-
     /// Creates the webview so needs to live on the main thread
-    private func legacyGenerateTabs(from windowData: WindowData, preservingTab: Tab? = nil) {
+    private func legacyGenerateTabs(from windowData: WindowData) {
         // Clear in memory tabs for tab restore
         tabs = [Tab]()
         let filteredTabs = legacyFilterPrivateTabs(from: windowData,
@@ -658,7 +612,7 @@ final class TabManagerImplementation: NSObject,
         var tabToSelect: Tab?
 
         for tabData in filteredTabs {
-            let newTab = legacyConfigureNewTab(with: tabData, preservingTab: preservingTab)
+            let newTab = legacyConfigureNewTab(with: tabData)
             if windowData.activeTabId == tabData.id {
                 tabToSelect = newTab
             }
@@ -667,11 +621,7 @@ final class TabManagerImplementation: NSObject,
         logger.log("There was \(filteredTabs.count) tabs restored",
                    level: .debug,
                    category: .tabs)
-        if let preservingTab {
-            selectPreservedTab(preservingTab)
-        } else {
-            handleTabSelectionAfterRestore(tabToSelect: tabToSelect)
-        }
+        handleTabSelectionAfterRestore(tabToSelect: tabToSelect)
     }
 
     /// Applies the output of `TabRestorer` to this manager's state, merging `preRestoreTabs`
@@ -679,61 +629,30 @@ final class TabManagerImplementation: NSObject,
     /// always land last. Picks a selected tab from the restoration result when available, falling
     /// back to the most recent normal tab or a freshly created one.
     private func applyRestorationResult(_ result: TabRestorationResult, preRestoreTabs: [Tab]) {
-        let preservingTab = pendingPreservedTab
-        pendingPreservedTab = nil
-
         defer {
             isRestoringTabs = false
             tabRestoreHasFinished = true
             AppEventQueue.completed(.tabRestoration(windowUUID))
         }
 
-        var restoredTabs = result.restoredTabs
-        if let preservingTab {
-            restoredTabs.removeAll { tab in
-                tab !== preservingTab
-                    && tab.isPrivate == preservingTab.isPrivate
-                    && tab.url == preservingTab.url
-            }
-        }
-        tabs = restoredTabs + preRestoreTabs
+        tabs = result.restoredTabs + preRestoreTabs
 
         // Notify delegates of tabs restore before selecting a tab due to tab.tabDelegate assignment
         for delegate in delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
         }
 
-        if let preservingTab {
-            selectPreservedTab(preservingTab)
-        } else {
-            let tabToSelect: Tab? = result.selectedTabUUID.flatMap { uuid in
-                result.restoredTabs.first(where: { $0.tabUUID == uuid })
-            }
-            handleTabSelectionAfterRestore(tabToSelect: tabToSelect)
+        let tabToSelect: Tab? = result.selectedTabUUID.flatMap { uuid in
+            result.restoredTabs.first(where: { $0.tabUUID == uuid })
         }
+        handleTabSelectionAfterRestore(tabToSelect: tabToSelect)
 
         cleanUpUnusedScreenshots()
         cleanUpTabSessionData()
     }
 
-    private func legacyConfigureNewTab(with tabData: TabData, preservingTab: Tab? = nil) -> Tab? {
-        let persistedURL = URL(string: tabData.siteUrl)
-        let newTab: Tab
-        if let preservingTab,
-           tabs.contains(where: { $0 === preservingTab }),
-           preservingTab.isPrivate == tabData.isPrivate,
-           preservingTab.url == persistedURL {
-            return nil
-        } else if let preservingTab,
-           preservingTab.isPrivate == tabData.isPrivate,
-           preservingTab.url == persistedURL {
-            newTab = preservingTab
-            if !tabs.contains(where: { $0 === preservingTab }) {
-                tabs.append(preservingTab)
-            }
-        } else {
-            newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
-        }
+    private func legacyConfigureNewTab(with tabData: TabData) -> Tab? {
+        let newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
         populateTab(newTab, from: tabData)
         restoreScreenshot(for: newTab)
         return newTab
@@ -761,6 +680,13 @@ final class TabManagerImplementation: NSObject,
 
     private func handleTabSelectionAfterRestore(tabToSelect: Tab?) {
         assert(Thread.isMainThread)
+        if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
+            logger.log("Skipping post-restore tab selection; deeplink tab pending",
+                       level: .debug,
+                       category: .tabs)
+            return
+        }
+
         if let tabToSelect {
             selectTab(tabToSelect)
         } else {

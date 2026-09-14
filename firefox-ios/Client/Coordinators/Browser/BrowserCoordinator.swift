@@ -80,8 +80,7 @@ final class BrowserCoordinator: BaseCoordinator,
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-         googleLensService: GoogleLensServicing = GoogleLensService(),
-         shouldDeferTabRestoration: Bool = false) {
+         googleLensService: GoogleLensServicing = GoogleLensService()) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.screenshotService = screenshotService
         self.profile = profile
@@ -92,8 +91,7 @@ final class BrowserCoordinator: BaseCoordinator,
         self.homepageTabStateStore = homepageTabStateStore
         self.browserViewController = BrowserViewController(profile: profile,
                                                            tabManager: tabManager,
-                                                           gleanWrapper: glean,
-                                                           shouldDeferTabRestoration: shouldDeferTabRestoration)
+                                                           gleanWrapper: glean)
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.googleLensService = googleLensService
@@ -353,6 +351,11 @@ final class BrowserCoordinator: BaseCoordinator,
             case .tutorial:
                 startLaunch(with: .defaultBrowser)
             }
+        }
+
+        if route.willSelectTabOnHandling,
+           AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
+            AppEventQueue.completed(.pendingDeeplinkTab(windowUUID))
         }
     }
 

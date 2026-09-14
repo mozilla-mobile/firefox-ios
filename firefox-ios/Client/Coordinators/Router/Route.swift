@@ -6,9 +6,15 @@ import Foundation
 
 /// An enumeration representing different navigational routes in an application.
 enum Route {
-    var isCopiedLink: Bool {
-        guard case let .search(_, _, options) = self else { return false }
-        return options?.contains(.copiedLink) == true
+    var willSelectTabOnHandling: Bool {
+        switch self {
+        case let .search(url, _, _):
+            return url != nil
+        case .searchQuery, .searchURL:
+            return true
+        default:
+            return false
+        }
     }
     /// Represents a search route that takes a URL, a boolean value indicating whether the search
     /// is private or not and an optional set of search options.
@@ -140,7 +146,6 @@ enum Route {
     enum SearchOptions: Equatable {
         /// An option to focus the user's attention on the location field of the search interface.
         case focusLocationField
-        case copiedLink
         /// An option to force open a new tab even when on homepage
         case forceNewTab
     }
