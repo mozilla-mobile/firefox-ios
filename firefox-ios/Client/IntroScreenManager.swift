@@ -36,8 +36,6 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
         featureFlagsProvider.isEnabled(.videoIntroOnboarding)
     }
 
-    /// Debug-only override. When true, onboarding is built from the hardcoded in-code cards
-    /// (`HardcodedOnboardingCardProvider`) instead of the Nimbus config.
     var shouldUseContinuousOnboarding: Bool {
         featureFlagsProvider.isEnabled(.multiDayOnboarding)
     }
