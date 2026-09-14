@@ -16,9 +16,7 @@ protocol SiteImageCache: Sendable {
     /// - Throws: An error if the image cannot be retrieved.
     func getImage(cacheKey: String, type: SiteImageType) async throws -> UIImage
 
-    /// Retrieves an already in-memory image without suspending, so callers can avoid
-    /// clearing a view's current image when the replacement is available immediately.
-    /// - Returns: The cached image, or `nil` when it isn't in the memory cache.
+    /// Memory-only lookup that does not suspend. `nil` when the image isn't in the memory cache.
     nonisolated func getImageFromMemory(cacheKey: String, type: SiteImageType) -> UIImage?
 
     /// Stores an image in the cache.

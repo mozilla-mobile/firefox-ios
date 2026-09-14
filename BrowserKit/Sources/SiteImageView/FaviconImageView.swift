@@ -78,8 +78,7 @@ public final class FaviconImageView: UIImageView, SiteImageView {
                                    siteURL: siteURL,
                                    siteResource: viewModel.siteResource)
 
-        // A cached favicon is applied without suspending. Going through `updateImage` would blank the
-        // view for at least one frame, which reads as a flicker whenever a list reloads its cells.
+        // Set directly rather than through `updateImage`, which would blank the view for a frame.
         if let cachedImage = imageFetcher.getImageFromMemory(model: model) {
             backgroundColor = .clear
             setImage(image: cachedImage)

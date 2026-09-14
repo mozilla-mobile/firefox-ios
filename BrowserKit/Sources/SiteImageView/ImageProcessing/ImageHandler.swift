@@ -18,9 +18,7 @@ protocol ImageHandler: Sendable {
     /// - Returns: The favicon image
     func fetchFavicon(imageModel: SiteImageModel) async -> UIImage
 
-    /// Returns the favicon only if it is already held in the memory cache, without suspending.
-    /// - Parameter imageModel: The image model whose `cacheKey` identifies the favicon
-    /// - Returns: The cached favicon, or `nil` when a fetch is required
+    /// Same precedence as `fetchFavicon`, limited to what resolves without suspending.
     func fetchFaviconFromMemory(imageModel: SiteImageModel) -> UIImage?
 
     /// The ImageHandler will fetch the hero image with the following precedence
@@ -74,14 +72,16 @@ final class DefaultImageHandler: ImageHandler {
     }
 
     func fetchFaviconFromMemory(imageModel: SiteImageModel) -> UIImage? {
-        // Bundled assets resolve synchronously anyway, so only the cache is consulted here.
-        guard imageModel.siteResource == nil || !isBundleAsset(imageModel.siteResource) else { return nil }
-        return imageCache.getImageFromMemory(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
-    }
+        if case let .bundleAsset(assetName, _) = imageModel.siteResource {
+            return try? loadDefaultFaviconFromBundle(assetName: assetName)
+        }
 
-    private func isBundleAsset(_ resource: SiteResource?) -> Bool {
-        if case .bundleAsset = resource { return true }
-        return false
+        // Bundled default images never enter the image cache, so the lookup below can't find them.
+        if let image = try? getBundleImage(assetName: imageModel.cacheKey) {
+            return image
+        }
+
+        return imageCache.getImageFromMemory(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
     }
 
     private func loadDefaultFaviconFromBundle(assetName: String) throws -> UIImage {
