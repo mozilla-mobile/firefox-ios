@@ -53,7 +53,7 @@ final class TopSitesSettingsViewController: SettingsTableViewController, UserFea
                     prefKey: PrefsKeys.FeatureFlags.SponsoredShortcuts,
                     defaultValue: userPreferences.getPreferenceFor(.hntSponsoredShortcuts),
                     titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
-                ) { [windowUUID, weak self]  _ in
+                ) { [windowUUID, weak self] _ in
                     store.dispatch(
                         TopSitesAction(
                             windowUUID: windowUUID,
