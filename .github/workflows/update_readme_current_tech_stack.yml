@@ -11,7 +11,7 @@ jobs:
 
         steps:
             - name: Checkout code
-              uses: actions/checkout@v3    
+              uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3    
     
             - name: Update README
               run: |
@@ -33,7 +33,7 @@ jobs:
 
             - name: Create Pull Request
               if: ${{ env.changes_detected }}
-              uses: peter-evans/create-pull-request@v6
+              uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
               with:
                   author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
                   committer: GitHub <noreply@github.com>
