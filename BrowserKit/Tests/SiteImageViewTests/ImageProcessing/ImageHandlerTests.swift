@@ -390,6 +390,13 @@ private final class MockSiteImageCache: SiteImageCache, @unchecked Sendable {
     var cacheImageCalled = 0
     var cachedWithType: SiteImageType?
     var clearCacheCalledCount = 0
+    var memoryCachedImage: UIImage?
+    var getImageFromMemoryCalled = 0
+
+    func getImageFromMemory(cacheKey: String, type: SiteImageType) -> UIImage? {
+        getImageFromMemoryCalled += 1
+        return memoryCachedImage
+    }
 
     func getImage(cacheKey: String, type: SiteImageType) async throws -> UIImage {
         getFromCacheWithType = type

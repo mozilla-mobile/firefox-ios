@@ -12,6 +12,9 @@ import UIKit
 protocol DefaultImageCache: Sendable {
     func retrieve(forKey key: String) async throws -> UIImage?
 
+    /// Synchronous, memory-only lookup. Returns `nil` when the image is absent or only on disk.
+    func retrieveFromMemory(forKey key: String) -> UIImage?
+
     func store(image: UIImage, forKey key: String)
 
     func clear()
@@ -20,6 +23,10 @@ protocol DefaultImageCache: Sendable {
 extension ImageCache: DefaultImageCache {
     func retrieve(forKey key: String) async throws -> UIImage? {
         return try await Kingfisher.ImageCache.default.retrieveImage(forKey: key).image
+    }
+
+    func retrieveFromMemory(forKey key: String) -> UIImage? {
+        return Kingfisher.ImageCache.default.retrieveImageInMemoryCache(forKey: key)
     }
 
     func store(image: UIImage, forKey key: String) {
