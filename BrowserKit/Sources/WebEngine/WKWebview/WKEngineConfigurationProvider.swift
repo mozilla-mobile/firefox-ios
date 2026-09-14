@@ -82,7 +82,14 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     }
 
     public func endPrivateBrowsingSession() {
-        Self.nonPersistentStore = .nonPersistent()
+        if #available(iOS 17.0, *) {
+            let currentProxyConfigs = Self.nonPersistentStore.proxyConfigurations
+            Self.nonPersistentStore = .nonPersistent()
+            Self.nonPersistentStore.proxyConfigurations = currentProxyConfigs
+        } else {
+            // If iOS 17 is not available they will never had turned on the proxy
+            Self.nonPersistentStore = .nonPersistent()
+        }
     }
 
     public func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration {
