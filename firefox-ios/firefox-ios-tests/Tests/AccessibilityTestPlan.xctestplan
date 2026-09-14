@@ -193,7 +193,7 @@
         "HomePageSettingsUITests\/testRecentlySaved()",
         "HomePageSettingsUITests\/testSetFirefoxHomeAsHome()",
         "HomePageSettingsUITests\/testShortcutsRows()",
-        "HomePageSettingsUITests\/testTyping()",
+        "HomePageSettingsUITests\/testValidateCustomURLAsCurrentHomepage()",
         "IntegrationTests",
         "IntegrationTests\/testFxADisconnectConnect()",
         "IntegrationTests\/testFxASyncBookmark()",
