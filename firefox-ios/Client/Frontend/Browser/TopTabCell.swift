@@ -98,13 +98,15 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         let hideCloseButton = frame.width < UX.closeButtonThreshold && !selected
         closeButton.isHidden = hideCloseButton
 
-        favicon.manuallySetImage(UIImage(named: ImageIdentifiers.firefoxFavicon) ?? UIImage())
-
         favicon.backgroundColor = .clear
 
+        // Setting the placeholder unconditionally clears `currentURLString`, which defeats the
+        // de-duplication in `setFavicon` and makes every reload blank the image before re-fetching.
         if let siteURL = tab.url?.absoluteString, !tab.isFxHomeTab {
             favicon.setFavicon(FaviconImageViewModel(siteURLString: siteURL,
                                                      faviconCornerRadius: UX.faviconCornerRadius))
+        } else {
+            favicon.manuallySetImage(UIImage(named: ImageIdentifiers.firefoxFavicon) ?? UIImage())
         }
     }
 

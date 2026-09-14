@@ -7,6 +7,12 @@ import Common
 
 public protocol SiteImageHandler: Sendable {
     func getImage(model: SiteImageModel) async -> UIImage
+
+    /// Returns the image only if it is already in the memory cache, without suspending.
+    /// Lets views skip the blank frame that an asynchronous fetch would otherwise cause.
+    /// - Parameter model: The image model whose `cacheKey` identifies the image
+    /// - Returns: The cached image, or `nil` when an asynchronous fetch is required
+    func getImageFromMemory(model: SiteImageModel) -> UIImage?
     func cacheFaviconURL(siteURL: URL, faviconURL: URL)
     func clearAllCaches()
 }
@@ -48,6 +54,11 @@ public final class DefaultSiteImageHandler: SiteImageHandler {
         case .favicon:
             return await getFaviconImage(imageModel: model)
         }
+    }
+
+    public func getImageFromMemory(model: SiteImageModel) -> UIImage? {
+        guard model.imageType == .favicon else { return nil }
+        return imageHandler.fetchFaviconFromMemory(imageModel: model)
     }
 
     public func cacheFaviconURL(siteURL: URL, faviconURL: URL) {
