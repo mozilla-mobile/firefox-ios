@@ -155,7 +155,11 @@ class SiteDataClearable: Clearable {
     }
 
     func clear() -> Success {
-        DefaultWKEngineConfigurationProvider.defaultStore.removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
+        DefaultWKEngineConfigurationProvider.defaultStore.removeData(
+            ofTypes: dataTypes,
+            modifiedSince: .distantPast,
+            completionHandler: {}
+        )
 
         logger.log("SiteDataClearable succeeded.",
                    level: .debug,

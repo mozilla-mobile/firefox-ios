@@ -58,7 +58,12 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     private static var nonPersistentStore = WKWebsiteDataStore.nonPersistent()
     public private(set) static var defaultStore = WKWebsiteDataStore.default()
     private static let defaultDataDetectorTypes: WKDataDetectorTypes = [.phoneNumber]
-    private static var areWeLockedDown = false
+
+    /// Whether the data stores currently route through a proxy. Consumers read this to apply the
+    /// mitigations for WebKit features that resolve or connect outside the proxy session — see
+    /// `ProxyHardeningDefaults` (DNS prefetch) and `UserScriptManager` (WebAuthn).
+    public private(set) static var isProxyEnabled = false
+
     private let configuration: WKWebViewConfiguration
 
     public init(configuration: WKWebViewConfiguration = WKWebViewConfiguration()) {
@@ -75,10 +80,7 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     ) {
         defaultStore.proxyConfigurations = configs
         nonPersistentStore.proxyConfigurations = configs
-        if !configs.isEmpty {
-            // Lock that baby down if we have a proxy on
-            areWeLockedDown = true
-        }
+        isProxyEnabled = !configs.isEmpty
     }
 
     public func endPrivateBrowsingSession() {
@@ -94,11 +96,6 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
 
     public func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration {
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !parameters.blockPopups
-        if #available(iOS 16.0, *) {
-            configuration.defaultWebpagePreferences.isLockdownModeEnabled = Self.areWeLockedDown
-        } else {
-            // Doesn't matter because you can't use the proxy anyways
-        }
         configuration.mediaTypesRequiringUserActionForPlayback = parameters.autoPlay
         configuration.userContentController = WKUserContentController()
         configuration.allowsInlineMediaPlayback = true
