@@ -6,50 +6,34 @@ import Common
 import Redux
 import ToolbarKit
 
-/// TODO: Temporarily used in Reducer side will be moved to UI side next
 /// Builds the address bar's leading page actions (share + translate icon), shown on real
-/// websites, not the homepage, and not while editing. Every input is already
-/// owned by `AddressBarState`, so there's nothing here to persist across dispatches.
+/// websites, not the homepage, and not while editing. Every input is already resolved by
+/// `AddressBarState`, so there's nothing here to persist across dispatches.
 enum LeadingPageActionsBuilder {
     @MainActor
-    static func getActions(action: Action,
+    static func getActions(translationConfiguration: TranslationConfiguration?,
                            isEditing: Bool,
-                           hasAlternativeLocationColor: Bool) -> [ToolbarActionConfiguration] {
+                           isHomepage: Bool,
+                           isLoading: Bool?,
+                           hasAlternativeLocationColor: Bool,
+                           isNovaDesignEnabled: Bool) -> [ToolbarActionConfiguration] {
         var actions = [ToolbarActionConfiguration]()
 
-        guard action is ToolbarAction || action is TranslationsAction else { return actions }
-
-        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
-              !isEditing
-        else { return actions }
-
-        let toolbarAction = action as? ToolbarAction
-        let actionTranslationConfiguration = TranslationConfiguration(from: action)
-        // For TranslationsAction the action's config is the sole authority — nil means "clear the icon".
-        // For ToolbarAction we fall back to state so the icon persists across unrelated toolbar updates.
-        let resolvedTranslationConfiguration: TranslationConfiguration? = action is TranslationsAction
-            ? actionTranslationConfiguration
-            : actionTranslationConfiguration ?? toolbarState.addressToolbar.translationConfiguration
-        let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
-        let isHomepage = (isURLDidChangeAction ? toolbarAction?.url : toolbarState.addressToolbar.url) == nil
-        let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
-        let isLoading = isLoadingChangeAction ? toolbarAction?.isLoading : toolbarState.addressToolbar.isLoading
-
         // Whether the navigation toolbar is showing doesn't affect these actions — share/translate
-        // only depend on whether we're on the homepage.
-        if !isHomepage {
-            let shareAction = shareAction(enabled: isLoading == false,
-                                          hasAlternativeLocationColor: hasAlternativeLocationColor)
-            actions.append(shareAction)
+        // only depend on whether we're editing or on the homepage.
+        guard !isEditing, !isHomepage else { return actions }
 
-            if let translationAction = configureTranslationIcon(
-                translationConfiguration: resolvedTranslationConfiguration,
-                isLoading: isLoading,
-                hasAlternativeLocationColor: hasAlternativeLocationColor,
-                isNovaDesignEnabled: toolbarState.addressToolbar.isNovaDesignEnabled
-            ) {
-                actions.append(translationAction)
-            }
+        let shareAction = shareAction(enabled: isLoading == false,
+                                      hasAlternativeLocationColor: hasAlternativeLocationColor)
+        actions.append(shareAction)
+
+        if let translationAction = configureTranslationIcon(
+            translationConfiguration: translationConfiguration,
+            isLoading: isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor,
+            isNovaDesignEnabled: isNovaDesignEnabled
+        ) {
+            actions.append(translationAction)
         }
 
         return actions
