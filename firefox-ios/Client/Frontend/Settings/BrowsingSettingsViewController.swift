@@ -14,7 +14,7 @@ protocol BrowsingSettingsDelegate: AnyObject, SupportSettingsDelegate {
     func pressedAutoPlay()
 }
 
-class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+final class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     weak var parentCoordinator: BrowsingSettingsDelegate?
 
     init(profile: Profile,
