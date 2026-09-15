@@ -6,7 +6,7 @@ import Common
 import Shared
 
 /// Child settings pages browsing actions
-protocol BrowsingSettingsDelegate: AnyObject {
+protocol BrowsingSettingsDelegate: AnyObject, SupportSettingsDelegate {
     @MainActor
     func pressedMailApp()
 
@@ -85,7 +85,7 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
             if featureFlagsProvider.isEnabled(.adBlocker) {
                 contentSection.append(AdBlockerSetting(
                     prefs: profile.prefs,
-                    supportDelegate: parentCoordinator as? SupportSettingsDelegate,
+                    supportDelegate: parentCoordinator,
                     settingDidChange: { isEnabled in
                         if isEnabled {
                             Task {

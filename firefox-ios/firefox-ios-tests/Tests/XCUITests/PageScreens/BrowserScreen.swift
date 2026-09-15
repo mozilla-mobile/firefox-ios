@@ -343,6 +343,19 @@ final class BrowserScreen {
         sel.CANCEL_BUTTON_URL_BAR.element(in: app).tapIfExists()
     }
 
+    /// On iOS 16 the first Cancel tap right after a new tab opens is swallowed, leaving the keyboard up,
+    /// which clips the lower homepage sections out of the accessibility tree.
+    func dismissURLBarOverlay(maxAttempts: Int = 3) {
+        for _ in 0..<maxAttempts {
+            guard cancelButton.mozWaitForElementToExist(timeout: 5.0, failOnTimeout: false) else { return }
+            cancelButton.tap()
+            if BaseTestCase().mozWaitForElementToNotExist(cancelButton, timeout: 3.0, failOnTimeout: false) {
+                return
+            }
+        }
+        XCTFail("The URL bar is still in editing mode after \(maxAttempts) Cancel taps")
+    }
+
     func assertRFCLinkExist(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(sel.LINK_RFC_2606.element(in: app), timeout: timeout)
     }

@@ -40,6 +40,12 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v155" = "다시 시도";
 
+/* On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.Description.v156" = "Wi-Fi에 연결하거나 iOS 설정으로 이동하여 %@에서 셀룰러 데이터를 켜세요.";
+
+/* On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "%@의 셀룰러 데이터가 꺼져 있습니다.";
+
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "%@의 소유자가 올바르게 설정하지 않아서 보안 연결을 할 수 없습니다.";
 

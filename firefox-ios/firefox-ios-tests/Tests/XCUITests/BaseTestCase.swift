@@ -32,6 +32,10 @@ let TRANSLATION_TIMEOUT: TimeInterval = 90
 // Probe for optional UI that shows up immediately or not at all
 let TIMEOUT_PICKER_PROBE: TimeInterval = 3
 let MAX_SWIPE = 5
+let IngestSuggestionsCell = "Ingest new suggestions now"
+// Nimbus applies fetched recipes on the launch after the fetch, so two attempts is the floor.
+let SuggestRolloutLaunchAttempts = 5
+let SuggestRolloutProbeTimeout: TimeInterval = 5
 
 @MainActor
 class BaseTestCase: XCTestCase {
@@ -118,6 +122,41 @@ class BaseTestCase: XCTestCase {
         mozWaitForElementToExist(app.windows.otherElements.firstMatch)
         // The navigator state does not survive a relaunch
         setUpScreenGraph()
+    }
+
+    /// The Nimbus database lives inside the test profile, so clearing it would discard the fetched rollout.
+    func relaunchKeepingProfile() {
+        app.terminate()
+        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
+        app.launchArguments = app.launchArguments.filter { $0 != LaunchArguments.ClearProfile }
+        app.launch()
+        waitForTabsButtonHittable()
+        navigator.nowAt(NewTabScreen)
+    }
+
+    /// Enrolls the running app in the live Firefox Suggest rollout, leaving it on the home screen. On
+    /// release builds the feature is enabled by a Nimbus rollout rather than a channel default, and
+    /// Nimbus only applies fetched recipes on the launch that follows the fetch, hence the relaunches.
+    /// - Parameter ingestingSuggestions: also downloads suggestions, which only tests that assert on
+    /// suggestion results need.
+    func enrollInFirefoxSuggestRollout(ingestingSuggestions: Bool = true) {
+        for _ in 1...SuggestRolloutLaunchAttempts {
+            relaunchKeepingProfile()
+            navigator.goto(SettingsScreen)
+            navigator.performAction(Action.OpenSecretSettings)
+            navigator.goto(FirefoxSuggestSettings)
+            // The ingest row only exists while the feature is enabled, so it doubles as the enrollment probe.
+            guard mozWaitForElementToExist(app.cells[IngestSuggestionsCell],
+                                           timeout: SuggestRolloutProbeTimeout,
+                                           failOnTimeout: false) else { continue }
+            if ingestingSuggestions {
+                navigator.performAction(Action.IngestNewSuggestionsNow)
+            }
+            navigator.goto(HomePanelsScreen)
+            return
+        }
+
+        XCTFail("Firefox Suggest was not enabled after \(SuggestRolloutLaunchAttempts) launches")
     }
 
     func removeApp() {

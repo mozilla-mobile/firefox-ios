@@ -15,8 +15,10 @@ final class TrackerBlockerSheetStateProviderTests: XCTestCase {
         let state = createSubject(store: store).sheetState()
 
         XCTAssertTrue(state.isEmpty)
+        XCTAssertEqual(state.presentation, .empty)
         XCTAssertNil(state.weeklyCount)
         XCTAssertNil(state.total)
+        XCTAssertEqual(state.lifetimeTotal, 0)
         XCTAssertEqual(state.categories.count, TrackerBlockerSheetState.Category.Kind.allCases.count)
         XCTAssertTrue(state.categories.allSatisfy { $0.count == nil })
     }
@@ -35,9 +37,21 @@ final class TrackerBlockerSheetStateProviderTests: XCTestCase {
         let state = createSubject(store: store).sheetState()
 
         XCTAssertFalse(state.isEmpty)
+        XCTAssertEqual(state.presentation, .filled)
         XCTAssertEqual(state.weeklyCount, 210)
+        XCTAssertEqual(state.lifetimeTotal, 4321)
         XCTAssertNil(state.emptyMessage)
         XCTAssertEqual(counts(in: state), [100, 60, 40, 10])
+    }
+
+    /// The state carries the lifetime total so callers don't have to read and decode it from prefs again.
+    func test_sheetState_readsTheLifetimeTotalOnce() {
+        let store = MockTrackerBlockStatsStore()
+        store.lifetimeTotalToReturn = 4321
+
+        _ = createSubject(store: store).sheetState()
+
+        XCTAssertEqual(store.lifetimeTotalCallCount, 1)
     }
 
     /// The rows are in the sheet's fixed display order, each counting the blocklist category the enhanced
@@ -84,6 +98,7 @@ final class TrackerBlockerSheetStateProviderTests: XCTestCase {
         let state = createSubject(store: store).sheetState()
 
         XCTAssertFalse(state.isEmpty)
+        XCTAssertEqual(state.presentation, .weeklyReset)
         XCTAssertEqual(state.weeklyCount, 0)
         XCTAssertEqual(state.total?.count, 5305)
         XCTAssertEqual(counts(in: state), [0, 0, 0, 0])
@@ -112,6 +127,7 @@ final class TrackerBlockerSheetStateProviderTests: XCTestCase {
 
         XCTAssertNil(state.total)
         XCTAssertEqual(state.weeklyCount, 12)
+        XCTAssertEqual(state.lifetimeTotal, 43251, "The total is still known, it just has no footer to appear in")
     }
 
     // MARK: - Helpers
@@ -134,9 +150,15 @@ private final class MockTrackerBlockStatsStore: TrackerBlockStatsStore {
 
     var currentWeekTotalDates = [Date]()
     var currentWeekByCategoryDates = [Date]()
+    var lifetimeTotalCallCount = 0
 
     func record(category: BlocklistCategory, count: Int, date: Date) {}
-    func lifetimeTotal() -> Int { return lifetimeTotalToReturn }
+
+    func lifetimeTotal() -> Int {
+        lifetimeTotalCallCount += 1
+        return lifetimeTotalToReturn
+    }
+
     func lifetimeByCategory() -> [BlocklistCategory: Int] { return [:] }
 
     func currentWeekTotal(for date: Date) -> Int {

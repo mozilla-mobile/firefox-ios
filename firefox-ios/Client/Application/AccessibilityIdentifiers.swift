@@ -485,12 +485,6 @@ struct AccessibilityIdentifiers {
         struct VideoIntro {
             static let continueButton = "Onboarding.VideoIntro.ContinueButton"
         }
-
-        struct Wallpaper {
-            static let card = "wallpaperCard"
-            static let title = "wallpaperOnboardingTitle"
-            static let description = "wallpaperOnboardingDescription"
-        }
     }
 
     struct TermsOfService {
@@ -615,6 +609,13 @@ struct AccessibilityIdentifiers {
             // This is based on `PrefsKeys.SearchSettings.showRecentSearches`
             static let showRecentSearchesSwitch = "recentSearchesFeatureKey"
             static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
+            // These are based on the matching `PrefsKeys.SearchSettings` keys
+            static let showPrivateModeSearchSuggestionsSwitch = "ShowPrivateModeSearchSuggestionsKey"
+            static let showBrowsingHistorySuggestionsSwitch = "FirefoxSuggestBrowsingHistorySuggestions"
+            static let showBookmarksSuggestionsSwitch = "FirefoxSuggestBookmarksSuggestions"
+            static let showSyncedTabsSuggestionsSwitch = "FirefoxSuggestSyncedTabsSuggestions"
+            static let showNonSponsoredSuggestionsSwitch = "FirefoxSuggestShowNonSponsoredSuggestions"
+            static let showSponsoredSuggestionsSwitch = "FirefoxSuggestShowSponsoredSuggestions"
             static let backButtoniOS26 = "BackButton"
             static let backButton = "Settings"
         }
@@ -918,6 +919,7 @@ struct AccessibilityIdentifiers {
         static let tableView = "Context Menu"
         static let pasteAction = "pasteAction"
         static let pasteAndGoAction = "pasteAndGoAction"
+        static let copyAddressAction = "copyAddressAction"
     }
 
     struct Alert {

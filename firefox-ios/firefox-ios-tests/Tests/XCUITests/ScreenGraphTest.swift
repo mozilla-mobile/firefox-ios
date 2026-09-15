@@ -185,9 +185,7 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
         screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
 
         // More Options
-        screenState.tap(
-            app.tables.cells["MainMenu.MoreLess"],
-            to: BrowserTabMenuMore)
+        screenState.gesture(to: BrowserTabMenuMore) { expandTabMenuIfNeeded(in: app) }
 
         screenState.backAction = {
             if isTablet {

@@ -19,9 +19,6 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "इ सेॅ तोय आपनो फोटों सहेज सके छौ";
 
-/* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "फायरफॉक्स तोहर आवाज के टेक्स्ट में बदलै छै वॉयस सर्च खातिर.";
-
 /* (No Comment) */
 "Scan QR Code" = "QR कोड स्कैन करोॅ";
 

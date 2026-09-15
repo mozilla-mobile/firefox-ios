@@ -111,10 +111,6 @@ class MockOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     func sendDismissButtonTappedTelemetry() {
         sendDismissButtonTappedTelemetryCalled = true
     }
-
-    func sendWallpaperSelectorViewTelemetry() {}
-    func sendWallpaperSelectorCloseTelemetry() {}
-    func sendWallpaperSelectorSelectedTelemetry(wallpaperName: String, wallpaperType: String) {}
 }
 
 class MockActivityEventHelper: ActivityEventHelper {

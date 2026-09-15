@@ -1,5 +1,5 @@
 {
-  "originHash" : "995fcab85cbc15a13d8e2966a58d5715849bd751989063a16ad7f309af14688b",
+  "originHash" : "0c46f7d8bc92800f2f39fd391cdc4de3909f8e5b8ebb009081d9b3b446efdb84",
   "pins" : [
     {
       "identity" : "a-star",
@@ -74,15 +74,6 @@
       }
     },
     {
-      "identity" : "lottie-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/airbnb/lottie-ios.git",
-      "state" : {
-        "revision" : "f4db77d7feacba0c2360b84a40c38a6ce8ff399d",
-        "version" : "4.6.1"
-      }
-    },
-    {
       "identity" : "mappamundi",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla-mobile/MappaMundi.git",
@@ -96,8 +87,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/WilhelmOks/ModifiedCopyMacro.git",
       "state" : {
-        "revision" : "13dee3de60d4614ac268ec822325a19812e6c6f6",
-        "version" : "2.2.0"
+        "revision" : "d020bf8c6432d0c6aa8428b5ca1c3225a0545b3b"
       }
     },
     {
@@ -141,8 +131,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-syntax.git",
       "state" : {
-        "revision" : "0687f71944021d616d34d922343dcef086855920",
-        "version" : "600.0.1"
+        "revision" : "79e4b74a295b6eb74a8b585e3a39d29e70c1dbd1",
+        "version" : "603.0.2"
       }
     },
     {

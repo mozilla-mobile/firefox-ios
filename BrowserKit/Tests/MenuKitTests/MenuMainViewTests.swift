@@ -100,6 +100,33 @@ final class MenuMainViewTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
+    func testAnnounceAccessibility_whenOptionalRowIsNotVisible() {
+        menuView.frame = CGRect(x: 0, y: 0, width: 375, height: 100)
+        let options = (0..<10).map { menuElement(a11yId: "option\($0)", isOptional: $0 == 9) }
+        menuView.reloadDataView(with: [MenuSection(isExpanded: true, isHomepage: false, options: options)])
+        menuView.layoutIfNeeded()
+
+        let expectation = XCTestExpectation(description: "Announcement completes without trapping")
+        menuView.announceAccessibility(expandedHint: "expanded")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { expectation.fulfill() }
+
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    private func menuElement(a11yId: String, isOptional: Bool) -> MenuElement {
+        MenuElement(
+            title: a11yId,
+            iconName: "",
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: a11yId,
+            a11yHint: "",
+            a11yId: a11yId,
+            isOptional: isOptional,
+            action: nil
+        )
+    }
+
     private func setupDetails(isBrowserDefault: Bool, bannerShown: Bool) {
         menuView.setupDetails(
             title: "",

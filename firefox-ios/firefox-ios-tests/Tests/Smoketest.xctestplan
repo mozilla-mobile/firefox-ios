@@ -482,6 +482,7 @@
         "ReadingListTests\/testRemoveSavedForReadingLongPress()",
         "ReportSiteTests",
         "ScreenGraphTest",
+        "SearchSettingsSuggestUITests",
         "SearchSettingsUITests",
         "SearchTests\/testCopyPasteComplete()",
         "SearchTests\/testDefaultSearchEngine()",

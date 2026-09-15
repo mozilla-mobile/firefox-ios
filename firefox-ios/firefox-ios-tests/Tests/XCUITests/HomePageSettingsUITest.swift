@@ -255,7 +255,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
                 app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
             } else {
                 navigator.performAction(Action.GoToHomePage)
-                app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+                browserScreen.dismissURLBarOverlay()
             }
             mozWaitForElementToExist(app.staticTexts["Bookmarks"])
             navigator.nowAt(NewTabScreen)

@@ -188,7 +188,7 @@ final class RouteBuilder {
                 try? await Task.sleep(nanoseconds: NSEC_PER_SEC)
                 self?.siriOpenTabThrottleIsActive = false
             }
-            return .search(url: nil, isPrivate: false)
+            return .search(url: nil, isPrivate: false, options: [.forceNewTab])
         }
 
         // If the user activity has a webpageURL, it's a deep link or an old history item.

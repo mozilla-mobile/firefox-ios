@@ -355,6 +355,7 @@
         "ScreenGraphTest",
         "ScreenGraphTest\/testSimpleToggleAction()",
         "ScreenGraphTest\/testUserStateChanges()",
+        "SearchSettingsSuggestUITests",
         "SearchSettingsUITests",
         "SearchSettingsUITests\/testCustomSearchEngineAsDefaultIsNotEditable()",
         "SearchSettingsUITests\/testCustomSearchEngineIsEditable()",
