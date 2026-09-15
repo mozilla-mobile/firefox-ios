@@ -91,12 +91,13 @@ struct MainMenuState: ScreenState, Sendable {
     let isBrowserDefault: Bool
     let isPhoneLandscape: Bool
     let moreCellTapped: Bool
-    let isVPNOn: Bool
 
     let siteProtectionsData: SiteProtectionsData?
 
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
+
+    let isVPNOn: Bool
 
     private var menuConfigurator: MainMenuConfigurationUtility {
         MainMenuConfigurationUtility()
@@ -298,7 +299,8 @@ struct MainMenuState: ScreenState, Sendable {
             .copy(menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
                 and: state.windowUUID,
-                isExpanded: state.moreCellTapped
+                isExpanded: state.moreCellTapped,
+                isVPNOn: state.isVPNOn
             ))
             .copy(currentTabInfo: currentTabInfo)
     }
@@ -326,30 +328,22 @@ struct MainMenuState: ScreenState, Sendable {
     /// middleware follows up with the value the `VPNManager` actually settled on.
     @MainActor
     private static func handleVPNStateAction(state: MainMenuState, isVPNOn: Bool) -> MainMenuState {
-        let menuElements: [MenuSection] = if let currentTabInfo = state.currentTabInfo {
-            state.menuConfigurator.generateMenuElements(
+        guard let currentTabInfo = state.currentTabInfo else {
+            return state
+                .resetTransientState()
+                .copy(isVPNOn: isVPNOn)
+        }
+
+        return state
+            .resetTransientState()
+            .copy(menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
                 and: state.windowUUID,
                 isExpanded: state.moreCellTapped,
                 isVPNOn: isVPNOn,
                 profileImage: state.accountProfileImage
-            )
-        } else {
-            state.menuElements
-        }
-
-        return MainMenuState(
-            windowUUID: state.windowUUID,
-            menuElements: menuElements,
-            currentTabInfo: state.currentTabInfo,
-            accountData: state.accountData,
-            accountProfileImage: state.accountProfileImage,
-            siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: state.moreCellTapped,
-            isVPNOn: isVPNOn
-        )
+            ))
+            .copy(isVPNOn: isVPNOn)
     }
 
     @MainActor
