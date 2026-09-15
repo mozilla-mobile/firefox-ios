@@ -60,9 +60,6 @@ final class SearchViewController: SiteTableViewController,
         static let AppendButtonSize: CGFloat = 44
     }
 
-    // Weak to avoid a retain cycle with BrowserViewController: now that the controller is
-    // kept alive across search sessions for reuse, a strong delegate would leak the whole
-    // window's BVC when it closes.
     weak var searchDelegate: SearchViewControllerDelegate?
     let viewModel: SearchViewModel
     private var tabManager: TabManager

@@ -551,7 +551,7 @@ class BrowserViewController: UIViewController,
                 // interaction is in flight (default run loop mode).
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                     RunLoop.main.perform(inModes: [.default]) { [weak self] in
-                        MainActor.assumeIsolated { self?.prewarmSearchController() }
+                        MainActor.assumeIsolated { self?.prepareSearchController() }
                     }
                 }
 
@@ -2190,11 +2190,9 @@ class BrowserViewController: UIViewController,
         self.searchController = searchController
     }
 
-    /// Builds the search suggestions controller and loads its view ahead of the user's first tap
-    /// on the address bar. Creating SearchViewController and its view hierarchy is the largest
-    /// chunk of work when editing begins.
+    /// Builds the search suggestions controller and loads its view ahead of the user's first tap.
     @MainActor
-    func prewarmSearchController() {
+    func prepareSearchController() {
         guard searchController == nil else { return }
         createSearchControllerIfNeeded()
         searchController?.loadViewIfNeeded()
@@ -2276,12 +2274,9 @@ class BrowserViewController: UIViewController,
         searchLoader = nil
 
         contentContainer.accessibilityElementsHidden = false
-        // Rebuild the controller at idle so the next address bar tap doesn't pay the creation
-        // cost synchronously inside becomeFirstResponder.
         DispatchQueue.main.async { [weak self] in
-            // Run when no interaction is in flight (default run loop mode).
             RunLoop.main.perform(inModes: [.default]) { [weak self] in
-                MainActor.assumeIsolated { self?.prewarmSearchController() }
+                MainActor.assumeIsolated { self?.prepareSearchController() }
             }
         }
     }

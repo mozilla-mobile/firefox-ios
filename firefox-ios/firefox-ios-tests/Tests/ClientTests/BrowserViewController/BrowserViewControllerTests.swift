@@ -822,35 +822,35 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Search controller prewarming
     @MainActor
-    func testPrewarmSearchController_createsControllerOnce_withoutStartingSearchSession() {
+    func testPrepareSearchController_createsControllerOnce_withoutStartingSearchSession() {
         let subject = createSubject()
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         XCTAssertNil(subject.searchController)
 
-        subject.prewarmSearchController()
+        subject.prepareSearchController()
 
-        let prewarmedController = subject.searchController
-        XCTAssertNotNil(prewarmedController)
+        let preparedSearchController = subject.searchController
+        XCTAssertNotNil(preparedSearchController)
         // Prewarming must not count as the user beginning a search for telemetry.
         XCTAssertNil(subject.searchSessionState)
 
         // A second prewarm is a no-op and keeps the same instance.
-        subject.prewarmSearchController()
-        XCTAssertIdentical(subject.searchController, prewarmedController)
+        subject.prepareSearchController()
+        XCTAssertIdentical(subject.searchController, preparedSearchController)
     }
 
     @MainActor
-    func testShowSearchController_reusesPrewarmedController_andStartsSearchSession() {
+    func testShowSearchController_reusesPrepareddController_andStartsSearchSession() {
         let subject = createSubject()
         subject.loadViewIfNeeded()
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
 
-        subject.prewarmSearchController()
-        let prewarmedController = subject.searchController
+        subject.prepareSearchController()
+        let preparedSearchController = subject.searchController
 
         subject.showSearchController()
 
-        XCTAssertIdentical(subject.searchController, prewarmedController)
+        XCTAssertIdentical(subject.searchController, preparedSearchController)
         XCTAssertEqual(subject.searchSessionState, .active)
     }
 
