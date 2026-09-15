@@ -4,6 +4,7 @@
 
 @testable import AppAttestKit
 import TestKit
+import DeviceCheck
 import XCTest
 
 final class AppAttestClientTests: XCTestCase {
@@ -99,6 +100,48 @@ final class AppAttestClientTests: XCTestCase {
         let subject = try createSubject(keyStore: keyStore)
         try subject.resetKey()
         XCTAssertNil(keyStore.loadKeyID(), "Expected keyId to be cleared after resetKey().")
+    }
+
+    func testGenerateAssertion_mapsInvalidKeyToInvalidKeyID() async throws {
+        // A stored keyId can outlive the Secure Enclave key it names, and only re-attesting fixes it.
+        let service = makeService(assertionToReturn: AppAttestTestData.assertionBlob)
+        service.assertionError = DCError(.invalidKey)
+        let subject = try createSubject(appAttestService: service, keyStore: createKeyStore(with: AppAttestTestData.keyID))
+
+        do {
+            _ = try await subject.generateAssertion(payload: ["a": "b"])
+            XCTFail("Expected generateAssertion to throw on an invalid key.")
+        } catch let error as AppAttestServiceError {
+            XCTAssertEqual(error, .invalidKeyID)
+        }
+    }
+
+    func testGenerateChallengeBoundAssertion_mapsInvalidKeyToInvalidKeyID() async throws {
+        let service = makeService(assertionToReturn: AppAttestTestData.assertionBlob)
+        service.assertionError = DCError(.invalidKey)
+        let subject = try createSubject(appAttestService: service, keyStore: createKeyStore(with: AppAttestTestData.keyID))
+
+        do {
+            _ = try await subject.generateChallengeBoundAssertion()
+            XCTFail("Expected generateChallengeBoundAssertion to throw on an invalid key.")
+        } catch let error as AppAttestServiceError {
+            XCTAssertEqual(error, .invalidKeyID)
+        }
+    }
+
+    /// Other DeviceCheck failures are retryable or unrecoverable, so they must not be reported as a
+    /// lost key, which would make callers discard a working enrollment.
+    func testGenerateAssertion_leavesOtherDeviceCheckErrorsAlone() async throws {
+        let service = makeService(assertionToReturn: AppAttestTestData.assertionBlob)
+        service.assertionError = DCError(.serverUnavailable)
+        let subject = try createSubject(appAttestService: service, keyStore: createKeyStore(with: AppAttestTestData.keyID))
+
+        do {
+            _ = try await subject.generateAssertion(payload: ["a": "b"])
+            XCTFail("Expected generateAssertion to rethrow the DeviceCheck error.")
+        } catch let error as DCError {
+            XCTAssertEqual(error.code, .serverUnavailable)
+        }
     }
 
     private func createSubject(

@@ -10,6 +10,7 @@ public final class MockAppAttestService: AppAttestServiceProtocol, @unchecked Se
     public var keyToReturn = "mock-key-id"
     public var attestationToReturn = Data()
     public var assertionToReturn = Data()
+    public var assertionError: Error?
 
     public init(isSupported: Bool) {
         self.isSupported = isSupported
@@ -23,6 +24,7 @@ public final class MockAppAttestService: AppAttestServiceProtocol, @unchecked Se
         return attestationToReturn
     }
     public func generateAssertion(_ keyId: String, clientDataHash: Data) async throws -> Data {
+        if let assertionError { throw assertionError }
         return assertionToReturn
     }
 }

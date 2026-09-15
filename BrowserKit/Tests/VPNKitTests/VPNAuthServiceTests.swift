@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import AppAttestKit
+import DeviceCheck
 import XCTest
 import TestKit
 
@@ -233,6 +234,26 @@ final class VPNAuthServiceTests: XCTestCase {
         XCTAssertEqual(keyStore.loadKeyID(), "mock-key-id", "Should attest a fresh key")
     }
 
+    func test_authenticate_reEnrolls_whenSecureEnclaveKeyIsInvalid() async throws {
+        // The stored keyId outlived its Secure Enclave key, so signing fails and only re-attesting fixes it.
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let service = MockAppAttestService(isSupported: true)
+        service.assertionError = DCError(.invalidKey)
+        let subject = try makeSubject(
+            remoteServer: enrollingServer(tokenStore: tokenStore),
+            keyStore: keyStore,
+            refresher: MockVPNSessionRefresher(tokenStore: tokenStore),
+            tokenStore: tokenStore,
+            appAttestService: service
+        )
+
+        let result = try await subject.authenticate()
+
+        XCTAssertEqual(result, "new-dsj", "An unusable key must be replaced rather than reported forever")
+        XCTAssertEqual(keyStore.loadKeyID(), "mock-key-id", "Should attest a fresh key")
+    }
+
     func test_authenticate_rethrows_whenRefreshHitsServerOutage() async throws {
         let tokenStore = MockVPNTokenStore(initial: expiredSession)
         let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
@@ -377,10 +398,11 @@ final class VPNAuthServiceTests: XCTestCase {
         remoteServer: AppAttestRemoteServerProtocol,
         keyStore: AppAttestKeyIDStore = MockAppAttestKeyIDStore(),
         refresher: VPNSessionRefreshing,
-        tokenStore: VPNTokenStore
+        tokenStore: VPNTokenStore,
+        appAttestService: AppAttestServiceProtocol = MockAppAttestService(isSupported: true)
     ) throws -> VPNAuthService {
         let client = try AppAttestClient(
-            appAttestService: MockAppAttestService(isSupported: true),
+            appAttestService: appAttestService,
             remoteServer: remoteServer,
             keyStore: keyStore
         )
