@@ -68,11 +68,19 @@ final class TranslationsService: TranslationsServiceProtocol {
         }
         onLanguageIdentified?(pageLanguage, targetLanguage)
         let webView = try currentWebView(for: windowUUID)
+        // The tab's WKWebView outlives its documents, and prewarming can take seconds.
+        let expectedDocumentId = try await currentDocumentIdJS(on: webView)
         // Prewarm resources prior to calling the JS translation API.
         await modelsFetcher.prewarmResources(for: pageLanguage, to: targetLanguage)
+        try Task.checkCancellation()
         // Create a bridge to the translations engine.
         _ = translationsEngine.bridge(to: webView)
-        try await startTranslationsJS(on: webView, from: pageLanguage, to: targetLanguage)
+        try await startTranslationsJS(
+            on: webView,
+            from: pageLanguage,
+            to: targetLanguage,
+            expecting: expectedDocumentId
+        )
     }
 
     /// Checks whether initial translation output has been produced.
@@ -101,20 +109,50 @@ final class TranslationsService: TranslationsServiceProtocol {
         }
     }
 
+    private func currentDocumentIdJS(on webView: WKWebView) async throws -> String {
+        let failure = TranslationsServiceError.jsEvaluationFailed(
+            reason: "JS evaluation failed: currentDocumentIdJS"
+        )
+        let js = "return window.__firefox__.Translations.documentId()"
+        let result: Any?
+        do {
+            result = try await webView.callAsyncJavaScript(js, contentWorld: .defaultClient)
+        } catch {
+            logger.log(
+                "Could not read the document id: \(error.localizedDescription)",
+                level: .warning,
+                category: .translations
+            )
+            throw failure
+        }
+
+        guard let documentId = result as? String, !documentId.isEmpty else { throw failure }
+        return documentId
+    }
+
     /// Starts translations by calling into the JS bridge.
+    /// Throws `.documentChanged` when the page navigated since the translation was requested.
     private func startTranslationsJS(on webView: WKWebView,
                                      from: String,
-                                     to: String) async throws {
-        let jsArgs = "{from: \"\(from)\", to: \"\(to)\"}"
-        let js = "window.__firefox__.Translations.startTranslations(\(jsArgs))"
+                                     to: String,
+                                     expecting documentId: String) async throws {
+        let jsArgs = "{from: \"\(from)\", to: \"\(to)\", expectedDocumentId: \"\(documentId)\"}"
+        let js = "return window.__firefox__.Translations.startTranslations(\(jsArgs))"
 
+        let result: Any?
         do {
-            _ = try await webView.callAsyncJavaScript(js, contentWorld: .defaultClient)
+            result = try await webView.callAsyncJavaScript(js, contentWorld: .defaultClient)
         } catch {
             /// NOTE: It would be safe to pass in the js string directly here, but it would just add too much noise 
             /// since from and to could be any language code. We only care that startTranslationsJS failed.
             throw TranslationsServiceError.jsEvaluationFailed(reason: "JS evaluation failed: startTranslationsJS")
         }
+
+        // Anything other than an explicit answer means the bridge is broken, not a navigation.
+        guard let didStart = result as? Bool else {
+            throw TranslationsServiceError.jsEvaluationFailed(reason: "JS evaluation failed: startTranslationsJS")
+        }
+        guard didStart else { throw TranslationsServiceError.documentChanged }
     }
 
     /// Evaluates the JS hook to check whether initial translation output has been produced.

@@ -653,6 +653,17 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         } catch {
             guard !Task.isCancelled else { return }
             let serviceError = TranslationsServiceError.fromUnknown(error)
+            // Not a failure, but the icon and the telemetry flow still have to be closed out.
+            if serviceError == .documentChanged {
+                logger.log(
+                    "Translation dropped because the page changed before it started.",
+                    level: .info,
+                    category: .translations
+                )
+                dispatchClearTranslationIcon(windowUUID: windowUUID, on: tab)
+                translationFlowIds[windowUUID] = nil
+                return
+            }
             translationsTelemetry.translationFailed(
                 translationFlowId: flowId(for: windowUUID),
                 errorType: serviceError.telemetryDescription
