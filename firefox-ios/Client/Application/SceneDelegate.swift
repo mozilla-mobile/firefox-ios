@@ -95,6 +95,14 @@ class SceneDelegate: UIResponder,
                 self.tabErrorTelemetryHelper.validateTabCountForForegroundedScene(uuid)
             }
         }
+
+        // Re-warm the connection to the pasteboard daemon off the main thread.
+        // UIKit queries the pasteboard synchronously on the main thread every time
+        // a text field becomes first responder, and returning from the background
+        // is when that call is most likely to be slow.
+        DispatchQueue.global(qos: .userInitiated).async {
+            _ = UIPasteboard.general.numberOfItems
+        }
     }
 
     // MARK: - Transitioning to Background

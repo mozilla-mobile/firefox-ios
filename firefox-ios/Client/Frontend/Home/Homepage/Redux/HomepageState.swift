@@ -22,6 +22,21 @@ struct HomepageState: ScreenState, Equatable {
     let wallpaperState: WallpaperState
     let telemetryState: HomepageTelemetryState
 
+    /// Compares the states that drive what the homepage renders, ignoring `telemetryState`,
+    /// which is impression/zero-search bookkeeping with no visual representation.
+    func hasSameRenderableContent(as other: HomepageState) -> Bool {
+        return headerState == other.headerState
+        && privacyNoticeState == other.privacyNoticeState
+        && messageState == other.messageState
+        && topSitesState == other.topSitesState
+        && searchBarState == other.searchBarState
+        && jumpBackInState == other.jumpBackInState
+        && trackerBlockerModuleState == other.trackerBlockerModuleState
+        && bookmarkState == other.bookmarkState
+        && merinoState == other.merinoState
+        && wallpaperState == other.wallpaperState
+    }
+
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = appState.componentState(
             HomepageState.self,

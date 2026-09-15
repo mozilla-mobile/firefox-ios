@@ -34,7 +34,7 @@ protocol SearchViewControllerDelegate: AnyObject {
     func searchViewControllerWillHide(_ searchViewController: SearchViewController)
 }
 
-class SearchViewController: SiteTableViewController,
+final class SearchViewController: SiteTableViewController,
                             KeyboardHelperDelegate,
                             SearchViewDelegate,
                             FeatureFlaggable,
@@ -60,7 +60,7 @@ class SearchViewController: SiteTableViewController,
         static let AppendButtonSize: CGFloat = 44
     }
 
-    var searchDelegate: SearchViewControllerDelegate?
+    weak var searchDelegate: SearchViewControllerDelegate?
     let viewModel: SearchViewModel
     private var tabManager: TabManager
     private let logger: Logger
