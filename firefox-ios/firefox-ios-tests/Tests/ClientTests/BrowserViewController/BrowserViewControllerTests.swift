@@ -860,7 +860,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.loadViewIfNeeded()
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
 
-        subject.prewarmSearchController()
+        subject.prepareSearchController()
         let normalModeController = subject.searchController
         XCTAssertEqual(normalModeController?.viewModel.isPrivate, false)
 
