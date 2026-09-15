@@ -38,8 +38,6 @@ class MockTabManager: TabManager {
     var removeTabsByURLCalled = 0
 
     var addTabWasCalled = false
-    var lastAddedTab: Tab?
-    var restoredPreservingTab: Tab?
     var notifyCurrentTabDidFinishLoadingCalled = 0
     var commitChangesCalled = 0
     var selectTabExpectation: XCTestExpectation?
@@ -110,9 +108,7 @@ class MockTabManager: TabManager {
 
     func preserveTabs(immediate: Bool) {}
 
-    func restoreTabs(preservingTab: Tab?) {
-        restoredPreservingTab = preservingTab
-    }
+    func restoreTabs() {}
 
     func getTabForUUID(uuid: String) -> Tab? {
         if let match = tabsByUUID[uuid] { return match }
@@ -141,10 +137,7 @@ class MockTabManager: TabManager {
     ) -> Tab {
         addTabWasCalled = true
         let isHomePage = request?.url?.absoluteString == "internal://local/about/home"
-        let tab = MockTab(profile: MockProfile(), isPrivate: isPrivate, windowUUID: windowUUID, isHomePage: isHomePage)
-        tab.url = request?.url
-        lastAddedTab = tab
-        return tab
+        return MockTab(profile: MockProfile(), isPrivate: isPrivate, windowUUID: windowUUID, isHomePage: isHomePage)
     }
 
     func backgroundRemoveAllTabs(isPrivate: Bool,

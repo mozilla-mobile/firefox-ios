@@ -392,7 +392,6 @@ class BrowserViewController: UIViewController,
 
     let profile: Profile
     let tabManager: TabManager
-    private let shouldDeferTabRestoration: Bool
     var googleLensSearches = [TabUUID: GoogleLensSearchState]()
     let googleLensTelemetry: GoogleLensTelemetry
     let crashTracker: CrashTracker
@@ -466,13 +465,11 @@ class BrowserViewController: UIViewController,
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated),
-        recordVisitManager: RecordVisitObserving? = nil,
-        shouldDeferTabRestoration: Bool = false
+        recordVisitManager: RecordVisitObserving? = nil
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
         self.tabManager = tabManager
-        self.shouldDeferTabRestoration = shouldDeferTabRestoration
         self.windowUUID = tabManager.windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -1071,9 +1068,7 @@ class BrowserViewController: UIViewController,
 
         setupEssentialUI()
         subscribeToRedux()
-        if !shouldDeferTabRestoration {
-            tabManager.restoreTabs()
-        }
+        tabManager.restoreTabs()
         updateAddressToolbarContainerPosition(for: traitCollection)
         if isTabScrollRefactoringEnabled {
             setupToolbarAnimator()
@@ -3464,16 +3459,7 @@ class BrowserViewController: UIViewController,
         navigationHandler?.popToBVC()
         cancelEditMode()
         if let url {
-            let isCopiedLink = options?.contains(.copiedLink) == true
-            let shouldPreserveCopiedLink = isCopiedLink && shouldDeferTabRestoration
-            let tab = switchToTabForURLOrOpen(
-                url,
-                isPrivate: isPrivate,
-                waitForRestoration: !shouldPreserveCopiedLink
-            )
-            if shouldPreserveCopiedLink, let tab {
-                tabManager.restoreTabs(preservingTab: tab)
-            }
+            switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
             let isFocusLocationTextFieldOption = options?.contains(.focusLocationField) == true
             let isForceNewTabOption = options?.contains(.forceNewTab) == true
@@ -3539,41 +3525,37 @@ class BrowserViewController: UIViewController,
         tabManager.selectTab(tab)
     }
 
-    @discardableResult
     func switchToTabForURLOrOpen(
         _ url: URL,
         uuid: String? = nil,
-        isPrivate: Bool = false,
-        waitForRestoration: Bool = true
-    ) -> Tab? {
+        isPrivate: Bool = false
+    ) {
         // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-10916]
-        if waitForRestoration && tabManager.isRestoringTabs {
+        guard !tabManager.isRestoringTabs else {
             AppEventQueue.wait(for: .tabRestoration(tabManager.windowUUID)) { [weak self] in
                 ensureMainThread { [weak self] in
-                    _ = self?.switchToTabForURLOrOpen(
+                    self?.switchToTabForURLOrOpen(
                         url,
                         uuid: uuid,
-                        isPrivate: isPrivate,
-                        waitForRestoration: waitForRestoration
+                        isPrivate: isPrivate
                     )
                 }
             }
-            return nil
+            return
         }
 
         navigationHandler?.popToBVC()
         guard !isShowingJSPromptAlert() else {
-            return tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
+            tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
+            return
         }
 
         if let uuid = uuid, let tab = tabManager.getTabForUUID(uuid: uuid) {
             tabManager.selectTab(tab)
-            return tab
         } else if let tab = tabManager.getTabForURL(url) {
             tabManager.selectTab(tab)
-            return tab
         } else {
-            return openURLInNewTab(url, isPrivate: isPrivate)
+            openURLInNewTab(url, isPrivate: isPrivate)
         }
     }
 

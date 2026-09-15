@@ -118,7 +118,7 @@ final class RouteBuilder {
                 } else {
                     let url = UIPasteboard.general.url
                     guard host.isValidURL(urlQuery: url) else { return nil }
-                    return .search(url: url, isPrivate: isPrivate, options: [.copiedLink])
+                    return .search(url: url, isPrivate: isPrivate)
                 }
 
             case .widgetSmallQuickLinkClosePrivateTabs, .widgetMediumQuickLinkClosePrivateTabs:

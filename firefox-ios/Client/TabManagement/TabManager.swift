@@ -110,7 +110,7 @@ protocol TabManager: AnyObject {
 
     func notifyCurrentTabDidFinishLoading()
 
-    func restoreTabs(preservingTab: Tab?)
+    func restoreTabs()
 
     func expireLoginAlerts()
 
@@ -125,10 +125,6 @@ protocol TabManager: AnyObject {
 }
 
 extension TabManager {
-    func restoreTabs() {
-        restoreTabs(preservingTab: nil)
-    }
-
     func selectTab(_ tab: Tab?, previous: Tab? = nil, immediatePreservation: Bool = false) {
         selectTab(tab, previous: previous, immediatePreservation: immediatePreservation)
     }

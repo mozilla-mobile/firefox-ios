@@ -6,6 +6,9 @@ import Foundation
 
 /// An enumeration representing different navigational routes in an application.
 enum Route {
+    /// True when handling this route deterministically creates or selects a tab.
+    /// `.search` with a `nil` URL is excluded because its handler relies on the restored selected tab
+    /// (it focuses the location field rather than opening a tab).
     var willSelectTabOnHandling: Bool {
         switch self {
         case let .search(url, _, _):

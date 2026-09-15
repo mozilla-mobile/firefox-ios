@@ -13,7 +13,6 @@ class SceneCoordinator: BaseCoordinator,
                         FeatureFlaggable {
     var window: UIWindow?
     var windowUUID: WindowUUID { reservedWindowUUID.uuid }
-    var shouldDeferTabRestorationForCopiedLink = false
     private let screenshotService: ScreenshotService
     private let sceneContainer: SceneContainer
     private let windowManager: WindowManager
@@ -143,8 +142,7 @@ class SceneCoordinator: BaseCoordinator,
                                                   uuid: reservedWindowUUID)
         let browserCoordinator = BrowserCoordinator(router: router,
                                                     screenshotService: screenshotService,
-                                                    tabManager: tabManager,
-                                                    shouldDeferTabRestoration: shouldDeferTabRestorationForCopiedLink)
+                                                    tabManager: tabManager)
 
         let windowInfo = AppWindowInfo(tabManager: tabManager, sceneCoordinator: self)
         windowManager.newBrowserWindowConfigured(windowInfo, uuid: windowUUID)
