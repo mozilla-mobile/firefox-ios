@@ -12,6 +12,7 @@ public enum VPNEnvironment: String, Sendable {
 
     var baseURL: URL? {
         // TODO: Replace with the real VPN IPN hosts once the backend endpoints are provisioned.
+        // See https://mozilla-hub.atlassian.net/browse/GS-198
         switch self {
         case .dev:
             return URL(string: "https://dev.guardian.nonprod.cloudops.mozgcp.net")
