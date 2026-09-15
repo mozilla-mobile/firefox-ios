@@ -2987,12 +2987,12 @@ extension String {
                 )
             }
 
-            public struct Accessibility {
+            public struct AccessibilityLabels {
                 public static let LearnMoreAction = MZLocalizedString(
                     key: "Settings.BoolSetting.LearnMoreAction.v157",
                     tableName: "Settings",
-                    value: "Learn more about %1$@",
-                    comment: "VoiceOver custom action name for a settings row's Learn More link. %1$@ is replaced with the row's title."
+                    value: "Learn more",
+                    comment: "VoiceOver custom action name for a settings row's Learn More link."
                 )
             }
         }
