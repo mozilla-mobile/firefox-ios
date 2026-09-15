@@ -66,6 +66,28 @@ final class MainMenuCoordinatorTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockRouter.dismissCalled, 1)
     }
 
+    func testDismissMenuModal_callsDelegateMainMenuDidDismiss() {
+        let subject = createSubject()
+        let mockDelegate = MockMainMenuCoordinatorDelegate()
+        subject.navigationHandler = mockDelegate
+
+        subject.start()
+        subject.dismissMenuModal(animated: false)
+
+        XCTAssertEqual(mockDelegate.mainMenuDidDismissCalled, 1)
+    }
+
+    func testNavigateTo_callsDelegateMainMenuDidDismiss() {
+        let subject = createSubject()
+        let mockDelegate = MockMainMenuCoordinatorDelegate()
+        subject.navigationHandler = mockDelegate
+
+        subject.navigateTo(MenuNavigationDestination(.readerView), animated: false)
+        mockRouter.savedCompletion?()
+
+        XCTAssertEqual(mockDelegate.mainMenuDidDismissCalled, 1)
+    }
+
     func testHandleNavigation_translatePage_dismissesMenu() {
         let subject = createSubject()
         subject.start()
