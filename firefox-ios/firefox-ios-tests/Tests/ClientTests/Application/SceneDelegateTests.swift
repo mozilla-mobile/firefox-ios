@@ -119,6 +119,39 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
                         "Route should dispatch once tabRestoration is signalled")
     }
 
+    // MARK: - pendingDeeplinkTab Activity
+
+    func testHandleRoute_deeplinkRoute_startsPendingDeeplinkTabActivity() throws {
+        let setup = try createSubjectWithCoordinator()
+
+        XCTAssertFalse(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(setup.coordinator.windowUUID)))
+
+        setup.delegate.scene(setup.scene, continue: makeSearchActivity())
+
+        XCTAssertTrue(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(setup.coordinator.windowUUID)))
+    }
+
+    func testHandleRoute_nonDeeplinkRoute_doesNotStartPendingDeeplinkTabActivity() throws {
+        let setup = try createSubjectWithCoordinator()
+        let nonDeeplinkURL = try XCTUnwrap(URL(string: "firefox://deep-link?url=/action/show-intro-onboarding"))
+
+        setup.delegate.handleOpenURL(nonDeeplinkURL)
+
+        XCTAssertFalse(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(setup.coordinator.windowUUID)))
+    }
+
+    func testSceneDidDisconnect_cleansUpPendingDeeplinkTabActivity() throws {
+        let setup = try createSubjectWithCoordinator()
+        let windowUUID = setup.coordinator.windowUUID
+
+        AppEventQueue.started(.pendingDeeplinkTab(windowUUID))
+        XCTAssertTrue(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
+
+        setup.delegate.sceneDidDisconnect(setup.scene)
+
+        XCTAssertFalse(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
+    }
+
     // MARK: - Telemetry
 
     func testHandleRoute_refactorEnabled_recordsDeeplinkTimeOnSuccess() throws {
