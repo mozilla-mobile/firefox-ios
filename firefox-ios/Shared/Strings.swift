@@ -3387,6 +3387,73 @@ extension String {
             }
         }
 
+        public struct VPN {
+            public static let Title = MZLocalizedString(
+                key: "Settings.VPN.Title.v155",
+                tableName: "Settings",
+                value: "Built-in VPN",
+                comment: "In the settings menu, in the Privacy section, this is the title for the built-in VPN settings section."
+            )
+
+            public static let Description = MZLocalizedString(
+                key: "Settings.VPN.Description.v155",
+                tableName: "Settings",
+                value: "Turn on %@’s built-in VPN to make your browsing more private and harder to trace.",
+                comment: "In the built-in VPN settings, this is the description explaining what the VPN does. %@ is the app name (e.g. Firefox)."
+            )
+
+            public static let ToggleTitle = MZLocalizedString(
+                key: "Settings.VPN.ToggleTitle.v155",
+                tableName: "Settings",
+                value: "VPN",
+                comment: "In the built-in VPN settings, this is the title for the toggle that turns the VPN on or off."
+            )
+
+            public struct LocationSection {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.VPN.LocationSection.Title.v155",
+                    tableName: "Settings",
+                    value: "LOCATION",
+                    comment: "In the built-in VPN settings, this is the title for the section where the user picks which location their traffic is routed through. This is uppercase to match the style on iOS apps."
+                )
+
+                public static let ScreenTitle = MZLocalizedString(
+                    key: "Settings.VPN.LocationSection.ScreenTitle.v155",
+                    tableName: "Settings",
+                    value: "Choose VPN location",
+                    comment: "This is the title of the screen where the user picks which location their built-in VPN traffic is routed through."
+                )
+
+                public static let ListTitle = MZLocalizedString(
+                    key: "Settings.VPN.LocationSection.ListTitle.v155",
+                    tableName: "Settings",
+                    value: "LOCATIONS",
+                    comment: "On the screen where the user picks a built-in VPN location, this is the title for the list of available locations. This is uppercase to match the style on iOS apps."
+                )
+
+                public static let RecommendedTitle = MZLocalizedString(
+                    key: "Settings.VPN.LocationSection.RecommendedTitle.v155",
+                    tableName: "Settings",
+                    value: "Recommended",
+                    comment: "In the built-in VPN settings, this is the title for the location option that lets the app pick the location automatically."
+                )
+
+                public static let RecommendedDescription = MZLocalizedString(
+                    key: "Settings.VPN.LocationSection.RecommendedDescription.v155",
+                    tableName: "Settings",
+                    value: "%@ finds the fastest location",
+                    comment: "In the built-in VPN settings, this is the description for the location option that lets the app pick the location automatically. %@ is the app name (e.g. Firefox)."
+                )
+
+                public static let SelectedAccessibilityLabel = MZLocalizedString(
+                    key: "Settings.VPN.LocationSection.SelectedAccessibilityLabel.v155",
+                    tableName: "Settings",
+                    value: "Selected",
+                    comment: "On the screen where the user picks a built-in VPN location, this is the accessibility label for the checkmark shown next to the location that is currently selected."
+                )
+            }
+        }
+
         public struct Summarize {
             public static let Title = MZLocalizedString(
                 key: "Settings.Summarize.Title.v142",
@@ -6236,6 +6303,32 @@ extension String {
                     tableName: "MainMenu",
                     value: "Main Menu",
                     comment: "The accessibility label for the Main Menu.")
+            }
+        }
+
+        public struct VPNSection {
+            public static let VPN = MZLocalizedString(
+                key: "MainMenu.VPNSection.VPN.Title.v154",
+                tableName: "MainMenu",
+                value: "VPN",
+                comment: "On the main menu, the title for the action that turns the VPN on or off.")
+            public static let VPNOn = MZLocalizedString(
+                key: "MainMenu.VPNSection.VPNOn.Title.v154",
+                tableName: "MainMenu",
+                value: "On",
+                comment: "On the main menu, a title for a label that indicates the VPN option from the menu is ON.")
+            public static let VPNOff = MZLocalizedString(
+                key: "MainMenu.VPNSection.VPNOff.Title.v154",
+                tableName: "MainMenu",
+                value: "Off",
+                comment: "On the main menu, a title for a label that indicates the VPN option from the menu is OFF.")
+
+            public struct AccessibilityLabels {
+                public static let VPN = MZLocalizedString(
+                    key: "MainMenu.VPNSection.AccessibilityLabels.VPN.v154",
+                    tableName: "MainMenu",
+                    value: "VPN",
+                    comment: "On the main menu, the accessibility label for the action that turns the VPN on or off.")
             }
         }
 

@@ -56,12 +56,42 @@ public protocol WKEngineConfigurationProvider {
 /// FXIOS-11986 - This will be internal when the WebEngine is fully integrated in Firefox iOS
 public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
     private static var nonPersistentStore = WKWebsiteDataStore.nonPersistent()
-    private static let defaultStore = WKWebsiteDataStore.default()
+    public private(set) static var defaultStore = WKWebsiteDataStore.default()
     private static let defaultDataDetectorTypes: WKDataDetectorTypes = [.phoneNumber]
+
+    /// Whether the data stores currently route through a proxy. Consumers read this to apply the
+    /// mitigations for WebKit features that resolve or connect outside the proxy session — see
+    /// `ProxyHardeningDefaults` (DNS prefetch) and `UserScriptManager` (WebAuthn).
+    public private(set) static var isProxyEnabled = false
+
     private let configuration: WKWebViewConfiguration
 
     public init(configuration: WKWebViewConfiguration = WKWebViewConfiguration()) {
         self.configuration = configuration
+    }
+
+    /// Assigns `proxyConfigurations` on the active stores without swapping them or copying
+    /// cookies. Use this for token rotation, where the proxy endpoint is unchanged and only
+    /// the auth header differs: WebKit keeps the existing connection pool so in-flight
+    /// requests get their grace period, and future requests are sent with the new header.
+    @available(iOS 17.0, *)
+    public static func applyProxyConfigurations(
+        _ configs: [ProxyConfiguration]
+    ) {
+        defaultStore.proxyConfigurations = configs
+        nonPersistentStore.proxyConfigurations = configs
+        isProxyEnabled = !configs.isEmpty
+    }
+
+    public func endPrivateBrowsingSession() {
+        if #available(iOS 17.0, *) {
+            let currentProxyConfigs = Self.nonPersistentStore.proxyConfigurations
+            Self.nonPersistentStore = .nonPersistent()
+            Self.nonPersistentStore.proxyConfigurations = currentProxyConfigs
+        } else {
+            // If iOS 17 is not available they will never had turned on the proxy
+            Self.nonPersistentStore = .nonPersistent()
+        }
     }
 
     public func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration {
@@ -92,8 +122,9 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
 
         return DefaultEngineConfiguration(webViewConfiguration: configuration)
     }
+}
 
-    public func endPrivateBrowsingSession() {
-        Self.nonPersistentStore = .nonPersistent()
-    }
+public enum ProxyScope {
+    case `private`
+    case normal
 }
