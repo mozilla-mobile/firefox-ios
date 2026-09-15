@@ -774,8 +774,13 @@ final class LocationView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         let colors = theme.colors
-        let usesAlternativeLocationColor = !theme.isNova && hasAlternativeLocationColor
-        let mainBackgroundColor = usesAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
+
+        var useAlternativeLocationColor = hasAlternativeLocationColor
+        if #unavailable(iOS 26) {
+            // for Nova themes on iOS 18 we want to use the alternative color for both top and bottom toolbar
+            useAlternativeLocationColor = theme.isNova
+        }
+        let mainBackgroundColor = useAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
         let (primaryColor, secondaryColor) = getPrimaryAndSecondaryColors()
 
         gradientLayer.colors = Gradient(

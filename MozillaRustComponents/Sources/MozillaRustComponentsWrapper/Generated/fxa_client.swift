@@ -39,6 +39,52 @@ fileprivate extension ForeignBytes {
     init(bufferPointer: UnsafeBufferPointer<UInt8>) {
         self.init(len: Int32(bufferPointer.count), data: bufferPointer.baseAddress)
     }
+
+    init(rawBufferPointer: UnsafeRawBufferPointer) {
+        self.init(
+            len: Int32(rawBufferPointer.count),
+            data: rawBufferPointer.baseAddress?.assumingMemoryBound(to: UInt8.self)
+        )
+    }
+}
+
+// Converter for `&[u8]` / `[ByRef] bytes` arguments.
+//
+// Conforms to `FfiConverter` so the compiler enforces the full converter
+// method set. Only the scope-bound `lower(_:_body:)` overload is sound —
+// zero-copy byte buffers only flow foreign -> Rust, and only in argument
+// position. The four protocol-witness methods (`lift`, `lower`, `read`,
+// `write`) `fatalError` at runtime if anyone reaches them.
+//
+// The scope-bound `lower` takes a closure because the `ForeignBytes`
+// pointer is only guaranteed valid for the duration of
+// `Data.withUnsafeBytes`. Callers must run the full FFI call inside
+// the closure body.
+fileprivate enum FfiConverterByRefBytes: FfiConverter {
+    typealias SwiftType = Data
+    typealias FfiType = ForeignBytes
+
+    static func lower<R>(_ value: Data, _ body: (ForeignBytes) throws -> R) rethrows -> R {
+        return try value.withUnsafeBytes { rawBuf in
+            try body(ForeignBytes(rawBufferPointer: rawBuf))
+        }
+    }
+
+    static func lower(_ value: Data) -> ForeignBytes {
+        fatalError("ByRef bytes cannot use the plain lower: returning ForeignBytes escapes the Data.withUnsafeBytes scope. Use the scope-bound lower(_:_body:) overload instead.")
+    }
+
+    static func lift(_ value: ForeignBytes) throws -> Data {
+        fatalError("ByRef bytes cannot be lifted: zero-copy &[u8] only flows foreign->Rust")
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        fatalError("ByRef bytes cannot be read from a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
+
+    static func write(_ value: Data, into buf: inout [UInt8]) {
+        fatalError("ByRef bytes cannot be written to a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
 }
 
 // For every type used in the interface, we provide helper methods for conveniently
@@ -471,7 +517,11 @@ fileprivate struct FfiConverterString: FfiConverter {
             return String()
         }
         let bytes = UnsafeBufferPointer<UInt8>(start: value.data!, count: Int(value.len))
-        return String(bytes: bytes, encoding: String.Encoding.utf8)!
+        // Use Swift's native UTF-8 decoder; `String(bytes:encoding:.utf8)` goes
+        // through Foundation's NSString and silently strips a leading U+FEFF BOM.
+        // Invalid UTF-8 substitutes U+FFFD instead of trapping (unreachable
+        // given Rust's `String` invariant).
+        return String(decoding: bytes, as: UTF8.self)
     }
 
     public static func lower(_ value: String) -> RustBuffer {
@@ -487,7 +537,8 @@ fileprivate struct FfiConverterString: FfiConverter {
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> String {
         let len: Int32 = try readInt(&buf)
-        return String(bytes: try readBytes(&buf, count: Int(len)), encoding: String.Encoding.utf8)!
+        // See `lift` above for why we avoid Foundation's NSString-backed decoder here.
+        return String(decoding: try readBytes(&buf, count: Int(len)), as: UTF8.self)
     }
 
     public static func write(_ value: String, into buf: inout [UInt8]) {
@@ -1112,8 +1163,9 @@ open class FirefoxAccount: FirefoxAccountProtocol, @unchecked Sendable {
 public convenience init(config: FxaConfig) {
     let handle =
         try! rustCall() {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_constructor_firefoxaccount_new(
-        FfiConverterTypeFxaConfig_lower(config),$0
+        FfiConverterTypeFxaConfig_lower(config),uniffiCallStatus
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -1142,8 +1194,9 @@ public convenience init(config: FxaConfig) {
      */
 public static func fromJson(data: String)throws  -> FirefoxAccount  {
     return try  FfiConverterTypeFirefoxAccount_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_constructor_firefoxaccount_from_json(
-        FfiConverterString.lower(data),$0
+        FfiConverterString.lower(data),uniffiCallStatus
     )
 })
 }
@@ -1154,8 +1207,9 @@ public static func fromJson(data: String)throws  -> FirefoxAccount  {
      * Used by the application to test auth token issues
      */
 open func simulateNetworkError()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_simulate_network_error(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1171,8 +1225,9 @@ open func simulateNetworkError()  {try! rustCall() {
      */
 open func getConnectionSuccessUrl()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_connection_success_url(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1193,9 +1248,10 @@ open func getConnectionSuccessUrl()throws  -> String  {
      */
 open func getManageAccountUrl(entrypoint: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_manage_account_url(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(entrypoint),$0
+        FfiConverterString.lower(entrypoint),uniffiCallStatus
     )
 })
 }
@@ -1217,9 +1273,10 @@ open func getManageAccountUrl(entrypoint: String)throws  -> String  {
      */
 open func getManageDevicesUrl(entrypoint: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_manage_devices_url(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(entrypoint),$0
+        FfiConverterString.lower(entrypoint),uniffiCallStatus
     )
 })
 }
@@ -1231,8 +1288,9 @@ open func getManageDevicesUrl(entrypoint: String)throws  -> String  {
      */
 open func getTokenServerEndpointUrl()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_token_server_endpoint_url(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1242,9 +1300,10 @@ open func getTokenServerEndpointUrl()throws  -> String  {
      */
 open func matchesServer(server: FxaServer)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_matches_server(
             self.uniffiCloneHandle(),
-        FfiConverterTypeFxaServer_lower(server),$0
+        FfiConverterTypeFxaServer_lower(server),uniffiCallStatus
     )
 })
 }
@@ -1260,8 +1319,9 @@ open func matchesServer(server: FxaServer)throws  -> Bool  {
      */
 open func checkAuthorizationStatus()throws  -> AuthorizationInfo  {
     return try  FfiConverterTypeAuthorizationInfo_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_check_authorization_status(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1281,8 +1341,9 @@ open func checkAuthorizationStatus()throws  -> AuthorizationInfo  {
      * is not desired then the application should discard the persisted account state.
      */
 open func disconnect()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_disconnect(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1295,8 +1356,9 @@ open func disconnect()  {try! rustCall() {
      */
 open func getAuthState() -> FxaRustAuthState  {
     return try!  FfiConverterTypeFxaRustAuthState_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_auth_state(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1311,8 +1373,9 @@ open func getAuthState() -> FxaRustAuthState  {
      */
 open func getPairingAuthorityUrl()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_pairing_authority_url(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1322,8 +1385,9 @@ open func getPairingAuthorityUrl()throws  -> String  {
      */
 open func getState() -> FxaState  {
     return try!  FfiConverterTypeFxaState_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_state(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1339,9 +1403,10 @@ open func getState() -> FxaState  {
      * **💾 This method alters the persisted account state.**
      */
 open func handleWebChannelLogin(jsonPayload: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_handle_web_channel_login(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(jsonPayload),$0
+        FfiConverterString.lower(jsonPayload),uniffiCallStatus
     )
 }
 }
@@ -1355,8 +1420,9 @@ open func handleWebChannelLogin(jsonPayload: String)throws   {try rustCallWithEr
      * user to re-authenticated.  It transitions the user to the [FxaRustAuthState.AuthIssues] state.
      */
 open func onAuthIssues()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_on_auth_issues(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1369,9 +1435,10 @@ open func onAuthIssues()  {try! rustCall() {
      */
 open func processEvent(event: FxaEvent)throws  -> FxaState  {
     return try  FfiConverterTypeFxaState_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_process_event(
             self.uniffiCloneHandle(),
-        FfiConverterTypeFxaEvent_lower(event),$0
+        FfiConverterTypeFxaEvent_lower(event),uniffiCallStatus
     )
 })
 }
@@ -1380,8 +1447,9 @@ open func processEvent(event: FxaEvent)throws  -> FxaState  {
      * Used by the application to test auth token issues
      */
 open func simulatePermanentAuthTokenIssue()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_simulate_permanent_auth_token_issue(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1390,8 +1458,9 @@ open func simulatePermanentAuthTokenIssue()  {try! rustCall() {
      * Used by the application to test auth token issues
      */
 open func simulateTemporaryAuthTokenIssue()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_simulate_temporary_auth_token_issue(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1411,8 +1480,9 @@ open func simulateTemporaryAuthTokenIssue()  {try! rustCall() {
      * granted the `https://identity.mozilla.com/apps/oldsync` scope.
      */
 open func clearDeviceName()throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_clear_device_name(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1442,9 +1512,10 @@ open func clearDeviceName()throws   {try rustCallWithError(FfiConverterTypeFxaEr
      */
 open func ensureCapabilities(supportedCapabilities: [DeviceCapability])throws  -> LocalDevice  {
     return try  FfiConverterTypeLocalDevice_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_ensure_capabilities(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceTypeDeviceCapability.lower(supportedCapabilities),$0
+        FfiConverterSequenceTypeDeviceCapability.lower(supportedCapabilities),uniffiCallStatus
     )
 })
 }
@@ -1462,8 +1533,9 @@ open func ensureCapabilities(supportedCapabilities: [DeviceCapability])throws  -
      */
 open func getAttachedClients()throws  -> [AttachedClient]  {
     return try  FfiConverterSequenceTypeAttachedClient.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_attached_clients(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1481,8 +1553,9 @@ open func getAttachedClients()throws  -> [AttachedClient]  {
      */
 open func getCurrentDeviceId()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_current_device_id(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1508,9 +1581,10 @@ open func getCurrentDeviceId()throws  -> String  {
      */
 open func getDevices(ignoreCache: Bool)throws  -> [Device]  {
     return try  FfiConverterSequenceTypeDevice.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_devices(
             self.uniffiCloneHandle(),
-        FfiConverterBool.lower(ignoreCache),$0
+        FfiConverterBool.lower(ignoreCache),uniffiCallStatus
     )
 })
 }
@@ -1542,11 +1616,12 @@ open func getDevices(ignoreCache: Bool)throws  -> [Device]  {
      */
 open func initializeDevice(name: String, deviceType: DeviceType, supportedCapabilities: [DeviceCapability])throws  -> LocalDevice  {
     return try  FfiConverterTypeLocalDevice_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_initialize_device(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(name),
         FfiConverterTypeDeviceType_lower(deviceType),
-        FfiConverterSequenceTypeDeviceCapability.lower(supportedCapabilities),$0
+        FfiConverterSequenceTypeDeviceCapability.lower(supportedCapabilities),uniffiCallStatus
     )
 })
 }
@@ -1570,9 +1645,10 @@ open func initializeDevice(name: String, deviceType: DeviceType, supportedCapabi
      */
 open func setDeviceName(displayName: String)throws  -> LocalDevice  {
     return try  FfiConverterTypeLocalDevice_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_set_device_name(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(displayName),$0
+        FfiConverterString.lower(displayName),uniffiCallStatus
     )
 })
 }
@@ -1601,9 +1677,10 @@ open func setDeviceName(displayName: String)throws  -> LocalDevice  {
      */
 open func getProfile(ignoreCache: Bool)throws  -> Profile  {
     return try  FfiConverterTypeProfile_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_profile(
             self.uniffiCloneHandle(),
-        FfiConverterBool.lower(ignoreCache),$0
+        FfiConverterBool.lower(ignoreCache),uniffiCallStatus
     )
 })
 }
@@ -1618,10 +1695,11 @@ open func getProfile(ignoreCache: Bool)throws  -> Profile  {
      */
 open func closeTabs(targetDeviceId: String, urls: [String])throws  -> CloseTabsResult  {
     return try  FfiConverterTypeCloseTabsResult_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_close_tabs(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(targetDeviceId),
-        FfiConverterSequenceString.lower(urls),$0
+        FfiConverterSequenceString.lower(urls),uniffiCallStatus
     )
 })
 }
@@ -1642,9 +1720,10 @@ open func closeTabs(targetDeviceId: String, urls: [String])throws  -> CloseTabsR
      */
 open func handlePushMessage(payload: String)throws  -> AccountEvent  {
     return try  FfiConverterTypeAccountEvent_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_handle_push_message(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(payload),$0
+        FfiConverterString.lower(payload),uniffiCallStatus
     )
 })
 }
@@ -1668,8 +1747,9 @@ open func handlePushMessage(payload: String)throws  -> AccountEvent  {
      */
 open func pollDeviceCommands()throws  -> [IncomingDeviceCommand]  {
     return try  FfiConverterSequenceTypeIncomingDeviceCommand.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_poll_device_commands(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1693,12 +1773,13 @@ open func pollDeviceCommands()throws  -> [IncomingDeviceCommand]  {
      * granted the `https://identity.mozilla.com/apps/oldsync` scope.
      */
 open func sendSingleTab(targetDeviceId: String, title: String, url: String, isPrivate: Bool = false)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_send_single_tab(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(targetDeviceId),
         FfiConverterString.lower(title),
         FfiConverterString.lower(url),
-        FfiConverterBool.lower(isPrivate),$0
+        FfiConverterBool.lower(isPrivate),uniffiCallStatus
     )
 }
 }
@@ -1725,9 +1806,10 @@ open func sendSingleTab(targetDeviceId: String, title: String, url: String, isPr
      */
 open func setPushSubscription(subscription: DevicePushSubscription)throws  -> LocalDevice  {
     return try  FfiConverterTypeLocalDevice_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_set_push_subscription(
             self.uniffiCloneHandle(),
-        FfiConverterTypeDevicePushSubscription_lower(subscription),$0
+        FfiConverterTypeDevicePushSubscription_lower(subscription),uniffiCallStatus
     )
 })
 }
@@ -1747,8 +1829,9 @@ open func setPushSubscription(subscription: DevicePushSubscription)throws  -> Lo
      */
 open func toJson()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_to_json(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1766,8 +1849,9 @@ open func toJson()throws  -> String  {
      */
 open func gatherTelemetry()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_gather_telemetry(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1787,9 +1871,10 @@ open func gatherTelemetry()throws  -> String  {
      */
 open func authorizeCodeUsingSessionToken(params: AuthorizationParameters)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_authorize_code_using_session_token(
             self.uniffiCloneHandle(),
-        FfiConverterTypeAuthorizationParameters_lower(params),$0
+        FfiConverterTypeAuthorizationParameters_lower(params),uniffiCallStatus
     )
 })
 }
@@ -1804,8 +1889,9 @@ open func authorizeCodeUsingSessionToken(params: AuthorizationParameters)throws 
      * It ensures that the expired token is removed and a fresh one generated.
      */
 open func clearAccessTokenCache()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_clear_access_token_cache(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1842,10 +1928,11 @@ open func clearAccessTokenCache()  {try! rustCall() {
      */
 open func getAccessToken(scope: String, useCache: Bool = true)throws  -> AccessTokenInfo  {
     return try  FfiConverterTypeAccessTokenInfo_lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_access_token(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(scope),
-        FfiConverterBool.lower(useCache),$0
+        FfiConverterBool.lower(useCache),uniffiCallStatus
     )
 })
 }
@@ -1869,8 +1956,9 @@ open func getAccessToken(scope: String, useCache: Bool = true)throws  -> AccessT
      */
 open func getSessionToken()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_session_token(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1883,8 +1971,9 @@ open func getSessionToken()throws  -> String  {
      */
 open func getSignedInUserForWebChannel() -> String?  {
     return try!  FfiConverterOptionString.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_get_signed_in_user_for_web_channel(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1904,9 +1993,10 @@ open func getSignedInUserForWebChannel() -> String?  {
      * - `session_token` - the new session token value provided from web content.
      */
 open func handleSessionTokenChange(sessionToken: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_handle_session_token_change(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(sessionToken),$0
+        FfiConverterString.lower(sessionToken),uniffiCallStatus
     )
 }
 }
@@ -1918,9 +2008,10 @@ open func handleSessionTokenChange(sessionToken: String)throws   {try rustCallWi
      * **💾 This method alters the persisted account state.**
      */
 open func handleWebChannelPasswordChange(jsonPayload: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_handle_web_channel_password_change(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(jsonPayload),$0
+        FfiConverterString.lower(jsonPayload),uniffiCallStatus
     )
 }
 }
@@ -1935,9 +2026,10 @@ open func handleWebChannelPasswordChange(jsonPayload: String)throws   {try rustC
      */
 open func hasScope(scope: String) -> Bool  {
     return try!  FfiConverterBool.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_fxa_client_fn_method_firefoxaccount_has_scope(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(scope),$0
+        FfiConverterString.lower(scope),uniffiCallStatus
     )
 })
 }
@@ -3168,8 +3260,7 @@ public func FfiConverterTypeTabHistoryEntry_lower(_ value: TabHistoryEntry) -> R
     return FfiConverterTypeTabHistoryEntry.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * An event that happened on the user's account.
  *
@@ -3336,8 +3427,7 @@ public func FfiConverterTypeAccountEvent_lower(_ value: AccountEvent) -> RustBuf
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * The result of invoking a "close tabs" command.
  *
@@ -3431,8 +3521,7 @@ public func FfiConverterTypeCloseTabsResult_lower(_ value: CloseTabsResult) -> R
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * A "capability" offered by a device.
  *
@@ -3514,7 +3603,8 @@ public func FfiConverterTypeDeviceCapability_lower(_ value: DeviceCapability) ->
  * Precise details of the error are hidden from consumers. The type of the error indicates how the
  * calling code should respond.
  */
-public enum FxaError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
+public 
+enum FxaError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -3700,8 +3790,7 @@ public func FfiConverterTypeFxaError_lower(_ value: FxaError) -> RustBuffer {
     return FfiConverterTypeFxaError.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * Fxa event
  *
@@ -3917,8 +4006,7 @@ public func FfiConverterTypeFxaEvent_lower(_ value: FxaEvent) -> RustBuffer {
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * High-level view of the authorization state
  *
@@ -4001,8 +4089,7 @@ public func FfiConverterTypeFxaRustAuthState_lower(_ value: FxaRustAuthState) ->
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 
 public enum FxaServer: Equatable, Hashable {
     
@@ -4099,8 +4186,7 @@ public func FfiConverterTypeFxaServer_lower(_ value: FxaServer) -> RustBuffer {
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * Fxa state
  *
@@ -4213,8 +4299,7 @@ public func FfiConverterTypeFxaState_lower(_ value: FxaState) -> RustBuffer {
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * A command invoked by another device.
  *
@@ -4610,127 +4695,127 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_network_error() != 47345) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_network_error() != 27883) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_connection_success_url() != 27552) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_connection_success_url() != 44793) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_manage_account_url() != 11657) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_manage_account_url() != 43415) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_manage_devices_url() != 21922) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_manage_devices_url() != 39925) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_token_server_endpoint_url() != 35945) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_token_server_endpoint_url() != 8479) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_matches_server() != 44422) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_matches_server() != 28649) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_check_authorization_status() != 56846) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_check_authorization_status() != 62263) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_disconnect() != 30463) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_disconnect() != 44105) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_auth_state() != 16738) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_auth_state() != 20188) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_pairing_authority_url() != 64167) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_pairing_authority_url() != 31881) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_state() != 27477) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_state() != 250) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_web_channel_login() != 60187) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_web_channel_login() != 62645) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_on_auth_issues() != 19864) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_on_auth_issues() != 48678) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_process_event() != 42868) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_process_event() != 12576) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_permanent_auth_token_issue() != 38491) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_permanent_auth_token_issue() != 54132) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_temporary_auth_token_issue() != 43541) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_temporary_auth_token_issue() != 41850) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_clear_device_name() != 3703) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_clear_device_name() != 40392) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_ensure_capabilities() != 50088) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_ensure_capabilities() != 2432) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_attached_clients() != 15457) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_attached_clients() != 51227) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_current_device_id() != 58859) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_current_device_id() != 35413) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_devices() != 6719) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_devices() != 42244) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_initialize_device() != 8609) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_initialize_device() != 62346) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_set_device_name() != 4915) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_set_device_name() != 47100) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_profile() != 28328) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_profile() != 6602) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_close_tabs() != 1129) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_close_tabs() != 6639) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_push_message() != 62441) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_push_message() != 17576) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_poll_device_commands() != 1098) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_poll_device_commands() != 1100) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_send_single_tab() != 8671) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_send_single_tab() != 10991) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_set_push_subscription() != 25582) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_set_push_subscription() != 57784) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_to_json() != 43575) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_to_json() != 13376) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_gather_telemetry() != 20971) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_gather_telemetry() != 63243) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_authorize_code_using_session_token() != 59487) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_authorize_code_using_session_token() != 58951) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_clear_access_token_cache() != 11860) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_clear_access_token_cache() != 37464) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_access_token() != 46839) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_access_token() != 61641) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_session_token() != 32830) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_session_token() != 22142) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_signed_in_user_for_web_channel() != 13580) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_signed_in_user_for_web_channel() != 58490) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_session_token_change() != 65325) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_session_token_change() != 50104) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_web_channel_password_change() != 14460) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_web_channel_password_change() != 37893) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_has_scope() != 30752) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_has_scope() != 8682) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_constructor_firefoxaccount_new() != 55647) {
+    if (uniffi_fxa_client_checksum_constructor_firefoxaccount_new() != 714) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_constructor_firefoxaccount_from_json() != 41017) {
+    if (uniffi_fxa_client_checksum_constructor_firefoxaccount_from_json() != 60229) {
         return InitializationResult.apiChecksumMismatch
     }
 

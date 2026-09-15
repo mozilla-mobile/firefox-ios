@@ -91,13 +91,6 @@ class MockSearchBarLocationSaver: SearchBarLocationSaverProtocol {
         saveUserSearchBarLocationCalled = true
         savedProfile = profile
     }
-
-    func migrateBottomBarPositionToTopOnIPad(
-        profile: Profile,
-        userInterfaceIdiom: UIUserInterfaceIdiom
-    ) {
-        // no-op for now
-    }
 }
 
 class MockOnboardingTelemetryUtility: OnboardingTelemetryProtocol {

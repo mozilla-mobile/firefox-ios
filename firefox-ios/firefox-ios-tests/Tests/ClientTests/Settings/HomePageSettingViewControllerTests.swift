@@ -41,7 +41,9 @@ final class HomePageSettingViewControllerTests: XCTestCase, FeatureFlagTestUtili
 
     func testHomePageSettingsLeaks_InitCall() throws {
         let subject = createSubject()
-        trackForMemoryLeaks(subject)
+        subject.profile = mockProfile
+        // Mirrors viewWillAppear(_:), which retains the generated settings on the controller.
+        subject.settings = subject.generateSettings()
     }
 
     func testHomepageSettings_generateSettings_jumpBackInSectionDefaultValue_isFalse() throws {

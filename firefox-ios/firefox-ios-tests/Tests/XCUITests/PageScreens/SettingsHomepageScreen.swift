@@ -6,12 +6,41 @@ import XCTest
 
 @MainActor
 final class SettingsHomepageScreen {
+    /// The settings table renders synchronously, so short probes are enough to call the row absent.
+    static let absenceProbeTimeout: TimeInterval = 2
+
     private let app: XCUIApplication
     private let sel: SettingsHomepageSelectorsSet
 
     init(app: XCUIApplication, selectors: SettingsHomepageSelectorsSet = SettingsHomepageSelectors()) {
         self.app = app
         self.sel = selectors
+    }
+
+    func assertSectionsAreDisplayed() {
+        BaseTestCase().waitForElementsToExist([
+            sel.NAVBAR.element(in: app),
+            sel.OPENING_SCREEN_SECTION.element(in: app),
+            sel.INCLUDE_ON_HOMEPAGE_SECTION.element(in: app),
+            sel.CURRENT_HOMEPAGE_SECTION.element(in: app)
+        ])
+    }
+
+    /// Asserts "Last tab" is the option selected in the Opening screen section, i.e. Start at Home disabled.
+    func assertLastTabIsSelectedAsOpeningScreen() {
+        assertDefaultOptionsVisible()
+        XCTAssertFalse(sel.START_AT_HOME_ALWAYS.element(in: app).isSelected,
+                       "Homepage is selected as the opening screen")
+        XCTAssertFalse(sel.START_AT_HOME_AFTER_4H.element(in: app).isSelected,
+                       "Homepage after four hours of inactivity is selected as the opening screen")
+        XCTAssertTrue(sel.START_AT_HOME_DISABLED.element(in: app).isSelected,
+                      "Last tab is not selected as the opening screen")
+    }
+
+    func assertFirefoxHomeIsSelectedAsCurrentHomepage() {
+        let firefoxHomeOption = sel.HOME_AS_FIREFOX_HOME.element(in: app)
+        BaseTestCase().waitForElementsToExist([firefoxHomeOption, sel.HOME_AS_CUSTOM_URL.element(in: app)])
+        XCTAssertTrue(firefoxHomeOption.isSelected, "Firefox Home is not selected as the current homepage")
     }
 
     func assertDefaultOptionsVisible() {
@@ -42,6 +71,33 @@ final class SettingsHomepageScreen {
             .completed,
             "Homepage is not selected as the opening screen"
         )
+    }
+
+    /// Below iOS 17 the Stories row is never added to Homepage settings, see
+    /// https://github.com/mozilla-mobile/firefox-ios/issues/35618. Fails once the bug is fixed.
+    /// Swipes while looking for the row, so one below the fold is not read as that bug.
+    @discardableResult
+    func assertStoriesSwitchIsAbsent(
+        maxSwipes: Int = 2,
+        timeout: TimeInterval = SettingsHomepageScreen.absenceProbeTimeout
+    ) -> Bool {
+        BaseTestCase().mozWaitForElementToExist(sel.NAVBAR.element(in: app))
+        let storiesSwitch = sel.STORIES_SWITCH.element(in: app)
+        var found = storiesSwitch.mozWaitForElementToExist(timeout: timeout, failOnTimeout: false)
+        var swipes = maxSwipes
+        while !found && swipes > 0 {
+            app.swipeUp()
+            swipes -= 1
+            found = storiesSwitch.mozWaitForElementToExist(
+                timeout: SettingsHomepageScreen.absenceProbeTimeout,
+                failOnTimeout: false
+            )
+        }
+        XCTAssertFalse(
+            found,
+            "Stories switch is present below iOS 17. Issue #35618 looks fixed, remove the version guard."
+        )
+        return !found
     }
 
     func assertStoriesSwitch(isOn expected: Bool) {

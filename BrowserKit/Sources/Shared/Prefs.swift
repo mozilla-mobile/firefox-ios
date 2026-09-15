@@ -101,10 +101,6 @@ public struct PrefsKeys {
         public static let Latest = "latestAppVersion"
     }
 
-    public struct AdsClient {
-        public static let documentsDirectoryMigrationCheck = "adsClientDocumentsDirectoryMigrationCheckUserPrefsKey"
-    }
-
     public struct Wallpapers {
         public static let MetadataLastCheckedDate = "WallpaperMetadataLastCheckedUserPrefsKey"
         public static let CurrentWallpaper = "CurrentWallpaperUserPrefsKey"

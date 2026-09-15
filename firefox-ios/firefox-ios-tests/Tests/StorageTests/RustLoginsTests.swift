@@ -42,6 +42,14 @@ class RustLoginsTests: XCTestCase, @unchecked Sendable {
         }
     }
 
+    override func tearDown() {
+        _ = logins?.forceClose()
+        logins = nil
+        files = nil
+        MockRustKeychain.shared.removeAllKeys()
+        super.tearDown()
+    }
+
     func testListLogins() {
         let expectation = XCTestExpectation(description: "addLogin")
         logins.addLogin(login: login) { result in

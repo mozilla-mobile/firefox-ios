@@ -47,6 +47,8 @@ class SecurityTests: BaseTestCase {
         static let spoofClickMeURL = "https://justluckidzz.github.io/clickme/poc-8f7d6e5c4b.html"
         static let spoofClickMeHost = "justluckidzz.github.io"
         static let clickHereButton = "CLICK HERE"
+        static let uxssPocURL = "https://firefoxuxss.v12.sh"
+        static let uxssPocHeading = "Firefox Focus UXSS POC"
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395565
@@ -203,20 +205,23 @@ class SecurityTests: BaseTestCase {
     func testXssAccountTakeover() {
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
         let endTime = Date().addingTimeInterval(TIMEOUT)
-        navigator.openURL("https://firefoxuxss.v12.sh")
+        let pocHeading = app.webViews.otherElements[WebStrings.uxssPocHeading]
+        navigator.openURL(WebStrings.uxssPocURL)
         browserScreen.assertWebViewLoaded()
 
-        browserScreen.assertWebElements(app.otherElements["Firefox Focus UXSS POC"])
+        browserScreen.assertWebElements(pocHeading)
         [ "Google", "X", "YouTube", "Reddit" ].forEach { button in
-            browserScreen.assertWebElements(app.buttons[button])
+            browserScreen.assertWebElements(app.webViews.buttons[button])
         }
 
         for _ in 0...5 {
             browserScreen.tapWebViewButton(buttonText: "X")
-            browserScreen.assertWebViewLoaded()
+            // Going back before the navigation commits pops the POC page off the stack instead
+            browserScreen.assertWebElements(shouldExist: false, pocHeading)
+            waitUntilPageLoad()
             browserScreen.tapBackButton()
-            browserScreen.assertWebViewLoaded()
-            browserScreen.assertWebElements(app.otherElements["Firefox Focus UXSS POC"])
+            waitUntilPageLoad()
+            browserScreen.assertWebElements(pocHeading)
         }
 
         browserScreen.tapWebViewButton(buttonText: "Google")

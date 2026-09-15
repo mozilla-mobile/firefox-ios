@@ -86,9 +86,11 @@ final class StatusBarOverlay: UIView,
     }
 
     func showOverlay(animated: Bool) {
+        let backgroundAlpha = toolbarHelper.novaToolbarGlassEffectAlpha
+
         guard animated else {
             scrollDelegate?.homepageScrollViewDidScroll(scrollOffset: 1.0)
-            backgroundColor = savedBackgroundColor?.withAlphaComponent(toolbarHelper.glassEffectAlpha)
+            backgroundColor = savedBackgroundColor?.withAlphaComponent(backgroundAlpha)
             return
         }
         UIView.animate(
@@ -97,7 +99,7 @@ final class StatusBarOverlay: UIView,
             options: .curveEaseIn
         ) {
             self.scrollDelegate?.homepageScrollViewDidScroll(scrollOffset: 1.0)
-            self.backgroundColor = self.savedBackgroundColor?.withAlphaComponent(self.toolbarHelper.glassEffectAlpha)
+            self.backgroundColor = self.savedBackgroundColor?.withAlphaComponent(backgroundAlpha)
         }
     }
 
@@ -130,13 +132,12 @@ final class StatusBarOverlay: UIView,
     }
 
     private func updateStatusBarAlpha(isHomepage: Bool, needsNoStatusBar: Bool) {
-        let translucencyBackgroundAlpha = toolbarHelper.glassEffectAlpha
-
+        let backgroundAlpha = toolbarHelper.novaToolbarGlassEffectAlpha
         if needsNoStatusBar {
-            let alpha = scrollOffset > translucencyBackgroundAlpha ? translucencyBackgroundAlpha : scrollOffset
+            let alpha = scrollOffset > backgroundAlpha ? backgroundAlpha : scrollOffset
             backgroundColor = savedBackgroundColor?.withAlphaComponent(alpha)
         } else {
-            backgroundColor = savedBackgroundColor?.withAlphaComponent(translucencyBackgroundAlpha)
+            backgroundColor = savedBackgroundColor?.withAlphaComponent(backgroundAlpha)
         }
     }
 
