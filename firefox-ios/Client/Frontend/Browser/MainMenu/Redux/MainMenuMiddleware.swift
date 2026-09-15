@@ -54,7 +54,6 @@ final class MainMenuMiddleware: UserFeaturePreferenceProvider {
     private let injectedVPNManager: VPNManaging?
     private let webCompatTelemetry: WebCompatReporterTelemetry
 
-
     init(telemetry: MainMenuTelemetry = MainMenuTelemetry(),
          webCompatTelemetry: WebCompatReporterTelemetry = WebCompatReporterTelemetry(),
          logger: Logger = DefaultLogger.shared,
