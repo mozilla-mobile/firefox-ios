@@ -39,7 +39,7 @@ class AutoplaySetting: Setting {
         settingsDelegate?.pressedAutoPlay()
     }
 
-    // TODO: FXIOS-16134
+    // TODO: FXIOS-16851
     // The Settings object still uses the deprecated textLabel/detailTextLabel
     // API. Setting rows should eventually migrate to UIListContentConfiguration for consistency.
     // Made changes here to fix bug reported in FXIOS-16134.
