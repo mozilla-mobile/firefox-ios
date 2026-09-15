@@ -9,6 +9,12 @@ import Common
 @testable import Client
 
 final class TabManagerRestoreTabsTests: TabManagerTestsBase {
+    override func setUp() async throws {
+        // A run killed before its teardown block leaks this key and would skip restore for every test here.
+        UserDefaults.standard.removeObject(forKey: Self.skipSessionRestoreDefaultsKey)
+        try await super.setUp()
+    }
+
     @MainActor
     func testRestoreTabs() {
         // Needed to ensure AppEventQueue is not fired from a previous test case with the same WindowUUID
@@ -217,5 +223,58 @@ final class TabManagerRestoreTabsTests: TabManagerTestsBase {
             }
         }
         wait(for: [expectation])
+    }
+
+    // MARK: - Skipped session restore
+
+    /// FXIOS-16244. The explicit timeout makes a regression fail rather than hang the suite.
+    @MainActor
+    func testRestoreTabs_whenSessionRestoreIsSkipped_stillCompletesTabRestorationEvent() {
+        setSkipSessionRestore(true)
+        let testUUID = UUID()
+        let subject = createSubject(windowUUID: testUUID)
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+
+        subject.restoreTabs()
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [mockTabStore] in
+            ensureMainThread {
+                XCTAssertEqual(mockTabStore?.fetchWindowDataCalledCount, 0, "Restore should have been skipped")
+                expectation.fulfill()
+            }
+        }
+        wait(for: [expectation], timeout: skippedRestoreTimeout)
+    }
+
+    @MainActor
+    func testRestoreTabs_whenSessionRestoreIsSkippedWithDeeplinkFlagEnabled_stillCompletesTabRestorationEvent() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        setSkipSessionRestore(true)
+        let testUUID = UUID()
+        let subject = createSubject(windowUUID: testUUID)
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+
+        subject.restoreTabs()
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [mockTabStore] in
+            ensureMainThread {
+                XCTAssertEqual(mockTabStore?.fetchWindowDataCalledCount, 0, "Restore should have been skipped")
+                expectation.fulfill()
+            }
+        }
+        wait(for: [expectation], timeout: skippedRestoreTimeout)
+    }
+
+    // MARK: - Helpers
+
+    private static let skipSessionRestoreDefaultsKey = "SettingsBundleSkipSessionRestore"
+
+    private let skippedRestoreTimeout: TimeInterval = 5
+
+    private func setSkipSessionRestore(_ skip: Bool) {
+        UserDefaults.standard.set(skip, forKey: Self.skipSessionRestoreDefaultsKey)
+        addTeardownBlock {
+            UserDefaults.standard.removeObject(forKey: Self.skipSessionRestoreDefaultsKey)
+        }
     }
 }
