@@ -921,6 +921,53 @@ final class TabManagerImplementation: NSObject,
         self.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
     }
 
+    // MARK: - Window merging
+
+    func tabDataForWindowMerge() -> [TabData] {
+        // Persist the live session state (back/forward history) of every tab that currently has a
+        // webview, so that once the tabs are recreated in the destination window their history can
+        // be restored from the tab session store (keyed by tab UUID). Tabs without a live webview
+        // already have their session persisted on disk from when they were last active.
+        for tab in tabs {
+            guard let sessionData = tab.webView?.interactionState as? Data,
+                  let tabID = UUID(uuidString: tab.tabUUID)
+            else { continue }
+            tabSessionStore.saveTabSession(tabID: tabID, sessionData: sessionData)
+        }
+        return generateTabDataForSaving()
+    }
+
+    func addTabs(fromWindowMergeData tabDataList: [TabData]) {
+        let existingUUIDs = Set(tabs.map { $0.tabUUID })
+        var didAddTab = false
+        for tabData in tabDataList where !existingUUIDs.contains(tabData.id.uuidString) {
+            _ = legacyConfigureNewTab(with: tabData)
+            didAddTab = true
+        }
+
+        guard didAddTab else { return }
+
+        // Keep the current selection; merged tabs are appended as zombies. Notifying delegates
+        // refreshes the tab tray, and commitChanges persists the now-merged window to disk.
+        delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
+        commitChanges()
+    }
+
+    func discardTabsMovedToAnotherWindow() {
+        guard !tabs.isEmpty else { return }
+
+        tabs = []
+        selectedIndex = -1
+
+        // No Tab.close(), `.didClose` or screenshot/session cleanup: these tabs moved rather than
+        // closed, and the destination window reuses their UUIDs, so their on-disk data must survive.
+        delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: nil) }
+
+        // Replaces the tab list any already-scheduled save still holds, which would otherwise be
+        // written after this point and bring the moved tabs back.
+        preserveTabs(forced: true)
+    }
+
     private func saveAllTabData() {
         // Only preserve tabs after the restore has finished
         guard tabRestoreHasFinished, let tab = selectedTab, let url = tab.url else { return }
@@ -1099,22 +1146,52 @@ final class TabManagerImplementation: NSObject,
     }
 
     private func cleanUpUnusedScreenshots() {
-        // Clean up any screenshots that are no longer associated with a tab.
-        var savedUUIDs = Set<String>()
-        tabs.forEach { savedUUIDs.insert($0.screenshotUUID?.uuidString ?? "") }
-        let savedUUIDsCopy = savedUUIDs
+        // Clean up any screenshots that are no longer associated with a tab. The image store is
+        // shared by every window, so it must be pruned against all of them (see liveTabUUIDs).
+        let openWindowsTabUUIDs = openWindowsTabUUIDs()
         let imageStore = imageStore
+        let tabDataStore = tabDataStore
         Task {
-            try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
+            let liveTabUUIDs = await Self.liveTabUUIDs(including: openWindowsTabUUIDs, tabDataStore: tabDataStore)
+            try? await imageStore?.clearAllScreenshotsExcluding(liveTabUUIDs)
         }
     }
 
     private func cleanUpTabSessionData() {
-        let liveTabs = tabs.compactMap { UUID(uuidString: $0.tabUUID) }
+        // The tab session store is shared by every window, so it must be pruned against all of
+        // them (see liveTabUUIDs).
+        let openWindowsTabUUIDs = openWindowsTabUUIDs()
         let tabSessionStore = tabSessionStore
+        let tabDataStore = tabDataStore
         Task {
-            await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
+            let liveTabUUIDs = await Self.liveTabUUIDs(including: openWindowsTabUUIDs, tabDataStore: tabDataStore)
+            await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabUUIDs.compactMap { UUID(uuidString: $0) })
         }
+    }
+
+    private func openWindowsTabUUIDs() -> Set<String> {
+        var uuids = Set(tabs.map { $0.tabUUID })
+        // This window may not be registered with the WindowManager yet during its own restore.
+        for tabManager in windowManager.allWindowTabManagers() {
+            uuids.formUnion(tabManager.tabs.map { $0.tabUUID })
+        }
+        return uuids
+    }
+
+    /// The tab UUIDs that must be kept in the process-wide screenshot and tab session stores.
+    ///
+    /// Both stores are shared by every window but are pruned per window, so a window that offered
+    /// only its own tabs would delete the screenshots and browsing history of every other window —
+    /// including tabs that had just been moved into another window by a window merge. Windows that
+    /// are saved but not open yet (or still restoring) are read back from disk for the same reason.
+    private static func liveTabUUIDs(including openWindowsTabUUIDs: Set<String>,
+                                     tabDataStore: TabDataStore) async -> Set<String> {
+        var uuids = openWindowsTabUUIDs
+        for uuid in tabDataStore.fetchWindowDataUUIDs() {
+            guard let windowData = await tabDataStore.fetchWindowData(uuid: uuid) else { continue }
+            uuids.formUnion(windowData.tabData.map { $0.id.uuidString })
+        }
+        return uuids
     }
 
     func clearAllTabsHistory() {

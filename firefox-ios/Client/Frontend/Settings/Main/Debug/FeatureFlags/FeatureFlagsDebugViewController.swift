@@ -192,6 +192,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .mergeWindows,
+                titleText: format(string: "Combine Windows"),
+                statusText: format(string: "Toggle to show the Combine Windows home screen Quick Action on iPad")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .microsurvey,
                 titleText: format(string: "Microsurvey"),
                 statusText: format(string: "Toggle to reset microsurvey expiration")
