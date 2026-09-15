@@ -421,7 +421,7 @@ class BoolSetting: Setting, UserFeaturePreferenceProvider {
     }
 
     func configureLearnMoreAccessibilityAction(title: String, onActivate: @escaping () -> Void) {
-        let actionName = String(format: .Settings.General.Accessibility.LearnMoreAction, title)
+        let actionName = String(format: .Settings.General.AccessibilityLabels.LearnMoreAction, title)
         control.switchView.accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: actionName) { _ in
                 onActivate()
