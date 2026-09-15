@@ -11,7 +11,7 @@ import XCTest
 final class MerinoStateTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: makeProfile())
     }
 
     override func tearDown() async throws {

@@ -374,7 +374,7 @@ final class TopSitesManagerTests: XCTestCase {
 
     func test_pinTopSite_callsProperMethods() throws {
         let mockPinnedSites = MockablePinnedSites()
-        let profile = MockProfile(injectedPinnedSites: mockPinnedSites)
+        let profile = makeProfile(injectedPinnedSites: mockPinnedSites)
         let mockTopSiteHistoryManager = MockTopSiteHistoryManager()
         let subject = try createSubject(
             injectedProfile: profile,
