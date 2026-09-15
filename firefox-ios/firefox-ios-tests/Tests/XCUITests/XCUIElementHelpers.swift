@@ -227,6 +227,23 @@ extension XCUIElement {
         return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
     }
 
+    /// Waits until the element stops moving, since a tap synthesized against the mid-animation
+    /// frame of a sheet lands on whatever sits under that point once the sheet has settled.
+    @discardableResult
+    func waitForFrameToSettle(timeout: TimeInterval = TIMEOUT) -> Bool {
+        let startTime = Date()
+        var previousFrame = frame
+        while Date().timeIntervalSince(startTime) < timeout {
+            usleep(100_000)
+            let currentFrame = frame
+            if currentFrame == previousFrame {
+                return true
+            }
+            previousFrame = currentFrame
+        }
+        return false
+    }
+
     /// Re-taps until `element` goes away, since a tap on a view that is presented as a form sheet
     /// is silently dropped while the sheet settles. Returns false instead of failing when it stays.
     @discardableResult
