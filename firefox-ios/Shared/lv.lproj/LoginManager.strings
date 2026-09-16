@@ -32,7 +32,7 @@
 "Logins will be removed from all connected devices." = "Pieteikšanās vienumi tiks noņemti visās savienotajās ierīcēs.";
 
 /* Label describing when the current login was last modified. %@ is the timestamp. */
-"Modified %@" = "Rediģēts %@";
+"Modified %@" = "Labots %@";
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Nav nevienas paroles";

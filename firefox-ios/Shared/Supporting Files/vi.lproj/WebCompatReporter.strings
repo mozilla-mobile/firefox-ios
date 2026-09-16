@@ -25,6 +25,12 @@
 /* Title of the issue category a user picks when video or audio does not play on a site, in the Report a Website Issue form. */
 "WebCompatReporter.Category.VideoOrAudio.v154" = "Video hoặc âm thanh không phát";
 
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no issue type has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint.v156" = "Trước tiên, hãy chọn loại sự cố";
+
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156" = "Chọn một vấn đề cụ thể cho loại sự cố bạn đã chọn";
+
 /* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "Mô tả sự cố một cách chi tiết";
 
