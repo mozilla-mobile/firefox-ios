@@ -38,6 +38,7 @@ public protocol ThemeColourPalette {
     var layerSurfaceMediumAlt: UIColor { get }
     var layerSurfaceMediumAltGlass: UIColor { get }
     var layerGradientSummary: Gradient { get }
+    var layerToolbarGlass: UIColor { get }
 
     // MARK: - Actions
     var actionPrimary: UIColor { get }

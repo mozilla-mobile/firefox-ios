@@ -53,6 +53,7 @@ private struct LightColourPalette: ThemeColourPalette {
         FXColors.Red70,
         FXColors.Orange50
     ])
+    var layerToolbarGlass: UIColor = FXColors.LightGrey10
 
     // MARK: - Actions
     var actionPrimary: UIColor = FXColors.Blue50

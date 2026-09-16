@@ -37,6 +37,7 @@ private struct NovaLightColourPalette: ThemeColourPalette {
     var layerGlassTintNova: UIColor = .clear
     var layerGlassSelectedFill: UIColor = NovaColors.Gray15
     var layerAccentPrivateNonOpaque: UIColor { layerAccentSubtle }
+    var layerToolbarGlass: UIColor = NovaColors.Gray5
 
     // MARK: - Action
 

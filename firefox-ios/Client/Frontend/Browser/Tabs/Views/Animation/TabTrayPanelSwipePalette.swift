@@ -126,6 +126,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var layerSurfaceMediumAlt: UIColor { base.layerSurfaceMediumAlt }
     var layerSurfaceMediumAltGlass: UIColor { base.layerSurfaceMediumAltGlass }
     var layerGradientSummary: Gradient { base.layerGradientSummary }
+    var layerToolbarGlass: UIColor { base.layerToolbarGlass }
 
     var actionPrimaryHover: UIColor { base.actionPrimaryHover }
     var actionPrimaryDisabled: UIColor { base.actionPrimaryDisabled }
