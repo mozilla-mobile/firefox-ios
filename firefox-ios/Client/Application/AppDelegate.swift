@@ -10,6 +10,7 @@ import Glean
 import TabDataStore
 import TipKit
 
+import class Account.Autopush
 import class MozillaAppServices.Viaduct
 import struct MozillaAppServices.RustAdsClient
 import enum MozillaAppServices.MozAdsEnvironment
@@ -179,7 +180,7 @@ class AppDelegate: UIResponder,
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
     // Eventually we'll sync in response to notifications.
-    func applicationDidBecomeActive(_ application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) async {
         logger.log("applicationDidBecomeActive start",
                    level: .info,
                    category: .lifecycle)
@@ -211,6 +212,18 @@ class AppDelegate: UIResponder,
 
         DispatchQueue.global().async { [weak profile] in
             profile?.pollCommands(forcePoll: false)
+        }
+
+        do {
+            let autopush = try await Autopush(files: profile.files, prefs: profile.prefs)
+            try await autopush.verifyActiveSubscriptions(prefs: profile.prefs)
+        } catch let error {
+            logger.log(
+                "Failed to update push registration",
+                level: .warning,
+                category: .setup,
+                description: error.localizedDescription
+            )
         }
 
         prefetchMerinoStories()

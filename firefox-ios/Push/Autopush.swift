@@ -54,19 +54,21 @@ public protocol AutopushProtocol {
 
     /// Verifies active subscriptions
     ///
-    /// - Parameter forceVerify:A boolean value indicating whether rate limiting should be circumvented
-    ///
+    /// - Parameters:
+    ///   - forceVerify: A boolean value indicating whether rate limiting should be circumvented
+    ///   - prefs: A set of prefs associated with the user's profile
     /// - Throws: In the following scenarios:
     ///     - The PushManager does not contain a valid UAID
     ///     - An error occurred sending an channel list retrieval request to the autopush server
     ///     - An error occurred accessing the PushManager's persisted storage
-    func verifyActiveSubscriptions(forceVerify: Bool) async throws
+    func verifyActiveSubscriptions(forceVerify: Bool, prefs: Prefs) async throws
 }
 
 public actor Autopush {
     private let pushManager: PushManagerProtocol
+    private let lastVerification: Timestamp?
 
-    public init(files: FileAccessor) async throws {
+    public init(files: FileAccessor, prefs: Prefs) async throws {
         let pushDB = URL(
             fileURLWithPath: try files.getAndEnsureDirectory(),
             isDirectory: true
@@ -76,11 +78,16 @@ public actor Autopush {
             .fromScheme(scheme: AppConstants.scheme)
             .toConfiguration(dbPath: pushDB)
         self.pushManager = try PushManager(config: pushManagerConfig)
+        self.lastVerification = prefs.timestampForKey(PrefsKeys.AutopushVerificationTimestamp)
     }
 
     /// Initializer for tests that want to inject a mock push manager
-    public init(withPushManager pushManager: PushManagerProtocol) {
+    public init(
+        withPushManager pushManager: PushManagerProtocol,
+        lastVerification: Timestamp = .init()
+    ) {
         self.pushManager = pushManager
+        self.lastVerification = lastVerification
     }
 }
 
@@ -105,12 +112,21 @@ extension Autopush: AutopushProtocol {
         return try pushManager.decrypt(payload: payload)
     }
 
-    public func verifyActiveSubscriptions(forceVerify: Bool = false) async throws {
-        guard let subscriptionChanges =
+    public func verifyActiveSubscriptions(
+        forceVerify: Bool = false,
+        prefs: Prefs
+    ) async throws {
+        let now = Date.now()
+        guard let lastVerification = self.lastVerification,
+              lastVerification != 0,
+              lastVerification < now,
+              now - lastVerification >= AppConstants.autopushVerificationInterval,
+              let subscriptionChanges =
                 try? pushManager.verifyConnection(forceVerify: forceVerify),
-                subscriptionChanges.isEmpty == false else {
-            return
+              subscriptionChanges.isEmpty == false else {
+                return
         }
+        prefs.setTimestamp(now, forKey: PrefsKeys.AutopushVerificationTimestamp)
 
         // Re-subscribe the returned `subscriptionChanges`
         try subscriptionChanges.forEach { change in
