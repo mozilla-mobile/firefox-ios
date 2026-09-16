@@ -33,6 +33,13 @@ public class RustAutofill: @unchecked Sendable {
     let databasePath: String
     /// DispatchQueue for synchronization.
     let queue: DispatchQueue
+    /// Serial DispatchQueue guarding encryption key retrieval state so concurrent
+    /// `getStoredKey` callers cannot each regenerate the key with different values.
+    private let keyQueue: DispatchQueue
+    /// Completions waiting on the in-flight key fetch. Only accessed on `keyQueue`.
+    private var pendingKeyCompletions = [@Sendable (Result<String, NSError>) -> Void]()
+    /// Whether a key fetch (and possible regeneration) is in flight. Only accessed on `keyQueue`.
+    private var isFetchingKey = false
     /// Shared rust keychain for credit card encryption/decryption.
     let rustKeychain = KeychainManager.shared
     /// AutofillStore instance.
@@ -53,6 +60,7 @@ public class RustAutofill: @unchecked Sendable {
                 logger: Logger = DefaultLogger.shared) {
         self.databasePath = databasePath
         queue = DispatchQueue(label: "RustAutofill queue: \(databasePath)")
+        keyQueue = DispatchQueue(label: "RustAutofill key queue: \(databasePath)")
         self.logger = logger
     }
 
@@ -145,30 +153,26 @@ public class RustAutofill: @unchecked Sendable {
     /// - Note: Uses guard statements and optionals effectively, following Swift best practices.
     public func decryptCreditCardNumber(encryptedCCNum: String?,
                                         completion: @escaping @Sendable(String?) -> Void) {
-        queue.async {
-            guard let encryptedCCNum = encryptedCCNum, !encryptedCCNum.isEmpty else {
-                completion(nil)
-                return
-            }
+        guard let encryptedCCNum, !encryptedCCNum.isEmpty else {
+            completion(nil)
+            return
+        }
 
-            self.getStoredKey { result in
-                var ccNumber: String
-                switch result {
-                case .success(let key):
-                    do {
-                        ccNumber = try decryptString(key: key, ciphertext: encryptedCCNum)
-                        completion(ccNumber)
-                    } catch let error as NSError {
-                        self.logger.log("Error decrypting credit card number",
-                                        level: .warning,
-                                        category: .storage,
-                                        description: error.localizedDescription)
-                        completion(nil)
-                        return
-                    }
-                case .failure:
+        getStoredKey { result in
+            switch result {
+            case .success(let key):
+                do {
+                    let ccNumber = try decryptString(key: key, ciphertext: encryptedCCNum)
+                    completion(ccNumber)
+                } catch let error as NSError {
+                    self.logger.log("Error decrypting credit card number",
+                                    level: .warning,
+                                    category: .storage,
+                                    description: error.localizedDescription)
                     completion(nil)
                 }
+            case .failure:
+                completion(nil)
             }
         }
     }
@@ -515,30 +519,52 @@ public class RustAutofill: @unchecked Sendable {
 
     /// Retrieves the stored encryption key.
     ///
+    /// Calls are serialized so concurrent callers cannot each observe a missing or
+    /// corrupt key and regenerate it with different values. Callers arriving while
+    /// a fetch is already in flight are queued and receive that fetch's result.
+    ///
     /// - Parameters:
     ///   - completion: A closure called upon completion with the encryption key or an error upon failure.
     public func getStoredKey(completion: @Sendable @escaping (Result<String, NSError>) -> Void) {
-        DispatchQueue.global(qos: .background).sync {
-            let (key, encryptedCanaryPhrase) = rustKeychain.getCreditCardKeyData()
+        keyQueue.async {
+            self.pendingKeyCompletions.append(completion)
 
-            switch (key, encryptedCanaryPhrase) {
-            case (.some(key), .some(encryptedCanaryPhrase)):
-                self.handleExpectedKeyAction(encryptedCanaryPhrase: encryptedCanaryPhrase,
-                                             key: key,
-                                             completion: completion)
-            case (.some(key), .none):
-                GleanMetrics.CreditCardKeyRegeneration.other.record()
-                self.handleUnexpectedKeyAction(completion: completion)
-            case (.none, .some(encryptedCanaryPhrase)):
-                 GleanMetrics.CreditCardKeyRegeneration.lost.record()
-                self.handleUnexpectedKeyAction(completion: completion)
-            case (.none, .none):
-                self.handleFirstTimeCallOrClearedKeychainAction(completion: completion)
-            default:
-                // If none of the above cases apply, we're in a state that shouldn't be possible
-                // but is disallowed nonetheless
-                completion(.failure(AutofillEncryptionKeyError.illegalState as NSError))
+            // If a fetch is already in flight, its result will be delivered to the
+            // completion we just queued once it finishes.
+            guard !self.isFetchingKey else { return }
+            self.isFetchingKey = true
+
+            self.fetchStoredKey { result in
+                self.keyQueue.async {
+                    let completions = self.pendingKeyCompletions
+                    self.pendingKeyCompletions.removeAll()
+                    self.isFetchingKey = false
+                    completions.forEach { $0(result) }
+                }
             }
+        }
+    }
+
+    private func fetchStoredKey(completion: @Sendable @escaping (Result<String, NSError>) -> Void) {
+        let (key, encryptedCanaryPhrase) = rustKeychain.getCreditCardKeyData()
+
+        switch (key, encryptedCanaryPhrase) {
+        case (.some(key), .some(encryptedCanaryPhrase)):
+            self.handleExpectedKeyAction(encryptedCanaryPhrase: encryptedCanaryPhrase,
+                                         key: key,
+                                         completion: completion)
+        case (.some(key), .none):
+            GleanMetrics.CreditCardKeyRegeneration.other.record()
+            self.handleUnexpectedKeyAction(completion: completion)
+        case (.none, .some(encryptedCanaryPhrase)):
+            GleanMetrics.CreditCardKeyRegeneration.lost.record()
+            self.handleUnexpectedKeyAction(completion: completion)
+        case (.none, .none):
+            self.handleFirstTimeCallOrClearedKeychainAction(completion: completion)
+        default:
+            // If none of the above cases apply, we're in a state that shouldn't be possible
+            // but is disallowed nonetheless
+            completion(.failure(AutofillEncryptionKeyError.illegalState as NSError))
         }
     }
 

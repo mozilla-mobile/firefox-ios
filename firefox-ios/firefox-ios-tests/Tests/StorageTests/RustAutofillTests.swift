@@ -7,7 +7,7 @@ import XCTest
 
 @testable import Storage
 
-class RustAutofillTests: XCTestCase {
+final class RustAutofillTests: XCTestCase {
     var files: FileAccessor!
     var autofill: RustAutofill!
     var encryptionKey: String!
@@ -52,6 +52,15 @@ class RustAutofillTests: XCTestCase {
         } else {
             XCTFail("Could not retrieve root directory")
         }
+    }
+
+    override func tearDown() {
+        // The mock keychain is a shared singleton, so remove any credit card
+        // key data a test may have seeded to avoid leaking state between tests.
+        autofill.rustKeychain.removeAutofillKeysForDebugMenuItem()
+        autofill = nil
+        files = nil
+        super.tearDown()
     }
 
     func addCreditCard() async throws -> CreditCard {
@@ -235,5 +244,120 @@ class RustAutofillTests: XCTestCase {
         XCTAssertEqual(creditCard.guid, retrievedCreditCard.guid)
         XCTAssertTrue(deleteCreditCardResult)
         XCTAssertNil(result)
+    }
+
+    func testDecryptCreditCardNumber() async throws {
+        let creditCard = try await addCreditCard()
+        let decryptedNumber = await Self.decryptCreditCardNumber(autofill, encryptedCCNum: creditCard.ccNumberEnc)
+
+        XCTAssertEqual(decryptedNumber, mockCreditCard.ccNumber)
+    }
+
+    func testDecryptCreditCardNumberWithNilAndEmptyInput() async {
+        let nilResult = await Self.decryptCreditCardNumber(autofill, encryptedCCNum: nil)
+        let emptyResult = await Self.decryptCreditCardNumber(autofill, encryptedCCNum: "")
+
+        XCTAssertNil(nilResult)
+        XCTAssertNil(emptyResult)
+    }
+
+    func testDecryptCreditCardNumberWithInvalidCiphertext() async {
+        let result = await Self.decryptCreditCardNumber(autofill, encryptedCCNum: "not-a-valid-ciphertext")
+
+        XCTAssertNil(result)
+    }
+
+    func testGetStoredKeyReturnsExistingValidKey() async throws {
+        let seededKey = try seedValidCreditCardKey()
+        let storedKey = try await Self.getStoredKey(autofill)
+
+        XCTAssertEqual(storedKey, seededKey)
+    }
+
+    func testConcurrentGetStoredKeyCallsReturnTheSameKey() async throws {
+        // With a valid key seeded, any caller that wrongly triggers a key
+        // regeneration would receive a newly created key instead of the seeded
+        // one and fail the assertions below.
+        let seededKey = try seedValidCreditCardKey()
+        let autofill: RustAutofill = autofill
+
+        let keys = try await withThrowingTaskGroup(of: String.self) { group in
+            for _ in 0..<20 {
+                group.addTask { try await Self.getStoredKey(autofill) }
+            }
+            return try await group.reduce(into: [String]()) { $0.append($1) }
+        }
+
+        XCTAssertEqual(keys.count, 20)
+        XCTAssertEqual(Set(keys), [seededKey])
+    }
+
+    func testConcurrentGetStoredKeyCallsWithNoExistingKey() async throws {
+        // With no key data present, concurrent callers coalesce onto a single
+        // key fetch. Every caller must still receive a completion callback and
+        // they must all get the same generated key.
+        autofill.rustKeychain.removeAutofillKeysForDebugMenuItem()
+        let autofill: RustAutofill = autofill
+
+        let keys = try await withThrowingTaskGroup(of: String.self) { group in
+            for _ in 0..<20 {
+                group.addTask { try await Self.getStoredKey(autofill) }
+            }
+            return try await group.reduce(into: [String]()) { $0.append($1) }
+        }
+
+        XCTAssertEqual(keys.count, 20)
+        XCTAssertEqual(Set(keys).count, 1, "All concurrent callers should receive the same generated key.")
+    }
+
+    func testConcurrentDecryptCreditCardNumber() async throws {
+        let creditCard = try await addCreditCard()
+        let encryptedCCNum = creditCard.ccNumberEnc
+        let autofill: RustAutofill = autofill
+
+        let decryptedNumbers = await withTaskGroup(of: String?.self) { group in
+            for _ in 0..<10 {
+                group.addTask { await Self.decryptCreditCardNumber(autofill, encryptedCCNum: encryptedCCNum) }
+            }
+            return await group.reduce(into: [String?]()) { $0.append($1) }
+        }
+
+        XCTAssertEqual(decryptedNumbers.count, 10)
+        for decryptedNumber in decryptedNumbers {
+            XCTAssertEqual(decryptedNumber, mockCreditCard.ccNumber)
+        }
+    }
+
+    // MARK: - Helpers
+
+    // Static so task group closures don't have to capture the non-Sendable test case.
+    static func getStoredKey(_ autofill: RustAutofill) async throws -> String {
+        return try await withCheckedThrowingContinuation { continuation in
+            autofill.getStoredKey { result in
+                switch result {
+                case .success(let key):
+                    continuation.resume(returning: key)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
+    static func decryptCreditCardNumber(_ autofill: RustAutofill, encryptedCCNum: String?) async -> String? {
+        return await withCheckedContinuation { continuation in
+            autofill.decryptCreditCardNumber(encryptedCCNum: encryptedCCNum) { ccNumber in
+                continuation.resume(returning: ccNumber)
+            }
+        }
+    }
+
+    /// Stores a valid key and matching canary in the keychain so `getStoredKey`
+    /// takes the existing-key path instead of generating a new one.
+    func seedValidCreditCardKey() throws -> String {
+        let key = try createAutofillKey()
+        let canary = try createCanary(text: autofill.rustKeychain.creditCardCanaryPhrase, encryptionKey: key)
+        autofill.rustKeychain.setCreditCardsKeyData(keyValue: key, canaryValue: canary)
+        return key
     }
 }
