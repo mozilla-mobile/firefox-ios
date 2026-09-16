@@ -194,6 +194,16 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                     return
                 }
 
+                // Bugzilla #2068171. Sheet was populated for origin of `tabURL`, do not
+                // inject if selected tab's origin no longer matches (page navigated etc).
+                guard let capturedOrigin = tabURL.origin,
+                      let currentOrigin = currentTab.url?.origin,
+                      capturedOrigin == currentOrigin else {
+                    router.dismiss(animated: true)
+                    parentCoordinator?.didFinish(from: self)
+                    return
+                }
+
                 LoginsHelper.fillLoginDetails(
                     with: currentTab,
                     loginData: LoginInjectionData(
