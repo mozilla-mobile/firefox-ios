@@ -55,7 +55,7 @@ struct OnboardingFlowView: View {
                              colors: [purple, red, yellow, yellow])
                 .ignoresSafeArea()
             } else {
-                LinearGradient(colors: [theme.colors.gradientAIStrongStop1.color, .yellow],
+                LinearGradient(colors: [purple, .yellow],
                                startPoint: .topLeading,
                                endPoint: .bottomTrailing)
                 .opacity(0.15)
