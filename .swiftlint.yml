@@ -13,7 +13,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - collection_alignment
   - colon
   - comma
-  # - comma_inheritance
+  - comma_inheritance
   - comment_spacing
   - compiler_protocol_init
   - computed_accessors_order
