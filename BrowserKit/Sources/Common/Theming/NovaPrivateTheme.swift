@@ -24,7 +24,7 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var layerSurfaceLow = NovaColors.VioletDesaturated90
     var layerSurfaceMedium = NovaColors.VioletDesaturated80
     var layerSurfaceMediumAlt: UIColor = NovaColors.VioletDesaturated70
-    var layerSurfaceMediumAltGlass = NovaColors.VioletDesaturated90
+    var layerSurfaceMediumAltGlass = NovaColors.VioletDesaturated80
     var layerSurfaceMediumAlpha = NovaColors.VioletDesaturated80.withAlphaComponent(0.4)
     var layerAccentSubtle: UIColor = NovaColors.Violet70
     var layerInverse: UIColor = NovaColors.Gray30
@@ -38,7 +38,7 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var layerGlassTintNova: UIColor = .clear
     var layerGlassSelectedFill: UIColor = NovaColors.VioletDesaturated70
     var layerAccentPrivateNonOpaque: UIColor { layerAccentSubtle }
-    var layerToolbarGlass: UIColor = NovaColors.VioletDesaturated70
+    var layerToolbarGlass: UIColor = NovaColors.VioletDesaturated60
 
     // MARK: - Action
 
