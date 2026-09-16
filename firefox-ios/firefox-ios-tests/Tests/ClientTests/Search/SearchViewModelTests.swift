@@ -170,8 +170,8 @@ final class SearchViewModelTests: XCTestCase {
         )
         let subject = createSubject()
         subject.remoteClientTabs = [ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab1),
-                                                 ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab2),
-                                                 ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab3)]
+                                    ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab2),
+                                    ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab3)]
         subject.searchRemoteTabs(for: "Mozilla")
         XCTAssertEqual(subject.filteredRemoteClientTabs.count, 2)
     }
@@ -205,8 +205,8 @@ final class SearchViewModelTests: XCTestCase {
         )
         let subject = createSubject()
         subject.remoteClientTabs = [ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab1),
-                                                 ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab2),
-                                                 ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab3)]
+                                    ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab2),
+                                    ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab3)]
         subject.searchRemoteTabs(for: "Mozilla")
         XCTAssertEqual(subject.filteredRemoteClientTabs.count, 3)
     }

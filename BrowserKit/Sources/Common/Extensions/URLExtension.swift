@@ -240,9 +240,11 @@ extension URL {
         if additionalPartCount > 0 {
             if let suffix = suffix {
                 // Take out the public suffixed and add in the additional parts we want.
-                let literalFromEnd: NSString.CompareOptions = [.literal,        // Match the string exactly.
-                                     .backwards,      // Search from the end.
-                                     .anchored]         // Stick to the end.
+                let literalFromEnd: NSString.CompareOptions = [
+                    .literal,   // Match the string exactly.
+                    .backwards, // Search from the end.
+                    .anchored   // Stick to the end.
+                ]
                 let suffixlessHost = host.replacingOccurrences(
                     of: suffix,
                     with: "",

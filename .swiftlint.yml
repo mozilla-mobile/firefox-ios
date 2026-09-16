@@ -10,7 +10,7 @@ only_rules: # Only enforce these rules, ignore all others
   - closure_end_indentation
   - closure_parameter_position
   - closure_spacing
-  # - collection_alignment
+  - collection_alignment
   - colon
   - comma
   # - comma_inheritance
