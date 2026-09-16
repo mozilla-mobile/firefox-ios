@@ -328,8 +328,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
                                                                              isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let translationConfiguration = translationsAction.translationConfiguration
         let leadingPageActions = LeadingPageActionsBuilder.getActions(
-            translationConfiguration: translationsAction.translationConfiguration,
+            translationConfiguration: translationConfiguration,
             isEditing: state.isEditing,
             isHomepage: state.url == nil,
             isLoading: state.isLoading,
@@ -337,7 +338,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isNovaDesignEnabled: state.isNovaDesignEnabled)
         return state
             .copy(leadingPageActions: leadingPageActions)
-            .copy(translationConfiguration: translationsAction.translationConfiguration)
+            .copy(translationConfiguration: translationConfiguration)
     }
 
     @MainActor
@@ -483,7 +484,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     @MainActor
     private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+        guard action is ToolbarAction else { return defaultState(from: state) }
 
         let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
                                                                              isNovaDesignEnabled: state.isNovaDesignEnabled)
@@ -800,9 +801,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
                                                                              isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let isEditing = true
+        let isEmptySearch = true
         let trailingPageActions = TrailingPageActionsBuilder.getActions(
-            isEditing: true,
-            isEmptySearch: true,
+            isEditing: isEditing,
+            isEmptySearch: isEmptySearch,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
             isLoading: state.isLoading,
@@ -810,10 +813,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
         return state
             .copy(trailingPageActions: trailingPageActions)
-            .copy(isEditing: true)
+            .copy(isEditing: isEditing)
             .copy(shouldSelectSearchTerm: false)
             .copy(didStartTyping: true)
-            .copy(isEmptySearch: true)
+            .copy(isEmptySearch: isEmptySearch)
     }
 
     @MainActor
@@ -822,9 +825,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
                                                                              isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let isEditing = true
+        let isEmptySearch = false
         let trailingPageActions = TrailingPageActionsBuilder.getActions(
-            isEditing: true,
-            isEmptySearch: false,
+            isEditing: isEditing,
+            isEmptySearch: isEmptySearch,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
             isLoading: state.isLoading,
@@ -832,10 +837,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
         return state
             .copy(trailingPageActions: trailingPageActions)
-            .copy(isEditing: true)
+            .copy(isEditing: isEditing)
             .copy(shouldSelectSearchTerm: false)
             .copy(didStartTyping: true)
-            .copy(isEmptySearch: false)
+            .copy(isEmptySearch: isEmptySearch)
     }
 
     private static func handleDidSetSearchTermAction(state: Self, action: Action) -> Self {
