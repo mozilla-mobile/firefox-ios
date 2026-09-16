@@ -71,6 +71,10 @@ class SceneDelegate: UIResponder,
         // Handle clean-up here for closing windows on iPad
         guard let sceneCoordinator = (scene.delegate as? SceneDelegate)?.sceneCoordinator else { return }
 
+        if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(sceneCoordinator.windowUUID)) {
+            AppEventQueue.completed(.pendingDeeplinkTab(sceneCoordinator.windowUUID))
+        }
+
         // For now, we explicitly cancel downloads for windows that are closed.
         // On iPhone this will happen during app termination, for iPad it will
         // occur on termination or when a window is disconnected/closed by iPadOS
@@ -236,6 +240,10 @@ class SceneDelegate: UIResponder,
 
         logger.log("Scene coordinator will handle a route", level: .info, category: .coordinator)
         sessionManager.launchSessionProvider.openedFromExternalSource = true
+
+        if route.willSelectTabOnHandling {
+            AppEventQueue.started(.pendingDeeplinkTab(sceneCoordinator.windowUUID))
+        }
 
         if isDeeplinkOptimizationRefactorEnabled {
             AppEventQueue.wait(for: [.startupFlowComplete]) {
