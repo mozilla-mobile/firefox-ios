@@ -172,12 +172,13 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
         )
         hostingController.rootView.viewModel.onLoginCellTap(login)
 
-        // Loading sheet schedules SwiftUI render that reads Environment(\.themeManager),
-        // which resolves ThemeManager from AppContainer. Flush that render while dependencies
-        // are still registered, so it can't fire during teardown after container is reset.
-        let drained = expectation(description: "main queue finished")
-        DispatchQueue.main.async { drained.fulfill() }
-        wait(for: [drained], timeout: 1.0)
+        // Slightly hacky workaround to ensure the main thread completes before we tear down
+        // the test, the reason is that this loads a sheet and schedules a subsequent SwiftUI
+        // render which will call into Environment(.themeManager), which will crash due to the
+        // nil dependency if the container is reset too early. 
+        let mainQueueCompleted = expectation(description: "main queue finished")
+        DispatchQueue.main.async { mainQueueCompleted.fulfill() }
+        wait(for: [mainQueueCompleted], timeout: 1.0)
     }
 
     private func makeTab(urlString: String) -> Tab {
