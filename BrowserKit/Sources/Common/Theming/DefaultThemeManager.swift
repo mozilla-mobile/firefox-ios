@@ -208,7 +208,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func determineUserTheme() -> ThemeType {
-        if nightModeIsOn { return .nightMode }
         if systemThemeIsOn { return getThemeTypeBasedOnSystem() }
         if automaticBrightnessIsOn { return getThemeTypeBasedOnBrightness() }
 
