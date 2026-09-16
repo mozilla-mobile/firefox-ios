@@ -82,6 +82,12 @@ struct ImageIdentifiers {
             public static let toolbarTopJapan = "onboardingToolbarIconTopJapan"
             public static let toolbarBottomJapan = "onboardingToolbarIconBottomJapan"
         }
+
+        public struct ContinuousOnboarding {
+            public static let notification = "kitOnboardingNotifications"
+            public static let notificationCard = "kitCircle"
+            public static let sync = "kitOnboardingSync"
+        }
     }
 
     public struct NativeErrorPage {

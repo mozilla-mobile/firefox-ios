@@ -296,7 +296,7 @@ final class BrowserCoordinator: BaseCoordinator,
         let cards = OnboardingDripScheduler(prefs: profile.prefs).getDueCards()
         guard !cards.isEmpty else { return }
 
-        let view = DripOnboardingFlowView(
+        let view = OnboardingFlowView(
             cards: cards,
             windowUUID: windowUUID,
             themeManager: themeManager,
