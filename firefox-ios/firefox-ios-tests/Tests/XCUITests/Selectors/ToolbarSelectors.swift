@@ -31,7 +31,7 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         static let tabToolbar_MenuButton = "TabToolbar.menuButton"
         static let reloadButton = AccessibilityIdentifiers.Toolbar.reloadButton
         static let shareButton = AccessibilityIdentifiers.Toolbar.shareButton
-        static let homeButton = AccessibilityIdentifiers.Toolbar.addNewTabButton
+        static let homeButton = AccessibilityIdentifiers.Toolbar.homeButton
         static let translateButton = AccessibilityIdentifiers.Toolbar.translateButton
         static let translateLoadingButton = AccessibilityIdentifiers.Toolbar.translateLoadingButton
         static let translateActiveButton = AccessibilityIdentifiers.Toolbar.translateActiveButton

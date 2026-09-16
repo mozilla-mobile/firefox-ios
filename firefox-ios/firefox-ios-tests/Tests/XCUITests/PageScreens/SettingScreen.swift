@@ -4,6 +4,12 @@
 
 import XCTest
 
+/// The button the user can place in the middle of the navigation toolbar, from Settings → Toolbar.
+enum NavigationToolbarMiddleButton {
+    case home
+    case newTab
+}
+
 @MainActor
 final class SettingScreen {
     private let app: XCUIApplication
@@ -196,6 +202,18 @@ final class SettingScreen {
     func selectBottomToolbar() {
         BaseTestCase().mozWaitForElementToExist(bottomToolbarButton)
         bottomToolbarButton.waitAndTap()
+    }
+
+    /// Picks which button sits in the middle of the navigation toolbar. The Home option is what makes
+    /// the custom homepage URL reachable, as the default New Tab button ignores it.
+    func selectNavigationToolbarMiddleButton(_ button: NavigationToolbarMiddleButton) {
+        let option = switch button {
+        case .home: sel.NAVIGATION_TOOLBAR_HOME_BUTTON.element(in: app)
+        case .newTab: sel.NAVIGATION_TOOLBAR_NEW_TAB_BUTTON.element(in: app)
+        }
+        BaseTestCase().mozWaitForElementToExist(option)
+        option.waitAndTap()
+        BaseTestCase().mozWaitForValueContains(option, value: "1")
     }
 
     func navigateToDisplaySettings() {

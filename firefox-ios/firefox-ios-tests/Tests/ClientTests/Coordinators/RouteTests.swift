@@ -72,10 +72,13 @@ class RouteTests: XCTestCase {
         }
     }
 
+    /// Uses the release host because the parser now matches the content server the build is
+    /// configured against, which is release unless a pref selects another one. Stage no longer
+    /// routes on a release build.
     func testPairingRouteFromSystemCameraDeepLink() {
         let subject = createSubject()
         let pairingURL = URL(
-            string: "https://accounts.stage.mozaws.net/pair#channel_id=channel&channel_key=key&v=2"
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key&v=2"
         )!
         let url = wrappedDeepLink(for: pairingURL)
 

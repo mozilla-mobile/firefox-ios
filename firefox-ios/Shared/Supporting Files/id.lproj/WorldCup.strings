@@ -1,3 +1,6 @@
+/* Accessibility label for the close button on the country picker for the World Cup widget. This allows users to close the country picker. */
+"WorldCup.CountryPicker.Close.AccessibilityLabel.v151" = "Tutup pemilih negara Piala Dunia";
+
 /* Section header for the Africa region in the World Cup country picker. */
 "WorldCup.CountryPicker.Confederation.Africa.v151" = "Afrika";
 
@@ -30,6 +33,9 @@
 
 /* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
 "WorldCup.CountryPicker.SkipButton.Title.v151" = "Lewati";
+
+/* Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
+"WorldCup.CountryPicker.Title.v151" = "Ikuti Tim Anda";
 
 /* The title of the Group A group in the World Cup Group Stage. */
 "WorldCup.GroupPhase.GroupA.Title.v151" = "Grup A";
@@ -136,6 +142,9 @@
 /* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Penuh Waktu";
 
+/* The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "Selesai • Adu penalti (%@)";
+
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Dapatkan gambar latar khusus";
 
@@ -153,6 +162,9 @@
 
 /* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
 "WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "Segarkan";
+
+/* Message shown in the World Cup widget when the device has no internet connection. */
+"WorldCup.HomepageWidget.OfflineLabel.v151" = "Sepertinya Anda sedang luring. Periksa sambungan internet Anda dan coba lagi.";
 
 /* The label indicating that the displaying match is in the penalties part of the game. %@ will be replaced by the score of the penalties */
 "WorldCup.HomepageWidget.PenaltiesLabel.v151" = "Penalti (%@)";

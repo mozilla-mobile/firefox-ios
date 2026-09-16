@@ -266,7 +266,7 @@
 "Downloads.CancelDialog.Resume" = "Sürdür";
 
 /* Alert dialog title when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Title" = "İndirmekten vazgeç";
+"Downloads.CancelDialog.Title" = "İndirmeyi iptal et";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
 "Downloads.Toast.Cancelled.LabelText" = "İndirme iptal edildi";

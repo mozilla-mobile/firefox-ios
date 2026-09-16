@@ -278,10 +278,13 @@ class AppSettingsTableViewController: SettingsTableViewController,
         }
         sendTechnicalDataSetting = sendTechnicalDataSettings
 
+        // Technical data is the only setting that drives the Nimbus telemetry setting
+        Experiments.setTelemetrySetting(profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
+
         let sendDailyUsagePingSettings = SendDataSetting(
             prefs: profile.prefs,
             prefKey: AppConstants.prefSendDailyUsagePing,
-            defaultValue: true,
+            defaultValue: AppConstants.defaultSendDailyUsagePing,
             titleText: .SendDailyUsagePingSettingTitle,
             subtitleText: String(format: .SendDailyUsagePingSettingMessage, MozillaName.shortName.rawValue),
             learnMoreText: .SendDailyUsagePingSettingLinkV2,
@@ -528,7 +531,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ChangeToChinaSetting(settings: self),
             AppReviewPromptSetting(settings: self, settingsDelegate: self),
             ResetContextualHints(settings: self),
-            ResetWallpaperOnboardingPage(settings: self, settingsDelegate: self),
             ResetTermsOfServiceAcceptancePage(settings: self, settingsDelegate: self),
             ResetSearchEnginePrefsSetting(settings: self),
             SentryIDSetting(settings: self, settingsDelegate: self),
@@ -549,6 +551,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
         hiddenDebugOptions.append(ResetTipsSetting(settings: self))
         hiddenDebugOptions.append(ChangeMLPAEndpointSetting(settings: self))
+        hiddenDebugOptions.append(QuickAnswersModelSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))

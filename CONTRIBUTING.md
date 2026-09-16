@@ -34,6 +34,8 @@ There are two supported ways to contribute to Firefox for iOS:
 * Once you are assigned to the issue, you are approved to begin coding
 * If you need guidance on the issue, the reference person can help you out
 
+> [!IMPORTANT]
+> If the issue concerns a bug, first confirm that it is still reproducible. Tickets can become stale, and the bug may already have been fixed by other PRs that don’t reference the issue.
 
 #### Issue Categories by Difficulty
 We’ve categorized `Contributor OK` issues by difficulty to help you get started:

@@ -188,7 +188,10 @@ final class TopSitesMiddleware {
         }
 
         guard telemetryMetadata.topSiteConfiguration.site.isSponsoredSite else { return }
-        unifiedAdsTelemetry.sendImpressionTelemetry(tileSite: telemetryMetadata.topSiteConfiguration.site, position: telemetryMetadata.position)
+        unifiedAdsTelemetry.sendImpressionTelemetry(
+            tileSite: telemetryMetadata.topSiteConfiguration.site,
+            position: telemetryMetadata.position
+        )
     }
 
     private func sendSponsoredTappedTracking(with topSiteConfig: TopSiteConfiguration, and position: Int) {

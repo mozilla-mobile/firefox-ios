@@ -25,11 +25,17 @@ let TIMEOUT_LONG: TimeInterval = 20
 let PDF_TIMEOUT: TimeInterval = 60
 // TabDataStore throttles background saves by 2 seconds, plus one second of margin
 let tabPersistenceThrottleWait: UInt32 = 3
+// Start at Home set to "Homepage" triggers after 5 seconds of inactivity, plus two of margin
+let startAtHomeInactivityWait: TimeInterval = 7
 // Translation is network-bound and can take up to ~1 min to complete
 let TRANSLATION_TIMEOUT: TimeInterval = 90
 // Probe for optional UI that shows up immediately or not at all
 let TIMEOUT_PICKER_PROBE: TimeInterval = 3
 let MAX_SWIPE = 5
+let IngestSuggestionsCell = "Ingest new suggestions now"
+// Nimbus applies fetched recipes on the launch after the fetch, so two attempts is the floor.
+let SuggestRolloutLaunchAttempts = 5
+let SuggestRolloutProbeTimeout: TimeInterval = 5
 
 @MainActor
 class BaseTestCase: XCTestCase {
@@ -55,13 +61,16 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.DisableAnimations
         ]
 
-    func restartInBackground() {
+    /// - Parameter inactiveFor: how long to stay backgrounded before foregrounding again, for tests
+    /// that need a minimum amount of inactivity to elapse.
+    func restartInBackground(inactiveFor seconds: TimeInterval = 0) {
         // Send app to background, and re-enter
         XCUIDevice.shared.press(.home)
         // Let's be sure the app is backgrounded
         _ = app.wait(for: XCUIApplication.State.runningBackgroundSuspended, timeout: TIMEOUT)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
+        idle(for: seconds)
         app.activate()
         // Wait until the app is fully opened (running in foreground) before continuing
         let predicate = NSPredicate(format: "state == %d", XCUIApplication.State.runningForeground.rawValue)
@@ -72,25 +81,38 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func closeFromAppSwitcherAndRelaunch() {
+    /// - Parameter inactiveFor: how long to stay closed before relaunching, for tests that need a
+    /// minimum amount of inactivity to elapse.
+    func closeFromAppSwitcherAndRelaunch(inactiveFor seconds: TimeInterval = 0) {
         let swipeStart = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.999))
         let swipeEnd = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.001))
         _ = app.wait(for: .runningForeground, timeout: TIMEOUT)
         swipeStart.press(forDuration: 0.1, thenDragTo: swipeEnd)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
+        idle(for: seconds)
         app.activate()
+    }
+
+    /// Idles without blocking the runner: a `sleep()` while the app is not in the foreground gets
+    /// the test process killed.
+    func idle(for seconds: TimeInterval) {
+        guard seconds > 0 else { return }
+        RunLoop.current.run(until: Date().addingTimeInterval(seconds))
     }
 
     /// Kills the app and relaunches it keeping the profile, so tabs and preferences set during the
     /// test survive the restart.
-    func forceCloseAndRelaunchApp() {
+    /// - Parameter inactiveFor: how long to stay closed before relaunching, for tests that need a
+    /// minimum amount of inactivity to elapse.
+    func forceCloseAndRelaunchApp(inactiveFor seconds: TimeInterval = 0) {
         // Backgrounding is what saves the tabs, and the app must outlive that throttled write.
         // It is foregrounded again first, as waiting at the home screen gets the runner killed.
         restartInBackground()
         sleep(tabPersistenceThrottleWait)
         app.terminate()
         _ = app.wait(for: .notRunning, timeout: TIMEOUT)
+        idle(for: seconds)
         // Session restore is opted into, as UI tests otherwise always start from a clean tab state
         let keptArguments = app.launchArguments.filter {
             $0 != LaunchArguments.ClearProfile && $0 != LaunchArguments.EnableSessionRestore
@@ -100,6 +122,41 @@ class BaseTestCase: XCTestCase {
         mozWaitForElementToExist(app.windows.otherElements.firstMatch)
         // The navigator state does not survive a relaunch
         setUpScreenGraph()
+    }
+
+    /// The Nimbus database lives inside the test profile, so clearing it would discard the fetched rollout.
+    func relaunchKeepingProfile() {
+        app.terminate()
+        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
+        app.launchArguments = app.launchArguments.filter { $0 != LaunchArguments.ClearProfile }
+        app.launch()
+        waitForTabsButtonHittable()
+        navigator.nowAt(NewTabScreen)
+    }
+
+    /// Enrolls the running app in the live Firefox Suggest rollout, leaving it on the home screen. On
+    /// release builds the feature is enabled by a Nimbus rollout rather than a channel default, and
+    /// Nimbus only applies fetched recipes on the launch that follows the fetch, hence the relaunches.
+    /// - Parameter ingestingSuggestions: also downloads suggestions, which only tests that assert on
+    /// suggestion results need.
+    func enrollInFirefoxSuggestRollout(ingestingSuggestions: Bool = true) {
+        for _ in 1...SuggestRolloutLaunchAttempts {
+            relaunchKeepingProfile()
+            navigator.goto(SettingsScreen)
+            navigator.performAction(Action.OpenSecretSettings)
+            navigator.goto(FirefoxSuggestSettings)
+            // The ingest row only exists while the feature is enabled, so it doubles as the enrollment probe.
+            guard mozWaitForElementToExist(app.cells[IngestSuggestionsCell],
+                                           timeout: SuggestRolloutProbeTimeout,
+                                           failOnTimeout: false) else { continue }
+            if ingestingSuggestions {
+                navigator.performAction(Action.IngestNewSuggestionsNow)
+            }
+            navigator.goto(HomePanelsScreen)
+            return
+        }
+
+        XCTFail("Firefox Suggest was not enabled after \(SuggestRolloutLaunchAttempts) launches")
     }
 
     func removeApp() {
@@ -178,6 +235,15 @@ class BaseTestCase: XCTestCase {
     var skipPlatform: Bool {
         guard let platform = specificForPlatform else { return false }
         return UIDevice.current.userInterfaceIdiom != platform
+    }
+
+    /// Below iOS 17 the locale check drops the News section and the Stories setting.
+    /// https://github.com/mozilla-mobile/firefox-ios/issues/35618
+    var isStoriesBrokenByLocaleBug: Bool {
+        if #available(iOS 17, *) {
+            return false
+        }
+        return true
     }
 
     func restart(_ app: XCUIApplication, args: [String] = []) {
@@ -546,9 +612,17 @@ class BaseTestCase: XCTestCase {
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         let pasteAction = app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction]
         urlBar.waitAndTap()
-        urlBar.pressWithRetry(duration: 2.0, element: pasteAction)
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        pasteAction.waitAndTap()
+        if #unavailable(iOS 16) {
+            // EXPERIMENT: focusing the bar puts it in editing mode, where iOS offers the system
+            // edit menu rather than Firefox's Photon sheet, and a 2s press starts a drag lift.
+            let pasteMenuItem = app.menuItems["Paste"]
+            urlBar.pressWithRetry(duration: 0.8, element: pasteMenuItem)
+            pasteMenuItem.waitAndTap()
+        } else {
+            urlBar.pressWithRetry(duration: 2.0, element: pasteAction)
+            mozWaitForElementToExist(app.tables["Context Menu"])
+            pasteAction.waitAndTap()
+        }
         mozWaitForElementToExist(urlBar)
         waitForPastedValue(in: urlBar, contains: url)
     }

@@ -1,11 +1,44 @@
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox padarīšana par noklusējuma pārlūku ir balsojums par atvērtu un pieejamu internetu.";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Noklusējums labākam internetam";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Iestatīt tīmekļvietņu, e-pasta un Messages saišu automātisku atvēršanu ar Firefox.";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Izvēlies Firefox kā savu noklusējuma pārlūku, lai padarītu ātrumu, drošību un privātumu automātisku!";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Uzlabo ikdienas pārlūkošanu";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox vidēji vienam lietotājam aiztur 3,000+ izsekotājus. Padari mūs par savu noklusējuma pārlūku privātumam un mierīgākam prātam!";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox nodrošina privātumu";
+
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Nomaini savu noklusējuma pārlūku";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "Doties uz iestatījumiem";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Jādodas uz iestatījumiem";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description2" = "2. Jāpiesit “Noklusējuma pārlūka lietotne”";
 
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Jāatlasa Firefox";
+
 /* Text for the screenshot of the iOS system settings page for Firefox. */
 "DefaultBrowserOnboarding.Screenshot" = "Noklusējuma pārlūka lietotne";
+
+/* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
+"DefaultBrowserOnboarding.SkipButton" = "Es to izdarīšu vēlāk";
 
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "Iestatīt kā noklusējuma pārlūku";

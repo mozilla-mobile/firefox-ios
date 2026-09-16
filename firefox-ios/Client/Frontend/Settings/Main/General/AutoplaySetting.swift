@@ -38,4 +38,22 @@ class AutoplaySetting: Setting {
     override func onClick(_ navigationController: UINavigationController?) {
         settingsDelegate?.pressedAutoPlay()
     }
+
+    // TODO: FXIOS-16851
+    // The Settings object still uses the deprecated textLabel/detailTextLabel
+    // API. Setting rows should eventually migrate to UIListContentConfiguration for consistency.
+    // Made changes here to fix bug reported in FXIOS-16134.
+    override func onConfigureCell(
+        _ cell: UITableViewCell,
+        theme: Theme
+    ) {
+        super.onConfigureCell(cell, theme: theme)
+
+        var content = UIListContentConfiguration.valueCell()
+        content.attributedText = title
+        content.secondaryAttributedText = status
+        content.prefersSideBySideTextAndSecondaryText = true
+        content.secondaryTextProperties.color = theme.colors.textPrimary
+        cell.contentConfiguration = content
+    }
 }

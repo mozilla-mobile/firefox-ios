@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 80
     steps:
       - name: Clone firefox-ios repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           repository: mozilla-mobile/firefox-ios
           ref: ${{ inputs.branch }}
@@ -36,7 +36,7 @@ jobs:
           ./bootstrap.sh focus
       - name: Fetch derived data
         timeout-minutes: 10
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: ${{ inputs.derived-data }}
       - name: Extract derived data
@@ -53,7 +53,7 @@ jobs:
         env:
           LOCALE: ${{ inputs.locale }}
       - name: Upload screenshots
-        uses: actions/upload-artifact@v4.6.0
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           path: ./l10n-screenshots
           retention-days: 90

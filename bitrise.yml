@@ -351,8 +351,8 @@ workflows:
             #!/usr/bin/env bash
             set -e
             set -x
-            brew tap mozilla-mobile/fxios
             brew trust mozilla-mobile/fxios
+            brew tap mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
     - xcode-build-for-test@3:
@@ -451,8 +451,8 @@ workflows:
             #!/usr/bin/env bash
             set -e
             set -x
-            brew tap mozilla-mobile/fxios
             brew trust mozilla-mobile/fxios
+            brew tap mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
     - xcode-build-for-test@3:
@@ -760,8 +760,8 @@ workflows:
     - script@1:
         inputs:
         - content: |-
-            brew tap mozilla-mobile/fxios
             brew trust mozilla-mobile/fxios
+            brew tap mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
         title: Run bootstrap
@@ -979,8 +979,8 @@ workflows:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - content: |-
-            brew tap mozilla-mobile/fxios
             brew trust mozilla-mobile/fxios
+            brew tap mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
         title: Run bootstrap
@@ -1049,8 +1049,8 @@ workflows:
     - script@1:
         inputs:
         - content: |-
-            brew tap mozilla-mobile/fxios
             brew trust mozilla-mobile/fxios
+            brew tap mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
         title: Run bootstrap
@@ -1161,8 +1161,8 @@ workflows:
             # debug log
             set -x
 
-            brew tap mozilla-mobile/fxios
             brew trust mozilla-mobile/fxios
+            brew tap mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
     - set-xcode-build-number@1:
@@ -1305,8 +1305,8 @@ workflows:
             set -e
             set -x
 
-            brew tap mozilla-mobile/fxios
             brew trust mozilla-mobile/fxios
+            brew tap mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
     - set-xcode-build-number@1:
@@ -2280,8 +2280,8 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            brew tap mozilla-mobile/fxios
             brew trust mozilla-mobile/fxios
+            brew tap mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap -p focus
         title: ContentBlockerGen
@@ -2805,8 +2805,8 @@ workflows:
             #!/usr/bin/env bash
             set -xe
 
-            brew tap mozilla-mobile/fxios
             brew trust mozilla-mobile/fxios
+            brew tap mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
     - set-xcode-build-number@1:

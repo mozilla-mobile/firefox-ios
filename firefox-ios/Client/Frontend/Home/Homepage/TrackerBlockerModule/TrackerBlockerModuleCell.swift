@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ComponentLibrary
 import UIKit
 
 final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
@@ -16,7 +17,7 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
 
     // MARK: - UI
 
-    private lazy var containerPillView: UIView = .build { view in
+    private lazy var containerPillView: CapsuleView = .build { view in
         view.clipsToBounds = true
         view.isAccessibilityElement = true
         view.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.containerPill
@@ -50,12 +51,6 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        containerPillView.layoutIfNeeded()
-        containerPillView.layer.cornerRadius = containerPillView.frame.height / 2
     }
 
     private func setupLayout() {

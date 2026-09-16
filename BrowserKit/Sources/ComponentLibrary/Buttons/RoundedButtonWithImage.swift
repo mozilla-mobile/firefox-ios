@@ -144,9 +144,9 @@ public final class RoundedButtonWithImage: ResizableButton, ThemeApplicable {
     // MARK: ThemeApplicable
 
     public func applyTheme(theme: Theme) {
-        highlightedBackgroundColor = theme.colors.actionSecondaryHover
-        normalBackgroundColor = theme.colors.actionSecondary
-        foregroundColor = theme.colors.textPrimary
+        highlightedBackgroundColor = theme.isNova ? theme.colors.actionPrimaryHover : theme.colors.actionSecondaryHover
+        normalBackgroundColor = theme.isNova ? theme.colors.actionPrimary : theme.colors.actionSecondary
+        foregroundColor = theme.isNova ? theme.colors.textInverted : theme.colors.textPrimary
         disabledBackgroundColor = theme.colors.actionSecondaryDisabled
         foregroundDisabledColor = theme.colors.textDisabled
         imageTintColor = theme.colors.iconAccentBlue

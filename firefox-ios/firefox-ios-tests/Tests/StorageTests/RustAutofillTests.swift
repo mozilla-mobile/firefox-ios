@@ -55,10 +55,10 @@ final class RustAutofillTests: XCTestCase {
     }
 
     override func tearDown() {
-        // The mock keychain is a shared singleton, so remove any credit card
-        // key data a test may have seeded to avoid leaking state between tests.
         autofill.rustKeychain.removeAutofillKeysForDebugMenuItem()
+        _ = autofill?.forceClose()
         autofill = nil
+        encryptionKey = nil
         files = nil
         super.tearDown()
     }

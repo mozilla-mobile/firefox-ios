@@ -76,6 +76,38 @@ class PairingTests: BaseTestCase {
         }
     }
 
+    /// Drive the v2 supplicant flow. The FxA functional test opens the pairing URL with
+    /// `simctl openurl` once the app is up; the deep link routes into the dedicated FxA
+    /// pairing web view, so this waits for the card that renders there.
+    ///
+    /// v2 inverts v1: the page asks the browser for OAuth parameters over the WebChannel, so
+    /// there is no native pairing screen to tap through, only the web card.
+    func testPairingV2() {
+        guard let connect = waitForElement(labelled: "Connect", timeout: 120) else {
+            attachScreenshot(named: "v2-no-connect-card")
+            XCTFail("No v2 Connect card. App still running: \(app.exists)")
+            return
+        }
+        // A "Connect" button also renders if the pairing URL merely opened as an ordinary tab, so
+        // check the modal is up before treating its dismissal as the success signal.
+        guard assertPairingModalIsOpen() else { return }
+        XCTAssertFalse(
+            app.webViews.staticTexts["Invalid pairing configuration"].exists,
+            "Supplicant page reported invalid pairing configuration"
+        )
+        connect.tap()
+
+        // FXIOS-16685: a successful pairing signs the user in, starts Sync and CLOSES the
+        // pairing modal, so success is the modal going away, not a card rendering in it.
+        // The functional test asserts the account side (device registered, Connected Services).
+        guard waitForModalToClose(timeout: 120) else {
+            attachScreenshot(named: "v2-modal-did-not-close")
+            XCTFail("Pairing modal stayed open after Connect")
+            return
+        }
+        attachScreenshot(named: "v2-pairing-modal-closed")
+    }
+
     /// Capture screenshots of the "Launch pairing from URL" debug option: the
     /// Debug settings row, and the URL-entry alert it opens.
     func testCaptureDebugPairingOption() {
@@ -89,7 +121,10 @@ class PairingTests: BaseTestCase {
     }
 
     private func attachScreenshot(named name: String) {
-        let shot = XCTAttachment(screenshot: app.screenshot())
+        // A dead app makes `app.screenshot()` throw, which turns an ordinary test failure into
+        // a runner crash and loses the diagnosis. Fall back to the whole screen.
+        let screenshot = app.exists ? app.screenshot() : XCUIScreen.main.screenshot()
+        let shot = XCTAttachment(screenshot: screenshot)
         shot.name = name
         shot.lifetime = .keepAlways
         add(shot)
@@ -122,6 +157,91 @@ class PairingTests: BaseTestCase {
         let launchPairing = app.cells["LaunchPairingFromURL.Setting"]
         scrollToElement(launchPairing)
         return launchPairing
+    }
+
+    /// Accept the "Open in ..." springboard confirmation if one is showing.
+    ///
+    /// `simctl openurl` only raises this prompt when the app is not frontmost. Under XCUITest
+    /// it usually is, and the URL arrives with no prompt at all, so this must never block.
+    @discardableResult
+    private func acceptOpenInAppPromptIfPresent() -> Bool {
+        let open = XCUIApplication(bundleIdentifier: "com.apple.springboard").buttons["Open"]
+        guard open.exists else { return false }
+        open.tap()
+        return true
+    }
+
+    /// The pairing modal dismisses itself once `oauth_login` completes, so its disappearance
+    /// is the supplicant-side success signal.
+    ///
+    /// Waits on the modal's own Close button, not on page content: the supplicant card re-renders
+    /// after Connect, so the Connect button going away would report success before pairing runs,
+    /// and would report success for a failure card too.
+    /// Uses `waitForExistence` rather than a tight poll for the same reason `waitForElement` does:
+    /// repeatedly walking the accessibility tree floods os_log and gets the app quarantined.
+    /// A dead app is a failure, not a success, so liveness is checked before reporting closure.
+    ///
+    /// The caller must have already established that the modal is open, otherwise a URL that never
+    /// reached the pairing route would report success: no modal and a dismissed modal both leave no
+    /// Close button. `assertPairingModalIsOpen` is what establishes that.
+    private func waitForModalToClose(timeout: TimeInterval) -> Bool {
+        let close = app.navigationBars.buttons["Close"].firstMatch
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            let remaining = deadline.timeIntervalSinceNow
+            guard remaining > 0 else { break }
+            // Each call yields to the runner instead of spinning the accessibility tree.
+            if !close.waitForExistence(timeout: min(2, remaining)) {
+                return app.state == .runningForeground
+            }
+        }
+        return !close.exists && app.state == .runningForeground
+    }
+
+    /// Confirm the pairing modal is actually presented, so the disappearance of its Close button
+    /// later means "pairing completed" rather than "the URL never opened the modal at all".
+    @discardableResult
+    private func assertPairingModalIsOpen() -> Bool {
+        let close = app.navigationBars.buttons["Close"].firstMatch
+        guard close.waitForExistence(timeout: TIMEOUT_LONG) else {
+            attachScreenshot(named: "v2-modal-never-opened")
+            XCTFail("The pairing modal never opened, so the pairing route was not taken")
+            return false
+        }
+        return true
+    }
+
+    /// Wait for a web card control by label, across the element types WebKit may surface it as.
+    ///
+    /// Uses `waitForExistence` rather than a tight poll: repeatedly walking the accessibility
+    /// tree floods os_log, and the app gets quarantined for logging volume, which segfaults
+    /// XCTAutomationSupport before the test can report anything useful.
+    ///
+    /// Also clears the springboard "Open in ..." prompt each round, since whether it appears
+    /// depends on which app is frontmost when the URL is delivered.
+    private func waitForElement(labelled label: String, timeout: TimeInterval) -> XCUIElement? {
+        let deadline = Date().addingTimeInterval(timeout)
+        let queries = [
+            app.webViews.buttons[label],
+            app.buttons[label],
+            app.webViews.staticTexts[label]
+        ]
+        var promptCleared = false
+        while Date() < deadline {
+            if !promptCleared {
+                promptCleared = acceptOpenInAppPromptIfPresent()
+            }
+            for element in queries {
+                // Derive each wait from the time left, so three back-to-back 2s waits cannot
+                // overshoot the caller's budget.
+                let remaining = deadline.timeIntervalSinceNow
+                guard remaining > 0 else { return nil }
+                if element.firstMatch.waitForExistence(timeout: min(2, remaining)) {
+                    return element.firstMatch
+                }
+            }
+        }
+        return nil
     }
 
     /// Poll for the supplicant's "Confirm pairing" control across the element

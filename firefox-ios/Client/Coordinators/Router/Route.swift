@@ -136,5 +136,7 @@ enum Route {
     enum SearchOptions: Equatable {
         /// An option to focus the user's attention on the location field of the search interface.
         case focusLocationField
+        /// An option to force open a new tab even when on homepage
+        case forceNewTab
     }
 }

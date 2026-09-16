@@ -67,13 +67,15 @@ extension PhotonActionSheetProtocol {
 
         let copyAddressAction = SingleActionViewModel(
             title: .CopyAddressTitle,
-            iconString: StandardImageIdentifiers.Large.link
-        ) { [tabManager] _ in
-            let currentURL = tabManager.selectedTab?.currentURL()
-            if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? currentURL {
-                UIPasteboard.general.url = url
-            }
-        }
+            iconString: StandardImageIdentifiers.Large.link,
+            tapHandler: { [tabManager] _ in
+                let currentURL = tabManager.selectedTab?.currentURL()
+                if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? currentURL {
+                    UIPasteboard.general.url = url
+                }
+            },
+            accessibilityId: AccessibilityIdentifiers.Photon.copyAddressAction
+        )
 
         var actionItems: [PhotonRowActions] = []
         if UIPasteboard.general.hasStrings {

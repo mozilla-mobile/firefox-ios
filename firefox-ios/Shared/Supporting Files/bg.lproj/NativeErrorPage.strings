@@ -40,6 +40,12 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v155" = "Нов опит";
 
+/* On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.Description.v156" = "Свържете се към Wi-Fi или в настройките на iOS включете мобилни данни за %@.";
+
+/* On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "Мобилните данни са изключени срещу %@.";
+
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Собственикът на %@ не го е настроил правилно и не може да бъде създадена защитена връзка.";
 
@@ -75,6 +81,9 @@
 
 /* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
 "NativeErrorPage.Wayback.Error.Search.v155" = "Търсене в интернет";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.SearchWayback.v155" = "Преглед на архивираната версия";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
 "NativeErrorPage.Wayback.Error.Title.v154" = "Не може да бъде установена връзка";

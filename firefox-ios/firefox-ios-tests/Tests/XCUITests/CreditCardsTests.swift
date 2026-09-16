@@ -191,7 +191,7 @@ class CreditCardsTests: BaseTestCase {
         tapCardName()
         nameOnCard.clearText()
         typeCardName(name: updatedName)
-        app.buttons["Save"].waitAndTap()
+        tapSaveAndWaitForCardFormToClose()
         // The name of the card is saved without issues
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[updatedName])
         // Go to an saved credit card and change the credit card number
@@ -204,7 +204,7 @@ class CreditCardsTests: BaseTestCase {
         tapCardNr()
         clearTextUntilEmpty(element: cardNr)
         typeCardNr(cardNo: cards[1])
-        app.buttons["Save"].waitAndTap()
+        tapSaveAndWaitForCardFormToClose()
         // The credit card number is saved without issues
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1111"))
         // Reach autofill website
@@ -358,7 +358,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToNotExist(app.otherElements.staticTexts["Enter a valid expiration date"])
         mozWaitForElementToExist(saveButton)
         XCTAssertTrue(saveButton.isEnabled)
-        saveButton.waitAndTap()
+        tapSaveAndWaitForCardFormToClose()
         // The credit card is saved
         let cardsInfo = ["Test", "5/40"]
         mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1252"))
@@ -560,46 +560,47 @@ class CreditCardsTests: BaseTestCase {
     }
 
     private func pressDelete() {
-        if iPad() {
-            mozWaitForElementToExist(app.keyboards.keys["delete"])
-            app.keyboards.keys["delete"].press(forDuration: 2.2)
-        } else {
-            mozWaitForElementToExist(app.keyboards.keys["Delete"])
-            app.keyboards.keys["Delete"].press(forDuration: 2.2)
-        }
+        let deleteKey = iPad() ? app.keyboards.keys["delete"] : app.keyboards.keys["Delete"]
+        mozWaitForElementToExist(deleteKey)
+        deleteKey.waitUntilHittable()
+        deleteKey.press(forDuration: 2.2)
     }
 
     func tapCardName() {
         initCardFields()
-        nameOnCard.waitAndTap()
-        mozWaitForElementToExist(nameOnCard)
+        nameOnCard.tapUntilKeyboardFocused()
     }
 
     func tapCardNr() {
         initCardFields()
-        cardNr.waitAndTap()
-        mozWaitForElementToExist(cardNr)
+        cardNr.tapUntilKeyboardFocused()
     }
 
     func tapExpiration() {
         initCardFields()
-        expiration.waitAndTap()
-        mozWaitForElementToExist(expiration)
+        expiration.tapUntilKeyboardFocused()
     }
 
     func typeCardName(name: String) {
-        initCardFields()
+        tapCardName()
         nameOnCard.typeText(name)
     }
 
     func typeCardNr(cardNo: String) {
-        initCardFields()
+        tapCardNr()
         cardNr.typeTextWithDelay(cardNo, delay: 0.1)
     }
 
     func typeExpirationDate(exprDate: String) {
-        initCardFields()
+        tapExpiration()
         expiration.typeText(exprDate)
+    }
+
+    /// Taps "Save" and waits for the card form to be dismissed. The form is presented as a form
+    /// sheet, so on iPad the list behind it stays visible and cannot be used as a barrier.
+    func tapSaveAndWaitForCardFormToClose() {
+        initCardFields()
+        app.buttons[creditCardsStaticTexts.AddCreditCard.save].tapUntilElementDisappears(cardNr)
     }
 
     private func validateAutofillCardInfo(cardNr: String, expYear: String, expMonth: String, name: String) {
@@ -767,12 +768,11 @@ class CreditCardsTests: BaseTestCase {
         let saveButton = app.buttons[creditCardsStaticTexts.AddCreditCard.save]
         if !saveButton.isEnabled {
             retryOnCardNumber(cardNumber: cardNumber)
-            mozWaitForElementToExist(expiration)
-            expiration.typeText(expirationDate)
+            typeExpirationDate(exprDate: expirationDate)
             retryExpirationNumber(expirationDate: expirationDate)
             mozWaitForElementToExist(saveButton)
         }
-        saveButton.waitAndTap()
+        tapSaveAndWaitForCardFormToClose()
     }
 
     private func addCreditCard_TAE(name: String, cardNumber: String, expirationDate: String) {
@@ -793,12 +793,11 @@ class CreditCardsTests: BaseTestCase {
         let saveButton = app.buttons[creditCardsStaticTexts.AddCreditCard.save]
         if !saveButton.isEnabled {
             retryOnCardNumber(cardNumber: cardNumber)
-            mozWaitForElementToExist(expiration)
-            expiration.typeText(expirationDate)
+            typeExpirationDate(exprDate: expirationDate)
             retryExpirationNumber(expirationDate: expirationDate)
             mozWaitForElementToExist(saveButton)
         }
-        saveButton.waitAndTap()
+        tapSaveAndWaitForCardFormToClose()
     }
 
     private func retryOnCardNumber(cardNumber: String) {
@@ -824,7 +823,7 @@ class CreditCardsTests: BaseTestCase {
 
 extension XCUIElement {
     func clearText() {
-        tap()
+        tapUntilKeyboardFocused()
         if let stringValue = value as? String, !stringValue.isEmpty {
             let deleteString = stringValue.map { _ in "\u{8}" }.joined()
             typeText(deleteString)

@@ -84,8 +84,6 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
         // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
         MozillaAppServices.initialize()
 
-        AdsClientDocumentsDirectoryMigration().removeLegacyDatabaseFiles()
-
         /// Migrate TermsOfService prefs to TermsOfUse prefs
         /// before Nimbus is initialized (should be available for experiments)
         /// and backfill accept date/version if needed - after telemetry set up
@@ -110,7 +108,6 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
 
         // Save toolbar position to user prefs
         let searchBarLocationSaver = SearchBarLocationSaver()
-        searchBarLocationSaver.migrateBottomBarPositionToTopOnIPad(profile: profile)
         searchBarLocationSaver.saveUserSearchBarLocation(profile: profile)
         let deviceName = UIDevice.current.name
 

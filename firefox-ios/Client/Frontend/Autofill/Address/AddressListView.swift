@@ -34,6 +34,7 @@ struct AddressListView: View {
     @State var subTextColor: Color = .clear
     @State var imageColor: Color = .clear
     @State var listColor: Color = .clear
+    @State private var accentColor: Color?
 
     @State private var isLandscape = false
 
@@ -82,6 +83,7 @@ struct AddressListView: View {
                     editAddressView
                 }
             }
+            .tint(accentColor)
         }
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
@@ -150,6 +152,7 @@ struct AddressListView: View {
         subTextColor = Color(color.textSecondary)
         imageColor = Color(color.iconSecondary)
         listColor = Color(color.layer1)
+        accentColor = theme.isNova ? Color(color.actionPrimary) : nil
     }
 
     @ViewBuilder var contentUnavailableView: some View {

@@ -23,7 +23,7 @@
 "NSPhotoLibraryAddUsageDescription" = "Бұл көмегімен фотоларды сақтауға болады.";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Firefox дауыстық іздеу үшін дауысыңызды мәтінге түрлендіру үшін сөйлеуді тануды пайдаланады.";
+"NSSpeechRecognitionUsageDescription" = "Бұл Firefox-қа аудиоңызды транскрипциялауға мүмкіндік береді.";
 
 /* (No Comment) */
 "Scan QR Code" = "QR кодын сканерлеу";

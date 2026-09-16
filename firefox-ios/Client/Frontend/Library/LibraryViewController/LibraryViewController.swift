@@ -438,7 +438,7 @@ class LibraryViewController: UIViewController, Themeable {
     func setNavigationBarHidden(_ value: Bool) {
         navigationController?.setToolbarHidden(value, animated: true)
         navigationController?.setNavigationBarHidden(value, animated: false)
-        let controlbarHeight = librarySegmentControl.frame.height
+        let controlbarHeight = UX.NavigationMenu.height
         librarySegmentControl.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
         controllerContainerView.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
 

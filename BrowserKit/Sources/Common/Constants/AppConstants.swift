@@ -28,6 +28,10 @@ public final class AppConstants {
     public static let isSessionRestoreEnabledForTests =
         ProcessInfo.processInfo.arguments.contains(LaunchArguments.EnableSessionRestore)
 
+    // Opt-in for the UI tests that assert on the Start at Home behaviour
+    public static let isStartAtHomeEnabledForTests =
+        ProcessInfo.processInfo.arguments.contains(LaunchArguments.EnableStartAtHome)
+
     public static let scheme: String = {
         guard let identifier = Bundle.main.bundleIdentifier else {
             return "unknown"
@@ -48,6 +52,8 @@ public final class AppConstants {
     public static let prefSendDailyUsagePing = "settings.sendDailyUsagePing"
     public static let prefStudiesToggle = "settings.studiesToggle"
     public static let prefRolloutsToggle = "settings.rolloutsToggle"
+
+    public static let defaultSendDailyUsagePing = true
 
     /// Build Channel.
     public static let buildChannel: AppBuildChannel = {

@@ -27,6 +27,14 @@ class SyncContentSettingsViewControllerTests: XCTestCase {
         try await super.tearDown()
     }
 
+    func test_syncContentSettingsViewController_doesNotLeak_whenGeneratedSettingsAreStored() {
+        let subject = SyncContentSettingsViewController(windowUUID: windowUUID)
+        subject.profile = profile
+        trackForMemoryLeaks(subject)
+        // Mirrors viewWillAppear(_:), which retains the generated settings on the controller.
+        subject.settings = subject.generateSettings()
+    }
+
     func test_syncContentSettingsViewController_generateSettingsCount() {
         let settingSections = syncContentSettingsVC?.generateSettings()
         // Count should be 4 as the sections contains

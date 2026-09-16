@@ -11,15 +11,18 @@ final class WebCompatReporterMiddleware {
     private let recorder: WebCompatReportRecorder
     private let telemetry: WebCompatReporterTelemetry
     private let pageContextReader: WebCompatPageContextReading
+    private let experiments: WebCompatExperimentsProviding
 
     init(windowManager: WindowManager = AppContainer.shared.resolve(),
          recorder: WebCompatReportRecorder = WebCompatReportRecorder(),
          telemetry: WebCompatReporterTelemetry = WebCompatReporterTelemetry(),
-         pageContextReader: WebCompatPageContextReading = WebCompatPageContextReader()) {
+         pageContextReader: WebCompatPageContextReading = WebCompatPageContextReader(),
+         experiments: WebCompatExperimentsProviding = WebCompatExperimentsProvider()) {
         self.windowManager = windowManager
         self.recorder = recorder
         self.telemetry = telemetry
         self.pageContextReader = pageContextReader
+        self.experiments = experiments
     }
 
     lazy var webCompatReporterProvider: Middleware<AppState> = (legacyProvider, modernProvider)
@@ -102,7 +105,7 @@ final class WebCompatReporterMiddleware {
         ))
     }
 
-    /// The only place a report is assembled, so the preview can't differ from what's sent.
+    /// Preview and submit build the report here, but as separate reads.
     private func makeReport(windowUUID: WindowUUID, state: AppState) -> WebCompatReportPayload {
         let reporterState = WebCompatReporterState(appState: state, uuid: windowUUID)
         let draft = WebCompatReportPayload.make(from: reporterState)
@@ -112,7 +115,8 @@ final class WebCompatReporterMiddleware {
             draft,
             tab: tab,
             includeBlockedList: reporterState.includeBlockedList,
-            includeTabSpecificInfo: includeTabSpecificInfo
+            includeTabSpecificInfo: includeTabSpecificInfo,
+            experiments: experiments
         )
         // Page context is `tab_info`, so it follows the same URL-match gate as that whole group.
         guard includeTabSpecificInfo, let pageContext = reporterState.pageContext else { return payload }

@@ -25,7 +25,7 @@ public struct DefaultResultsServiceFactory: ResultsServiceFactory {
         prefs: Prefs,
         configFetcher: QuickAnswersConfigFetcher
     ) throws -> ResultsService {
-        guard let client = makeLiteLLMClient(prefs: prefs) else {
+        guard let client = makeLiteLLMClient(prefs: prefs, model: configFetcher.model) else {
             throw ResultsServiceError.unableToCreateService
         }
 
@@ -33,7 +33,7 @@ public struct DefaultResultsServiceFactory: ResultsServiceFactory {
     }
 
     // MARK: - Private Helpers
-    private func makeLiteLLMClient(prefs: Prefs) -> LiteLLMClientProtocol? {
-        return liteLLMCreator.createAppAttestLiteLLM(using: prefs, serviceType: .quickAnswers)
+    private func makeLiteLLMClient(prefs: Prefs, model: QuickAnswersModel) -> LiteLLMClientProtocol? {
+        return liteLLMCreator.createAppAttestLiteLLM(using: prefs, serviceType: model.serviceType)
     }
 }

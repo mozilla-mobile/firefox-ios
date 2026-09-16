@@ -81,9 +81,15 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
             fallbackFaviconSize: CGSize(width: UX.faviconSize, height: UX.faviconSize)
         )
         thumbnailImageView.setHeroImage(heroImageViewModel)
+        let faviconSiteResource: SiteResource? = if let url = item.faviconURL {
+            SiteResource.remoteURL(url: url)
+        } else {
+            nil
+        }
         faviconImageView.setFavicon(
             FaviconImageViewModel(
-                siteURLString: item.faviconURL?.absoluteString ?? item.url?.absoluteString,
+                siteURLString: item.url?.absoluteString ?? "",
+                siteResource: faviconSiteResource,
                 faviconCornerRadius: UX.faviconCornerRadius
             )
         )
@@ -113,7 +119,6 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
     }
 }
 
-// TODO: - FXIOS-14720 Add Strings and accessibility ids
 final class QuickAnswersSourceView: UIView,
                                     UICollectionViewDataSource,
                                     UICollectionViewDelegateFlowLayout,
@@ -127,7 +132,7 @@ final class QuickAnswersSourceView: UIView,
 
     private let headerLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.caption1.scaledFont()
-        $0.text = "Sources"
+        $0.text = ""
         $0.adjustsFontForContentSizeCategory = true
     }
     private lazy var collectionView: UICollectionView = {
@@ -196,6 +201,10 @@ final class QuickAnswersSourceView: UIView,
     }
 
     // MARK: - Configuration
+    func configureStrings(sourcesHeader: String) {
+        headerLabel.text = sourcesHeader
+    }
+
     func configure(with items: [SearchResult.Source], onSourceTapped: ((URL) -> Void)? = nil) {
         self.items = items
         self.onSourceTapped = onSourceTapped

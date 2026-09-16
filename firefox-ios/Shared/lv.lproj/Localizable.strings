@@ -16,6 +16,18 @@
 /* About settings section title */
 "About" = "Par";
 
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Piespraust";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Atspraust";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Cilnes: %d";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Nesen saglabātas";
+
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Iestatiet rindas";
 
@@ -61,17 +73,53 @@
 /* Block pop-up windows setting */
 "Block Pop-up Windows" = "Liegt uzlecošos logus";
 
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Grāmatzīmes";
+
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Labot";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "Labot grāmatzīmi";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "Labot mapi";
 
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Mape";
 
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "Darbvirsmas grāmatzīmes";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "Jauna grāmatzīme";
+
 /* The button to create a new folder */
 "Bookmarks.NewFolder.Label" = "Jauna mape";
 
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "Jauns atdalītājs";
+
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Virsraksts";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Šis pārkāpums notika";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Pēc pēdējās paroles mainīšanas reizes ir noplūdušas vai nozagtas paroles. Lai aizsargātu šo kontu, jāpiesakās vietnē un jānomaina sava parole.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Uzzināt vairāk";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Doties uz";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Tīmekļvietnes datu noplūde";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Spilgtums";
@@ -103,11 +151,17 @@
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Atvērta jauna privātā cilne";
 
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "Atvērta jauna privātā cilne";
+
 /* The button text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Pārslēgt";
 
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Atvērta jauna cilne";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "Atvērta jauna cilne";
 
 /* Context menu item for copying an image to the clipboard */
 "ContextMenu.CopyImageButtonTitle" = "Kopēt attēlu";
@@ -130,6 +184,18 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Dalīties ar saiti";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "Rīkjoslas iestatījumi";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "Cilnes, kuras divu nedēļu laikā nav apskatītas, tiek pārvietotas šeit.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Izslēgt iestatījumos";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Aizvērt";
+
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Nevar pievienot lapu lasīšanas sarakstam";
 
@@ -138,6 +204,12 @@
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Nevar ielādēt lapu.";
+
+/* Text for the new ETP settings button */
+"CoverSheet.v24.ETP.Settings.Button" = "Doties uz iestatījumiem";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Aizsardzība pret reklāmu izsekošanu";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "Izveidot kontu";
@@ -150,6 +222,9 @@
 
 /* Title for default search engine picker. */
 "Default Search Engine" = "Noklusējuma meklētājs";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "Aizvērt";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "Attēlošanās iestatījumi";
@@ -188,7 +263,7 @@
 "Downloads.Toast.GoToDownloads.Button" = "Lejupielādes";
 
 /* The description text in the Download progress toast for showing the number of files when multiple files are downloading. %d is the total number of files. */
-"Downloads.Toast.MultipleFiles.DescriptionText" = "1 no %d failiem";
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1 datne no %d";
 
 /* The description text in the Download progress toast for showing the number of files (%1$@) and download progress (%2$@). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where %1$@ is Downloads.Toast.MultipleFiles.DescriptionText and %2$@ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and %1$@ should come before %2$@ everywhere except for right-to-left locales. */
 "Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
@@ -196,8 +271,14 @@
 /* The description text in the Download progress toast for showing the downloaded file size (%1$@) out of the total expected file size (%2$@). */
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "Izdzēst";
+
 /* Title for the Downloads Panel empty state. */
 "DownloadsPanel.EmptyState.Title" = "Lejupielādētais būs redzams te.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "Kopīgot";
 
 /* Text message in the settings table view */
 "Enter your password to connect" = "Ievadiet paroli lai pieslēgtos";
@@ -212,19 +293,22 @@
 "ErrorPages.AdvancedWarning2.Text" = "Tā varētu būt nepareizas uzstādīšanas vai uzbrukuma pazīme. Turpiniet tikai ja jūs pieņemat iespējamo risku.";
 
 /* Warning text on the certificate error page. %@ is the domain of the website. */
-"ErrorPages.CertWarning.Description" = "%@ īpašnieks ir nepareizi uzstādījis savu mājaslapu. Lai aizsargātu jūsu informāciju no zagšanas, Firefox nav pieslēdzies šai mājaslapai.";
+"ErrorPages.CertWarning.Description" = "%@ īpašnieks ir nepareizi konfigurējis savu tīmekļvietni. Lai aizsargātu savu informāciju no nozagšanas, Firefox neizveidoja savienojumu ar šo tīmekļvietni.";
 
 /* Title on the certificate error page */
 "ErrorPages.CertWarning.Title" = "Šis savienojums nav uzticams";
 
 /* Label for button to go back from the error page */
-"ErrorPages.GoBack.Button" = "Iet atpakaļ";
+"ErrorPages.GoBack.Button" = "Doties atpakaļ";
 
 /* Button label to temporarily continue to the site from the certificate error page */
 "ErrorPages.VisitOnce.Button" = "Tomēr apmeklēt šo mājaslapu";
 
 /* Question shown to user when tapping a link that opens the App Store app */
 "ExternalLink.AppStore.ConfirmationTitle" = "Atveriet šo saiti App Store?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "Atvērt šo saiti ārējā lietotnē?";
 
 /* Tile title for Facebook */
 "Facebook" = "Facebook";
@@ -234,6 +318,30 @@
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
 "FirefoxHome.CustomizeHomeButton.Title" = "Pielāgot sākumlapu";
+
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "Atklāt vairāk";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "Pārdomas rosinoši stāsti";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "Noņemt";
+
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Lapas: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "Iestatījumi";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Mūsu atbalstītāji un Tavs privātums";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Atvērt vienādotu cilni";
+
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Apskatīt visas vienādotās cilnes";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Pārsūtīt";
@@ -373,11 +481,17 @@
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Meklēt vēlreiz";
 
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "Rādīt lejupielādes";
+
 /* This label is meant to signify the section containing a group of items from the past thirty days. */
 "Last month" = "Pēdējā mēnesī";
 
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Pagājušajā nedēļā";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Izdzēst";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "Licences";
@@ -397,6 +511,12 @@
 /* Toggle logins syncing setting */
 "Logins" = "Paroles";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Uzzināt vairāk";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Uzzināt vairāk";
+
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Nesaglabāt";
 
@@ -410,7 +530,7 @@
 "LoginsHelper.Update.Button" = "Atjaunināt";
 
 /* Placeholder test for search box in logins list view. */
-"LoginsList.LoginsListSearchPlaceholder" = "Filtrs";
+"LoginsList.LoginsListSearchPlaceholder" = "Atrsijātājs";
 
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Nekas neatbilst meklētajam.";
@@ -448,6 +568,15 @@
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "Pielāgot sākumlapu";
 
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Lejupielādes";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Aizsardzība ir IZSLĒGTA šai vietnei";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Aizsardzība ir IESLĒGTA šai vietnei";
+
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Ielīmēt";
 
@@ -461,7 +590,7 @@
 "Menu.ReloadWithTrackingProtection.Title" = "Pārlādēt ar izsekošanas aizsardzību";
 
 /* Toast displayed to the user after a bookmark has been removed. */
-"Menu.RemoveBookmark.Confirm" = "Grāmatzīme aizvākta";
+"Menu.RemoveBookmark.Confirm" = "Grāmatzīme noņemta";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
 "mobile device" = "mobilā ierīce";
@@ -700,6 +829,15 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
 "Settings.AddressBar.SettingsTitle.v138" = "Adrešu josla";
 
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Izskats";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Tīmekļvietņu izskats";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Piešķir tīmekļvietnēm tumšu izskatu. Dažas vietnes var neizskatīties pareizi.";
+
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Liegt ārēju lietotņu atvēršanu";
 
@@ -710,7 +848,7 @@
 "Settings.ClearPrivateData.SectionName" = "Notīrīt privātos datus";
 
 /* Default text in search bar for Data Management */
-"Settings.DataManagement.SearchLabel" = "Filtrēt vietnes";
+"Settings.DataManagement.SearchLabel" = "Atsijāt vietnes";
 
 /* Body of the alert when prompting the user asking to disconnect. */
 "Settings.Disconnect.Body" = "Firefox pārstās sinhronizēt ar jūsu kontu, bet esošie dati no šīs ierīces netiks izdzēsti.";
@@ -759,6 +897,9 @@
 
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
 "Settings.Home.Option.Title.v101" = "Iekļaut sākumlapā";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "Uzzināt vairāk";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Sākumlapa";
@@ -829,14 +970,20 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri saīsnes";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Uzzināt vairāk.";
+
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Labi, sapratu";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Uzzināt vairāk";
 
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Izsekošanas aizsardzība";
 
 /* Tracking protection settings option for using the strict blocklist. */
-"Settings.TrackingProtectionOption.BlockListStrict" = "Strikts";
+"Settings.TrackingProtectionOption.BlockListStrict" = "Stingrs";
 
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "Problēmu novēršana";
@@ -947,7 +1094,7 @@
 "Toolbar.Menu.CloseAllTabs" = "Aizvērt visas cilnes";
 
 /* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
-"TopSites.RemovePage.Button" = "Aizvākt lapu - %@";
+"TopSites.RemovePage.Button" = "Noņemt lapu — %@";
 
 /* Button to disallow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.Cancel" = "Nē";

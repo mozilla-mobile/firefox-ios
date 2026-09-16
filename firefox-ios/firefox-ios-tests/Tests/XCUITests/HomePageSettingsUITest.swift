@@ -14,10 +14,15 @@ let urlExampleLabel = TestLabels.exampleDomain
 let urlMozillaLabel = "Internet for people, not profit — Mozilla (US)"
 
 class HomePageSettingsUITests: FeatureFlaggedTestBase {
+    private var homepageSettingsScreen: HomepageSettingsScreen!
+    private var settingsHomepageScreen: SettingsHomepageScreen!
+    private var homePageScreen: HomePageScreen!
+    private var settingScreen: SettingScreen!
+    private var toolbarScreen: ToolbarScreen!
+    private var browserScreen: BrowserScreen!
+
     private func enterWebPageAsHomepage(text: String) {
-        app.textFields["HomeAsCustomURLTextField"].tapAndTypeText(text)
-        let value = app.textFields["HomeAsCustomURLTextField"].value
-        XCTAssertEqual(value as? String, text, "The webpage typed does not match with the one saved")
+        homepageSettingsScreen.typeCustomHomepageURL(text)
     }
     let testWithDB = ["testTopSitesCustomNumberOfRows"]
     let prefilledTopSites = "testBookmarksDatabase1000-browser.db"
@@ -37,6 +42,12 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         }
         launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         try await super.setUp()
+        homepageSettingsScreen = HomepageSettingsScreen(app: app)
+        settingsHomepageScreen = SettingsHomepageScreen(app: app)
+        homePageScreen = HomePageScreen(app: app)
+        settingScreen = SettingScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339256
@@ -45,54 +56,60 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
 
-        waitForElementsToExist(
-            [
-                app.navigationBars["Homepage"],
-                app.tables.otherElements["OPENING SCREEN"],
-                app.tables.otherElements["INCLUDE ON HOMEPAGE"],
-                app.tables.otherElements["CURRENT HOMEPAGE"]
-            ]
-        )
+        settingsHomepageScreen.assertSectionsAreDisplayed()
 
         // Opening Screen
-        XCTAssertFalse(app.tables.cells["StartAtHomeAlways"].isSelected)
-        XCTAssertFalse(app.tables.cells["StartAtHomeDisabled"].isSelected)
-        XCTAssertTrue(app.tables.cells["StartAtHomeAfterFourHours"].isSelected)
+        settingsHomepageScreen.assertLastTabIsSelectedAsOpeningScreen()
 
         // Include on Homepage
-        mozWaitForElementToExist(app.tables.cells["TopSitesSettings"].staticTexts["On"])
+        homepageSettingsScreen.assertJumpBackInToggleIsDisabled()
+        homepageSettingsScreen.assertShortcutsSettingIsOn()
+        // The Stories row is not rendered on iOS 16, where the locale identifier is
+        // reported as "en-US_US" and fails the Merino supported locale check
+        if #available(iOS 17, *) {
+            settingsHomepageScreen.assertStoriesSwitch(isOn: true)
+        }
+        homepageSettingsScreen.assertBookmarkToggleIsDisabled()
 
         // Current Homepage
-        XCTAssertTrue(app.tables.cells["Firefox Home"].isSelected)
-        mozWaitForElementToExist(app.tables.cells["HomeAsCustomURL"])
+        settingsHomepageScreen.assertFirefoxHomeIsSelectedAsCurrentHomepage()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339257
-    func testTyping() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest,
-                      "Skipping test based on https://github.com/mozilla-mobile/firefox-ios/issues/28117.")
+    // Regression
+    func testValidateCustomURLAsCurrentHomepage() throws {
+        guard !iPad() else {
+            throw XCTSkip("The navigation toolbar middle button cannot be configured on iPad")
+        }
+        app.launch()
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         // Enter a webpage
-        enterWebPageAsHomepage(text: "example.com")
+        enterWebPageAsHomepage(text: path(forTestPage: TestPages.exampleHTML))
 
         // Check if it is saved going back and then again to home settings menu
         navigator.goto(SettingsScreen)
         navigator.goto(HomeSettings)
-        mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "http://example.com")
+        homepageSettingsScreen.assertCustomHomepageURLContains(TestPages.exampleHTML)
+
+        // The custom homepage is loaded by the Home button only. It replaces the new tab button in
+        // the middle of the navigation toolbar, which follows the New Tab settings instead.
+        navigator.goto(SettingsScreen)
+        settingScreen.navigateToToolbarSettings()
+        settingScreen.selectNavigationToolbarMiddleButton(.home)
+        settingScreen.tapBackToSettings()
+        settingScreen.closeSettingsWithDoneButton()
 
         // Check that it is actually set by opening a different website and going to Home
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
 
-        // Now check open home page should load the previously saved home page
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+        // Now the home button should load the previously saved home page
+        toolbarScreen.tapHomeButton()
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                value: "example.com")
+        browserScreen.assertWebPageText(with: TestLabels.exampleDomain)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339258
@@ -113,28 +130,36 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339260
-    func testSetFirefoxHomeAsHome() {
+    func testSetFirefoxHomeAsHome() throws {
+        guard !iPad() else {
+            throw XCTSkip("The navigation toolbar middle button cannot be configured on iPad")
+        }
         app.launch()
         // Go to homepage settings
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
-        // Firefox home and custom URL options are displayed
-        // Firefox Home is selected by default
-        mozWaitForElementToExist(app.tables.cells["HomeAsFirefoxHome"])
-        mozWaitForElementToExist(app.tables.cells["HomeAsCustomURL"])
-        XCTAssertTrue(app.tables.cells["HomeAsFirefoxHome"].isSelected, "Firefox Home is not selected by default")
+        // Firefox home and custom URL options are displayed, Firefox Home is selected by default
+        settingsHomepageScreen.assertFirefoxHomeIsSelectedAsCurrentHomepage()
+
+        // The homepage is loaded by the Home button, which replaces the new tab button in the
+        // middle of the navigation toolbar
         navigator.goto(SettingsScreen)
-        navigator.goto(NewTabScreen)
+        settingScreen.navigateToToolbarSettings()
+        settingScreen.selectNavigationToolbarMiddleButton(.home)
+        settingScreen.tapBackToSettings()
+        settingScreen.closeSettingsWithDoneButton()
+
+        // Go to a webpage and tap the home button
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        // Add a new tab
-        navigator.performAction(Action.GoToHomePage)
-        // A new tab with Firefox homepage is added
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+        toolbarScreen.tapHomeButton()
+
+        // The Firefox homepage opens on the same tab
+        homePageScreen.assertHomepageIsDisplayed()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "1",
+                                            message: "The homepage did not open on the same tab")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339489
@@ -239,7 +264,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
                 app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
             } else {
                 navigator.performAction(Action.GoToHomePage)
-                app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+                browserScreen.dismissURLBarOverlay()
             }
             mozWaitForElementToExist(app.staticTexts["Bookmarks"])
             navigator.nowAt(NewTabScreen)

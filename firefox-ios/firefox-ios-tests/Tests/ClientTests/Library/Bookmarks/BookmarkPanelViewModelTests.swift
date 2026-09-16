@@ -5,6 +5,7 @@
 import MozillaAppServices
 import Shared
 import Storage
+import UIKit
 import XCTest
 
 @testable import Client
@@ -419,6 +420,100 @@ final class BookmarksPanelViewModelTests: XCTestCase {
         XCTAssertEqual(subject.displayedBookmarkNodes.count, 1, "One of two bookmarks was removed")
     }
 
+    func testDeletingBookmark_doesNotReloadTableViewAfterAsyncRemoval_ifNotSearching() throws {
+        profile.reopen()
+        profile.prefs.removeObjectForKey(PrefsKeys.RecentBookmarkFolder)
+
+        let bookmarksHandler = MockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let viewModel = createSubject(
+            guid: BookmarkRoots.MobileFolderGUID,
+            bookmarksHandler: bookmarksHandler
+        )
+        let dataLoaded = expectation(description: "Bookmarks loaded")
+        viewModel.reloadData {
+            dataLoaded.fulfill()
+        }
+        wait(for: [dataLoaded], timeout: 1)
+        XCTAssertEqual(viewModel.displayedBookmarkNodes.count, 2)
+
+        let controller = BookmarksViewController(
+            viewModel: viewModel,
+            windowUUID: .XCTestDefaultUUID
+        )
+        trackForMemoryLeaks(controller)
+
+        let tableView = ReloadTrackingTableView()
+        controller.tableView = tableView
+
+        let configuration = try XCTUnwrap(
+            controller.tableView(
+                tableView,
+                trailingSwipeActionsConfigurationForRowAt: IndexPath(row: 0, section: 0)
+            )
+        )
+        let deleteAction = try XCTUnwrap(configuration.actions.first)
+        deleteAction.handler(deleteAction, tableView) { _ in }
+
+        // MockBookmarksHandler returns an already-filled Deferred. The removal callback is enqueued before this marker.
+        let asyncRemovalDrained = expectation(description: "Async removal callback drained")
+        DispatchQueue.main.async {
+            asyncRemovalDrained.fulfill()
+        }
+        wait(for: [asyncRemovalDrained], timeout: 1)
+
+        XCTAssertEqual(viewModel.displayedBookmarkNodes.count, 1)
+        XCTAssertEqual(tableView.reloadDataCallCount, 0)
+    }
+
+    func testDeletingBookmark_reloadsTableViewAfterAsyncRemoval_ifSearching() throws {
+        setupNimbusBookmarksSearchTesting(isEnabled: true)
+        profile.reopen()
+        profile.prefs.removeObjectForKey(PrefsKeys.RecentBookmarkFolder)
+
+        let bookmarksHandler = MockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let viewModel = createSubject(
+            guid: BookmarkRoots.MobileFolderGUID,
+            bookmarksHandler: bookmarksHandler
+        )
+        let searchCompleted = expectation(description: "Bookmark search completed")
+        viewModel.reloadData {
+            viewModel.searchBookmarks(query: "www") {
+                searchCompleted.fulfill()
+            }
+        }
+        wait(for: [searchCompleted], timeout: 1)
+        XCTAssertTrue(viewModel.isShowingSearchResults)
+        XCTAssertEqual(viewModel.displayedBookmarkNodes.count, 2)
+
+        let controller = BookmarksViewController(
+            viewModel: viewModel,
+            windowUUID: .XCTestDefaultUUID
+        )
+        trackForMemoryLeaks(controller)
+        controller.state = .bookmarks(state: .search)
+
+        let tableView = ReloadTrackingTableView()
+        controller.tableView = tableView
+        let tableReloaded = expectation(description: "Table reloaded after bookmark removal")
+        tableView.onReloadData = {
+            tableReloaded.fulfill()
+        }
+
+        let configuration = try XCTUnwrap(
+            controller.tableView(
+                tableView,
+                trailingSwipeActionsConfigurationForRowAt: IndexPath(row: 1, section: 0)
+            )
+        )
+        let deleteAction = try XCTUnwrap(configuration.actions.first)
+        deleteAction.handler(deleteAction, tableView) { _ in }
+
+        wait(for: [tableReloaded], timeout: 1)
+
+        XCTAssertEqual(viewModel.displayedBookmarkNodes.count, 1)
+        XCTAssertEqual(tableView.reloadDataCallCount, 1)
+    }
+
     // MARK: - Search test helpers
 
     private func createFolderWithBookmarks() -> BookmarkFolderData {
@@ -603,4 +698,24 @@ private final class MockPinnedSites: MockablePinnedSites, @unchecked Sendable {
         deferred.fill(Maybe(success: isPinnedTopSite))
         return deferred
     }
+}
+
+@MainActor
+private final class ReloadTrackingTableView: UITableView {
+    private(set) var reloadDataCallCount = 0
+    var onReloadData: (() -> Void)?
+
+    override func reloadData() {
+        reloadDataCallCount += 1
+        onReloadData?()
+    }
+
+    override func beginUpdates() {}
+
+    override func deleteRows(
+        at indexPaths: [IndexPath],
+        with animation: UITableView.RowAnimation
+    ) {}
+
+    override func endUpdates() {}
 }

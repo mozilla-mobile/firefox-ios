@@ -94,4 +94,62 @@ final class SearchSettingsScreen {
     func assertSearchEngineExists(named engineName: String) {
         BaseTestCase().mozWaitForElementToExist(sel.searchEngineRow(named: engineName).element(in: app))
     }
+
+    func assertAddSearchEngineRowExists() {
+        assertRowExists(sel.ADD_SEARCH_ENGINE_ROW)
+    }
+
+    func assertShowSearchSuggestionsSwitchIsOn() {
+        assertSwitch(sel.SHOW_SEARCH_SUGGESTIONS_SWITCH, isOn: true)
+    }
+
+    func assertShowInPrivateSessionsSwitchIsOff() {
+        assertSwitch(sel.SHOW_IN_PRIVATE_SESSIONS_SWITCH, isOn: false)
+    }
+
+    func assertSearchBrowsingHistorySwitchIsOn() {
+        assertSwitch(sel.SEARCH_BROWSING_HISTORY_SWITCH, isOn: true)
+    }
+
+    func assertSearchBookmarksSwitchIsOn() {
+        assertSwitch(sel.SEARCH_BOOKMARKS_SWITCH, isOn: true)
+    }
+
+    func assertSearchSyncedTabsSwitchIsOn() {
+        assertSwitch(sel.SEARCH_SYNCED_TABS_SWITCH, isOn: true)
+    }
+
+    func assertSuggestionsFromTheWebSwitchIsOn() {
+        assertSwitch(sel.SUGGESTIONS_FROM_THE_WEB_SWITCH, isOn: true)
+    }
+
+    func assertSuggestionsFromSponsorsSwitchIsOn() {
+        assertSwitch(sel.SUGGESTIONS_FROM_SPONSORS_SWITCH, isOn: true)
+    }
+
+    func assertLearnMoreAboutFirefoxSuggestRowExists() {
+        assertRowExists(sel.LEARN_MORE_ABOUT_FIREFOX_SUGGEST_ROW)
+    }
+
+    /// Rows further down the search settings table are only added to the accessibility tree once the
+    /// table view has scrolled them into range, hence the scroll before every assertion.
+    private func assertRowExists(_ selector: Selector) {
+        let element = selector.element(in: app)
+        BaseTestCase().scrollToElement(element)
+        BaseTestCase().mozWaitForElementToExist(element)
+    }
+
+    private func assertSwitch(_ selector: Selector, isOn: Bool) {
+        let element = selector.element(in: app)
+        BaseTestCase().scrollToElement(element)
+        BaseTestCase().mozWaitForElementToExist(element)
+
+        let expectedValue = isOn ? "1" : "0"
+        let value = element.value as? String
+        XCTAssertEqual(
+            value,
+            expectedValue,
+            "Expected '\(selector.description)' to be \(isOn ? "ON" : "OFF"), but got \(String(describing: value))"
+        )
+    }
 }

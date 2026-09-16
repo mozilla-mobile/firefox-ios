@@ -23,7 +23,7 @@
 "NSPhotoLibraryAddUsageDescription" = "讓您可儲存相片。";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Firefox 使用語音辨識功能來將您的聲音轉換成文字，進行語音搜尋。";
+"NSSpeechRecognitionUsageDescription" = "此權限讓 Firefox 能轉錄您的聲音。";
 
 /* (No Comment) */
 "Scan QR Code" = "掃描 QR Code";
