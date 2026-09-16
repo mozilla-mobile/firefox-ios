@@ -79,11 +79,14 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
             titleLabel.bottomAnchor.constraint(equalTo: containerPillView.bottomAnchor, constant: -UX.verticalPadding),
 
             containerPillView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            containerPillView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
             containerPillView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor,
                                                        constant: UX.horizontalPadding),
             containerPillView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor,
-                                                        constant: -UX.horizontalPadding)
+                                                        constant: -UX.horizontalPadding),
+            containerPillView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor),
+            containerPillView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor)
         ])
     }
 
