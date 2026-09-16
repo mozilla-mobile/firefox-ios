@@ -144,6 +144,9 @@ class KeyboardShortcutsTests: BaseTestCase {
             if attempt > 0 { app.activate() }
             app.typeKey(key, modifierFlags: modifierFlags)
             if isSatisfied() { return }
+            // A Tab whose modifier was dropped is taken by the focus engine, which focuses the
+            // address bar and hides the page. That is a lost key press, not a state change.
+            if browserScreen.leaveAddressBarEditingIfActive() { continue }
             if !shouldRetry() {
                 XCTFail("\(failureMessage), and the app moved to an unexpected state instead")
                 return

@@ -111,10 +111,18 @@ final class LoginSettingsScreen {
         XCTAssertEqual(toggle.value as? String, "1", "Save passwords toggle is not enabled by default")
     }
 
-    func openLoginAtIndex(_ index: Int) {
+    /// The row sits under the first-run sheet, whose dismissal animation swallows a tap sent as soon
+    /// as the sheet leaves the hierarchy, so the row is re-tapped until the detail screen pushes.
+    func openLoginAtIndex(_ index: Int, attempts: Int = 3) {
+        let base = BaseTestCase()
         let cell = sel.LOGIN_LIST.element(in: app).cells.element(boundBy: index)
-        BaseTestCase().mozWaitForElementToExist(cell)
-        cell.waitAndTap()
+        let detailList = sel.LOGIN_DETAIL_LIST.element(in: app)
+        base.mozWaitForElementToExist(cell)
+        for _ in 0..<attempts {
+            cell.tap(force: true)
+            if detailList.mozWaitForElementToExist(timeout: 5, failOnTimeout: false) { return }
+        }
+        XCTFail("The login detail screen did not open after \(attempts) taps")
     }
 
     func revealPassword() {

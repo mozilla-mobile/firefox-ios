@@ -50,6 +50,12 @@ final class MarkupScreen {
             }
             guard tapMarkupEntryControl() else { break }
         }
+        // The entry control goes away as soon as markup is requested, so running out of controls to
+        // tap means the palette is on its way rather than that it is never coming.
+        if palette.mozWaitForElementToExist(timeout: TIMEOUT_LONG, failOnTimeout: false) {
+            BaseTestCase().mozWaitForElementToExist(penTool, timeout: TIMEOUT_LONG)
+            return
+        }
         XCTFail("The Markup palette did not open. \(observedMarkupState())")
     }
 

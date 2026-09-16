@@ -180,9 +180,10 @@ final class BrowserScreen {
         openDesignatedURLButton.waitAndTap()
     }
 
+    /// The button fades in with the address bar layout, and a tap sent before it settles is dropped
+    /// with no hit point, so it is re-tapped until the field empties and the button goes away.
     func clearURL() {
-        BaseTestCase().mozWaitForElementToExist(clearButton)
-        clearButton.waitAndTap()
+        clearButton.tapUntilElementDisappears(clearButton)
     }
 
     func tapClearButtonIfExists() {
@@ -239,6 +240,14 @@ final class BrowserScreen {
     /// Taps the "<" chevron shown next to the address bar while it is being edited.
     func tapCancelEditButton() {
         cancelButton.waitAndTap()
+    }
+
+    /// Leaves address bar editing when the field holds keyboard focus, reporting whether it did.
+    @discardableResult
+    func leaveAddressBarEditingIfActive() -> Bool {
+        guard addressBar.hasKeyboardFocus else { return false }
+        cancelButton.tapIfExists()
+        return !addressBar.hasKeyboardFocus
     }
 
     /// Opening a blank new tab focuses the address bar, so the keyboard is raised on both idioms.
