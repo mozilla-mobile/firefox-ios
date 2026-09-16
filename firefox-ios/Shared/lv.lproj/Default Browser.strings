@@ -4,6 +4,9 @@
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Noklusējums labākam internetam";
 
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Uzzini, kā";
+
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Iestatīt tīmekļvietņu, e-pasta un Messages saišu automātisku atvēršanu ar Firefox.";
 
