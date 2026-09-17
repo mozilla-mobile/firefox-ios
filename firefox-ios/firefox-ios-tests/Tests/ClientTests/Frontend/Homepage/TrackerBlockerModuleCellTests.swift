@@ -84,12 +84,21 @@ final class TrackerBlockerModuleCellTests: XCTestCase {
         XCTAssertEqual(fonts.regular, FXFontStyles.Regular.footnote.scaledFont())
     }
 
-    func test_configure_withZeroCount_usesScaledFootnoteFont() {
+    func test_configure_withZeroCount_usesBoldTitleFont() {
         let cell = createSubject()
 
         cell.configure(count: 0, theme: theme, onTap: nil)
 
-        XCTAssertEqual(titleLabel(in: cell)?.font, FXFontStyles.Regular.footnote.scaledFont())
+        XCTAssertEqual(titleLabel(in: cell)?.font, FXFontStyles.Bold.footnote.scaledFont())
+    }
+
+    func test_configure_withZeroCountAfterNonZeroCount_usesBoldTitleFont() {
+        let cell = createSubject()
+
+        cell.configure(count: 5, theme: theme, onTap: nil)
+        cell.configure(count: 0, theme: theme, onTap: nil)
+
+        XCTAssertEqual(titleLabel(in: cell)?.font, FXFontStyles.Bold.footnote.scaledFont())
     }
 
     private func createSubject() -> TrackerBlockerModuleCell {
