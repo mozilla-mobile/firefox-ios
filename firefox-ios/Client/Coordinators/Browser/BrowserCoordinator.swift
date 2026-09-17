@@ -769,9 +769,6 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func showSearchEngineSelection(forSourceView sourceView: UIView) {
         guard !childCoordinators.contains(where: { $0 is SearchEngineSelectionCoordinator }) else { return }
-        let isEditing = store.state.componentState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: windowUUID)?.addressToolbar.isEditing == true
 
         let navigationController = DismissableNavigationViewController()
         if navigationController.shouldUseiPadSetup() {
@@ -783,9 +780,7 @@ final class BrowserCoordinator: BaseCoordinator,
             navigationController.modalPresentationStyle = .pageSheet
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
-            if isEditing {
-                store.dispatch(ToolbarModernAction.didKeyboardRequestChange(shouldShow: false), forWindowUUID: windowUUID)
-            }
+            releaseAddressBarKeyboardIfEditing()
         }
 
         let coordinator = DefaultSearchEngineSelectionCoordinator(
@@ -799,6 +794,17 @@ final class BrowserCoordinator: BaseCoordinator,
         coordinator.start()
 
         present(navigationController)
+    }
+
+    /// Gives up the address bar's claim on the keyboard, while staying in editing mode, before a sheet is
+    /// presented over the browser. Without this the address bar takes the keyboard back on top of the sheet
+    /// the next time the toolbar is reconfigured, which a bottom address bar does on every rotation.
+    private func releaseAddressBarKeyboardIfEditing() {
+        let isEditing = store.state.componentState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: windowUUID)?.addressToolbar.isEditing == true
+        guard isEditing else { return }
+        store.dispatch(ToolbarModernAction.didKeyboardRequestChange(shouldShow: false), forWindowUUID: windowUUID)
     }
 
     // MARK: - BrowserNavigationHandler
@@ -864,6 +870,10 @@ final class BrowserCoordinator: BaseCoordinator,
             presentation: state.presentation,
             lifetimeCount: state.lifetimeTotal
         )
+
+        // The homepage's dismiss-keyboard tap gesture ignores touches that land on a cell, so tapping the
+        // tracker blocker module leaves the address bar editing with the keyboard still spoken for.
+        releaseAddressBarKeyboardIfEditing()
 
         let viewController = TrackerBlockerSheetViewController(
             windowUUID: windowUUID,
