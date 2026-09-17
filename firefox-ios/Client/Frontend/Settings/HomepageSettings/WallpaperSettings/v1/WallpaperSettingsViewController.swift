@@ -273,9 +273,10 @@ private extension WallpaperSettingsViewController {
             preferredStyle: .alert
         )
 
+        let defaultServer = "https://wallpaper-mock-741655098661.us-central1.run.app"
         alert.addTextField { field in
-            field.placeholder = "http://192.168.1.x:8080"
-            field.text = defaults.string(forKey: WallpaperLiveReload.serverKey) ?? ""
+            field.placeholder = defaultServer
+            field.text = defaults.string(forKey: WallpaperLiveReload.serverKey) ?? defaultServer
             field.keyboardType = .URL
             field.autocapitalizationType = .none
             field.autocorrectionType = .no

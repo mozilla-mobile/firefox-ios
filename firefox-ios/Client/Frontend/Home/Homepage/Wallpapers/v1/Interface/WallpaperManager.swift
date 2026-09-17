@@ -66,9 +66,13 @@ final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
 
     /// Determines whether the wallpaper settings can be shown
     var canSettingsBeShown: Bool {
+        #if MOZ_CHANNEL_developer
+        return true
+        #else
         guard hasEnoughThumbnailsToShow else { return false }
 
         return true
+        #endif
     }
 
     /// Returns true if the metadata & thumbnails are available

@@ -27,11 +27,17 @@ final class WallpaperLiveReload: @unchecked Sendable {
         }
 
         let host = baseURL.host ?? "localhost"
-        let wsPort = (baseURL.port ?? 8080) + 1
+        let wsScheme = baseURL.scheme == "https" ? "wss" : "ws"
+        let portSuffix: String
+        if let port = baseURL.port {
+            portSuffix = ":\(port)"
+        } else {
+            portSuffix = ""
+        }
         let name = UIDevice.current.name
             .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "iOS"
 
-        guard let url = URL(string: "ws://\(host):\(wsPort)/?session=\(token)&source=device&name=\(name)")
+        guard let url = URL(string: "\(wsScheme)://\(host)\(portSuffix)/?session=\(token)&source=device&name=\(name)")
         else { return }
 
         print("[LiveReload] connecting to \(url)")
