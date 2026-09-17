@@ -775,16 +775,15 @@ final class LocationView: UIView,
         self.theme = theme
         let colors = theme.colors
 
-        var useAlternativeLocationColor = hasAlternativeLocationColor
-        var mainBackgroundColor = useAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
+        var mainBackgroundColor = hasAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
 
-        if #unavailable(iOS 26) {
-            // for Nova themes on iOS 18 we want to use the alternative color for both top and bottom toolbar
-            useAlternativeLocationColor = theme.isNova
-            mainBackgroundColor = useAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
-        } else if theme.isNova {
-            // for Nova themes on iOS 26 we want to use the alternative color for both top and bottom toolbar
-            mainBackgroundColor = colors.layerSurfaceMediumAltGlass
+        if theme.isNova {
+            // for Nova themes we want to use the alternative color for both top and bottom toolbar
+            mainBackgroundColor = if #unavailable(iOS 26) {
+                colors.layerSurfaceMediumAlt
+            } else {
+                colors.layerSurfaceMediumAltGlass
+            }
         }
         let (primaryColor, secondaryColor) = getPrimaryAndSecondaryColors()
 
