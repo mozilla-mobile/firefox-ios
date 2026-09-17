@@ -197,6 +197,11 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         view.addSubview(contentScrollView)
         view.addSubview(closeButton)
 
+        // The scroll view covers the whole sheet, including the area the close button floats over, and VoiceOver
+        // won't reach a sibling overlapping a scroll view on its own. Listing the elements explicitly also puts
+        // the button first, matching where it sits on screen.
+        view.accessibilityElements = [closeButton, contentScrollView]
+
         NSLayoutConstraint.activate([
             backgroundGradientView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundGradientView.bottomAnchor.constraint(equalTo: view.bottomAnchor),

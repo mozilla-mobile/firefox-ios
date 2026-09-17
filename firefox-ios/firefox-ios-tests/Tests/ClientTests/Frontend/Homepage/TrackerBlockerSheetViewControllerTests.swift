@@ -81,6 +81,27 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertNotNil(view(subject, withID: A11y.closeButton))
     }
 
+    /// The close button floats over the scroll view, so VoiceOver only reaches it if it is listed explicitly.
+    func test_loadView_exposesCloseButtonToVoiceOverFirst() throws {
+        let subject = createSubject()
+
+        subject.loadViewIfNeeded()
+
+        let elements = try XCTUnwrap(subject.view.accessibilityElements as? [UIView])
+        XCTAssertEqual(elements.first?.accessibilityIdentifier, A11y.closeButton)
+        XCTAssertTrue(elements.contains { $0 is UIScrollView }, "Expected the sheet content to stay reachable")
+    }
+
+    func test_loadView_givesCloseButtonAnAccessibilityLabel() throws {
+        let subject = createSubject()
+
+        subject.loadViewIfNeeded()
+
+        let closeButton = try XCTUnwrap(view(subject, withID: A11y.closeButton))
+        XCTAssertEqual(closeButton.accessibilityLabel, .CloseButtonTitle)
+        XCTAssertTrue(closeButton.isAccessibilityElement)
+    }
+
     // MARK: - Progress bar widths
 
     /// A four-digit count is much wider than a one-digit count, but the bars beside them must still match.
