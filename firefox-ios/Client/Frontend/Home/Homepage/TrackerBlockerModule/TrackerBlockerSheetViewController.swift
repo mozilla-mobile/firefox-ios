@@ -121,8 +121,9 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         view.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.totalPill
     }
 
-    /// Resolved on each use so it keeps up with Dynamic Type.
+    /// Resolved on each use so they keep up with Dynamic Type.
     private static var footerFont: UIFont { FXFontStyles.Regular.footnote.scaledFont() }
+    private static var footerBoldFont: UIFont { FXFontStyles.Bold.footnote.scaledFont() }
 
     private let footerLabel: UILabel = .build { label in
         label.font = TrackerBlockerSheetViewController.footerFont
@@ -337,7 +338,8 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
             // back from `footerLabel.font`, which reports the attributed string's first font — the bold count —
             // once it has been set, and would otherwise bold the whole string on the next `configure`.
             footerLabel.attributedText = total.text.attributedText(boldString: total.countText,
-                                                                   font: Self.footerFont)
+                                                                   font: Self.footerFont,
+                                                                   boldFont: Self.footerBoldFont)
         } else {
             footerLabel.attributedText = nil
             footerLabel.text = nil
