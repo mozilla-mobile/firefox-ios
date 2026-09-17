@@ -130,7 +130,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         }
         let topSitesCells = app.collectionViews.links["TopSitesCell"]
-        if #available(iOS 16, *) {
+        if #available(iOS 15, *) {
             mozWaitForElementToExist(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         } else {
             mozWaitForElementToExist(
@@ -139,14 +139,14 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             )
         }
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
-        if #available(iOS 16, *) {
+        if #available(iOS 15, *) {
             topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
         } else {
             topSitesCells.staticTexts["Mozilla — Internet for people, not profit"].press(forDuration: 1)
         }
 
         selectOptionFromContextMenu(option: "Pin")
-        if #available(iOS 16, *) {
+        if #available(iOS 15, *) {
             mozWaitForElementToExist(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         } else {
             mozWaitForElementToExist(
@@ -159,7 +159,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
-        if #available(iOS 16, *) {
+        if #available(iOS 15, *) {
             mozWaitForElementToExist(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         } else {
             mozWaitForElementToExist(

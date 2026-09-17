@@ -39,6 +39,52 @@ fileprivate extension ForeignBytes {
     init(bufferPointer: UnsafeBufferPointer<UInt8>) {
         self.init(len: Int32(bufferPointer.count), data: bufferPointer.baseAddress)
     }
+
+    init(rawBufferPointer: UnsafeRawBufferPointer) {
+        self.init(
+            len: Int32(rawBufferPointer.count),
+            data: rawBufferPointer.baseAddress?.assumingMemoryBound(to: UInt8.self)
+        )
+    }
+}
+
+// Converter for `&[u8]` / `[ByRef] bytes` arguments.
+//
+// Conforms to `FfiConverter` so the compiler enforces the full converter
+// method set. Only the scope-bound `lower(_:_body:)` overload is sound —
+// zero-copy byte buffers only flow foreign -> Rust, and only in argument
+// position. The four protocol-witness methods (`lift`, `lower`, `read`,
+// `write`) `fatalError` at runtime if anyone reaches them.
+//
+// The scope-bound `lower` takes a closure because the `ForeignBytes`
+// pointer is only guaranteed valid for the duration of
+// `Data.withUnsafeBytes`. Callers must run the full FFI call inside
+// the closure body.
+fileprivate enum FfiConverterByRefBytes: FfiConverter {
+    typealias SwiftType = Data
+    typealias FfiType = ForeignBytes
+
+    static func lower<R>(_ value: Data, _ body: (ForeignBytes) throws -> R) rethrows -> R {
+        return try value.withUnsafeBytes { rawBuf in
+            try body(ForeignBytes(rawBufferPointer: rawBuf))
+        }
+    }
+
+    static func lower(_ value: Data) -> ForeignBytes {
+        fatalError("ByRef bytes cannot use the plain lower: returning ForeignBytes escapes the Data.withUnsafeBytes scope. Use the scope-bound lower(_:_body:) overload instead.")
+    }
+
+    static func lift(_ value: ForeignBytes) throws -> Data {
+        fatalError("ByRef bytes cannot be lifted: zero-copy &[u8] only flows foreign->Rust")
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        fatalError("ByRef bytes cannot be read from a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
+
+    static func write(_ value: Data, into buf: inout [UInt8]) {
+        fatalError("ByRef bytes cannot be written to a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
 }
 
 // For every type used in the interface, we provide helper methods for conveniently
@@ -535,7 +581,11 @@ fileprivate struct FfiConverterString: FfiConverter {
             return String()
         }
         let bytes = UnsafeBufferPointer<UInt8>(start: value.data!, count: Int(value.len))
-        return String(bytes: bytes, encoding: String.Encoding.utf8)!
+        // Use Swift's native UTF-8 decoder; `String(bytes:encoding:.utf8)` goes
+        // through Foundation's NSString and silently strips a leading U+FEFF BOM.
+        // Invalid UTF-8 substitutes U+FFFD instead of trapping (unreachable
+        // given Rust's `String` invariant).
+        return String(decoding: bytes, as: UTF8.self)
     }
 
     public static func lower(_ value: String) -> RustBuffer {
@@ -551,7 +601,8 @@ fileprivate struct FfiConverterString: FfiConverter {
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> String {
         let len: Int32 = try readInt(&buf)
-        return String(bytes: try readBytes(&buf, count: Int(len)), encoding: String.Encoding.utf8)!
+        // See `lift` above for why we avoid Foundation's NSString-backed decoder here.
+        return String(decoding: try readBytes(&buf, count: Int(len)), as: UTF8.self)
     }
 
     public static func write(_ value: String, into buf: inout [UInt8]) {
@@ -626,16 +677,18 @@ open class PlacesApi: PlacesApiProtocol, @unchecked Sendable {
     
 open func newConnection(connType: ConnectionType)throws  -> PlacesConnection  {
     return try  FfiConverterTypePlacesConnection_lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesapi_new_connection(
             self.uniffiCloneHandle(),
-        FfiConverterTypeConnectionType_lower(connType),$0
+        FfiConverterTypeConnectionType_lower(connType),uniffiCallStatus
     )
 })
 }
     
 open func registerWithSyncManager()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesapi_register_with_sync_manager(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -886,18 +939,20 @@ open class PlacesConnection: PlacesConnectionProtocol, @unchecked Sendable {
      * handles malformed urls
      */
 open func acceptResult(searchString: String, url: String)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_accept_result(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(searchString),
-        FfiConverterString.lower(url),$0
+        FfiConverterString.lower(url),uniffiCallStatus
     )
 }
 }
     
 open func applyObservation(visit: VisitObservation)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_apply_observation(
             self.uniffiCloneHandle(),
-        FfiConverterTypeVisitObservation_lower(visit),$0
+        FfiConverterTypeVisitObservation_lower(visit),uniffiCallStatus
     )
 }
 }
@@ -910,352 +965,390 @@ open func applyObservation(visit: VisitObservation)throws   {try rustCallWithErr
      */
 open func bookmarksCountBookmarksInTrees(folderGuids: [Guid])throws  -> UInt32  {
     return try  FfiConverterUInt32.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_bookmarks_count_bookmarks_in_trees(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceTypeGuid.lower(folderGuids),$0
+        FfiConverterSequenceTypeGuid.lower(folderGuids),uniffiCallStatus
     )
 })
 }
     
 open func bookmarksDelete(id: Guid)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_bookmarks_delete(
             self.uniffiCloneHandle(),
-        FfiConverterTypeGuid_lower(id),$0
+        FfiConverterTypeGuid_lower(id),uniffiCallStatus
     )
 })
 }
     
 open func bookmarksDeleteEverything()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_bookmarks_delete_everything(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func bookmarksGetAllWithUrl(url: String)throws  -> [BookmarkItem]  {
     return try  FfiConverterSequenceTypeBookmarkItem.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_bookmarks_get_all_with_url(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(url),$0
+        FfiConverterString.lower(url),uniffiCallStatus
     )
 })
 }
     
 open func bookmarksGetByGuid(guid: Guid, getDirectChildren: Bool)throws  -> BookmarkItem?  {
     return try  FfiConverterOptionTypeBookmarkItem.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_bookmarks_get_by_guid(
             self.uniffiCloneHandle(),
         FfiConverterTypeGuid_lower(guid),
-        FfiConverterBool.lower(getDirectChildren),$0
+        FfiConverterBool.lower(getDirectChildren),uniffiCallStatus
     )
 })
 }
     
 open func bookmarksGetRecent(limit: Int32)throws  -> [BookmarkItem]  {
     return try  FfiConverterSequenceTypeBookmarkItem.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_bookmarks_get_recent(
             self.uniffiCloneHandle(),
-        FfiConverterInt32.lower(limit),$0
+        FfiConverterInt32.lower(limit),uniffiCallStatus
     )
 })
 }
     
 open func bookmarksGetTree(itemGuid: Guid)throws  -> BookmarkItem?  {
     return try  FfiConverterOptionTypeBookmarkItem.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_bookmarks_get_tree(
             self.uniffiCloneHandle(),
-        FfiConverterTypeGuid_lower(itemGuid),$0
+        FfiConverterTypeGuid_lower(itemGuid),uniffiCallStatus
     )
 })
 }
     
 open func bookmarksGetUrlForKeyword(keyword: String)throws  -> Url?  {
     return try  FfiConverterOptionTypeUrl.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_bookmarks_get_url_for_keyword(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(keyword),$0
+        FfiConverterString.lower(keyword),uniffiCallStatus
     )
 })
 }
     
 open func bookmarksInsert(bookmark: InsertableBookmarkItem)throws  -> Guid  {
     return try  FfiConverterTypeGuid_lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_bookmarks_insert(
             self.uniffiCloneHandle(),
-        FfiConverterTypeInsertableBookmarkItem_lower(bookmark),$0
+        FfiConverterTypeInsertableBookmarkItem_lower(bookmark),uniffiCallStatus
     )
 })
 }
     
 open func bookmarksSearch(query: String, limit: Int32)throws  -> [BookmarkItem]  {
     return try  FfiConverterSequenceTypeBookmarkItem.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_bookmarks_search(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(query),
-        FfiConverterInt32.lower(limit),$0
+        FfiConverterInt32.lower(limit),uniffiCallStatus
     )
 })
 }
     
 open func bookmarksUpdate(data: BookmarkUpdateInfo)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_bookmarks_update(
             self.uniffiCloneHandle(),
-        FfiConverterTypeBookmarkUpdateInfo_lower(data),$0
+        FfiConverterTypeBookmarkUpdateInfo_lower(data),uniffiCallStatus
     )
 }
 }
     
 open func deleteEverythingHistory()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_delete_everything_history(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func deleteVisit(url: String, timestamp: PlacesTimestamp)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_delete_visit(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(url),
-        FfiConverterTypePlacesTimestamp_lower(timestamp),$0
+        FfiConverterTypePlacesTimestamp_lower(timestamp),uniffiCallStatus
     )
 }
 }
     
 open func deleteVisitsBetween(start: PlacesTimestamp, end: PlacesTimestamp)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_delete_visits_between(
             self.uniffiCloneHandle(),
         FfiConverterTypePlacesTimestamp_lower(start),
-        FfiConverterTypePlacesTimestamp_lower(end),$0
+        FfiConverterTypePlacesTimestamp_lower(end),uniffiCallStatus
     )
 }
 }
     
 open func deleteVisitsFor(url: String)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_delete_visits_for(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(url),$0
+        FfiConverterString.lower(url),uniffiCallStatus
     )
 }
 }
     
 open func getHistoryHighlights(weights: HistoryHighlightWeights, limit: Int32)throws  -> [HistoryHighlight]  {
     return try  FfiConverterSequenceTypeHistoryHighlight.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_history_highlights(
             self.uniffiCloneHandle(),
         FfiConverterTypeHistoryHighlightWeights_lower(weights),
-        FfiConverterInt32.lower(limit),$0
+        FfiConverterInt32.lower(limit),uniffiCallStatus
     )
 })
 }
     
 open func getHistoryMetadataBetween(start: PlacesTimestamp, end: PlacesTimestamp)throws  -> [HistoryMetadata]  {
     return try  FfiConverterSequenceTypeHistoryMetadata.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_history_metadata_between(
             self.uniffiCloneHandle(),
         FfiConverterTypePlacesTimestamp_lower(start),
-        FfiConverterTypePlacesTimestamp_lower(end),$0
+        FfiConverterTypePlacesTimestamp_lower(end),uniffiCallStatus
     )
 })
 }
     
 open func getHistoryMetadataSince(since: PlacesTimestamp)throws  -> [HistoryMetadata]  {
     return try  FfiConverterSequenceTypeHistoryMetadata.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_history_metadata_since(
             self.uniffiCloneHandle(),
-        FfiConverterTypePlacesTimestamp_lower(since),$0
+        FfiConverterTypePlacesTimestamp_lower(since),uniffiCallStatus
     )
 })
 }
     
 open func getLatestHistoryMetadataForUrl(url: Url)throws  -> HistoryMetadata?  {
     return try  FfiConverterOptionTypeHistoryMetadata.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_latest_history_metadata_for_url(
             self.uniffiCloneHandle(),
-        FfiConverterTypeUrl_lower(url),$0
+        FfiConverterTypeUrl_lower(url),uniffiCallStatus
     )
 })
 }
     
 open func getMostRecentHistoryMetadata(limit: Int32)throws  -> [HistoryMetadata]  {
     return try  FfiConverterSequenceTypeHistoryMetadata.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_most_recent_history_metadata(
             self.uniffiCloneHandle(),
-        FfiConverterInt32.lower(limit),$0
+        FfiConverterInt32.lower(limit),uniffiCallStatus
     )
 })
 }
     
 open func getMostRecentSearchEntriesInHistoryMetadata(limit: Int32)throws  -> [HistoryMetadata]  {
     return try  FfiConverterSequenceTypeHistoryMetadata.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_most_recent_search_entries_in_history_metadata(
             self.uniffiCloneHandle(),
-        FfiConverterInt32.lower(limit),$0
+        FfiConverterInt32.lower(limit),uniffiCallStatus
     )
 })
 }
     
 open func getTopFrecentSiteInfos(numItems: Int32, thresholdOption: FrecencyThresholdOption)throws  -> [TopFrecentSiteInfo]  {
     return try  FfiConverterSequenceTypeTopFrecentSiteInfo.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_top_frecent_site_infos(
             self.uniffiCloneHandle(),
         FfiConverterInt32.lower(numItems),
-        FfiConverterTypeFrecencyThresholdOption_lower(thresholdOption),$0
+        FfiConverterTypeFrecencyThresholdOption_lower(thresholdOption),uniffiCallStatus
     )
 })
 }
     
 open func getVisitCount(excludeTypes: VisitTransitionSet)throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_visit_count(
             self.uniffiCloneHandle(),
-        FfiConverterTypeVisitTransitionSet_lower(excludeTypes),$0
+        FfiConverterTypeVisitTransitionSet_lower(excludeTypes),uniffiCallStatus
     )
 })
 }
     
 open func getVisitCountForHost(host: String, before: PlacesTimestamp, excludeTypes: VisitTransitionSet)throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_visit_count_for_host(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(host),
         FfiConverterTypePlacesTimestamp_lower(before),
-        FfiConverterTypeVisitTransitionSet_lower(excludeTypes),$0
+        FfiConverterTypeVisitTransitionSet_lower(excludeTypes),uniffiCallStatus
     )
 })
 }
     
 open func getVisitInfos(startDate: PlacesTimestamp, endDate: PlacesTimestamp, excludeTypes: VisitTransitionSet)throws  -> [HistoryVisitInfo]  {
     return try  FfiConverterSequenceTypeHistoryVisitInfo.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_visit_infos(
             self.uniffiCloneHandle(),
         FfiConverterTypePlacesTimestamp_lower(startDate),
         FfiConverterTypePlacesTimestamp_lower(endDate),
-        FfiConverterTypeVisitTransitionSet_lower(excludeTypes),$0
+        FfiConverterTypeVisitTransitionSet_lower(excludeTypes),uniffiCallStatus
     )
 })
 }
     
 open func getVisitPage(offset: Int64, count: Int64, excludeTypes: VisitTransitionSet)throws  -> [HistoryVisitInfo]  {
     return try  FfiConverterSequenceTypeHistoryVisitInfo.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_visit_page(
             self.uniffiCloneHandle(),
         FfiConverterInt64.lower(offset),
         FfiConverterInt64.lower(count),
-        FfiConverterTypeVisitTransitionSet_lower(excludeTypes),$0
+        FfiConverterTypeVisitTransitionSet_lower(excludeTypes),uniffiCallStatus
     )
 })
 }
     
 open func getVisitPageWithBound(bound: Int64, offset: Int64, count: Int64, excludeTypes: VisitTransitionSet)throws  -> HistoryVisitInfosWithBound  {
     return try  FfiConverterTypeHistoryVisitInfosWithBound_lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_visit_page_with_bound(
             self.uniffiCloneHandle(),
         FfiConverterInt64.lower(bound),
         FfiConverterInt64.lower(offset),
         FfiConverterInt64.lower(count),
-        FfiConverterTypeVisitTransitionSet_lower(excludeTypes),$0
+        FfiConverterTypeVisitTransitionSet_lower(excludeTypes),uniffiCallStatus
     )
 })
 }
     
 open func getVisited(urls: [String])throws  -> [Bool]  {
     return try  FfiConverterSequenceBool.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_visited(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceString.lower(urls),$0
+        FfiConverterSequenceString.lower(urls),uniffiCallStatus
     )
 })
 }
     
 open func getVisitedUrlsInRange(start: PlacesTimestamp, end: PlacesTimestamp, includeRemote: Bool)throws  -> [Url]  {
     return try  FfiConverterSequenceTypeUrl.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_get_visited_urls_in_range(
             self.uniffiCloneHandle(),
         FfiConverterTypePlacesTimestamp_lower(start),
         FfiConverterTypePlacesTimestamp_lower(end),
-        FfiConverterBool.lower(includeRemote),$0
+        FfiConverterBool.lower(includeRemote),uniffiCallStatus
     )
 })
 }
     
 open func matchUrl(query: String)throws  -> Url?  {
     return try  FfiConverterOptionTypeUrl.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_match_url(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(query),$0
+        FfiConverterString.lower(query),uniffiCallStatus
     )
 })
 }
     
 open func metadataDelete(url: Url, referrerUrl: Url?, searchTerm: String?)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_metadata_delete(
             self.uniffiCloneHandle(),
         FfiConverterTypeUrl_lower(url),
         FfiConverterOptionTypeUrl.lower(referrerUrl),
-        FfiConverterOptionString.lower(searchTerm),$0
+        FfiConverterOptionString.lower(searchTerm),uniffiCallStatus
     )
 }
 }
     
 open func metadataDeleteOlderThan(olderThan: PlacesTimestamp)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_metadata_delete_older_than(
             self.uniffiCloneHandle(),
-        FfiConverterTypePlacesTimestamp_lower(olderThan),$0
+        FfiConverterTypePlacesTimestamp_lower(olderThan),uniffiCallStatus
     )
 }
 }
     
 open func metadataDeleteSearchTerms()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_metadata_delete_search_terms(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func newInterruptHandle() -> SqlInterruptHandle  {
     return try!  FfiConverterTypeSqlInterruptHandle_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_new_interrupt_handle(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func noteHistoryMetadataObservation(data: HistoryMetadataObservation, options: NoteHistoryMetadataObservationOptions)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_note_history_metadata_observation(
             self.uniffiCloneHandle(),
         FfiConverterTypeHistoryMetadataObservation_lower(data),
-        FfiConverterTypeNoteHistoryMetadataObservationOptions_lower(options),$0
+        FfiConverterTypeNoteHistoryMetadataObservationOptions_lower(options),uniffiCallStatus
     )
 }
 }
     
 open func placesHistoryImportFromIos(dbPath: String, lastSyncTimestamp: Int64)throws  -> HistoryMigrationResult  {
     return try  FfiConverterTypeHistoryMigrationResult_lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_places_history_import_from_ios(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(dbPath),
-        FfiConverterInt64.lower(lastSyncTimestamp),$0
+        FfiConverterInt64.lower(lastSyncTimestamp),uniffiCallStatus
     )
 })
 }
     
 open func queryAutocomplete(search: String, limit: Int32)throws  -> [SearchResult]  {
     return try  FfiConverterSequenceTypeSearchResult.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_query_autocomplete(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(search),
-        FfiConverterInt32.lower(limit),$0
+        FfiConverterInt32.lower(limit),uniffiCallStatus
     )
 })
 }
     
 open func queryHistoryMetadata(query: String, limit: Int32)throws  -> [HistoryMetadata]  {
     return try  FfiConverterSequenceTypeHistoryMetadata.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_query_history_metadata(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(query),
-        FfiConverterInt32.lower(limit),$0
+        FfiConverterInt32.lower(limit),uniffiCallStatus
     )
 })
 }
@@ -1269,8 +1362,9 @@ open func queryHistoryMetadata(query: String, limit: Int32)throws  -> [HistoryMe
      * it supports a stop-watch style API, not recording specific values).
      */
 open func runMaintenanceCheckpoint()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_run_maintenance_checkpoint(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1284,8 +1378,9 @@ open func runMaintenanceCheckpoint()throws   {try rustCallWithError(FfiConverter
      * it supports a stop-watch style API, not recording specific values).
      */
 open func runMaintenanceOptimize()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_run_maintenance_optimize(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1305,10 +1400,11 @@ open func runMaintenanceOptimize()throws   {try rustCallWithError(FfiConverterTy
      */
 open func runMaintenancePrune(dbSizeLimit: UInt32, pruneLimit: UInt32)throws  -> RunMaintenanceMetrics  {
     return try  FfiConverterTypeRunMaintenanceMetrics_lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_run_maintenance_prune(
             self.uniffiCloneHandle(),
         FfiConverterUInt32.lower(dbSizeLimit),
-        FfiConverterUInt32.lower(pruneLimit),$0
+        FfiConverterUInt32.lower(pruneLimit),uniffiCallStatus
     )
 })
 }
@@ -1322,8 +1418,9 @@ open func runMaintenancePrune(dbSizeLimit: UInt32, pruneLimit: UInt32)throws  ->
      * it supports a stop-watch style API, not recording specific values).
      */
 open func runMaintenanceVacuum()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_method_placesconnection_run_maintenance_vacuum(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1437,8 +1534,9 @@ open class SqlInterruptHandle: SqlInterruptHandleProtocol, @unchecked Sendable {
 
     
 open func interrupt()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_places_fn_method_sqlinterrupthandle_interrupt(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -2826,10 +2924,9 @@ public func FfiConverterTypeVisitObservation_lower(_ value: VisitObservation) ->
     return FfiConverterTypeVisitObservation.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum BookmarkItem: Equatable, Hashable {
+
+public indirect enum BookmarkItem: Equatable, Hashable {
     
     case bookmark(b: BookmarkData
     )
@@ -2909,8 +3006,7 @@ public func FfiConverterTypeBookmarkItem_lower(_ value: BookmarkItem) -> RustBuf
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * Where the item should be placed.
  */
@@ -2982,8 +3078,7 @@ public func FfiConverterTypeBookmarkPosition_lower(_ value: BookmarkPosition) ->
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 
 public enum ConnectionType: Equatable, Hashable {
     
@@ -3056,8 +3151,7 @@ public func FfiConverterTypeConnectionType_lower(_ value: ConnectionType) -> Rus
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 
 public enum DocumentType: Equatable, Hashable {
     
@@ -3129,8 +3223,7 @@ public func FfiConverterTypeDocumentType_lower(_ value: DocumentType) -> RustBuf
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * Frecency threshold options for fetching top frecent sites. Requests a page that was visited
  * with a frecency score greater or equal to the value associated with the enums
@@ -3206,8 +3299,7 @@ public func FfiConverterTypeFrecencyThresholdOption_lower(_ value: FrecencyThres
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * The action to take when recording a history metadata observation for
  * a page that doesn't have an entry in the history database.
@@ -3283,10 +3375,9 @@ public func FfiConverterTypeHistoryMetadataPageMissingBehavior_lower(_ value: Hi
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum InsertableBookmarkItem: Equatable, Hashable {
+
+public indirect enum InsertableBookmarkItem: Equatable, Hashable {
     
     case bookmark(b: InsertableBookmark
     )
@@ -3367,7 +3458,8 @@ public func FfiConverterTypeInsertableBookmarkItem_lower(_ value: InsertableBook
 
 
 
-public enum PlacesApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
+public 
+enum PlacesApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -3490,8 +3582,7 @@ public func FfiConverterTypePlacesApiError_lower(_ value: PlacesApiError) -> Rus
     return FfiConverterTypePlacesApiError.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 
 public enum VisitType: Equatable, Hashable {
     
@@ -4235,10 +4326,6 @@ fileprivate struct FfiConverterSequenceTypeUrl: FfiConverterRustBuffer {
 }
 
 
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- */
 public typealias Guid = String
 
 #if swift(>=5.8)
@@ -4279,10 +4366,6 @@ public func FfiConverterTypeGuid_lower(_ value: Guid) -> RustBuffer {
 
 
 
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- */
 public typealias PlacesTimestamp = Int64
 
 #if swift(>=5.8)
@@ -4323,10 +4406,6 @@ public func FfiConverterTypePlacesTimestamp_lower(_ value: PlacesTimestamp) -> I
 
 
 
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- */
 public typealias Url = String
 
 #if swift(>=5.8)
@@ -4367,10 +4446,6 @@ public func FfiConverterTypeUrl_lower(_ value: Url) -> RustBuffer {
 
 
 
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- */
 public typealias VisitTransitionSet = Int32
 
 #if swift(>=5.8)
@@ -4411,8 +4486,9 @@ public func FfiConverterTypeVisitTransitionSet_lower(_ value: VisitTransitionSet
 
 public func placesApiNew(dbPath: String)throws  -> PlacesApi  {
     return try  FfiConverterTypePlacesApi_lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+        uniffiCallStatus in
     uniffi_places_fn_func_places_api_new(
-        FfiConverterString.lower(dbPath),$0
+        FfiConverterString.lower(dbPath),uniffiCallStatus
     )
 })
 }
@@ -4447,34 +4523,34 @@ private let initializationResult: InitializationResult = {
     if (uniffi_places_checksum_method_placesconnection_apply_observation() != 42778) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_count_bookmarks_in_trees() != 6281) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_count_bookmarks_in_trees() != 54749) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_delete() != 61181) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_delete() != 25421) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_places_checksum_method_placesconnection_bookmarks_delete_everything() != 47280) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_all_with_url() != 43867) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_all_with_url() != 26165) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_by_guid() != 50991) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_by_guid() != 8530) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_recent() != 39796) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_recent() != 23681) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_tree() != 7349) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_tree() != 27691) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_url_for_keyword() != 8678) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_get_url_for_keyword() != 48422) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_insert() != 41248) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_insert() != 22864) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_bookmarks_search() != 5069) {
+    if (uniffi_places_checksum_method_placesconnection_bookmarks_search() != 40367) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_places_checksum_method_placesconnection_bookmarks_update() != 55026) {
@@ -4483,64 +4559,64 @@ private let initializationResult: InitializationResult = {
     if (uniffi_places_checksum_method_placesconnection_delete_everything_history() != 34149) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_delete_visit() != 37437) {
+    if (uniffi_places_checksum_method_placesconnection_delete_visit() != 8257) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_delete_visits_between() != 46647) {
+    if (uniffi_places_checksum_method_placesconnection_delete_visits_between() != 25948) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_places_checksum_method_placesconnection_delete_visits_for() != 45911) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_history_highlights() != 33627) {
+    if (uniffi_places_checksum_method_placesconnection_get_history_highlights() != 24970) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_history_metadata_between() != 18749) {
+    if (uniffi_places_checksum_method_placesconnection_get_history_metadata_between() != 18124) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_history_metadata_since() != 58266) {
+    if (uniffi_places_checksum_method_placesconnection_get_history_metadata_since() != 21413) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_latest_history_metadata_for_url() != 42673) {
+    if (uniffi_places_checksum_method_placesconnection_get_latest_history_metadata_for_url() != 3219) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_most_recent_history_metadata() != 51076) {
+    if (uniffi_places_checksum_method_placesconnection_get_most_recent_history_metadata() != 25198) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_most_recent_search_entries_in_history_metadata() != 25650) {
+    if (uniffi_places_checksum_method_placesconnection_get_most_recent_search_entries_in_history_metadata() != 1578) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_top_frecent_site_infos() != 51768) {
+    if (uniffi_places_checksum_method_placesconnection_get_top_frecent_site_infos() != 61543) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visit_count() != 1687) {
+    if (uniffi_places_checksum_method_placesconnection_get_visit_count() != 24598) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visit_count_for_host() != 64658) {
+    if (uniffi_places_checksum_method_placesconnection_get_visit_count_for_host() != 1297) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visit_infos() != 23804) {
+    if (uniffi_places_checksum_method_placesconnection_get_visit_infos() != 37245) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visit_page() != 18361) {
+    if (uniffi_places_checksum_method_placesconnection_get_visit_page() != 18257) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visit_page_with_bound() != 48926) {
+    if (uniffi_places_checksum_method_placesconnection_get_visit_page_with_bound() != 61292) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visited() != 32501) {
+    if (uniffi_places_checksum_method_placesconnection_get_visited() != 61716) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_get_visited_urls_in_range() != 11583) {
+    if (uniffi_places_checksum_method_placesconnection_get_visited_urls_in_range() != 10707) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_match_url() != 8297) {
+    if (uniffi_places_checksum_method_placesconnection_match_url() != 6000) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_metadata_delete() != 47660) {
+    if (uniffi_places_checksum_method_placesconnection_metadata_delete() != 62957) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_metadata_delete_older_than() != 20307) {
+    if (uniffi_places_checksum_method_placesconnection_metadata_delete_older_than() != 35475) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_places_checksum_method_placesconnection_metadata_delete_search_terms() != 36196) {
@@ -4555,10 +4631,10 @@ private let initializationResult: InitializationResult = {
     if (uniffi_places_checksum_method_placesconnection_places_history_import_from_ios() != 58273) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_query_autocomplete() != 12559) {
+    if (uniffi_places_checksum_method_placesconnection_query_autocomplete() != 34997) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_query_history_metadata() != 42147) {
+    if (uniffi_places_checksum_method_placesconnection_query_history_metadata() != 12095) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_places_checksum_method_placesconnection_run_maintenance_checkpoint() != 53937) {

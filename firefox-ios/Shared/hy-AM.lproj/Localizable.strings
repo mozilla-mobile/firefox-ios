@@ -278,7 +278,7 @@
 "Downloads.Toast.GoToDownloads.Button" = "Ներբեռնումներ";
 
 /* The description text in the Download progress toast for showing the number of files when multiple files are downloading. %d is the total number of files. */
-"Downloads.Toast.MultipleFiles.DescriptionText" = "1-ը %d ֆայլերից";
+"Downloads.Toast.MultipleFiles.DescriptionText" = "1-ը %d ֆայլից";
 
 /* The description text in the Download progress toast for showing the number of files (%1$@) and download progress (%2$@). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where %1$@ is Downloads.Toast.MultipleFiles.DescriptionText and %2$@ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and %1$@ should come before %2$@ everywhere except for right-to-left locales. */
 "Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";

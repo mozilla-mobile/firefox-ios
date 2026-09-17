@@ -21,6 +21,11 @@ class SearchEngineManagerTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
+    override func tearDown() {
+        mockUserDefaults.clear()
+        super.tearDown()
+    }
+
     func testAddEngine() {
         let manager = SearchEngineManager(prefs: mockUserDefaults)
         let engine = manager.addEngine(name: CUSTOM_ENGINE_NAME, template: CUSTOM_ENGINE_TEMPLATE)

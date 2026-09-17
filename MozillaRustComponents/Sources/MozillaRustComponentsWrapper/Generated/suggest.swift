@@ -39,6 +39,52 @@ fileprivate extension ForeignBytes {
     init(bufferPointer: UnsafeBufferPointer<UInt8>) {
         self.init(len: Int32(bufferPointer.count), data: bufferPointer.baseAddress)
     }
+
+    init(rawBufferPointer: UnsafeRawBufferPointer) {
+        self.init(
+            len: Int32(rawBufferPointer.count),
+            data: rawBufferPointer.baseAddress?.assumingMemoryBound(to: UInt8.self)
+        )
+    }
+}
+
+// Converter for `&[u8]` / `[ByRef] bytes` arguments.
+//
+// Conforms to `FfiConverter` so the compiler enforces the full converter
+// method set. Only the scope-bound `lower(_:_body:)` overload is sound —
+// zero-copy byte buffers only flow foreign -> Rust, and only in argument
+// position. The four protocol-witness methods (`lift`, `lower`, `read`,
+// `write`) `fatalError` at runtime if anyone reaches them.
+//
+// The scope-bound `lower` takes a closure because the `ForeignBytes`
+// pointer is only guaranteed valid for the duration of
+// `Data.withUnsafeBytes`. Callers must run the full FFI call inside
+// the closure body.
+fileprivate enum FfiConverterByRefBytes: FfiConverter {
+    typealias SwiftType = Data
+    typealias FfiType = ForeignBytes
+
+    static func lower<R>(_ value: Data, _ body: (ForeignBytes) throws -> R) rethrows -> R {
+        return try value.withUnsafeBytes { rawBuf in
+            try body(ForeignBytes(rawBufferPointer: rawBuf))
+        }
+    }
+
+    static func lower(_ value: Data) -> ForeignBytes {
+        fatalError("ByRef bytes cannot use the plain lower: returning ForeignBytes escapes the Data.withUnsafeBytes scope. Use the scope-bound lower(_:_body:) overload instead.")
+    }
+
+    static func lift(_ value: ForeignBytes) throws -> Data {
+        fatalError("ByRef bytes cannot be lifted: zero-copy &[u8] only flows foreign->Rust")
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        fatalError("ByRef bytes cannot be read from a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
+
+    static func write(_ value: Data, into buf: inout [UInt8]) {
+        fatalError("ByRef bytes cannot be written to a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
 }
 
 // For every type used in the interface, we provide helper methods for conveniently
@@ -535,7 +581,11 @@ fileprivate struct FfiConverterString: FfiConverter {
             return String()
         }
         let bytes = UnsafeBufferPointer<UInt8>(start: value.data!, count: Int(value.len))
-        return String(bytes: bytes, encoding: String.Encoding.utf8)!
+        // Use Swift's native UTF-8 decoder; `String(bytes:encoding:.utf8)` goes
+        // through Foundation's NSString and silently strips a leading U+FEFF BOM.
+        // Invalid UTF-8 substitutes U+FFFD instead of trapping (unreachable
+        // given Rust's `String` invariant).
+        return String(decoding: bytes, as: UTF8.self)
     }
 
     public static func lower(_ value: String) -> RustBuffer {
@@ -551,7 +601,8 @@ fileprivate struct FfiConverterString: FfiConverter {
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> String {
         let len: Int32 = try readInt(&buf)
-        return String(bytes: try readBytes(&buf, count: Int(len)), encoding: String.Encoding.utf8)!
+        // See `lift` above for why we avoid Foundation's NSString-backed decoder here.
+        return String(decoding: try readBytes(&buf, count: Int(len)), as: UTF8.self)
     }
 
     public static func write(_ value: String, into buf: inout [UInt8]) {
@@ -801,9 +852,10 @@ open class SuggestStore: SuggestStoreProtocol, @unchecked Sendable {
 public convenience init(path: String, remoteSettingsService: RemoteSettingsService) {
     let handle =
         try! rustCall() {
+        uniffiCallStatus in
     uniffi_suggest_fn_constructor_suggeststore_new(
         FfiConverterString.lower(path),
-        FfiConverterTypeRemoteSettingsService_lower(remoteSettingsService),$0
+        FfiConverterTypeRemoteSettingsService_lower(remoteSettingsService),uniffiCallStatus
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -826,8 +878,9 @@ public convenience init(path: String, remoteSettingsService: RemoteSettingsServi
      */
 open func anyDismissedSuggestions()throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_any_dismissed_suggestions(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -836,8 +889,9 @@ open func anyDismissedSuggestions()throws  -> Bool  {
      * Removes all content from the database.
      */
 open func clear()throws   {try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_clear(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -846,8 +900,9 @@ open func clear()throws   {try rustCallWithError(FfiConverterTypeSuggestApiError
      * Clear dismissed suggestions
      */
 open func clearDismissedSuggestions()throws   {try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_clear_dismissed_suggestions(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -862,9 +917,10 @@ open func clearDismissedSuggestions()throws   {try rustCallWithError(FfiConverte
      * suggestion originates outside this component.
      */
 open func dismissByKey(key: String)throws   {try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_dismiss_by_key(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(key),$0
+        FfiConverterString.lower(key),uniffiCallStatus
     )
 }
 }
@@ -875,9 +931,10 @@ open func dismissByKey(key: String)throws   {try rustCallWithError(FfiConverterT
      * Dismissed suggestions cannot be fetched again.
      */
 open func dismissBySuggestion(suggestion: Suggestion)throws   {try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_dismiss_by_suggestion(
             self.uniffiCloneHandle(),
-        FfiConverterTypeSuggestion_lower(suggestion),$0
+        FfiConverterTypeSuggestion_lower(suggestion),uniffiCallStatus
     )
 }
 }
@@ -891,9 +948,10 @@ open func dismissBySuggestion(suggestion: Suggestion)throws   {try rustCallWithE
      * Dismissed suggestions will not be returned again
      */
 open func dismissSuggestion(suggestionUrl: String)throws   {try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_dismiss_suggestion(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(suggestionUrl),$0
+        FfiConverterString.lower(suggestionUrl),uniffiCallStatus
     )
 }
 }
@@ -905,9 +963,10 @@ open func dismissSuggestion(suggestionUrl: String)throws   {try rustCallWithErro
      */
 open func fetchGeonameAlternates(geoname: Geoname)throws  -> GeonameAlternates  {
     return try  FfiConverterTypeGeonameAlternates_lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_fetch_geoname_alternates(
             self.uniffiCloneHandle(),
-        FfiConverterTypeGeoname_lower(geoname),$0
+        FfiConverterTypeGeoname_lower(geoname),uniffiCallStatus
     )
 })
 }
@@ -920,11 +979,12 @@ open func fetchGeonameAlternates(geoname: Geoname)throws  -> GeonameAlternates  
      */
 open func fetchGeonames(query: String, matchNamePrefix: Bool, filter: [Geoname]?)throws  -> [GeonameMatch]  {
     return try  FfiConverterSequenceTypeGeonameMatch.lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_fetch_geonames(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(query),
         FfiConverterBool.lower(matchNamePrefix),
-        FfiConverterOptionSequenceTypeGeoname.lower(filter),$0
+        FfiConverterOptionSequenceTypeGeoname.lower(filter),uniffiCallStatus
     )
 })
 }
@@ -934,8 +994,9 @@ open func fetchGeonames(query: String, matchNamePrefix: Bool, filter: [Geoname]?
      */
 open func fetchGlobalConfig()throws  -> SuggestGlobalConfig  {
     return try  FfiConverterTypeSuggestGlobalConfig_lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_fetch_global_config(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -945,9 +1006,10 @@ open func fetchGlobalConfig()throws  -> SuggestGlobalConfig  {
      */
 open func fetchProviderConfig(provider: SuggestionProvider)throws  -> SuggestProviderConfig?  {
     return try  FfiConverterOptionTypeSuggestProviderConfig.lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_fetch_provider_config(
             self.uniffiCloneHandle(),
-        FfiConverterTypeSuggestionProvider_lower(provider),$0
+        FfiConverterTypeSuggestionProvider_lower(provider),uniffiCallStatus
     )
 })
 }
@@ -957,9 +1019,10 @@ open func fetchProviderConfig(provider: SuggestionProvider)throws  -> SuggestPro
      */
 open func ingest(constraints: SuggestIngestionConstraints)throws  -> SuggestIngestionMetrics  {
     return try  FfiConverterTypeSuggestIngestionMetrics_lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_ingest(
             self.uniffiCloneHandle(),
-        FfiConverterTypeSuggestIngestionConstraints_lower(constraints),$0
+        FfiConverterTypeSuggestIngestionConstraints_lower(constraints),uniffiCallStatus
     )
 })
 }
@@ -972,9 +1035,10 @@ open func ingest(constraints: SuggestIngestionConstraints)throws  -> SuggestInge
      * method does not interrupt any ongoing ingests.
      */
 open func interrupt(kind: InterruptKind? = nil)  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_interrupt(
             self.uniffiCloneHandle(),
-        FfiConverterOptionTypeInterruptKind.lower(kind),$0
+        FfiConverterOptionTypeInterruptKind.lower(kind),uniffiCallStatus
     )
 }
 }
@@ -989,9 +1053,10 @@ open func interrupt(kind: InterruptKind? = nil)  {try! rustCall() {
      */
 open func isDismissedByKey(key: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_is_dismissed_by_key(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(key),$0
+        FfiConverterString.lower(key),uniffiCallStatus
     )
 })
 }
@@ -1005,9 +1070,10 @@ open func isDismissedByKey(key: String)throws  -> Bool  {
      */
 open func isDismissedBySuggestion(suggestion: Suggestion)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_is_dismissed_by_suggestion(
             self.uniffiCloneHandle(),
-        FfiConverterTypeSuggestion_lower(suggestion),$0
+        FfiConverterTypeSuggestion_lower(suggestion),uniffiCallStatus
     )
 })
 }
@@ -1017,9 +1083,10 @@ open func isDismissedBySuggestion(suggestion: Suggestion)throws  -> Bool  {
      */
 open func query(query: SuggestionQuery)throws  -> [Suggestion]  {
     return try  FfiConverterSequenceTypeSuggestion.lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_query(
             self.uniffiCloneHandle(),
-        FfiConverterTypeSuggestionQuery_lower(query),$0
+        FfiConverterTypeSuggestionQuery_lower(query),uniffiCallStatus
     )
 })
 }
@@ -1029,9 +1096,10 @@ open func query(query: SuggestionQuery)throws  -> [Suggestion]  {
      */
 open func queryWithMetrics(query: SuggestionQuery)throws  -> QueryWithMetricsResult  {
     return try  FfiConverterTypeQueryWithMetricsResult_lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststore_query_with_metrics(
             self.uniffiCloneHandle(),
-        FfiConverterTypeSuggestionQuery_lower(query),$0
+        FfiConverterTypeSuggestionQuery_lower(query),uniffiCallStatus
     )
 })
 }
@@ -1167,7 +1235,8 @@ open class SuggestStoreBuilder: SuggestStoreBuilderProtocol, @unchecked Sendable
 public convenience init() {
     let handle =
         try! rustCall() {
-    uniffi_suggest_fn_constructor_suggeststorebuilder_new($0
+        uniffiCallStatus in
+    uniffi_suggest_fn_constructor_suggeststorebuilder_new(uniffiCallStatus
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -1187,8 +1256,9 @@ public convenience init() {
     
 open func build()throws  -> SuggestStore  {
     return try  FfiConverterTypeSuggestStore_lift(try rustCallWithError(FfiConverterTypeSuggestApiError_lift) {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststorebuilder_build(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1198,18 +1268,20 @@ open func build()throws  -> SuggestStore  {
      */
 open func cachePath(path: String) -> SuggestStoreBuilder  {
     return try!  FfiConverterTypeSuggestStoreBuilder_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststorebuilder_cache_path(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(path),$0
+        FfiConverterString.lower(path),uniffiCallStatus
     )
 })
 }
     
 open func dataPath(path: String) -> SuggestStoreBuilder  {
     return try!  FfiConverterTypeSuggestStoreBuilder_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststorebuilder_data_path(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(path),$0
+        FfiConverterString.lower(path),uniffiCallStatus
     )
 })
 }
@@ -1223,37 +1295,41 @@ open func dataPath(path: String) -> SuggestStoreBuilder  {
      */
 open func loadExtension(library: String, entryPoint: String?) -> SuggestStoreBuilder  {
     return try!  FfiConverterTypeSuggestStoreBuilder_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststorebuilder_load_extension(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(library),
-        FfiConverterOptionString.lower(entryPoint),$0
+        FfiConverterOptionString.lower(entryPoint),uniffiCallStatus
     )
 })
 }
     
 open func remoteSettingsBucketName(bucketName: String) -> SuggestStoreBuilder  {
     return try!  FfiConverterTypeSuggestStoreBuilder_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststorebuilder_remote_settings_bucket_name(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(bucketName),$0
+        FfiConverterString.lower(bucketName),uniffiCallStatus
     )
 })
 }
     
 open func remoteSettingsServer(server: RemoteSettingsServer) -> SuggestStoreBuilder  {
     return try!  FfiConverterTypeSuggestStoreBuilder_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststorebuilder_remote_settings_server(
             self.uniffiCloneHandle(),
-        FfiConverterTypeRemoteSettingsServer_lower(server),$0
+        FfiConverterTypeRemoteSettingsServer_lower(server),uniffiCallStatus
     )
 })
 }
     
 open func remoteSettingsService(rsService: RemoteSettingsService) -> SuggestStoreBuilder  {
     return try!  FfiConverterTypeSuggestStoreBuilder_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_suggest_fn_method_suggeststorebuilder_remote_settings_service(
             self.uniffiCloneHandle(),
-        FfiConverterTypeRemoteSettingsService_lower(rsService),$0
+        FfiConverterTypeRemoteSettingsService_lower(rsService),uniffiCallStatus
     )
 })
 }
@@ -2252,8 +2328,7 @@ public func FfiConverterTypeSuggestionQuery_lower(_ value: SuggestionQuery) -> R
     return FfiConverterTypeSuggestionQuery.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 
 public enum AmpMatchingStrategy: Equatable, Hashable {
     
@@ -2337,8 +2412,7 @@ public func FfiConverterTypeAmpMatchingStrategy_lower(_ value: AmpMatchingStrate
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 
 public enum GeonameMatchType: Equatable, Hashable {
     
@@ -2414,8 +2488,7 @@ public func FfiConverterTypeGeonameMatchType_lower(_ value: GeonameMatchType) ->
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * The type of a geoname.
  */
@@ -2514,8 +2587,7 @@ public func FfiConverterTypeGeonameType_lower(_ value: GeonameType) -> RustBuffe
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * What should be interrupted when [SuggestStore::interrupt] is called?
  */
@@ -2606,7 +2678,8 @@ public func FfiConverterTypeInterruptKind_lower(_ value: InterruptKind) -> RustB
  * The error type for all Suggest component operations. These errors are
  * exposed to your application, which should handle them as needed.
  */
-public enum SuggestApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
+public 
+enum SuggestApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -2711,8 +2784,7 @@ public func FfiConverterTypeSuggestApiError_lower(_ value: SuggestApiError) -> R
     return FfiConverterTypeSuggestApiError.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * Per-provider configuration data.
  */
@@ -2789,8 +2861,7 @@ public func FfiConverterTypeSuggestProviderConfig_lower(_ value: SuggestProvider
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * A suggestion from the database to show in the address bar.
  */
@@ -2962,8 +3033,7 @@ public func FfiConverterTypeSuggestion_lower(_ value: Suggestion) -> RustBuffer 
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * A provider is a source of search suggestions.
  * Please preserve the integer values after removing or adding providers.
@@ -3069,8 +3139,7 @@ public func FfiConverterTypeSuggestionProvider_lower(_ value: SuggestionProvider
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * Subject type for Yelp suggestion.
  */
@@ -3703,10 +3772,6 @@ fileprivate struct FfiConverterDictionaryUInt8TypeAlternateNames: FfiConverterRu
 }
 
 
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- */
 public typealias JsonValue = String
 
 #if swift(>=5.8)
@@ -3752,9 +3817,10 @@ public func FfiConverterTypeJsonValue_lower(_ value: JsonValue) -> RustBuffer {
  */
 public func rawSuggestionUrlMatches(rawUrl: String, cookedUrl: String) -> Bool  {
     return try!  FfiConverterBool.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_suggest_fn_func_raw_suggestion_url_matches(
         FfiConverterString.lower(rawUrl),
-        FfiConverterString.lower(cookedUrl),$0
+        FfiConverterString.lower(cookedUrl),uniffiCallStatus
     )
 })
 }
@@ -3774,82 +3840,82 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_suggest_checksum_func_raw_suggestion_url_matches() != 61462) {
+    if (uniffi_suggest_checksum_func_raw_suggestion_url_matches() != 19202) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_any_dismissed_suggestions() != 41516) {
+    if (uniffi_suggest_checksum_method_suggeststore_any_dismissed_suggestions() != 59383) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_clear() != 17574) {
+    if (uniffi_suggest_checksum_method_suggeststore_clear() != 4059) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_clear_dismissed_suggestions() != 21297) {
+    if (uniffi_suggest_checksum_method_suggeststore_clear_dismissed_suggestions() != 54886) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_dismiss_by_key() != 56209) {
+    if (uniffi_suggest_checksum_method_suggeststore_dismiss_by_key() != 36084) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_dismiss_by_suggestion() != 57118) {
+    if (uniffi_suggest_checksum_method_suggeststore_dismiss_by_suggestion() != 19492) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_dismiss_suggestion() != 33000) {
+    if (uniffi_suggest_checksum_method_suggeststore_dismiss_suggestion() != 17189) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_fetch_geoname_alternates() != 60828) {
+    if (uniffi_suggest_checksum_method_suggeststore_fetch_geoname_alternates() != 32499) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_fetch_geonames() != 64800) {
+    if (uniffi_suggest_checksum_method_suggeststore_fetch_geonames() != 21793) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_fetch_global_config() != 23207) {
+    if (uniffi_suggest_checksum_method_suggeststore_fetch_global_config() != 51329) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_fetch_provider_config() != 16664) {
+    if (uniffi_suggest_checksum_method_suggeststore_fetch_provider_config() != 4276) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_ingest() != 56852) {
+    if (uniffi_suggest_checksum_method_suggeststore_ingest() != 45574) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_interrupt() != 46232) {
+    if (uniffi_suggest_checksum_method_suggeststore_interrupt() != 33433) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_is_dismissed_by_key() != 49909) {
+    if (uniffi_suggest_checksum_method_suggeststore_is_dismissed_by_key() != 21530) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_is_dismissed_by_suggestion() != 46020) {
+    if (uniffi_suggest_checksum_method_suggeststore_is_dismissed_by_suggestion() != 20105) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_query() != 18358) {
+    if (uniffi_suggest_checksum_method_suggeststore_query() != 49707) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststore_query_with_metrics() != 3909) {
+    if (uniffi_suggest_checksum_method_suggeststore_query_with_metrics() != 26383) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_build() != 30982) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_build() != 46671) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_cache_path() != 24621) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_cache_path() != 5675) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_data_path() != 21293) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_data_path() != 3441) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_load_extension() != 44656) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_load_extension() != 36461) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_remote_settings_bucket_name() != 12709) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_remote_settings_bucket_name() != 50890) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_remote_settings_server() != 34776) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_remote_settings_server() != 22740) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_method_suggeststorebuilder_remote_settings_service() != 6794) {
+    if (uniffi_suggest_checksum_method_suggeststorebuilder_remote_settings_service() != 52415) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_constructor_suggeststore_new() != 4502) {
+    if (uniffi_suggest_checksum_constructor_suggeststore_new() != 63569) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_suggest_checksum_constructor_suggeststorebuilder_new() != 5502) {
+    if (uniffi_suggest_checksum_constructor_suggeststorebuilder_new() != 32091) {
         return InitializationResult.apiChecksumMismatch
     }
 

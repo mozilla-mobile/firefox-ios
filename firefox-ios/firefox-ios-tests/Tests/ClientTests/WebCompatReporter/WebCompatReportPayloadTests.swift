@@ -54,7 +54,7 @@ final class WebCompatReportPayloadTests: XCTestCase {
         // Labelled with the raw schema keys, so a renamed or reordered group misdescribes the ping.
         XCTAssertEqual(
             WebCompatReportPayload().previewGroups.map(\.id.rawValue),
-            ["basic", "tabInfo", "antiTracking", "frameworks", "browserInfo", "app", "system", "graphics"]
+            ["basic", "tabInfo", "antiTracking", "frameworks", "browserInfo", "prefs", "app", "system", "graphics"]
         )
     }
 

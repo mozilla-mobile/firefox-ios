@@ -485,12 +485,6 @@ struct AccessibilityIdentifiers {
         struct VideoIntro {
             static let continueButton = "Onboarding.VideoIntro.ContinueButton"
         }
-
-        struct Wallpaper {
-            static let card = "wallpaperCard"
-            static let title = "wallpaperOnboardingTitle"
-            static let description = "wallpaperOnboardingDescription"
-        }
     }
 
     struct TermsOfService {

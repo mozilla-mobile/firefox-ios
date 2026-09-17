@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import ComponentLibrary
 
-class ContentBlockerSettingViewController: SettingsTableViewController {
+final class ContentBlockerSettingViewController: SettingsTableViewController {
     private struct UX {
         static let buttonContentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
     }
@@ -68,26 +68,27 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 style: .leftSide,
                 subtitle: NSAttributedString(string: option.settingSubtitle),
                 accessibilityIdentifier: id,
-                isChecked: {
-                    return option == self.currentBlockingStrength
+                isChecked: { [weak self] in
+                    return option == self?.currentBlockingStrength
                 },
-                onChecked: {
-                    let previousOption = self.currentBlockingStrength
+                onChecked: { [weak self] in
+                    guard let self else { return }
+                    let previousOption = currentBlockingStrength
 
-                    self.currentBlockingStrength = option
-                    self.prefs.setString(self.currentBlockingStrength.rawValue,
-                                         forKey: ContentBlockingConfig.Prefs.StrengthKey)
+                    currentBlockingStrength = option
+                    prefs.setString(currentBlockingStrength.rawValue,
+                                    forKey: ContentBlockingConfig.Prefs.StrengthKey)
                     TabContentBlocker.prefsChanged()
-                    self.tableView.reloadData()
+                    tableView.reloadData()
 
-                    self.recordEventOnChecked(option: option, fromOption: previousOption)
+                    recordEventOnChecked(option: option, fromOption: previousOption)
                 })
 
             let uuid = windowUUID
-            setting.onAccessoryButtonTapped = {
+            setting.onAccessoryButtonTapped = { [weak self] in
                 let vc = TPAccessoryInfo(windowUUID: uuid)
                 vc.isStrictMode = option == .strict
-                self.navigationController?.pushViewController(vc, animated: true)
+                self?.navigationController?.pushViewController(vc, animated: true)
             }
 
             if self.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) == false {

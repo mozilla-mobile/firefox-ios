@@ -161,8 +161,9 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
 
-        // is_private_browsing on top of the device's has_touch_screen and is_tablet.
-        XCTAssertEqual(gleanWrapper.setBooleanCalled, 3)
+        // is_private_browsing on top of the device's has_touch_screen and is_tablet,
+        // plus the app-wide ad_blocker_enabled pref.
+        XCTAssertEqual(gleanWrapper.setBooleanCalled, 4)
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -173,7 +174,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.webCompatReporterProvider.legacyMiddleware(mockStore.state, submitAction())
 
-        XCTAssertEqual(gleanWrapper.setBooleanCalled, 2)
+        XCTAssertEqual(gleanWrapper.setBooleanCalled, 3)
 
         releaseMiddlewareProvidersFromMemory(subject)
     }

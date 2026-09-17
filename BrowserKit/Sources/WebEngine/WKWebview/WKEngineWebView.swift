@@ -289,7 +289,8 @@ final class DefaultWKEngineWebView: WKWebView,
         refresh.configure(with: scrollView) { [weak self] in
             self?.delegate?.webViewNeedsReload()
         }
-        guard pullRefreshViewType != UIRefreshControl.self else { return }
+
+        guard !(refresh is UIRefreshControl) else { return }
         scrollView.addSubview(refresh)
         refresh.translatesAutoresizingMaskIntoConstraints = false
         pullRefreshViewHeightConstraint = refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height)
@@ -304,6 +305,9 @@ final class DefaultWKEngineWebView: WKWebView,
     }
 
     private func removePullRefresh() {
+        if pullRefreshView is UIRefreshControl {
+            scrollView.refreshControl = nil
+        }
         pullRefreshView?.removeFromSuperview()
         pullRefreshViewWidthConstraint = nil
         pullRefreshViewHeightConstraint = nil

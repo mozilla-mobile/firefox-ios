@@ -37,6 +37,15 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Reŝargi";
 
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v155" = "Provi denove";
+
+/* On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.Description.v156" = "Konektiĝu al WI-FI aŭ iru al la agordoj de iOS kaj ŝaltu porteblajn datumojn por %@.";
+
+/* On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "Porteblaj datumoj ŝaltitaj por %@.";
+
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "La posedanto de %@ ne bone agordis ĝin kaj pro tio ne eblas krei sekuran konekton al ĝi.";
 
@@ -51,4 +60,37 @@
 
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Ŝajne estas problemo kun via retaliro.";
+
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v155" = "Kontrolo de arkivo…";
+
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v155" = "Ni ne povis atingi la arkivan servon.";
+
+/* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.Wayback.Error.Description.v154" = "La servilo povus esti okupata aŭ ne disponebla. Provu denove poste. Se vi ne povas viziti iun ajn paĝon, kontrolu la WI-FI aŭ datuman konekton. %@ ankaŭ povas serĉi en Wayback Machine pli fruan version de tiu ĉi paĝo.";
+
+/* Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. %1$@ is the app name (e.g. Firefox). %2$@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org. */
+"NativeErrorPage.Wayback.Error.FooterDescription.v155" = "%1$@ povas serĉi pli fruan version de tiu ĉi paĝo en la %2$@ de Internet Archive.";
+
+/* The tappable link text within the Wayback footer description, opens web.archive.org. */
+"NativeErrorPage.Wayback.Error.LinkText.v155" = "Wayback Machine";
+
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "Neniu arkivita versio trovita.";
+
+/* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
+"NativeErrorPage.Wayback.Error.Retry.v154" = "Provi denove";
+
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
+"NativeErrorPage.Wayback.Error.Search.v155" = "Serĉi en la reto";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.SearchWayback.v155" = "Vidi arkivitan version";
+
+/* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
+"NativeErrorPage.Wayback.Error.Title.v154" = "Ne eblas konektiĝi";
+
+/* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
+"NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Serĉo de arkivita version de tiu ĉi paĝo en Wayback Machine.";
 

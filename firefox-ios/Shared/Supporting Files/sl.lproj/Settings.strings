@@ -61,6 +61,9 @@
 /* Settings section title for the old Firefox account */
 "FxA.FirefoxAccount.v119" = "Račun";
 
+/* Link button on the Quick Answers settings screen that opens more information about the feature. */
+"QuickAnswers.Settings.LearnMore.v158" = "Več o tem";
+
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Naslovi";
 

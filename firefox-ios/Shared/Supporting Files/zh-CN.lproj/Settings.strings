@@ -220,6 +220,9 @@
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "账户";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the brand title for the section containing the Wrexham AFC wallpapers. */
+"Settings.Home.Option.Wallpaper.WrexhamBrandTitle.v155" = "雷克瑟姆足球俱乐部";
+
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsStatus.v112" = "需要开启此功能才能接收标签页，并在您于其他设备上登录时收到通知。";
 

@@ -62,6 +62,8 @@ struct WebCompatReportPayload: Equatable {
     var mobify: Bool?
     // broken_site_report.browser_info
     var experiments: [WebCompatExperiment]?
+    // broken_site_report.browser_info.prefs
+    var adBlockerEnabled: Bool?
     // broken_site_report.browser_info.app
     var defaultLocales: [String]?
     var defaultUserAgentString: String?
@@ -99,6 +101,7 @@ struct WebCompatReportPayload: Equatable {
             case marfeel
             case mobify
             case experiments
+            case adBlockerEnabled
             case defaultLocales
             case defaultUseragentString
             case isTablet
@@ -118,6 +121,7 @@ struct WebCompatReportPayload: Equatable {
             case antiTracking
             case frameworks
             case browserInfo
+            case prefs
             case app
             case system
             case graphics
@@ -153,6 +157,9 @@ struct WebCompatReportPayload: Equatable {
             ]),
             PreviewGroup(id: .browserInfo, fields: [
                 PreviewField(key: .experiments, value: previewValue(experiments))
+            ]),
+            PreviewGroup(id: .prefs, fields: [
+                PreviewField(key: .adBlockerEnabled, value: previewValue(adBlockerEnabled))
             ]),
             PreviewGroup(id: .app, fields: [
                 PreviewField(key: .defaultLocales, value: previewValue(defaultLocales)),

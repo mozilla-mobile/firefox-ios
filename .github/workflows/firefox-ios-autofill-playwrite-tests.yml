@@ -24,7 +24,7 @@ jobs:
     continue-on-error: true
     steps:
         - name: Checkout repository
-          uses: actions/checkout@v4
+          uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         - name: Get the current github action name
           run: |
             github_action_name="Update credential provider script"
@@ -33,7 +33,7 @@ jobs:
           run: |
             git clone https://github.com/issammani/test-playwright.git
         - name: Install node
-          uses: actions/setup-node@v4
+          uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
           with:
            node-version: 18
         - run: |
@@ -54,7 +54,7 @@ jobs:
         - name: Send Slack notification if tests fail
           if: '${{ !cancelled() && !github.event.pull_request.head.repo.fork }}'
           id: slack
-          uses: slackapi/slack-github-action@v2.0.0
+          uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d # v2.0.0
           with:
             payload-file-path: "./test-fixtures/ci/slack-notification-payload-generic.json"
             payload-templated: true

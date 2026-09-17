@@ -17,14 +17,23 @@ class TestBrowserDB: XCTestCase, @unchecked Sendable {
         }
     }
 
-    override func setUp() {
-        super.setUp()
+    fileprivate func removeTestDatabaseFiles() {
         rm("foo.db")
         rm("foo.db-shm")
         rm("foo.db-wal")
         rm("foo.db.bak.1")
         rm("foo.db.bak.1-shm")
         rm("foo.db.bak.1-wal")
+    }
+
+    override func setUp() {
+        super.setUp()
+        removeTestDatabaseFiles()
+    }
+
+    override func tearDown() {
+        removeTestDatabaseFiles()
+        super.tearDown()
     }
 
     class MockFailingSchema: Schema {
