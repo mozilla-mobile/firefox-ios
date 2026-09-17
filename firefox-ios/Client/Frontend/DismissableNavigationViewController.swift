@@ -25,4 +25,21 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
         onViewDismissed?()
         onViewDismissed = nil
     }
+
+    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        super.pushViewController(viewController, animated: animated)
+        transitionCoordinator?.animate(alongsideTransition: nil) { [weak self] _ in
+            self?.announceNavigationBarTitle()
+        }
+    }
+
+    private func announceNavigationBarTitle() {
+        for index in 0..<navigationBar.accessibilityElementCount() {
+            guard let element = navigationBar.accessibilityElement(at: index) as? NSObject,
+                  element.accessibilityTraits.contains(.header) else { continue }
+
+            UIAccessibility.post(notification: .layoutChanged, argument: element)
+            return
+        }
+    }
 }
