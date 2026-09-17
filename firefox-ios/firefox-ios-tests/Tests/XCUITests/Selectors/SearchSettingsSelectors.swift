@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Localizations
+import Shared
 import XCTest
 
 protocol SearchSettingsSelectorsSet {
@@ -52,8 +54,11 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
         static let suggestionsFromSponsorsSwitch =
             AccessibilityIdentifiers.Settings.Search.showSponsoredSuggestionsSwitch
         static let learnMoreAboutFirefoxSuggestRow = "Learn more about Firefox Suggest"
-        static let suggestionsFromSponsorsTitle = "Suggestions from Sponsors"
-        static let suggestionsFromSponsorsDescription = "Support Firefox with occasional sponsored suggestions"
+        static let suggestionsFromSponsorsTitle = String.Settings.Search.Suggest.ShowSponsoredSuggestionsTitle
+        static let suggestionsFromSponsorsDescription = String.localizedStringWithFormat(
+            .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
+            AppName.shortName.rawValue
+        )
     }
 
     let NAVBAR = Selector.navigationBarId(

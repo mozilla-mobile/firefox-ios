@@ -144,7 +144,6 @@ class SearchSettingsSuggestUITests: BaseTestCase {
     private var settingScreen: SettingScreen!
     private var searchSettingsScreen: SearchSettingsScreen!
     private var browserScreen: BrowserScreen!
-    private var searchScreen: SearchScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -153,7 +152,6 @@ class SearchSettingsSuggestUITests: BaseTestCase {
         settingScreen = SettingScreen(app: app)
         searchSettingsScreen = SearchSettingsScreen(app: app)
         browserScreen = BrowserScreen(app: app)
-        searchScreen = SearchScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2753086
@@ -161,10 +159,7 @@ class SearchSettingsSuggestUITests: BaseTestCase {
     func testSearchSettingsMenuUIWithFirefoxSuggestEnabled() {
         enrollInFirefoxSuggestRollout(ingestingSuggestions: false)
 
-        toolbarScreen.tapSettingsMenuButton()
-        mainMenuScreen.tapSettings()
-        settingScreen.navigateToSearchSettings()
-        searchSettingsScreen.assertNavBarVisible()
+        openSearchSettings()
 
         searchSettingsScreen.assertDefaultSearchEngineSectionExists()
         searchSettingsScreen.assertAlternativeSearchEnginesSectionExists()
@@ -210,9 +205,13 @@ class SearchSettingsSuggestUITests: BaseTestCase {
         searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsOff()
         openNewTabFromSearchSettings()
         browserScreen.searchFromAddressBar(term: sponsoredSearchTerm)
-        // Absence is only meaningful once the suggestion list has actually been populated
-        searchScreen.assertSearchSectionVisible(with: defaultSearchEngine1)
-        browserScreen.assertNoSponsoredResult(title: sponsoredSuggestionTitle)
+        // The Suggest section must still render, otherwise the sponsored entry could be missing
+        // simply because no suggestions came back at all
+        browserScreen.assertSponsoredResult(
+            title: sponsoredSuggestionTitle,
+            shouldExist: false,
+            suggestSectionExists: true
+        )
     }
 
     private func openSearchSettings() {

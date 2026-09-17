@@ -563,21 +563,23 @@ final class BrowserScreen {
         }
     }
 
-    func assertSponsoredResult(title: String, shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
+    /// - Parameter suggestSectionExists: whether the Firefox Suggest section itself is expected on
+    /// screen. Defaults to `shouldExist`: the section is gone when suggestions are off altogether
+    /// (private mode), but stays when only the sponsored entry is filtered out, and then it is the
+    /// positive control proving suggestions were returned at all.
+    func assertSponsoredResult(
+        title: String,
+        shouldExist: Bool = true,
+        suggestSectionExists: Bool? = nil,
+        timeout: TimeInterval = TIMEOUT_LONG
+    ) {
         assertWebElements(
-            shouldExist: shouldExist,
+            shouldExist: suggestSectionExists ?? shouldExist,
             sel.SEARCH_SETTINGS_BUTTON.element(in: app),
-            app.staticTexts[title],
-            sel.SPONSORED_LABEL.element(in: app),
             timeout: timeout
         )
-    }
-
-    /// Only the sponsored entry itself is checked, because the Firefox Suggest section and its
-    /// settings button stay in place as long as non-sponsored suggestions are still enabled.
-    func assertNoSponsoredResult(title: String, timeout: TimeInterval = TIMEOUT_LONG) {
         assertWebElements(
-            shouldExist: false,
+            shouldExist: shouldExist,
             app.staticTexts[title],
             sel.SPONSORED_LABEL.element(in: app),
             timeout: timeout
@@ -596,8 +598,19 @@ final class BrowserScreen {
 
     func searchFromAddressBar(term: String) {
         tapOnAddressBar()
-        tapClearButtonIfExists()
+        clearAddressBarText()
         typeOnSearchBar(text: term)
+    }
+
+    /// Fails rather than returning with text still in the field, so a retry cannot append to the
+    /// previous term and search for "amazonamazon" instead.
+    private func clearAddressBarText() {
+        guard clearButton.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) else { return }
+        clearButton.waitAndTap()
+        XCTAssertTrue(
+            clearButton.waitUntilGone(),
+            "The address bar still holds text after tapping the clear button"
+        )
     }
 
     func assertSuggestedLinesNotEmpty() {
