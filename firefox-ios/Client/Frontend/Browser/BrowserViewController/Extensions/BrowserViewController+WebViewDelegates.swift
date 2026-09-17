@@ -200,6 +200,7 @@ extension BrowserViewController: WKUIDelegate {
         completionHandler: @escaping @MainActor (UIContextMenuConfiguration?) -> Void
     ) {
         guard let url = elementInfo.linkURL, let currentTab = tabManager.selectedTab else {
+            pendingContextMenuTelemetry = nil
             completionHandler(nil)
             return
         }
@@ -207,14 +208,29 @@ extension BrowserViewController: WKUIDelegate {
         let elements = Self.resolveContextMenuElements(for: url, from: contextHelper)
 
         completionHandler(contextMenuConfiguration(for: url, webView: webView, elements: elements))
-        ContextMenuTelemetry().shown(origin: elements.image != nil ? .imageLink : .webLink)
+
+        let origin: ContextMenuTelemetry.OriginExtra = elements.image != nil ? .imageLink : .webLink
+        pendingContextMenuTelemetry = (url: url, origin: origin)
+        contextMenuTelemetry.shown(origin: origin)
     }
 
     func webView(_ webView: WKWebView, contextMenuDidEndForElement elementInfo: WKContextMenuElementInfo) {
-        guard let url = elementInfo.linkURL, let currentTab = tabManager.selectedTab else { return }
+        guard let url = elementInfo.linkURL else { return }
+        contextMenuDidEnd(for: url)
+    }
+
+    /// Split out from the delegate method above because `WKContextMenuElementInfo` declares its
+    /// initializer unavailable, so it can't be constructed to unit test the delegate method directly.
+    func contextMenuDidEnd(for url: URL) {
+        // Both sides come straight from WebKit's own `elementInfo.linkURL`, so a stale slot left by a
+        // long press whose dismiss never fired is only ever consumed by the matching gesture's dismiss.
+        if let pending = pendingContextMenuTelemetry, pending.url == url {
+            contextMenuTelemetry.dismissed(origin: pending.origin)
+        }
+        pendingContextMenuTelemetry = nil
+
+        guard let currentTab = tabManager.selectedTab else { return }
         let contextHelper = currentTab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper
-        let elements = Self.resolveContextMenuElements(for: url, from: contextHelper)
-        ContextMenuTelemetry().dismissed(origin: elements.image != nil ? .imageLink : .webLink)
         if Self.shouldResetContextMenuElements(afterDismissing: url, contextHelper: contextHelper) {
             contextHelper?.reset()
         }

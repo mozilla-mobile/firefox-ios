@@ -734,4 +734,77 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
         XCTAssertFalse(shouldReset)
     }
+
+    // MARK: - Context menu dismiss telemetry origin
+    // See FXIOS-14918 review feedback: the origin must be captured once when the menu is shown and
+    // reused when it's dismissed, rather than re-derived from `ContextMenuHelper.elements`, which the
+    // JS bridge can overwrite while the menu is open.
+
+    @MainActor
+    func testContextMenuDidEnd_bridgeReportsImageMidMenu_dismissedReusesShownOrigin() throws {
+        let gleanWrapper = MockGleanWrapper()
+        let subject = createSubject(gleanWrapper: gleanWrapper)
+        let url = URL(string: "https://example.com/photo-link")!
+        subject.pendingContextMenuTelemetry = (url: url, origin: .webLink)
+
+        subject.contextMenuDidEnd(for: url)
+
+        let dismissedExtras = try XCTUnwrap(gleanWrapper.savedExtras.last as? GleanMetrics.ContextMenu.DismissedExtra)
+        XCTAssertEqual(
+            dismissedExtras.origin,
+            ContextMenuTelemetry.OriginExtra.webLink.rawValue,
+            "Must reuse the origin captured at show time, not re-derive it from elements the JS bridge overwrote mid-menu"
+        )
+    }
+
+    @MainActor
+    func testContextMenuDidEnd_consumesPendingOrigin() {
+        let subject = createSubject()
+        let url = URL(string: "https://example.com")!
+        subject.pendingContextMenuTelemetry = (url: url, origin: .imageLink)
+
+        subject.contextMenuDidEnd(for: url)
+
+        XCTAssertNil(subject.pendingContextMenuTelemetry, "The captured origin must be consumed on dismiss")
+    }
+
+    @MainActor
+    func testContextMenuDidEnd_noPendingOrigin_recordsNoDismissedEvent() {
+        let gleanWrapper = MockGleanWrapper()
+        let subject = createSubject(gleanWrapper: gleanWrapper)
+
+        subject.contextMenuDidEnd(for: URL(string: "https://example.com")!)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 0, "Dismiss with no matching show must not manufacture an event")
+    }
+
+    @MainActor
+    func testContextMenuDidEnd_staleDismissForEarlierMenu_doesNotStealNewerOrigin() {
+        let gleanWrapper = MockGleanWrapper()
+        let subject = createSubject(gleanWrapper: gleanWrapper)
+        let earlierURL = URL(string: "https://example.com/earlier")!
+        let newerURL = URL(string: "https://example.com/newer")!
+        subject.pendingContextMenuTelemetry = (url: newerURL, origin: .imageLink)
+
+        subject.contextMenuDidEnd(for: earlierURL)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 0, "A dismiss for a superseded long press must not fire")
+        XCTAssertNil(subject.pendingContextMenuTelemetry, "The stale entry must still be cleared")
+    }
+
+    @MainActor
+    func testContextMenuDidEnd_stillResetsMatchingContextHelperElements() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: tab)
+        contextHelper.elements = ContextMenuHelper.Elements(link: url, image: nil, title: "Example", alt: nil)
+        tab.addContentScript(contextHelper, name: ContextMenuHelper.name())
+
+        subject.contextMenuDidEnd(for: url)
+
+        XCTAssertNil(contextHelper.elements, "The telemetry refactor must not change the existing reset behavior")
+    }
 }
