@@ -2991,7 +2991,7 @@ extension String {
                 public static let LearnMoreAction = MZLocalizedString(
                     key: "Settings.BoolSetting.LearnMoreAction.v157",
                     tableName: "Settings",
-                    value: "Learn more",
+                    value: "Learn More",
                     comment: "VoiceOver custom action name for a settings row's Learn More link."
                 )
             }
