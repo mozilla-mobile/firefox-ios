@@ -136,10 +136,15 @@ class SearchSettingsUITests: BaseTestCase {
 }
 
 class SearchSettingsSuggestUITests: BaseTestCase {
+    private let sponsoredSearchTerm = "amazon"
+    private let sponsoredSuggestionTitle = "Amazon.com - Official Site"
+
     private var toolbarScreen: ToolbarScreen!
     private var mainMenuScreen: MainMenuScreen!
     private var settingScreen: SettingScreen!
     private var searchSettingsScreen: SearchSettingsScreen!
+    private var browserScreen: BrowserScreen!
+    private var searchScreen: SearchScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -147,6 +152,8 @@ class SearchSettingsSuggestUITests: BaseTestCase {
         mainMenuScreen = MainMenuScreen(app: app)
         settingScreen = SettingScreen(app: app)
         searchSettingsScreen = SearchSettingsScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+        searchScreen = SearchScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2753086
@@ -170,5 +177,57 @@ class SearchSettingsSuggestUITests: BaseTestCase {
         searchSettingsScreen.assertSuggestionsFromTheWebSwitchIsOn()
         searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsOn()
         searchSettingsScreen.assertLearnMoreAboutFirefoxSuggestRowExists()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753072
+    // Regression
+    func testSponsoredSuggestionsToggle() {
+        enrollInFirefoxSuggestRollout()
+
+        // Step 1: the toggle is displayed with its title and description
+        openSearchSettings()
+        searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsDisplayed()
+
+        // Step 2: it is ON by default and can be switched both ways
+        searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsOn()
+        searchSettingsScreen.tapOnSuggestionsFromSponsorsSwitch()
+        searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsOff()
+        searchSettingsScreen.tapOnSuggestionsFromSponsorsSwitch()
+        searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsOn()
+
+        // Bug: sponsored suggestions may not show up on iPad
+        // https://github.com/mozilla-mobile/firefox-ios/issues/35243
+        guard !iPad() else { return }
+
+        // Step 3: with the toggle ON, a sponsored suggestion is offered
+        openNewTabFromSearchSettings()
+        browserScreen.searchAndAssertSponsoredResult(term: sponsoredSearchTerm, title: sponsoredSuggestionTitle)
+
+        // Step 4: with the toggle OFF, it is not
+        browserScreen.dismissURLBarOverlay()
+        openSearchSettings()
+        searchSettingsScreen.tapOnSuggestionsFromSponsorsSwitch()
+        searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsOff()
+        openNewTabFromSearchSettings()
+        browserScreen.searchFromAddressBar(term: sponsoredSearchTerm)
+        // Absence is only meaningful once the suggestion list has actually been populated
+        searchScreen.assertSearchSectionVisible(with: defaultSearchEngine1)
+        browserScreen.assertNoSponsoredResult(title: sponsoredSuggestionTitle)
+    }
+
+    private func openSearchSettings() {
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
+        settingScreen.navigateToSearchSettings()
+        searchSettingsScreen.assertNavBarVisible()
+    }
+
+    /// Backs out with direct taps, as the screen graph has no route out of SearchSettings: settings
+    /// was opened by tapping rather than through the navigator, so no return path was recorded.
+    private func openNewTabFromSearchSettings() {
+        searchSettingsScreen.tapOnBackButton()
+        settingScreen.closeSettingsWithDoneButton()
+        navigator.nowAt(NewTabScreen)
+        navigator.createNewTab()
     }
 }

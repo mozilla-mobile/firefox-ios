@@ -573,6 +573,33 @@ final class BrowserScreen {
         )
     }
 
+    /// Only the sponsored entry itself is checked, because the Firefox Suggest section and its
+    /// settings button stay in place as long as non-sponsored suggestions are still enabled.
+    func assertNoSponsoredResult(title: String, timeout: TimeInterval = TIMEOUT_LONG) {
+        assertWebElements(
+            shouldExist: false,
+            app.staticTexts[title],
+            sel.SPONSORED_LABEL.element(in: app),
+            timeout: timeout
+        )
+    }
+
+    /// Searches for `term` and asserts the sponsored entry for `title` is offered. A suggest query
+    /// interrupted while the term is still being typed is dropped silently, hence the retyping.
+    func searchAndAssertSponsoredResult(term: String, title: String, maxAttempts: Int = 3) {
+        for _ in 0..<maxAttempts {
+            searchFromAddressBar(term: term)
+            if app.staticTexts[title].mozWaitForElementToExist(timeout: 5, failOnTimeout: false) { break }
+        }
+        assertSponsoredResult(title: title)
+    }
+
+    func searchFromAddressBar(term: String) {
+        tapOnAddressBar()
+        tapClearButtonIfExists()
+        typeOnSearchBar(text: term)
+    }
+
     func assertSuggestedLinesNotEmpty() {
         let suggestedLines = app.tables.firstMatch.cells
         XCTAssertNotEqual(suggestedLines.count, 0, "Expected suggestions to appear")
