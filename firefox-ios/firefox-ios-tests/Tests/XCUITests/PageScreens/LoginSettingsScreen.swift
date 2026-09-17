@@ -119,10 +119,24 @@ final class LoginSettingsScreen {
         let detailList = sel.LOGIN_DETAIL_LIST.element(in: app)
         base.mozWaitForElementToExist(cell)
         for _ in 0..<attempts {
+            // Re-tapping once the push has started would force-tap a coordinate that by then sits
+            // over the detail screen, so a landed tap is waited out rather than repeated.
+            if detailList.exists { return }
+            guard cell.exists else { break }
             cell.tap(force: true)
             if detailList.mozWaitForElementToExist(timeout: 5, failOnTimeout: false) { return }
         }
+        if detailList.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) { return }
         XCTFail("The login detail screen did not open after \(attempts) taps")
+    }
+
+    func assertLoginDetailListExists() {
+        BaseTestCase().mozWaitForElementToExist(sel.LOGIN_DETAIL_LIST.element(in: app))
+    }
+
+    func tapLoginDetailCellContaining(_ text: String) {
+        assertLoginDetailListExists()
+        sel.LOGIN_DETAIL_LIST.element(in: app).cells.elementContainingText(text).waitAndTap()
     }
 
     func revealPassword() {

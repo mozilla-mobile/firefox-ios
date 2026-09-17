@@ -183,7 +183,10 @@ final class BrowserScreen {
     /// The button fades in with the address bar layout, and a tap sent before it settles is dropped
     /// with no hit point, so it is re-tapped until the field empties and the button goes away.
     func clearURL() {
-        clearButton.tapUntilElementDisappears(clearButton)
+        XCTAssertTrue(
+            clearButton.tapUntilElementDisappears(clearButton),
+            "The address bar was not cleared"
+        )
     }
 
     func tapClearButtonIfExists() {
@@ -243,11 +246,12 @@ final class BrowserScreen {
     }
 
     /// Leaves address bar editing when the field holds keyboard focus, reporting whether it did.
+    /// Probes with a short timeout so a run where editing is never active does not pay for it.
     @discardableResult
-    func leaveAddressBarEditingIfActive() -> Bool {
+    func leaveAddressBarEditingIfActive(timeout: TimeInterval = TIMEOUT_PICKER_PROBE) -> Bool {
         guard addressBar.hasKeyboardFocus else { return false }
-        cancelButton.tapIfExists()
-        return !addressBar.hasKeyboardFocus
+        cancelButton.tapIfExists(timeout: timeout)
+        return addressBar.waitUntilKeyboardFocusLost(timeout: timeout)
     }
 
     /// Opening a blank new tab focuses the address bar, so the keyboard is raised on both idioms.
