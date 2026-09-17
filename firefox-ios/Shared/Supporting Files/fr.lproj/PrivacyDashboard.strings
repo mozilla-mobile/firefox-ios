@@ -1,5 +1,5 @@
 /* On the Privacy Dashboard popup, the accessibility label read out for one of the tracker category rows. The first placeholder (%1$@) is the category's name, such as Fingerprinters. The second placeholder (%2$@) is how many trackers of that category we've blocked this week. */
-"PrivacyDashboard.CategoryAccessibilityLabel.v156" = "%1$@, bloqué : %2$@";
+"PrivacyDashboard.CategoryAccessibilityLabel.v156" = "%1$@, éléments bloqués : %2$@";
 
 /* On the Privacy Dashboard popup, the title text for the bar & label showing how many cross-site tracking cookies we've blocked. */
 "PrivacyDashboard.CrossSiteTrackers.v155" = "Cookies de pistage intersites";

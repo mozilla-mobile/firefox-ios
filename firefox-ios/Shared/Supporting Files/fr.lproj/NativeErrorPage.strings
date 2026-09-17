@@ -41,10 +41,10 @@
 "NativeErrorPage.ButtonLabel.v155" = "Réessayer";
 
 /* On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox). */
-"NativeErrorPage.CellularDataRestricted.Description.v156" = "Connectez-vous au Wi-Fi ou allez dans les paramètres iOS et activez les données mobiles pour %@.";
+"NativeErrorPage.CellularDataRestricted.Description.v156" = "Connectez-vous à un réseau Wi-Fi ou ouvrez les réglages d’iOS pour autoriser %@ à utiliser les données cellulaires.";
 
 /* On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox). */
-"NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "Les données mobiles sont désactivées pendant %@.";
+"NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "Les données cellulaires sont désactivées pour %@.";
 
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Le propriétaire de %@ ne l’a pas configuré correctement et une connexion sécurisée n’a pas pu être établie.";

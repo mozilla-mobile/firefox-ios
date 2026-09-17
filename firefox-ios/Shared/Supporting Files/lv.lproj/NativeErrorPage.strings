@@ -1,3 +1,6 @@
+/* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "Var būt nepieciešams pieteikties Wi-Fi tīklā vai arī jāpārbauda VPN iestatījumi.";
+
 /* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
 "NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Kļūdas kods: %@";
 
