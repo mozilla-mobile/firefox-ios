@@ -129,6 +129,36 @@ final class HomePageSettingViewControllerTests: XCTestCase, FeatureFlagTestUtili
         XCTAssertTrue(trackerBlockerModuleSettingValue)
     }
 
+    func testHomepageSettings_generateSettings_trackerBlockerModule_isOrderedBetweenShortcutsAndJumpBackIn() throws {
+        setFeatureFlag(.homepageTrackerBlockerModule, isEnabled: true)
+        let subject = createSubject()
+        subject.profile = mockProfile
+
+        let settingsList = subject.generateSettings()
+
+        let customizeFirefoxHomeSettingsList = try XCTUnwrap(settingsList.first(
+            where: {
+                $0.title?.string == .Settings.Homepage.CustomizeFirefoxHome.Title
+            }))
+
+        let children = customizeFirefoxHomeSettingsList.children
+        let shortcutsIndex = try XCTUnwrap(children.firstIndex(
+            where: {
+                $0 is HomePageSettingViewController.TopSitesSettings
+            }))
+        let trackerBlockerModuleIndex = try XCTUnwrap(children.firstIndex(
+            where: {
+                ($0 as? BoolSetting)?.prefKey == PrefsKeys.HomepageSettings.TrackerBlockerSection
+            }))
+        let jumpBackInIndex = try XCTUnwrap(children.firstIndex(
+            where: {
+                ($0 as? BoolSetting)?.prefKey == PrefsKeys.HomepageSettings.JumpBackInSection
+            }))
+
+        XCTAssertLessThan(shortcutsIndex, trackerBlockerModuleIndex)
+        XCTAssertLessThan(trackerBlockerModuleIndex, jumpBackInIndex)
+    }
+
     // MARK: - Helpers
 
     private func createSubject() -> HomePageSettingViewController {
