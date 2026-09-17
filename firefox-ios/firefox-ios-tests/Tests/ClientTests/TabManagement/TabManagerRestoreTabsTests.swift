@@ -254,7 +254,7 @@ final class TabManagerRestoreTabsTests: TabManagerTestsBase {
                 XCTAssertNotEqual(subject.selectedTab?.tabUUID,
                                   activeId.uuidString,
                                   "Restored active tab should not be selected while deeplink is pending")
-                XCTAssertIdentical(subject.selectedTab, initialTab)
+                XCTAssertEqual(subject.tabs.last?.tabUUID, initialTab.tabUUID)
                 expectation.fulfill()
             }
         }
