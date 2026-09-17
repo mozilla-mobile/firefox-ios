@@ -714,7 +714,8 @@ final class SearchViewController: SiteTableViewController,
 
         let attributedString = searchPhrase.attributedText(
             boldIn: upperBound..<searchPhrase.endIndex,
-            font: FXFontStyles.Regular.body.scaledFont()
+            font: FXFontStyles.Regular.body.scaledFont(),
+            boldFont: FXFontStyles.Bold.body.scaledFont()
         )
         return attributedString
     }

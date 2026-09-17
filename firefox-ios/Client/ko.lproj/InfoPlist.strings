@@ -22,6 +22,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "사진을 저장할 수 있게 합니다.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox가 오디오를 텍스트로 변환할 수 있게 합니다.";
+
 /* (No Comment) */
 "Scan QR Code" = "QR 코드 스캔";
 

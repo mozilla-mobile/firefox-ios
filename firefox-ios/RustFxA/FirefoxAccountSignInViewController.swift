@@ -99,10 +99,13 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
                 guard let url = try? result.get(), let host = url.host else { return }
 
                 let font = FXFontStyles.Regular.headline.scaledFont()
+                // `FXFontStyles.Bold.headline` is semibold, same as the regular headline, so the URL is given a
+                // true bold weight at the same text style to keep it standing out from the surrounding copy.
+                let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .headline, size: 17)
 
                 let shortUrl = host + url.path // "firefox.com" + "/pair"
                 let msg: String = .FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
-                label.attributedText = msg.attributedText(boldString: shortUrl, font: font)
+                label.attributedText = msg.attributedText(boldString: shortUrl, font: font, boldFont: boldFont)
             }
         }
     }

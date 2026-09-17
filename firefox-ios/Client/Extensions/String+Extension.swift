@@ -10,33 +10,29 @@ extension String {
     /// substring is bold.
     /// - Parameters:
     ///     - boldString: the substring that should be bold
-    ///     - font: font for entire string, part of string will be converted to bold version of this font
-    func attributedText(boldString: String, font: UIFont) -> NSAttributedString {
+    ///     - font: font for the parts of the string that are not bold
+    ///     - boldFont: font for `boldString`. Pass a Dynamic Type scaled font (e.g. one of the
+    ///     `FXFontStyles.Bold` styles) so the bold run keeps scaling with the content size category the way
+    ///     the rest of the string does.
+    func attributedText(boldString: String, font: UIFont, boldFont: UIFont) -> NSAttributedString {
         guard let range = self.range(of: boldString) else {
             return NSAttributedString(string: self)
         }
-        return self.attributedText(boldIn: range, font: font)
+        return self.attributedText(boldIn: range, font: font, boldFont: boldFont)
     }
 
     /// Returns an attributed string in which the characters in the given range
     /// are bold.
     /// - Parameters:
     ///     - boldIn: the character range in the string that should be bold
-    ///     - font: font for entire string, part of string will be converted to bold version of this font
-    func attributedText(boldIn range: Range<String.Index>, font: UIFont) -> NSAttributedString {
+    ///     - font: font for the parts of the string that are not bold
+    ///     - boldFont: font for the characters in `range`. Pass a Dynamic Type scaled font (e.g. one of the
+    ///     `FXFontStyles.Bold` styles) so the bold run keeps scaling with the content size category the way
+    ///     the rest of the string does.
+    func attributedText(boldIn range: Range<String.Index>, font: UIFont, boldFont: UIFont) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(string: self,
                                                          attributes: [NSAttributedString.Key.font: font])
-
-        var boldFont = UIFont.boldSystemFont(ofSize: font.pointSize)
-
-        // if we have a text style, we are using dynamic text so the attributed text should do too
-        if let textStyle = font.fontDescriptor.fontAttributes[.textStyle] as? UIFont.TextStyle {
-            boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: textStyle,
-                                                                  size: font.pointSize)
-        }
-
-        let boldFontAttribute = [NSAttributedString.Key.font: boldFont]
-        attributedString.addAttributes(boldFontAttribute, range: NSRange(range, in: self))
+        attributedString.addAttributes([NSAttributedString.Key.font: boldFont], range: NSRange(range, in: self))
         return attributedString
     }
 

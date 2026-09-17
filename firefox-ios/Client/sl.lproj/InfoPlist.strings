@@ -22,6 +22,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "To vam omogoča shranjevati fotografije.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "To Firefoxu omogoča pretvorbo posnetega govora v besedilo.";
+
 /* (No Comment) */
 "Scan QR Code" = "Skeniraj QR-kodo";
 

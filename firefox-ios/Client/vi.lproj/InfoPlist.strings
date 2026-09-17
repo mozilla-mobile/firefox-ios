@@ -22,6 +22,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Điều này cho phép bạn lưu ảnh.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Điều này cho phép Firefox phiên âm âm thanh của bạn.";
+
 /* (No Comment) */
 "Scan QR Code" = "Quét mã QR";
 

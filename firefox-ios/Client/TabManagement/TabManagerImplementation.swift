@@ -680,6 +680,13 @@ final class TabManagerImplementation: NSObject,
 
     private func handleTabSelectionAfterRestore(tabToSelect: Tab?) {
         assert(Thread.isMainThread)
+        if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
+            logger.log("Skipping post-restore tab selection; deeplink tab pending",
+                       level: .debug,
+                       category: .tabs)
+            return
+        }
+
         if let tabToSelect {
             selectTab(tabToSelect)
         } else {

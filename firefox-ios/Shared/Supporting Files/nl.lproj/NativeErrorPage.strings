@@ -40,6 +40,12 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v155" = "Opnieuw proberen";
 
+/* On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.Description.v156" = "Maak verbinding met wifi of ga naar iOS-instellingen en schakel mobiele gegevens in voor %@.";
+
+/* On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "Mobiele gegevens zijn uitgeschakeld voor %@.";
+
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "De eigenaar van %@ heeft deze niet juist ingesteld en er kan geen beveiligde verbinding tot stand worden gebracht.";
 

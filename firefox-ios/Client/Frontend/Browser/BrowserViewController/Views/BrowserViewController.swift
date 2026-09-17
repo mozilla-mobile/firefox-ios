@@ -4020,7 +4020,7 @@ class BrowserViewController: UIViewController,
         let colors = currentTheme.colors
         backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layerSurfaceLow
         if #available(iOS 26, *), let glassEffect = effect as? UIGlassEffect {
-            glassEffect.tintColor = currentTheme.colors.layer1.withAlphaComponent(0.5)
+            glassEffect.tintColor = currentTheme.colors.layerToolbarGlass.withAlphaComponent(0.5)
             bottomBlurView.effect = glassEffect
             topBlurView.effect = glassEffect
         }

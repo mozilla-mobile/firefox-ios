@@ -100,6 +100,8 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
            // After everything is setup, register for push notifications
             if manager.hasAccount() {
                 NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+            } else {
+                RustFirefoxAccounts.shared.clearUserProfileCache()
             }
 
             completion(manager)
@@ -260,8 +262,13 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
 
     /// Cache the user profile (i.e. email, user name) for when the app starts offline. Notice this gets
     /// cleared when an account is disconnected.
-    private let prefKeyCachedUserProfile = "prefKeyCachedUserProfile"
+    public static let prefKeyCachedUserProfile = "prefKeyCachedUserProfile"
     private var cachedUserProfile: FxAUserProfile?
+
+    public func clearUserProfileCache(prefs: Prefs? = nil) {
+        cachedUserProfile = nil
+        (prefs ?? RustFirefoxAccounts.prefs)?.removeObjectForKey(Self.prefKeyCachedUserProfile)
+    }
 
     /// In-flight account operation the account manager applies asynchronously; UI reads it to show a
     /// transitional label ("Signing out…") instead of stale account info during the window.
@@ -273,6 +280,7 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
     public private(set) var accountTransition: AccountTransition = .idle
 
     public var userProfile: FxAUserProfile? {
+        guard accountTransition != .signingOut else { return nil }
         let prefs = RustFirefoxAccounts.prefs
 
         if let profile = RustFirefoxAccounts.shared.accountManager?.accountProfile() {
@@ -282,10 +290,10 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
 
             cachedUserProfile = FxAUserProfile(profile: profile)
             if let data = try? JSONEncoder().encode(cachedUserProfile!) {
-                prefs?.setObject(data, forKey: prefKeyCachedUserProfile)
+                prefs?.setObject(data, forKey: Self.prefKeyCachedUserProfile)
             }
         } else if cachedUserProfile == nil {
-            if let data: Data = prefs?.objectForKey(prefKeyCachedUserProfile) {
+            if let data: Data = prefs?.objectForKey(Self.prefKeyCachedUserProfile) {
                 cachedUserProfile = try? JSONDecoder().decode(FxAUserProfile.self, from: data)
             }
         }
@@ -298,11 +306,11 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
         // Enter the "Signing out…" transition immediately; `logout` completes asynchronously, after which
         // the account manager's state becomes authoritative again.
         accountTransition = .signingOut
+        // Clear the profile cache up front.
+        clearUserProfileCache()
         NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         accountManager.logout { [weak self] _ in
             guard let self else { return }
-            cachedUserProfile = nil
-            RustFirefoxAccounts.prefs?.removeObjectForKey(prefKeyCachedUserProfile)
             accountTransition = .idle
             NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         }

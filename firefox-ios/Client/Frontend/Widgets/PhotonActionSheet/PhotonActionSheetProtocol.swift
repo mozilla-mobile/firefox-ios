@@ -45,9 +45,12 @@ extension PhotonActionSheetProtocol {
             title: .PasteAndGoTitle,
             iconString: StandardImageIdentifiers.Large.clipboard,
             tapHandler: { _ in
-                if let pasteboardContents = UIPasteboard.general.string,
-                   let toolbar = view as? AddressToolbarContainer {
-                    toolbar.delegate?.openBrowser(searchTerm: pasteboardContents)
+                guard let toolbar = view as? AddressToolbarContainer else { return }
+                UIPasteboard.general.asyncString { pasteboardContents in
+                    guard let pasteboardContents else { return }
+                    ensureMainThread {
+                        toolbar.delegate?.openBrowser(searchTerm: pasteboardContents)
+                    }
                 }
             },
             accessibilityId: AccessibilityIdentifiers.Photon.pasteAndGoAction
@@ -57,9 +60,12 @@ extension PhotonActionSheetProtocol {
             title: .PasteTitle,
             iconString: StandardImageIdentifiers.Large.clipboard,
             tapHandler: { _ in
-                if let pasteboardContents = UIPasteboard.general.string,
-                   let toolbar = view as? AddressToolbarContainer {
+                guard let toolbar = view as? AddressToolbarContainer else { return }
+                UIPasteboard.general.asyncString { pasteboardContents in
+                    guard let pasteboardContents else { return }
+                    ensureMainThread {
                         toolbar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+                    }
                 }
             },
             accessibilityId: AccessibilityIdentifiers.Photon.pasteAction

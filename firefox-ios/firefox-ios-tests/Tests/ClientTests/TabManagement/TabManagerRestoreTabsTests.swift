@@ -218,4 +218,85 @@ final class TabManagerRestoreTabsTests: TabManagerTestsBase {
         }
         wait(for: [expectation])
     }
+
+    // MARK: - pendingDeeplinkTab Activity
+
+    @MainActor
+    func testRestoreTabs_withPendingDeeplinkTabActivity_skipsPostRestoreTabSelection() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let testUUID = UUID()
+        let initialTab = generateTabs(ofType: .normal, count: 1).first!
+        let subject = createSubject(tabs: [initialTab], windowUUID: testUUID)
+        subject.selectTab(initialTab)
+
+        AppEventQueue.started(.pendingDeeplinkTab(testUUID))
+        defer { AppEventQueue.completed(.pendingDeeplinkTab(testUUID)) }
+
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+        let activeId = UUID()
+        var tabData = getMockTabData(count: 3)
+        tabData[1] = TabData(id: activeId,
+                             title: tabData[1].title,
+                             siteUrl: tabData[1].siteUrl,
+                             faviconURL: tabData[1].faviconURL,
+                             isPrivate: false,
+                             lastUsedTime: tabData[1].lastUsedTime,
+                             createdAtTime: tabData[1].createdAtTime,
+                             temporaryDocumentSession: [:])
+        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
+                                                     activeTabId: activeId,
+                                                     tabData: tabData)
+
+        subject.restoreTabs()
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            ensureMainThread {
+                XCTAssertNotEqual(subject.selectedTab?.tabUUID,
+                                  activeId.uuidString,
+                                  "Restored active tab should not be selected while deeplink is pending")
+                XCTAssertEqual(subject.tabs.last?.tabUUID, initialTab.tabUUID)
+                expectation.fulfill()
+            }
+        }
+        wait(for: [expectation])
+    }
+
+    @MainActor
+    func testRestoreTabs_legacyPath_withPendingDeeplinkTabActivity_skipsPostRestoreTabSelection() {
+        setIsDeeplinkOptimizationRefactorEnabled(false)
+        let testUUID = UUID()
+        let subject = createSubject(windowUUID: testUUID)
+
+        AppEventQueue.started(.pendingDeeplinkTab(testUUID))
+        defer { AppEventQueue.completed(.pendingDeeplinkTab(testUUID)) }
+
+        let expectation = XCTestExpectation(description: "Tab restoration event should have been called")
+        let activeId = UUID()
+        var tabData = getMockTabData(count: 3)
+        tabData[1] = TabData(id: activeId,
+                             title: tabData[1].title,
+                             siteUrl: tabData[1].siteUrl,
+                             faviconURL: tabData[1].faviconURL,
+                             isPrivate: false,
+                             lastUsedTime: tabData[1].lastUsedTime,
+                             createdAtTime: tabData[1].createdAtTime,
+                             temporaryDocumentSession: [:])
+        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
+                                                     activeTabId: activeId,
+                                                     tabData: tabData)
+
+        subject.restoreTabs()
+
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            ensureMainThread {
+                XCTAssertEqual(subject.tabs.count, 3)
+                XCTAssertNotEqual(subject.selectedTab?.tabUUID,
+                                  activeId.uuidString,
+                                  "Restored active tab should not be selected while deeplink is pending")
+                XCTAssertNil(subject.selectedTab)
+                expectation.fulfill()
+            }
+        }
+        wait(for: [expectation])
+    }
 }

@@ -266,8 +266,8 @@ class MenuBuilderHelper {
                 UIKeyCommand(
                     title: .KeyboardShortcuts.ShowTabTray,
                     action: #selector(BrowserViewController.showTabTrayKeyCommand),
-                    input: "\t",
-                    modifierFlags: [.command, .alternate],
+                    input: "\\",
+                    modifierFlags: [.command, .shift],
                     discoverabilityTitle: .KeyboardShortcuts.ShowTabTray
                 ),
                 UIKeyCommand(
