@@ -70,16 +70,44 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         self.configuration = configuration
     }
 
-    /// Assigns `proxyConfigurations` on the active stores without swapping them or copying
-    /// cookies. Use this for token rotation, where the proxy endpoint is unchanged and only
-    /// the auth header differs: WebKit keeps the existing connection pool so in-flight
-    /// requests get their grace period, and future requests are sent with the new header.
+    /// Inert OHTTP config appended to every stack, to make WebKit drop its existing sessions
+    /// and connection pools on the change — see https://bugs.webkit.org/show_bug.cgi?id=316948.
+    /// WebKit only recreates sessions when `nw_proxy_config_stack_requires_http_protocols` is
+    /// true for some entry, and only `nw_proxy_config_create_oblivious_http` returns true.
+    /// Routing is unaffected: relay host and match domain are both unresolvable `.invalid`.
+    /// In-flight loads are cancelled without a callback, so switch while the webviews are quiet.
+    @available(iOS 17.0, *)
+    private static var sessionRecreateTrigger: ProxyConfiguration {
+        let relay = ProxyConfiguration.RelayHop(
+            http2RelayEndpoint: .url(URL(string: "https://unused-relay.invalid/")!)
+        )
+        return ProxyConfiguration(
+            obliviousHTTPRelay: relay,
+            relayResourcePath: "/gateway",
+            gatewayKeyConfig: Data(count: 8),
+            matchDomains: ["unused-match.invalid"]
+        )
+    }
+
+    /// Assigns `proxyConfigurations` on the active stores.
+    ///
+    /// With `forcingSessionReset`, `sessionRecreateTrigger` is appended so WebKit drops its
+    /// sessions and connection pools. That is required whenever the proxy endpoint changes,
+    /// since pooled connections otherwise keep bypassing the new proxy, but every webview
+    /// must already be torn down, because a load cancelled after the reset is processed
+    /// against a session that no longer exists and crashes the network process.
+    ///
+    /// Without it the stack is assigned as-is and the connection pool survives, so in-flight
+    /// requests get their grace period while new requests pick up the new stack. Use that for
+    /// token rotation, where the endpoint is unchanged and only the auth header differs.
     @available(iOS 17.0, *)
     public static func applyProxyConfigurations(
-        _ configs: [ProxyConfiguration]
+        _ configs: [ProxyConfiguration],
+        forcingSessionReset: Bool = true
     ) {
-        defaultStore.proxyConfigurations = configs
-        nonPersistentStore.proxyConfigurations = configs
+        let stack = forcingSessionReset ? configs + [sessionRecreateTrigger] : configs
+        defaultStore.proxyConfigurations = stack
+        nonPersistentStore.proxyConfigurations = stack
         isProxyEnabled = !configs.isEmpty
     }
 
@@ -122,9 +150,4 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
 
         return DefaultEngineConfiguration(webViewConfiguration: configuration)
     }
-}
-
-public enum ProxyScope {
-    case `private`
-    case normal
 }
