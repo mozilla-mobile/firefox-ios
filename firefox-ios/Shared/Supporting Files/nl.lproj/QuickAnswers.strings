@@ -16,6 +16,12 @@
 /* Button label on the Quick Answers permission alert to dismiss the alert without taking action. */
 "QuickAnswers.Errors.Cancel.v158" = "Annuleren";
 
+/* Title of the alert shown when the user has exceeded the daily usage limit for Quick Answers. */
+"QuickAnswers.Errors.DailyLimitTitle.v158" = "Daglimiet bereikt";
+
+/* Message shown in the alert when Quick Answers encounters an unexpected error. */
+"QuickAnswers.Errors.GenericErrorMessage.v158" = "Probeer het later opnieuw te vragen.";
+
 /* Button label to dismiss the Quick Answers error alert. */
 "QuickAnswers.Errors.OK.v158" = "OK";
 
@@ -27,4 +33,7 @@
 
 /* Link text on the Quick Answers opt-in screen that opens more information about the feature. */
 "QuickAnswers.OptIn.LearnMore.v158" = "Meer info";
+
+/* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
+"QuickAnswers.Tip.Message.v158" = "Tik hier om te beginnen.";
 
