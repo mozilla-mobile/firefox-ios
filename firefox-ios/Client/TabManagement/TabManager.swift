@@ -118,11 +118,17 @@ protocol TabManager: AnyObject {
     func tabDidSetScreenshot(_ tab: Tab)
     func offloadBackgroundWebViews() async
 
-    /// Discards every background webview and rebuilds the selected tab's webview against a
-    /// fresh `WKWebViewConfiguration`. Used after the data stores' `proxyConfigurations`
-    /// change (e.g. on VPN toggle) so existing webviews — which still hold the pre-change
-    /// connection pool — are torn down and the visible tab reloads through the new proxy.
-    func cleanupWebViewsForProxyChange() async
+    /// Stops in-flight loads and discards every webview, the selected tab's included, ahead of
+    /// a `proxyConfigurations` change (e.g. on VPN toggle). Webviews hold the pre-change
+    /// connection pool, so they have to go for the new proxy to take effect — and they have to
+    /// go *before* the change, since a load cancelled afterwards is processed against a session
+    /// WebKit has already torn down, which crashes the network process.
+    func tearDownWebViewsForProxyChange() async
+
+    /// Rebuilds the selected tab's webview against a fresh `WKWebViewConfiguration` once the new
+    /// proxy stack is in place, restoring the session saved during teardown so the tab keeps its
+    /// back/forward list across the change.
+    func restoreSelectedTabForProxyChange()
 
     /// ADR 0008: load `tab`'s screenshot from disk if it isn't already in memory. Intended for
     /// just-in-time loading driven by the tab tray's prefetch data source. No-op if the tab

@@ -106,11 +106,11 @@ final class VPNManager: VPNManaging {
         self.userPreferences.setPreferenceFor(.vpnFeature, to: false)
     }
 
-    /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the
-    /// new bearer token. We use the lightweight `applyProxyConfigurations` (not
-    /// `rebuildStores`) here — the proxy endpoint is unchanged so we want to keep WebKit's
-    /// existing connection pool, letting in-flight requests finish under the proxy's grace
-    /// period while new requests pick up the rotated header.
+    /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the new
+    /// bearer token. The endpoint is unchanged, so this rotates without forcing a session
+    /// reset: WebKit keeps its existing connection pool, in-flight requests finish under the
+    /// proxy's grace period, and new requests pick up the rotated header. Forcing the reset
+    /// here would tear down sessions out from under webviews that are still loading.
     private func startPassRotation(after initial: VPNGuardian.ProxyPass) {
         rotationTask?.cancel()
         rotationTask = Task { [weak self] in
@@ -119,7 +119,10 @@ final class VPNManager: VPNManaging {
                 guard let self,
                       let server = self.activeServer else { return }
                 let config = self.buildProxyConfig(server: server, pass: new)
-                DefaultWKEngineConfigurationProvider.applyProxyConfigurations([config])
+                DefaultWKEngineConfigurationProvider.applyProxyConfigurations(
+                    [config],
+                    forcingSessionReset: false
+                )
                 self.logger.log(
                     "Rotated VPN proxy pass — next expiry \(new.expiresAt)",
                     level: .info,
@@ -129,20 +132,29 @@ final class VPNManager: VPNManaging {
         }
     }
 
-    /// Apply the new proxy configuration to the active data stores, then tear down every
-    /// normal tab's webview and reload the visible tab. Assigning `proxyConfigurations` does
-    /// not invalidate WebKit's existing connection pool, so pooled connections keep bypassing
-    /// the proxy until the webviews holding them are discarded.
+    /// Tear down every webview, wait for WebKit to process the resulting load cancellations,
+    /// then apply the new proxy configuration and rebuild the visible tab.
     ///
-    /// Deliberately scoped to `.normal`
+    /// Order is necessary here. Assigning `proxyConfigurations` does not invalidate WebKit's
+    /// existing connection pool, so the webviews holding it have to be discarded for the change
+    /// to take effect — but discarding them cancels every load they own, and a cancellation that
+    /// lands after the stack changed is processed against a session WebKit has already torn
+    /// down, which takes the network process with it.
     private func applyProxyAndRebuildWebViews(configs: [ProxyConfiguration]) async {
+        await tearDownWebViews()
         DefaultWKEngineConfigurationProvider.applyProxyConfigurations(configs)
-        await rebuildWebViews()
+        restoreSelectedTabs()
     }
 
-    private func rebuildWebViews() async {
+    private func tearDownWebViews() async {
         for tabManager in windowManager.allWindowTabManagers() {
-            await tabManager.cleanupWebViewsForProxyChange()
+            await tabManager.tearDownWebViewsForProxyChange()
+        }
+    }
+
+    private func restoreSelectedTabs() {
+        for tabManager in windowManager.allWindowTabManagers() {
+            tabManager.restoreSelectedTabForProxyChange()
         }
     }
 

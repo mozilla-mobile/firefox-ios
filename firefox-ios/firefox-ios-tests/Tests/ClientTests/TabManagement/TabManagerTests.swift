@@ -406,7 +406,7 @@ final class TabManagerTests: TabManagerTestsBase {
     }
 
     @MainActor
-    func testCleanupWebViewsForProxyChange_offloadsBackgroundWebViews() async {
+    func testTearDownWebViewsForProxyChange_discardsEveryWebViewIncludingSelected() async {
         let subject = createSubject()
         let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
         let tab2 = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
@@ -414,24 +414,36 @@ final class TabManagerTests: TabManagerTestsBase {
         XCTAssertNotNil(tab1.webView)
         XCTAssertNotNil(tab2.webView)
 
-        await subject.cleanupWebViewsForProxyChange()
+        await subject.tearDownWebViewsForProxyChange()
 
-        XCTAssertNotNil(tab1.webView)
+        XCTAssertNil(tab1.webView)
         XCTAssertNil(tab2.webView)
     }
 
     @MainActor
-    func testCleanupWebViewsForProxyChange_ifThereIsASelectedTab_closesAndReopensTab() async {
+    func testTearDownWebViewsForProxyChange_emptyTabList_doesNotCrash() async {
+        let subject = createSubject()
+
+        await subject.tearDownWebViewsForProxyChange()
+
+        XCTAssertEqual(subject.tabs.count, 0)
+    }
+
+    @MainActor
+    func testRestoreSelectedTabForProxyChange_rebuildsSelectedWebViewOnly() async {
         let subject = createSubject()
         let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
-        _ = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
+        let tab2 = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
         subject.selectTab(tab1)
 
         let webViewHash = tab1.webView.hashValue
 
-        await subject.cleanupWebViewsForProxyChange()
+        await subject.tearDownWebViewsForProxyChange()
+        subject.restoreSelectedTabForProxyChange()
 
+        XCTAssertNotNil(tab1.webView)
         XCTAssertNotEqual(tab1.webView.hashValue, webViewHash)
+        XCTAssertNil(tab2.webView)
     }
 
     // MARK: - selectTab neighbour screenshot preloading (ADR 0008)
