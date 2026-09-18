@@ -101,6 +101,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                                            frame: WKFrameInfo?,
                                            viewController: UIViewController,
                                            alertContainer: UIView) {
+        let capturedOrigin = tabManager.selectedTab?.url?.origin
         let creditCardControllerViewModel = CreditCardBottomSheetViewModel(creditCardProvider: creditCardProvider,
                                                                            creditCard: creditCard,
                                                                            decryptedCreditCard: decryptedCard,
@@ -142,6 +143,12 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         bottomSheetViewController.didSelectCreditCardToFill = { [weak self] plainTextCard in
             guard let self = self else { return }
             guard let currentTab = self.tabManager.selectedTab else {
+                self.parentCoordinator?.didFinish(from: self)
+                return
+            }
+            guard let capturedOrigin,
+                  let currentOrigin = currentTab.url?.origin,
+                  capturedOrigin == currentOrigin else {
                 self.parentCoordinator?.didFinish(from: self)
                 return
             }
