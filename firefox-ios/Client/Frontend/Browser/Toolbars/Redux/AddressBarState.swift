@@ -432,8 +432,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
 
-            hasAlternativeLocationColor: hasAlternativeLocationColor)
-
         // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
         // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
@@ -475,7 +473,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
-            hasAlternativeLocationColor: hasAlternativeLocationColor)
         // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
         // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
@@ -545,7 +542,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     @MainActor
     private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
-        guard action is ToolbarAction else { return defaultState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
                                                                              isNovaDesignEnabled: state.isNovaDesignEnabled)
@@ -564,10 +561,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
-            hasAlternativeLocationColor: hasAlternativeLocationColor)
         // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
         // and canGoForward). For actions that change one of these values, we use the updated value from the action.
-        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: state.windowUUID)
         var navigationActions = [ToolbarActionConfiguration]()
         if let toolbarState {
             navigationActions = NavigationActionsBuilder.getActions(
@@ -607,7 +603,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
-            hasAlternativeLocationColor: hasAlternativeLocationColor)
         // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
         // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
@@ -665,7 +660,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
-            hasAlternativeLocationColor: hasAlternativeLocationColor)
         // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
         // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
@@ -729,7 +723,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
-            hasAlternativeLocationColor: hasAlternativeLocationColor)
         // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
         // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
@@ -791,7 +784,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
-            hasAlternativeLocationColor: hasAlternativeLocationColor)
         // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
         // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
@@ -859,7 +851,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
-            hasAlternativeLocationColor: hasAlternativeLocationColor)
         // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
         // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
@@ -940,7 +931,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
-            hasAlternativeLocationColor: hasAlternativeLocationColor)
         // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
         // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
@@ -1008,7 +998,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
-            hasAlternativeLocationColor: hasAlternativeLocationColor)
         // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
         // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
@@ -1187,105 +1176,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         )
     }
 
-    // MARK: - Address Toolbar Actions
-    @MainActor
-    private static func navigationActions(
-        action: ToolbarAction,
-        addressBarState: AddressBarState
-    ) -> [ToolbarActionConfiguration] {
-        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
-        else { return [] }
-
-        return NavigationActionsBuilder.getActions(
-            isShowingNavigationToolbar: action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar,
-            canGoBack: action.canGoBack ?? toolbarState.canGoBack,
-            canGoForward: action.canGoForward ?? toolbarState.canGoForward
-        )
-    }
-
-    @MainActor
-    private static func trailingPageActions(
-        action: ToolbarAction,
-        addressBarState: AddressBarState,
-        isEditing: Bool,
-        isEmptySearch: Bool? = nil
-    ) -> [ToolbarActionConfiguration] {
-        var actions = [ToolbarActionConfiguration]()
-
-        let isReaderModeAction = action.actionType as? ToolbarActionType == .readerModeStateChanged
-        let isSummarizeModeAction = action.actionType as? ToolbarActionType == .didSummarizeSettingsChange
-        let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
-        let canSummarize = isSummarizeModeAction || isReaderModeAction ? action.canSummarize : addressBarState.canSummarize
-        let hasEmptySearchField = isEmptySearch ?? addressBarState.isEmptySearch
-        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(
-            action: action,
-            isNovaDesignEnabled: addressBarState.isNovaDesignEnabled
-        )
-
-        guard !hasEmptySearchField, // When the search field is empty we show no actions
-              !isEditing
-        else { return actions }
-
-        let summarizerNimbusUtils = DefaultSummarizerNimbusUtils()
-        let isSummarizeFeatureForToolbarOn = summarizerNimbusUtils.isToolbarButtonEnabled
-        let isReaderModeWithSummarizerEnabled = summarizerNimbusUtils.isLanguageExpansionEnabled && canSummarize
-            && readerModeState?.isEnabled == true
-        if isReaderModeWithSummarizerEnabled {
-            actions.append(readerModeWithSummarizerAction(isSelected: readerModeState == .active,
-                                                          hasAlternativeLocationColor: hasAlternativeLocationColor))
-        } else if isSummarizeFeatureForToolbarOn, canSummarize, readerModeState == .available, !UIWindow.isLandscape {
-            actions.append(summaryAction(hasAlternativeLocationColor: hasAlternativeLocationColor))
-        } else if readerModeState?.isEnabled == true {
-            actions.append(readerModeAction(isSelected: readerModeState == .active,
-                                            hasAlternativeLocationColor: hasAlternativeLocationColor))
-        }
-
-        let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
-        let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
-
-        if isLoading == true {
-            actions.append(stopLoadingAction(hasAlternativeLocationColor: hasAlternativeLocationColor))
-        } else if isLoading == false {
-            actions.append(reloadAction(hasAlternativeLocationColor: hasAlternativeLocationColor))
-        }
-
-        return actions
-    }
-
-    @MainActor
-    private static func browserActions(
-        action: ToolbarAction,
-        addressBarState: AddressBarState,
-        isEditing: Bool
-    ) -> [ToolbarActionConfiguration] {
-        guard let toolbarState = store.state.componentState(ToolbarState.self,
-                                                            for: .toolbar,
-                                                            window: action.windowUUID)
-        else { return [] }
-
-        let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
-        let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
-        let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
-        let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
-        let showActionWarningBadge = action.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge
-        let isTabScreenshotAction = action.actionType as? ToolbarActionType == .didSetTabScreenshot
-
-        return BrowserActionsBuilder.getActions(
-            isEditing: isEditing,
-            isShowingNavigationToolbar: action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar,
-            isShowingTopTabs: action.isShowingTopTabs ?? toolbarState.isShowingTopTabs,
-            isHomepage: isHomepage,
-            toolbarLayout: isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout,
-            tabTrayButtonStyle: isLoadAction ? action.tabTrayButtonStyle : toolbarState.tabTrayButtonStyle,
-            numberOfTabs: action.numberOfTabs ?? toolbarState.numberOfTabs,
-            showWarningBadge: isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge,
-            previousTabScreenshot: isTabScreenshotAction ? action.previousTabScreenshot : toolbarState.previousTabScreenshot,
-            nextTabScreenshot: isTabScreenshotAction ? action.nextTabScreenshot : toolbarState.nextTabScreenshot,
-            isPrivateMode: toolbarState.isPrivateMode,
-            isNovaDesignEnabled: addressBarState.isNovaDesignEnabled
-        )
-    }
-
     private static func editingAccessoryAction(isGoogleLensEnabled: Bool) -> ToolbarActionConfiguration? {
         guard isGoogleLensEnabled else { return nil }
 
@@ -1314,48 +1204,5 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return (toolbarPosition ?? toolbarState.toolbarPosition) == .top
             && !(isShowingTopTabs ?? toolbarState.isShowingTopTabs)
             && (isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar)
-    }
-
-    // MARK: - Helper
-    private static func tabsAction(
-        iconName: String?,
-        numberOfTabs: Int = 1,
-        isPrivateMode: Bool = false,
-        isNovaDesignEnabled: Bool = false,
-        previousTabScreenshot: UIImage?,
-        nextTabScreenshot: UIImage?)
-    -> ToolbarActionConfiguration {
-        let largeContentTitle = numberOfTabs > 99 ?
-            .Toolbars.TabsButtonOverflowLargeContentTitle :
-            String(format: .Toolbars.TabsButtonLargeContentTitle, NSNumber(value: numberOfTabs))
-
-        let isNovaPrivate = isPrivateMode && isNovaDesignEnabled
-        let badgeImageName = isNovaPrivate
-            ? StandardImageIdentifiers.Medium.privateModeCircleFillStrokeMulticolor
-            : StandardImageIdentifiers.Medium.privateModeCircleFillPurple
-
-        return ToolbarActionConfiguration(
-            actionType: .tabs,
-            iconName: iconName,
-            badgeImageName: isPrivateMode ? badgeImageName : nil,
-            maskImageName: (isPrivateMode && iconName != nil) ? ImageIdentifiers.badgeMask : nil,
-            numberOfTabs: numberOfTabs,
-            isEnabled: true,
-            largeContentTitle: largeContentTitle,
-            previousTabScreenshot: previousTabScreenshot,
-            nextTabScreenshot: nextTabScreenshot,
-            a11yLabel: .Toolbars.TabsButtonAccessibilityLabel,
-            a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
-    }
-
-    private static func menuAction(iconName: String, showWarningBadge: Bool = false) -> ToolbarActionConfiguration {
-        return ToolbarActionConfiguration(
-            actionType: .menu,
-            iconName: iconName,
-            badgeImageName: showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil,
-            maskImageName: showWarningBadge ? ImageIdentifiers.menuWarningMask : nil,
-            isEnabled: true,
-            a11yLabel: .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel,
-            a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
     }
 }
