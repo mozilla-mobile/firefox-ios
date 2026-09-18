@@ -435,7 +435,7 @@ final class HomepageViewController: UIViewController,
 
         // TODO: - FXIOS-13346 / FXIOS-13343 - fix collection view being reloaded all the time also when data don't change
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
-        if homepageState != state {
+        if !state.hasSameRenderableContent(as: homepageState) {
             let animatingDifferences = state.wallpaperState.availableContentHeight
                                         == homepageState.wallpaperState.availableContentHeight
             self.homepageState = state
@@ -447,6 +447,8 @@ final class HomepageViewController: UIViewController,
                 self?.updateNewsTransitionHeaderProgress()
             }
             updateWallpaperConstraints(availableWallpaperHeight: state.wallpaperState.availableWallpaperHeight)
+        } else {
+            homepageState = state
         }
 
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top

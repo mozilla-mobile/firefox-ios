@@ -546,6 +546,15 @@ class BrowserViewController: UIViewController,
         let tabWindowUUID = tabManager.windowUUID
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in
             ensureMainThread { [weak self] in
+                // Wait an extra beat after startup settles so the prewarm's main-thread work
+                // can't compete with post-restoration rendering, then only run when no
+                // interaction is in flight (default run loop mode).
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    RunLoop.main.perform(inModes: [.default]) { [weak self] in
+                        MainActor.assumeIsolated { self?.prepareSearchController() }
+                    }
+                }
+
                 // Ensure we call into didBecomeActive at least once during startup flow (if needed)
                 guard !AppEventQueue.activityIsCompleted(.browserUpdatedForAppActivation(tabWindowUUID)) else { return }
                 self?.browserDidBecomeActive()
@@ -2141,10 +2150,16 @@ class BrowserViewController: UIViewController,
 
     // MARK: - SearchViewController
 
-    fileprivate func createSearchControllerIfNeeded() {
-        guard self.searchController == nil else { return }
-
+    private func createSearchControllerIfNeeded() {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+
+        // Discard a controller built for the other browsing mode (e.g. prewarmed in normal
+        // mode before the user switched to private browsing) so private state can't leak.
+        if let searchController, searchController.viewModel.isPrivate != isPrivate {
+            destroySearchController()
+        }
+
+        guard self.searchController == nil else { return }
 
         let trendingClient = TrendingSearchClient()
 
@@ -2173,11 +2188,19 @@ class BrowserViewController: UIViewController,
         self.searchLoader = searchLoader
 
         self.searchController = searchController
-        self.searchSessionState = .active
+    }
+
+    /// Builds the search suggestions controller and loads its view ahead of the user's first tap.
+    @MainActor
+    func prepareSearchController() {
+        guard searchController == nil else { return }
+        createSearchControllerIfNeeded()
+        searchController?.loadViewIfNeeded()
     }
 
     func showSearchController() {
         createSearchControllerIfNeeded()
+        searchSessionState = .active
 
         guard let searchController = self.searchController else { return }
 
@@ -2251,6 +2274,11 @@ class BrowserViewController: UIViewController,
         searchLoader = nil
 
         contentContainer.accessibilityElementsHidden = false
+        DispatchQueue.main.async { [weak self] in
+            RunLoop.main.perform(inModes: [.default]) { [weak self] in
+                MainActor.assumeIsolated { self?.prepareSearchController() }
+            }
+        }
     }
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
