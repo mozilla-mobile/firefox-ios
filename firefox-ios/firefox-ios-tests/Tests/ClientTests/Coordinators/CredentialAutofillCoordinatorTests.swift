@@ -30,6 +30,12 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
+        // Presenting saved-login sheet can leave a SwiftUI render pending, which queries
+        // ThemeManager in AppContainer. Keep a ThemeManager registered after reset so a
+        // deferred render can never fatal-error against an empty container. This registered
+        // dependency gets cleared for other test suites any time we bootstrapDependencies.
+        AppContainer.shared.register(service: MockThemeManager() as ThemeManager)
+        AppContainer.shared.bootstrap()
         profile.shutdown()
         profile = nil
         router = nil
@@ -112,7 +118,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
     func testSavedLoginSelection_whenSelectedTabOriginMatches_fillsCredential() throws {
         Self.setupTelemetry(with: profile)
-        defer { Self.tearDownTelemetry() }
+        defer { self.tearDownLoginAutofillTelemetry() }
         tabManager.selectedTab = makeTab(urlString: "https://httpbin.org/login")
         let subject = createSubject()
 
@@ -128,7 +134,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
     func testSavedLoginSelection_whenSelectedTabNavigatedToOtherOrigin_doesNotFill() throws {
         Self.setupTelemetry(with: profile)
-        defer { Self.tearDownTelemetry() }
+        defer { self.tearDownLoginAutofillTelemetry() }
         // Sheet opened for httpbin.org, but the named tab was navigated to pie.dev while open.
         tabManager.selectedTab = makeTab(urlString: "https://pie.dev/target")
         let subject = createSubject()
@@ -145,7 +151,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
     func testSavedLoginSelection_whenSelectedTabSameHostDifferentScheme_doesNotFill() throws {
         Self.setupTelemetry(with: profile)
-        defer { Self.tearDownTelemetry() }
+        defer { self.tearDownLoginAutofillTelemetry() }
         tabManager.selectedTab = makeTab(urlString: "http://httpbin.org/login")
         let subject = createSubject()
 
@@ -171,14 +177,15 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
             bottomSheet.children.first as? SelfSizingHostingController<LoginAutofillView>
         )
         hostingController.rootView.viewModel.onLoginCellTap(login)
+    }
 
-        // Slightly hacky workaround to ensure the main thread completes before we tear down
-        // the test, the reason is that this loads a sheet and schedules a subsequent SwiftUI
-        // render which will call into Environment(.themeManager), which will crash due to the
-        // nil dependency if the container is reset too early. 
-        let mainQueueCompleted = expectation(description: "main queue finished")
-        DispatchQueue.main.async { mainQueueCompleted.fulfill() }
-        wait(for: [mainQueueCompleted], timeout: 1.0)
+    private func tearDownLoginAutofillTelemetry() {
+        Self.tearDownTelemetry()
+        // tearDownTelemetry() resets AppContainer. Presenting the saved-login sheet schedules a
+        // SwiftUI render that resolves ThemeManager from AppContainer during teardown, so
+        // re-register one immediately to keep that render code from failing.
+        AppContainer.shared.register(service: MockThemeManager() as ThemeManager)
+        AppContainer.shared.bootstrap()
     }
 
     private func makeTab(urlString: String) -> Tab {
