@@ -6,18 +6,15 @@ import Foundation
 import Storage
 import XCTest
 
+@testable import Client
+
 class FileAccessorTests: XCTestCase {
     fileprivate var testDir: String!
     fileprivate var files: FileAccessor!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        let docPath: NSString = NSSearchPathForDirectoriesInDomains(
-            .documentDirectory,
-            .userDomainMask,
-            true
-        )[0] as NSString
-        files = MockFiles(rootPath: docPath.appendingPathComponent("filetest"))
+        files = makeTemporaryFiles()
 
         testDir = try files.getAndEnsureDirectory()
         try files.removeFilesInDirectory()
@@ -83,5 +80,40 @@ class FileAccessorTests: XCTestCase {
             success = false
         }
         XCTAssertTrue(success, "Wrote to \(path)")
+    }
+
+    // MARK: - Test artifact containment
+
+    func testTemporaryFilesRootIsUnderTemporaryDirectory() {
+        let temporaryDirectory = URL(fileURLWithPath: NSTemporaryDirectory()).standardizedFileURL
+        let root = URL(fileURLWithPath: TemporaryFiles().rootPath).standardizedFileURL
+        XCTAssertTrue(
+            root.pathComponents.starts(with: temporaryDirectory.pathComponents),
+            "Test artifacts must be written to the temporary directory"
+        )
+    }
+
+    func testTemporaryFilesHaveIsolatedRoots() {
+        XCTAssertNotEqual(TemporaryFiles().rootPath, TemporaryFiles().rootPath)
+    }
+
+    func testOwnedTemporaryFilesCleanUpTheirOriginalRoot() throws {
+        let files = TemporaryFiles(ownsRoot: true)
+        let originalRoot = try files.getAndEnsureDirectory()
+        files.rootPath = TemporaryFiles().rootPath
+
+        files.removeRoot()
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: originalRoot))
+    }
+
+    func testUnownedTemporaryFilesLeaveTheirRootAlone() throws {
+        let files = TemporaryFiles(ownsRoot: false)
+        let root = try files.getAndEnsureDirectory()
+        defer { try? FileManager.default.removeItem(atPath: root) }
+
+        files.removeRoot()
+
+        XCTAssertTrue(FileManager.default.fileExists(atPath: root))
     }
 }
