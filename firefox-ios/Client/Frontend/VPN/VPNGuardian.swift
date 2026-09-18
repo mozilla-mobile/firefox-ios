@@ -15,7 +15,7 @@ final class VPNGuardian: Sendable {
             case .prod:
                 return URL(string: "https://vpn.mozilla.com")!
             case .staging:
-                return URL(string: "https://stage.vpn.nonprod.webservices.mozgcp.net/")!
+                return URL(string: "https://vpn-mozilla-nonprod-stage.global.ssl.fastly.net")!
             }
         }
     }

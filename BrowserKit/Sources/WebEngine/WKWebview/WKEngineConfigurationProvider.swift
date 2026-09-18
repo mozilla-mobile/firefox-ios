@@ -56,7 +56,7 @@ public protocol WKEngineConfigurationProvider {
 /// FXIOS-11986 - This will be internal when the WebEngine is fully integrated in Firefox iOS
 public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
     private static var nonPersistentStore = WKWebsiteDataStore.nonPersistent()
-    public private(set) static var defaultStore = WKWebsiteDataStore.default()
+    private static let defaultStore = WKWebsiteDataStore.default()
     private static let defaultDataDetectorTypes: WKDataDetectorTypes = [.phoneNumber]
 
     /// Whether the data stores currently route through a proxy. Consumers read this to apply the

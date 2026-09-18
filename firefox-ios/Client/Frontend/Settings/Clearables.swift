@@ -96,11 +96,7 @@ class CacheClearable: Clearable {
 
     func clear() -> Success {
         let dataTypes = Set([WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
-        DefaultWKEngineConfigurationProvider.defaultStore.removeData(
-            ofTypes: dataTypes,
-            modifiedSince: .distantPast,
-            completionHandler: {}
-        )
+        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
 
         // Clear in-memory reader cache (private browsing content etc.)
         MemoryReaderModeCache.shared.clear()
@@ -155,11 +151,7 @@ class SiteDataClearable: Clearable {
     }
 
     func clear() -> Success {
-        DefaultWKEngineConfigurationProvider.defaultStore.removeData(
-            ofTypes: dataTypes,
-            modifiedSince: .distantPast,
-            completionHandler: {}
-        )
+        dataStore.removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
 
         logger.log("SiteDataClearable succeeded.",
                    level: .debug,
