@@ -74,7 +74,7 @@ public struct AddressToolbarUXConfiguration {
         // On iOS 18, Nova always uses the alternative color.
         return (theme.isNova || hasAlternativeLocationColor)
             ? theme.colors.layerSurfaceMediumAlt
-            : theme.colors.layerEmphasis
+            : theme.colors.layerSurfaceMedium
     }
 
     public func locationViewVerticalPaddings(addressBarPosition: AddressToolbarPosition) -> (top: CGFloat, bottom: CGFloat) {
