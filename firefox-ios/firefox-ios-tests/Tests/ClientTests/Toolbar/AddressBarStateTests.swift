@@ -777,6 +777,29 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.searchTerm, nil)
     }
 
+    func test_traitCollectionDidChangedAction_usesActionValueForAlternativeLocationColor() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+        let stateWithWebsite = loadWebsiteAction(state: initialState, reducer: reducer)
+
+        // The committed ToolbarState still has isShowingNavigationToolbar == true (default), so a
+        // stale read would keep hasAlternativeLocationColor true here; the action's fresher value
+        // (false) should be used instead, disabling the alternative color.
+        let newState = reducer.legacyReducer(
+            stateWithWebsite,
+            ToolbarAction(
+                isShowingNavigationToolbar: false,
+                isShowingTopTabs: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.traitCollectionDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.leadingPageActions.first?.actionType, .share)
+        XCTAssertEqual(newState.leadingPageActions.first?.hasCustomColor, true)
+    }
+
     func test_showMenuWarningBadgeAction_withoutNavToolbar_returnsExpectedState() {
         setupStore(with: initialToolbarState(isShowingNavigationToolbar: false))
         let initialState = createSubject()
@@ -844,6 +867,28 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.borderPosition, .top)
+    }
+
+    func test_toolbarPositionChangedAction_usesActionValueForAlternativeLocationColor() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+        let stateWithWebsite = loadWebsiteAction(state: initialState, reducer: reducer)
+
+        // The committed ToolbarState still has toolbarPosition == .top (default), so a stale read
+        // would keep hasAlternativeLocationColor true here; the action's fresher value (.bottom)
+        // should be used instead, disabling the alternative color.
+        let newState = reducer.legacyReducer(
+            stateWithWebsite,
+            ToolbarAction(
+                toolbarPosition: .bottom,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.toolbarPositionChanged
+            )
+        )
+
+        XCTAssertEqual(newState.leadingPageActions.first?.actionType, .share)
+        XCTAssertEqual(newState.leadingPageActions.first?.hasCustomColor, true)
     }
 
     func test_didPasteSearchTermAction_returnsExpectedState() {

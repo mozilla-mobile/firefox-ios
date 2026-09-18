@@ -514,8 +514,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handleTraitCollectionDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
-                                                                             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(
+            windowUUID: state.windowUUID,
+            isNovaDesignEnabled: state.isNovaDesignEnabled,
+            isShowingTopTabs: toolbarAction.isShowingTopTabs,
+            isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar
+        )
         let leadingPageActions = LeadingPageActionsBuilder.getActions(
             translationConfiguration: state.translationConfiguration,
             isEditing: state.isEditing,
@@ -574,8 +578,16 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
-                                                                             isNovaDesignEnabled: state.isNovaDesignEnabled)
+        let toolbarPosition: AddressToolbarPosition? = switch toolbarAction.toolbarPosition {
+        case .top: .top
+        case .bottom: .bottom
+        case nil: nil
+        }
+        let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(
+            windowUUID: state.windowUUID,
+            isNovaDesignEnabled: state.isNovaDesignEnabled,
+            toolbarPosition: toolbarPosition
+        )
         let leadingPageActions = LeadingPageActionsBuilder.getActions(
             translationConfiguration: state.translationConfiguration,
             isEditing: state.isEditing,
@@ -1004,21 +1016,26 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     /// Whether the address bar should render with the alternative "in-content" location color —
     /// true when the toolbar is top-positioned, top tabs aren't shown, and the nav toolbar is
-    /// visible. Reads `ToolbarState` only, no action fields, so it stays valid once these builders
-    /// move to the Lens. This means a `traitCollectionDidChange`/`toolbarPositionChanged` dispatch
-    /// can read a one-dispatch-stale value here (before `ToolbarState`'s own reducer commits its
-    /// new position/visibility fields) — self-corrects on the next dispatch, and won't exist once
-    /// this is computed post-commit in the Lens instead of mid-dispatch here. Shared across the
-    /// leading and trailing page action handlers. Always false on Nova.
+    /// visible. Reads `ToolbarState` by default, but `traitCollectionDidChange`/`toolbarPositionChanged`
+    /// carry a fresher value for these fields than what's already committed to `ToolbarState`
+    /// (read mid-dispatch, before `ToolbarState`'s own reducer commits), so those two callers pass
+    /// the action's value instead. Shared across the leading and trailing page action handlers.
+    /// Always false on Nova.
     @MainActor
-    private static func shouldShowAlternativeLocationColor(windowUUID: WindowUUID, isNovaDesignEnabled: Bool) -> Bool {
+    private static func shouldShowAlternativeLocationColor(
+        windowUUID: WindowUUID,
+        isNovaDesignEnabled: Bool,
+        toolbarPosition: AddressToolbarPosition? = nil,
+        isShowingTopTabs: Bool? = nil,
+        isShowingNavigationToolbar: Bool? = nil
+    ) -> Bool {
         guard !isNovaDesignEnabled,
               let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         else { return false }
 
-        return toolbarState.toolbarPosition == .top
-            && !toolbarState.isShowingTopTabs
-            && toolbarState.isShowingNavigationToolbar
+        return (toolbarPosition ?? toolbarState.toolbarPosition) == .top
+            && !(isShowingTopTabs ?? toolbarState.isShowingTopTabs)
+            && (isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar)
     }
 
     // MARK: - Helper
