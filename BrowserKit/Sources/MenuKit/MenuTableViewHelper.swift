@@ -73,13 +73,12 @@ final class MenuTableViewHelper: NSObject {
             ) as? MenuAccountCell else {
                 return UITableViewCell()
             }
-            if let theme {
-                let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
-                let isFirst = indexPath.row == 0
-                let isLast = indexPath.row == numberOfRows - 1
-                cell.configureCellWith(model: rowOption, theme: theme, isFirstCell: isFirst, isLastCell: isLast)
-                cell.applyTheme(theme: theme)
-            }
+            let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
+            cell.configureCellWith(
+                model: rowOption,
+                isFirstCell: indexPath.row == 0,
+                isLastCell: indexPath.row == numberOfRows - 1)
+            if let theme { cell.applyTheme(theme: theme) }
             return cell
         }
 
@@ -90,10 +89,8 @@ final class MenuTableViewHelper: NSObject {
             ) as? MenuInfoCell else {
                 return UITableViewCell()
             }
-            if let theme {
-                cell.configureCellWith(model: rowOption)
-                cell.applyTheme(theme: theme)
-            }
+            cell.configureCellWith(model: rowOption)
+            if let theme { cell.applyTheme(theme: theme) }
             return cell
         }
 
@@ -103,13 +100,12 @@ final class MenuTableViewHelper: NSObject {
         ) as? MenuCell else {
             return UITableViewCell()
         }
-        if let theme {
-            let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
-            let isFirst = indexPath.row == 0
-            let isLast = indexPath.row == numberOfRows - 1
-            cell.configureCellWith(model: rowOption, theme: theme, isFirstCell: isFirst, isLastCell: isLast)
-            cell.applyTheme(theme: theme)
-        }
+        let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
+        cell.configureCellWith(
+            model: rowOption,
+            isFirstCell: indexPath.row == 0,
+            isLastCell: indexPath.row == numberOfRows - 1)
+        if let theme { cell.applyTheme(theme: theme) }
         return cell
     }
 

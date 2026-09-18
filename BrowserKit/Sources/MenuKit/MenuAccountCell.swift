@@ -86,7 +86,6 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     func configureCellWith(
         model: MenuElement,
-        theme: Theme,
         isFirstCell: Bool,
         isLastCell: Bool,
         mainMenuHelper: MainMenuInterface = MainMenuHelper()
@@ -98,14 +97,7 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
         titleLabel.text = model.title
         descriptionLabel.text = model.description
         contentStackView.spacing = model.description != nil ? UX.contentSpacing : UX.noDescriptionContentSpacing
-        if let needsReAuth = model.needsReAuth, needsReAuth {
-            typealias Icons = StandardImageIdentifiers.Large
-            if theme.type == .light {
-                iconImageView.image = UIImage(named: Icons.avatarWarningCircleFillMulticolorLight)
-            } else {
-                iconImageView.image = UIImage(named: Icons.avatarWarningCircleFillMulticolorDark)
-            }
-        } else if let iconImage = model.iconImage {
+        if let iconImage = model.iconImage {
             iconImageView.image = iconImage
         } else {
             iconImageView.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
@@ -165,6 +157,10 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
             selectedBackgroundView = nil
         }
         if let needsReAuth = model.needsReAuth, needsReAuth {
+            typealias Icons = StandardImageIdentifiers.Large
+            iconImageView.image = UIImage(named: theme.type == .light
+                ? Icons.avatarWarningCircleFillMulticolorLight
+                : Icons.avatarWarningCircleFillMulticolorDark)
             descriptionLabel.textColor = theme.colors.textCritical
         } else if model.iconImage != nil {
             descriptionLabel.textColor = theme.colors.textSecondary
