@@ -66,7 +66,7 @@ class NotificationService: UNNotificationServiceExtension, @unchecked Sendable {
     ) {
         Task {
             do {
-                let autopush = try await Autopush(files: profile.files)
+                let autopush = try await Autopush(files: profile.files, prefs: profile.prefs)
                 var payload = [String: String]()
                 for (key, value) in userInfo {
                     if let key = key as? String, let value = value as? String {

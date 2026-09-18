@@ -138,7 +138,7 @@ extension AppDelegate {
 
         Task { [profile] in
             do {
-                let autopush = try await Autopush(files: profile.files)
+                let autopush = try await Autopush(files: profile.files, prefs: profile.prefs)
                 try await autopush.updateToken(withDeviceToken: deviceToken)
                 let fxaSubscription = try await autopush.subscribe(scope: RustFirefoxAccounts.pushScope)
                 RustFirefoxAccounts.shared.pushNotifications.updatePushRegistration(
