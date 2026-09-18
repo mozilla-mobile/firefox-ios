@@ -127,6 +127,31 @@ final class SearchSettingsScreen {
         assertSwitch(sel.SUGGESTIONS_FROM_SPONSORS_SWITCH, isOn: true)
     }
 
+    func assertSuggestionsFromSponsorsSwitchIsOff() {
+        assertSwitch(sel.SUGGESTIONS_FROM_SPONSORS_SWITCH, isOn: false)
+    }
+
+    func tapOnSuggestionsFromSponsorsSwitch() {
+        let toggle = sel.SUGGESTIONS_FROM_SPONSORS_SWITCH.element(in: app)
+        BaseTestCase().scrollToElement(toggle, isHittable: true)
+        toggle.waitAndTap()
+    }
+
+    /// The row's title and description are set on the switch as one accessibility label, so that is
+    /// where the copy shown next to the toggle can be read back from.
+    func assertSuggestionsFromSponsorsSwitchIsDisplayed() {
+        let toggle = sel.SUGGESTIONS_FROM_SPONSORS_SWITCH.element(in: app)
+        BaseTestCase().scrollToElement(toggle, isHittable: true)
+        BaseTestCase().mozWaitForElementToExist(toggle)
+
+        XCTAssertTrue(toggle.isHittable, "Expected the 'Suggestions from Sponsors' toggle to be on screen")
+        XCTAssertEqual(
+            toggle.label,
+            sel.SUGGESTIONS_FROM_SPONSORS_DISPLAYED_TEXT,
+            "The 'Suggestions from Sponsors' row is not showing the expected title and description"
+        )
+    }
+
     func assertLearnMoreAboutFirefoxSuggestRowExists() {
         assertRowExists(sel.LEARN_MORE_ABOUT_FIREFOX_SUGGEST_ROW)
     }

@@ -563,13 +563,53 @@ final class BrowserScreen {
         }
     }
 
-    func assertSponsoredResult(title: String, shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
+    /// - Parameter suggestSectionExists: whether the Firefox Suggest section itself is expected on
+    /// screen. Defaults to `shouldExist`: the section is gone when suggestions are off altogether
+    /// (private mode), but stays when only the sponsored entry is filtered out, and then it is the
+    /// positive control proving suggestions were returned at all.
+    func assertSponsoredResult(
+        title: String,
+        shouldExist: Bool = true,
+        suggestSectionExists: Bool? = nil,
+        timeout: TimeInterval = TIMEOUT_LONG
+    ) {
+        assertWebElements(
+            shouldExist: suggestSectionExists ?? shouldExist,
+            sel.SEARCH_SETTINGS_BUTTON.element(in: app),
+            timeout: timeout
+        )
         assertWebElements(
             shouldExist: shouldExist,
-            sel.SEARCH_SETTINGS_BUTTON.element(in: app),
             app.staticTexts[title],
             sel.SPONSORED_LABEL.element(in: app),
             timeout: timeout
+        )
+    }
+
+    /// Searches for `term` and asserts the sponsored entry for `title` is offered. A suggest query
+    /// interrupted while the term is still being typed is dropped silently, hence the retyping.
+    func searchAndAssertSponsoredResult(term: String, title: String, maxAttempts: Int = 3) {
+        for _ in 0..<maxAttempts {
+            searchFromAddressBar(term: term)
+            if app.staticTexts[title].mozWaitForElementToExist(timeout: 5, failOnTimeout: false) { break }
+        }
+        assertSponsoredResult(title: title)
+    }
+
+    func searchFromAddressBar(term: String) {
+        tapOnAddressBar()
+        clearAddressBarText()
+        typeOnSearchBar(text: term)
+    }
+
+    /// Fails rather than returning with text still in the field, so a retry cannot append to the
+    /// previous term and search for "amazonamazon" instead.
+    private func clearAddressBarText() {
+        guard clearButton.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) else { return }
+        clearButton.waitAndTap()
+        XCTAssertTrue(
+            clearButton.waitUntilGone(),
+            "The address bar still holds text after tapping the clear button"
         )
     }
 

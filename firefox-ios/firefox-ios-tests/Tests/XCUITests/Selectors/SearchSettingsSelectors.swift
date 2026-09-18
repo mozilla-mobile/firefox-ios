@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Localizations
+import Shared
 import XCTest
 
 protocol SearchSettingsSelectorsSet {
@@ -22,6 +24,9 @@ protocol SearchSettingsSelectorsSet {
     var SUGGESTIONS_FROM_THE_WEB_SWITCH: Selector { get }
     var SUGGESTIONS_FROM_SPONSORS_SWITCH: Selector { get }
     var LEARN_MORE_ABOUT_FIREFOX_SUGGEST_ROW: Selector { get }
+    /// Title and description the 'Suggestions from Sponsors' row is expected to display, in the
+    /// single string the app folds them into for accessibility.
+    var SUGGESTIONS_FROM_SPONSORS_DISPLAYED_TEXT: String { get }
     func searchEngineRow(named engineName: String) -> Selector
     var all: [Selector] { get }
 }
@@ -49,6 +54,11 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
         static let suggestionsFromSponsorsSwitch =
             AccessibilityIdentifiers.Settings.Search.showSponsoredSuggestionsSwitch
         static let learnMoreAboutFirefoxSuggestRow = "Learn more about Firefox Suggest"
+        static let suggestionsFromSponsorsTitle = String.Settings.Search.Suggest.ShowSponsoredSuggestionsTitle
+        static let suggestionsFromSponsorsDescription = String.localizedStringWithFormat(
+            .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
+            AppName.shortName.rawValue
+        )
     }
 
     let NAVBAR = Selector.navigationBarId(
@@ -146,6 +156,9 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
         description: "Switch for 'Suggestions from Sponsors' on Settings → Search",
         groups: ["settings", "search", "firefox suggest"]
     )
+
+    let SUGGESTIONS_FROM_SPONSORS_DISPLAYED_TEXT =
+        "\(IDs.suggestionsFromSponsorsTitle), \(IDs.suggestionsFromSponsorsDescription)"
 
     let LEARN_MORE_ABOUT_FIREFOX_SUGGEST_ROW = Selector.staticTextInTablesByLabel(
         IDs.learnMoreAboutFirefoxSuggestRow,
