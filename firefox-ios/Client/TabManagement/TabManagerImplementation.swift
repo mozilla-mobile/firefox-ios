@@ -541,13 +541,20 @@ final class TabManagerImplementation: NSObject,
                 }
                 return
             }
-
             if let mostRecentViableTab = mostRecentTab(inTabs: viableTabs), mostRecentViableTab == removedTab.parent {
                 // 1. Try to select the most recently used viable tab, if it's the removed tab's parent.
                 selectTab(mostRecentViableTab, previous: removedTab)
-            } else if let rightOrLeftTab = findRightOrLeftTab(forRemovedTab: removedTab, withDeletedIndex: deletedIndex) {
+            } else if let rightOrLeftTab = findRightOrLeftTab(
+                forRemovedTab: removedTab,
+                withDeletedIndex: deletedIndex
+            ) {
                 // 2. Try to select an array neighbour of the same tab type
-                selectTab(rightOrLeftTab, previous: removedTab)
+                selectTabInternal(
+                    rightOrLeftTab,
+                    previous: removedTab,
+                    immediatePreservation: false,
+                    updateLastExecutedTime: false
+                )
             } else {
                 // 3. If there are no suitable tabs to select, create a new normal tab.
                 selectTab(addTab(), previous: removedTab)
@@ -959,11 +966,24 @@ final class TabManagerImplementation: NSObject,
     /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case
     /// where the index of the tab has changed (such as after deletion).
     func selectTab(_ tab: Tab?, previous: Tab? = nil, immediatePreservation: Bool = false) {
+        selectTabInternal(
+            tab,
+            previous: previous,
+            immediatePreservation: immediatePreservation,
+            updateLastExecutedTime: true
+        )
+    }
+
+    private func selectTabInternal(
+        _ tab: Tab?,
+        previous: Tab?,
+        immediatePreservation: Bool,
+        updateLastExecutedTime: Bool
+    ) {
         assert(Thread.isMainThread)
         // Fallback everywhere to selectedTab if no previous tab
         let previous = previous ?? selectedTab
         previous?.pauseDocumentDownload()
-
         guard let tab = tab,
               let tabUUID = UUID(uuidString: tab.tabUUID)
         else {
@@ -978,7 +998,6 @@ final class TabManagerImplementation: NSObject,
         logger.log("Select tab",
                    level: .info,
                    category: .tabs)
-
         // Before moving to a new tab save the current tab session data in order to preserve things like scroll position
         saveSessionData(forTab: selectedTab)
 
@@ -990,11 +1009,14 @@ final class TabManagerImplementation: NSObject,
         }
 
         selectedIndex = tabs.firstIndex(of: tab) ?? -1
-
         preserveTabs(immediate: immediatePreservation)
 
         let sessionData = tabSessionStore.fetchTabSession(tabID: tabUUID)
-        selectTabWithSession(tab: tab, sessionData: sessionData)
+        selectTabWithSession(
+            tab: tab,
+            sessionData: sessionData,
+            updateLastExecutedTime: updateLastExecutedTime
+        )
 
         let action = PrivateModeAction(isPrivate: tab.isPrivate,
                                        windowUUID: windowUUID,
@@ -1002,7 +1024,6 @@ final class TabManagerImplementation: NSObject,
         store.dispatch(action)
 
         tab.resumeDocumentDownload()
-
         didSelectTab(url)
         updateMenuItemsForSelectedTab()
         if isDeeplinkOptimizationRefactorEnabled {
@@ -1010,7 +1031,6 @@ final class TabManagerImplementation: NSObject,
         } else {
             dispatchDidSetScreenshotAction(for: tab)
         }
-
         // Broadcast updates for any listeners
         delegates.forEach {
             $0.get()?.tabManager(
@@ -1027,7 +1047,6 @@ final class TabManagerImplementation: NSObject,
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
         }
-
         // Note: we setup last session private case as the session is tied to user's selected
         // tab but there are times when tab manager isn't available and we need to know
         // users's last state (Private vs Regular)
@@ -1077,11 +1096,18 @@ final class TabManagerImplementation: NSObject,
         store.dispatch(action)
     }
 
-    private func selectTabWithSession(tab: Tab, sessionData: Data?) {
+    private func selectTabWithSession(
+        tab: Tab,
+        sessionData: Data?,
+        updateLastExecutedTime: Bool
+    ) {
         MainActor.assertIsolated("Expected to be called only on main actor.")
         let configuration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
         selectedTab?.createWebview(with: sessionData, configuration: configuration)
-        selectedTab?.lastExecutedTime = Date.now()
+
+        if updateLastExecutedTime {
+            selectedTab?.lastExecutedTime = Date.now()
+        }
     }
 
     // MARK: - TabEventHandler
