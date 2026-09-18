@@ -101,6 +101,50 @@ final class TrackerBlockerModuleCellTests: XCTestCase {
         XCTAssertEqual(titleLabel(in: cell)?.font, FXFontStyles.Bold.footnote.scaledFont())
     }
 
+    func test_pill_isVerticallyCenteredAndContained() throws {
+        let cell = createSubject()
+        cell.configure(count: 0, theme: theme, onTap: nil)
+        cell.frame = CGRect(x: 0, y: 0, width: 320, height: 100)
+
+        cell.layoutIfNeeded()
+
+        let pill = try XCTUnwrap(containerPill(in: cell))
+        XCTAssertEqual(pill.frame.midY, cell.contentView.bounds.midY, accuracy: 0.5)
+        XCTAssertGreaterThanOrEqual(pill.frame.minY, 0)
+        XCTAssertLessThanOrEqual(pill.frame.maxY, cell.contentView.bounds.height)
+    }
+
+    func test_fittingHeight_fitsPillContent() throws {
+        let cell = createSubject()
+        cell.configure(count: 0, theme: theme, onTap: nil)
+
+        let fittingHeight = fittingHeight(for: cell, width: 320)
+        cell.frame = CGRect(x: 0, y: 0, width: 320, height: fittingHeight)
+        cell.layoutIfNeeded()
+
+        let pill = try XCTUnwrap(containerPill(in: cell))
+        XCTAssertEqual(fittingHeight, pill.frame.height, accuracy: 0.5)
+    }
+
+    /// Guards against the pill overflowing its section, which made it overlap the following homepage section
+    func test_fittingHeight_growsWhenLabelWraps() {
+        let cell = createSubject()
+        cell.configure(count: 0, theme: theme, onTap: nil)
+
+        let wideHeight = fittingHeight(for: cell, width: 320)
+        let narrowHeight = fittingHeight(for: cell, width: 140)
+
+        XCTAssertGreaterThan(narrowHeight, wideHeight)
+    }
+
+    private func fittingHeight(for cell: TrackerBlockerModuleCell, width: CGFloat) -> CGFloat {
+        return cell.systemLayoutSizeFitting(
+            CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+    }
+
     private func createSubject() -> TrackerBlockerModuleCell {
         let cell = TrackerBlockerModuleCell(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
         trackForMemoryLeaks(cell)
