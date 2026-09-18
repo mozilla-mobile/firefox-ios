@@ -83,22 +83,24 @@ class ExperimentRemoteTabsEmptyView: UIView,
         )
         signInButton.configure(viewModel: viewModel)
 
-        if config == .notLoggedIn || config == .failedToSync {
+        signInButton.removeTarget(nil, action: nil, for: .touchUpInside)
+
+        switch config {
+        case .noClients, .noTabs:
+            signInButton.addTarget(self, action: #selector(refreshTabs), for: .touchUpInside)
+        case .notLoggedIn, .failedToSync:
             signInButton.addTarget(self, action: #selector(presentSignIn), for: .touchUpInside)
-        } else if config == .syncDisabledByUser {
+        case .syncDisabledByUser:
             signInButton.addTarget(self, action: #selector(openAccountSettings), for: .touchUpInside)
         }
 
-        signInButton.isHidden = shouldHideButton(config)
+        signInButton.isHidden = false
+        signInButton.isEnabled = !isSyncing
 
         // Recalculate layout after setting text. Labels initialize empty, causing button to clip
         // multi-line text at large Dynamic Type sizes if intrinsic size isn't updated.
         signInButton.invalidateIntrinsicContentSize()
         signInButton.layoutIfNeeded()
-    }
-
-    private func shouldHideButton(_ state: RemoteTabsPanelEmptyStateReason) -> Bool {
-        return state == .noClients && state == .noTabs
     }
 
     private func setupLayout() {
@@ -163,6 +165,11 @@ class ExperimentRemoteTabsEmptyView: UIView,
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncSignIn)
             delegate.remotePanelDidRequestToSignIn()
         }
+    }
+
+    @objc
+    private func refreshTabs() {
+        delegate?.remotePanelDidRequestToRefreshTabs()
     }
 
     @objc

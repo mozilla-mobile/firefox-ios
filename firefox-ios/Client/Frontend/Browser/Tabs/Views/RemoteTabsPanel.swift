@@ -237,6 +237,10 @@ final class RemoteTabsPanel: UIViewController,
     }
 
     // MARK: - RemotePanelDelegate
+    func remotePanelDidRequestToRefreshTabs() {
+        refreshTabs()
+    }
+
     func remotePanelDidRequestToSignIn() {
         remoteTabsDelegate?.presentFirefoxAccountSignIn()
     }
