@@ -394,6 +394,11 @@ class BrowserViewController: UIViewController,
     let tabManager: TabManager
     var googleLensSearches = [TabUUID: GoogleLensSearchState]()
     let googleLensTelemetry: GoogleLensTelemetry
+    /// The origin captured when a web context menu was shown, kept until its matching dismiss is
+    /// reported. `ContextMenuHelper.elements` can be overwritten by the JS bridge while a menu is open,
+    /// so `dismissed` telemetry must reuse this instead of re-deriving it from that mutable state. See FXIOS-14918.
+    var pendingContextMenuTelemetry: (url: URL, origin: ContextMenuTelemetry.OriginExtra)?
+    let contextMenuTelemetry: ContextMenuTelemetry
     let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
     private(set) var browserViewControllerState: BrowserViewControllerState?
@@ -482,6 +487,7 @@ class BrowserViewController: UIViewController,
         self.appAuthenticator = appAuthenticator
         self.searchEnginesManager = searchEnginesManager
         self.googleLensTelemetry = GoogleLensTelemetry(gleanWrapper: gleanWrapper)
+        self.contextMenuTelemetry = ContextMenuTelemetry(gleanWrapper: gleanWrapper)
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
