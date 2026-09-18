@@ -132,23 +132,6 @@ final class HomePageSettingViewController: SettingsTableViewController,
         sectionItems.append(TopSitesSettings(settings: self))
 
         if let profile {
-            let jumpBackInSetting = BoolSetting(
-                prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: PrefsKeys.HomepageSettings.JumpBackInSection,
-                defaultValue: userPreferences.getPreferenceFor(.homepageJumpBackinSectionDefault),
-                titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
-            ) { [windowUUID] value in
-                store.dispatch(
-                    JumpBackInAction(
-                        isEnabled: value,
-                        windowUUID: windowUUID,
-                        actionType: JumpBackInActionType.toggleShowSectionSetting
-                    )
-                )
-            }
-            sectionItems.append(jumpBackInSetting)
-
             if featureFlagsProvider.isEnabled(.homepageTrackerBlockerModule) {
                 let trackerBlockerModuleSetting = BoolSetting(
                     prefs: profile.prefs,
@@ -167,6 +150,23 @@ final class HomePageSettingViewController: SettingsTableViewController,
                 }
                 sectionItems.append(trackerBlockerModuleSetting)
             }
+
+            let jumpBackInSetting = BoolSetting(
+                prefs: profile.prefs,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                prefKey: PrefsKeys.HomepageSettings.JumpBackInSection,
+                defaultValue: userPreferences.getPreferenceFor(.homepageJumpBackinSectionDefault),
+                titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
+            ) { [windowUUID] value in
+                store.dispatch(
+                    JumpBackInAction(
+                        isEnabled: value,
+                        windowUUID: windowUUID,
+                        actionType: JumpBackInActionType.toggleShowSectionSetting
+                    )
+                )
+            }
+            sectionItems.append(jumpBackInSetting)
 
             let bookmarksSetting = BoolSetting(
                 prefs: profile.prefs,
