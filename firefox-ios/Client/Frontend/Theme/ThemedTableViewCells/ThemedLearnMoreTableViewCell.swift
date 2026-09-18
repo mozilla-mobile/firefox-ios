@@ -11,11 +11,6 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
         static let horizontalMargin: CGFloat = 15
         static let verticalMargin: CGFloat = 10
         static let labelsSpacing: CGFloat = 3
-        static let learnMoreInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        static var cellSeparatorInsetForCurrentOS: UIEdgeInsets {
-            guard #available(iOS 26.0, *) else { return .zero }
-            return UIEdgeInsets(top: 0, left: horizontalMargin, bottom: 0, right: horizontalMargin)
-        }
     }
 
     private lazy var labelsStackView: UIStackView = .build { stackView in
@@ -45,13 +40,16 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
     }
 
     func configure(title: String, subtitle: String, learnMoreText: String, a11yId: String?, theme: Theme) {
+        layoutMargins = Setting.UX.cellLayoutMarginsForCurrentOS
+        separatorInset = Setting.UX.cellSeparatorInsetForCurrentOS
+
         titleLabel.text = title
         subtitleLabel.text = subtitle
         let learnMoreButtonViewModel = LinkButtonViewModel(
             title: learnMoreText,
             a11yIdentifier: a11yId ?? "",
             font: FXFontStyles.Regular.caption1.scaledFont(),
-            contentInsets: UX.learnMoreInsets
+            contentInsets: .zero
         )
         learnMoreButton.configure(viewModel: learnMoreButtonViewModel)
     }
@@ -66,7 +64,6 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
     }
 
     private func setupLayout() {
-        separatorInset = UX.cellSeparatorInsetForCurrentOS
         selectionStyle = .none
         contentView.addSubview(labelsStackView)
         contentView.addSubview(learnMoreButton)
@@ -77,17 +74,17 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
             equalTo: contentView.bottomAnchor,
             constant: -UX.verticalMargin
         )
-        bottomConstraint.priority = .defaultLow
+        bottomConstraint.priority = .defaultHigh
 
         NSLayoutConstraint.activate([
             labelsStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.verticalMargin),
-            labelsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalMargin),
-            labelsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.horizontalMargin),
+            labelsStackView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            labelsStackView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
 
             learnMoreButton.topAnchor.constraint(equalTo: labelsStackView.bottomAnchor, constant: UX.labelsSpacing),
-            learnMoreButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalMargin),
-            bottomConstraint,
-            learnMoreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.horizontalMargin)
+            learnMoreButton.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            learnMoreButton.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+            bottomConstraint
         ])
     }
 
