@@ -46,7 +46,10 @@ class RemoteTabsViewController: UIViewController,
     private let tabTrayUtils: TabTrayUtils
 
     var tableView: UITableView = .build()
-    private var isShowingEmptyView: Bool { state.showingEmptyState != nil }
+    private var isShowingEmptyView: Bool {
+        guard case .empty = state.contentState else { return false }
+        return true
+    }
     private lazy var emptyView: RemoteTabsEmptyViewProtocol = {
         if isTabTrayUIExperimentsEnabled {
             let view = ExperimentRemoteTabsEmptyView()
@@ -156,16 +159,13 @@ class RemoteTabsViewController: UIViewController,
     }
 
     func newState(state: RemoteTabsPanelState) {
-        let currentClientAndTabs = self.state.clientAndTabs
         self.state = state
-        reloadUI(currentClientAndTabs: currentClientAndTabs)
+        reloadUI()
     }
 
-    private func reloadUI(currentClientAndTabs: [ClientAndTabs] = []) {
+    private func reloadUI() {
         updateUI()
-        if currentClientAndTabs != self.state.clientAndTabs {
-            tableView.reloadData()
-        }
+        tableView.reloadData()
     }
 
     private func updateUI() {
@@ -206,7 +206,7 @@ class RemoteTabsViewController: UIViewController,
     }
 
     private func configureEmptyView(isSyncing: Bool = false) {
-        guard let emptyStateReason = state.showingEmptyState else { return }
+        guard case let .empty(emptyStateReason) = state.contentState else { return }
         emptyView.configure(config: emptyStateReason, delegate: remoteTabsPanel, isSyncing: isSyncing)
         emptyView.applyTheme(theme: retrieveTheme())
     }

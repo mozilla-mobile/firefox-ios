@@ -38,6 +38,28 @@ final class RemoteTabPanelTests: XCTestCase {
         XCTAssertEqual(tableView.numberOfRows(inSection: 0), 2)
     }
 
+    @MainActor
+    func testNewState_whenOnlyContentStateChanges_reloadsTableView() {
+        let tabsState = generateStateOneClientTwoTabs()
+        let subject = RemoteTabsViewController(state: tabsState, windowUUID: .XCTestDefaultUUID)
+        let tableView = MockRemoteTabsTableView()
+        subject.tableView = tableView
+        trackForMemoryLeaks(subject)
+
+        let emptyState = RemoteTabsPanelState(windowUUID: .XCTestDefaultUUID,
+                                              refreshState: .idle,
+                                              allowsRefresh: true,
+                                              clientAndTabs: tabsState.clientAndTabs,
+                                              contentState: .empty(.failedToSync),
+                                              devices: [])
+
+        subject.newState(state: emptyState)
+        XCTAssertEqual(tableView.reloadDataCallCount, 1)
+
+        subject.newState(state: tabsState)
+        XCTAssertEqual(tableView.reloadDataCallCount, 2)
+    }
+
     // MARK: - Private
 
     private func generateEmptyState() -> RemoteTabsPanelState {
@@ -71,7 +93,7 @@ final class RemoteTabPanelTests: XCTestCase {
                                     refreshState: .idle,
                                     allowsRefresh: true,
                                     clientAndTabs: fakeData,
-                                    showingEmptyState: nil,
+                                    contentState: .tabs,
                                     devices: [])
     }
 
@@ -84,5 +106,13 @@ final class RemoteTabPanelTests: XCTestCase {
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+}
+
+private final class MockRemoteTabsTableView: UITableView {
+    private(set) var reloadDataCallCount = 0
+
+    override func reloadData() {
+        reloadDataCallCount += 1
     }
 }
