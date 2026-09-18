@@ -2906,7 +2906,7 @@ extension String {
             public static let OK = MZLocalizedString(
                 key: "QuickAnswers.Errors.OK.v158",
                 tableName: "QuickAnswers",
-                value: "Ok",
+                value: "OK",
                 comment: "Button label to dismiss the Quick Answers error alert."
             )
         }
