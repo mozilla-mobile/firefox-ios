@@ -38,10 +38,9 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
     private static var boldTitleFont: UIFont { FXFontStyles.Bold.footnote.scaledFont() }
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.font = TrackerBlockerModuleCell.titleFont
+        label.font = TrackerBlockerModuleCell.boldTitleFont
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.text = .Menu.EnhancedTrackingProtection.trackersBlockedLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.titleLabel
         label.text = .FirefoxHomepage.TrackerBlocker.NoTrackersBlocked
     }
@@ -117,7 +116,7 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
     private func updateTrackerNumber(to count: Int) {
         guard count > 0 else {
             titleLabel.attributedText = nil
-            titleLabel.font = Self.titleFont
+            titleLabel.font = Self.boldTitleFont
             titleLabel.text = .FirefoxHomepage.TrackerBlocker.NoTrackersBlocked
             containerPillView.accessibilityLabel = .FirefoxHomepage.TrackerBlocker.NoTrackersBlocked
             return
