@@ -93,6 +93,20 @@ class AppDelegate: UIResponder,
         appLaunchUtil = AppLaunchUtil(profile: profile)
         appLaunchUtil?.setUpPreLaunchDependencies()
 
+        // If the VPN Pref is on then start the vpn server.
+        // NOTE: These calls need to happen after bootstrapping dependencies and
+        // setup pre-launch dependencies
+        if #available(iOS 17.0, *), featureFlagsProvider.isEnabled(.vpnFeature) {
+            Task {
+                let userFeaturePreferenceManager: UserFeaturePreferring = AppContainer.shared.resolve()
+                let vpnManager: VPNManaging = AppContainer.shared.resolve()
+                let isRunning = userFeaturePreferenceManager.getPreferenceFor(.vpnFeature)
+                if isRunning {
+                    await vpnManager.start()
+                }
+            }
+        }
+
         // Set up a web server that serves us static content.
         // Do this early so that it is ready when the UI is presented.
         webServerUtil = WebServerUtil(readerModeHandler: ReaderModeHandlers(), profile: profile)
