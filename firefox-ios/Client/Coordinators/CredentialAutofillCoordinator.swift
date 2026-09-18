@@ -101,6 +101,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                                            frame: WKFrameInfo?,
                                            viewController: UIViewController,
                                            alertContainer: UIView) {
+        let capturedOrigin = tabManager.selectedTab?.url?.origin
         let creditCardControllerViewModel = CreditCardBottomSheetViewModel(creditCardProvider: creditCardProvider,
                                                                            creditCard: creditCard,
                                                                            decryptedCreditCard: decryptedCard,
@@ -142,6 +143,12 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         bottomSheetViewController.didSelectCreditCardToFill = { [weak self] plainTextCard in
             guard let self = self else { return }
             guard let currentTab = self.tabManager.selectedTab else {
+                self.parentCoordinator?.didFinish(from: self)
+                return
+            }
+            guard let capturedOrigin,
+                  let currentOrigin = currentTab.url?.origin,
+                  capturedOrigin == currentOrigin else {
                 self.parentCoordinator?.didFinish(from: self)
                 return
             }
@@ -189,6 +196,16 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             onLoginCellTap: { [weak self] login in
                 guard let self else { return }
                 guard let currentTab = self.tabManager.selectedTab else {
+                    router.dismiss(animated: true)
+                    parentCoordinator?.didFinish(from: self)
+                    return
+                }
+
+                // Bugzilla #2068171. Sheet was populated for origin of `tabURL`, do not
+                // inject if selected tab's origin no longer matches (page navigated etc).
+                guard let capturedOrigin = tabURL.origin,
+                      let currentOrigin = currentTab.url?.origin,
+                      capturedOrigin == currentOrigin else {
                     router.dismiss(animated: true)
                     parentCoordinator?.didFinish(from: self)
                     return
