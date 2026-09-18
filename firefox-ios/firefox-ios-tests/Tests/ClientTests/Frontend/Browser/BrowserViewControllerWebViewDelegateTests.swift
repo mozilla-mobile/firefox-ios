@@ -603,7 +603,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
         XCTAssertEqual(elements.link, url)
         XCTAssertNil(elements.image)
-        XCTAssertEqual(elements.title, url.normalizedHostWithLRI, "Must not fall back to the raw URL as a title")
+        XCTAssertEqual(elements.title, url.normalizedHost, "Must not fall back to the raw URL as a title")
         XCTAssertNil(elements.alt)
     }
 
@@ -615,7 +615,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let elements = BrowserViewController.resolveContextMenuElements(for: url, from: contextHelper)
 
         XCTAssertEqual(elements.link, url)
-        XCTAssertEqual(elements.title, url.normalizedHostWithLRI, "Must not fall back to the raw URL as a title")
+        XCTAssertEqual(elements.title, url.normalizedHost, "Must not fall back to the raw URL as a title")
     }
 
     @MainActor
@@ -656,7 +656,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         XCTAssertEqual(elements.link, url)
         XCTAssertEqual(
             elements.title,
-            url.normalizedHostWithLRI,
+            url.normalizedHost,
             "Stale JS-reported data for a different link must not be used, and must not fall back to the raw URL"
         )
     }

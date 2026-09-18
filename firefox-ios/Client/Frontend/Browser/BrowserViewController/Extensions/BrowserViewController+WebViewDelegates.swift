@@ -242,12 +242,16 @@ extension BrowserViewController: WKUIDelegate {
     /// comes straight from WebKit and is always current, so it's used as-is; the JS-sourced data is only trusted
     /// when its link matches, and otherwise a native-only fallback keeps the custom menu (and its actions like
     /// "Open in Private Tab") from being replaced with WebKit's default one. See FXIOS-14918.
+    ///
+    /// The fallback title uses `normalizedHost`, not `normalizedHostWithLRI`: this title can flow into
+    /// "Bookmark Link" as the saved bookmark's title, and `normalizedHostWithLRI`'s bidi isolate marks
+    /// are only meant for on-screen display, not for persisting into stored data.
     static func resolveContextMenuElements(
         for url: URL,
         from contextHelper: ContextMenuHelper?
     ) -> ContextMenuHelper.Elements {
         matchingContextHelperElements(contextHelper, url)
-            ?? ContextMenuHelper.Elements(link: url, image: nil, title: url.normalizedHostWithLRI, alt: nil)
+            ?? ContextMenuHelper.Elements(link: url, image: nil, title: url.normalizedHost, alt: nil)
     }
 
     /// Whether `contextHelper.elements` still belongs to the long press that's being dismissed. WebKit's
