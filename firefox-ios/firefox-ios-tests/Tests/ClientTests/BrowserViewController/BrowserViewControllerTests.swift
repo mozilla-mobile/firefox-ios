@@ -58,7 +58,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 advertiser: "test advertiser",
                 iabCategory: "999 - Test Category",
                 impressionReportingURL: URL(string: "https://example.com/ios_test_impression_reporting_url"),
-                clickReportingURL: URL(string: "https://example.com/ios_test_click_reporting_url")
+                clickReportingURL: URL(string: "https://example.com/ios_test_click_reporting_url"),
+                suggestionId: "test-suggestion-id"
             ),
             position: 3,
             didTap: false

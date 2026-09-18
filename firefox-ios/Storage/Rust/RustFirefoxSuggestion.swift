@@ -15,7 +15,8 @@ public enum RustFirefoxSuggestionTelemetryInfo {
         advertiser: String,
         iabCategory: String,
         impressionReportingURL: URL?,
-        clickReportingURL: URL?
+        clickReportingURL: URL?,
+        suggestionId: String
     )
     case wikipedia
 }
@@ -67,7 +68,7 @@ public struct RustFirefoxSuggestion: Equatable {
             _,
             _,
             _,
-            _
+            suggestionId
         ) = suggestion {
             // This use of `URL(string:)` is OK; we don't need to use
             // `URL(string:encodingInvalidCharacters:)` here.
@@ -81,7 +82,8 @@ public struct RustFirefoxSuggestion: Equatable {
                 advertiser: advertiser.lowercased(),
                 iabCategory: iabCategory,
                 impressionReportingURL: URL(string: impressionUrlString),
-                clickReportingURL: URL(string: clickUrlString)
+                clickReportingURL: URL(string: clickUrlString),
+                suggestionId: suggestionId
             )
         } else if case let .wikipedia(title, urlString, iconBytes, _, _) = suggestion {
             // This use of `URL(string:)` is OK.
