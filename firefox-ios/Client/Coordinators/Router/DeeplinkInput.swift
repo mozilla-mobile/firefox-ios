@@ -73,5 +73,6 @@ enum DeeplinkInput {
         case newPrivateTab = "NewPrivateTab"
         case openLastBookmark = "OpenLastBookmark"
         case appIcon = "AppIcon"
+        case mergeWindows = "MergeWindows"
     }
 }
