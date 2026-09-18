@@ -623,4 +623,130 @@ final class TabManagerRemoveTabTests: TabManagerTestsBase {
         XCTAssertNotEqual(tabManager.selectedTab, secondTab, "This tab should have been removed")
         XCTAssertEqual(tabManager.selectedIndex, 0, "Index of new normal tab")
     }
+    // MARK: - Remove Tab (closing duplicate homepage tabs)
+
+    @MainActor
+    func testAddTab_whenNewTabLoadsHomepage_closesOtherHomepageTabs() {
+        let subject = createSubject(tabs: generateHomepageTabs(count: 3))
+        subject.tabRestoreHasFinished = true
+
+        let newTab = subject.addTab()
+
+        XCTAssertEqual(subject.tabs.count, 1)
+        XCTAssertEqual(subject.tabs.first, newTab)
+    }
+
+    @MainActor
+    func testAddTab_whenNewTabLoadsHomepage_keepsTabsShowingOtherURLs() {
+        let subject = createSubject(tabs: generateTabs(count: 3) + generateHomepageTabs(count: 2))
+        subject.tabRestoreHasFinished = true
+
+        let newTab = subject.addTab()
+
+        XCTAssertEqual(subject.tabs.count, 4)
+        XCTAssertEqual(subject.tabs.filter { $0.isFxHomeTab }, [newTab])
+    }
+
+    @MainActor
+    func testAddTab_whenNewTabLoadsHomepage_keepsHomepageTabsFromTheOtherBrowsingMode() {
+        let subject = createSubject(tabs: generateHomepageTabs(count: 2, isPrivate: true)
+                                    + generateHomepageTabs(count: 2))
+        subject.tabRestoreHasFinished = true
+
+        _ = subject.addTab()
+
+        XCTAssertEqual(subject.privateTabs.count, 2)
+        XCTAssertEqual(subject.normalTabs.count, 1)
+    }
+
+    @MainActor
+    func testAddPrivateTab_whenNewTabLoadsHomepage_closesOtherPrivateHomepageTabs() {
+        let subject = createSubject(tabs: generateHomepageTabs(count: 2, isPrivate: true)
+                                    + generateHomepageTabs(count: 2))
+        subject.tabRestoreHasFinished = true
+
+        _ = subject.addTab(isPrivate: true)
+
+        XCTAssertEqual(subject.privateTabs.count, 1)
+        XCTAssertEqual(subject.normalTabs.count, 2)
+    }
+
+    @MainActor
+    func testAddTab_whenNewTabPageIsBlank_keepsOtherHomepageTabs() {
+        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.KeyNewTab] = NewTabPage.blankPage.rawValue
+        let subject = createSubject(tabs: generateHomepageTabs(count: 2))
+        subject.tabRestoreHasFinished = true
+
+        _ = subject.addTab()
+
+        XCTAssertEqual(subject.tabs.count, 3)
+    }
+
+    @MainActor
+    func testAddTab_whenNewTabPageIsACustomHomepage_keepsOtherHomepageTabs() {
+        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.KeyNewTab] = NewTabPage.homePage.rawValue
+        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.NewTabCustomUrlPrefKey] = "https://mozilla.com"
+        let subject = createSubject(tabs: generateHomepageTabs(count: 2))
+        subject.tabRestoreHasFinished = true
+
+        _ = subject.addTab()
+
+        XCTAssertEqual(subject.tabs.count, 3)
+    }
+
+    @MainActor
+    func testAddTab_withARequest_keepsOtherHomepageTabs() {
+        let subject = createSubject(tabs: generateHomepageTabs(count: 2))
+        subject.tabRestoreHasFinished = true
+
+        _ = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+
+        XCTAssertEqual(subject.tabs.count, 3)
+    }
+
+    @MainActor
+    func testAddTab_whenTabRestoreHasNotFinished_keepsOtherHomepageTabs() {
+        let subject = createSubject(tabs: generateHomepageTabs(count: 2))
+
+        _ = subject.addTab()
+
+        XCTAssertEqual(subject.tabs.count, 3)
+    }
+
+    @MainActor
+    func testAddTab_whenSelectedTabIsNotAHomepage_keepsThatTabSelected() {
+        let contentTabs = generateTabs(count: 1)
+        let subject = createSubject(tabs: generateHomepageTabs(count: 2) + contentTabs)
+        subject.tabRestoreHasFinished = true
+        subject.selectTab(contentTabs[0])
+
+        _ = subject.addTab()
+
+        XCTAssertEqual(subject.selectedTab, contentTabs[0])
+        XCTAssertEqual(subject.selectedIndex, 0, "The selected tab index should have shifted left")
+    }
+
+    @MainActor
+    func testAddTab_whenSelectedTabIsClosedBySweep_selectsTheNewTab() {
+        let homepageTabs = generateHomepageTabs(count: 2)
+        let subject = createSubject(tabs: homepageTabs)
+        subject.tabRestoreHasFinished = true
+        subject.selectTab(homepageTabs[0])
+
+        let newTab = subject.addTab()
+
+        XCTAssertEqual(subject.selectedTab, newTab)
+        XCTAssertEqual(subject.selectedIndex, 0, "Index of the only remaining tab")
+    }
+
+    // MARK: - Helpers
+
+    @MainActor
+    private func generateHomepageTabs(count: Int, isPrivate: Bool = false) -> [Tab] {
+        return (0..<count).map { _ in
+            let tab = Tab(profile: mockProfile, isPrivate: isPrivate, windowUUID: tabWindowUUID)
+            tab.url = HomePanelType.topSites.internalUrl
+            return tab
+        }
+    }
 }
