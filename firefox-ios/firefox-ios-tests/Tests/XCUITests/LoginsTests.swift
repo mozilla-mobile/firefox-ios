@@ -212,21 +212,20 @@ class LoginTest: BaseTestCase {
         XCTAssertTrue(app.staticTexts[domainLogin].exists)
         app.staticTexts[domain].waitAndTap()
         // The login details are available
-        mozWaitForElementToExist(app.tables["Login Detail List"])
+        loginSettingsScreen.assertLoginDetailListExists()
         mozWaitForElementToExist(app.tables.cells[loginsListURLLabel])
         mozWaitForElementToExist(app.tables.cells[loginsListUsernameLabel])
         mozWaitForElementToExist(app.tables.cells[loginsListPasswordLabel])
         mozWaitForElementToExist(app.tables.cells.staticTexts["Delete"])
         // Change the username
         app.buttons["Edit"].waitAndTap()
-        mozWaitForElementToExist(app.tables["Login Detail List"])
-        app.tables["Login Detail List"].cells.elementContainingText("Username").waitAndTap()
+        loginSettingsScreen.tapLoginDetailCellContaining("Username")
         app.menuItems["Select All"].waitAndTap()
         app.menuItems["Cut"].waitAndTap()
         enterTextInField(typedText: "foo")
         app.buttons["Done"].waitAndTap()
         // The username is correctly changed
-        mozWaitForElementToExist(app.tables["Login Detail List"])
+        loginSettingsScreen.assertLoginDetailListExists()
         mozWaitForElementToExist(app.tables.cells[loginsListURLLabel])
         mozWaitForElementToNotExist(app.tables.cells[loginsListUsernameLabel])
         mozWaitForElementToExist(app.tables.cells[loginsListUsernameLabelEdited])
@@ -446,22 +445,19 @@ class LoginTest: BaseTestCase {
     func testDismissedChangesAreNotSaved() {
         openLoginsSettingsFromBrowserTab()
         createLoginManually()
-        let savedCredentials = app.tables[loginList].cells.element(boundBy: 1)
         let passwordCell = app.tables.cells["Password"]
         let editButton = app.buttons["Edit"]
-        savedCredentials.waitAndTap()
         // The passwords list has an "Edit" button of its own, so tapping before the detail screen has
         // pushed puts the list into selection mode instead of editing the login.
-        mozWaitForElementToExist(app.tables["Login Detail List"])
+        loginSettingsScreen.openLoginAtIndex(defaultNumRowsLoginsList)
         editButton.waitAndTap()
         // Focus the username field explicitly; relying on auto-focus after Edit is flaky on CI.
-        mozWaitForElementToExist(app.tables["Login Detail List"])
-        app.tables["Login Detail List"].cells.elementContainingText("Username").waitAndTap()
+        loginSettingsScreen.tapLoginDetailCellContaining("Username")
         clearAndEnterText(text: "test")
         passwordCell.waitAndTap()
         clearAndEnterText(text: "pass")
         navigator.goto(AutofillPasswordSettings)
-        savedCredentials.waitAndTap()
+        loginSettingsScreen.openLoginAtIndex(defaultNumRowsLoginsList)
         mozWaitForElementToExist(app.tables.cells[loginsListUsernameLabelEdited])
         editButton.waitAndTap()
         passwordCell.waitAndTap()
@@ -534,7 +530,7 @@ class LoginTest: BaseTestCase {
     }
 
     private func validateLoginTextFieldsCanBeCopied(indexField: Int, copiedText: String, field: String) {
-        app.tables[loginList].cells.element(boundBy: defaultNumRowsLoginsList).waitAndTap()
+        loginSettingsScreen.openLoginAtIndex(defaultNumRowsLoginsList)
         // Long tap on the field and then tap on Copy
         let fieldCell = app.tables.cells.element(boundBy: indexField)
         mozWaitForElementToExist(fieldCell)
@@ -559,11 +555,11 @@ class LoginTest: BaseTestCase {
     }
 
     /// Repeats `gesture` until the edit-callout entry named `label` appears, and returns it. The entry
-    /// is a menuItem on some iOS versions and a staticText on others, so both types are polled.
+    /// is a menuItem, a staticText or a button depending on the iOS version, so all three are polled.
     private func revealCalloutMenuItem(labelled label: String,
                                        maxAttempts: Int = 3,
                                        gesture: () -> Void) -> XCUIElement {
-        let candidates = [app.menuItems[label], app.staticTexts[label]]
+        let candidates = [app.menuItems[label], app.staticTexts[label], app.buttons[label]]
         for _ in 0..<maxAttempts {
             gesture()
             if let revealed = waitForFirstToExist(candidates, timeout: 5) { return revealed }
