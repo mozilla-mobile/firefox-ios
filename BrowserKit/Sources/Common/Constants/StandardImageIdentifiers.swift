@@ -134,6 +134,7 @@ public struct StandardImageIdentifiers {
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"
         public static let warningFillLarged = "warningFillLarged"
+        public static let audio = "audio-24"
     }
 
     // Icon size 30x30
