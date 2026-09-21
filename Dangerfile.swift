@@ -16,6 +16,7 @@ if releaseCheck.isReleaseBranch {
 } else {
     checkForFunMetrics()
     checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
+    StandardImageVectorDataChecker().run()
     checkForSpecificFileChange()
     checkForGleanFileChange()
     checkForNimbusFeatureChange()
@@ -942,6 +943,115 @@ func checkAlphabeticalOrder(inFile filePath: String) {
         }
     } catch {
         warn("Failed to read or process file \(filePath): \(error)")
+    }
+}
+
+// MARK: - Acorn Preserve Vector Data
+// Standard images (the acorn icons listed in StandardImageIdentifiers.swift) must be PDF-backed
+// and keep "Preserve Vector Data" enabled so they stay crisp when rendered above their nominal size.
+final class StandardImageVectorDataChecker {
+    func run() {
+        let identifiers = standardImageIdentifiers()
+        guard !identifiers.isEmpty else { return }
+
+        let createdContents = danger.git.createdFiles.filter { $0.hasSuffix(".imageset/Contents.json") }
+        var nonPDFOffenders: [String] = []
+        var missingFlagOffenders: [String] = []
+
+        for path in createdContents {
+            guard let imagesetName = imagesetName(fromPath: path),
+                  identifiers.contains(imagesetName) else { continue }
+
+            guard let data = FileManager.default.contents(atPath: path),
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                warn("Could not parse `\(path)` to verify its vector data settings.")
+                continue
+            }
+
+            let filenames = imageFilenames(in: json)
+            guard !filenames.isEmpty else { continue }
+
+            if filenames.contains(where: { !$0.hasSuffix(".pdf") }) {
+                nonPDFOffenders.append(path)
+                continue
+            }
+
+            let properties = json["properties"] as? [String: Any]
+            let preservesVectorData = properties?["preserves-vector-representation"] as? Bool ?? false
+            if !preservesVectorData { missingFlagOffenders.append(path) }
+        }
+
+        reportNonPDFOffenders(nonPDFOffenders)
+        reportMissingFlagOffenders(missingFlagOffenders)
+    }
+
+    private func reportNonPDFOffenders(_ offenders: [String]) {
+        guard !offenders.isEmpty else { return }
+
+        let bullets = offenders.map { "• `\($0)`" }.joined(separator: "\n")
+        failOrWarn("""
+        ### 🖼️ Standard image is not a PDF
+        The following newly added standard image asset(s) contain non-PDF file(s):
+        \(bullets)
+
+        Assets referenced by `StandardImageIdentifiers.swift` must be **PDF** vector assets. \
+        Please export the icon as a PDF and replace the other format(s) in the imageset.
+        """)
+    }
+
+    private func reportMissingFlagOffenders(_ offenders: [String]) {
+        guard !offenders.isEmpty else { return }
+
+        let bullets = offenders.map { "• `\($0)`" }.joined(separator: "\n")
+        failOrWarn("""
+        ### 🖼️ Standard image is missing "Preserve Vector Data"
+        The following newly added standard image asset(s) do not have **Preserve Vector Data** enabled:
+        \(bullets)
+
+        Assets referenced by `StandardImageIdentifiers.swift` are rendered at multiple sizes across the app, \
+        so they must keep their vector representation. Without it, the PDF is rasterized at build time and \
+        the icon becomes blurry when drawn above its nominal size (e.g. with Dynamic Type).
+
+        **How to fix:** select the imageset in Xcode's asset catalog and tick **Preserve Vector Data** in the \
+        Attributes inspector, or add this to the imageset's `Contents.json`:
+        ```json
+        "properties" : {
+          "preserves-vector-representation" : true
+        }
+        ```
+        """)
+    }
+
+    // Extracts the asset names (the string values) from StandardImageIdentifiers.swift
+    private func standardImageIdentifiers() -> Set<String> {
+        guard let fileContent = try? String(contentsOfFile: standardImageIdentifiersPath, encoding: .utf8),
+              let regex = try? NSRegularExpression(pattern: #"public static let \w+ = "([^"]+)""#) else {
+            warn("Could not read \(standardImageIdentifiersPath) to check Preserve Vector Data on new assets.")
+            return []
+        }
+
+        let range = NSRange(fileContent.startIndex..<fileContent.endIndex, in: fileContent)
+        let matches = regex.matches(in: fileContent, options: [], range: range)
+        let names = matches.compactMap { match -> String? in
+            guard let range = Range(match.range(at: 1), in: fileContent) else { return nil }
+            return String(fileContent[range])
+        }
+        return Set(names)
+    }
+
+    // Extracts the imageset name from a Contents.json path, which is also the image's identifier,
+    // e.g. "bookmarkLarge" from ".../bookmarkLarge.imageset/Contents.json"
+    private func imagesetName(fromPath path: String) -> String? {
+        let components = path.split(separator: "/")
+        guard components.count >= 2 else { return nil }
+        let folder = String(components[components.count - 2])
+        guard folder.hasSuffix(".imageset") else { return nil }
+        return String(folder.dropLast(".imageset".count))
+    }
+
+    private func imageFilenames(in contentsJSON: [String: Any]) -> [String] {
+        let images = contentsJSON["images"] as? [[String: Any]] ?? []
+        return images.compactMap { ($0["filename"] as? String)?.lowercased() }
     }
 }
 

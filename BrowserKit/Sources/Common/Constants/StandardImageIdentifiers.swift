@@ -133,6 +133,7 @@ public struct StandardImageIdentifiers {
         public static let translateActiveAltMulticolor = "translateActiveAltMulticolorLarge"
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"
+        public static let warningFillLarged = "warningFillLarged"
     }
 
     // Icon size 30x30
