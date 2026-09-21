@@ -120,7 +120,8 @@ final class TranscriptLabel: UILabel {
         text = transcript
     }
 
-    /// Makes the `appendedText` snapshots and blurs it with the initial `UX.blurRadius`, then starts the ramp on the blurred image.
+    /// Makes the `appendedText` snapshots and blurs it with the initial `UX.blurRadius`
+    /// then starts the ramp on the blurred image.
     private func startBlurRamp(of appendedText: NSAttributedString) {
         stopBlurRamp()
         appendedTextSnapshot = snapshot(of: appendedText)
