@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 
-
 class ResetOnboardingDripSetting: HiddenSetting {
     private weak var settingsDelegate: SharedSettingsDelegate?
 
