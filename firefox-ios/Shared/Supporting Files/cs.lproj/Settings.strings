@@ -184,6 +184,9 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Automatické přehrávání";
 
+/* VoiceOver custom action name for a settings row's Learn More link. */
+"Settings.BoolSetting.LearnMoreAction.v157" = "Zjistit více";
+
 /* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
 "Settings.Browsing.AdBlocker.Description.v155" = "Omezuje reklamy a sledovací prvky související s reklamami. Pokud se stránka nezobrazuje správně, zkuste tuto funkci vypnout.";
 

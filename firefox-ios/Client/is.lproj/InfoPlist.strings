@@ -22,6 +22,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Hér getur þú vistað myndir.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Þetta gerir Firefox kleift að umrita hljóðið þitt.";
+
 /* (No Comment) */
 "Scan QR Code" = "Skanna QR-kóða";
 
