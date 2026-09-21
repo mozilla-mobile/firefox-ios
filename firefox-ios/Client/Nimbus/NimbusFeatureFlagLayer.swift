@@ -182,6 +182,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .tabScrollRefactorFeature:
             return checkTabScrollRefactorFeature()
 
+        case .tabTrayButtonScreenshot:
+            return checkTabTrayButtonScreenshotFeature()
+
         case .tabTrayiPadUIExperiments:
             return checkTabTrayiPadUIExperiments()
 
@@ -265,6 +268,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkTabScrollRefactorFeature() -> Bool {
         return nimbus.features.tabScrollRefactorFeature.value().enabled
+    }
+
+    private func checkTabTrayButtonScreenshotFeature() -> Bool {
+        return nimbus.features.toolbarRefactorFeature.value().tabTrayButtonType == .screenshot
     }
 
     private func checkTabTrayiPadUIExperiments() -> Bool {
