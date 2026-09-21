@@ -17,7 +17,8 @@ final class TranscriptLabel: UILabel {
         static let blurRadius: CGFloat = 5.0
         /// The padding around the snapshot, so the blur isn't clipped by the snapshot bounds.
         static let blurPadding = blurRadius * 3.0
-        static let blurredTextRevealRelativeDuration: TimeInterval = 1.0
+        /// The ramp is rounded to this step to avoid useless blur re compute.
+        static let blurRadiusStep: CGFloat = 1
     }
 
     /// Overlays the label with the appended characters only, so they animate on their own while
@@ -29,6 +30,7 @@ final class TranscriptLabel: UILabel {
     private var appendedTextSnapshot: UIImage?
     private var blurDisplayLink: CADisplayLink?
     private var blurStartTimestamp: CFTimeInterval = 0
+    private var lastRenderedRadius: CGFloat = -1
     /// The last transcript reported by the transcriber.
     private var transcript = ""
     /// The part of `transcript` that has already been animated in.
@@ -91,8 +93,7 @@ final class TranscriptLabel: UILabel {
         attributedText = attributedTranscript(hiding: appendedRange)
         let appendedText = attributedTranscript(hiding: NSRange(location: 0, length: appendedRange.location))
         startBlurRamp(of: appendedText)
-        blurredTextView.alpha = 0.1
-        
+
         UIView.animate(withDuration: UX.animationDuration, delay: 0.0, options: .curveEaseIn) { [self] in
             blurredTextView.transform = .identity
             blurredTextView.alpha = 1.0
@@ -119,16 +120,18 @@ final class TranscriptLabel: UILabel {
         text = transcript
     }
 
+    /// Makes the `appendedText` snapshots and blurs it with the initial `UX.blurRadius`, then starts the ramp on the blurred image.
     private func startBlurRamp(of appendedText: NSAttributedString) {
         stopBlurRamp()
         appendedTextSnapshot = snapshot(of: appendedText)
         blurredTextView.image = blurred(appendedTextSnapshot, radius: UX.blurRadius)
+        lastRenderedRadius = UX.blurRadius
         // The snapshot is padded on every side, so it's offset to overlap the text it blurs.
         blurredTextView.frame = CGRect(
             origin: CGPoint(x: -UX.blurPadding, y: -UX.blurPadding),
             size: appendedTextSnapshot?.size ?? .zero
         )
-        blurredTextView.alpha = 0.0
+        blurredTextView.alpha = 0.1
         blurredTextView.transform = CGAffineTransform(translationX: 0.0, y: UX.chunkInitialOffset)
 
         let displayLink = CADisplayLink(target: self, selector: #selector(updateBlurRamp))
@@ -142,7 +145,12 @@ final class TranscriptLabel: UILabel {
             blurStartTimestamp = displayLink.timestamp
         }
         let progress = min((displayLink.timestamp - blurStartTimestamp) / UX.animationDuration, 1.0)
-        blurredTextView.image = blurred(appendedTextSnapshot, radius: UX.blurRadius * (1.0 - progress))
+        // Calculate the new blur radius based on the progress and normalize it with the step.
+        let radius = (UX.blurRadius * (1.0 - progress) / UX.blurRadiusStep).rounded() * UX.blurRadiusStep
+        if radius != lastRenderedRadius {
+            lastRenderedRadius = radius
+            blurredTextView.image = blurred(appendedTextSnapshot, radius: radius)
+        }
         if progress >= 1.0 {
             stopBlurRamp()
         }
@@ -180,7 +188,7 @@ final class TranscriptLabel: UILabel {
         return UIImage(cgImage: blurredImage, scale: image.scale, orientation: .up)
     }
 
-    private func attributedTranscript(hiding range: NSRange, alpha: CGFloat = 1.0) -> NSAttributedString {
+    private func attributedTranscript(hiding range: NSRange) -> NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = textAlignment
         var attributes: [NSAttributedString.Key: Any] = [.paragraphStyle: paragraphStyle]
@@ -188,7 +196,7 @@ final class TranscriptLabel: UILabel {
             attributes[.font] = font
         }
         if let textColor {
-            attributes[.foregroundColor] = textColor.withAlphaComponent(alpha)
+            attributes[.foregroundColor] = textColor
         }
         let attributedString = NSMutableAttributedString(string: transcript, attributes: attributes)
         attributedString.addAttribute(.foregroundColor, value: UIColor.clear, range: range)
