@@ -371,7 +371,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .stopLoading)
-        XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
+        XCTAssertEqual(newState.navigationActions.count, 0)
         // Still on the website loaded by loadWebsiteAction above, so share stays visible.
         XCTAssertEqual(newState.leadingPageActions.count, 1)
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
@@ -395,24 +395,24 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
-        XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
+        XCTAssertEqual(newState.navigationActions.count, 0)
         // Still on the website loaded by loadWebsiteAction above, so share stays visible.
         XCTAssertEqual(newState.leadingPageActions.count, 1)
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
     func test_websiteLoadingStateDidChangeAction_withouthNavigationToolbar_returnsExcpectedState() {
-        setupStore()
+        setupStore(with: initialToolbarState(isShowingNavigationToolbar: false))
 
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
         let urlDidChangeState = loadWebsiteAction(state: initialState,
+                                                  isShowingNavigationToolbar: false,
                                                   reducer: reducer)
         let newState = reducer.legacyReducer(
             urlDidChangeState,
             ToolbarAction(
-                isShowingNavigationToolbar: false,
                 isLoading: true,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.websiteLoadingStateDidChange
