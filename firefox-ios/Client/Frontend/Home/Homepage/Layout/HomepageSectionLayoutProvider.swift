@@ -146,6 +146,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 itemHeight: UX.MessageCardConstants.height,
                 bottomInsets: UX.spacingBetweenSections
             )
+        case .notificationCard:
+            return createSingleItemSectionLayout(
+                for: traitCollection,
+                topInsets: UX.standardInset,
+                bottomInsets: UX.spacingBetweenSections
+            )
         case .topSites(_, let numberOfTilesPerRow, let shouldShowSectionHeader):
             return createTopSitesSectionLayout(
                 for: traitCollection,

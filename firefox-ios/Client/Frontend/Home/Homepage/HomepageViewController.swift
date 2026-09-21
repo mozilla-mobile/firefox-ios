@@ -637,6 +637,10 @@ final class HomepageViewController: UIViewController,
             return configuredCell(cellType: PrivacyNoticeCell.self, at: indexPath) { cell in
                 configurePrivacyNoticeCell(cell: cell)
             }
+        case .notificationCard:
+            return configuredCell(cellType: NotificationCardCell.self, at: indexPath) { cell in
+                configureNotificationCardCell(cell: cell)
+            }
         case .messageCard(let config):
             return configuredCell(cellType: HomepageMessageCardCell.self, at: indexPath) { cell in
                 cell.configure(with: config, windowUUID: windowUUID, theme: currentTheme)
@@ -708,6 +712,16 @@ final class HomepageViewController: UIViewController,
                            self?.dispatchPrivacyNoticeLinkTapped(url: url)
                        }
         )
+    }
+
+    private func configureNotificationCardCell(cell: NotificationCardCell) {
+        cell.configure(theme: currentTheme,
+                       enableButtonAction: { [weak self] in
+                           self?.dispatchNotificationCardEnableButtonTapped()
+                       },
+                       closeButtonAction: { [weak self] in
+                           self?.dispatchNotificationCardCloseButtonTapped()
+                       })
     }
 
     private func configureSyncedTabCell(
@@ -1131,6 +1145,24 @@ final class HomepageViewController: UIViewController,
             HomepageAction(
                 windowUUID: self.windowUUID,
                 actionType: HomepageActionType.privacyNoticeCloseButtonTapped
+            )
+        )
+    }
+
+    private func dispatchNotificationCardEnableButtonTapped() {
+        store.dispatch(
+            HomepageAction(
+                windowUUID: self.windowUUID,
+                actionType: HomepageActionType.notificationCardEnableButtonTapped
+            )
+        )
+    }
+
+    private func dispatchNotificationCardCloseButtonTapped() {
+        store.dispatch(
+            HomepageAction(
+                windowUUID: self.windowUUID,
+                actionType: HomepageActionType.notificationCardCloseButtonTapped
             )
         )
     }
