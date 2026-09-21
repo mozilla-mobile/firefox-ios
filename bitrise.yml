@@ -213,7 +213,7 @@ workflows:
         timeout: 1800
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -parallel-testing-enabled YES -maximum-parallel-testing-workers 2'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator27.0-arm64.xctestrun
         - maximum_test_repetitions: 2
         - test_repetition_mode: retry_on_failure
