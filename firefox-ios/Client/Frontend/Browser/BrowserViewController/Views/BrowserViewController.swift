@@ -324,7 +324,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isHomepageSearchBarEnabled: Bool {
-        return featureFlagsProvider.isEnabled(.homepageSearchBar)
+        return featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearch)
     }
 
     var isSummarizerToolbarFeatureEnabled: Bool {
@@ -1342,7 +1342,7 @@ class BrowserViewController: UIViewController,
     /// As part of the homepage search bar work, we want to only hide the toolbar when the homepage search bar appears.
     /// The homepage search bar should not appear if we are in editing mode.
     private func shouldHideAddressToolbar() {
-        guard featureFlagsProvider.isEnabled(.homepageSearchBar) else { return }
+        guard featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearch) else { return }
         let toolbarState = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,

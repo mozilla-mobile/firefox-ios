@@ -114,7 +114,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
         and isLandscape: Bool = UIWindow.isLandscape
     ) -> Bool {
-        let isHomepageSearchEnabled = featureFlagsProvider.isEnabled(.homepageSearchBar)
+        let isHomepageSearchEnabled = featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearch)
         let isCompact = device == .phone && !isLandscape
 
         guard isHomepageSearchEnabled, isCompact else {
