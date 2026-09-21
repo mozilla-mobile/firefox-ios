@@ -26,7 +26,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         $0.textAlignment = .center
         $0.adjustsFontForContentSizeCategory = true
     }
-    private let transcriptLabel: UILabel = .build {
+    private let transcriptLabel: TranscriptLabel = .build {
         $0.font = FXFontStyles.Regular.title2.scaledFont()
         $0.numberOfLines = 0
         $0.adjustsFontForContentSizeCategory = true
@@ -173,16 +173,10 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         // if the placeholder is visible then hide it before adding text to the transcription label.
         // This is needed to don't overlap the show of the transcription with the placeholder label
         guard placeholderLabel.alpha == 1.0 else {
-            UIView.transition(
-                with: transcriptLabel,
-                duration: UX.animationDuration,
-                options: .transitionCrossDissolve
-            ) { [self] in
-                transcriptLabel.text = text
-            }
+            transcriptLabel.setTranscript(text, animated: true)
             return
         }
-        transcriptLabel.text = text
+        transcriptLabel.setTranscript(text, animated: false)
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             placeholderLabel.alpha = 0.0
         }
