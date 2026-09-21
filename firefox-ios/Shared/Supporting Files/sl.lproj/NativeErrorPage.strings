@@ -40,6 +40,12 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v155" = "Poskusi znova";
 
+/* On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.Description.v156" = "Povežite se z omrežjem Wi‑Fi ali v nastavitvah sistema iOS vklopite mobilne podatke za %@.";
+
+/* On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "Mobilna podatkovna povezava je izklopljena za %@.";
+
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Strani %@ lastnik ni pravilno nastavil, zato ni mogoče vzpostaviti varne povezave.";
 

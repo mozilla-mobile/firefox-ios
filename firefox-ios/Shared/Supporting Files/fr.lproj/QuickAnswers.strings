@@ -8,7 +8,7 @@
 "QuickAnswers.ContentView.Answering.v158" = "Réponse…";
 
 /* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
-"QuickAnswers.ContentView.Footer.v158" = "Mis en avant par %@ · Les réponses peuvent contenir des erreurs.";
+"QuickAnswers.ContentView.Footer.v158" = "Rendu possible par %@ · Les réponses peuvent contenir des erreurs.";
 
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "Posez n’importe quelle question…";
@@ -56,11 +56,11 @@
 "QuickAnswers.OptIn.LearnMore.v158" = "En savoir plus";
 
 /* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
-"QuickAnswers.OptIn.Title.v158" = "Demandez avec votre voix";
+"QuickAnswers.OptIn.Title.v158" = "Posez vos questions à voix haute";
 
 /* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
 "QuickAnswers.Tip.Message.v158" = "Appuyez ici pour commencer.";
 
 /* Title of the tooltip that introduces the Quick Answers feature on the homepage. */
-"QuickAnswers.Tip.Title.v158" = "Demander à haute voix des réponses rapides";
+"QuickAnswers.Tip.Title.v158" = "Posez vos questions à voix haute pour obtenir des réponses rapides";
 

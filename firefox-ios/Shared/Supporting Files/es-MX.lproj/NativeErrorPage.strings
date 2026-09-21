@@ -37,6 +37,15 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Recargar";
 
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v155" = "Reintentar";
+
+/* On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.Description.v156" = "Conéctate a una red Wi-Fi o ve a ajustes de iOS y activa los datos móviles para %@.";
+
+/* On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "Los datos móviles están desactivados para %@.";
+
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "La persona propietaria de %@ no lo ha configurado correctamente y no se puede crear una conexión segura.";
 
@@ -51,6 +60,9 @@
 
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Parece que hay un problema con tu conexión a Internet.";
+
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v155" = "Revisando el archivo…";
 
 /* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.Wayback.Error.Description.v154" = "Es posible que el sitio esté sobrecargado o no esté disponible. Inténtalo de nuevo más tarde. Si tienes problemas al cargar otras páginas, comprueba tu conexión Wi-Fi o tu red de datos. %@ puede buscar una versión anterior de esta página usando Wayback Machine.";

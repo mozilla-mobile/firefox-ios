@@ -28,6 +28,9 @@
 /* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no issue type has been selected yet, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint.v156" = "Najprej izberite vrsto težave";
 
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156" = "Izberite določeno težavo za izbrano vrsto težave";
+
 /* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "Podrobneje opišite težavo";
 
