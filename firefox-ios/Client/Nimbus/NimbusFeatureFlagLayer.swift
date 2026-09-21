@@ -182,11 +182,11 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .tabScrollRefactorFeature:
             return checkTabScrollRefactorFeature()
 
-        case .tabTrayButtonScreenshot:
-            return checkTabTrayButtonScreenshotFeature()
-
         case .tabTrayiPadUIExperiments:
             return checkTabTrayiPadUIExperiments()
+
+        case .tabTrayScreenshotButtonStyle:
+            return checkTabTrayScreenshotButtonStyleFeature()
 
         case .tabTrayTranslucency:
             return checkTabTrayTranslucencyFeature()
@@ -270,13 +270,13 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.tabScrollRefactorFeature.value().enabled
     }
 
-    private func checkTabTrayButtonScreenshotFeature() -> Bool {
-        return nimbus.features.toolbarRefactorFeature.value().tabTrayButtonType == .screenshot
-    }
-
     private func checkTabTrayiPadUIExperiments() -> Bool {
         let config = nimbus.features.tabTrayUiExperiments.value()
         return config.iPadUpdateEnabled
+    }
+
+    private func checkTabTrayScreenshotButtonStyleFeature() -> Bool {
+        return nimbus.features.toolbarRefactorFeature.value().tabTrayButtonType == .screenshot
     }
 
     private func checkTabTrayTranslucencyFeature() -> Bool {

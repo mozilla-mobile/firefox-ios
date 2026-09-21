@@ -89,7 +89,7 @@ final class ToolbarMiddleware {
 
             let toolbarConfig = FxNimbus.shared.features.toolbarRefactorFeature.value()
             let toolbarLayout = ToolbarLayoutStyle.style(from: toolbarConfig.layout)
-            let tabTrayButtonStyle: TabTrayButtonStyle = featureFlagsProvider.isEnabled(.tabTrayButtonScreenshot)
+            let tabTrayButtonStyle: TabTrayButtonStyle = featureFlagsProvider.isEnabled(.tabTrayScreenshotButtonStyle)
                 ? .screenshot
                 : .number
             let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)

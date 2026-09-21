@@ -312,8 +312,8 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .tabTrayButtonScreenshot,
-                titleText: format(string: "Tab Tray Screenshot Button"),
+                with: .tabTrayScreenshotButtonStyle,
+                titleText: format(string: "Tab Tray Screenshot Button Style"),
                 statusText: format(string: "Toggle to use the screenshot style tab tray button in the toolbar")
             ) { [weak self] _ in
                 self?.reloadView()
