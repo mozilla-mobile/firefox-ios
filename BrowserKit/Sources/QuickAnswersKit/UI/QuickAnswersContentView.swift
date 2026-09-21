@@ -176,7 +176,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             transcriptLabel.setTranscript(text, animated: true)
             return
         }
-        transcriptLabel.setTranscript(text, animated: false)
+        transcriptLabel.setTranscript(text, animated: true)
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             placeholderLabel.alpha = 0.0
         }
@@ -218,7 +218,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         self.theme = theme
         audioWaveform.applyTheme(theme: theme)
         placeholderLabel.textColor = theme.colors.textSecondary
-        transcriptLabel.textColor = theme.colors.textPrimary
+        transcriptLabel.foregroundColor = theme.colors.textPrimary
         searchingLabel.textColor = theme.colors.textSecondary
         answerLabel.textColor = theme.colors.textPrimary
         footerLabel.textColor = theme.colors.textSecondary

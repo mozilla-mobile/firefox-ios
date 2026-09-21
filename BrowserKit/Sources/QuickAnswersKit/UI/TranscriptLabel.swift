@@ -52,6 +52,12 @@ final class TranscriptLabel: UILabel {
         return NSRange(location: location, length: currentTranscript.length - location)
     }
 
+    /// The text color for this label.
+    ///
+    /// This property is needed since when applying custom attributed strings the value of `textColor` is not preserved
+    /// and thus we need to save it in a separate variable.
+    var foregroundColor: UIColor = .clear
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -117,7 +123,7 @@ final class TranscriptLabel: UILabel {
         stopBlurRamp()
         revealedTranscript = transcript
         blurredTextView.image = nil
-        text = transcript
+        attributedText = attributedTranscript(hiding: NSRange(location: 0, length: 0))
     }
 
     /// Makes the `appendedText` snapshots and blurs it with the initial `UX.blurRadius`
@@ -196,9 +202,7 @@ final class TranscriptLabel: UILabel {
         if let font {
             attributes[.font] = font
         }
-        if let textColor {
-            attributes[.foregroundColor] = textColor
-        }
+        attributes[.foregroundColor] = foregroundColor
         let attributedString = NSMutableAttributedString(string: transcript, attributes: attributes)
         attributedString.addAttribute(.foregroundColor, value: UIColor.clear, range: range)
         return attributedString
