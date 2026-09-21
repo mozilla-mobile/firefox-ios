@@ -669,9 +669,7 @@ class SearchTests: FeatureFlaggedTestBase {
         launchWithFirefoxSuggestRollout()
 
         // Step 1: Type a keyword that trigers a sponsored result
-        browserScreen.tapOnAddressBar()
-        browserScreen.tapClearButtonIfExists()
-        browserScreen.typeOnSearchBar(text: "Amazon")
+        browserScreen.searchFromAddressBar(term: "Amazon")
 
         // Step 2: Sponsored result should be specified
         browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
@@ -688,9 +686,7 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.goto(TabTray)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.goto(NewTabScreen)
-        browserScreen.tapOnAddressBar()
-        browserScreen.tapClearButtonIfExists()
-        browserScreen.typeOnSearchBar(text: "Amazon")
+        browserScreen.searchFromAddressBar(term: "Amazon")
         browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: false)
     }
 
