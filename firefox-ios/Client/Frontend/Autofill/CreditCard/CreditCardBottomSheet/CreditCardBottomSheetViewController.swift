@@ -319,7 +319,7 @@ class CreditCardBottomSheetViewController: UIViewController,
         ) as? HostingTableViewCell<CreditCardItemRow>,
               let creditCard = viewModel.getConvertedCreditCardValues(
                 bottomSheetState: viewModel.state,
-                ccNumberDecrypted: viewModel.decryptCreditCardNumber(card: viewModel.creditCard),
+                ccNumberDecrypted: viewModel.decryptedCardNumber,
                 row: indexPath.row
               )
         else { return UITableViewCell() }
@@ -390,19 +390,22 @@ class CreditCardBottomSheetViewController: UIViewController,
     }
 
     func handleCreditCardSelection(row: Int) {
-        guard let plainTextCreditCard = viewModel.getPlainCreditCardValues(
+        viewModel.getPlainCreditCardValues(
             bottomSheetState: .selectSavedCard,
             row: row
-        ) else {
-            // A nil means the card couldn't be decrypted. The Keychain key is unavailable.
-            logger.log("Credit card autofill selection failed: unable to decrypt selected card.",
-                       level: .warning,
-                       category: .autofill)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillFailed)
-            return
+        ) { [weak self] plainTextCreditCard in
+            guard let self else { return }
+            guard let plainTextCreditCard else {
+                // A nil means the card couldn't be decrypted. The Keychain key is unavailable.
+                self.logger.log("Credit card autofill selection failed: unable to decrypt selected card.",
+                                level: .fatal,
+                                category: .autofill)
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillFailed)
+                return
+            }
+            self.didSelectCreditCardToFill?(plainTextCreditCard)
+            self.dismissVC()
         }
-        didSelectCreditCardToFill?(plainTextCreditCard)
-        dismissVC()
     }
 
     // MARK: Themable
