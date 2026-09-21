@@ -171,7 +171,6 @@
         "NavigationTest\/testPopUpBlocker_tabTrayExperimentOff()",
         "NavigationTest\/testPopUpBlocker_tabTrayExperimentOn()",
         "NavigationTest\/testReloadPreservesMobileOrDesktopSite()",
-        "NavigationTest\/testSSL()",
         "NavigationTest\/testToggleBetweenMobileAndDesktopSiteFromSite()",
         "NavigationTest\/testURLBar()",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowBlankPage_tabTrayExperimentOff()",
