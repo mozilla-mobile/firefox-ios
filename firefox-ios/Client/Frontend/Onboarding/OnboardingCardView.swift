@@ -5,6 +5,7 @@
 import SwiftUI
 import UIKit
 import Common
+import Shared
 
 /// View that presents the day's onboarding cards
 struct OnboardingFlowView: View {
@@ -128,7 +129,7 @@ struct OnboardingCardView: View {
     }
 
     private var titleText: some View {
-        Text(card.title.replaceFirstOccurrence(of: "%@", with: "Firefox"))
+        Text(card.title.replaceFirstOccurrence(of: "%@", with: AppName.shortName.rawValue))
             .font(FXFontStyles.Bold.largeTitle.scaledSwiftUIFont())
             .foregroundColor(theme.colors.textPrimary.color)
             .multilineTextAlignment(.center)
@@ -140,7 +141,7 @@ struct OnboardingCardView: View {
     }
 
     private var bodyText: some View {
-        Text(card.body.replaceFirstOccurrence(of: "%@", with: "Firefox"))
+        Text(card.body.replaceFirstOccurrence(of: "%@", with: AppName.shortName.rawValue))
             .font(FXFontStyles.Regular.title2.scaledSwiftUIFont())
             .foregroundColor(theme.colors.textSecondary.color)
             .multilineTextAlignment(.center)
