@@ -152,9 +152,3 @@ extension AppDelegate {
         NimbusWrapper.shared.initialize()
     }
 }
-
-protocol ModalDelegate: AnyObject {
-    func presentModal(viewController: UIViewController, animated: Bool)
-    func presentSheet(viewController: UIViewController)
-    func dismiss(animated: Bool)
-}

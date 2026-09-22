@@ -9,6 +9,24 @@ import Onboarding
 import Shared
 import UIKit
 
+protocol ModalDelegate: AnyObject {
+    func presentModal(viewController: UIViewController, animated: Bool)
+    func presentSheet(viewController: UIViewController)
+    func dismiss(animated: Bool)
+}
+
+// This enum can be expanded to support all new shortcuts added to menu.
+enum ShortcutIdentifier: String {
+    case EraseAndOpen
+    init?(fullIdentifier: String) {
+        guard let shortIdentifier = fullIdentifier.components(separatedBy: ".").last else {
+            return nil
+        }
+
+        self.init(rawValue: shortIdentifier)
+    }
+}
+
 enum AppPhase {
     case notRunning
     case didFinishLaunching
@@ -16,44 +34,44 @@ enum AppPhase {
     case didBecomeActive
     case willResignActive
     case didEnterBackground
-    case willTerminate
 }
 
-/// Owns the window Focus presents and everything scoped to it: the root `BrowserViewController`,
-/// biometric authentication, the privacy overlay, and the routing of URLs, quick actions and Siri
-/// activities into the browser. Process-wide setup stays in `AppDelegate`.
+/// Owns everything scoped to Focus's single window. Process-wide setup stays in `AppDelegate`.
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
-    // This enum can be expanded to support all new shortcuts added to menu.
-    enum ShortcutIdentifier: String {
-        case EraseAndOpen
-        init?(fullIdentifier: String) {
-            guard let shortIdentifier = fullIdentifier.components(separatedBy: ".").last else {
-                return nil
-            }
-            self.init(rawValue: shortIdentifier)
-        }
-    }
-
     var window: UIWindow?
 
     @Published private var appPhase: AppPhase = .notRunning
 
-    private lazy var authenticationManager = AuthenticationManager()
+    private let authenticationManager = AuthenticationManager()
     private let themeManager = ThemeManager()
     private let gleanUsageReportingMetricsService = GleanUsageReportingMetricsService()
-    private lazy var shortcutManager = ShortcutsManager()
+    private let shortcutManager = ShortcutsManager()
     private var cancellables = Set<AnyCancellable>()
+    private var authenticationTask: Task<Void, Never>?
     private var queuedUrl: URL?
     private var queuedString: String?
     private var isWidgetURL = false
 
     private lazy var onboardingEventsHandler: OnboardingEventsHandling = {
-        var shouldShowNewOnboarding: () -> Bool = { [unowned self] in
+        let shouldShowNewOnboarding: () -> Bool = {
             !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
         }
         guard !AppInfo.isTesting() else { return TestOnboarding() }
         return OnboardingFactory.makeOnboardingEventsHandler(shouldShowNewOnboarding)
     }()
+
+    private lazy var privacyProtectionWindowManager = PrivacyProtectionWindowManager(
+        privacyWindowFactory: { [weak self] in
+            guard let windowScene = self?.window?.windowScene else { return nil }
+            return UIWindow(windowScene: windowScene)
+        },
+        mainWindowProvider: { [weak self] in self?.window },
+        // Captures the manager rather than self: the factory returns a non-optional
+        // view controller, so it cannot bail out on a deallocated scene delegate.
+        rootViewControllerFactory: { [authenticationManager] in
+            SplashViewController(authenticationManager: authenticationManager)
+        }
+    )
 
     private lazy var browserViewController = BrowserViewController(
         shortcutManager: shortcutManager,
@@ -70,7 +88,10 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
-        guard let windowScene = scene as? UIWindowScene else { return }
+        guard let windowScene = scene as? UIWindowScene else {
+            assertionFailure("Focus connected to a scene that is not a UIWindowScene")
+            return
+        }
 
         appPhase = .didFinishLaunching
         observeAppPhase()
@@ -83,14 +104,10 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
         window.overrideUserInterfaceStyle = themeManager.selectedTheme
         self.window = window
 
-        startUsageReporting()
+        recordStartupTelemetry()
 
-        if AppInfo.isTesting() {
-            // Only show the First Run UI if the test asks for it.
-            if AppInfo.isFirstRunUIEnabled() {
-                onboardingEventsHandler.send(.applicationDidLaunch)
-            }
-        } else {
+        // Under test the First Run UI only appears when the test asks for it.
+        if !AppInfo.isTesting() || AppInfo.isFirstRunUIEnabled() {
             onboardingEventsHandler.send(.applicationDidLaunch)
         }
 
@@ -99,11 +116,11 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
         }
 
         if let shortcutItem = connectionOptions.shortcutItem {
-            _ = handleShortcut(shortcutItem: shortcutItem)
+            _ = handle(shortcutItem: shortcutItem)
         }
 
         if let userActivity = connectionOptions.userActivities.first {
-            _ = handle(userActivity: userActivity)
+            handle(userActivity: userActivity)
         }
     }
 
@@ -129,17 +146,11 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
         }
 
         if let url = queuedUrl {
-            browserViewController.ensureBrowsingMode()
-            browserViewController.deactivateUrlBarOnHomeView()
-            browserViewController.dismissSettings()
-            browserViewController.dismissActionSheet()
+            prepareForQueuedNavigation()
             browserViewController.submit(url: url, source: .action)
             queuedUrl = nil
         } else if let text = queuedString {
-            browserViewController.ensureBrowsingMode()
-            browserViewController.deactivateUrlBarOnHomeView()
-            browserViewController.dismissSettings()
-            browserViewController.dismissActionSheet()
+            prepareForQueuedNavigation()
 
             if let fixedUrl = URIFixup.getURL(entry: text) {
                 browserViewController.submit(url: fixedUrl, source: .action)
@@ -151,6 +162,13 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
         }
     }
 
+    private func prepareForQueuedNavigation() {
+        browserViewController.ensureBrowsingMode()
+        browserViewController.deactivateUrlBarOnHomeView()
+        browserViewController.dismissSettings()
+        browserViewController.dismissActionSheet()
+    }
+
     func sceneWillResignActive(_ scene: UIScene) {
         appPhase = .willResignActive
         browserViewController.dismissActionSheet()
@@ -159,10 +177,14 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        // This gets called every time the app goes to background but should not get
-        // called for *temporary* interruptions such as an incoming phone call until the user
-        // takes action and we are officially backgrounded.
+        // Temporary interruptions such as an incoming call land in sceneWillResignActive
+        // instead; this only fires once the scene is genuinely backgrounded.
         appPhase = .didEnterBackground
+    }
+
+    func sceneDidDisconnect(_ scene: UIScene) {
+        authenticationTask?.cancel()
+        cancellables.removeAll()
     }
 
     // MARK: - Routing
@@ -178,19 +200,18 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
         performActionFor shortcutItem: UIApplicationShortcutItem,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        completionHandler(handleShortcut(shortcutItem: shortcutItem))
+        completionHandler(handle(shortcutItem: shortcutItem))
     }
 
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        _ = handle(userActivity: userActivity)
+        handle(userActivity: userActivity)
     }
 
-    @discardableResult
-    private func handle(url: URL) -> Bool {
-        guard let navigation = NavigationPath(url: url) else { return false }
+    private func handle(url: URL) {
+        guard let navigation = NavigationPath(url: url) else { return }
         if navigation == .widget {
             isWidgetURL = true
-            return false
+            return
         }
         let navigationHandler = NavigationPath.handle(
             UIApplication.shared,
@@ -203,11 +224,9 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
         } else if case .url = navigation {
             queuedUrl = navigationHandler as? URL
         }
-
-        return true
     }
 
-    private func handleShortcut(shortcutItem: UIApplicationShortcutItem) -> Bool {
+    private func handle(shortcutItem: UIApplicationShortcutItem) -> Bool {
         let shortcutType = shortcutItem.type
         guard let shortcutIdentifier = ShortcutIdentifier(fullIdentifier: shortcutType) else {
             return false
@@ -222,7 +241,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
         return true
     }
 
-    private func handle(userActivity: NSUserActivity) -> Bool {
+    private func handle(userActivity: NSUserActivity) {
         browserViewController.photonActionSheetDidDismiss()
         browserViewController.navigationController?.popViewController(animated: true)
 
@@ -232,25 +251,25 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
             GleanMetrics.Siri.eraseAndOpen.record()
         case "org.mozilla.ios.Klar.openUrl":
             guard let urlString = userActivity.userInfo?["url"] as? String,
-                let url = URL(string: urlString, invalidCharacters: false) else { return false }
+                let url = URL(string: urlString, invalidCharacters: false) else { return }
             browserViewController.resetBrowser(hidePreviousSession: true)
             browserViewController.ensureBrowsingMode()
             browserViewController.deactivateUrlBarOnHomeView()
             browserViewController.submit(url: url, source: .action)
             GleanMetrics.Siri.openFavoriteSite.record()
         case "EraseIntent":
-            guard userActivity.interaction?.intent is EraseIntent else { return false }
+            guard userActivity.interaction?.intent is EraseIntent else { return }
             browserViewController.resetBrowser()
             GleanMetrics.Siri.eraseInBackground.record()
         default: break
         }
-        return true
     }
 
     // MARK: - Authentication
 
     private func observeAppPhase() {
-        $appPhase.sink { [unowned self] phase in
+        $appPhase.sink { [weak self] phase in
+            guard let self else { return }
             switch phase {
             case .didFinishLaunching, .willEnterForeground:
                 authenticateWithBiometrics()
@@ -266,7 +285,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
             case .didEnterBackground:
                 authenticationManager.logout()
 
-            case .notRunning, .willTerminate:
+            case .notRunning:
                 break
             }
         }
@@ -277,13 +296,14 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
         authenticationManager
             .$authenticationState
             .receive(on: DispatchQueue.main)
-            .sink { state in
+            .sink { [weak self] state in
+                guard let self else { return }
                 switch state {
                 case .loggedin:
-                    self.hidePrivacyProtectionWindow()
+                    hidePrivacyProtectionWindow()
 
                 case .loggedout:
-                    self.showPrivacyProtectionWindow()
+                    showPrivacyProtectionWindow()
 
                 case .canceled:
                     break
@@ -293,16 +313,17 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
     }
 
     private func authenticateWithBiometrics() {
-        Task {
-            await authenticationManager.authenticateWithBiometrics()
+        authenticationTask?.cancel()
+        authenticationTask = Task { [weak self] in
+            await self?.authenticationManager.authenticateWithBiometrics()
         }
     }
 
     // MARK: - Telemetry
 
-    /// Usage reporting owns the same service instance the settings screen toggles, so it is started
-    /// once the browser that carries it down to settings exists.
-    private func startUsageReporting() {
+    /// Runs once the browser exists, because the usage-reporting service started here is the same
+    /// instance the settings screen later toggles on and off.
+    private func recordStartupTelemetry() {
         GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(shortcutManager.shortcutsViewModels.count))
 
         if TelemetryManager.shared.isNewTosEnabled {
@@ -313,17 +334,6 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, ModalDelegate {
     }
 
     // MARK: - Privacy Protection
-
-    private lazy var privacyProtectionWindowManager = PrivacyProtectionWindowManager(
-        privacyWindowFactory: { [unowned self] in
-            guard let windowScene = window?.windowScene else { return nil }
-            return UIWindow(windowScene: windowScene)
-        },
-        mainWindowProvider: { [unowned self] in window },
-        rootViewControllerFactory: { [unowned self] in
-            SplashViewController(authenticationManager: authenticationManager)
-        }
-    )
 
     private func showPrivacyProtectionWindow() {
         browserViewController.deactivateUrlBarOnHomeView()
