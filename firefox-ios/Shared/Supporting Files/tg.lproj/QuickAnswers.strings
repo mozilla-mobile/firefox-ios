@@ -1,0 +1,30 @@
+/* Accessibility label for the close button on the Quick Answers screen. */
+"QuickAnswers.AccessibilityLabels.Close.v158" = "Пӯшидан";
+
+/* Accessibility label for the button on the homepage that opens the Quick Answers feature. */
+"QuickAnswers.AccessibilityLabels.OpenQuickAnswers.v158" = "Кушодани «Ҷавобҳои фаврӣ»";
+
+/* Loading label shown in the Quick Answers view while an answer is being fetched. */
+"QuickAnswers.ContentView.Answering.v158" = "Ҷавоб медиҳад…";
+
+/* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
+"QuickAnswers.ContentView.Footer.v158" = "Аз ҷониби «%@» таҳия карда шудааст. Ҷавобҳо метавонанд хатоҳоро дар бар гиранд.";
+
+/* Header label for the sources section shown below a Quick Answers result. */
+"QuickAnswers.ContentView.Sources.v158" = "Манбаъҳо";
+
+/* Button label on the Quick Answers permission alert to dismiss the alert without taking action. */
+"QuickAnswers.Errors.Cancel.v158" = "Бекор кардан";
+
+/* Button label to dismiss the Quick Answers error alert. */
+"QuickAnswers.Errors.OK.v158" = "Хуб";
+
+/* Button label on the permission alert that opens the iOS Settings app so the user can grant permissions. */
+"QuickAnswers.Errors.OpenSettings.v158" = "Кушодани танзимот";
+
+/* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
+"QuickAnswers.OptIn.ContinueButton.v158" = "Идома додан";
+
+/* Link text on the Quick Answers opt-in screen that opens more information about the feature. */
+"QuickAnswers.OptIn.LearnMore.v158" = "Маълумоти бештар";
+

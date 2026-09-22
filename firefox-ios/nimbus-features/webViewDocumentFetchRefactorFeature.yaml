@@ -1,0 +1,18 @@
+# The configuration for the webViewDocumentFetchRefactorFeature feature
+features:
+  web-view-document-fetch-refactor-feature:
+    description: >
+      Determines whether we read PDF and document data for sharing directly from the authenticated WebView, rather than re-downloading via URLSession.
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true

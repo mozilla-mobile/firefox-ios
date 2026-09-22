@@ -27,6 +27,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864049
+    // Regression
     func testShareNormalWebsitePrint() {
         app.launch()
         reachShareMenuLayoutAndSelectOption(option: "Print")
@@ -34,6 +35,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864047
+    // Regression
     func testShareNormalWebsiteSendLinkToDevice() {
         app.launch()
         reachShareMenuLayoutAndSelectOption(option: "Send Link to Device")
@@ -55,6 +57,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864046
+    // Regression
     func testShareNormalWebsiteCopyUrl() {
         app.launch()
         reachShareMenuLayoutAndSelectOption(option: "Copy")
@@ -128,6 +131,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864065
+    // Regression
     func testSharePdfFilePrint() {
         app.launch()
         reachShareMenuLayoutAndSelectOption(option: "Print", url: pdfUrl)
@@ -142,6 +146,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864066
+    // Regression
     func testSharePdfFileSaveToFile() {
         app.launch()
         if #available(iOS 17, *) {

@@ -4,6 +4,7 @@
 
 import Common
 import ComponentLibrary
+import Glean
 import MozillaAppServices
 import Redux
 import SwiftUI
@@ -299,6 +300,44 @@ final class BrowserCoordinatorTests: XCTestCase,
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is TrackerBlockerSheetViewController)
+    }
+
+    func testShowTrackerBlockerSheet_whenAddressBarIsEditing_releasesKeyboard() throws {
+        setupStoreWithAddressBar(isEditing: true)
+        let subject = createSubject()
+
+        subject.showTrackerBlockerSheet()
+
+        let actions = mockStore.dispatchedModernActions.compactMap { $0 as? ToolbarModernAction }
+        XCTAssertEqual(actions.count, 1)
+        guard case .didKeyboardRequestChange(let shouldShow) = try XCTUnwrap(actions.first) else {
+            XCTFail("Expected a didKeyboardRequestChange action")
+            return
+        }
+        XCTAssertFalse(shouldShow)
+    }
+
+    func testShowTrackerBlockerSheet_whenAddressBarIsNotEditing_doesNotReleaseKeyboard() {
+        setupStoreWithAddressBar(isEditing: false)
+        let subject = createSubject()
+
+        subject.showTrackerBlockerSheet()
+
+        XCTAssertTrue(mockStore.dispatchedModernActions.compactMap { $0 as? ToolbarModernAction }.isEmpty)
+    }
+
+    func testShowTrackerBlockerSheet_recordsDashboardViewed() throws {
+        typealias ExtraType = GleanMetrics.TrackerBlocker.DashboardViewedExtra
+        let subject = createSubject()
+
+        subject.showTrackerBlockerSheet()
+
+        let recorded = glean.savedExtras.compactMap { $0 as? ExtraType }
+        let savedExtras = try XCTUnwrap(recorded.first)
+        XCTAssertEqual(recorded.count, 1)
+        // Nothing has been blocked against the test profile, so the sheet opens empty and unbanded.
+        XCTAssertEqual(savedExtras.dashboardState, "empty")
+        XCTAssertNil(savedExtras.figures)
     }
 
     func testStartShareSheetCoordinator_addsShareSheetCoordinator() {
@@ -779,6 +818,23 @@ final class BrowserCoordinatorTests: XCTestCase,
 
         XCTAssertNotNil(termsOfUseLinkVC)
         XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
+    func testAskedToOpen_pushesSettingsContentViewController() throws {
+        let subject = createSubject()
+        let navigationController = UINavigationController()
+        let mockNavigationController = try XCTUnwrap(mockRouter.navigationController as? MockNavigationController)
+        mockNavigationController.presentedViewController = navigationController
+        let url = try XCTUnwrap(URL(string: "https://support.mozilla.org"))
+        let title = NSAttributedString(string: "Support")
+
+        subject.askedToOpen(url: url, withTitle: title)
+
+        let contentViewController = try XCTUnwrap(
+            navigationController.topViewController as? SettingsContentViewController
+        )
+        XCTAssertEqual(contentViewController.url, url)
+        XCTAssertEqual(contentViewController.settingsTitle, title)
     }
 
     func testPopToBVC_popsViewControllers() {
@@ -1267,6 +1323,21 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(browserViewController.presentSignInReferringPage, ReferringPage.none)
     }
 
+    func testHandleFxaPairingPresentsPairingFlow() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key&v=2"
+        )!
+
+        let result = testCanHandleAndHandle(subject, route: .fxaPairing(url: pairingURL))
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(browserViewController.presentPairingCount, 1)
+        XCTAssertEqual(browserViewController.presentPairingURL, pairingURL)
+    }
+
     // MARK: - App action route
 
     func testHandleClosePrivateTabs_returnsTrue() {
@@ -1628,6 +1699,24 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(browserViewController.handleQuery, "firefox")
     }
 
+    func testHandle_completesPendingDeeplinkTabActivity() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+        AppEventQueue.started(.pendingDeeplinkTab(windowUUID))
+        defer {
+            if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
+                AppEventQueue.completed(.pendingDeeplinkTab(windowUUID))
+            }
+        }
+        XCTAssertTrue(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
+
+        let route = Route.search(url: URL(string: "https://example.com")!, isPrivate: false)
+        subject.handle(route: route)
+
+        XCTAssertFalse(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
+    }
+
     // MARK: - StoreTestUtility
     func setupAppState() -> AppState {
         return AppState()
@@ -1635,6 +1724,23 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     func setupStore() {
         mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    private func setupStoreWithAddressBar(isEditing: Bool) {
+        var toolbarState = ToolbarState(windowUUID: windowUUID)
+        toolbarState.addressToolbar = toolbarState.addressToolbar
+            .copy(isEditing: isEditing)
+            .copy(shouldShowKeyboard: isEditing)
+
+        mockStore = MockStoreForMiddleware(state: AppState(
+            presentedComponents: PresentedComponentsState(
+                components: [
+                    .browserViewController(BrowserViewControllerState(windowUUID: windowUUID)),
+                    .toolbar(toolbarState)
+                ]
+            )
+        ))
         StoreTestUtilityHelper.setupStore(with: mockStore)
     }
 

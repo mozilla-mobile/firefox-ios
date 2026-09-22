@@ -1490,7 +1490,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         }
         let addressToolbar = AddressBarState(
             windowUUID: .XCTestDefaultUUID,
-            navigationActions: [],
+            navigationActionsState: NavigationActionsState(windowUUID: .XCTestDefaultUUID),
             leadingPageActions: [],
             trailingPageActions: [],
             browserActions: [],
@@ -1543,7 +1543,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
                             isTranslationsEnabled: true,
                             previousTabScreenshot: nil,
                             nextTabScreenshot: nil,
-                            isAddressBarMinimized: false
+                            isAddressBarMinimized: false,
+                            isAccessoryViewVisible: false
                         )
                     )
                 ]

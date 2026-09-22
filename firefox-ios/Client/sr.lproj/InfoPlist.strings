@@ -22,9 +22,6 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Ово вам омогућава да сачувате фотографије.";
 
-/* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Firefox користи препознавање говора за претварање вашег гласа у текст за гласовну претрагу.";
-
 /* (No Comment) */
 "Scan QR Code" = "Скенирај КР код";
 

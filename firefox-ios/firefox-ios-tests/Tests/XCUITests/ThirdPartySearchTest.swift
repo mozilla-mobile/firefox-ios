@@ -12,6 +12,7 @@ class ThirdPartySearchTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2443998
+    // Regression
     func testCustomSearchEngines() {
         addCustomSearchEngine()
 
@@ -31,11 +32,16 @@ class ThirdPartySearchTest: BaseTestCase {
             XCTFail("Failed to retrieve the URL value from the browser's URL bar")
             return
         }
-        XCTAssertEqual(url, "developer.mozilla.org", "The URL should indicate that the search was performed on MDN and not the default")
+        XCTAssertEqual(
+            url,
+            "developer.mozilla.org",
+            "The URL should indicate that the search was performed on MDN and not the default"
+        )
         mozWaitForElementToExist(app.staticTexts["MDN"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2444328
+    // Regression
     func testCustomSearchEngineAsDefault() {
         addCustomSearchEngine()
 
@@ -57,11 +63,15 @@ class ThirdPartySearchTest: BaseTestCase {
             XCTFail("Failed to retrieve the URL value from the browser's URL bar")
             return
         }
-        XCTAssert(url.hasPrefix("developer.mozilla.org"), "The URL should indicate that the search was performed on MDN and not the default")
+        XCTAssert(
+            url.hasPrefix("developer.mozilla.org"),
+            "The URL should indicate that the search was performed on MDN and not the default"
+        )
         mozWaitForElementToExist(app.staticTexts["MDN"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306941
+    // Regression
     func testCustomSearchEngineDeletion() {
         addCustomSearchEngine()
 

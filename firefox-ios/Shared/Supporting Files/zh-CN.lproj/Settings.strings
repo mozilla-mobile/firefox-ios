@@ -169,6 +169,18 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "自动播放";
 
+/* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
+"Settings.Browsing.AdBlocker.Description.v155" = "减少广告和与广告相关的跟踪器。若网站功能异常，请尝试关闭此功能。";
+
+/* Link text below the Ad Blocker toggle description that opens a support page with more information. */
+"Settings.Browsing.AdBlocker.LearnMore.v155" = "详细了解";
+
+/* Title for the Ad Blocker toggle in the Browsing settings page. */
+"Settings.Browsing.AdBlocker.Title.v155" = "广告拦截器";
+
+/* Title for the Background Audio toggle in the Browsing settings page. When enabled, audio from web pages continues playing after the app is backgrounded. */
+"Settings.Browsing.BackgroundAudio.Title.v156" = "背景音乐";
+
 /* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
 "Settings.Browsing.BlockAds.Title.v153" = "屏蔽广告";
 
@@ -207,6 +219,9 @@
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "账户";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the brand title for the section containing the Wrexham AFC wallpapers. */
+"Settings.Home.Option.Wallpaper.WrexhamBrandTitle.v155" = "雷克瑟姆足球俱乐部";
 
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsStatus.v112" = "需要开启此功能才能接收标签页，并在您于其他设备上登录时收到通知。";

@@ -22,6 +22,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864324
+    // Regression
     func testShareNormalWebsiteSendLinkToDevice() {
         app.launch()
         longPressTopSitesAndReachShareOptions(option: "Send Link to Device")
@@ -35,6 +36,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864323
+    // Regression
     func testShareNormalWebsiteCopyUrl() {
         app.launch()
         longPressTopSitesAndReachShareOptions(option: "Copy")
@@ -186,9 +188,12 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864482
+    // Regression
     func testShareViaLongPressLinkCopy() {
         app.launch()
         longPressLinkAndSelectShareOption(option: "Copy")
+        // The toolbar has no hit point until the share sheet has finished dismissing
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitUntilHittable()
         openNewTabAndValidateURLisPaste(url: "example")
     }
 
@@ -199,8 +204,10 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.buttons["Open in New Tab"])
         app.buttons["Share Link"].waitAndTap()
         if #available(iOS 16, *) {
-            mozWaitForElementToExist(app.collectionViews.cells[option])
-            app.collectionViews.cells[option].waitAndTap()
+            let optionCell = app.collectionViews.cells[option]
+            mozWaitForElementToExist(optionCell)
+            optionCell.waitForFrameToSettle()
+            optionCell.waitAndTap()
         } else {
             app.buttons[option].waitAndTap()
         }
@@ -221,8 +228,10 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         app.tables["Context Menu"].buttons["shareAppleLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
-            mozWaitForElementToExist(app.collectionViews.cells[option])
-            app.collectionViews.cells[option].tapOnApp()
+            let optionCell = app.collectionViews.cells[option]
+            mozWaitForElementToExist(optionCell)
+            optionCell.waitForFrameToSettle()
+            optionCell.tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
@@ -240,8 +249,10 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         app.tables["Context Menu"].buttons["shareAppleLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
-            mozWaitForElementToExist(app.collectionViews.cells[option])
-            app.collectionViews.cells[option].tapOnApp()
+            let optionCell = app.collectionViews.cells[option]
+            mozWaitForElementToExist(optionCell)
+            optionCell.waitForFrameToSettle()
+            optionCell.tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
@@ -262,9 +273,11 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         contextMenu.buttons["shareAppleLarge"].waitAndTap()
         // Tap the Reminders button in the menu
         if #available(iOS 16, *) {
-            mozWaitForElementToExist(app.collectionViews.cells[option])
-            mozWaitElementHittable(element: app.collectionViews.cells[option], timeout: 10)
-            app.collectionViews.cells[option].tapOnApp()
+            let optionCell = app.collectionViews.cells[option]
+            mozWaitForElementToExist(optionCell)
+            mozWaitElementHittable(element: optionCell, timeout: 10)
+            optionCell.waitForFrameToSettle()
+            optionCell.tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
@@ -280,9 +293,11 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     private func longPressTopSitesAndReachShareOptions(option: String) {
         reachShareSheetFromTopSitesLongPress()
         if #available(iOS 16, *) {
-            mozWaitForElementToExist(app.collectionViews.cells[option])
-            mozWaitElementHittable(element: app.collectionViews.cells[option], timeout: 10)
-            app.collectionViews.cells[option].tapOnApp()
+            let optionCell = app.collectionViews.cells[option]
+            mozWaitForElementToExist(optionCell)
+            mozWaitElementHittable(element: optionCell, timeout: 10)
+            optionCell.waitForFrameToSettle()
+            optionCell.tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }

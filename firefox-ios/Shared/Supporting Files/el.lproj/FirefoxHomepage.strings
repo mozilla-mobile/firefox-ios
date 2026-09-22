@@ -5,7 +5,7 @@
 "FirefoxHome.PrivacyNotice.LearnMoreLink.v148" = "Μάθετε περισσότερα";
 
 /* Label for the “Privacy Notice” link inserted into the first placeholder of the Privacy Notice body label. This text will appear as a tappable link that opens the updated Firefox Privacy Notice. */
-"FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148" = "Σημείωση απορρήτου";
+"FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148" = "Δήλωση απορρήτου";
 
 /* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
 "FirefoxHome.ScreenTitle.v144" = "Αρχική σελίδα";

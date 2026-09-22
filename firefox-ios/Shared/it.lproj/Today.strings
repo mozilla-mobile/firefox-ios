@@ -50,7 +50,7 @@
 "TodayWidget.SearchInPrivateTabLabelV2" = "Cerca in scheda anonima";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryDescription" = "Aggiungi scorciatoie ai siti visitati di frequente e recentemente.";
+"TodayWidget.TopSitesGalleryDescription" = "Aggiungi collegamenti ai siti visitati di frequente e recentemente.";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Siti principali";

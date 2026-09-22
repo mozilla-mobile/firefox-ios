@@ -39,7 +39,8 @@ class SyncNowSetting: WithAccountSetting,
 
     private lazy var timestampFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .medium
         return formatter
     }()
 

@@ -14,8 +14,6 @@ final class HomepageSettingsScreen {
         self.sel = selectors
     }
 
-    private var bookmarkToggle: XCUIElement { sel.BOOKMARK_TOGGLE.element(in: app) }
-
     // helper to centralize the duplicated lookup
     private var bookmarkSwitch: XCUIElement {
         let settingTable = sel.HOMEPAGE_SETTINGS_TABLE.element(in: app)
@@ -27,6 +25,21 @@ final class HomepageSettingsScreen {
         let settingTable = sel.HOMEPAGE_SETTINGS_TABLE.element(in: app)
         let toggle = sel.JUMP_BACK_IN_TOGGLE.value
         return settingTable.cells.switches[toggle]
+    }
+
+    private var customURLTextField: XCUIElement { sel.CUSTOM_URL_TEXT_FIELD.element(in: app) }
+
+    private var shortcutsSettingsCell: XCUIElement { sel.SHORTCUTS_SETTINGS_CELL.element(in: app) }
+
+    func typeCustomHomepageURL(_ url: String) {
+        customURLTextField.tapAndTypeText(url)
+        XCTAssertEqual(customURLTextField.value as? String,
+                       url,
+                       "The webpage typed does not match with the one saved")
+    }
+
+    func assertCustomHomepageURLContains(_ url: String) {
+        BaseTestCase().mozWaitForValueContains(customURLTextField, value: url)
     }
 
     func assertBookmarkToggleExists(timeout: TimeInterval = TIMEOUT) {
@@ -78,5 +91,11 @@ final class HomepageSettingsScreen {
     func assertJumpBackInToggleIsDisabled() {
         let switchElement = jumpBackInSwitch
         XCTAssertEqual(switchElement.value as? String, "0", "Jump Back In toggle is not disabled")
+    }
+
+    func assertShortcutsSettingIsOn() {
+        BaseTestCase().mozWaitForElementToExist(
+            shortcutsSettingsCell.staticTexts[sel.SHORTCUTS_STATUS_ON.value]
+        )
     }
 }

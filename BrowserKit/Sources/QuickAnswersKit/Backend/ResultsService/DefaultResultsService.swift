@@ -86,8 +86,8 @@ final class DefaultResultsService: ResultsService {
             return .invalidResponse(statusCode: statusCode)
         case LiteLLMClientError.noContent:
             return .noMessage
-        case let e as LiteLLMClientError: return .unknown(e.localizedDescription)
-        default: return .unknown(error.localizedDescription)
+        case let e as LiteLLMClientError: return .unknown(e.telemetryDescription)
+        default: return .unknown(error.telemetryDescription)
         }
     }
 }

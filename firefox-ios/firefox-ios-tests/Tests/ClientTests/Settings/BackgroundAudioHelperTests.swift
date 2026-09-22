@@ -1,0 +1,118 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Common
+import Shared
+import XCTest
+
+@testable import Client
+
+@MainActor
+final class BackgroundAudioHelperTests: XCTestCase {
+    private var mockNotificationCenter: MockNotificationCenter!
+    private var prefs: MockProfilePrefs!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        mockNotificationCenter = MockNotificationCenter()
+        prefs = MockProfilePrefs()
+    }
+
+    override func tearDown() async throws {
+        mockNotificationCenter = nil
+        prefs = nil
+        try await super.tearDown()
+    }
+
+    func testIsEnabled_defaultsToFalse() {
+        XCTAssertFalse(BackgroundAudioHelper.isEnabled(prefs))
+    }
+
+    func testIsEnabled_returnsTrueWhenPrefSet() {
+        prefs.setBool(true, forKey: PrefsKeys.BackgroundAudio)
+
+        XCTAssertTrue(BackgroundAudioHelper.isEnabled(prefs))
+    }
+
+    func testIsEnabled_returnsFalseWhenPrefSetToFalse() {
+        prefs.setBool(false, forKey: PrefsKeys.BackgroundAudio)
+
+        XCTAssertFalse(BackgroundAudioHelper.isEnabled(prefs))
+    }
+
+    func testConfigure_whenDisabled_doesNotObserve() {
+        let subject = createSubject()
+
+        subject.configure(prefs: prefs)
+
+        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 0)
+    }
+
+    func testConfigure_whenEnabled_startsObserving() {
+        prefs.setBool(true, forKey: PrefsKeys.BackgroundAudio)
+        let subject = createSubject()
+
+        subject.configure(prefs: prefs)
+
+        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 3)
+        XCTAssertTrue(mockNotificationCenter.observers.contains(UIApplication.willResignActiveNotification))
+        XCTAssertTrue(mockNotificationCenter.observers.contains(UIApplication.didEnterBackgroundNotification))
+        XCTAssertTrue(mockNotificationCenter.observers.contains(UIApplication.didBecomeActiveNotification))
+    }
+
+    func testToggle_enableSetsPrefsAndStartsObserving() {
+        let subject = createSubject()
+
+        subject.toggle(isEnabled: true, prefs: prefs)
+
+        XCTAssertTrue(prefs.boolForKey(PrefsKeys.BackgroundAudio) ?? false)
+        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 3)
+    }
+
+    func testToggle_disableSetsPrefsAndStopsObserving() {
+        let subject = createSubject()
+        subject.toggle(isEnabled: true, prefs: prefs)
+
+        subject.toggle(isEnabled: false, prefs: prefs)
+
+        XCTAssertFalse(prefs.boolForKey(PrefsKeys.BackgroundAudio) ?? true)
+        // startObservingNotification calls remove observers as a first call on the notification center so we except
+        // 6 times the remove observer being called. 3 when isEnabled is true and 3 when it is false.
+        XCTAssertEqual(mockNotificationCenter.removeObserverCallCount, 6)
+    }
+
+    func testStartObserving_registersForCorrectNotifications() {
+        let subject = createSubject()
+
+        subject.startObserving()
+
+        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 3)
+        XCTAssertTrue(mockNotificationCenter.observers.contains(UIApplication.willResignActiveNotification))
+        XCTAssertTrue(mockNotificationCenter.observers.contains(UIApplication.didEnterBackgroundNotification))
+        XCTAssertTrue(mockNotificationCenter.observers.contains(UIApplication.didBecomeActiveNotification))
+    }
+
+    func testStartObserving_calledTwice_doesNotDoubleRegister() {
+        let subject = createSubject()
+
+        subject.startObserving()
+        subject.startObserving()
+
+        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 3)
+    }
+
+    func testStopObserving_whenNotObserving_doesNothing() {
+        let subject = createSubject()
+
+        subject.stopObserving()
+
+        XCTAssertEqual(mockNotificationCenter.removeObserverCallCount, 0)
+    }
+
+    private func createSubject() -> BackgroundAudioHelper {
+        let subject = BackgroundAudioHelper(notificationCenter: mockNotificationCenter)
+        trackForMemoryLeaks(subject)
+        return subject
+    }
+}

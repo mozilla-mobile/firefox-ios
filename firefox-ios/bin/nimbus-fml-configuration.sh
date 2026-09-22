@@ -10,7 +10,7 @@
 ## The `CONFIGURATION` to derive the channel used in the feature manifest.
 CHANNEL=
 case "${CONFIGURATION}" in
-    Fennec)
+    Debug)
         CHANNEL="developer"
         ;;
     Fennec_Testing)

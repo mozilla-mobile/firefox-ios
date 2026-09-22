@@ -39,6 +39,9 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
             DefaultBrowserUtility().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
         }
         DefaultBrowserUtility().migrateDefaultBrowserStatusIfNeeded(isFirstRun: introScreenManager.shouldShowIntroScreen)
+
+        SummarizerPrefsMigration(prefs: profile.prefs).migrateSelectedLanguage()
+
         if #available(iOS 26, *) {
             AppleIntelligenceUtil().processAvailabilityState()
         }
@@ -81,8 +84,6 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
         // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
         MozillaAppServices.initialize()
 
-        AdsClientDocumentsDirectoryMigration().removeLegacyDatabaseFiles()
-
         /// Migrate TermsOfService prefs to TermsOfUse prefs
         /// before Nimbus is initialized (should be available for experiments)
         /// and backfill accept date/version if needed - after telemetry set up
@@ -107,7 +108,6 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
 
         // Save toolbar position to user prefs
         let searchBarLocationSaver = SearchBarLocationSaver()
-        searchBarLocationSaver.migrateBottomBarPositionToTopOnIPad(profile: profile)
         searchBarLocationSaver.saveUserSearchBarLocation(profile: profile)
         let deviceName = UIDevice.current.name
 
@@ -178,6 +178,7 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
         AppEventQueue.signal(event: .postLaunchDependenciesComplete)
     }
 
+    @MainActor
     private func setUserAgent() {
         // Record the user agent for use by search suggestion clients.
         SearchViewModel.userAgent = UserAgent.getUserAgent()

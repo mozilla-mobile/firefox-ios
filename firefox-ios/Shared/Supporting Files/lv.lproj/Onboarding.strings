@@ -1,3 +1,30 @@
+/* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.SecondLabel.v114" = "2. Jāpiesit *Noklusējuma pārlūka lietotne*";
+
+/* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
+"DefaultBrowserPopup.Title.v114" = "Nomaini savu noklusējuma pārlūku";
+
 /* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Customization.Intro.Continue.Action.v123" = "Pielāgot %@";
+
+/* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "Iestatīt kā noklusējuma pārlūku";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "Uzzināt vairāk";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
+"Onboarding.Modern.Welcome.ActionTreatementA.v140" = "Iestatīt kā noklusējuma pārlūku";
+
+/* Action button to set the app as the default browser. */
+"Onboarding.Modern.Welcome.ActionTreatmentA.v145" = "Iestatīt kā noklusējuma pārlūku";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "Uzzināt vairāk";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
+"Onboarding.Welcome.ActionTreatementA.v114" = "Iestatīt kā noklusējuma pārlūku";
+
+/* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Link.Action.v114" = "Uzzināt vairāk mūsu privātuma paziņojumā";
 

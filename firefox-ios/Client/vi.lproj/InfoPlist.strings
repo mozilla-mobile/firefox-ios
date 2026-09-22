@@ -23,7 +23,7 @@
 "NSPhotoLibraryAddUsageDescription" = "Điều này cho phép bạn lưu ảnh.";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Firefox sử dụng công nghệ nhận dạng giọng nói để chuyển giọng nói của bạn thành văn bản phục vụ cho việc tìm kiếm bằng giọng nói.";
+"NSSpeechRecognitionUsageDescription" = "Điều này cho phép Firefox phiên âm âm thanh của bạn.";
 
 /* (No Comment) */
 "Scan QR Code" = "Quét mã QR";

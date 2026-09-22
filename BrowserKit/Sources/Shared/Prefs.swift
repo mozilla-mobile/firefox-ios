@@ -62,6 +62,7 @@ public struct PrefsKeys {
     public static let ShowClipboardBar = "showClipboardBar"
     public static let ShowRelayMaskSuggestions = "showRelayMaskSuggestions"
     public static let BlockOpeningExternalApps = "blockOpeningExternalApps"
+    public static let BackgroundAudio = "backgroundAudio"
     public static let BlockAds = "blockAds"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
@@ -90,22 +91,20 @@ public struct PrefsKeys {
         public static let didAgreeTermsOfService = "didAgreeTermOfService"
         public static let summarizeContentFeature = "summarizeContentFeature"
         public static let shakeGestureEnabled = "shakeGestureEnabledKey"
-        public static let selectedLanguage = "selectedLanguage"
+        public static let selectedLanguage = "summarizer.selectedLanguage"
+        /// Legacy pref name used to store the summarizer selected language.
+        /// It is only used to migrate to the new pref `selectedLanguage`
+        public static let legacySelectedLanguage = "selectedLanguage"
     }
 
     public struct AppVersion {
         public static let Latest = "latestAppVersion"
     }
 
-    public struct AdsClient {
-        public static let documentsDirectoryMigrationCheck = "adsClientDocumentsDirectoryMigrationCheckUserPrefsKey"
-    }
-
     public struct Wallpapers {
         public static let MetadataLastCheckedDate = "WallpaperMetadataLastCheckedUserPrefsKey"
         public static let CurrentWallpaper = "CurrentWallpaperUserPrefsKey"
         public static let ThumbnailsAvailable = "ThumbnailsAvailableUserPrefsKey"
-        public static let OnboardingSeenKey = "WallpaperOnboardingSeenKeyUserPrefsKey"
 
         public static let legacyAssetMigrationCheck = "legacyAssetMigrationCheckUserPrefsKey"
         public static let v1MigrationCheck = "v1MigrationCheckUserPrefsKey"
@@ -135,6 +134,7 @@ public struct PrefsKeys {
 
     public struct QuickAnswers {
         public static let optInCompleted = "quickAnswers.optInCompleted"
+        public static let modelOverride = "quickAnswers.modelOverride"
     }
 
     public struct Tips {

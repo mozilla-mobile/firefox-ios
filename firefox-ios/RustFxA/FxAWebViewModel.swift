@@ -15,7 +15,57 @@ import struct MozillaAppServices.FxaAuthData
 enum FxAPageType: Equatable {
     case emailLoginFlow
     case qrCode(url: URL)
+    /// A pairing v2 deep link loaded straight from the content server. Distinct from `qrCode`
+    /// because that case is also used by the v1 flows, which start their own OAuth flow through
+    /// `beginPairingAuthentication` before the page loads. Only this case may mint OAuth
+    /// parameters on the page's request.
+    case pairingV2(url: URL)
     case settingsPage
+
+    /// Whether a page of this type may ask the app to start an OAuth flow on its behalf.
+    var allowsPairOAuthStart: Bool {
+        if case .pairingV2 = self { return true }
+        return false
+    }
+}
+
+/// The two shapes a `fxaccounts:pair_oauth_start` reply can take.
+enum PairOAuthReply: Equatable {
+    case parameters([String: String])
+    case error(String)
+
+    var jsonObject: [String: Any] {
+        switch self {
+        case .parameters(let parameters):
+            return parameters
+        case .error(let message):
+            return ["error": ["message": message]]
+        }
+    }
+}
+
+enum FxAAuthenticationStatusResponse {
+    private static let pairingVersion = 2
+
+    static func json(localeProvider: LocaleProvider = SystemLocaleProvider()) -> String? {
+        let response = ["capabilities": authenticationStatusCapabilities(localeProvider: localeProvider)]
+        return FxAWebViewModel.webChannelJSONString(from: response)
+    }
+
+    private static func authenticationStatusCapabilities(
+        localeProvider: LocaleProvider
+    ) -> [String: Any] {
+        var engines = ["bookmarks", "history", "tabs", "passwords", "creditcards"]
+        if AddressLocaleFeatureValidator.isValidRegion(for: localeProvider.regionCode()) {
+            engines.append("addresses")
+        }
+
+        return [
+            "choose_what_to_sync": true,
+            "pairingVersion": pairingVersion,
+            "engines": engines
+        ]
+    }
 }
 
 // See https://mozilla.github.io/ecosystem-platform/docs/fxa-engineering/fxa-webchannel-protocol
@@ -24,6 +74,7 @@ private enum RemoteCommand: String {
     case canLinkAccount = "fxaccounts:can_link_account"
     // case loaded = "fxaccounts:loaded"
     case status = "fxaccounts:fxa_status"
+    case pairOAuthStart = "fxaccounts:pair_oauth_start"
     case oauthLogin = "fxaccounts:oauth_login"
     case login = "fxaccounts:login"
     case changePassword = "fxaccounts:change_password"
@@ -46,6 +97,10 @@ class FxAWebViewModel {
     static let mobileUserAgent = UserAgent.mobileUserAgent()
 
     var userDefaults: UserDefaultsInterface = UserDefaults.standard
+    private lazy var pairingOAuthHandler = FxAPairingOAuthHandler(
+        authenticatorProvider: { [weak self] in self?.profile.rustFxA.accountManager },
+        logger: logger
+    )
 
     var blobToDataScript = """
                 async function createBlobFromUrl(url) {
@@ -68,6 +123,18 @@ class FxAWebViewModel {
                 const url = await createBlobFromUrl(blobUrl)
                 return await blobToDataURLAsync(url)
             """
+
+    /// Serialize a WebChannel payload for injection into the reply script.
+    ///
+    /// `fileprivate` rather than `private` so `FxAAuthenticationStatusResponse` can reuse it, and
+    /// `nonisolated` because that caller is not on the main actor. The body touches no state.
+    nonisolated fileprivate static func webChannelJSONString(from object: Any) -> String? {
+        guard JSONSerialization.isValidJSONObject(object),
+              let data = try? JSONSerialization.data(withJSONObject: object),
+              let json = String(data: data, encoding: .utf8)
+        else { return nil }
+        return json
+    }
 
     func setupUserScript(for controller: WKUserContentController) {
         guard let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"),
@@ -139,7 +206,7 @@ class FxAWebViewModel {
                             completion(self.makeRequest(url), .emailLogin)
                         }
                     }
-                case let .qrCode(url):
+                case let .qrCode(url), let .pairingV2(url):
                     self.baseURL = url
                     completion(self.makeRequest(url), .qrPairing)
                 case .settingsPage:
@@ -225,6 +292,13 @@ extension FxAWebViewModel {
               let webView = message.webView
         else { return }
 
+        // The handler is exposed to every frame regardless of the user script's `forMainFrameOnly`,
+        // and only the top-level document is ever the content server's own page.
+        guard message.frameInfo.isMainFrame else {
+            logger.log("Ignoring message from a subframe", level: .warning, category: .sync)
+            return
+        }
+
         let origin = message.frameInfo.securityOrigin
         guard origin.`protocol` == url.scheme && origin.host == url.host && origin.port == (url.port ?? 0) else {
             logger.log("Ignoring message - \(origin) does not match expected origin: \(url.origin ?? "nil")",
@@ -240,7 +314,7 @@ extension FxAWebViewModel {
               let cmd = msg["command"] as? String
         else { return }
 
-        let id = Int(msg["messageId"] as? String ?? "")
+        let id = messageID(from: msg["messageId"])
         handleRemote(command: cmd, id: id, data: msg["data"], webView: webView)
     }
 
@@ -249,6 +323,20 @@ extension FxAWebViewModel {
         logger.log("webchannel message: \(rawValue)", level: .info, category: .sync)
         let command = RemoteCommand(rawValue: rawValue) ?? .unknown
         switch command {
+        case .pairOAuthStart:
+            guard let id else {
+                logger.log("Ignoring \(rawValue) with no usable messageId", level: .warning, category: .sync)
+                return
+            }
+            // Only the v2 pairing deep link has a reason to mint OAuth parameters for the page.
+            // The other flows share this bridge and have already started their own OAuth flow, so
+            // starting a second one would clobber the state their sign-in depends on.
+            guard pageType.allowsPairOAuthStart else {
+                logger.log("Ignoring \(rawValue) outside the pairing flow", level: .warning, category: .sync)
+                sendPairOAuth(id: id, webView: webView, reply: .error(FxAPairingOAuthHandler.errorMessage))
+                return
+            }
+            onPairOAuthStart(id: id, webView: webView)
         case .oauthLogin:
             if let data = data {
                 onLoginComplete(data: data, webView: webView)
@@ -292,9 +380,29 @@ extension FxAWebViewModel {
         }
     }
 
+    /// The WebChannel sends `messageId` as a string today, but accept a number too so a numeric
+    /// sender cannot silently strand every reply. Internal rather than private so tests reach it.
+    func messageID(from value: Any?) -> Int? {
+        if let value = value as? Int {
+            return value
+        }
+        if let value = value as? String {
+            return Int(value)
+        }
+        return nil
+    }
+
     /// Send a message to web content using the required message structure.
-    private func runJS(webView: WKWebView, typeId: String, messageId: Int, command: String, data: String = "{}") {
-        let msg = """
+    /// The reply envelope the WebChannel expects. `messageId` is emitted unquoted so the page
+    /// matches it against the id it sent. Internal rather than private so tests can assert the
+    /// shape, which is a protocol contract with the content server.
+    nonisolated static func webChannelReplyScript(
+        typeId: String,
+        messageId: Int,
+        command: String,
+        data: String
+    ) -> String {
+        return """
             var msg = {
                 id: "\(typeId)",
                 message: {
@@ -305,6 +413,15 @@ extension FxAWebViewModel {
             };
             window.dispatchEvent(new CustomEvent('WebChannelMessageToContent', { detail: JSON.stringify(msg) }));
         """
+    }
+
+    private func runJS(webView: WKWebView, typeId: String, messageId: Int, command: String, data: String = "{}") {
+        let msg = Self.webChannelReplyScript(
+            typeId: typeId,
+            messageId: messageId,
+            command: command,
+            data: data
+        )
 
         webView.evaluateJavascriptInDefaultContentWorld(msg)
     }
@@ -313,11 +430,6 @@ extension FxAWebViewModel {
     /// user info (for settings), or by passing CWTS setup info (in case the user is
     /// signing up for an account). This latter case is also used for the sign-in state.
     private func onSessionStatus(id: Int, webView: WKWebView, localeProvider: LocaleProvider = SystemLocaleProvider()) {
-        let addressAutofillStatus = AddressLocaleFeatureValidator.isValidRegion(for: localeProvider.regionCode())
-
-        let creditCardCapability = ", \"creditcards\""
-        let addressAutofillCapability =  addressAutofillStatus ? ", \"addresses\"" : ""
-
         guard let fxa = profile.rustFxA.accountManager else { return }
         let cmd = "fxaccounts:fxa_status"
         let typeId = "account_updates"
@@ -331,15 +443,49 @@ extension FxAWebViewModel {
                     signedInUser: \(signedInUserJson),
                 }
                 """
-        case .emailLoginFlow, .qrCode:
-            data = """
-                    { capabilities:
-                        { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"\(creditCardCapability)\(addressAutofillCapability)] },
-                    }
-                """
+        case .emailLoginFlow, .qrCode, .pairingV2:
+            guard let status = FxAAuthenticationStatusResponse.json(localeProvider: localeProvider) else {
+                logger.log("Failed to serialize the \(cmd) reply", level: .warning, category: .sync)
+                return
+            }
+            data = status
         }
 
         runJS(webView: webView, typeId: typeId, messageId: id, command: cmd, data: data)
+    }
+
+    private func onPairOAuthStart(id: Int, webView: WKWebView) {
+        // Captured strongly so the dropped-reply case below still logs once self is gone.
+        let logger = self.logger
+        pairingOAuthHandler.start { [weak self, weak webView] result in
+            guard let self, let webView else {
+                logger.log("Pair OAuth reply dropped. View model or web view deallocated",
+                           level: .info,
+                           category: .sync)
+                return
+            }
+
+            switch result {
+            case .success(let parameters):
+                sendPairOAuth(id: id, webView: webView, reply: .parameters(parameters))
+            case .failure:
+                sendPairOAuth(id: id, webView: webView, reply: .error(FxAPairingOAuthHandler.errorMessage))
+            }
+        }
+    }
+
+    private func sendPairOAuth(id: Int, webView: WKWebView, reply: PairOAuthReply) {
+        guard let dataJSON = Self.webChannelJSONString(from: reply.jsonObject) else {
+            logger.log("Failed to serialize the \(RemoteCommand.pairOAuthStart.rawValue) reply",
+                       level: .warning,
+                       category: .sync)
+            return
+        }
+        runJS(webView: webView,
+              typeId: "account_updates",
+              messageId: id,
+              command: RemoteCommand.pairOAuthStart.rawValue,
+              data: dataJSON)
     }
 
     private func onLoginComplete(data: Any, webView: WKWebView) {

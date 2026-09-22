@@ -73,10 +73,26 @@ ai.summarize:
         type: quantity
         description: |
           The length of the text to be summarized, in words.
+      summary_language:
+        type: string
+        description: |
+          The language the summary is generated in, as a locale identifier
+          (e.g. `en`, `de-DE`). Bounded by the `supportedLocales` allowlist of the
+          `summarizer-language-expansion-feature` Nimbus feature.
+          Absent when no language could be resolved.
+      page_language:
+        type: string
+        description: |
+          The detected language of the page being summarized, as a locale identifier
+          (e.g. `en`, `de`). Differs from `summary_language` when the user picked a
+          specific summary language in settings.
+          Absent when no language could be resolved.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+      - https://github.com/mozilla-mobile/firefox-ios/issues/35362
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35361
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -206,3 +222,16 @@ user.ai.summarize:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  selected_language:
+    type: string
+    description: |
+      Records the summary language the user selected in the summarize settings.
+      Either `websiteLanguage`, or a locale identifier from the `supportedLocales`
+      allowlist of the `summarizer-language-expansion-feature` Nimbus feature.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/35362
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35361
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"

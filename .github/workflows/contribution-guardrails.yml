@@ -27,10 +27,12 @@ jobs:
         if: github.event.action == 'labeled' && github.event.label.name == 'does-not-meet-guidelines'
         shell: bash
         env:
+          # __AUTHOR__ is substituted at runtime rather than interpolated by the workflow
+          # templater, so event data never becomes part of the script itself.
           BODY: |
-            :wave: Thanks @${{ env.PR_AUTHOR }} for your contribution.
+            :wave: Thanks @__AUTHOR__ for your contribution.
 
-            This pull request is being closed because it does not meet the project's 
+            This pull request is being closed because it does not meet the project's
             [contribution guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md).
 
             Common reasons might include:
@@ -56,45 +58,94 @@ jobs:
             Thank you for your understanding.
 
         run: |
-          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
-          retry gh pr comment "$NUMBER" -R "$GH_REPO" -b "$BODY" || true
-          retry gh pr close "$NUMBER" -R "$GH_REPO" || true
+          # No `set -e`: these actions are best-effort. Failures are surfaced as warnings
+          # rather than failing the run, because "already closed" and "label not present"
+          # are expected outcomes, not errors.
+          set -uo pipefail
+          try() {
+            local desc="$1"; shift
+            local n=0
+            until "$@"; do
+              n=$((n + 1))
+              if [ "$n" -ge 3 ]; then
+                echo "::warning::${desc} did not succeed after ${n} attempts"
+                return 0
+              fi
+              sleep 2
+            done
+          }
+
+          body=${BODY//__AUTHOR__/$PR_AUTHOR}
+          try "commenting on PR #$NUMBER" gh pr comment "$NUMBER" -R "$GH_REPO" -b "$body"
+          try "closing PR #$NUMBER" gh pr close "$NUMBER" -R "$GH_REPO"
 
       - name: Handle outside-approved-scope label
         if: github.event.action == 'labeled' && github.event.label.name == 'outside-approved-scope'
         shell: bash
         env:
-         BODY: |
-          :wave: Thanks @${{ env.PR_AUTHOR }} for your contribution.
+          BODY: |
+            :wave: Thanks @__AUTHOR__ for your contribution.
 
-          This pull request is being closed because it introduces changes that were 
-          not previously aligned with the maintainers. Please have a look at our contribution guidelines 
-          [here](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md#guidelines-for-contributing).
+            This pull request is being closed because it introduces changes that were
+            not previously aligned with the maintainers. Please have a look at our contribution guidelines
+            [here](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md#guidelines-for-contributing).
 
-          If you’d like to work on something that isn’t marked as contributor-friendly,
-          please reach out to a team member first to confirm whether it’s available.
-          Work that isn’t pre-aligned can be declined, as features and priorities are
-          carefully planned with product and design, and can also conflict with
-          work that is already in progress.
+            If you’d like to work on something that isn’t marked as contributor-friendly,
+            please reach out to a team member first to confirm whether it’s available.
+            Work that isn’t pre-aligned can be declined, as features and priorities are
+            carefully planned with product and design, and can also conflict with
+            work that is already in progress.
 
-          We absolutely welcome ideas and contributions. If you’d like to move this
-          forward, please let's align first. This can be done on [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org), 
-          or the ticket itself for this feature. Thank you!
+            We absolutely welcome ideas and contributions. If you’d like to move this
+            forward, please let's align first. This can be done on [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org),
+            or the ticket itself for this feature. Thank you!
         run: |
-          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
-          retry gh pr comment "$NUMBER" -R "$GH_REPO" -b "$BODY" || true
-          retry gh pr close "$NUMBER" -R "$GH_REPO" || true
+          set -uo pipefail
+          try() {
+            local desc="$1"; shift
+            local n=0
+            until "$@"; do
+              n=$((n + 1))
+              if [ "$n" -ge 3 ]; then
+                echo "::warning::${desc} did not succeed after ${n} attempts"
+                return 0
+              fi
+              sleep 2
+            done
+          }
+
+          body=${BODY//__AUTHOR__/$PR_AUTHOR}
+          try "commenting on PR #$NUMBER" gh pr comment "$NUMBER" -R "$GH_REPO" -b "$body"
+          try "closing PR #$NUMBER" gh pr close "$NUMBER" -R "$GH_REPO"
 
       - name: Reopen PR when label removed
         if: github.event.action == 'unlabeled' && (github.event.label.name == 'does-not-meet-guidelines' || github.event.label.name == 'outside-approved-scope')
         shell: bash
         run: |
-          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
-          retry gh pr reopen "$NUMBER" -R "$GH_REPO" || true
+          set -uo pipefail
+          try() {
+            local desc="$1"; shift
+            local n=0
+            until "$@"; do
+              n=$((n + 1))
+              if [ "$n" -ge 3 ]; then
+                echo "::warning::${desc} did not succeed after ${n} attempts"
+                return 0
+              fi
+              sleep 2
+            done
+          }
+
+          # Already-open PRs are a normal case here, so a failure is informational only.
+          try "reopening PR #$NUMBER" gh pr reopen "$NUMBER" -R "$GH_REPO"
 
       - name: Cleanup labels on manual reopen
         if: github.event.action == 'reopened'
         shell: bash
         run: |
-          gh pr edit "$NUMBER" -R "$GH_REPO" --remove-label "does-not-meet-guidelines" || true
-          gh pr edit "$NUMBER" -R "$GH_REPO" --remove-label "outside-approved-scope" || true
+          set -uo pipefail
+          # Most reopened PRs never carried these labels, so removal failing is expected
+          # and deliberately not reported.
+          for label in does-not-meet-guidelines outside-approved-scope; do
+            gh pr edit "$NUMBER" -R "$GH_REPO" --remove-label "$label" || true
+          done

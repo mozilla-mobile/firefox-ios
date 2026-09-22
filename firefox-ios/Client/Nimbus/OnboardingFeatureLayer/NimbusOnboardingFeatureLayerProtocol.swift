@@ -73,10 +73,6 @@ extension NimbusOnboardingFeatureLayerProtocol {
         case .themeing: return ImageIdentifiers.Onboarding.HeaderImages.theming
         case .toolbar: return ImageIdentifiers.Onboarding.HeaderImages.toolbar
         case .customizeFirefox: return ImageIdentifiers.Onboarding.HeaderImages.customizeFirefox
-            // Challenge the Default experiment
-        case .notificationsCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.notifications
-        case .welcomeCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.welcome
-        case .syncDevicesCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.sync
         case .syncWithIcons: return ImageIdentifiers.Onboarding.HeaderImages.syncWithIcons
         case .trackers: return ImageIdentifiers.Onboarding.HeaderImages.trackers
         case .syncWithIconsJapan: return ImageIdentifiers.Onboarding.HeaderImages.syncWithIconsJapan

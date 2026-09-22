@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import UIKit
-import Shared
 
 enum WallpaperManagerError: Error {
     case downloadFailed(Error)
@@ -17,13 +16,9 @@ protocol WallpaperManagerInterface {
     var availableCollections: [WallpaperCollection] { get }
     var canSettingsBeShown: Bool { get }
 
-    @MainActor
-    func canOnboardingBeShown(using: Profile) -> Bool
-    func onboardingSeen()
     func setCurrentWallpaper(to wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
     func fetchAssetsFor(_ wallpaper: Wallpaper, completion: @escaping @Sendable (Result<Void, Error>) -> Void)
     func removeUnusedAssets()
-    func checkForUpdates()
 }
 
 // TODO: FXIOS-14150 - WallpaperManager shouldn't be @unchecked Sendable
@@ -36,17 +31,14 @@ final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
 
     // MARK: - Properties
     private var networkingModule: WallpaperNetworking
-    private var userDefaults: UserDefaultsInterface
     private var logger: Logger
 
     // MARK: - Initializers
     init(
         with networkingModule: WallpaperNetworking = WallpaperNetworkingModule(),
-        userDefaults: UserDefaultsInterface = UserDefaults.standard,
         logger: Logger = DefaultLogger.shared
     ) {
         self.networkingModule = networkingModule
-        self.userDefaults = userDefaults
         self.logger = logger
     }
 
@@ -78,28 +70,6 @@ final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
         guard thumbnailUtility.areThumbnailsAvailable else { return false }
 
         return true
-    }
-
-    /// Determines whether the wallpaper onboarding can be shown
-    /// Doesn't need overlayState to check for CFR because the state was previously check
-    @MainActor
-    func canOnboardingBeShown(using profile: Profile) -> Bool {
-        let cfrHintUtility = ContextualHintEligibilityUtility(with: profile, overlayState: nil)
-        let jumpBackInCFRShown = !cfrHintUtility.canPresent(.jumpBackIn)
-        let cfrsHaveBeenShown = jumpBackInCFRShown
-
-        guard cfrsHaveBeenShown,
-              hasEnoughThumbnailsToShow,
-              !userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
-        else { return false }
-
-        return true
-    }
-
-    /// Update the value referenced for wallpaper onboarding when
-    /// wallpaper onboarding was shown
-    func onboardingSeen() {
-        userDefaults.set(true, forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
     }
 
     /// Sets and saves a selected wallpaper as currently selected wallpaper.
@@ -149,8 +119,8 @@ final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
                 let (portrait, landscape) = await (try portraitFetchRequest,
                                                    try landscapeFetchRequest)
 
-                try storageUtility.store(portrait, withName: wallpaper.portraitID, andKey: wallpaper.id)
-                try storageUtility.store(landscape, withName: wallpaper.landscapeID, andKey: wallpaper.id)
+                try storageUtility.store(portrait, withName: wallpaper.portraitID)
+                try storageUtility.store(landscape, withName: wallpaper.landscapeID)
 
                 completion(.success(()))
             } catch {

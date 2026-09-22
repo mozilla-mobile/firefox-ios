@@ -1,0 +1,39 @@
+/* Accessibility label for the close button on the Quick Answers screen. */
+"QuickAnswers.AccessibilityLabels.Close.v158" = "Sluiten";
+
+/* Accessibility label for the button on the homepage that opens the Quick Answers feature. */
+"QuickAnswers.AccessibilityLabels.OpenQuickAnswers.v158" = "Snelle antwoorden openen";
+
+/* Loading label shown in the Quick Answers view while an answer is being fetched. */
+"QuickAnswers.ContentView.Answering.v158" = "Beantwoorden…";
+
+/* Placeholder text shown in the Quick Answers view before the user starts speaking. */
+"QuickAnswers.ContentView.Placeholder.v158" = "Iets vragen…";
+
+/* Header label for the sources section shown below a Quick Answers result. */
+"QuickAnswers.ContentView.Sources.v158" = "Bronnen";
+
+/* Button label on the Quick Answers permission alert to dismiss the alert without taking action. */
+"QuickAnswers.Errors.Cancel.v158" = "Annuleren";
+
+/* Title of the alert shown when the user has exceeded the daily usage limit for Quick Answers. */
+"QuickAnswers.Errors.DailyLimitTitle.v158" = "Daglimiet bereikt";
+
+/* Message shown in the alert when Quick Answers encounters an unexpected error. */
+"QuickAnswers.Errors.GenericErrorMessage.v158" = "Probeer het later opnieuw te vragen.";
+
+/* Button label to dismiss the Quick Answers error alert. */
+"QuickAnswers.Errors.OK.v158" = "OK";
+
+/* Button label on the permission alert that opens the iOS Settings app so the user can grant permissions. */
+"QuickAnswers.Errors.OpenSettings.v158" = "Instellingen openen";
+
+/* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
+"QuickAnswers.OptIn.ContinueButton.v158" = "Doorgaan";
+
+/* Link text on the Quick Answers opt-in screen that opens more information about the feature. */
+"QuickAnswers.OptIn.LearnMore.v158" = "Meer info";
+
+/* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
+"QuickAnswers.Tip.Message.v158" = "Tik hier om te beginnen.";
+

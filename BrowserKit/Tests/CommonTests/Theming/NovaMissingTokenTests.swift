@@ -7,6 +7,10 @@ import XCTest
 @testable import Common
 
 class NovaMissingTokenTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+    }
+
     override func tearDown() {
         NovaMissingToken.reportMisuse = { assertionFailure($0) }
         super.tearDown()

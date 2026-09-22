@@ -201,7 +201,7 @@ final class TabTrayViewController: UIViewController,
     @available(iOS 26.0, *)
     private func applyToolbarGlassButtonTints(theme: Theme) {
         guard isNovaDesignEnabled else { return }
-        let glassTint = theme.type == .light ? UIColor.clear : theme.colors.layerGlassTintNova
+        let glassTint = theme.colors.layerGlassTintNova
         setProminentGlass(deleteButton,
                           StandardImageIdentifiers.Large.delete,
                           background: glassTint,
@@ -214,6 +214,8 @@ final class TabTrayViewController: UIViewController,
                           StandardImageIdentifiers.Large.checkmark,
                           background: theme.colors.actionPrimary,
                           glyph: theme.colors.iconInverted)
+        syncTabButton.style = .prominent
+        syncTabButton.tintColor = glassTint
     }
 
     @available(iOS 26.0, *)
@@ -1051,10 +1053,11 @@ final class TabTrayViewController: UIViewController,
 
     @objc
     private func newTabButtonTapped() {
-        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.addNewTab)
-        store.dispatch(action)
+        guard let type = TabsDisplayViewPanelType(fromTabTrayPanelType: tabTrayState.selectedPanel) else { return }
+        store.dispatch(
+            TabPanelViewModernAction.addNewTab(ofType: type),
+            forWindowUUID: self.windowUUID
+        )
     }
 
     @objc

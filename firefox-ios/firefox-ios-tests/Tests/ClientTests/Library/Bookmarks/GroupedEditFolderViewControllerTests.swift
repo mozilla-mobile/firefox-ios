@@ -178,6 +178,19 @@ final class GroupedEditFolderViewControllerTests: XCTestCase {
         XCTAssert(!navController.viewControllers.contains(subject))
     }
 
+    func test_saveButtonAction_savesFolder() {
+        let folder = makeFolder()
+        let viewModel = createViewModel(folder: folder)
+        let subject = createSubject(viewModel: viewModel)
+
+        let expectation = XCTestExpectation(description: "folder saved")
+        viewModel.onBookmarkSaved = { expectation.fulfill() }
+
+        subject.saveButtonAction()
+
+        wait(for: [expectation], timeout: 1.0)
+    }
+
     // MARK: - Private
 
     private func createSubject(
@@ -213,6 +226,19 @@ final class GroupedEditFolderViewControllerTests: XCTestCase {
             folder: folder,
             bookmarkSaver: MockBookmarksSaver(),
             folderFetcher: folderFetcher ?? MockGroupedFolderHierarchyFetcher()
+        )
+    }
+
+    private func makeFolder() -> BookmarkFolderData {
+        BookmarkFolderData(
+            guid: "folder_guid",
+            dateAdded: 0,
+            lastModified: 0,
+            parentGUID: "parent_guid",
+            position: 0,
+            title: "My Folder",
+            childGUIDs: [],
+            children: nil
         )
     }
 

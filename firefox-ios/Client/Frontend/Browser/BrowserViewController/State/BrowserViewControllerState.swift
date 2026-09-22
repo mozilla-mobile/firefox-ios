@@ -269,7 +269,7 @@ struct BrowserViewControllerState: ScreenState {
                 HomepageState.self,
                 for: .homepage,
                 window: action.windowUUID
-            )?.searchState.shouldShowSearchBar ?? false
+            )?.searchBarState.shouldShowSearchBar ?? false
 
             guard shouldShowSearchBar, action.buttonType == .search else {
                 return passthroughState(from: state, action: action)

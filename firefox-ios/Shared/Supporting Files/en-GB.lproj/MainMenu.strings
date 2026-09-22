@@ -32,7 +32,7 @@
 "MainMenu.Account.AccessibilityLabels.CloseButton.v142" = "Close";
 
 /* The accessibility label for the sign in button in the Main menu header view. */
-"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Sign in to synchronise passwords, tabs, and more";
+"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Sign in to synchronise passwords, tabs and more";
 
 /* On the main menu, when the user is signed in. */
 "MainMenu.Account.SignedIn.Description.v141" = "Manage what you back up and synchronise";

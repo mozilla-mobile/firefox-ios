@@ -59,8 +59,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         button.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.audioWave)?
             .withRenderingMode(.alwaysTemplate)
         button.configuration?.cornerStyle = .capsule
-        // TODO: - FXIOS-14720 Add Strings for accessibility label
-        button.accessibilityLabel = "Open Quick Answers"
+        button.accessibilityLabel = .QuickAnswers.AccessibilityLabels.OpenQuickAnswers
         button.accessibilityIdentifier = a11y.quickAnswersButton
         button.adjustsImageSizeForAccessibilityContentSizeCategory = false
         button.addAction(UIAction(handler: { [weak self] _ in

@@ -39,6 +39,52 @@ fileprivate extension ForeignBytes {
     init(bufferPointer: UnsafeBufferPointer<UInt8>) {
         self.init(len: Int32(bufferPointer.count), data: bufferPointer.baseAddress)
     }
+
+    init(rawBufferPointer: UnsafeRawBufferPointer) {
+        self.init(
+            len: Int32(rawBufferPointer.count),
+            data: rawBufferPointer.baseAddress?.assumingMemoryBound(to: UInt8.self)
+        )
+    }
+}
+
+// Converter for `&[u8]` / `[ByRef] bytes` arguments.
+//
+// Conforms to `FfiConverter` so the compiler enforces the full converter
+// method set. Only the scope-bound `lower(_:_body:)` overload is sound —
+// zero-copy byte buffers only flow foreign -> Rust, and only in argument
+// position. The four protocol-witness methods (`lift`, `lower`, `read`,
+// `write`) `fatalError` at runtime if anyone reaches them.
+//
+// The scope-bound `lower` takes a closure because the `ForeignBytes`
+// pointer is only guaranteed valid for the duration of
+// `Data.withUnsafeBytes`. Callers must run the full FFI call inside
+// the closure body.
+fileprivate enum FfiConverterByRefBytes: FfiConverter {
+    typealias SwiftType = Data
+    typealias FfiType = ForeignBytes
+
+    static func lower<R>(_ value: Data, _ body: (ForeignBytes) throws -> R) rethrows -> R {
+        return try value.withUnsafeBytes { rawBuf in
+            try body(ForeignBytes(rawBufferPointer: rawBuf))
+        }
+    }
+
+    static func lower(_ value: Data) -> ForeignBytes {
+        fatalError("ByRef bytes cannot use the plain lower: returning ForeignBytes escapes the Data.withUnsafeBytes scope. Use the scope-bound lower(_:_body:) overload instead.")
+    }
+
+    static func lift(_ value: ForeignBytes) throws -> Data {
+        fatalError("ByRef bytes cannot be lifted: zero-copy &[u8] only flows foreign->Rust")
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        fatalError("ByRef bytes cannot be read from a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
+
+    static func write(_ value: Data, into buf: inout [UInt8]) {
+        fatalError("ByRef bytes cannot be written to a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
 }
 
 // For every type used in the interface, we provide helper methods for conveniently
@@ -487,7 +533,11 @@ fileprivate struct FfiConverterString: FfiConverter {
             return String()
         }
         let bytes = UnsafeBufferPointer<UInt8>(start: value.data!, count: Int(value.len))
-        return String(bytes: bytes, encoding: String.Encoding.utf8)!
+        // Use Swift's native UTF-8 decoder; `String(bytes:encoding:.utf8)` goes
+        // through Foundation's NSString and silently strips a leading U+FEFF BOM.
+        // Invalid UTF-8 substitutes U+FFFD instead of trapping (unreachable
+        // given Rust's `String` invariant).
+        return String(decoding: bytes, as: UTF8.self)
     }
 
     public static func lower(_ value: String) -> RustBuffer {
@@ -503,7 +553,8 @@ fileprivate struct FfiConverterString: FfiConverter {
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> String {
         let len: Int32 = try readInt(&buf)
-        return String(bytes: try readBytes(&buf, count: Int(len)), encoding: String.Encoding.utf8)!
+        // See `lift` above for why we avoid Foundation's NSString-backed decoder here.
+        return String(decoding: try readBytes(&buf, count: Int(len)), as: UTF8.self)
     }
 
     public static func write(_ value: String, into buf: inout [UInt8]) {
@@ -603,10 +654,11 @@ open class RemoteCommandStore: RemoteCommandStoreProtocol, @unchecked Sendable {
      */
 open func addRemoteCommand(deviceId: String, command: RemoteCommand)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_remotecommandstore_add_remote_command(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(deviceId),
-        FfiConverterTypeRemoteCommand_lower(command),$0
+        FfiConverterTypeRemoteCommand_lower(command),uniffiCallStatus
     )
 })
 }
@@ -616,11 +668,12 @@ open func addRemoteCommand(deviceId: String, command: RemoteCommand)throws  -> B
      */
 open func addRemoteCommandAt(deviceId: String, command: RemoteCommand, when: Timestamp)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_remotecommandstore_add_remote_command_at(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(deviceId),
         FfiConverterTypeRemoteCommand_lower(command),
-        FfiConverterTypeTimestamp_lower(when),$0
+        FfiConverterTypeTimestamp_lower(when),uniffiCallStatus
     )
 })
 }
@@ -630,8 +683,9 @@ open func addRemoteCommandAt(deviceId: String, command: RemoteCommand, when: Tim
      */
 open func getUnsentCommands()throws  -> [PendingCommand]  {
     return try  FfiConverterSequenceTypePendingCommand.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_remotecommandstore_get_unsent_commands(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -642,10 +696,11 @@ open func getUnsentCommands()throws  -> [PendingCommand]  {
      */
 open func removeRemoteCommand(deviceId: String, command: RemoteCommand)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_remotecommandstore_remove_remote_command(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(deviceId),
-        FfiConverterTypeRemoteCommand_lower(command),$0
+        FfiConverterTypeRemoteCommand_lower(command),uniffiCallStatus
     )
 })
 }
@@ -655,9 +710,10 @@ open func removeRemoteCommand(deviceId: String, command: RemoteCommand)throws  -
      */
 open func setPendingCommandSent(command: PendingCommand)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_remotecommandstore_set_pending_command_sent(
             self.uniffiCloneHandle(),
-        FfiConverterTypePendingCommand_lower(command),$0
+        FfiConverterTypePendingCommand_lower(command),uniffiCallStatus
     )
 })
 }
@@ -810,102 +866,115 @@ open class TabsBridgedEngine: TabsBridgedEngineProtocol, @unchecked Sendable {
     
 open func apply(serverModifiedMillis: Int64)throws  -> [String]  {
     return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsbridgedengine_apply(
             self.uniffiCloneHandle(),
-        FfiConverterInt64.lower(serverModifiedMillis),$0
+        FfiConverterInt64.lower(serverModifiedMillis),uniffiCallStatus
     )
 })
 }
     
 open func ensureCurrentSyncId(newSyncId: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsbridgedengine_ensure_current_sync_id(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(newSyncId),$0
+        FfiConverterString.lower(newSyncId),uniffiCallStatus
     )
 })
 }
     
 open func lastSync()throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsbridgedengine_last_sync(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func reset()throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsbridgedengine_reset(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func resetLastSync()throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsbridgedengine_reset_last_sync(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func resetSyncId()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsbridgedengine_reset_sync_id(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func setClients(clientData: String)throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsbridgedengine_set_clients(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(clientData),$0
+        FfiConverterString.lower(clientData),uniffiCallStatus
     )
 }
 }
     
 open func setUploaded(newTimestamp: Int64, uploadedIds: [String])throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsbridgedengine_set_uploaded(
             self.uniffiCloneHandle(),
         FfiConverterInt64.lower(newTimestamp),
-        FfiConverterSequenceString.lower(uploadedIds),$0
+        FfiConverterSequenceString.lower(uploadedIds),uniffiCallStatus
     )
 }
 }
     
 open func storeIncoming(incomingEnvelopesAsJson: [String])throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsbridgedengine_store_incoming(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceString.lower(incomingEnvelopesAsJson),$0
+        FfiConverterSequenceString.lower(incomingEnvelopesAsJson),uniffiCallStatus
     )
 }
 }
     
 open func syncFinished()throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsbridgedengine_sync_finished(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func syncId()throws  -> String?  {
     return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsbridgedengine_sync_id(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func syncStarted()throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsbridgedengine_sync_started(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func wipe()throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsbridgedengine_wipe(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1025,8 +1094,9 @@ open class TabsStore: TabsStoreProtocol, @unchecked Sendable {
 public convenience init(path: String) {
     let handle =
         try! rustCall() {
+        uniffiCallStatus in
     uniffi_tabs_fn_constructor_tabsstore_new(
-        FfiConverterString.lower(path),$0
+        FfiConverterString.lower(path),uniffiCallStatus
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -1046,38 +1116,43 @@ public convenience init(path: String) {
     
 open func bridgedEngine() -> TabsBridgedEngine  {
     return try!  FfiConverterTypeTabsBridgedEngine_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsstore_bridged_engine(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func closeConnection()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsstore_close_connection(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func getAll() -> [ClientRemoteTabs]  {
     return try!  FfiConverterSequenceTypeClientRemoteTabs.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsstore_get_all(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func newRemoteCommandStore() -> RemoteCommandStore  {
     return try!  FfiConverterTypeRemoteCommandStore_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsstore_new_remote_command_store(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func registerWithSyncManager()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsstore_register_with_sync_manager(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1086,9 +1161,10 @@ open func registerWithSyncManager()  {try! rustCall() {
      * An API for clients which know nothing about windows or tab groups.
      */
 open func setLocalTabs(remoteTabs: [RemoteTabRecord])  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsstore_set_local_tabs(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceTypeRemoteTabRecord.lower(remoteTabs),$0
+        FfiConverterSequenceTypeRemoteTabRecord.lower(remoteTabs),uniffiCallStatus
     )
 }
 }
@@ -1097,9 +1173,10 @@ open func setLocalTabs(remoteTabs: [RemoteTabRecord])  {try! rustCall() {
      * More context-aware API for setting information about a tab like window and groups.
      */
 open func setLocalTabsInfo(info: LocalTabsInfo)  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_tabs_fn_method_tabsstore_set_local_tabs_info(
             self.uniffiCloneHandle(),
-        FfiConverterTypeLocalTabsInfo_lower(info),$0
+        FfiConverterTypeLocalTabsInfo_lower(info),uniffiCallStatus
     )
 }
 }
@@ -1575,8 +1652,7 @@ public func FfiConverterTypeWindow_lower(_ value: Window) -> RustBuffer {
     return FfiConverterTypeWindow.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * A command which should be sent to a remote device.
  */
@@ -1642,7 +1718,8 @@ public func FfiConverterTypeRemoteCommand_lower(_ value: RemoteCommand) -> RustB
 
 
 
-public enum TabsApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
+public 
+enum TabsApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -1735,8 +1812,7 @@ public func FfiConverterTypeTabsApiError_lower(_ value: TabsApiError) -> RustBuf
     return FfiConverterTypeTabsApiError.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 
 public enum WindowType: UInt8, Equatable, Hashable {
     
@@ -1996,10 +2072,6 @@ fileprivate struct FfiConverterDictionaryStringTypeWindow: FfiConverterRustBuffe
 }
 
 
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- */
 public typealias Timestamp = Int64
 
 #if swift(>=5.8)
@@ -2057,10 +2129,10 @@ private let initializationResult: InitializationResult = {
     if (uniffi_tabs_checksum_method_remotecommandstore_add_remote_command() != 2773) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_remotecommandstore_add_remote_command_at() != 25564) {
+    if (uniffi_tabs_checksum_method_remotecommandstore_add_remote_command_at() != 38380) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_remotecommandstore_get_unsent_commands() != 40420) {
+    if (uniffi_tabs_checksum_method_remotecommandstore_get_unsent_commands() != 56551) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tabs_checksum_method_remotecommandstore_remove_remote_command() != 28236) {
@@ -2069,7 +2141,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_tabs_checksum_method_remotecommandstore_set_pending_command_sent() != 17621) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_apply() != 5752) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_apply() != 41887) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tabs_checksum_method_tabsbridgedengine_ensure_current_sync_id() != 35742) {
@@ -2090,16 +2162,16 @@ private let initializationResult: InitializationResult = {
     if (uniffi_tabs_checksum_method_tabsbridgedengine_set_clients() != 61398) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_set_uploaded() != 33193) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_set_uploaded() != 43130) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_store_incoming() != 6635) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_store_incoming() != 45540) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tabs_checksum_method_tabsbridgedengine_sync_finished() != 62322) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_sync_id() != 3494) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_sync_id() != 51678) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tabs_checksum_method_tabsbridgedengine_sync_started() != 56074) {
@@ -2114,7 +2186,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_tabs_checksum_method_tabsstore_close_connection() != 24061) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsstore_get_all() != 13681) {
+    if (uniffi_tabs_checksum_method_tabsstore_get_all() != 35226) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tabs_checksum_method_tabsstore_new_remote_command_store() != 26945) {
@@ -2123,7 +2195,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_tabs_checksum_method_tabsstore_register_with_sync_manager() != 37153) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsstore_set_local_tabs() != 30185) {
+    if (uniffi_tabs_checksum_method_tabsstore_set_local_tabs() != 33828) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tabs_checksum_method_tabsstore_set_local_tabs_info() != 31893) {

@@ -410,7 +410,7 @@ public class BrowserAddressToolbar: UIView,
         widthAnchor.priority = .defaultHigh
     }
 
-    private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
+    func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
         let buttons = toolbarElements.map { toolbarElement in
             let hasCachedButton = hasCachedButton(for: toolbarElement)
             let button = getToolbarButton(for: toolbarElement)
@@ -445,6 +445,10 @@ public class BrowserAddressToolbar: UIView,
             }
             return button
         }
+
+        // Buttons are cached and reused, so the stack often ends up with the exact same arrangement.
+        // Tearing it down and rebuilding it in that case only invalidates layout for no visible change.
+        guard !stackView.arrangedSubviews.elementsEqual(buttons, by: { $0 === $1 }) else { return }
 
         stackView.removeAllArrangedViews()
 

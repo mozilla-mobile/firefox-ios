@@ -12,7 +12,7 @@ final class MockSummarizerConfigProvider: SummarizerConfigProvider, @unchecked S
     func getConfig(
         summarizerModel: SummarizerModel,
         contentType: SummarizationContentType,
-        locale: Locale
+        languages: SummarizerLanguageResolution
     ) async -> SummarizerConfig {
         getConfigCalledCount += 1
         return SummarizerConfig.defaultConfig

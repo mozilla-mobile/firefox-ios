@@ -63,6 +63,7 @@ class ClipBoardTests: BaseTestCase {
 
     // This test is disabled in release, but can still run on master
     // https://mozilla.testrail.io/index.php?/cases/view/2325688
+    // Regression
     func testClipboard() {
         navigator.openURL(url)
         waitUntilPageLoad()

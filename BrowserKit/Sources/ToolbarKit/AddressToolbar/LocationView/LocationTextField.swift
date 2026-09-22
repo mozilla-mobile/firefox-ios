@@ -172,25 +172,26 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     func setAutocompleteSuggestion(_ suggestion: String?) {
         let searchText = text ?? ""
 
-        guard let suggestion = suggestion, isEditing && markedTextRange == nil else {
-            hideCursor = false
+        guard let suggestion, isEditing && markedTextRange == nil else {
+            cancelPendingCompletion()
             return
         }
 
         let normalized = normalizeString(searchText)
         guard suggestion.hasPrefix(normalized) && normalized.count < suggestion.count else {
-            hideCursor = false
+            cancelPendingCompletion()
             return
         }
 
         let suggestionText = String(suggestion.dropFirst(normalized.count))
+        selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
         setMarkedText(suggestionText, selectedRange: NSRange())
         hideCursor = true
     }
 
     func handleInputModeDidChange() {
-        guard !lastMarkedText.isEmpty, let currentText = self.text else { return }
-        self.text = currentText.replacingOccurrences(of: lastMarkedText, with: "")
+        guard !lastMarkedText.isEmpty, let currentText = text, currentText.hasSuffix(lastMarkedText) else { return }
+        self.text = String(currentText.dropLast(lastMarkedText.count))
         hideCursor = true
         setMarkedText(lastMarkedText, selectedRange: NSRange())
     }
@@ -220,6 +221,11 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     }
 
     // MARK: - Private
+    private func cancelPendingCompletion() {
+        hideCursor = false
+        if markedTextRange == nil { lastMarkedText = "" }
+    }
+
     @objc
     private func textDidChange() {
         // When marked text (autocomplete suggestion) is set this method is called

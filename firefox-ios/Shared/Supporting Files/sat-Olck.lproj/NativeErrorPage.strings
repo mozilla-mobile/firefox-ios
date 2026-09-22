@@ -25,8 +25,20 @@
 /* On certificate error page, this is a link to learn more about certificate errors. */
 "NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ";
 
+/* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "ᱞᱟᱦᱟ ᱥᱮᱱᱚᱜ ᱢᱮ %@ (ᱡᱷᱩᱠᱤ)";
+
+/* On certificate error page, this is the title warning the user about a potential security issue. */
+"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "ᱦᱩᱥᱤᱭᱟᱹᱨ ᱛᱟᱦᱮᱱ ᱢᱮ ᱾  ᱡᱟᱦᱟᱱᱟᱜ ᱜᱮ ᱴᱷᱤᱠ ᱵᱟᱝ ᱧᱮᱞᱚᱜ ᱠᱟᱱᱟ ᱾";
+
+/* On certificate error page, this is a link that will show the site’s certificate details. */
+"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "ᱥᱟᱭᱤᱴ ᱨᱮᱭᱟᱜ ᱥᱟᱨᱴᱤᱯᱷᱤᱠᱮᱴ ᱧᱮᱞ ᱢᱮ";
+
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "ᱫᱚᱦᱲᱟ ᱞᱟᱫᱤ";
+
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v155" = "ᱫᱩᱦᱲᱟᱹ ᱠᱩᱨᱩᱢᱩᱴᱩ";
 
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "%@ ᱨᱮᱱ ᱢᱟᱞᱤᱠ ᱫᱚ ᱱᱚᱣᱟ ᱵᱮᱥ ᱞᱮᱠᱟ ᱵᱟᱭ ᱥᱮᱴ ᱟᱯ ᱟᱠᱟᱫᱟ ᱟᱨ ᱨᱟᱠᱷᱟ ᱡᱚᱯᱲᱟᱣ ᱵᱟᱝ ᱛᱮᱭᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾";
@@ -34,9 +46,30 @@
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "ᱦᱩᱥᱤᱭᱟᱹᱨ ᱛᱟᱦᱮᱱ ᱢᱮ ᱾  ᱡᱟᱦᱟᱱᱟᱜ ᱜᱮ ᱴᱷᱤᱠ ᱵᱟᱝ ᱧᱮᱞᱚᱜ ᱠᱟᱱᱟ ᱾";
 
+/* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
+"NativeErrorPage.GoBackButton.v149" = "ᱛᱟᱭᱚᱢ ᱥᱮᱱᱚᱜ ᱢᱮ (ᱠᱷᱚᱡᱚᱜ ᱜᱮᱭᱟ)";
+
 /* On error page, this is the description for no internet connection. */
 "NativeErrorPage.NoInternetConnection.Description.v131" = "ᱮᱴᱟᱜ ᱰᱤᱵᱷᱟᱭᱤᱥ ᱨᱮ ᱡᱚᱯᱲᱟᱣ ᱨᱮᱭᱟᱜ ᱠᱩᱨᱩᱢᱩᱴᱩᱭ ᱢᱮ᱾ ᱟᱢᱟᱜ ᱢᱚᱰᱮᱢ ᱵᱟᱝᱠᱷᱟᱱ ᱨᱟᱣᱴᱟᱨ ᱧᱮᱞ ᱵᱤᱰᱟᱹᱣ ᱢᱮ ᱾ Wi-Fi ᱥᱟᱶ ᱰᱤᱥᱠᱚᱱᱮᱠᱴ ᱟᱨ ᱫᱚᱦᱲᱟ ᱡᱚᱯᱲᱟᱣ ᱢᱮ ᱾";
 
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "ᱧᱮᱞᱚᱜ ᱠᱟᱱᱟ ᱟᱢᱟᱜ ᱤᱱᱴᱟᱨᱱᱮᱴ ᱠᱚᱱᱮᱠᱥᱚᱱ ᱨᱮ ᱮᱴᱠᱮᱴᱚᱬᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾";
+
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v155" = "ᱟᱨᱠᱟᱭᱤᱵᱷ ᱧᱮᱞ ᱦᱩᱭᱩᱜ ᱠᱟᱱᱟ";
+
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v155" = "ᱟᱞᱮ ᱟᱨᱠᱟᱭᱤᱵᱷ ᱥᱮᱵᱟ ᱵᱟᱞᱮ ᱥᱮᱴᱮᱨ ᱫᱟᱲᱮᱭᱟᱜ ᱠᱟᱱᱟ ᱾";
+
+/* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.Wayback.Error.Description.v154" = "ᱥᱟᱭᱤᱴ ᱫᱚ ᱵᱮᱥᱛᱚ ᱥᱮ ᱵᱟᱝ ᱧᱟᱢᱚᱜ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾ ᱛᱟᱭᱚᱢ ᱛᱮ ᱫᱚᱦᱲᱟ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾ ᱡᱩᱫᱤ ᱮᱴᱟᱜ ᱥᱟᱦᱴᱟ ᱵᱟᱝ ᱞᱳᱰᱚᱜ ᱠᱟᱱᱟ, ᱟᱢᱟᱜ ᱣᱟᱭ-ᱯᱷᱟᱭ ᱵᱟᱝᱠᱷᱟᱱ ᱰᱟᱴᱟ ᱠᱟᱱᱮᱠᱥᱚᱱ ᱧᱮᱞ ᱢᱮ ᱾ %@ ᱦᱚᱸ ᱱᱚᱣᱟ ᱥᱟᱦᱴᱟ ᱨᱮᱭᱟᱜ ᱢᱟᱲᱟᱝ ᱵᱷᱟᱨᱥᱚᱱ ᱞᱟᱹᱜᱤᱫ ᱣᱮᱵᱮᱠ ᱢᱮᱥᱤᱱ ᱥᱮᱸᱫᱽᱨᱟ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾";
+
+/* Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. %1$@ is the app name (e.g. Firefox). %2$@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org. */
+"NativeErrorPage.Wayback.Error.FooterDescription.v155" = "%1$@ ᱤᱱᱴᱟᱨᱱᱮᱴ ᱟᱨᱠᱟᱭᱤᱵᱷ ᱨᱮᱱᱟᱜ %2$@ ᱠᱷᱚᱱ ᱱᱚᱣᱟ ᱥᱟᱦᱴᱟ ᱨᱮᱭᱟᱜ ᱞᱟᱦᱟ ᱨᱮᱱᱟᱜ ᱵᱷᱟᱨᱥᱚᱱ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾";
+
+/* The tappable link text within the Wayback footer description, opens web.archive.org. */
+"NativeErrorPage.Wayback.Error.LinkText.v155" = "Wayback Machine";
+
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "ᱪᱮᱫ ᱟᱨᱠᱟᱭᱤᱵᱷ ᱵᱷᱟᱨᱥᱚᱱ ᱵᱟᱝ ᱧᱟᱢ ᱟᱠᱟᱱᱟ ᱾";
 

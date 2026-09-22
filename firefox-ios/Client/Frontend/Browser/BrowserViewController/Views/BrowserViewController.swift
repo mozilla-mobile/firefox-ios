@@ -265,6 +265,9 @@ class BrowserViewController: UIViewController,
 
     var navigationHintDoubleTapTimer: Timer?
     var googleLensTipObservationTask: Task<Void, Never>?
+
+    /// Outstanding wait for the account manager before the pairing modal can present.
+    private var pairingWaitToken: ActionToken?
     weak var googleLensTipViewController: UIViewController?
     private(set) lazy var navigationContextHintVC: ContextualHintViewController = {
         let navigationViewProvider = ContextualHintViewProvider(forHintType: .navigation, with: profile)
@@ -508,6 +511,9 @@ class BrowserViewController: UIViewController,
             unsubscribeFromRedux()
             stopObservingAllWebViews()
             googleLensTipObservationTask?.cancel()
+            if let pairingWaitToken {
+                AppEventQueue.cancelAction(token: pairingWaitToken)
+            }
         }
     }
 
@@ -632,24 +638,28 @@ class BrowserViewController: UIViewController,
     // MARK: - Translucency and blur helpers
 
     func updateBlurViews(scrollOffset: CGFloat? = nil) {
-        guard toolbarHelper.shouldBlur() else {
-            topBlurView.alpha = 0
-            bottomBlurView.isHidden = true
-            header.isClearBackground = false
-            overKeyboardContainer.isClearBackground = false
-            bottomContainer.isClearBackground = false
-            contentContainer.mask = nil
-            return
-        }
-
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let isKeyboardShowing = keyboardState != nil
-
         let isToolbarCollapsed = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID
         )?.isAddressBarMinimized == true
+
+        guard toolbarHelper.shouldBlur() else {
+            topBlurView.alpha = 0
+            bottomBlurView.isHidden = true
+            header.isClearBackground = false
+            // With blur off this container paints the chrome behind a bottom address bar, except while
+            // minimized — the remaining pill has to float over the page, not sit on an opaque band.
+            overKeyboardContainer.isClearBackground = isToolbarCollapsed
+            // Nothing else re-themes it while scrolling with blur off.
+            overKeyboardContainer.applyTheme(theme: theme)
+            bottomContainer.isClearBackground = false
+            contentContainer.mask = nil
+            return
+        }
+
+        let isKeyboardShowing = keyboardState != nil
         let isScrollAlphaZero = if #available(iOS 26.0, *) { isToolbarCollapsed } else { false }
 
         // Prevent homepage from showing behind the keyboard when content isn't scrollable.
@@ -1345,7 +1355,7 @@ class BrowserViewController: UIViewController,
             HomepageState.self,
             for: .homepage,
             window: windowUUID
-        )?.searchState.shouldShowSearchBar ?? false
+        )?.searchBarState.shouldShowSearchBar ?? false
 
         guard shouldShowSearchBar, !isEditing, contentContainer.hasHomepage else {
             guard addressToolbarContainer.isHidden == true else { return }
@@ -3373,10 +3383,10 @@ class BrowserViewController: UIViewController,
         else { return }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
-            let action = TabPanelViewAction(panelType: .tabs,
-                                            windowUUID: self.windowUUID,
-                                            actionType: TabPanelViewActionType.addNewTab)
-            store.dispatch(action)
+            store.dispatch(
+                TabPanelViewModernAction.addNewTab(ofType: .normal),
+                forWindowUUID: self.windowUUID
+            )
 
             self.debugOpen(numberOfNewTabs: numberOfNewTabs - 1, at: url)
         })
@@ -3401,6 +3411,40 @@ class BrowserViewController: UIViewController,
                                     topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
+    func presentPairingViewController(_ pairingURL: URL) {
+        // Without an account manager the web view never loads its first page, so the modal would
+        // present empty with no error and no way out. A cold-launch deep link can arrive before the
+        // account manager finishes initializing, so wait for it rather than dropping the route.
+        pairingWaitToken = AppEventQueue.wait(for: .accountManagerInitialized) { [weak self] in
+            ensureMainThread { [weak self] in
+                self?.pairingWaitToken = nil
+                self?.presentPairingWebView(pairingURL)
+            }
+        }
+    }
+
+    private func presentPairingWebView(_ pairingURL: URL) {
+        guard profile.rustFxA.accountManager != nil else {
+            logger.log("Cannot present the pairing flow without an account manager",
+                       level: .warning,
+                       category: .sync)
+            return
+        }
+
+        let viewController = FxAWebViewController(
+            pageType: .pairingV2(url: pairingURL),
+            profile: profile,
+            dismissalStyle: .dismiss,
+            deepLinkParams: FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: [:])
+        )
+        presentThemedViewController(
+            navItemLocation: .Left,
+            navItemText: .Close,
+            vcBeingPresented: viewController,
+            topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad
+        )
+    }
+
     // MARK: - Handle Deeplink open URL / query
 
     func handle(query: String, isPrivate: Bool, shouldOpenNewTab: Bool = true) {
@@ -3418,7 +3462,7 @@ class BrowserViewController: UIViewController,
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
             let isFocusLocationTextFieldOption = options?.contains(.focusLocationField) == true
-
+            let isForceNewTabOption = options?.contains(.forceNewTab) == true
             // Avoid race condition; if we're restoring tabs, wait to process URL until completed. [FXIOS-14406]
             // Wait for tabs restoration because we need the `selectedTab`.
             // The `selectedTab` is `nil` when open firefox from a widget.
@@ -3426,17 +3470,22 @@ class BrowserViewController: UIViewController,
                 AppEventQueue.wait(for: [.tabRestoration(tabManager.windowUUID)]) { [weak self] in
                     ensureMainThread { [weak self] in
                         guard let self, let selectedTab = self.tabManager.selectedTab else { return }
-                        self.handle(selectedTab, isPrivate, isFocusLocationTextFieldOption)
+                        self.handle(selectedTab, isPrivate, isFocusLocationTextFieldOption, isForceNewTabOption)
                     }
                 }
                 return
             }
-            handle(selectedTab, isPrivate, isFocusLocationTextFieldOption)
+            handle(selectedTab, isPrivate, isFocusLocationTextFieldOption, isForceNewTabOption)
         }
     }
 
-    private func handle(_ selectedTab: Tab, _ isPrivate: Bool, _ isFocusLocationTextFieldOption: Bool) {
-        if shouldFocusLocationTextField(for: selectedTab, isPrivate: isPrivate) {
+    private func handle(
+        _ selectedTab: Tab,
+        _ isPrivate: Bool,
+        _ isFocusLocationTextFieldOption: Bool,
+        _ isForceNewTabOption: Bool
+    ) {
+        if !isForceNewTabOption && shouldFocusLocationTextField(for: selectedTab, isPrivate: isPrivate) {
             focusLocationTextField(forTab: selectedTab)
         } else {
             openBlankNewTab(
@@ -3943,7 +3992,7 @@ class BrowserViewController: UIViewController,
         let colors = currentTheme.colors
         backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layerSurfaceLow
         if #available(iOS 26, *), let glassEffect = effect as? UIGlassEffect {
-            glassEffect.tintColor = currentTheme.colors.layer1.withAlphaComponent(0.5)
+            glassEffect.tintColor = currentTheme.colors.layerToolbarGlass.withAlphaComponent(0.5)
             bottomBlurView.effect = glassEffect
             topBlurView.effect = glassEffect
         }
@@ -4794,9 +4843,7 @@ extension BrowserViewController: TabManagerDelegate {
                                          canGoForward: selectedTab.canGoForward,
                                          windowUUID: windowUUID)
 
-        if let url = selectedTab.webView?.url, !InternalURL.isValid(url: url) {
-            addressToolbarContainer.hideProgressBar()
-        }
+        restoreProgressBar(for: selectedTab)
 
         // When the newly selected tab is the homepage or another internal tab,
         // we need to explicitly set the reader mode state to be unavailable.
@@ -4818,6 +4865,23 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         } else if isSwipingTabsEnabled {
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+        }
+    }
+
+    // Restores the progress bar state for the newly selected tab.
+    // Shows the bar at the tab's current load progress if it is still loading a real URL,
+    // otherwise hides it.
+    private func restoreProgressBar(for tab: Tab) {
+        guard let webView = tab.webView else {
+            addressToolbarContainer.hideProgressBar()
+            return
+        }
+
+        let isInternalURL = webView.url.map { InternalURL.isValid(url: $0) } ?? true
+        if !isInternalURL && webView.isLoading {
+            addressToolbarContainer.updateProgressBar(progress: webView.estimatedProgress)
+        } else {
+            addressToolbarContainer.hideProgressBar()
         }
     }
 
@@ -5050,13 +5114,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let isEditing = toolbarState?.addressToolbar.isEditing == true
         if !isEditing {
-            store.dispatch(
-                ToolbarAction(
-                    shouldShowKeyboard: false,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.keyboardStateDidChange
-                )
-            )
+            store.dispatch(ToolbarModernAction.didKeyboardRequestChange(shouldShow: false), forWindowUUID: windowUUID)
         }
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
                                               doesFindInPageBarExist: iOS15FindInPageBar != nil)
@@ -5075,6 +5133,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
         keyboardState = state
+
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        if toolbarState?.addressToolbar.isEditing == true {
+            store.dispatch(ToolbarModernAction.didKeyboardRequestChange(shouldShow: true), forWindowUUID: windowUUID)
+        }
 
         UIView.animate(
             withDuration: state.animationDuration,

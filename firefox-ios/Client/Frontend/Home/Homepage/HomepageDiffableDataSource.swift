@@ -126,7 +126,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         snapshot.appendSections([.header])
         snapshot.appendItems([headerItem], toSection: .header)
 
-        if state.shouldShowPrivacyNotice {
+        if state.privacyNoticeState.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])
             snapshot.appendItems([.privacyNotice], toSection: .privacyNotice)
         }
@@ -167,7 +167,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         snapshot.appendSections([.spacer])
         snapshot.appendItems([.spacer], toSection: .spacer)
 
-        if state.searchState.shouldShowSearchBar {
+        if state.searchBarState.shouldShowSearchBar {
             snapshot.appendSections([.searchBar])
             snapshot.appendItems([.searchBar], toSection: .searchBar)
         }

@@ -10,6 +10,9 @@
 /* Label for the button, displayed in the menu, used to open a new tab */
 "Menu.NewTabAction.Title" = "Atvērt jaunu cilni";
 
+/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. */
+"Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "Lejupielādes";
+
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
 "Menu.OpenSettingsAction.Title" = "Iestatījumi";
 
@@ -21,4 +24,7 @@
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "Lapas mobilā versija";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"SettingsMenu.OpenHomePageAction.Title" = "Sākumlapa";
 

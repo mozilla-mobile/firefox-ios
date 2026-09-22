@@ -46,6 +46,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .backgroundAudio,
+                titleText: format(string: "Background Audio"),
+                statusText: format(string: "Toggle to allow audio to continue playing when the app is backgrounded.")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .addressBarGestureToOpenTabTrayInteractive,
                 titleText: format(string: "Address bar gesture interactive"),
                 statusText: format(string: "Toggle to enable fancier animations for address bar swipe gestures")
@@ -350,6 +357,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .waybackMachine,
                 titleText: format(string: "Wayback Machine"),
                 statusText: format(string: "Toggle to show Wayback Machine fallback on native error pages")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .webViewDocumentFetchRefactor,
+                titleText: format(string: "Webview Document Refactor"),
+                statusText: format(string: "Toggle to enable document sharing to fetch WebView data directly")
             ) { [weak self] _ in
                 self?.reloadView()
             },

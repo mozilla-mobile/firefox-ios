@@ -65,6 +65,23 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertTrue(navigationController.interactivePopGestureRecognizer?.delegate === originalGestureDelegate)
     }
 
+    func testBookmarksDeleteSwipeAction_avoidsDestructiveStyleAnimation() throws {
+        let subject = createSubject()
+        subject.start(from: LocalDesktopFolder())
+        let controller = try XCTUnwrap(router.pushedViewController as? BookmarksViewController)
+
+        let configuration = try XCTUnwrap(
+            controller.tableView(
+                controller.tableView,
+                trailingSwipeActionsConfigurationForRowAt: IndexPath(row: 0, section: 0)
+            )
+        )
+        let deleteAction = try XCTUnwrap(configuration.actions.first)
+
+        XCTAssertEqual(deleteAction.style, .normal)
+        XCTAssertEqual(deleteAction.backgroundColor, .systemRed)
+    }
+
     func testShowBookmarksDetail_forFolder() {
         let subject = createSubject()
         let folder = LocalDesktopFolder()

@@ -6,6 +6,19 @@ import Foundation
 
 /// An enumeration representing different navigational routes in an application.
 enum Route {
+    /// True when handling this route deterministically creates or selects a tab.
+    /// `.search` with a `nil` URL` is excluded because its handler relies on the restored selected tab
+    /// (it focuses the location field rather than opening a tab).
+    var willSelectTabOnHandling: Bool {
+        switch self {
+        case let .search(url, _, _):
+            return url != nil
+        case .searchQuery, .searchURL:
+            return true
+        default:
+            return false
+        }
+    }
     /// Represents a search route that takes a URL, a boolean value indicating whether the search
     /// is private or not and an optional set of search options.
     ///
@@ -58,6 +71,9 @@ enum Route {
     ///
     /// - Parameter params: An instance of `FxALaunchParams` containing the parameters for the sign-in.
     case fxaSignIn(params: FxALaunchParams)
+
+    /// Represents a validated Mozilla Accounts pairing URL opened from outside Firefox.
+    case fxaPairing(url: URL)
 
     /// Represents a default browser route that takes a `DefaultBrowserSection` value indicating
     /// the section to be displayed.
@@ -133,5 +149,7 @@ enum Route {
     enum SearchOptions: Equatable {
         /// An option to focus the user's attention on the location field of the search interface.
         case focusLocationField
+        /// An option to force open a new tab even when on homepage
+        case forceNewTab
     }
 }

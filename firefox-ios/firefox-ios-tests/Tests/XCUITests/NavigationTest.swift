@@ -39,6 +39,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     override func setUp() async throws {
         try await super.setUp()
 
+        browserScreen = BrowserScreen(app: app)
         launchApp()
     }
 
@@ -208,6 +209,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441496
+    // Regression
     func testCopyLink() {
         longPressLinkOptions(optionSelected: "Copy Link")
         let searchBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
@@ -238,66 +240,23 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441923
-    func testLongPressOnAddressBar() throws {
-        // Long press on the URL requires copy & paste permission
-        throw XCTSkip("Test needs to be updated")
-        /*
-            app.launch()
-            // This test is for populated clipboard only so we need to make sure there's something in Pasteboard
-            urlBarAddress.typeText("www.google.com")
-            // Tapping two times when the text is not selected will reveal the menu
-            urlBarAddress.tap()
-            mozWaitForElementToExist(urlBarAddress)
-            urlBarAddress.tap()
-            mozWaitForElementToExist(app.menuItems["Select All"])
-            XCTAssertTrue(app.menuItems["Select All"].exists)
-            XCTAssertTrue(app.menuItems["Select"].exists)
+    func testLongPressOnAddressBar() {
+        // `Paste & Go` and `Paste` are only built when the pasteboard holds a string, so seed it
+        // from the test process rather than copying in-app, which triggers the cross-process paste
+        // permission prompt the previous version of this test was disabled for.
+        UIPasteboard.general.string = website_2["url"]!
 
-            // Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
-            app.menuItems["Select All"].tap()
-            mozWaitForElementToExist(app.menuItems["Copy"])
-            if iPad() {
-                XCTAssertTrue(app.menuItems["Copy"].exists)
-                XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Paste"].exists)
-                XCTAssertTrue(app.menuItems["Open Link"].exists)
-                XCTAssertTrue(app.menuItems["Add to Reading List"].exists)
-                XCTAssertTrue(app.menuItems["Share…"].exists)
-                XCTAssertTrue(app.menuItems["Paste & Go"].exists)
-            } else {
-                XCTAssertTrue(app.menuItems["Copy"].exists)
-                XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Paste"].exists)
-                XCTAssertTrue(app.menuItems["Open Link"].exists)
-            }
+        // Open a webpage so the selected tab has a display URL, which `Copy Address` requires.
+        navigator.openURL(website_1["url"]!)
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
 
-            urlBarAddress.typeText("\n")
-            waitUntilPageLoad()
-            mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        // Long press on the address bar reveals the menu with all its options.
+        browserScreen.longPressAddressBar()
+        browserScreen.assertAddressBarContextMenuOptionsExist()
+        browserScreen.assertAddressBarContextMenuCloseButtonExists()
 
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 3)
-            app.tables.otherElements[StandardImageIdentifiers.Large.link].tap()
-
-            sleep(2)
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
-            // Since the textField value appears all selected first time is clicked
-            // this workaround is necessary
-            mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-            urlBarAddress.waitAndTap()
-            mozWaitForElementToExist(app.menuItems["Copy"])
-            if iPad() {
-                XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Copy"].exists)
-                XCTAssertTrue(app.menuItems["Open Link"].exists)
-                XCTAssertTrue(app.menuItems["Add to Reading List"].exists)
-                XCTAssertTrue(app.menuItems["Paste"].exists)
-            } else {
-                XCTAssertTrue(app.menuItems["Copy"].exists)
-                XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Open Link"].exists)
-            }
-        }
-         */
+        browserScreen.dismissAddressBarContextMenu()
     }
 
     private func longPressLinkOptions(optionSelected: String) {
@@ -317,6 +276,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441498
+    // Regression
     func testDownloadLink() {
         longPressLinkOptions(optionSelected: "Download Link")
         mozWaitForElementToExist(app.tables["Context Menu"])
@@ -337,6 +297,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441499
+    // Regression
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
         if #available(iOS 16, *) {
@@ -511,9 +472,15 @@ class NavigationTest: FeatureFlaggedTestSuite {
         browserScreen.assertAddressBarContains(value: "example.com")
         XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
         // swiftlint:enable empty_count
+
+        // Navigating away must leave edit mode, not just hide the keyboard, and the address bar has
+        // to stay tappable afterwards.
+        browserScreen.assertAddressBarLeftEditMode()
+        browserScreen.assertAddressBarRegainsKeyboardFocus()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441772
+    // Regression
     func testOpenInNewTab() {
         // Long-tap on an article link. Choose "Open in New Tab".
         openContextMenuForArticleLink()
@@ -528,6 +495,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441773
+    // Regression
     func testOpenInNewPrivateTab() {
         // Long-tap on an article link. Choose "Open in New Private Tab".
         openContextMenuForArticleLink()
@@ -552,6 +520,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441774
+    // Regression
     func testBookmarkLink() {
         // Long-tap on an article link. Choose "Bookmark Link".
         openContextMenuForArticleLink()
@@ -615,6 +584,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306833
+    // Regression
     func testLongTapFirefoxIconNewTab() throws {
         guard #available(iOS 18, *) else {
             throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
@@ -684,7 +654,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         mozWaitForElementToExist(app.navigationBars["App Icon"])
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/edit/3408300
+    // https://mozilla.testrail.io/index.php?/cases/view/3408300
     func testLongTapFirefoxIconOpenLastBookmark() throws {
         guard #available(iOS 18, *) else {
             throw XCTSkip("Test requires iOS 18+ due to app icon springboard context menu behavior")

@@ -14,6 +14,7 @@ struct GenericSelectableItemCellView: View {
     let title: String
     let isSelected: Bool
     let theme: Theme?
+    let a11yIdentifier: String
     private(set) var onTap: () -> Void
 
     var textColor: Color {
@@ -46,7 +47,9 @@ struct GenericSelectableItemCellView: View {
         .padding(.horizontal, UX.horizontalSpacing)
         .background(backgroundColor)
         .accessibilityElement()
+        .accessibilityIdentifier(a11yIdentifier)
         .accessibilityLabel(title)
+        .accessibilityValue(isSelected ? "1" : "0")
         .accessibilityAddTraits(.isButton)
         .onTapGesture {
             onTap()

@@ -78,7 +78,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "8.11.0"),
+            exact: "8.12.0"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),

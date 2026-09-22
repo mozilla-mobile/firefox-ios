@@ -163,6 +163,7 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2318742
+    // Regression
     func testProtectionLevelMoreInfoMenu() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(TrackingProtectionSettings)
@@ -191,6 +192,7 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307063
+    // Regression
     func testStrictTrackingProtection() {
         navigator.goto(TrackingProtectionSettings)
         // Enable Strict Protection Level

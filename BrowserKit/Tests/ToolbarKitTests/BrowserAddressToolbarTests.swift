@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import UIKit
 import XCTest
 import TestKit
 @testable import ToolbarKit
@@ -133,6 +134,60 @@ final class BrowserAddressToolbarTests: XCTestCase {
 
         let button = sut.getToolbarButton(for: tabToolbarElement)
         XCTAssertTrue(button is TabNumberButton, "Should create TabNumberButton when numberOfTabs is provided.")
+    }
+
+    // MARK: - updateActionStack
+    @MainActor
+    func testUpdateActionStack_KeepsSameArrangementWhenElementsUnchanged() {
+        let sut = createSubject()
+        let stackView = UIStackView()
+        guard let toolbarElement, let toolbarElement2 else {
+            XCTFail("Setup failed.")
+            return
+        }
+
+        sut.updateActionStack(stackView: stackView, toolbarElements: [toolbarElement, toolbarElement2])
+        let firstArrangement = stackView.arrangedSubviews
+        sut.updateActionStack(stackView: stackView, toolbarElements: [toolbarElement, toolbarElement2])
+
+        XCTAssertEqual(stackView.arrangedSubviews.count, 2, "Stack should still hold both buttons.")
+        XCTAssertTrue(stackView.arrangedSubviews.elementsEqual(firstArrangement) { $0 === $1 },
+                      "Reconfiguring with the same elements should leave the arrangement untouched.")
+    }
+
+    @MainActor
+    func testUpdateActionStack_UpdatesArrangementWhenElementsChange() {
+        let sut = createSubject()
+        let stackView = UIStackView()
+        guard let toolbarElement, let toolbarElement2 else {
+            XCTFail("Setup failed.")
+            return
+        }
+
+        sut.updateActionStack(stackView: stackView, toolbarElements: [toolbarElement])
+        XCTAssertEqual(stackView.arrangedSubviews.count, 1, "Stack should hold the single button.")
+
+        sut.updateActionStack(stackView: stackView, toolbarElements: [toolbarElement, toolbarElement2])
+
+        XCTAssertEqual(stackView.arrangedSubviews.count, 2, "Stack should be rebuilt when the elements change.")
+        XCTAssertTrue(stackView.arrangedSubviews.last === sut.getToolbarButton(for: toolbarElement2),
+                      "The newly added element's button should be last in the stack.")
+    }
+
+    @MainActor
+    func testUpdateActionStack_RebuildsWhenElementOrderChanges() {
+        let sut = createSubject()
+        let stackView = UIStackView()
+        guard let toolbarElement, let toolbarElement2 else {
+            XCTFail("Setup failed")
+            return
+        }
+
+        sut.updateActionStack(stackView: stackView, toolbarElements: [toolbarElement, toolbarElement2])
+        sut.updateActionStack(stackView: stackView, toolbarElements: [toolbarElement2, toolbarElement])
+
+        XCTAssertTrue(stackView.arrangedSubviews.first === sut.getToolbarButton(for: toolbarElement2),
+                      "Reordering the elements should reorder the stack.")
     }
 
     // MARK: Test helper

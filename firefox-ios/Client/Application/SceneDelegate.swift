@@ -43,11 +43,6 @@ class SceneDelegate: UIResponder,
         guard !AppConstants.isRunningUnitTest else { return }
         logger.log("SceneDelegate: will connect to session", level: .info, category: .lifecycle)
 
-        // Add hooks for the nimbus-cli to test experiments on device or involving deeplinks.
-        if let url = connectionOptions.urlContexts.first?.url {
-            Experiments.shared.initializeTooling(url: url)
-        }
-
         routeBuilder.configure(
             isPrivate: UserDefaults.standard.bool(
                 forKey: PrefsKeys.LastSessionWasPrivate
@@ -70,6 +65,10 @@ class SceneDelegate: UIResponder,
         logger.log("SceneDelegate: scene did disconnect. UUID: \(logUUID)", level: .info, category: .lifecycle)
         // Handle clean-up here for closing windows on iPad
         guard let sceneCoordinator = (scene.delegate as? SceneDelegate)?.sceneCoordinator else { return }
+
+        if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(sceneCoordinator.windowUUID)) {
+            AppEventQueue.completed(.pendingDeeplinkTab(sceneCoordinator.windowUUID))
+        }
 
         // For now, we explicitly cancel downloads for windows that are closed.
         // On iPhone this will happen during app termination, for iPad it will
@@ -236,6 +235,10 @@ class SceneDelegate: UIResponder,
 
         logger.log("Scene coordinator will handle a route", level: .info, category: .coordinator)
         sessionManager.launchSessionProvider.openedFromExternalSource = true
+
+        if route.willSelectTabOnHandling {
+            AppEventQueue.started(.pendingDeeplinkTab(sceneCoordinator.windowUUID))
+        }
 
         if isDeeplinkOptimizationRefactorEnabled {
             AppEventQueue.wait(for: [.startupFlowComplete]) {

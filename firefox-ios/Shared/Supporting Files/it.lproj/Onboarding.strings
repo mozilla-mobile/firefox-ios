@@ -455,10 +455,10 @@
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "Chiudi e termina introduzione di %@";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Description.TreatementA.v120" = "Il nostro browser, supportato da un’organizzazione senza fini di lucro, blocca automaticamente le società che, di nascosto, cercano di seguire le tue attività sul Web.";
+"Onboarding.Welcome.Description.TreatementA.v120" = "Il nostro browser, supportato da un’organizzazione senza fini di lucro, aiuta a bloccare le aziende che, di nascosto, cercano di seguire le tue attività sul Web.";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
-"Onboarding.Welcome.Description.v120" = "Il nostro browser, supportato da un’organizzazione senza fini di lucro, blocca automaticamente le società che, di nascosto, cercano di seguire le tue attività sul Web.";
+"Onboarding.Welcome.Description.v120" = "Il nostro browser, supportato da un’organizzazione senza fini di lucro, aiuta a bloccare le aziende che, di nascosto, cercano di seguire le tue attività sul Web.";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Ulteriori informazioni nella nostra informativa sulla privacy";

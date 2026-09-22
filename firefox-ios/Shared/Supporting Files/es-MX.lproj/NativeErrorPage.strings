@@ -55,11 +55,13 @@
 /* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.Wayback.Error.Description.v154" = "Es posible que el sitio esté sobrecargado o no esté disponible. Inténtalo de nuevo más tarde. Si tienes problemas al cargar otras páginas, comprueba tu conexión Wi-Fi o tu red de datos. %@ puede buscar una versión anterior de esta página usando Wayback Machine.";
 
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "No encontramos versiones archivadas.";
+
 /* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
 "NativeErrorPage.Wayback.Error.Retry.v154" = "Reintentar";
 
-/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine.
-Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
 "NativeErrorPage.Wayback.Error.Search.v155" = "Buscar en la web";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */

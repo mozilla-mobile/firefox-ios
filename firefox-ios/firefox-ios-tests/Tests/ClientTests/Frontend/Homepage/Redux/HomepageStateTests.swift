@@ -7,27 +7,25 @@ import XCTest
 
 @testable import Client
 
-final class HomepageStateTests: XCTestCase {
-    private var profile: MockProfile!
-    private var mockNimbusLayer: MockNimbusFeatureFlagLayer!
+final class HomepageStateTests: XCTestCase, FeatureFlagTestUtility {
+    internal var mockProfile: MockProfile!
+    internal var mockNimbusLayer: MockNimbusFeatureFlagLayer!
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        mockProfile = MockProfile()
         mockNimbusLayer = MockNimbusFeatureFlagLayer()
-        let featureFlagProvider = FeatureFlagsProvider(prefs: profile.prefs, backendLayer: mockNimbusLayer)
-        let userFeaturePreferences = UserFeaturePreferenceManager(prefs: profile.prefs, backendLayer: mockNimbusLayer)
 
-        await DependencyHelperMock().bootstrapDependencies(
-            injectedProfile: profile,
-            injectedFeatureFlagProvider: featureFlagProvider,
-            injectedUserFeaturePreferences: userFeaturePreferences
+        DependencyHelperMock().bootstrapDependencies(
+            injectedProfile: mockProfile,
+            injectedFeatureFlagProvider: featureFlagsProviderFactory(),
+            injectedUserFeaturePreferences: userFeaturePreferenceManagerFactory()
         )
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
-        profile = nil
+        mockProfile = nil
         mockNimbusLayer = nil
         try await super.tearDown()
     }
@@ -87,7 +85,7 @@ final class HomepageStateTests: XCTestCase {
             )
         )
 
-        XCTAssertTrue(newState.shouldShowPrivacyNotice)
+        XCTAssertTrue(newState.privacyNoticeState.shouldShowPrivacyNotice)
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
     }
 
@@ -104,7 +102,7 @@ final class HomepageStateTests: XCTestCase {
             )
         )
 
-        XCTAssertFalse(newState.shouldShowPrivacyNotice)
+        XCTAssertFalse(newState.privacyNoticeState.shouldShowPrivacyNotice)
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
     }
 
@@ -167,13 +165,5 @@ final class HomepageStateTests: XCTestCase {
 
     private func homepageReducer() -> Reducer<HomepageState> {
         return HomepageState.reducer
-    }
-
-    private func setFeatureFlag(_ flag: FeatureFlagID, isEnabled: Bool) {
-        if isEnabled {
-            mockNimbusLayer.enabledFlags.insert(flag)
-        } else {
-            mockNimbusLayer.enabledFlags.remove(flag)
-        }
     }
 }

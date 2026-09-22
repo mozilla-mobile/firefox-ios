@@ -11,8 +11,6 @@ import TabDataStore
 import TipKit
 
 import class MozillaAppServices.Viaduct
-import struct MozillaAppServices.RustAdsClient
-import enum MozillaAppServices.MozAdsEnvironment
 
 class AppDelegate: UIResponder,
                    UIApplicationDelegate,
@@ -143,6 +141,10 @@ class AppDelegate: UIResponder,
         )
 
         widgetManager = TopSitesWidgetManager(topSitesProvider: topSitesProvider)
+
+        if featureFlagsProvider.isEnabled(.backgroundAudio) {
+            BackgroundAudioHelper.shared.configure(prefs: profile.prefs)
+        }
 
         addObservers()
 

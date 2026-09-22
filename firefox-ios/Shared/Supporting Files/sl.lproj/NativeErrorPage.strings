@@ -37,6 +37,9 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Ponovno naloži";
 
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v155" = "Poskusi znova";
+
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Strani %@ lastnik ni pravilno nastavil, zato ni mogoče vzpostaviti varne povezave.";
 
@@ -52,6 +55,12 @@
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Videti je, da obstaja težava z vašo internetno povezavo.";
 
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v155" = "Iskanje po arhivu …";
+
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v155" = "S storitvijo arhiva ni bilo mogoče vzpostaviti povezave.";
+
 /* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.Wayback.Error.Description.v154" = "Spletno mesto je morda zelo obremenjeno ali pa ni dostopno. Poskusite znova pozneje. Če se ne nalagajo tudi druge strani, preverite Wi-Fi oziroma podatkovno povezavo. %@ lahko tudi poišče arhivirano različico te strani v Wayback Machine.";
 
@@ -61,12 +70,17 @@
 /* The tappable link text within the Wayback footer description, opens web.archive.org. */
 "NativeErrorPage.Wayback.Error.LinkText.v155" = "Wayback Machine";
 
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "Ni najdene arhivirane različice.";
+
 /* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
 "NativeErrorPage.Wayback.Error.Retry.v154" = "Poskusi znova";
 
-/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine.
-Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
 "NativeErrorPage.Wayback.Error.Search.v155" = "Išči po spletu";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.SearchWayback.v155" = "Prikaži arhivirano različico";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
 "NativeErrorPage.Wayback.Error.Title.v154" = "Povezave ni mogoče vzpostaviti";
