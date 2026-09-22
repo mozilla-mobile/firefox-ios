@@ -6,109 +6,16 @@ import Common
 import UIKit
 import Glean
 import Sentry
-import Combine
-import Onboarding
-import AppShortcuts
 import Shared
-
-enum AppPhase {
-    case notRunning
-    case didFinishLaunching
-    case willEnterForeground
-    case didBecomeActive
-    case willResignActive
-    case didEnterBackground
-    case willTerminate
-}
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
-    private lazy var authenticationManager = AuthenticationManager()
-    @Published private var appPhase: AppPhase = .notRunning
-
-    // This enum can be expanded to support all new shortcuts added to menu.
-    enum ShortcutIdentifier: String {
-        case EraseAndOpen
-        init?(fullIdentifier: String) {
-            guard let shortIdentifier = fullIdentifier.components(separatedBy: ".").last else {
-                return nil
-            }
-            self.init(rawValue: shortIdentifier)
-        }
-    }
-
-    var window: UIWindow?
-
-    private lazy var browserViewController = BrowserViewController(
-        shortcutManager: shortcutManager,
-        authenticationManager: authenticationManager,
-        onboardingEventsHandler: onboardingEventsHandler,
-        gleanUsageReportingMetricsService: gleanUsageReportingMetricsService,
-        themeManager: themeManager
-    )
-
     private let nimbus = NimbusWrapper.shared
-    private var queuedUrl: URL?
-    private var isWidgetURL = false
-    private var queuedString: String?
-    private let themeManager = ThemeManager()
-    private var cancellables = Set<AnyCancellable>()
-    private lazy var shortcutManager: ShortcutsManager = .init()
-    private lazy var gleanUsageReportingMetricsService = GleanUsageReportingMetricsService()
-
-    private lazy var onboardingEventsHandler: OnboardingEventsHandling = {
-        var shouldShowNewOnboarding: () -> Bool = { [unowned self] in
-            !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
-        }
-        guard !AppInfo.isTesting() else { return TestOnboarding() }
-        return OnboardingFactory.makeOnboardingEventsHandler(shouldShowNewOnboarding)
-    }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         setupCrashReporting()
         setupTelemetry()
         setupExperimentation()
-
-        appPhase = .didFinishLaunching
-
-        $appPhase.sink { [unowned self] phase in
-            switch phase {
-            case .didFinishLaunching, .willEnterForeground:
-                authenticateWithBiometrics()
-
-            case .didBecomeActive:
-                if authenticationManager.authenticationState == .loggedin { hidePrivacyProtectionWindow() }
-
-            case .willResignActive:
-                // Reveal synchronously so the overlay is up before iOS takes the
-                // app-switcher snapshot. FXIOS-16007.
-                showPrivacyProtectionWindow()
-
-            case .didEnterBackground:
-                authenticationManager.logout()
-
-            case .notRunning, .willTerminate:
-                break
-            }
-        }
-        .store(in: &cancellables)
-
-        authenticationManager
-            .$authenticationState
-            .receive(on: DispatchQueue.main)
-            .sink { state in
-                switch state {
-                case .loggedin:
-                    self.hidePrivacyProtectionWindow()
-
-                case .loggedout:
-                    self.showPrivacyProtectionWindow()
-
-                case .canceled:
-                    break
-                }
-            }
-            .store(in: &cancellables)
 
         if AppInfo.testRequestsReset() {
             if let bundleID = Bundle.main.bundleIdentifier {
@@ -149,178 +56,15 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // Re-register the blocking lists at startup in case they've changed.
         Utils.reloadSafariContentBlocker()
 
-        window = UIWindow(frame: UIScreen.main.bounds)
-
-        browserViewController.modalDelegate = self
-        window?.rootViewController = browserViewController
-        window?.makeKeyAndVisible()
-        window?.overrideUserInterfaceStyle = themeManager.selectedTheme
-
         WebCacheUtils.reset()
 
         KeyboardHelper.defaultHelper.startObserving()
 
-        if AppInfo.isTesting() {
-            // Only show the First Run UI if the test asks for it.
-            if AppInfo.isFirstRunUIEnabled() {
-                onboardingEventsHandler.send(.applicationDidLaunch)
-            }
-            return true
-        }
-
-        onboardingEventsHandler.send(.applicationDidLaunch)
-
-        ContentBlockerHelper.shared.updateContentRuleListIfNeeded()
-
-        return true
-    }
-
-    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        guard let navigation = NavigationPath(url: url) else { return false }
-        if navigation == .widget {
-            isWidgetURL = true
-            return false
-        }
-        let navigationHandler = NavigationPath.handle(application, navigation: navigation, with: browserViewController)
-
-        if case .text = navigation {
-            queuedString = navigationHandler as? String
-        } else if case .url = navigation {
-            queuedUrl = navigationHandler as? URL
+        if !AppInfo.isTesting() {
+            ContentBlockerHelper.shared.updateContentRuleListIfNeeded()
         }
 
         return true
-    }
-
-    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
-        completionHandler(handleShortcut(shortcutItem: shortcutItem))
-    }
-
-    private func handleShortcut(shortcutItem: UIApplicationShortcutItem) -> Bool {
-        let shortcutType = shortcutItem.type
-        guard let shortcutIdentifier = ShortcutIdentifier(fullIdentifier: shortcutType) else {
-            return false
-        }
-        switch shortcutIdentifier {
-        case .EraseAndOpen:
-            browserViewController.photonActionSheetDidDismiss()
-            browserViewController.dismiss(animated: true, completion: nil)
-            browserViewController.navigationController?.popViewController(animated: true)
-            browserViewController.resetBrowser(hidePreviousSession: true)
-        }
-        return true
-    }
-
-    private func authenticateWithBiometrics() {
-        Task {
-            await authenticationManager.authenticateWithBiometrics()
-        }
-    }
-
-    func applicationWillResignActive(_ application: UIApplication) {
-        appPhase = .willResignActive
-        browserViewController.dismissActionSheet()
-        browserViewController.deactivateUrlBar()
-        browserViewController.exitFullScreenVideo()
-    }
-
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        appPhase = .didBecomeActive
-
-        if Settings.siriRequestsErase() {
-            browserViewController.photonActionSheetDidDismiss()
-            browserViewController.dismiss(animated: true, completion: nil)
-            browserViewController.navigationController?.popViewController(animated: true)
-            browserViewController.resetBrowser(hidePreviousSession: true)
-            Settings.setSiriRequestErase(to: false)
-            GleanMetrics.Siri.eraseInBackground.record()
-        }
-
-        if isWidgetURL {
-            _ = NavigationPath.handle(application, navigation: .widget, with: browserViewController)
-            isWidgetURL = false
-        }
-
-        if let url = queuedUrl {
-            browserViewController.ensureBrowsingMode()
-            browserViewController.deactivateUrlBarOnHomeView()
-            browserViewController.dismissSettings()
-            browserViewController.dismissActionSheet()
-            browserViewController.submit(url: url, source: .action)
-            queuedUrl = nil
-        } else if let text = queuedString {
-            browserViewController.ensureBrowsingMode()
-            browserViewController.deactivateUrlBarOnHomeView()
-            browserViewController.dismissSettings()
-            browserViewController.dismissActionSheet()
-
-            if let fixedUrl = URIFixup.getURL(entry: text) {
-                browserViewController.submit(url: fixedUrl, source: .action)
-            } else {
-                browserViewController.submit(text: text, source: .action)
-            }
-
-            queuedString = nil
-        }
-    }
-
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        appPhase = .willEnterForeground
-    }
-
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        // This gets called every time the app goes to background but should not get
-        // called for *temporary* interruptions such as an incoming phone call until the user
-        // takes action and we are officially backgrounded.
-        appPhase = .didEnterBackground
-    }
-
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        browserViewController.photonActionSheetDidDismiss()
-        browserViewController.navigationController?.popViewController(animated: true)
-
-        switch userActivity.activityType {
-        case "org.mozilla.ios.Klar.eraseAndOpen":
-            browserViewController.resetBrowser(hidePreviousSession: true)
-            GleanMetrics.Siri.eraseAndOpen.record()
-        case "org.mozilla.ios.Klar.openUrl":
-            guard let urlString = userActivity.userInfo?["url"] as? String,
-                let url = URL(string: urlString, invalidCharacters: false) else { return false }
-            browserViewController.resetBrowser(hidePreviousSession: true)
-            browserViewController.ensureBrowsingMode()
-            browserViewController.deactivateUrlBarOnHomeView()
-            browserViewController.submit(url: url, source: .action)
-            GleanMetrics.Siri.openFavoriteSite.record()
-        case "EraseIntent":
-            guard userActivity.interaction?.intent is EraseIntent else { return false }
-            browserViewController.resetBrowser()
-            GleanMetrics.Siri.eraseInBackground.record()
-        default: break
-        }
-        return true
-    }
-
-    // MARK: Privacy Protection
-    private lazy var privacyProtectionWindowManager = PrivacyProtectionWindowManager(
-        privacyWindowFactory: { [unowned self] in
-            guard let windowScene = window?.windowScene else { return nil }
-            return UIWindow(windowScene: windowScene)
-        },
-        mainWindowProvider: { [unowned self] in window },
-        rootViewControllerFactory: { [unowned self] in
-            SplashViewController(authenticationManager: authenticationManager)
-        }
-    )
-
-    private func showPrivacyProtectionWindow() {
-        browserViewController.deactivateUrlBarOnHomeView()
-        privacyProtectionWindowManager.show()
-    }
-
-    private func hidePrivacyProtectionWindow() {
-        privacyProtectionWindowManager.hide()
-        browserViewController.activateUrlBarOnHomeView()
-        KeyboardType.identifyKeyboardNameTelemetry()
     }
 }
 
@@ -391,17 +135,10 @@ extension AppDelegate {
 
         GleanMetrics.Pings.shared.usageDeletionRequest.setEnabled(enabled: true)
 
-        if TelemetryManager.shared.isNewTosEnabled {
-            gleanUsageReportingMetricsService.start()
-        } else {
-            gleanUsageReportingMetricsService.lifecycleObserver.profileIdentifier.unsetUsageProfileId()
-        }
-
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
 
         let url = URL(string: "firefox://", invalidCharacters: false)!
         // Send "at startup" telemetry
-        GleanMetrics.Shortcuts.shortcutsOnHomeNumber.set(Int64(shortcutManager.shortcutsViewModels.count))
         GleanMetrics.TrackingProtection.hasAdvertisingBlocked.set(Settings.getToggle(.blockAds))
         GleanMetrics.TrackingProtection.hasAnalyticsBlocked.set(Settings.getToggle(.blockAnalytics))
         GleanMetrics.TrackingProtection.hasContentBlocked.set(Settings.getToggle(.blockOther))
@@ -413,24 +150,6 @@ extension AppDelegate {
     func setupExperimentation() {
         // Enable nimbus when both Send Usage Data and Studies are enabled in the settings.
         NimbusWrapper.shared.initialize()
-    }
-}
-
-extension AppDelegate: ModalDelegate {
-    func dismiss(animated: Bool = true) {
-        window?.rootViewController?.presentedViewController?.dismiss(animated: animated)
-    }
-
-    func presentModal(viewController: UIViewController, animated: Bool) {
-        window?.rootViewController?.present(viewController, animated: animated, completion: nil)
-    }
-
-    func presentSheet(viewController: UIViewController) {
-        let vc = SheetModalViewController(containerViewController: viewController)
-        vc.modalPresentationStyle = .overCurrentContext
-        // keep false
-        // modal animation will be handled in VC itself
-        window?.rootViewController?.present(vc, animated: false)
     }
 }
 
