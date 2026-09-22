@@ -61,6 +61,9 @@
 /* Settings section title for the old Firefox account */
 "FxA.FirefoxAccount.v119" = "Hesap";
 
+/* Link button on the Quick Answers settings screen that opens more information about the feature. */
+"QuickAnswers.Settings.LearnMore.v158" = "Daha fazla bilgi al";
+
 /* Status text shown next to the Quick Answers row in the general settings when the feature is disabled. */
 "QuickAnswers.Settings.StatusOff.v158" = "Kapalı";
 
@@ -174,6 +177,9 @@
 
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Otomatik oynat";
+
+/* VoiceOver custom action name for a settings row's Learn More link. */
+"Settings.BoolSetting.LearnMoreAction.v157" = "Daha fazla bilgi al";
 
 /* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
 "Settings.Browsing.AdBlocker.Description.v155" = "Reklamları ve reklamlarla ilgili takip kodlarını azaltır. Bozuk görünen bir site olursa bu özelliği kapatmayı deneyin.";

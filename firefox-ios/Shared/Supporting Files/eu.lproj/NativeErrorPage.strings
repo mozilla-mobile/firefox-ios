@@ -71,7 +71,7 @@
 "NativeErrorPage.Wayback.Error.Description.v154" = "Baliteke gunea lanpetuta egotea edo erabilgarri ez egotea. Saiatu berriro geroago. Beste orriak ere ez badira kargatzen, egiaztatu zure Wi-Fi edo datu-konexioa. %@(e)k ere orri honen aurreko bertsio bat bila dezake Wayback Machine erabilita.";
 
 /* Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. %1$@ is the app name (e.g. Firefox). %2$@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org. */
-"NativeErrorPage.Wayback.Error.FooterDescription.v155" = "%1$@(e)k orri honen aurreko bertsio bat bilatzen du Internet Archive-ren %2$@ erabilita.";
+"NativeErrorPage.Wayback.Error.FooterDescription.v155" = "%1$@(e)k orri honen aurreko bertsio bat bila dezake Internet Archive-ren %2$@ erabilita.";
 
 /* The tappable link text within the Wayback footer description, opens web.archive.org. */
 "NativeErrorPage.Wayback.Error.LinkText.v155" = "Wayback Machine";
