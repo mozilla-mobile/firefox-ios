@@ -105,7 +105,7 @@ final class TranslationsService: TranslationsServiceProtocol {
     private func startTranslationsJS(on webView: WKWebView,
                                      from: String,
                                      to: String) async throws {
-        let js = "return await window.__firefox__.Translations.startTranslations({from: fromLang, to: toLang})"
+        let js = "window.__firefox__.Translations.startTranslations({from: fromLang, to: toLang})"
 
         do {
             _ = try await webView.callAsyncJavaScript(
