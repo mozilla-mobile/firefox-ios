@@ -206,8 +206,11 @@ public final class QuickAnswersViewController: UIViewController,
                 } else {
                     self?.triggerHaptic()
                     self?.backgroundRecordEffect.alpha = UX.recordWaveEffectResultOpacity
-                    self?.contentView.configureAnswer(result.resultText, modelName: self?.viewModel.modelDisplayName ?? "")
-                    self?.contentView.configureSources(result.sources) { [weak self] url in
+                    self?.contentView.configureResult(
+                        result.resultText,
+                        modelName: self?.viewModel.modelDisplayName ?? "",
+                        sources: result.sources
+                    ) { [weak self] url in
                         self?.viewModel.recordCitationTapped()
                         self?.dismiss(with: url)
                     }

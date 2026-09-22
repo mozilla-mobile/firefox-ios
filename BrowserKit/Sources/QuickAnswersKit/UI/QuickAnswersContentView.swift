@@ -9,7 +9,18 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     private struct UX {
         static let contentSpacing: CGFloat = 32.0
         static let animationDuration: TimeInterval = 0.2
+        static let resultAnimationDuration: TimeInterval = 0.3
+        static let resultCascadeDelay: TimeInterval = 0.08
+        static let resultBlurRadius: CGFloat = 6.0
+        static let resultInitialAlpha: CGFloat = 0.8
+        /// The answer starts fading in halfway through the transcript moving up.
+        static let resultFadeStartOffset = resultAnimationDuration / 2.0
+        static let resultKeyframeDuration = resultFadeStartOffset
+                                            + 2.0 * resultCascadeDelay
+                                            + resultAnimationDuration
         static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)
+        /// The vertical space the waveform and its spacing leave behind.
+        static let resultTranslationOffset = audioWaveformSize.height + contentSpacing
     }
 
     // MARK: - Subviews
@@ -201,22 +212,46 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         }
     }
 
-    func configureAnswer(_ text: String, modelName: String) {
+    func configureResult(
+        _ text: String,
+        modelName: String,
+        sources: [SearchResult.Source],
+        onSourceTapped: @escaping (URL) -> Void
+    ) {
         searchingLabel.stopShimmering()
         searchingLabel.alpha = 0.0
+        answerLabel.text = text
         footerLabel.text = String(format: strings?.footerFormat ?? "", modelName)
-        UIView.animate(withDuration: UX.animationDuration) { [self] in
-            answerLabel.text = text
-            answerLabel.alpha = 1.0
-            footerLabel.alpha = 1.0
+        sourceView.configure(with: sources, onSourceTapped: onSourceTapped)
+        animateResultCascade()
+    }
+
+    /// Slides the whole stack over the space taken by the waveform, then sharpens the answer in halfway
+    /// through that move, followed by the sources and the footer one after the other.
+    private func animateResultCascade() {
+        let movingSections: [UIView] = [transcriptLabel, answerLabel, sourceView, footerLabel]
+        let fadingSections: [UIView] = [answerLabel, sourceView, footerLabel]
+        let translation = CGAffineTransform(translationX: 0.0, y: -UX.resultTranslationOffset)
+        let total = UX.resultKeyframeDuration
+        let easeOut = UIView.KeyframeAnimationOptions(rawValue: UIView.AnimationOptions.curveEaseOut.rawValue)
+        
+        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut) { [self] in
+            movingSections.forEach {
+                $0.transform = translation
+            }
+            audioWaveform.alpha = 0.0
+        }
+
+        // The blur runs on its own CAAnimation, keyed to the same start times as the fades.
+        for (index, section) in fadingSections.enumerated() {
+            UIView.animate(withDuration: 0.2, delay: fadeStartTime(at: index)) {
+                section.alpha = 1.0
+            }
         }
     }
 
-    func configureSources(_ items: [SearchResult.Source], onSourceTapped: @escaping (URL) -> Void) {
-        sourceView.configure(with: items, onSourceTapped: onSourceTapped)
-        UIView.animate(withDuration: UX.animationDuration) { [self] in
-            sourceView.alpha = 1.0
-        }
+    private func fadeStartTime(at index: Int) -> TimeInterval {
+        UX.resultFadeStartOffset + Double(index) * UX.resultCascadeDelay
     }
 
     // MARK: - ThemeApplicable
