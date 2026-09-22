@@ -3797,8 +3797,8 @@ class BrowserViewController: UIViewController,
             break
         }
 
-        tabWebView.accessoryView.savedAddressesClosure = {
-            DispatchQueue.main.async { [weak self] in
+        tabWebView.accessoryView.savedAddressesClosure = { [weak self, weak webView] in
+            DispatchQueue.main.async {
                 webView?.resignFirstResponder()
                 self?.navigationHandler?.showAddressAutofill(frame: frame)
             }
@@ -3865,8 +3865,8 @@ class BrowserViewController: UIViewController,
 
     /// Handles the action when the saved cards button is tapped on the tab web view.
     private func handleSavedCardsButtonTap(tabWebView: TabWebView, webView: WKWebView?, frame: WKFrameInfo?) {
-        tabWebView.accessoryView.savedCardsClosure = {
-            DispatchQueue.main.async { [weak self] in
+        tabWebView.accessoryView.savedCardsClosure = { [weak self, weak webView] in
+            DispatchQueue.main.async {
                 webView?.resignFirstResponder()
                 self?.authenticateSelectCreditCardBottomSheet(frame: frame)
             }
