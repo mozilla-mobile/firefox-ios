@@ -41,6 +41,7 @@ protocol BrowserSelectorsSet {
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
+    func suggestionRow(titled title: String) -> Selector
     var all: [Selector] { get }
 }
 
@@ -301,6 +302,14 @@ struct BrowserSelectors: BrowserSelectorsSet {
             text,
             description: "Web page text",
             groups: ["browser", "webview"]
+        )
+    }
+
+    func suggestionRow(titled title: String) -> Selector {
+        Selector.staticTextInTablesByLabel(
+            title,
+            description: "Address bar suggestion row titled '\(title)'",
+            groups: ["browser", "search"]
         )
     }
 
