@@ -4,10 +4,12 @@
 
 @testable import Client
 
-class MockASOHttpManager: ASOhttpManager {
+class MockASOHttpManager: ASOhttpManager, @unchecked Sendable {
     private let data: Data?
     private let response: HTTPURLResponse?
     private let error: Error?
+
+    private(set) var capturedRequests: [URLRequest] = []
 
     init(
         with data: Data? = nil,
@@ -20,7 +22,8 @@ class MockASOHttpManager: ASOhttpManager {
     }
 
     func data(for request: URLRequest) async throws -> (Data, HTTPURLResponse) {
-        try await data(from: request.url!)
+        capturedRequests.append(request)
+        return try await data(from: request.url!)
     }
 
     private func data(from url: URL) async throws -> (Data, HTTPURLResponse) {
