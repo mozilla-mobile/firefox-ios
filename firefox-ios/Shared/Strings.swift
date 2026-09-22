@@ -2924,11 +2924,11 @@ extension String {
                 comment: "Title of the privacy banner shown on the Quick Answers screen."
             )
 
-            public static let Description = MZLocalizedString(
+            public static let DescriptionFormat = MZLocalizedString(
                 key: "QuickAnswers.PrivacyBanner.Description.v158",
                 tableName: "QuickAnswers",
-                value: "Firefox doesn’t store your audio or questions, use your data to train AI models, or use your voice to identify you.",
-                comment: "Body text of the privacy banner shown on the Quick Answers screen, explaining how the feature handles user data."
+                value: "%@ doesn’t store your audio or questions, use your data to train AI models, or use your voice to identify you.",
+                comment: "Body text of the privacy banner shown on the Quick Answers screen, explaining how the feature handles user data. %@ is the name of the app (e.g. Firefox)."
             )
         }
 
