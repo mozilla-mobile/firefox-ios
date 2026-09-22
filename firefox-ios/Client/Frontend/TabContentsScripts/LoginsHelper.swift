@@ -65,8 +65,9 @@ class LoginsHelper: @unchecked Sendable, TabContentScript {
         self.theme = theme
     }
 
+    @MainActor
     func prepareForDeinit() {
-        self.loginAlertTimer = nil
+        invalidateLoginAlertTimer()
         if let loginAlert {
             self.loginAlert = nil
             tab?.removeLoginAlert(loginAlert)
@@ -159,10 +160,11 @@ class LoginsHelper: @unchecked Sendable, TabContentScript {
             !tab.isPrivate,
             profile.prefs.boolForKey("saveLogins") ?? true {
             let userDefaults = UserDefaults.standard
+            let windowUUID = tab.windowUUID
             let showPasswordGeneratorClosure = {
                 let newAction = GeneralBrowserAction(
                     frameContext: frameContext,
-                    windowUUID: tab.windowUUID,
+                    windowUUID: windowUUID,
                     actionType: GeneralBrowserActionType.showPasswordGenerator)
 
                 store.dispatch(newAction)
@@ -289,15 +291,19 @@ class LoginsHelper: @unchecked Sendable, TabContentScript {
         }
 
         let alert = SaveLoginAlert()
-        alert.saveAction = {
-            self.tab?.removeLoginAlert(alert)
-            self.loginAlert = nil
-            self.sendLoginsSavedTelemetry()
-            self.profile.logins.addLogin(login: login, completionHandler: { _ in })
+        alert.saveAction = { [weak self, weak alert] in
+            guard let self else { return }
+            if let alert { tab?.removeLoginAlert(alert) }
+            loginAlert = nil
+            invalidateLoginAlertTimer()
+            sendLoginsSavedTelemetry()
+            profile.logins.addLogin(login: login, completionHandler: { _ in })
         }
-        alert.notNotAction = {
-            self.tab?.removeLoginAlert(alert)
-            self.loginAlert = nil
+        alert.notNotAction = { [weak self, weak alert] in
+            guard let self else { return }
+            if let alert { tab?.removeLoginAlert(alert) }
+            loginAlert = nil
+            invalidateLoginAlertTimer()
         }
 
         let viewModel = SaveLoginAlertViewModel(
@@ -329,15 +335,19 @@ class LoginsHelper: @unchecked Sendable, TabContentScript {
         }
 
         let alert = SaveLoginAlert()
-        alert.saveAction = {
-            self.tab?.removeLoginAlert(alert)
-            self.loginAlert = nil
-            self.sendLoginsModifiedTelemetry()
-            self.profile.logins.updateLogin(id: old.id, login: new, completionHandler: { _ in })
+        alert.saveAction = { [weak self, weak alert] in
+            guard let self else { return }
+            if let alert { tab?.removeLoginAlert(alert) }
+            loginAlert = nil
+            invalidateLoginAlertTimer()
+            sendLoginsModifiedTelemetry()
+            profile.logins.updateLogin(id: old.id, login: new, completionHandler: { _ in })
         }
-        alert.notNotAction = {
-            self.tab?.removeLoginAlert(alert)
-            self.loginAlert = nil
+        alert.notNotAction = { [weak self, weak alert] in
+            guard let self else { return }
+            if let alert { tab?.removeLoginAlert(alert) }
+            loginAlert = nil
+            invalidateLoginAlertTimer()
         }
 
         let viewModel = SaveLoginAlertViewModel(
@@ -353,11 +363,18 @@ class LoginsHelper: @unchecked Sendable, TabContentScript {
     }
 
     @MainActor
+    private func invalidateLoginAlertTimer() {
+        loginAlertTimer?.invalidate()
+        loginAlertTimer = nil
+    }
+
+    @MainActor
     private func show(_ alert: SaveLoginAlert) {
         loginAlert = alert
         loginAlert?.applyTheme(theme: theme)
         tab?.addLoginAlert(alert)
 
+        invalidateLoginAlertTimer()
         let timer = Timer(
             timeInterval: loginAlertTimeout,
             target: self,
