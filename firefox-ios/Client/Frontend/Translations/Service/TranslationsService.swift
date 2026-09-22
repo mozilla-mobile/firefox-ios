@@ -105,11 +105,15 @@ final class TranslationsService: TranslationsServiceProtocol {
     private func startTranslationsJS(on webView: WKWebView,
                                      from: String,
                                      to: String) async throws {
-        let jsArgs = "{from: \"\(from)\", to: \"\(to)\"}"
-        let js = "window.__firefox__.Translations.startTranslations(\(jsArgs))"
+        let js = "return await window.__firefox__.Translations.startTranslations({from: fromLang, to: toLang})"
 
         do {
-            _ = try await webView.callAsyncJavaScript(js, contentWorld: .defaultClient)
+            _ = try await webView.callAsyncJavaScript(
+                js,
+                arguments: ["fromLang": from, "toLang": to],
+                in: nil,
+                contentWorld: .defaultClient
+            )
         } catch {
             /// NOTE: It would be safe to pass in the js string directly here, but it would just add too much noise 
             /// since from and to could be any language code. We only care that startTranslationsJS failed.
