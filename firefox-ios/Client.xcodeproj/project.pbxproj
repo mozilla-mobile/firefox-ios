@@ -17,8 +17,6 @@
 				C2A1EA172F43875400DD202A /* PBXTargetDependency */,
 			);
 			name = Periphery;
-			packageProductDependencies = (
-			);
 			productName = Periphery;
 		};
 /* End PBXAggregateTarget section */
@@ -181,6 +179,7 @@
 		0ECAA5F32DAD737700E27780 /* DownloadLiveActivityIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECAA5F22DAD737700E27780 /* DownloadLiveActivityIntent.swift */; };
 		0ECB6B6D2CCFF718006A7C82 /* DateGroupedTableDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */; };
 		150082C6D38C48819700F800 /* OneLineTableViewCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D44C1561FC142F59A89E890 /* OneLineTableViewCellTests.swift */; };
+		154D3E9DC03FA30349A25020 /* BrowserProfileLogLevelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9480BB41F803A4EA669D8206 /* BrowserProfileLogLevelTests.swift */; };
 		158241282820698B00956B39 /* RustRemoteTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158241272820698B00956B39 /* RustRemoteTabsTests.swift */; };
 		15DE98FD27FCED4F00F1ECDB /* RustRemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DE98FC27FCED4F00F1ECDB /* RustRemoteTabs.swift */; };
 		1BA34275CCDA41468AF44704 /* CopiedLinksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD11BA88BC54CCF82817612 /* CopiedLinksTests.swift */; };
@@ -10469,6 +10468,7 @@
 		943243A181E1E50DC25992B9 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Today.strings"; sourceTree = "<group>"; };
 		943E40B3AAC35EFAE3107893 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/Shared.strings; sourceTree = "<group>"; };
 		94804B6BAF67E8C759A196AD /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Today.strings"; sourceTree = "<group>"; };
+		9480BB41F803A4EA669D8206 /* BrowserProfileLogLevelTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BrowserProfileLogLevelTests.swift; sourceTree = "<group>"; };
 		94864BC4BB4F13CC9829209D /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Intro.strings; sourceTree = "<group>"; };
 		948A4953ADF53D3D73AF65D5 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Storage.strings; sourceTree = "<group>"; };
 		94934A829907CBCA05DDA7F5 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Storage.strings; sourceTree = "<group>"; };
@@ -12488,7 +12488,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		8CF609442EA8D61F00F069B6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		8CF609442EA8D61F00F069B6 /* Exceptions for "ActionExtension" folder in "ActionExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -12498,13 +12498,84 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		034784BA2E2690F600D04A84 /* TermsOfUse */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TermsOfUse; sourceTree = "<group>"; };
-		5FE7F1852E781EB300B0AFEC /* Selectors */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Selectors; sourceTree = "<group>"; };
-		5FE7F18C2E78224100B0AFEC /* PageScreens */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PageScreens; sourceTree = "<group>"; };
-		8CF609282EA8D46E00F069B6 /* ActionExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8CF609442EA8D61F00F069B6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ActionExtension; sourceTree = "<group>"; };
-		BCBE04E22E3A52D4004B6039 /* Summarize */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Summarize; sourceTree = "<group>"; };
-		ED85DD2C2DE669FF00487807 /* probes */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = probes; sourceTree = "<group>"; };
-		FC16179A00000000000000A1 /* WebCompat */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WebCompat; sourceTree = "<group>"; };
+		034784BA2E2690F600D04A84 /* TermsOfUse */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = TermsOfUse;
+			sourceTree = "<group>";
+		};
+		5FE7F1852E781EB300B0AFEC /* Selectors */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = Selectors;
+			sourceTree = "<group>";
+		};
+		5FE7F18C2E78224100B0AFEC /* PageScreens */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = PageScreens;
+			sourceTree = "<group>";
+		};
+		8CF609282EA8D46E00F069B6 /* ActionExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8CF609442EA8D61F00F069B6 /* Exceptions for "ActionExtension" folder in "ActionExtension" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = ActionExtension;
+			sourceTree = "<group>";
+		};
+		BCBE04E22E3A52D4004B6039 /* Summarize */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = Summarize;
+			sourceTree = "<group>";
+		};
+		ED85DD2C2DE669FF00487807 /* probes */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = probes;
+			sourceTree = "<group>";
+		};
+		FC16179A00000000000000A1 /* WebCompat */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = WebCompat;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -17849,6 +17920,7 @@
 				8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */,
 				2199A1D12DB80B6C00DC84BD /* ZoomPageManagerTests.swift */,
 				8C2FB1E92FF3D69C00C9A803 /* WebCompatReporter */,
+				9480BB41F803A4EA669D8206 /* BrowserProfileLogLevelTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -21673,6 +21745,7 @@
 				C869915528917803007ACC5C /* WallpaperMetadataTestProvider.swift in Sources */,
 				8A83C58E2DDF887300FF60EF /* ProfilePrefsReaderTests.swift in Sources */,
 				BC003F5E2B59F44600929ECB /* BrowserViewControllerTests.swift in Sources */,
+				154D3E9DC03FA30349A25020 /* BrowserProfileLogLevelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -34125,8 +34198,6 @@
 				kind = exactVersion;
 				version = 9.10.0;
 			};
-			traits = (
-			);
 		};
 		5A984D322C8A31A0007938C9 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;

@@ -38,6 +38,11 @@ public struct LaunchArguments {
     public static let ResetMicrosurveyExpirationCount = "RESET_MICROSURVEY_EXPIRATION_COUNT"
     public static let SkipAppleIntelligence = "SKIP_APPLE_INTELLIGENCE"
 
+    /// After the colon, put the desired application-services log level (`debug` or `trace`). Raises the
+    /// verbosity of the Rust log forwarder so sync engine activity is written to the log file. Anything
+    /// else, including omitting the argument, leaves the level at its default of `info`.
+    public static let SyncLogLevelPrefix = "FIREFOX_SYNC_LOG_LEVEL:"
+
     // After the colon, put the name of the file to load from test bundle
     public static let LoadDatabasePrefix = "FIREFOX_LOAD_DB_NAMED:"
     public static let LoadTabsStateArchive = "LOAD_TABS_STATE_ARCHIVE_NAMED:"
