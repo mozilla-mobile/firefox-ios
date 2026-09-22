@@ -299,7 +299,7 @@ class LoginsHelper: @unchecked Sendable, TabContentScript {
             sendLoginsSavedTelemetry()
             profile.logins.addLogin(login: login, completionHandler: { _ in })
         }
-        alert.notNotAction = { [weak self, weak alert] in
+        alert.notNowAction = { [weak self, weak alert] in
             guard let self else { return }
             if let alert { tab?.removeLoginAlert(alert) }
             loginAlert = nil
@@ -343,7 +343,7 @@ class LoginsHelper: @unchecked Sendable, TabContentScript {
             sendLoginsModifiedTelemetry()
             profile.logins.updateLogin(id: old.id, login: new, completionHandler: { _ in })
         }
-        alert.notNotAction = { [weak self, weak alert] in
+        alert.notNowAction = { [weak self, weak alert] in
             guard let self else { return }
             if let alert { tab?.removeLoginAlert(alert) }
             loginAlert = nil
