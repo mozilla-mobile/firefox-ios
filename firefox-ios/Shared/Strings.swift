@@ -359,19 +359,6 @@ extension String {
                 value: "Tap to summarize this page. Touch and hold for Reader View.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the summarize button on the new toolbar layout.")
         }
-
-        public struct Translations {
-            public static let Title = MZLocalizedString(
-                key: "ContextualHints.Translations.Title.v145",
-                tableName: "ContextualHints",
-                value: "%@ Speaks Your Language",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new translation icon on the toolbar. %@ is the app name (e.g. Firefox).")
-            public static let Body = MZLocalizedString(
-                key: "ContextualHints.Translations.Body.v145",
-                tableName: "ContextualHints",
-                value: "Fast, private translations are ready when you are.",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar.")
-        }
     }
 }
 
@@ -9039,6 +9026,18 @@ extension String {
     /// https://github.com/mozilla-mobile/firefox-ios/wiki/How-to-add-and-modify-Strings#oldstrings-struct
     /// periphery:ignore - These strings are getting removed every couple of months
     struct OldStrings {
+        struct v157 {
+            public static let Title = MZLocalizedString(
+                key: "ContextualHints.Translations.Title.v145",
+                tableName: "ContextualHints",
+                value: "%@ Speaks Your Language",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new translation icon on the toolbar. %@ is the app name (e.g. Firefox).")
+            public static let Body = MZLocalizedString(
+                key: "ContextualHints.Translations.Body.v145",
+                tableName: "ContextualHints",
+                value: "Fast, private translations are ready when you are.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar.")
+        }
         struct v153 {
             public static let AppMenuReportSiteIssueTitleString = MZLocalizedString(
                 key: "Menu.ReportSiteIssueAction.Title",
