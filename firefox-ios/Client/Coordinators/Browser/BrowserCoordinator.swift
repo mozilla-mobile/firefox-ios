@@ -286,6 +286,9 @@ final class BrowserCoordinator: BaseCoordinator,
         presentHardcodedOnboardingDripIfNeeded()
     }
 
+    // needed to display login page after sync onboarding card is dismissed
+    private var pendingDripCardAction: OnboardingCardButtonAction = .none
+
     // Presents the day-based onboarding card over the current tab
     private func presentHardcodedOnboardingDripIfNeeded() {
         guard browserViewController.presentedViewController == nil else { return }
@@ -304,7 +307,9 @@ final class BrowserCoordinator: BaseCoordinator,
                 self?.handleDripCardAction(action)
             },
             onComplete: { [weak self] in
-                self?.browserViewController.dismiss(animated: true)
+                self?.browserViewController.dismiss(animated: true) { [weak self] in
+                    self?.completePendingDripCardAction()
+                }
             }
         )
 
@@ -320,7 +325,27 @@ final class BrowserCoordinator: BaseCoordinator,
             NotificationManager().requestAuthorization { _, _ in }
         case .declineNotifications:
             profile.prefs.setBool(true, forKey: PrefsKeys.onboardingNotificationsDeclined)
+        case .signIn:
+            // Presented in completePendingDripCardAction once the onboarding card is dismissed.
+            pendingDripCardAction = .signIn
         case .none:
+            break
+        }
+    }
+
+    // Runs any navigation deferred from a drip card action, after the onboarding modal is dismissed.
+    private func completePendingDripCardAction() {
+        let action = pendingDripCardAction
+        pendingDripCardAction = .none
+        switch action {
+        case .signIn:
+            let fxaParameters = FxASignInViewParameters(
+                launchParameters: FxALaunchParams(entrypoint: .browserMenu, query: [:]),
+                flowType: .emailLoginFlow,
+                referringPage: .appMenu
+            )
+            showSignInView(fxaParameters: fxaParameters)
+        default:
             break
         }
     }
