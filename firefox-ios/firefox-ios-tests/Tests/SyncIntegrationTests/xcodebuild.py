@@ -5,6 +5,7 @@ import logging
 import os
 import shutil
 import subprocess
+import traceback
 
 from .xcrun import XCRun
 
@@ -93,11 +94,15 @@ class XCodeBuild(object):
             return
         try:
             log_dir = self._find_app_log_dir()
-        except (subprocess.CalledProcessError, OSError, LookupError) as e:
+        except Exception as e:
             message = getattr(e, 'output', str(e))
             self.logger.warning('Could not locate app container: {}'.format(message))
             with open(self.app_log, 'w') as f:
-                f.write('Could not locate app container for {}:\n{}'.format(self.bundleId, message))
+                f.write('Could not locate app container for {}:\n'.format(self.bundleId))
+                f.write('Exception type: {}\n'.format(type(e).__qualname__))
+                f.write('Exception str: {}\n'.format(message))
+                f.write('Traceback:\n')
+                traceback.print_exc(file=f)
             return
 
         # SwiftyBeaver rotates Firefox.log to Firefox.log.1, so read oldest first
