@@ -2832,7 +2832,7 @@ extension String {
             public static let PrivateByDesignTitle = MZLocalizedString(
                 key: "QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158",
                 tableName: "QuickAnswers",
-                value: "Private by Design",
+                value: "Private By Design",
                 comment: "Title of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them."
             )
 
