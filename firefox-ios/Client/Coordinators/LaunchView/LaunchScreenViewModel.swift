@@ -84,9 +84,9 @@ class LaunchScreenViewModel {
     private func loadLaunchType() {
         var order: [LaunchType] = []
 
-        if introScreenManager.shouldUseHardcodedOnboarding {
+        if introScreenManager.shouldUseContinuousOnboarding {
             // Count this launch as an active day
-            introScreenManager.recordHardcodedOnboardingActiveDay()
+            introScreenManager.recordContinuousOnboardingActiveDay()
         }
 
         if introScreenManager.shouldShowIntroScreen {
