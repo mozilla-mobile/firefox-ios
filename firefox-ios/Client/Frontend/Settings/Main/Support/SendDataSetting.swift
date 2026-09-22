@@ -64,8 +64,7 @@ final class SendDataSetting: BoolSetting {
             title: title,
             subtitle: subtitle,
             learnMoreText: learnMoreText,
-            a11yId: learnMoreA11yId,
-            theme: theme
+            a11yId: learnMoreA11yId
         )
 
         control.configureSwitch(
@@ -81,7 +80,8 @@ final class SendDataSetting: BoolSetting {
 
         cell.accessoryView = control
         cell.selectionStyle = .none
-
+        cell.layoutMargins = UX.cellLayoutMarginsForCurrentOS
+        cell.separatorInset = UX.cellSeparatorInsetForCurrentOS
         cell.contentView.alpha = enabled ? 1.0 : 0.5
 
         cell.learnMoreDidTap = { [weak self] in
