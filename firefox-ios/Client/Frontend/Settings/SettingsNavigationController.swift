@@ -12,26 +12,12 @@ class SettingsNavigationController: ThemedNavigationController {
         NotificationCenter.default.post(name: .SettingsDismissed, object: self)
     }
 
-    var shouldUsePrivateOverride: Bool {
+    /// Settings are always shown in the regular theme, even while the user browses in private mode.
+    override var shouldUsePrivateOverride: Bool {
         return true
     }
 
-    var shouldBeInPrivateTheme: Bool {
+    override var shouldBeInPrivateTheme: Bool {
         return false
-    }
-
-    private func retrieveTheme() -> Theme {
-        if shouldUsePrivateOverride {
-            return themeManager.resolvedTheme(with: false)
-        } else {
-            return themeManager.getCurrentTheme(for: windowUUID)
-        }
-    }
-
-    override func applyTheme() {
-        super.applyTheme()
-        let theme = retrieveTheme()
-
-        setupNavigationBarAppearance(theme: theme)
     }
 }

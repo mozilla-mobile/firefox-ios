@@ -5,12 +5,17 @@
 import Common
 import SwiftUI
 
-struct PageZoomSettingsView: View {
-    private let windowUUID: WindowUUID
+struct PageZoomSettingsView: ThemeableView {
+    let windowUUID: WindowUUID
     @ObservedObject var viewModel: PageZoomSettingsViewModel
-    @Environment(\.themeManager)
-    var themeManager
-    @State private var themeColors: ThemeColourPalette = LightTheme().colors
+    let themeManager: ThemeManager
+    @State var theme: Theme
+
+    /// Settings are always shown in the regular theme, even while the user browses in private mode.
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    private var themeColors: ThemeColourPalette { return theme.colors }
 
     private struct UX {
         static let dividerHeight: CGFloat = 0.7
@@ -30,13 +35,11 @@ struct PageZoomSettingsView: View {
         return themeColors.textPrimary.color
     }
 
-    init(windowUUID: WindowUUID) {
+    init(windowUUID: WindowUUID, themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.windowUUID = windowUUID
         self.viewModel = PageZoomSettingsViewModel(zoomManager: ZoomPageManager(windowUUID: windowUUID))
-    }
-
-    var theme: Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+        self.themeManager = themeManager
+        self.theme = themeManager.resolveTheme(for: windowUUID, privateOverride: false)
     }
 
     var body: some View {
@@ -60,12 +63,6 @@ struct PageZoomSettingsView: View {
             .frame(maxWidth: .infinity)
         }
         .background(viewBackground)
-        .onAppear {
-            themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
-        }
+        .listenToThemeChanges(in: self, theme: $theme)
     }
 }

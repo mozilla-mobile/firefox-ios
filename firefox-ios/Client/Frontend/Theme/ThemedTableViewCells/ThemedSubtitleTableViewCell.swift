@@ -13,4 +13,9 @@ class ThemedSubtitleTableViewCell: ThemedTableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+//    func applyTheme(theme: Theme) {
+//        super.applyTheme(theme: theme)
+//        subtitleLabel.textColor = theme.colors.textSecondary
+//    }
 }

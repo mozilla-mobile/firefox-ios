@@ -74,10 +74,6 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 

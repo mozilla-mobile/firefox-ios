@@ -5,7 +5,7 @@
 import SwiftUI
 import Common
 
-struct AppIconView: View, ThemeApplicable {
+struct AppIconView: ThemeableView {
     let appIcon: AppIcon
     let isSelected: Bool
     let windowUUID: WindowUUID
@@ -13,11 +13,27 @@ struct AppIconView: View, ThemeApplicable {
     let setAppIcon: (AppIcon) -> Void
 
     // MARK: - Theming
-    // FIXME FXIOS-11472 Improve our SwiftUI theming
-    @Environment(\.themeManager)
-    private var themeManager
-    @State private var currentTheme: Theme = LightTheme()
-    @State private var themeColors: ThemeColourPalette = LightTheme().colors
+    let themeManager: ThemeManager
+    @State var theme: Theme
+
+    /// Settings are always shown in the regular theme, even while the user browses in private mode.
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    private var themeColors: ThemeColourPalette { return theme.colors }
+
+    init(appIcon: AppIcon,
+         isSelected: Bool,
+         windowUUID: WindowUUID,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         setAppIcon: @escaping (AppIcon) -> Void) {
+        self.appIcon = appIcon
+        self.isSelected = isSelected
+        self.windowUUID = windowUUID
+        self.themeManager = themeManager
+        self.setAppIcon = setAppIcon
+        self.theme = themeManager.resolveTheme(for: windowUUID, privateOverride: false)
+    }
 
     struct UX {
         static let checkmarkImageIdentifier = "checkmark"
@@ -45,13 +61,7 @@ struct AppIconView: View, ThemeApplicable {
 
     var body: some View {
         subView
-        .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
+        .listenToThemeChanges(in: self, theme: $theme)
     }
 
     @ViewBuilder private var subView: some View {
@@ -76,7 +86,7 @@ struct AppIconView: View, ThemeApplicable {
         if forceLightTheme {
             return UX.appIconLightBackgroundColor
         } else {
-            switch currentTheme.type.colorScheme {
+            switch theme.type.colorScheme {
             case .light:
                 return UX.appIconLightBackgroundColor
             default:
@@ -106,7 +116,7 @@ struct AppIconView: View, ThemeApplicable {
                     .colorScheme(
                         forceLightTheme
                         ? ColorScheme.light
-                        : currentTheme.type.colorScheme
+                        : theme.type.colorScheme
                     )
                     .cornerRadius(UX.cornerRadius)
                     .overlay(
@@ -128,10 +138,5 @@ struct AppIconView: View, ThemeApplicable {
             .padding(.vertical, UX.itemPaddingVertical)
         }
         .accessibilityHint(selectionAccessibilityHint)
-    }
-
-    func applyTheme(theme: Theme) {
-        self.currentTheme = theme
-        self.themeColors = theme.colors
     }
 }

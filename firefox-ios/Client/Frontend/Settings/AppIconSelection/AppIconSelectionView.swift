@@ -5,8 +5,8 @@
 import SwiftUI
 import Common
 
-struct AppIconSelectionView: View, ThemeApplicable, FeatureFlaggable {
-    private let windowUUID: WindowUUID
+struct AppIconSelectionView: ThemeableView, FeatureFlaggable {
+    let windowUUID: WindowUUID
     private let logger: Logger
     private let telemetry: AppIconSelectionTelemetry
 
@@ -20,19 +20,26 @@ struct AppIconSelectionView: View, ThemeApplicable, FeatureFlaggable {
     @State private var isShowingErrorAlert = false
 
     // MARK: - Theming
-    // FIXME FXIOS-11472 Improve our SwiftUI theming
-    @Environment(\.themeManager)
-    var themeManager
-    @State private var themeColors: ThemeColourPalette = LightTheme().colors
+    let themeManager: ThemeManager
+    @State var theme: Theme
+
+    /// Settings are always shown in the regular theme, even while the user browses in private mode.
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    private var themeColors: ThemeColourPalette { return theme.colors }
 
     init(
         windowUUID: WindowUUID,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.windowUUID = windowUUID
         self.telemetry = AppIconSelectionTelemetry(gleanWrapper: gleanWrapper)
         self.logger = logger
+        self.themeManager = themeManager
+        self.theme = themeManager.resolveTheme(for: windowUUID, privateOverride: false)
     }
 
     var availableAppIcons: [AppIcon] {
@@ -47,6 +54,7 @@ struct AppIconSelectionView: View, ThemeApplicable, FeatureFlaggable {
                         appIcon: appIcon,
                         isSelected: appIcon == currentAppIcon,
                         windowUUID: windowUUID,
+                        themeManager: themeManager,
                         setAppIcon: setAppIcon
                     )
                 }.listRowBackground(themeColors.layer5.color)
@@ -61,20 +69,10 @@ struct AppIconSelectionView: View, ThemeApplicable, FeatureFlaggable {
                     )
                 )
             }
-            .onAppear {
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-                guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
         }
         .background(themeColors.layer1.color)
         .modifier(ScrollContentBackgroundModifier())
-    }
-
-    func applyTheme(theme: Theme) {
-        self.themeColors = theme.colors
+        .listenToThemeChanges(in: self, theme: $theme)
     }
 
     private func setAppIcon(to appIcon: AppIcon) {

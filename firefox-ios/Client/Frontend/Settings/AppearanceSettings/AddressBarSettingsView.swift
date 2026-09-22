@@ -7,18 +7,32 @@ import Common
 import Shared
 
 /// The main view displaying the settings for the address bar position menu.
-struct AddressBarSettingsView: View, UserFeaturePreferenceProvider {
+struct AddressBarSettingsView: ThemeableView, UserFeaturePreferenceProvider {
     let windowUUID: WindowUUID
     /// NOTE: To avoid duplication, the old view model is reused in the new address bar setting menu.
     /// TODO(FXIOS-12000): Once the experiment is done, we can remove the old viewmodel and move it to here.
     let viewModel: SearchBarSettingsViewModel
 
-    @Environment(\.themeManager)
-    var themeManager
+    let themeManager: ThemeManager
 
     var prefs: Prefs
 
-    @State private var currentTheme: Theme?
+    @State var theme: Theme
+
+    /// Settings are always shown in the regular theme, even while the user browses in private mode.
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    init(windowUUID: WindowUUID,
+         viewModel: SearchBarSettingsViewModel,
+         prefs: Prefs,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+        self.windowUUID = windowUUID
+        self.viewModel = viewModel
+        self.prefs = prefs
+        self.themeManager = themeManager
+        self.theme = themeManager.resolveTheme(for: windowUUID, privateOverride: false)
+    }
 
     var selectedMiddleButtonType: NavigationBarMiddleButtonType {
         if let rawValue = prefs.stringForKey(PrefsKeys.Settings.navigationToolbarMiddleButton),
@@ -34,7 +48,7 @@ struct AddressBarSettingsView: View, UserFeaturePreferenceProvider {
     }
 
     private var viewBackground: Color {
-        return Color(currentTheme?.colors.layer1 ?? UIColor.clear)
+        return Color(theme.colors.layer1)
     }
 
     private struct UX {
@@ -45,32 +59,26 @@ struct AddressBarSettingsView: View, UserFeaturePreferenceProvider {
     var body: some View {
         ScrollView {
             VStack {
-                GenericSectionView(theme: currentTheme,
+                GenericSectionView(theme: theme,
                                    title: .Settings.AddressBar.AddressBarSectionTitle,
                                    identifier: AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting) {
                     AddressBarSelectionView(
-                        theme: currentTheme,
+                        theme: theme,
                         selectedAddressBarPosition: addressBarPosition,
                         onSelected: viewModel.saveSearchBarPosition)
-                    .modifier(SectionStyle(theme: currentTheme, cornerRadius: UX.cornerRadius))
+                    .modifier(SectionStyle(theme: theme, cornerRadius: UX.cornerRadius))
                 }
 
-                NavigationToolbarSection(theme: currentTheme,
+                NavigationToolbarSection(theme: theme,
                                          selectedOption: selectedMiddleButtonType,
                                          onChange: updateMiddleNavigationToolbarButton,
                                          cornerRadius: UX.cornerRadius)
                 Spacer()
             }
         }
-        .modifier(PaddingStyle(theme: currentTheme, spacing: UX.spacing))
+        .modifier(PaddingStyle(theme: theme, spacing: UX.spacing))
         .background(viewBackground)
-        .onAppear {
-            currentTheme = themeManager.getCurrentTheme(for: windowUUID)
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            currentTheme = themeManager.getCurrentTheme(for: windowUUID)
-        }
+        .listenToThemeChanges(in: self, theme: $theme)
     }
 
     // MARK: NavigationToolbarSection

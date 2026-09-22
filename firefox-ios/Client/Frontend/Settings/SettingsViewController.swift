@@ -18,6 +18,7 @@ class SettingsViewController: UIViewController, Themeable {
 
     var currentWindowUUID: UUID? { return windowUUID }
 
+    /// Settings are always shown in the regular theme, even while the user browses in private mode.
     var shouldUsePrivateOverride: Bool {
         return true
     }
@@ -51,7 +52,9 @@ class SettingsViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        let theme = themeManager.resolveTheme(for: currentWindowUUID,
+                                              shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                              shouldBeInPrivateTheme: shouldBeInPrivateTheme)
         view.backgroundColor = theme.colors.layer1
     }
 }

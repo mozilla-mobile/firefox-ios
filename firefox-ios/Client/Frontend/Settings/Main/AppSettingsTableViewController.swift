@@ -642,18 +642,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
         tableView.reloadData()
     }
 
-    private func retrieveTheme() -> Theme {
-        if shouldUsePrivateOverride {
-            return themeManager.resolvedTheme(with: shouldBeInPrivateTheme)
-        } else {
-            return themeManager.getCurrentTheme(for: windowUUID)
-        }
-    }
-
     override func applyTheme() {
         super.applyTheme()
         if #available(iOS 26.0, *) {
-            let theme = retrieveTheme()
+            let theme = currentTheme()
             navigationItem.rightBarButtonItem?.tintColor = theme.isNova
                 ? theme.colors.actionPrimary
                 : theme.colors.textPrimary

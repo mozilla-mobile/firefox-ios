@@ -12,6 +12,19 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
+    /// Declared here rather than relying on the `Themeable` defaults so that subclasses can override them.
+    /// A requirement satisfied by a protocol extension is not part of the class vtable, so a subclass
+    /// redeclaring it would be ignored everywhere `Themeable` reads it.
+    var shouldUsePrivateOverride: Bool { return false }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    /// The theme this controller and its cells should use, honouring the private theme override.
+    func currentTheme() -> Theme {
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+    }
+
     struct UX {
         static let horizontalMargin: CGFloat = 15
         static func tableViewStyleForCurrentOS(with style: UITableView.Style) -> UITableView.Style {
@@ -68,7 +81,7 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
             withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
         ) as? ThemedTableSectionHeaderFooterView
         else { return nil }
-        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        headerView.applyTheme(theme: currentTheme())
         return headerView
     }
 
@@ -80,7 +93,7 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
             withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
         ) as? ThemedTableSectionHeaderFooterView
         else { return nil }
-        footerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        footerView.applyTheme(theme: currentTheme())
         return footerView
     }
 
@@ -94,7 +107,7 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
     }
 
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
         tableView.reloadData()

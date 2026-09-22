@@ -992,31 +992,20 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
         applyTheme()
     }
 
-    func currentTheme() -> Theme {
-        return retrieveTheme()
-    }
-
-    var shouldUsePrivateOverride: Bool {
+    /// Settings are always shown in the regular theme, even while the user browses in private mode.
+    override var shouldUsePrivateOverride: Bool {
         return true
     }
 
-    var shouldBeInPrivateTheme: Bool {
+    override var shouldBeInPrivateTheme: Bool {
         return false
-    }
-
-    private func retrieveTheme() -> Theme {
-        if shouldUsePrivateOverride {
-            return themeManager.resolvedTheme(with: shouldBeInPrivateTheme)
-        } else {
-            return themeManager.getCurrentTheme(for: windowUUID)
-        }
     }
 
     override func applyTheme() {
         settings = generateSettings()
         super.applyTheme()
 
-        let theme = retrieveTheme()
+        let theme = currentTheme()
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
         tableView.reloadData()
