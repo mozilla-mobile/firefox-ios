@@ -115,9 +115,14 @@ enum Experiments {
             let dir = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
             profilePath = dir.path
         } else {
-            profilePath = FileManager.default.containerURL(
+            // Mirrors `ProfileFileAccessor`: the shared container is unavailable when the
+            // app group entitlement is missing, so fall back to the same directory the
+            // profile files land in. Without this, `dbPath` is nil, Nimbus silently
+            // becomes `NimbusDisabled`, and every onboarding card is filtered out.
+            let rootPath = FileManager.default.containerURL(
                 forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier
-            )?
+            )?.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+            profilePath = URL(fileURLWithPath: rootPath)
                 .appendingPathComponent("profile.profile")
                 .path
         }
