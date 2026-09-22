@@ -71,6 +71,8 @@ final class MockIntroScreenManager: IntroScreenManagerProtocol {
 
     var shouldShowVideoIntro: Bool { return false }
 
+    var shouldUseContinuousOnboarding: Bool { return false }
+
     var onboardingKitVariant: OnboardingKit.OnboardingVariant {
         return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .base
     }
@@ -78,6 +80,8 @@ final class MockIntroScreenManager: IntroScreenManagerProtocol {
     func didSeeIntroScreen() {
         didSeeIntroScreenCalled = true
     }
+
+    func recordContinuousOnboardingActiveDay() {}
 }
 
 class MockSearchBarLocationSaver: SearchBarLocationSaverProtocol {
