@@ -2193,10 +2193,7 @@ workflows:
 
             echo "Found UITest .xctestrun: $FOCUS_UI_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH --value "$FOCUS_UI_XCTESTRUN"
-    # Disabled on iOS 27: Focus never launches
-    # https://mozilla-hub.atlassian.net/browse/FXIOS-16730
     - xcode-test-without-building@0:
-        run_if: "false"
         timeout: 1800
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
@@ -2278,10 +2275,7 @@ workflows:
             fi
         - title: Check if build is scheduled or regular to set the test plan
     - pull-intermediate-files@1: {}
-    # Disabled on iOS 27: Focus never launches
-    # https://mozilla-hub.atlassian.net/browse/FXIOS-16730
     - xcode-test-without-building@0:
-        run_if: "false"
         timeout: 1800
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
