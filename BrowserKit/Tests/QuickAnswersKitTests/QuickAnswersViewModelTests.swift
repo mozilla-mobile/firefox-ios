@@ -62,7 +62,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(states[3], .loadingSearchResult)
         XCTAssertEqual(states[4], .showSearchResult(searchResult, nil))
         XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
-        XCTAssertEqual(mockTelemetry.lastRequestedModel, QuickAnswersModel.exa.telemetryLabel)
+        XCTAssertEqual(mockTelemetry.lastRequestedModel, QuickAnswersModel.exa.rawValue)
         XCTAssertEqual(mockTelemetry.recordingStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastRecordingOutcome, true)
@@ -70,7 +70,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastResultsOutcome, true)
-        XCTAssertEqual(mockTelemetry.lastResultsModel, QuickAnswersModel.exa.telemetryLabel)
+        XCTAssertEqual(mockTelemetry.lastResultsModel, QuickAnswersModel.exa.rawValue)
         XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 0)
     }
 
@@ -137,7 +137,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastResultsOutcome, false)
-        XCTAssertEqual(mockTelemetry.lastResultsModel, QuickAnswersModel.exa.telemetryLabel)
+        XCTAssertEqual(mockTelemetry.lastResultsModel, QuickAnswersModel.exa.rawValue)
     }
 
     func testStartFlow_whenServiceNotInitialized_emitsServiceNotInitializedError() {
@@ -279,7 +279,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         _ = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .liner))
 
         XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
-        XCTAssertEqual(mockTelemetry.lastRequestedModel, QuickAnswersModel.liner.telemetryLabel)
+        XCTAssertEqual(mockTelemetry.lastRequestedModel, QuickAnswersModel.liner.rawValue)
     }
 
     // MARK: - Helper
