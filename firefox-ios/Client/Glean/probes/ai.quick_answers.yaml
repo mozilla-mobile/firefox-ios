@@ -52,7 +52,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35786
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
@@ -121,14 +121,15 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35786
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
   permission_denied:
     type: event
     description: |
-      Recorded when the user denies one of the permissions Quick Answers needs to capture audio.
+      Recorded when the user denies one of the permissions Quick Answers needs to capture audio
+      or to generate the transcription.
     extra_keys:
       transcription:
         type: boolean
@@ -136,9 +137,9 @@ ai.quick_answers:
           True when the denied permission is speech recognition (transcription),
           false when it is the microphone.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16927
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35786
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"

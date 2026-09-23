@@ -30,7 +30,7 @@ public protocol QuickAnswersTelemetry {
     @MainActor
     func resultsCompleted(outcome: Bool, errorType: String?, model: String)
 
-    /// Fires when the user denies one of the permissions needed to capture audio.
+    /// Fires when the user denies one of the permissions needed to capture audio or generate the transcription.
     /// - Parameter isTranscription: `true` for the speech recognition permission, `false` for the microphone one.
     func permissionDenied(isTranscription: Bool)
 
