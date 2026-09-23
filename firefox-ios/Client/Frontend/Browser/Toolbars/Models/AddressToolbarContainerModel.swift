@@ -203,6 +203,7 @@ final class AddressToolbarContainerModel: Equatable {
     @MainActor
     init(
         state: ToolbarState,
+        addressToolbarContainerLens: AddressToolbarContainerLens,
         profile: Profile,
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         toolbarHelper: ToolbarHelperInterface = ToolbarHelper(),
@@ -212,7 +213,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.navigationActions = Self.mapActions(state.addressToolbar.navigationActionsState.actions,
                                                  isShowingTopTabs: state.isShowingTopTabs,
                                                  windowUUID: windowUUID)
-        self.leadingPageActions = Self.mapActions(state.addressToolbar.leadingPageActions,
+        self.leadingPageActions = Self.mapActions(addressToolbarContainerLens.leadingPageActions,
                                                   isShowingTopTabs: state.isShowingTopTabs,
                                                   windowUUID: windowUUID)
         self.trailingPageActions = Self.mapActions(state.addressToolbar.trailingPageActions,
@@ -228,6 +229,8 @@ final class AddressToolbarContainerModel: Equatable {
         // If the user has selected an alternative search engine, use that. Otherwise, use the default engine.
         let searchEngineModel = state.addressToolbar.alternativeSearchEngine
                                 ?? searchEnginesManager.defaultEngine?.generateModel()
+        // TODO: Remove once all actions that need hasAlternativeLocationColor are migrated into the lens.
+        // Can't drop this yet, still used here for uxConfiguration's background tint.
         let hasAlternativeLocationColor = state.toolbarPosition == .top &&
                                             !state.isShowingTopTabs &&
                                             state.isShowingNavigationToolbar

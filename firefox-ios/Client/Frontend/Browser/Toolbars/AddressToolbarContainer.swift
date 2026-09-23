@@ -70,8 +70,6 @@ final class AddressToolbarContainer: UIView,
         static let accessoryViewGradientOffset: CGFloat = 74
     }
 
-    typealias SubscriberStateType = ToolbarState
-
     private let toolbarHelper: ToolbarHelperInterface
     private var windowUUID: WindowUUID?
     private var profile: Profile?
@@ -317,7 +315,7 @@ final class AddressToolbarContainer: UIView,
 
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return ToolbarState(appState: appState, uuid: windowUUID)
+                return AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
             })
         })
     }
@@ -335,9 +333,9 @@ final class AddressToolbarContainer: UIView,
         store.unsubscribe(self)
     }
 
-    func newState(state: ToolbarState) {
-        self.state = state
-        updateModel(toolbarState: state)
+    func newState(state: AddressToolbarContainerLens) {
+        self.state = state.toolbarState
+        updateModel(addressToolbarContainerLens: state)
     }
 
     // MARK: - AlphaDimmable
@@ -352,9 +350,11 @@ final class AddressToolbarContainer: UIView,
         updateSkeletonAddressBarsAlpha(forMinimizedAddressBar: isMinimizedAddressBar)
     }
 
-    private func updateModel(toolbarState: ToolbarState) {
+    private func updateModel(addressToolbarContainerLens: AddressToolbarContainerLens) {
         guard let windowUUID, let profile else { return }
+        let toolbarState = addressToolbarContainerLens.toolbarState
         let newModel = AddressToolbarContainerModel(state: toolbarState,
+                                                    addressToolbarContainerLens: addressToolbarContainerLens,
                                                     profile: profile,
                                                     windowUUID: windowUUID)
 
