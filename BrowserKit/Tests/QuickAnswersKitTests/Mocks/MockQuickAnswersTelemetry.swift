@@ -15,15 +15,20 @@ final class MockQuickAnswersTelemetry: QuickAnswersTelemetry, @unchecked Sendabl
     var citationTappedCalledCount = 0
     var closedCalledCount = 0
     var consentShownCalledCount = 0
+    var permissionDeniedCalledCount = 0
 
     var lastRecordingOutcome: Bool?
     var lastRecordingErrorType: String?
     var lastResultsOutcome: Bool?
     var lastResultsErrorType: String?
+    var lastResultsModel: String?
+    var lastRequestedModel: String?
     var lastConsentAgreed: Bool?
+    var lastPermissionDeniedIsTranscription: Bool?
 
-    func quickAnswersRequested() {
+    func quickAnswersRequested(model: String) {
         quickAnswersRequestedCalledCount += 1
+        lastRequestedModel = model
     }
 
     func recordingStarted() {
@@ -40,10 +45,16 @@ final class MockQuickAnswersTelemetry: QuickAnswersTelemetry, @unchecked Sendabl
         resultsStartedCalledCount += 1
     }
 
-    func resultsCompleted(outcome: Bool, errorType: String?) {
+    func resultsCompleted(outcome: Bool, errorType: String?, model: String) {
         resultsCompletedCalledCount += 1
         lastResultsOutcome = outcome
         lastResultsErrorType = errorType
+        lastResultsModel = model
+    }
+
+    func permissionDenied(isTranscription: Bool) {
+        permissionDeniedCalledCount += 1
+        lastPermissionDeniedIsTranscription = isTranscription
     }
 
     func displayed() {

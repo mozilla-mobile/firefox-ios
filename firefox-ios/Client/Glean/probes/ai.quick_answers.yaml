@@ -43,10 +43,16 @@ ai.quick_answers:
     type: event
     description: |
       Recorded the instant the user initiates the Quick Answers flow (e.g. taps the button on the homepage).
+    extra_keys:
+      model:
+        type: string
+        description: |
+          The model backing the Quick Answers request, one of `exa` or `liner`.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
@@ -65,6 +71,7 @@ ai.quick_answers:
     type: event
     description: |
       Recorded when the transcription completes.
+      Microphone and speech recognition permission denials are reported through `permission_denied` instead.
     extra_keys:
       outcome:
         type: boolean
@@ -78,6 +85,7 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
@@ -107,10 +115,33 @@ ai.quick_answers:
         type: string
         description: |
           Optional. The error message if present.
+      model:
+        type: string
+        description: |
+          The model backing the Quick Answers request, one of `exa` or `liner`.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  permission_denied:
+    type: event
+    description: |
+      Recorded when the user denies one of the permissions Quick Answers needs to capture audio,
+      replacing the `recording_completed` event for these two cases.
+    extra_keys:
+      transcription:
+        type: boolean
+        description: |
+          True when the denied permission is speech recognition (transcription),
+          false when it is the microphone.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33376
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"

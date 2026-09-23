@@ -6,12 +6,13 @@ import Foundation
 
 public protocol QuickAnswersTelemetry {
     /// Fires when the user initiates the Quick Answers flow.
-    func quickAnswersRequested()
+    /// - Parameter model: The model backing the request.
+    func quickAnswersRequested(model: String)
 
     /// Fires when the service starts attempting to capture user audio.
     func recordingStarted()
 
-    /// Fires when the transcription completes.
+    /// Fires when the transcription completes, except on permission denials which fire `permissionDenied` instead.
     /// - Parameters:
     ///   - outcome: `true` if the transcription succeeded, `false` if it failed.
     ///   - errorType: A description of the failure when `outcome` is `false`, otherwise `nil`.
@@ -25,8 +26,14 @@ public protocol QuickAnswersTelemetry {
     /// - Parameters:
     ///   - outcome: `true` if the results were fetched successfully, `false` if it failed.
     ///   - errorType: A description of the failure when `outcome` is `false`, otherwise `nil`.
+    ///   - model: The model backing the request.
     @MainActor
-    func resultsCompleted(outcome: Bool, errorType: String?)
+    func resultsCompleted(outcome: Bool, errorType: String?, model: String)
+
+    /// Fires when the user denies one of the permissions needed to capture audio, in place of
+    /// `recordingCompleted(outcome:errorType:)`.
+    /// - Parameter isTranscription: `true` for the speech recognition permission, `false` for the microphone one.
+    func permissionDenied(isTranscription: Bool)
 
     /// Fires when the user taps a citation source in the results.
     func citationTapped()
