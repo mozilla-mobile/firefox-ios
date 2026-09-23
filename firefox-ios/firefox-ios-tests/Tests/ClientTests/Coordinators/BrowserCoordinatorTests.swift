@@ -453,7 +453,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         // Availability is injected rather than read from the simulator, which reports a camera
         // on a developer machine but not on CI, running the same iOS version.
         var availabilityCalled = false
-        let subject = createSubject(cameraAvailability: {
+        let subject = createSubject(isCameraAvailable: {
             availabilityCalled = true
             return false
         })
@@ -1714,7 +1714,7 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     // MARK: - Helpers
     private func createSubject(googleLensService: GoogleLensServicing = GoogleLensService(),
-                               cameraAvailability: @escaping @MainActor () -> Bool = { true },
+                               isCameraAvailable: @escaping @MainActor () -> Bool = { true },
                                file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserCoordinator {
         let subject = BrowserCoordinator(router: mockRouter,
@@ -1725,7 +1725,7 @@ final class BrowserCoordinatorTests: XCTestCase,
                                          glean: glean,
                                          applicationHelper: applicationHelper,
                                          googleLensService: googleLensService,
-                                         cameraAvailability: cameraAvailability)
+                                         isCameraAvailable: isCameraAvailable)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
