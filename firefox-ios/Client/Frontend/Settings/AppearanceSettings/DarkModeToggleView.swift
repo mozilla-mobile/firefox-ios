@@ -26,7 +26,7 @@ struct DarkModeToggleView: View {
         return Color(theme?.colors.layer5 ?? UIColor.clear)
     }
 
-    private struct UX {
+    private enum UX {
         static let horizontalSpacing: CGFloat = 16
         static let verticalSpacing: CGFloat = 8
         static let dividerHeight: CGFloat = 0.7

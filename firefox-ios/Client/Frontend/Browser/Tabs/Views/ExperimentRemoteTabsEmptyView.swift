@@ -18,7 +18,7 @@ protocol RemoteTabsEmptyViewProtocol: UIView, ThemeApplicable, InsetUpdatable {
 
 class ExperimentRemoteTabsEmptyView: UIView,
                                      RemoteTabsEmptyViewProtocol {
-    struct UX {
+    enum UX {
         static let topPadding: CGFloat = 55
         static let bottomPadding: CGFloat = 35
         static let paddingInBetweenItems: CGFloat = 15

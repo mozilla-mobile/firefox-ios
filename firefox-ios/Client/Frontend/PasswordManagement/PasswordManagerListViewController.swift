@@ -10,7 +10,7 @@ import struct MozillaAppServices.LoginEntry
 
 class PasswordManagerListViewController: SensitiveViewController,
                                          Themeable {
-    private struct UX {
+    private enum UX {
         static let separatorInset: CGFloat = 20
         static let selectAllButtonMargin: CGFloat = 16
     }

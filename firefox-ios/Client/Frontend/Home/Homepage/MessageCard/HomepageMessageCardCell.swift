@@ -15,7 +15,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner
     typealias BannerCopy = String.FirefoxHomepage.HomeTabBanner.EvergreenMessage
 
-    struct UX {
+    enum UX {
         static let cardSizeMaxWidth: CGFloat = 360
         static let textSpacing: CGFloat = 8
         static let cornerRadius: CGFloat = 12

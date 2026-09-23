@@ -26,7 +26,7 @@ enum SearchViewVisibleSuggestionTelemetryInfo {
 
 // Search Partner Codes
 // https://docs.google.com/spreadsheets/d/1HMm9UXjfJv-uHhGU1pJlbP4ILkdpSD9w_Fd-3yOd8oY/
-struct SearchPartner {
+enum SearchPartner {
     // Google partner code for US and ROW (rest of the world)
     private static let google = ["US": "firefox-b-1-m",
                                  "ROW": "firefox-b-m"]

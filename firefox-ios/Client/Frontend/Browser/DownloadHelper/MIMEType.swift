@@ -5,7 +5,7 @@
 import Foundation
 import UniformTypeIdentifiers
 
-struct MIMEType {
+enum MIMEType {
     static let Bitmap = "image/bmp"
     static let CSS = "text/css"
     static let GIF = "image/gif"

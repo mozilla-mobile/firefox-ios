@@ -14,7 +14,7 @@ protocol SurveySurfaceViewControllerDelegate: AnyObject {
 }
 
 class SurveySurfaceViewController: UIViewController, Themeable {
-    struct UX {
+    enum UX {
         static let buttonMaxWidth: CGFloat  = 400
         static let buttonHeight: CGFloat = 45
         static let buttonSeparation: CGFloat = 8

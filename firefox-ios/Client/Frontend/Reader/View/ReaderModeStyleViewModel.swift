@@ -26,7 +26,7 @@ class ReaderModeStyleViewModel {
         self.readerModeStyle = style
     }
 
-    struct UX {
+    enum UX {
         // For top or bottom presentation
         static let PresentationSpace = 13.0
     }

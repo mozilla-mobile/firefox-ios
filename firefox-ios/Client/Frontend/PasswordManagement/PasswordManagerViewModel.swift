@@ -170,7 +170,7 @@ final class PasswordManagerViewModel {
     }
 
     // MARK: - UX Constants
-    struct UX {
+    enum UX {
         static let selectionButtonFont = UIFont.systemFont(ofSize: 16)
         static let noResultsFont = UIFont.systemFont(ofSize: 16)
     }

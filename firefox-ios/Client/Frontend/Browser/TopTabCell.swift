@@ -8,7 +8,7 @@ import Shared
 import SiteImageView
 
 class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
-    struct UX {
+    enum UX {
         // MARK: - Favicon and Title Constants
         static let faviconSize: CGFloat = 20
         static let faviconCornerRadius: CGFloat = 2

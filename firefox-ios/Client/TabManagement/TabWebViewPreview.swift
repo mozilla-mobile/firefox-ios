@@ -7,7 +7,7 @@ import SiteImageView
 import Common
 
 final class TabWebViewPreview: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let faviconCornerRadius: CGFloat = 20.0
         static let faviconImageViewSize: CGFloat = 45.0
         static let backgroundShadowCornerRadius: CGFloat = 14.0

@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let titleHorizontalPadding: CGFloat = 16
         static let titleVerticalPadding: CGFloat = 6
         static let titleVerticalLongPadding: CGFloat = 20

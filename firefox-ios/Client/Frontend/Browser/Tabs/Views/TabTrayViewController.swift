@@ -36,8 +36,8 @@ final class TabTrayViewController: UIViewController,
                                    TabDisplayViewDragAndDropInteraction,
                                    Notifiable {
     typealias SubscriberStateType = TabTrayState
-    private struct UX {
-        struct NavigationMenu {
+    private enum UX {
+        enum NavigationMenu {
             static let width: CGFloat = 343
             static let iPadWidth: CGFloat = 500
         }

@@ -7,7 +7,7 @@ import UIKit
 import Shared
 
 class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let deviceRowTextFont = UIFont.systemFont(ofSize: 16)
         static let deviceRowTextPaddingLeft: CGFloat = 60
         static let deviceRowTextPaddingRight: CGFloat = 20

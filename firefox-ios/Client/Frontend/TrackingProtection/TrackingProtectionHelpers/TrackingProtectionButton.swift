@@ -12,7 +12,7 @@ public struct TrackingProtectionButtonModel {
 }
 
 class TrackingProtectionButton: ResizableButton, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let buttonCornerRadius: CGFloat = 12
         static let newStyleButtonCornerRadius: CGFloat = 24
         static let buttonVerticalInset: CGFloat = 12

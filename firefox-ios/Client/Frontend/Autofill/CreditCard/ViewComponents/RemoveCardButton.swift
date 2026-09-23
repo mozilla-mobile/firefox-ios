@@ -7,7 +7,7 @@ import Foundation
 import SwiftUI
 
 struct RemoveCardButton: View {
-    private struct UX {
+    private enum UX {
         static let cornerRadius: CGFloat = 24
         static let rectangleHeight: CGFloat = 0.7
         static let padding: CGFloat = 16

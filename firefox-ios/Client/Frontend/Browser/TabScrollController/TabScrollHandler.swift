@@ -40,7 +40,7 @@ final class TabScrollHandler: NSObject,
         func hideToolbar()
     }
 
-    private struct UX {
+    private enum UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let minimumScrollThreshold: CGFloat = 20
     }

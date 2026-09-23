@@ -22,7 +22,7 @@ class RemoteTabsViewController: UIViewController,
                                 FeatureFlaggable,
                                 UITableViewDelegate,
                                 UITableViewDataSource {
-    struct UX {
+    enum UX {
         static let rowHeight = SiteTableViewControllerUX.RowHeight
     }
 

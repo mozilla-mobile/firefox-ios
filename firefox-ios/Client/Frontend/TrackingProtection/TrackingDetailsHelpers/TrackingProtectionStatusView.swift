@@ -7,7 +7,7 @@ import UIKit
 import Common
 
 class TrackingProtectionStatusView: UIView {
-    private struct UX {
+    private enum UX {
         static let imageMargins: CGFloat = 10
         static let labelsVerticalMargins: CGFloat = 11
         static let connectionStatusLabelConstraintConstant = 16.0

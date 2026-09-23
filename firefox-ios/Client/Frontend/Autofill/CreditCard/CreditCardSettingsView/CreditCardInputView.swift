@@ -9,7 +9,7 @@ import SwiftUI
 import struct MozillaAppServices.CreditCard
 
 struct CreditCardInputView: ThemeableView {
-    private struct UX {
+    private enum UX {
         static let cornerRadius: CGFloat = 24
         static let blurRadius: CGFloat = 10
         static let dividerHeight: CGFloat = 0.7

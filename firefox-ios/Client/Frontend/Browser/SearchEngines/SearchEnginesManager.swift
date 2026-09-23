@@ -33,7 +33,7 @@ protocol SearchEngineDelegate: AnyObject {
     func searchEnginesDidUpdate()
 }
 
-struct SearchEngineProviderFactory {
+enum SearchEngineProviderFactory {
     static let defaultSearchEngineProvider: SearchEngineProvider = ASSearchEngineProvider()
 }
 

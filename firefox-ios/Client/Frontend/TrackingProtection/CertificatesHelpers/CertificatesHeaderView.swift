@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 class CertificatesHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let headerStackViewSpacing = 16.0
         static let separatorHeight = 1.0
     }

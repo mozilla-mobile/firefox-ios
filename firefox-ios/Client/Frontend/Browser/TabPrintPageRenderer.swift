@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 final class TabPrintPageRenderer: UIPrintPageRenderer {
-    private struct UX {
+    private enum UX {
         static let insets = CGFloat(36.0)
         static let textFont = FXFontStyles.Regular.caption1.scaledFont()
         static let marginScale = CGFloat(0.5)

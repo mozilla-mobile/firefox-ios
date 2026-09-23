@@ -8,7 +8,7 @@ import UIKit
 final class FolderSectionHeaderView: UITableViewHeaderFooterView {
     static let reuseIdentifier = "FolderSectionHeaderView"
 
-    private struct UX {
+    private enum UX {
         static let horizontalPadding: CGFloat = 16.0
         static let verticalPadding: CGFloat = 8.0
         static let captionBottomPadding: CGFloat = 6.0

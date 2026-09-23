@@ -9,7 +9,7 @@ struct SettingsTelemetry {
     private let gleanWrapper: GleanWrapper
 
     /// Standard fallback values to use in telemetry when needed (e.g. missing data).
-    struct Placeholders {
+    enum Placeholders {
         /// Used when a value is not available to send (e.g. settings.changed changedFrom value missing)
         static let missingValue = "unavailable"
     }

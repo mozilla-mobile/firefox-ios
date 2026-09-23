@@ -10,7 +10,7 @@ import SiteImageView
 
 /// Tab cell used in the tab tray under the .tabTrayUIExperiments Nimbus experiment
 final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
-    struct UX {
+    enum UX {
         static let selectedBorderWidth: CGFloat = 3.0
         static let unselectedBorderWidth: CGFloat = 1
         static let zeroBorderWidth: CGFloat = 0

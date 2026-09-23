@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @MainActor
-struct HomepageDimensionCalculator {
+enum HomepageDimensionCalculator {
     static func isCompactLayout(
         traitCollection: UITraitCollection,
         for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,

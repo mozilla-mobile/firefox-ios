@@ -7,7 +7,7 @@ import Common
 import ComponentLibrary
 
 final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let a11yTopMargin: CGFloat = 16
         static let titleTopMargin: CGFloat = 16
         static let bodyTopMargin: CGFloat = 8
