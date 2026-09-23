@@ -9023,7 +9023,7 @@ extension String {
 // MARK: - Strings to be removed
 extension String {
     /// For more detailed information on how to use this struct, please see
-    /// https://github.com/mozilla-mobile/firefox-ios/wiki/How-to-add-and-modify-Strings#oldstrings-struct
+    /// https://mozilla-hub.atlassian.net/wiki/spaces/FXIOS/pages/2730819617/How+to+Add+And+Modify+Strings
     /// periphery:ignore - These strings are getting removed every couple of months
     struct OldStrings {
         struct v157 {
