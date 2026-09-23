@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 final class FolderTreeCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    struct UX {
+    enum UX {
         static let imageSize: CGFloat = 29
         static let borderViewMargin: CGFloat = 16
         static let verticalMargin: CGFloat = 8

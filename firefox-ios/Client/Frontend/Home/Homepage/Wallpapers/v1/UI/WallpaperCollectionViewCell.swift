@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
-    private struct UX {
+    private enum UX {
         static let cornerRadius: CGFloat = 10
         static let borderWidth: CGFloat = 1
         static let selectedBorderWidth: CGFloat = 3

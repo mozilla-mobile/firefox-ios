@@ -22,7 +22,7 @@ only_rules: # Only enforce these rules, ignore all others
   - contains_over_first_not_nil
   - contains_over_range_nil_comparison
   - control_statement
-  # - convenience_type
+  - convenience_type
   # - cyclomatic_complexity
   # - deployment_target
   # - direct_return

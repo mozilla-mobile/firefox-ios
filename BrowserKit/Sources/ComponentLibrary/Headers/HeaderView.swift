@@ -7,7 +7,7 @@ import Common
 import SiteImageView
 
 public final class HeaderView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let headerLinesLimit = 2
         static let siteDomainLabelsVerticalSpacing: CGFloat = 13
         static let siteDomainLabelsHorizontalSpacing: CGFloat = 12

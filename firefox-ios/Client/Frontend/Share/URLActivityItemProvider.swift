@@ -8,7 +8,7 @@ import Shared
 import Common
 
 class URLActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
-    private struct ActivityIdentifiers {
+    private enum ActivityIdentifiers {
         static let whatsApp = "net.whatsapp.WhatsApp.ShareExtension"
     }
 

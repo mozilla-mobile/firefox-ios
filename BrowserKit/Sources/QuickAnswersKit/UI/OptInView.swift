@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let contentSpacing: CGFloat = 16.0
         static let buttonContentInset = NSDirectionalEdgeInsets(
             top: 13.5,

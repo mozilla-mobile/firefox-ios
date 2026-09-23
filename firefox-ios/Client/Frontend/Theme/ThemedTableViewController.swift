@@ -12,7 +12,7 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
-    struct UX {
+    enum UX {
         static let horizontalMargin: CGFloat = 15
         static func tableViewStyleForCurrentOS(with style: UITableView.Style) -> UITableView.Style {
             guard #available(iOS 26.0, *) else { return style }

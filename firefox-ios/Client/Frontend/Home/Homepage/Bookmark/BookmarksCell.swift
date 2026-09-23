@@ -8,7 +8,7 @@ import SiteImageView
 
 /// A cell used in homepage's Bookmarks section.
 final class BookmarksCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
-    private struct UX {
+    private enum UX {
         static let containerSpacing: CGFloat = 4
         static let heroImageSize = CGSize(width: 126, height: 68)
         static let generalSpacing: CGFloat = 8

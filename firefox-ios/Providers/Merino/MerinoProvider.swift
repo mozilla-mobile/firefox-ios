@@ -12,7 +12,7 @@ protocol MerinoStoriesProviding: Sendable {
 }
 
 final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
-    private struct Constants {
+    private enum Constants {
         static let merinoServicesBaseURL = "https://merino.services.mozilla.com"
         static let numberOfStoriesToFetchForCaching = 100
     }

@@ -56,7 +56,7 @@ public final class KeyboardHelper: NSObject {
     private var delegates = [WeakKeyboardDelegate]()
 
     public class var defaultHelper: KeyboardHelper {
-        struct Singleton {
+        enum Singleton {
             static let instance = KeyboardHelper()
         }
         return Singleton.instance

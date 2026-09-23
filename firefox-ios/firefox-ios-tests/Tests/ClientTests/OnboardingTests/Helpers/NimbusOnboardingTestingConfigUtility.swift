@@ -5,7 +5,7 @@
 import MozillaAppServices
 
 struct NimbusOnboardingTestingConfigUtility {
-    struct CardElementNames {
+    enum CardElementNames {
         static let name = "Name"
         static let title = "Title"
         static let body = "Body"

@@ -9,7 +9,7 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
     static let logger: Logger = DefaultLogger.shared
     static let supportsSecureCoding = true
 
-    struct UX {
+    enum UX {
         static let preferredIconSize = 30
     }
 

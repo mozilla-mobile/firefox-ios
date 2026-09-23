@@ -27,7 +27,7 @@ struct GenericSectionView<Content: View>: View {
         return Color(theme?.colors.textSecondary ?? UIColor.clear)
     }
 
-    private struct UX {
+    private enum UX {
         static var sectionPadding: CGFloat { 16 }
         static var dividerHeight: CGFloat { 0.7 }
         static var textPadding: CGFloat { 8 }

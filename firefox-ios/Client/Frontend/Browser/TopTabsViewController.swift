@@ -21,7 +21,7 @@ protocol TopTabsDelegate: AnyObject {
 }
 
 class TopTabsViewController: UIViewController, Themeable, Notifiable {
-    private struct UX {
+    private enum UX {
         static let trailingEdgeSpace: CGFloat = 10
         static let topTabsViewHeight: CGFloat = 44
         static let topTabsBackgroundShadowWidth: CGFloat = 12

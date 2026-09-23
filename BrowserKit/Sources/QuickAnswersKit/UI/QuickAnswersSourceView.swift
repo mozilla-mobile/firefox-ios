@@ -7,7 +7,7 @@ import Common
 import SiteImageView
 
 final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let thumbnailCornerRadius: CGFloat = 16.0
         static let thumbnailBorderWidth: CGFloat = 1.0
         static let thumbnailShadowBlurRadius: CGFloat = 64.0
@@ -123,7 +123,7 @@ final class QuickAnswersSourceView: UIView,
                                     UICollectionViewDataSource,
                                     UICollectionViewDelegateFlowLayout,
                                     ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let headerSpacing: CGFloat = 8.0
         static let interItemSpacing: CGFloat = 16.0
         static let maxItemWidth: CGFloat = 150.0
@@ -284,7 +284,7 @@ final class QuickAnswersSourceView: UIView,
 /// The enlarged preview shown when long pressing a source cell: a larger thumbnail and the full,
 /// untruncated title. Tapping it commits the same navigation as tapping the cell.
 private final class SourcePreviewViewController: UIViewController {
-    private struct UX {
+    private enum UX {
         static let width: CGFloat = 260.0
         static let padding: CGFloat = 16.0
         static let imageSpacing: CGFloat = 12.0

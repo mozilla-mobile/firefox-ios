@@ -4,7 +4,7 @@
 
 import Foundation
 
-class AppInfo {
+enum AppInfo {
     /// Return the shared container identifier (also known as the app group) to be used with for example background
     /// http requests. It is the base bundle identifier with a "group." prefix.
     static var sharedContainerIdentifier: String {
@@ -88,11 +88,11 @@ class AppInfo {
 
     static let config: AppConfig = AppInfo.isKlar ? KlarAppConfig() : FocusAppConfig()
 
-    open class func isSimulator() -> Bool {
+    public static func isSimulator() -> Bool {
         return ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] != nil
     }
 
-    open class func isTesting() -> Bool {
+    public static func isTesting() -> Bool {
         return ProcessInfo.processInfo.arguments.contains("testMode")
     }
 
@@ -100,11 +100,11 @@ class AppInfo {
         return (Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String)?.contains("enterprise") ?? false
     }
 
-    open class func testRequestsReset() -> Bool {
+    public static func testRequestsReset() -> Bool {
         return ProcessInfo.processInfo.arguments.contains("testMode")
     }
 
-    open class func isFirstRunUIEnabled() -> Bool {
+    public static func isFirstRunUIEnabled() -> Bool {
         return !ProcessInfo.processInfo.arguments.contains("disableFirstRunUI")
     }
 

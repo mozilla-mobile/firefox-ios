@@ -7,7 +7,7 @@ import Common
 
 // TODO: - FXIOS-15247 Refactor Gradient according to design
 final class GradientCircleView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let gradientStartPoint = CGPoint(x: 1.0, y: 0.5)
         static let gradientEndPoint = CGPoint(x: 0.0, y: 0.5)
         static let colorsInitialLocation: [NSNumber] = [0.0, 0.5, 1.0]

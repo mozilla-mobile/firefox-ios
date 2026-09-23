@@ -5,7 +5,7 @@
 import Common
 
 final class TrackingProtectionToggleView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let toggleLabelsContainerConstraintConstant = 16.0
     }
 

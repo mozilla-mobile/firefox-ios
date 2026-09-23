@@ -9,7 +9,7 @@ final class GroupedEditFolderViewController: UIViewController,
                                        UITableViewDelegate,
                                        UITableViewDataSource,
                                        Themeable {
-    private struct UX {
+    private enum UX {
         static let editFolderCellTopPadding: CGFloat = 25.0
     }
 

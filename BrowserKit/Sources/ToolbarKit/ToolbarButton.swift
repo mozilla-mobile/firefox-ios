@@ -14,7 +14,7 @@ class ToolbarButton: UIButton,
                      ThemeApplicable,
                      UIGestureRecognizerDelegate,
                      Notifiable {
-    private struct UX {
+    private enum UX {
         static let verticalInset: CGFloat = 10
         static let horizontalInset: CGFloat = 10
         static let horizontalTextInset: CGFloat = 5

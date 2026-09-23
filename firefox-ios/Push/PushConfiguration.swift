@@ -8,7 +8,7 @@ import enum MozillaAppServices.BridgeType
 import enum MozillaAppServices.PushHttpProtocol
 import struct MozillaAppServices.PushConfiguration
 
-public struct KnownPushHost {
+public enum KnownPushHost {
     public static let prod = "updates.push.services.mozilla.com"
     public static let stage = "updates-autopush.stage.mozaws.net"
 }

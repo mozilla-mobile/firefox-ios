@@ -4,8 +4,8 @@
 
 import Foundation
 
-open class Bytes {
-    open class func generateRandomBytes(_ len: UInt) -> Data {
+public enum Bytes {
+    public static func generateRandomBytes(_ len: UInt) -> Data {
         let len = Int(len)
         var data = Data(count: len)
         data.withUnsafeMutableBytes { (p: UnsafeMutableRawBufferPointer) in

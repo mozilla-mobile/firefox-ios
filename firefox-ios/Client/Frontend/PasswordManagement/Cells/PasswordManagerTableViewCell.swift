@@ -16,7 +16,7 @@ class PasswordManagerSettingsTableViewCell: ThemedTableViewCell {
 }
 
 class PasswordManagerTableViewCell: ThemedTableViewCell {
-    private struct UX {
+    private enum UX {
         static let horizontalMargin: CGFloat = 14
     }
 

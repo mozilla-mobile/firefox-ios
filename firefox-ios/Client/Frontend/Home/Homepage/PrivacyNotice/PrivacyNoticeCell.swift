@@ -10,7 +10,7 @@ final class PrivacyNoticeCell: UICollectionViewCell,
                                UITextViewDelegate,
                                ReusableCell,
                                ThemeApplicable {
-    struct UX {
+    enum UX {
         static let cellCornerRadius: CGFloat = 16
         static let cellBorderWidth: CGFloat = 1
         static let bodyLabelVerticalInset: CGFloat = 10

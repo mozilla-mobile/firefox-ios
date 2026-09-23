@@ -17,7 +17,7 @@ import Shared
  */
 
 final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
-    private struct UX {
+    private enum UX {
         static let headerStackSpacing: CGFloat = 8
         static let stackSpacing: CGFloat = 17
         static let borderThickness = 1.0

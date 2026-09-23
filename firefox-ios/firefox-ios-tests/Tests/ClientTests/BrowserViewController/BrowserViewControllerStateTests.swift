@@ -10,8 +10,6 @@ import QuickAnswersKit
 @testable import Client
 
 final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
-    let storeUtilityHelper = StoreTestUtilityHelper()
-
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()

@@ -7,7 +7,7 @@ import UIKit
 
 /// A horizontally scrolling picker that renders selectable options as chip buttons.
 public final class ChipPickerView: UIView, ThemeApplicable, UIScrollViewDelegate {
-    public struct UX {
+    public enum UX {
         public static let itemSpacing: CGFloat = 10
     }
 

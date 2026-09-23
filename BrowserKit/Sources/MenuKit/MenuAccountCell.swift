@@ -7,7 +7,7 @@ import Common
 import UIKit
 
 final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let contentMargin: CGFloat = 16
         static let horizontalMargin: CGFloat = 24
         static let iconSize: CGFloat = 24

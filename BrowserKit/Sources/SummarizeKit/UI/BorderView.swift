@@ -37,7 +37,7 @@ private struct AdjustableBlurBorder: View {
 /// - Doesn't block touch events through to UIKit/SwiftUI views underneath
 struct BorderView: View {
     var theme: Theme
-    private struct UX {
+    private enum UX {
         static let borderWidth: CGFloat = 50
         static let cornerRadius: CGFloat = 55
         static let blurRadius: CGFloat = 25

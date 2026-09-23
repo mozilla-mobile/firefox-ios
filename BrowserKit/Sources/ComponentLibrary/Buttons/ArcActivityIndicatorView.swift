@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 final class ArcActivityIndicatorView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let lineWidth: CGFloat = 2
         static let rotationDuration: CFTimeInterval = 0.8
         static let arcFraction: CGFloat = 0.25

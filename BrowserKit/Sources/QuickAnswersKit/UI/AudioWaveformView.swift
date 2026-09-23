@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 final class AudioWaveformView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let numberOfBars = 5
         static let barWidth: CGFloat = 2.0
         static let barSpacing: CGFloat = 4.0

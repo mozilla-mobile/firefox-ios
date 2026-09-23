@@ -10,7 +10,7 @@ protocol TopTabsScrollDelegate: AnyObject {
 }
 
 class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
-    struct UX {
+    enum UX {
         static let separatorWidth: CGFloat = 1
         @MainActor
         static let minTabWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 130 : 76

@@ -18,7 +18,7 @@ public protocol SummarizeNavigationHandler: AnyObject {
 }
 
 public final class SummarizeController: UIViewController, Themeable {
-    private struct UX {
+    private enum UX {
         static let tabSnapshotFinalPositionBottomPadding: CGFloat = 110.0
         static let tabSnapshotLoadingTransformPercentage: CGFloat = 0.5
         static let summaryViewEdgePadding: CGFloat = 12.0

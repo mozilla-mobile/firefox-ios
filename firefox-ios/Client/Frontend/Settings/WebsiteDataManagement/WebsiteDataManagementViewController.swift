@@ -17,7 +17,7 @@ final class WebsiteDataManagementViewController: UIViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     private static let showMoreCellReuseIdentifier = "showMoreCell"
-    private struct UX {
+    private enum UX {
         static let sectionTopMargin: CGFloat = 10
         static var tableViewStyleForCurrentOS: UITableView.Style {
             guard #available(iOS 26.0, *) else { return .grouped }

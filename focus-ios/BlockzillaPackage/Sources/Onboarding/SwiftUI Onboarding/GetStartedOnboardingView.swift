@@ -60,7 +60,7 @@ struct GetStartedOnboardingView: View {
             }
     }
 
-    private struct Constants {
+    private enum Constants {
         static let buttonPadding: CGFloat = 26
         static let titlePadding: CGFloat = 20
         static let subtitlePadding: CGFloat = 10

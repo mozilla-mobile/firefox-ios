@@ -28,7 +28,7 @@ public enum QuickAnswersTransitionType: Equatable, Sendable {
 final class CrossDissolveTransitionAnimator: NSObject,
                                              UIViewControllerTransitioningDelegate,
                                              UIViewControllerAnimatedTransitioning {
-    private struct UX {
+    private enum UX {
         static let springAnimationDuration: TimeInterval = 0.4
         static let springAnimationDamping: CGFloat = 0.8
         static let springAnimationVelocity: CGFloat = 1.0

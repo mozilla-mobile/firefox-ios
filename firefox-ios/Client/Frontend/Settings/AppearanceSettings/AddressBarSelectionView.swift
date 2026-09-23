@@ -17,7 +17,7 @@ struct AddressBarSelectionView: View {
         return Color(theme?.colors.layer5 ?? UIColor.clear)
     }
 
-    private struct UX {
+    private enum UX {
         static let spacing: CGFloat = 36
         static let sectionPadding: CGFloat = 16
         static let dividerHeight: CGFloat = 0.7

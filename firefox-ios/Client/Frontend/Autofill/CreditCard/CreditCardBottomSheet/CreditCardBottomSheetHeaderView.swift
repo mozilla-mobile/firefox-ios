@@ -12,7 +12,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView,
                                        ReusableCell,
                                        ThemeApplicable {
     // MARK: UX
-    struct UX {
+    enum UX {
         static let headerElementsSpacing: CGFloat = 7.0
         static let mainContainerElementsSpacing: CGFloat = 7.0
         static let bottomSpacing: CGFloat = 24.0

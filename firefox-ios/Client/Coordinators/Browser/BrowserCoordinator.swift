@@ -40,7 +40,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           WebCompatReportCoordinatorNavigationDelegate,
                           BrowsingSettingsDelegate,
                           FeatureFlaggable {
-    private struct UX {
+    private enum UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
     }
 

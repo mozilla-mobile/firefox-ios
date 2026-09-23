@@ -122,7 +122,7 @@ enum BlockerStatus: String {
     case blocking
 }
 
-struct NoImageModeDefaults {
+enum NoImageModeDefaults {
     static let Script =
     """
     [{"trigger":{"url-filter":".*","resource-type":["image"]},"action":{"type":"block"}}]

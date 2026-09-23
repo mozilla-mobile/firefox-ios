@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 public final class NavigationHeaderView: UIView {
-    private struct UX {
+    private enum UX {
         static let closeButtonSize: CGFloat = 30
         static let imageMargins: CGFloat = 10
         static let baseDistance: CGFloat = 21

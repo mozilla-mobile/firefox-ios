@@ -26,7 +26,7 @@ import Shared
  */
 
 class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissable, Themeable {
-    private struct UX {
+    private enum UX {
         static let textOffset: CGFloat = 20
         static let textOffsetSmall: CGFloat = 13
         static let ctaButtonWidth: CGFloat = 350

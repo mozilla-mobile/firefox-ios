@@ -8,7 +8,7 @@ import Common
 
 /// The view model used to configure a `LinkButton`
 public struct LinkButtonViewModel {
-    public struct UX {
+    public enum UX {
         public static let verticalInset: CGFloat = 12
         public static let horizontalInset: CGFloat = 16
     }

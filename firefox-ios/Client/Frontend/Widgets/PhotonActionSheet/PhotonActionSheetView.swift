@@ -16,7 +16,7 @@ protocol PhotonActionSheetViewDelegate: AnyObject {
 // More than one PhotonActionSheetView can be in the parent container cell.
 class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicable {
     // MARK: - PhotonActionSheetViewUX
-    struct UX {
+    enum UX {
         static let StatusIconSize = CGSize(width: 24, height: 24)
         static let StatusIconMaxSize = CGSize(width: 58, height: 58)
         static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)

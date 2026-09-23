@@ -9,7 +9,7 @@ class EditFolderViewController: UIViewController,
                                 UITableViewDelegate,
                                 UITableViewDataSource,
                                 Themeable {
-    private struct UX {
+    private enum UX {
         static let editFolderCellTopPadding: CGFloat = 25.0
         static let parentFolderHeaderHorizontalPadding: CGFloat = 16.0
         static let parentFolderHeaderBottomPadding: CGFloat = 8.0

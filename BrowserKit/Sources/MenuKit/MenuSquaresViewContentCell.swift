@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let contentViewSpacing: CGFloat = 16
     }
 

@@ -19,7 +19,7 @@ struct AppIconView: View, ThemeApplicable {
     @State private var currentTheme: Theme = LightTheme()
     @State private var themeColors: ThemeColourPalette = LightTheme().colors
 
-    struct UX {
+    enum UX {
         static let checkmarkImageIdentifier = "checkmark"
         static let cornerRadius: CGFloat = 10
         static let itemPaddingHorizontal: CGFloat = 10

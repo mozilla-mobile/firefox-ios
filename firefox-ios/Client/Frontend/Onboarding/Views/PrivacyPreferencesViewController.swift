@@ -10,7 +10,7 @@ import Glean
 final class PrivacyPreferencesViewController: UIViewController,
                                               Themeable,
                                               Notifiable {
-    struct UX {
+    enum UX {
         static let headerViewTopMargin: CGFloat = 24
         static let horizontalMargin: CGFloat = 10
         static let contentHorizontalMargin: CGFloat = 24

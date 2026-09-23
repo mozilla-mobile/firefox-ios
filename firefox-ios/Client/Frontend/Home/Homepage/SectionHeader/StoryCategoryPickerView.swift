@@ -8,7 +8,7 @@ import Foundation
 import UIKit
 
 final class StoryCategoryPickerView: UIView, ThemeApplicable {
-    struct UX {
+    enum UX {
         static let topSpacing: CGFloat = 16
     }
 

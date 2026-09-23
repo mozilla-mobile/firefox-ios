@@ -23,7 +23,7 @@ struct TopSitesWidget: Widget {
 }
 
 struct TopSitesView: View {
-    private struct UX {
+    private enum UX {
         static let itemCornerRadius: CGFloat = 5.0
         static let iconScale: CGFloat = 1.0
         static let minimumRowSpacing: CGFloat = 12.0

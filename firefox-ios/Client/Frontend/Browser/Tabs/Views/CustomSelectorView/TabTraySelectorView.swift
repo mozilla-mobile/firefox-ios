@@ -12,7 +12,7 @@ protocol TabTraySelectorDelegate: AnyObject {
 
 class TabTraySelectorView: UIView, ThemeApplicable {
     // MARK: - UX Constants
-    struct UX {
+    enum UX {
         static let horizontalSpacing: CGFloat = 12
         static let cornerRadius: CGFloat = 12
         static let verticalInsets: CGFloat = 8

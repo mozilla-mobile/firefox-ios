@@ -175,7 +175,7 @@ func type(text: String, in app: XCUIApplication) {
      }
 }
 
-class Action {
+enum Action {
     static let LoadURL = "LoadURL"
     static let LoadURLByTyping = "LoadURLByTyping"
     static let LoadURLByPasting = "LoadURLByPasting"

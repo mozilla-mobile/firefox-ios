@@ -29,7 +29,7 @@ public enum NotificationPermissionRequestBehavior {
 
 /// ViewController handling Sign In through QR Code or Email address
 class FirefoxAccountSignInViewController: UIViewController, Themeable {
-    struct UX {
+    enum UX {
         static let horizontalPadding: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 8
         static let buttonVerticalInset: CGFloat = 12

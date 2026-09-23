@@ -7,7 +7,7 @@ import Shared
 import Common
 
 class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
-    public struct UX {
+    public enum UX {
         public static let stackViewSpacing: CGFloat = 8
         public static let brightnessSize: CGFloat = 20
         public static let brightnessMaxSize: CGFloat = 35

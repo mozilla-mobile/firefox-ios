@@ -10,7 +10,7 @@ import ComponentLibrary
 class EditBookmarkCell: UITableViewCell,
                         ReusableCell,
                         ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let textFieldDividerHeight: CGFloat = 0.5
         static let textFieldDividerTrailingPadding: CGFloat = 24.0
         static let faviconSize: CGFloat = 64.0
