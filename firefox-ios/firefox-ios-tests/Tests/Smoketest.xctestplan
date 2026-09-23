@@ -455,6 +455,7 @@
         "PrivateBrowsingTest\/testForceCloseDuringPrivateBrowsingSession()",
         "PrivateBrowsingTest\/testHamburgerMenuNewPrivateTab_tabTrayExperimentOff()",
         "PrivateBrowsingTest\/testHamburgerMenuNewPrivateTab_tabTrayExperimentOn()",
+        "PrivateBrowsingTest\/testLeaveNoTracesMessageIsDisplayed()",
         "PrivateBrowsingTest\/testLongPressLinkOptionsPrivateMode()",
         "PrivateBrowsingTest\/testPrivateBrowserPanelView()",
         "PrivateBrowsingTest\/testPrivateBrowserPanelView_tabTrayExperimentOff()",

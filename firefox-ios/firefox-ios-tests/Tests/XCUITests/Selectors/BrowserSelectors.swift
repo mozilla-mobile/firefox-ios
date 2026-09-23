@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Localizations
+import Shared
 import XCTest
 
 protocol BrowserSelectorsSet {
@@ -28,7 +30,16 @@ protocol BrowserSelectorsSet {
     var CLIPBOARD_TOAST: Selector { get }
     var BOOKMARK_SAVED_TOAST: Selector { get }
     var PRIVATE_MODE_HOMEPAGE_TITLE: Selector { get }
+    var PRIVATE_MODE_HOMEPAGE_BODY: Selector { get }
     var PRIVATE_MODE_HOMEPAGE_LINK: Selector { get }
+    /// Copy the private homepage card is expected to show, so the message itself can be asserted
+    /// rather than only the presence of its labels.
+    var PRIVATE_MODE_HOMEPAGE_TITLE_TEXT: String { get }
+    var PRIVATE_MODE_HOMEPAGE_BODY_TEXT: String { get }
+    /// The same copy pinned in English. The localized values above move with the app, so on their
+    /// own they cannot catch a change to the message itself.
+    var PRIVATE_MODE_HOMEPAGE_TITLE_TEXT_EN: String { get }
+    var PRIVATE_MODE_HOMEPAGE_BODY_TEXT_EN: String { get }
     var SEARCH_SETTINGS_BUTTON: Selector { get }
     var SPONSORED_LABEL: Selector { get }
     var PASTE_BUTTON: Selector { get }
@@ -64,7 +75,17 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let clipboardToast = "Fennec pasted from CoreSimulatorBridge"
         static let bookmarkSavedToast = "Saved in"
         static let privateModeHomepageTitle = "PrivateMode.Homepage.Title"
+        static let privateModeHomepageBody = AccessibilityIdentifiers.PrivateMode.Homepage.body
         static let privateModeHomepageLink = AccessibilityIdentifiers.PrivateMode.Homepage.link
+        static let privateModeHomepageTitleText = String.FirefoxHomepage.FeltPrivacyUI.Title
+        static let privateModeHomepageBodyText = String(
+            format: .FirefoxHomepage.FeltPrivacyUI.Body,
+            AppName.shortName.rawValue
+        )
+        static let privateModeHomepageTitleTextEN = "Leave no traces on this device"
+        // The app name stays interpolated, as it is the build channel rather than the copy that sets it
+        static let privateModeHomepageBodyTextEN = "\(AppName.shortName.rawValue) deletes your cookies, "
+            + "history, and site data when you close all your private tabs."
         static let bookOfMozilla = "The Book of Mozilla"
         static let bookOfMozillaVerseText = "And the beast shall come forth"
         static let searchSettingsButton = "Search Settings"
@@ -224,6 +245,20 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "private-mode"]
     )
 
+    let PRIVATE_MODE_HOMEPAGE_BODY = Selector.staticTextId(
+        IDs.privateModeHomepageBody,
+        description: "Private mode homepage body message",
+        groups: ["browser", "private-mode"]
+    )
+
+    let PRIVATE_MODE_HOMEPAGE_TITLE_TEXT = IDs.privateModeHomepageTitleText
+
+    let PRIVATE_MODE_HOMEPAGE_BODY_TEXT = IDs.privateModeHomepageBodyText
+
+    let PRIVATE_MODE_HOMEPAGE_TITLE_TEXT_EN = IDs.privateModeHomepageTitleTextEN
+
+    let PRIVATE_MODE_HOMEPAGE_BODY_TEXT_EN = IDs.privateModeHomepageBodyTextEN
+
     let SEARCH_SETTINGS_BUTTON = Selector.buttonByLabel(
         IDs.searchSettingsButton,
         description: "'Search Settings' button in the search suggestions scroll view",
@@ -310,7 +345,8 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, BOOK_OF_MOZILLA_VERSE_TEXT,
                            ADDRESSTOOLBAR_LOCKICON, ADDRESSTOOLBAR_LOCKICON_OFF,
                            TOPTABS_COLLECTIONVIEW, MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE,
-                           SAVE_BUTTON, CLIPBOARD_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE, PRIVATE_MODE_HOMEPAGE_LINK,
+                           SAVE_BUTTON, CLIPBOARD_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE,
+                           PRIVATE_MODE_HOMEPAGE_BODY, PRIVATE_MODE_HOMEPAGE_LINK,
                            PASTE_BUTTON, SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL,
                            OPEN_DESIGNATED_URL_BUTTON, ADDRESS_BAR_CONTEXT_MENU,
                            CONTEXT_MENU_PASTE_AND_GO, CONTEXT_MENU_PASTE,
