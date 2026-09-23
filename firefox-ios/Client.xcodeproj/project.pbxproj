@@ -369,6 +369,7 @@
 		21A44804304AFCE70054DF7C /* TrailingPageActionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A44803304AFCE70054DF7C /* TrailingPageActionsBuilder.swift */; };
 		21A44806304B48400054DF7C /* TrailingPageActionsBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A44805304B48400054DF7C /* TrailingPageActionsBuilderTests.swift */; };
 		21A44808304B54BB0054DF7C /* LeadingPageActionsBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A44807304B54BB0054DF7C /* LeadingPageActionsBuilderTests.swift */; };
+		D7DA9FE4833B261F33F82DC6 /* AddressToolbarContainerLensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A634864799839312CA5C49 /* AddressToolbarContainerLensTests.swift */; };
 		21AFCFEE2AE80B700027E9CE /* TabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */; };
 		21AFCFF02AE80D370027E9CE /* RemoteTabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */; };
 		21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */; };
@@ -3293,6 +3294,7 @@
 		21A44803304AFCE70054DF7C /* TrailingPageActionsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailingPageActionsBuilder.swift; sourceTree = "<group>"; };
 		21A44805304B48400054DF7C /* TrailingPageActionsBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailingPageActionsBuilderTests.swift; sourceTree = "<group>"; };
 		21A44807304B54BB0054DF7C /* LeadingPageActionsBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadingPageActionsBuilderTests.swift; sourceTree = "<group>"; };
+		01A634864799839312CA5C49 /* AddressToolbarContainerLensTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainerLensTests.swift; sourceTree = "<group>"; };
 		21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsCoordinator.swift; sourceTree = "<group>"; };
 		21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsCoordinator.swift; sourceTree = "<group>"; };
 		21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerWebViewDelegateTests.swift; sourceTree = "<group>"; };
@@ -16966,6 +16968,7 @@
 			isa = PBXGroup;
 			children = (
 				21A44807304B54BB0054DF7C /* LeadingPageActionsBuilderTests.swift */,
+				01A634864799839312CA5C49 /* AddressToolbarContainerLensTests.swift */,
 				21A44805304B48400054DF7C /* TrailingPageActionsBuilderTests.swift */,
 				2132A472303894A90040B898 /* NavigationActionsStateTests.swift */,
 				EE046A76300A75F4004E3D80 /* SwipeUpTabPreviewGestureHandlerTests.swift */,
@@ -21158,6 +21161,7 @@
 				C80C11F428B3CD580062922A /* MockUserDefaultsTests.swift in Sources */,
 				E14D6D342CCBA9FF0058B910 /* AddressBarStateTests.swift in Sources */,
 				21A44808304B54BB0054DF7C /* LeadingPageActionsBuilderTests.swift in Sources */,
+				D7DA9FE4833B261F33F82DC6 /* AddressToolbarContainerLensTests.swift in Sources */,
 				2F697F7E1A9FD22D009E03AE /* SearchEnginesManagerTests.swift in Sources */,
 				C7470EEB2E974E42000E1B6E /* MockStoryProvider.swift in Sources */,
 				ED5BEBD62E2823F2001D731D /* MockLegacyResponder.swift in Sources */,

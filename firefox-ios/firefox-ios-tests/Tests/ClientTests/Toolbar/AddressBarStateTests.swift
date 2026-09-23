@@ -37,7 +37,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(initialState.windowUUID, windowUUID)
         XCTAssertEqual(initialState.navigationActionsState, NavigationActionsState(windowUUID: windowUUID))
         XCTAssertEqual(initialState.trailingPageActions, [])
-        XCTAssertEqual(initialState.leadingPageActions, [])
         XCTAssertEqual(initialState.browserActions, [])
         XCTAssertNil(initialState.borderPosition)
         XCTAssertNil(initialState.url)
@@ -71,7 +70,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActionsState, NavigationActionsState(windowUUID: windowUUID))
 
-        XCTAssertEqual(newState.leadingPageActions.count, 0)
         XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 0)
 
@@ -189,7 +187,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.leadingPageActions.count, 0)
         XCTAssertEqual(newState.trailingPageActions.count, 0)
     }
 
@@ -209,7 +206,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.leadingPageActions.count, 0)
         XCTAssertEqual(newState.trailingPageActions.count, 0)
     }
 
@@ -233,7 +229,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .readerMode)
         XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.readerView)
         XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
     func test_readerModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeFeatureOn() {
@@ -261,7 +256,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .summarizer)
         XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.lightning)
         XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
     func test_readerModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeLanguaeExpansionOn() {
@@ -289,7 +283,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .readerModeWithSummarizer)
         XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.readerSummarize)
         XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
     func test_readerModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeFeatureOn_readerModeActive() {
@@ -317,7 +310,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .readerMode)
         XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.readerView)
         XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
     func test_summarizeModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeFeatureOn() {
@@ -350,7 +342,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .summarizer)
         XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.lightning)
         XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
     func test_websiteLoadingStateDidChangeAction_withLoadingTrue_returnsExpectedState() {
@@ -372,9 +363,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .stopLoading)
         XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
-        // Still on the website loaded by loadWebsiteAction above, so share stays visible.
-        XCTAssertEqual(newState.leadingPageActions.count, 1)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
     func test_websiteLoadingStateDidChangeAction_withLoadingFalse_returnsExpectedState() {
@@ -396,9 +384,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
         XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
-        // Still on the website loaded by loadWebsiteAction above, so share stays visible.
-        XCTAssertEqual(newState.leadingPageActions.count, 1)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
     func test_websiteLoadingStateDidChangeAction_withouthNavigationToolbar_returnsExcpectedState() {
@@ -422,9 +407,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .stopLoading)
-        // Still on the website loaded by loadWebsiteAction above, so share stays visible.
-        XCTAssertEqual(newState.leadingPageActions.count, 1)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
 
         XCTAssertEqual(newState.navigationActionsState.actions.count, 2)
         XCTAssertEqual(newState.navigationActionsState.actions[0].actionType, .back)
@@ -442,7 +424,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
 
         XCTAssertEqual(newState.browserActions.count, 0)
     }
@@ -458,7 +439,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
 
         XCTAssertEqual(newState.browserActions.count, 3)
         XCTAssertEqual(newState.browserActions[0].actionType, .newTab)
@@ -508,149 +488,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActionsState.actions[0].isEnabled, true)
         XCTAssertEqual(newState.navigationActionsState.actions[1].actionType, .forward)
         XCTAssertEqual(newState.navigationActionsState.actions[1].isEnabled, false)
-    }
-
-    // MARK: - Translation Configuration
-    func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsEnabled_returnsTranslateButton() {
-        setTranslationsFeatureEnabled(enabled: true)
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                url: URL(string: "http://mozilla.com"),
-                translationConfiguration: TranslationConfiguration(
-                    prefs: mockProfile.prefs,
-                    state: .inactive
-                ),
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.urlDidChange
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.leadingPageActions.count, 2)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
-        XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
-        XCTAssertEqual(newState.leadingPageActions[1].iconName, StandardImageIdentifiers.Medium.translate)
-        XCTAssertFalse(newState.leadingPageActions[1].loadingConfig!.isLoading)
-    }
-
-    func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsEnabled_returnsLoadingIcon() {
-        setTranslationsFeatureEnabled(enabled: true)
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                url: URL(string: "http://mozilla.com"),
-                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .loading),
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.urlDidChange
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.leadingPageActions.count, 2)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
-        XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
-        XCTAssertTrue(newState.leadingPageActions[1].loadingConfig!.isLoading)
-        XCTAssertNil(newState.leadingPageActions[1].iconName)
-    }
-
-    func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsEnabled_returnsActiveIcon() {
-        setTranslationsFeatureEnabled(enabled: true)
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                url: URL(string: "http://mozilla.com"),
-                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .active),
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.urlDidChange
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.leadingPageActions.count, 2)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
-        XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
-        XCTAssertFalse(newState.leadingPageActions[1].loadingConfig!.isLoading)
-        XCTAssertEqual(newState.leadingPageActions[1].iconName, ImageIdentifiers.Translations.translationActive)
-    }
-
-    func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsSettingsEnabled_showsNoTranslateButton() {
-        setTranslationsFeatureEnabled(enabled: true)
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                url: URL(string: "http://mozilla.com"),
-                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, isUserSettingEnabled: false),
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.urlDidChange
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.leadingPageActions.count, 1)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
-    }
-
-    func test_urlDidChangeAction_withTranslationConfiguration_reduxSettingsEnabled_showsTranslateButton() {
-        setTranslationsFeatureEnabled(enabled: true)
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                url: URL(string: "http://mozilla.com"),
-                translationConfiguration: TranslationConfiguration(
-                    prefs: mockProfile.prefs,
-                    isUserSettingEnabled: true,
-                    state: .inactive
-                ),
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.urlDidChange
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.leadingPageActions.count, 2)
-        XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
-    }
-
-    func test_urlDidChangeAction_withTranslationConfiguration_andFFDisabled_doesNotIncludeTranslateButton() {
-        setTranslationsFeatureEnabled(enabled: false)
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                url: URL(string: "http://mozilla.com"),
-                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.urlDidChange
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.leadingPageActions.count, 1)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
     /// urlDidChange with `.active` config overrides existing Redux state.
@@ -768,36 +605,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActionsState.actions[1].actionType, .forward)
 
         XCTAssertEqual(newState.trailingPageActions.count, 0)
-        XCTAssertEqual(newState.leadingPageActions.count, 0)
 
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .menu)
         XCTAssertEqual(newState.browserActions[1].actionType, .tabs)
 
         XCTAssertEqual(newState.searchTerm, nil)
-    }
-
-    func test_traitCollectionDidChangedAction_usesActionValueForAlternativeLocationColor() {
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-        let stateWithWebsite = loadWebsiteAction(state: initialState, reducer: reducer)
-
-        // The committed ToolbarState still has isShowingNavigationToolbar == true (default), so a
-        // stale read would keep hasAlternativeLocationColor true here; the action's fresher value
-        // (false) should be used instead, disabling the alternative color.
-        let newState = reducer.legacyReducer(
-            stateWithWebsite,
-            ToolbarAction(
-                isShowingNavigationToolbar: false,
-                isShowingTopTabs: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.traitCollectionDidChange
-            )
-        )
-
-        XCTAssertEqual(newState.leadingPageActions.first?.actionType, .share)
-        XCTAssertEqual(newState.leadingPageActions.first?.hasCustomColor, true)
     }
 
     func test_showMenuWarningBadgeAction_withoutNavToolbar_returnsExpectedState() {
@@ -869,28 +682,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.borderPosition, .top)
     }
 
-    func test_toolbarPositionChangedAction_usesActionValueForAlternativeLocationColor() {
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-        let stateWithWebsite = loadWebsiteAction(state: initialState, reducer: reducer)
-
-        // The committed ToolbarState still has toolbarPosition == .top (default), so a stale read
-        // would keep hasAlternativeLocationColor true here; the action's fresher value (.bottom)
-        // should be used instead, disabling the alternative color.
-        let newState = reducer.legacyReducer(
-            stateWithWebsite,
-            ToolbarAction(
-                toolbarPosition: .bottom,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.toolbarPositionChanged
-            )
-        )
-
-        XCTAssertEqual(newState.leadingPageActions.first?.actionType, .share)
-        XCTAssertEqual(newState.leadingPageActions.first?.hasCustomColor, true)
-    }
-
     func test_didPasteSearchTermAction_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
@@ -909,7 +700,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
 
-        XCTAssertEqual(newState.leadingPageActions.count, 0)
         XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 1)
         XCTAssertEqual(newState.browserActions[0].actionType, .cancelEdit)
@@ -938,7 +728,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
 
-        XCTAssertEqual(newState.leadingPageActions.count, 0)
         XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 1)
         XCTAssertEqual(newState.browserActions[0].actionType, .cancelEdit)
@@ -969,7 +758,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
 
-        XCTAssertEqual(newState.leadingPageActions.count, 0)
         XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 1)
         XCTAssertEqual(newState.browserActions[0].actionType, .cancelEdit)
@@ -1146,10 +934,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
-
-        // Still on the website loaded by loadWebsiteAction above, so share stays visible.
-        XCTAssertEqual(newState.leadingPageActions.count, 1)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
         XCTAssertEqual(newState.browserActions.count, 0)
 
         XCTAssertEqual(newState.searchTerm, nil)
@@ -1177,7 +961,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActionsState.actions.count, 0)
-        XCTAssertEqual(newState.leadingPageActions.count, 0)
         XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 1)
         XCTAssertEqual(newState.browserActions[0].actionType, .cancelEdit)
