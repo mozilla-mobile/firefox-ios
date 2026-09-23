@@ -345,18 +345,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return defaultState(from: state)
         }
 
-        let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
-                                                                             isNovaDesignEnabled: state.isNovaDesignEnabled)
         let translationConfiguration = translationsAction.translationConfiguration
-        let leadingPageActions = LeadingPageActionsBuilder.getActions(
-            translationConfiguration: translationConfiguration,
-            isEditing: state.isEditing,
-            isHomepage: state.url == nil,
-            isLoading: state.isLoading,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            isNovaDesignEnabled: state.isNovaDesignEnabled)
         return state
-            .copy(leadingPageActions: leadingPageActions)
             .copy(translationConfiguration: translationConfiguration)
     }
 
@@ -415,14 +405,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isLoading = toolbarAction.isLoading ?? state.isLoading
         let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
                                                                              isNovaDesignEnabled: state.isNovaDesignEnabled)
-        let leadingPageActions = LeadingPageActionsBuilder.getActions(
-            translationConfiguration: state.translationConfiguration,
-            isEditing: state.isEditing,
-            isHomepage: state.url == nil,
-            isLoading: isLoading,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            isNovaDesignEnabled: state.isNovaDesignEnabled)
-
         let trailingPageActions = TrailingPageActionsBuilder.getActions(
             isEditing: state.isEditing,
             isEmptySearch: state.isEmptySearch,
@@ -458,13 +440,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                                 existingConfig: state.translationConfiguration)
         let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
                                                                              isNovaDesignEnabled: state.isNovaDesignEnabled)
-        let leadingPageActions = LeadingPageActionsBuilder.getActions(
-            translationConfiguration: translationConfiguration,
-            isEditing: state.isEditing,
-            isHomepage: isEmptySearch,
-            isLoading: state.isLoading,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            isNovaDesignEnabled: state.isNovaDesignEnabled)
         let trailingPageActions = TrailingPageActionsBuilder.getActions(
             isEditing: state.isEditing,
             isEmptySearch: isEmptySearch,
@@ -546,13 +521,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
                                                                              isNovaDesignEnabled: state.isNovaDesignEnabled)
-        let leadingPageActions = LeadingPageActionsBuilder.getActions(
-            translationConfiguration: state.translationConfiguration,
-            isEditing: state.isEditing,
-            isHomepage: state.url == nil,
-            isLoading: state.isLoading,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            isNovaDesignEnabled: state.isNovaDesignEnabled)
         let trailingPageActions = TrailingPageActionsBuilder.getActions(
             isEditing: state.isEditing,
             isEmptySearch: state.isEmptySearch,
@@ -588,13 +556,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isShowingTopTabs: toolbarAction.isShowingTopTabs,
             isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar
         )
-        let leadingPageActions = LeadingPageActionsBuilder.getActions(
-            translationConfiguration: state.translationConfiguration,
-            isEditing: state.isEditing,
-            isHomepage: state.url == nil,
-            isLoading: state.isLoading,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            isNovaDesignEnabled: state.isNovaDesignEnabled)
         let trailingPageActions = TrailingPageActionsBuilder.getActions(
             isEditing: state.isEditing,
             isEmptySearch: state.isEmptySearch,
@@ -645,13 +606,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
                                                                              isNovaDesignEnabled: state.isNovaDesignEnabled)
-        let leadingPageActions = LeadingPageActionsBuilder.getActions(
-            translationConfiguration: state.translationConfiguration,
-            isEditing: state.isEditing,
-            isHomepage: state.url == nil,
-            isLoading: state.isLoading,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            isNovaDesignEnabled: state.isNovaDesignEnabled)
         let trailingPageActions = TrailingPageActionsBuilder.getActions(
             isEditing: state.isEditing,
             isEmptySearch: state.isEmptySearch,
@@ -708,13 +662,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isNovaDesignEnabled: state.isNovaDesignEnabled,
             toolbarPosition: toolbarPosition
         )
-        let leadingPageActions = LeadingPageActionsBuilder.getActions(
-            translationConfiguration: state.translationConfiguration,
-            isEditing: state.isEditing,
-            isHomepage: state.url == nil,
-            isLoading: state.isLoading,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            isNovaDesignEnabled: state.isNovaDesignEnabled)
         let trailingPageActions = TrailingPageActionsBuilder.getActions(
             isEditing: state.isEditing,
             isEmptySearch: state.isEmptySearch,
@@ -769,13 +716,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
                                                                              isNovaDesignEnabled: state.isNovaDesignEnabled)
-        let leadingPageActions = LeadingPageActionsBuilder.getActions(
-            translationConfiguration: state.translationConfiguration,
-            isEditing: isEditing,
-            isHomepage: state.url == nil,
-            isLoading: state.isLoading,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            isNovaDesignEnabled: state.isNovaDesignEnabled)
         let trailingPageActions = TrailingPageActionsBuilder.getActions(
             isEditing: isEditing,
             isEmptySearch: isEmptySearch,
@@ -836,13 +776,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isEditing = true
         let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
                                                                              isNovaDesignEnabled: state.isNovaDesignEnabled)
-        let leadingPageActions = LeadingPageActionsBuilder.getActions(
-            translationConfiguration: state.translationConfiguration,
-            isEditing: isEditing,
-            isHomepage: state.url == nil,
-            isLoading: state.isLoading,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            isNovaDesignEnabled: state.isNovaDesignEnabled)
         let trailingPageActions = TrailingPageActionsBuilder.getActions(
             isEditing: isEditing,
             isEmptySearch: isEmptySearch,
@@ -916,13 +849,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isEditing = false
         let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
                                                                              isNovaDesignEnabled: state.isNovaDesignEnabled)
-        let leadingPageActions = LeadingPageActionsBuilder.getActions(
-            translationConfiguration: state.translationConfiguration,
-            isEditing: isEditing,
-            isHomepage: isEmptySearch,
-            isLoading: state.isLoading,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            isNovaDesignEnabled: state.isNovaDesignEnabled)
         let trailingPageActions = TrailingPageActionsBuilder.getActions(
             isEditing: isEditing,
             isEmptySearch: isEmptySearch,
@@ -983,13 +909,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isEditing = true
         let hasAlternativeLocationColor = shouldShowAlternativeLocationColor(windowUUID: state.windowUUID,
                                                                              isNovaDesignEnabled: state.isNovaDesignEnabled)
-        let leadingPageActions = LeadingPageActionsBuilder.getActions(
-            translationConfiguration: state.translationConfiguration,
-            isEditing: isEditing,
-            isHomepage: state.url == nil,
-            isLoading: state.isLoading,
-            hasAlternativeLocationColor: hasAlternativeLocationColor,
-            isNovaDesignEnabled: state.isNovaDesignEnabled)
         let trailingPageActions = TrailingPageActionsBuilder.getActions(
             isEditing: isEditing,
             isEmptySearch: isEmptySearch,
