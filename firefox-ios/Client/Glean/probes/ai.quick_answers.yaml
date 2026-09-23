@@ -71,7 +71,6 @@ ai.quick_answers:
     type: event
     description: |
       Recorded when the transcription completes.
-      Microphone and speech recognition permission denials are reported through `permission_denied` instead.
     extra_keys:
       outcome:
         type: boolean
@@ -85,7 +84,6 @@ ai.quick_answers:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
@@ -130,8 +128,7 @@ ai.quick_answers:
   permission_denied:
     type: event
     description: |
-      Recorded when the user denies one of the permissions Quick Answers needs to capture audio,
-      replacing the `recording_completed` event for these two cases.
+      Recorded when the user denies one of the permissions Quick Answers needs to capture audio.
     extra_keys:
       transcription:
         type: boolean

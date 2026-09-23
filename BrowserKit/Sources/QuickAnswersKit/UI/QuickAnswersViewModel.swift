@@ -120,7 +120,6 @@ final class QuickAnswersViewModel {
         }
     }
 
-    /// Permission denials are reported through their own event, any other failure through `recordingCompleted`.
     private func recordRecordingFailure(_ error: SpeechError) {
         switch error {
         case .microphonePermissionDenied:

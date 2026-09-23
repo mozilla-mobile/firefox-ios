@@ -12,7 +12,7 @@ public protocol QuickAnswersTelemetry {
     /// Fires when the service starts attempting to capture user audio.
     func recordingStarted()
 
-    /// Fires when the transcription completes, except on permission denials which fire `permissionDenied` instead.
+    /// Fires when the transcription completes.
     /// - Parameters:
     ///   - outcome: `true` if the transcription succeeded, `false` if it failed.
     ///   - errorType: A description of the failure when `outcome` is `false`, otherwise `nil`.
@@ -30,8 +30,7 @@ public protocol QuickAnswersTelemetry {
     @MainActor
     func resultsCompleted(outcome: Bool, errorType: String?, model: String)
 
-    /// Fires when the user denies one of the permissions needed to capture audio, in place of
-    /// `recordingCompleted(outcome:errorType:)`.
+    /// Fires when the user denies one of the permissions needed to capture audio.
     /// - Parameter isTranscription: `true` for the speech recognition permission, `false` for the microphone one.
     func permissionDenied(isTranscription: Bool)
 
