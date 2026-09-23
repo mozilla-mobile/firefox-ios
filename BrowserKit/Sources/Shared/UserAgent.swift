@@ -6,7 +6,7 @@ import Common
 import WebKit
 import UIKit
 
-open class UserAgent {
+public enum UserAgent {
     public static let uaBitSafari = "Safari/604.1"
     public static let uaBitMobile = "Mobile/15E148"
     public static let uaBitFx = "FxiOS/\(AppInfo.appVersion)"

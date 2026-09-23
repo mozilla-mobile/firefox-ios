@@ -117,7 +117,7 @@ class TestUserState: MMUserState {
 
 let WebPageLoading = "WebPageLoading"
 
-private class TestActions {
+private enum TestActions {
     static let ToggleNightMode = "ToggleNightMode"
     static let ToggleNighModeOff = "ToggleNightModeOff"
     static let LoadURL = "LoadURL"

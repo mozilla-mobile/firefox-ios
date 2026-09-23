@@ -11,7 +11,6 @@ import QuickAnswersKit
 
 final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
-    let storeUtilityHelper = StoreTestUtilityHelper()
 
     override func setUp() async throws {
         try await super.setUp()

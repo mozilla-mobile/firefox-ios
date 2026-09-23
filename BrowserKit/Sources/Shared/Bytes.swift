@@ -9,7 +9,7 @@ public typealias GUID = String
 
 /// Utilities for futzing with bytes and such.
 extension Bytes {
-    public class func generateGUID() -> GUID {
+    public static func generateGUID() -> GUID {
         // Turns the standard NSData encoding into the URL-safe variant that Sync expects.
         return generateRandomBytes(9)
             .base64EncodedString(options: [])
@@ -17,7 +17,7 @@ extension Bytes {
             .replacingOccurrences(of: "+", with: "-")
     }
 
-    public class func decodeBase64(_ b64: String) -> Data? {
+    public static func decodeBase64(_ b64: String) -> Data? {
         return Data(base64Encoded: b64, options: [])
     }
 
@@ -54,7 +54,7 @@ extension Bytes {
      * Turn a string of base64 characters into an NSData *without decoding*.
      * This is to allow HMAC to be computed of the raw base64 string.
      */
-    public class func dataFromBase64(_ b64: String) -> Data? {
+    public static func dataFromBase64(_ b64: String) -> Data? {
         return b64.data(using: .ascii, allowLossyConversion: false)
     }
 }
