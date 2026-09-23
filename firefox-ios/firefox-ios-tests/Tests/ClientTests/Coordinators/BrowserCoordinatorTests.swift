@@ -302,6 +302,30 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(mockRouter.presentedViewController is TrackerBlockerSheetViewController)
     }
 
+    func testShowTrackerBlockerSheet_whenAddressBarIsEditing_releasesKeyboard() throws {
+        setupStoreWithAddressBar(isEditing: true)
+        let subject = createSubject()
+
+        subject.showTrackerBlockerSheet()
+
+        let actions = mockStore.dispatchedModernActions.compactMap { $0 as? ToolbarModernAction }
+        XCTAssertEqual(actions.count, 1)
+        guard case .didKeyboardRequestChange(let shouldShow) = try XCTUnwrap(actions.first) else {
+            XCTFail("Expected a didKeyboardRequestChange action")
+            return
+        }
+        XCTAssertFalse(shouldShow)
+    }
+
+    func testShowTrackerBlockerSheet_whenAddressBarIsNotEditing_doesNotReleaseKeyboard() {
+        setupStoreWithAddressBar(isEditing: false)
+        let subject = createSubject()
+
+        subject.showTrackerBlockerSheet()
+
+        XCTAssertTrue(mockStore.dispatchedModernActions.compactMap { $0 as? ToolbarModernAction }.isEmpty)
+    }
+
     func testShowTrackerBlockerSheet_recordsDashboardViewed() throws {
         typealias ExtraType = GleanMetrics.TrackerBlocker.DashboardViewedExtra
         let subject = createSubject()
@@ -1675,6 +1699,24 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(browserViewController.handleQuery, "firefox")
     }
 
+    func testHandle_completesPendingDeeplinkTabActivity() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+        AppEventQueue.started(.pendingDeeplinkTab(windowUUID))
+        defer {
+            if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
+                AppEventQueue.completed(.pendingDeeplinkTab(windowUUID))
+            }
+        }
+        XCTAssertTrue(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
+
+        let route = Route.search(url: URL(string: "https://example.com")!, isPrivate: false)
+        subject.handle(route: route)
+
+        XCTAssertFalse(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
+    }
+
     // MARK: - StoreTestUtility
     func setupAppState() -> AppState {
         return AppState()
@@ -1682,6 +1724,23 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     func setupStore() {
         mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    private func setupStoreWithAddressBar(isEditing: Bool) {
+        var toolbarState = ToolbarState(windowUUID: windowUUID)
+        toolbarState.addressToolbar = toolbarState.addressToolbar
+            .copy(isEditing: isEditing)
+            .copy(shouldShowKeyboard: isEditing)
+
+        mockStore = MockStoreForMiddleware(state: AppState(
+            presentedComponents: PresentedComponentsState(
+                components: [
+                    .browserViewController(BrowserViewControllerState(windowUUID: windowUUID)),
+                    .toolbar(toolbarState)
+                ]
+            )
+        ))
         StoreTestUtilityHelper.setupStore(with: mockStore)
     }
 

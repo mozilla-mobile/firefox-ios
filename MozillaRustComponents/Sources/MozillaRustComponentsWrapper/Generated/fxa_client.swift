@@ -703,6 +703,20 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
     func processEvent(event: FxaEvent) throws  -> FxaState
     
     /**
+     * Reset the timer indicating time since last auth issues were encountered.
+     *
+     * **💾 This method alters the persisted account state.**
+     *
+     * Call this if we have encountered the [FxaRustAuthState.AuthIssues] state as a result of a
+     * failure happening (i.e. not as a result of initialization simply loading that state from a
+     * previous failure).
+     * Most likely, this should not need to be called externally except in testing since the state
+     * machine's `transition` function should generally call the internal version of this function
+     * when necessary.
+     */
+    func resetAuthRecheckTimer() 
+    
+    /**
      * Used by the application to test auth token issues
      */
     func simulatePermanentAuthTokenIssue() 
@@ -1441,6 +1455,26 @@ open func processEvent(event: FxaEvent)throws  -> FxaState  {
         FfiConverterTypeFxaEvent_lower(event),uniffiCallStatus
     )
 })
+}
+    
+    /**
+     * Reset the timer indicating time since last auth issues were encountered.
+     *
+     * **💾 This method alters the persisted account state.**
+     *
+     * Call this if we have encountered the [FxaRustAuthState.AuthIssues] state as a result of a
+     * failure happening (i.e. not as a result of initialization simply loading that state from a
+     * previous failure).
+     * Most likely, this should not need to be called externally except in testing since the state
+     * machine's `transition` function should generally call the internal version of this function
+     * when necessary.
+     */
+open func resetAuthRecheckTimer()  {try! rustCall() {
+        uniffiCallStatus in
+    uniffi_fxa_client_fn_method_firefoxaccount_reset_auth_recheck_timer(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+}
 }
     
     /**
@@ -4735,6 +4769,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_process_event() != 12576) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_reset_auth_recheck_timer() != 40117) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_permanent_auth_token_issue() != 54132) {

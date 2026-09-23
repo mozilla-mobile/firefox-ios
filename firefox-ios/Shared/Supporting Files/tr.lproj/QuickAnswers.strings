@@ -1,9 +1,36 @@
 /* Accessibility label for the close button on the Quick Answers screen. */
 "QuickAnswers.AccessibilityLabels.Close.v158" = "Kapat";
 
+/* Loading label shown in the Quick Answers view while an answer is being fetched. */
+"QuickAnswers.ContentView.Answering.v158" = "Cevaplanıyor…";
+
+/* Placeholder text shown in the Quick Answers view before the user starts speaking. */
+"QuickAnswers.ContentView.Placeholder.v158" = "İstediğinizi sorun…";
+
 /* Header label for the sources section shown below a Quick Answers result. */
 "QuickAnswers.ContentView.Sources.v158" = "Kaynaklar";
 
+/* Title of the alert shown when the user has exceeded the daily usage limit for Quick Answers. */
+"QuickAnswers.Errors.DailyLimitTitle.v158" = "Günlük sınıra ulaşıldı";
+
+/* Message shown in the alert when Quick Answers encounters an unexpected error. */
+"QuickAnswers.Errors.GenericErrorMessage.v158" = "Daha sonra yeniden sormayı deneyin.";
+
+/* Title of the alert shown when Quick Answers encounters an unexpected error. */
+"QuickAnswers.Errors.GenericErrorTitle.v158" = "Cevap alınamadı";
+
 /* Button label to dismiss the Quick Answers error alert. */
 "QuickAnswers.Errors.OK.v158" = "Tamam";
+
+/* Button label on the permission alert that opens the iOS Settings app so the user can grant permissions. */
+"QuickAnswers.Errors.OpenSettings.v158" = "Ayarları aç";
+
+/* Link text on the Quick Answers opt-in screen that opens more information about the feature. */
+"QuickAnswers.OptIn.LearnMore.v158" = "Daha fazla bilgi al";
+
+/* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
+"QuickAnswers.OptIn.Title.v158" = "Konuşarak soru sorun";
+
+/* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
+"QuickAnswers.Tip.Message.v158" = "Başlamak için buraya dokunun.";
 

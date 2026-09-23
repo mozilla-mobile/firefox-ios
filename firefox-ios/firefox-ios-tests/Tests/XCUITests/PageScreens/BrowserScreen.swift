@@ -180,9 +180,13 @@ final class BrowserScreen {
         openDesignatedURLButton.waitAndTap()
     }
 
+    /// The button fades in with the address bar layout, and a tap sent before it settles is dropped
+    /// with no hit point, so it is re-tapped until the field empties and the button goes away.
     func clearURL() {
-        BaseTestCase().mozWaitForElementToExist(clearButton)
-        clearButton.waitAndTap()
+        XCTAssertTrue(
+            clearButton.tapUntilElementDisappears(clearButton),
+            "The address bar was not cleared"
+        )
     }
 
     func tapClearButtonIfExists() {
@@ -239,6 +243,15 @@ final class BrowserScreen {
     /// Taps the "<" chevron shown next to the address bar while it is being edited.
     func tapCancelEditButton() {
         cancelButton.waitAndTap()
+    }
+
+    /// Leaves address bar editing when the field holds keyboard focus, reporting whether it did.
+    /// Probes with a short timeout so a run where editing is never active does not pay for it.
+    @discardableResult
+    func leaveAddressBarEditingIfActive(timeout: TimeInterval = TIMEOUT_PICKER_PROBE) -> Bool {
+        guard addressBar.hasKeyboardFocus else { return false }
+        cancelButton.tapIfExists(timeout: timeout)
+        return addressBar.waitUntilKeyboardFocusLost(timeout: timeout)
     }
 
     /// Opening a blank new tab focuses the address bar, so the keyboard is raised on both idioms.
@@ -563,13 +576,67 @@ final class BrowserScreen {
         }
     }
 
-    func assertSponsoredResult(title: String, shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
+    enum SuggestKind {
+        case sponsored
+        case nonSponsored
+    }
+
+    /// - Parameter kind: only `.sponsored` asserts the "Sponsored" label, which is not scoped to the
+    /// row, so its absence cannot be asserted without tripping on other sponsored entries.
+    /// - Parameter suggestSectionExists: defaults to `shouldExist`; pass `true` when only one kind of
+    /// entry is filtered out and the section itself stays.
+    func assertSuggestResult(
+        title: String,
+        kind: SuggestKind,
+        shouldExist: Bool = true,
+        suggestSectionExists: Bool? = nil,
+        timeout: TimeInterval = TIMEOUT_LONG
+    ) {
+        assertWebElements(
+            shouldExist: suggestSectionExists ?? shouldExist,
+            sel.SEARCH_SETTINGS_BUTTON.element(in: app),
+            timeout: timeout
+        )
+        assertWebElements(shouldExist: shouldExist, app.staticTexts[title], timeout: timeout)
+
+        guard kind == .sponsored else { return }
+        assertWebElements(shouldExist: shouldExist, sel.SPONSORED_LABEL.element(in: app), timeout: timeout)
+    }
+
+    /// Searches for `term` and asserts the Firefox Suggest entry for `title` is offered. A suggest
+    /// query interrupted while the term is still being typed is dropped silently, hence the retyping.
+    func searchAndAssertSuggestResult(term: String, title: String, kind: SuggestKind, maxAttempts: Int = 3) {
+        for _ in 0..<maxAttempts {
+            searchFromAddressBar(term: term)
+            if app.staticTexts[title].mozWaitForElementToExist(timeout: 5, failOnTimeout: false) { break }
+        }
+        assertSuggestResult(title: title, kind: kind)
+    }
+
+    /// Asserts on an address bar row backed by local data (browsing history or bookmarks), which is
+    /// listed by page title rather than under the Firefox Suggest section.
+    func assertSuggestionRow(titled title: String, shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
         assertWebElements(
             shouldExist: shouldExist,
-            sel.SEARCH_SETTINGS_BUTTON.element(in: app),
-            app.staticTexts[title],
-            sel.SPONSORED_LABEL.element(in: app),
+            sel.suggestionRow(titled: title).element(in: app),
             timeout: timeout
+        )
+    }
+
+    func searchFromAddressBar(term: String) {
+        tapOnAddressBar()
+        clearAddressBarText()
+        typeOnSearchBar(text: term)
+    }
+
+    /// Fails rather than returning with text still in the field, so a retry cannot append to the
+    /// previous term and search for "amazonamazon" instead.
+    private func clearAddressBarText() {
+        guard clearButton.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) else { return }
+        clearButton.waitAndTap()
+        XCTAssertTrue(
+            clearButton.waitUntilGone(),
+            "The address bar still holds text after tapping the clear button"
         )
     }
 

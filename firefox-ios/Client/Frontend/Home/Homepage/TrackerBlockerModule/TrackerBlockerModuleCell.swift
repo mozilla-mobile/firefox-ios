@@ -33,11 +33,14 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         icon.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.shieldIcon
     }
 
+    /// Resolved on each use so they keep up with Dynamic Type.
+    private static var titleFont: UIFont { FXFontStyles.Regular.footnote.scaledFont() }
+    private static var boldTitleFont: UIFont { FXFontStyles.Bold.footnote.scaledFont() }
+
     private lazy var titleLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.footnote.scaledFont()
+        label.font = TrackerBlockerModuleCell.boldTitleFont
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.text = .Menu.EnhancedTrackingProtection.trackersBlockedLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.titleLabel
         label.text = .FirefoxHomepage.TrackerBlocker.NoTrackersBlocked
     }
@@ -75,11 +78,14 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
             titleLabel.bottomAnchor.constraint(equalTo: containerPillView.bottomAnchor, constant: -UX.verticalPadding),
 
             containerPillView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            containerPillView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
             containerPillView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor,
                                                        constant: UX.horizontalPadding),
             containerPillView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor,
-                                                        constant: -UX.horizontalPadding)
+                                                        constant: -UX.horizontalPadding),
+            containerPillView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor),
+            containerPillView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor)
         ])
     }
 
@@ -107,9 +113,13 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
 
     // MARK: - Update Tracker number
 
+    /// The fonts are resolved from `FXFontStyles` rather than read back from `titleLabel.font`, which reports the
+    /// attributed string's first font once it has been set, and so would carry the bold count's font into the
+    /// surrounding copy when a reused cell is configured again.
     private func updateTrackerNumber(to count: Int) {
         guard count > 0 else {
             titleLabel.attributedText = nil
+            titleLabel.font = Self.boldTitleFont
             titleLabel.text = .FirefoxHomepage.TrackerBlocker.NoTrackersBlocked
             containerPillView.accessibilityLabel = .FirefoxHomepage.TrackerBlocker.NoTrackersBlocked
             return
@@ -120,7 +130,8 @@ final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeA
         let fullText = String(format: .FirefoxHomepage.TrackerBlocker.TrackersBlockedTemp, numberText)
         titleLabel.attributedText = fullText.attributedText(
             boldString: numberText,
-            font: titleLabel.font
+            font: Self.titleFont,
+            boldFont: Self.boldTitleFont
         )
         containerPillView.accessibilityLabel = fullText
     }

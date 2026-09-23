@@ -3797,8 +3797,8 @@ class BrowserViewController: UIViewController,
             break
         }
 
-        tabWebView.accessoryView.savedAddressesClosure = {
-            DispatchQueue.main.async { [weak self] in
+        tabWebView.accessoryView.savedAddressesClosure = { [weak self, weak webView] in
+            DispatchQueue.main.async {
                 webView?.resignFirstResponder()
                 self?.navigationHandler?.showAddressAutofill(frame: frame)
             }
@@ -3865,8 +3865,8 @@ class BrowserViewController: UIViewController,
 
     /// Handles the action when the saved cards button is tapped on the tab web view.
     private func handleSavedCardsButtonTap(tabWebView: TabWebView, webView: WKWebView?, frame: WKFrameInfo?) {
-        tabWebView.accessoryView.savedCardsClosure = {
-            DispatchQueue.main.async { [weak self] in
+        tabWebView.accessoryView.savedCardsClosure = { [weak self, weak webView] in
+            DispatchQueue.main.async {
                 webView?.resignFirstResponder()
                 self?.authenticateSelectCreditCardBottomSheet(frame: frame)
             }
@@ -3992,7 +3992,7 @@ class BrowserViewController: UIViewController,
         let colors = currentTheme.colors
         backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layerSurfaceLow
         if #available(iOS 26, *), let glassEffect = effect as? UIGlassEffect {
-            glassEffect.tintColor = currentTheme.colors.layer1.withAlphaComponent(0.5)
+            glassEffect.tintColor = currentTheme.colors.layerToolbarGlass.withAlphaComponent(0.5)
             bottomBlurView.effect = glassEffect
             topBlurView.effect = glassEffect
         }

@@ -1,3 +1,6 @@
+/* The title of the folder that contains mobile bookmarks. */
+"Bookmarks" = "वाचनखूणा";
+
 /* The name of the folder that contains desktop bookmarks in the menu. */
 "Bookmarks Menu" = "वाचनखूण मेनु";
 

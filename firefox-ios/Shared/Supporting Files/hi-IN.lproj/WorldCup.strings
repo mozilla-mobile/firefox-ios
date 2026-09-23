@@ -1,0 +1,219 @@
+/* Accessibility label for the close button on the country picker for the World Cup widget. This allows users to close the country picker. */
+"WorldCup.CountryPicker.Close.AccessibilityLabel.v151" = "वर्ल्ड कप देश चुनने वाला पिकर बंद करें";
+
+/* Section header for the Africa region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Africa.v151" = "अफ़्रीका";
+
+/* Section header for the Asia region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Asia.v151" = "एशिया";
+
+/* Section header for the Central America region in the World Cup country picker. Note: Central America falls under the CONCACAF confederation in FIFA. This string is included for completeness in case the UI groups countries by geographic region rather than confederation. */
+"WorldCup.CountryPicker.Confederation.CentralAmerica.v151" = "मध्य अमेरिका";
+
+/* Section header for the CONCACAF confederation group in the World Cup country picker. CONCACAF is the abbreviation for Confederation of North, Central America and Caribbean Association Football. This covers North America, Central America, and the Caribbean. */
+"WorldCup.CountryPicker.Confederation.CONCACAF.v151" = "CONCACAF";
+
+/* Section header for the Europe region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Europe.v151" = "यूरोप";
+
+/* Section header for the North America region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.NorthAmerica.v151" = "उत्तरी अमेरिका";
+
+/* Section header for the Oceania region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Oceania.v151" = "ओशिनिया";
+
+/* Section header for the South America region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.SouthAmerica.v151" = "दक्षिण अमेरिका";
+
+/* Country name for England in the World Cup country picker. England cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.England.v151" = "इंग्लैंड";
+
+/* Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.Scotland.v151" = "स्कॉटलैंड";
+
+/* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
+"WorldCup.CountryPicker.SkipButton.Title.v151" = "छोड़ें";
+
+/* Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
+"WorldCup.CountryPicker.Title.v151" = "अपनी टीम फ़ॉलो करें";
+
+/* The title of the Group A group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupA.Title.v151" = "ग्रुप A";
+
+/* The title of the Group B group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupB.Title.v151" = "ग्रुप B";
+
+/* The title of the Group C group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupC.Title.v151" = "ग्रुप C";
+
+/* The title of the Group D group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupD.Title.v151" = "ग्रुप D";
+
+/* The title of the Group E group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupE.Title.v151" = "ग्रुप E";
+
+/* The title of the Group F group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupF.Title.v151" = "ग्रुप F";
+
+/* The title of the Group G group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupG.Title.v151" = "ग्रुप G";
+
+/* The title of the Group H group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupH.Title.v151" = "ग्रुप H";
+
+/* The title of the Group I group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupI.Title.v151" = "ग्रुप I";
+
+/* The title of the Group J group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupJ.Title.v151" = "ग्रुप J";
+
+/* The title of the Group K group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupK.Title.v151" = "ग्रुप K";
+
+/* The title of the Group L group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupL.Title.v151" = "ग्रुप L";
+
+/* The generic label indicating the Group Stage phase in the World Cup widget. */
+"WorldCup.GroupPhase.GroupStageLabel.v151" = "ग्रुप स्टेज";
+
+/* The label for the button that allows to change the team displayed in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "टीम बदलें";
+
+/* D is short for Days. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. T for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
+"WorldCup.HomepageWidget.CountDown.DayLabel.v151" = "दि";
+
+/* H is short for Hours. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. St for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
+"WorldCup.HomepageWidget.CountDown.HourLabel.v151" = "घं";
+
+/* M is short for Minutes. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
+"WorldCup.HomepageWidget.CountDown.MinuteLabel.v151" = "मि";
+
+/* Title for the countdown section of the World Cup widget showing the time remaining until the World Cup event. */
+"WorldCup.HomepageWidget.CountDown.Title.v151" = "वर्ल्ड कप का काउंटडाउन";
+
+/* Label for the button that takes users to the World Cup schedule website on the countdown section. */
+"WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "शेड्यूल देखें";
+
+/* The accessibility labels for the button that allow to disable World Cup notifications. */
+"WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "नोटिफ़िकेशन बंद करें";
+
+/* The label for the button in the eliminated section that takes the user back to the team selection screen. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "टीम चुनें";
+
+/* The description of the section in the World Cup widget that shows when the selected team was eliminated. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "वर्ल्ड कप से जुड़े रहने के लिए कोई दूसरी टीम चुनें।";
+
+/* The accessibility label for the button in the eliminated section that removes the World Cup widget from the homepage. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonAccessibilityLabel.v151" = "वर्ल्ड कप विजेट हटाएं";
+
+/* The label for the button in the eliminated section that removes the World Cup widget from the homepage. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151" = "हटाएं";
+
+/* The title of the section in the World Cup widget that shows when the selected team was eliminated. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151" = "क्या आप अब भी फ़ॉलो करना चाहते हैं?";
+
+/* A generic error message used in the World Cup widget when the match data could not be loaded. */
+"WorldCup.HomepageWidget.ErrorLabel.v151" = "हम मैच का डेटा लोड नहीं कर सके। कृपया रीफ़्रेश करें।";
+
+/* The label indicating that the displaying match is in the extra time part of the game. */
+"WorldCup.HomepageWidget.ExtraTimeLabel.v151" = "एक्स्ट्रा टाइम";
+
+/* The label indicating that the displaying match is in the first half. */
+"WorldCup.HomepageWidget.FirstHalfLabel.v151" = "पहला हाफ़";
+
+/* Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event. */
+"WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151" = "वर्ल्ड कप अपडेट छिपाएं";
+
+/* Call to action for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
+"WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "अपनी टीम फ़ॉलो करें";
+
+/* Description for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
+"WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "मैच के लाइव अपडेट और बहुत कुछ पाएं।";
+
+/* Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. 'Keep Tabs On' is an informal expression meaning to stay updated on or regularly follow something (in this case, World Cup matches and updates). It’s playfully related to Firefox in that “tabs” are a browser feature. It suggests ongoing awareness rather than active monitoring or control. Not to be translated literally as physical 'tabs' or tracking in a technical sense. the meaning is about staying informed. */
+"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "वर्ल्ड कप पर नज़र रखें";
+
+/* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
+"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "टीम फ़ॉलो करें";
+
+/* The label indicating that the displaying match has ended. */
+"WorldCup.HomepageWidget.FTLabel.v151" = "(फ़ुल टाइम)";
+
+/* The label indicating that the displaying match has ended. */
+"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "फ़ुल टाइम";
+
+/* The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "फ़ुल टाइम • पेनल्टी (%@)";
+
+/* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "कस्टम वॉलपेपर पाएं";
+
+/* The label for the section in the World Cup widget showing the related matches of a team for the group phase. */
+"WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "मिलते-जुलते मैच";
+
+/* The label indicating that the displaying match is in the half time. */
+"WorldCup.HomepageWidget.HalfTimeLabel.v151" = "हाफ़ टाइम";
+
+/* The label that appears for live World Cup matches. */
+"WorldCup.HomepageWidget.LiveLabel.v151" = "लाइव";
+
+/* Message shown in the World Cup widget when match data is temporarily unavailable. */
+"WorldCup.HomepageWidget.MatchUnavailableLabel.v151" = "मैच की जानकारी फ़िलहाल उपलब्ध नहीं है। कुछ मिनटों में रीफ़्रेश करके देखें।";
+
+/* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
+"WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "रीफ़्रेश करें";
+
+/* Message shown in the World Cup widget when the device has no internet connection. */
+"WorldCup.HomepageWidget.OfflineLabel.v151" = "लगता है आप ऑफ़लाइन हैं। अपना इंटरनेट कनेक्शन चेक करें और फिर से कोशिश करें।";
+
+/* The label indicating that the displaying match is in the penalties part of the game. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.PenaltiesLabel.v151" = "पेनल्टी (%@)";
+
+/* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
+"WorldCup.HomepageWidget.RemoveLabel.v151" = "हटाएं";
+
+/* The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed. */
+"WorldCup.HomepageWidget.RetryButtonLabel.v151" = "रीफ़्रेश करें";
+
+/* The label for the 'Bronze final' match in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel.v151" = "ब्रॉन्ज़ फ़ाइनल";
+
+/* The label for the 'Final' match in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "फ़ाइनल";
+
+/* The label for the 'Quarter-finals' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "क्वार्टर-फ़ाइनल";
+
+/* The label for the 'Round of 16' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "राउंड ऑफ़ 16";
+
+/* The label for the 'Round of 32' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "राउंड ऑफ़ 32";
+
+/* The accessibility label for the scroll indicator that lets users navigate through the matches in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151" = "पिछले या अगले मैच देखने के लिए स्क्रॉल करें";
+
+/* The label for the 'Semi-finals' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "सेमी-फ़ाइनल";
+
+/* The label for the 'Third place' winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "तीसरा स्थान";
+
+/* The label for an upcoming match in the World Cup widget round phase. */
+"WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "आने वाले";
+
+/* The label for the World Cup championship winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "2026 वर्ल्ड कप चैंपियन";
+
+/* The label indicating that the displaying match is in the second half. */
+"WorldCup.HomepageWidget.SecondHalfLabel.v151" = "दूसरा हाफ़";
+
+/* The accessibility label for the button that allows to see more options related to World Cup widget. */
+"WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "और विकल्प";
+
+/* The label for the button that allows to share the selected match info in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ShareLabel.v151" = "शेयर करें";
+
+/* The description for the temporary view in the World Cup widget showing the team that has been previously selected. */
+"WorldCup.HomepageWidget.TemporaryView.Description.v151" = "जैसे-जैसे वर्ल्ड कप नज़दीक आएगा, हम आपको अपडेट देते रहेंगे";
+

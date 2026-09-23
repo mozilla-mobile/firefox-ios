@@ -111,6 +111,19 @@ final class SearchSettingsScreen {
         assertSwitch(sel.SEARCH_BROWSING_HISTORY_SWITCH, isOn: true)
     }
 
+    func assertSearchBrowsingHistorySwitchIsOff() {
+        assertSwitch(sel.SEARCH_BROWSING_HISTORY_SWITCH, isOn: false)
+    }
+
+    func tapOnSearchBrowsingHistorySwitch() {
+        tapOnSwitch(sel.SEARCH_BROWSING_HISTORY_SWITCH)
+    }
+
+    func assertSearchBrowsingHistorySwitchIsDisplayed() {
+        assertSwitchIsDisplayed(sel.SEARCH_BROWSING_HISTORY_SWITCH,
+                                showing: sel.SEARCH_BROWSING_HISTORY_DISPLAYED_TEXT)
+    }
+
     func assertSearchBookmarksSwitchIsOn() {
         assertSwitch(sel.SEARCH_BOOKMARKS_SWITCH, isOn: true)
     }
@@ -123,8 +136,34 @@ final class SearchSettingsScreen {
         assertSwitch(sel.SUGGESTIONS_FROM_THE_WEB_SWITCH, isOn: true)
     }
 
+    func assertSuggestionsFromTheWebSwitchIsOff() {
+        assertSwitch(sel.SUGGESTIONS_FROM_THE_WEB_SWITCH, isOn: false)
+    }
+
+    func tapOnSuggestionsFromTheWebSwitch() {
+        tapOnSwitch(sel.SUGGESTIONS_FROM_THE_WEB_SWITCH)
+    }
+
+    func assertSuggestionsFromTheWebSwitchIsDisplayed() {
+        assertSwitchIsDisplayed(sel.SUGGESTIONS_FROM_THE_WEB_SWITCH,
+                                showing: sel.SUGGESTIONS_FROM_THE_WEB_DISPLAYED_TEXT)
+    }
+
     func assertSuggestionsFromSponsorsSwitchIsOn() {
         assertSwitch(sel.SUGGESTIONS_FROM_SPONSORS_SWITCH, isOn: true)
+    }
+
+    func assertSuggestionsFromSponsorsSwitchIsOff() {
+        assertSwitch(sel.SUGGESTIONS_FROM_SPONSORS_SWITCH, isOn: false)
+    }
+
+    func tapOnSuggestionsFromSponsorsSwitch() {
+        tapOnSwitch(sel.SUGGESTIONS_FROM_SPONSORS_SWITCH)
+    }
+
+    func assertSuggestionsFromSponsorsSwitchIsDisplayed() {
+        assertSwitchIsDisplayed(sel.SUGGESTIONS_FROM_SPONSORS_SWITCH,
+                                showing: sel.SUGGESTIONS_FROM_SPONSORS_DISPLAYED_TEXT)
     }
 
     func assertLearnMoreAboutFirefoxSuggestRowExists() {
@@ -137,6 +176,27 @@ final class SearchSettingsScreen {
         let element = selector.element(in: app)
         BaseTestCase().scrollToElement(element)
         BaseTestCase().mozWaitForElementToExist(element)
+    }
+
+    private func tapOnSwitch(_ selector: Selector) {
+        let toggle = selector.element(in: app)
+        BaseTestCase().scrollToElement(toggle, isHittable: true)
+        toggle.waitAndTap()
+    }
+
+    /// A row's title and description are set on its switch as one accessibility label, so that is
+    /// where the copy shown next to the toggle can be read back from.
+    private func assertSwitchIsDisplayed(_ selector: Selector, showing expectedLabel: String) {
+        let toggle = selector.element(in: app)
+        BaseTestCase().scrollToElement(toggle, isHittable: true)
+        BaseTestCase().mozWaitForElementToExist(toggle)
+
+        XCTAssertTrue(toggle.isHittable, "Expected '\(selector.description)' to be on screen")
+        XCTAssertEqual(
+            toggle.label,
+            expectedLabel,
+            "'\(selector.description)' is not showing the expected title and description"
+        )
     }
 
     private func assertSwitch(_ selector: Selector, isOn: Bool) {

@@ -59,7 +59,7 @@
 "NoLoginsFound.Title.v122" = "Пароли не найдены";
 
 /* Open and Fill website text selection menu item */
-"Open & Fill" = "Открыть и Заполнить";
+"Open & Fill" = "Открыть и заполнить";
 
 /* Label displayed above the password row in Login Detail View. */
 "Password" = "Пароль";

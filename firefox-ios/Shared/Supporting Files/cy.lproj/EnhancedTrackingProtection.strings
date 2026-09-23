@@ -38,7 +38,7 @@
 "Menu.EnhancedTrackingProtection.Certificates.ValidityNotBefore.v131" = "Nid Cyn";
 
 /* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "Diddymu";
+"Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "Na";
 
 /* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Clirio";

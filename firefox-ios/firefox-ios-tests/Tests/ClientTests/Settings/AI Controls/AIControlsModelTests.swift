@@ -15,7 +15,7 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile(databasePrefix: "test")
+        mockProfile = makeProfile()
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
             PrefsKeys.Settings.translationsFeature: false,

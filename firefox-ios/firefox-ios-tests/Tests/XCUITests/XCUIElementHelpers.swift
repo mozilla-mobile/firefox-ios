@@ -211,6 +211,15 @@ extension XCUIElement {
         return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
     }
 
+    /// Waits until the element no longer reports keyboard focus, since the editing overlay takes a
+    /// moment to collapse. Returns false on timeout instead of failing.
+    @discardableResult
+    func waitUntilKeyboardFocusLost(timeout: TimeInterval = TIMEOUT) -> Bool {
+        let predicate = NSPredicate(format: "hasKeyboardFocus == false")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: self)
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
+
     /// Waits until the element is hittable. Returns false on timeout instead of failing.
     @discardableResult
     func waitUntilHittable(timeout: TimeInterval = TIMEOUT) -> Bool {

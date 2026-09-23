@@ -22,6 +22,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Lader dig gemme fotos.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Dette lader Firefox transskribere din lyd.";
+
 /* (No Comment) */
 "Scan QR Code" = "Skan QR-kode";
 

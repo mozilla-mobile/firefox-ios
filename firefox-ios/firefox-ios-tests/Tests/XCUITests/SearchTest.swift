@@ -304,6 +304,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306943
+    // Smoketest
     func testSearchIconOnAboutHome() throws {
         app.launch()
         if iPad() {
@@ -669,16 +670,14 @@ class SearchTests: FeatureFlaggedTestBase {
         launchWithFirefoxSuggestRollout()
 
         // Step 1: Type a keyword that trigers a sponsored result
-        browserScreen.tapOnAddressBar()
-        browserScreen.tapClearButtonIfExists()
-        browserScreen.typeOnSearchBar(text: "Amazon")
+        browserScreen.searchFromAddressBar(term: "Amazon")
 
         // Step 2: Sponsored result should be specified
-        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
+        browserScreen.assertSuggestResult(title: "Amazon.com - Official Site", kind: .sponsored, shouldExist: true)
 
         // Step 3: Turn the device to landscape and observe the sponsored result
         settingsScreen.rotateDevice(to: .landscapeLeft)
-        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
+        browserScreen.assertSuggestResult(title: "Amazon.com - Official Site", kind: .sponsored, shouldExist: true)
         navigator.performAction(Action.CloseURLBarOpen)
 
         // Step 4: Trigger a sponsored result in private mode
@@ -688,10 +687,8 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.goto(TabTray)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.goto(NewTabScreen)
-        browserScreen.tapOnAddressBar()
-        browserScreen.tapClearButtonIfExists()
-        browserScreen.typeOnSearchBar(text: "Amazon")
-        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: false)
+        browserScreen.searchFromAddressBar(term: "Amazon")
+        browserScreen.assertSuggestResult(title: "Amazon.com - Official Site", kind: .sponsored, shouldExist: false)
     }
 
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {

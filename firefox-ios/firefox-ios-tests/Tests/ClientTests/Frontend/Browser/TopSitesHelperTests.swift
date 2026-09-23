@@ -15,25 +15,16 @@ class TopSitesHelperTests: XCTestCase {
     private static let defaultSuggestedSitesCount = 4
     private var profile: MockProfile!
 
-    private func deleteDatabases() {
-        do {
-            try profile.files.remove("TopSitesHelperTests.db")
-        } catch {}
+    override func setUp() async throws {
+        try await super.setUp()
+        profile = makeProfile()
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
     override func tearDown() async throws {
-        self.deleteDatabases()
         DependencyHelperMock().reset()
-        self.profile = nil
+        profile = nil
         try await super.tearDown()
-    }
-
-    override func setUp() async throws {
-        try await super.setUp()
-        self.profile = MockProfile(databasePrefix: "TopSitesHelperTests")
-        await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
-        // Just in case tearDown didn't run or succeed last time!
-        self.deleteDatabases()
     }
 
     func createSubject(

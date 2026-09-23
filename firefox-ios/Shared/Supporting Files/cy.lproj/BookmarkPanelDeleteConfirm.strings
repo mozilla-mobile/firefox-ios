@@ -1,5 +1,5 @@
 /* Button label to cancel deletion when the user tried to delete a non-empty folder. */
-"Bookmarks.DeleteFolderWarning.CancelButton.Label" = "Diddymu";
+"Bookmarks.DeleteFolderWarning.CancelButton.Label" = "Na";
 
 /* Button label for the button that deletes a folder and all of its children. */
 "Bookmarks.DeleteFolderWarning.DeleteButton.Label" = "Dileu";

@@ -121,8 +121,9 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         view.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TrackerBlockerModule.Sheet.totalPill
     }
 
-    /// Resolved on each use so it keeps up with Dynamic Type.
+    /// Resolved on each use so they keep up with Dynamic Type.
     private static var footerFont: UIFont { FXFontStyles.Regular.footnote.scaledFont() }
+    private static var footerBoldFont: UIFont { FXFontStyles.Bold.footnote.scaledFont() }
 
     private let footerLabel: UILabel = .build { label in
         label.font = TrackerBlockerSheetViewController.footerFont
@@ -166,6 +167,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         // Reading `sheetPresentationController` forces the presentation controller into existence, so this waits
         // until `modalPresentationStyle` is settled — `init` sets it, and the presenting code may override it.
         setDetentSize()
+        updateModalAccessibility()
         setupLayout()
         setupCloseButton()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
@@ -195,6 +197,11 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         view.addSubview(backgroundGradientView)
         view.addSubview(contentScrollView)
         view.addSubview(closeButton)
+
+        // The scroll view covers the whole sheet, including the area the close button floats over, and VoiceOver
+        // won't reach a sibling overlapping a scroll view on its own. Listing the elements explicitly also puts
+        // the button first, matching where it sits on screen.
+        view.accessibilityElements = [closeButton, contentScrollView]
 
         NSLayoutConstraint.activate([
             backgroundGradientView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -306,6 +313,19 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         sheet.animateChanges { sheet.detents = detents }
     }
 
+    /// Keeps VoiceOver out of the homepage behind the sheet.
+    ///
+    /// UIKit already leaves the content underneath out of the accessibility tree at the medium detent, but a
+    /// sheet at `.large()` reads that content out even though it covers it, so it has to be marked modal itself.
+    /// The iPad form sheet is a dimmed card over the whole screen, so it is always modal.
+    ///
+    /// - Parameter contentSizeCategory: the text size the sheet is sized for, which is what picks its detent.
+    func updateModalAccessibility(
+        for contentSizeCategory: UIContentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+    ) {
+        view.accessibilityViewIsModal = isFormSheetPresentation || contentSizeCategory.isAccessibilityCategory
+    }
+
     // MARK: - Configuration
     func configure(with state: TrackerBlockerSheetState) {
         self.state = state
@@ -337,7 +357,8 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
             // back from `footerLabel.font`, which reports the attributed string's first font — the bold count —
             // once it has been set, and would otherwise bold the whole string on the next `configure`.
             footerLabel.attributedText = total.text.attributedText(boldString: total.countText,
-                                                                   font: Self.footerFont)
+                                                                   font: Self.footerFont,
+                                                                   boldFont: Self.footerBoldFont)
         } else {
             footerLabel.attributedText = nil
             footerLabel.text = nil
@@ -416,6 +437,8 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
         case UIContentSizeCategory.didChangeNotification:
             ensureMainThread {
                 self.setDetentSize(animated: true)
+                // The detent may have just changed, and with it whether the sheet has to be modal.
+                self.updateModalAccessibility()
                 // The labels rescale themselves, so the form sheet has to re-measure around them.
                 self.view.layoutIfNeeded()
                 self.updatePreferredContentSize()

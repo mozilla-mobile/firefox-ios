@@ -3,6 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import ComponentLibrary
+import Common
+import Glean
+import MozillaAppServices
 import XCTest
 
 @testable import Client
@@ -27,6 +30,12 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
+        // Presenting saved-login sheet can leave a SwiftUI render pending, which queries
+        // ThemeManager in AppContainer. Keep a ThemeManager registered after reset so a
+        // deferred render can never fatal-error against an empty container. This registered
+        // dependency gets cleared for other test suites any time we bootstrapDependencies.
+        AppContainer.shared.register(service: MockThemeManager() as ThemeManager)
+        AppContainer.shared.bootstrap()
         profile.shutdown()
         profile = nil
         router = nil
@@ -105,6 +114,102 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
         XCTAssertEqual(creditCardProvider.listCreditCardsCalledCount, 1)
         XCTAssertEqual(router.presentCalled, 0)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+    }
+
+    func testSavedLoginSelection_whenSelectedTabOriginMatches_fillsCredential() throws {
+        Self.setupTelemetry(with: profile)
+        defer { self.tearDownLoginAutofillTelemetry() }
+        tabManager.selectedTab = makeTab(urlString: "https://httpbin.org/login")
+        let subject = createSubject()
+
+        try selectSavedLogin(
+            on: subject,
+            capturedTabURL: URL(string: "https://httpbin.org")!,
+            login: makeLogin(origin: "https://httpbin.org")
+        )
+
+        XCTAssertNotNil(GleanMetrics.Logins.autofilled.testGetValue(),
+                        "Same-origin selection should inject the credential")
+    }
+
+    func testSavedLoginSelection_whenSelectedTabNavigatedToOtherOrigin_doesNotFill() throws {
+        Self.setupTelemetry(with: profile)
+        defer { self.tearDownLoginAutofillTelemetry() }
+        // Sheet opened for httpbin.org, but the named tab was navigated to pie.dev while open.
+        tabManager.selectedTab = makeTab(urlString: "https://pie.dev/target")
+        let subject = createSubject()
+
+        try selectSavedLogin(
+            on: subject,
+            capturedTabURL: URL(string: "https://httpbin.org")!,
+            login: makeLogin(origin: "https://httpbin.org")
+        )
+
+        XCTAssertNil(GleanMetrics.Logins.autofilled.testGetValue(),
+                     "Cross-origin selection should not inject the credential")
+    }
+
+    func testSavedLoginSelection_whenSelectedTabSameHostDifferentScheme_doesNotFill() throws {
+        Self.setupTelemetry(with: profile)
+        defer { self.tearDownLoginAutofillTelemetry() }
+        tabManager.selectedTab = makeTab(urlString: "http://httpbin.org/login")
+        let subject = createSubject()
+
+        try selectSavedLogin(
+            on: subject,
+            capturedTabURL: URL(string: "https://httpbin.org")!,
+            login: makeLogin(origin: "https://httpbin.org")
+        )
+
+        XCTAssertNil(GleanMetrics.Logins.autofilled.testGetValue(),
+                     "http/https origin mismatch should not inject the credential")
+    }
+
+    private func selectSavedLogin(
+        on subject: CredentialAutofillCoordinator,
+        capturedTabURL: URL,
+        login: MozillaAppServices.Login
+    ) throws {
+        subject.showSavedLoginAutofill(tabURL: capturedTabURL, currentRequestId: "req-1", field: .username)
+        let bottomSheet = try XCTUnwrap(router.presentedViewController as? BottomSheetViewController)
+        bottomSheet.loadViewIfNeeded()
+        let hostingController = try XCTUnwrap(
+            bottomSheet.children.first as? SelfSizingHostingController<LoginAutofillView>
+        )
+        hostingController.rootView.viewModel.onLoginCellTap(login)
+    }
+
+    private func tearDownLoginAutofillTelemetry() {
+        Self.tearDownTelemetry()
+        // tearDownTelemetry() resets AppContainer. Presenting the saved-login sheet schedules a
+        // SwiftUI render that resolves ThemeManager from AppContainer during teardown, so
+        // re-register one immediately to keep that render code from failing.
+        AppContainer.shared.register(service: MockThemeManager() as ThemeManager)
+        AppContainer.shared.bootstrap()
+    }
+
+    private func makeTab(urlString: String) -> Tab {
+        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        tab.url = URL(string: urlString)
+        return tab
+    }
+
+    private func makeLogin(origin: String) -> MozillaAppServices.Login {
+        return MozillaAppServices.Login(
+            id: "test-id",
+            timesUsed: 1,
+            timeCreated: 0,
+            timeLastUsed: 0,
+            timePasswordChanged: 0,
+            timeLastBreachAlertDismissed: nil,
+            origin: origin,
+            httpRealm: nil,
+            formActionOrigin: nil,
+            usernameField: "",
+            passwordField: "",
+            password: "test",
+            username: "test"
+        )
     }
 
     private func createSubject() -> CredentialAutofillCoordinator {

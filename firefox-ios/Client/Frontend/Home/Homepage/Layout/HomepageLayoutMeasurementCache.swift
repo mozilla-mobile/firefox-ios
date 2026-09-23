@@ -56,6 +56,17 @@ struct HomepageLayoutMeasurementCache {
         let result: Result
     }
 
+    struct TrackerBlockerModuleMeasurement: Equatable {
+        struct Key: Equatable {
+            let blockedTrackerCount: Int
+            let cellWidth: Double
+            let contentSizeCategory: UIContentSizeCategory
+        }
+
+        let key: Key
+        let height: CGFloat
+    }
+
     struct SearchBarMeasurement: Equatable {
         struct Key: Equatable {
             let shouldShowSearchBar: Bool
@@ -71,6 +82,7 @@ struct HomepageLayoutMeasurementCache {
     private var jumpBackIn: JumpBackInMeasurement?
     private var bookmarks: BookmarksMeasurement?
     private var searchBar: SearchBarMeasurement?
+    private var trackerBlockerModule: TrackerBlockerModuleMeasurement?
 
     mutating func setHeight(_ height: CGFloat, for key: TopSitesMeasurement.Key) {
         topSites = TopSitesMeasurement(key: key, height: height)
@@ -87,6 +99,15 @@ struct HomepageLayoutMeasurementCache {
 
     func height(for key: SearchBarMeasurement.Key) -> CGFloat? {
         guard let measurement = searchBar, measurement.key == key else { return nil }
+        return measurement.height
+    }
+
+    mutating func setHeight(_ height: CGFloat, for key: TrackerBlockerModuleMeasurement.Key) {
+        trackerBlockerModule = TrackerBlockerModuleMeasurement(key: key, height: height)
+    }
+
+    func height(for key: TrackerBlockerModuleMeasurement.Key) -> CGFloat? {
+        guard let measurement = trackerBlockerModule, measurement.key == key else { return nil }
         return measurement.height
     }
 

@@ -81,6 +81,55 @@ final class TrackerBlockerSheetViewControllerTests: XCTestCase {
         XCTAssertNotNil(view(subject, withID: A11y.closeButton))
     }
 
+    /// The close button floats over the scroll view, so VoiceOver only reaches it if it is listed explicitly.
+    func test_loadView_exposesCloseButtonToVoiceOverFirst() throws {
+        let subject = createSubject()
+
+        subject.loadViewIfNeeded()
+
+        let elements = try XCTUnwrap(subject.view.accessibilityElements as? [UIView])
+        XCTAssertEqual(elements.first?.accessibilityIdentifier, A11y.closeButton)
+        XCTAssertTrue(elements.contains { $0 is UIScrollView }, "Expected the sheet content to stay reachable")
+    }
+
+    /// Only the label is asserted: `isAccessibilityElement` is backed by UIKit's accessibility runtime, which
+    /// is only loaded once an assistive technology attaches, so under XCTest it reads `false` for every view —
+    /// including a plain `UIButton`. The button's reachability is covered by
+    /// `test_loadView_exposesCloseButtonToVoiceOverFirst` above instead.
+    func test_loadView_givesCloseButtonAnAccessibilityLabel() throws {
+        let subject = createSubject()
+
+        subject.loadViewIfNeeded()
+
+        let closeButton = try XCTUnwrap(view(subject, withID: A11y.closeButton))
+        XCTAssertEqual(closeButton.accessibilityLabel, .CloseButtonTitle)
+    }
+
+    // MARK: - Modal accessibility
+
+    /// At an accessibility text size the sheet grows to the large detent, which covers the homepage behind it
+    /// while still reading it out, so it has to declare itself modal.
+    func test_updateModalAccessibility_withAccessibilitySize_marksTheSheetModal() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+
+        subject.updateModalAccessibility(for: .accessibilityExtraLarge)
+
+        XCTAssertTrue(subject.view.accessibilityViewIsModal)
+    }
+
+    /// The medium detent leaves the homepage visible beside the sheet, and UIKit already keeps it out of the
+    /// accessibility tree, so forcing modal here would be redundant.
+    func test_updateModalAccessibility_withStandardSize_leavesTheSheetNonModal() throws {
+        try XCTSkipUnless(UIDevice.current.userInterfaceIdiom == .phone, "iPad presents a modal form sheet")
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+
+        subject.updateModalAccessibility(for: .large)
+
+        XCTAssertFalse(subject.view.accessibilityViewIsModal)
+    }
+
     // MARK: - Progress bar widths
 
     /// A four-digit count is much wider than a one-digit count, but the bars beside them must still match.

@@ -136,10 +136,21 @@ class SearchSettingsUITests: BaseTestCase {
 }
 
 class SearchSettingsSuggestUITests: BaseTestCase {
+    private let sponsoredSearchTerm = "amazon"
+    private let sponsoredSuggestionTitle = "Amazon.com - Official Site"
+    private let nonSponsoredSearchTerm = "fifa"
+    private let nonSponsoredSuggestionTitle = "Wikipedia - FIFA World Cup"
+    private let localSitesSearchTerm = "localhost"
+    // History is offered as one row per visited origin rather than per page, so the row is titled
+    // with the origin. Bookmarks are matched separately and do keep their page title
+    private let visitedOriginRowTitle = "localhost:\(serverPort)/"
+    private let bookmarkedPageTitle = TestLabels.exampleDomain
+
     private var toolbarScreen: ToolbarScreen!
     private var mainMenuScreen: MainMenuScreen!
     private var settingScreen: SettingScreen!
     private var searchSettingsScreen: SearchSettingsScreen!
+    private var browserScreen: BrowserScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -147,6 +158,7 @@ class SearchSettingsSuggestUITests: BaseTestCase {
         mainMenuScreen = MainMenuScreen(app: app)
         settingScreen = SettingScreen(app: app)
         searchSettingsScreen = SearchSettingsScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2753086
@@ -154,10 +166,7 @@ class SearchSettingsSuggestUITests: BaseTestCase {
     func testSearchSettingsMenuUIWithFirefoxSuggestEnabled() {
         enrollInFirefoxSuggestRollout(ingestingSuggestions: false)
 
-        toolbarScreen.tapSettingsMenuButton()
-        mainMenuScreen.tapSettings()
-        settingScreen.navigateToSearchSettings()
-        searchSettingsScreen.assertNavBarVisible()
+        openSearchSettings()
 
         searchSettingsScreen.assertDefaultSearchEngineSectionExists()
         searchSettingsScreen.assertAlternativeSearchEnginesSectionExists()
@@ -170,5 +179,168 @@ class SearchSettingsSuggestUITests: BaseTestCase {
         searchSettingsScreen.assertSuggestionsFromTheWebSwitchIsOn()
         searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsOn()
         searchSettingsScreen.assertLearnMoreAboutFirefoxSuggestRowExists()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753072
+    // Regression
+    func testSponsoredSuggestionsToggle() {
+        enrollInFirefoxSuggestRollout()
+
+        // Step 1: the toggle is displayed with its title and description
+        openSearchSettings()
+        searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsDisplayed()
+
+        // Step 2: it is ON by default and can be switched both ways
+        searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsOn()
+        searchSettingsScreen.tapOnSuggestionsFromSponsorsSwitch()
+        searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsOff()
+        searchSettingsScreen.tapOnSuggestionsFromSponsorsSwitch()
+        searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsOn()
+
+        // Bug: sponsored suggestions may not show up on iPad
+        // https://github.com/mozilla-mobile/firefox-ios/issues/35243
+        guard !iPad() else { return }
+
+        // Step 3: with the toggle ON, a sponsored suggestion is offered
+        openNewTabFromSearchSettings()
+        browserScreen.searchAndAssertSuggestResult(
+            term: sponsoredSearchTerm,
+            title: sponsoredSuggestionTitle,
+            kind: .sponsored
+        )
+
+        // Step 4: with the toggle OFF, it is not
+        browserScreen.dismissURLBarOverlay()
+        openSearchSettings()
+        searchSettingsScreen.tapOnSuggestionsFromSponsorsSwitch()
+        searchSettingsScreen.assertSuggestionsFromSponsorsSwitchIsOff()
+        openNewTabFromSearchSettings()
+        browserScreen.searchFromAddressBar(term: sponsoredSearchTerm)
+        // The Suggest section must still render, otherwise the sponsored entry could be missing
+        // simply because no suggestions came back at all
+        browserScreen.assertSuggestResult(
+            title: sponsoredSuggestionTitle,
+            kind: .sponsored,
+            shouldExist: false,
+            suggestSectionExists: true
+        )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753071
+    // Regression
+    func testNonSponsoredSuggestionsToggle() {
+        enrollInFirefoxSuggestRollout()
+
+        // Step 1: the toggle is displayed with its title and description
+        openSearchSettings()
+        searchSettingsScreen.assertSuggestionsFromTheWebSwitchIsDisplayed()
+
+        // Step 2: it is ON by default and can be switched both ways
+        searchSettingsScreen.assertSuggestionsFromTheWebSwitchIsOn()
+        searchSettingsScreen.tapOnSuggestionsFromTheWebSwitch()
+        searchSettingsScreen.assertSuggestionsFromTheWebSwitchIsOff()
+        searchSettingsScreen.tapOnSuggestionsFromTheWebSwitch()
+        searchSettingsScreen.assertSuggestionsFromTheWebSwitchIsOn()
+
+        // Bug: the sponsored suggestion used below as a control may not show up on iPad
+        // https://github.com/mozilla-mobile/firefox-ios/issues/35243
+        guard !iPad() else { return }
+
+        // Step 3: with the toggle ON, a non-sponsored suggestion is offered
+        openNewTabFromSearchSettings()
+        browserScreen.searchAndAssertSuggestResult(
+            term: nonSponsoredSearchTerm,
+            title: nonSponsoredSuggestionTitle,
+            kind: .nonSponsored
+        )
+
+        // Step 4: with the toggle OFF, it is not
+        browserScreen.dismissURLBarOverlay()
+        openSearchSettings()
+        searchSettingsScreen.tapOnSuggestionsFromTheWebSwitch()
+        searchSettingsScreen.assertSuggestionsFromTheWebSwitchIsOff()
+        openNewTabFromSearchSettings()
+        // Sponsored suggestions are left on as the control: they prove suggestions are still being
+        // served, so the missing web entry cannot be an empty Suggest response
+        browserScreen.searchAndAssertSuggestResult(
+            term: sponsoredSearchTerm,
+            title: sponsoredSuggestionTitle,
+            kind: .sponsored
+        )
+        browserScreen.searchFromAddressBar(term: nonSponsoredSearchTerm)
+        browserScreen.assertSuggestResult(
+            title: nonSponsoredSuggestionTitle,
+            kind: .nonSponsored,
+            shouldExist: false,
+            suggestSectionExists: true
+        )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753068
+    // Regression
+    func testBrowsingHistorySuggestionsToggle() {
+        seedHistoryAndBookmark()
+
+        // Step 1: the toggle is displayed
+        openSearchSettings()
+        searchSettingsScreen.assertSearchBrowsingHistorySwitchIsDisplayed()
+
+        // Step 2: it is ON by default and can be switched both ways
+        searchSettingsScreen.assertSearchBrowsingHistorySwitchIsOn()
+        searchSettingsScreen.tapOnSearchBrowsingHistorySwitch()
+        searchSettingsScreen.assertSearchBrowsingHistorySwitchIsOff()
+        searchSettingsScreen.tapOnSearchBrowsingHistorySwitch()
+        searchSettingsScreen.assertSearchBrowsingHistorySwitchIsOn()
+
+        // Step 3: with the toggle ON, the visited page is suggested
+        openNewTabFromSearchSettings()
+        browserScreen.searchFromAddressBar(term: localSitesSearchTerm)
+        browserScreen.assertSuggestionRow(titled: visitedOriginRowTitle)
+        browserScreen.assertSuggestionRow(titled: bookmarkedPageTitle)
+
+        // Step 4: with the toggle OFF, it is not
+        browserScreen.dismissURLBarOverlay()
+        openSearchSettings()
+        searchSettingsScreen.tapOnSearchBrowsingHistorySwitch()
+        searchSettingsScreen.assertSearchBrowsingHistorySwitchIsOff()
+        openNewTabFromSearchSettings()
+        browserScreen.searchFromAddressBar(term: localSitesSearchTerm)
+        // The bookmark row is the control: it comes from the same awesomebar query, so its presence
+        // proves the history row is filtered out rather than simply not looked up yet
+        browserScreen.assertSuggestionRow(titled: bookmarkedPageTitle)
+        browserScreen.assertSuggestionRow(titled: visitedOriginRowTitle, shouldExist: false)
+    }
+
+    /// Leaves one page in browsing history and another bookmarked, with no tab open for either, so
+    /// that each row in the address bar can only come from the source being asserted on.
+    private func seedHistoryAndBookmark() {
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+
+        navigator.openNewURL(urlString: path(forTestPage: TestPages.exampleHTML))
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.Bookmark)
+
+        waitForTabsButton()
+        navigator.goto(CloseTabMenu)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+    }
+
+    private func openSearchSettings() {
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
+        settingScreen.navigateToSearchSettings()
+        searchSettingsScreen.assertNavBarVisible()
+    }
+
+    /// Backs out with direct taps, as the screen graph has no route out of SearchSettings: settings
+    /// was opened by tapping rather than through the navigator, so no return path was recorded.
+    private func openNewTabFromSearchSettings() {
+        searchSettingsScreen.tapOnBackButton()
+        settingScreen.closeSettingsWithDoneButton()
+        navigator.nowAt(NewTabScreen)
+        navigator.createNewTab()
     }
 }
