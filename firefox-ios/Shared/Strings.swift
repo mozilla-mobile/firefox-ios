@@ -2911,7 +2911,7 @@ extension String {
             public static let AboutYourPrivacy = MZLocalizedString(
                 key: "QuickAnswers.ContentView.AboutYourPrivacy.v158",
                 tableName: "QuickAnswers",
-                value: "About your privacy",
+                value: "About Your Privacy",
                 comment: "Link shown in the footer of the Quick Answers view - when tapped, it opens a privacy banner explaining how the feature handles user data."
             )
         }
