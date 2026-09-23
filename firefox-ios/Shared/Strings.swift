@@ -3108,7 +3108,7 @@ extension String {
                 key: "QuickAnswers.QuickActions.Title.v158",
                 tableName: "QuickAnswers",
                 value: "Quick Answers",
-                comment: "Title of the home screen quick action, shown when long-pressing the app icon, that opens the Quick Answers feature."
+                comment: "Feature name as displayed in the iOS Quick Action menu (contextual menu displayed when long-pressing the browser app icon)"
             )
         }
     }
