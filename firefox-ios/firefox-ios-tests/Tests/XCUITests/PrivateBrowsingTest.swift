@@ -226,9 +226,11 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Step 3: the message survives a rotation to landscape
         settingScreen.rotateDevice(to: .landscapeLeft)
+        waitForRotation(to: .landscapeLeft)
         browserScreen.assertPrivateModeMessageCardExists(verifyingCopy: true)
         // Taps sent before the rotation settles resolve against the landscape frame and miss
         settingScreen.rotateDevice(to: .portrait)
+        waitForRotation(to: .portrait)
         waitForTabsButtonHittable()
 
         // Step 4: it survives leaving and re-entering private browsing

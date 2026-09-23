@@ -712,11 +712,6 @@ final class BrowserScreen {
 
         let body = sel.PRIVATE_MODE_HOMEPAGE_BODY.element(in: app)
         BaseTestCase().mozWaitForElementToExist(body, timeout: timeout)
-        XCTAssertEqual(title.label, sel.PRIVATE_MODE_HOMEPAGE_TITLE_TEXT, "Unexpected private homepage title")
-        XCTAssertEqual(body.label, sel.PRIVATE_MODE_HOMEPAGE_BODY_TEXT, "Unexpected private homepage body")
-
-        // Only English runs can pin the copy itself; elsewhere the card shows a translation
-        guard Locale.current.identifier.hasPrefix("en") else { return }
         XCTAssertEqual(title.label, sel.PRIVATE_MODE_HOMEPAGE_TITLE_TEXT_EN, "Private homepage title copy changed")
         XCTAssertEqual(body.label, sel.PRIVATE_MODE_HOMEPAGE_BODY_TEXT_EN, "Private homepage body copy changed")
     }

@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Localizations
 import Shared
 import XCTest
 
@@ -32,12 +31,8 @@ protocol BrowserSelectorsSet {
     var PRIVATE_MODE_HOMEPAGE_TITLE: Selector { get }
     var PRIVATE_MODE_HOMEPAGE_BODY: Selector { get }
     var PRIVATE_MODE_HOMEPAGE_LINK: Selector { get }
-    /// Copy the private homepage card is expected to show, so the message itself can be asserted
-    /// rather than only the presence of its labels.
-    var PRIVATE_MODE_HOMEPAGE_TITLE_TEXT: String { get }
-    var PRIVATE_MODE_HOMEPAGE_BODY_TEXT: String { get }
-    /// The same copy pinned in English. The localized values above move with the app, so on their
-    /// own they cannot catch a change to the message itself.
+    /// Copy the private homepage card is expected to show, pinned in English because the test plans
+    /// fix the language to en-US. Sourcing it from the app's own strings would compare it to itself.
     var PRIVATE_MODE_HOMEPAGE_TITLE_TEXT_EN: String { get }
     var PRIVATE_MODE_HOMEPAGE_BODY_TEXT_EN: String { get }
     var SEARCH_SETTINGS_BUTTON: Selector { get }
@@ -74,14 +69,9 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let saveButton = "Save"
         static let clipboardToast = "Fennec pasted from CoreSimulatorBridge"
         static let bookmarkSavedToast = "Saved in"
-        static let privateModeHomepageTitle = "PrivateMode.Homepage.Title"
+        static let privateModeHomepageTitle = AccessibilityIdentifiers.PrivateMode.Homepage.title
         static let privateModeHomepageBody = AccessibilityIdentifiers.PrivateMode.Homepage.body
         static let privateModeHomepageLink = AccessibilityIdentifiers.PrivateMode.Homepage.link
-        static let privateModeHomepageTitleText = String.FirefoxHomepage.FeltPrivacyUI.Title
-        static let privateModeHomepageBodyText = String(
-            format: .FirefoxHomepage.FeltPrivacyUI.Body,
-            AppName.shortName.rawValue
-        )
         static let privateModeHomepageTitleTextEN = "Leave no traces on this device"
         // The app name stays interpolated, as it is the build channel rather than the copy that sets it
         static let privateModeHomepageBodyTextEN = "\(AppName.shortName.rawValue) deletes your cookies, "
@@ -250,10 +240,6 @@ struct BrowserSelectors: BrowserSelectorsSet {
         description: "Private mode homepage body message",
         groups: ["browser", "private-mode"]
     )
-
-    let PRIVATE_MODE_HOMEPAGE_TITLE_TEXT = IDs.privateModeHomepageTitleText
-
-    let PRIVATE_MODE_HOMEPAGE_BODY_TEXT = IDs.privateModeHomepageBodyText
 
     let PRIVATE_MODE_HOMEPAGE_TITLE_TEXT_EN = IDs.privateModeHomepageTitleTextEN
 
