@@ -382,25 +382,6 @@ final class ToolbarMiddleware {
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showBackForwardList)
             store.dispatch(action)
-        case .tabs:
-            toolbarTelemetry.tabTrayButtonLongPressed(isPrivate: toolbarState.isPrivateMode)
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showTabsLongPressActions)
-            store.dispatch(action)
-        case .locationView:
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showLocationViewLongPressActionSheet)
-            store.dispatch(action)
-        case .reload:
-            let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
-                                              windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showReloadLongPressAction)
-            store.dispatch(action)
-        case .newTab:
-            toolbarTelemetry.oneTapNewTabButtonLongPressed(isPrivate: toolbarState.isPrivateMode)
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showNewTabLongPressActions)
-            store.dispatch(action)
         case .readerMode:
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.addToReadingListLongPressAction)

@@ -726,24 +726,55 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Toolbar
 
-    func testToolbarLongPressMenu_rowsTitlesAndIcons() {
+    func testToolbarLongPressMenu_hasExpectedSectionsAndActions() throws {
+        let gleanWrapper = MockGleanWrapper()
+        let subject = createSubject(gleanWrapper: gleanWrapper)
+        let menu = try XCTUnwrap(subject.contextMenu(for: .tabs))
+        let sections = try menu.children.map { try XCTUnwrap($0 as? UIMenu) }
+        let tabActions = try sections[0].children.map { try XCTUnwrap($0 as? UIAction) }
+        let closeAction = try XCTUnwrap(sections[1].children.first as? UIAction)
+        let savedMetric = try XCTUnwrap(
+            gleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.TabTrayLongPressExtra>
+        )
+
+        XCTAssertEqual(sections.map(\.children.count), [2, 1])
+        XCTAssertEqual(
+            tabActions.map(\.title),
+            [String.KeyboardShortcuts.NewTab, String.KeyboardShortcuts.NewPrivateTab]
+        )
+        XCTAssertEqual(closeAction.title, String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton)
+        XCTAssertEqual(closeAction.attributes, .destructive)
+        XCTAssert(savedMetric === GleanMetrics.Toolbar.tabTrayLongPress)
+    }
+
+    func testLocationBarContextMenu_copyAddressActionHasExpectedIdentifier() throws {
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        tab.url = URL(string: "https://mozilla.org")
+        tabManager.selectedTab = tab
         let subject = createSubject()
-        let nav = subject.getNavigationToolbarLongPressActions()
-        XCTAssertEqual([nav.count, nav[0].count, nav[1].count], [2, 2, 1])
 
-        let newTabOnly = subject.getNewTabLongPressActions()
-        XCTAssertEqual([newTabOnly.count, newTabOnly[0].count], [1, 2])
+        let menu = try XCTUnwrap(subject.contextMenu(for: .locationView))
+        let section = try XCTUnwrap(menu.children.first as? UIMenu)
+        let copyAddressAction = try XCTUnwrap(
+            section.children
+                .compactMap { $0 as? UIAction }
+                .first { $0.title == String.CopyAddressTitle }
+        )
 
-        for index in 0..<2 {
-            let navigationItem = nav[0][index].items[0]
-            let newTabItem = newTabOnly[0][index].items[0]
-            XCTAssertEqual(navigationItem.title, newTabItem.title)
-            XCTAssertEqual(navigationItem.iconString, newTabItem.iconString)
-        }
+        XCTAssertEqual(
+            copyAddressAction.accessibilityIdentifier,
+            AccessibilityIdentifiers.Photon.copyAddressAction
+        )
+    }
 
-        let close = nav[1][0].items[0]
-        XCTAssertEqual(close.title, String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton)
-        XCTAssertEqual(close.iconString, StandardImageIdentifiers.Large.cross)
+    func testLocationBarContextMenu_withoutAvailableActions_returnsNil() {
+        let pasteboardItems = UIPasteboard.general.items
+        UIPasteboard.general.items = []
+        defer { UIPasteboard.general.items = pasteboardItems }
+
+        let subject = createSubject()
+
+        XCTAssertNil(subject.contextMenu(for: .locationView))
     }
 
     func testDismissToolbarCFRs_mismatchedWindowUUID() {
@@ -821,10 +852,12 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Private
 
-    private func createSubject(file: StaticString = #filePath,
+    private func createSubject(gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+                               file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
+                                            gleanWrapper: gleanWrapper,
                                             appStartupTelemetry: appStartupTelemetry,
                                             recordVisitManager: recordVisitManager)
         screenshotHelper = MockScreenshotHelper(controller: subject)
