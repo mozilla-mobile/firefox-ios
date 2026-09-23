@@ -4,10 +4,10 @@
 
 import Foundation
 
-struct NotificationSentTabs {
+enum NotificationSentTabs {
     static let sentTabsKey = "sentTabs"
 
-    struct Payload {
+    enum Payload {
         static let titleKey = "title"
         static let urlKey = "url"
         static let displayURLKey = "displayURL"
@@ -15,7 +15,7 @@ struct NotificationSentTabs {
     }
 }
 
-struct NotificationCloseTabs {
+enum NotificationCloseTabs {
     static let closeTabsKey = "closeRemoteTabs"
     static let notificationCategoryId = "org.mozilla.ios.fxa.notification.category"
     static let messageIdKey = "messageId"

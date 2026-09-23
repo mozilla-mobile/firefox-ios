@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-struct TextStyle {
+enum TextStyle {
     static func title(_ text: Text) -> some View {
         text
             .font(.title28Bold)

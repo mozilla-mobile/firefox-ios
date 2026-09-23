@@ -21,7 +21,7 @@ protocol CredentialProviderViewProtocol: AnyObject {
     func show(itemList: [(ASPasswordCredentialIdentity, ASPasswordCredential)])
 }
 
-struct CredentialProvider {
+enum CredentialProvider {
     static var titleColor: UIColor? {
         return UIColor(named: "labelColor")
     }

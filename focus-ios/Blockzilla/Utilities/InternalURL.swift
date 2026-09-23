@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct InternalURL {
+public enum InternalURL {
     public static let uuid = UUID().uuidString
     public static let scheme = "internal"
     public static let baseUrl = "\(scheme)://local"
