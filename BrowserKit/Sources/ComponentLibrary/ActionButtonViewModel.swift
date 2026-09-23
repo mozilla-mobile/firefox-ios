@@ -7,7 +7,7 @@ import UIKit
 
 /// The view model used to configure a `ActionButton`
 public struct ActionButtonViewModel {
-    public struct UX {
+    public enum UX {
         public static let verticalInset: CGFloat = 0
         public static let horizontalInset: CGFloat = 8
     }

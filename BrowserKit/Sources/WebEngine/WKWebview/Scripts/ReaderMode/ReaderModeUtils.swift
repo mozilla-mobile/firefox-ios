@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-public struct ReaderModeUtils {
+public enum ReaderModeUtils {
     @MainActor
     public static func generateReaderContent(
         _ readabilityResult: ReadabilityResult,

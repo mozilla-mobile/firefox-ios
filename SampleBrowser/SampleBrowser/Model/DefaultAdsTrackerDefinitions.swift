@@ -5,7 +5,7 @@
 import Foundation
 import WebEngine
 
-struct DefaultAdsTrackerDefinitions {
+enum DefaultAdsTrackerDefinitions {
     static let searchProviders: [EngineSearchProviderModel] = [
            EngineSearchProviderModel(
                name: "google",

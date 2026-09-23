@@ -12,7 +12,7 @@ typealias VoidReturnCallback = () -> Void
 class PullRefreshView: UIView,
                        EnginePullRefreshView,
                        ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let blinkProgressViewStandardThreshold: CGFloat = 80.0
         static let progressViewPadding: CGFloat = 28.0
         static let progressViewSize: CGFloat = 40.0
@@ -248,7 +248,7 @@ class PullRefreshView: UIView,
 }
 
 struct EasterEggViewLayoutBuilder {
-    private struct UX {
+    private enum UX {
         static let sidePadding: CGFloat = 32.0
         /// The max height that we are considering a device a small one.
         /// This screen height refers to iPhone SE 2/3 rd gen, 6,7,8.

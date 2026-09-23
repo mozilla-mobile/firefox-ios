@@ -11,7 +11,7 @@ import ComponentLibrary
 public class OnboardingBottomSheetViewController: UIViewController,
                                                   Themeable,
                                                   Notifiable {
-    private struct UX {
+    private enum UX {
         static var closeButtonPadding: CGFloat {
             if #available(iOS 26, *) {
                 return 18.0

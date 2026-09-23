@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct ServerErrorHelper {
+enum ServerErrorHelper {
     /// Extracts whether the given error is related to user connectivity (not a server-side error).
     /// - Parameter error: The error to be checked.
     /// - Returns: A boolean indicating if the error is a connectivity error (e.g., no internet connection).

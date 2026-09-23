@@ -10,7 +10,7 @@ import Shared
 public final class QuickAnswersViewController: UIViewController,
                                                UIAdaptivePresentationControllerDelegate,
                                                Themeable {
-    private struct UX {
+    private enum UX {
         static let closeButtonSidePadding: CGFloat = 16.0
         static let closeButtonPadding: CGFloat = 13.0
         static let closeButtonContentInset = NSDirectionalEdgeInsets(

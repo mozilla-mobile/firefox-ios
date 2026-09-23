@@ -7,7 +7,7 @@ import Foundation
 import UIKit
 
 final class SummaryTitleCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let titleBottomPadding: CGFloat = 20
     }
     private let titleLabel: UILabel = .build {

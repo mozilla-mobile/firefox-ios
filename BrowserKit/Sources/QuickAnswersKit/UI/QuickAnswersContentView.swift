@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 final class QuickAnswersContentView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let contentSpacing: CGFloat = 32.0
         static let animationDuration: TimeInterval = 0.2
         static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)

@@ -20,7 +20,7 @@ public class CloseButton: UIButton,
                       height: heightConstraint?.constant ?? UX.closeButtonSize.height)
     }
 
-    private struct UX {
+    private enum UX {
         static let closeButtonSize = CGSize(width: 30, height: 30)
         static let maxCloseButtonSize = CGSize(width: 44, height: 44)
         static let crossCircleImage = StandardImageIdentifiers.ExtraLarge.crossCircleFill

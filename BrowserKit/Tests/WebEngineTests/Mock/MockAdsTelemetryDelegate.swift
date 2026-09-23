@@ -27,7 +27,7 @@ class MockAdsTelemetryDelegate: AdsTelemetryScriptDelegate {
     }
 }
 
-struct MockAdsTelemetrySearchProvider {
+enum MockAdsTelemetrySearchProvider {
     static func mockSearchProviderModels() -> [WebEngine.EngineSearchProviderModel] {
         return [EngineSearchProviderModel(
                 name: "mocksearch",

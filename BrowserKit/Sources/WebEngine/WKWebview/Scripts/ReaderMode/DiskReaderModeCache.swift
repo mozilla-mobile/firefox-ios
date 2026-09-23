@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-struct ReaderModeError {
+enum ReaderModeError {
     static let domain = "com.mozilla.client.readermodecache."
 
     enum CacheError: Int {

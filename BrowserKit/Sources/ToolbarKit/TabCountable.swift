@@ -4,7 +4,7 @@
 
 import UIKit
 
-private struct UX {
+private enum UX {
     static let maxTabCount = 99
     static let infinitySymbol = "\u{221E}"
 }

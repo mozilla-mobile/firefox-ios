@@ -7,7 +7,7 @@ import Foundation
 import UIKit
 
 /// Utility functions related to SUMO and Webcompat
-public struct SupportUtils {
+public enum SupportUtils {
     public static var URLForPrivateBrowsingLearnMore: URL? {
         // Returns the predefined URL associated to private homepage message card learn more action.
         return URL(string: "https://support.mozilla.org/en-US/kb/common-myths-about-private-browsing?as=u&utm_source=inproduct")
