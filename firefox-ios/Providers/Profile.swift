@@ -799,7 +799,7 @@ open class BrowserProfile: Profile,
     private func unregisterRemoteNotifications() {
         Task {
             do {
-                let autopush = try await Autopush(files: files, prefs: self.prefs)
+                let autopush = try await Autopush(files: files)
                 // unsubscribe returns a boolean telling the caller if the subscription was already
                 // unsubscribed, we ignore it because regardless the subscription is gone.
                 _ = try await autopush.unsubscribe(scope: RustFirefoxAccounts.pushScope)
