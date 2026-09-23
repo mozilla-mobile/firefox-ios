@@ -68,10 +68,7 @@ enum GeneralBrowserActionType: ActionType {
     case showTabTray
     case showBackForwardList
     case showTrackingProtectionDetails
-    case showTabsLongPressActions
-    case showReloadLongPressAction
     case showMenu
-    case showLocationViewLongPressActionSheet
     case showSummarizer
     case stopLoadingWebsite
     case reloadWebsite
@@ -79,7 +76,6 @@ enum GeneralBrowserActionType: ActionType {
     case loadWaybackURL
     case showShare
     case addNewTab
-    case showNewTabLongPressActions
     case addToReadingListLongPressAction
     case showPasswordGenerator
     case didSelectedTabChangeToHomepage

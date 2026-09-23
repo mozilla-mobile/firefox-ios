@@ -10,6 +10,8 @@ import UIKit
 protocol NavigationToolbarContainerDelegate: AnyObject {
     @MainActor
     func configureContextualHint(for: UIButton, with contextualHintType: String)
+    @MainActor
+    func contextMenu(for actionType: ToolbarActionConfiguration.ActionType) -> UIMenu?
 }
 
 final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
@@ -90,7 +92,13 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
 
     private func updateModel(toolbarState: ToolbarState) {
         guard let windowUUID else { return }
-        let model = NavigationToolbarContainerModel(state: toolbarState, windowUUID: windowUUID)
+        let model = NavigationToolbarContainerModel(
+            state: toolbarState,
+            longPressMenuProvider: { [weak self] actionType in
+                self?.toolbarDelegate?.contextMenu(for: actionType)
+            },
+            windowUUID: windowUUID
+        )
 
         if self.model != model {
             self.model = model

@@ -27,7 +27,6 @@ public struct LocationViewConfiguration {
     public let shouldSelectSearchTerm: Bool
     public let editingAccessoryAction: ToolbarElement?
     public var onTapLockIcon: (@MainActor (UIButton) -> Void)?
-    public var onLongPress: (@MainActor () -> Void)?
 
     public init(
         searchEngineImageViewA11yId: String,
@@ -48,8 +47,7 @@ public struct LocationViewConfiguration {
         shouldShowKeyboard: Bool,
         shouldSelectSearchTerm: Bool,
         editingAccessoryAction: ToolbarElement? = nil,
-        onTapLockIcon: (@MainActor (UIButton) -> Void)? = nil,
-        onLongPress: (@MainActor () -> Void)? = nil
+        onTapLockIcon: (@MainActor (UIButton) -> Void)? = nil
     ) {
         self.searchEngineImageViewA11yId = searchEngineImageViewA11yId
         self.searchEngineImageViewA11yLabel = searchEngineImageViewA11yLabel
@@ -70,6 +68,5 @@ public struct LocationViewConfiguration {
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
         self.editingAccessoryAction = editingAccessoryAction
         self.onTapLockIcon = onTapLockIcon
-        self.onLongPress = onLongPress
     }
 }

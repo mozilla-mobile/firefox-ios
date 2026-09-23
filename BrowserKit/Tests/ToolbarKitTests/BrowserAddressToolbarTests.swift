@@ -24,9 +24,7 @@ final class BrowserAddressToolbarTests: XCTestCase {
             a11yId: "a11yID-1",
             a11yCustomActionName: nil,
             a11yCustomAction: nil,
-            hasLongPressAction: false,
-            onSelected: nil,
-            onLongPress: nil
+            onSelected: nil
         )
 
         toolbarElement2 = ToolbarElement(
@@ -38,9 +36,7 @@ final class BrowserAddressToolbarTests: XCTestCase {
             a11yId: "a11yID-2",
             a11yCustomActionName: nil,
             a11yCustomAction: nil,
-            hasLongPressAction: false,
-            onSelected: nil,
-            onLongPress: nil
+            onSelected: nil
         )
 
         tabToolbarElement = ToolbarElement(
@@ -53,9 +49,7 @@ final class BrowserAddressToolbarTests: XCTestCase {
             a11yId: "a11yID-3",
             a11yCustomActionName: nil,
             a11yCustomAction: nil,
-            hasLongPressAction: false,
-            onSelected: nil,
-            onLongPress: nil
+            onSelected: nil
         )
     }
 
@@ -190,6 +184,68 @@ final class BrowserAddressToolbarTests: XCTestCase {
                       "Reordering the elements should reorder the stack.")
     }
 
+    @MainActor
+    func testContextMenuInteraction_isAttachedToLocationView() throws {
+        let subject = createSubject()
+        subject.frame = CGRect(x: 0, y: 0, width: 320, height: 44)
+        subject.layoutIfNeeded()
+        let interaction = try XCTUnwrap(findContextMenuInteraction(in: subject))
+
+        XCTAssertTrue(interaction.view is LocationView)
+    }
+
+    @MainActor
+    func testContextMenuPreview_targetsEntireAddressBar() throws {
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
+        let subject = createConfiguredSubject()
+        subject.frame = window.bounds
+        window.addSubview(subject)
+        window.layoutIfNeeded()
+        let interaction = try XCTUnwrap(findContextMenuInteraction(in: subject))
+        let configuration = try XCTUnwrap(
+            subject.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero)
+        )
+
+        let preview = subject.contextMenuInteraction(
+            interaction,
+            previewForHighlightingMenuWithConfiguration: configuration
+        )
+
+        XCTAssertTrue(preview?.view is LocationContainer)
+    }
+
+    @MainActor
+    func testContextMenuConfiguration_whenAddressBarIsActive_returnsConfiguration() throws {
+        let subject = createConfiguredSubject()
+        let interaction = try XCTUnwrap(findContextMenuInteraction(in: subject))
+
+        XCTAssertNotNil(subject.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero))
+    }
+
+    @MainActor
+    func testContextMenuConfiguration_whenAddressBarIsMinimized_returnsNil() throws {
+        let subject = createConfiguredSubject(isAddressBarMinimized: true)
+        let interaction = try XCTUnwrap(findContextMenuInteraction(in: subject))
+
+        XCTAssertNil(subject.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero))
+    }
+
+    @MainActor
+    func testContextMenuConfiguration_whenAddressBarIsInOverlayMode_returnsNil() throws {
+        let subject = createConfiguredSubject(isEditing: true)
+        let interaction = try XCTUnwrap(findContextMenuInteraction(in: subject))
+
+        XCTAssertNil(subject.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero))
+    }
+
+    @MainActor
+    func testContextMenuConfiguration_whenMenuIsUnavailable_returnsNil() throws {
+        let subject = createConfiguredSubject(longPressMenuProvider: { nil })
+        let interaction = try XCTUnwrap(findContextMenuInteraction(in: subject))
+
+        XCTAssertNil(subject.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero))
+    }
+
     // MARK: Test helper
     @MainActor
     func createSubject(file: StaticString = #filePath, line: UInt = #line) -> BrowserAddressToolbar {
@@ -197,4 +253,83 @@ final class BrowserAddressToolbarTests: XCTestCase {
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
+
+    @MainActor
+    private func createConfiguredSubject(
+        isEditing: Bool = false,
+        isAddressBarMinimized: Bool = false,
+        longPressMenuProvider: @escaping @MainActor () -> UIMenu? = {
+            UIMenu(children: [UIAction(title: "Action") { _ in }])
+        },
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> BrowserAddressToolbar {
+        let subject = createSubject(file: file, line: line)
+        let locationConfiguration = LocationViewConfiguration(
+            searchEngineImageViewA11yId: "searchEngine",
+            searchEngineImageViewA11yLabel: "Search engine",
+            lockIconButtonA11yId: "lockIcon",
+            lockIconButtonA11yLabel: "Site information",
+            urlTextFieldPlaceholder: "Search or enter address",
+            urlTextFieldA11yId: "urlTextField",
+            searchEngineImage: UIImage(),
+            lockIconImageName: nil,
+            lockIconNeedsTheming: false,
+            safeListedURLImageName: nil,
+            url: URL(string: "https://mozilla.org"),
+            droppableUrl: nil,
+            searchTerm: nil,
+            isEditing: isEditing,
+            didStartTyping: false,
+            shouldShowKeyboard: false,
+            shouldSelectSearchTerm: false
+        )
+        let configuration = AddressToolbarConfiguration(
+            locationViewConfiguration: locationConfiguration,
+            longPressMenuProvider: longPressMenuProvider,
+            navigationActions: [],
+            leadingPageActions: [],
+            trailingPageActions: [],
+            browserActions: [],
+            borderConfiguration: AddressToolbarBorderConfiguration(a11yIdentifier: "border", borderPosition: nil),
+            uxConfiguration: .experiment(isAddressBarMinimized: isAddressBarMinimized),
+            shouldAnimate: false
+        )
+        subject.configure(
+            config: configuration,
+            toolbarPosition: .top,
+            toolbarDelegate: MockAddressToolbarDelegate(),
+            leadingSpace: 0,
+            trailingSpace: 0,
+            isUnifiedSearchEnabled: false,
+            animated: false
+        )
+        return subject
+    }
+
+    @MainActor
+    private func findContextMenuInteraction(in view: UIView) -> UIContextMenuInteraction? {
+        if let interaction = view.interactions.compactMap({ $0 as? UIContextMenuInteraction }).first {
+            return interaction
+        }
+        return view.subviews.lazy.compactMap(findContextMenuInteraction).first
+    }
+}
+
+@MainActor
+private final class MockAddressToolbarDelegate: AddressToolbarDelegate {
+    func searchSuggestions(searchTerm: String) {}
+    func didClearSearch() {}
+    func openBrowser(searchTerm: String) {}
+    func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {}
+    func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? { return nil }
+    func configureContextualHint(
+        _ addressToolbar: BrowserAddressToolbar,
+        for button: UIButton,
+        with contextualHintType: String
+    ) {}
+    func addressToolbarDidBeginDragInteraction() {}
+    func addressToolbarDidProvideItemsForDragInteraction() {}
+    func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) {}
+    func addressToolbarNeedsSearchReset() {}
 }

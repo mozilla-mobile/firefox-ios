@@ -17,6 +17,7 @@ public class BrowserAddressToolbar: UIView,
                                     ThemeApplicable,
                                     ToolbarButtonCaching,
                                     LocationViewDelegate,
+                                    UIContextMenuInteractionDelegate,
                                     UIDragInteractionDelegate {
     private enum UX {
         static let horizontalSpace: CGFloat = 8
@@ -31,10 +32,26 @@ public class BrowserAddressToolbar: UIView,
         static let iconsAnimationDelay: CGFloat = 0.075
     }
 
+    // Avoids a Swift linker failure where a directly stored @MainActor
+    // closure emits an unresolved getter on Xcode 27.
+    private final class LongPressMenuProvider {
+        private let provider: @MainActor () -> UIMenu?
+
+        init(provider: @escaping @MainActor () -> UIMenu?) {
+            self.provider = provider
+        }
+
+        @MainActor
+        func makeMenu() -> UIMenu? {
+            return provider()
+        }
+    }
+
     public var notificationCenter: any NotificationProtocol = NotificationCenter.default
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
     private var droppableUrl: URL?
+    private var longPressMenuProvider: LongPressMenuProvider?
     private var addressBarPosition: AddressToolbarPosition = .bottom
 
     var cachedButtonReferences = [String: ToolbarButton]()
@@ -165,6 +182,13 @@ public class BrowserAddressToolbar: UIView,
         animated: Bool
     ) {
         updateBorder(borderPosition: config.borderConfiguration.borderPosition)
+        let isContextMenuEnabled = !config.locationViewConfiguration.isEditing &&
+                                   !config.uxConfiguration.isAddressBarMinimized
+        if isContextMenuEnabled, let provider = config.longPressMenuProvider {
+            longPressMenuProvider = LongPressMenuProvider(provider: provider)
+        } else {
+            longPressMenuProvider = nil
+        }
 
         locationView.configure(
             config.locationViewConfiguration,
@@ -212,6 +236,7 @@ public class BrowserAddressToolbar: UIView,
         locationContainer.addSubview(locationView)
         locationContainer.addSubview(locationDividerView)
         locationContainer.addSubview(trailingPageActionStack)
+        locationView.addInteraction(UIContextMenuInteraction(delegate: self))
 
         toolbarContainerView.addSubview(navigationActionStack)
         toolbarContainerView.addSubview(locationContainer)
@@ -548,6 +573,41 @@ public class BrowserAddressToolbar: UIView,
         locationContainer.applyTheme(theme: theme)
         locationView.applyTheme(theme: theme)
         self.theme = theme
+    }
+
+    // MARK: - UIContextMenuInteractionDelegate
+    public func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        guard let menu = longPressMenuProvider?.makeMenu(), !menu.children.isEmpty else { return nil }
+        return UIContextMenuConfiguration(actionProvider: { _ in
+            return menu
+        })
+    }
+
+    public func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        return contextMenuPreview()
+    }
+
+    public func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        previewForDismissingMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        return contextMenuPreview()
+    }
+
+    private func contextMenuPreview() -> UITargetedPreview {
+        let parameters = UIPreviewParameters()
+        parameters.backgroundColor = locationContainer.backgroundColor
+        parameters.visiblePath = UIBezierPath(
+            roundedRect: locationContainer.bounds,
+            cornerRadius: locationContainer.layer.cornerRadius
+        )
+        return UITargetedPreview(view: locationContainer, parameters: parameters)
     }
 
     // MARK: - UIDragInteractionDelegate
