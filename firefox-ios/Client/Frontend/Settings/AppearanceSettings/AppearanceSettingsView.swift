@@ -9,12 +9,16 @@ import Common
 protocol AppearanceSettingsDelegate: AnyObject {
     @MainActor
     func pressedPageZoom()
+
+    @MainActor
+    func pressedWallpaper()
 }
 
 /// The main view displaying the settings for the appearance menu.
 struct AppearanceSettingsView: View {
     let windowUUID: WindowUUID
     weak var delegate: AppearanceSettingsDelegate?
+    var isWallpaperSectionEnabled = false
 
     @Environment(\.themeManager)
     var themeManager
@@ -55,6 +59,12 @@ struct AppearanceSettingsView: View {
                     onThemeSelected: updateBrowserTheme,
                     cornerRadius: UX.cornerRadius
                 )
+
+                if isWallpaperSectionEnabled {
+                    WallpaperSection(theme: currentTheme, cornerRadius: UX.cornerRadius) {
+                        delegate?.pressedWallpaper()
+                    }
+                }
 
                 // Section for toggling website appearance (e.g., dark mode).
                 WebsiteAppearanceSection(theme: currentTheme, onChange: setWebsiteDarkMode, cornerRadius: UX.cornerRadius)
@@ -135,6 +145,29 @@ struct AppearanceSettingsView: View {
             ) {
                 GenericItemCellView(
                     title: .Settings.Appearance.PageZoom.PageZoomTitle,
+                    image: .chevronRightLarge,
+                    theme: theme
+                ) {
+                    onTap()
+                }
+                .modifier(SectionStyle(theme: theme, cornerRadius: cornerRadius))
+            }
+        }
+    }
+
+    private struct WallpaperSection: View {
+        let theme: Theme?
+        let cornerRadius: CGFloat
+        let onTap: () -> Void
+
+        var body: some View {
+            GenericSectionView(
+                theme: theme,
+                title: .Settings.Homepage.CustomizeFirefoxHome.Wallpaper,
+                identifier: AccessibilityIdentifiers.Settings.Appearance.wallpaperTitle
+            ) {
+                GenericItemCellView(
+                    title: .Settings.Homepage.CustomizeFirefoxHome.Wallpaper,
                     image: .chevronRightLarge,
                     theme: theme
                 ) {

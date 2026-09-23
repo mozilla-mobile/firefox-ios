@@ -12,7 +12,7 @@ public enum WallpaperSettingsError: Error {
 
 // TODO: FXIOS-14150 - WallpaperSettingsViewModel shouldn't be @unchecked Sendable
 final class WallpaperSettingsViewModel: @unchecked Sendable {
-    typealias a11yIds = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Wallpaper
+    typealias a11yIds = AccessibilityIdentifiers.Settings.Appearance.Wallpaper
     typealias stringIds = String.Settings.Homepage.Wallpaper
 
     enum WallpaperSettingsLayout: Equatable {
