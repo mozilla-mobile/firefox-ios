@@ -2884,14 +2884,14 @@ extension String {
                 key: "QuickAnswers.ContentView.Thinking.v158",
                 tableName: "QuickAnswers",
                 value: "Thinking…",
-                comment: "Loading label shown in the Quick Answers view while the question is being processed, before sources are looked up."
+                comment: "Loading label shown in the Quick Answers view while the question is being processed."
             )
 
             public static let SearchingSources = MZLocalizedString(
                 key: "QuickAnswers.ContentView.SearchingSources.v158",
                 tableName: "QuickAnswers",
                 value: "Searching sources…",
-                comment: "Loading label shown in the Quick Answers view while the sources backing the answer are being looked up."
+                comment: "Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer."
             )
 
             public static let FooterFormat = MZLocalizedString(
@@ -2912,7 +2912,7 @@ extension String {
                 key: "QuickAnswers.ContentView.AboutYourPrivacy.v158",
                 tableName: "QuickAnswers",
                 value: "About your privacy",
-                comment: "Link shown in the footer of the Quick Answers view that reveals the privacy banner explaining how the feature handles user data."
+                comment: "Link shown in the footer of the Quick Answers view - when tapped, it opens a privacy banner explaining how the feature handles user data."
             )
         }
 
@@ -2937,7 +2937,13 @@ extension String {
                 key: "QuickAnswers.ReturnPill.Subtitle.v158",
                 tableName: "QuickAnswers",
                 value: "Tap to return",
-                comment: "Subtitle of the pill shown over a web page that takes the user back to the Quick Answers result they came from."
+                comment: "Helper text for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer."
+            )
+            public static let ReturnToQuickAnswerAccessibilityLabel = MZLocalizedString(
+                key: "QuickAnswers.ReturnPill.ReturnToQuickAnswerAccessibilityLabel.v158",
+                tableName: "QuickAnswers",
+                value: "Return to Quick Answer",
+                comment: "Accessibility label for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer."
             )
         }
 
@@ -2954,20 +2960,6 @@ extension String {
                 tableName: "QuickAnswers",
                 value: "Open Quick Answers",
                 comment: "Accessibility label for the button on the homepage that opens the Quick Answers feature."
-            )
-
-            public static let DismissPrivacyBanner = MZLocalizedString(
-                key: "QuickAnswers.AccessibilityLabels.DismissPrivacyBanner.v158",
-                tableName: "QuickAnswers",
-                value: "Dismiss privacy information",
-                comment: "Accessibility label for the close button on the privacy banner shown on the Quick Answers screen."
-            )
-
-            public static let ReturnToQuickAnswer = MZLocalizedString(
-                key: "QuickAnswers.AccessibilityLabels.ReturnToQuickAnswer.v158",
-                tableName: "QuickAnswers",
-                value: "Return to Quick Answer",
-                comment: "Accessibility label for the pill shown over a web page that takes the user back to the Quick Answers result they came from."
             )
         }
 
