@@ -157,8 +157,8 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .homepageAnimatedCenterSearch,
-                titleText: format(string: "Homepage Animated Center Search"),
+                with: .homepageAnimatedCenterSearchBar,
+                titleText: format(string: "Homepage Animated Center Search Bar"),
                 statusText: format(string: "Toggle to enable homepage animated center search bar for redesign")
             ) { [weak self] _ in
                 self?.reloadView()

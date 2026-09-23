@@ -27,7 +27,7 @@ final class TopSitesRowCountSettingsController: SettingsTableViewController, Fea
         updateNumberofRows()
 
         var rows = [CheckmarkSetting]()
-        if featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearch) {
+        if featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar) {
             rows = [1, 2].map(createSetting)
         } else {
             rows = [1, 2, 3, 4].map(createSetting)
@@ -64,7 +64,7 @@ final class TopSitesRowCountSettingsController: SettingsTableViewController, Fea
 
     private func updateNumberofRows() {
         let defaultValue = TopSitesRowCountSettingsController.defaultNumberOfRows
-        if featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearch) {
+        if featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar) {
             let savedNumberOfRows = self.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? defaultValue
             numberOfRows = savedNumberOfRows > 2 ? defaultValue : savedNumberOfRows
         } else {

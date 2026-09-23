@@ -204,7 +204,7 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
     /// enabled from greater than two to 2. See FXIOS-12704
     @MainActor
     private func migrateTopSitesRowNumbers() {
-        if featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearch) {
+        if featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar) {
             let defaultNumber = TopSitesRowCountSettingsController.defaultNumberOfRows
             let userNumberOfTopSiteRows = profile.prefs.intForKey(
                 PrefsKeys.NumberOfTopSiteRows
