@@ -18,7 +18,7 @@ enum ShortcutType: String {
 }
 
 // MARK: - QuickActionInfos
-struct QuickActionInfos {
+enum QuickActionInfos {
     static let version = "1.0"
     static let versionKey = "dynamicQuickActionsVersion"
     static let tabURLKey = "url"

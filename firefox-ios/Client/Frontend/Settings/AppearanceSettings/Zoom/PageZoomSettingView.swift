@@ -12,7 +12,7 @@ struct PageZoomSettingsView: View {
     var themeManager
     @State private var themeColors: ThemeColourPalette = LightTheme().colors
 
-    private struct UX {
+    private enum UX {
         static let dividerHeight: CGFloat = 0.7
         static let sectionPadding: CGFloat = 16
         static let spacing: CGFloat = 24

@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 class ThemedCenteredTableViewCell: ThemedTableViewCell {
-    private struct UX {
+    private enum UX {
         static let labelMargin: CGFloat = 15
     }
 

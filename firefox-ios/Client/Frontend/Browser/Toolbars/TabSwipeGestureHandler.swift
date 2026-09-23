@@ -25,7 +25,7 @@ final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, Store
 
     typealias SubscriberStateType = ToolbarState
     // MARK: - UX Constants
-    private struct UX {
+    private enum UX {
         // Offset used to ensure the skeleton address bar animates in alignment with the address bar.
         static let transformOffset: CGFloat = 24
         static let offset: CGFloat = 48

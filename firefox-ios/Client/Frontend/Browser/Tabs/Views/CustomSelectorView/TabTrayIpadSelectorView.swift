@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 class TabTrayiPadSelectorView: TabTraySelectorView {
-    private struct iPadUX {
+    private enum iPadUX {
         static let stackViewHorizontalSpacing: CGFloat = 80
         static let verticalSpacing: CGFloat = 8
         static let buttonHorizontalInsets: CGFloat = 16

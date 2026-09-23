@@ -8,7 +8,7 @@ import UIKit
 import Shared
 
 extension TabTrayViewController: UIViewControllerTransitioningDelegate {
-    private struct UX {
+    private enum UX {
         // Animation keyPaths
         static let lineWidthKeyPath = "lineWidth"
         static let opacityKeyPath = "opacity"

@@ -16,7 +16,7 @@ class PhotonActionSheet: UIViewController,
                          UITableViewDataSource,
                          UITableViewDelegate,
                          PhotonActionSheetContainerCellDelegate {
-    struct UX {
+    enum UX {
         static let maxWidth: CGFloat = 414
         static let padding: CGFloat = 6
         static let rowHeight: CGFloat = 44

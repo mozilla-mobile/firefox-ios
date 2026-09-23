@@ -7,7 +7,7 @@ import UIKit
 
 // MARK: - PhotonActionSheetTitleHeaderView
 class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
-    struct UX {
+    enum UX {
         static let padding: CGFloat = 18
     }
 

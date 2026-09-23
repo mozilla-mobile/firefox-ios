@@ -7,7 +7,7 @@ import UIKit
 import Common
 
 class TrackingProtectionVerifiedByView: UIView {
-    private struct UX {
+    private enum UX {
         static let labelsVerticalMargins: CGFloat = 11
     }
 

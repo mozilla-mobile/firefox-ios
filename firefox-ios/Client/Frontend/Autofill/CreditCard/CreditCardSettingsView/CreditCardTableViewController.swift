@@ -12,7 +12,7 @@ class CreditCardTableViewController: UIViewController,
                                      Themeable,
                                      Notifiable {
     // MARK: UX constants
-    struct UX {
+    enum UX {
         static let toggleSwitchContainerHeight: CGFloat = 40
         static let toggleSwitchAnchor: CGFloat = -16
         static let toggleSwitchLabelHeight: CGFloat = 18

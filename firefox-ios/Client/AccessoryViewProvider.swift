@@ -16,7 +16,7 @@ final class AccessoryViewProvider: UIView,
                                    UserFeaturePreferenceProvider,
                                    Notifiable {
     // MARK: - Constants
-    private struct UX {
+    private enum UX {
         static let accessoryViewHeight: CGFloat = 56
         static let fixedSpacerWidth: CGFloat = if #available(iOS 26.0, *) { 8 } else { 10 }
         static let fixedSpacerHeight: CGFloat = 30

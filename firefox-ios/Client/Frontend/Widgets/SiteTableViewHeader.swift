@@ -25,7 +25,7 @@ struct SiteTableViewHeaderModel {
 // Section header view that contains title, but also has an accessory view
 // (i.e. collapsible arrow for synced tabs, clear button for recent searches list)
 class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, ReusableCell {
-    struct UX {
+    enum UX {
         static let titleTrailingLeadingMargin: CGFloat = 16
         static let titleTopBottomMargin: CGFloat = 12
         static let spacing: CGFloat = 12

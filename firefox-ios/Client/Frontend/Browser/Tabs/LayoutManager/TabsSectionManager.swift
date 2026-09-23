@@ -6,7 +6,7 @@ import Foundation
 
 @MainActor
 final class TabsSectionManager {
-    struct UX {
+    enum UX {
         // On iPad we can set to have bigger tabs, on iPhone we need smaller ones
         @MainActor
         static let cellEstimatedWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 170

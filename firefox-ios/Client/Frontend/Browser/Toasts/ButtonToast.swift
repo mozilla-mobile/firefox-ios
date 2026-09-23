@@ -14,7 +14,7 @@ struct ButtonToastViewModel {
 }
 
 class ButtonToast: Toast {
-    struct UX {
+    enum UX {
         static let delay = DispatchTimeInterval.milliseconds(900)
         static let stackViewSpacing: CGFloat = 8
         static let spacing: CGFloat = 8

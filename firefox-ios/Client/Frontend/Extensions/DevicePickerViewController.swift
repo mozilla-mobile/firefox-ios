@@ -65,7 +65,7 @@ public enum ClientType: String {
 }
 
 class DevicePickerViewController: UITableViewController {
-    private struct UX {
+    private enum UX {
         static let tableHeaderRowHeight: CGFloat = 50
         static let deviceRowHeight: CGFloat = 50
         static let tabTitleTextFont = UIFont.boldSystemFont(ofSize: 16)

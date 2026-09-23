@@ -8,7 +8,7 @@ import Foundation
 
 /// Firefox homepage section header view
 class LabelButtonHeaderView: UIView, ThemeApplicable, Notifiable {
-    struct UX {
+    enum UX {
         static let inBetweenSpace: CGFloat = 12
     }
 

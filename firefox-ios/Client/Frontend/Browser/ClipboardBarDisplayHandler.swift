@@ -21,7 +21,7 @@ protocol ClipboardBarDisplayHandlerDelegate: AnyObject {
 @MainActor
 @available(iOS 16.0, *)
 final class DefaultClipboardBarDisplayHandler: ClipboardBarDisplayHandler, Notifiable {
-    struct UX {
+    enum UX {
         static let toastDelay = DispatchTimeInterval.milliseconds(10000)
     }
 

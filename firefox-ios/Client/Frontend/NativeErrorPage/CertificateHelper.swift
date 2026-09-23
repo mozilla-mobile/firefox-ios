@@ -11,7 +11,7 @@ import X509
 /// Certificate-specific extraction helpers for the native error page.
 /// Parses certificate data from internal error page URLs (e.g. `badcert` query param).
 /// Kept as a dedicated struct: certificate logic is separate from general error-page handling.
-struct CertificateHelper {
+enum CertificateHelper {
     private static let badCertQueryParam = "badcert"
     private static let certErrorQueryParam = "certerror"
 

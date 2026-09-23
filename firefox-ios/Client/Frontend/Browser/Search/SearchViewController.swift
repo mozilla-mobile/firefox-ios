@@ -42,7 +42,7 @@ class SearchViewController: SiteTableViewController,
                             Notifiable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
-    private struct UX {
+    private enum UX {
         static let buttonsHeight: CGFloat = 44 // Equivalent to toolbar height, fixed at the moment
         static let engineButtonWidth: CGFloat = buttonsHeight * 1.4
         static let EngineButtonBackgroundColor = UIColor.clear.cgColor

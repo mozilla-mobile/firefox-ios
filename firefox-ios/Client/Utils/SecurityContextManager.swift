@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct SecurityContextManager {
+enum SecurityContextManager {
     /// Determines if a frame is loaded in a secure context.
     /// A frame is considered secure only when BOTH the top-level webView
     /// and the frame itself are loaded via HTTPS. This prevents

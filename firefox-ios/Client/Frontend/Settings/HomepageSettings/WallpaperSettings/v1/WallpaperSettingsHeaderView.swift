@@ -20,7 +20,7 @@ struct WallpaperSettingsHeaderViewModel {
 }
 
 class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
-    private struct UX {
+    private enum UX {
         static let stackViewSpacing: CGFloat = 4.0
         static let topBottomSpacing: CGFloat = 16.0
     }

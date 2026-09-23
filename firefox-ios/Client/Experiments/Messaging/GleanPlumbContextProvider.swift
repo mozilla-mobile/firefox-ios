@@ -17,7 +17,7 @@ class GleanPlumbContextProvider {
         case signedInFxaAccount = "is_fxa_signed_in"
     }
 
-    struct Constant {
+    enum Constant {
         static let activityReferencePeriod = UInt64(60 * 60 * 48 * 1000) // 48 hours in milliseconds
         static let inactivityPeriod = UInt64(60 * 60 * 24 * 1000) // 24 hours in milliseconds
     }

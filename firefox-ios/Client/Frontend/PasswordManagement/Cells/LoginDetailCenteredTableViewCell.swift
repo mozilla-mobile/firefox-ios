@@ -10,7 +10,7 @@ struct LoginDetailCenteredTableViewCellModel {
 }
 
 class LoginDetailCenteredTableViewCell: UITableViewCell, ThemeApplicable, ReusableCell {
-    struct UX {
+    enum UX {
         static let spacingTopBottom: CGFloat = 26
         static let spacingLeadingTrailing: CGFloat = 16
     }

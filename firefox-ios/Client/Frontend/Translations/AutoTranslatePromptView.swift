@@ -9,7 +9,7 @@ import Shared
 import UIKit
 
 final class AutoTranslatePromptView: UIView, AlphaDimmable, ThemeApplicable, Notifiable {
-    private struct UX {
+    private enum UX {
         static let borderThickness: CGFloat = 1.0
         static let contentPadding = NSDirectionalEdgeInsets(
             top: 14,

@@ -21,7 +21,7 @@ class BlockedTrackersTableViewController: UIViewController,
                                           UITableViewDelegate,
                                           Notifiable,
                                           UITextViewDelegate {
-    private struct UX {
+    private enum UX {
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
         static let headerDistance: CGFloat = 8

@@ -5,7 +5,7 @@
 import Foundation
 
 final class ContextMenuPreviewViewController: UIViewController {
-    private struct UX {
+    private enum UX {
         static let heightMultiplier: CGFloat = 0.8
     }
 

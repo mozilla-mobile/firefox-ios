@@ -7,7 +7,7 @@ import ComponentLibrary
 import UIKit
 
 final class TrackerBlockerModuleCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let cornerRadius: CGFloat = 8
         static let horizontalPadding: CGFloat = 16
         static let verticalPadding: CGFloat = 8

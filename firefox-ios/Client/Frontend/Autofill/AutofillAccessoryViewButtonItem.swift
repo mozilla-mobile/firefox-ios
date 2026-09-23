@@ -23,7 +23,7 @@ import Common
 /// - `tappedAccessoryButton()`: Handles the tap action on the accessory view.
 final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
     // MARK: - Constants
-    private struct UX {
+    private enum UX {
         static let accessoryImageViewSize: CGFloat = 24
         static let accessoryButtonStackViewSpacing: CGFloat = 2
         static let cornerRadius: CGFloat = 4

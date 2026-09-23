@@ -10,7 +10,7 @@ import struct MozillaAppServices.LoginEntry
 
 class PasswordDetailViewController: SensitiveViewController,
                                     Themeable {
-    private struct UX {
+    private enum UX {
         static let horizontalMargin: CGFloat = 14
     }
 

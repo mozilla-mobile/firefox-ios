@@ -36,7 +36,7 @@ struct AppearanceSettingsView: View {
         return Color(currentTheme?.colors.layer1 ?? UIColor.clear)
     }
 
-    private struct UX {
+    private enum UX {
         static let spacing: CGFloat = 24
         static let cornerRadius: CGFloat = 24
         static var spacingCurrentOS: CGFloat {

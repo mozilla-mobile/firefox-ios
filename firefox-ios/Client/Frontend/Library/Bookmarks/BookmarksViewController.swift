@@ -17,7 +17,7 @@ final class BookmarksViewController: SiteTableViewController,
                                      UIGestureRecognizerDelegate,
                                      Notifiable,
                                      FeatureFlaggable {
-    struct UX {
+    enum UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
         static let toastDismissDelay = DispatchTimeInterval.seconds(8)

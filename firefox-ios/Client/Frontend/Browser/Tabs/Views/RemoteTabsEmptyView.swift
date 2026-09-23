@@ -20,7 +20,7 @@ protocol RemoteTabsEmptyViewDelegate: AnyObject {
 
 class RemoteTabsEmptyView: UIView,
                            RemoteTabsEmptyViewProtocol {
-    struct UX {
+    enum UX {
         static let verticalPadding: CGFloat = 40
         static let horizontalPadding: CGFloat = 24
         static let paddingInBetweenItems: CGFloat = 15

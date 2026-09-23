@@ -7,7 +7,7 @@ import WidgetKit
 typealias DownloadState = DownloadLiveActivityAttributes.ContentState.Download
 
 // TODO: FXIOS-11619 investigate ways to move DownloadLiveActivityUtil code into DownloadLiveActivityAttributes
-struct DownloadLiveActivityUtil {
+enum DownloadLiveActivityUtil {
     static func generateDownloadStateFromDownload(download: Download) -> DownloadState {
         let downloadState = DownloadState(
             fileName: download.filename,

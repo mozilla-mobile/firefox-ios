@@ -37,7 +37,7 @@ final class LoginDetailTableViewCell: UITableViewCell,
                                       ReusableCell,
                                       UITextFieldDelegate,
                                       MenuHelperLoginInterface {
-    private struct UX {
+    private enum UX {
         static let horizontalMargin: CGFloat = 14
         static let verticalMargin: CGFloat = 11
     }

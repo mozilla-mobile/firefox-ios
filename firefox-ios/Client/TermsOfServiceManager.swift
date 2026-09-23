@@ -8,7 +8,7 @@ import Glean
 import MozillaAppServices
 import OnboardingKit
 
-struct Links {
+enum Links {
     static let termsOfService = "https://www.mozilla.org/about/legal/terms/firefox/"
     static let privacyNotice = "https://www.mozilla.org/privacy/firefox/"
 }

@@ -7,7 +7,7 @@ import Shared
 import UIKit
 
 class DownloadToast: Toast, DownloadProgressDelegate {
-    struct UX {
+    enum UX {
         static let buttonSize: CGFloat = 40
     }
 

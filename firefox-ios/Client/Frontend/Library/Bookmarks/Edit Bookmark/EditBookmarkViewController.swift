@@ -9,7 +9,7 @@ import MozillaAppServices
 class EditBookmarkViewController: UIViewController,
                                   UITableViewDelegate,
                                   Themeable {
-    private struct UX {
+    private enum UX {
         static let bookmarkCellTopPadding: CGFloat = 25.0
         static let folderHeaderIdentifier = "folderHeaderIdentifier"
         static let folderHeaderHorizontalPadding: CGFloat = 16.0

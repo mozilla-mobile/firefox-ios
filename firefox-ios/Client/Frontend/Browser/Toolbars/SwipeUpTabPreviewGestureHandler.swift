@@ -8,7 +8,7 @@ import Redux
 
 @MainActor
 final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelegate, StoreSubscriber {
-    private struct UX {
+    private enum UX {
         static let closeTabAnimationsDuration: CGFloat = 0.3
         static let dismissPreviewDelay: CGFloat = 0.4
         static let swipeUpVelocityThreshold: CGFloat = -1100

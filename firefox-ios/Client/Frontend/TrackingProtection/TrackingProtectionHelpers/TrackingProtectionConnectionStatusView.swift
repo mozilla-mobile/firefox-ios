@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let connectionStatusLabelConstraintConstant = 16.0
         static let toggleLabelsContainerConstraintConstant = 16.0
     }

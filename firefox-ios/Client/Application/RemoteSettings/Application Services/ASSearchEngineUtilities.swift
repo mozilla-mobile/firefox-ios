@@ -6,7 +6,7 @@ import MozillaAppServices
 
 /// General purpose utilities for translating between Remote Settings models and our
 /// existing OpenSearch model objects.
-struct ASSearchEngineUtilities {
+enum ASSearchEngineUtilities {
     static func convertASToOpenSearch(_ engine: SearchEngineDefinition, image: UIImage) -> OpenSearchEngine {
         let engineID = engine.identifier
         let name = engine.name

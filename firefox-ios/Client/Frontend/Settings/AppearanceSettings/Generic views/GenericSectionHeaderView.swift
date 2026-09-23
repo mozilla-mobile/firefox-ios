@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 
 struct GenericSectionHeaderView: View {
-    private struct UX {
+    private enum UX {
         static var textPadding: CGFloat { 8 }
     }
 

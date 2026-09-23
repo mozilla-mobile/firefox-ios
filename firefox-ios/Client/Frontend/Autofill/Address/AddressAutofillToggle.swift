@@ -9,7 +9,7 @@ import SwiftUI
 
 /// A SwiftUI view representing a toggle with theming for address autofill functionality.
 struct AddressAutofillToggle: View {
-    private struct UX {
+    private enum UX {
         static let viewPadding: CGFloat = 16
         static let viewCornerRadius: CGFloat = 24
         static let dividerHeight: CGFloat = 0.7

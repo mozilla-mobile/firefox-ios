@@ -10,7 +10,7 @@ struct AppIconSelectionView: View, ThemeApplicable, FeatureFlaggable {
     private let logger: Logger
     private let telemetry: AppIconSelectionTelemetry
 
-    struct UX {
+    enum UX {
         static let listPadding: CGFloat = 20
         static let cornerRadius: CGFloat = 10
         static let islandBorderWidth: CGFloat = 1

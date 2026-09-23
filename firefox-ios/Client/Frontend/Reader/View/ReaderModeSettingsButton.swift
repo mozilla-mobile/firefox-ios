@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 class ReaderModeSettingsButton: UIButton {
-    public struct UX {
+    public enum UX {
         public static let verticalInset: CGFloat = 16
         public static let horizontalInset: CGFloat = 16
         public static let serifFontName = "NewYorkMedium-Regular"

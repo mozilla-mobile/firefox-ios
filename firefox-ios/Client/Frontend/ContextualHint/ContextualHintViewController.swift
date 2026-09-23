@@ -11,7 +11,7 @@ class ContextualHintViewController: UIViewController,
                                     OnViewDismissable,
                                     Themeable,
                                     UIAdaptivePresentationControllerDelegate {
-    private struct UX {
+    private enum UX {
         static let contextualHintWidth: CGFloat = 350
         static let contextualHintLandscapeExtraWidth: CGFloat = 60
     }

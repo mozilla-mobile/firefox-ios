@@ -6,7 +6,7 @@ import Common
 import Shared
 import UIKit
 
-struct SettingsUX {
+enum SettingsUX {
     static let TableViewHeaderFooterHeight = CGFloat(44)
 }
 
@@ -28,7 +28,7 @@ extension UILabel {
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 @MainActor
 class Setting: NSObject {
-    struct UX {
+    enum UX {
         static let horizontalMargin: CGFloat = 15
         static var cellLayoutMarginsForCurrentOS: UIEdgeInsets {
             guard #available(iOS 26.0, *) else { return .zero }
@@ -183,7 +183,7 @@ class SettingSection: Setting {
 }
 
 class PaddedSwitch: UIView {
-    private struct UX {
+    private enum UX {
         static let padding: CGFloat = 8
     }
 
@@ -530,7 +530,7 @@ protocol SettingValuePersister {
 /// This takes an optional settingIsValid and settingDidChange callback
 /// If settingIsValid returns false, the Setting will not change and the text remains red.
 class StringSetting: Setting, UITextFieldDelegate {
-    private struct UX {
+    private enum UX {
         static let padding: CGFloat = 15
         static let textFieldHeight: CGFloat = 44
         static let textFieldIdentifierSuffix = "TextField"
@@ -668,7 +668,7 @@ enum CheckmarkSettingStyle {
 }
 
 final class CheckmarkSetting: Setting {
-    private struct UX {
+    private enum UX {
         static let defaultInset: CGFloat = 0
         static let cellIndentationWidth: CGFloat = 42
         static let cellIndentationLevel = 1
@@ -939,7 +939,7 @@ protocol SettingsDelegate: AnyObject {
 
 // The base settings view controller.
 class SettingsTableViewController: ThemedTableViewController, Notifiable {
-    private struct UX {
+    private enum UX {
         static let tableViewFooterHeight: CGFloat = 30
         static let estimatedRowHeight: CGFloat = 44
         static let estimatedSectionHeaderHeight: CGFloat = 44

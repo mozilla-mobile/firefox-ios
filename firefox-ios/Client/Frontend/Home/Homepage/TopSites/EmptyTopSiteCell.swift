@@ -7,7 +7,7 @@ import Foundation
 
 // An empty cell to show when a row is incomplete
 class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
-    struct UX {
+    enum UX {
         static let horizontalMargin: CGFloat = 8
     }
 
