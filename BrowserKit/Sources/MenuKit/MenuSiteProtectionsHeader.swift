@@ -22,7 +22,7 @@ public struct MenuSiteAdBlockerBadgeData {
 }
 
 public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let closeButtonSize: CGFloat = 30
         static let novaCloseButtonSize: CGFloat = 44
         static let contentLabelsSpacing: CGFloat = 1

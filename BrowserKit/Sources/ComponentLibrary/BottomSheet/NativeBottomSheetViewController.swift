@@ -12,7 +12,7 @@ import Common
 public class NativeBottomSheetViewController: UIViewController,
                                               Themeable,
                                               Notifiable {
-    private struct UX {
+    private enum UX {
         static var closeButtonPadding: CGFloat {
             if #available(iOS 26, *) {
                 return 18.0

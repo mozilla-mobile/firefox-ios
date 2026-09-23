@@ -15,7 +15,7 @@ class RootViewController: UIViewController,
                           SearchSuggestionDelegate,
                           SettingsDelegate,
                           Themeable {
-    private struct UX {
+    private enum UX {
         static let addressToolbarContainerHorizontalPadding: CGFloat = 16.0
     }
 

@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 final class MenuSiteBadge: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let cornerRadius: CGFloat = 12
         static let borderWidth: CGFloat = 1
         static let horizontalPadding: CGFloat = 10

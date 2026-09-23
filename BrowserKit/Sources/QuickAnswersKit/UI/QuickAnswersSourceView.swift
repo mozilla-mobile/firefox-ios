@@ -7,7 +7,7 @@ import Common
 import SiteImageView
 
 final class QuickAnswersSourceRow: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let faviconContainerSize: CGFloat = 32.0
         static let faviconContainerCornerRadius: CGFloat = 9.0
         static let faviconContainerTopPadding: CGFloat = 3.0
@@ -131,7 +131,7 @@ final class QuickAnswersSourceRow: UIView, ThemeApplicable {
 }
 
 final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let headerSpacing: CGFloat = 16.0
         static let rowSpacing: CGFloat = 12.0
     }
@@ -235,7 +235,7 @@ final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, Th
 /// The enlarged preview shown when long pressing a source row: a larger thumbnail and the full,
 /// untruncated title. Tapping it commits the same navigation as tapping the row.
 private final class SourcePreviewViewController: UIViewController {
-    private struct UX {
+    private enum UX {
         static let width: CGFloat = 260.0
         static let padding: CGFloat = 16.0
         static let imageSpacing: CGFloat = 12.0

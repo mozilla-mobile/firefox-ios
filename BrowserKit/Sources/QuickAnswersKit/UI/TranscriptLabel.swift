@@ -9,7 +9,7 @@ import Common
 /// A label that reveals the characters appended by each transcript update by fading them in
 /// from the bottom while they sharpen out of a blur.
 final class TranscriptLabel: UILabel {
-    private struct UX {
+    private enum UX {
         static let animationDuration: TimeInterval = 0.2
         static let chunkInitialOffset: CGFloat = 6.0
         /// The radius the appended text is blurred by when it starts animating in. It ramps down

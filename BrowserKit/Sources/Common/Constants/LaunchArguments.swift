@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct LaunchArguments {
+public enum LaunchArguments {
     public static let Test = "FIREFOX_TEST"
     public static let PerformanceTest = "FIREFOX_PERFORMANCE_TEST"
     public static let SkipIntro = "FIREFOX_SKIP_INTRO"

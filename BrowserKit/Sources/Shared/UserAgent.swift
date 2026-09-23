@@ -102,7 +102,7 @@ public enum UserAgentPlatform {
     case Mobile
 }
 
-struct CustomUserAgentConstant {
+enum CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let safariMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "Version/26.4 \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
 

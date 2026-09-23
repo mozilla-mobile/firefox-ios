@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct InstallationUtils {
+public enum InstallationUtils {
     /// Fetches the app's inferred installation date from the creation date of the Documents directory.
     public static var inferredDateInstalledOn: Date? {
         guard

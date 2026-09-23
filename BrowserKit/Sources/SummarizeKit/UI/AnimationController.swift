@@ -32,7 +32,7 @@ protocol AnimationController {
 
 /// The controller responsible to animate the states of `SummarizeController`
 struct DefaultAnimationController: AnimationController {
-    private struct UX {
+    private enum UX {
         @MainActor // `CAMediaTimingFunction` is not Sendable, so isolate it to the main actor
         static let initialTransformTimingCurve = CAMediaTimingFunction(controlPoints: 1, 0, 0, 1)
         static let snapshotTranslationKeyPath = "transform.translation.y"

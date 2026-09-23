@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 final class MenuSquareView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let iconSize: CGFloat = 24
         static let backgroundViewCornerRadius: CGFloat = 12
         static let contentViewSpacing: CGFloat = 4

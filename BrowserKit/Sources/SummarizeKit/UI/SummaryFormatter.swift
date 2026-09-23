@@ -16,7 +16,7 @@ final class CustomStyler: DownStyler {
 }
 
 struct SummaryFormatter {
-    private struct UX {
+    private enum UX {
         static let headingSpacing: CGFloat = 16.0
         static let bodySpacing: CGFloat = 8.0
         static let listItemTopSpacing: CGFloat = 2.0

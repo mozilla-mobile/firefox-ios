@@ -12,7 +12,7 @@ protocol ResultsService: Sendable {
 }
 
 final class DefaultResultsService: ResultsService {
-    private struct Constants {
+    private enum Constants {
         static let maxCitationsCount = 2
     }
     private let client: LiteLLMClientProtocol
