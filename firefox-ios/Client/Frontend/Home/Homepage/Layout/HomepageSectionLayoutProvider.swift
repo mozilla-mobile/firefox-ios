@@ -282,6 +282,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let shouldPinNewsHeader = featureFlagsProvider.isEnabled(.homepagePinnedHeader)
                                   && featureFlagsProvider.isEnabled(.homepageStoryCategories)
         header.pinToVisibleBounds = shouldPinNewsHeader
+        // IHC - This is needed to move the pinned News header below the pinned address bar
+        header.contentInsets = NSDirectionalEdgeInsets(
+            top: -50.0, // height of address bar as top inset to prevent overlaps
+            leading: horizontalInset,
+            bottom: UX.standardInset,
+            trailing: horizontalInset
+        )
         section.boundarySupplementaryItems = [header]
 
         section.contentInsets = NSDirectionalEdgeInsets(

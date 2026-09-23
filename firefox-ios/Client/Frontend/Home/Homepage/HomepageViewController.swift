@@ -45,6 +45,11 @@ final class HomepageViewController: UIViewController,
     // MARK: - Private variables
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     private var collectionView: UICollectionView?
+    private var embeddedAddressBarView: UIView = .build { embeddedAddressBarView in
+        embeddedAddressBarView.backgroundColor = .blue
+        embeddedAddressBarView.layer.zPosition = CGFloat(999)
+    }
+    private var embeddedAddressBarViewTopCellConstraint: NSLayoutConstraint?
     private var dataSource: HomepageDiffableDataSource?
     private lazy var sectionProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
     // Tracks which tab the shared homepage instance is currently representing.
@@ -511,7 +516,7 @@ final class HomepageViewController: UIViewController,
     private func setupLayout() {
         guard let collectionView else {
             logger.log(
-                "Homepage collectionview should not have been nil, something went wrong",
+                "Homepage collectionView should not have been nil, something went wrong",
                 level: .fatal,
                 category: .homepage
             )
@@ -525,6 +530,18 @@ final class HomepageViewController: UIViewController,
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+
+        // Add address bar as a sibling to collectionView
+        view.addSubview(embeddedAddressBarView)
+
+        NSLayoutConstraint.activate([
+            embeddedAddressBarView.topAnchor.constraint(
+                greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor
+            ),
+            embeddedAddressBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            embeddedAddressBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            embeddedAddressBarView.heightAnchor.constraint(equalToConstant: 50.0)
         ])
     }
 
@@ -656,6 +673,7 @@ final class HomepageViewController: UIViewController,
         case .searchBar:
             return configuredCell(cellType: SearchBarCell.self, at: indexPath) { cell in
                 cell.applyTheme(theme: currentTheme)
+                constrainEmbeddedAddressBar(toSearchBarCell: cell)
             }
         case .jumpBackIn(let tab):
             return configuredCell(cellType: JumpBackInCell.self, at: indexPath) { cell in
@@ -685,6 +703,23 @@ final class HomepageViewController: UIViewController,
         case .spacer:
             return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }
         }
+    }
+
+    private func constrainEmbeddedAddressBar(toSearchBarCell cell: SearchBarCell) {
+        // Remove the old constraint, if it exists
+        if let embeddedAddressBarViewTopCellConstraint {
+            embeddedAddressBarView.removeConstraint(embeddedAddressBarViewTopCellConstraint)
+        }
+
+        // Add a new constraint to the proxy cell to afford scrolling the "embedded" address bar with the with collectionView
+        let constraint = embeddedAddressBarView.topAnchor.constraint(
+            equalTo: cell.topAnchor,
+            priority: UILayoutPriority(999) // So we can safely break the constraint and pin to top when scrolling
+        )
+        embeddedAddressBarViewTopCellConstraint = constraint
+        NSLayoutConstraint.activate([
+            constraint
+        ])
     }
 
     private func configuredCell<T: UICollectionViewCell & ReusableCell>(

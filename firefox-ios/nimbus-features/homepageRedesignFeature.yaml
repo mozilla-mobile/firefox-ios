@@ -46,7 +46,7 @@ features:
 
       - channel: developer
         value:
-          search-bar: false
+          search-bar: true
           bookmarks-section-default: false
           jbi-section-default: false
           categories-enabled: true
