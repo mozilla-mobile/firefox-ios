@@ -5,7 +5,7 @@
 import Foundation
 @testable import Client
 
-final class MicrosurveyMock {
+enum MicrosurveyMock {
     static var model: MicrosurveyModel {
         return MicrosurveyModel(
             id: "survey-id",

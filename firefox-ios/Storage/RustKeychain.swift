@@ -32,7 +32,7 @@ public extension AutofillApiError {
 /// Running tests on Bitrise code that reads/writes to keychain silently fails.
 /// SecItemAdd status: -34018 - A required entitlement isn't present.
 /// This should be removed if we ever have keychain support on our CI.
-public class KeychainManager {
+public enum KeychainManager {
     public static let shared = {
         AppConstants.isRunningUnitTest
             ? MockRustKeychain.shared

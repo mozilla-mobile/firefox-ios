@@ -11,7 +11,6 @@ import SummarizeKit
 @testable import Client
 
 final class AddressBarStateTests: XCTestCase, StoreTestUtility {
-    let storeUtilityHelper = StoreTestUtilityHelper()
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockProfile: MockProfile!
 

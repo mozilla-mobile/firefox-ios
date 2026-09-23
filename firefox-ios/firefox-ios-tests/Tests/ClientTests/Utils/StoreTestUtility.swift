@@ -16,7 +16,7 @@ protocol StoreTestUtility {
 }
 
 /// Utility class used when replacing the global store for testing purposes
-class StoreTestUtilityHelper {
+enum StoreTestUtilityHelper {
     @MainActor
     static func setupStore(with appState: AppState, middlewares: [Middleware<AppState>]) {
 #if TESTING

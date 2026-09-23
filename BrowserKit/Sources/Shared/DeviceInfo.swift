@@ -6,11 +6,11 @@ import Common
 import UIKit
 
 extension DeviceInfo {
-    public class func deviceModel() -> String {
+    public static func deviceModel() -> String {
         return UIDeviceDetails.model
     }
 
-    public class func hasConnectivity() -> Bool {
+    public static func hasConnectivity() -> Bool {
         return connectionType() != .offline
     }
 
@@ -22,7 +22,7 @@ extension DeviceInfo {
     }
 
     /// Convenience method to determine the current network connection type.
-    public class func connectionType() -> ConnectionType {
+    public static func connectionType() -> ConnectionType {
         switch Reach().connectionStatus() {
         case .online(.wiFi):
             return .wifi
@@ -36,7 +36,7 @@ extension DeviceInfo {
     /// Returns true for devices running iOS 26 Beta 1 to 3 (developer betas). These betas have an Apple bug with
     /// `UIGlassEffect`. See FXIOS-13528 for details. This workaround can probably be removed soon after iOS 26 official
     /// release and user adoption.
-    public class var isRunningLiquidGlassEarlyBeta: Bool {
+    public static var isRunningLiquidGlassEarlyBeta: Bool {
         let systemVersion = ProcessInfo.processInfo.operatingSystemVersionString
 
         // Note: Info collected from https://betawiki.net/wiki/IOS_26. Beta 4 was the first public build.
@@ -53,7 +53,7 @@ extension DeviceInfo {
 
     // Reports portrait screen size regardless of the current orientation.
     @MainActor
-    public class func screenSizeOrientationIndependent() -> CGSize {
+    public static func screenSizeOrientationIndependent() -> CGSize {
         let screenSize = UIScreen.main.bounds.size
         return CGSize(width: min(screenSize.width, screenSize.height), height: max(screenSize.width, screenSize.height))
     }

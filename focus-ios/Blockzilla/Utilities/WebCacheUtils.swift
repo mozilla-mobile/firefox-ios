@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 
-final class WebCacheUtils {
+enum WebCacheUtils {
     static let PermittedFolderList = ["KSCrash", "io.sentry", "Snapshots"]
 
     static func reset() {
