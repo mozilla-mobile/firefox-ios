@@ -7,7 +7,7 @@ import XCTest
 @testable import Client
 
 class MainThreadThrottlerTests: XCTestCase {
-    struct Timing {
+    enum Timing {
         static let veryLongDelay: Double = 100_000
         static let defaultTestMaxWaitTime: Double = 2
         static let shortenTestMaxWaitTime = 0.5

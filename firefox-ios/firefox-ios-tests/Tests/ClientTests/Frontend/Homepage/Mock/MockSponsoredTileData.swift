@@ -7,7 +7,7 @@ import Storage
 
 @testable import Client
 
-struct MockSponsoredTileData {
+enum MockSponsoredTileData {
     enum MockError: Error {
         case testError
     }

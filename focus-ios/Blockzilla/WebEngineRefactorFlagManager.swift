@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct WebEngineFlagManager {
+enum WebEngineFlagManager {
     /// Whether the refactor for using the new WebEngine as the active browser engine for the client
     /// is enabled. If `true` the WebEngine will be used rather than the legacy browser code.
     ///

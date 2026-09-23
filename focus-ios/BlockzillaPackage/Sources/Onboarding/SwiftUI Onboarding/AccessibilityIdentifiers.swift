@@ -5,8 +5,8 @@
 
 // MARK: - Accessibility Identifiers
 
-struct AccessibilityIdentifiers {
-    struct TermsOfService {
+enum AccessibilityIdentifiers {
+    enum TermsOfService {
         static let title = "TermsOfService.title"
         static let subtitle = "TermsOfService.subtitle"
         static let termsOfServiceAgreement = "TermsOfService.termsOfServiceAgreement"
@@ -14,7 +14,7 @@ struct AccessibilityIdentifiers {
         static let agreeAndContinueButton = "TermsOfService.agreeAndContinueButton"
     }
     
-    struct DefaultBrowserOnboarding {
+    enum DefaultBrowserOnboarding {
         static let closeButton = "DefaultBrowserOnboarding.closeButton"
         static let image = "DefaultBrowserOnboarding.image"
         static let title = "DefaultBrowserOnboarding.title"
@@ -23,7 +23,7 @@ struct AccessibilityIdentifiers {
         static let skipOnboardingButton = "DefaultBrowserOnboarding.skipOnboardingButton"
     }
     
-    struct AttributedLinkText {
+    enum AttributedLinkText {
         static let view = "AttributedLinkText.view"
     }
 }

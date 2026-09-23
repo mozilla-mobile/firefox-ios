@@ -9,7 +9,7 @@ import TestKit
 import XCTest
 
 class RustSyncManagerTests: XCTestCase {
-    struct Keys {
+    enum Keys {
         static let bookmarksStateChangedPrefKey = "sync.engine.bookmarks.enabledStateChanged"
         static let bookmarksEnabledPrefKey = "sync.engine.bookmarks.enabled"
         static let creditcardsStateChangedPrefKey = "sync.engine.creditcards.enabledStateChanged"

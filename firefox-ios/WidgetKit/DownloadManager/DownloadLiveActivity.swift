@@ -58,7 +58,7 @@ struct DownloadLiveActivityAttributes: ActivityAttributes {
 }
 @available(iOS 17, *)
 struct DownloadLiveActivity: Widget {
-    struct UX {
+    enum UX {
         static let downloadColor: UIColor = .orange
         static let circleWidth: CGFloat = 17.5
         static let lineWidth: CGFloat = 3.5
@@ -75,7 +75,7 @@ struct DownloadLiveActivity: Widget {
         static let checkmarkIcon = StandardImageIdentifiers.Large.checkmark
         static let mediaStopIcon = "mediaStop"
         static let firefoxIcon = "faviconFox"
-        struct LockScreen {
+        enum LockScreen {
             static let horizontalSpacing: CGFloat = 16
             static let verticalSpacing: CGFloat = 4
             static let iconSize: CGFloat = 40
@@ -86,7 +86,7 @@ struct DownloadLiveActivity: Widget {
             static let circleAnimation: CGFloat = 0.5
             static let progressIconSize: CGFloat = 20
         }
-        struct DynamicIsland {
+        enum DynamicIsland {
             static let rotation: CGFloat = -90
             static let downloadColor: UIColor = .orange
             static let circleWidth: CGFloat = 17.5
