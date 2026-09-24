@@ -1,0 +1,24 @@
+/* Accessibility label for the close button on the Quick Answers screen. */
+"QuickAnswers.AccessibilityLabels.Close.v158" = "Luk";
+
+/* Header label for the sources section shown below a Quick Answers result. */
+"QuickAnswers.ContentView.Sources.v158" = "Kilder";
+
+/* Button label on the Quick Answers permission alert to dismiss the alert without taking action. */
+"QuickAnswers.Errors.Cancel.v158" = "Annuller";
+
+/* Button label to dismiss the Quick Answers error alert. */
+"QuickAnswers.Errors.OK.v158" = "OK";
+
+/* Button label on the permission alert that opens the iOS Settings app so the user can grant permissions. */
+"QuickAnswers.Errors.OpenSettings.v158" = "Åbn Indstillinger";
+
+/* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
+"QuickAnswers.OptIn.ContinueButton.v158" = "Fortsæt";
+
+/* Link text on the Quick Answers opt-in screen that opens more information about the feature. */
+"QuickAnswers.OptIn.LearnMore.v158" = "Læs mere";
+
+/* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
+"QuickAnswers.Tip.Message.v158" = "Tryk her for at komme i gang.";
+

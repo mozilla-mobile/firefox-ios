@@ -1,0 +1,96 @@
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Nested.Body.v135" = "ब्राउज़ करते समय बुकमार्क जोड़ें, ताकि आप अपनी पसंदीदा साइटों को बाद में आसानी से ढूंढ सकें।";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Nested.Title.v135" = "यह फ़ोल्डर खाली है";
+
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Root.Body.v135" = "ब्राउज़ करते समय साइटें सेव करें। हम अन्य सिंक किए गए डिवाइसों से भी बुकमार्क ले आएंगे।";
+
+/* The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Root.BodySignedOut.v135" = "ब्राउज़ करते समय साइटें सेव करें। अन्य सिंक किए गए डिवाइसों से बुकमार्क लाने के लिए साइन इन करें।";
+
+/* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
+"Bookmarks.EmptyState.Root.ButtonTitle.v136" = "सिंक करने के लिए साइन इन करें";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Root.Title.v135" = "अभी तक कोई बुकमार्क नहीं है";
+
+/* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
+"Bookmarks.Menu.AllBookmarks.v131" = "सभी";
+
+/* Accessibility label for the clear button located within every bookmark cell text field in the bookmarks panel. Pressing this button will clear the text field's text */
+"Bookmarks.Menu.ClearTextFieldButtonA11yLabel.v139" = "मिटाएं";
+
+/* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
+"Bookmarks.Menu.DeleteBookmark.v132" = "बुकमार्क डिलीट करें";
+
+/* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
+"Bookmarks.Menu.DeletedBookmark.v131" = "“%@” को डिलीट किया";
+
+/* When a folder is longpressed in the bookmarks menu, a `Delete Folder` button is present. */
+"Bookmarks.Menu.DeleteFolder.v131" = "फ़ोल्डर डिलीट करें";
+
+/* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
+"Bookmarks.Menu.EditBookmark.v131" = "बुकमार्क एडिट करें";
+
+/* Caption shown above the first collapsible folder group in the New/Edit Folder location picker. */
+"Bookmarks.Menu.EditBookmarkAllFoldersLabel.v154" = "सभी फ़ोल्डर";
+
+/* Link that expands the collapsed Location summary into the full folder picker in the New/Edit Folder screen. */
+"Bookmarks.Menu.EditBookmarkChangeLocationLabel.v154" = "जगह बदलें";
+
+/* Header denoting that the proceeding folders in the parent folder selector table of the Edit Bookmarks Screen are folders shared with desktop. */
+"Bookmarks.Menu.EditBookmarkDesktopBookmarksLabel.v136" = "डेस्कटॉप बुकमार्क";
+
+/* Collapsible header for the group of desktop bookmark folders in the New/Edit Folder location picker. */
+"Bookmarks.Menu.EditBookmarkDesktopGroupLabel.v154" = "डेस्कटॉप";
+
+/* VoiceOver accessibility value read for a collapsed folder group header in the New/Edit Folder location picker. */
+"Bookmarks.Menu.EditBookmarkGroupCollapsedValue.v154" = "छोटा किया गया";
+
+/* VoiceOver accessibility value read for an expanded folder group header in the New/Edit Folder location picker. */
+"Bookmarks.Menu.EditBookmarkGroupExpandedValue.v154" = "बड़ा किया गया";
+
+/* Caption shown above the collapsed folder summary row in the New/Edit Folder location picker. */
+"Bookmarks.Menu.EditBookmarkLocationLabel.v154" = "जगह";
+
+/* Header denoting that the following folders in the parent folder selector table of the Edit Bookmarks Screen are mobile-only folders, shown alongside a 'DESKTOP BOOKMARKS' header so the two categories are clearly separated. */
+"Bookmarks.Menu.EditBookmarkMobileBookmarksLabel.v154" = "मोबाइल बुकमार्क";
+
+/* Collapsible header for the group of mobile bookmark folders in the New/Edit Folder location picker. */
+"Bookmarks.Menu.EditBookmarkMobileGroupLabel.v154" = "मोबाइल";
+
+/* Breadcrumb shown under a nested folder's title in the New/Edit Folder location picker. %@ is replaced with the immediate parent folder's name. RTL locales might want to use `%@ ↵` instead. */
+"Bookmarks.Menu.EditBookmarkParentFolderBreadcrumbFormat.v154" = "↳ %@";
+
+/* When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved. */
+"Bookmarks.Menu.EditBookmarkSave.v135" = "सेव करें";
+
+/* When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`. */
+"Bookmarks.Menu.EditBookmarkSaveIn.v131" = "इसमें सेव करें";
+
+/* Label on the top of the `Edit Bookmarks` screen. */
+"Bookmarks.Menu.EditBookmarkTitle.v131" = "बुकमार्क एडिट करें";
+
+/* When a folder is longpressed in the bookmarks menu, an `Edit Folder` button is present. */
+"Bookmarks.Menu.EditFolder.v131" = "फ़ोल्डर एडिट करें";
+
+/* Accessibility label for the "..." disclosure button located within every bookmark site cell in the bookmarks panel. Pressing this button opens a modal with more actions. */
+"Bookmarks.Menu.MoreOptionsA11yLabel.v136" = "और विकल्प";
+
+/* The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button */
+"Bookmarks.Menu.RemoveFromShortcutsTitle.v139" = "शॉर्टकट से हटाएं";
+
+/* The label displayed in the toast notification when saving a bookmark via the menu to the default folder. "Bookmarks" is the name of the default folder where the bookmark will be saved to. */
+"Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel.v136" = "“बुकमार्क” में सेव किया गया";
+
+/* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. %@ represents the custom name of the folder, created by the user, where the bookmark will be saved to. */
+"Bookmarks.Menu.SavedBookmarkToastLabel.v136" = "“%@” में सेव किया गया";
+
+/* Placeholder text for the search field in the bookmarks panel, used to filter bookmarks by title or URL. */
+"Bookmarks.Search.Placeholder.v151" = "बुकमार्क सर्च करें";
+
+/* The title for the Edit context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Edit.v131" = "एडिट करें";
+

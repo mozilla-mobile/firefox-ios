@@ -13,13 +13,10 @@ class DiskImageStoreTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        store = DefaultDiskImageStore(files: MockFiles(), namespace: "DiskImageStoreTests", quality: 1)
-
-        await clearStore()
+        store = DefaultDiskImageStore(files: makeTemporaryFiles(), namespace: "DiskImageStoreTests", quality: 1)
     }
 
     override func tearDown() async throws {
-        await clearStore()
         store = nil
         try await super.tearDown()
     }
@@ -75,10 +72,6 @@ class DiskImageStoreTests: XCTestCase {
     }
 
     // MARK: - Helper methods
-
-    func clearStore() async {
-        try? await store?.clearAllScreenshotsExcluding(Set())
-    }
 
     func makeImageWithColor(_ color: UIColor, size: CGSize) -> UIImage {
         let rect = CGRect(size: size)

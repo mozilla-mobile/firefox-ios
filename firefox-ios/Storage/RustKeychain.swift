@@ -336,8 +336,8 @@ public final class RustKeychain: KeychainProtocol {
     private func getBaseKeychainQuery(key: String) -> [String: Any] {
         let encodedIdentifier: Data? = key.data(using: String.Encoding.utf8)
         var keychainQueryDictionary: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
-                                                       kSecAttrService as String: self.serviceName,
-                                                       kSecAttrSynchronizable as String: false]
+                                                      kSecAttrService as String: self.serviceName,
+                                                      kSecAttrSynchronizable as String: false]
         keychainQueryDictionary[kSecAttrGeneric as String] = encodedIdentifier
         keychainQueryDictionary[kSecAttrAccount as String] = encodedIdentifier
 

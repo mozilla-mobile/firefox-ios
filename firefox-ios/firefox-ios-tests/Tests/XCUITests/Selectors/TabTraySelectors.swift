@@ -138,6 +138,6 @@ struct TabTraySelectors: TabTraySelectorsSet {
 
     var all: [Selector] { [TABSTRAY_CONTAINER, COLLECTION_VIEW,
                            IPHONE_TAB_TRAY_COLLECTION_VIEW, FIRST_CELL, NEW_TAB_BUTTON, DONE_BUTTON,
-                            UNDO_BUTTON, CONTEXT_MENU_ADD_TO_BOOKMARKS,
-                            CONTEXT_MENU_COPY_URL, CONTEXT_MENU_CLOSE_TAB] }
+                           UNDO_BUTTON, CONTEXT_MENU_ADD_TO_BOOKMARKS,
+                           CONTEXT_MENU_COPY_URL, CONTEXT_MENU_CLOSE_TAB] }
 }

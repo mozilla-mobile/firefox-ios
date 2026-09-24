@@ -8,7 +8,7 @@ import Shared
 import XCTest
 
 class TestSQLiteReadingList: XCTestCase {
-    let files = MockFiles()
+    lazy var files = makeTemporaryFiles()
     var db: BrowserDB!
     var readingList: SQLiteReadingList!
 
@@ -19,8 +19,7 @@ class TestSQLiteReadingList: XCTestCase {
     }
 
     override func tearDown() {
-        self.readingList = nil
-        self.db = nil
+        db.forceClose()
         super.tearDown()
     }
 

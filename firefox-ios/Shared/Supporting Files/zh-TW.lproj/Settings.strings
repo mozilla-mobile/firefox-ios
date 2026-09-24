@@ -1,5 +1,5 @@
 /* This label is used for a button in the address list screen allowing users to manage their saved addresses. It's meant to direct users to where they can add, remove, or edit their saved addresses. */
-"Addresses.ManageAddressesButton.v130" = "管理已存地址";
+"Addresses.ManageAddressesButton.v130" = "管理已儲存的地址";
 
 /* Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available. */
 "Addresses.Settings.ListItemA11y.v130" = "%@ 的地址";
@@ -113,16 +113,16 @@
 "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151" = "翻譯";
 
 /* This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
-"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "封鎖的話，代表您不會在 %@ 看到目前已有，或新推出的 AI 擴充功能，或是任何有關這些功能的彈出提示。";
+"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "封鎖的話，代表您不會在 %@ 看到目前已有，或新推出的 AI 強化功能，或是任何有關這些功能的彈出提示。";
 
 /* In the AI Controls settings, this is the text for the link that takes the user more information on AI features. */
 "Settings.AIControls.BlockAIEnhancementsLink.v151" = "看看包含哪些項目，又不含哪些項目";
 
 /* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
-"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "封鎖 AI 功能";
+"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "封鎖 AI 強化功能";
 
 /* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
-"Settings.AIControls.BlockedInformation.v151" = "預設會封鎖目前與新推出的 AI 擴充功能，可在下方解除封鎖特定功能。";
+"Settings.AIControls.BlockedInformation.v151" = "預設會封鎖目前與新推出的 AI 強化功能，可在下方解除封鎖特定功能。";
 
 /* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
 "Settings.AIControls.HeaderCard.Link.v151" = "更多資訊";
@@ -183,6 +183,9 @@
 
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "自動播放";
+
+/* VoiceOver custom action name for a settings row's Learn More link. */
+"Settings.BoolSetting.LearnMoreAction.v157" = "更多資訊";
 
 /* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
 "Settings.Browsing.AdBlocker.Description.v155" = "減少廣告與廣告類追蹤器。若使用後網站發生故障，可嘗試關閉此項。";

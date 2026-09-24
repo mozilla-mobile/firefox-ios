@@ -31,7 +31,7 @@ enum FeatureFlagID: String, CaseIterable {
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
     case homepagePinnedHeader
-    case homepageSearchBar
+    case homepageAnimatedCenterSearchBar
     case homepageStoryCategories
     case homepageTrackerBlockerModule
     case hostedSummarizer
@@ -60,6 +60,7 @@ enum FeatureFlagID: String, CaseIterable {
     case summarizerPermissiveGuardrails
     case tabScrollRefactorFeature
     case tabTrayiPadUIExperiments
+    case tabTrayScreenshotButtonStyle
     case tabTrayTranslucency
     case tabTrayUIExperiments
     case tosFeature
@@ -115,7 +116,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .googleLens,
                 .homepageAddShortcutTile,
                 .homepagePinnedHeader,
-                .homepageSearchBar,
+                .homepageAnimatedCenterSearchBar,
                 .homepageStoryCategories,
                 .homepageTrackerBlockerModule,
                 .hostedSummarizer,
@@ -136,6 +137,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .summarizerLanguageExpansion,
                 .summarizerPermissiveGuardrails,
                 .tabScrollRefactorFeature,
+                .tabTrayScreenshotButtonStyle,
                 .tabTrayUIExperiments,
                 .touFeature,
                 .translation,

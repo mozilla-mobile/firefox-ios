@@ -274,11 +274,6 @@ class BrowserViewController: UIViewController,
         return ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
     }()
 
-    private(set) lazy var translationContextHintVC: ContextualHintViewController = {
-        let translationProvider = ContextualHintViewProvider(forHintType: .translation, with: profile)
-        return ContextualHintViewController(with: translationProvider, windowUUID: windowUUID)
-    }()
-
     private(set) lazy var relayMaskContextHintVC: ContextualHintViewController = {
         let relayProvider = ContextualHintViewProvider(forHintType: .relay, with: profile)
         return ContextualHintViewController(with: relayProvider, windowUUID: windowUUID)
@@ -324,7 +319,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isHomepageSearchBarEnabled: Bool {
-        return featureFlagsProvider.isEnabled(.homepageSearchBar)
+        return featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar)
     }
 
     var isSummarizerToolbarFeatureEnabled: Bool {
@@ -1017,7 +1012,6 @@ class BrowserViewController: UIViewController,
 
         dismissModalsIfStartAtHome()
         shouldHideAddressToolbar()
-        dismissToolbarCFRs(with: windowUUID)
     }
 
     private func showToastType(toast: ToastType) {
@@ -1342,7 +1336,7 @@ class BrowserViewController: UIViewController,
     /// As part of the homepage search bar work, we want to only hide the toolbar when the homepage search bar appears.
     /// The homepage search bar should not appear if we are in editing mode.
     private func shouldHideAddressToolbar() {
-        guard featureFlagsProvider.isEnabled(.homepageSearchBar) else { return }
+        guard featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar) else { return }
         let toolbarState = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
@@ -1629,10 +1623,6 @@ class BrowserViewController: UIViewController,
             // In general we want to dismiss when changing layout on iPhone
             if summarizeToolbarEntryContextHintVC.isPresenting || UIDevice.current.userInterfaceIdiom == .phone {
                 summarizeToolbarEntryContextHintVC.dismiss(animated: true)
-            }
-
-            if translationContextHintVC.isPresenting || UIDevice.current.userInterfaceIdiom == .phone {
-                translationContextHintVC.dismiss(animated: true)
             }
         }
     }
@@ -3797,8 +3787,8 @@ class BrowserViewController: UIViewController,
             break
         }
 
-        tabWebView.accessoryView.savedAddressesClosure = {
-            DispatchQueue.main.async { [weak self] in
+        tabWebView.accessoryView.savedAddressesClosure = { [weak self, weak webView] in
+            DispatchQueue.main.async {
                 webView?.resignFirstResponder()
                 self?.navigationHandler?.showAddressAutofill(frame: frame)
             }
@@ -3865,8 +3855,8 @@ class BrowserViewController: UIViewController,
 
     /// Handles the action when the saved cards button is tapped on the tab web view.
     private func handleSavedCardsButtonTap(tabWebView: TabWebView, webView: WKWebView?, frame: WKFrameInfo?) {
-        tabWebView.accessoryView.savedCardsClosure = {
-            DispatchQueue.main.async { [weak self] in
+        tabWebView.accessoryView.savedCardsClosure = { [weak self, weak webView] in
+            DispatchQueue.main.async {
                 webView?.resignFirstResponder()
                 self?.authenticateSelectCreditCardBottomSheet(frame: frame)
             }
@@ -4128,8 +4118,6 @@ class BrowserViewController: UIViewController,
             configureNavigationContextualHint(button)
         case ContextualHintType.summarizeToolbarEntry.rawValue:
             configureSummarizeToolbarEntryContextualHint(for: button)
-        case ContextualHintType.translation.rawValue:
-            configureTranslationContextualHint(for: button)
         case TipKitHintType.googleLens.rawValue:
             configureGoogleLensTip(for: button)
         default:
@@ -4434,6 +4422,9 @@ extension BrowserViewController: LegacyTabDelegate {
 
         let adsHelper = AdsTelemetryHelper(tab: tab)
         tab.addContentScript(adsHelper, name: AdsTelemetryHelper.name())
+
+        let translationsPageStateHelper = TranslationsPageStateHelper(tab: tab)
+        tab.addContentScript(translationsPageStateHelper, name: TranslationsPageStateHelper.name())
 
         let noImageModeHelper = NoImageModeHelper(tab: tab)
         tab.addContentScript(noImageModeHelper, name: NoImageModeHelper.name())
