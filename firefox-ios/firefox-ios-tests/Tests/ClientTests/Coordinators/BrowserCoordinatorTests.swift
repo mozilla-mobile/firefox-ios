@@ -474,12 +474,17 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     func testShowGoogleLensCamera_whenCameraUnavailable_doesNotPresentOrLeaveChild() {
-        // The simulator has no camera, so the coordinator finishes immediately and cleans
-        // itself up without presenting anything.
-        let subject = createSubject()
+        // Availability is injected rather than read from the simulator, which reports a camera
+        // on a developer machine but not on CI, running the same iOS version.
+        var availabilityCalled = false
+        let subject = createSubject(isCameraAvailable: {
+            availabilityCalled = true
+            return false
+        })
 
         subject.showGoogleLensCamera()
 
+        XCTAssertTrue(availabilityCalled)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
         XCTAssertEqual(mockRouter.presentCalled, 0)
     }
@@ -1750,6 +1755,7 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     // MARK: - Helpers
     private func createSubject(googleLensService: GoogleLensServicing = GoogleLensService(),
+                               isCameraAvailable: @escaping @MainActor () -> Bool = { true },
                                file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserCoordinator {
         let subject = BrowserCoordinator(router: mockRouter,
@@ -1759,7 +1765,8 @@ final class BrowserCoordinatorTests: XCTestCase,
                                          profile: profile,
                                          glean: glean,
                                          applicationHelper: applicationHelper,
-                                         googleLensService: googleLensService)
+                                         googleLensService: googleLensService,
+                                         isCameraAvailable: isCameraAvailable)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
