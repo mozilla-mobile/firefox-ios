@@ -26,7 +26,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         let event = GleanMetrics.AiQuickAnswers.requested
         typealias EventExtrasType = GleanMetrics.AiQuickAnswers.RequestedExtra
 
-        let expectedModel = "exa"
+        let expectedModel = QuickAnswersModel.exa
 
         subject.quickAnswersRequested(model: expectedModel)
 
@@ -37,7 +37,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 0)
-        XCTAssertEqual(savedExtras.model, expectedModel)
+        XCTAssertEqual(savedExtras.model, expectedModel.rawValue)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
@@ -99,7 +99,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
 
         let expectedOutcome = false
         let expectedErrorType = "some_error"
-        let expectedModel = "liner"
+        let expectedModel = QuickAnswersModel.liner
 
         subject.resultsCompleted(outcome: expectedOutcome, errorType: expectedErrorType, model: expectedModel)
 
@@ -110,7 +110,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
 
         XCTAssertEqual(savedExtras.outcome, expectedOutcome)
         XCTAssertEqual(savedExtras.errorType, expectedErrorType)
-        XCTAssertEqual(savedExtras.model, expectedModel)
+        XCTAssertEqual(savedExtras.model, expectedModel.rawValue)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
@@ -119,7 +119,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         let event = GleanMetrics.AiQuickAnswers.permissionDenied
         typealias EventExtrasType = GleanMetrics.AiQuickAnswers.PermissionDeniedExtra
 
-        subject.permissionDenied(isTranscription: false)
+        subject.permissionDenied(permission: .microphone)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(
@@ -127,16 +127,16 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         )
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.transcription, false)
+        XCTAssertEqual(savedExtras.permission, "microphone")
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
-    func test_recordEvent_whenTranscriptionPermissionDenied_thenGleanIsCalled() throws {
+    func test_recordEvent_whenSpeechRecognitionPermissionDenied_thenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.AiQuickAnswers.permissionDenied
         typealias EventExtrasType = GleanMetrics.AiQuickAnswers.PermissionDeniedExtra
 
-        subject.permissionDenied(isTranscription: true)
+        subject.permissionDenied(permission: .speechRecognition)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(
@@ -144,7 +144,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         )
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.transcription, true)
+        XCTAssertEqual(savedExtras.permission, "speech_recognition")
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
@@ -182,7 +182,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         let subject = createSubject()
 
         subject.resultsStarted()
-        subject.resultsCompleted(outcome: true, errorType: nil, model: "exa")
+        subject.resultsCompleted(outcome: true, errorType: nil, model: .exa)
 
         XCTAssertEqual(mockGleanWrapper.startTimingCalled, 1)
         XCTAssertEqual(mockGleanWrapper.stopAndAccumulateCalled, 1)

@@ -62,7 +62,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(states[3], .loadingSearchResult)
         XCTAssertEqual(states[4], .showSearchResult(searchResult, nil))
         XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
-        XCTAssertEqual(mockTelemetry.lastRequestedModel, QuickAnswersModel.exa.rawValue)
+        XCTAssertEqual(mockTelemetry.lastRequestedModel, .exa)
         XCTAssertEqual(mockTelemetry.recordingStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastRecordingOutcome, true)
@@ -70,7 +70,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastResultsOutcome, true)
-        XCTAssertEqual(mockTelemetry.lastResultsModel, QuickAnswersModel.exa.rawValue)
+        XCTAssertEqual(mockTelemetry.lastResultsModel, .exa)
         XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 0)
     }
 
@@ -137,7 +137,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastResultsOutcome, false)
-        XCTAssertEqual(mockTelemetry.lastResultsModel, QuickAnswersModel.exa.rawValue)
+        XCTAssertEqual(mockTelemetry.lastResultsModel, .exa)
     }
 
     func testStartFlow_whenServiceNotInitialized_emitsServiceNotInitializedError() {
@@ -158,12 +158,10 @@ final class QuickAnswersViewModelTests: XCTestCase {
     func testStartFlow_whenMicrophonePermissionDenied_recordsPermissionDeniedOnly() {
         mockService.speechErrorToThrow = .microphonePermissionDenied(isFirstTime: true)
         let expectation = XCTestExpectation()
-        var states = [QuickAnswersViewModel.State]()
         let subject = createSubject(prefs: optInCompletedPrefs())
 
         subject.onStateChange = { state in
-            states.append(state)
-            guard states.count == 2 else { return }
+            guard case .speechResult(_, .microphonePermissionDenied) = state else { return }
             expectation.fulfill()
         }
         subject.startFlow()
@@ -171,19 +169,17 @@ final class QuickAnswersViewModelTests: XCTestCase {
         wait(for: [expectation])
 
         XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 1)
-        XCTAssertEqual(mockTelemetry.lastPermissionDeniedIsTranscription, false)
+        XCTAssertEqual(mockTelemetry.lastPermissionDenied, .microphone)
         XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 0)
     }
 
-    func testStartFlow_whenSpeechRecognitionPermissionDenied_recordsTranscriptionPermissionDenied() {
+    func testStartFlow_whenSpeechRecognitionPermissionDenied_recordsPermissionDeniedOnly() {
         mockService.speechErrorToThrow = .speechRecognitionPermissionDenied(isFirstTime: false)
         let expectation = XCTestExpectation()
-        var states = [QuickAnswersViewModel.State]()
         let subject = createSubject(prefs: optInCompletedPrefs())
 
         subject.onStateChange = { state in
-            states.append(state)
-            guard states.count == 2 else { return }
+            guard case .speechResult(_, .speechRecognitionPermissionDenied) = state else { return }
             expectation.fulfill()
         }
         subject.startFlow()
@@ -191,7 +187,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         wait(for: [expectation])
 
         XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 1)
-        XCTAssertEqual(mockTelemetry.lastPermissionDeniedIsTranscription, true)
+        XCTAssertEqual(mockTelemetry.lastPermissionDenied, .speechRecognition)
         XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 0)
     }
 
@@ -279,7 +275,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         _ = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .liner))
 
         XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
-        XCTAssertEqual(mockTelemetry.lastRequestedModel, QuickAnswersModel.liner.rawValue)
+        XCTAssertEqual(mockTelemetry.lastRequestedModel, .liner)
     }
 
     // MARK: - Helper

@@ -47,7 +47,8 @@ ai.quick_answers:
       model:
         type: string
         description: |
-          The model backing the Quick Answers request, one of `exa` or `liner`.
+          The model backing the Quick Answers request. The valid values are the cases of the
+          `QuickAnswersModel` enum, currently `exa` and `liner`.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
@@ -116,7 +117,8 @@ ai.quick_answers:
       model:
         type: string
         description: |
-          The model backing the Quick Answers request, one of `exa` or `liner`.
+          The model backing the Quick Answers request. The valid values are the cases of the
+          `QuickAnswersModel` enum, currently `exa` and `liner`.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
@@ -128,14 +130,16 @@ ai.quick_answers:
   permission_denied:
     type: event
     description: |
-      Recorded when the user denies one of the permissions Quick Answers needs to capture audio
-      or to generate the transcription.
+      Recorded when the user denies one of the permissions the Quick Answers voice flow needs,
+      which stops the flow before any audio is transcribed. Quick Answers asks for the microphone
+      to capture the user's audio and for speech recognition to turn that audio into a transcription,
+      so the user can be prompted for, and deny, either of them.
     extra_keys:
-      transcription:
-        type: boolean
+      permission:
+        type: string
         description: |
-          True when the denied permission is speech recognition (transcription),
-          false when it is the microphone.
+          The permission the user denied. The valid values are the cases of the
+          `QuickAnswersPermission` enum, currently `microphone` and `speech_recognition`.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16927
     data_reviews:

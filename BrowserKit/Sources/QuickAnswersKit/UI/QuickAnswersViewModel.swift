@@ -45,7 +45,7 @@ final class QuickAnswersViewModel {
         } catch {
             self.service = nil
         }
-        telemetry.quickAnswersRequested(model: self.model.rawValue)
+        telemetry.quickAnswersRequested(model: self.model)
     }
 
     /// Entry point for the flow: shows the opt-in screen until the user has consented,
@@ -123,9 +123,9 @@ final class QuickAnswersViewModel {
     private func recordRecordingFailure(_ error: SpeechError) {
         switch error {
         case .microphonePermissionDenied:
-            telemetry.permissionDenied(isTranscription: false)
+            telemetry.permissionDenied(permission: .microphone)
         case .speechRecognitionPermissionDenied:
-            telemetry.permissionDenied(isTranscription: true)
+            telemetry.permissionDenied(permission: .speechRecognition)
         default:
             telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel)
         }
@@ -143,14 +143,10 @@ final class QuickAnswersViewModel {
         let searchResult = await service.search(text: result.text)
         switch searchResult {
         case .success(let result):
-            telemetry.resultsCompleted(outcome: true, errorType: nil, model: model.rawValue)
+            telemetry.resultsCompleted(outcome: true, errorType: nil, model: model)
             onStateChange?(.showSearchResult(result, nil))
         case .failure(let error):
-            telemetry.resultsCompleted(
-                outcome: false,
-                errorType: error.telemetryLabel,
-                model: model.rawValue
-            )
+            telemetry.resultsCompleted(outcome: false, errorType: error.telemetryLabel, model: model)
             onStateChange?(.showSearchResult(.empty(), error))
         }
     }
