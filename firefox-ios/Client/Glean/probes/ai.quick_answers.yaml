@@ -47,8 +47,8 @@ ai.quick_answers:
       model:
         type: string
         description: |
-          The model backing the Quick Answers request. The valid values are the cases of the
-          `QuickAnswersModel` enum, currently `exa` and `liner`.
+          The model backing the Quick Answers request. See the `QuickAnswersModel` enum for the
+          valid values.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
@@ -117,8 +117,8 @@ ai.quick_answers:
       model:
         type: string
         description: |
-          The model backing the Quick Answers request. The valid values are the cases of the
-          `QuickAnswersModel` enum, currently `exa` and `liner`.
+          The model backing the Quick Answers request. See the `QuickAnswersModel` enum for the
+          valid values.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
@@ -138,8 +138,8 @@ ai.quick_answers:
       permission:
         type: string
         description: |
-          The permission the user denied. The valid values are the cases of the
-          `QuickAnswersPermission` enum, currently `microphone` and `speech_recognition`.
+          The permission the user denied. See the `QuickAnswersPermission` enum for the
+          valid values.
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-16927
     data_reviews:
