@@ -26,7 +26,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         let event = GleanMetrics.AiQuickAnswers.requested
         typealias EventExtrasType = GleanMetrics.AiQuickAnswers.RequestedExtra
 
-        let expectedModel = QuickAnswersModel.exa
+        let expectedModel = QuickAnswersKit.QuickAnswersModel.exa
 
         subject.quickAnswersRequested(model: expectedModel)
 
@@ -99,7 +99,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
 
         let expectedOutcome = false
         let expectedErrorType = "some_error"
-        let expectedModel = QuickAnswersModel.liner
+        let expectedModel = QuickAnswersKit.QuickAnswersModel.liner
 
         subject.resultsCompleted(outcome: expectedOutcome, errorType: expectedErrorType, model: expectedModel)
 
