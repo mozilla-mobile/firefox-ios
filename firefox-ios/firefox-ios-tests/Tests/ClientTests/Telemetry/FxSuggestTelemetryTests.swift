@@ -51,6 +51,7 @@ final class FxSuggestTelemetryTests: XCTestCase {
             XCTAssertEqual(GleanMetrics.FxSuggest.advertiser.testGetValue(),
                            FxSuggestTelemetry.EventInfo.wikipediaAdvertiser.rawValue)
             XCTAssertEqual(GleanMetrics.FxSuggest.iabCategory.testGetValue(), nil)
+            XCTAssertEqual(GleanMetrics.FxSuggest.suggestionId.testGetValue(), nil)
             XCTAssertEqual(GleanMetrics.FxSuggest.reportingUrl.testGetValue(), nil)
             expectation.fulfill()
         }
@@ -82,6 +83,7 @@ final class FxSuggestTelemetryTests: XCTestCase {
             XCTAssertEqual(GleanMetrics.FxSuggest.country.testGetValue(), "US")
             XCTAssertEqual(GleanMetrics.FxSuggest.advertiser.testGetValue(), "test advertiser")
             XCTAssertEqual(GleanMetrics.FxSuggest.iabCategory.testGetValue(), "999 - Test Category")
+            XCTAssertEqual(GleanMetrics.FxSuggest.suggestionId.testGetValue(), "test-suggestion-id")
             XCTAssertEqual(GleanMetrics.FxSuggest.reportingUrl.testGetValue(),
                            "https://example.com/ios_test_click_reporting_url")
             XCTAssertEqual(GleanMetrics.FxSuggest.country.testGetValue(), "US")
@@ -93,7 +95,8 @@ final class FxSuggestTelemetryTests: XCTestCase {
             advertiser: "test advertiser",
             iabCategory: "999 - Test Category",
             impressionReportingURL: URL(string: "https://example.com/ios_test_impression_reporting_url"),
-            clickReportingURL: URL(string: "https://example.com/ios_test_click_reporting_url")
+            clickReportingURL: URL(string: "https://example.com/ios_test_click_reporting_url"),
+            suggestionId: "test-suggestion-id"
         )
         let subject = createSubject()
         subject.clickEvent(telemetryInfo: info, position: 3)
@@ -107,7 +110,8 @@ final class FxSuggestTelemetryTests: XCTestCase {
             advertiser: "test-advertiser",
             iabCategory: "test-category",
             impressionReportingURL: URL(string: "https://test1.com"),
-            clickReportingURL: URL(string: "https://test2.com")
+            clickReportingURL: URL(string: "https://test2.com"),
+            suggestionId: "test-suggestion-id"
         )
 
         let subject = createSubject(gleanWrapper: gleanWrapper)
@@ -138,6 +142,7 @@ final class FxSuggestTelemetryTests: XCTestCase {
             XCTAssertEqual(GleanMetrics.FxSuggest.advertiser.testGetValue(),
                            FxSuggestTelemetry.EventInfo.wikipediaAdvertiser.rawValue)
             XCTAssertEqual(GleanMetrics.FxSuggest.iabCategory.testGetValue(), nil)
+            XCTAssertEqual(GleanMetrics.FxSuggest.suggestionId.testGetValue(), nil)
             XCTAssertEqual(GleanMetrics.FxSuggest.reportingUrl.testGetValue(), nil)
             XCTAssertEqual(GleanMetrics.FxSuggest.country.testGetValue(), "US")
             expectation.fulfill()
@@ -171,6 +176,7 @@ final class FxSuggestTelemetryTests: XCTestCase {
             XCTAssertEqual(GleanMetrics.FxSuggest.blockId.testGetValue(), 1234)
             XCTAssertEqual(GleanMetrics.FxSuggest.advertiser.testGetValue(), "test-advertiser")
             XCTAssertEqual(GleanMetrics.FxSuggest.iabCategory.testGetValue(), "999 - Test Category")
+            XCTAssertEqual(GleanMetrics.FxSuggest.suggestionId.testGetValue(), "test-suggestion-id")
             XCTAssertEqual(GleanMetrics.FxSuggest.reportingUrl.testGetValue(),
                            "https://example.com/ios_test_impression_reporting_url")
             XCTAssertEqual(GleanMetrics.FxSuggest.country.testGetValue(), "US")
@@ -182,7 +188,8 @@ final class FxSuggestTelemetryTests: XCTestCase {
             advertiser: "test-advertiser",
             iabCategory: "999 - Test Category",
             impressionReportingURL: URL(string: "https://example.com/ios_test_impression_reporting_url"),
-            clickReportingURL: URL(string: "https://example.com/ios_test_click_reporting_url")
+            clickReportingURL: URL(string: "https://example.com/ios_test_click_reporting_url"),
+            suggestionId: "test-suggestion-id"
         )
         let subject = createSubject()
         subject.impressionEvent(telemetryInfo: info,
@@ -199,7 +206,8 @@ final class FxSuggestTelemetryTests: XCTestCase {
             advertiser: "test-advertiser",
             iabCategory: "test-category",
             impressionReportingURL: URL(string: "https://test1.com"),
-            clickReportingURL: URL(string: "https://test2.com")
+            clickReportingURL: URL(string: "https://test2.com"),
+            suggestionId: "test-suggestion-id"
         )
 
         let subject = createSubject(gleanWrapper: gleanWrapper)
@@ -218,7 +226,8 @@ final class FxSuggestTelemetryTests: XCTestCase {
             advertiser: "test-advertiser",
             iabCategory: "test-category",
             impressionReportingURL: URL(string: "https://test1.com"),
-            clickReportingURL: URL(string: "https://test2.com")
+            clickReportingURL: URL(string: "https://test2.com"),
+            suggestionId: "test-suggestion-id"
         )
 
         let subject = createSubject(gleanWrapper: gleanWrapper)
