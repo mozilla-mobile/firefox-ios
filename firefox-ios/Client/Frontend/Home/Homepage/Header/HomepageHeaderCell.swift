@@ -54,7 +54,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         imageView.contentMode = .scaleAspectFit
     }
 
-    private lazy var quickAnswersButton: UIButton = .build { button in
+    private lazy var quickAnswersButton: UIButton = .build { [weak self] button in
         button.configuration = .filled()
         button.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.audioWave)?
             .withRenderingMode(.alwaysTemplate)
@@ -62,7 +62,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         button.accessibilityLabel = .QuickAnswers.AccessibilityLabels.OpenQuickAnswers
         button.accessibilityIdentifier = a11y.quickAnswersButton
         button.adjustsImageSizeForAccessibilityContentSizeCategory = false
-        button.addAction(UIAction(handler: { [weak self] _ in
+        button.addAction(UIAction(handler: { _ in
             self?.quickAnswerButtonTapped()
         }), for: .touchUpInside)
     }

@@ -103,8 +103,8 @@ final class HistoryPanelViewModel: @unchecked Sendable {
             resetHistory()
         }
 
-        fetchData { fetchedSites in
-            DispatchQueue.global().async { [weak self] in
+        fetchData { [weak self] fetchedSites in
+            DispatchQueue.global().async {
                 guard let self,
                       !fetchedSites.isEmpty else {
                     completion(false)
@@ -223,12 +223,12 @@ final class HistoryPanelViewModel: @unchecked Sendable {
             limit: queryFetchLimit,
             offset: currentFetchOffset,
             excludedTypes: VisitTransitionSet(0)
-        ).upon { result in
+        ).upon { [weak self] result in
             completion(result.successValue?.asArray() ?? [])
 
             // Force 100ms delay between resolution of the last batch of results
             // and the next time `fetchData()` can be called.
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
                 guard let self = self else { return }
                 self.isFetchInProgress = false
                 self.logger.log("currentFetchOffset is: \(self.currentFetchOffset)",

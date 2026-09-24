@@ -392,8 +392,8 @@ class SearchViewModel: FeatureFlaggable,
             return
         }
 
-        recentSearchProvider.loadRecentSearches { searchTerms in
-            ensureMainThread { [weak self] in
+        recentSearchProvider.loadRecentSearches { [weak self] searchTerms in
+            ensureMainThread {
                 self?.recentSearches = searchTerms
                 self?.delegate?.reloadTableView()
             }
@@ -413,8 +413,8 @@ class SearchViewModel: FeatureFlaggable,
     func clearRecentSearches() {
         searchTelemetry.recentSearchesClearButtonTapped()
 
-        recentSearchProvider.clear { result in
-            ensureMainThread { [weak self] in
+        recentSearchProvider.clear { [weak self] result in
+            ensureMainThread {
                 if case .success = result {
                     self?.recentSearches = []
                     self?.delegate?.reloadTableView()

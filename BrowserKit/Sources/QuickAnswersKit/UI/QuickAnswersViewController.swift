@@ -32,7 +32,7 @@ public final class QuickAnswersViewController: UIViewController,
         $0.effect = UIBlurEffect(style: .systemUltraThinMaterial)
     }
     private let backgroundRecordEffect: GradientCircleView = .build()
-    private lazy var closeButton: UIButton = .build {
+    private lazy var closeButton: UIButton = .build { [weak self] in
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
         } else {
@@ -42,7 +42,7 @@ public final class QuickAnswersViewController: UIViewController,
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.closeButtonContentInset
         $0.addAction(
-            UIAction(handler: { [weak self] _ in
+            UIAction(handler: { _ in
                 self?.dismiss(with: nil)
             }),
             for: .touchUpInside

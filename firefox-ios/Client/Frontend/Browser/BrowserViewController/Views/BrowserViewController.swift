@@ -4309,8 +4309,8 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
 
     override func paste(itemProviders: [NSItemProvider]) {
         for provider in itemProviders where provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-            _ = provider.loadObject(ofClass: URL.self) { url, _ in
-                DispatchQueue.main.async { [weak self] in
+            _ = provider.loadObject(ofClass: URL.self) { [weak self] url, _ in
+                DispatchQueue.main.async {
                     let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
                     self?.openURLInNewTab(url, isPrivate: isPrivate)
                 }
