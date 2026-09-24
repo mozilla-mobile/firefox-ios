@@ -74,6 +74,9 @@ public final class AppConstants {
     /// Time that needs to pass before polling FxA for send tabs again, 86_400_000 milliseconds is 1 day
     public static let fxaCommandsInterval = 86_400_000
 
+    /// Time that needs to pass before verifying Autopush connections again, 86_400_000 milliseconds is 1 day
+    public static let autopushVerificationInterval = 86_400_000
+
     /// The maximum number of times we should attempt to migrated the History to Application Services Places DB
     public static let maxHistoryMigrationAttempt = 5
 
