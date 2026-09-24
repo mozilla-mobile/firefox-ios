@@ -138,6 +138,11 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         sourceView.configureStrings(sourcesHeader: strings.sources)
     }
 
+    /// Vertical coordinate of the placeholder label's bottom edge, converted into `view` coordinates.
+    func placeholderBottom(in view: UIView) -> CGFloat {
+        return frame.size.height - placeholderLabel.frame.maxY
+    }
+
     func startAudioWaveformAnimation() {
         audioWaveform.startAnimating()
     }
@@ -228,24 +233,23 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         let translation = CGAffineTransform(translationX: 0.0, y: -UX.resultTranslationOffset)
         let total = UX.resultKeyframeDuration
         let easeOut = UIView.KeyframeAnimationOptions(rawValue: UIView.AnimationOptions.curveEaseOut.rawValue)
-        
+
         UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut) { [self] in
-            movingSections.forEach {
-                $0.transform = translation
-            }
+            transcriptLabel.transform = translation
             audioWaveform.alpha = 0.0
         }
 
         // The blur runs on its own CAAnimation, keyed to the same start times as the fades.
         for (index, section) in fadingSections.enumerated() {
-            UIView.animate(withDuration: 0.2, delay: fadeStartTime(at: index)) {
+            UIView.animate(withDuration: 0.3, delay: fadeStartTime(at: index)) {
+                section.transform = translation
                 section.alpha = 1.0
             }
         }
     }
 
     private func fadeStartTime(at index: Int) -> TimeInterval {
-        UX.resultFadeStartOffset + Double(index) * UX.resultCascadeDelay
+        Double(index) * UX.resultCascadeDelay
     }
 
     // MARK: - ThemeApplicable
