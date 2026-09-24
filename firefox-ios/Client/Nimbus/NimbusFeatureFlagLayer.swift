@@ -137,6 +137,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .novaDesign:
             return checkNovaDesignFeature()
 
+        case .novaPrivateThemeOverride:
+            return checkNovaPrivateThemeOverrideFeature()
+
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature()
 
@@ -439,6 +442,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkNovaDesignFeature() -> Bool {
         return nimbus.features.novaDesignFeature.value().enabled
+    }
+
+    private func checkNovaPrivateThemeOverrideFeature() -> Bool {
+        return nimbus.features.novaDesignFeature.value().privateThemeOverride
     }
 
     private func checkAiKillSwitchFeature() -> Bool {

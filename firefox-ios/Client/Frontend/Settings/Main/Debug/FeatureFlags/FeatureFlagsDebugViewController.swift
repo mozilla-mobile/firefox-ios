@@ -228,6 +228,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .novaPrivateThemeOverride,
+                titleText: format(string: "Nova Private Theme Override"),
+                statusText: format(string: "Toggle to disable purple theme for private mode")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .privacyDashboard,
                 titleText: format(string: "Privacy Dashboard"),
                 statusText: format(string: "Toggle Privacy Dashboard")
