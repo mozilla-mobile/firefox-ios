@@ -13,7 +13,7 @@ final class DefaultQuickAnswersTelemetry: QuickAnswersTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    func quickAnswersRequested(model: QuickAnswersModel) {
+    func quickAnswersRequested(model: QuickAnswersKit.QuickAnswersModel) {
         let extras = GleanMetrics.AiQuickAnswers.RequestedExtra(model: model.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.requested, extras: extras)
     }
@@ -35,7 +35,7 @@ final class DefaultQuickAnswersTelemetry: QuickAnswersTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.resultsStarted)
     }
 
-    func resultsCompleted(outcome: Bool, errorType: String?, model: QuickAnswersModel) {
+    func resultsCompleted(outcome: Bool, errorType: String?, model: QuickAnswersKit.QuickAnswersModel) {
         if let resultsTimerId {
             gleanWrapper.stopAndAccumulateTiming(for: GleanMetrics.AiQuickAnswers.resultsTime, timerId: resultsTimerId)
             self.resultsTimerId = nil
