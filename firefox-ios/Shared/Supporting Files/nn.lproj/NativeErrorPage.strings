@@ -53,7 +53,7 @@
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Ver varsam. Noko ser ikkje rett ut.";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
-"NativeErrorPage.GoBackButton.v149" = "Gå tilbake (Tilrådd)";
+"NativeErrorPage.GoBackButton.v149" = "Gå tilbake (tilrådd)";
 
 /* On error page, this is the description for no internet connection. */
 "NativeErrorPage.NoInternetConnection.Description.v131" = "Prøv å kople til på ei anna eining. Sjekk modemet eller ruteren. Kople frå og kople til Wi-fi igjen.";

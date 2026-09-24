@@ -592,6 +592,9 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Uzzināt vairāk";
 
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Turpināt";
+
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.Onboarding.LearnMoreButtonTitle" = "Uzzināt vairāk";
 
@@ -846,6 +849,9 @@
 
 /* Title of the dialog that allows you to send a tab to a different device */
 "SendTo.NavBar.Title" = "Sūtīt cilni";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "Lūgums atvērt Firefox, doties uz iestatījumiem un pieteikties, lai turpinātu.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Sūtīt";

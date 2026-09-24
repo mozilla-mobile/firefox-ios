@@ -8,7 +8,7 @@
 "QuickAnswers.ContentView.Answering.v158" = "Erantzuten…";
 
 /* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
-"QuickAnswers.ContentView.Footer.v158" = "%@ modeloak hornitua · Erantzunek akatsak izan litzakete.";
+"QuickAnswers.ContentView.Footer.v158" = "%@ ereduak hornitua · Erantzunek akatsak izan litzakete.";
 
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "Galdetu edozer…";

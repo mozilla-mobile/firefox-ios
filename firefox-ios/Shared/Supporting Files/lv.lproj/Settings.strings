@@ -67,6 +67,9 @@
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Uzzināt vairāk par Firefox Suggest";
 
+/* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Meklēt vienādotajās cilnēs";
+
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Uzzināt vairāk";
 
@@ -78,4 +81,7 @@
 
 /* Row label in the preferred languages list that opens the language picker to add a new preferred language for translation. */
 "Settings.Translation.PreferredLanguages.AddLanguage.v151" = "Pievienot valodu…";
+
+/* Section header for the preferred languages list in the Translation settings screen. */
+"Settings.Translation.PreferredLanguages.SectionTitle.v151" = "Vēlamās valodas";
 
