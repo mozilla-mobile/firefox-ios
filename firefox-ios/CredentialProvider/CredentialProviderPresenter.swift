@@ -48,8 +48,8 @@ final class CredentialProviderPresenter {
     private func attemptProvision(id: String, currentRetry: Int) {
         let maxRetries = 3
 
-        profile.logins.getLogin(id: id, completionHandler: { result in
-            ensureMainThread { [weak self] in
+        profile.logins.getLogin(id: id, completionHandler: { [weak self] result in
+            ensureMainThread {
                 switch result {
                 case .failure:
                     self?.cancel(with: .failed)
@@ -86,8 +86,8 @@ final class CredentialProviderPresenter {
         if self.profile.logins.reopenIfClosed() != nil {
             cancel(with: .failed)
         } else {
-            profile.logins.listLogins(completionHandler: { result in
-                ensureMainThread { [weak self] in
+            profile.logins.listLogins(completionHandler: { [weak self] result in
+                ensureMainThread {
                     switch result {
                     case .failure:
                         self?.cancel(with: .failed)

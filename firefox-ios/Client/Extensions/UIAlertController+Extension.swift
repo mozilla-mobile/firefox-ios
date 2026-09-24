@@ -119,7 +119,7 @@ extension UIAlertController {
         }
         saveAction.isEnabled = false
 
-        alert.addTextField { textField in
+        alert.addTextField { [weak saveAction] textField in
             textField.placeholder = .FirefoxHomepage.Shortcuts.AddShortcut.URLTextFieldPlaceholder
             textField.keyboardType = .URL
             textField.autocapitalizationType = .none
@@ -128,7 +128,7 @@ extension UIAlertController {
             textField.clearButtonMode = .whileEditing
             textField.accessibilityIdentifier =
                 AccessibilityIdentifiers.FirefoxHomepage.TopSites.AddShortcutAlert.urlTextField
-            textField.addAction(UIAction { [weak textField, weak saveAction] _ in
+            textField.addAction(UIAction { [weak textField] _ in
                 let text = textField?.text ?? ""
                 saveAction?.isEnabled = URIFixup.getURL(text) != nil
             }, for: .editingChanged)
