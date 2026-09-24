@@ -717,9 +717,17 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForElementToExist(linkText, timeout: timeout)
     }
 
-    func assertPrivateModeMessageCardExists(timeout: TimeInterval = TIMEOUT) {
-        let privateMessage = sel.PRIVATE_MODE_HOMEPAGE_TITLE.element(in: app)
-        BaseTestCase().mozWaitForElementToExist(privateMessage, timeout: timeout)
+    /// - Parameter verifyingCopy: also asserts the title and body text, which the presence of the
+    /// labels alone does not cover: an empty or wrong message still satisfies the identifiers.
+    func assertPrivateModeMessageCardExists(verifyingCopy: Bool = false, timeout: TimeInterval = TIMEOUT) {
+        let title = sel.PRIVATE_MODE_HOMEPAGE_TITLE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(title, timeout: timeout)
+        guard verifyingCopy else { return }
+
+        let body = sel.PRIVATE_MODE_HOMEPAGE_BODY.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(body, timeout: timeout)
+        XCTAssertEqual(title.label, sel.PRIVATE_MODE_HOMEPAGE_TITLE_TEXT_EN, "Private homepage title copy changed")
+        XCTAssertEqual(body.label, sel.PRIVATE_MODE_HOMEPAGE_BODY_TEXT_EN, "Private homepage body copy changed")
     }
 
     func tapPrivateModeActivityLink() {
