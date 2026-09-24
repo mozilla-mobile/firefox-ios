@@ -99,8 +99,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .homepagePinnedHeader:
             return checkHomepagePinnedHeaderFeature()
 
-        case .homepageSearchBar:
-            return checkHomepageSearchBarFeature()
+        case .homepageAnimatedCenterSearchBar:
+            return checkHomepageAnimatedCenterSearchBarFeature()
 
         case .homepageStoryCategories:
             return checkHomepageStoriesCaterogiesFeature()
@@ -261,8 +261,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.homepageRedesignFeature.value().pinnedHeaderEnabled
     }
 
-    private func checkHomepageSearchBarFeature() -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().searchBar
+    private func checkHomepageAnimatedCenterSearchBarFeature() -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().animatedCenterSearchBar
     }
 
     private func checkHomepageStoriesCaterogiesFeature() -> Bool {

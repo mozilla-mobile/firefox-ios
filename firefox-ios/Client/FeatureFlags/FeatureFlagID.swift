@@ -31,7 +31,7 @@ enum FeatureFlagID: String, CaseIterable {
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
     case homepagePinnedHeader
-    case homepageSearchBar
+    case homepageAnimatedCenterSearchBar
     case homepageStoryCategories
     case homepageTrackerBlockerModule
     case hostedSummarizer
@@ -117,7 +117,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .googleLens,
                 .homepageAddShortcutTile,
                 .homepagePinnedHeader,
-                .homepageSearchBar,
+                .homepageAnimatedCenterSearchBar,
                 .homepageStoryCategories,
                 .homepageTrackerBlockerModule,
                 .hostedSummarizer,

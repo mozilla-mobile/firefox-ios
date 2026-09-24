@@ -576,12 +576,18 @@ final class BrowserScreen {
         }
     }
 
-    /// - Parameter suggestSectionExists: whether the Firefox Suggest section itself is expected on
-    /// screen. Defaults to `shouldExist`: the section is gone when suggestions are off altogether
-    /// (private mode), but stays when only the sponsored entry is filtered out, and then it is the
-    /// positive control proving suggestions were returned at all.
-    func assertSponsoredResult(
+    enum SuggestKind {
+        case sponsored
+        case nonSponsored
+    }
+
+    /// - Parameter kind: only `.sponsored` asserts the "Sponsored" label, which is not scoped to the
+    /// row, so its absence cannot be asserted without tripping on other sponsored entries.
+    /// - Parameter suggestSectionExists: defaults to `shouldExist`; pass `true` when only one kind of
+    /// entry is filtered out and the section itself stays.
+    func assertSuggestResult(
         title: String,
+        kind: SuggestKind,
         shouldExist: Bool = true,
         suggestSectionExists: Bool? = nil,
         timeout: TimeInterval = TIMEOUT_LONG
@@ -591,22 +597,30 @@ final class BrowserScreen {
             sel.SEARCH_SETTINGS_BUTTON.element(in: app),
             timeout: timeout
         )
-        assertWebElements(
-            shouldExist: shouldExist,
-            app.staticTexts[title],
-            sel.SPONSORED_LABEL.element(in: app),
-            timeout: timeout
-        )
+        assertWebElements(shouldExist: shouldExist, app.staticTexts[title], timeout: timeout)
+
+        guard kind == .sponsored else { return }
+        assertWebElements(shouldExist: shouldExist, sel.SPONSORED_LABEL.element(in: app), timeout: timeout)
     }
 
-    /// Searches for `term` and asserts the sponsored entry for `title` is offered. A suggest query
-    /// interrupted while the term is still being typed is dropped silently, hence the retyping.
-    func searchAndAssertSponsoredResult(term: String, title: String, maxAttempts: Int = 3) {
+    /// Searches for `term` and asserts the Firefox Suggest entry for `title` is offered. A suggest
+    /// query interrupted while the term is still being typed is dropped silently, hence the retyping.
+    func searchAndAssertSuggestResult(term: String, title: String, kind: SuggestKind, maxAttempts: Int = 3) {
         for _ in 0..<maxAttempts {
             searchFromAddressBar(term: term)
             if app.staticTexts[title].mozWaitForElementToExist(timeout: 5, failOnTimeout: false) { break }
         }
-        assertSponsoredResult(title: title)
+        assertSuggestResult(title: title, kind: kind)
+    }
+
+    /// Asserts on an address bar row backed by local data (browsing history or bookmarks), which is
+    /// listed by page title rather than under the Firefox Suggest section.
+    func assertSuggestionRow(titled title: String, shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
+        assertWebElements(
+            shouldExist: shouldExist,
+            sel.suggestionRow(titled: title).element(in: app),
+            timeout: timeout
+        )
     }
 
     func searchFromAddressBar(term: String) {
@@ -703,9 +717,17 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForElementToExist(linkText, timeout: timeout)
     }
 
-    func assertPrivateModeMessageCardExists(timeout: TimeInterval = TIMEOUT) {
-        let privateMessage = sel.PRIVATE_MODE_HOMEPAGE_TITLE.element(in: app)
-        BaseTestCase().mozWaitForElementToExist(privateMessage, timeout: timeout)
+    /// - Parameter verifyingCopy: also asserts the title and body text, which the presence of the
+    /// labels alone does not cover: an empty or wrong message still satisfies the identifiers.
+    func assertPrivateModeMessageCardExists(verifyingCopy: Bool = false, timeout: TimeInterval = TIMEOUT) {
+        let title = sel.PRIVATE_MODE_HOMEPAGE_TITLE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(title, timeout: timeout)
+        guard verifyingCopy else { return }
+
+        let body = sel.PRIVATE_MODE_HOMEPAGE_BODY.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(body, timeout: timeout)
+        XCTAssertEqual(title.label, sel.PRIVATE_MODE_HOMEPAGE_TITLE_TEXT_EN, "Private homepage title copy changed")
+        XCTAssertEqual(body.label, sel.PRIVATE_MODE_HOMEPAGE_BODY_TEXT_EN, "Private homepage body copy changed")
     }
 
     func tapPrivateModeActivityLink() {

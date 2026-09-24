@@ -187,7 +187,6 @@ public struct PrefsKeys {
         case mainMenuRedesignKey = "mainMenuRedesignHintKey"
         case navigationKey = "ContextualHintNavigation"
         case relayMaskKey = "ContextualHintRelayMaskKey"
-        case translationKey = "ContextualHintTranslationKey"
         case summarizerToolbarEntryKey = "summarizerToolbarEntryKey"
     }
 
@@ -244,6 +243,9 @@ public struct PrefsKeys {
 
     // The last timestamp we polled FxA for missing send tabs
     public static let PollCommandsTimestamp = "PollCommandsTimestamp"
+
+    // The last timestamp we verified Autopush connections
+    public static let AutopushVerificationTimestamp = "AutopushVerificationTimestamp"
 
     // Representing whether or not the last user session was private
     public static let LastSessionWasPrivate = "wasLastSessionPrivate"

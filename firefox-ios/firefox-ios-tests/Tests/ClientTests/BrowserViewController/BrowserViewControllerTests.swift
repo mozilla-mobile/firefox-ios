@@ -746,36 +746,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(close.iconString, StandardImageIdentifiers.Large.cross)
     }
 
-    func testDismissToolbarCFRs_mismatchedWindowUUID() {
-        let toolbarWindow = WindowUUID.XCTestDefaultUUID
-        let mismatchedWindow = WindowUUID.DefaultUITestingUUID
-
-        let state = AppState(presentedComponents: PresentedComponentsState(components: [
-            .browserViewController(BrowserViewControllerState(windowUUID: toolbarWindow)),
-            .toolbar(ToolbarState(windowUUID: toolbarWindow)),
-        ]))
-        mockStore = MockStoreForMiddleware(state: state)
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-
-        createSubject().dismissToolbarCFRs(with: mismatchedWindow)
-    }
-
-    func testDismissToolbarCFRs_ToolbarAddedForWindow() {
-        let window = WindowUUID.XCTestDefaultUUID
-
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-        createSubject().dismissToolbarCFRs(with: window)
-
-        let state = AppState(presentedComponents: PresentedComponentsState(components: [
-            .browserViewController(BrowserViewControllerState(windowUUID: window)),
-            .toolbar(ToolbarState(windowUUID: window)),
-        ]))
-        mockStore = MockStoreForMiddleware(state: state)
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-        createSubject().dismissToolbarCFRs(with: window)
-    }
-
     @MainActor
     func testStartNavigationButtonDoubleTapTimer_singleTap_doesNotDispatchDoubleTap() {
         let subject = createSubject()
