@@ -274,11 +274,6 @@ class BrowserViewController: UIViewController,
         return ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
     }()
 
-    private(set) lazy var translationContextHintVC: ContextualHintViewController = {
-        let translationProvider = ContextualHintViewProvider(forHintType: .translation, with: profile)
-        return ContextualHintViewController(with: translationProvider, windowUUID: windowUUID)
-    }()
-
     private(set) lazy var relayMaskContextHintVC: ContextualHintViewController = {
         let relayProvider = ContextualHintViewProvider(forHintType: .relay, with: profile)
         return ContextualHintViewController(with: relayProvider, windowUUID: windowUUID)
@@ -1017,7 +1012,6 @@ class BrowserViewController: UIViewController,
 
         dismissModalsIfStartAtHome()
         shouldHideAddressToolbar()
-        dismissToolbarCFRs(with: windowUUID)
     }
 
     private func showToastType(toast: ToastType) {
@@ -1629,10 +1623,6 @@ class BrowserViewController: UIViewController,
             // In general we want to dismiss when changing layout on iPhone
             if summarizeToolbarEntryContextHintVC.isPresenting || UIDevice.current.userInterfaceIdiom == .phone {
                 summarizeToolbarEntryContextHintVC.dismiss(animated: true)
-            }
-
-            if translationContextHintVC.isPresenting || UIDevice.current.userInterfaceIdiom == .phone {
-                translationContextHintVC.dismiss(animated: true)
             }
         }
     }
@@ -3797,8 +3787,8 @@ class BrowserViewController: UIViewController,
             break
         }
 
-        tabWebView.accessoryView.savedAddressesClosure = {
-            DispatchQueue.main.async { [weak self] in
+        tabWebView.accessoryView.savedAddressesClosure = { [weak self, weak webView] in
+            DispatchQueue.main.async {
                 webView?.resignFirstResponder()
                 self?.navigationHandler?.showAddressAutofill(frame: frame)
             }
@@ -3865,8 +3855,8 @@ class BrowserViewController: UIViewController,
 
     /// Handles the action when the saved cards button is tapped on the tab web view.
     private func handleSavedCardsButtonTap(tabWebView: TabWebView, webView: WKWebView?, frame: WKFrameInfo?) {
-        tabWebView.accessoryView.savedCardsClosure = {
-            DispatchQueue.main.async { [weak self] in
+        tabWebView.accessoryView.savedCardsClosure = { [weak self, weak webView] in
+            DispatchQueue.main.async {
                 webView?.resignFirstResponder()
                 self?.authenticateSelectCreditCardBottomSheet(frame: frame)
             }
@@ -4128,8 +4118,6 @@ class BrowserViewController: UIViewController,
             configureNavigationContextualHint(button)
         case ContextualHintType.summarizeToolbarEntry.rawValue:
             configureSummarizeToolbarEntryContextualHint(for: button)
-        case ContextualHintType.translation.rawValue:
-            configureTranslationContextualHint(for: button)
         case TipKitHintType.googleLens.rawValue:
             configureGoogleLensTip(for: button)
         default:

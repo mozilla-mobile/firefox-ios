@@ -2,11 +2,11 @@
 "Bookmarks.DeleteFolderWarning.CancelButton.Label" = "रद्द करें";
 
 /* Button label for the button that deletes a folder and all of its children. */
-"Bookmarks.DeleteFolderWarning.DeleteButton.Label" = "मिटाएं";
+"Bookmarks.DeleteFolderWarning.DeleteButton.Label" = "डिलीट करें";
 
 /* Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
-"Bookmarks.DeleteFolderWarning.Description" = "क्या आप वाकई में इसे और इसकी सामग्री मिटाना चाहते हैं?";
+"Bookmarks.DeleteFolderWarning.Description" = "क्या आप वाकई इसे और इसके कंटेंट को डिलीट करना चाहते हैं?";
 
 /* Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders. */
-"Bookmarks.DeleteFolderWarning.Title" = "यह फोल्डर खाली नहीं हैं।";
+"Bookmarks.DeleteFolderWarning.Title" = "यह फ़ोल्डर खाली नहीं है।";
 

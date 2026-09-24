@@ -224,6 +224,7 @@
         "SearchTests\/testDismissPromptPresence()",
         "SearchTests\/testOpenTabsInSearchSuggestions()",
         "SearchTests\/testSearchEngine()",
+        "SearchTests\/testSearchIconOnAboutHome()",
         "SearchTests\/testSearchStartAfterTypingTwoWords()",
         "SettingsTests\/testImageOnOff()",
         "SettingsTests\/testImageOnOff_tabTrayExperimentOff()",

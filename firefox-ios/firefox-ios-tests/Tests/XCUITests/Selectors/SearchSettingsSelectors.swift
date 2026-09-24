@@ -27,6 +27,9 @@ protocol SearchSettingsSelectorsSet {
     /// Title and description the 'Suggestions from Sponsors' row is expected to display, in the
     /// single string the app folds them into for accessibility.
     var SUGGESTIONS_FROM_SPONSORS_DISPLAYED_TEXT: String { get }
+    var SUGGESTIONS_FROM_THE_WEB_DISPLAYED_TEXT: String { get }
+    /// The 'Search Browsing History' row has no description, so its accessibility label is the title alone.
+    var SEARCH_BROWSING_HISTORY_DISPLAYED_TEXT: String { get }
     func searchEngineRow(named engineName: String) -> Selector
     var all: [Selector] { get }
 }
@@ -59,6 +62,12 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
             .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
             AppName.shortName.rawValue
         )
+        static let suggestionsFromTheWebTitle = String.Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle
+        static let suggestionsFromTheWebDescription = String.localizedStringWithFormat(
+            .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
+            AppName.shortName.rawValue
+        )
+        static let searchBrowsingHistoryTitle = String.Settings.Search.Suggest.SearchBrowsingHistory
     }
 
     let NAVBAR = Selector.navigationBarId(
@@ -159,6 +168,11 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
 
     let SUGGESTIONS_FROM_SPONSORS_DISPLAYED_TEXT =
         "\(IDs.suggestionsFromSponsorsTitle), \(IDs.suggestionsFromSponsorsDescription)"
+
+    let SUGGESTIONS_FROM_THE_WEB_DISPLAYED_TEXT =
+        "\(IDs.suggestionsFromTheWebTitle), \(IDs.suggestionsFromTheWebDescription)"
+
+    let SEARCH_BROWSING_HISTORY_DISPLAYED_TEXT = IDs.searchBrowsingHistoryTitle
 
     let LEARN_MORE_ABOUT_FIREFOX_SUGGEST_ROW = Selector.staticTextInTablesByLabel(
         IDs.learnMoreAboutFirefoxSuggestRow,

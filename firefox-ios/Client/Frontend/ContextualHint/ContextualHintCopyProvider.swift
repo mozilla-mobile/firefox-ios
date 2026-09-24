@@ -55,9 +55,6 @@ struct ContextualHintCopyProvider {
         case .mainMenu:
             return CFRStrings.MainMenu.MenuRedesign.Title
 
-        case .translation:
-            return String(format: CFRStrings.Translations.Title, AppName.shortName.rawValue)
-
         default: return ""
         }
     }
@@ -81,9 +78,6 @@ struct ContextualHintCopyProvider {
         case .relay:
             descriptionCopy = String(format: String.RelayMask.RelayEmailMaskAvailableCFR, AppName.shortName.rawValue)
 
-        case .translation:
-            descriptionCopy = CFRStrings.Translations.Body
-
         case .summarizeToolbarEntry:
             descriptionCopy = CFRStrings.Summarize.Description
         }
@@ -103,8 +97,6 @@ struct ContextualHintCopyProvider {
         case .navigation:
             actionCopy = ""
         case .relay:
-            actionCopy = ""
-        case .translation:
             actionCopy = ""
         case .summarizeToolbarEntry:
             actionCopy = ""

@@ -21,7 +21,7 @@ class CustomSearchEnginesTest: XCTestCase {
 
     @MainActor
     func testgetSearchTemplate() {
-        let profile = MockBrowserProfile(localName: "customSearchTests")
+        let profile = makeBrowserProfile(localName: "customSearchTests")
         let customSearchEngineForm = CustomSearchViewController(windowUUID: windowUUID)
         customSearchEngineForm.profile = profile
 
@@ -34,7 +34,7 @@ class CustomSearchEnginesTest: XCTestCase {
 
     @MainActor
     func testaddSearchEngine() async {
-        let profile = MockBrowserProfile(localName: "customSearchTests")
+        let profile = makeBrowserProfile(localName: "customSearchTests")
         let customSearchEngineForm = CustomSearchViewController(windowUUID: windowUUID)
         customSearchEngineForm.profile = profile
         let q = "http://www.google.ca/?#q=%s"
@@ -53,7 +53,7 @@ class CustomSearchEnginesTest: XCTestCase {
 
     @MainActor
     func testaddSearchEngineFailure() async {
-        let profile = MockBrowserProfile(localName: "customSearchTests")
+        let profile = makeBrowserProfile(localName: "customSearchTests")
         let customSearchEngineForm = CustomSearchViewController(windowUUID: windowUUID)
         customSearchEngineForm.profile = profile
         let q = "isthisvalid.com/hhh%s"

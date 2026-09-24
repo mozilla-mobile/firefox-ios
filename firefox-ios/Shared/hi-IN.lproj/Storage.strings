@@ -1,3 +1,6 @@
+/* The title of the folder that contains mobile bookmarks. */
+"Bookmarks" = "बुकमार्क";
+
 /* The name of the folder that contains desktop bookmarks in the menu. */
 "Bookmarks Menu" = "बुकमार्क मेन्यू";
 
@@ -8,5 +11,5 @@
 "Mobile Bookmarks" = "मोबाइल बुकमार्क";
 
 /* The name of the folder that contains unsorted desktop bookmarks. */
-"Unsorted Bookmarks" = "अवर्गीकृत बुकमार्क";
+"Unsorted Bookmarks" = "बिना क्रम वाले बुकमार्क";
 

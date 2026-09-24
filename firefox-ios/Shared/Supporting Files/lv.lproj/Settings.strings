@@ -28,6 +28,9 @@
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
 "Settings.Autoplay.BlockAudioAndVideo.v137" = "Liegt skaņu un video";
 
+/* VoiceOver custom action name for a settings row's Learn More link. */
+"Settings.BoolSetting.LearnMoreAction.v157" = "Uzzināt vairāk";
+
 /* Link text below the Ad Blocker toggle description that opens a support page with more information. */
 "Settings.Browsing.AdBlocker.LearnMore.v155" = "Uzzināt vairāk";
 

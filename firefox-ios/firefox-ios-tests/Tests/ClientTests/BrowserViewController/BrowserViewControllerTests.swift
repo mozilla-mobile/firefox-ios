@@ -25,7 +25,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     override func setUp() async throws {
         try await super.setUp()
         tabManager = MockTabManager()
-        profile = MockProfile()
+        profile = makeProfile()
         browserCoordinator = MockBrowserCoordinator()
         appStartupTelemetry = MockAppStartupTelemetry()
         recordVisitManager = MockRecordVisitObservationManager()
@@ -37,7 +37,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
-        profile.shutdown()
         profile = nil
         tabManager = nil
         appStartupTelemetry = nil
@@ -745,36 +744,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let close = nav[1][0].items[0]
         XCTAssertEqual(close.title, String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton)
         XCTAssertEqual(close.iconString, StandardImageIdentifiers.Large.cross)
-    }
-
-    func testDismissToolbarCFRs_mismatchedWindowUUID() {
-        let toolbarWindow = WindowUUID.XCTestDefaultUUID
-        let mismatchedWindow = WindowUUID.DefaultUITestingUUID
-
-        let state = AppState(presentedComponents: PresentedComponentsState(components: [
-            .browserViewController(BrowserViewControllerState(windowUUID: toolbarWindow)),
-            .toolbar(ToolbarState(windowUUID: toolbarWindow)),
-        ]))
-        mockStore = MockStoreForMiddleware(state: state)
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-
-        createSubject().dismissToolbarCFRs(with: mismatchedWindow)
-    }
-
-    func testDismissToolbarCFRs_ToolbarAddedForWindow() {
-        let window = WindowUUID.XCTestDefaultUUID
-
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-        createSubject().dismissToolbarCFRs(with: window)
-
-        let state = AppState(presentedComponents: PresentedComponentsState(components: [
-            .browserViewController(BrowserViewControllerState(windowUUID: window)),
-            .toolbar(ToolbarState(windowUUID: window)),
-        ]))
-        mockStore = MockStoreForMiddleware(state: state)
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-        createSubject().dismissToolbarCFRs(with: window)
     }
 
     @MainActor
