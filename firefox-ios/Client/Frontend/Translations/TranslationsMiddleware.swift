@@ -168,19 +168,20 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         )?.isTranslationsEnabled ?? true
 
         switch action.pageState {
-        case .translated(let from, let to) where translationsEnabled:
-            selectedTargetLanguages[windowUUID] = to
-            dispatchAction(
-                for: TranslationsActionType.translationCompleted,
-                with: .active,
-                translatedToLanguage: to,
-                sourceLanguage: from,
-                and: windowUUID,
-                on: reportingTab
-            )
-
-        case .translated:
-            dispatchClearTranslationIcon(windowUUID: windowUUID, on: reportingTab)
+        case .translated(let from, let to):
+            if translationsEnabled {
+                selectedTargetLanguages[windowUUID] = to
+                dispatchAction(
+                    for: TranslationsActionType.translationCompleted,
+                    with: .active,
+                    translatedToLanguage: to,
+                    sourceLanguage: from,
+                    and: windowUUID,
+                    on: reportingTab
+                )
+            } else {
+                dispatchClearTranslationIcon(windowUUID: windowUUID, on: reportingTab)
+            }
 
         case .notTranslated:
             persistTranslationConfig(nil, on: reportingTab)
