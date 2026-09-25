@@ -125,7 +125,7 @@ extension URL {
     /// ```
     public static func getSubdomainAndHost(from urlString: String) -> (subdomain: String?, normalizedHost: String) {
         guard let url = URL(string: urlString) else { return (nil, urlString) }
-        let normalizedHost = url.normalizedHost ?? urlString
+        let normalizedHost = url.normalizedHost ?? (url.scheme == "about" ? "about:blank" : urlString)
 
         guard let publicSuffix = url.publicSuffix else { return (nil, normalizedHost) }
 
