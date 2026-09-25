@@ -88,7 +88,9 @@ final class WebServer: WebServerProtocol, @unchecked Sendable {
 
     func stop(completion: (@Sendable () -> Void)? = nil) {
         lifecycleQueue.async { [server] in
-            server.stop()
+            if server.isRunning {
+                server.stop()
+            }
             guard let completion else { return }
             DispatchQueue.main.async(execute: completion)
         }
