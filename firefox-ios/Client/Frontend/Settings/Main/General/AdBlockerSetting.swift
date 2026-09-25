@@ -39,6 +39,8 @@ final class AdBlockerSetting: BoolSetting {
         guard let cell = cell as? ThemedLearnMoreTableViewCell else { return }
         guard let title = title?.string else { return }
 
+        cell.accessibilityElements = nil
+
         cell.configure(
             title: title,
             subtitle: subtitleText,
@@ -51,9 +53,15 @@ final class AdBlockerSetting: BoolSetting {
             isEnabled: enabled
         )
         displayBool(control.switchView)
-        control.switchView.accessibilityLabel = "\(title), \(subtitleText)"
+
+        configureSwitchAccessibility(for: cell)
+
         if let accessibilityIdentifier {
             cell.setAccessibilities(traits: .none, identifier: accessibilityIdentifier)
+        }
+
+        configureLearnMoreAccessibilityAction(title: title) { [weak cell] in
+            cell?.learnMoreDidTap?()
         }
 
         cell.accessoryView = control
