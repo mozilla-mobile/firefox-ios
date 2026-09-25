@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import TabDataStore
 import XCTest
 @testable import Client
 
@@ -61,6 +62,34 @@ final class TabManagerTests: TabManagerTestsBase {
         XCTAssertEqual(subject.tabs.count, 1)
         XCTAssertEqual(subject.tabs.first?.url?.absoluteString, "https://www.mozilla.org/privacy/firefox")
         XCTAssertEqual(subject.tabs.first?.isPrivate, true)
+    }
+
+    @MainActor
+    func test_addTabsFromWindowMergeData_notifiesWithRestoredTitleURLAndFavicon() {
+        let subject = createSubject(tabs: generateTabs(count: 2))
+        let observer = MergeTabStateObserver()
+        subject.addDelegate(observer)
+        let sourceTabs = (0..<4).map { index in
+            TabData(id: UUID(),
+                    title: "Wikipedia article \(index)",
+                    siteUrl: "https://en.wikipedia.org/wiki/Article_\(index)",
+                    faviconURL: "https://en.wikipedia.org/favicon.ico",
+                    isPrivate: false,
+                    lastUsedTime: testDate,
+                    createdAtTime: testDate,
+                    temporaryDocumentSession: [:])
+        }
+
+        subject.addTabs(fromWindowMergeData: sourceTabs)
+
+        XCTAssertEqual(subject.tabs.count, 6)
+        XCTAssertEqual(observer.observedStates.count, 4)
+        for (index, state) in observer.observedStates.enumerated() {
+            XCTAssertEqual(state.url, sourceTabs[index].siteUrl)
+            XCTAssertEqual(state.title, sourceTabs[index].title)
+            XCTAssertEqual(state.faviconURL, sourceTabs[index].faviconURL)
+        }
+        XCTAssertTrue(subject.tabs.suffix(4).allSatisfy { $0.webView == nil })
     }
 
     // MARK: - normalTabs / privateTabs cache tests
@@ -474,5 +503,25 @@ final class TabManagerTests: TabManagerTestsBase {
         expectation.expectedFulfillmentCount = count
         mockDiskImageStore.onGetImageForKey = { expectation.fulfill() }
         return expectation
+    }
+}
+
+@MainActor
+private final class MergeTabStateObserver: TabManagerDelegate {
+    struct State {
+        let url: String?
+        let title: String
+        let faviconURL: String?
+    }
+
+    private(set) var observedStates: [State] = []
+
+    func tabManager(_ tabManager: TabManager,
+                    didAddTab tab: Tab,
+                    placeNextToParentTab: Bool,
+                    isRestoring: Bool) {
+        observedStates.append(State(url: tab.url?.absoluteString,
+                                    title: tab.getTabTrayTitle(),
+                                    faviconURL: tab.faviconURL))
     }
 }
