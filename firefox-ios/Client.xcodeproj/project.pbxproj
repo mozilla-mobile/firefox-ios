@@ -923,6 +923,7 @@
 		8A106D632D416F82009AD7E4 /* MessageCardMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A106D622D416F82009AD7E4 /* MessageCardMiddlewareTests.swift */; };
 		8A11C80F2731916E00AC7318 /* defaultOnlyTestList.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */; };
 		8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */; };
+		A68600000000000000000002 /* ReaderModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68600000000000000000001 /* ReaderModeTests.swift */; };
 		8A11C8132731E54800AC7318 /* DictionaryExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */; };
 		8A13FA892AD82BC8007527AB /* AppSendTabDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A13FA882AD82BC8007527AB /* AppSendTabDelegateTests.swift */; };
 		8A13FA8B2AD82E6D007527AB /* ApplicationStateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A13FA8A2AD82E6D007527AB /* ApplicationStateProvider.swift */; };
@@ -9946,6 +9947,7 @@
 		8A106D622D416F82009AD7E4 /* MessageCardMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCardMiddlewareTests.swift; sourceTree = "<group>"; };
 		8A11C80D2731916E00AC7318 /* defaultOnlyTestList.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = defaultOnlyTestList.json; sourceTree = "<group>"; };
 		8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleTests.swift; sourceTree = "<group>"; };
+		A68600000000000000000001 /* ReaderModeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeTests.swift; sourceTree = "<group>"; };
 		8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensionsTests.swift; sourceTree = "<group>"; };
 		8A13FA882AD82BC8007527AB /* AppSendTabDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSendTabDelegateTests.swift; sourceTree = "<group>"; };
 		8A13FA8A2AD82E6D007527AB /* ApplicationStateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationStateProvider.swift; sourceTree = "<group>"; };
@@ -17811,6 +17813,7 @@
 				CA24B53824ABFE250093848C /* PasswordManagerSelectionHelperTests.swift */,
 				2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */,
 				8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */,
+				A68600000000000000000001 /* ReaderModeTests.swift */,
 				03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */,
 				1D62C5262EE8E77C00C6BCB9 /* RelayControllerTests.swift */,
 				AAD00A7A2FBB534500123E8C /* QuickAnswers */,
@@ -21370,6 +21373,7 @@
 				C838FD612899A9BB0068F60B /* WallpaperURLProviderTests.swift in Sources */,
 				C25017362ECBAD0A0071506F /* MockRemoteSettingsClient.swift in Sources */,
 				8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */,
+				A68600000000000000000002 /* ReaderModeTests.swift in Sources */,
 				8A3FDEB82FAE5A4E001F5DE9 /* SceneDelegateTests.swift in Sources */,
 				EDD3348E2D109458004516D0 /* ShareTelemetryTests.swift in Sources */,
 				0EC57CE32CA31C5B002E3F04 /* PasswordGeneratorViewControllerTests.swift in Sources */,
