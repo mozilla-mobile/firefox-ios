@@ -27,6 +27,15 @@ enum FxAPageType: Equatable {
         if case .pairingV2 = self { return true }
         return false
     }
+
+    /// Whether the page closes on `oauth_login`. Pairing pages stay open to show the content
+    /// server's confirmation screen, which it renders after sending `oauth_login`.
+    var dismissesOnOAuthLogin: Bool {
+        switch self {
+        case .qrCode, .pairingV2: return false
+        case .emailLoginFlow, .settingsPage: return true
+        }
+    }
 }
 
 /// The two shapes a `fxaccounts:pair_oauth_start` reply can take.
@@ -319,7 +328,7 @@ extension FxAWebViewModel {
     }
 
     // Handle a message coming from the content server.
-    private func handleRemote(command rawValue: String, id: Int?, data: Any?, webView: WKWebView) {
+    func handleRemote(command rawValue: String, id: Int?, data: Any?, webView: WKWebView) {
         logger.log("webchannel message: \(rawValue)", level: .info, category: .sync)
         let command = RemoteCommand(rawValue: rawValue) ?? .unknown
         switch command {
@@ -340,7 +349,7 @@ extension FxAWebViewModel {
         case .oauthLogin:
             if let data = data {
                 onLoginComplete(data: data, webView: webView)
-            } else {
+            } else if pageType.dismissesOnOAuthLogin {
                 onDismissController?()
             }
         case .changePassword:
@@ -529,7 +538,9 @@ extension FxAWebViewModel {
         }
         // Record login or registration completed telemetry
         fxAWebViewTelemetry.recordTelemetry(for: .completed)
-        onDismissController?()
+        if pageType.dismissesOnOAuthLogin {
+            onDismissController?()
+        }
     }
 
     private func onPasswordChange(data: Any, webView: WKWebView) {
