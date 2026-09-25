@@ -24,6 +24,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		4FCDEF5F026340238201E234 /* TabGroupsFeatureFlagTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8322BA101049DBB4826444 /* TabGroupsFeatureFlagTests.swift */; };
 		032CE5F62EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032CE5F52EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift */; };
 		033A5FCC2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A5FCB2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift */; };
 		033A62002E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A61FF2E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift */; };
@@ -489,6 +490,7 @@
 		39230FDC2FEC53BA00AD5FAB /* WebServerLifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39230FDB2FEC53BA00AD5FAB /* WebServerLifecycleTests.swift */; };
 		39236E721FCC600200A38F1B /* TabEventHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */; };
 		392D791A2F8FCE1A00B10BDC /* FeatureFlagID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392D79192F8FCE0E00B10BDC /* FeatureFlagID.swift */; };
+		26CC5468CF3075C7FDB5E4E1 /* TabGroupsFeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6490D091AB3E3ED2BDDF36EF /* TabGroupsFeatureFlag.swift */; };
 		392D80542F901D2600B10BDC /* UserFeaturePreferenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392D80532F901D1500B10BDC /* UserFeaturePreferenceManager.swift */; };
 		392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED7E31D0AEF56009D9B62 /* NewTabAccessors.swift */; };
 		392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED7E51D0AEFEF009D9B62 /* HomePageAccessors.swift */; };
@@ -2805,6 +2807,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CD8322BA101049DBB4826444 /* TabGroupsFeatureFlagTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsFeatureFlagTests.swift; sourceTree = "<group>"; };
 		001348F79CA80B94DCD3E535 /* km */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = km; path = km.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		00218A431FC749D7BC8EC05D /* homepageStoryCategoriesOn.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = homepageStoryCategoriesOn.json; sourceTree = "<group>"; };
 		003141C6B19507C79B6C399C /* ga */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -3608,6 +3611,7 @@
 		39230FDB2FEC53BA00AD5FAB /* WebServerLifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServerLifecycleTests.swift; sourceTree = "<group>"; };
 		39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabEventHandlerTests.swift; sourceTree = "<group>"; };
 		392D79192F8FCE0E00B10BDC /* FeatureFlagID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagID.swift; sourceTree = "<group>"; };
+		6490D091AB3E3ED2BDDF36EF /* TabGroupsFeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsFeatureFlag.swift; sourceTree = "<group>"; };
 		392D80532F901D1500B10BDC /* UserFeaturePreferenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeaturePreferenceManager.swift; sourceTree = "<group>"; };
 		392ED7E31D0AEF56009D9B62 /* NewTabAccessors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewTabAccessors.swift; path = Accessors/NewTabAccessors.swift; sourceTree = "<group>"; };
 		392ED7E51D0AEFEF009D9B62 /* HomePageAccessors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomePageAccessors.swift; path = Accessors/HomePageAccessors.swift; sourceTree = "<group>"; };
@@ -16299,6 +16303,7 @@
 				392D80532F901D1500B10BDC /* UserFeaturePreferenceManager.swift */,
 				C8656D74270F834600E199EA /* FlaggableFeatureOptions.swift */,
 				392D79192F8FCE0E00B10BDC /* FeatureFlagID.swift */,
+				6490D091AB3E3ED2BDDF36EF /* TabGroupsFeatureFlag.swift */,
 				3294BB4D24674A3EA5323E21 /* FeatureFlagsProvider.swift */,
 			);
 			path = FeatureFlags;
@@ -17964,6 +17969,7 @@
 				C807CCCB28367446008E6A5A /* CoreBuildFlagsTests.swift */,
 				399BA7FF2F901D8600CCC502 /* UserFeaturePreferenceManagerTests.swift */,
 				A1B2C3D4E5F6789012345678 /* FeatureFlagsProviderTests.swift */,
+				CD8322BA101049DBB4826444 /* TabGroupsFeatureFlagTests.swift */,
 				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
 				B0A92F012F31000100DB1EA0 /* MockProfileLifecycleTests.swift */,
 				C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */,
@@ -20189,6 +20195,7 @@
 				396E38F11EE0C8EC00CC180F /* FxAPushMessageHandler.swift in Sources */,
 				8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */,
 				392D791A2F8FCE1A00B10BDC /* FeatureFlagID.swift in Sources */,
+				26CC5468CF3075C7FDB5E4E1 /* TabGroupsFeatureFlag.swift in Sources */,
 				8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */,
 				8A7AE4442BAB510B0072DAEC /* LibraryPanelCoordinatorDelegate.swift in Sources */,
 				8C19532E2B85E7AE00761B20 /* SelfSizingHostingController.swift in Sources */,
@@ -21763,6 +21770,7 @@
 				8A5604F629DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift in Sources */,
 				C807CCCC28367446008E6A5A /* CoreBuildFlagsTests.swift in Sources */,
 				B2C3D4E5F67890123456789A /* FeatureFlagsProviderTests.swift in Sources */,
+				4FCDEF5F026340238201E234 /* TabGroupsFeatureFlagTests.swift in Sources */,
 				ECD8E56E2FF7ED79002092C6 /* WaybackServiceTests.swift in Sources */,
 				8A552AC72CB43AB400564C98 /* HomepageStateTests.swift in Sources */,
 				8A552AD22CB43AB400564C98 /* HomepageTelemetryStateTests.swift in Sources */,

@@ -190,6 +190,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .summarizerPermissiveGuardrails:
             return checkSummarizerPermissiveGuardrailsFeature()
 
+        case .tabGroups:
+            return nimbus.features.tabGroupsFeature.value().enabled
+
         case .tabScrollRefactorFeature:
             return checkTabScrollRefactorFeature()
 
