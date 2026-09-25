@@ -337,10 +337,7 @@ class SearchViewController: SiteTableViewController,
     /// In this state, we surface two types of content:
     /// - Trending searches: popular or curated terms shown to inspire discovery.
     /// - Recent searches: the user’s own past searches for quick re-access.
-    ///
-    /// We clear telemetry here since we're showing users a new set of searches.
     private func loadZeroSearchData() {
-        searchTelemetry?.clearZeroSearchSectionSeen()
         viewModel.loadTrendingSearches()
         viewModel.retrieveRecentSearches()
     }
