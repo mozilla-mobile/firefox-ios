@@ -209,7 +209,7 @@ final class AddressToolbarContainerModel: Equatable {
         windowUUID: UUID
     ) {
         self.borderPosition = state.addressToolbar.borderPosition
-        self.navigationActions = Self.mapActions(state.addressToolbar.navigationActionsState.actions,
+        self.navigationActions = Self.mapActions(state.addressToolbar.navigationActions,
                                                  isShowingTopTabs: state.isShowingTopTabs,
                                                  windowUUID: windowUUID)
         self.leadingPageActions = Self.mapActions(state.addressToolbar.leadingPageActions,
