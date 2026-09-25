@@ -23,6 +23,8 @@ extension StoreTestUtility {
     }
 
     func resetStore() {
+        // XCTest keeps test case instances for the whole run; without this the recorded actions outlive the test.
+        mockStore = nil
         StoreTestUtilityHelper.resetStore()
     }
 }

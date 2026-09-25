@@ -28,7 +28,6 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
         DependencyHelperMock().reset()
         mockVC = nil
         tabManager = nil
-        mockStore = nil
         resetStore()
         try await super.tearDown()
     }

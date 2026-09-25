@@ -43,7 +43,6 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         tabPreview = nil
         mockGleanWrapper = nil
         resetStore()
-        mockStore = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }

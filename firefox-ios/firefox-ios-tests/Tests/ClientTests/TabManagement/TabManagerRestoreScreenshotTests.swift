@@ -21,7 +21,6 @@ final class TabManagerRestoreScreenshotTests: TabManagerTestsBase, StoreTestUtil
 
     override func tearDown() async throws {
         resetStore()
-        mockStore = nil
         try await super.tearDown()
     }
 

@@ -33,7 +33,6 @@ final class SearchSettingsTableViewControllerTests: XCTestCase, StoreTestUtility
         profile = nil
         featureFlags = nil
         userPreferences = nil
-        mockStore = nil
         DependencyHelperMock().reset()
         resetStore()
         try await super.tearDown()
