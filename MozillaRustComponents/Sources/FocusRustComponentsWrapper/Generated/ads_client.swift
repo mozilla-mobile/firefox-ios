@@ -1295,12 +1295,12 @@ public struct MozAdsImage: Equatable, Hashable {
     public var blockKey: String
     public var callbacks: MozAdsCallbacks
     public var format: String
-    public var imageUrl: String
-    public var url: String
+    public var imageUrl: AdsClientUrl
+    public var url: AdsClientUrl
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(altText: String?, blockKey: String, callbacks: MozAdsCallbacks, format: String, imageUrl: String, url: String) {
+    public init(altText: String?, blockKey: String, callbacks: MozAdsCallbacks, format: String, imageUrl: AdsClientUrl, url: AdsClientUrl) {
         self.altText = altText
         self.blockKey = blockKey
         self.callbacks = callbacks
@@ -1329,8 +1329,8 @@ public struct FfiConverterTypeMozAdsImage: FfiConverterRustBuffer {
                 blockKey: FfiConverterString.read(from: &buf), 
                 callbacks: FfiConverterTypeMozAdsCallbacks.read(from: &buf), 
                 format: FfiConverterString.read(from: &buf), 
-                imageUrl: FfiConverterString.read(from: &buf), 
-                url: FfiConverterString.read(from: &buf)
+                imageUrl: FfiConverterTypeAdsClientUrl.read(from: &buf), 
+                url: FfiConverterTypeAdsClientUrl.read(from: &buf)
         )
     }
 
@@ -1339,8 +1339,8 @@ public struct FfiConverterTypeMozAdsImage: FfiConverterRustBuffer {
         FfiConverterString.write(value.blockKey, into: &buf)
         FfiConverterTypeMozAdsCallbacks.write(value.callbacks, into: &buf)
         FfiConverterString.write(value.format, into: &buf)
-        FfiConverterString.write(value.imageUrl, into: &buf)
-        FfiConverterString.write(value.url, into: &buf)
+        FfiConverterTypeAdsClientUrl.write(value.imageUrl, into: &buf)
+        FfiConverterTypeAdsClientUrl.write(value.url, into: &buf)
     }
 }
 
@@ -1541,16 +1541,16 @@ public struct MozAdsSpoc: Equatable, Hashable {
     public var domain: String
     public var excerpt: String
     public var format: String
-    public var imageUrl: String
+    public var imageUrl: AdsClientUrl
     public var ranking: MozAdsSpocRanking
     public var sponsor: String
     public var sponsoredByOverride: String?
     public var title: String
-    public var url: String
+    public var url: AdsClientUrl
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(blockKey: String, callbacks: MozAdsCallbacks, caps: MozAdsSpocFrequencyCaps, domain: String, excerpt: String, format: String, imageUrl: String, ranking: MozAdsSpocRanking, sponsor: String, sponsoredByOverride: String?, title: String, url: String) {
+    public init(blockKey: String, callbacks: MozAdsCallbacks, caps: MozAdsSpocFrequencyCaps, domain: String, excerpt: String, format: String, imageUrl: AdsClientUrl, ranking: MozAdsSpocRanking, sponsor: String, sponsoredByOverride: String?, title: String, url: AdsClientUrl) {
         self.blockKey = blockKey
         self.callbacks = callbacks
         self.caps = caps
@@ -1587,12 +1587,12 @@ public struct FfiConverterTypeMozAdsSpoc: FfiConverterRustBuffer {
                 domain: FfiConverterString.read(from: &buf), 
                 excerpt: FfiConverterString.read(from: &buf), 
                 format: FfiConverterString.read(from: &buf), 
-                imageUrl: FfiConverterString.read(from: &buf), 
+                imageUrl: FfiConverterTypeAdsClientUrl.read(from: &buf), 
                 ranking: FfiConverterTypeMozAdsSpocRanking.read(from: &buf), 
                 sponsor: FfiConverterString.read(from: &buf), 
                 sponsoredByOverride: FfiConverterOptionString.read(from: &buf), 
                 title: FfiConverterString.read(from: &buf), 
-                url: FfiConverterString.read(from: &buf)
+                url: FfiConverterTypeAdsClientUrl.read(from: &buf)
         )
     }
 
@@ -1603,12 +1603,12 @@ public struct FfiConverterTypeMozAdsSpoc: FfiConverterRustBuffer {
         FfiConverterString.write(value.domain, into: &buf)
         FfiConverterString.write(value.excerpt, into: &buf)
         FfiConverterString.write(value.format, into: &buf)
-        FfiConverterString.write(value.imageUrl, into: &buf)
+        FfiConverterTypeAdsClientUrl.write(value.imageUrl, into: &buf)
         FfiConverterTypeMozAdsSpocRanking.write(value.ranking, into: &buf)
         FfiConverterString.write(value.sponsor, into: &buf)
         FfiConverterOptionString.write(value.sponsoredByOverride, into: &buf)
         FfiConverterString.write(value.title, into: &buf)
-        FfiConverterString.write(value.url, into: &buf)
+        FfiConverterTypeAdsClientUrl.write(value.url, into: &buf)
     }
 }
 
@@ -1794,13 +1794,13 @@ public struct MozAdsTile: Equatable, Hashable {
     public var blockKey: String
     public var callbacks: MozAdsCallbacks
     public var format: String
-    public var imageUrl: String
+    public var imageUrl: AdsClientUrl
     public var name: String
-    public var url: String
+    public var url: AdsClientUrl
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(blockKey: String, callbacks: MozAdsCallbacks, format: String, imageUrl: String, name: String, url: String) {
+    public init(blockKey: String, callbacks: MozAdsCallbacks, format: String, imageUrl: AdsClientUrl, name: String, url: AdsClientUrl) {
         self.blockKey = blockKey
         self.callbacks = callbacks
         self.format = format
@@ -1828,9 +1828,9 @@ public struct FfiConverterTypeMozAdsTile: FfiConverterRustBuffer {
                 blockKey: FfiConverterString.read(from: &buf), 
                 callbacks: FfiConverterTypeMozAdsCallbacks.read(from: &buf), 
                 format: FfiConverterString.read(from: &buf), 
-                imageUrl: FfiConverterString.read(from: &buf), 
+                imageUrl: FfiConverterTypeAdsClientUrl.read(from: &buf), 
                 name: FfiConverterString.read(from: &buf), 
-                url: FfiConverterString.read(from: &buf)
+                url: FfiConverterTypeAdsClientUrl.read(from: &buf)
         )
     }
 
@@ -1838,9 +1838,9 @@ public struct FfiConverterTypeMozAdsTile: FfiConverterRustBuffer {
         FfiConverterString.write(value.blockKey, into: &buf)
         FfiConverterTypeMozAdsCallbacks.write(value.callbacks, into: &buf)
         FfiConverterString.write(value.format, into: &buf)
-        FfiConverterString.write(value.imageUrl, into: &buf)
+        FfiConverterTypeAdsClientUrl.write(value.imageUrl, into: &buf)
         FfiConverterString.write(value.name, into: &buf)
-        FfiConverterString.write(value.url, into: &buf)
+        FfiConverterTypeAdsClientUrl.write(value.url, into: &buf)
     }
 }
 
