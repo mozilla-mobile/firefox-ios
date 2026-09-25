@@ -64,6 +64,11 @@ final class TabTrayScreen {
         XCTAssertEqual(cells.count, expected, "The number of tabs is not correct", file: file, line: line)
     }
 
+    func assertNoTabs(file: StaticString = #filePath, line: UInt = #line) {
+        BaseTestCase().mozWaitForElementToNotExist(collectionView.cells.firstMatch)
+        XCTAssertEqual(collectionView.cells.count, 0, "Expected the tab tray to be empty", file: file, line: line)
+    }
+
     func assertiPhoneTabCount(_ expected: Int, file: StaticString = #filePath, line: UInt = #line) {
         let iPhoneTabTray = sel.IPHONE_TAB_TRAY_COLLECTION_VIEW.element(in: app)
         BaseTestCase().mozWaitForElementToExist(iPhoneTabTray.cells.firstMatch)
