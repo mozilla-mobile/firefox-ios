@@ -88,11 +88,8 @@ struct QuickActionsImplementation: QuickActions {
                 userInfo: userData as [String: NSSecureCoding]
             )
 
-            if let index = (dynamicShortcutItems.firstIndex { $0.type == ShortcutType.mergeWindows.type }) {
-                dynamicShortcutItems[index] = mergeWindowsShortcut
-            } else {
-                dynamicShortcutItems.append(mergeWindowsShortcut)
-            }
+            dynamicShortcutItems.removeAll { $0.type == ShortcutType.mergeWindows.type }
+            dynamicShortcutItems.insert(mergeWindowsShortcut, at: 0)
         default:
             break
         }

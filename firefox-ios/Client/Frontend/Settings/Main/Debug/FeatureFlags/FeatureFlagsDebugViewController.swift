@@ -196,6 +196,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 titleText: format(string: "Combine Windows"),
                 statusText: format(string: "Toggle to show the Combine Windows home screen Quick Action on iPad")
             ) { [weak self] _ in
+                MergeWindowsQuickActionController().update()
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(

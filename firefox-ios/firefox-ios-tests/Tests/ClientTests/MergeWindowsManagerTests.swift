@@ -197,6 +197,21 @@ class MergeWindowsManagerTests: XCTestCase {
         XCTAssertTrue(quickActions.addedTypes.isEmpty)
     }
 
+    func testQuickAction_precedesBookmarkShortcutWhenBothExist() {
+        let application = UIApplication.shared
+        let originalShortcuts = application.shortcutItems
+        defer { application.shortcutItems = originalShortcuts }
+        application.shortcutItems = nil
+        let quickActions = QuickActionsImplementation()
+
+        quickActions.addDynamicApplicationShortcutItemOfType(.openLastBookmark, toApplication: application)
+        quickActions.addDynamicApplicationShortcutItemOfType(.mergeWindows, toApplication: application)
+        quickActions.addDynamicApplicationShortcutItemOfType(.openLastBookmark, toApplication: application)
+
+        let expectedTypes = [ShortcutType.mergeWindows.type, ShortcutType.openLastBookmark.type]
+        XCTAssertEqual(application.shortcutItems?.map(\.type), expectedTypes)
+    }
+
     // MARK: - Helpers
 
     private enum TestError: Error {
