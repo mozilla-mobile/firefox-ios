@@ -405,6 +405,47 @@ final class TabManagerTests: TabManagerTestsBase {
         XCTAssertEqual(subject.tabs.count, 0)
     }
 
+    @MainActor
+    func testTearDownWebViewsForProxyChange_discardsEveryWebViewIncludingSelected() async {
+        let subject = createSubject()
+        let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        let tab2 = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab1)
+        XCTAssertNotNil(tab1.webView)
+        XCTAssertNotNil(tab2.webView)
+
+        await subject.tearDownWebViewsForProxyChange()
+
+        XCTAssertNil(tab1.webView)
+        XCTAssertNil(tab2.webView)
+    }
+
+    @MainActor
+    func testTearDownWebViewsForProxyChange_emptyTabList_doesNotCrash() async {
+        let subject = createSubject()
+
+        await subject.tearDownWebViewsForProxyChange()
+
+        XCTAssertEqual(subject.tabs.count, 0)
+    }
+
+    @MainActor
+    func testRestoreSelectedTabForProxyChange_rebuildsSelectedWebViewOnly() async {
+        let subject = createSubject()
+        let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        let tab2 = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab1)
+
+        let webViewHash = tab1.webView.hashValue
+
+        await subject.tearDownWebViewsForProxyChange()
+        subject.restoreSelectedTabForProxyChange()
+
+        XCTAssertNotNil(tab1.webView)
+        XCTAssertNotEqual(tab1.webView.hashValue, webViewHash)
+        XCTAssertNil(tab2.webView)
+    }
+
     // MARK: - selectTab neighbour screenshot preloading (ADR 0008)
 
     @MainActor

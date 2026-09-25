@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import WebKit
+import WebEngine
 
 @MainActor
 class UserScriptManager {
@@ -30,6 +31,39 @@ class UserScriptManager {
     private let printHelperUserScript = WKUserScript.createInPageContentWorld(
         source: "window.print = function () { window.webkit.messageHandlers.printHandler.postMessage({}) }",
         injectionTime: .atDocumentEnd,
+        forMainFrameOnly: false)
+
+    /// Removes the JS entry points for two WebKit features that connect outside the proxy session,
+    /// neither of which has a preference we can turn off:
+    /// - WebAuthn: validating a cross-domain passkey makes WebKit fetch
+    ///   `https://<rpId>/.well-known/webauthn`, handing the device's real IP to the relying party.
+    ///   A ceremony only ever starts from `navigator.credentials`, so taking it away is enough.
+    /// - WebTransport: its QUIC connections bypass the proxy entirely. WebKit only exposes it once
+    ///   the OS has the full set of `nw_webtransport_*` symbols (iOS 26.4+, unconditional on iOS 27),
+    ///   so this is inert on older systems and starts mattering after an OS update.
+    ///
+    /// Runs in the page content world to shadow the page's own globals, and in every frame since a
+    /// subframe can reach both features too.
+    private let proxyHardeningUserScript = WKUserScript.createInPageContentWorld(
+        source: """
+        (function() {
+            const unsupported = () => Promise.reject(new DOMException('Not supported', 'NotAllowedError'));
+            try {
+                Object.defineProperty(window, 'PublicKeyCredential', { value: undefined, configurable: false });
+                Object.defineProperty(navigator, 'credentials', {
+                    value: Object.freeze({
+                        get: unsupported,
+                        create: unsupported,
+                        store: unsupported,
+                        preventSilentAccess: () => Promise.resolve()
+                    }),
+                    configurable: false
+                });
+                Object.defineProperty(window, 'WebTransport', { value: undefined, configurable: false });
+            } catch (e) {}
+        })();
+        """,
+        injectionTime: .atDocumentStart,
         forMainFrameOnly: false)
 
     private init() {
@@ -158,6 +192,9 @@ class UserScriptManager {
         }
         if backgroundAudio {
             webView?.configuration.userContentController.addUserScript(backgroundAudioUserScript)
+        }
+        if DefaultWKEngineConfigurationProvider.isProxyEnabled {
+            webView?.configuration.userContentController.addUserScript(proxyHardeningUserScript)
         }
     }
 }

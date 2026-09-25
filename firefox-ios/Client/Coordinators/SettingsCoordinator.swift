@@ -43,6 +43,8 @@ final class SettingsCoordinator: BaseCoordinator,
     weak var parentCoordinator: SettingsCoordinatorDelegate?
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let settingsTelemetry: SettingsTelemetry
+    /// Shared by the VPN settings screen and the location picker pushed from it.
+    private var vpnSettingsModel: VPNSettingsModel?
 
     init(
         router: Router,
@@ -400,6 +402,36 @@ final class SettingsCoordinator: BaseCoordinator,
             )
         )
         viewController.title = .Settings.AIControls.Title
+        router.push(viewController)
+    }
+
+    func pressedVPN() {
+        let model = VPNSettingsModel(
+            prefs: profile.prefs,
+            windowUUID: windowUUID,
+            locationProvider: VPNServerlist(rsService: profile.remoteSettingsService)
+        )
+        vpnSettingsModel = model
+
+        let viewController = UIHostingController(
+            rootView: VPNSettingsView(
+                model: model,
+                onTapLocation: { [weak self] in self?.pressedVPNLocation() }
+            )
+        )
+        viewController.title = .Settings.VPN.Title
+        router.push(viewController)
+    }
+
+    /// Reuses the model created by `pressedVPN` so a pick on the location screen is reflected
+    /// on the VPN settings screen once it is popped back to.
+    private func pressedVPNLocation() {
+        guard let vpnSettingsModel else { return }
+
+        let viewController = UIHostingController(
+            rootView: VPNLocationSelectionView(model: vpnSettingsModel)
+        )
+        viewController.title = .Settings.VPN.LocationSection.ScreenTitle
         router.push(viewController)
     }
 
