@@ -1,0 +1,17 @@
+features:
+  tab-groups-feature:
+    description: >
+      Enables Tab Groups views and interactions.
+    variables:
+      enabled:
+        description: >
+          Whether Tab Groups is enabled.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false
