@@ -7,6 +7,7 @@ import Combine
 
 public protocol Themeable: ThemeUUIDIdentifiable {
     /// Whether we should override / force the theme to be private or not private. Goes against the basic theme set up.
+    /// Note: subclasses must redeclare this themselves — protocol extension defaults aren't part of the vtable.
     nonisolated var shouldUsePrivateOverride: Bool { get }
 
     /// Determines if we want views to be in private theme or not.
@@ -67,12 +68,9 @@ extension Themeable {
         guard let uuid = (view as? ThemeUUIDIdentifiable)?.currentWindowUUID ?? window else { return }
         assert(uuid != .unavailable, "Theme applicable view has `unavailable` window UUID. Unexpected.")
 
-        let theme: Theme
-        if shouldUsePrivateOverride {
-            theme = themeManager.resolvedTheme(with: shouldBeInPrivateTheme)
-        } else {
-            theme = themeManager.getCurrentTheme(for: uuid)
-        }
+        let theme = themeManager.resolveTheme(for: uuid,
+                                              shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                              shouldBeInPrivateTheme: shouldBeInPrivateTheme)
 
         let themeViews = getAllSubviews(for: view, ofType: ThemeApplicable.self)
         themeViews.forEach { $0.applyTheme(theme: theme) }

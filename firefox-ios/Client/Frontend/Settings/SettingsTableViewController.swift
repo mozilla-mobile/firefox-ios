@@ -992,10 +992,6 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
         applyTheme()
     }
 
-    func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
-    }
-
     override func applyTheme() {
         settings = generateSettings()
         super.applyTheme()
