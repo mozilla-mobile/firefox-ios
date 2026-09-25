@@ -1801,6 +1801,70 @@ extension String {
             value: "Skip",
             comment: "Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page.")
 
+        public struct MultiDay {
+            public struct NotificationCard {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.MultiDay.NotificationCard.Title.v158",
+                    tableName: "Onboarding",
+                    value: "Stay in the Loop With %@",
+                    comment: "Title for the onboarding card requesting permissions to send notifications. %@ is the name of the app (e.g., Firefox).")
+                public static let BodyText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.NotificationCard.BodyText.v158",
+                    tableName: "Onboarding",
+                    value: "Get privacy feature updates, protection tips, and summaries of your privacy report.",
+                    comment: "Body of the onboarding card requesting permissions to send notifications, with examples of notifications the user will receive.")
+                public static let AcceptButtonText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.NotificationCard.AcceptButtonText.v158",
+                    tableName: "Onboarding",
+                    value: "Enable Notifications",
+                    comment: "Primary button on the onboarding card requesting permission to send notifications. Tapping this button accepts the permission request.")
+                public static let DeclineButtonText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.NotificationCard.DeclineButtonText.v158",
+                    tableName: "Onboarding",
+                    value: "Not Now",
+                    comment: "Secondary button on the onboarding card requesting permission to send notifications. Tapping this button declines the permission request.")
+            }
+            public struct HomeScreenNotificationsPopup {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.MultiDay.HomeScreenNotificationsPopup.Title.v158",
+                    tableName: "Onboarding",
+                    value: "Get Fresh Privacy Features",
+                    comment: "Title of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on privacy features.")
+                public static let BodyText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.HomeScreenNotificationsPopup.BodyText.v158",
+                    tableName: "Onboarding",
+                    value: "Stay up to date on %@’s latest privacy features.",
+                    comment: "Body of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on privacy features. %@ is a placeholder for the app name (e.g., Firefox).")
+                public static let EnableButtonText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableButtonText.v158",
+                    tableName: "Onboarding",
+                    value: "Enable Notifications",
+                    comment: "Button on the home screen popup requesting notification permissions. Tapping this button accepts the permission request.")
+            }
+            public struct SyncCard {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.MultiDay.SyncCard.Title.v158",
+                    tableName: "Onboarding",
+                    value: "Sync Your Stuff to Any Device",
+                    comment: "Title of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information).")
+                public static let BodyText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.SyncCard.BodyText.v158",
+                    tableName: "Onboarding",
+                    value: "Instantly get passwords, history, and more everywhere you use %@.",
+                    comment: "Body of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information). %@ is a placeholder for the app name (e.g., Firefox).")
+                public static let AcceptButtonText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.SyncCard.AcceptButtonText.v158",
+                    tableName: "Onboarding",
+                    value: "Sign In to Sync",
+                    comment: "Primary button on the onboarding card that prompts users to enable syncing for their account data. Tapping it directs the user sign into to their Mozilla account to access the feature.")
+                public static let DeclineButtonText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.NotificationCard.DeclineButtonText.v158",
+                    tableName: "Onboarding",
+                    value: "Not Now",
+                    comment: "Secondary button on the onboarding card that prompts users to enable syncing for their account data. Tapping this button dismisses the prompt and closes the card.")
+            }
+        }
+
         public struct Modern {
             public struct Welcome {
                 public static let Title = MZLocalizedString(

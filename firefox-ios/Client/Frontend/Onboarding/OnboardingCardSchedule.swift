@@ -45,16 +45,20 @@ struct OnboardingCard {
 enum OnboardingDripSchedule {
     static let cardsByDay: [Int: [OnboardingCard]] = [
         2: [OnboardingCard(
-            title: "Stay in the loop",
-            body: "Turn on notifications to get tips and updates from Firefox.",
-            imageName: ImageIdentifiers.Onboarding.HeaderImages.notification,
-            primaryButtonTitle: "Turn on notifications",
+            title: String.Onboarding.MultiDay.NotificationCard.Title,
+            body: String.Onboarding.MultiDay.NotificationCard.BodyText,
+            imageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.notification,
+            primaryButtonTitle: String.Onboarding.MultiDay.NotificationCard.AcceptButtonText,
             primaryButtonAction: .enableNotifications,
-            secondaryButtonTitle: "Not now",
+            secondaryButtonTitle: String.Onboarding.MultiDay.NotificationCard.DeclineButtonText,
             secondaryButtonAction: .declineNotifications)],
         7: [OnboardingCard(
-            title: "Browse with confidence",
-            body: "Day 7 placeholder card. Firefox blocks trackers by default.",
-            imageName: ImageIdentifiers.Onboarding.HeaderImages.trackers)]
+            title: String.Onboarding.MultiDay.SyncCard.Title,
+            body: String.Onboarding.MultiDay.SyncCard.BodyText,
+            imageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.sync,
+            primaryButtonTitle: String.Onboarding.MultiDay.SyncCard.AcceptButtonText,
+            primaryButtonAction: .none, // replace with something like .promptSignIn later
+            secondaryButtonTitle: String.Onboarding.MultiDay.SyncCard.DeclineButtonText,
+            secondaryButtonAction: .none)]
     ]
 }
