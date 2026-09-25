@@ -104,7 +104,7 @@ final class AddressToolbarContainer: UIView,
         }
     }
 
-    var parent: UIStackView?
+    weak var parent: UIStackView?
     var onContainerTap: (() -> Void)?
     private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
     private lazy var leftSkeletonAddressBar: RegularBrowserAddressToolbar = .build()

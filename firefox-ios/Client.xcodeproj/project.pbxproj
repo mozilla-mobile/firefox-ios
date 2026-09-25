@@ -387,6 +387,7 @@
 		21E78A7228F9A93100F8D687 /* UIDeviceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */; };
 		21EA337F2EC65CC300D20D90 /* ToolbarViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA337E2EC65CC300D20D90 /* ToolbarViewProtocol.swift */; };
 		21EA33812EC67FCA00D20D90 /* ToolbarAnimatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA33802EC67FCA00D20D90 /* ToolbarAnimatorTest.swift */; };
+		0BFC5052940B541F0D9D33C3 /* ToolbarMemoryLeakTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA6190FE4B33D9B108A2179 /* ToolbarMemoryLeakTests.swift */; };
 		21EA466A2B04130500AAAB2D /* TabsPanelState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA46692B04130500AAAB2D /* TabsPanelState.swift */; };
 		21ED80B32AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ED80B22AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift */; };
 		21EEAA192D3852B300595119 /* BookmarksTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EEAA182D3852B300595119 /* BookmarksTelemetry.swift */; };
@@ -3314,6 +3315,7 @@
 		21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceInterface.swift; sourceTree = "<group>"; };
 		21EA337E2EC65CC300D20D90 /* ToolbarViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarViewProtocol.swift; sourceTree = "<group>"; };
 		21EA33802EC67FCA00D20D90 /* ToolbarAnimatorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarAnimatorTest.swift; sourceTree = "<group>"; };
+		7FA6190FE4B33D9B108A2179 /* ToolbarMemoryLeakTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarMemoryLeakTests.swift; sourceTree = "<group>"; };
 		21EA46692B04130500AAAB2D /* TabsPanelState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPanelState.swift; sourceTree = "<group>"; };
 		21ED80B22AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayDiffableDataSourceTests.swift; sourceTree = "<group>"; };
 		21EEAA182D3852B300595119 /* BookmarksTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTelemetry.swift; sourceTree = "<group>"; };
@@ -17071,6 +17073,7 @@
 				2173326629CCD259007F20C7 /* LegacyTabScrollControllerTests.swift */,
 				21872A222E3CFEA500241A8A /* TabScrollHandlerTests.swift */,
 				21EA33802EC67FCA00D20D90 /* ToolbarAnimatorTest.swift */,
+				7FA6190FE4B33D9B108A2179 /* ToolbarMemoryLeakTests.swift */,
 				8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */,
 				E1AEC174286E0CF500062E29 /* WebView */,
 			);
@@ -21577,6 +21580,7 @@
 				615532D42D7AA5F30046347F /* ScreenshotHelperTests.swift in Sources */,
 				8A87B4342CC1A731003A9239 /* MerinoMiddlewareTests.swift in Sources */,
 				21EA33812EC67FCA00D20D90 /* ToolbarAnimatorTest.swift in Sources */,
+				0BFC5052940B541F0D9D33C3 /* ToolbarMemoryLeakTests.swift in Sources */,
 				61497F3E2F68856600BC5ACA /* MockGeneralSettingsDelegate.swift in Sources */,
 				C283EED42E4E0F25008EB540 /* MockSummarizerConfigSource.swift in Sources */,
 				81AE06F62E3AA6A3002C3E58 /* MerinoProviderTests.swift in Sources */,

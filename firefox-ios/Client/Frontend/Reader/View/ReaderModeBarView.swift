@@ -51,7 +51,7 @@ protocol ReaderModeBarViewDelegate: AnyObject {
 class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, SearchBarLocationProvider, ThemeApplicable {
     weak var delegate: ReaderModeBarViewDelegate?
 
-    var parent: UIStackView?
+    weak var parent: UIStackView?
 
     var contextStrokeColor: UIColor?
 
