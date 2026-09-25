@@ -737,6 +737,7 @@
 		5AD3B67E2CF665B400AFA1FE /* UIApplicationInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B67D2CF665AE00AFA1FE /* UIApplicationInterface.swift */; };
 		B2D5F8CA3F2157E9B4F6D1C8 /* SceneSessionInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C4E7B92F1046D8A3E5C0B7 /* SceneSessionInterface.swift */; };
 		D4F71AEC5F4379ABD618AF3E /* SceneDestroyerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E609DB4F3268FAC5079E2D /* SceneDestroyerTests.swift */; };
+		B37E742C61654E4FA7BBE801 /* SceneSessionInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E742C61654E4FA7BBE802 /* SceneSessionInterfaceTests.swift */; };
 		5AD3B6802CF6674F00AFA1FE /* MockUIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B67F2CF6674B00AFA1FE /* MockUIApplication.swift */; };
 		5AE371842A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE371832A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift */; };
 		5AE371852A4DD6FE0092A760 /* PasswordManagerCoordinatorDelegateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE371812A4DD0D70092A760 /* PasswordManagerCoordinatorDelegateMock.swift */; };
@@ -9468,6 +9469,7 @@
 		5AD3B67D2CF665AE00AFA1FE /* UIApplicationInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationInterface.swift; sourceTree = "<group>"; };
 		A1C4E7B92F1046D8A3E5C0B7 /* SceneSessionInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSessionInterface.swift; sourceTree = "<group>"; };
 		C3E609DB4F3268FAC5079E2D /* SceneDestroyerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDestroyerTests.swift; sourceTree = "<group>"; };
+		B37E742C61654E4FA7BBE802 /* SceneSessionInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSessionInterfaceTests.swift; sourceTree = "<group>"; };
 		5AD3B67F2CF6674B00AFA1FE /* MockUIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIApplication.swift; sourceTree = "<group>"; };
 		5AE371812A4DD0D70092A760 /* PasswordManagerCoordinatorDelegateMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerCoordinatorDelegateMock.swift; sourceTree = "<group>"; };
 		5AE371832A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerListViewControllerSpy.swift; sourceTree = "<group>"; };
@@ -14438,6 +14440,7 @@
 				5AD3B67F2CF6674B00AFA1FE /* MockUIApplication.swift */,
 				8A3FDEB72FAE5A4E001F5DE9 /* SceneDelegateTests.swift */,
 				C3E609DB4F3268FAC5079E2D /* SceneDestroyerTests.swift */,
+				B37E742C61654E4FA7BBE802 /* SceneSessionInterfaceTests.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -21513,6 +21516,7 @@
 				8A93F86529D37331004159D9 /* DefaultRouterTests.swift in Sources */,
 				5AD3B6802CF6674F00AFA1FE /* MockUIApplication.swift in Sources */,
 				D4F71AEC5F4379ABD618AF3E /* SceneDestroyerTests.swift in Sources */,
+				B37E742C61654E4FA7BBE801 /* SceneSessionInterfaceTests.swift in Sources */,
 				8AF10D8A29D713F50086351D /* LaunchScreenViewModelTests.swift in Sources */,
 				0B7B053F2D64C022007FD7AC /* MockTabWebView.swift in Sources */,
 				8C6AF26A2D38FB1500254698 /* GleanLifecycleObserverTests.swift in Sources */,
