@@ -277,6 +277,8 @@ public struct PrefsKeys {
     // Used for enabling test data for merino stories on non-dev builds
     public static let useMerinoTestData = "useMerinoTestData"
 
+    public static let useMockBreachAlerts = "useMockBreachAlerts"
+
     public struct Usage {
         public static let profileId = "profileId"
     }

@@ -45,6 +45,11 @@ final class BreachAlertsManager: @unchecked Sendable {
     ///    - Parameters:
     ///         - completion: a completion handler for the processed breaches
     func loadBreaches(completion: @escaping @Sendable (Maybe<Set<BreachRecord>>) -> Void) {
+        guard !isUsingMockBreaches else {
+            completion(Maybe(success: breaches))
+            return
+        }
+
         guard let cacheURL = self.cacheURL else {
             self.fetchAndSaveBreaches(completion)
             return
@@ -106,6 +111,10 @@ final class BreachAlertsManager: @unchecked Sendable {
     ///    - Returns:
     ///         - an array of LoginRecords of breaches in the original list.
     func findUserBreaches(_ logins: [LoginRecord]) -> Maybe<Set<LoginRecord>> {
+        if isUsingMockBreaches {
+            breaches = mockBreaches(for: logins)
+        }
+
         var result = Set<LoginRecord>()
 
         if self.breaches.isEmpty {
@@ -170,6 +179,22 @@ final class BreachAlertsManager: @unchecked Sendable {
     }
 
     // MARK: - Helper Functions
+    private var isUsingMockBreaches: Bool {
+        return profile.prefs.boolForKey(PrefsKeys.useMockBreachAlerts) ?? false
+    }
+
+    private func mockBreaches(for logins: [LoginRecord]) -> Set<BreachRecord> {
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let breachDate = dateFormatter.string(from: Date(timeIntervalSinceNow: 24 * 60 * 60))
+        return Set(loginsByHostname(logins).keys.map { domain in
+            BreachRecord(name: domain,
+                         title: domain,
+                         domain: domain,
+                         breachDate: breachDate,
+                         description: "Mock breach alert")
+        })
+    }
+
     private func baseDomainForLogin(_ login: LoginRecord) -> String {
         guard let result = login.hostname.asURL?.baseDomain else { return login.hostname }
         return result
