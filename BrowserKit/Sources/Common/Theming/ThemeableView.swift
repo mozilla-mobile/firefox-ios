@@ -14,9 +14,30 @@ public protocol ThemeableView: View {
     var windowUUID: WindowUUID { get }
     /// Manager responsible for handling theme changes across the application
     var themeManager: ThemeManager { get }
+
+    /// When `false`, the view uses any override declared by an ancestor view instead.
+    var shouldUsePrivateOverride: Bool { get }
+    var shouldBeInPrivateTheme: Bool { get }
+}
+
+public extension ThemeableView {
+    var shouldUsePrivateOverride: Bool { return false }
+    var shouldBeInPrivateTheme: Bool { return false }
 }
 
 public extension View {
+    /// The view's private theme override, if any, is also published to its descendants.
+    @MainActor
+    func listenToThemeChanges(in view: some ThemeableView, theme: Binding<Theme>) -> some View {
+        ThemeChangeListener(
+            content: self,
+            theme: theme,
+            manager: view.themeManager,
+            windowUUID: view.windowUUID,
+            declaredPrivacyOverride: view.shouldUsePrivateOverride ? view.shouldBeInPrivateTheme : nil
+        )
+    }
+
     /// Adds theme change listening capabilities to any SwiftUI view.
     /// - Parameters:
     ///   - theme: A binding to the theme that will be updated when theme changes occur
@@ -24,33 +45,56 @@ public extension View {
     ///   - windowUUID: The window identifier to filter theme change notifications
     /// - Returns: A view wrapped with theme change listening functionality
     func listenToThemeChanges(theme: Binding<Theme>, manager: ThemeManager, windowUUID: WindowUUID) -> some View {
-        ThemeChangeListener(content: self, theme: theme, manager: manager, windowUUID: windowUUID)
+        ThemeChangeListener(content: self,
+                            theme: theme,
+                            manager: manager,
+                            windowUUID: windowUUID,
+                            declaredPrivacyOverride: nil)
     }
 }
 
 /// A view modifier that listens for theme changes and updates the bound theme accordingly.
-/// In DEBUG mode, responds to Xcode's light/dark mode toggle for SwiftUI previews.
-/// In production, listens to NotificationCenter for theme change notifications.
+/// In Xcode previews, responds to the light/dark mode toggle instead, since theme change notifications
+/// are never posted there.
 struct ThemeChangeListener<Content: View>: View {
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.themePrivacyOverride) private var inheritedPrivacyOverride
 
     let content: Content
     @Binding var theme: Theme
     let manager: ThemeManager
     let windowUUID: WindowUUID
+    let declaredPrivacyOverride: Bool?
+
+    /// An override declared by the view itself takes precedence over one inherited from an ancestor.
+    var privacyOverride: Bool? { declaredPrivacyOverride ?? inheritedPrivacyOverride }
 
     var body: some View {
+        themedContent
+            .themePrivacyOverride(shouldUsePrivateOverride: privacyOverride != nil,
+                                  shouldBeInPrivateTheme: privacyOverride ?? false)
+            // Resolves the theme once the environment is available, which it isn't in a view's initializer.
+            .onAppear { updateTheme() }
+    }
+
+    private var themedContent: some View {
         #if DEBUG
-        debugThemeHandler
+        debugThemeHandler(for: themeChangeObserver)
         #else
+        themeChangeObserver
+        #endif
+    }
+
+    private var themeChangeObserver: some View {
         content
             .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
                 // Only update theme if the notification is for this specific window
-                if notification.windowUUID == windowUUID {
-                    let newTheme = manager.getCurrentTheme(for: notification.windowUUID)
-                    theme = newTheme
-                }
+                guard notification.windowUUID == windowUUID else { return }
+                updateTheme()
             }
-        #endif
+    }
+
+    func updateTheme() {
+        theme = manager.resolveTheme(for: windowUUID, privateOverride: privacyOverride)
     }
 }

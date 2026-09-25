@@ -24,10 +24,6 @@ class TPAccessoryInfo: ThemedTableViewController {
         applyTheme()
     }
 
-    func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
-    }
-
     func headerView() -> UIView {
         let stack = UIStackView(
             frame: CGRect(
