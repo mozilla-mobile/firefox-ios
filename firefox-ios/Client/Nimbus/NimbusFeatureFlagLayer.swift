@@ -190,6 +190,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .summarizerPermissiveGuardrails:
             return checkSummarizerPermissiveGuardrailsFeature()
 
+        case .tabGroups:
+            return checkTabGroupsFeature()
+
         case .tabScrollRefactorFeature:
             return checkTabScrollRefactorFeature()
 
@@ -275,6 +278,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkHomepageStoriesCaterogiesFeature() -> Bool {
         return nimbus.features.homepageRedesignFeature.value().categoriesEnabled
+    }
+
+    private func checkTabGroupsFeature() -> Bool {
+        return nimbus.features.tabGroupsFeature.value().enabled
     }
 
     private func checkTabScrollRefactorFeature() -> Bool {
