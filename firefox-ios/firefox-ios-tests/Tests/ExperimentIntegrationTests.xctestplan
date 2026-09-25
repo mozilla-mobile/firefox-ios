@@ -163,6 +163,7 @@
         "SearchSettingsSuggestUITests",
         "SearchSettingsUITests",
         "SearchTests\/testDefaultSearchEngines()",
+        "SearchTests\/testFirefoxSuggestNonSponsoredUI()",
         "SearchTests\/testRecentSearchesSettingsToggleOff_recentSearchesExperimentOn()",
         "SearchTests\/testRecentSearchesSettingsToggleOn_recentSearchesExperimentOn()",
         "SearchTests\/testRecentSearchesWithNoRecentSearches_recentSearchesExperimentOn()",

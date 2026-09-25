@@ -596,6 +596,31 @@ class SearchTests: FeatureFlaggedTestBase {
                                isSponsored: false)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2753075
+    // Regression
+    func testFirefoxSuggestNonSponsoredUI() {
+        let keyword = "fifa world cup"
+        let suggestion = "Wikipedia - FIFA World Cup"
+        launchWithFirefoxSuggestRollout()
+
+        // Step 1: A keyword triggers a non sponsored result in the Firefox Suggest section
+        browserScreen.searchAndAssertSuggestResult(term: keyword, title: suggestion, kind: .nonSponsored)
+
+        // Step 2: The result sits at the bottom of the Firefox Suggest section, not marked as sponsored
+        browserScreen.assertNonSponsoredSuggestRowUI(title: suggestion)
+
+        // Step 3: The non sponsored result is NOT displayed in private mode
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButtonHittable()
+        navigator.goto(TabTray)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.goto(NewTabScreen)
+        browserScreen.searchFromAddressBar(term: keyword)
+        browserScreen.assertAddressBarContains(value: keyword)
+        browserScreen.assertSuggestResult(title: suggestion, kind: .nonSponsored, shouldExist: false)
+        browserScreen.assertFirefoxSuggestHeader(shouldExist: false)
+    }
+
     private func verifySearchSuggestion(searchTerm: String,
                                         expectedMatch: String = "",
                                         hasFirefoxSuggest: Bool = false,
