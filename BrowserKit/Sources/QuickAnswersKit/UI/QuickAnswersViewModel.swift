@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import Shared
-import UIKit
 
 @MainActor
 final class QuickAnswersViewModel {
@@ -35,7 +34,6 @@ final class QuickAnswersViewModel {
             try DefaultQuickAnswersService(configFetcher: configFetcher, prefs: prefs)
         }
     ) {
-//        UIApplication.shared.windows.first?.layer.speed = 0.8
         self.telemetry = telemetry
         self.store = Store(prefs: prefs)
         self.modelDisplayName = configFetcher.model.displayName
