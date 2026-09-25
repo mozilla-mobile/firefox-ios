@@ -117,6 +117,7 @@ class BrowserViewController: UIViewController,
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
     var downloadProgressManager: DownloadProgressManager?
     let tabsPanelTelemetry: TabsPanelTelemetry
+    let toolbarTelemetry: ToolbarTelemetry
     let recordVisitManager: RecordVisitObserving
     let relayController: RelayControllerProtocol
 
@@ -481,6 +482,7 @@ class BrowserViewController: UIViewController,
         self.bookmarksHandler = profile.places
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
+        self.toolbarTelemetry = ToolbarTelemetry(gleanWrapper: gleanWrapper)
         self.userInitiatedQueue = userInitiatedQueue
         self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
         self.relayController = (UIApplication.shared.delegate as? AppDelegate)?.relayController ?? RelayController()
@@ -2846,17 +2848,10 @@ class BrowserViewController: UIViewController,
         switch displayState {
         case .backForwardList:
             navigationHandler?.showBackForwardList()
-        case .tabsLongPressActions:
-            presentTabsLongPressAction(from: view)
-        case .locationViewLongPressAction:
-            presentLocationViewActionSheet(from: addressToolbarContainer)
         case .trackingProtectionDetails:
             navigationHandler?.showEnhancedTrackingProtection(sourceView: state.buttonTapped ?? addressToolbarContainer)
         case .menu:
             didTapOnMenu(button: state.buttonTapped)
-        case .reloadLongPressAction:
-            guard let button = state.buttonTapped else { return }
-            presentRefreshLongPressAction(from: button)
         case .tabTray:
             updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
@@ -2873,8 +2868,6 @@ class BrowserViewController: UIViewController,
             shareSelectedTab(fromShareButton: button)
         case .readerModeLongPressAction:
             _ = toggleReaderModeLongPressAction()
-        case .newTabLongPressActions:
-            presentNewTabLongPressActionSheet(from: view)
         case .passwordGenerator:
             if let tab = tabManager.selectedTab, let frameContext = state.frameContext {
                 navigationHandler?.showPasswordGenerator(tab: tab, frameContext: frameContext)
@@ -2932,64 +2925,6 @@ class BrowserViewController: UIViewController,
                 navigateInTab(tab: currentTab, webViewStatus: .title)
             }
         }
-    }
-
-    func presentLocationViewActionSheet(from view: UIView) {
-        let actions = getLongPressLocationBarActions(with: view, alertContainer: contentContainer)
-        guard !actions.isEmpty else { return }
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-
-        let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
-        let style: UIModalPresentationStyle = if #available(iOS 26.0, *) {
-            .overCurrentContext
-        } else {
-            !shouldSuppress ? .popover : .overCurrentContext
-        }
-        let viewModel = PhotonActionSheetViewModel(
-            actions: [actions],
-            closeButtonTitle: .CloseButtonTitle,
-            modalStyle: style
-        )
-        presentSheetWith(viewModel: viewModel, on: self, from: view)
-    }
-
-    func presentRefreshLongPressAction(from button: UIButton) {
-        guard let tab = tabManager.selectedTab else { return }
-        let urlActions = self.getRefreshLongPressMenu(for: tab)
-        guard !urlActions.isEmpty else { return }
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-
-        let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        let shouldSuppress = !topTabsVisible && isPad
-        let style: UIModalPresentationStyle = if #available(iOS 26.0, *) {
-            .overCurrentContext
-        } else if shouldSuppress || !isPad {
-            .overCurrentContext
-        } else {
-            .popover
-        }
-        let viewModel = PhotonActionSheetViewModel(
-            actions: [urlActions],
-            closeButtonTitle: .CloseButtonTitle,
-            modalStyle: style
-        )
-
-        presentSheetWith(viewModel: viewModel, on: self, from: button)
-    }
-
-    func presentNewTabLongPressActionSheet(from view: UIView) {
-        let actions = getNewTabLongPressActions()
-
-        let shouldPresentAsPopover = toolbarHelper.shouldShowTopTabs(for: traitCollection)
-        let style: UIModalPresentationStyle = shouldPresentAsPopover ? .popover : .overCurrentContext
-        let viewModel = PhotonActionSheetViewModel(
-            actions: actions,
-            closeButtonTitle: .CloseButtonTitle,
-            modalStyle: style
-        )
-        presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
     /// Presents an action sheet allowing the user to pick a translation target language.
@@ -3198,21 +3133,6 @@ class BrowserViewController: UIViewController,
             sourceRect: nil,
             toastContainer: contentContainer,
             popoverArrowDirection: isBottomSearchBar ? .down : .up)
-    }
-
-    func presentTabsLongPressAction(from view: UIView) {
-        guard presentedViewController == nil else { return }
-
-        var actions: [[PhotonRowActions]] = []
-        actions = getNavigationToolbarLongPressActions()
-
-        let viewModel = PhotonActionSheetViewModel(
-            actions: actions,
-            closeButtonTitle: .CloseButtonTitle,
-            modalStyle: .overCurrentContext
-        )
-
-        presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
     func focusOnTabSegment() {
@@ -5193,8 +5113,8 @@ extension BrowserViewController: TopTabsDelegate {
         }
     }
 
-    func topTabsDidLongPressNewTab(button: UIButton) {
-        presentNewTabLongPressActionSheet(from: button)
+    func topTabsNewTabMenu() -> UIMenu? {
+        return makeNewTabMenu()
     }
 
     func topTabsDidChangeTab() {

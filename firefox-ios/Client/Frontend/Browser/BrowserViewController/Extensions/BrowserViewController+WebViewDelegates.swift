@@ -1136,8 +1136,24 @@ extension BrowserViewController: WKNavigationDelegate {
         // Open our helper and cancel this response from the webview.
         if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
                                                                     okAction: downloadAction) {
-            presentSheetWith(viewModel: downloadViewModel, on: self, from: addressToolbarContainer)
+            presentSheetWith(viewModel: downloadViewModel, from: addressToolbarContainer)
         }
+    }
+
+    private func presentSheetWith(viewModel: PhotonActionSheetViewModel, from view: UIView) {
+        guard let uuid = view.currentWindowUUID else { return }
+
+        let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: uuid)
+        sheet.modalPresentationStyle = viewModel.modalStyle
+        sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
+
+        if let popover = sheet.popoverPresentationController, sheet.modalPresentationStyle == .popover {
+            popover.delegate = self
+            popover.sourceView = view
+            popover.sourceRect = view.bounds
+            popover.permittedArrowDirections = viewModel.getPossibleArrowDirections(trait: traitCollection)
+        }
+        present(sheet, animated: true)
     }
 
     /// Tells the delegate that an error occurred during navigation.

@@ -36,18 +36,6 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigateTo, .newTab)
     }
 
-    func testShowNewTabLongpPressActions() {
-        let initialState = createSubject()
-        let reducer = browserViewControllerReducer()
-
-        XCTAssertNil(initialState.displayView)
-
-        let action = getAction(for: .showNewTabLongPressActions)
-        let newState = reducer.legacyReducer(initialState, action)
-
-        XCTAssertEqual(newState.displayView, .newTabLongPressActions)
-    }
-
     func testShowGoogleLensPhotoPickerAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
