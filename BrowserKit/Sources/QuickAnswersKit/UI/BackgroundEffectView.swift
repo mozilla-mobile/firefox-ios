@@ -17,7 +17,6 @@ struct BlendedBlobsGradient: View {
         static let blobRadiusRatios: [CGFloat] = [1.5, 2, 1.3]
         /// Distance of each blob from the region center, relative to the region radius.
         static let orbitRatios: [CGFloat] = [0.5, 1.5, 1.2]
-
         /// Height of the region the blobs are laid out in, relative to the canvas height.
         static let regionHeightRatio: CGFloat = 2.0 / 3.0
         /// Radius of the circular path each blob drifts along, relative to the blob radius.
@@ -177,11 +176,4 @@ struct BackgroundEffectView: ThemeableView {
         .ignoresSafeArea()
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
-}
-
-#Preview {
-    BackgroundEffectView(
-        windowUUID: .DefaultUITestingUUID,
-        themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
-    )
 }

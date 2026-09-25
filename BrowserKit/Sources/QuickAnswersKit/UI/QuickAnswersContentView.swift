@@ -218,8 +218,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         animateResultCascade()
     }
 
-    /// Slides the stack over the space the waveform leaves behind, then settles the answer, the sources and the
-    /// footer into their final position one after the other as they fade in.
     private func animateResultCascade() {
         let cascadingSections: [UIView] = [answerLabel, sourceView, footerLabel]
         let finalTransform = CGAffineTransform(translationX: 0.0, y: -UX.resultTranslationOffset)
