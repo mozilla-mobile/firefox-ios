@@ -36,8 +36,8 @@ struct BlendedBlobsGradient: View {
         /// eases out so the region blends into the background instead of stopping at a visible edge.
         static let maskStops: [SwiftUI.Gradient.Stop] = [
             .init(color: .black, location: 0.0),
-            .init(color: .black, location: 0.3),
-            .init(color: .black.opacity(0.92), location: 0.45),
+            .init(color: .black.opacity(0.9), location: 0.2),
+            .init(color: .black.opacity(0.8), location: 0.45),
             .init(color: .black.opacity(0.72), location: 0.6),
             .init(color: .black.opacity(0.48), location: 0.75),
             .init(color: .black.opacity(0.26), location: 0.88),
