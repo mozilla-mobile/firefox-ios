@@ -104,7 +104,7 @@ final class HistoryPanelViewModel: @unchecked Sendable {
         }
 
         fetchData { [weak self] fetchedSites in
-            DispatchQueue.global().async {
+            DispatchQueue.global().async { [weak self] in
                 guard let self,
                       !fetchedSites.isEmpty else {
                     completion(false)
