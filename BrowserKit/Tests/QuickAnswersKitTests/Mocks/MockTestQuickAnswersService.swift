@@ -7,7 +7,7 @@
 final class MockTestQuickAnswersService: QuickAnswersService, @unchecked Sendable {
     var speechResults: [SpeechResult] = []
     var searchResult: Result<SearchResult, ResultsServiceError> = .success(.empty())
-    var shouldThrowSpeechError = false
+    var speechErrorToThrow: SpeechError?
     var recordVoiceCalledCount = 0
     var stopRecordingCalledCount = 0
     var searchCalledCount = 0
@@ -16,8 +16,8 @@ final class MockTestQuickAnswersService: QuickAnswersService, @unchecked Sendabl
         recordVoiceCalledCount += 1
         return AsyncThrowingStream { continuation in
             Task {
-                if shouldThrowSpeechError {
-                    continuation.finish(throwing: SpeechError.unknown("Unknown error occurred"))
+                if let speechErrorToThrow {
+                    continuation.finish(throwing: speechErrorToThrow)
                     return
                 }
 

@@ -13,8 +13,9 @@ final class DefaultQuickAnswersTelemetry: QuickAnswersTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    func quickAnswersRequested() {
-        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.requested)
+    func quickAnswersRequested(model: QuickAnswersKit.QuickAnswersModel) {
+        let extras = GleanMetrics.AiQuickAnswers.RequestedExtra(model: model.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.requested, extras: extras)
     }
 
     func recordingStarted() {
@@ -34,16 +35,22 @@ final class DefaultQuickAnswersTelemetry: QuickAnswersTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.resultsStarted)
     }
 
-    func resultsCompleted(outcome: Bool, errorType: String?) {
+    func resultsCompleted(outcome: Bool, errorType: String?, model: QuickAnswersKit.QuickAnswersModel) {
         if let resultsTimerId {
             gleanWrapper.stopAndAccumulateTiming(for: GleanMetrics.AiQuickAnswers.resultsTime, timerId: resultsTimerId)
             self.resultsTimerId = nil
         }
         let extras = GleanMetrics.AiQuickAnswers.ResultsCompletedExtra(
             errorType: errorType,
+            model: model.rawValue,
             outcome: outcome
         )
         gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.resultsCompleted, extras: extras)
+    }
+
+    func permissionDenied(permission: QuickAnswersPermission) {
+        let extras = GleanMetrics.AiQuickAnswers.PermissionDeniedExtra(permission: permission.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.permissionDenied, extras: extras)
     }
 
     func citationTapped() {

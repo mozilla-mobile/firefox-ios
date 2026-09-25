@@ -19,12 +19,15 @@ final class QuickAnswersViewModel {
     private let service: QuickAnswersService?
     private let telemetry: QuickAnswersTelemetry
     private let store: Store
+    private let model: QuickAnswersModel
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
     var onStateChange: ((State) -> Void)?
 
     /// The user-facing name of the model backing the request.
-    let modelDisplayName: String
+    var modelDisplayName: String {
+        return model.displayName
+    }
 
     init(
         prefs: Prefs,
@@ -36,13 +39,13 @@ final class QuickAnswersViewModel {
     ) {
         self.telemetry = telemetry
         self.store = Store(prefs: prefs)
-        self.modelDisplayName = configFetcher.model.displayName
+        self.model = configFetcher.model
         do {
             self.service = try makeService(prefs, configFetcher)
         } catch {
             self.service = nil
         }
-        telemetry.quickAnswersRequested()
+        telemetry.quickAnswersRequested(model: self.model)
     }
 
     /// Entry point for the flow: shows the opt-in screen until the user has consented,
@@ -81,7 +84,7 @@ final class QuickAnswersViewModel {
     private func startRecordingVoice() {
         guard let service else {
             let error = SpeechError.serviceNotInitialized
-            telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel)
+            recordRecordingFailure(error)
             onStateChange?(.speechResult(.empty(), error))
             return
         }
@@ -112,8 +115,19 @@ final class QuickAnswersViewModel {
         } catch {
             try? await service.stopRecording()
             let error = (error as? SpeechError) ?? SpeechError.unknown(error.telemetryDescription)
-            telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel)
+            recordRecordingFailure(error)
             onStateChange?(.speechResult(.empty(), error))
+        }
+    }
+
+    private func recordRecordingFailure(_ error: SpeechError) {
+        switch error {
+        case .microphonePermissionDenied:
+            telemetry.permissionDenied(permission: .microphone)
+        case .speechRecognitionPermissionDenied:
+            telemetry.permissionDenied(permission: .speechRecognition)
+        default:
+            telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel)
         }
     }
 
@@ -129,10 +143,10 @@ final class QuickAnswersViewModel {
         let searchResult = await service.search(text: result.text)
         switch searchResult {
         case .success(let result):
-            telemetry.resultsCompleted(outcome: true, errorType: nil)
+            telemetry.resultsCompleted(outcome: true, errorType: nil, model: model)
             onStateChange?(.showSearchResult(result, nil))
         case .failure(let error):
-            telemetry.resultsCompleted(outcome: false, errorType: error.telemetryLabel)
+            telemetry.resultsCompleted(outcome: false, errorType: error.telemetryLabel, model: model)
             onStateChange?(.showSearchResult(.empty(), error))
         }
     }

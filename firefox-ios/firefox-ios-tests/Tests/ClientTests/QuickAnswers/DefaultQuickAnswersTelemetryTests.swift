@@ -24,15 +24,20 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
     func test_recordEvent_whenQuickAnswersRequested_thenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.AiQuickAnswers.requested
+        typealias EventExtrasType = GleanMetrics.AiQuickAnswers.RequestedExtra
 
-        subject.quickAnswersRequested()
+        let expectedModel = QuickAnswersKit.QuickAnswersModel.exa
 
+        subject.quickAnswersRequested(model: expectedModel)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>
         )
 
-        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 0)
+        XCTAssertEqual(savedExtras.model, expectedModel.rawValue)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
@@ -94,8 +99,9 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
 
         let expectedOutcome = false
         let expectedErrorType = "some_error"
+        let expectedModel = QuickAnswersKit.QuickAnswersModel.liner
 
-        subject.resultsCompleted(outcome: expectedOutcome, errorType: expectedErrorType)
+        subject.resultsCompleted(outcome: expectedOutcome, errorType: expectedErrorType, model: expectedModel)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(
@@ -104,6 +110,41 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
 
         XCTAssertEqual(savedExtras.outcome, expectedOutcome)
         XCTAssertEqual(savedExtras.errorType, expectedErrorType)
+        XCTAssertEqual(savedExtras.model, expectedModel.rawValue)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    func test_recordEvent_whenMicrophonePermissionDenied_thenGleanIsCalled() throws {
+        let subject = createSubject()
+        let event = GleanMetrics.AiQuickAnswers.permissionDenied
+        typealias EventExtrasType = GleanMetrics.AiQuickAnswers.PermissionDeniedExtra
+
+        subject.permissionDenied(permission: .microphone)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>
+        )
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.permission, "microphone")
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    func test_recordEvent_whenSpeechRecognitionPermissionDenied_thenGleanIsCalled() throws {
+        let subject = createSubject()
+        let event = GleanMetrics.AiQuickAnswers.permissionDenied
+        typealias EventExtrasType = GleanMetrics.AiQuickAnswers.PermissionDeniedExtra
+
+        subject.permissionDenied(permission: .speechRecognition)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>
+        )
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.permission, "speech_recognition")
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
@@ -141,7 +182,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         let subject = createSubject()
 
         subject.resultsStarted()
-        subject.resultsCompleted(outcome: true, errorType: nil)
+        subject.resultsCompleted(outcome: true, errorType: nil, model: .exa)
 
         XCTAssertEqual(mockGleanWrapper.startTimingCalled, 1)
         XCTAssertEqual(mockGleanWrapper.stopAndAccumulateCalled, 1)
