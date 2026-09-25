@@ -67,7 +67,6 @@ final class LegacyTabScrollController: NSObject,
             assert(scrollView != nil, "Can't set the scrollView delegate if the webView.scrollView is nil")
             scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
-            scrollView?.keyboardDismissMode = .onDrag
             configureRefreshControl()
 
             tab?.onWebViewLoadingStateChanged = { [weak self] in

@@ -77,7 +77,6 @@ final class TabScrollHandler: NSObject,
             // FXIOS-9781 This could result in scrolling not closing the toolbar
             assert(scrollView != nil, "Can't set the scrollView delegate if the webView.scrollView is nil")
             scrollView?.delegate = self
-            scrollView?.keyboardDismissMode = .onDrag
             configureRefreshControl()
             tabProvider?.onLoadingStateChanged = { [weak self] in
                 self?.handleOnTabContentLoading()
