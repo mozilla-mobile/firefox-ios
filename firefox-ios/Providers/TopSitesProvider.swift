@@ -97,7 +97,7 @@ final class TopSitesProviderImplementation: TopSitesProvider, FeatureFlaggable {
     private func getFrecencySites(group: DispatchGroup, numberOfMaxItems: Int) {
         group.enter()
         let placesFetcher = self.placesFetcher
-        DispatchQueue.global().async {
+        DispatchQueue.global().async { [weak self] in
             // It's possible that the top sites fetch is the
             // very first use of places, lets make sure that
             // our connection is open
@@ -107,7 +107,7 @@ final class TopSitesProviderImplementation: TopSitesProvider, FeatureFlaggable {
 
             placesFetcher.getTopFrecentSiteInfos(limit: numberOfMaxItems,
                                                  thresholdOption: FrecencyThresholdOption.none)
-                .uponQueue(.main) { [weak self] result in
+                .uponQueue(.main) { result in
                     MainActor.assumeIsolated {
                         if let sites = result.successValue {
                             self?.frecencySites = sites

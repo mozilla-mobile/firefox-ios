@@ -127,8 +127,8 @@ final class BookmarksViewController: SiteTableViewController,
         return button
     }()
 
-    private lazy var emptyStateView: BookmarksFolderEmptyStateView = .build { emptyStateView in
-        emptyStateView.signInAction = { [weak self] in
+    private lazy var emptyStateView: BookmarksFolderEmptyStateView = .build { [weak self] emptyStateView in
+        emptyStateView.signInAction = {
             self?.bookmarkCoordinatorDelegate?.showSignIn()
         }
     }

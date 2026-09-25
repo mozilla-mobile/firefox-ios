@@ -33,7 +33,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
         $0.adjustsFontForContentSizeCategory = true
         $0.delegate = self
     }
-    private lazy var continueButton: UIButton = .build {
+    private lazy var continueButton: UIButton = .build { [weak self] in
         if #available(iOS 26, *) {
             $0.configuration = .prominentClearGlass()
         } else {
@@ -41,7 +41,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
         }
         $0.configuration?.cornerStyle = .capsule
         $0.configuration?.contentInsets = UX.buttonContentInset
-        $0.addAction(UIAction { [weak self] _ in self?.onContinue?() }, for: .touchUpInside)
+        $0.addAction(UIAction { _ in self?.onContinue?() }, for: .touchUpInside)
     }
 
     // MARK: - Init
