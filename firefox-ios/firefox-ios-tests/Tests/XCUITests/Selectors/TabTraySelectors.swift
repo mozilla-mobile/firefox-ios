@@ -12,6 +12,7 @@ protocol TabTraySelectorsSet {
     var NEW_TAB_BUTTON: Selector { get }
     var DONE_BUTTON: Selector { get }
     var UNDO_BUTTON: Selector { get }
+    var PRIVATE_EMPTY_STATE_TITLE: Selector { get }
     var CONTEXT_MENU_ADD_TO_BOOKMARKS: Selector { get }
     var CONTEXT_MENU_COPY_URL: Selector { get }
     var CONTEXT_MENU_CLOSE_TAB: Selector { get }
@@ -29,6 +30,7 @@ struct TabTraySelectors: TabTraySelectorsSet {
         static let tabsTray = AccessibilityIdentifiers.TabTray.tabsTray
         static let newTabButton = AccessibilityIdentifiers.TabTray.newTabButton
         static let doneButton = AccessibilityIdentifiers.TabTray.doneButton
+        static let privateEmptyStateTitle = "Private Browsing"
     }
 
     let TABSTRAY_CONTAINER = Selector(
@@ -117,6 +119,12 @@ struct TabTraySelectors: TabTraySelectorsSet {
         )
     }
 
+    let PRIVATE_EMPTY_STATE_TITLE = Selector.staticTextId(
+        IDs.privateEmptyStateTitle,
+        description: "Title of the empty private tabs view",
+        groups: ["tabtray"]
+    )
+
     func tabCellAtIndex(index: Int) -> Selector {
         let identifier = "\(AccessibilityIdentifiers.TabTray.tabCell)_0_\(index)"
 
@@ -138,6 +146,6 @@ struct TabTraySelectors: TabTraySelectorsSet {
 
     var all: [Selector] { [TABSTRAY_CONTAINER, COLLECTION_VIEW,
                            IPHONE_TAB_TRAY_COLLECTION_VIEW, FIRST_CELL, NEW_TAB_BUTTON, DONE_BUTTON,
-                           UNDO_BUTTON, CONTEXT_MENU_ADD_TO_BOOKMARKS,
+                           UNDO_BUTTON, PRIVATE_EMPTY_STATE_TITLE, CONTEXT_MENU_ADD_TO_BOOKMARKS,
                            CONTEXT_MENU_COPY_URL, CONTEXT_MENU_CLOSE_TAB] }
 }
