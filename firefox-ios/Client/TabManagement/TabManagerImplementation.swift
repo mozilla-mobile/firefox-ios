@@ -681,6 +681,7 @@ final class TabManagerImplementation: NSObject,
     private func populateTab(_ tab: Tab, from tabData: TabData) {
         tab.url = URL(string: tabData.siteUrl)
         tab.lastTitle = tabData.title
+        tab.faviconURL = tabData.faviconURL
         tab.tabUUID = tabData.id.uuidString
         tab.screenshotUUID = tabData.id
         tab.firstCreatedTime = tabData.createdAtTime.toTimestamp()
@@ -963,10 +964,19 @@ final class TabManagerImplementation: NSObject,
     }
 
     func addTabs(fromWindowMergeData tabDataList: [TabData]) {
-        let existingUUIDs = Set(tabs.map { $0.tabUUID })
+        var existingUUIDs = Set(tabs.map { $0.tabUUID })
         var didAddTab = false
         for tabData in tabDataList where !existingUUIDs.contains(tabData.id.uuidString) {
-            _ = legacyConfigureNewTab(with: tabData)
+            let tab = createTab(with: tabData)
+            tabs.append(tab)
+            existingUUIDs.insert(tab.tabUUID)
+            restoreScreenshot(for: tab)
+            delegates.forEach {
+                $0.get()?.tabManager(self,
+                                     didAddTab: tab,
+                                     placeNextToParentTab: false,
+                                     isRestoring: !tabRestoreHasFinished)
+            }
             didAddTab = true
         }
 
