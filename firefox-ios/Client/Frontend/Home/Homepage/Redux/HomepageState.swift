@@ -12,6 +12,7 @@ struct HomepageState: ScreenState, Equatable {
     // Homepage sections state in the order they appear on the collection view
     let headerState: HeaderState
     let privacyNoticeState: PrivacyNoticeState
+    let notificationCardState: NotificationCardState
     let messageState: MessageCardState
     let topSitesState: TopSitesSectionState
     let searchBarState: SearchBarState
@@ -36,6 +37,7 @@ struct HomepageState: ScreenState, Equatable {
             windowUUID: homepageState.windowUUID,
             headerState: homepageState.headerState,
             privacyNoticeState: homepageState.privacyNoticeState,
+            notificationCardState: homepageState.notificationCardState,
             messageState: homepageState.messageState,
             topSitesState: homepageState.topSitesState,
             searchBarState: homepageState.searchBarState,
@@ -53,6 +55,7 @@ struct HomepageState: ScreenState, Equatable {
             windowUUID: windowUUID,
             headerState: HeaderState(windowUUID: windowUUID),
             privacyNoticeState: PrivacyNoticeState(windowUUID: windowUUID),
+            notificationCardState: NotificationCardState(windowUUID: windowUUID),
             messageState: MessageCardState(windowUUID: windowUUID),
             topSitesState: TopSitesSectionState(windowUUID: windowUUID),
             searchBarState: SearchBarState(windowUUID: windowUUID),
@@ -69,6 +72,7 @@ struct HomepageState: ScreenState, Equatable {
         windowUUID: WindowUUID,
         headerState: HeaderState,
         privacyNoticeState: PrivacyNoticeState,
+        notificationCardState: NotificationCardState,
         messageState: MessageCardState,
         topSitesState: TopSitesSectionState,
         searchBarState: SearchBarState,
@@ -82,6 +86,7 @@ struct HomepageState: ScreenState, Equatable {
         self.windowUUID = windowUUID
         self.headerState = headerState
         self.privacyNoticeState = privacyNoticeState
+        self.notificationCardState = notificationCardState
         self.messageState = messageState
         self.topSitesState = topSitesState
         self.searchBarState = searchBarState
@@ -110,6 +115,7 @@ struct HomepageState: ScreenState, Equatable {
             windowUUID: state.windowUUID,
             headerState: HeaderState.reducer.legacyReducer(state.headerState, action),
             privacyNoticeState: PrivacyNoticeState.reducer.legacyReducer(state.privacyNoticeState, action),
+            notificationCardState: NotificationCardState.reducer.legacyReducer(state.notificationCardState, action),
             messageState: MessageCardState.reducer.legacyReducer(state.messageState, action),
             topSitesState: TopSitesSectionState.reducer.legacyReducer(state.topSitesState, action),
             searchBarState: SearchBarState.reducer.legacyReducer(state.searchBarState, action),
@@ -128,6 +134,7 @@ struct HomepageState: ScreenState, Equatable {
             windowUUID: state.windowUUID,
             headerState: HeaderState.defaultState(from: state.headerState),
             privacyNoticeState: PrivacyNoticeState.defaultState(from: state.privacyNoticeState),
+            notificationCardState: NotificationCardState.defaultState(from: state.notificationCardState),
             messageState: MessageCardState.defaultState(from: state.messageState),
             topSitesState: TopSitesSectionState.defaultState(from: state.topSitesState),
             searchBarState: SearchBarState.defaultState(from: state.searchBarState),

@@ -2377,6 +2377,9 @@
 		EEB971C72FC48C5100D6C232 /* NewYorkMedium-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA764251A99E200A014BF /* NewYorkMedium-RegularItalic.otf */; };
 		EECF6B61300682B5006FD44E /* SwipeGestureFeatureFlagProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECF6B60300682B5006FD44E /* SwipeGestureFeatureFlagProvider.swift */; };
 		EECF6B633006864D006FD44E /* SwipeGestureFeatureFlagProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECF6B623006864D006FD44E /* SwipeGestureFeatureFlagProviderTests.swift */; };
+		EED78397305AF1CB001A3E4C /* NotificationCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED78393305AF1CB001A3E4C /* NotificationCardCell.swift */; };
+		EED78398305AF1CB001A3E4C /* NotificationCardState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED78394305AF1CB001A3E4C /* NotificationCardState.swift */; };
+		EED78399305AF1CB001A3E4C /* NotificationCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED78395305AF1CB001A3E4C /* NotificationCardView.swift */; };
 		EEEA7B4B2FFE96B70075F5B3 /* SwipeUpTabPreviewGestureHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEA7B4A2FFE969B0075F5B3 /* SwipeUpTabPreviewGestureHandler.swift */; };
 		EEEA7B4D2FFE98C10075F5B3 /* SwipeUpTabWebViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEA7B4C2FFE98B50075F5B3 /* SwipeUpTabWebViewPreview.swift */; };
 		F18859502A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F188594F2A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift */; };
@@ -12331,6 +12334,9 @@
 		EEB96A212FBF4B8300D6C232 /* ReaderFileRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderFileRoute.swift; sourceTree = "<group>"; };
 		EECF6B60300682B5006FD44E /* SwipeGestureFeatureFlagProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeGestureFeatureFlagProvider.swift; sourceTree = "<group>"; };
 		EECF6B623006864D006FD44E /* SwipeGestureFeatureFlagProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeGestureFeatureFlagProviderTests.swift; sourceTree = "<group>"; };
+		EED78393305AF1CB001A3E4C /* NotificationCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCardCell.swift; sourceTree = "<group>"; };
+		EED78394305AF1CB001A3E4C /* NotificationCardState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCardState.swift; sourceTree = "<group>"; };
+		EED78395305AF1CB001A3E4C /* NotificationCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCardView.swift; sourceTree = "<group>"; };
 		EEE8476797612D908D23E6BC /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEEA7B4A2FFE969B0075F5B3 /* SwipeUpTabPreviewGestureHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeUpTabPreviewGestureHandler.swift; sourceTree = "<group>"; };
 		EEEA7B4C2FFE98B50075F5B3 /* SwipeUpTabWebViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeUpTabWebViewPreview.swift; sourceTree = "<group>"; };
@@ -14896,6 +14902,7 @@
 		8A7D08E12CAAF79F0035999C /* Homepage */ = {
 			isa = PBXGroup;
 			children = (
+				EED78396305AF1CB001A3E4C /* NotificationCard */,
 				8A9E04172D4D07E30022ED90 /* Bookmark */,
 				8A62B15B2CED40800045F46E /* ContextMenu */,
 				8A454D2A2CB7079A009436D9 /* Header */,
@@ -17639,6 +17646,16 @@
 				EEB965142FBCCE7B00D6C232 /* SchemeHandler */,
 			);
 			path = ReaderTests;
+			sourceTree = "<group>";
+		};
+		EED78396305AF1CB001A3E4C /* NotificationCard */ = {
+			isa = PBXGroup;
+			children = (
+				EED78393305AF1CB001A3E4C /* NotificationCardCell.swift */,
+				EED78394305AF1CB001A3E4C /* NotificationCardState.swift */,
+				EED78395305AF1CB001A3E4C /* NotificationCardView.swift */,
+			);
+			path = NotificationCard;
 			sourceTree = "<group>";
 		};
 		F8324A082649A188007E4BFA /* CredentialProvider */ = {
@@ -20991,6 +21008,9 @@
 				884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */,
 				8A9F0B5627C595F300FE09AE /* ImageIdentifiers.swift in Sources */,
 				818BCC742E463BAD008309B1 /* CuratedRecommendationCacheUtility.swift in Sources */,
+				EED78397305AF1CB001A3E4C /* NotificationCardCell.swift in Sources */,
+				EED78398305AF1CB001A3E4C /* NotificationCardState.swift in Sources */,
+				EED78399305AF1CB001A3E4C /* NotificationCardView.swift in Sources */,
 				ED28DAC92C45A95F00D2641C /* TabScrollBehaviorModel.swift in Sources */,
 				EC4084E1300FCAEE0003DE07 /* BookmarkFolderData+Copy.swift in Sources */,
 				8AD248F12C0F735200500AB7 /* BehavioralTargetingEvent.swift in Sources */,

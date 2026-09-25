@@ -8,6 +8,7 @@ enum OnboardingCardButtonAction {
     case none
     case enableNotifications
     case declineNotifications
+    case signIn
 }
 
 /// Content for an onboarding card
@@ -57,7 +58,7 @@ enum OnboardingDripSchedule {
             body: String.Onboarding.MultiDay.SyncCard.BodyText,
             imageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.sync,
             primaryButtonTitle: String.Onboarding.MultiDay.SyncCard.AcceptButtonText,
-            primaryButtonAction: .none, // replace with something like .promptSignIn later
+            primaryButtonAction: .signIn,
             secondaryButtonTitle: String.Onboarding.MultiDay.SyncCard.DeclineButtonText,
             secondaryButtonAction: .none)]
     ]
