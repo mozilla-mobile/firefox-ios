@@ -41,8 +41,9 @@ final class SSLWarningScreen {
         sel.VISIT_SITE_ANYWAY_LINK.element(in: app).waitAndTap()
     }
 
-    func waitForPageToLoadAfterBypass() {
-        let domain = sel.PAGE_DOMAIN.element(in: app)
-        BaseTestCase().mozWaitForElementToExist(domain, timeout: TIMEOUT_LONG)
+    func waitForPageToLoadAfterBypass(domain: String = "expired.badssl.com") {
+        waitForWarningToDisappear()
+        let urlField = sel.PAGE_DOMAIN.element(in: app)
+        BaseTestCase().mozWaitForValueContains(urlField, value: domain, timeout: TIMEOUT_LONG)
     }
 }

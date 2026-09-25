@@ -4,8 +4,13 @@ set -e
 
 BUILD_LOG_FILE="$1"
 TYPE_LOG_FILE="$2"
-THRESHOLD_UNIT_TEST=3
-THRESHOLD_XCUITEST=3
+# Raised for the Xcode 27 canary: Xcode 27 reports new diagnostic categories
+# (#ImplicitStrongCapture, #SendingClosureRisksDataRace, #NoUseUnstructuredThrowingTask,
+# @Sendable on type aliases) on unchanged code, taking the count from 3 to 52.
+# Tracked in https://mozilla-hub.atlassian.net/browse/FXIOS-16729 - restore to 3 once
+# those warnings are fixed.
+THRESHOLD_UNIT_TEST=52
+THRESHOLD_XCUITEST=52
 
 
 WARNINGS=$(
