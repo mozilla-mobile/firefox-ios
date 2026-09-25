@@ -380,11 +380,7 @@ class TodayWidgetTests: BaseTestCase {
     /// Opens the Quick Actions action picker and checks the options it lists.
     private func openQuickActionsPicker() {
         checkFirefoxWidgetOptions()
-        if #unavailable(iOS 16) {
-            springboard.buttons["Edit Widget"].waitAndTap()
-        } else {
-            springboard.buttons[editWidgetButton].waitAndTap()
-        }
+        springboard.buttons[editWidgetButton].waitAndTap()
         mozWaitElementHittable(element: newSearch, timeout: TIMEOUT)
         newSearch.waitAndTap()
         if #unavailable(iOS 17) {
@@ -527,6 +523,8 @@ class TodayWidgetTests: BaseTestCase {
         addQuickActionsWidget()
         openQuickActionsPicker()
         selectQuickAction(clearPrivateTabs)
+        // A cold launch would restore only the normal tab and pass without clearing anything
+        XCTAssertNotEqual(app.state, .notRunning, "The app was terminated in the background")
         tapOnWidget(widgetType: "Private Tabs")
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: TIMEOUT), "The widget did not bring the app back")
         // Back on the normal session, with no private tabs left
@@ -534,7 +532,8 @@ class TodayWidgetTests: BaseTestCase {
         toolbarScreen.assertTabsButtonValue(expectedCount: "1")
         toolbarScreen.tapOnTabsButton()
         tabTray.switchToPrivateBrowsing()
-        tabTray.assertNoTabs()
+        tabTray.waitForEmptyPrivateModeOpened()
+        tabTray.assertNoPrivateTabs()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2783001

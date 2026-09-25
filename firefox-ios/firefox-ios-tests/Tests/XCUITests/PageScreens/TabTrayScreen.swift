@@ -64,9 +64,15 @@ final class TabTrayScreen {
         XCTAssertEqual(cells.count, expected, "The number of tabs is not correct", file: file, line: line)
     }
 
-    func assertNoTabs(file: StaticString = #filePath, line: UInt = #line) {
-        BaseTestCase().mozWaitForElementToNotExist(collectionView.cells.firstMatch)
-        XCTAssertEqual(collectionView.cells.count, 0, "Expected the tab tray to be empty", file: file, line: line)
+    /// Waits until the private panel has finished paging in, so its empty view is fully on screen.
+    func waitForEmptyPrivateModeOpened(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitElementHittable(element: sel.PRIVATE_EMPTY_STATE_TITLE.element(in: app), timeout: timeout)
+    }
+
+    func assertNoPrivateTabs(file: StaticString = #filePath, line: UInt = #line) {
+        // The empty view replaces the collection view, so it is the positive signal the tray is empty
+        BaseTestCase().mozWaitForElementToExist(sel.PRIVATE_EMPTY_STATE_TITLE.element(in: app))
+        XCTAssertEqual(collectionView.cells.count, 0, "Expected the private tab tray to be empty", file: file, line: line)
     }
 
     func assertiPhoneTabCount(_ expected: Int, file: StaticString = #filePath, line: UInt = #line) {
