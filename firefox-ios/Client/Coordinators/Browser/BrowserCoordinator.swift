@@ -287,6 +287,33 @@ final class BrowserCoordinator: BaseCoordinator,
                        category: .coordinator)
             findAndHandle(route: savedRoute)
         }
+
+        presentHardcodedOnboardingDripIfNeeded()
+    }
+
+    // Presents the day-based onboarding card over the current tab
+    private func presentHardcodedOnboardingDripIfNeeded() {
+        guard browserViewController.presentedViewController == nil else { return }
+
+        let manager = IntroScreenManager(prefs: profile.prefs)
+        guard manager.shouldUseContinuousOnboarding, !manager.shouldShowIntroScreen else { return }
+
+        let cards = OnboardingDripScheduler(prefs: profile.prefs).getDueCards()
+        guard !cards.isEmpty else { return }
+
+        let view = DripOnboardingFlowView(
+            cards: cards,
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            onComplete: { [weak self] in
+                self?.browserViewController.dismiss(animated: true)
+            }
+        )
+
+        let hostingController = PortraitOnlyHostingController(rootView: view)
+        hostingController.modalPresentationStyle = .fullScreen
+        hostingController.modalTransitionStyle = .crossDissolve
+        browserViewController.present(hostingController, animated: true)
     }
 
     // MARK: - ETPCoordinatorSSLStatusDelegate
