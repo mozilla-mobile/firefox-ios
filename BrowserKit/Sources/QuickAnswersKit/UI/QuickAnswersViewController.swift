@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import SwiftUI
 import Common
 import Shared
 
@@ -19,19 +20,16 @@ public final class QuickAnswersViewController: UIViewController,
             bottom: UX.closeButtonPadding,
             trailing: UX.closeButtonPadding
         )
-        static let recordWaveEffectSize: CGFloat = 450.0
-        static let recordWaveEffectBottomPadding = 150.0
-        static let recordWaveEffectResultOpacity: CGFloat = 0.3
+        static let recordWaveEffectResultOpacity: CGFloat = 0.4
+        static let recordWaveEffectFadeDuration: TimeInterval = 0.3
+        static let recordWaveEffectFadeDelay: TimeInterval = 0.2
         static let contentViewTopPadding: CGFloat = 32.0
         static let contentViewBottomPadding: CGFloat = 12.0
         static let contentViewHorizontalPadding: CGFloat = 24.0
     }
 
     // MARK: - Properties
-    private let backgroundBlur: UIVisualEffectView = .build {
-        $0.effect = UIBlurEffect(style: .systemUltraThinMaterial)
-    }
-    private let backgroundRecordEffect: GradientCircleView = .build()
+    private let backgroundRecordEffect: UIHostingController<BackgroundEffectView>
     private lazy var closeButton: UIButton = .build {
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
@@ -120,6 +118,9 @@ public final class QuickAnswersViewController: UIViewController,
         }
         self.viewModel = viewModel
         self.learnMoreURL = learnMoreURL
+        self.backgroundRecordEffect = UIHostingController(
+            rootView: BackgroundEffectView(windowUUID: windowUUID, themeManager: themeManager)
+        )
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = transitionType.modalPresentationStyle
         transitioningDelegate = transitionAnimator
@@ -151,9 +152,8 @@ public final class QuickAnswersViewController: UIViewController,
     private func setupSubviews() {
         closeButton.accessibilityLabel = stringsConfiguration.closeAccessibilityLabel
         contentView.configureStrings(stringsConfiguration.contentView)
+        setupBackgroundEffect()
         view.addSubviews(
-            backgroundRecordEffect,
-            backgroundBlur,
             contentView,
             closeButton,
         )
@@ -172,14 +172,16 @@ public final class QuickAnswersViewController: UIViewController,
                                                   constant: -UX.contentViewHorizontalPadding),
             contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
                                                 constant: -UX.contentViewBottomPadding),
-
-            backgroundRecordEffect.widthAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
-            backgroundRecordEffect.heightAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
-            backgroundRecordEffect.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            backgroundRecordEffect.bottomAnchor.constraint(equalTo: view.bottomAnchor,
-                                                           constant: UX.recordWaveEffectBottomPadding),
         ])
-        backgroundBlur.pinToSuperview()
+    }
+
+    private func setupBackgroundEffect() {
+        addChild(backgroundRecordEffect)
+        backgroundRecordEffect.view.translatesAutoresizingMaskIntoConstraints = false
+        backgroundRecordEffect.view.backgroundColor = .clear
+        view.addSubview(backgroundRecordEffect.view)
+        backgroundRecordEffect.view.pinToSuperview()
+        backgroundRecordEffect.didMove(toParent: self)
     }
 
     private func registerCallbacks() {
@@ -188,7 +190,6 @@ public final class QuickAnswersViewController: UIViewController,
             case .showOptIn:
                 self?.contentView.showOptIn()
             case .recordingStarted:
-                self?.backgroundRecordEffect.startAnimating()
                 self?.contentView.startAudioWaveformAnimation()
             case .speechResult(let result, let error):
                 if let error {
@@ -205,9 +206,12 @@ public final class QuickAnswersViewController: UIViewController,
                     self?.errorHandler.handleSearchError(error)
                 } else {
                     self?.triggerHaptic()
-                    self?.backgroundRecordEffect.alpha = UX.recordWaveEffectResultOpacity
-                    self?.contentView.configureAnswer(result.resultText, modelName: self?.viewModel.modelDisplayName ?? "")
-                    self?.contentView.configureSources(result.sources) { [weak self] url in
+                    self?.fadeBackgroundEffectForResult()
+                    self?.contentView.configureResult(
+                        result.resultText,
+                        modelName: self?.viewModel.modelDisplayName ?? "",
+                        sources: result.sources
+                    ) { [weak self] url in
                         self?.viewModel.recordCitationTapped()
                         self?.dismiss(with: url)
                     }
@@ -226,6 +230,13 @@ public final class QuickAnswersViewController: UIViewController,
                 self?.dismiss(with: url)
             }
         )
+    }
+
+    private func fadeBackgroundEffectForResult() {
+        UIView.animate(withDuration: UX.recordWaveEffectFadeDuration,
+                       delay: UX.recordWaveEffectFadeDelay) {
+            self.backgroundRecordEffect.view.alpha = UX.recordWaveEffectResultOpacity
+        }
     }
 
     private func dismiss(with url: URL?) {
@@ -251,7 +262,6 @@ public final class QuickAnswersViewController: UIViewController,
         view.backgroundColor = theme.colors.layer2
         closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
-        backgroundRecordEffect.applyTheme(theme: theme)
         contentView.applyTheme(theme: theme)
     }
 }
