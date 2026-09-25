@@ -72,7 +72,7 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
             refreshState: .refreshing,
             allowsRefresh: false,
             clientAndTabs: [],
-            showingEmptyState: nil,
+            contentState: .tabs,
             devices: []
         )
         subject.newState(state: newState)
