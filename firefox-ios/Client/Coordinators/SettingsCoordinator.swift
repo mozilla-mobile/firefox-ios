@@ -184,7 +184,11 @@ final class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .theme:
-            let appearanceView = AppearanceSettingsView(windowUUID: windowUUID, delegate: self)
+            let appearanceView = AppearanceSettingsView(
+                windowUUID: windowUUID,
+                delegate: self,
+                isWallpaperSectionEnabled: wallpaperManager.canSettingsBeShown
+            )
             return UIHostingController(rootView: appearanceView)
 
         case .wallpaper:
@@ -457,7 +461,11 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTheme() {
-        let appearanceView = AppearanceSettingsView(windowUUID: windowUUID, delegate: self)
+        let appearanceView = AppearanceSettingsView(
+            windowUUID: windowUUID,
+            delegate: self,
+            isWallpaperSectionEnabled: wallpaperManager.canSettingsBeShown
+        )
         let viewController = UIHostingController(rootView: appearanceView)
         viewController.title = .SettingsAppearanceTitle
         router.push(viewController)
@@ -575,6 +583,19 @@ final class SettingsCoordinator: BaseCoordinator,
         let appearanceView = PageZoomSettingsView(windowUUID: windowUUID)
         let viewController = UIHostingController(rootView: appearanceView)
         viewController.title = .Settings.Appearance.PageZoom.PageZoomTitle
+        router.push(viewController)
+    }
+
+    func pressedWallpaper() {
+        guard wallpaperManager.canSettingsBeShown else { return }
+        let viewModel = WallpaperSettingsViewModel(
+            wallpaperManager: wallpaperManager,
+            tabManager: tabManager,
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            windowUUID: windowUUID
+        )
+        let viewController = WallpaperSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
+        viewController.settingsDelegate = self
         router.push(viewController)
     }
 
