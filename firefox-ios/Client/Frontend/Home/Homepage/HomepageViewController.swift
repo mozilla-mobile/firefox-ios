@@ -1299,10 +1299,11 @@ final class HomepageViewController: UIViewController,
                 actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
             )
         case .jumpBackIn(let config):
+            guard let tab = tabManager.getTabForUUID(uuid: config.tabUUID) else { return }
             dispatchDidSelectCardItemAction(with: item)
             store.dispatch(
                 JumpBackInAction(
-                    tab: config.tab,
+                    tab: tab,
                     windowUUID: self.windowUUID,
                     actionType: JumpBackInActionType.tapOnCell
                 )
