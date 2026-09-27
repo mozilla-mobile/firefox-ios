@@ -31,8 +31,8 @@ public final class QuickAnswersViewController: UIViewController,
     private let backgroundBlur: UIVisualEffectView = .build {
         $0.effect = UIBlurEffect(style: .systemUltraThinMaterial)
     }
-    private let backgroundRecordEffect: GradientCircleView = .build()
-    private lazy var closeButton: UIButton = .build { [weak self] in
+    let backgroundRecordEffect: GradientCircleView = .build()
+    lazy var closeButton: UIButton = .build { [weak self] in
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
         } else {
@@ -48,7 +48,7 @@ public final class QuickAnswersViewController: UIViewController,
             for: .touchUpInside
         )
     }
-    private let contentView: QuickAnswersContentView = .build()
+    let contentView: QuickAnswersContentView = .build()
     private let transitionAnimator: CrossDissolveTransitionAnimator?
 
     public let themeManager: any ThemeManager
@@ -153,7 +153,7 @@ public final class QuickAnswersViewController: UIViewController,
         contentView.configureStrings(stringsConfiguration.contentView)
         view.addSubviews(
             backgroundRecordEffect,
-            backgroundBlur,
+//            backgroundBlur,
             contentView,
             closeButton,
         )
@@ -179,7 +179,7 @@ public final class QuickAnswersViewController: UIViewController,
             backgroundRecordEffect.bottomAnchor.constraint(equalTo: view.bottomAnchor,
                                                            constant: UX.recordWaveEffectBottomPadding),
         ])
-        backgroundBlur.pinToSuperview()
+//        backgroundBlur.pinToSuperview()
     }
 
     private func registerCallbacks() {

@@ -84,30 +84,88 @@ final class CrossDissolveTransitionAnimator: NSObject,
             transitionContext.completeTransition(false)
             return
         }
+//        UIApplication.shared.windows.first?.layer.speed = 0.1
+        
+        let button = AudioWaveformView()
+        button.frame = sourceRect
+        button.applyTheme(theme: LightTheme())
+        button.startAnimating()
 
         let containerView = transitionContext.containerView
-        containerView.addSubview(presentedController.view)
-
-        presentedController.view.frame = containerView.bounds
-        presentedController.view.transform = presentationInitialTransform(in: containerView)
-        presentedController.view.alpha = 0.0
-        presentedController.view.clipsToBounds = true
-        presentedController.view.applyScreenCornerRadius()
-
-        UIView.animate(
-            withDuration: UX.springAnimationDuration,
-            delay: 0,
-            usingSpringWithDamping: UX.springAnimationDamping,
-            initialSpringVelocity: UX.springAnimationVelocity,
-            options: .curveEaseOut,
-            animations: {
-                presentedController.view.transform = .identity
-                presentedController.view.alpha = 1.0
-            },
-            completion: { _ in
-                transitionContext.completeTransition(true)
-            }
+        let maxSize = max(containerView.bounds.width, containerView.bounds.height) * 2.3
+        let view = UIView(
+            frame: CGRect(
+                origin: CGPoint(
+                    x: -maxSize / 2.0 + sourceRect.midX,
+                    y: -maxSize / 2.0 + sourceRect.midY
+                ),
+                size: CGSize(width: maxSize, height: maxSize)
+            )
         )
+        let mask = CAGradientLayer()
+        mask.frame = view.bounds
+        mask.type = .radial
+        mask.startPoint = CGPoint(x: 0.5, y: 0.5) // Center
+        mask.endPoint = CGPoint(x: 1.0, y: 1.0)   // Circular edge
+        mask.colors = [
+            UIColor.black.cgColor,
+            UIColor.black.cgColor,
+            UIColor.black.withAlphaComponent(0.0).cgColor,
+        ]
+        mask.locations = [0, 0.9, 1]
+        view.layer.mask = mask
+        view.backgroundColor = .red
+        view.layer.cornerRadius = maxSize / 2.0
+
+        containerView.addSubview(presentedController.view)
+        presentedController.view.mask = view
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+        blur.frame = containerView.bounds
+        containerView.addSubview(blur)
+        containerView.addSubview(button)
+        blur.alpha = 0.0
+        
+        view.transform = .init(scaleX: 0.01, y: 0.01)
+        
+        let transform = CGAffineTransform(translationX: 0.0, y: 30.0)
+        
+        presentedController.contentView.audioWaveform.alpha = 0.0
+        presentedController.contentView.placeholderLabel.transform = transform
+        presentedController.backgroundRecordEffect.transform = transform
+        presentedController.closeButton.transform = CGAffineTransform(translationX: 0.0, y: -50.0)
+
+        
+        UIView.animateKeyframes(withDuration: 0.4, delay: 0.0) {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.2) {
+                blur.alpha = 1.0
+            }
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0) {
+                view.transform = .identity
+                button.frame = CGRect(
+                    origin: CGPoint(
+                        x: containerView.bounds.midX - 9,
+                        y: 25/2 + 32 + 32 + presentedController.view.safeAreaInsets.top
+                    ),
+                    size: CGSize(width: 18.0, height: 25)
+                )
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.8, relativeDuration: 0.2) {
+                blur.alpha = 0.0
+                presentedController.contentView.audioWaveform.alpha = 1.0
+                presentedController.contentView.placeholderLabel.transform = .identity
+                presentedController.backgroundRecordEffect.transform = .identity
+                presentedController.closeButton.transform = .identity
+            }
+            UIView.addKeyframe(withRelativeStartTime: 0.9, relativeDuration: 0.1) {
+                button.alpha = 0.0
+            }
+        } completion: { _ in
+            button.removeFromSuperview()
+            blur.removeFromSuperview()
+            presentedController.view.mask = nil
+            transitionContext.completeTransition(true)
+        }
     }
 
     /// The transform applied to the presented view before the cross dissolve animation begins.
@@ -136,26 +194,162 @@ final class CrossDissolveTransitionAnimator: NSObject,
             transitionContext.completeTransition(false)
             return
         }
-
+        
         let containerView = transitionContext.containerView
+        let maxSize = max(containerView.bounds.width, containerView.bounds.height) * 2
+        let view = UIView(
+            frame: CGRect(
+                origin: CGPoint(
+                    x: -maxSize / 2.0 + sourceRect.midX,
+                    y: -maxSize / 2.0 + sourceRect.midY
+                ),
+                size: CGSize(width: maxSize, height: maxSize)
+            )
+        )
+        let mask = CAGradientLayer()
+        mask.frame = view.bounds
+        mask.type = .radial
+        mask.startPoint = CGPoint(x: 0.5, y: 0.5) // Center
+        mask.endPoint = CGPoint(x: 1.0, y: 1.0)   // Circular edge
+        mask.colors = [
+            UIColor.black.cgColor,
+            UIColor.black.cgColor,
+            UIColor.black.withAlphaComponent(0.0).cgColor,
+        ]
+        mask.locations = [0, 0.9, 1]
+        view.layer.mask = mask
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+        blur.frame = presentingController.view.bounds
+        presentingController.view.addSubview(blur)
+        view.backgroundColor = .red
+        view.layer.cornerRadius = maxSize / 2.0
+        containerView.mask = view
+        
+        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut) {
+            view.transform = .init(scaleX: 0.01, y: 0.01)
+        } completion: { _ in
+            blur.removeFromSuperview()
+            transitionContext.completeTransition(true)
+        }
+        
+        UIView.animate(withDuration: 0.3, delay: 0.1) {
+            blur.alpha = 0.0
+        }
+    }
+}
 
-        snapshotView.alpha = 0.0
-        containerView.addSubview(snapshotView)
+import Shared
 
-        UIView.animate(
-            withDuration: UX.springAnimationDuration,
-            delay: 0,
-            usingSpringWithDamping: UX.springAnimationDamping,
-            initialSpringVelocity: UX.springAnimationVelocity,
-            options: .curveEaseOut,
-            animations: {
-                snapshotView.alpha = 1.0
-            },
-            completion: { _ in
-                // We don't need to remove the snapshot view since during the dismissal the container view
-                // is removed from its superview.
-                transitionContext.completeTransition(true)
-            }
+// swiftlint: disable all
+struct Tel: QuickAnswersTelemetry {
+    func quickAnswersRequested(model: QuickAnswersModel) {
+        
+    }
+    
+    func recordingStarted() {
+        
+    }
+    
+    func recordingCompleted(outcome: Bool, errorType: String?) {
+        
+    }
+    
+    func resultsStarted() {
+        
+    }
+    
+    func resultsCompleted(outcome: Bool, errorType: String?, model: QuickAnswersModel) {
+        
+    }
+    
+    func permissionDenied(permission: QuickAnswersPermission) {
+        
+    }
+    
+    func citationTapped() {
+        
+    }
+    
+    func closed() {
+            
+    }
+    
+    func consentShown(agreed: Bool) {
+        
+    }
+}
+
+@available(iOS 26, *)
+class Contr: UIViewController, QuickAnswersNavigationHandler {
+    func dismissQuickAnswers(with navigationType: QuickAnswersNavigationType?) {
+        dismiss(animated: true)
+    }
+    
+    override func viewDidLoad() {
+        UIApplication.shared.windows.first?.layer.speed = 0.2
+        let button = UIButton()
+        button.configuration = .prominentClearGlass()
+        button.configuration?.image = UIImage(systemName: "waveform")
+        button.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .red
+        view.addSubview(button)
+        
+        NSLayoutConstraint.activate([
+            button.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16.0),
+            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16.0)
+        ])
+        
+        button.addAction(
+            UIAction(
+                handler: { _ in
+                    let pref = MockProfilePrefs()
+                    pref.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
+                    let quickAnswer = QuickAnswersViewController(
+                        navigationHandler: self,
+                        viewModel: QuickAnswersViewModel(prefs: pref, telemetry: Tel()),
+                        transitionType: .crossDissolve(sourceRect: button.frame),
+                        windowUUID: .DefaultUITestingUUID,
+                        themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
+                        learnMoreURL: nil,
+                        stringsConfiguration: .init(
+                            optIn: .init(
+                                title: "",
+                                description: "",
+                                learnMore: "",
+                                continueButton: ""
+                            ),
+                            contentView: .init(
+                                placeholder: "Listening, ask a question",
+                                answering: "",
+                                footerFormat: "",
+                                sources: ""
+                            ),
+                            errors: .init(
+                                permissionAlertTitle: "",
+                                microphonePermissionMessage: "",
+                                speechRecognitionPermissionMessage: "",
+                                openSettings: "",
+                                cancel: "",
+                                dailyLimitTitle: "",
+                                dailyLimitMessage: "",
+                                genericErrorTitle: "",
+                                genericErrorMessage: "",
+                                ok: ""
+                            ),
+                            closeAccessibilityLabel: "",
+                            appName: ""
+                        ),
+                        notificationCenter: NotificationCenter.default
+                    )
+                
+                    self.present(quickAnswer, animated: true)
+            }),
+            for: .allEvents
         )
     }
+}
+
+@available(iOS 26, *)
+#Preview {
+    Contr()
 }

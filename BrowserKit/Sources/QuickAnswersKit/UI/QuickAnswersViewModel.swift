@@ -85,7 +85,8 @@ final class QuickAnswersViewModel {
         guard let service else {
             let error = SpeechError.serviceNotInitialized
             recordRecordingFailure(error)
-            onStateChange?(.speechResult(.empty(), error))
+            onStateChange?(.recordingStarted)
+//            onStateChange?(.speechResult(.empty(), error))
             return
         }
         searchResultTask?.cancel()

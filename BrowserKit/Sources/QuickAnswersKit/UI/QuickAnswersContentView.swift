@@ -19,8 +19,8 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         $0.clipsToBounds = false
     }
     private let contentView: UIView = .build()
-    private let audioWaveform: AudioWaveformView = .build()
-    private let placeholderLabel: UILabel = .build {
+    let audioWaveform: AudioWaveformView = .build()
+    let placeholderLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.title2.scaledFont()
         $0.numberOfLines = 0
         $0.textAlignment = .center
