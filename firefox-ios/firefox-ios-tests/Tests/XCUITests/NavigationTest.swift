@@ -15,8 +15,7 @@ let website_2 = [
     "label": "Example",
     "value": "example",
     "link": "More information...",
-    "moreLinkLongPressUrl": "iana.org",
-    "moreLinkLongPressInfo": "iana"
+    "moreLinkLongPressUrl": "localhost"
 ]
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
 
@@ -219,8 +218,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
         app.buttons["Go"].waitAndTap()
         waitUntilPageLoad()
-        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        mozWaitForValueContains(url, value: website_2["moreLinkLongPressInfo"]!)
+        browserScreen.assertReservedTLDNamesLinkExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441497
@@ -235,8 +233,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
         app.buttons["Go"].waitAndTap()
         waitUntilPageLoad()
-        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        mozWaitForValueContains(url, value: website_2["moreLinkLongPressInfo"]!)
+        browserScreen.assertReservedTLDNamesLinkExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441923
@@ -287,13 +284,13 @@ class NavigationTest: FeatureFlaggedTestSuite {
         // There should be one item downloaded. It's name and size should be shown
         let downloadedList = app.tables["DownloadsTable"].cells.count
         XCTAssertEqual(downloadedList, 1, "The number of items in the downloads table is not correct")
-        mozWaitForElementToExist(app.tables.cells.staticTexts["example-domains.html"])
+        mozWaitForElementToExist(app.tables.cells.staticTexts[TestPages.exampleDomainsHTML])
 
         // Tap on the just downloaded link to check that the web page is loaded
-        app.tables.cells.staticTexts["example-domains.html"].waitAndTap()
+        app.tables.cells.staticTexts[TestPages.exampleDomainsHTML].waitAndTap()
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        mozWaitForValueContains(url, value: "example-domains.html")
+        mozWaitForValueContains(url, value: TestPages.exampleDomainsHTML)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441499
