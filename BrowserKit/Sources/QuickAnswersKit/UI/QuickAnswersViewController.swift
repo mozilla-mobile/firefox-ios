@@ -29,8 +29,8 @@ public final class QuickAnswersViewController: UIViewController,
     }
 
     // MARK: - Properties
-    private let backgroundRecordEffect: UIHostingController<BackgroundEffectView>
-    private lazy var closeButton: UIButton = .build {
+    let backgroundRecordEffect: UIHostingController<BackgroundEffectView>
+    lazy var closeButton: UIButton = .build {
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
         } else {
@@ -40,7 +40,7 @@ public final class QuickAnswersViewController: UIViewController,
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.closeButtonContentInset
         $0.addAction(
-            UIAction(handler: { _ in
+            UIAction(handler: { [weak self] _ in
                 self?.dismiss(with: nil)
             }),
             for: .touchUpInside

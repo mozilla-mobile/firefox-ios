@@ -84,7 +84,7 @@ final class CrossDissolveTransitionAnimator: NSObject,
             transitionContext.completeTransition(false)
             return
         }
-        UIApplication.shared.windows.first?.layer.speed = 0.1
+        UIApplication.shared.windows.first?.layer.speed = 1
 
         let containerView = transitionContext.containerView
         let maxSize = max(containerView.bounds.width, containerView.bounds.height) * 2.3
@@ -116,40 +116,35 @@ final class CrossDissolveTransitionAnimator: NSObject,
         presentedController.view.mask = view
         let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
         blur.frame = containerView.bounds
-        containerView.addSubview(blur)
-        blur.alpha = 0.0
-        
         view.transform = .init(scaleX: 0.01, y: 0.01)
+//        let copy = UIView(frame: view.frame)
+//        copy.transform = view.transform
+//        blur.mask = copy
         
+        presentedController.view.addSubview(blur)
+
         let transform = CGAffineTransform(translationX: 0.0, y: 30.0)
         
         presentedController.contentView.audioWaveform.alpha = 0.0
         presentedController.contentView.placeholderLabel.transform = transform
-        presentedController.backgroundRecordEffect.transform = transform
+        presentedController.backgroundRecordEffect.view.transform = transform
         presentedController.closeButton.transform = CGAffineTransform(translationX: 0.0, y: -50.0)
         presentedController.closeButton.alpha = 0.0
-
-        
-        UIView.animateKeyframes(withDuration: 0.4, delay: 0.0) {
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-                blur.alpha = 1.0
-            }
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0) {
-                view.transform = .identity
-                presentedController.closeButton.alpha = 1.0
-                presentedController.contentView.audioWaveform.alpha = 1.0
-                presentedController.contentView.placeholderLabel.transform = .identity
-                presentedController.backgroundRecordEffect.transform = .identity
-                presentedController.closeButton.transform = .identity
-            }
-            
-            UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
-                blur.alpha = 0.0
-            }
+        UIView.animate(withDuration: 0.4, delay: 0.0, options: .curveEaseOut) {
+            view.transform = .identity
+            presentedController.closeButton.alpha = 1.0
+            presentedController.contentView.audioWaveform.alpha = 1.0
+            presentedController.contentView.placeholderLabel.transform = .identity
+            presentedController.backgroundRecordEffect.view.transform = .identity
+            presentedController.closeButton.transform = .identity
         } completion: { _ in
             blur.removeFromSuperview()
             presentedController.view.mask = nil
             transitionContext.completeTransition(true)
+        }
+        
+        UIView.animate(withDuration: 0.1, delay: 0.3) {
+            blur.alpha = 0
         }
     }
 
@@ -203,8 +198,7 @@ final class CrossDissolveTransitionAnimator: NSObject,
         UIView.animate(withDuration: 0.3, delay: 0.1) {
             blur.alpha = 0.0
         }
-        
-        UIView.animate(withDuration: 0.1, delay: 0.3) {
+        UIView.animate(withDuration: 0.3, delay: 0.3) {
             view.alpha = 0.0
         }
     }
