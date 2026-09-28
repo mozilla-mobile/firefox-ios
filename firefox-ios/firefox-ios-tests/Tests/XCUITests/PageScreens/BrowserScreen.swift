@@ -379,8 +379,8 @@ final class BrowserScreen {
         XCTFail("The URL bar is still in editing mode after \(maxAttempts) Cancel taps")
     }
 
-    func assertRFCLinkExist(timeout: TimeInterval = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(sel.LINK_RFC_2606.element(in: app), timeout: timeout)
+    func assertReservedTLDNamesLinkExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.LINK_RESERVED_TLD_NAMES.element(in: app), timeout: timeout)
     }
 
     func addressToolbarContainValue(value: String) {
@@ -613,6 +613,28 @@ final class BrowserScreen {
         assertSuggestResult(title: title, kind: kind)
     }
 
+    /// Asserts the non-sponsored `title` row directly follows the Firefox Suggest header, which holds
+    /// a single entry, and has no "Sponsored" description.
+    func assertNonSponsoredSuggestRowUI(title: String, timeout: TimeInterval = TIMEOUT) {
+        let header = sel.FIREFOX_SUGGEST_HEADER.element(in: app)
+        let row = app.tables.cells.containing(.staticText, identifier: title).firstMatch
+        assertWebElements(header, row, row.staticTexts[title])
+
+        // Search engine suggestions arriving late shift the table, so poll until the layout settles
+        let isDirectlyBelowHeader = NSPredicate { _, _ in abs(row.frame.minY - header.frame.maxY) <= 1 }
+        let expectation = XCTNSPredicateExpectation(predicate: isDirectlyBelowHeader, object: nil)
+        XCTAssertEqual(
+            XCTWaiter().wait(for: [expectation], timeout: timeout),
+            .completed,
+            "The suggestion is not the row directly under the Firefox Suggest header"
+        )
+        assertWebElements(shouldExist: false, row.staticTexts[sel.SPONSORED_LABEL.value])
+    }
+
+    func assertFirefoxSuggestHeader(shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
+        assertWebElements(shouldExist: shouldExist, sel.FIREFOX_SUGGEST_HEADER.element(in: app), timeout: timeout)
+    }
+
     /// Asserts on an address bar row backed by local data (browsing history or bookmarks), which is
     /// listed by page title rather than under the Firefox Suggest section.
     func assertSuggestionRow(titled title: String, shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
@@ -717,9 +739,17 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForElementToExist(linkText, timeout: timeout)
     }
 
-    func assertPrivateModeMessageCardExists(timeout: TimeInterval = TIMEOUT) {
-        let privateMessage = sel.PRIVATE_MODE_HOMEPAGE_TITLE.element(in: app)
-        BaseTestCase().mozWaitForElementToExist(privateMessage, timeout: timeout)
+    /// - Parameter verifyingCopy: also asserts the title and body text, which the presence of the
+    /// labels alone does not cover: an empty or wrong message still satisfies the identifiers.
+    func assertPrivateModeMessageCardExists(verifyingCopy: Bool = false, timeout: TimeInterval = TIMEOUT) {
+        let title = sel.PRIVATE_MODE_HOMEPAGE_TITLE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(title, timeout: timeout)
+        guard verifyingCopy else { return }
+
+        let body = sel.PRIVATE_MODE_HOMEPAGE_BODY.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(body, timeout: timeout)
+        XCTAssertEqual(title.label, sel.PRIVATE_MODE_HOMEPAGE_TITLE_TEXT_EN, "Private homepage title copy changed")
+        XCTAssertEqual(body.label, sel.PRIVATE_MODE_HOMEPAGE_BODY_TEXT_EN, "Private homepage body copy changed")
     }
 
     func tapPrivateModeActivityLink() {

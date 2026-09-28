@@ -29,8 +29,10 @@ final class SummaryTitleCell: UITableViewCell, ReusableCell, ThemeApplicable {
         contentView.addSubview(titleLabel)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: SummaryCellUX.horizontalPadding),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                 constant: -SummaryCellUX.horizontalPadding),
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.titleBottomPadding)
         ])
     }

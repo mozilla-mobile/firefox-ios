@@ -427,9 +427,11 @@ private extension URL {
         if additionalPartCount > 0 {
             if let suffix = suffix {
                 // Take out the public suffixed and add in the additional parts we want.
-                let literalFromEnd: NSString.CompareOptions = [.literal,        // Match the string exactly.
-                    .backwards,      // Search from the end.
-                    .anchored]         // Stick to the end.
+                let literalFromEnd: NSString.CompareOptions = [
+                    .literal,   // Match the string exactly.
+                    .backwards, // Search from the end.
+                    .anchored   // Stick to the end.
+                ]
                 let suffixlessHost = host.replacingOccurrences(of: suffix, with: "", options: literalFromEnd, range: nil)
                 let suffixlessTokens = suffixlessHost.components(separatedBy: ".").filter { !$0.isEmpty }
                 let maxAdditionalCount = max(0, suffixlessTokens.count - additionalPartCount)

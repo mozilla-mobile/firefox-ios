@@ -89,7 +89,7 @@ class Download: NSObject {
 }
 
 // FIXME: FXIOS-14051 Class is not thread safe and Sendable
-class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate, @unchecked Sendable {
+final class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate, @unchecked Sendable {
     let preflightResponse: URLResponse
     let request: URLRequest
 
@@ -185,6 +185,11 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
             resumeData != nil {
             return
         }
+        // The download is in a terminal state. The session must be invalidated
+        // because URLSession strongly retains its delegate (self) until then,
+        // which would otherwise leak self (HTTPDownload).
+        // https://developer.apple.com/documentation/foundation/urlsession#Using-a-session-delegate
+        session.finishTasksAndInvalidate()
         ensureMainThread {
             self.delegate?.download(self, didCompleteWithError: error)
         }

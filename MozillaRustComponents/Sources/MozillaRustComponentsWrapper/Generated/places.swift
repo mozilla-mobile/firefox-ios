@@ -835,50 +835,7 @@ public protocol PlacesConnectionProtocol: AnyObject, Sendable {
     
     func queryHistoryMetadata(query: String, limit: Int32) throws  -> [HistoryMetadata]
     
-    /**
-     * Run maintenance on the places DB (checkpoint step)
-     *
-     * The `run_maintenance_*()` functions are intended to be run during idle time and will take steps
-     * to clean up / shrink the database.  They're split up so that we can time each one in the
-     * Kotlin wrapper code (This is needed because we only have access to the Glean API in Kotlin and
-     * it supports a stop-watch style API, not recording specific values).
-     */
-    func runMaintenanceCheckpoint() throws 
-    
-    /**
-     * Run maintenance on the places DB (optimize step)
-     *
-     * The `run_maintenance_*()` functions are intended to be run during idle time and will take steps
-     * to clean up / shrink the database.  They're split up so that we can time each one in the
-     * Kotlin wrapper code (This is needed because we only have access to the Glean API in Kotlin and
-     * it supports a stop-watch style API, not recording specific values).
-     */
-    func runMaintenanceOptimize() throws 
-    
-    /**
-     * Run maintenance on the places DB (prune step)
-     *
-     * The `run_maintenance_*()` functions are intended to be run during idle time and will take steps
-     * to clean up / shrink the database.  They're split up so that we can time each one in the
-     * Kotlin wrapper code (This is needed because we only have access to the Glean API in Kotlin and
-     * it supports a stop-watch style API, not recording specific values).
-     *
-     * db_size_limit is the approximate storage limit in bytes.  If the database is using more space
-     * than this, some older visits will be deleted to free up space.  Pass in a 0 to skip this.
-     *
-     * prune_limit is the maximum number of visits to prune if the database is over db_size_limit
-     */
-    func runMaintenancePrune(dbSizeLimit: UInt32, pruneLimit: UInt32) throws  -> RunMaintenanceMetrics
-    
-    /**
-     * Run maintenance on the places DB (vacuum step)
-     *
-     * The `run_maintenance_*()` functions are intended to be run during idle time and will take steps
-     * to clean up / shrink the database.  They're split up so that we can time each one in the
-     * Kotlin wrapper code (This is needed because we only have access to the Glean API in Kotlin and
-     * it supports a stop-watch style API, not recording specific values).
-     */
-    func runMaintenanceVacuum() throws 
+    func runMaintenance(options: PlacesRunMaintenanceOptions) throws 
     
 }
 open class PlacesConnection: PlacesConnectionProtocol, @unchecked Sendable {
@@ -1353,74 +1310,11 @@ open func queryHistoryMetadata(query: String, limit: Int32)throws  -> [HistoryMe
 })
 }
     
-    /**
-     * Run maintenance on the places DB (checkpoint step)
-     *
-     * The `run_maintenance_*()` functions are intended to be run during idle time and will take steps
-     * to clean up / shrink the database.  They're split up so that we can time each one in the
-     * Kotlin wrapper code (This is needed because we only have access to the Glean API in Kotlin and
-     * it supports a stop-watch style API, not recording specific values).
-     */
-open func runMaintenanceCheckpoint()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
+open func runMaintenance(options: PlacesRunMaintenanceOptions)throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
         uniffiCallStatus in
-    uniffi_places_fn_method_placesconnection_run_maintenance_checkpoint(
-            self.uniffiCloneHandle(),uniffiCallStatus
-    )
-}
-}
-    
-    /**
-     * Run maintenance on the places DB (optimize step)
-     *
-     * The `run_maintenance_*()` functions are intended to be run during idle time and will take steps
-     * to clean up / shrink the database.  They're split up so that we can time each one in the
-     * Kotlin wrapper code (This is needed because we only have access to the Glean API in Kotlin and
-     * it supports a stop-watch style API, not recording specific values).
-     */
-open func runMaintenanceOptimize()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-        uniffiCallStatus in
-    uniffi_places_fn_method_placesconnection_run_maintenance_optimize(
-            self.uniffiCloneHandle(),uniffiCallStatus
-    )
-}
-}
-    
-    /**
-     * Run maintenance on the places DB (prune step)
-     *
-     * The `run_maintenance_*()` functions are intended to be run during idle time and will take steps
-     * to clean up / shrink the database.  They're split up so that we can time each one in the
-     * Kotlin wrapper code (This is needed because we only have access to the Glean API in Kotlin and
-     * it supports a stop-watch style API, not recording specific values).
-     *
-     * db_size_limit is the approximate storage limit in bytes.  If the database is using more space
-     * than this, some older visits will be deleted to free up space.  Pass in a 0 to skip this.
-     *
-     * prune_limit is the maximum number of visits to prune if the database is over db_size_limit
-     */
-open func runMaintenancePrune(dbSizeLimit: UInt32, pruneLimit: UInt32)throws  -> RunMaintenanceMetrics  {
-    return try  FfiConverterTypeRunMaintenanceMetrics_lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-        uniffiCallStatus in
-    uniffi_places_fn_method_placesconnection_run_maintenance_prune(
+    uniffi_places_fn_method_placesconnection_run_maintenance(
             self.uniffiCloneHandle(),
-        FfiConverterUInt32.lower(dbSizeLimit),
-        FfiConverterUInt32.lower(pruneLimit),uniffiCallStatus
-    )
-})
-}
-    
-    /**
-     * Run maintenance on the places DB (vacuum step)
-     *
-     * The `run_maintenance_*()` functions are intended to be run during idle time and will take steps
-     * to clean up / shrink the database.  They're split up so that we can time each one in the
-     * Kotlin wrapper code (This is needed because we only have access to the Glean API in Kotlin and
-     * it supports a stop-watch style API, not recording specific values).
-     */
-open func runMaintenanceVacuum()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-        uniffiCallStatus in
-    uniffi_places_fn_method_placesconnection_run_maintenance_vacuum(
-            self.uniffiCloneHandle(),uniffiCallStatus
+        FfiConverterTypePlacesRunMaintenanceOptions_lower(options),uniffiCallStatus
     )
 }
 }
@@ -2665,17 +2559,29 @@ public func FfiConverterTypeNoteHistoryMetadataObservationOptions_lower(_ value:
 }
 
 
-public struct RunMaintenanceMetrics: Equatable, Hashable {
-    public var prunedVisits: Bool
-    public var dbSizeBefore: UInt32
-    public var dbSizeAfter: UInt32
+public struct PlacesRunMaintenanceOptions: Equatable, Hashable {
+    /**
+     * db_size_limit is the approximate storage limit in bytes.  If the database is using more space
+     * than this, some older visits will be deleted to free up space.  Pass in a 0 to skip this.
+     */
+    public var dbSizeLimit: UInt32
+    /**
+     * Maximum number of visits to prune in one pass
+     */
+    public var pruneLimit: UInt32
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(prunedVisits: Bool, dbSizeBefore: UInt32, dbSizeAfter: UInt32) {
-        self.prunedVisits = prunedVisits
-        self.dbSizeBefore = dbSizeBefore
-        self.dbSizeAfter = dbSizeAfter
+    public init(
+        /**
+         * db_size_limit is the approximate storage limit in bytes.  If the database is using more space
+         * than this, some older visits will be deleted to free up space.  Pass in a 0 to skip this.
+         */dbSizeLimit: UInt32, 
+        /**
+         * Maximum number of visits to prune in one pass
+         */pruneLimit: UInt32 = UInt32(12)) {
+        self.dbSizeLimit = dbSizeLimit
+        self.pruneLimit = pruneLimit
     }
 
     
@@ -2684,26 +2590,24 @@ public struct RunMaintenanceMetrics: Equatable, Hashable {
 }
 
 #if compiler(>=6)
-extension RunMaintenanceMetrics: Sendable {}
+extension PlacesRunMaintenanceOptions: Sendable {}
 #endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public struct FfiConverterTypeRunMaintenanceMetrics: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RunMaintenanceMetrics {
+public struct FfiConverterTypePlacesRunMaintenanceOptions: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> PlacesRunMaintenanceOptions {
         return
-            try RunMaintenanceMetrics(
-                prunedVisits: FfiConverterBool.read(from: &buf), 
-                dbSizeBefore: FfiConverterUInt32.read(from: &buf), 
-                dbSizeAfter: FfiConverterUInt32.read(from: &buf)
+            try PlacesRunMaintenanceOptions(
+                dbSizeLimit: FfiConverterUInt32.read(from: &buf), 
+                pruneLimit: FfiConverterUInt32.read(from: &buf)
         )
     }
 
-    public static func write(_ value: RunMaintenanceMetrics, into buf: inout [UInt8]) {
-        FfiConverterBool.write(value.prunedVisits, into: &buf)
-        FfiConverterUInt32.write(value.dbSizeBefore, into: &buf)
-        FfiConverterUInt32.write(value.dbSizeAfter, into: &buf)
+    public static func write(_ value: PlacesRunMaintenanceOptions, into buf: inout [UInt8]) {
+        FfiConverterUInt32.write(value.dbSizeLimit, into: &buf)
+        FfiConverterUInt32.write(value.pruneLimit, into: &buf)
     }
 }
 
@@ -2711,15 +2615,15 @@ public struct FfiConverterTypeRunMaintenanceMetrics: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRunMaintenanceMetrics_lift(_ buf: RustBuffer) throws -> RunMaintenanceMetrics {
-    return try FfiConverterTypeRunMaintenanceMetrics.lift(buf)
+public func FfiConverterTypePlacesRunMaintenanceOptions_lift(_ buf: RustBuffer) throws -> PlacesRunMaintenanceOptions {
+    return try FfiConverterTypePlacesRunMaintenanceOptions.lift(buf)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRunMaintenanceMetrics_lower(_ value: RunMaintenanceMetrics) -> RustBuffer {
-    return FfiConverterTypeRunMaintenanceMetrics.lower(value)
+public func FfiConverterTypePlacesRunMaintenanceOptions_lower(_ value: PlacesRunMaintenanceOptions) -> RustBuffer {
+    return FfiConverterTypePlacesRunMaintenanceOptions.lower(value)
 }
 
 
@@ -4637,16 +4541,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_places_checksum_method_placesconnection_query_history_metadata() != 12095) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesconnection_run_maintenance_checkpoint() != 53937) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_places_checksum_method_placesconnection_run_maintenance_optimize() != 19276) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_places_checksum_method_placesconnection_run_maintenance_prune() != 45926) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_places_checksum_method_placesconnection_run_maintenance_vacuum() != 6384) {
+    if (uniffi_places_checksum_method_placesconnection_run_maintenance() != 59938) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_places_checksum_method_sqlinterrupthandle_interrupt() != 3328) {

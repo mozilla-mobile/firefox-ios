@@ -2,7 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-// Configuration settings file format documentation can be found at:
-// https://help.apple.com/xcode/#/dev745c5c974
+import UIKit
 
-SWIFT_ACTIVE_COMPILATION_CONDITIONS = TESTING;
+/// Layout constants shared by all the `SummaryView` cells, so their content stays aligned.
+enum SummaryCellUX {
+    static let horizontalPadding: CGFloat = 16.0
+}

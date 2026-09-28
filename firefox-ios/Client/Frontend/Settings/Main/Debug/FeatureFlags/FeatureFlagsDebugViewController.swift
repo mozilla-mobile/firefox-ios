@@ -157,9 +157,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .homepageSearchBar,
-                titleText: format(string: "Homepage Search Bar"),
-                statusText: format(string: "Toggle to enable homepage search bar for redesign")
+                with: .homepageAnimatedCenterSearchBar,
+                titleText: format(string: "Homepage Animated Center Search Bar"),
+                statusText: format(string: "Toggle to enable homepage animated center search bar for redesign")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -224,6 +224,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .novaDesign,
                 titleText: format(string: "Nova Design"),
                 statusText: format(string: "Toggle to enable Nova design")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .novaPrivateThemeOverride,
+                titleText: format(string: "Nova Private Theme Override"),
+                statusText: format(string: "Toggle to disable purple theme for private mode")
             ) { [weak self] _ in
                 self?.reloadView()
             },

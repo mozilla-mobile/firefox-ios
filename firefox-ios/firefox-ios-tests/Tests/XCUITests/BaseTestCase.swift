@@ -213,6 +213,12 @@ class BaseTestCase: XCTestCase {
     }
 
     func setUpLaunchArguments() {
+        // iOS 17 XCTest crashes the app once it is quarantined for high logging volume
+        // https://mozilla-hub.atlassian.net/browse/MTE-6254
+        if #available(iOS 18, *) {
+        } else if #available(iOS 17, *) {
+            app.launchEnvironment["OS_ACTIVITY_MODE"] = "disable"
+        }
         if !launchArguments.contains("FIREFOX_PERFORMANCE_TEST") {
             app.launchArguments = [LaunchArguments.Test] + launchArguments
         } else {

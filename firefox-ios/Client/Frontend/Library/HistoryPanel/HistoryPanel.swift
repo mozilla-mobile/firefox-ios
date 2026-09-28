@@ -246,8 +246,8 @@ class HistoryPanel: UIViewController,
         // Avoid refreshing if search is in progress
         guard !viewModel.isSearchInProgress else { return }
 
-        viewModel.reloadData { success in
-            ensureMainThread { [weak self] in
+        viewModel.reloadData { [weak self] success in
+            ensureMainThread {
                 self?.applySnapshot(animatingDifferences: animating)
             }
         }

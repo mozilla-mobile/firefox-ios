@@ -126,8 +126,8 @@ final class TabTrayViewController: UIViewController,
     private lazy var experimentSegmentControl: TabTraySelectorView = {
         let selectedIndex = experimentConvertSelectedIndex()
         let titles = [TabTrayPanelType.privateTabs.label,
-                     TabTrayPanelType.tabs.label,
-                     TabTrayPanelType.syncedTabs.label]
+                      TabTrayPanelType.tabs.label,
+                      TabTrayPanelType.syncedTabs.label]
         let selector = TabTraySelectorView(selectedIndex: selectedIndex,
                                            theme: retrieveTheme(),
                                            buttonTitles: titles)
@@ -141,8 +141,8 @@ final class TabTrayViewController: UIViewController,
     private lazy var experimentiPadSegmentControl: TabTrayiPadSelectorView = {
         let selectedIndex = experimentConvertSelectedIndex()
         let titles = [TabTrayPanelType.privateTabs.label,
-                     TabTrayPanelType.tabs.label,
-                     TabTrayPanelType.syncedTabs.label]
+                      TabTrayPanelType.tabs.label,
+                      TabTrayPanelType.syncedTabs.label]
         let selector = TabTrayiPadSelectorView(selectedIndex: selectedIndex,
                                                theme: retrieveTheme(),
                                                buttonTitles: titles)

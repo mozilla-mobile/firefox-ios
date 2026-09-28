@@ -258,8 +258,8 @@ private extension WallpaperSettingsViewController {
 
         cell.showDownloading(true)
 
-        viewModel.downloadAndSetWallpaper(at: indexPath) { result in
-            ensureMainThread { [weak self] in
+        viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
+            ensureMainThread {
                 switch result {
                 case .success:
                     self?.showToast()

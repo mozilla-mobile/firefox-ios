@@ -148,7 +148,6 @@ extension AppDelegate {
     }
 
     func setupExperimentation() {
-        // Enable nimbus when both Send Usage Data and Studies are enabled in the settings.
         NimbusWrapper.shared.initialize()
     }
 }

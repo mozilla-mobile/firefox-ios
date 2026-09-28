@@ -412,7 +412,7 @@ class TelemetryWrapperTests: XCTestCase {
         let isAccessibilitySizeEnabledKey = TelemetryWrapper.EventExtraKey.isAccessibilitySizeEnabled.rawValue
         let preferredContentSizeCategoryKey = TelemetryWrapper.EventExtraKey.preferredContentSizeCategory.rawValue
         let extras = [isAccessibilitySizeEnabledKey: "\(1)",
-                    preferredContentSizeCategoryKey: "UICTContentSizeCategoryAccessibilityL"]
+                      preferredContentSizeCategoryKey: "UICTContentSizeCategoryAccessibilityL"]
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .dynamicTextSize,

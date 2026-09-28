@@ -319,7 +319,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isHomepageSearchBarEnabled: Bool {
-        return featureFlagsProvider.isEnabled(.homepageSearchBar)
+        return featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar)
     }
 
     var isSummarizerToolbarFeatureEnabled: Bool {
@@ -1336,7 +1336,7 @@ class BrowserViewController: UIViewController,
     /// As part of the homepage search bar work, we want to only hide the toolbar when the homepage search bar appears.
     /// The homepage search bar should not appear if we are in editing mode.
     private func shouldHideAddressToolbar() {
-        guard featureFlagsProvider.isEnabled(.homepageSearchBar) else { return }
+        guard featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar) else { return }
         let toolbarState = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
@@ -4309,8 +4309,8 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
 
     override func paste(itemProviders: [NSItemProvider]) {
         for provider in itemProviders where provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-            _ = provider.loadObject(ofClass: URL.self) { url, _ in
-                DispatchQueue.main.async { [weak self] in
+            _ = provider.loadObject(ofClass: URL.self) { [weak self] url, _ in
+                DispatchQueue.main.async {
                     let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
                     self?.openURLInNewTab(url, isPrivate: isPrivate)
                 }
@@ -4422,6 +4422,9 @@ extension BrowserViewController: LegacyTabDelegate {
 
         let adsHelper = AdsTelemetryHelper(tab: tab)
         tab.addContentScript(adsHelper, name: AdsTelemetryHelper.name())
+
+        let translationsPageStateHelper = TranslationsPageStateHelper(tab: tab)
+        tab.addContentScript(translationsPageStateHelper, name: TranslationsPageStateHelper.name())
 
         let noImageModeHelper = NoImageModeHelper(tab: tab)
         tab.addContentScript(noImageModeHelper, name: NoImageModeHelper.name())

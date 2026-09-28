@@ -857,12 +857,8 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        // Blob URLs are downloaded via DownloadHelper.js where we check if we need to handle any special cases like:
-        // - If the blob response has a .pkpass MIME type (FXIOS-11684)
-        // - The <a> tag pressed has a "download" attribute, indicating a file download (FXIOS-11125)
-        // Once inspected, if there are no special cases to handle, we will then navigate to the blob URL's location
-        // via JS since we are cancelling the navigation here
-        if url.scheme == "blob" && navigationAction.navigationType != .other {
+        // Read blob data in the web view, including passes opened by JavaScript navigation.
+        if url.scheme == "blob" {
             _ = DownloadContentScript.requestBlobDownload(url: url, tab: tab)
             decisionHandler(.cancel)
             return

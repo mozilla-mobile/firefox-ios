@@ -726,8 +726,8 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
             let index = indexPath.item + 1
             let engine = model.orderedEngines[index]
 
-            model.deleteCustomEngine(engine) {
-                ensureMainThread { [weak self] in
+            model.deleteCustomEngine(engine) { [weak self] in
+                ensureMainThread {
                     self?.tableView.deleteRows(at: [indexPath], with: .right)
 
                     // Change navigationItem's right button item title to Edit and disable the edit button

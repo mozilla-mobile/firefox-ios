@@ -20,7 +20,6 @@ struct SummaryViewModel {
 
 final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeApplicable {
     private struct UX {
-        static let tableViewHorizontalPadding: CGFloat = 16.0
         static let titleVisibilityThreshold: CGFloat = 30.0
         static let titleVisibilityAnimationDuration: CGFloat = 0.1
     }
@@ -68,8 +67,8 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
         addSubviews(tableView)
 
         NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.tableViewHorizontalPadding),
-            tableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.tableViewHorizontalPadding),
+            tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
             tableView.topAnchor.constraint(equalTo: topAnchor),
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])

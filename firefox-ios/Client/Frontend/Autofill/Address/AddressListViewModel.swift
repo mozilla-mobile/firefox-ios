@@ -223,13 +223,12 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     private func saveLocal(address: UpdatableAddressFields) {
         addressProvider.addAddress(address: address) { [weak self] result in
-            guard let self else { return }
             ensureMainThread {
                 switch result {
                 case .failure:
-                    self.presentToast?(
+                    self?.presentToast?(
                         .error(
-                            .save(action: { [weak self] in
+                            .save(action: {
                                 self?.destination = .add(
                                     Address(
                                         guid: "",
@@ -254,8 +253,8 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
                     )
                 default: break
                 }
-                self.destination = nil
-                self.fetchAddresses()
+                self?.destination = nil
+                self?.fetchAddresses()
             }
         }
     }
@@ -288,22 +287,21 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     private func removeLocal(address: Address) {
         addressProvider.deleteAddress(id: address.id) { [weak self] result in
-            guard let self else { return }
             ensureMainThread {
                 switch result {
                 case .failure:
-                    self.presentToast?(
+                    self?.presentToast?(
                         .error(
-                            .remove(action: { [weak self] in
+                            .remove(action: {
                                 self?.destination = .edit(address)
                             })
                         )
                     )
                 default: break
                 }
-                self.toggleEditMode()
-                self.destination = nil
-                self.fetchAddresses()
+                self?.toggleEditMode()
+                self?.destination = nil
+                self?.fetchAddresses()
             }
         }
     }

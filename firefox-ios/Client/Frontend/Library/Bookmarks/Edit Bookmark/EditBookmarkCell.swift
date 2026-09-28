@@ -27,16 +27,16 @@ class EditBookmarkCell: UITableViewCell,
         view.spacing = 10.0
     }
     private lazy var textFieldsDivider: UIView = .build()
-    private lazy var titleTextfield: TextField = .build { view in
-        view.addAction(UIAction(handler: { [weak self] _ in
+    private lazy var titleTextfield: TextField = .build { [weak self] view in
+        view.addAction(UIAction(handler: { _ in
             self?.titleTextFieldDidChange()
         }), for: .editingChanged)
         view.adjustsFontSizeToFitWidth = true
         view.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.titleTextField
     }
-    private lazy var urlTextfield: TextField = .build { view in
+    private lazy var urlTextfield: TextField = .build { [weak self] view in
         view.keyboardType = .URL
-        view.addAction(UIAction(handler: { [weak self] _ in
+        view.addAction(UIAction(handler: { _ in
             self?.urlTextFieldDidChange()
         }), for: .editingChanged)
         view.adjustsFontSizeToFitWidth = true

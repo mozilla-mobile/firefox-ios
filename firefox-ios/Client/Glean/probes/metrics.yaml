@@ -2680,6 +2680,23 @@ fx_suggest:
     expires: never
     send_in_pings:
       - fx-suggest
+  suggestion_id:
+    type: string
+    description: |
+      The suggestion ID from MARS/Merino.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/35706
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35723
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - ttran@mozilla.com
+      - najiang@mozilla.com
+    expires: never
+    send_in_pings:
+      - fx-suggest
 
 # Window (iPad) metrics
 windows:

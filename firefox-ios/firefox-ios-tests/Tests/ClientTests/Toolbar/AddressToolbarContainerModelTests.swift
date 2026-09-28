@@ -303,7 +303,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         isGoogleLensEnabled: Bool = false
     ) -> AddressBarState {
         return AddressBarState(windowUUID: windowUUID,
-                               navigationActionsState: NavigationActionsState(windowUUID: windowUUID),
+                               navigationActions: [],
                                leadingPageActions: [],
                                trailingPageActions: [],
                                browserActions: [],

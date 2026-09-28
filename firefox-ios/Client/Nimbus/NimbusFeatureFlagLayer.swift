@@ -99,8 +99,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .homepagePinnedHeader:
             return checkHomepagePinnedHeaderFeature()
 
-        case .homepageSearchBar:
-            return checkHomepageSearchBarFeature()
+        case .homepageAnimatedCenterSearchBar:
+            return checkHomepageAnimatedCenterSearchBarFeature()
 
         case .homepageStoryCategories:
             return checkHomepageStoriesCaterogiesFeature()
@@ -136,6 +136,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .novaDesign:
             return checkNovaDesignFeature()
+
+        case .novaPrivateThemeOverride:
+            return checkNovaPrivateThemeOverrideFeature()
 
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature()
@@ -258,8 +261,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.homepageRedesignFeature.value().pinnedHeaderEnabled
     }
 
-    private func checkHomepageSearchBarFeature() -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().searchBar
+    private func checkHomepageAnimatedCenterSearchBarFeature() -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().animatedCenterSearchBar
     }
 
     private func checkHomepageStoriesCaterogiesFeature() -> Bool {
@@ -439,6 +442,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkNovaDesignFeature() -> Bool {
         return nimbus.features.novaDesignFeature.value().enabled
+    }
+
+    private func checkNovaPrivateThemeOverrideFeature() -> Bool {
+        return nimbus.features.novaDesignFeature.value().privateThemeOverride
     }
 
     private func checkAiKillSwitchFeature() -> Bool {

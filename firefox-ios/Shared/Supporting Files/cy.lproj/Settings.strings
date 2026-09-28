@@ -184,6 +184,9 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Awtochwarae";
 
+/* VoiceOver custom action name for a settings row's Learn More link. */
+"Settings.BoolSetting.LearnMoreAction.v157" = "Dysgu Rhagor";
+
 /* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
 "Settings.Browsing.AdBlocker.Description.v155" = "Yn lleihau hysbysebion a thracwyr sy'n gysylltiedig â hysbysebion. Os yw gwefan yn edrych fel ei bod wedi torri, ceisiwch ddiffodd hwn.";
 

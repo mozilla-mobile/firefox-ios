@@ -31,7 +31,7 @@ enum FeatureFlagID: String, CaseIterable {
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
     case homepagePinnedHeader
-    case homepageSearchBar
+    case homepageAnimatedCenterSearchBar
     case homepageStoryCategories
     case homepageTrackerBlockerModule
     case hostedSummarizer
@@ -44,6 +44,7 @@ enum FeatureFlagID: String, CaseIterable {
     case nativeErrorPage
     case newBookmarkFolderTree
     case novaDesign
+    case novaPrivateThemeOverride
     case noInternetConnectionErrorPage
     case privacyDashboard
     case quickAnswers
@@ -116,7 +117,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .googleLens,
                 .homepageAddShortcutTile,
                 .homepagePinnedHeader,
-                .homepageSearchBar,
+                .homepageAnimatedCenterSearchBar,
                 .homepageStoryCategories,
                 .homepageTrackerBlockerModule,
                 .hostedSummarizer,
@@ -126,6 +127,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .newBookmarkFolderTree,
                 .novaDesign,
+                .novaPrivateThemeOverride,
                 .noInternetConnectionErrorPage,
                 .privacyDashboard,
                 .quickAnswers,
