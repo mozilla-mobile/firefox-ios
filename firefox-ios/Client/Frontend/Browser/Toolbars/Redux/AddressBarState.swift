@@ -557,12 +557,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        let toolbarPosition: AddressToolbarPosition? = switch toolbarAction.toolbarPosition {
-        case .top: .top
-        case .bottom: .bottom
-        case nil: nil
-        }
-
         // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
         // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
