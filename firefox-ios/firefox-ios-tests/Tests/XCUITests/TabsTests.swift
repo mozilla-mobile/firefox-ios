@@ -704,7 +704,7 @@ class TabsTestsIphone: BaseTestCase {
         // Check that the tab has changed
         waitUntilPageLoad()
         browserScreen.addressToolbarContainValue(value: "iana")
-        browserScreen.assertRFCLinkExist()
+        browserScreen.assertReservedTLDNamesLinkExist()
         toolBarScreen.assertTabsButtonExists()
         toolBarScreen.assertTabsButtonValue(expectedCount: "2")
     }
@@ -725,7 +725,7 @@ class TabsTestsIphone: BaseTestCase {
 
         waitUntilPageLoad()
         browserScreen.addressToolbarContainValue(value: "iana")
-        browserScreen.assertRFCLinkExist()
+        browserScreen.assertReservedTLDNamesLinkExist()
         toolBarScreen.assertTabsButtonExists()
         toolBarScreen.assertTabsButtonValue(expectedCount: "2")
 

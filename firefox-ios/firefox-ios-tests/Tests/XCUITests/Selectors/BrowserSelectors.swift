@@ -17,7 +17,7 @@ protocol BrowserSelectorsSet {
     var CANCEL_BUTTON_URL_BAR: Selector { get }
     var PRIVATE_BROWSING: Selector { get }
     var CANCEL_BUTTON: Selector { get }
-    var LINK_RFC_2606: Selector { get }
+    var LINK_RESERVED_TLD_NAMES: Selector { get }
     var BOOK_OF_MOZILLA_TEXT: Selector { get }
     var BOOK_OF_MOZILLA_VERSE_TEXT: Selector { get }
     var ADDRESSTOOLBAR_LOCKICON: Selector { get }
@@ -37,6 +37,7 @@ protocol BrowserSelectorsSet {
     var PRIVATE_MODE_HOMEPAGE_BODY_TEXT_EN: String { get }
     var SEARCH_SETTINGS_BUTTON: Selector { get }
     var SPONSORED_LABEL: Selector { get }
+    var FIREFOX_SUGGEST_HEADER: Selector { get }
     var PASTE_BUTTON: Selector { get }
     var OPEN_DESIGNATED_URL_BUTTON: Selector { get }
     var ADDRESS_BAR_CONTEXT_MENU: Selector { get }
@@ -62,7 +63,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let cancelButtonUrlBar = AccessibilityIdentifiers.Browser.UrlBar.cancelButton
         static let privateBrowsingLabel = "Private Browsing"
         static let cancelButton = "Cancel"
-        static let rfc = "RFC 2606"
+        static let reservedTLDNames = "Reserved Top Level DNS Names"
         static let AddressToolbar_LockIcon = AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon
         static let AddressToolbar_LockIcon_Off = AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff
         static let topTabsCollectionView = AccessibilityIdentifiers.Browser.TopTabs.collectionView
@@ -81,6 +82,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let bookOfMozillaVerseText = "And the beast shall come forth"
         static let searchSettingsButton = "Search Settings"
         static let sponsoredLabel = "Sponsored"
+        static let firefoxSuggestHeader = "Firefox Suggest"
         // In-page button of the test-window-open-on-tap fixture
         static let openDesignatedURLButton = "Open designated URL"
         static let addressBarContextMenu = AccessibilityIdentifiers.Photon.tableView
@@ -156,9 +158,9 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser"]
     )
 
-    let LINK_RFC_2606 = Selector.linkById(
-        IDs.rfc,
-        description: "Link to RFC 2606 in example page",
+    let LINK_RESERVED_TLD_NAMES = Selector.linkById(
+        IDs.reservedTLDNames,
+        description: "Link to RFC 2606 (Reserved Top Level DNS Names) on the IANA example domains page",
         groups: ["browser", "webview"]
     )
 
@@ -258,6 +260,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "search"]
     )
 
+    let FIREFOX_SUGGEST_HEADER = Selector.tableOtherById(
+        IDs.firefoxSuggestHeader,
+        description: "'Firefox Suggest' section header in the address bar suggestions",
+        groups: ["browser", "search"]
+    )
+
     let OPEN_DESIGNATED_URL_BUTTON = Selector.buttonByLabel(
         IDs.openDesignatedURLButton,
         description: "In-page button that opens the designated URL in a new tab",
@@ -337,12 +345,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
     var all: [Selector] { [ADDRESS_BAR, SEARCH_ENGINE_LOGO, DOWNLOADS_TOAST_BUTTON, BACK_BUTTON,
                            MENU_BUTTON, STATIC_TEXT_MOZILLA, STATIC_TEXT_EXAMPLE_DOMAIN,
                            CLEAR_TEXT_BUTTON, CANCEL_BUTTON_URL_BAR, PRIVATE_BROWSING, CANCEL_BUTTON,
-                           LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, BOOK_OF_MOZILLA_VERSE_TEXT,
+                           LINK_RESERVED_TLD_NAMES, BOOK_OF_MOZILLA_TEXT, BOOK_OF_MOZILLA_VERSE_TEXT,
                            ADDRESSTOOLBAR_LOCKICON, ADDRESSTOOLBAR_LOCKICON_OFF,
                            TOPTABS_COLLECTIONVIEW, MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE,
                            SAVE_BUTTON, CLIPBOARD_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE,
                            PRIVATE_MODE_HOMEPAGE_BODY, PRIVATE_MODE_HOMEPAGE_LINK,
-                           PASTE_BUTTON, SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL,
+                           PASTE_BUTTON, SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL, FIREFOX_SUGGEST_HEADER,
                            OPEN_DESIGNATED_URL_BUTTON, ADDRESS_BAR_CONTEXT_MENU,
                            CONTEXT_MENU_PASTE_AND_GO, CONTEXT_MENU_PASTE,
                            CONTEXT_MENU_COPY_ADDRESS, CONTEXT_MENU_CLOSE_BUTTON]
