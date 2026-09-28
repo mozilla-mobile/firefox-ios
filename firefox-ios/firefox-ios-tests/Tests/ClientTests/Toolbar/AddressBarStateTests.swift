@@ -363,9 +363,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .stopLoading)
         XCTAssertEqual(newState.navigationActions.count, 0)
-        // Still on the website loaded by loadWebsiteAction above, so share stays visible.
-        XCTAssertEqual(newState.leadingPageActions.count, 1)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
     func test_websiteLoadingStateDidChangeAction_withLoadingFalse_returnsExpectedState() {
@@ -387,9 +384,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions.count, 1)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
         XCTAssertEqual(newState.navigationActions.count, 0)
-        // Still on the website loaded by loadWebsiteAction above, so share stays visible.
-        XCTAssertEqual(newState.leadingPageActions.count, 1)
-        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
     func test_websiteLoadingStateDidChangeAction_withouthNavigationToolbar_returnsExcpectedState() {
@@ -705,7 +699,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions.count, 0)
-
         XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 1)
         XCTAssertEqual(newState.browserActions[0].actionType, .cancelEdit)
@@ -967,7 +960,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions.count, 0)
-        XCTAssertEqual(newState.leadingPageActions.count, 0)
         XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 1)
         XCTAssertEqual(newState.browserActions[0].actionType, .cancelEdit)

@@ -13,7 +13,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     var windowUUID: WindowUUID
     // The address bar's back/forward buttons, shown only when the navigation toolbar is hidden (e.g. compact layout).
     var navigationActions: [ToolbarActionConfiguration]
-    var leadingPageActions: [ToolbarActionConfiguration]
     var trailingPageActions: [ToolbarActionConfiguration]
     var browserActions: [ToolbarActionConfiguration]
     var editingAccessoryAction: ToolbarActionConfiguration?
@@ -71,7 +70,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         self.init(
             windowUUID: windowUUID,
             navigationActions: [],
-            leadingPageActions: [],
             trailingPageActions: [],
             browserActions: [],
             editingAccessoryAction: nil,
@@ -98,7 +96,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     init(windowUUID: WindowUUID,
          navigationActions: [ToolbarActionConfiguration],
-         leadingPageActions: [ToolbarActionConfiguration],
          trailingPageActions: [ToolbarActionConfiguration],
          browserActions: [ToolbarActionConfiguration],
          editingAccessoryAction: ToolbarActionConfiguration?,
@@ -122,7 +119,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
          isNovaDesignEnabled: Bool) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
-        self.leadingPageActions = leadingPageActions
         self.trailingPageActions = trailingPageActions
         self.browserActions = browserActions
         self.editingAccessoryAction = editingAccessoryAction
@@ -264,7 +260,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         return state
             .copy(navigationActions: [])
-            .copy(leadingPageActions: [])
             .copy(trailingPageActions: [])
             .copy(browserActions: [])
             .copy(editingAccessoryAction: nil)
@@ -1060,7 +1055,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
             trailingPageActions: state.trailingPageActions,
             browserActions: state.browserActions,
             editingAccessoryAction: state.editingAccessoryAction,
