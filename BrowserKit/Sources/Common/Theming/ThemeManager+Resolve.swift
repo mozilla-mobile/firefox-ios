@@ -8,7 +8,7 @@ public extension ThemeManager {
     /// `privateOverride: nil` follows the window's own private state; otherwise the private theme is
     /// forced on or off, regardless of that state.
     func resolveTheme(for window: WindowUUID?, privateOverride: Bool?) -> Theme {
-        guard let privateOverride else { return getCurrentTheme(for: window) }
+        guard isPrivateThemeOverrideEnabled, let privateOverride else { return getCurrentTheme(for: window) }
         return resolvedTheme(with: privateOverride)
     }
 
