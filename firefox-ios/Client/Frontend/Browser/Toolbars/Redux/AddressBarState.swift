@@ -426,7 +426,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
         return state
             .copy(navigationActions: navigationActions)
-            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(isLoading: isLoading)
     }
@@ -482,7 +481,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         return state
             .copy(navigationActions: navigationActions)
-            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions)
             .copy(url: toolbarAction.url)
@@ -541,7 +539,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
         return state
             .copy(navigationActions: navigationActions)
-            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(searchTerm: nil)
     }
@@ -595,7 +592,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
         return state
             .copy(navigationActions: navigationActions)
-            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions)
     }
@@ -643,7 +639,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
         return state
             .copy(navigationActions: navigationActions)
-            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions)
     }
@@ -699,7 +694,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
         return state
             .copy(navigationActions: navigationActions)
-            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions)
             .copy(borderPosition: toolbarAction.addressBorderPosition)
@@ -753,7 +747,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
         return state
             .copy(navigationActions: navigationActions)
-            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions)
             .copy(searchTerm: toolbarAction.searchTerm)
@@ -813,7 +806,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
         return state
             .copy(navigationActions: navigationActions)
-            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions)
             .copy(searchTerm: searchTerm)
@@ -887,7 +879,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         return state
             .copy(navigationActions: navigationActions)
-            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions)
             .copy(url: url)
@@ -947,7 +938,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         return state
             .copy(navigationActions: navigationActions)
-            .copy(leadingPageActions: leadingPageActions)
             .copy(trailingPageActions: trailingPageActions)
             .copy(browserActions: browserActions)
             .copy(searchTerm: toolbarAction.searchTerm)

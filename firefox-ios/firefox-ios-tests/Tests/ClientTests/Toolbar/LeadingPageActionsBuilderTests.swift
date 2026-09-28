@@ -9,12 +9,16 @@ import Common
 
 @MainActor
 final class LeadingPageActionsBuilderTests: XCTestCase {
+    private var mockProfile: MockProfile!
+
     override func setUp() async throws {
         try await super.setUp()
+        mockProfile = MockProfile()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: MockTabManager())
     }
 
     override func tearDown() async throws {
+        mockProfile = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -36,13 +40,15 @@ final class LeadingPageActionsBuilderTests: XCTestCase {
     func testGetActions_whenRealWebsite_returnsShareAction() {
         let actions = subject(isEditing: false, isHomepage: false)
 
-        XCTAssertTrue(actions.contains { $0.actionType == .share })
+        XCTAssertEqual(actions.count, 1)
+        XCTAssertEqual(actions[0].actionType, .share)
     }
 
     func testGetActions_withNoTranslationConfiguration_doesNotReturnTranslateAction() {
         let actions = subject(translationConfiguration: nil)
 
-        XCTAssertFalse(actions.contains { $0.actionType == .translate })
+        XCTAssertEqual(actions.count, 1)
+        XCTAssertEqual(actions[0].actionType, .share)
     }
 
     // MARK: - Alternative location color
@@ -50,16 +56,97 @@ final class LeadingPageActionsBuilderTests: XCTestCase {
     func testGetActions_whenHasAlternativeLocationColorTrue_disablesCustomColorOnShareAction() {
         let actions = subject(hasAlternativeLocationColor: true)
 
-        XCTAssertEqual(actions.first { $0.actionType == .share }?.hasCustomColor, false)
+        XCTAssertEqual(actions[0].actionType, .share)
+        XCTAssertEqual(actions[0].hasCustomColor, false)
     }
 
     func testGetActions_whenHasAlternativeLocationColorFalse_enablesCustomColorOnShareAction() {
         let actions = subject(hasAlternativeLocationColor: false)
 
-        XCTAssertEqual(actions.first { $0.actionType == .share }?.hasCustomColor, true)
+        XCTAssertEqual(actions[0].actionType, .share)
+        XCTAssertEqual(actions[0].hasCustomColor, true)
+    }
+
+    // MARK: - Translation feature flag / user setting
+
+    func testGetActions_whenTranslationFeatureEnabled_butUserSettingDisabled_doesNotReturnTranslateAction() {
+        setTranslationsFeatureEnabled(enabled: true)
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, isUserSettingEnabled: false, state: .inactive)
+
+        let actions = subject(translationConfiguration: config)
+
+        XCTAssertEqual(actions.count, 1)
+        XCTAssertFalse(actions.contains { $0.actionType == .translate })
+    }
+
+    func testGetActions_whenTranslationFeatureFlagDisabled_doesNotReturnTranslateAction() {
+        setTranslationsFeatureEnabled(enabled: false)
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, isUserSettingEnabled: true, state: .inactive)
+
+        let actions = subject(translationConfiguration: config)
+
+        XCTAssertEqual(actions.count, 1)
+        XCTAssertFalse(actions.contains { $0.actionType == .translate })
+    }
+
+    func testGetActions_whenTranslationFeatureAndUserSettingEnabled_returnsTranslateAction() {
+        setTranslationsFeatureEnabled(enabled: true)
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, isUserSettingEnabled: true, state: .inactive)
+
+        let actions = subject(translationConfiguration: config)
+
+        XCTAssertEqual(actions.count, 2)
+        XCTAssertEqual(actions[0].actionType, .share)
+        XCTAssertEqual(actions[1].actionType, .translate)
+    }
+
+    // MARK: - Translation icon state
+
+    func testGetActions_withInactiveState_returnsInactiveIcon() {
+        setTranslationsFeatureEnabled(enabled: true)
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
+
+        let actions = subject(translationConfiguration: config)
+        let translateAction = actions[1]
+
+        XCTAssertEqual(translateAction.actionType, .translate)
+        XCTAssertEqual(translateAction.iconName, StandardImageIdentifiers.Medium.translate)
+        XCTAssertFalse(translateAction.isSelected)
+        XCTAssertFalse(translateAction.loadingConfig!.isLoading)
+    }
+
+    func testGetActions_withLoadingState_returnsLoadingIcon() {
+        setTranslationsFeatureEnabled(enabled: true)
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .loading)
+
+        let actions = subject(translationConfiguration: config)
+        let translateAction = actions[1]
+
+        XCTAssertEqual(translateAction.actionType, .translate)
+        XCTAssertNil(translateAction.iconName)
+        XCTAssertTrue(translateAction.loadingConfig!.isLoading)
+    }
+
+    func testGetActions_withActiveState_returnsActiveIcon() {
+        setTranslationsFeatureEnabled(enabled: true)
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .active)
+
+        let actions = subject(translationConfiguration: config)
+        let translateAction = actions[1]
+
+        XCTAssertEqual(translateAction.actionType, .translate)
+        XCTAssertEqual(translateAction.iconName, ImageIdentifiers.Translations.translationActive)
+        XCTAssertTrue(translateAction.isSelected)
+        XCTAssertFalse(translateAction.loadingConfig!.isLoading)
     }
 
     // MARK: - Helpers
+
+    private func setTranslationsFeatureEnabled(enabled: Bool) {
+        FxNimbus.shared.features.translationsFeature.with { _, _ in
+            return TranslationsFeature(enabled: enabled)
+        }
+    }
 
     private func subject(
         translationConfiguration: TranslationConfiguration? = nil,
