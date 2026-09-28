@@ -216,7 +216,7 @@ final class AddressToolbarContainerModel: Equatable {
                                                   isShowingTopTabs: state.isShowingTopTabs,
                                                   longPressMenuProvider: longPressMenuProvider,
                                                   windowUUID: windowUUID)
-        self.trailingPageActions = Self.mapActions(state.addressToolbar.trailingPageActions,
+        self.trailingPageActions = Self.mapActions(addressToolbarContainerLens.trailingPageActions,
                                                    isShowingTopTabs: state.isShowingTopTabs,
                                                    longPressMenuProvider: longPressMenuProvider,
                                                    windowUUID: windowUUID)

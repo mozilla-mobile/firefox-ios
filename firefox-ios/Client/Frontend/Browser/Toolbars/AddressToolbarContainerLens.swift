@@ -21,15 +21,21 @@ protocol StateLens: Equatable {
 struct AddressToolbarContainerLens: StateLens {
     let toolbarState: ToolbarState
     let leadingPageActions: [ToolbarActionConfiguration]
+    let trailingPageActions: [ToolbarActionConfiguration]
 
     // MARK: - Private initializers
-    private init(toolbarState: ToolbarState, leadingPageActions: [ToolbarActionConfiguration]) {
+    private init(toolbarState: ToolbarState,
+                 leadingPageActions: [ToolbarActionConfiguration],
+                 trailingPageActions: [ToolbarActionConfiguration]) {
         self.toolbarState = toolbarState
         self.leadingPageActions = leadingPageActions
+        self.trailingPageActions = trailingPageActions
     }
 
     private init(windowUUID: WindowUUID) {
-        self.init(toolbarState: ToolbarState(windowUUID: windowUUID), leadingPageActions: [])
+        self.init(toolbarState: ToolbarState(windowUUID: windowUUID),
+                  leadingPageActions: [],
+                  trailingPageActions: [])
     }
 
     // MARK: - Lens initialization
@@ -51,7 +57,17 @@ struct AddressToolbarContainerLens: StateLens {
             isNovaDesignEnabled: addressToolbar.isNovaDesignEnabled
         )
 
-        self.init(toolbarState: toolbarState, leadingPageActions: leadingPageActions)
+        let trailingPageActions = TrailingPageActionsBuilder.getActions(
+            isEditing: addressToolbar.isEditing,
+            isEmptySearch: addressToolbar.isEmptySearch,
+            readerModeState: addressToolbar.readerModeState,
+            canSummarize: addressToolbar.canSummarize,
+            isLoading: addressToolbar.isLoading,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
+
+        self.init(toolbarState: toolbarState,
+                  leadingPageActions: leadingPageActions,
+                  trailingPageActions: trailingPageActions)
     }
 
     private static func shouldHaveAlternativeLocationColor(toolbarState: ToolbarState) -> Bool {
