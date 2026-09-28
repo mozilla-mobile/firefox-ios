@@ -379,8 +379,8 @@ final class BrowserScreen {
         XCTFail("The URL bar is still in editing mode after \(maxAttempts) Cancel taps")
     }
 
-    func assertRFCLinkExist(timeout: TimeInterval = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(sel.LINK_RFC_2606.element(in: app), timeout: timeout)
+    func assertReservedTLDNamesLinkExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.LINK_RESERVED_TLD_NAMES.element(in: app), timeout: timeout)
     }
 
     func addressToolbarContainValue(value: String) {
