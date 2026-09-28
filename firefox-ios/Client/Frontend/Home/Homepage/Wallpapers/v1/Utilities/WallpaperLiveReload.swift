@@ -77,29 +77,14 @@ final class WallpaperLiveReload: @unchecked Sendable {
 
     private func refreshWallpapers() {
         Task {
-            print("[LiveReload] refreshing wallpapers...")
-
             let networking = WallpaperNetworkingModule()
             let dataService = WallpaperDataService(with: networking)
             let storage = WallpaperStorageUtility()
 
-            guard let metadata = try? await dataService.getMetadata() else {
-                print("[LiveReload] failed to fetch metadata")
-                return
-            }
-
+            guard let metadata = try? await dataService.getMetadata() else {return}
             let allWallpapers = metadata.collections.flatMap(\.wallpapers)
-            print("[LiveReload] metadata has \(metadata.collections.count) collection(s), \(allWallpapers.count) wallpaper(s)")
-
             try? storage.store(metadata)
-
-            guard let wallpaper = allWallpapers.last else {
-                print("[LiveReload] no wallpapers found")
-                return
-            }
-
-            print("[LiveReload] selecting '\(wallpaper.id)', fetching assets...")
-
+            guard let wallpaper = allWallpapers.last else {return}
             let manager = WallpaperManager()
 
             let fetchResult: Result<Void, Error> = await withCheckedContinuation { cont in
@@ -109,9 +94,7 @@ final class WallpaperLiveReload: @unchecked Sendable {
             switch fetchResult {
             case .success:
                 print("[LiveReload] assets downloaded, setting as current...")
-            case .failure(let error):
-                print("[LiveReload] asset download FAILED: \(error)")
-                return
+            case .failure(let error): return
             }
 
             let setResult: Result<Void, Error> = await withCheckedContinuation { cont in
@@ -120,7 +103,6 @@ final class WallpaperLiveReload: @unchecked Sendable {
 
             switch setResult {
             case .success:
-                print("[LiveReload] wallpaper set! dispatching Redux action")
                 await MainActor.run {
                     let config = WallpaperConfiguration(wallpaper: wallpaper)
                     let action = WallpaperAction(
