@@ -307,7 +307,6 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     ) -> AddressBarState {
         return AddressBarState(windowUUID: windowUUID,
                                navigationActions: [],
-                               leadingPageActions: [],
                                trailingPageActions: [],
                                browserActions: [],
                                editingAccessoryAction: makeEditingAccessoryAction(
