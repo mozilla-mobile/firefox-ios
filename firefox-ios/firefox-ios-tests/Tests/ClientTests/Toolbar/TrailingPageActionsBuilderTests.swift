@@ -97,6 +97,39 @@ final class TrailingPageActionsBuilderTests: XCTestCase {
         XCTAssertFalse(actions.contains { $0.actionType == .summarizer })
     }
 
+    // Assumes the test runs in portrait; see comment on the test above.
+    func testGetActions_whenSummarizeToolbarButtonEnabled_combinesWithReloadAction() {
+        setIsHostedSummarizerFeatureEnabled(enabled: true)
+
+        let actions = subject(readerModeState: .available, canSummarize: true, isLoading: false)
+
+        XCTAssertEqual(actions.count, 2)
+        XCTAssertEqual(actions[0].actionType, .summarizer)
+        XCTAssertEqual(actions[1].actionType, .reload)
+    }
+
+    func testGetActions_whenReaderModeWithSummarizerEnabled_combinesWithReloadAction() {
+        setIsSummarizerLanguageExpansionEnabled(enabled: true)
+
+        let actions = subject(readerModeState: .active, canSummarize: true, isLoading: false)
+
+        XCTAssertEqual(actions.count, 2)
+        XCTAssertEqual(actions[0].actionType, .readerModeWithSummarizer)
+        XCTAssertEqual(actions[1].actionType, .reload)
+    }
+
+    // The summarizer-toolbar-button branch only fires for `.available` state; `.active` falls back
+    // to the plain reader mode action even with the feature enabled.
+    func testGetActions_whenSummarizeToolbarButtonEnabled_butReaderModeActive_returnsPlainReaderModeAction() {
+        setIsHostedSummarizerFeatureEnabled(enabled: true)
+
+        let actions = subject(readerModeState: .active, canSummarize: true)
+
+        XCTAssertEqual(actions.count, 1)
+        XCTAssertEqual(actions[0].actionType, .readerMode)
+        XCTAssertEqual(actions[0].isSelected, true)
+    }
+
     // MARK: - Loading
 
     func testGetActions_whenLoadingTrue_appendsStopLoadingAction() {
