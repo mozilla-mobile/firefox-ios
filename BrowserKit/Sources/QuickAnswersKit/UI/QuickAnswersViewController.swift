@@ -30,7 +30,7 @@ public final class QuickAnswersViewController: UIViewController,
 
     // MARK: - Properties
     private let backgroundRecordEffect: UIHostingController<BackgroundEffectView>
-    private lazy var closeButton: UIButton = .build {
+    private lazy var closeButton: UIButton = .build { [weak self] in
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
         } else {
