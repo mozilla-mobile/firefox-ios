@@ -168,23 +168,6 @@ final class CrossDissolveTransitionAnimator: NSObject,
         }
     }
 
-    /// The transform applied to the presented view before the cross dissolve animation begins.
-    /// The view is scaled down and anchored so its top-right corner matches the source rect's
-    /// top-right corner, making it zoom in from that edge.
-    private func presentationInitialTransform(in containerView: UIView) -> CGAffineTransform {
-        let scale = UX.crossDissolveInitialScale
-
-        // The transform scales the view about its center, so translate the scaled view's
-        // top-right corner onto the source rect's top-right corner.
-        let scaledWidth = containerView.bounds.width * scale
-        let scaledHeight = containerView.bounds.height * scale
-        let translationX = sourceRect.maxX - scaledWidth / 2.0 - containerView.bounds.midX
-        let translationY = sourceRect.minY + scaledHeight / 2.0 - containerView.bounds.midY
-
-        return CGAffineTransform(translationX: translationX, y: translationY)
-            .scaledBy(x: scale, y: scale)
-    }
-
     // MARK: - Dismissal
     private func animateDismissal(_ transitionContext: UIViewControllerContextTransitioning) {
         guard let presentingController = transitionContext.viewController(forKey: .to),
