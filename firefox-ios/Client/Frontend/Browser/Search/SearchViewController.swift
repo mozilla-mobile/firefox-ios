@@ -760,16 +760,11 @@ class SearchViewController: SiteTableViewController,
         case .openedTabs:
             if viewModel.filteredOpenedTabs.count > indexPath.row {
                 let openedTab = viewModel.filteredOpenedTabs[indexPath.row]
-                twoLineCell.descriptionLabel.isHidden = false
-                twoLineCell.titleLabel.text = openedTab.title ?? openedTab.lastTitle
-                twoLineCell.descriptionLabel.text = String.SearchSuggestionCellSwitchToTabLabel
-                twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
-                twoLineCell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
-                twoLineCell.leftImageView.layer.borderWidth = UX.IconBorderWidth
-                if let urlString = openedTab.url?.absoluteString {
-                    twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
-                }
-                twoLineCell.accessoryView = nil
+                configureOpenedTabsCell(
+                    twoLineCell,
+                    openedTab.title ?? openedTab.lastTitle,
+                    openedTab.url?.absoluteString
+                )
                 cell = twoLineCell
             }
         case .remoteTabs:
@@ -852,6 +847,23 @@ class SearchViewController: SiteTableViewController,
             accessoryType: .none,
             editingAccessoryView: nil)
         return viewModel
+    }
+
+    private func configureOpenedTabsCell(
+        _ cell: TwoLineImageOverlayCell,
+        _ title: String?,
+        _ urlString: String?
+    ) {
+        cell.descriptionLabel.isHidden = false
+        cell.titleLabel.text = title
+        cell.descriptionLabel.text = String.SearchSuggestionCellSwitchToTabLabel
+        cell.leftOverlayImageView.image = openAndSyncTabBadge
+        cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
+        cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
+        if let urlString = urlString {
+            cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
+        }
+        cell.accessoryView = nil
     }
 
     private func configureRemoteTabsCell(
