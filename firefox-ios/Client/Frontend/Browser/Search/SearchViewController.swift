@@ -806,19 +806,12 @@ class SearchViewController: SiteTableViewController,
 
         case .firefoxSuggestions:
             let firefoxSuggestion = viewModel.firefoxSuggestions[indexPath.row]
-            twoLineCell.titleLabel.text = firefoxSuggestion.title
-            if firefoxSuggestion.isSponsored {
-                twoLineCell.descriptionLabel.isHidden = false
-                twoLineCell.descriptionLabel.text = .Search.SponsoredSuggestionDescription
-            } else {
-                twoLineCell.descriptionLabel.isHidden = true
-            }
-            twoLineCell.leftOverlayImageView.image = nil
-            twoLineCell.leftImageView.contentMode = .scaleAspectFit
-            twoLineCell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
-            twoLineCell.leftImageView.layer.borderWidth = UX.IconBorderWidth
-            twoLineCell.leftImageView.manuallySetImage(firefoxSuggestion.iconImage ?? UIImage())
-            twoLineCell.accessoryView = nil
+            configureFirefoxSuggestionsCell(
+                twoLineCell,
+                firefoxSuggestion.title,
+                firefoxSuggestion.isSponsored,
+                firefoxSuggestion.iconImage ?? UIImage()
+            )
             cell = twoLineCell
         }
 
@@ -895,6 +888,27 @@ class SearchViewController: SiteTableViewController,
         cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
         cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
         cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: description))
+        cell.accessoryView = nil
+    }
+
+    private func configureFirefoxSuggestionsCell(
+        _ cell: TwoLineImageOverlayCell,
+        _ title: String,
+        _ isSponsored: Bool,
+        _ iconImage: UIImage
+    ) {
+        cell.titleLabel.text = title
+        if isSponsored {
+            cell.descriptionLabel.isHidden = false
+            cell.descriptionLabel.text = .Search.SponsoredSuggestionDescription
+        } else {
+            cell.descriptionLabel.isHidden = true
+        }
+        cell.leftOverlayImageView.image = nil
+        cell.leftImageView.contentMode = .scaleAspectFit
+        cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
+        cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
+        cell.leftImageView.manuallySetImage(iconImage)
         cell.accessoryView = nil
     }
 
