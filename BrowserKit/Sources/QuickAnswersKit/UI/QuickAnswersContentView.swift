@@ -19,6 +19,10 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         /// The sections start settling shortly after the transcript begins moving up.
         static let resultCascadeStartDelay: TimeInterval = 0.1
         static let resultCascadeStagger: TimeInterval = 0.1
+        /// How far below its final position the placeholder starts when presenting.
+        static let presentationSlideOffset: CGFloat = 30.0
+        static let presentationFadeDuration: TimeInterval = 0.4
+        static let presentationSlideDuration: TimeInterval = 0.3
     }
 
     // MARK: - Subviews
@@ -28,8 +32,8 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         $0.clipsToBounds = false
     }
     private let contentView: UIView = .build()
-    let audioWaveform: AudioWaveformView = .build()
-    let placeholderLabel: UILabel = .build {
+    private let audioWaveform: AudioWaveformView = .build()
+    private let placeholderLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.title2.scaledFont()
         $0.numberOfLines = 0
         $0.textAlignment = .center
@@ -218,6 +222,24 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         animateResultCascade()
     }
 
+    // MARK: - Presentation transition
+    /// Hides and offsets the content so `animatePresentationTransition` can bring it in alongside the
+    /// cross dissolve. Both are driven by `CrossDissolveTransitionAnimator`.
+    func prepareForPresentationTransition() {
+        audioWaveform.alpha = 0.0
+        placeholderLabel.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationSlideOffset)
+    }
+
+    func animatePresentationTransition() {
+        UIView.animate(withDuration: UX.presentationFadeDuration, delay: 0.0, options: .curveEaseOut) { [self] in
+            audioWaveform.alpha = 1.0
+        }
+        UIView.animate(withDuration: UX.presentationSlideDuration) { [self] in
+            placeholderLabel.transform = .identity
+        }
+    }
+
+    // MARK: - Result animation
     private func animateResultCascade() {
         let cascadingSections: [UIView] = [answerLabel, sourceView, footerLabel]
         let finalTransform = CGAffineTransform(translationX: 0.0, y: -UX.resultTranslationOffset)

@@ -26,11 +26,17 @@ public final class QuickAnswersViewController: UIViewController,
         static let contentViewTopPadding: CGFloat = 32.0
         static let contentViewBottomPadding: CGFloat = 12.0
         static let contentViewHorizontalPadding: CGFloat = 24.0
+        /// How far below its final position the background effect starts when presenting.
+        static let presentationSlideOffset: CGFloat = 30.0
+        /// How far above its final position the close button starts when presenting.
+        static let presentationCloseButtonOffset: CGFloat = -50.0
+        static let presentationFadeDuration: TimeInterval = 0.4
+        static let presentationSlideDuration: TimeInterval = 0.3
     }
 
     // MARK: - Properties
-    let backgroundRecordEffect: UIHostingController<BackgroundEffectView>
-    lazy var closeButton: UIButton = .build {
+    private let backgroundRecordEffect: UIHostingController<BackgroundEffectView>
+    private lazy var closeButton: UIButton = .build {
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
         } else {
@@ -46,7 +52,7 @@ public final class QuickAnswersViewController: UIViewController,
             for: .touchUpInside
         )
     }
-    let contentView: QuickAnswersContentView = .build()
+    private let contentView: QuickAnswersContentView = .build()
     private let transitionAnimator: CrossDissolveTransitionAnimator?
 
     public let themeManager: any ThemeManager
@@ -108,11 +114,7 @@ public final class QuickAnswersViewController: UIViewController,
         // The custom transition animator is only used for the cross dissolve transition; the form sheet
         // relies on the system presentation.
         if case let .crossDissolve(sourceRect) = transitionType {
-            self.transitionAnimator = CrossDissolveTransitionAnimator(
-                themeManager: themeManager,
-                windowUUID: windowUUID,
-                sourceRect: sourceRect
-            )
+            self.transitionAnimator = CrossDissolveTransitionAnimator(sourceRect: sourceRect)
         } else {
             self.transitionAnimator = nil
         }
@@ -232,10 +234,32 @@ public final class QuickAnswersViewController: UIViewController,
         )
     }
 
+    // MARK: - Presentation transition
+    /// Hides and offsets the content so `animatePresentationTransition` can bring it in alongside the
+    /// cross dissolve. Both are driven by `CrossDissolveTransitionAnimator`.
+    func prepareForPresentationTransition() {
+        contentView.prepareForPresentationTransition()
+        backgroundRecordEffect.view.transform = CGAffineTransform(translationX: 0.0,
+                                                                  y: UX.presentationSlideOffset)
+        closeButton.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationCloseButtonOffset)
+        closeButton.alpha = 0.0
+    }
+
+    func animatePresentationTransition() {
+        contentView.animatePresentationTransition()
+        UIView.animate(withDuration: UX.presentationFadeDuration, delay: 0.0, options: .curveEaseOut) { [self] in
+            closeButton.alpha = 1.0
+        }
+        UIView.animate(withDuration: UX.presentationSlideDuration) { [self] in
+            backgroundRecordEffect.view.transform = .identity
+            closeButton.transform = .identity
+        }
+    }
+
     private func fadeBackgroundEffectForResult() {
         UIView.animate(withDuration: UX.recordWaveEffectFadeDuration,
-                       delay: UX.recordWaveEffectFadeDelay) {
-            self.backgroundRecordEffect.view.alpha = UX.recordWaveEffectResultOpacity
+                       delay: UX.recordWaveEffectFadeDelay) { [self] in
+            backgroundRecordEffect.view.alpha = UX.recordWaveEffectResultOpacity
         }
     }
 

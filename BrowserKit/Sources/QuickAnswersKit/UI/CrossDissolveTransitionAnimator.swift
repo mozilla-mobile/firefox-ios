@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Common
 
 /// The possible transition types to animate presentation and dismissal of `QuickAnswersViewController`.
 public enum QuickAnswersTransitionType: Equatable, Sendable {
@@ -23,30 +22,32 @@ public enum QuickAnswersTransitionType: Equatable, Sendable {
 }
 
 /// The animator for a custom cross dissolve presentation and dismissal.
-/// It adds a zoom in and fade from the provided source rect when presenting.
-/// The dismissal is a simple cross dissolve.
+/// Both directions animate the scale of a soft edged circular mask centered on the source rect, so the
+/// controller grows out of it when presenting and collapses back into it when dismissing. The presented
+/// controller animates its own content alongside the mask.
 final class CrossDissolveTransitionAnimator: NSObject,
                                              UIViewControllerTransitioningDelegate,
                                              UIViewControllerAnimatedTransitioning {
     private struct UX {
-        static let springAnimationDuration: TimeInterval = 0.4
-        static let springAnimationDamping: CGFloat = 0.8
-        static let springAnimationVelocity: CGFloat = 1.0
-        static let crossDissolveInitialScale: CGFloat = 0.2
+        static let presentationDuration: TimeInterval = 0.4
+        static let dismissalDuration: TimeInterval = 0.3
+        static let dismissalBlurFadeDuration: TimeInterval = 0.3
+        static let dismissalBlurFadeDelay: TimeInterval = 0.1
+        /// Diameter of the mask, relative to the longest container side. Above 1.0 so the mask still
+        /// covers the container corners once it reaches its final size.
+        static let presentationMaskDiameterRatio: CGFloat = 2.3
+        static let dismissalMaskDiameterRatio: CGFloat = 2.0
+        /// The collapsed mask scale. Not zero, since a zero scale transform can't be inverted.
+        static let collapsedMaskScale: CGFloat = 0.01
+        /// Where the mask starts fading out, relative to its radius, so its edge reads as soft.
+        static let maskFadeStartLocation: NSNumber = 0.9
     }
-    private let themeManager: any ThemeManager
-    private let windowUUID: WindowUUID
+
     /// The rect, in the container view's coordinate space, the cross dissolve presentation
     /// animation originates from.
     private let sourceRect: CGRect
 
-    init(
-        themeManager: any ThemeManager,
-        windowUUID: WindowUUID,
-        sourceRect: CGRect
-    ) {
-        self.themeManager = themeManager
-        self.windowUUID = windowUUID
+    init(sourceRect: CGRect) {
         self.sourceRect = sourceRect
     }
 
@@ -80,242 +81,93 @@ final class CrossDissolveTransitionAnimator: NSObject,
 
     // MARK: - Presentation
     private func animatePresentation(_ transitionContext: UIViewControllerContextTransitioning) {
-        guard let presentedController = transitionContext.viewController(forKey: .to) as? QuickAnswersViewController else {
+        guard let presentedController = transitionContext.viewController(forKey: .to) as? QuickAnswersViewController
+        else {
             transitionContext.completeTransition(false)
             return
         }
-        UIApplication.shared.windows.first?.layer.speed = 1
-
         let containerView = transitionContext.containerView
-        let maxSize = max(containerView.bounds.width, containerView.bounds.height) * 2.3
-        let view = UIView(
-            frame: CGRect(
-                origin: CGPoint(
-                    x: -maxSize / 2.0 + sourceRect.midX,
-                    y: -maxSize / 2.0 + sourceRect.midY
-                ),
-                size: CGSize(width: maxSize, height: maxSize)
-            )
-        )
-        let mask = CAGradientLayer()
-        mask.frame = view.bounds
-        mask.type = .radial
-        mask.startPoint = CGPoint(x: 0.5, y: 0.5) // Center
-        mask.endPoint = CGPoint(x: 1.0, y: 1.0)   // Circular edge
-        mask.colors = [
-            UIColor.black.cgColor,
-            UIColor.black.cgColor,
-            UIColor.black.withAlphaComponent(0.0).cgColor,
-        ]
-        mask.locations = [0, 0.9, 1]
-        view.layer.mask = mask
-        view.backgroundColor = .red
-        view.layer.cornerRadius = maxSize / 2.0
-
         containerView.addSubview(presentedController.view)
-        presentedController.view.mask = view
-        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
-        blur.frame = containerView.bounds
-        view.transform = .init(scaleX: 0.01, y: 0.01)
-//        let copy = UIView(frame: view.frame)
-//        copy.transform = view.transform
-//        blur.mask = copy
-        
-        presentedController.view.addSubview(blur)
 
-        let transform = CGAffineTransform(translationX: 0.0, y: 30.0)
-        
-        presentedController.contentView.audioWaveform.alpha = 0.0
-        presentedController.contentView.placeholderLabel.transform = transform
-        presentedController.backgroundRecordEffect.view.transform = transform
-        presentedController.closeButton.transform = CGAffineTransform(translationX: 0.0, y: -50.0)
-        presentedController.closeButton.alpha = 0.0
-        UIView.animate(withDuration: 0.4, delay: 0.0, options: .curveEaseOut) {
-            view.transform = .identity
-            presentedController.closeButton.alpha = 1.0
-            presentedController.contentView.audioWaveform.alpha = 1.0
-            presentedController.contentView.placeholderLabel.transform = .identity
-            presentedController.backgroundRecordEffect.view.transform = .identity
-            presentedController.closeButton.transform = .identity
+        let maskView = makeMaskView(for: containerView, diameterRatio: UX.presentationMaskDiameterRatio)
+        maskView.transform = CGAffineTransform(scaleX: UX.collapsedMaskScale, y: UX.collapsedMaskScale)
+        presentedController.view.mask = maskView
+
+        let blurView = makeBlurView(frame: containerView.bounds)
+        presentedController.view.addSubview(blurView)
+
+        presentedController.prepareForPresentationTransition()
+        UIView.animate(withDuration: UX.presentationDuration, delay: 0.0, options: .curveEaseOut) {
+            maskView.transform = .identity
+            blurView.alpha = 0.0
         } completion: { _ in
-            blur.removeFromSuperview()
+            blurView.removeFromSuperview()
             presentedController.view.mask = nil
             transitionContext.completeTransition(true)
         }
-        
-        UIView.animate(withDuration: 0.1, delay: 0.3) {
-            blur.alpha = 0
-        }
+        presentedController.animatePresentationTransition()
     }
 
     // MARK: - Dismissal
     private func animateDismissal(_ transitionContext: UIViewControllerContextTransitioning) {
-        guard let presentingController = transitionContext.viewController(forKey: .to),
-              // We can't add the presenting controller to the containerView since it is going to be removed
-              // from its original superview, thus we need a snapshot.
-                let snapshotView = presentingController.view.snapshotView(afterScreenUpdates: false) else {
+        guard let presentingController = transitionContext.viewController(forKey: .to) else {
             transitionContext.completeTransition(false)
             return
         }
-        
         let containerView = transitionContext.containerView
-        let maxSize = max(containerView.bounds.width, containerView.bounds.height) * 2
-        let view = UIView(
-            frame: CGRect(
-                origin: CGPoint(
-                    x: -maxSize / 2.0 + sourceRect.midX,
-                    y: -maxSize / 2.0 + sourceRect.midY
-                ),
-                size: CGSize(width: maxSize, height: maxSize)
-            )
-        )
-        let mask = CAGradientLayer()
-        mask.frame = view.bounds
-        mask.type = .radial
-        mask.startPoint = CGPoint(x: 0.5, y: 0.5) // Center
-        mask.endPoint = CGPoint(x: 1.0, y: 1.0)   // Circular edge
-        mask.colors = [
-            UIColor.black.cgColor,
-            UIColor.black.cgColor,
-            UIColor.black.withAlphaComponent(0.0).cgColor,
-        ]
-        mask.locations = [0, 0.9, 1]
-        view.layer.mask = mask
-        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
-        blur.frame = presentingController.view.bounds
-        presentingController.view.addSubview(blur)
-        view.backgroundColor = .red
-        view.layer.cornerRadius = maxSize / 2.0
-        containerView.mask = view
-        
-        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut) {
-            view.transform = .init(scaleX: 0.01, y: 0.01)
+        let maskView = makeMaskView(for: containerView, diameterRatio: UX.dismissalMaskDiameterRatio)
+        containerView.mask = maskView
+
+        // The blur is added to the presenting controller, which stays on screen, so unlike the mask it
+        // has to be torn down once the transition completes.
+        let blurView = makeBlurView(frame: presentingController.view.bounds)
+        presentingController.view.addSubview(blurView)
+
+        UIView.animate(withDuration: UX.dismissalDuration, delay: 0.0, options: .curveEaseOut) {
+            maskView.transform = CGAffineTransform(scaleX: UX.collapsedMaskScale, y: UX.collapsedMaskScale)
         } completion: { _ in
-            blur.removeFromSuperview()
+            blurView.removeFromSuperview()
             transitionContext.completeTransition(true)
         }
-        
-        UIView.animate(withDuration: 0.3, delay: 0.1) {
-            blur.alpha = 0.0
-        }
-        UIView.animate(withDuration: 0.3, delay: 0.3) {
-            view.alpha = 0.0
+
+        UIView.animate(withDuration: UX.dismissalBlurFadeDuration, delay: UX.dismissalBlurFadeDelay) {
+            blurView.alpha = 0.0
         }
     }
-}
 
-import Shared
-
-// swiftlint: disable all
-struct Tel: QuickAnswersTelemetry {
-    func quickAnswersRequested(model: QuickAnswersModel) {
-        
-    }
-    
-    func recordingStarted() {
-        
-    }
-    
-    func recordingCompleted(outcome: Bool, errorType: String?) {
-        
-    }
-    
-    func resultsStarted() {
-        
-    }
-    
-    func resultsCompleted(outcome: Bool, errorType: String?, model: QuickAnswersModel) {
-        
-    }
-    
-    func permissionDenied(permission: QuickAnswersPermission) {
-        
-    }
-    
-    func citationTapped() {
-        
-    }
-    
-    func closed() {
-            
-    }
-    
-    func consentShown(agreed: Bool) {
-        
-    }
-}
-
-@available(iOS 26, *)
-class Contr: UIViewController, QuickAnswersNavigationHandler {
-    func dismissQuickAnswers(with navigationType: QuickAnswersNavigationType?) {
-        dismiss(animated: true)
-    }
-    
-    override func viewDidLoad() {
-        UIApplication.shared.windows.first?.layer.speed = 0.2
-        let button = UIButton()
-        button.configuration = .prominentClearGlass()
-        button.configuration?.image = UIImage(systemName: "waveform")
-        button.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .red
-        view.addSubview(button)
-        
-        NSLayoutConstraint.activate([
-            button.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16.0),
-            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16.0)
-        ])
-        
-        button.addAction(
-            UIAction(
-                handler: { _ in
-                    let pref = MockProfilePrefs()
-                    pref.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
-                    let quickAnswer = QuickAnswersViewController(
-                        navigationHandler: self,
-                        viewModel: QuickAnswersViewModel(prefs: pref, telemetry: Tel()),
-                        transitionType: .crossDissolve(sourceRect: button.frame),
-                        windowUUID: .DefaultUITestingUUID,
-                        themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-                        learnMoreURL: nil,
-                        stringsConfiguration: .init(
-                            optIn: .init(
-                                title: "",
-                                description: "",
-                                learnMore: "",
-                                continueButton: ""
-                            ),
-                            contentView: .init(
-                                placeholder: "Listening, ask a question",
-                                answering: "",
-                                footerFormat: "",
-                                sources: ""
-                            ),
-                            errors: .init(
-                                permissionAlertTitle: "",
-                                microphonePermissionMessage: "",
-                                speechRecognitionPermissionMessage: "",
-                                openSettings: "",
-                                cancel: "",
-                                dailyLimitTitle: "",
-                                dailyLimitMessage: "",
-                                genericErrorTitle: "",
-                                genericErrorMessage: "",
-                                ok: ""
-                            ),
-                            closeAccessibilityLabel: "",
-                            appName: ""
-                        ),
-                        notificationCenter: NotificationCenter.default
-                    )
-                
-                    self.present(quickAnswer, animated: true)
-            }),
-            for: .allEvents
+    // MARK: - Helpers
+    /// A circle centered on `sourceRect`, large enough to cover `containerView`, whose edge fades out
+    /// instead of ending abruptly.
+    private func makeMaskView(for containerView: UIView, diameterRatio: CGFloat) -> UIView {
+        let diameter = max(containerView.bounds.width, containerView.bounds.height) * diameterRatio
+        let maskView = UIView(
+            frame: CGRect(
+                origin: CGPoint(x: sourceRect.midX - diameter / 2.0, y: sourceRect.midY - diameter / 2.0),
+                size: CGSize(width: diameter, height: diameter)
+            )
         )
-    }
-}
+        // Only the alpha channel of a mask is used, the color just has to be opaque.
+        maskView.backgroundColor = .black
+        maskView.layer.cornerRadius = diameter / 2.0
 
-@available(iOS 26, *)
-#Preview {
-    Contr()
+        let gradient = CAGradientLayer()
+        gradient.frame = maskView.bounds
+        gradient.type = .radial
+        gradient.startPoint = CGPoint(x: 0.5, y: 0.5)
+        gradient.endPoint = CGPoint(x: 1.0, y: 1.0)
+        gradient.colors = [
+            UIColor.black.cgColor,
+            UIColor.black.cgColor,
+            UIColor.black.withAlphaComponent(0.0).cgColor
+        ]
+        gradient.locations = [0.0, UX.maskFadeStartLocation, 1.0]
+        maskView.layer.mask = gradient
+        return maskView
+    }
+
+    private func makeBlurView(frame: CGRect) -> UIVisualEffectView {
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+        blurView.frame = frame
+        return blurView
+    }
 }
