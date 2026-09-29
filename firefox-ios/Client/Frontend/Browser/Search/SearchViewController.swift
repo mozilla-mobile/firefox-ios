@@ -777,15 +777,13 @@ class SearchViewController: SiteTableViewController,
                viewModel.filteredRemoteClientTabs.count > indexPath.row {
                 let remoteTab = viewModel.filteredRemoteClientTabs[indexPath.row].tab
                 let remoteClient = viewModel.filteredRemoteClientTabs[indexPath.row].client
-                twoLineCell.descriptionLabel.isHidden = false
-                twoLineCell.titleLabel.text = remoteTab.title
-                twoLineCell.descriptionLabel.text = remoteClient.name
-                twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
-                twoLineCell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
-                twoLineCell.leftImageView.layer.borderWidth = UX.IconBorderWidth
                 let urlString = remoteTab.URL.absoluteString
-                twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
-                twoLineCell.accessoryView = nil
+                configureRemoteTabsCell(
+                    twoLineCell,
+                    remoteTab.title,
+                    remoteClient.name,
+                    urlString
+                )
                 cell = twoLineCell
             }
         case .history:
@@ -854,6 +852,22 @@ class SearchViewController: SiteTableViewController,
             accessoryType: .none,
             editingAccessoryView: nil)
         return viewModel
+    }
+
+    private func configureRemoteTabsCell(
+        _ cell: TwoLineImageOverlayCell,
+        _ title: String,
+        _ description: String,
+        _ urlString: String
+    ) {
+        cell.descriptionLabel.isHidden = false
+        cell.titleLabel.text = title
+        cell.descriptionLabel.text = description
+        cell.leftOverlayImageView.image = openAndSyncTabBadge
+        cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
+        cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
+        cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
+        cell.accessoryView = nil
     }
 
     private func configureBookmarksAndHistoryCell(
