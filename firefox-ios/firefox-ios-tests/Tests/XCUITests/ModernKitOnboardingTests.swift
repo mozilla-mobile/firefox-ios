@@ -345,6 +345,39 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertSyncScreen()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3309014
+    // Regression
+    func testModernKitOnboardingCardsImages() throws {
+        launchApp()
+
+        onboardingScreen.assertTermsOfServiceShowsImage()
+        onboardingScreen.handleTermsOfService()
+
+        // Step 3: Set as Default Browser card shows its illustration
+        onboardingScreen.assertModernWelcomeScreen()
+        onboardingScreen.assertCurrentCardShowsImage()
+        onboardingScreen.goToNextScreenViaSecondary()
+
+        if iPad() {
+            // iPad does not show the address bar card; a11y IDs still increase by one.
+            onboardingScreen.currentScreen += 1
+        } else {
+            // Step 4: Address bar card - its illustrations are part of the Top/Bottom option buttons
+            onboardingScreen.assertToolbarCustomizationScreen()
+            onboardingScreen.assertCurrentCardOptionsShowImages()
+            onboardingScreen.goToNextScreenViaPrimary()
+        }
+
+        // Step 5: Theme card - its illustrations are part of the Automatic/Light/Dark option buttons
+        onboardingScreen.assertModernThemeCustomizationScreen()
+        onboardingScreen.assertCurrentCardOptionsShowImages()
+        onboardingScreen.goToNextScreenViaPrimary()
+
+        // Step 6: Sync card shows its illustration
+        onboardingScreen.assertSyncScreen()
+        onboardingScreen.assertCurrentCardShowsImage()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/4035641
     // Regression
     func testModernKitOnboardingLightThemeSelection() throws {
