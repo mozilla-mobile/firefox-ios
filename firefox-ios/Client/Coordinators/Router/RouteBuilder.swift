@@ -68,14 +68,7 @@ final class RouteBuilder {
                 return makeOpenUrlRoute(urlScanner: urlScanner, urlQuery: urlQuery, isPrivate: isPrivate)
 
             case .openText:
-                let queryValue = urlScanner.value(query: "text") ?? ""
-                let queryURL = URIFixup.getURL(queryValue)
-                let safeQuery = queryURL != nil ? queryValue.replacingOccurrences(of: "://", with: "%3A%2F%2F") : queryValue
-                let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
-                if isOpeningWithFirefoxExtension {
-                    actionExtensionTelemetry.shareText()
-                }
-                return .searchQuery(query: safeQuery, isPrivate: isPrivate)
+                return makeOpenTextRoute(urlScanner: urlScanner, isPrivate: isPrivate)
 
             case .glean:
                 return .glean(url: url)
@@ -183,6 +176,17 @@ final class RouteBuilder {
             }
         }
         return .search(url: urlQuery, isPrivate: isPrivate)
+    }
+    
+    private func makeOpenTextRoute(urlScanner: URLScanner, isPrivate: Bool) -> Route? {
+        let queryValue = urlScanner.value(query: "text") ?? ""
+        let queryURL = URIFixup.getURL(queryValue)
+        let safeQuery = queryURL != nil ? queryValue.replacingOccurrences(of: "://", with: "%3A%2F%2F") : queryValue
+        let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
+        if isOpeningWithFirefoxExtension {
+            actionExtensionTelemetry.shareText()
+        }
+        return .searchQuery(query: safeQuery, isPrivate: isPrivate)
     }
 
     @MainActor
