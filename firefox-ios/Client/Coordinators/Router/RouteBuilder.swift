@@ -99,13 +99,7 @@ final class RouteBuilder {
 
             case .widgetTabsLargeOpenUrl:
                 // Widget Tabs Quick View - large
-                let tabs = SimpleTab.getSimpleTabs()
-                if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty {
-                    let tab = tabs[uuid]
-                    return .searchURL(url: tab?.url, tabId: uuid)
-                } else {
-                    return .search(url: nil, isPrivate: false)
-                }
+                return makeWidgetTabsLargeOpenUrlRoute(urlScanner: urlScanner)
 
             case .fxaSignIn:
                 return nil
@@ -192,6 +186,16 @@ final class RouteBuilder {
         let tabs = SimpleTab.getSimpleTabs()
         if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty, let tab = tabs[uuid] {
             return .searchURL(url: tab.url, tabId: uuid)
+        } else {
+            return .search(url: nil, isPrivate: false)
+        }
+    }
+    
+    private func makeWidgetTabsLargeOpenUrlRoute(urlScanner: URLScanner) -> Route? {
+        let tabs = SimpleTab.getSimpleTabs()
+        if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty {
+            let tab = tabs[uuid]
+            return .searchURL(url: tab?.url, tabId: uuid)
         } else {
             return .search(url: nil, isPrivate: false)
         }
