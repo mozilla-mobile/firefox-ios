@@ -87,13 +87,7 @@ final class RouteBuilder {
 
             case .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
                 // Widget Quick links - medium - open copied url
-                if !UIPasteboard.general.hasURLs, let searchText = UIPasteboard.general.string {
-                    return .searchQuery(query: searchText, isPrivate: isPrivate)
-                } else {
-                    let url = UIPasteboard.general.url
-                    guard host.isValidURL(urlQuery: url) else { return nil }
-                    return .search(url: url, isPrivate: isPrivate)
-                }
+                return makeWidgetQuickLinkOpenCopiedRoute(isPrivate: isPrivate, host: host)
 
             case .widgetSmallQuickLinkClosePrivateTabs, .widgetMediumQuickLinkClosePrivateTabs:
                 // Widget Quick links - medium - close private tabs
@@ -187,6 +181,16 @@ final class RouteBuilder {
             actionExtensionTelemetry.shareText()
         }
         return .searchQuery(query: safeQuery, isPrivate: isPrivate)
+    }
+    
+    private func makeWidgetQuickLinkOpenCopiedRoute(isPrivate: Bool, host: DeeplinkInput.Host) -> Route? {
+        if !UIPasteboard.general.hasURLs, let searchText = UIPasteboard.general.string {
+            return .searchQuery(query: searchText, isPrivate: isPrivate)
+        } else {
+            let url = UIPasteboard.general.url
+            guard host.isValidURL(urlQuery: url) else { return nil }
+            return .search(url: url, isPrivate: isPrivate)
+        }
     }
 
     @MainActor
