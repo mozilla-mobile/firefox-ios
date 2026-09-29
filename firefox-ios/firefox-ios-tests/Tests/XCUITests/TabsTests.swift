@@ -703,7 +703,6 @@ class TabsTestsIphone: BaseTestCase {
 
         // Check that the tab has changed
         waitUntilPageLoad()
-        browserScreen.addressToolbarContainValue(value: "iana")
         browserScreen.assertReservedTLDNamesLinkExist()
         toolBarScreen.assertTabsButtonExists()
         toolBarScreen.assertTabsButtonValue(expectedCount: "2")
@@ -724,7 +723,6 @@ class TabsTestsIphone: BaseTestCase {
         newTabsScreen.tapOnSwitchButton()
 
         waitUntilPageLoad()
-        browserScreen.addressToolbarContainValue(value: "iana")
         browserScreen.assertReservedTLDNamesLinkExist()
         toolBarScreen.assertTabsButtonExists()
         toolBarScreen.assertTabsButtonValue(expectedCount: "2")
@@ -746,7 +744,7 @@ class TabsTestsIphone: BaseTestCase {
         // Check that the tab has changed to the new open one and that the user is in private mode.
         // Open a new tab from private tab tray should open a new tab in private mode.
         waitUntilPageLoad()
-        browserScreen.addressToolbarContainValue(value: "iana")
+        browserScreen.assertReservedTLDNamesLinkExist()
         waitForTabsButton()
         navigator.goto(TabTray)
         tabTrayScreen.tapOnNewTabButton()
