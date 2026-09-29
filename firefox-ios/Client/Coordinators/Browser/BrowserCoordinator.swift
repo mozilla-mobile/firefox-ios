@@ -234,8 +234,9 @@ final class BrowserCoordinator: BaseCoordinator,
         )
         add(child: bookmarksCoordinator)
         bookmarksCoordinator.start(parentFolder: parentFolder, bookmark: bookmark)
-        navigationController.onViewDismissed = { [weak self] in
+        navigationController.onViewDismissed = { [weak self, weak bookmarksCoordinator] in
             // Remove coordinator when user drags down to dismiss modal
+            guard let bookmarksCoordinator else { return }
             self?.didFinish(from: bookmarksCoordinator)
         }
         present(navigationController)
@@ -478,8 +479,10 @@ final class BrowserCoordinator: BaseCoordinator,
         add(child: settingsCoordinator)
         settingsCoordinator.start(with: section)
 
-        navigationController.onViewDismissed = { [weak self] in
-            self?.didFinishSettings(from: settingsCoordinator)
+        navigationController.onViewDismissed = { [weak self, weak settingsCoordinator] in
+            if let settingsCoordinator {
+                self?.didFinishSettings(from: settingsCoordinator)
+            }
             onDismiss?()
         }
         present(navigationController)
@@ -1079,9 +1082,11 @@ final class BrowserCoordinator: BaseCoordinator,
         add(child: tabTrayCoordinator)
         tabTrayCoordinator.start(with: selectedPanel)
 
-        navigationController.onViewDismissed = { [weak self] in
+        navigationController.onViewDismissed = { [weak self, weak tabTrayCoordinator] in
             guard let self else { return }
-            self.didDismissTabTray(from: tabTrayCoordinator)
+            if let tabTrayCoordinator {
+                self.didDismissTabTray(from: tabTrayCoordinator)
+            }
             store.dispatch(
                 TabTrayAction(
                     windowUUID: self.windowUUID,
@@ -1355,8 +1360,9 @@ final class BrowserCoordinator: BaseCoordinator,
         add(child: coordinator)
         coordinator.start()
 
-        navigationController.onViewDismissed = { [weak self] in
+        navigationController.onViewDismissed = { [weak self, weak coordinator] in
             // Remove coordinator when user drags down to dismiss modal
+            guard let coordinator else { return }
             self?.didFinish(from: coordinator)
         }
 
