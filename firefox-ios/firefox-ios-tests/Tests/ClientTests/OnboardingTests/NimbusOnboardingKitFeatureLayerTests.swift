@@ -870,7 +870,7 @@ class NimbusOnboardingKitFeatureLayerTests: XCTestCase {
     }
 
     private func setupNimbus(with cards: [String: NimbusOnboardingCardData]) {
-        FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _, _ in
+        FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _ in
             OnboardingFrameworkFeature(cards: cards, dismissable: true)
         })
     }

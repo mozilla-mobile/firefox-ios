@@ -293,7 +293,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
     // MARK: - Helpers
 
     private func setTermsOfServiceFeatureEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.tosFeature.with(initializer: { _, _ in
+        FxNimbus.shared.features.tosFeature.with(initializer: { _ in
             TosFeature(status: enabled)
         })
     }

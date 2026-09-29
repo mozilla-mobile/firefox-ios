@@ -92,7 +92,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     func testFirefoxSuggestionReturnsNoSuggestions() async throws {
-        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
+        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _ in
             FirefoxSuggestFeature(availableSuggestionsTypes:
                                     [.amp: false, .ampMobile: false, .wikipedia: false])
        })
@@ -112,7 +112,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     func testFirefoxSuggestionReturnsNoSuggestionsWhenSuggestionSettingsFalse() async throws {
-        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
+        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _ in
             FirefoxSuggestFeature(availableSuggestionsTypes:
                                     [.amp: false, .ampMobile: true, .wikipedia: true])
        })
@@ -128,7 +128,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     func testFirefoxSuggestionReturnsSponsoredAndNonSponsored() async throws {
-        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
+        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _ in
             FirefoxSuggestFeature(availableSuggestionsTypes:
                                     [.amp: false, .ampMobile: true, .wikipedia: true])
        })
@@ -267,7 +267,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     func testLoad_forFirefoxSuggestions_doesNotTriggerReloadForSameSuggestions() async throws {
-        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
+        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _ in
             FirefoxSuggestFeature(availableSuggestionsTypes:
                                     [.amp: false, .ampMobile: true, .wikipedia: true])
        })
@@ -320,7 +320,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     func testFirefoxSuggestionReturnsSponsored() async {
-        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
+        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _ in
             FirefoxSuggestFeature(availableSuggestionsTypes:
                                     [.amp: false, .ampMobile: true, .wikipedia: true])
        })
@@ -335,7 +335,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     func testFirefoxSuggestionReturnsNonSponsored() async {
-        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
+        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _ in
             FirefoxSuggestFeature(availableSuggestionsTypes:
                                     [.amp: false, .ampMobile: true, .wikipedia: true])
        })
