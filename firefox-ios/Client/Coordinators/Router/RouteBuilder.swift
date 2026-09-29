@@ -34,7 +34,7 @@ final class RouteBuilder {
         guard let urlScanner = URLScanner(url: url), urlScanner.isOurScheme else { return nil }
         return DeeplinkInput.Host(rawValue: urlScanner.host.lowercased())
     }
-
+    
     @MainActor
     func makeRoute(url: URL) -> Route? {
         switch FxAPairingURLParser.parse(url) {
@@ -62,12 +62,7 @@ final class RouteBuilder {
                 return makeDeepLinkRoute(urlScanner: urlScanner)
 
             case .fxaSignIn where urlScanner.value(query: "signin") != nil:
-                return .fxaSignIn(
-                    params: FxALaunchParams(
-                        entrypoint: .fxaDeepLinkNavigation,
-                        query: url.getQuery()
-                    )
-                )
+                return makeFxaSignInRoute(url: url)
 
             case .openUrl:
                 let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
@@ -175,6 +170,15 @@ final class RouteBuilder {
         } else {
             return nil
         }
+    }
+    
+    private func makeFxaSignInRoute(url: URL) -> Route {
+        return .fxaSignIn(
+            params: FxALaunchParams(
+                entrypoint: .fxaDeepLinkNavigation,
+                query: url.getQuery()
+            )
+        )
     }
 
     @MainActor
