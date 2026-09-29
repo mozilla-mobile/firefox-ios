@@ -65,21 +65,7 @@ final class RouteBuilder {
                 return makeFxaSignInRoute(url: url)
 
             case .openUrl:
-                let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
-                if isOpeningWithFirefoxExtension {
-                    actionExtensionTelemetry.shareURL()
-                }
-                if let urlQuery {
-                    switch FxAPairingURLParser.parse(urlQuery) {
-                    case .pairing(let pairingURL):
-                        return .fxaPairing(url: pairingURL)
-                    case .invalidPairing:
-                        return nil
-                    case .notPairing:
-                        break
-                    }
-                }
-                return .search(url: urlQuery, isPrivate: isPrivate)
+                return makeOpenUrlRoute(urlScanner: urlScanner, urlQuery: urlQuery, isPrivate: isPrivate)
 
             case .openText:
                 let queryValue = urlScanner.value(query: "text") ?? ""
@@ -179,6 +165,24 @@ final class RouteBuilder {
                 query: url.getQuery()
             )
         )
+    }
+    
+    private func makeOpenUrlRoute(urlScanner: URLScanner, urlQuery: URL?, isPrivate: Bool) -> Route? {
+        let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
+        if isOpeningWithFirefoxExtension {
+            actionExtensionTelemetry.shareURL()
+        }
+        if let urlQuery {
+            switch FxAPairingURLParser.parse(urlQuery) {
+            case .pairing(let pairingURL):
+                return .fxaPairing(url: pairingURL)
+            case .invalidPairing:
+                return nil
+            case .notPairing:
+                break
+            }
+        }
+        return .search(url: urlQuery, isPrivate: isPrivate)
     }
 
     @MainActor
