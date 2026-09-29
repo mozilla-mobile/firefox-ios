@@ -208,7 +208,7 @@ final class AddressToolbarContainerModel: Equatable {
     ) {
         self.longPressMenuProvider = longPressMenuProvider
         self.borderPosition = state.addressToolbar.borderPosition
-        self.navigationActions = Self.mapActions(state.addressToolbar.navigationActions,
+        self.navigationActions = Self.mapActions(addressToolbarContainerLens.navigationActions,
                                                  isShowingTopTabs: state.isShowingTopTabs,
                                                  longPressMenuProvider: longPressMenuProvider,
                                                  windowUUID: windowUUID)

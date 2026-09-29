@@ -11,8 +11,6 @@ import SummarizeKit
 @Copyable
 struct AddressBarState: StateType, Sendable, Equatable {
     var windowUUID: WindowUUID
-    // The address bar's back/forward buttons, shown only when the navigation toolbar is hidden (e.g. compact layout).
-    var navigationActions: [ToolbarActionConfiguration]
     var browserActions: [ToolbarActionConfiguration]
     var editingAccessoryAction: ToolbarActionConfiguration?
     let borderPosition: AddressToolbarBorderPosition?
@@ -68,7 +66,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            navigationActions: [],
             browserActions: [],
             editingAccessoryAction: nil,
             borderPosition: nil,
@@ -93,7 +90,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     init(windowUUID: WindowUUID,
-         navigationActions: [ToolbarActionConfiguration],
          browserActions: [ToolbarActionConfiguration],
          editingAccessoryAction: ToolbarActionConfiguration?,
          borderPosition: AddressToolbarBorderPosition?,
@@ -115,7 +111,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
          alternativeSearchEngine: SearchEngineModel?,
          isNovaDesignEnabled: Bool) {
         self.windowUUID = windowUUID
-        self.navigationActions = navigationActions
         self.browserActions = browserActions
         self.editingAccessoryAction = editingAccessoryAction
         self.borderPosition = borderPosition
@@ -255,7 +250,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
 
         return state
-            .copy(navigationActions: [])
             .copy(browserActions: [])
             .copy(editingAccessoryAction: nil)
             .copy(borderPosition: borderPosition)
@@ -346,10 +340,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return defaultState(from: state)
         }
 
-        let canSummarize = toolbarAction.canSummarize
-
         return state
-            .copy(canSummarize: canSummarize)
+            .copy(canSummarize: toolbarAction.canSummarize)
     }
 
     @MainActor
@@ -370,21 +362,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handleWebsiteLoadingStateDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        let isLoading = toolbarAction.isLoading ?? state.isLoading
-
-        // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
-        // and canGoForward). For actions that change one of these values, we use the updated value from the action.
-        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-        var navigationActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            navigationActions = NavigationActionsBuilder.getActions(
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                canGoBack: toolbarAction.canGoBack ?? toolbarState.canGoBack,
-                canGoForward: toolbarAction.canGoForward ?? toolbarState.canGoForward)
-        }
         return state
-            .copy(navigationActions: navigationActions)
-            .copy(isLoading: isLoading)
+            .copy(isLoading: toolbarAction.isLoading ?? state.isLoading)
     }
 
     @MainActor
@@ -395,17 +374,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let translationConfiguration = resolveTranslationConfig(from: toolbarAction,
                                                                 existingConfig: state.translationConfiguration)
 
-        // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
-        // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-        var navigationActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            let isShowingNavToolbar = toolbarAction.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
-            navigationActions = NavigationActionsBuilder.getActions(
-                isShowingNavigationToolbar: isShowingNavToolbar,
-                canGoBack: toolbarAction.canGoBack ?? toolbarState.canGoBack,
-                canGoForward: toolbarAction.canGoForward ?? toolbarState.canGoForward)
-        }
+
         // BrowserActions needs isHomepage from the parent ToolbarState, but urlDidChange carries a
         // fresher url than what's already committed to ToolbarState, so we use the action's value.
         var browserActions = [ToolbarActionConfiguration]()
@@ -428,7 +398,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
 
         return state
-            .copy(navigationActions: navigationActions)
             .copy(browserActions: browserActions)
             .copy(url: toolbarAction.url)
             .copy(searchTerm: nil)
@@ -462,20 +431,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     @MainActor
     private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+        guard action is ToolbarAction else { return defaultState(from: state) }
 
-        // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
-        // and canGoForward). For actions that change one of these values, we use the updated value from the action.
-        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: state.windowUUID)
-        var navigationActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            navigationActions = NavigationActionsBuilder.getActions(
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                canGoBack: toolbarAction.canGoBack ?? toolbarState.canGoBack,
-                canGoForward: toolbarAction.canGoForward ?? toolbarState.canGoForward)
-        }
         return state
-            .copy(navigationActions: navigationActions)
             .copy(searchTerm: nil)
     }
 
@@ -483,17 +441,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handleTraitCollectionDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
-        // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-        var navigationActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            let isShowingNavToolbar = toolbarAction.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
-            navigationActions = NavigationActionsBuilder.getActions(
-                isShowingNavigationToolbar: isShowingNavToolbar,
-                canGoBack: toolbarState.canGoBack,
-                canGoForward: toolbarState.canGoForward)
-        }
+
         var browserActions = [ToolbarActionConfiguration]()
         if let toolbarState {
             let isShowingNavToolbar = toolbarAction.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
@@ -513,7 +462,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             )
         }
         return state
-            .copy(navigationActions: navigationActions)
             .copy(browserActions: browserActions)
     }
 
@@ -521,16 +469,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handleShowMenuWarningBadgeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
-        // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-        var navigationActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            navigationActions = NavigationActionsBuilder.getActions(
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                canGoBack: toolbarState.canGoBack,
-                canGoForward: toolbarState.canGoForward)
-        }
+
         var browserActions = [ToolbarActionConfiguration]()
         if let toolbarState {
             browserActions = BrowserActionsBuilder.getActions(
@@ -549,7 +489,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             )
         }
         return state
-            .copy(navigationActions: navigationActions)
             .copy(browserActions: browserActions)
     }
 
@@ -557,16 +496,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
-        // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-        var navigationActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            navigationActions = NavigationActionsBuilder.getActions(
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                canGoBack: toolbarState.canGoBack,
-                canGoForward: toolbarState.canGoForward)
-        }
+
         var browserActions = [ToolbarActionConfiguration]()
         if let toolbarState {
             browserActions = BrowserActionsBuilder.getActions(
@@ -585,7 +516,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             )
         }
         return state
-            .copy(navigationActions: navigationActions)
             .copy(browserActions: browserActions)
             .copy(borderPosition: toolbarAction.addressBorderPosition)
     }
@@ -599,16 +529,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // Declared once and reused so the actions computed here can never drift out of sync
         let isEditing = true
 
-        // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
-        // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-        var navigationActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            navigationActions = NavigationActionsBuilder.getActions(
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                canGoBack: toolbarState.canGoBack,
-                canGoForward: toolbarState.canGoForward)
-        }
         var browserActions = [ToolbarActionConfiguration]()
         if let toolbarState {
             browserActions = BrowserActionsBuilder.getActions(
@@ -627,7 +548,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             )
         }
         return state
-            .copy(navigationActions: navigationActions)
             .copy(browserActions: browserActions)
             .copy(searchTerm: toolbarAction.searchTerm)
             .copy(isEditing: isEditing)
@@ -648,16 +568,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // Declared once and reused so the actions computed here can never drift out of sync
         let isEditing = true
 
-        // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
-        // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-        var navigationActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            navigationActions = NavigationActionsBuilder.getActions(
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                canGoBack: toolbarState.canGoBack,
-                canGoForward: toolbarState.canGoForward)
-        }
+
         var browserActions = [ToolbarActionConfiguration]()
         if let toolbarState {
             browserActions = BrowserActionsBuilder.getActions(
@@ -676,7 +588,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             )
         }
         return state
-            .copy(navigationActions: navigationActions)
             .copy(browserActions: browserActions)
             .copy(searchTerm: searchTerm)
             .copy(isEditing: isEditing)
@@ -710,16 +621,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // can never drift out of sync
         let isEditing = false
 
-        // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
-        // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-        var navigationActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            navigationActions = NavigationActionsBuilder.getActions(
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                canGoBack: toolbarState.canGoBack,
-                canGoForward: toolbarState.canGoForward)
-        }
+
         var browserActions = [ToolbarActionConfiguration]()
         if let toolbarState {
             browserActions = BrowserActionsBuilder.getActions(
@@ -739,7 +642,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
 
         return state
-            .copy(navigationActions: navigationActions)
             .copy(browserActions: browserActions)
             .copy(url: url)
             .copy(searchTerm: nil)
@@ -759,16 +661,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // Declared once and reused so the actions computed here can never drift out of sync
         let isEditing = true
 
-        // NavigationActions needs values from the parent ToolbarState (isShowingNavigationToolbar, canGoBack,
-        // and canGoForward). For actions that change one of these values, we use the updated value from the action.
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-        var navigationActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            navigationActions = NavigationActionsBuilder.getActions(
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                canGoBack: toolbarState.canGoBack,
-                canGoForward: toolbarState.canGoForward)
-        }
         var browserActions = [ToolbarActionConfiguration]()
         if let toolbarState {
             browserActions = BrowserActionsBuilder.getActions(
@@ -788,7 +681,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
 
         return state
-            .copy(navigationActions: navigationActions)
             .copy(browserActions: browserActions)
             .copy(searchTerm: toolbarAction.searchTerm)
             .copy(isEditing: isEditing)
@@ -878,7 +770,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     static func defaultState(from state: AddressBarState) -> Self {
         return AddressBarState(
             windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
             browserActions: state.browserActions,
             editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
@@ -906,29 +797,5 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard isGoogleLensEnabled else { return nil }
 
         return googleLensAction
-    }
-
-    /// Whether the address bar should render with the alternative "in-content" location color —
-    /// true when the toolbar is top-positioned, top tabs aren't shown, and the nav toolbar is
-    /// visible. Reads `ToolbarState` by default, but `traitCollectionDidChange`/`toolbarPositionChanged`
-    /// carry a fresher value for these fields than what's already committed to `ToolbarState`
-    /// (read mid-dispatch, before `ToolbarState`'s own reducer commits), so those two callers pass
-    /// the action's value instead. Shared across the leading and trailing page action handlers.
-    /// Always false on Nova.
-    @MainActor
-    private static func shouldShowAlternativeLocationColor(
-        windowUUID: WindowUUID,
-        isNovaDesignEnabled: Bool,
-        toolbarPosition: AddressToolbarPosition? = nil,
-        isShowingTopTabs: Bool? = nil,
-        isShowingNavigationToolbar: Bool? = nil
-    ) -> Bool {
-        guard !isNovaDesignEnabled,
-              let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
-        else { return false }
-
-        return (toolbarPosition ?? toolbarState.toolbarPosition) == .top
-            && !(isShowingTopTabs ?? toolbarState.isShowingTopTabs)
-            && (isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar)
     }
 }
