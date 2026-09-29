@@ -22,7 +22,7 @@ final class NimbusMessagingMessageTests: XCTestCase {
 
     lazy var feature = {
         FxNimbus.shared.initialize(with: { nil })
-        return FxNimbusMessaging.shared.features.messaging.value()
+        return FxNimbus.shared.features.messaging.value()
     }()
 
     lazy var subject = GleanPlumbMessageManager(
