@@ -111,16 +111,7 @@ final class RouteBuilder {
                     return nil
                 }
 
-                // Pass optional share message and subtitle here
-                var shareMessage: ShareMessage?
-                if let titleText = urlScanner.value(query: "title") {
-                    let subtitleText: String? = urlScanner.value(query: "subtitle")
-
-                    shareMessage = ShareMessage(message: titleText, subtitle: subtitleText)
-                }
-
-                // Deeplinks cannot have an associated tab or file, so this must be a website URL `.site` share
-                return .sharesheet(shareType: .site(url: shareURL), shareMessage: shareMessage)
+                return makeShareSheetRoute(urlScanner: urlScanner, shareURL: shareURL)
             }
         } else if urlScanner.isHTTPScheme {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
@@ -199,6 +190,19 @@ final class RouteBuilder {
         } else {
             return .search(url: nil, isPrivate: false)
         }
+    }
+    
+    private func makeShareSheetRoute(urlScanner: URLScanner, shareURL: URL) -> Route? {
+        // Pass optional share message and subtitle here
+        var shareMessage: ShareMessage?
+        if let titleText = urlScanner.value(query: "title") {
+            let subtitleText: String? = urlScanner.value(query: "subtitle")
+            
+            shareMessage = ShareMessage(message: titleText, subtitle: subtitleText)
+        }
+        
+        // Deeplinks cannot have an associated tab or file, so this must be a website URL `.site` share
+        return .sharesheet(shareType: .site(url: shareURL), shareMessage: shareMessage)
     }
 
     @MainActor
