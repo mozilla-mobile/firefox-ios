@@ -95,12 +95,7 @@ final class RouteBuilder {
 
             case .widgetTabsMediumOpenUrl:
                 // Widget Tabs Quick View - medium
-                let tabs = SimpleTab.getSimpleTabs()
-                if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty, let tab = tabs[uuid] {
-                    return .searchURL(url: tab.url, tabId: uuid)
-                } else {
-                    return .search(url: nil, isPrivate: false)
-                }
+                return makeWidgetTabsMediumOpenUrlRoute(urlScanner: urlScanner)
 
             case .widgetTabsLargeOpenUrl:
                 // Widget Tabs Quick View - large
@@ -190,6 +185,15 @@ final class RouteBuilder {
             let url = UIPasteboard.general.url
             guard host.isValidURL(urlQuery: url) else { return nil }
             return .search(url: url, isPrivate: isPrivate)
+        }
+    }
+    
+    private func makeWidgetTabsMediumOpenUrlRoute(urlScanner: URLScanner) -> Route? {
+        let tabs = SimpleTab.getSimpleTabs()
+        if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty, let tab = tabs[uuid] {
+            return .searchURL(url: tab.url, tabId: uuid)
+        } else {
+            return .search(url: nil, isPrivate: false)
         }
     }
 
