@@ -503,7 +503,6 @@
 		394615642FEC381D003321D8 /* MockReaderModeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394615632FEC381A003321D8 /* MockReaderModeHandlers.swift */; };
 		394CF6CF1BAA493C00906917 /* DefaultSuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */; };
 		3954D0F12F74288E00CDC338 /* MerinoStoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3954D0F02F74286800CDC338 /* MerinoStoryResponse.swift */; };
-		39673BC12B6D82F400653F4A /* FxNimbusMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39673BC02B6D82F400653F4A /* FxNimbusMessaging.swift */; };
 		396A0A0E3048634C001BF33A /* TrackerBlockerSheetStateProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396A0A0D3048634A001BF33A /* TrackerBlockerSheetStateProviderTests.swift */; };
 		396A0A1130486377001BF33A /* TrackerBlockerSheetStateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396A0A1030486376001BF33A /* TrackerBlockerSheetStateProvider.swift */; };
 		396E38CC1EE0816C00CC180F /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
@@ -3647,7 +3646,6 @@
 		394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSuggestedSites.swift; sourceTree = "<group>"; };
 		3954D0F02F74286800CDC338 /* MerinoStoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoStoryResponse.swift; sourceTree = "<group>"; };
 		3964F5FB2656D2B500065278 /* initial_experiments.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = initial_experiments.json; path = Client/Experiments/initial_experiments.json; sourceTree = SOURCE_ROOT; };
-		39673BC02B6D82F400653F4A /* FxNimbusMessaging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxNimbusMessaging.swift; sourceTree = "<group>"; };
 		396A0A0D3048634A001BF33A /* TrackerBlockerSheetStateProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerSheetStateProviderTests.swift; sourceTree = "<group>"; };
 		396A0A1030486376001BF33A /* TrackerBlockerSheetStateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerBlockerSheetStateProvider.swift; sourceTree = "<group>"; };
 		397848DB1ED86605004C0C0B /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -16670,7 +16668,6 @@
 			children = (
 				0B11AF062CB416FE00AD51D5 /* Metrics */,
 				455880A027B42F720078DEBB /* FxNimbus.swift */,
-				39673BC02B6D82F400653F4A /* FxNimbusMessaging.swift */,
 			);
 			path = Generated;
 			sourceTree = "<group>";
@@ -19817,7 +19814,6 @@
 			);
 			outputPaths = (
 				"$(SRCROOT)/Client/Generated/FxNimbus.swift",
-				"$(SRCROOT)/Client/Generated/FxNimbusMessaging.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -20884,7 +20880,6 @@
 				8A5BC1EB2C4AA13F009A40A4 /* FeatureFlagsBoolSetting.swift in Sources */,
 				2154A0FB2F115E700067EA43 /* PasswordGeneratorScriptEvaluator.swift in Sources */,
 				43D16B7C29831CD0009F8279 /* CreditCardItemRow.swift in Sources */,
-				39673BC12B6D82F400653F4A /* FxNimbusMessaging.swift in Sources */,
 				965C3C942933A860006499ED /* LaunchSessionProvider.swift in Sources */,
 				8C51ED722DE0A5B500B3E58A /* OnboardingKitViewModel.swift in Sources */,
 				EDADF77C2D70C58200C39295 /* SettingsTelemetry.swift in Sources */,

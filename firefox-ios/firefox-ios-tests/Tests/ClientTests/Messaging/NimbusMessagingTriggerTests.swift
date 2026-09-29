@@ -23,7 +23,7 @@ final class NimbusMessagingTriggerTests: XCTestCase {
 
     lazy var feature: Messaging = {
         FxNimbus.shared.initialize(with: { nil })
-        return FxNimbusMessaging.shared.features.messaging.value()
+        return FxNimbus.shared.features.messaging.value()
     }()
 
     func testTriggers() throws {
