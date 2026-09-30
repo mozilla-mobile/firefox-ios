@@ -6,7 +6,6 @@ import Foundation
 import WebKit
 import Shared
 import Glean
-import WebEngine
 
 enum HistoryDeletionUtilityDateOptions: String, CaseIterable {
     case lastHour
@@ -60,7 +59,7 @@ final class HistoryDeletionUtility: HistoryDeletionProtocol, Sendable {
     ) {
         guard let date = dateFor(dateOption, requiringAllTimeAsPresent: false) else { return }
 
-        DefaultWKEngineConfigurationProvider.defaultStore.removeData(
+        WKWebsiteDataStore.default().removeData(
             ofTypes: types,
             modifiedSince: date,
             completionHandler: { }
