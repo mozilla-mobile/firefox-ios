@@ -160,7 +160,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
 
     let LINK_RESERVED_TLD_NAMES = Selector.linkById(
         IDs.reservedTLDNames,
-        description: "Link to RFC 2606 (Reserved Top Level DNS Names) on the IANA example domains page",
+        description: "Link to RFC 2606 (Reserved Top Level DNS Names) on the example domains test page",
         groups: ["browser", "webview"]
     )
 

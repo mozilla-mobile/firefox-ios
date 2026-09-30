@@ -135,6 +135,7 @@ extension BrowserViewController {
 
         store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
                                             actionType: GeneralBrowserActionType.addNewTab))
+        keyboardPressesHandler().reset()
     }
 
     @objc

@@ -9,13 +9,14 @@ import XCTest
 @MainActor
 final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
     var profile: MockProfile!
-    let tabManager = MockTabManager()
+    var tabManager: MockTabManager!
     var mockVC: MockBrowserViewController!
     var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() async throws {
         try await super.setUp()
         profile = MockProfile()
+        tabManager = MockTabManager()
         DependencyHelperMock().bootstrapDependencies()
         mockVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
         setupStore()
@@ -26,6 +27,8 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
         profile = nil
         DependencyHelperMock().reset()
         mockVC = nil
+        tabManager = nil
+        mockStore = nil
         resetStore()
         try await super.tearDown()
     }

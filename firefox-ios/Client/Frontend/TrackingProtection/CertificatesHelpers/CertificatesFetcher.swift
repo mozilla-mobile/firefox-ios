@@ -60,6 +60,10 @@ final class CertificatesFetcher {
         }
 
         task.resume()
+        // Fix: Stop a memory leak.
+        // URLSession holds onto this code block forever.
+        // We must shut down the session when the task finishes to clear it from memory.
+        session.finishTasksAndInvalidate()
     }
 }
 

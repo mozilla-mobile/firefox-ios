@@ -477,7 +477,6 @@ class PrivateBrowsingTestIphone: BaseTestCase {
 
         // Check that the tab has changed
         waitUntilPageLoad()
-        browserScreen.addressToolbarContainValue(value: "iana")
         browserScreen.assertReservedTLDNamesLinkExist()
         toolbarScreen.assertTabsButtonValue(expectedCount: "2")
     }
