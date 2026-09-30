@@ -31,36 +31,18 @@ struct OnboardingFlowView: View {
     }
 
     var body: some View {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let isDark = theme.type == .dark
-        let card = cards[min(index, cards.count - 1)]
-        let secondaryAction: (() -> Void)? = card.secondaryButtonTitle == nil
+        return ZStack(alignment: .topTrailing) {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            let card = cards[min(index, cards.count - 1)]
+            let secondaryAction: (() -> Void)? = card.secondaryButtonTitle == nil
             ? nil
             : { perform(card.secondaryButtonAction) }
 
-        let yellowOpacity = isDark ? 0.0 : 0.25
-        let yellow = Color(red: 0xFF / 255, green: 0xD4 / 255, blue: 0xB7 / 255, opacity: yellowOpacity)
-        // let purple = Color(red: 0xE5 / 255, green: 0xD6 / 255, blue: 0xFF / 255, opacity: 0.35)
-        let purple = theme.colors.gradientAIStrongStop1.color.opacity(0.2)
-        // let red = Color(red: 0xFF / 255, green: 0x8F / 255, blue: 0x5D / 255, opacity: 0.28)
-        let red = Color.red.opacity(0.2)
-        ZStack {
             theme.colors.layer1.color
                 .ignoresSafeArea()
 
-            if #available(iOS 18.0, *) {
-                MeshGradient(width: 2,
-                             height: 2,
-                             points: [.init(0, 0), .init(1, 0), .init(0, 1), .init(1, 1)],
-                             colors: [purple, red, yellow, yellow])
+            gradient
                 .ignoresSafeArea()
-            } else {
-                LinearGradient(colors: [purple, .yellow],
-                               startPoint: .topLeading,
-                               endPoint: .bottomTrailing)
-                .opacity(0.15)
-                .ignoresSafeArea()
-            }
 
             OnboardingCardView(
                 card: card,
@@ -69,6 +51,37 @@ struct OnboardingFlowView: View {
                 onSecondary: secondaryAction
             )
         }.padding(0)
+    }
+
+    private var gradient: some View {
+        let colors = gradientColors(for: themeManager.getCurrentTheme(for: windowUUID))
+        let center = UnitPoint(x: 0.9, y: 0.1)
+        let radialGradient = RadialGradient(colors: [colors[2], .white.opacity(0)],
+                                            center: center,
+                                            startRadius: 0,
+                                            endRadius: 200)
+
+        let linearGradient = LinearGradient(colors: Array(colors[0...1]),
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing)
+            .overlay(radialGradient)
+
+        return linearGradient
+    }
+
+    private func gradientColors(for theme: Theme) -> [Color] {
+        guard !theme.isNova else {
+            let gradient = theme.colors.gradientAccentSubtle.colors
+            let orange = theme.colors.gradientAIStrongStop3.color.opacity(0.28)
+            // only 2 elements in this gradient
+            return [Color(gradient[0]), Color(gradient[1]), orange]
+        }
+        let isDark = theme.type == .dark
+        let yellowOpacity = isDark ? 0.0 : 0.25
+        let yellow = theme.colors.gradientAIStrongStop3.color.opacity(yellowOpacity)
+        let purple = theme.colors.gradientAIStrongStop1.color.opacity(0.2)
+        let orange = theme.colors.gradientOnboardingStop4.color.opacity(0.28)
+        return [purple, yellow, orange]
     }
 
     private func perform(_ action: OnboardingCardButtonAction) {
