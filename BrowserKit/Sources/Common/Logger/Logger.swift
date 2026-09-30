@@ -8,6 +8,11 @@ public protocol Logger: Sendable {
     var crashedLastLaunch: Bool { get }
 
     func setup(sendCrashReports: Bool)
+
+    /// Sets the feature flags attached to crash reports, replacing any previously set flags.
+    /// - Parameter featureBranches: Feature name mapped to the branch the user is enrolled in
+    func setFeatureFlags(_ featureBranches: [String: String])
+
     func logCustomError(error: Error)
 
     /// Log a new message to the logging system
@@ -37,6 +42,8 @@ public protocol Logger: Sendable {
 }
 
 public extension Logger {
+    func setFeatureFlags(_ featureBranches: [String: String]) {}
+
     func log(_ message: String,
              level: LoggerLevel,
              category: LoggerCategory,

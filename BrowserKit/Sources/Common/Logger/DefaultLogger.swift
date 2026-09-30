@@ -27,6 +27,10 @@ public struct DefaultLogger: Logger {
         crashManager.setup(sendCrashReports: sendCrashReports)
     }
 
+    public func setFeatureFlags(_ featureBranches: [String: String]) {
+        crashManager.setFeatureFlags(featureBranches)
+    }
+
     // TODO: FXIOS-7819 need to rethink if this should go to Sentry
     public func logCustomError(error: Error) {}
 
