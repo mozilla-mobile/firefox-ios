@@ -415,7 +415,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     private func format(string: String) -> NSAttributedString {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         return NSAttributedString(
             string: string,
             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]

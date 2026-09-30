@@ -18,6 +18,14 @@ class SettingsViewController: UIViewController, Themeable {
 
     var currentWindowUUID: UUID? { return windowUUID }
 
+    var shouldUsePrivateOverride: Bool {
+        return true
+    }
+
+    var shouldBeInPrivateTheme: Bool {
+        return false
+    }
+
     init(windowUUID: WindowUUID,
          profile: Profile? = nil,
          tabManager: TabManager? = nil,
@@ -43,7 +51,9 @@ class SettingsViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        let theme = themeManager.resolveTheme(for: currentWindowUUID,
+                                              shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                              shouldBeInPrivateTheme: shouldBeInPrivateTheme)
         view.backgroundColor = theme.colors.layer1
     }
 }
