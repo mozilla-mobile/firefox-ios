@@ -100,7 +100,7 @@ struct VPNSettingsView: View, ThemeApplicable {
                         }
                     }
                     Spacer()
-                    icon(named: StandardImageIdentifiers.Large.chevronRight)
+//                    icon(named: StandardImageIdentifiers.Large.chevronRight)
                 }
                 .contentShape(Rectangle())
             }
