@@ -11,7 +11,6 @@ import SummarizeKit
 @Copyable
 struct AddressBarState: StateType, Sendable, Equatable {
     var windowUUID: WindowUUID
-    var browserActions: [ToolbarActionConfiguration]
     var editingAccessoryAction: ToolbarActionConfiguration?
     let borderPosition: AddressToolbarBorderPosition?
     var url: URL?
@@ -66,7 +65,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            browserActions: [],
             editingAccessoryAction: nil,
             borderPosition: nil,
             url: nil,
@@ -90,7 +88,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     init(windowUUID: WindowUUID,
-         browserActions: [ToolbarActionConfiguration],
          editingAccessoryAction: ToolbarActionConfiguration?,
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
@@ -111,7 +108,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
          alternativeSearchEngine: SearchEngineModel?,
          isNovaDesignEnabled: Bool) {
         self.windowUUID = windowUUID
-        self.browserActions = browserActions
         self.editingAccessoryAction = editingAccessoryAction
         self.borderPosition = borderPosition
         self.url = url
@@ -156,12 +152,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.didLoadToolbars:
             return handleDidLoadToolbarsAction(state: state, action: action)
 
-        case ToolbarActionType.numberOfTabsChanged:
-            return handleNumberOfTabsChangedAction(state: state, action: action)
-
-        case ToolbarActionType.didSetTabScreenshot:
-            return handleDidSetTabScreenshotAction(state: state, action: action)
-
         // Translation related actions
         case TranslationsActionType.didStartTranslatingPage,
             TranslationsActionType.translationCompleted,
@@ -187,12 +177,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleBackForwardButtonStateChangedAction(state: state, action: action)
-
-        case ToolbarActionType.traitCollectionDidChange:
-            return handleTraitCollectionDidChangeAction(state: state, action: action)
-
-        case ToolbarActionType.showMenuWarningBadge:
-            return handleShowMenuWarningBadgeAction(state: state, action: action)
 
         case ToolbarActionType.borderPositionChanged,
             ToolbarActionType.toolbarPositionChanged:
@@ -250,7 +234,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
 
         return state
-            .copy(browserActions: [])
             .copy(editingAccessoryAction: nil)
             .copy(borderPosition: borderPosition)
             .copy(url: nil)
@@ -269,58 +252,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             .copy(didStartTyping: false)
             .copy(isEmptySearch: true)
             .copy(isNovaDesignEnabled: toolbarAction.isNovaDesignEnabled ?? state.isNovaDesignEnabled)
-    }
-
-    @MainActor
-    private static func handleNumberOfTabsChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-        var browserActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            browserActions = BrowserActionsBuilder.getActions(
-                isEditing: state.isEditing,
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                isShowingTopTabs: toolbarState.isShowingTopTabs,
-                isHomepage: toolbarState.addressToolbar.url == nil,
-                toolbarLayout: toolbarState.toolbarLayout,
-                tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
-                numberOfTabs: toolbarAction.numberOfTabs ?? toolbarState.numberOfTabs,
-                showWarningBadge: toolbarState.showMenuWarningBadge,
-                previousTabScreenshot: toolbarState.previousTabScreenshot,
-                nextTabScreenshot: toolbarState.nextTabScreenshot,
-                isPrivateMode: toolbarState.isPrivateMode,
-                isNovaDesignEnabled: state.isNovaDesignEnabled
-            )
-        }
-
-        return state.copy(browserActions: browserActions)
-    }
-
-    @MainActor
-    private static func handleDidSetTabScreenshotAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-        var browserActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            browserActions = BrowserActionsBuilder.getActions(
-                isEditing: state.isEditing,
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                isShowingTopTabs: toolbarState.isShowingTopTabs,
-                isHomepage: toolbarState.addressToolbar.url == nil,
-                toolbarLayout: toolbarState.toolbarLayout,
-                tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
-                numberOfTabs: toolbarState.numberOfTabs,
-                showWarningBadge: toolbarState.showMenuWarningBadge,
-                previousTabScreenshot: toolbarAction.previousTabScreenshot,
-                nextTabScreenshot: toolbarAction.nextTabScreenshot,
-                isPrivateMode: toolbarState.isPrivateMode,
-                isNovaDesignEnabled: state.isNovaDesignEnabled
-            )
-        }
-
-        return state.copy(browserActions: browserActions)
     }
 
     @MainActor
@@ -374,31 +305,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let translationConfiguration = resolveTranslationConfig(from: toolbarAction,
                                                                 existingConfig: state.translationConfiguration)
 
-        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-
-        // BrowserActions needs isHomepage from the parent ToolbarState, but urlDidChange carries a
-        // fresher url than what's already committed to ToolbarState, so we use the action's value.
-        var browserActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            let isShowingNavToolbar = toolbarAction.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
-            browserActions = BrowserActionsBuilder.getActions(
-                isEditing: state.isEditing,
-                isShowingNavigationToolbar: isShowingNavToolbar,
-                isShowingTopTabs: toolbarState.isShowingTopTabs,
-                isHomepage: isEmptySearch,
-                toolbarLayout: toolbarState.toolbarLayout,
-                tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
-                numberOfTabs: toolbarState.numberOfTabs,
-                showWarningBadge: toolbarState.showMenuWarningBadge,
-                previousTabScreenshot: toolbarState.previousTabScreenshot,
-                nextTabScreenshot: toolbarState.nextTabScreenshot,
-                isPrivateMode: toolbarState.isPrivateMode,
-                isNovaDesignEnabled: state.isNovaDesignEnabled
-            )
-        }
-
         return state
-            .copy(browserActions: browserActions)
             .copy(url: toolbarAction.url)
             .copy(searchTerm: nil)
             .copy(lockIconButtonA11yId: toolbarAction.lockIconButtonA11yId ?? state.lockIconButtonA11yId)
@@ -438,85 +345,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     @MainActor
-    private static func handleTraitCollectionDidChangeAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-
-        var browserActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            let isShowingNavToolbar = toolbarAction.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
-            browserActions = BrowserActionsBuilder.getActions(
-                isEditing: state.isEditing,
-                isShowingNavigationToolbar: isShowingNavToolbar,
-                isShowingTopTabs: toolbarAction.isShowingTopTabs ?? toolbarState.isShowingTopTabs,
-                isHomepage: toolbarState.addressToolbar.url == nil,
-                toolbarLayout: toolbarState.toolbarLayout,
-                tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
-                numberOfTabs: toolbarState.numberOfTabs,
-                showWarningBadge: toolbarState.showMenuWarningBadge,
-                previousTabScreenshot: toolbarState.previousTabScreenshot,
-                nextTabScreenshot: toolbarState.nextTabScreenshot,
-                isPrivateMode: toolbarState.isPrivateMode,
-                isNovaDesignEnabled: state.isNovaDesignEnabled
-            )
-        }
-        return state
-            .copy(browserActions: browserActions)
-    }
-
-    @MainActor
-    private static func handleShowMenuWarningBadgeAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-
-        var browserActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            browserActions = BrowserActionsBuilder.getActions(
-                isEditing: state.isEditing,
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                isShowingTopTabs: toolbarState.isShowingTopTabs,
-                isHomepage: toolbarState.addressToolbar.url == nil,
-                toolbarLayout: toolbarState.toolbarLayout,
-                tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
-                numberOfTabs: toolbarState.numberOfTabs,
-                showWarningBadge: toolbarAction.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge,
-                previousTabScreenshot: toolbarState.previousTabScreenshot,
-                nextTabScreenshot: toolbarState.nextTabScreenshot,
-                isPrivateMode: toolbarState.isPrivateMode,
-                isNovaDesignEnabled: state.isNovaDesignEnabled
-            )
-        }
-        return state
-            .copy(browserActions: browserActions)
-    }
-
-    @MainActor
     private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-
-        var browserActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            browserActions = BrowserActionsBuilder.getActions(
-                isEditing: state.isEditing,
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                isShowingTopTabs: toolbarState.isShowingTopTabs,
-                isHomepage: toolbarState.addressToolbar.url == nil,
-                toolbarLayout: toolbarState.toolbarLayout,
-                tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
-                numberOfTabs: toolbarState.numberOfTabs,
-                showWarningBadge: toolbarState.showMenuWarningBadge,
-                previousTabScreenshot: toolbarState.previousTabScreenshot,
-                nextTabScreenshot: toolbarState.nextTabScreenshot,
-                isPrivateMode: toolbarState.isPrivateMode,
-                isNovaDesignEnabled: state.isNovaDesignEnabled
-            )
-        }
         return state
-            .copy(browserActions: browserActions)
             .copy(borderPosition: toolbarAction.addressBorderPosition)
     }
 
@@ -529,26 +361,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // Declared once and reused so the actions computed here can never drift out of sync
         let isEditing = true
 
-        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-        var browserActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            browserActions = BrowserActionsBuilder.getActions(
-                isEditing: isEditing,
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                isShowingTopTabs: toolbarState.isShowingTopTabs,
-                isHomepage: toolbarState.addressToolbar.url == nil,
-                toolbarLayout: toolbarState.toolbarLayout,
-                tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
-                numberOfTabs: toolbarState.numberOfTabs,
-                showWarningBadge: toolbarState.showMenuWarningBadge,
-                previousTabScreenshot: toolbarState.previousTabScreenshot,
-                nextTabScreenshot: toolbarState.nextTabScreenshot,
-                isPrivateMode: toolbarState.isPrivateMode,
-                isNovaDesignEnabled: state.isNovaDesignEnabled
-            )
-        }
         return state
-            .copy(browserActions: browserActions)
             .copy(searchTerm: toolbarAction.searchTerm)
             .copy(isEditing: isEditing)
             .copy(shouldShowKeyboard: true)
@@ -568,27 +381,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // Declared once and reused so the actions computed here can never drift out of sync
         let isEditing = true
 
-        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-
-        var browserActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            browserActions = BrowserActionsBuilder.getActions(
-                isEditing: isEditing,
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                isShowingTopTabs: toolbarState.isShowingTopTabs,
-                isHomepage: toolbarState.addressToolbar.url == nil,
-                toolbarLayout: toolbarState.toolbarLayout,
-                tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
-                numberOfTabs: toolbarState.numberOfTabs,
-                showWarningBadge: toolbarState.showMenuWarningBadge,
-                previousTabScreenshot: toolbarState.previousTabScreenshot,
-                nextTabScreenshot: toolbarState.nextTabScreenshot,
-                isPrivateMode: toolbarState.isPrivateMode,
-                isNovaDesignEnabled: state.isNovaDesignEnabled
-            )
-        }
         return state
-            .copy(browserActions: browserActions)
             .copy(searchTerm: searchTerm)
             .copy(isEditing: isEditing)
             .copy(shouldShowKeyboard: true)
@@ -621,28 +414,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // can never drift out of sync
         let isEditing = false
 
-        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-
-        var browserActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            browserActions = BrowserActionsBuilder.getActions(
-                isEditing: isEditing,
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                isShowingTopTabs: toolbarState.isShowingTopTabs,
-                isHomepage: toolbarState.addressToolbar.url == nil,
-                toolbarLayout: toolbarState.toolbarLayout,
-                tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
-                numberOfTabs: toolbarState.numberOfTabs,
-                showWarningBadge: toolbarState.showMenuWarningBadge,
-                previousTabScreenshot: toolbarState.previousTabScreenshot,
-                nextTabScreenshot: toolbarState.nextTabScreenshot,
-                isPrivateMode: toolbarState.isPrivateMode,
-                isNovaDesignEnabled: state.isNovaDesignEnabled
-            )
-        }
-
         return state
-            .copy(browserActions: browserActions)
             .copy(url: url)
             .copy(searchTerm: nil)
             .copy(isEditing: isEditing)
@@ -661,27 +433,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // Declared once and reused so the actions computed here can never drift out of sync
         let isEditing = true
 
-        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: toolbarAction.windowUUID)
-        var browserActions = [ToolbarActionConfiguration]()
-        if let toolbarState {
-            browserActions = BrowserActionsBuilder.getActions(
-                isEditing: isEditing,
-                isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                isShowingTopTabs: toolbarState.isShowingTopTabs,
-                isHomepage: toolbarState.addressToolbar.url == nil,
-                toolbarLayout: toolbarState.toolbarLayout,
-                tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
-                numberOfTabs: toolbarState.numberOfTabs,
-                showWarningBadge: toolbarState.showMenuWarningBadge,
-                previousTabScreenshot: toolbarState.previousTabScreenshot,
-                nextTabScreenshot: toolbarState.nextTabScreenshot,
-                isPrivateMode: toolbarState.isPrivateMode,
-                isNovaDesignEnabled: state.isNovaDesignEnabled
-            )
-        }
-
         return state
-            .copy(browserActions: browserActions)
             .copy(searchTerm: toolbarAction.searchTerm)
             .copy(isEditing: isEditing)
             .copy(shouldShowKeyboard: true)
@@ -770,7 +522,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     static func defaultState(from state: AddressBarState) -> Self {
         return AddressBarState(
             windowUUID: state.windowUUID,
-            browserActions: state.browserActions,
             editingAccessoryAction: state.editingAccessoryAction,
             borderPosition: state.borderPosition,
             url: state.url,

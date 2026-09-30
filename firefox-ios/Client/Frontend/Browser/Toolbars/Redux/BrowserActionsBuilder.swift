@@ -5,10 +5,7 @@
 import Common
 import Foundation
 
-/// TODO: Temporarily used in Reducer side will be moved to View side next
-/// Builds the address bar's browser-wide actions (cancel/new tab/menu/tabs), shown alongside the
-/// address bar. Every input is already resolved by `AddressBarState`, so there's nothing here to
-/// persist across dispatches.
+/// Builds the address bar's browser-wide actions (cancel/new tab/menu/tabs), shown alongside the address bar. 
 enum BrowserActionsBuilder {
     private static let cancelEditTextAction = ToolbarActionConfiguration(
         actionType: .cancelEdit,
