@@ -474,6 +474,8 @@ class Tab: NSObject,
     var onWebViewLoadingStateChanged: (@MainActor () -> Void)?
     private var webViewLoadingObserver: NSKeyValueObservation?
 
+    private var blankLoadDelegate: BlankPageNavigationDelegate?
+
     private var temporaryDocumentsSession: TemporaryDocumentSession = [:]
 
     // MARK: - Tab leaks detection view
@@ -671,6 +673,28 @@ class Tab: NSObject,
     func offloadWebView() async {
         guard webView != nil else { return }
         await close()
+    }
+
+    /// Navigates to `about:blank` and waits for the navigation to settle.
+    /// Callers must persist any session data they need first, since this replaces the tab's
+    /// interaction state.
+    ///
+    /// ⚠️⚠️⚠️ Takes over `navigationDelegate` for the duration, so the usual delegate never sees the
+    /// blank navigation and doesn't update the address bar or history for it. That makes this
+    /// only safe on a webview which is about to be discarded.
+    func loadBlankPage() async {
+        guard let webView, let blankURL = URL(string: "about:blank") else { return }
+
+        let previousDelegate = webView.navigationDelegate
+        await withCheckedContinuation { continuation in
+            let delegate = BlankPageNavigationDelegate(continuation: continuation)
+            // `navigationDelegate` is weak, so the delegate needs an owner for the duration.
+            blankLoadDelegate = delegate
+            webView.navigationDelegate = delegate
+            delegate.beginAwaiting(webView.load(URLRequest(url: blankURL)))
+        }
+        webView.navigationDelegate = previousDelegate
+        blankLoadDelegate = nil
     }
 
     func goBack() {
@@ -1098,5 +1122,67 @@ class Tab: NSObject,
         leakIdentifierView.accessibilityTraits = [.button]
         root.view.addSubview(leakIdentifierView)
         uiTestLeakView = leakIdentifierView
+    }
+}
+
+/// ⚠️⚠️⚠️⚠️ Careful, don't use this ⚠️⚠️⚠️⚠️
+/// Resumes a continuation once the navigation it is given reaches a terminal state. For
+/// awaiting a single navigation on a webview whose usual delegate should not see it.
+///
+/// Every navigation ends in `didFinish`, one of the two failure callbacks, or the loss of its
+/// content process, so there is always exactly one resume and no need for a timeout.
+@MainActor
+private final class BlankPageNavigationDelegate: NSObject, WKNavigationDelegate {
+    private var continuation: CheckedContinuation<Void, Never>?
+    private var awaitedNavigation: WKNavigation?
+
+    init(continuation: CheckedContinuation<Void, Never>) {
+        self.continuation = continuation
+        super.init()
+    }
+
+    /// Starts awaiting `navigation`, or resumes straight away when `load` returned nothing to
+    /// wait for. Must be called before returning to the runloop, which is the earliest WebKit
+    /// can deliver a callback for the navigation.
+    func beginAwaiting(_ navigation: WKNavigation?) {
+        guard let navigation else {
+            finish()
+            return
+        }
+        awaitedNavigation = navigation
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
+        finish(for: navigation)
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation?, withError error: Error) {
+        finish(for: navigation)
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        didFailProvisionalNavigation navigation: WKNavigation?,
+        withError error: Error
+    ) {
+        finish(for: navigation)
+    }
+
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        // The document and every load it owned went with the process, so there is nothing
+        // left to wait for.
+        finish()
+    }
+
+    /// Ignores callbacks for any other navigation, so a late failure from the load being
+    /// replaced cannot resume us before the awaited one has finished.
+    private func finish(for navigation: WKNavigation?) {
+        guard navigation === awaitedNavigation else { return }
+        finish()
+    }
+
+    private func finish() {
+        continuation?.resume()
+        continuation = nil
     }
 }

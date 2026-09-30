@@ -25,6 +25,9 @@ protocol GeneralSettingsDelegate: AnyObject {
     func pressedAIControls()
 
     @MainActor
+    func pressedVPN()
+
+    @MainActor
     func pressedToolbar()
 
     @MainActor

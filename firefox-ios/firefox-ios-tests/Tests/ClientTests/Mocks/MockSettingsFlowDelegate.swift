@@ -66,6 +66,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     func pressedAIControls() {}
 
+    func pressedVPN() {}
+
     func pressedToolbar() {}
 
     func pressedTheme() {}

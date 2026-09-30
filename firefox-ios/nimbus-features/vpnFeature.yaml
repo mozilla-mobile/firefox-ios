@@ -12,7 +12,7 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled: true
       - channel: developer
         value:
           enabled: true

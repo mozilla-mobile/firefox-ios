@@ -201,6 +201,8 @@ public struct PrefsKeys {
         public static let translationAutoTranslatePromptShown = "settings.translationAutoTranslatePromptShown"
         public static let aiKillSwitchFeature = "settings.aiKillSwitchFeature"
         public static let quickAnswersFeature = "settings.quickAnswersFeature"
+        public static let vpnFeature = "settings.vpnFeature"
+        public static let vpnLocation = "settings.vpnLocation"
     }
 
     // Activity Stream

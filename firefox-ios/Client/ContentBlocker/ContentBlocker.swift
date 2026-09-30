@@ -6,6 +6,7 @@ import WebKit
 import Shared
 import Common
 import CryptoKit
+import WebEngine
 
 enum BlocklistCategory: CaseIterable {
     case advertising
@@ -130,11 +131,25 @@ struct NoImageModeDefaults {
     static let ScriptName = "images"
 }
 
+/// Extra rules applied while the VPN proxy is on. WebKit resolves `<link rel="dns-prefetch">` and
+/// `rel="preconnect"` hints outside the proxy session, which leaks the device's real IP to whoever
+/// observes the DNS query. `FrameLoader::prefetchDNSIfNeeded` runs those hints through content rule
+/// lists as the `ping` resource type, so blocking that type suppresses them. Navigation pings
+/// (`<a ping>`) are blocked too; `fetch` and `navigator.sendBeacon` are unaffected.
+struct ProxyHardeningDefaults {
+    static let script =
+    """
+    [{"trigger":{"url-filter":".*","resource-type":["ping"]},"action":{"type":"block"}}]
+    """
+    static let scriptName = "proxy-hardening"
+}
+
 @MainActor
 class ContentBlocker: Notifiable {
     var safelistedDomains = SafelistedDomains()
     let ruleStore = WKContentRuleListStore.default()
     var blockImagesRule: WKContentRuleList?
+    var proxyHardeningRule: WKContentRuleList?
     var setupCompleted = false
     let logger: Logger
     var adBlockerListFetcher: AdBlockerListFetcherProtocol = ASAdBlockerListFetcher()
@@ -146,6 +161,8 @@ class ContentBlocker: Notifiable {
 
         // Compile No Image Mode script
         compileNoImageModeScript()
+
+        compileProxyHardeningScript()
 
         // Read the safelist at startup
         if let list = readSafelistFile() {
@@ -236,6 +253,10 @@ class ContentBlocker: Notifiable {
         if let rule = blockImagesRule, tab.imageContentBlockingEnabled() {
             add(contentRuleList: rule, toTab: tab)
         }
+
+        if let rule = proxyHardeningRule, DefaultWKEngineConfigurationProvider.isProxyEnabled {
+            add(contentRuleList: rule, toTab: tab)
+        }
     }
 
     private func add(contentRuleList: WKContentRuleList, toTab tab: ContentBlockerTab) {
@@ -243,24 +264,44 @@ class ContentBlocker: Notifiable {
     }
 
     private func compileNoImageModeScript() {
+        compileLocalRuleList(identifier: NoImageModeDefaults.ScriptName,
+                             encodedRules: NoImageModeDefaults.Script,
+                             into: \.blockImagesRule)
+    }
+
+    private func compileProxyHardeningScript() {
+        compileLocalRuleList(identifier: ProxyHardeningDefaults.scriptName,
+                             encodedRules: ProxyHardeningDefaults.script,
+                             into: \.proxyHardeningRule)
+    }
+
+    /// Compiles a rule list that the app defines inline rather than loading from the block list
+    /// files. These are held onto here because they have to be re-added by hand every time
+    /// `removeAllContentRuleLists` wipes a webview's rules.
+    private func compileLocalRuleList(
+        identifier: String,
+        encodedRules: String,
+        into keyPath: ReferenceWritableKeyPath<ContentBlocker, WKContentRuleList?>
+    ) {
         let logger = self.logger
-        let blockImages = NoImageModeDefaults.Script
         ruleStore?.compileContentRuleList(
-            forIdentifier: NoImageModeDefaults.ScriptName,
-            encodedContentRuleList: blockImages) { rule, error in
+            forIdentifier: identifier,
+            encodedContentRuleList: encodedRules) { rule, error in
                 if let error {
-                    logger.log("No Image script failed compilation: \(error))", level: .warning, category: .adblock)
+                    logger.log("\(identifier) list failed compilation: \(error)",
+                               level: .warning,
+                               category: .adblock)
                     assertionFailure()
                     return
                 }
 
-                guard rule != nil else {
-                    logger.log("Nil rule set for NoImageMode.", level: .warning, category: .adblock)
+                guard let rule else {
+                    logger.log("Nil rule set for \(identifier).", level: .warning, category: .adblock)
                     assertionFailure()
                     return
                 }
 
-                self.blockImagesRule = rule
+                self[keyPath: keyPath] = rule
         }
     }
 

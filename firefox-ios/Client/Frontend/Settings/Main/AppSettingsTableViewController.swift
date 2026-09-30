@@ -450,6 +450,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
+        if featureFlagsProvider.isEnabled(.vpnFeature) {
+            privacySettings.append(VPNSetting(settings: self, settingsDelegate: parentCoordinator))
+        }
+
         if let profile {
             privacySettings.append(NotificationsSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                                         profile: profile,

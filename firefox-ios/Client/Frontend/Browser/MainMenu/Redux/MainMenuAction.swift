@@ -20,6 +20,7 @@ struct MainMenuAction: Action {
     var isPhoneLandscape: Bool
     var moreCellTapped: Bool
     var accountProfileImage: UIImage?
+    var isVPNOn: Bool?
 
     init(
         windowUUID: WindowUUID,
@@ -34,7 +35,8 @@ struct MainMenuAction: Action {
         isBrowserDefault: Bool = false,
         isPhoneLandscape: Bool = false,
         moreCellTapped: Bool = false,
-        accountProfileImage: UIImage? = nil
+        accountProfileImage: UIImage? = nil,
+        isVPNOn: Bool? = nil
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
@@ -49,6 +51,7 @@ struct MainMenuAction: Action {
         self.isPhoneLandscape = isPhoneLandscape
         self.moreCellTapped = moreCellTapped
         self.accountProfileImage = accountProfileImage
+        self.isVPNOn = isVPNOn
     }
 }
 
@@ -65,6 +68,7 @@ enum MainMenuActionType: ActionType {
     case tapEditBookmark
     case tapZoom
     case tapToggleNightMode
+    case tapToggleVPN
     case tapAddToShortcuts
     case tapRemoveFromShortcuts
     case updateSiteProtectionsHeader
@@ -78,4 +82,5 @@ enum MainMenuMiddlewareActionType: ActionType {
     case updateAccountHeader
     case updateBannerVisibility
     case updateMenuAppearance
+    case updateVPNState
 }
