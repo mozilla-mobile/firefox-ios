@@ -15,30 +15,34 @@ protocol StateLens: Equatable {
 }
 
 /// Feeds `AddressToolbarContainer`/`AddressToolbarContainerModel` derived values that today are
-/// computed and persisted on `AddressBarState` by the reducer. `leadingPageActions`, `trailingPageActions` are
-///  moved the rest (`browserActions`, `navigationActions`) follow once this is proven out.
+/// computed and persisted on `AddressBarState` by the reducer. `leadingPageActions`, `trailingPageActions`,
+/// `navigationActions`, `browserActions` are all moved now.
 struct AddressToolbarContainerLens: StateLens {
     let toolbarState: ToolbarState
     let leadingPageActions: [ToolbarActionConfiguration]
     let trailingPageActions: [ToolbarActionConfiguration]
     let navigationActions: [ToolbarActionConfiguration]
+    let browserActions: [ToolbarActionConfiguration]
 
     // MARK: - Private initializers
     private init(toolbarState: ToolbarState,
                  leadingPageActions: [ToolbarActionConfiguration],
                  trailingPageActions: [ToolbarActionConfiguration],
-                 navigationActions: [ToolbarActionConfiguration]) {
+                 navigationActions: [ToolbarActionConfiguration],
+                 browserActions: [ToolbarActionConfiguration]) {
         self.toolbarState = toolbarState
         self.leadingPageActions = leadingPageActions
         self.trailingPageActions = trailingPageActions
         self.navigationActions = navigationActions
+        self.browserActions = browserActions
     }
 
     private init(windowUUID: WindowUUID) {
         self.init(toolbarState: ToolbarState(windowUUID: windowUUID),
                   leadingPageActions: [],
                   trailingPageActions: [],
-                  navigationActions: [])
+                  navigationActions: [],
+                  browserActions: [])
     }
 
     // MARK: - Lens initialization
@@ -73,10 +77,25 @@ struct AddressToolbarContainerLens: StateLens {
             canGoBack: toolbarState.canGoBack,
             canGoForward: toolbarState.canGoForward)
 
+        let browserActions = BrowserActionsBuilder.getActions(
+            isEditing: addressToolbar.isEditing,
+            isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
+            isShowingTopTabs: toolbarState.isShowingTopTabs,
+            isHomepage: addressToolbar.url == nil,
+            toolbarLayout: toolbarState.toolbarLayout,
+            tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
+            numberOfTabs: toolbarState.numberOfTabs,
+            showWarningBadge: toolbarState.showMenuWarningBadge,
+            previousTabScreenshot: toolbarState.previousTabScreenshot,
+            nextTabScreenshot: toolbarState.nextTabScreenshot,
+            isPrivateMode: toolbarState.isPrivateMode,
+            isNovaDesignEnabled: addressToolbar.isNovaDesignEnabled)
+
         self.init(toolbarState: toolbarState,
                   leadingPageActions: leadingPageActions,
                   trailingPageActions: trailingPageActions,
-                  navigationActions: navigationActions)
+                  navigationActions: navigationActions,
+                  browserActions: browserActions)
     }
 
     private static func shouldHaveAlternativeLocationColor(toolbarState: ToolbarState) -> Bool {
