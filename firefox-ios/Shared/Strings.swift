@@ -4350,6 +4350,21 @@ extension String {
 // MARK: - Tabs Tray
 extension String {
     public struct TabsTray {
+        public static let BookmarkAllTabs = MZLocalizedString(
+            key: "TabTray.BookmarkAllTabs",
+            tableName: "TabsTray",
+            value: "Bookmark all open tabs",
+            comment: "Tab tray action to save the open tabs into a named bookmark folder")
+        public static let BookmarkAllTabsError = MZLocalizedString(
+            key: "TabTray.BookmarkAllTabsError",
+            tableName: "TabsTray",
+            value: "Some tabs could not be saved. Tap Save to try again.",
+            comment: "Error when saving open tabs as bookmarks fails")
+        public static let NoTabsToBookmark = MZLocalizedString(
+            key: "TabTray.NoTabsToBookmark",
+            tableName: "TabsTray",
+            value: "There are no web pages to bookmark in this tray.",
+            comment: "Message when the tab tray only contains internal pages or is empty")
         public static let TabTrayV2Title = MZLocalizedString(
             key: "TabTray.Title",
             tableName: nil,

@@ -31,6 +31,25 @@ final class TabTrayViewControllerTests: XCTestCase {
         try await super.tearDown()
     }
 
+    func testBookmarkAllTabs_usesSelectedTray() {
+        let regularTray = createSubject()
+        regularTray.bookmarkAllTabsTapped()
+        XCTAssertEqual(delegate.bookmarkRequests, [false])
+
+        let privateTray = createSubject(selectedSegment: .privateTabs)
+        privateTray.bookmarkAllTabsTapped()
+        XCTAssertEqual(delegate.bookmarkRequests, [false, true])
+    }
+
+    func testBookmarkAllTabs_availableOnIPad() {
+        let subject = createSubject()
+        subject.layout = .regular
+        subject.viewWillAppear(false)
+        XCTAssertTrue(subject.navigationItem.leftBarButtonItems?.contains {
+            $0.accessibilityIdentifier == AccessibilityIdentifiers.TabTray.bookmarkAllTabsButton
+        } == true)
+    }
+
     // MARK: Compact layout
     func testToolbarItems_ForCompact() {
         let viewController = createSubject()
@@ -54,7 +73,7 @@ final class TabTrayViewControllerTests: XCTestCase {
         viewController.layout = .compact
         viewController.viewWillAppear(false)
 
-        XCTAssertEqual(viewController.toolbarItems?.count, 3)
+        XCTAssertEqual(viewController.toolbarItems?.count, 5)
     }
 
     func testBottomToolbarItems_ForPrivateTabsInCompact() {
@@ -64,7 +83,7 @@ final class TabTrayViewControllerTests: XCTestCase {
         viewController.layout = .compact
         viewController.viewWillAppear(false)
 
-        XCTAssertEqual(viewController.toolbarItems?.count, 3)
+        XCTAssertEqual(viewController.toolbarItems?.count, 5)
     }
 
     func testBottomToolbarItems_ForSyncTabsEnabledInCompact() {
@@ -83,7 +102,7 @@ final class TabTrayViewControllerTests: XCTestCase {
         viewController.layout = .compact
         viewController.viewWillAppear(false)
 
-        XCTAssertEqual(viewController.toolbarItems?.count, 5)
+        XCTAssertEqual(viewController.toolbarItems?.count, 7)
     }
 
     func testBottomToolbarItemsWithExperiment_ForPrivateTabsInCompact() {
@@ -93,7 +112,7 @@ final class TabTrayViewControllerTests: XCTestCase {
         viewController.layout = .compact
         viewController.viewWillAppear(false)
 
-        XCTAssertEqual(viewController.toolbarItems?.count, 5)
+        XCTAssertEqual(viewController.toolbarItems?.count, 7)
     }
 
     func testBottomToolbarItemsWithExperiment_ForSyncTabsEnabledInCompact() {
@@ -173,4 +192,6 @@ final class TabTrayViewControllerTests: XCTestCase {
 // MARK: MockTabTrayViewControllerDelegate
 class MockTabTrayViewControllerDelegate: TabTrayViewControllerDelegate {
     func didFinish() {}
+    var bookmarkRequests: [Bool] = []
+    func bookmarkAllTabs(isPrivate: Bool) { bookmarkRequests.append(isPrivate) }
 }

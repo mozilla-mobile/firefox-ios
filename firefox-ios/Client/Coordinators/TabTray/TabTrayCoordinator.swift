@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import MozillaAppServices
+import Shared
 
 protocol TabTrayCoordinatorDelegate: AnyObject {
     @MainActor
@@ -135,6 +137,64 @@ final class TabTrayCoordinator: BaseCoordinator,
     }
 
     // MARK: - TabTrayViewControllerDelegate
+    func bookmarkAllTabs(isPrivate: Bool) {
+        let tabs = isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        let bookmarks = Self.bookmarks(from: tabs)
+        guard !bookmarks.isEmpty else {
+            let alert = UIAlertController(title: .TabsTray.BookmarkAllTabs,
+                                          message: .TabsTray.NoTabsToBookmark,
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: .OKString, style: .default))
+            router.present(alert)
+            return
+        }
+        let parentFolder = BookmarkFolderData(guid: BookmarkRoots.MobileFolderGUID,
+                                               dateAdded: 0,
+                                               lastModified: 0,
+                                               parentGUID: BookmarkRoots.RootGUID,
+                                               position: 0,
+                                               title: .Bookmarks.Menu.EditBookmarkMobileBookmarksLabel,
+                                               childGUIDs: [],
+                                               children: nil)
+        let viewModel = EditFolderViewModel(profile: profile,
+                                            parentFolder: parentFolder,
+                                            folder: nil,
+                                            bookmarksToSave: bookmarks)
+        let controller = EditFolderViewController(viewModel: viewModel, windowUUID: tabManager.windowUUID)
+        let navigation = ThemedNavigationController(rootViewController: controller, windowUUID: tabManager.windowUUID)
+        controller.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            systemItem: .cancel,
+            primaryAction: UIAction { [weak navigation] _ in navigation?.dismiss(animated: true) }
+        )
+        viewModel.onBookmarkSaved = { [weak navigation] in
+            navigation?.dismiss(animated: true)
+        }
+        viewModel.onSaveFailed = { [weak controller] in
+            let alert = UIAlertController(title: .TabsTray.BookmarkAllTabs,
+                                          message: .TabsTray.BookmarkAllTabsError,
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: .OKString, style: .default))
+            controller?.present(alert, animated: true)
+        }
+        router.present(navigation)
+    }
+
+    static func bookmarks(from tabs: [Tab]) -> [BookmarkItemData] {
+        return tabs.compactMap { tab in
+            guard let url = (tab.url ?? tab.lastKnownUrl)?.displayURL,
+                  let scheme = url.scheme?.lowercased(),
+                  ["http", "https"].contains(scheme),
+                  !InternalURL.isValid(url: url) else { return nil }
+            return BookmarkItemData(guid: "",
+                                    dateAdded: 0,
+                                    lastModified: 0,
+                                    parentGUID: nil,
+                                    position: 0,
+                                    url: url.absoluteString,
+                                    title: tab.displayTitle)
+        }
+    }
+
     func didFinish() {
         parentCoordinator?.didDismissTabTray(from: self)
     }

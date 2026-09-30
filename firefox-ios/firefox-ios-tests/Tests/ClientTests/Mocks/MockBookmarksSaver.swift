@@ -8,6 +8,9 @@ import Shared
 import MozillaAppServices
 
 class MockBookmarksSaver: BookmarksSaver {
+    var savedNodes: [any FxBookmarkNode] = []
+    var savedParentGUIDs: [String] = []
+    var failingSaveCalls: Set<Int> = []
     var saveCalled = 0
     var createBookmarkCalled = 0
     var restoreBookmarkNodeCalled = 0
@@ -20,6 +23,11 @@ class MockBookmarksSaver: BookmarksSaver {
     func save(bookmark: any FxBookmarkNode,
               parentFolderGUID: String) async -> Result<GUID?, any Error> {
         saveCalled += 1
+        savedNodes.append(bookmark)
+        savedParentGUIDs.append(parentFolderGUID)
+        if failingSaveCalls.contains(saveCalled) {
+            return .failure(DefaultBookmarksSaver.SaveError.saveOperationFailed)
+        }
         return Result.success(mockCreateGuid)
     }
 

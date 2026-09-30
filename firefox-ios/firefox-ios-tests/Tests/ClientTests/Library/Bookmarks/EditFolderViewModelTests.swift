@@ -4,6 +4,7 @@
 
 import XCTest
 import MozillaRustComponents
+import MozillaAppServices
 import Shared
 
 @testable import Client
@@ -152,6 +153,80 @@ final class EditFolderViewModelTests: XCTestCase {
         await task?.value
 
         XCTAssertNotNil(parentFolderSelector.selectedFolder)
+    }
+
+    func testSaveBookmarks_createsNamedFolderInSelectedParent() async {
+        bookmarksSaver.mockCreateGuid = "new-folder"
+        let subject = makeBatchSubject()
+        subject.selectFolder(parentFolderSelection)
+        subject.selectFolder(parentFolderSelection)
+        await subject.save()?.value
+
+        XCTAssertTrue(subject.saveSucceeded)
+        XCTAssertEqual(bookmarksSaver.savedNodes.map(\.title), ["Trip", "First", "Second"])
+        XCTAssertEqual(bookmarksSaver.savedParentGUIDs, ["destination", "new-folder", "new-folder"])
+    }
+
+    func testSaveBookmarks_retryDoesNotDuplicateSuccessfulBookmarks() async {
+        bookmarksSaver.mockCreateGuid = "new-folder"
+        bookmarksSaver.failingSaveCalls = [3]
+        let subject = makeBatchSubject()
+        var failures = 0
+        subject.onSaveFailed = { failures += 1 }
+        await subject.save()?.value
+        XCTAssertFalse(subject.saveSucceeded)
+        XCTAssertEqual(failures, 1)
+
+        await subject.save()?.value
+
+        XCTAssertTrue(subject.saveSucceeded)
+        XCTAssertEqual(bookmarksSaver.savedNodes.map(\.title), ["Trip", "First", "Second", "Trip", "Second"])
+        XCTAssertEqual(bookmarksSaver.savedNodes[3].guid, "new-folder")
+        XCTAssertNotNil(bookmarksSaver.savedNodes[3].parentGUID)
+    }
+
+    func testSaveBookmarks_folderFailureDoesNotSaveTabs() async {
+        bookmarksSaver.failingSaveCalls = [1]
+        let subject = makeBatchSubject()
+        await subject.save()?.value
+        XCTAssertFalse(subject.saveSucceeded)
+        XCTAssertEqual(bookmarksSaver.saveCalled, 1)
+    }
+
+    func testSaveBookmarks_missingFolderGUIDDoesNotReportSuccess() async {
+        let subject = makeBatchSubject()
+        await subject.save()?.value
+        XCTAssertFalse(subject.saveSucceeded)
+        XCTAssertEqual(bookmarksSaver.saveCalled, 1)
+    }
+
+    func testSaveBookmarks_rejectsBlankNameAndConcurrentSave() async {
+        let subject = makeBatchSubject()
+        subject.updateFolderTitle("  ")
+        XCTAssertNil(subject.save())
+        subject.updateFolderTitle("Trip")
+        let task = subject.save()
+        XCTAssertNil(subject.save())
+        await task?.value
+    }
+
+    private var parentFolderSelection: Folder {
+        Folder(title: "Destination", guid: "destination", indentation: 0)
+    }
+
+    private func makeBatchSubject() -> EditFolderViewModel {
+        let bookmarks = ["First", "Second"].map {
+            BookmarkItemData(guid: "", dateAdded: 0, lastModified: 0, parentGUID: nil,
+                             position: 0, url: "https://example.com/\($0)", title: $0)
+        }
+        let subject = EditFolderViewModel(profile: profile,
+                                          parentFolder: parentFolder,
+                                          folder: nil,
+                                          bookmarkSaver: bookmarksSaver,
+                                          folderFetcher: folderFetcher,
+                                          bookmarksToSave: bookmarks)
+        subject.updateFolderTitle("Trip")
+        return subject
     }
 
     // MARK: Helper function

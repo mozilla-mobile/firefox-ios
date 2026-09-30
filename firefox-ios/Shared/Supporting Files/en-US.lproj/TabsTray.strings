@@ -15,3 +15,12 @@
 
 /* Button label to sync tabs in your account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "Sync Tabs";
+
+/* Tab tray action to save the open tabs into a named bookmark folder */
+"TabTray.BookmarkAllTabs" = "Bookmark all open tabs";
+
+/* Error when saving open tabs as bookmarks fails */
+"TabTray.BookmarkAllTabsError" = "Some tabs could not be saved. Tap Save to try again.";
+
+/* Message when the tab tray only contains internal pages or is empty */
+"TabTray.NoTabsToBookmark" = "There are no web pages to bookmark in this tray.";

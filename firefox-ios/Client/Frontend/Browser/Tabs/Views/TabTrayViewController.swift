@@ -22,6 +22,8 @@ protocol TabTrayController: UIViewController,
 protocol TabTrayViewControllerDelegate: AnyObject {
     @MainActor
     func didFinish()
+    @MainActor
+    func bookmarkAllTabs(isPrivate: Bool)
 }
 
 final class TabTrayViewController: UIViewController,
@@ -206,6 +208,10 @@ final class TabTrayViewController: UIViewController,
                           StandardImageIdentifiers.Large.delete,
                           background: glassTint,
                           glyph: theme.colors.iconPrimary)
+        setProminentGlass(bookmarkAllButton,
+                          StandardImageIdentifiers.Large.bookmark,
+                          background: glassTint,
+                          glyph: theme.colors.iconPrimary)
         setProminentGlass(newTabButton,
                           StandardImageIdentifiers.Large.plus,
                           background: glassTint,
@@ -231,6 +237,18 @@ final class TabTrayViewController: UIViewController,
                                 a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
                                 a11yLabel: .LegacyAppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
     }()
+
+    private lazy var bookmarkAllButton: UIBarButtonItem = {
+        return createButtonItem(imageName: StandardImageIdentifiers.Large.bookmark,
+                                action: #selector(bookmarkAllTabsTapped),
+                                a11yId: AccessibilityIdentifiers.TabTray.bookmarkAllTabsButton,
+                                a11yLabel: .TabsTray.BookmarkAllTabs)
+    }()
+
+    @objc
+    func bookmarkAllTabsTapped() {
+        delegate?.bookmarkAllTabs(isPrivate: tabTrayState.selectedPanel == .privateTabs)
+    }
 
     private lazy var newTabButton: UIBarButtonItem = {
         return createButtonItem(imageName: StandardImageIdentifiers.Large.plus,
@@ -295,11 +313,11 @@ final class TabTrayViewController: UIViewController,
     }()
 
     private lazy var bottomToolbarItems: [UIBarButtonItem] = {
-        return [deleteButton, flexibleSpace, newTabButton]
+        return [deleteButton, flexibleSpace, bookmarkAllButton, flexibleSpace, newTabButton]
     }()
 
     private lazy var experimentBottomToolbarItems: [UIBarButtonItem] = {
-        return [deleteButton, flexibleSpace, newTabButton, flexibleSpace, doneButton]
+        return [deleteButton, flexibleSpace, bookmarkAllButton, flexibleSpace, newTabButton, flexibleSpace, doneButton]
     }()
 
     private lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
@@ -405,7 +423,7 @@ final class TabTrayViewController: UIViewController,
 
         switch layout {
         case .compact:
-            navigationItem.leftBarButtonItem = nil
+            navigationItem.leftBarButtonItems = nil
             navigationItem.titleView = nil
             if tabTrayUtils.shouldDisplayExperimentUI() {
                 navigationController?.setNavigationBarHidden(true, animated: false)
@@ -506,6 +524,7 @@ final class TabTrayViewController: UIViewController,
         view.backgroundColor = theme.colors.layer1
         navigationToolbar.barTintColor = theme.colors.layer1
         deleteButton.tintColor = theme.colors.iconPrimary
+        bookmarkAllButton.tintColor = theme.colors.iconPrimary
         newTabButton.tintColor = theme.colors.iconPrimary
         if #available(iOS 26, *) {
             doneButton.tintColor = theme.isNova ? theme.colors.iconInverted : theme.colors.iconPrimary
@@ -555,6 +574,7 @@ final class TabTrayViewController: UIViewController,
         navigationToolbar.barTintColor = swipeTheme.colors.layer1
         if !usesNovaGlassToolbarButtons {
             deleteButton.tintColor = swipeTheme.colors.iconPrimary
+            bookmarkAllButton.tintColor = swipeTheme.colors.iconPrimary
             newTabButton.tintColor = swipeTheme.colors.iconPrimary
             if #available(iOS 26, *) {
                 doneButton.tintColor = swipeTheme.isNova ? swipeTheme.colors.iconInverted : swipeTheme.colors.iconPrimary
@@ -796,10 +816,10 @@ final class TabTrayViewController: UIViewController,
 
     private func setupToolbarForIpad() {
         if tabTrayState.isSyncTabsPanel {
-            navigationItem.leftBarButtonItem = nil
+            navigationItem.leftBarButtonItems = nil
             navigationItem.rightBarButtonItems = rightBarButtonItemsForSync
         } else {
-            navigationItem.leftBarButtonItem = deleteButton
+            navigationItem.leftBarButtonItems = [deleteButton, bookmarkAllButton]
             navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
         }
 

@@ -313,8 +313,8 @@ class BookmarksCoordinator: BaseCoordinator,
     }
 
     private func reloadLastBookmarksController() {
-        guard let rootBookmarkController = router.navigationController.viewControllers.last
-                as? BookmarksViewController
+        guard let rootBookmarkController = router.navigationController.viewControllers
+            .reversed().compactMap({ $0 as? BookmarksViewController }).first
         else { return }
         rootBookmarkController.reloadData()
     }

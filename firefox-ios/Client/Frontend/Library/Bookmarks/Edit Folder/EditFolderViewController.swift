@@ -125,8 +125,22 @@ class EditFolderViewController: UIViewController,
 
     @objc
     func saveButtonAction() {
-        viewModel.save()
-        navigationController?.popViewController(animated: true)
+        guard let saveTask = viewModel.save() else { return }
+        navigationController?.isModalInPresentation = true
+        navigationItem.leftBarButtonItem?.isEnabled = false
+        saveBarButton.isEnabled = false
+        tableView.isUserInteractionEnabled = false
+        Task { @MainActor [weak self] in
+            await saveTask.value
+            guard let self else { return }
+            navigationController?.isModalInPresentation = false
+            navigationItem.leftBarButtonItem?.isEnabled = true
+            saveBarButton.isEnabled = true
+            tableView.isUserInteractionEnabled = true
+            if viewModel.saveSucceeded {
+                navigationController?.popViewController(animated: true)
+            }
+        }
     }
 
     // MARK: - Themeable

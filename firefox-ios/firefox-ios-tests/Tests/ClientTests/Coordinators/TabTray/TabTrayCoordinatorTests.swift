@@ -30,6 +30,39 @@ final class TabTrayCoordinatorTests: XCTestCase {
         try await super.tearDown()
     }
 
+    func testBookmarks_filtersInternalPagesAndPreservesTabOrderAndTitles() {
+        let urls = ["https://example.com/first", "about:home", "file:///tmp/test", "https://example.com/second"]
+        let tabs = urls.map { value in
+            let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+            tab.url = URL(string: value)
+            tab.lastTitle = value
+            return tab
+        }
+        let bookmarks = TabTrayCoordinator.bookmarks(from: tabs)
+        XCTAssertEqual(bookmarks.map(\.url), [urls[0], urls[3]])
+        XCTAssertEqual(bookmarks.map(\.title), [urls[0], urls[3]])
+        XCTAssertTrue(bookmarks.allSatisfy { $0.parentGUID == nil })
+    }
+
+    func testBookmarkAllTabs_presentsFolderEditorForRegularTabsOnly() throws {
+        let manager = try XCTUnwrap(tabManager as? MockTabManager)
+        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        tab.url = URL(string: "https://example.com")
+        manager.normalTabs = [tab]
+        let subject = createSubject()
+
+        subject.bookmarkAllTabs(isPrivate: false)
+        let navigation = try XCTUnwrap(mockRouter.presentedViewController as? UINavigationController)
+        XCTAssertTrue(navigation.topViewController is EditFolderViewController)
+
+        subject.bookmarkAllTabs(isPrivate: true)
+        XCTAssertTrue(mockRouter.presentedViewController is UIAlertController)
+    }
+
+    func testBookmarks_emptyTabs() {
+        XCTAssertTrue(TabTrayCoordinator.bookmarks(from: []).isEmpty)
+    }
+
     func testInitialState() {
         let subject = createSubject()
 
