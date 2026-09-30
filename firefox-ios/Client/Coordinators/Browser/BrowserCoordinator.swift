@@ -1489,8 +1489,8 @@ final class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - TabTrayCoordinatorDelegate
 
-    func didDismissTabTray(from coordinator: TabTrayCoordinator) {
-        router.dismiss(animated: true, completion: nil)
+    func didDismissTabTray(from coordinator: TabTrayCoordinator, completion: (() -> Void)? = nil) {
+        router.dismiss(animated: true, completion: completion)
         // [FXIOS-10482] Initial bandaid for memory leaking during tab tray open/close. Needs further investigation.
         coordinator.dismissChildTabTrayPanels()
         remove(child: coordinator)

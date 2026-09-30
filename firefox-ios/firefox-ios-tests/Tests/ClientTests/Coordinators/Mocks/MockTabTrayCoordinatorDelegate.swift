@@ -8,7 +8,15 @@ import Foundation
 class MockTabTrayCoordinatorDelegate: TabTrayCoordinatorDelegate {
     var didDismissWasCalled = 0
 
-    func didDismissTabTray(from coordinator: TabTrayCoordinator) {
+    var completesDismissalImmediately = true
+    var dismissalCompletion: (() -> Void)?
+
+    func didDismissTabTray(from coordinator: TabTrayCoordinator, completion: (() -> Void)?) {
         didDismissWasCalled += 1
+        dismissalCompletion = completion
+        if completesDismissalImmediately {
+            completion?()
+            dismissalCompletion = nil
+        }
     }
 }

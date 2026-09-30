@@ -59,7 +59,8 @@ final class TabTrayCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.presentedViewController is UIAlertController)
     }
 
-    func testBookmarkAndClose_closesOnlyOriginalTabsAfterSaving() async throws {
+    func testBookmarkAndClose_closesOnlyOriginalTabsAfterTrayDismissal() async throws {
+        parentCoordinator.completesDismissalImmediately = false
         let manager = try XCTUnwrap(tabManager as? MockTabManager)
         let tabs = makeBookmarkTabs()
         manager.normalTabs = tabs
@@ -78,6 +79,12 @@ final class TabTrayCoordinatorTests: XCTestCase {
         XCTAssertTrue(viewModel.saveSucceeded)
         XCTAssertEqual(saver.savedNodes.first?.title, "Reading")
         XCTAssertEqual(saver.saveCalled, 3)
+        XCTAssertEqual(parentCoordinator.didDismissWasCalled, 1)
+        XCTAssertTrue(manager.removedTabUUIDs.isEmpty)
+
+        let completion = try XCTUnwrap(parentCoordinator.dismissalCompletion)
+        completion()
+
         XCTAssertEqual(manager.removedTabUUIDs, tabs.map(\.tabUUID))
     }
 
@@ -95,6 +102,7 @@ final class TabTrayCoordinatorTests: XCTestCase {
         await viewModel.save()?.value
         XCTAssertFalse(viewModel.saveSucceeded)
         XCTAssertTrue(manager.removedTabUUIDs.isEmpty)
+        XCTAssertEqual(parentCoordinator.didDismissWasCalled, 0)
 
         await viewModel.save()?.value
 

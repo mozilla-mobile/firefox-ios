@@ -8,7 +8,7 @@ import Shared
 
 protocol TabTrayCoordinatorDelegate: AnyObject {
     @MainActor
-    func didDismissTabTray(from coordinator: TabTrayCoordinator)
+    func didDismissTabTray(from coordinator: TabTrayCoordinator, completion: (() -> Void)?)
 }
 
 protocol TabTrayNavigationHandler: AnyObject {
@@ -133,7 +133,7 @@ final class TabTrayCoordinator: BaseCoordinator,
     // MARK: - ParentCoordinatorDelegate
     func didFinish(from childCoordinator: Coordinator) {
         remove(child: childCoordinator)
-        parentCoordinator?.didDismissTabTray(from: self)
+        parentCoordinator?.didDismissTabTray(from: self, completion: nil)
     }
 
     // MARK: - TabTrayViewControllerDelegate
@@ -185,10 +185,12 @@ final class TabTrayCoordinator: BaseCoordinator,
                                             folder: nil,
                                             bookmarkSaver: bookmarkSaver,
                                             bookmarksToSave: Self.bookmarks(from: tabs))
-        viewModel.onBookmarkSaved = { [weak tabManager] in
-            guard closeAfterSaving else { return }
-            for tab in tabs {
-                tabManager?.removeTab(tab.tabUUID)
+        viewModel.onBookmarkSaved = { [weak self] in
+            guard closeAfterSaving, let self else { return }
+            parentCoordinator?.didDismissTabTray(from: self) { [weak tabManager] in
+                for tab in tabs {
+                    tabManager?.removeTab(tab.tabUUID)
+                }
             }
         }
         return viewModel
@@ -211,6 +213,6 @@ final class TabTrayCoordinator: BaseCoordinator,
     }
 
     func didFinish() {
-        parentCoordinator?.didDismissTabTray(from: self)
+        parentCoordinator?.didDismissTabTray(from: self, completion: nil)
     }
 }

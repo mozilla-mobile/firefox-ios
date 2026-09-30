@@ -638,10 +638,17 @@ final class BrowserCoordinatorTests: XCTestCase,
             return
         }
 
-        subject.didDismissTabTray(from: tabTrayCoordinator)
+        var didComplete = false
+        subject.didDismissTabTray(from: tabTrayCoordinator) {
+            didComplete = true
+        }
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
+        XCTAssertFalse(didComplete)
+        let completion = try XCTUnwrap(mockRouter.savedCompletion)
+        completion()
+        XCTAssertTrue(didComplete)
     }
 
     func testShowPasswordGenerator_presentsPasswordGeneratorBottomSheet() {
