@@ -334,12 +334,6 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData.v2" = "Mozilla 力图仅收集用来为大众改进 %@ 所必需的数据。";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies" = "%@ 可能会不时地安装并运行一些研究项目。";
-
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies.v2" = "%@ 会随机选择用户测试功能，以为全体用户改进质量。";
-
 /* Title for section in settings menu */
 "Settings.general" = "常规";
 
@@ -456,12 +450,6 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "发送使用统计";
-
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies" = "研究";
-
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies.v2" = "允许功能研究";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "使用触控 ID 解锁应用";
