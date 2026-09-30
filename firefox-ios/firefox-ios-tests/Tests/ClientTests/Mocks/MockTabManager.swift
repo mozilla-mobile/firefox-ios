@@ -86,7 +86,10 @@ class MockTabManager: TabManager {
 
     func removeTabs(_ tabs: [Tab]) {}
 
-    func removeTab(_ tabUUID: TabUUID) {}
+    var removedTabUUIDs: [TabUUID] = []
+    func removeTab(_ tabUUID: TabUUID) {
+        removedTabUUIDs.append(tabUUID)
+    }
 
     func removeAllTabs(isPrivateMode: Bool) {}
 

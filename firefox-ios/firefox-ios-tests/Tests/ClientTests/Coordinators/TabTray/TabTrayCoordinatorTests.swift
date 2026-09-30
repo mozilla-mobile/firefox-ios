@@ -59,6 +59,72 @@ final class TabTrayCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.presentedViewController is UIAlertController)
     }
 
+    func testBookmarkAndClose_closesOnlyOriginalTabsAfterSaving() async throws {
+        let manager = try XCTUnwrap(tabManager as? MockTabManager)
+        let tabs = makeBookmarkTabs()
+        manager.normalTabs = tabs
+        let saver = MockBookmarksSaver()
+        saver.mockCreateGuid = "saved-folder"
+        let subject = createSubject()
+        let viewModel = subject.makeBookmarkAllTabsViewModel(tabs: tabs,
+                                                              closeAfterSaving: true,
+                                                              bookmarkSaver: saver)
+        XCTAssertTrue(manager.removedTabUUIDs.isEmpty)
+        manager.normalTabs.append(Tab(profile: profile, windowUUID: .XCTestDefaultUUID))
+        viewModel.updateFolderTitle("Reading")
+
+        await viewModel.save()?.value
+
+        XCTAssertTrue(viewModel.saveSucceeded)
+        XCTAssertEqual(saver.savedNodes.first?.title, "Reading")
+        XCTAssertEqual(saver.saveCalled, 3)
+        XCTAssertEqual(manager.removedTabUUIDs, tabs.map(\.tabUUID))
+    }
+
+    func testBookmarkAndClose_keepsTabsOpenOnFailureUntilRetrySucceeds() async throws {
+        let manager = try XCTUnwrap(tabManager as? MockTabManager)
+        let tabs = makeBookmarkTabs()
+        let saver = MockBookmarksSaver()
+        saver.mockCreateGuid = "saved-folder"
+        saver.failingSaveCalls = [3]
+        let subject = createSubject()
+        let viewModel = subject.makeBookmarkAllTabsViewModel(tabs: tabs,
+                                                              closeAfterSaving: true,
+                                                              bookmarkSaver: saver)
+        viewModel.updateFolderTitle("Reading")
+        await viewModel.save()?.value
+        XCTAssertFalse(viewModel.saveSucceeded)
+        XCTAssertTrue(manager.removedTabUUIDs.isEmpty)
+
+        await viewModel.save()?.value
+
+        XCTAssertTrue(viewModel.saveSucceeded)
+        XCTAssertEqual(manager.removedTabUUIDs, tabs.map(\.tabUUID))
+    }
+
+    func testBookmarkWithoutClosing_keepsTabsOpenAfterSaving() async throws {
+        let manager = try XCTUnwrap(tabManager as? MockTabManager)
+        let saver = MockBookmarksSaver()
+        saver.mockCreateGuid = "saved-folder"
+        let subject = createSubject()
+        let viewModel = subject.makeBookmarkAllTabsViewModel(tabs: makeBookmarkTabs(),
+                                                              closeAfterSaving: false,
+                                                              bookmarkSaver: saver)
+        viewModel.updateFolderTitle("Reading")
+        await viewModel.save()?.value
+
+        XCTAssertTrue(viewModel.saveSucceeded)
+        XCTAssertTrue(manager.removedTabUUIDs.isEmpty)
+    }
+
+    private func makeBookmarkTabs() -> [Tab] {
+        return ["https://example.com/first", "https://example.com/second"].map { url in
+            let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+            tab.url = URL(string: url)
+            return tab
+        }
+    }
+
     func testBookmarks_emptyTabs() {
         XCTAssertTrue(TabTrayCoordinator.bookmarks(from: []).isEmpty)
     }

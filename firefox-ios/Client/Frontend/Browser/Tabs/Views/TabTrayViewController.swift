@@ -23,7 +23,7 @@ protocol TabTrayViewControllerDelegate: AnyObject {
     @MainActor
     func didFinish()
     @MainActor
-    func bookmarkAllTabs(isPrivate: Bool)
+    func bookmarkAllTabs(isPrivate: Bool, closeAfterSaving: Bool)
 }
 
 final class TabTrayViewController: UIViewController,
@@ -239,15 +239,26 @@ final class TabTrayViewController: UIViewController,
     }()
 
     private lazy var bookmarkAllButton: UIBarButtonItem = {
-        return createButtonItem(imageName: StandardImageIdentifiers.Large.bookmark,
-                                action: #selector(bookmarkAllTabsTapped),
-                                a11yId: AccessibilityIdentifiers.TabTray.bookmarkAllTabsButton,
-                                a11yLabel: .TabsTray.BookmarkAllTabs)
+        let button = createButtonItem(imageName: StandardImageIdentifiers.Large.bookmark,
+                                      action: #selector(bookmarkAllTabsTapped),
+                                      a11yId: AccessibilityIdentifiers.TabTray.bookmarkAllTabsButton,
+                                      a11yLabel: .TabsTray.BookmarkAllTabs)
+        let bookmarkAndClose = UIAction(title: .TabsTray.BookmarkAllTabsAndClose,
+                                        image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark)) {
+            [weak self] _ in
+            self?.bookmarkAllTabsAndCloseTapped()
+        }
+        button.menu = UIMenu(children: [bookmarkAndClose])
+        return button
     }()
 
     @objc
     func bookmarkAllTabsTapped() {
-        delegate?.bookmarkAllTabs(isPrivate: tabTrayState.selectedPanel == .privateTabs)
+        delegate?.bookmarkAllTabs(isPrivate: tabTrayState.selectedPanel == .privateTabs, closeAfterSaving: false)
+    }
+
+    func bookmarkAllTabsAndCloseTapped() {
+        delegate?.bookmarkAllTabs(isPrivate: tabTrayState.selectedPanel == .privateTabs, closeAfterSaving: true)
     }
 
     private lazy var newTabButton: UIBarButtonItem = {

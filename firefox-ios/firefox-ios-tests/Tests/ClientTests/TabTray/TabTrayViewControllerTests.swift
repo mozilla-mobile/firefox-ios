@@ -39,6 +39,26 @@ final class TabTrayViewControllerTests: XCTestCase {
         let privateTray = createSubject(selectedSegment: .privateTabs)
         privateTray.bookmarkAllTabsTapped()
         XCTAssertEqual(delegate.bookmarkRequests, [false, true])
+        XCTAssertEqual(delegate.closeAfterSavingRequests, [false, false])
+    }
+
+    func testBookmarkAllTabsAndClose_usesSelectedTray() {
+        let subject = createSubject(selectedSegment: .privateTabs)
+        subject.bookmarkAllTabsAndCloseTapped()
+        XCTAssertEqual(delegate.bookmarkRequests, [true])
+        XCTAssertEqual(delegate.closeAfterSavingRequests, [true])
+    }
+
+    func testBookmarkAllTabs_hasLongPressMenu() throws {
+        let subject = createSubject()
+        subject.layout = .compact
+        subject.viewWillAppear(false)
+        let button = try XCTUnwrap(subject.toolbarItems?.first {
+            $0.accessibilityIdentifier == AccessibilityIdentifiers.TabTray.bookmarkAllTabsButton
+        })
+        let action = try XCTUnwrap(button.menu?.children.first as? UIAction)
+        XCTAssertEqual(action.title, String.TabsTray.BookmarkAllTabsAndClose)
+        XCTAssertNotNil(button.action)
     }
 
     func testBookmarkAllTabs_availableOnIPad() {
@@ -193,5 +213,9 @@ final class TabTrayViewControllerTests: XCTestCase {
 class MockTabTrayViewControllerDelegate: TabTrayViewControllerDelegate {
     func didFinish() {}
     var bookmarkRequests: [Bool] = []
-    func bookmarkAllTabs(isPrivate: Bool) { bookmarkRequests.append(isPrivate) }
+    var closeAfterSavingRequests: [Bool] = []
+    func bookmarkAllTabs(isPrivate: Bool, closeAfterSaving: Bool) {
+        bookmarkRequests.append(isPrivate)
+        closeAfterSavingRequests.append(closeAfterSaving)
+    }
 }

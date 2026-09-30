@@ -137,7 +137,7 @@ final class TabTrayCoordinator: BaseCoordinator,
     }
 
     // MARK: - TabTrayViewControllerDelegate
-    func bookmarkAllTabs(isPrivate: Bool) {
+    func bookmarkAllTabs(isPrivate: Bool, closeAfterSaving: Bool = false) {
         let tabs = isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         let bookmarks = Self.bookmarks(from: tabs)
         guard !bookmarks.isEmpty else {
@@ -148,6 +148,30 @@ final class TabTrayCoordinator: BaseCoordinator,
             router.present(alert)
             return
         }
+        let viewModel = makeBookmarkAllTabsViewModel(tabs: tabs, closeAfterSaving: closeAfterSaving)
+        let controller = EditFolderViewController(viewModel: viewModel, windowUUID: tabManager.windowUUID)
+        let navigation = ThemedNavigationController(rootViewController: controller, windowUUID: tabManager.windowUUID)
+        controller.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            systemItem: .cancel,
+            primaryAction: UIAction { [weak navigation] _ in navigation?.dismiss(animated: true) }
+        )
+        let onBookmarksSaved = viewModel.onBookmarkSaved
+        viewModel.onBookmarkSaved = { [weak navigation] in
+            navigation?.dismiss(animated: true, completion: onBookmarksSaved)
+        }
+        viewModel.onSaveFailed = { [weak controller] in
+            let alert = UIAlertController(title: .TabsTray.BookmarkAllTabs,
+                                          message: .TabsTray.BookmarkAllTabsError,
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: .OKString, style: .default))
+            controller?.present(alert, animated: true)
+        }
+        router.present(navigation)
+    }
+
+    func makeBookmarkAllTabsViewModel(tabs: [Tab],
+                                      closeAfterSaving: Bool,
+                                      bookmarkSaver: BookmarksSaver? = nil) -> EditFolderViewModel {
         let parentFolder = BookmarkFolderData(guid: BookmarkRoots.MobileFolderGUID,
                                                dateAdded: 0,
                                                lastModified: 0,
@@ -159,24 +183,15 @@ final class TabTrayCoordinator: BaseCoordinator,
         let viewModel = EditFolderViewModel(profile: profile,
                                             parentFolder: parentFolder,
                                             folder: nil,
-                                            bookmarksToSave: bookmarks)
-        let controller = EditFolderViewController(viewModel: viewModel, windowUUID: tabManager.windowUUID)
-        let navigation = ThemedNavigationController(rootViewController: controller, windowUUID: tabManager.windowUUID)
-        controller.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            systemItem: .cancel,
-            primaryAction: UIAction { [weak navigation] _ in navigation?.dismiss(animated: true) }
-        )
-        viewModel.onBookmarkSaved = { [weak navigation] in
-            navigation?.dismiss(animated: true)
+                                            bookmarkSaver: bookmarkSaver,
+                                            bookmarksToSave: Self.bookmarks(from: tabs))
+        viewModel.onBookmarkSaved = { [weak tabManager] in
+            guard closeAfterSaving else { return }
+            for tab in tabs {
+                tabManager?.removeTab(tab.tabUUID)
+            }
         }
-        viewModel.onSaveFailed = { [weak controller] in
-            let alert = UIAlertController(title: .TabsTray.BookmarkAllTabs,
-                                          message: .TabsTray.BookmarkAllTabsError,
-                                          preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: .OKString, style: .default))
-            controller?.present(alert, animated: true)
-        }
-        router.present(navigation)
+        return viewModel
     }
 
     static func bookmarks(from tabs: [Tab]) -> [BookmarkItemData] {

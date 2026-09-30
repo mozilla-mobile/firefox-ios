@@ -4355,6 +4355,11 @@ extension String {
             tableName: "TabsTray",
             value: "Bookmark all open tabs",
             comment: "Tab tray action to save the open tabs into a named bookmark folder")
+        public static let BookmarkAllTabsAndClose = MZLocalizedString(
+            key: "TabTray.BookmarkAllTabsAndClose",
+            tableName: "TabsTray",
+            value: "Bookmark all tabs and close them",
+            comment: "Long-press tab tray action to save all open tabs to a named folder, then close them")
         public static let BookmarkAllTabsError = MZLocalizedString(
             key: "TabTray.BookmarkAllTabsError",
             tableName: "TabsTray",

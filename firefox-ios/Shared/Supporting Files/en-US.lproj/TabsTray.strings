@@ -24,3 +24,6 @@
 
 /* Message when the tab tray only contains internal pages or is empty */
 "TabTray.NoTabsToBookmark" = "There are no web pages to bookmark in this tray.";
+
+/* Long-press tab tray action to save all open tabs to a named folder, then close them */
+"TabTray.BookmarkAllTabsAndClose" = "Bookmark all tabs and close them";
