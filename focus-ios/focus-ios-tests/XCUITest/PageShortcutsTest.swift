@@ -58,7 +58,7 @@ class PageShortcutsTest: BaseTestCase {
         waitForExistence(app.otherElements.staticTexts["Example"])
 
         app.urlTextField.typeText("foo")
-        waitForNoExistence(app.otherElements.staticTexts["E"])
+        waitForNoExistence(app.otherElements["outerView"])
         waitForNoExistence(app.otherElements.staticTexts["Example"])
     }
 
