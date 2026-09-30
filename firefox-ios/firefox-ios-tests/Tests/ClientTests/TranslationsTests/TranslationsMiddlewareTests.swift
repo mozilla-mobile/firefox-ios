@@ -1548,8 +1548,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         }
         let addressToolbar = AddressBarState(
             windowUUID: .XCTestDefaultUUID,
-            navigationActionsState: NavigationActionsState(windowUUID: .XCTestDefaultUUID),
-            leadingPageActions: [],
+            navigationActions: [],
             trailingPageActions: [],
             browserActions: [],
             editingAccessoryAction: nil,

@@ -31,8 +31,8 @@ public class OnboardingBottomSheetViewController: UIViewController,
     /// Closure called when the bottom sheet is dismissed via the close button
     public var onDismiss: (() -> Void)?
 
-    private lazy var closeButton: UIButton = .build {
-        $0.addAction(UIAction(handler: { [weak self] _ in
+    private lazy var closeButton: UIButton = .build { [weak self] in
+        $0.addAction(UIAction(handler: { _ in
             self?.onDismiss?()
             self?.dismiss(animated: true)
         }), for: .touchUpInside)

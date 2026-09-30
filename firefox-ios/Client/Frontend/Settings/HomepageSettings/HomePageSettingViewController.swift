@@ -15,11 +15,6 @@ final class HomePageSettingViewController: SettingsTableViewController,
     var currentNewTabChoice: NewTabPage?
     var currentStartAtHomeSetting: StartAtHomeSetting?
     var hasHomePage = false
-    var wallpaperManager: WallpaperManagerInterface
-
-    var isWallpaperSectionEnabled: Bool {
-        return wallpaperManager.canSettingsBeShown
-    }
 
     var isPocketSectionEnabled: Bool {
         return MerinoProvider.isLocaleSupported(Locale.current.identifier)
@@ -27,11 +22,9 @@ final class HomePageSettingViewController: SettingsTableViewController,
 
     // MARK: - Initializers
     init(prefs: Prefs,
-         wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
          settingsDelegate: SettingsDelegate? = nil,
          tabManager: TabManager) {
         self.prefs = prefs
-        self.wallpaperManager = wallpaperManager
         super.init(style: .grouped, windowUUID: tabManager.windowUUID)
         super.settingsDelegate = settingsDelegate
         self.tabManager = tabManager
@@ -206,16 +199,6 @@ final class HomePageSettingViewController: SettingsTableViewController,
             sectionItems.append(pocketSetting)
         }
 
-        if isWallpaperSectionEnabled, let tabManager {
-            let wallpaperSetting = WallpaperSettings(
-                settings: self,
-                settingsDelegate: settingsDelegate,
-                tabManager: tabManager,
-                wallpaperManager: wallpaperManager
-            )
-            sectionItems.append(wallpaperSetting)
-        }
-
         return SettingSection(
             title: NSAttributedString(
                 string: .Settings.Homepage.CustomizeFirefoxHome.Title
@@ -321,49 +304,6 @@ extension HomePageSettingViewController {
             let topSitesVC = TopSitesSettingsViewController(windowUUID: windowUUID)
             topSitesVC.profile = profile
             navigationController?.pushViewController(topSitesVC, animated: true)
-        }
-    }
-}
-
-// MARK: - WallpaperSettings
-extension HomePageSettingViewController {
-    final class WallpaperSettings: Setting {
-        unowned let settings: SettingsTableViewController
-        var tabManager: TabManager
-        var wallpaperManager: WallpaperManagerInterface
-        weak var settingsDelegate: SettingsDelegate?
-
-        override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
-        override var accessibilityIdentifier: String? {
-            return AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.wallpaper
-        }
-        override var style: UITableViewCell.CellStyle { return .value1 }
-
-        init(settings: SettingsTableViewController,
-             settingsDelegate: SettingsDelegate?,
-             tabManager: TabManager,
-             wallpaperManager: WallpaperManagerInterface = WallpaperManager()
-        ) {
-            self.settings = settings
-            self.settingsDelegate = settingsDelegate
-            self.tabManager = tabManager
-            self.wallpaperManager = wallpaperManager
-            super.init(title: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.Wallpaper))
-        }
-
-        override func onClick(_ navigationController: UINavigationController?) {
-            guard wallpaperManager.canSettingsBeShown else { return }
-
-            let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
-            let viewModel = WallpaperSettingsViewModel(
-                wallpaperManager: wallpaperManager,
-                tabManager: tabManager,
-                theme: theme,
-                windowUUID: settings.windowUUID
-            )
-            let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel, windowUUID: tabManager.windowUUID)
-            wallpaperVC.settingsDelegate = settingsDelegate
-            navigationController?.pushViewController(wallpaperVC, animated: true)
         }
     }
 }

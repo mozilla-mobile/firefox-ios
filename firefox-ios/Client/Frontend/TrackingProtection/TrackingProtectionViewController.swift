@@ -228,9 +228,9 @@ class TrackingProtectionViewController: UIViewController,
                   let internalURL = InternalURL(url),
                   internalURL.isCertificateErrorURL,
                   let originalURL = internalURL.originalURLFromErrorPage {
-            CertificatesFetcher().getCertificates(for: originalURL) { certificates in
+            CertificatesFetcher().getCertificates(for: originalURL) { [weak self] certificates in
                 Task { @MainActor in
-                    self.model.certificates = certificates ?? []
+                    self?.model.certificates = certificates ?? []
                 }
             }
         }

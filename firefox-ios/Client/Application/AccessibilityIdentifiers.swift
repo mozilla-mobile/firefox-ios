@@ -540,6 +540,15 @@ struct AccessibilityIdentifiers {
             static let websiteAppearanceSectionTitle = "WebsiteAppearanceSectionTitle"
             static let navigationToolbarSectionTitle = "NavigationToolbarSectionTitle"
             static let pageZoomTitle = "PageZoomTitle"
+            static let wallpaperTitle = "WallpaperTitle"
+
+            struct Wallpaper {
+                static let collectionTitle = "wallpaperCollectionTitle"
+                static let collectionDescription = "wallpaperCollectionDescription"
+                static let collectionButton = "wallpaperCollectionButton"
+                static let card = "wallpaperCard"
+            }
+
             static let specificSiteSettings = "SpecificSiteSettings"
             static let automaticThemeView = "AutomaticThemeView"
             static let lightThemeView = "LightThemeView"
@@ -571,16 +580,8 @@ struct AccessibilityIdentifiers {
                     static let topSitesRows = "TopSitesRows"
                 }
 
-                struct Wallpaper {
-                    static let collectionTitle = "wallpaperCollectionTitle"
-                    static let collectionDescription = "wallpaperCollectionDescription"
-                    static let collectionButton = "wallpaperCollectionButton"
-                    static let card = "wallpaperCard"
-                }
-
                 static let jumpBackIn = "Jump Back In"
                 static let recentlySaved = "Recently Saved"
-                static let wallpaper = "WallpaperSettings"
             }
         }
 

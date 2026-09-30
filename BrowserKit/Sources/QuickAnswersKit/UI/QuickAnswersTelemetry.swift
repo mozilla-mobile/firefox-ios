@@ -4,9 +4,18 @@
 
 import Foundation
 
+/// A permission the Quick Answers voice flow needs before it can run.
+public enum QuickAnswersPermission: String {
+    /// Captures the user's audio.
+    case microphone
+    /// Turns the captured audio into a transcription.
+    case speechRecognition = "speech_recognition"
+}
+
 public protocol QuickAnswersTelemetry {
     /// Fires when the user initiates the Quick Answers flow.
-    func quickAnswersRequested()
+    /// - Parameter model: The model backing the request.
+    func quickAnswersRequested(model: QuickAnswersModel)
 
     /// Fires when the service starts attempting to capture user audio.
     func recordingStarted()
@@ -25,8 +34,13 @@ public protocol QuickAnswersTelemetry {
     /// - Parameters:
     ///   - outcome: `true` if the results were fetched successfully, `false` if it failed.
     ///   - errorType: A description of the failure when `outcome` is `false`, otherwise `nil`.
+    ///   - model: The model backing the request.
     @MainActor
-    func resultsCompleted(outcome: Bool, errorType: String?)
+    func resultsCompleted(outcome: Bool, errorType: String?, model: QuickAnswersModel)
+
+    /// Fires when the user denies one of the permissions the voice flow needs.
+    /// - Parameter permission: The permission that was denied.
+    func permissionDenied(permission: QuickAnswersPermission)
 
     /// Fires when the user taps a citation source in the results.
     func citationTapped()

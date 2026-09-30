@@ -46,7 +46,7 @@ func registerUrlBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppli
             searchTextField.waitAndTap()
             // Tapping doesn't reliably select the existing text (seen on iPad), so typing can insert
             // into rather than replace it. Clear explicitly before typing.
-            app.buttons["Clear text"].tapIfExists()
+            app.buttons["Clear text"].tapIfExists(timeout: 1.5)
             // On CI the field is occasionally focus-less after tapping, which makes typeText abort;
             // wait for keyboard focus (re-tapping if needed) before typing.
             searchTextField.tapAndTypeTextWhenFocused(url)
