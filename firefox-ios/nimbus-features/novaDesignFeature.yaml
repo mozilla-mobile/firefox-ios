@@ -22,5 +22,5 @@ features:
           privateThemeOverride: false
       - channel: developer
         value:
-          enabled: false
+          enabled: true
           privateThemeOverride: false
