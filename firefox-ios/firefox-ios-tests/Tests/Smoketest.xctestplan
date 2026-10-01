@@ -332,6 +332,7 @@
         "ModernKitOnboardingTests\/testModernCrashReportsToggle()",
         "ModernKitOnboardingTests\/testModernKitOnboardingAccessibility()",
         "ModernKitOnboardingTests\/testModernKitOnboardingCardsCopy()",
+        "ModernKitOnboardingTests\/testModernKitOnboardingCardsImages()",
         "ModernKitOnboardingTests\/testModernKitOnboardingCloseOptionLastCard()",
         "ModernKitOnboardingTests\/testModernKitOnboardingDarkThemeSelection()",
         "ModernKitOnboardingTests\/testModernKitOnboardingDefaultBrowserSkip()",
