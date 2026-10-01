@@ -13,7 +13,7 @@ import XCTest
 
 @MainActor
 final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility {
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
     private var mockProfile: MockProfile!
     private var mockLogger: MockLogger!
     private var mockWindowManager: MockWindowManager!
@@ -1607,17 +1607,6 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
                 ]
             )
         )
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    // In order to avoid flaky tests, we should reset the store
-    // similar to production
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 
     // MARK: - Long-press tests

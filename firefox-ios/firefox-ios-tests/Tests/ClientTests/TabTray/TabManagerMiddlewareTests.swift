@@ -15,7 +15,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
     private var mockPinnedSites: MockablePinnedSites!
     private var mockWindowManager: MockWindowManager!
     private var mockTabsPanelTelemetry: MockTabsPanelTelemetry!
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
     private var mockTabManager: MockTabManager!
     private var mockSummarizerConfigFactory: MockSummarizerConfigFactory!
     private var appState: AppState!
@@ -1106,14 +1106,5 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
         )
         self.appState = appState
         return appState
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

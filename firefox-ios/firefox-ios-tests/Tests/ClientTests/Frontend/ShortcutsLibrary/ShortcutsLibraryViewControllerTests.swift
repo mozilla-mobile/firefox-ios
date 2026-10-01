@@ -82,13 +82,4 @@ final class ShortcutsLibraryViewControllerTests: XCTestCase, StoreTestUtility {
     func setupAppState() -> Client.AppState {
         return AppState()
     }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
-    }
 }

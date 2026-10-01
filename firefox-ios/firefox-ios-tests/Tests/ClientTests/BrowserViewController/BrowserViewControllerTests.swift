@@ -903,15 +903,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         self.appState = appState
         return appState
     }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
-    }
 }
 
 class MockScreenshotHelper: ScreenshotHelper {
