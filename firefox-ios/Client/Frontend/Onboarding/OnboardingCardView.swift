@@ -73,7 +73,11 @@ struct OnboardingFlowView: View {
     private func gradientColors(for theme: Theme) -> [Color] {
         guard !theme.isNova else {
             let gradient = theme.colors.gradientAccentSubtle.colors
+            let isDark = theme.type == .dark
             let orange = theme.colors.gradientAIStrongStop3.color.opacity(0.28)
+            if isDark {
+                return [Color(gradient[0]), Color(gradient[1]).opacity(0), orange]
+            }
             return [Color(gradient[0]), Color(gradient[1]), orange]
         }
 
