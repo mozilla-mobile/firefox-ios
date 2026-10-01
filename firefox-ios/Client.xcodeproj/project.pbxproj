@@ -1896,6 +1896,7 @@
 		C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1D222EDE4400E30E52 /* Accelerate.framework */; };
 		C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1F222EDED000E30E52 /* SafariServices.framework */; };
 		C8E1BC0A28085AA700C62964 /* NimbusFeatureFlagLayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E1BC0928085AA700C62964 /* NimbusFeatureFlagLayerTests.swift */; };
+		FA17F1A65E47F1A600000006 /* ExperimentsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA17F1A65E47F1A600000005 /* ExperimentsTests.swift */; };
 		C8E2E80C23D20FB3005AACE6 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80823D20FB3005AACE6 /* Avatar.swift */; };
 		C8E2E80D23D20FB3005AACE6 /* RustFirefoxAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80923D20FB3005AACE6 /* RustFirefoxAccounts.swift */; };
 		C8E2E80E23D20FD2005AACE6 /* FxAWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80723D20FB3005AACE6 /* FxAWebViewController.swift */; };
@@ -11347,6 +11348,7 @@
 		C8E18F1D222EDE4400E30E52 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		C8E18F1F222EDED000E30E52 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		C8E1BC0928085AA700C62964 /* NimbusFeatureFlagLayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusFeatureFlagLayerTests.swift; sourceTree = "<group>"; };
+		FA17F1A65E47F1A600000005 /* ExperimentsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentsTests.swift; sourceTree = "<group>"; };
 		C8E2E80723D20FB3005AACE6 /* FxAWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAWebViewController.swift; sourceTree = "<group>"; };
 		C8E2E80823D20FB3005AACE6 /* Avatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		C8E2E80923D20FB3005AACE6 /* RustFirefoxAccounts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustFirefoxAccounts.swift; sourceTree = "<group>"; };
@@ -16498,6 +16500,7 @@
 			isa = PBXGroup;
 			children = (
 				C8E1BC0928085AA700C62964 /* NimbusFeatureFlagLayerTests.swift */,
+				FA17F1A65E47F1A600000005 /* ExperimentsTests.swift */,
 				39C137962655798A003DC662 /* NimbusIntegrationTests.swift */,
 				8015C8B42D0A31FE0093AED0 /* RecordedNimbusContextTests.swift */,
 			);
@@ -21693,6 +21696,7 @@
 				E1463D042982D0240074E16E /* NotificationManagerTests.swift in Sources */,
 				8AA0A6682CAC747500AC7EB3 /* HomepageDiffableDataSourceTests.swift in Sources */,
 				C8E1BC0A28085AA700C62964 /* NimbusFeatureFlagLayerTests.swift in Sources */,
+				FA17F1A65E47F1A600000006 /* ExperimentsTests.swift in Sources */,
 				213046B92F202F27007ECEDA /* UIFontExtensionsTests.swift in Sources */,
 				39230FDC2FEC53BA00AD5FAB /* WebServerLifecycleTests.swift in Sources */,
 				032CE5F62EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift in Sources */,
