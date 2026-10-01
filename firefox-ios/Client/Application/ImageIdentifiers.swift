@@ -87,6 +87,8 @@ struct ImageIdentifiers {
             public static let notification = "kitOnboardingNotifications"
             public static let notificationCard = "kitCircle"
             public static let sync = "kitOnboardingSync"
+            public static let notificationDark = "kitOnboardingNotificationsDark"
+            public static let syncDark = "kitOnboardingSyncDark"
         }
     }
 

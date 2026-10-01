@@ -69,13 +69,14 @@ struct OnboardingFlowView: View {
         return linearGradient
     }
 
+    // returns an array of colours needed for the card gradient
     private func gradientColors(for theme: Theme) -> [Color] {
         guard !theme.isNova else {
             let gradient = theme.colors.gradientAccentSubtle.colors
             let orange = theme.colors.gradientAIStrongStop3.color.opacity(0.28)
-            // only 2 elements in this gradient
             return [Color(gradient[0]), Color(gradient[1]), orange]
         }
+
         let isDark = theme.type == .dark
         let yellowOpacity = isDark ? 0.0 : 0.25
         let yellow = theme.colors.gradientAIStrongStop3.color.opacity(yellowOpacity)
@@ -104,6 +105,10 @@ struct OnboardingCardView: View {
     private let onPrimary: () -> Void
     private let onSecondary: (() -> Void)?
 
+    private var buttonColour: Color {
+        theme.isNova ? theme.colors.actionPrimary.color : theme.colors.gradientAIStrongStop1.color
+    }
+
     init(
         card: OnboardingCard,
         theme: Theme,
@@ -131,7 +136,7 @@ struct OnboardingCardView: View {
 
     @ViewBuilder
     private var cardImage: some View {
-        if let name = card.imageName, let uiImage = UIImage(named: name) {
+        if let name = theme.type == .dark ? card.darkImageName : card.lightImageName, let uiImage = UIImage(named: name) {
             Image(uiImage: uiImage)
                 .resizable()
                 .scaledToFit()
@@ -181,7 +186,7 @@ struct OnboardingCardView: View {
                 .padding([.leading, .trailing], 0)
         }
         .padding(0)
-        .background(theme.colors.gradientAIStrongStop1.color)
+        .background(buttonColour)
         .clipShape(RoundedRectangle(cornerRadius: 28))
     }
 
@@ -191,7 +196,7 @@ struct OnboardingCardView: View {
             Button(action: onSecondary) {
                 Text(secondaryTitle)
                     .font(FXFontStyles.Bold.callout.scaledSwiftUIFont())
-                    .foregroundColor(theme.colors.gradientAIStrongStop1.color)
+                    .foregroundColor(buttonColour)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 15)
             }
