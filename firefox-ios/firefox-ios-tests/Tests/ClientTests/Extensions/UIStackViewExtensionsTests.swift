@@ -5,6 +5,13 @@
 import UIKit
 import XCTest
 
+@testable import Client
+
+@MainActor
+private final class MockInterchangeableView: UIView, TopBottomInterchangeable {
+    var parent: UIStackView?
+}
+
 @MainActor
 final class UIStackViewExtensionsTests: XCTestCase {
     // MARK: Top
@@ -126,5 +133,57 @@ final class UIStackViewExtensionsTests: XCTestCase {
         stackView.insertArrangedView(secondView, position: 2)
 
         XCTAssertEqual(stackView.arrangedSubviews.count, 1)
+    }
+
+    // MARK: - TopBottomInterchangeable.addToParent(belowView:)
+
+    func testAddToParent_belowViewPresent_insertsDirectlyAfterIt() {
+        let stackView = UIStackView()
+        let topTabsView = UIView()
+        let addressBar = MockInterchangeableView()
+        stackView.addArrangedViewToTop(topTabsView)
+
+        addressBar.addToParent(parent: stackView, addToTop: true, belowView: topTabsView)
+
+        XCTAssertEqual(stackView.arrangedSubviews[0], topTabsView)
+        XCTAssertEqual(stackView.arrangedSubviews[1], addressBar)
+        XCTAssertEqual(addressBar.parent, stackView)
+    }
+
+    func testAddToParent_belowViewNotInParent_fallsBackToAddToTop() {
+        let stackView = UIStackView()
+        let existingView = UIView()
+        let unrelatedView = UIView()
+        let addressBar = MockInterchangeableView()
+        stackView.addArrangedViewToTop(existingView)
+
+        addressBar.addToParent(parent: stackView, addToTop: true, belowView: unrelatedView)
+
+        XCTAssertEqual(stackView.arrangedSubviews[0], addressBar)
+        XCTAssertEqual(stackView.arrangedSubviews[1], existingView)
+    }
+
+    func testAddToParent_belowViewNil_addToTopTrue_insertsAtTop() {
+        let stackView = UIStackView()
+        let existingView = UIView()
+        let addressBar = MockInterchangeableView()
+        stackView.addArrangedViewToTop(existingView)
+
+        addressBar.addToParent(parent: stackView, addToTop: true, belowView: nil)
+
+        XCTAssertEqual(stackView.arrangedSubviews[0], addressBar)
+        XCTAssertEqual(stackView.arrangedSubviews[1], existingView)
+    }
+
+    func testAddToParent_belowViewNil_addToTopFalse_insertsAtBottom() {
+        let stackView = UIStackView()
+        let existingView = UIView()
+        let addressBar = MockInterchangeableView()
+        stackView.addArrangedViewToTop(existingView)
+
+        addressBar.addToParent(parent: stackView, addToTop: false, belowView: nil)
+
+        XCTAssertEqual(stackView.arrangedSubviews[0], existingView)
+        XCTAssertEqual(stackView.arrangedSubviews[1], addressBar)
     }
 }
