@@ -250,9 +250,10 @@ final class TabTrayViewController: UIViewController,
                                       action: #selector(bookmarkAllTabsTapped),
                                       a11yId: AccessibilityIdentifiers.TabTray.bookmarkAllTabsButton,
                                       a11yLabel: .TabsTray.BookmarkAllTabs)
-        let bookmarkAndClose = UIAction(title: .TabsTray.BookmarkAllTabsAndClose,
-                                        image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark)) {
-            [weak self] _ in
+        let bookmarkAndClose = UIAction(
+            title: .TabsTray.BookmarkAllTabsAndClose,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark)
+        ) { [weak self] _ in
             self?.bookmarkAllTabsAndCloseTapped()
         }
         button.menu = UIMenu(children: [bookmarkAndClose])

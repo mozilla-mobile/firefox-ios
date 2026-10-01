@@ -89,8 +89,8 @@ final class TabTrayCoordinatorTests: XCTestCase {
         saver.mockCreateGuid = "saved-folder"
         let subject = createSubject()
         let viewModel = subject.makeBookmarkAllTabsViewModel(tabs: tabs,
-                                                              closeAfterSaving: true,
-                                                              bookmarkSaver: saver)
+                                                             closeAfterSaving: true,
+                                                             bookmarkSaver: saver)
         XCTAssertTrue(manager.removedTabUUIDs.isEmpty)
         manager.normalTabs.append(Tab(profile: profile, windowUUID: .XCTestDefaultUUID))
         viewModel.updateFolderTitle("Reading")
@@ -117,8 +117,8 @@ final class TabTrayCoordinatorTests: XCTestCase {
         saver.failingSaveCalls = [3]
         let subject = createSubject()
         let viewModel = subject.makeBookmarkAllTabsViewModel(tabs: tabs,
-                                                              closeAfterSaving: true,
-                                                              bookmarkSaver: saver)
+                                                             closeAfterSaving: true,
+                                                             bookmarkSaver: saver)
         viewModel.updateFolderTitle("Reading")
         await viewModel.save()?.value
         XCTAssertFalse(viewModel.saveSucceeded)
@@ -137,8 +137,8 @@ final class TabTrayCoordinatorTests: XCTestCase {
         saver.mockCreateGuid = "saved-folder"
         let subject = createSubject()
         let viewModel = subject.makeBookmarkAllTabsViewModel(tabs: makeBookmarkTabs(),
-                                                              closeAfterSaving: false,
-                                                              bookmarkSaver: saver)
+                                                             closeAfterSaving: false,
+                                                             bookmarkSaver: saver)
         viewModel.updateFolderTitle("Reading")
         await viewModel.save()?.value
 

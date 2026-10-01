@@ -237,8 +237,13 @@ final class EditFolderViewModelTests: XCTestCase {
 
     private func makeBatchSubject() -> EditFolderViewModel {
         let bookmarks = ["First", "Second"].map {
-            BookmarkItemData(guid: "", dateAdded: 0, lastModified: 0, parentGUID: nil,
-                             position: 0, url: "https://example.com/\($0)", title: $0)
+            BookmarkItemData(guid: "",
+                             dateAdded: 0,
+                             lastModified: 0,
+                             parentGUID: nil,
+                             position: 0,
+                             url: "https://example.com/\($0)",
+                             title: $0)
         }
         let subject = EditFolderViewModel(profile: profile,
                                           parentFolder: parentFolder,
