@@ -36,7 +36,8 @@ final class TabTrayViewController: UIViewController,
                                    TabTraySelectorDelegate,
                                    TabTrayAnimationDelegate,
                                    TabDisplayViewDragAndDropInteraction,
-                                   Notifiable {
+                                   Notifiable,
+                                   FeatureFlaggable {
     typealias SubscriberStateType = TabTrayState
     private struct UX {
         struct NavigationMenu {
@@ -191,6 +192,10 @@ final class TabTrayViewController: UIViewController,
         return isRegularLayout ? regularLayoutItems : iPhoneItems
     }
 
+    private var isBookmarkAllTabsEnabled: Bool {
+        featureFlagsProvider.isEnabled(.bookmarkAllTabs)
+    }
+
     private var isNovaDesignEnabled: Bool {
         (AppContainer.shared.resolve() as FeatureFlagProviding).isEnabled(.novaDesign)
     }
@@ -208,10 +213,12 @@ final class TabTrayViewController: UIViewController,
                           StandardImageIdentifiers.Large.delete,
                           background: glassTint,
                           glyph: theme.colors.iconPrimary)
-        setProminentGlass(bookmarkAllButton,
-                          StandardImageIdentifiers.Large.bookmark,
-                          background: glassTint,
-                          glyph: theme.colors.iconPrimary)
+        if isBookmarkAllTabsEnabled {
+            setProminentGlass(bookmarkAllButton,
+                              StandardImageIdentifiers.Large.bookmark,
+                              background: glassTint,
+                              glyph: theme.colors.iconPrimary)
+        }
         setProminentGlass(newTabButton,
                           StandardImageIdentifiers.Large.plus,
                           background: glassTint,
@@ -254,10 +261,12 @@ final class TabTrayViewController: UIViewController,
 
     @objc
     func bookmarkAllTabsTapped() {
+        guard isBookmarkAllTabsEnabled else { return }
         delegate?.bookmarkAllTabs(isPrivate: tabTrayState.selectedPanel == .privateTabs, closeAfterSaving: false)
     }
 
     func bookmarkAllTabsAndCloseTapped() {
+        guard isBookmarkAllTabsEnabled else { return }
         delegate?.bookmarkAllTabs(isPrivate: tabTrayState.selectedPanel == .privateTabs, closeAfterSaving: true)
     }
 
@@ -323,13 +332,17 @@ final class TabTrayViewController: UIViewController,
         return fixedSpace
     }()
 
-    private lazy var bottomToolbarItems: [UIBarButtonItem] = {
+    private var bottomToolbarItems: [UIBarButtonItem] {
+        guard isBookmarkAllTabsEnabled else { return [deleteButton, flexibleSpace, newTabButton] }
         return [deleteButton, flexibleSpace, bookmarkAllButton, flexibleSpace, newTabButton]
-    }()
+    }
 
-    private lazy var experimentBottomToolbarItems: [UIBarButtonItem] = {
+    private var experimentBottomToolbarItems: [UIBarButtonItem] {
+        guard isBookmarkAllTabsEnabled else {
+            return [deleteButton, flexibleSpace, newTabButton, flexibleSpace, doneButton]
+        }
         return [deleteButton, flexibleSpace, bookmarkAllButton, flexibleSpace, newTabButton, flexibleSpace, doneButton]
-    }()
+    }
 
     private lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
         guard hasSyncableAccount else { return [] }
@@ -535,7 +548,9 @@ final class TabTrayViewController: UIViewController,
         view.backgroundColor = theme.colors.layer1
         navigationToolbar.barTintColor = theme.colors.layer1
         deleteButton.tintColor = theme.colors.iconPrimary
-        bookmarkAllButton.tintColor = theme.colors.iconPrimary
+        if isBookmarkAllTabsEnabled {
+            bookmarkAllButton.tintColor = theme.colors.iconPrimary
+        }
         newTabButton.tintColor = theme.colors.iconPrimary
         if #available(iOS 26, *) {
             doneButton.tintColor = theme.isNova ? theme.colors.iconInverted : theme.colors.iconPrimary
@@ -585,7 +600,9 @@ final class TabTrayViewController: UIViewController,
         navigationToolbar.barTintColor = swipeTheme.colors.layer1
         if !usesNovaGlassToolbarButtons {
             deleteButton.tintColor = swipeTheme.colors.iconPrimary
-            bookmarkAllButton.tintColor = swipeTheme.colors.iconPrimary
+            if isBookmarkAllTabsEnabled {
+                bookmarkAllButton.tintColor = swipeTheme.colors.iconPrimary
+            }
             newTabButton.tintColor = swipeTheme.colors.iconPrimary
             if #available(iOS 26, *) {
                 doneButton.tintColor = swipeTheme.isNova ? swipeTheme.colors.iconInverted : swipeTheme.colors.iconPrimary
@@ -830,7 +847,9 @@ final class TabTrayViewController: UIViewController,
             navigationItem.leftBarButtonItems = nil
             navigationItem.rightBarButtonItems = rightBarButtonItemsForSync
         } else {
-            navigationItem.leftBarButtonItems = [deleteButton, bookmarkAllButton]
+            navigationItem.leftBarButtonItems = isBookmarkAllTabsEnabled
+                ? [deleteButton, bookmarkAllButton]
+                : [deleteButton]
             navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
         }
 

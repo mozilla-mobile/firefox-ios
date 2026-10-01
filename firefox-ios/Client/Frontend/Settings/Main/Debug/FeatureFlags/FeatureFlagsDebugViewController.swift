@@ -108,6 +108,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .bookmarkAllTabs,
+                titleText: format(string: "Bookmark All Tabs"),
+                statusText: format(string: "Enable bookmarking all tabs, with an option to close them after saving.")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .bookmarksSearchFeature,
                 titleText: format(string: "Bookmarks Search"),
                 statusText: format(string: "Toggle to enable bookmarks panel search feature")

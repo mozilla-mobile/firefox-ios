@@ -14,6 +14,9 @@ final class TabTrayCoordinatorTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
+        FxNimbus.shared.features.bookmarkAllTabsFeature.with { _, _ in
+            BookmarkAllTabsFeature(enabled: true)
+        }
         let mockTabManager = MockTabManager()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         mockRouter = MockRouter(navigationController: MockNavigationController())
@@ -23,11 +26,29 @@ final class TabTrayCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() async throws {
+        FxNimbus.shared.features.bookmarkAllTabsFeature.with { _, _ in
+            BookmarkAllTabsFeature(enabled: false)
+        }
         mockRouter = nil
         profile = nil
         parentCoordinator = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
+    }
+
+    func testBookmarkAllTabs_disabledDoesNotPresentOrCloseTabs() throws {
+        FxNimbus.shared.features.bookmarkAllTabsFeature.with { _, _ in
+            BookmarkAllTabsFeature(enabled: false)
+        }
+        let manager = try XCTUnwrap(tabManager as? MockTabManager)
+        manager.normalTabs = makeBookmarkTabs()
+        let subject = createSubject()
+
+        subject.bookmarkAllTabs(isPrivate: false)
+        subject.bookmarkAllTabs(isPrivate: false, closeAfterSaving: true)
+
+        XCTAssertEqual(mockRouter.presentCalled, 0)
+        XCTAssertTrue(manager.removedTabUUIDs.isEmpty)
     }
 
     func testBookmarks_filtersInternalPagesAndPreservesTabOrderAndTitles() {

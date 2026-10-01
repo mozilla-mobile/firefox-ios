@@ -14,6 +14,7 @@ class EditFolderViewModel: @unchecked Sendable {
     private let parentFolder: FxBookmarkNode
     private var folder: FxBookmarkNode?
     private let bookmarkSaver: BookmarksSaver
+    let isSavingTabs: Bool
     private var bookmarksToSave: ArraySlice<BookmarkItemData>
     private var createdFolderGUID: String?
     private(set) var saveSucceeded = false
@@ -45,6 +46,7 @@ class EditFolderViewModel: @unchecked Sendable {
          bookmarkSaver: BookmarksSaver? = nil,
          folderFetcher: FolderHierarchyFetcher? = nil,
          bookmarksToSave: [BookmarkItemData] = []) {
+        self.isSavingTabs = !bookmarksToSave.isEmpty
         self.bookmarksToSave = bookmarksToSave[...]
         self.profile = profile
         self.logger = logger
@@ -101,8 +103,9 @@ class EditFolderViewModel: @unchecked Sendable {
     @discardableResult
     @MainActor
     func save() -> Task<Void, Never>? {
-        guard !isSaving, let folder, !folder.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            return nil
+        guard let folder, !folder.title.isEmpty else { return nil }
+        if isSavingTabs {
+            guard !isSaving, !folder.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return nil }
         }
         isSaving = true
         saveSucceeded = false
@@ -141,7 +144,7 @@ class EditFolderViewModel: @unchecked Sendable {
                 }
                 break
             }
-            createdFolderGUID = guid
+            if isSavingTabs { createdFolderGUID = guid }
             while let bookmark = bookmarksToSave.first {
                 let bookmarkResult = await bookmarkSaver.save(bookmark: bookmark, parentFolderGUID: guid)
                 guard case .success = bookmarkResult else {
@@ -158,8 +161,10 @@ class EditFolderViewModel: @unchecked Sendable {
             parentFolderSelector?.selectFolderCreatedFromChild(folder: folderCreated)
         case .failure(let error):
             self.logger.log("Failed to save folder: \(error)", level: .warning, category: .library)
-            onSaveFailed?()
-            return
+            if isSavingTabs {
+                onSaveFailed?()
+                return
+            }
         }
 
         saveSucceeded = true

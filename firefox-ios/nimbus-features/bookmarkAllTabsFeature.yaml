@@ -1,0 +1,17 @@
+features:
+  bookmark-all-tabs-feature:
+    description: >
+      Save all tabs from the tab tray into a named bookmark folder, optionally closing them after saving.
+    variables:
+      enabled:
+        description: Whether the bookmark-all-tabs actions are available in the tab tray.
+        type: Boolean
+        default: false
+        
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true

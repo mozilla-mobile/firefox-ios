@@ -63,6 +63,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .badCertDomainErrorPage:
             return checkBadCertDomainErrorPageFeature()
 
+        case .bookmarkAllTabs:
+            return nimbus.features.bookmarkAllTabsFeature.value().enabled
+
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
 

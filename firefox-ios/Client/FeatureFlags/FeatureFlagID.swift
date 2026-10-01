@@ -18,6 +18,7 @@ enum FeatureFlagID: String, CaseIterable {
     case aiKillSwitch
     case backgroundAudio
     case badCertDomainErrorPage
+    case bookmarkAllTabs
     case bookmarksSearchFeature
     case cellularDataRestrictedErrorPage
     case customReaderModeScheme
@@ -110,6 +111,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .aiKillSwitch,
                 .backgroundAudio,
                 .badCertDomainErrorPage,
+                .bookmarkAllTabs,
                 .bookmarksSearchFeature,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,

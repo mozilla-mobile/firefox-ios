@@ -27,6 +27,20 @@ final class FeatureFlagsProviderTests: XCTestCase {
         super.tearDown()
     }
 
+    func testBookmarkAllTabs_disabledByDefault() {
+        XCTAssertFalse(BookmarkAllTabsFeature().enabled)
+    }
+
+    func testBookmarkAllTabs_supportsDebugOverride() throws {
+        subject.setDebugOverride(.bookmarkAllTabs, to: true)
+
+        let debugKey = try XCTUnwrap(FeatureFlagID.bookmarkAllTabs.debugKey)
+        XCTAssertEqual(prefs.boolForKey(debugKey), true)
+        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        XCTAssertTrue(subject.isEnabled(.bookmarkAllTabs))
+        #endif
+    }
+
     // MARK: - isEnabled with mock layer
 
     func testIsEnabled_layerReturnsTrue_returnsTrue() {

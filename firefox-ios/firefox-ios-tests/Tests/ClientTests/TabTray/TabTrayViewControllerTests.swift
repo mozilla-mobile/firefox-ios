@@ -16,6 +16,7 @@ final class TabTrayViewControllerTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
+        setBookmarkAllTabsEnabled(true)
         let mockTabManager = MockTabManager()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         delegate = MockTabTrayViewControllerDelegate()
@@ -24,11 +25,49 @@ final class TabTrayViewControllerTests: XCTestCase {
     }
 
     override func tearDown() async throws {
+        setBookmarkAllTabsEnabled(false)
         delegate = nil
         navigationController = nil
         DependencyHelperMock().reset()
 
         try await super.tearDown()
+    }
+
+    func testBookmarkAllTabs_disabledRestoresOriginalToolbars() {
+        setBookmarkAllTabsEnabled(false)
+        for experimentEnabled in [false, true] {
+            setupNimbusTabTrayUIExperimentTesting(isEnabled: experimentEnabled)
+            for panel in [TabTrayPanelType.tabs, .privateTabs] {
+                let subject = createSubject(selectedSegment: panel)
+                subject.layout = .compact
+                subject.viewWillAppear(false)
+                XCTAssertEqual(subject.toolbarItems?.count, experimentEnabled ? 5 : 3)
+                XCTAssertFalse(subject.toolbarItems?.contains {
+                    $0.accessibilityIdentifier == AccessibilityIdentifiers.TabTray.bookmarkAllTabsButton
+                } == true)
+            }
+        }
+    }
+
+    func testBookmarkAllTabs_disabledHidesIPadButtonAndIgnoresActions() {
+        setBookmarkAllTabsEnabled(false)
+        let subject = createSubject()
+        subject.layout = .regular
+        subject.viewWillAppear(false)
+        XCTAssertEqual(subject.navigationItem.leftBarButtonItems?.count, 1)
+        XCTAssertFalse(subject.navigationItem.leftBarButtonItems?.contains {
+            $0.accessibilityIdentifier == AccessibilityIdentifiers.TabTray.bookmarkAllTabsButton
+        } == true)
+
+        subject.bookmarkAllTabsTapped()
+        subject.bookmarkAllTabsAndCloseTapped()
+        XCTAssertTrue(delegate.bookmarkRequests.isEmpty)
+    }
+
+    private func setBookmarkAllTabsEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.bookmarkAllTabsFeature.with { _, _ in
+            BookmarkAllTabsFeature(enabled: enabled)
+        }
     }
 
     func testBookmarkAllTabs_usesSelectedTray() {

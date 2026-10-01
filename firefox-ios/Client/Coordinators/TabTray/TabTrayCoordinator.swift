@@ -19,7 +19,8 @@ protocol TabTrayNavigationHandler: AnyObject {
 final class TabTrayCoordinator: BaseCoordinator,
                           ParentCoordinatorDelegate,
                           TabTrayViewControllerDelegate,
-                          TabTrayNavigationHandler {
+                          TabTrayNavigationHandler,
+                          FeatureFlaggable {
     var tabTrayViewController: TabTrayViewController?
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
     private let profile: Profile
@@ -138,6 +139,7 @@ final class TabTrayCoordinator: BaseCoordinator,
 
     // MARK: - TabTrayViewControllerDelegate
     func bookmarkAllTabs(isPrivate: Bool, closeAfterSaving: Bool = false) {
+        guard featureFlagsProvider.isEnabled(.bookmarkAllTabs) else { return }
         let tabs = isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         let bookmarks = Self.bookmarks(from: tabs)
         guard !bookmarks.isEmpty else {

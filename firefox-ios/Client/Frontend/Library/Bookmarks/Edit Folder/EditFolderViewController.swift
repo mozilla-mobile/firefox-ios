@@ -125,6 +125,11 @@ class EditFolderViewController: UIViewController,
 
     @objc
     func saveButtonAction() {
+        guard viewModel.isSavingTabs else {
+            viewModel.save()
+            navigationController?.popViewController(animated: true)
+            return
+        }
         guard let saveTask = viewModel.save() else { return }
         navigationController?.isModalInPresentation = true
         navigationItem.leftBarButtonItem?.isEnabled = false

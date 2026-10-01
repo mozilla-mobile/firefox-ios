@@ -155,6 +155,27 @@ final class EditFolderViewModelTests: XCTestCase {
         XCTAssertNotNil(parentFolderSelector.selectedFolder)
     }
 
+    func testSaveOrdinaryFolder_preservesWhitespaceNameBehavior() async {
+        let subject = createSubject(folder: folder, parentFolder: parentFolder)
+        subject.updateFolderTitle("  ")
+
+        await subject.save()?.value
+
+        XCTAssertFalse(subject.isSavingTabs)
+        XCTAssertEqual(bookmarksSaver.saveCalled, 1)
+    }
+
+    func testSaveOrdinaryFolder_failureStillCallsCompletion() async {
+        bookmarksSaver.failingSaveCalls = [1]
+        let subject = createSubject(folder: folder, parentFolder: parentFolder)
+        var didComplete = false
+        subject.onBookmarkSaved = { didComplete = true }
+
+        await subject.save()?.value
+
+        XCTAssertTrue(didComplete)
+    }
+
     func testSaveBookmarks_createsNamedFolderInSelectedParent() async {
         bookmarksSaver.mockCreateGuid = "new-folder"
         let subject = makeBatchSubject()
