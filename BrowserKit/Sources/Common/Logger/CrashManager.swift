@@ -10,8 +10,6 @@ public protocol CrashManager: Sendable {
     var crashedLastLaunch: Bool { get }
     func captureError(error: Error)
     func setup(sendCrashReports: Bool)
-    /// Records the feature flags to attach to crash reports, replacing any previously set flags.
-    /// - Parameter featureBranches: Feature name mapped to the branch the user is enrolled in
     func setFeatureFlags(_ featureBranches: [String: String])
     func send(message: String,
               category: LoggerCategory,
