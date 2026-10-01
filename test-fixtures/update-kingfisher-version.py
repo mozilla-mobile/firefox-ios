@@ -6,8 +6,8 @@ from github import Github
 # Constants
 KINGFISHER_REPO = "onevcat/Kingfisher"
 
-BROWSERKIT_PACKAGE_SWIFT = "BrowserKit/Package.swift"
-BROWSERKIT_SPM_PACKAGE = "BrowserKit/Package.resolved"
+BROWSERKIT_PACKAGE_SWIFT = "BrowserKit/Components/Package.swift"
+BROWSERKIT_SPM_PACKAGE = "BrowserKit/Components/Package.resolved"
 FIREFOX_SPM_PACKAGE = "firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
 SAMPLE_APP_SPM_PACKAGE = "SampleComponentLibraryApp/SampleComponentLibraryApp.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
 FOCUS_SPM_PACKAGE = "focus-ios/Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
@@ -38,7 +38,7 @@ def get_latest_kingfisher_version():
 
 
 def read_version_from_package_swift(filepath):
-    """Read the current pinned version from BrowserKit/Package.swift."""
+    """Read the current pinned version from BrowserKit/Components/Package.swift."""
     try:
         with open(filepath) as f:
             content = f.read()
@@ -135,7 +135,7 @@ def main():
     """
     STEPS
     1. Fetch latest Kingfisher tag from GitHub
-    2. Update BrowserKit/Package.swift if its pinned version is behind latest
+    2. Update BrowserKit/Components/Package.swift if its pinned version is behind latest
     3. Update each Package.resolved independently if its pinned version is behind latest
     4. Write newest_kingfisher_tag.txt if any file was changed (signals the workflow to open a PR)
     """
@@ -146,7 +146,7 @@ def main():
 
     any_updated = False
 
-    # Update BrowserKit/Package.swift if behind
+    # Update BrowserKit/Components/Package.swift if behind
     swift_version = read_version_from_package_swift(BROWSERKIT_PACKAGE_SWIFT)
     logging.info(f"Current Kingfisher in Package.swift: {swift_version}")
     if swift_version and compare_versions(swift_version, latest_version):

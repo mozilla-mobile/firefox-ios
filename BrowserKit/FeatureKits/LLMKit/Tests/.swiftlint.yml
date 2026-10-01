@@ -1,0 +1,9 @@
+# Swiftlint configuration overloads that will be applied to all files
+# in this folder and all its children recursively, unless another
+# nested configuration takes over.
+# https://github.com/realm/SwiftLint#nested-configurations.
+
+disabled_rules:
+  # Many test use implicitly unwrapped optional properties that 
+  # initialized in setUp and reset in tearDown.
+  - implicitly_unwrapped_optional

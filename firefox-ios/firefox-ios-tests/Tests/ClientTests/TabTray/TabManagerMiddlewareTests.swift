@@ -4,6 +4,7 @@
 
 import Common
 import Redux
+import ReduxTestKit
 import XCTest
 import TestKit
 

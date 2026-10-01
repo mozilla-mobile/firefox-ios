@@ -71,8 +71,8 @@ jobs:
         branch: update-spm-new-kingfisher-tag-${{ env.kingfisher_version }}
         token: ${{ secrets.GITHUB_TOKEN }}
         add-paths: |
-          BrowserKit/Package.swift
-          BrowserKit/Package.resolved
+          BrowserKit/Components/Package.swift
+          BrowserKit/Components/Package.resolved
           firefox-ios/Client.xcodeproj/project.pbxproj
           firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
           SampleComponentLibraryApp/SampleComponentLibraryApp.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved

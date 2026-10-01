@@ -259,8 +259,8 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - DerivedData/
   # Package.swift files need a custom header for swift-tools-version so must be excluded due to file_header rule. Ignore at all levels.
   - "**/Package.swift"
-  - BrowserKit/Sources/Shared/Deferred/
-  - BrowserKit/.build/
+  - BrowserKit/Core/Sources/Shared/Deferred/
+  - BrowserKit/**/.build/
   - firefox-ios/Build/Intermediates.noindex/Client.build/Fennec-iphoneos/WidgetKitExtension.build/DerivedSources/IntentDefinitionGenerated/WidgetIntents/*
   # Focus specific
   - focus-ios/Blockzilla/Generated

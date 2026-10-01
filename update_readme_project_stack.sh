@@ -42,7 +42,7 @@ XCODE_VERSION=$(grep "stack:" $BIT_RISE_FILE | tail -n 1 | grep -o '\d\d.\d')
 DEPLOYMENT_TARGET_FIREFOX=$(deployment_target $PROJECT_FIREFOX_FILE)
 DEPLOYMENT_TARGET_FOCUS=$(deployment_target $PROJECT_FOCUS_FILE)
 README_FILE="README.md"
-BROWSER_KIT_SWIFT_PACKAGE_FILE="BrowserKit/Package.swift"
+BROWSER_KIT_SWIFT_PACKAGE_FILE="BrowserKit/Core/Package.swift"
 SWIFT_VERSION=$(head -n 1 "$BROWSER_KIT_SWIFT_PACKAGE_FILE" | grep -o '[0-9]\+\.[0-9]\+')
 
 sed_into_readme "Firefox-iOS" $DEPLOYMENT_TARGET_FIREFOX

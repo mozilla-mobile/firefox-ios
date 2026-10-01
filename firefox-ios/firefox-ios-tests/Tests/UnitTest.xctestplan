@@ -12,57 +12,57 @@
     "codeCoverage" : {
       "targets" : [
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/AppAttestKit",
           "identifier" : "AppAttestKit",
           "name" : "AppAttestKit"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/FeatureKits\/MLPAKit",
           "identifier" : "MLPAKit",
           "name" : "MLPAKit"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/Components",
           "identifier" : "ComponentLibrary",
           "name" : "ComponentLibrary"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/Core",
           "identifier" : "ContentBlockingGenerator",
           "name" : "ContentBlockingGenerator"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/FeatureKits\/MenuKit",
           "identifier" : "MenuKit",
           "name" : "MenuKit"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/Redux",
           "identifier" : "Redux",
           "name" : "Redux"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/Components",
           "identifier" : "SiteImageView",
           "name" : "SiteImageView"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/Core",
           "identifier" : "TabDataStore",
           "name" : "TabDataStore"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/FeatureKits\/ToolbarKit",
           "identifier" : "ToolbarKit",
           "name" : "ToolbarKit"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/FeatureKits\/WebCompatReporterKit",
           "identifier" : "WebCompatReporterKit",
           "name" : "WebCompatReporterKit"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/Core",
           "identifier" : "WebEngine",
           "name" : "WebEngine"
         },
@@ -102,42 +102,42 @@
           "name" : "Storage"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/Core",
           "identifier" : "ActionExtensionKit",
           "name" : "ActionExtensionKit"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/Core",
           "identifier" : "JWTKit",
           "name" : "JWTKit"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/Core",
           "identifier" : "Shared",
           "name" : "Shared"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/FeatureKits\/SummarizeKit",
           "identifier" : "SummarizeKit",
           "name" : "SummarizeKit"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/FeatureKits\/OnboardingKit",
           "identifier" : "OnboardingKit",
           "name" : "OnboardingKit"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/FeatureKits\/UnifiedSearchKit",
           "identifier" : "UnifiedSearchKit",
           "name" : "UnifiedSearchKit"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/Core",
           "identifier" : "Common",
           "name" : "Common"
         },
         {
-          "containerPath" : "container:..\/BrowserKit",
+          "containerPath" : "container:..\/BrowserKit\/FeatureKits\/QuickAnswersKit",
           "identifier" : "QuickAnswersKit",
           "name" : "QuickAnswersKit"
         },
@@ -154,7 +154,7 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/Core",
         "identifier" : "ActionExtensionKitTests",
         "name" : "ActionExtensionKitTests"
       }
@@ -168,28 +168,28 @@
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/Core",
         "identifier" : "ContentBlockingGeneratorTests",
         "name" : "ContentBlockingGeneratorTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/Components",
         "identifier" : "SiteImageViewTests",
         "name" : "SiteImageViewTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/FeatureKits\/OnboardingKit",
         "identifier" : "OnboardingKitTests",
         "name" : "OnboardingKitTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/FeatureKits\/QuickAnswersKit",
         "identifier" : "QuickAnswersKitTests",
         "name" : "QuickAnswersKitTests"
       }
@@ -203,7 +203,7 @@
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/Core",
         "identifier" : "CommonTests",
         "name" : "CommonTests"
       }
@@ -221,42 +221,42 @@
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/FeatureKits\/ToolbarKit",
         "identifier" : "ToolbarKitTests",
         "name" : "ToolbarKitTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/FeatureKits\/WebCompatReporterKit",
         "identifier" : "WebCompatReporterKitTests",
         "name" : "WebCompatReporterKitTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/FeatureKits\/SummarizeKit",
         "identifier" : "SummarizeKitTests",
         "name" : "SummarizeKitTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/Core",
         "identifier" : "JWTKitTests",
         "name" : "JWTKitTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/Core",
         "identifier" : "WebEngineTests",
         "name" : "WebEngineTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/Core",
         "identifier" : "TabDataStoreTests",
         "name" : "TabDataStoreTests"
       }
@@ -320,21 +320,21 @@
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/Components",
         "identifier" : "ComponentLibraryTests",
         "name" : "ComponentLibraryTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/AppAttestKit",
         "identifier" : "AppAttestKitTests",
         "name" : "AppAttestKitTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/FeatureKits\/MLPAKit",
         "identifier" : "MLPAKitTests",
         "name" : "MLPAKitTests"
       }
@@ -374,21 +374,21 @@
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/FeatureKits\/MenuKit",
         "identifier" : "MenuKitTests",
         "name" : "MenuKitTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/Redux",
         "identifier" : "ReduxTests",
         "name" : "ReduxTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/BrowserKit",
+        "containerPath" : "container:..\/BrowserKit\/FeatureKits\/LLMKit",
         "identifier" : "LLMKitTests",
         "name" : "LLMKitTests"
       }

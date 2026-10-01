@@ -32,7 +32,7 @@
                BlueprintIdentifier = "ActionExtensionKit"
                BuildableName = "ActionExtensionKit"
                BlueprintName = "ActionExtensionKit"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Core">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -46,7 +46,7 @@
                BlueprintIdentifier = "Common"
                BuildableName = "Common"
                BlueprintName = "Common"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Core">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -60,7 +60,7 @@
                BlueprintIdentifier = "ComponentLibrary"
                BuildableName = "ComponentLibrary"
                BlueprintName = "ComponentLibrary"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Components">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -74,7 +74,7 @@
                BlueprintIdentifier = "ContentBlockingGenerator"
                BuildableName = "ContentBlockingGenerator"
                BlueprintName = "ContentBlockingGenerator"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Core">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -88,7 +88,7 @@
                BlueprintIdentifier = "JWTKit"
                BuildableName = "JWTKit"
                BlueprintName = "JWTKit"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Core">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -102,7 +102,7 @@
                BlueprintIdentifier = "MenuKit"
                BuildableName = "MenuKit"
                BlueprintName = "MenuKit"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/FeatureKits/MenuKit">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -116,7 +116,7 @@
                BlueprintIdentifier = "OnboardingKit"
                BuildableName = "OnboardingKit"
                BlueprintName = "OnboardingKit"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/FeatureKits/OnboardingKit">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -130,7 +130,7 @@
                BlueprintIdentifier = "Redux"
                BuildableName = "Redux"
                BlueprintName = "Redux"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Redux">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -144,7 +144,7 @@
                BlueprintIdentifier = "Shared"
                BuildableName = "Shared"
                BlueprintName = "Shared"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Core">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -158,7 +158,7 @@
                BlueprintIdentifier = "SiteImageView"
                BuildableName = "SiteImageView"
                BlueprintName = "SiteImageView"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Components">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -172,7 +172,7 @@
                BlueprintIdentifier = "SummarizeKit"
                BuildableName = "SummarizeKit"
                BlueprintName = "SummarizeKit"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/FeatureKits/SummarizeKit">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -186,7 +186,7 @@
                BlueprintIdentifier = "TabDataStore"
                BuildableName = "TabDataStore"
                BlueprintName = "TabDataStore"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Core">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -200,7 +200,7 @@
                BlueprintIdentifier = "ToolbarKit"
                BuildableName = "ToolbarKit"
                BlueprintName = "ToolbarKit"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/FeatureKits/ToolbarKit">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -214,7 +214,7 @@
                BlueprintIdentifier = "UnifiedSearchKit"
                BuildableName = "UnifiedSearchKit"
                BlueprintName = "UnifiedSearchKit"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/FeatureKits/UnifiedSearchKit">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -228,7 +228,7 @@
                BlueprintIdentifier = "WebEngine"
                BuildableName = "WebEngine"
                BlueprintName = "WebEngine"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Core">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -242,7 +242,7 @@
                BlueprintIdentifier = "WebCompatReporterKit"
                BuildableName = "WebCompatReporterKit"
                BlueprintName = "WebCompatReporterKit"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/FeatureKits/WebCompatReporterKit">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -298,7 +298,7 @@
                BlueprintIdentifier = "QuickAnswersKitTests"
                BuildableName = "QuickAnswersKitTests"
                BlueprintName = "QuickAnswersKitTests"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/FeatureKits/QuickAnswersKit">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -446,126 +446,119 @@
             BlueprintIdentifier = "ActionExtensionKit"
             BuildableName = "ActionExtensionKit"
             BlueprintName = "ActionExtensionKit"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/Core">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "Common"
             BuildableName = "Common"
             BlueprintName = "Common"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/Core">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "ComponentLibrary"
             BuildableName = "ComponentLibrary"
             BlueprintName = "ComponentLibrary"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/Components">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "ContentBlockingGenerator"
             BuildableName = "ContentBlockingGenerator"
             BlueprintName = "ContentBlockingGenerator"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/Core">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "JWTKit"
             BuildableName = "JWTKit"
             BlueprintName = "JWTKit"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/Core">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "MenuKit"
             BuildableName = "MenuKit"
             BlueprintName = "MenuKit"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/FeatureKits/MenuKit">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "OnboardingKit"
             BuildableName = "OnboardingKit"
             BlueprintName = "OnboardingKit"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/FeatureKits/OnboardingKit">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "QuickAnswersKit"
             BuildableName = "QuickAnswersKit"
             BlueprintName = "QuickAnswersKit"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/FeatureKits/QuickAnswersKit">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "Redux"
             BuildableName = "Redux"
             BlueprintName = "Redux"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/Redux">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "Shared"
             BuildableName = "Shared"
             BlueprintName = "Shared"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/Core">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "SiteImageView"
             BuildableName = "SiteImageView"
             BlueprintName = "SiteImageView"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/Components">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "SummarizeKit"
             BuildableName = "SummarizeKit"
             BlueprintName = "SummarizeKit"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/FeatureKits/SummarizeKit">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "TabDataStore"
             BuildableName = "TabDataStore"
             BlueprintName = "TabDataStore"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/Core">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "ToolbarKit"
             BuildableName = "ToolbarKit"
             BlueprintName = "ToolbarKit"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/FeatureKits/ToolbarKit">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "UnifiedSearchKit"
             BuildableName = "UnifiedSearchKit"
             BlueprintName = "UnifiedSearchKit"
-            ReferencedContainer = "container:../BrowserKit">
-         </BuildableReference>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "VoiceSearchKit"
-            BuildableName = "VoiceSearchKit"
-            BlueprintName = "VoiceSearchKit"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/FeatureKits/UnifiedSearchKit">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "WebEngine"
             BuildableName = "WebEngine"
             BlueprintName = "WebEngine"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/Core">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "WebCompatReporterKit"
             BuildableName = "WebCompatReporterKit"
             BlueprintName = "WebCompatReporterKit"
-            ReferencedContainer = "container:../BrowserKit">
+            ReferencedContainer = "container:../BrowserKit/FeatureKits/WebCompatReporterKit">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -754,7 +747,7 @@
                BlueprintIdentifier = "CommonTests"
                BuildableName = "CommonTests"
                BlueprintName = "CommonTests"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Core">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -764,7 +757,7 @@
                BlueprintIdentifier = "SiteImageViewTests"
                BuildableName = "SiteImageViewTests"
                BlueprintName = "SiteImageViewTests"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Components">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -774,7 +767,7 @@
                BlueprintIdentifier = "WebEngineTests"
                BuildableName = "WebEngineTests"
                BlueprintName = "WebEngineTests"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Core">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -784,7 +777,7 @@
                BlueprintIdentifier = "WebCompatReporterKitTests"
                BuildableName = "WebCompatReporterKitTests"
                BlueprintName = "WebCompatReporterKitTests"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/FeatureKits/WebCompatReporterKit">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -794,7 +787,7 @@
                BlueprintIdentifier = "ContentBlockingGeneratorTests"
                BuildableName = "ContentBlockingGeneratorTests"
                BlueprintName = "ContentBlockingGeneratorTests"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Core">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -804,7 +797,7 @@
                BlueprintIdentifier = "TabDataStoreTests"
                BuildableName = "TabDataStoreTests"
                BlueprintName = "TabDataStoreTests"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Core">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -814,7 +807,7 @@
                BlueprintIdentifier = "ReduxTests"
                BuildableName = "ReduxTests"
                BlueprintName = "ReduxTests"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/Redux">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -824,7 +817,7 @@
                BlueprintIdentifier = "QuickAnswersKitTests"
                BuildableName = "QuickAnswersKitTests"
                BlueprintName = "QuickAnswersKitTests"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/FeatureKits/QuickAnswersKit">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -834,7 +827,7 @@
                BlueprintIdentifier = "ToolbarKitTests"
                BuildableName = "ToolbarKitTests"
                BlueprintName = "ToolbarKitTests"
-               ReferencedContainer = "container:../BrowserKit">
+               ReferencedContainer = "container:../BrowserKit/FeatureKits/ToolbarKit">
             </BuildableReference>
          </TestableReference>
          <TestableReference

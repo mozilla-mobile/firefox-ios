@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths: # Only runs on changes to BrowserKit files
-      - BrowserKit/Sources/ComponentLibrary/**
+      - BrowserKit/Components/Sources/ComponentLibrary/**
       - .github/workflows/firefox-ios-publish-docc.yml
 
 permissions:

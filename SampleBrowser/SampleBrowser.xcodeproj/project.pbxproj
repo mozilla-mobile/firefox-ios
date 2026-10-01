@@ -68,7 +68,6 @@
 		1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAdsTrackerDefinitions.swift; sourceTree = "<group>"; };
 		21AE784E2D8B4AE6002FDC9E /* DependencyHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyHelper.swift; sourceTree = "<group>"; };
 		8A0687602B6D9F990031427A /* SettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDelegate.swift; sourceTree = "<group>"; };
-		8A0F44682B56ECBF00438589 /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BrowserKit; path = ../BrowserKit; sourceTree = "<group>"; };
 		8A0F446A2B56EDC900438589 /* EngineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineProvider.swift; sourceTree = "<group>"; };
 		8A0F44702B56FD3600438589 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		8A0F44722B56FD4500438589 /* SuggestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionViewController.swift; sourceTree = "<group>"; };
@@ -113,6 +112,13 @@
 		E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainerModel.swift; sourceTree = "<group>"; };
 		E1F816B02BCEBB940043E2E0 /* NavigationToolbarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationToolbarContainer.swift; sourceTree = "<group>"; };
 		E1F816B22BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationToolbarContainerModel.swift; sourceTree = "<group>"; };
+		8B2497F09E58A7C6D798ABBC /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = Core; sourceTree = "<group>"; };
+		83EB7A4F214049FFA50AE115 /* Components */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Components; path = Components; sourceTree = "<group>"; };
+		5A91D229CB4692F5CC7D3ACC /* AppAttestKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = AppAttestKit; path = AppAttestKit; sourceTree = "<group>"; };
+		CD6B94C1C621858C5B689A10 /* ToolbarKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ToolbarKit; path = FeatureKits/ToolbarKit; sourceTree = "<group>"; };
+		C81D28CF0282A3C384E3F334 /* SummarizeKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SummarizeKit; path = FeatureKits/SummarizeKit; sourceTree = "<group>"; };
+		24EAF6415098BCDF3A87E3D2 /* LLMKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = LLMKit; path = FeatureKits/LLMKit; sourceTree = "<group>"; };
+		0C1A90A9A4598219D55191C0 /* MLPAKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MLPAKit; path = FeatureKits/MLPAKit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +134,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A0F44682B56ECBF00438589 /* BrowserKit */ = {
+			isa = PBXGroup;
+			children = (
+				8B2497F09E58A7C6D798ABBC /* Core */,
+				83EB7A4F214049FFA50AE115 /* Components */,
+				5A91D229CB4692F5CC7D3ACC /* AppAttestKit */,
+				CD6B94C1C621858C5B689A10 /* ToolbarKit */,
+				C81D28CF0282A3C384E3F334 /* SummarizeKit */,
+				24EAF6415098BCDF3A87E3D2 /* LLMKit */,
+				0C1A90A9A4598219D55191C0 /* MLPAKit */,
+			);
+			name = BrowserKit;
+			path = ../BrowserKit;
+			sourceTree = "<group>";
+		};
 		21AE784F2D8B4AE6002FDC9E /* Dependency */ = {
 			isa = PBXGroup;
 			children = (

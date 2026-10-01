@@ -702,7 +702,6 @@
 		840057572735309500E48144 /* SettingsTableViewToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewToggleCell.swift; sourceTree = "<group>"; };
 		8400575927353B1800E48144 /* UIPasteBoardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPasteBoardExtensions.swift; sourceTree = "<group>"; };
 		846A23172668CC4500DB3C37 /* FullScreen.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FullScreen.js; sourceTree = "<group>"; };
-		8A0E7F2B2BA0F0C2006BC6B6 /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BrowserKit; path = ../BrowserKit; sourceTree = "<group>"; };
 		8A6445842BA38B8600759319 /* web-fonts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "web-fonts.json"; sourceTree = "<group>"; };
 		8A6445862BA3904100759319 /* disconnect-block-analytics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-analytics.json"; path = "../../ContentBlockingLists/disconnect-block-analytics.json"; sourceTree = "<group>"; };
 		8A6445872BA3904100759319 /* disconnect-block-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-social.json"; path = "../../ContentBlockingLists/disconnect-block-social.json"; sourceTree = "<group>"; };
@@ -1262,6 +1261,7 @@
 		F8E4E8C027444A6900A97CCD /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tt; path = tt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F8E4E8C227444A6900A97CCD /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tt; path = tt.lproj/Intro.strings; sourceTree = "<group>"; };
 		F8E4E8C327444A6900A97CCD /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tt; path = tt.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5DF52942BAC0D7DD4D351070 /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = Core; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1347,6 +1347,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A0E7F2B2BA0F0C2006BC6B6 /* BrowserKit */ = {
+			isa = PBXGroup;
+			children = (
+				5DF52942BAC0D7DD4D351070 /* Core */,
+			);
+			name = BrowserKit;
+			path = ../BrowserKit;
+			sourceTree = "<group>";
+		};
 		0BA39A841DD2B8E4005F970A /* XCUITest */ = {
 			isa = PBXGroup;
 			children = (

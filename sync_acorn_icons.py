@@ -201,7 +201,7 @@ public struct StandardImageIdentifiers {
     swift_file_content += "\n".join(struct_blocks)
     swift_file_content += "}\n"
 
-    standard_image_file_path = "BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift"
+    standard_image_file_path = "BrowserKit/Core/Sources/Common/Constants/StandardImageIdentifiers.swift"
     with open(standard_image_file_path, "w") as swift_file:
         swift_file.write(swift_file_content)
 

@@ -8,7 +8,7 @@ import Foundation
 
 /// Reference at https://danger.systems/swift/reference.html
 let danger = Danger()
-let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift"
+let standardImageIdentifiersPath = "./BrowserKit/Core/Sources/Common/Constants/StandardImageIdentifiers.swift"
 
 let releaseCheck = ReleaseBranchCheck()
 if releaseCheck.isReleaseBranch {

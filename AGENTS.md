@@ -11,7 +11,12 @@ This is a monorepo containing three main projects:
 
 - `firefox-ios/` - Firefox for iOS (main app, scheme: `Fennec`)
 - `focus-ios/` - Firefox Focus for iOS (scheme: `Focus`)
-- `BrowserKit/` - Shared Swift Package mostly used in Firefox
+- `BrowserKit/` - Shared Swift Packages mostly used in Firefox:
+  - `Core/` - Common, Shared, TabDataStore, WebEngine, JWTKit, ContentBlockingGenerator, ActionExtensionKit, TestKit
+  - `Components/` - ComponentLibrary, SiteImageView
+  - `Redux/` - Redux, ReduxTestKit
+  - `AppAttestKit/` - AppAttestKit, AppAttestTestKit
+  - `FeatureKits/<Kit>/` - one package per feature kit (ToolbarKit, MenuKit, SummarizeKit, ...)
 
 ## Common Commands
 

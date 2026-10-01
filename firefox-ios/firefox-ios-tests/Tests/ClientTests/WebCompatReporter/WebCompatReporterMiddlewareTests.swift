@@ -5,6 +5,7 @@
 import Common
 import Glean
 import Redux
+import ReduxTestKit
 import TestKit
 import XCTest
 

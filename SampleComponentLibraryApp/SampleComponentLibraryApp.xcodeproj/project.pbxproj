@@ -54,7 +54,6 @@
 		8A6EE0962A5730A100B4D401 /* ComponentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentData.swift; sourceTree = "<group>"; };
 		8A6EE0982A5730FA00B4D401 /* ComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentViewModel.swift; sourceTree = "<group>"; };
 		8A6EE09A2A57317200B4D401 /* ComponentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentCell.swift; sourceTree = "<group>"; };
-		8A6EE09C2A574E3700B4D401 /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BrowserKit; path = ../BrowserKit; sourceTree = "<group>"; };
 		8A6EE0A42A58642500B4D401 /* ComponentDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentDataSource.swift; sourceTree = "<group>"; };
 		8A6EE0A72A58659900B4D401 /* FadeScrollViewComponentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FadeScrollViewComponentViewModel.swift; sourceTree = "<group>"; };
 		8A6EE0A92A5866C300B4D401 /* ComponentDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentDelegate.swift; sourceTree = "<group>"; };
@@ -70,6 +69,8 @@
 		E19891C72A790AB700CD256D /* CollapsibleCardViewComponentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapsibleCardViewComponentViewModel.swift; sourceTree = "<group>"; };
 		E1E0E86F2A850479003D847E /* ShadowCardViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowCardViewViewController.swift; sourceTree = "<group>"; };
 		E1E0E8702A850479003D847E /* ShadowCardViewComponentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowCardViewComponentViewModel.swift; sourceTree = "<group>"; };
+		18DB3439D7AFC63E4F1B4B2D /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = Core; sourceTree = "<group>"; };
+		294E4196176581CD77E49FA3 /* Components */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Components; path = Components; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +85,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A6EE09C2A574E3700B4D401 /* BrowserKit */ = {
+			isa = PBXGroup;
+			children = (
+				18DB3439D7AFC63E4F1B4B2D /* Core */,
+				294E4196176581CD77E49FA3 /* Components */,
+			);
+			name = BrowserKit;
+			path = ../BrowserKit;
+			sourceTree = "<group>";
+		};
 		0ACC667E2D3FA2AA00DA742D /* Headers */ = {
 			isa = PBXGroup;
 			children = (

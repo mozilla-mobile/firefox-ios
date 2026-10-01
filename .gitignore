@@ -152,3 +152,7 @@ LicensePlistTemp
 # Claude Code
 .claude/settings.local.json
 .mcp.json
+# BrowserKit packages that only depend on other local packages don't track their own Package.resolved
+BrowserKit/Redux/Package.resolved
+BrowserKit/AppAttestKit/Package.resolved
+BrowserKit/FeatureKits/*/Package.resolved
