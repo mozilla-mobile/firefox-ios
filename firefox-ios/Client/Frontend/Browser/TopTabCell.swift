@@ -79,10 +79,11 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         isSelectedTab = selected
         windowUUID = tab.windowUUID
 
-        titleText.text = tab.getTabTrayTitle()
-        accessibilityLabel = getA11yTitleLabel(tab: tab)
+        let title = tab.getTabTrayTitle()
+        titleText.text = title
+        accessibilityLabel = getA11yTitleLabel(title: title)
         showsLargeContentViewer = true
-        largeContentTitle = tab.getTabTrayTitle()
+        largeContentTitle = title
 
         closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel,
                                                 self.titleText.text ?? "")
@@ -193,10 +194,8 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         clipsToBounds = false
     }
 
-    func getA11yTitleLabel(tab: Tab) -> String? {
-        let baseName = tab.getTabTrayTitle()
-
-        if isSelectedTab, !tab.getTabTrayTitle().isEmpty {
+    func getA11yTitleLabel(title baseName: String) -> String? {
+        if isSelectedTab, !baseName.isEmpty {
             return baseName + ". " + String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else if isSelectedTab {
             return String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel
