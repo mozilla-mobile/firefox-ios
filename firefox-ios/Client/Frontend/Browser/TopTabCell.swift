@@ -194,7 +194,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         clipsToBounds = false
     }
 
-    func getA11yTitleLabel(title baseName: String) -> String? {
+    private func getA11yTitleLabel(title baseName: String) -> String? {
         if isSelectedTab, !baseName.isEmpty {
             return baseName + ". " + String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else if isSelectedTab {
