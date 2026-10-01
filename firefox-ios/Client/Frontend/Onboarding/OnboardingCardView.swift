@@ -8,6 +8,16 @@ import Common
 
 /// View that presents the day's onboarding cards
 struct OnboardingFlowView: View {
+    private struct UX {
+        static let bodyPadding: CGFloat = 0
+        static let radialGradientCentre = UnitPoint(x: 0.9, y: 0.1)
+        static let radialGradientStartRadius: CGFloat = 0
+        static let radialGradientEndRadius: CGFloat = 200
+        static let radialGadientOrangeOpacity: CGFloat = 0.28
+        static let linearGradientYellowOpacity: CGFloat = 0.25
+        static let linearGradientPurpleOpacity: CGFloat = 0.2
+    }
+
     private let cards: [OnboardingCard]
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
@@ -50,16 +60,15 @@ struct OnboardingFlowView: View {
                 onPrimary: { perform(card.primaryButtonAction) },
                 onSecondary: secondaryAction
             )
-        }.padding(0)
+        }.padding(UX.bodyPadding)
     }
 
     private var gradient: some View {
         let colors = gradientColors(for: themeManager.getCurrentTheme(for: windowUUID))
-        let center = UnitPoint(x: 0.9, y: 0.1)
         let radialGradient = RadialGradient(colors: [colors[2], .white.opacity(0)],
-                                            center: center,
-                                            startRadius: 0,
-                                            endRadius: 200)
+                                            center: UX.radialGradientCentre,
+                                            startRadius: UX.radialGradientStartRadius,
+                                            endRadius: UX.radialGradientEndRadius)
 
         let linearGradient = LinearGradient(colors: Array(colors[0...1]),
                                             startPoint: .topLeading,
@@ -74,7 +83,7 @@ struct OnboardingFlowView: View {
         guard !theme.isNova else {
             let gradient = theme.colors.gradientAccentSubtle.colors
             let isDark = theme.type == .dark
-            let orange = theme.colors.gradientAIStrongStop3.color.opacity(0.28)
+            let orange = theme.colors.gradientAIStrongStop3.color.opacity(UX.radialGadientOrangeOpacity)
             if isDark {
                 return [Color(gradient[0]), Color(gradient[1]).opacity(0), orange]
             }
@@ -82,10 +91,10 @@ struct OnboardingFlowView: View {
         }
 
         let isDark = theme.type == .dark
-        let yellowOpacity = isDark ? 0.0 : 0.25
+        let yellowOpacity = isDark ? 0.0 : UX.linearGradientYellowOpacity
         let yellow = theme.colors.gradientAIStrongStop3.color.opacity(yellowOpacity)
-        let purple = theme.colors.gradientAIStrongStop1.color.opacity(0.2)
-        let orange = theme.colors.gradientOnboardingStop4.color.opacity(0.28)
+        let purple = theme.colors.gradientAIStrongStop1.color.opacity(UX.linearGradientPurpleOpacity)
+        let orange = theme.colors.gradientOnboardingStop4.color.opacity(UX.radialGadientOrangeOpacity)
         return [purple, yellow, orange]
     }
 
@@ -104,6 +113,10 @@ struct OnboardingFlowView: View {
 }
 
 struct OnboardingCardView: View {
+    private struct UX {
+        static let maxImageHeight: CGFloat = 500
+        static let titleLineSpacing: CGFloat = 2
+    }
     private let card: OnboardingCard
     private let theme: Theme
     private let onPrimary: () -> Void
@@ -144,7 +157,7 @@ struct OnboardingCardView: View {
             Image(uiImage: uiImage)
                 .resizable()
                 .scaledToFit()
-                .frame(maxHeight: 500)
+                .frame(maxHeight: UX.maxImageHeight)
                 .accessibilityHidden(true)
         }
     }
@@ -154,7 +167,7 @@ struct OnboardingCardView: View {
             .font(FXFontStyles.Bold.largeTitle.scaledSwiftUIFont())
             .foregroundColor(theme.colors.textPrimary.color)
             .multilineTextAlignment(.center)
-            .lineSpacing(2)
+            .lineSpacing(UX.titleLineSpacing)
             .fixedSize(horizontal: false, vertical: true)
             .accessibility(addTraits: .isHeader)
             .padding([.leading, .trailing], 56)
@@ -185,7 +198,6 @@ struct OnboardingCardView: View {
                 .font(FXFontStyles.Bold.callout.scaledSwiftUIFont())
                 .foregroundColor(theme.colors.textInverted.color)
                 .frame(maxWidth: .infinity)
-                .clipShape(RoundedRectangle(cornerRadius: 50))
                 .padding([.top, .bottom], 14)
                 .padding([.leading, .trailing], 0)
         }
