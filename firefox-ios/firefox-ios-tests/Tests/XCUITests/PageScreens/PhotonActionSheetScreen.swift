@@ -52,6 +52,101 @@ final class PhotonActionSheetScreen {
         assertShareViewLoaded()
     }
 
+    func assertShareSheetExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.ACTIVITY_LIST_VIEW.element(in: app), timeout: timeout)
+    }
+
+    func assertShareSheetDismissed(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(sel.ACTIVITY_LIST_VIEW.element(in: app), timeout: timeout)
+    }
+
+    /// Asserts the share sheet header names the shared document. The header caption carries the file
+    /// name without its extension, which is how a shared file is distinguished from a shared page.
+    func assertShareSheetDocumentName(_ name: String, timeout: TimeInterval = TIMEOUT) {
+        let caption = headerCaption(sel.SHARE_SHEET_TOP_CAPTION, index: 0, timeout: timeout)
+        XCTAssertEqual(caption, name, "The share sheet should name the document currently displayed")
+    }
+
+    func assertShareSheetDocumentNameIsNot(_ name: String, timeout: TimeInterval = TIMEOUT) {
+        let caption = headerCaption(sel.SHARE_SHEET_TOP_CAPTION, index: 0, timeout: timeout)
+        XCTAssertNotEqual(caption, name, "The share sheet should not still name a previously shared document")
+    }
+
+    /// Asserts the sheet offers the document as a PDF file rather than as a web page link.
+    func assertShareSheetOffersPdfDocument(timeout: TimeInterval = TIMEOUT) {
+        let caption = headerCaption(sel.SHARE_SHEET_BOTTOM_CAPTION, index: 1, timeout: timeout)
+        XCTAssertTrue(
+            caption?.contains("PDF") == true,
+            "The share sheet should describe the shared item as a PDF document, found: \(caption ?? "nil")"
+        )
+    }
+
+    /// Reads a share sheet header caption. iOS 26 tags captions with `selector`'s identifier; older iOS
+    /// leaves them untagged, so fall back to the header's `index`-th labelled leaf (name, then kind and size).
+    private func headerCaption(_ selector: Selector, index: Int, timeout: TimeInterval) -> String? {
+        let taggedCaption = selector.element(in: app)
+        let header = sel.SHARE_SHEET_HEADER.element(in: app)
+        let deadline = Date().addingTimeInterval(timeout)
+        repeat {
+            if taggedCaption.exists { return taggedCaption.label }
+            if header.exists, let snapshot = try? header.snapshot() {
+                let captions = labelledLeaves(of: snapshot)
+                if captions.count > index { return captions[index] }
+            }
+            usleep(100_000)
+        } while Date() < deadline
+        XCTFail("Timed out waiting for share sheet header caption \(index) in \(timeout) seconds")
+        return nil
+    }
+
+    private func labelledLeaves(of snapshot: XCUIElementSnapshot) -> [String] {
+        guard !snapshot.children.isEmpty else {
+            return snapshot.elementType == .other && !snapshot.label.isEmpty ? [snapshot.label] : []
+        }
+        return snapshot.children.flatMap { labelledLeaves(of: $0) }
+    }
+
+    /// Completing an activity does not always tear the sheet down with it, so close it when it is
+    /// still on screen and leave the browser interactive again.
+    func dismissShareSheetIfPresented(attempts: Int = 3) {
+        let sheet = sel.ACTIVITY_LIST_VIEW.element(in: app)
+        for _ in 0..<attempts {
+            // The sheet usually closes itself shortly after the activity; tapping its dismiss
+            // region mid-teardown races with it, so only step in once it has settled on screen.
+            if BaseTestCase().mozWaitForElementToNotExist(sheet, timeout: TIMEOUT, failOnTimeout: false) { return }
+            // The sheet can linger in the hierarchy after it has gone; stop once no control is left.
+            guard dismissShareSheet() else { return }
+        }
+    }
+
+    /// Dismisses the system share sheet. The collapsed sheet is a popover carrying only a dismiss
+    /// region; a Close button appears once it is expanded, and older iOS shows Done instead, which on
+    /// iPad sits behind a popover that needs a forced tap.
+    /// Returns whether a dismiss control was found and tapped.
+    @discardableResult
+    func dismissShareSheet() -> Bool {
+        // On iOS 26 the dismiss region is present whether the sheet is collapsed or expanded, and unlike
+        // the header's Close button it tears the sheet down in both states.
+        let dismissRegion = sel.SHARE_SHEET_DISMISS_REGION.element(in: app)
+        let close = sel.SHARE_SHEET_CLOSE_BUTTON.element(in: app)
+        // Older iOS centres the region on the sheet itself, so tapping it lands on the sheet instead.
+        var controls = [dismissRegion, close]
+        if #unavailable(iOS 26) { controls.reverse() }
+        for control in controls
+        where control.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) {
+            control.waitAndTap()
+            return true
+        }
+        let done = sel.SHARE_SHEET_DONE_BUTTON.element(in: app)
+        guard done.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) else { return false }
+        if BaseTestCase().iPad() {
+            done.tap(force: true)
+        } else {
+            done.waitAndTap()
+        }
+        return true
+    }
+
     func assertShareViewExists(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().waitForElementsToExist(
             [

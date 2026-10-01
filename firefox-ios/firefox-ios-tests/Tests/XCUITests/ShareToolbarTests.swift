@@ -9,7 +9,34 @@ import Common
 let sendLinkMsg1 = "You are not signed in to your account."
 let sendLinkMsg2 = "Please open Firefox, go to Settings and sign in to continue."
 
+let saveToFilesOption = "Save to Files"
+// The share sheet names a shared file by its file name; the picker pre-fills the name without extension.
+let pdfTestPdfName = PDF_website["tabTitle"]!
+let loremIpsumPdfName = PDF_website["secondTabTitle"]!
+let pdfTestPdfBaseName = (pdfTestPdfName as NSString).deletingPathExtension
+let loremIpsumPdfBaseName = (loremIpsumPdfName as NSString).deletingPathExtension
+
 class ShareToolbarTests: FeatureFlaggedTestBase {
+    private var browser: BrowserScreen!
+    private var toolbar: ToolbarScreen!
+    private var shareSheet: PhotonActionSheetScreen!
+    private var documentPicker: DocumentPickerScreen!
+    private var history: HistoryScreen!
+    private var downloads: DownloadsScreen!
+    private var tabTray: TabTrayScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+
+        browser = BrowserScreen(app: app)
+        toolbar = ToolbarScreen(app: app)
+        shareSheet = PhotonActionSheetScreen(app: app)
+        documentPicker = DocumentPickerScreen(app: app)
+        history = HistoryScreen(app: app)
+        downloads = DownloadsScreen(app: app)
+        tabTray = TabTrayScreen(app: app)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2864270
     func testShareNormalWebsiteTabReminders() {
         app.launch()
@@ -149,23 +176,117 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     func testSharePdfFileSaveToFile() {
         app.launch()
         if #available(iOS 17, *) {
-            tapToolbarShareButtonAndSelectOption(option: "Save to Files", url: pdfUrl)
-            // Anchor on the Files picker's own Save button rather than a location label such as
-            // "On My iPhone": the picker opens on whichever location was last used (iCloud Drive,
-            // On My iPhone, …), so the label is not reliably present, whereas Save always is.
-            // The share-sheet tap does not always open the picker on CI, so re-tap it if needed.
-            let saveButton = app.buttons["Save"]
-            var attempts = 2
-            while !saveButton.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) && attempts > 0 {
-                let saveToFilesCell = app.collectionViews.cells["Save to Files"]
-                guard saveToFilesCell.exists else { break }
-                saveToFilesCell.tapOnApp()
-                attempts -= 1
-            }
-            mozWaitForElementToExist(saveButton, timeout: TIMEOUT_LONG)
-            saveButton.waitAndTap()
+            openShareSheetFromToolbar(url: pdfUrl)
+            openSaveToFilesPicker()
+            documentPicker.save()
             waitForTabsButton()
         }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4381151
+    // Smoketest
+    func testSavePdfToFilesOffersTheDocumentAndKeepsBothCopies() {
+        app.launch()
+        guard #available(iOS 17, *) else { return }
+
+        openShareSheetFromToolbar(url: pdfUrl)
+        shareSheet.assertShareSheetDocumentName(loremIpsumPdfBaseName)
+        shareSheet.assertShareSheetOffersPdfDocument()
+        saveCurrentDocumentToFiles(named: loremIpsumPdfBaseName)
+
+        // Saving the same document a second time succeeds: iOS keeps both copies rather than failing
+        toolbar.tapShareButton()
+        saveCurrentDocumentToFiles(named: loremIpsumPdfBaseName)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4381155
+    // Regression
+    func testSharingPdfRepeatedlyAndAcrossDocumentsNeverOffersAStaleFile() {
+        app.launch()
+        guard #available(iOS 17, *) else { return }
+
+        openShareSheetFromToolbar(url: PDF_website["url"]!)
+        assertShareSheetNamesDocumentThenDismiss(pdfTestPdfBaseName)
+
+        // Reopening the sheet keeps naming the same document, with no duplicated sheet left behind
+        for _ in 1...2 {
+            toolbar.tapShareButton()
+            assertShareSheetNamesDocumentThenDismiss(pdfTestPdfBaseName)
+        }
+
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(PDF_website["secondUrl"]!)
+        waitUntilPageLoad()
+
+        toolbar.tapShareButton()
+        shareSheet.assertShareSheetDocumentName(loremIpsumPdfBaseName)
+        shareSheet.assertShareSheetOffersPdfDocument()
+        shareSheet.assertShareSheetDocumentNameIsNot(pdfTestPdfBaseName)
+
+        // The picker offers the document now on screen, not a stale temporary file from the first share
+        saveCurrentDocumentToFiles(named: loremIpsumPdfBaseName)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4381157
+    // Regression
+    func testSharePdfInPrivateBrowsingLeavesNoResidue() {
+        app.launch()
+        guard #available(iOS 17, *) else { return }
+
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        if userState.isPrivate {
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+            navigator.nowAt(BrowserTab)
+        }
+
+        navigator.openURL(pdfUrl)
+        waitUntilPageLoad()
+        browser.assertAddressBarContains(value: PDF_website["pdfValue"]!, timeout: PDF_TIMEOUT)
+
+        // An explicit user-initiated save is allowed in a Private tab
+        toolbar.tapShareButton()
+        shareSheet.assertShareSheetDocumentName(loremIpsumPdfBaseName)
+        shareSheet.assertShareSheetOffersPdfDocument()
+        saveCurrentDocumentToFiles(named: loremIpsumPdfBaseName)
+
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTray.closeFirstTab()
+        browser.assertPrivateBrowsingLabelExist()
+
+        // Return to the regular tab opened at launch rather than closing all tabs to reach the homepage
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        tabTray.tapTabAtIndex(index: 0)
+        navigator.nowAt(NewTabScreen)
+
+        // The private session leaves neither a history entry nor an in-app download entry
+        navigator.goto(LibraryPanel_History)
+        history.waitForHistoryEntriesNotExist([loremIpsumPdfName])
+        navigator.goto(LibraryPanel_Downloads)
+        downloads.assertNumberOfDownloadedItems(expectedCount: 0)
+    }
+
+    /// Asserts the open share sheet names the given document, then closes it and waits for it to go.
+    private func assertShareSheetNamesDocumentThenDismiss(_ documentName: String) {
+        shareSheet.assertShareSheetDocumentName(documentName)
+        shareSheet.dismissShareSheet()
+        shareSheet.assertShareSheetDismissed()
+    }
+
+    /// Saves the document behind the open share sheet, asserting the picker offers it by name, and
+    /// waits until the picker has gone and the rendered PDF is back.
+    private func saveCurrentDocumentToFiles(named baseName: String) {
+        openSaveToFilesPicker()
+        documentPicker.assertFileNameIsPrefilled(baseName)
+        documentPicker.save()
+        documentPicker.assertDismissed()
+        shareSheet.dismissShareSheetIfPresented()
+        // The toolbar is only hittable once the sheet is really gone, so this proves the save
+        // returned to the rendered PDF rather than leaving the sheet on screen.
+        toolbar.assertToolbarIsVisible()
+        browser.assertAddressBarContains(value: PDF_website["pdfValue"]!, timeout: PDF_TIMEOUT)
     }
 
     private func validatePrintLayout() {
@@ -219,6 +340,11 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     }
 
     private func tapToolbarShareButtonAndSelectOption(option: String, url: String = url_3) {
+        openShareSheetFromToolbar(url: url)
+        selectShareSheetOption(option)
+    }
+
+    private func openShareSheetFromToolbar(url: String = url_3) {
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
@@ -226,7 +352,35 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         navigator.openURL(url)
         waitUntilPageLoad()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
-        selectShareSheetOption(option)
+    }
+
+    /// Reveals the activities hidden behind the share sheet's expander, which is a "View More"
+    /// scroll-view cell on some iOS versions and a "More" action cell on others.
+    private func expandShareSheetActions() {
+        let viewMore = app.scrollViews.cells["View More"]
+        if viewMore.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) {
+            viewMore.waitAndTap(timeout: 10)
+            return
+        }
+        app.collectionViews.cells
+            .matching(NSPredicate(format: "identifier == %@ AND label == %@", "actionGroupCell", "More"))
+            .firstMatch
+            .waitAndTap(timeout: 10)
+    }
+
+    /// Selects Save to Files from the open share sheet and waits for the document picker.
+    /// The share-sheet tap does not always open the picker on CI, so re-tap it when it doesn't.
+    private func openSaveToFilesPicker() {
+        selectShareSheetOption(saveToFilesOption)
+        let saveButton = app.buttons["Save"]
+        var attempts = 2
+        while !saveButton.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) && attempts > 0 {
+            let saveToFilesCell = app.collectionViews.cells[saveToFilesOption]
+            guard saveToFilesCell.exists else { break }
+            saveToFilesCell.tapOnApp()
+            attempts -= 1
+        }
+        documentPicker.assertOpened()
     }
 
     /// Selects `option` from the system share sheet, expanding via "View More" only when needed.
@@ -239,7 +393,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         if #available(iOS 26, *) {
             let optionCell = app.collectionViews.cells[option]
             if !optionCell.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
-                app.scrollViews.cells["View More"].waitAndTap(timeout: 10)
+                expandShareSheetActions()
             }
         }
         if #available(iOS 16, *) {
