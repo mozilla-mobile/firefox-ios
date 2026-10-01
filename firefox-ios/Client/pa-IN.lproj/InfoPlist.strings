@@ -22,6 +22,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "ਇਹ ਤੁਹਾਨੂੰ ਫ਼ੋਟੋ ਸੰਭਾਲਣ ਦਿੰਦਾ ਹੈ।";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "ਇਹ Firefox ਨੂੰ ਤੁਹਾਡੀ ਆਡੀਓ ਨੂੰ ਟਰਾਂਸਕਰਾਈਬ ਕਰਨ ਦਿੰਦਾ ਹੈ।";
+
 /* (No Comment) */
 "Scan QR Code" = "QR ਕੋਡ ਸਕੈਨ ਕਰੋ";
 

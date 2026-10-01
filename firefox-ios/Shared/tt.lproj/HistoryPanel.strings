@@ -10,3 +10,6 @@
 /* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
 "LibraryPanel.History.LastTwentyFourHoursOption.v138" = "Соңгы 24 сәгать";
 
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "Тарихны (башка җиһазлардан синхронланган тарихны да кертеп), кукиларны һәм башка гизү мәгълүматларын бетерә.";
+

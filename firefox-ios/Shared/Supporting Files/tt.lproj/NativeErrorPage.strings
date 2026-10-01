@@ -1,11 +1,20 @@
 /* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
 "NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "Киңәйтелгән";
 
+/* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
+"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Хата коды: %@";
+
 /* On certificate error page, this is a link to learn more about certificate errors. */
 "NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "Күбрәк белү";
 
+/* On certificate error page, this is the title warning the user about a potential security issue. */
+"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "Сак булыгыз. Нәрсәдер дөрес түгел монда.";
+
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Яңарту";
+
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v155" = "Янәдән тырышып карау";
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Сак булыгыз. Нәрсәдер дөрес түгел монда.";
@@ -15,4 +24,16 @@
 
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Интернетка бәйләнешегездә проблема бар кебек.";
+
+/* The tappable link text within the Wayback footer description, opens web.archive.org. */
+"NativeErrorPage.Wayback.Error.LinkText.v155" = "Wayback Machine";
+
+/* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
+"NativeErrorPage.Wayback.Error.Retry.v154" = "Кабатлау";
+
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
+"NativeErrorPage.Wayback.Error.Search.v155" = "Интернетта эзләү";
+
+/* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
+"NativeErrorPage.Wayback.Error.Title.v154" = "Тоташып булмады";
 

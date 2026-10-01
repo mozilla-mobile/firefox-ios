@@ -61,6 +61,9 @@
 /* Settings section title for the old Firefox account */
 "FxA.FirefoxAccount.v119" = "Hesap";
 
+/* Label of the toggle that enables or disables the Quick Answers feature on the Quick Answers settings screen. */
+"QuickAnswers.Settings.EnableQuickAnswers.v158" = "Hızlı cevapları etkinleştir";
+
 /* Link button on the Quick Answers settings screen that opens more information about the feature. */
 "QuickAnswers.Settings.LearnMore.v158" = "Daha fazla bilgi al";
 
@@ -69,6 +72,9 @@
 
 /* Status text shown next to the Quick Answers row in the general settings when the feature is enabled. */
 "QuickAnswers.Settings.StatusOn.v158" = "Açık";
+
+/* Title shown in the navigation bar and as the toggle label on the Quick Answers settings screen. */
+"QuickAnswers.Settings.Title.v158" = "Hızlı cevaplar";
 
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Adresler";
