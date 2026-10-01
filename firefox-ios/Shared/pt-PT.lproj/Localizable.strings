@@ -1496,7 +1496,7 @@
 "Settings.Studies.Toggle.Title" = "Estudos";
 
 /* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
-"Settings.Sync.ButtonDescription.v103" = "Inicie sessão para sincronizar os separadores, marcadores, palavras-passe e mais.";
+"Settings.Sync.ButtonDescription.v103" = "Inicie sessão para sincronizar os separadores, marcadores, palavras-passe, e muito mais.";
 
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
 "Settings.Sync.ButtonTitle.v103" = "Sincronizar e guardar dados";

@@ -38,11 +38,11 @@
 "DefaultBrowserOnboarding.Description3" = "3. ជ្រើសរើស Firefox";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
-"DefaultBrowserOnboarding.Screenshot" = "កម្មវិធី​រុករក​តាម​អ៊ីនធឺណិត​លំនាំដើម";
+"DefaultBrowserOnboarding.Screenshot" = "កម្មវិធីការីច្បោលបុរេជម្រើស";
 
 /* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
 "DefaultBrowserOnboarding.SkipButton" = "ខ្ញុំនឹងធ្វើវានៅពេលក្រោយ";
 
 /* Menu option for setting Firefox as default browser. */
-"Settings.DefaultBrowserMenuItem" = "កំណត់​ជា​កម្មវិធី​រុករក​តាម​អ៊ីនធឺណិត​លំនាំដើម";
+"Settings.DefaultBrowserMenuItem" = "កំណត់ជាការីច្បោលបុរេជម្រើស";
 

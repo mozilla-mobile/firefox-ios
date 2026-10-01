@@ -55,3 +55,6 @@
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the section heading shown for all other miscellaneous variants of the app icon (like hand drawn or retro versions). */
 "Settings.AppIconSelection.SectionNames.More.Title.v139" = "Күбрәк";
 
+/* On the Settings screen, the name of the row that opens app icon selection options. */
+"Settings.AppIconSelection.SettingsOptionName.v136" = "Кушымта логотибы";
+

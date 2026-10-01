@@ -4,17 +4,29 @@
 /* Accessibility label for the button on the homepage that opens the Quick Answers feature. */
 "QuickAnswers.AccessibilityLabels.OpenQuickAnswers.v158" = "Abrir respuestas rápidas";
 
+/* Link shown in the footer of the Quick Answers view - when tapped, it opens a privacy banner explaining how the feature handles user data. */
+"QuickAnswers.ContentView.AboutYourPrivacy.v158" = "Acerca de tu privacidad";
+
 /* Loading label shown in the Quick Answers view while an answer is being fetched. */
 "QuickAnswers.ContentView.Answering.v158" = "Respondiendo…";
 
 /* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
 "QuickAnswers.ContentView.Footer.v158" = "Desarrollado por %@ · Las respuestas pueden contener errores.";
 
+/* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak. */
+"QuickAnswers.ContentView.Listening.v158" = "Escuchando, pregunta lo que quieras…";
+
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "Pregunta cualquier cosa…";
 
+/* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
+"QuickAnswers.ContentView.SearchingSources.v158" = "Buscando fuentes…";
+
 /* Header label for the sources section shown below a Quick Answers result. */
 "QuickAnswers.ContentView.Sources.v158" = "Fuentes";
+
+/* Loading label shown in the Quick Answers view while the question is being processed. */
+"QuickAnswers.ContentView.Thinking.v158" = "Pensando…";
 
 /* Button label on the Quick Answers permission alert to dismiss the alert without taking action. */
 "QuickAnswers.Errors.Cancel.v158" = "Cancelar";
@@ -46,6 +58,9 @@
 /* Message shown in the permission alert when speech recognition access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox). */
 "QuickAnswers.Errors.SpeechRecognitionPermissionMessage.v158" = "Permitir que %@ acceda al reconocimiento de voz.";
 
+/* Link text that opens more information about how Quick Answers works and how it uses your data. */
+"QuickAnswers.LearnMore.v158" = "Aprender más…";
+
 /* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
 "QuickAnswers.OptIn.ContinueButton.v158" = "Continuar";
 
@@ -57,6 +72,45 @@
 
 /* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
 "QuickAnswers.OptIn.Title.v158" = "Pregunta con tu voz";
+
+/* Description displayed on the Quick Answers opt-in screen explaining how the feature works. */
+"QuickAnswers.OptInRedesign.Description.v158" = "Pregunta con tu voz. Obtén una respuesta breve con referencias en segundos.";
+
+/* Description of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedDescription.v158" = "No almacenamos su voz, preguntas ni respuestas.";
+
+/* Title of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedTitle.v158" = "Nada se guarda";
+
+/* Description of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingDescription.v158" = "No usamos tus datos para entrenar nuestros sistemas.";
+
+/* Title of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingTitle.v158" = "No se hacen entrenamientos con tus datos";
+
+/* Description of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignDescription.v158" = "No usamos tu voz para identificarte.";
+
+/* Title of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158" = "Privado por diseño";
+
+/* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
+"QuickAnswers.OptInRedesign.Title.v158" = "Prueba respuestas rápidas";
+
+/* Body text of the privacy banner shown on the Quick Answers screen, explaining how the feature handles user data. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.PrivacyBanner.Description.v158" = "%@ no almacena tu audio ni tus preguntas, no utiliza tus datos para entrenar modelos de IA ni utiliza tu voz para identificarte.";
+
+/* Title of the privacy banner shown on the Quick Answers screen. */
+"QuickAnswers.PrivacyBanner.Title.v158" = "Privado por diseño";
+
+/* Feature name as displayed in the iOS Quick Action menu (contextual menu displayed when long-pressing the browser app icon) */
+"QuickAnswers.QuickActions.Title.v158" = "Respuestas rápidas";
+
+/* Accessibility label for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer. */
+"QuickAnswers.ReturnPill.ReturnToQuickAnswerAccessibilityLabel.v158" = "Regresar a respuestas rápidas";
+
+/* Helper text for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer. */
+"QuickAnswers.ReturnPill.Subtitle.v158" = "Toca para volver";
 
 /* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
 "QuickAnswers.Tip.Message.v158" = "Toca aquí para empezar.";
