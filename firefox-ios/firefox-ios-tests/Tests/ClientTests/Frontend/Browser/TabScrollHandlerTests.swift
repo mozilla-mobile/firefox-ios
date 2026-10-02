@@ -284,7 +284,7 @@ final class TabScrollHandlerTests: XCTestCase {
     // MARK: - endDrag checks
 
     func test_endDrag_atBottom_preventsCommit() {
-        let contentOffset = CGPoint(x: 0, y: 1980)
+        let contentOffset = CGPoint(x: 0, y: 3980)
         let subject = createSubject()
         tabProvider.scrollView?.contentOffset = contentOffset
 
@@ -425,7 +425,7 @@ final class TabScrollHandlerTests: XCTestCase {
 
     // MARK: - Setup
 
-    private func createSubject(contentSize: CGSize = CGSize(width: 200, height: 2000)) -> TabScrollHandler {
+    private func createSubject(contentSize: CGSize = CGSize(width: 200, height: 4000)) -> TabScrollHandler {
         let subject = TabScrollHandler(windowUUID: .XCTestDefaultUUID, delegate: delegate)
 
         // Create tab and scrollView

@@ -370,7 +370,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
     private func setupTabScroll(with subject: LegacyTabScrollController) {
         tab.createWebview(configuration: .init())
         tab.webView?.scrollView.frame.size = CGSize(width: 200, height: 2000)
-        tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
+        tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 4000)
         tab.webView?.scrollView.delegate = subject
         subject.tab = tab
     }
