@@ -7,7 +7,7 @@ import XCTest
 protocol DocumentPickerSelectorsSet {
     var SAVE_BUTTON: Selector { get }
     var FILE_NAME_FIELD: Selector { get }
-    var FILE_NAME_FIELD_TAGS_BUTTON: Selector { get }
+    var UNTAGGED_FILE_NAME_FIELD: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -31,12 +31,12 @@ struct DocumentPickerSelectors: DocumentPickerSelectorsSet {
         groups: ["documentPicker", "system"]
     )
 
-    // Older iOS leaves the file name field untagged; this button inside it is what tells it apart.
-    let FILE_NAME_FIELD_TAGS_BUTTON = Selector.buttonIdOrLabel(
-        IDs.fileNameFieldTagsButton,
-        description: "Tags button inside the iOS document picker's file name field",
+    // Older iOS leaves the file name field without an id, so find it by the Tags button it contains.
+    let UNTAGGED_FILE_NAME_FIELD = Selector.textFieldContainingButton(
+        labeled: IDs.fileNameFieldTagsButton,
+        description: "File name field in the iOS document picker on iOS versions that leave it untagged",
         groups: ["documentPicker", "system"]
     )
 
-    var all: [Selector] { [SAVE_BUTTON, FILE_NAME_FIELD, FILE_NAME_FIELD_TAGS_BUTTON] }
+    var all: [Selector] { [SAVE_BUTTON, FILE_NAME_FIELD, UNTAGGED_FILE_NAME_FIELD] }
 }

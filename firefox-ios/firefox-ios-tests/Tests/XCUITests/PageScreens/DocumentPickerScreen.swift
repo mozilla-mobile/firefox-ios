@@ -17,14 +17,7 @@ final class DocumentPickerScreen {
     }
 
     private var saveButton: XCUIElement { sel.SAVE_BUTTON.element(in: app) }
-    private var untaggedFileNameField: XCUIElement {
-        let tagsButton = NSPredicate(
-            format: "elementType == %d AND label == %@",
-            XCUIElement.ElementType.button.rawValue,
-            sel.FILE_NAME_FIELD_TAGS_BUTTON.value
-        )
-        return app.textFields.containing(tagsButton).firstMatch
-    }
+    private var untaggedFileNameField: XCUIElement { sel.UNTAGGED_FILE_NAME_FIELD.element(in: app) }
 
     /// Anchors on the picker's own Save button rather than a location label such as "On My iPhone":
     /// the picker opens on whichever location was last used, so the label is not reliably present.
