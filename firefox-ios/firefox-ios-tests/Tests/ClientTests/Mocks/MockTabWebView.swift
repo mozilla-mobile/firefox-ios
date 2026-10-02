@@ -24,6 +24,8 @@ final class MockTabWebView: TabWebView {
     var mockCanGoBack = false
     var mockCanGoForward = false
     var mockInteractionState: Data?
+    var mockNavigation: WKNavigation?
+    var navigationDelegateAtLoad: WKNavigationDelegate?
 
     override var title: String? {
         return mockTitle
@@ -80,7 +82,8 @@ final class MockTabWebView: TabWebView {
         loadCalled += 1
         loadedRequest = request
         loadedURL = request.url
-        return nil
+        navigationDelegateAtLoad = navigationDelegate
+        return mockNavigation
     }
 
     override func loadFileURL(_ URL: URL, allowingReadAccessTo readAccessURL: URL) -> WKNavigation? {

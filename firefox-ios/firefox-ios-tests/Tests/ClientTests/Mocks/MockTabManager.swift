@@ -159,6 +159,16 @@ class MockTabManager: TabManager {
     }
     func offloadBackgroundWebViews() async {}
 
+    var tearDownWebViewsForProxyChangeCalled = 0
+    func tearDownWebViewsForProxyChange() async {
+        tearDownWebViewsForProxyChangeCalled += 1
+    }
+
+    var restoreSelectedTabForProxyChangeCalled = 0
+    func restoreSelectedTabForProxyChange() {
+        restoreSelectedTabForProxyChangeCalled += 1
+    }
+
     var restoreScreenshotCalls: [Tab] = []
     func restoreScreenshot(for tab: Tab) {
         restoreScreenshotCalls.append(tab)
