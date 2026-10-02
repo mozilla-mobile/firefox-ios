@@ -222,6 +222,7 @@
         "SearchTests\/testBottomViewURLBar_trendingRecentSearchesExperimentOff()",
         "SearchTests\/testBottomViewURLBar_trendingRecentSearchesExperimentOn()",
         "SearchTests\/testDismissPromptPresence()",
+        "SearchTests\/testFirefoxSuggest()",
         "SearchTests\/testOpenTabsInSearchSuggestions()",
         "SearchTests\/testSearchEngine()",
         "SearchTests\/testSearchIconOnAboutHome()",

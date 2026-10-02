@@ -490,7 +490,6 @@
         "SearchTests\/testDefaultSearchEngines()",
         "SearchTests\/testDismissPromptPresence()",
         "SearchTests\/testDoNotShowSuggestionsWhenEnteringURL()",
-        "SearchTests\/testFirefoxSuggest()",
         "SearchTests\/testFirefoxSuggestNonSponsoredUI()",
         "SearchTests\/testFirefoxSuggestPartialNonSponsored()",
         "SearchTests\/testFirefoxSuggestPartialSponsored()",
