@@ -26,6 +26,8 @@ final class MockTabWebView: TabWebView {
     var mockInteractionState: Data?
     var evaluatedScripts: [(script: String, world: WKContentWorld)] = []
     var completesJavaScriptEvaluation = false
+    var mockNavigation: WKNavigation?
+    var navigationDelegateAtLoad: WKNavigationDelegate?
 
     override func __evaluateJavaScript(
         _ javaScriptString: String,
@@ -106,7 +108,8 @@ final class MockTabWebView: TabWebView {
         loadCalled += 1
         loadedRequest = request
         loadedURL = request.url
-        return nil
+        navigationDelegateAtLoad = navigationDelegate
+        return mockNavigation
     }
 
     override func loadFileURL(_ URL: URL, allowingReadAccessTo readAccessURL: URL) -> WKNavigation? {
