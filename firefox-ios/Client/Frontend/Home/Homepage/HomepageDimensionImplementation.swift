@@ -33,9 +33,11 @@ struct HomepageDimensionCalculator {
     }
 
     private static var isMultitasking: Bool {
-        guard let window = UIWindow.keyWindow else { return false }
+        // Read the screen via windowScene, not window.screen directly, which can resolve to the
+        // wrong display in multi-scene/multi-display environments.
+        guard let window = UIWindow.keyWindow, let screenBounds = window.windowScene?.screen.bounds else { return false }
 
-        return window.frame.width != window.screen.bounds.width && window.frame.width != window.screen.bounds.height
+        return window.frame.width != screenBounds.width && window.frame.width != screenBounds.height
     }
 
     private static func isPadInLandscapeSplit(
@@ -43,13 +45,15 @@ struct HomepageDimensionCalculator {
         isLandscape: Bool,
         device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
     ) -> Bool {
+        // Same windowScene-routed screen access as isMultitasking above.
         guard device == .pad,
               isLandscape,
               isMultitasking,
-              let window = UIWindow.keyWindow
+              let window = UIWindow.keyWindow,
+              let screenBounds = window.windowScene?.screen.bounds
         else { return false }
 
-        let splitScreenWidth = window.screen.bounds.width * split
+        let splitScreenWidth = screenBounds.width * split
         return window.frame.width >= splitScreenWidth * 0.9 && window.frame.width <= splitScreenWidth * 1.1
     }
 
