@@ -230,6 +230,7 @@
         "SettingsTests\/testImageOnOff_tabTrayExperimentOff()",
         "SettingsTests\/testImageOnOff_tabTrayExperimentOn()",
         "SettingsTests\/testSettingsOptionSubtitles()",
+        "ShareToolbarTests\/testSavePdfToFilesOffersTheDocumentAndKeepsBothCopies()",
         "SiteLoadTest",
         "SyncUITests\/testAccountManagementPage()",
         "TabTraySearchTabsTests\/testSearchTabs()",
