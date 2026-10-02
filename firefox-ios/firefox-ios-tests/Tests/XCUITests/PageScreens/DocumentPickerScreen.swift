@@ -17,6 +17,14 @@ final class DocumentPickerScreen {
     }
 
     private var saveButton: XCUIElement { sel.SAVE_BUTTON.element(in: app) }
+    private var untaggedFileNameField: XCUIElement {
+        let tagsButton = NSPredicate(
+            format: "elementType == %d AND label == %@",
+            XCUIElement.ElementType.button.rawValue,
+            sel.FILE_NAME_FIELD_TAGS_BUTTON.value
+        )
+        return app.textFields.containing(tagsButton).firstMatch
+    }
 
     /// Anchors on the picker's own Save button rather than a location label such as "On My iPhone":
     /// the picker opens on whichever location was last used, so the label is not reliably present.
@@ -33,16 +41,10 @@ final class DocumentPickerScreen {
     /// hosting the picker's Tags button.
     private func fileNameField(timeout: TimeInterval) -> XCUIElement? {
         let taggedField = sel.FILE_NAME_FIELD.element(in: app)
-        let tagsButton = NSPredicate(
-            format: "elementType == %d AND label == %@",
-            XCUIElement.ElementType.button.rawValue,
-            sel.FILE_NAME_FIELD_TAGS_BUTTON.value
-        )
-        let untaggedField = app.textFields.containing(tagsButton).firstMatch
         let deadline = Date().addingTimeInterval(timeout)
         repeat {
             if taggedField.exists { return taggedField }
-            if untaggedField.exists { return untaggedField }
+            if untaggedFileNameField.exists { return untaggedFileNameField }
             usleep(100_000)
         } while Date() < deadline
         XCTFail("Timed out waiting for the document picker's file name field in \(timeout) seconds")
@@ -65,7 +67,11 @@ final class DocumentPickerScreen {
         }
     }
 
+    /// The Save button turns into a spinner while the file is written, so it vanishes before the picker
+    /// does; the file name field stays up until the picker is really gone.
     func assertDismissed(timeout: TimeInterval = TIMEOUT_LONG) {
         BaseTestCase().mozWaitForElementToNotExist(saveButton, timeout: timeout)
+        BaseTestCase().mozWaitForElementToNotExist(sel.FILE_NAME_FIELD.element(in: app), timeout: timeout)
+        BaseTestCase().mozWaitForElementToNotExist(untaggedFileNameField, timeout: timeout)
     }
 }
