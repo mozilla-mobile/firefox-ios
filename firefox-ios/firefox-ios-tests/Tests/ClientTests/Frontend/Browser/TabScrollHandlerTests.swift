@@ -263,6 +263,24 @@ final class TabScrollHandlerTests: XCTestCase {
         XCTAssertEqual(delegate.hideCount, 0)
     }
 
+    // MARK: - hasScrollableContent
+
+    func test_hasScrollableContent_contentTallerThanViewportPlusToolbars_isTrue() {
+        // createSubject sets the scroll view's own frame height to 2000, independent of the
+        // simulator/device's actual screen size.
+        let tallContentSize = CGSize(width: 320, height: 2000 + 2 * UIConstants.ToolbarHeight + 1)
+        let subject = createSubject(contentSize: tallContentSize)
+
+        XCTAssertTrue(subject.hasScrollableContent)
+    }
+
+    func test_hasScrollableContent_contentShorterThanViewportPlusToolbars_isFalse() {
+        let shortContentSize = CGSize(width: 320, height: 2000 + 2 * UIConstants.ToolbarHeight - 1)
+        let subject = createSubject(contentSize: shortContentSize)
+
+        XCTAssertFalse(subject.hasScrollableContent)
+    }
+
     // MARK: - endDrag checks
 
     func test_endDrag_atBottom_preventsCommit() {
