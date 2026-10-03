@@ -22,7 +22,7 @@ protocol TopTabsDelegate: AnyObject {
 
 class TopTabsViewController: UIViewController, Themeable, Notifiable {
     private struct UX {
-        static let trailingEdgeSpace: CGFloat = 10
+        static let horizontalEdgeSpace: CGFloat = 16
         static let topTabsViewHeight: CGFloat = 44
         static let topTabsBackgroundShadowWidth: CGFloat = 12
         static let faderPadding: CGFloat = 8
@@ -317,13 +317,25 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
             )
         } else {
             constraints.append(
-                privateModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10)
+                privateModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                           constant: UX.horizontalEdgeSpace)
+            )
+        }
+
+        if #available(iOS 26.0, *) {
+            constraints.append(
+                newTab.trailingAnchor.constraint(
+                    equalTo: view.layoutGuide(for: .margins(cornerAdaptation: .horizontal)).trailingAnchor
+                )
+            )
+        } else {
+            constraints.append(
+                newTab.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                 constant: -UX.horizontalEdgeSpace)
             )
         }
 
         NSLayoutConstraint.activate(constraints)
-
-        newTab.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.trailingEdgeSpace).isActive = true
     }
 
     private func handleFadeOutAfterTabSelection() {
