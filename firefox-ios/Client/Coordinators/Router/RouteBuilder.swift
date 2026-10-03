@@ -62,39 +62,13 @@ final class RouteBuilder {
                 return makeDeepLinkRoute(urlScanner: urlScanner)
 
             case .fxaSignIn where urlScanner.value(query: "signin") != nil:
-                return .fxaSignIn(
-                    params: FxALaunchParams(
-                        entrypoint: .fxaDeepLinkNavigation,
-                        query: url.getQuery()
-                    )
-                )
+                return makeFxaSignInRoute(url: url)
 
             case .openUrl:
-                let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
-                if isOpeningWithFirefoxExtension {
-                    actionExtensionTelemetry.shareURL()
-                }
-                if let urlQuery {
-                    switch FxAPairingURLParser.parse(urlQuery) {
-                    case .pairing(let pairingURL):
-                        return .fxaPairing(url: pairingURL)
-                    case .invalidPairing:
-                        return nil
-                    case .notPairing:
-                        break
-                    }
-                }
-                return .search(url: urlQuery, isPrivate: isPrivate)
+                return makeOpenUrlRoute(urlScanner: urlScanner, urlQuery: urlQuery, isPrivate: isPrivate)
 
             case .openText:
-                let queryValue = urlScanner.value(query: "text") ?? ""
-                let queryURL = URIFixup.getURL(queryValue)
-                let safeQuery = queryURL != nil ? queryValue.replacingOccurrences(of: "://", with: "%3A%2F%2F") : queryValue
-                let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
-                if isOpeningWithFirefoxExtension {
-                    actionExtensionTelemetry.shareText()
-                }
-                return .searchQuery(query: safeQuery, isPrivate: isPrivate)
+                return makeOpenTextRoute(urlScanner: urlScanner, isPrivate: isPrivate)
 
             case .glean:
                 return .glean(url: url)
@@ -113,13 +87,7 @@ final class RouteBuilder {
 
             case .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
                 // Widget Quick links - medium - open copied url
-                if !UIPasteboard.general.hasURLs, let searchText = UIPasteboard.general.string {
-                    return .searchQuery(query: searchText, isPrivate: isPrivate)
-                } else {
-                    let url = UIPasteboard.general.url
-                    guard host.isValidURL(urlQuery: url) else { return nil }
-                    return .search(url: url, isPrivate: isPrivate)
-                }
+                return makeWidgetQuickLinkOpenCopiedRoute(isPrivate: isPrivate, host: host)
 
             case .widgetSmallQuickLinkClosePrivateTabs, .widgetMediumQuickLinkClosePrivateTabs:
                 // Widget Quick links - medium - close private tabs
@@ -127,22 +95,11 @@ final class RouteBuilder {
 
             case .widgetTabsMediumOpenUrl:
                 // Widget Tabs Quick View - medium
-                let tabs = SimpleTab.getSimpleTabs()
-                if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty, let tab = tabs[uuid] {
-                    return .searchURL(url: tab.url, tabId: uuid)
-                } else {
-                    return .search(url: nil, isPrivate: false)
-                }
+                return makeWidgetTabsMediumOpenUrlRoute(urlScanner: urlScanner)
 
             case .widgetTabsLargeOpenUrl:
                 // Widget Tabs Quick View - large
-                let tabs = SimpleTab.getSimpleTabs()
-                if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty {
-                    let tab = tabs[uuid]
-                    return .searchURL(url: tab?.url, tabId: uuid)
-                } else {
-                    return .search(url: nil, isPrivate: false)
-                }
+                return makeWidgetTabsLargeOpenUrlRoute(urlScanner: urlScanner)
 
             case .fxaSignIn:
                 return nil
@@ -154,16 +111,7 @@ final class RouteBuilder {
                     return nil
                 }
 
-                // Pass optional share message and subtitle here
-                var shareMessage: ShareMessage?
-                if let titleText = urlScanner.value(query: "title") {
-                    let subtitleText: String? = urlScanner.value(query: "subtitle")
-
-                    shareMessage = ShareMessage(message: titleText, subtitle: subtitleText)
-                }
-
-                // Deeplinks cannot have an associated tab or file, so this must be a website URL `.site` share
-                return .sharesheet(shareType: .site(url: shareURL), shareMessage: shareMessage)
+                return makeShareSheetRoute(urlScanner: urlScanner, shareURL: shareURL)
             }
         } else if urlScanner.isHTTPScheme {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
@@ -175,6 +123,86 @@ final class RouteBuilder {
         } else {
             return nil
         }
+    }
+
+    private func makeFxaSignInRoute(url: URL) -> Route {
+        return .fxaSignIn(
+            params: FxALaunchParams(
+                entrypoint: .fxaDeepLinkNavigation,
+                query: url.getQuery()
+            )
+        )
+    }
+
+    private func makeOpenUrlRoute(urlScanner: URLScanner, urlQuery: URL?, isPrivate: Bool) -> Route? {
+        let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
+        if isOpeningWithFirefoxExtension {
+            actionExtensionTelemetry.shareURL()
+        }
+        if let urlQuery {
+            switch FxAPairingURLParser.parse(urlQuery) {
+            case .pairing(let pairingURL):
+                return .fxaPairing(url: pairingURL)
+            case .invalidPairing:
+                return nil
+            case .notPairing:
+                break
+            }
+        }
+        return .search(url: urlQuery, isPrivate: isPrivate)
+    }
+
+    private func makeOpenTextRoute(urlScanner: URLScanner, isPrivate: Bool) -> Route? {
+        let queryValue = urlScanner.value(query: "text") ?? ""
+        let queryURL = URIFixup.getURL(queryValue)
+        let safeQuery = queryURL != nil ? queryValue.replacingOccurrences(of: "://", with: "%3A%2F%2F") : queryValue
+        let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
+        if isOpeningWithFirefoxExtension {
+            actionExtensionTelemetry.shareText()
+        }
+        return .searchQuery(query: safeQuery, isPrivate: isPrivate)
+    }
+
+    private func makeWidgetQuickLinkOpenCopiedRoute(isPrivate: Bool, host: DeeplinkInput.Host) -> Route? {
+        if !UIPasteboard.general.hasURLs, let searchText = UIPasteboard.general.string {
+            return .searchQuery(query: searchText, isPrivate: isPrivate)
+        } else {
+            let url = UIPasteboard.general.url
+            guard host.isValidURL(urlQuery: url) else { return nil }
+            return .search(url: url, isPrivate: isPrivate)
+        }
+    }
+
+    private func makeWidgetTabsMediumOpenUrlRoute(urlScanner: URLScanner) -> Route? {
+        let tabs = SimpleTab.getSimpleTabs()
+        if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty, let tab = tabs[uuid] {
+            return .searchURL(url: tab.url, tabId: uuid)
+        } else {
+            return .search(url: nil, isPrivate: false)
+        }
+    }
+
+    private func makeWidgetTabsLargeOpenUrlRoute(urlScanner: URLScanner) -> Route? {
+        let tabs = SimpleTab.getSimpleTabs()
+        if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty {
+            let tab = tabs[uuid]
+            return .searchURL(url: tab?.url, tabId: uuid)
+        } else {
+            return .search(url: nil, isPrivate: false)
+        }
+    }
+
+    private func makeShareSheetRoute(urlScanner: URLScanner, shareURL: URL) -> Route? {
+        // Pass optional share message and subtitle here
+        var shareMessage: ShareMessage?
+        if let titleText = urlScanner.value(query: "title") {
+            let subtitleText: String? = urlScanner.value(query: "subtitle")
+
+            shareMessage = ShareMessage(message: titleText, subtitle: subtitleText)
+        }
+
+        // Deeplinks cannot have an associated tab or file, so this must be a website URL `.site` share
+        return .sharesheet(shareType: .site(url: shareURL), shareMessage: shareMessage)
     }
 
     @MainActor
