@@ -5165,9 +5165,10 @@ class TranslationScheduler {
     if (this.#port) {
       this.#port.close();
       this.#port = null;
-      this.#portRequest = null;
     }
 
+    this.#portRequest?.resolve();
+    this.#portRequest = null;
     this.#engineStatus = "uninitialized";
   }
 
