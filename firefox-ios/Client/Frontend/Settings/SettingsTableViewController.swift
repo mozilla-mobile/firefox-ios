@@ -992,6 +992,14 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
         applyTheme()
     }
 
+    override var shouldUsePrivateOverride: Bool {
+        return true
+    }
+
+    override var shouldBeInPrivateTheme: Bool {
+        return false
+    }
+
     override func applyTheme() {
         settings = generateSettings()
         super.applyTheme()
@@ -1038,7 +1046,7 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
             let cell = dequeueCellFor(indexPath: indexPath, setting: setting)
-            setting.onConfigureCell(cell, theme: themeManager.getCurrentTheme(for: windowUUID))
+            setting.onConfigureCell(cell, theme: currentTheme())
             return cell
         }
         return super.tableView(tableView, cellForRowAt: indexPath)
@@ -1051,8 +1059,8 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
     ) {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row], let themedCell = cell as? ThemedTableViewCell {
-            setting.onConfigureCell(themedCell, theme: themeManager.getCurrentTheme(for: windowUUID))
-            themedCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            setting.onConfigureCell(themedCell, theme: currentTheme())
+            themedCell.applyTheme(theme: currentTheme())
         }
     }
 
@@ -1112,7 +1120,7 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
         if let sectionTitle = sectionSetting.title?.string {
             headerView.titleLabel.text = sectionTitle.uppercased()
         }
-        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        headerView.applyTheme(theme: currentTheme())
         return headerView
     }
 
@@ -1126,7 +1134,7 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
 
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
-        footerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        footerView.applyTheme(theme: currentTheme())
         return footerView
     }
 

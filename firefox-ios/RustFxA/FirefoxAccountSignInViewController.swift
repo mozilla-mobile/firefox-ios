@@ -49,6 +49,9 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
     var currentWindowUUID: UUID? { windowUUID }
 
+    let shouldUsePrivateOverride: Bool
+    var shouldBeInPrivateTheme: Bool { return false }
+
     /// This variable is used to track parent page that launched this sign in VC.
     /// telemetryObject deduced from parentType initializer is sent with telemetry events on button click
     private let telemetryObject: TelemetryWrapper.EventObject
@@ -149,6 +152,12 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         self.deepLinkParams = deepLinkParams
         self.profile = profile
         self.windowUUID = windowUUID
+        switch parentType {
+        case .settings:
+            self.shouldUsePrivateOverride = true
+        case .appMenu, .onboarding, .upgrade, .tabTray, .library:
+            self.shouldUsePrivateOverride = false
+        }
         switch parentType {
         case .appMenu:
             self.telemetryObject = .appMenu
@@ -259,7 +268,9 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = themeManager.resolveTheme(for: windowUUID,
+                                              shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                              shouldBeInPrivateTheme: shouldBeInPrivateTheme)
         let colors = theme.colors
         view.backgroundColor = colors.layer1
         qrSignInLabel.textColor = colors.textPrimary
