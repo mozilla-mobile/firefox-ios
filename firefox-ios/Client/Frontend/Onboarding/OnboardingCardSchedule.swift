@@ -14,8 +14,9 @@ enum OnboardingCardButtonAction {
 struct OnboardingCard {
     let title: String
     let body: String
-    // Asset name in the Client bundle, or nil for a text-only card
-    let imageName: String?
+    // Asset names in the Client bundle, or nil for a text-only card
+    let lightImageName: String?
+    let darkImageName: String?
     let primaryButtonTitle: String
     let primaryButtonAction: OnboardingCardButtonAction
     let secondaryButtonTitle: String?
@@ -24,7 +25,8 @@ struct OnboardingCard {
     init(
         title: String,
         body: String,
-        imageName: String? = nil,
+        lightImageName: String? = nil,
+        darkImageName: String? = nil,
         primaryButtonTitle: String = "Continue",
         primaryButtonAction: OnboardingCardButtonAction = .none,
         secondaryButtonTitle: String? = nil,
@@ -32,7 +34,8 @@ struct OnboardingCard {
     ) {
         self.title = title
         self.body = body
-        self.imageName = imageName
+        self.lightImageName = lightImageName
+        self.darkImageName = darkImageName
         self.primaryButtonTitle = primaryButtonTitle
         self.primaryButtonAction = primaryButtonAction
         self.secondaryButtonTitle = secondaryButtonTitle
@@ -45,16 +48,22 @@ struct OnboardingCard {
 enum OnboardingDripSchedule {
     static let cardsByDay: [Int: [OnboardingCard]] = [
         2: [OnboardingCard(
-            title: "Stay in the loop",
-            body: "Turn on notifications to get tips and updates from Firefox.",
-            imageName: ImageIdentifiers.Onboarding.HeaderImages.notification,
-            primaryButtonTitle: "Turn on notifications",
+            title: String.Onboarding.MultiDay.NotificationCard.Title,
+            body: String.Onboarding.MultiDay.NotificationCard.BodyText,
+            lightImageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.notification,
+            darkImageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.notificationDark,
+            primaryButtonTitle: String.Onboarding.MultiDay.NotificationCard.AcceptButtonText,
             primaryButtonAction: .enableNotifications,
-            secondaryButtonTitle: "Not now",
+            secondaryButtonTitle: String.Onboarding.MultiDay.NotificationCard.DeclineButtonText,
             secondaryButtonAction: .declineNotifications)],
         7: [OnboardingCard(
-            title: "Browse with confidence",
-            body: "Day 7 placeholder card. Firefox blocks trackers by default.",
-            imageName: ImageIdentifiers.Onboarding.HeaderImages.trackers)]
+            title: String.Onboarding.MultiDay.SyncCard.Title,
+            body: String.Onboarding.MultiDay.SyncCard.BodyText,
+            lightImageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.sync,
+            darkImageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.syncDark,
+            primaryButtonTitle: String.Onboarding.MultiDay.SyncCard.AcceptButtonText,
+            primaryButtonAction: .none, // replace with something like .promptSignIn later
+            secondaryButtonTitle: String.Onboarding.MultiDay.SyncCard.DeclineButtonText,
+            secondaryButtonAction: .none)]
     ]
 }

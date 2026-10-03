@@ -7,7 +7,7 @@ import UIKit
 import Common
 
 /// View that presents the day's onboarding cards
-struct DripOnboardingFlowView: View {
+struct OnboardingFlowView: View {
     private let cards: [OnboardingCard]
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
@@ -31,23 +31,62 @@ struct DripOnboardingFlowView: View {
     }
 
     var body: some View {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let card = cards[min(index, cards.count - 1)]
-        let secondaryAction: (() -> Void)? = card.secondaryButtonTitle == nil
+        return ZStack(alignment: .topTrailing) {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            let card = cards[min(index, cards.count - 1)]
+            let secondaryAction: (() -> Void)? = card.secondaryButtonTitle == nil
             ? nil
             : { perform(card.secondaryButtonAction) }
 
-        ZStack {
             theme.colors.layer1.color
                 .ignoresSafeArea()
 
-            DripOnboardingCardView(
+            gradient
+                .ignoresSafeArea()
+
+            OnboardingCardView(
                 card: card,
                 theme: theme,
                 onPrimary: { perform(card.primaryButtonAction) },
                 onSecondary: secondaryAction
             )
+        }.padding(0)
+    }
+
+    private var gradient: some View {
+        let colors = gradientColors(for: themeManager.getCurrentTheme(for: windowUUID))
+        let center = UnitPoint(x: 0.9, y: 0.1)
+        let radialGradient = RadialGradient(colors: [colors[2], .white.opacity(0)],
+                                            center: center,
+                                            startRadius: 0,
+                                            endRadius: 200)
+
+        let linearGradient = LinearGradient(colors: Array(colors[0...1]),
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing)
+            .overlay(radialGradient)
+
+        return linearGradient
+    }
+
+    // returns an array of colours needed for the card gradient
+    private func gradientColors(for theme: Theme) -> [Color] {
+        guard !theme.isNova else {
+            let gradient = theme.colors.gradientAccentSubtle.colors
+            let isDark = theme.type == .dark
+            let orange = theme.colors.gradientAIStrongStop3.color.opacity(0.28)
+            if isDark {
+                return [Color(gradient[0]), Color(gradient[1]).opacity(0), orange]
+            }
+            return [Color(gradient[0]), Color(gradient[1]), orange]
         }
+
+        let isDark = theme.type == .dark
+        let yellowOpacity = isDark ? 0.0 : 0.25
+        let yellow = theme.colors.gradientAIStrongStop3.color.opacity(yellowOpacity)
+        let purple = theme.colors.gradientAIStrongStop1.color.opacity(0.2)
+        let orange = theme.colors.gradientOnboardingStop4.color.opacity(0.28)
+        return [purple, yellow, orange]
     }
 
     private func perform(_ action: OnboardingCardButtonAction) {
@@ -64,11 +103,15 @@ struct DripOnboardingFlowView: View {
     }
 }
 
-struct DripOnboardingCardView: View {
+struct OnboardingCardView: View {
     private let card: OnboardingCard
     private let theme: Theme
     private let onPrimary: () -> Void
     private let onSecondary: (() -> Void)?
+
+    private var buttonColour: Color {
+        theme.isNova ? theme.colors.actionPrimary.color : theme.colors.gradientAIStrongStop1.color
+    }
 
     init(
         card: OnboardingCard,
@@ -83,44 +126,49 @@ struct DripOnboardingCardView: View {
     }
 
     var body: some View {
-        VStack(spacing: 20) {
-            Spacer(minLength: 0)
-            cardImage
-            titleText
-            bodyText
-            Spacer(minLength: 0)
+        VStack {
+            cardImage.padding([.bottom], 4)
+            titleText.padding([.top], 0).padding([.bottom], 2)
+            bodyText.padding([.bottom], 2)
+            Spacer(minLength: 90)
             buttons
         }
-        .padding(24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding([.leading, .trailing], 16)
+        .padding([.bottom], 24)
     }
 
     @ViewBuilder
     private var cardImage: some View {
-        if let name = card.imageName, let uiImage = UIImage(named: name) {
+        if let name = theme.type == .dark ? card.darkImageName : card.lightImageName, let uiImage = UIImage(named: name) {
             Image(uiImage: uiImage)
                 .resizable()
                 .scaledToFit()
-                .frame(maxHeight: 220)
+                .frame(maxHeight: 500)
                 .accessibilityHidden(true)
         }
     }
 
     private var titleText: some View {
-        Text(card.title)
-            .font(FXFontStyles.Bold.title1.scaledSwiftUIFont())
+        Text(card.title.replaceFirstOccurrence(of: "%@", with: "Firefox"))
+            .font(FXFontStyles.Bold.largeTitle.scaledSwiftUIFont())
             .foregroundColor(theme.colors.textPrimary.color)
             .multilineTextAlignment(.center)
+            .lineSpacing(2)
             .fixedSize(horizontal: false, vertical: true)
             .accessibility(addTraits: .isHeader)
+            .padding([.leading, .trailing], 56)
+            .padding([.top, .bottom], 0)
     }
 
     private var bodyText: some View {
-        Text(card.body)
-            .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+        Text(card.body.replaceFirstOccurrence(of: "%@", with: "Firefox"))
+            .font(FXFontStyles.Regular.title2.scaledSwiftUIFont())
             .foregroundColor(theme.colors.textSecondary.color)
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
+            .padding([.leading, .trailing], 24)
+            .padding([.top, .bottom], 0)
     }
 
     private var buttons: some View {
@@ -128,6 +176,7 @@ struct DripOnboardingCardView: View {
             primaryButton
             secondaryButton
         }
+        .padding([.leading, .trailing], 26)
     }
 
     private var primaryButton: some View {
@@ -136,10 +185,13 @@ struct DripOnboardingCardView: View {
                 .font(FXFontStyles.Bold.callout.scaledSwiftUIFont())
                 .foregroundColor(theme.colors.textInverted.color)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 15)
-                .background(theme.colors.actionPrimary.color)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .clipShape(RoundedRectangle(cornerRadius: 50))
+                .padding([.top, .bottom], 14)
+                .padding([.leading, .trailing], 0)
         }
+        .padding(0)
+        .background(buttonColour)
+        .clipShape(RoundedRectangle(cornerRadius: 28))
     }
 
     @ViewBuilder
@@ -148,7 +200,7 @@ struct DripOnboardingCardView: View {
             Button(action: onSecondary) {
                 Text(secondaryTitle)
                     .font(FXFontStyles.Bold.callout.scaledSwiftUIFont())
-                    .foregroundColor(theme.colors.actionPrimary.color)
+                    .foregroundColor(buttonColour)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 15)
             }
