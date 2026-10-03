@@ -37,7 +37,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(initialState.windowUUID, windowUUID)
         XCTAssertEqual(initialState.navigationActions, [])
-        XCTAssertEqual(initialState.trailingPageActions, [])
         XCTAssertEqual(initialState.browserActions, [])
         XCTAssertNil(initialState.borderPosition)
         XCTAssertNil(initialState.url)
@@ -70,8 +69,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions, [])
-
-        XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 0)
 
         XCTAssertEqual(newState.borderPosition, .top)
@@ -173,178 +170,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.browserActions[1].numberOfTabs, 2)
     }
 
-    func test_readerModeStateChangedAction_onHomepage_returnsExpectedState() {
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                readerModeState: .available,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.readerModeStateChanged
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.trailingPageActions.count, 0)
-    }
-
-    func test_readerModeStateChangedAction_onHomepage_returnsExpectedState_whenSummarizerFeatureOn() {
-        setIsHostedSummarizerFeatureEnabled(enabled: true)
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                readerModeState: .available,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.readerModeStateChanged
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.trailingPageActions.count, 0)
-    }
-
-    func test_readerModeStateChangedAction_onWebsite_returnsExpectedState() {
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
-        let newState = reducer.legacyReducer(
-            urlDidChangeState,
-            ToolbarAction(
-                readerModeState: .available,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.readerModeStateChanged
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.trailingPageActions.count, 2)
-        XCTAssertEqual(newState.trailingPageActions[0].actionType, .readerMode)
-        XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.readerView)
-        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
-    }
-
-    func test_readerModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeFeatureOn() {
-        setIsHostedSummarizerFeatureEnabled(enabled: true)
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let urlDidChangeState = loadWebsiteAction(
-            state: initialState,
-            reducer: reducer
-        )
-        let newState = reducer.legacyReducer(
-            urlDidChangeState,
-            ToolbarAction(
-                canSummarize: true,
-                readerModeState: .available,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.readerModeStateChanged
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.trailingPageActions.count, 2)
-        XCTAssertEqual(newState.trailingPageActions[0].actionType, .summarizer)
-        XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.lightning)
-        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
-    }
-
-    func test_readerModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeLanguaeExpansionOn() {
-        setIsSummarizerLanguageExpansionEnabled(enabled: true)
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let urlDidChangeState = loadWebsiteAction(
-            state: initialState,
-            reducer: reducer
-        )
-        let newState = reducer.legacyReducer(
-            urlDidChangeState,
-            ToolbarAction(
-                canSummarize: true,
-                readerModeState: .available,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.readerModeStateChanged
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.trailingPageActions.count, 2)
-        XCTAssertEqual(newState.trailingPageActions[0].actionType, .readerModeWithSummarizer)
-        XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.readerSummarize)
-        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
-    }
-
-    func test_readerModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeFeatureOn_readerModeActive() {
-        setIsHostedSummarizerFeatureEnabled(enabled: true)
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-
-        let urlDidChangeState = loadWebsiteAction(
-            state: initialState,
-            reducer: reducer
-        )
-        let newState = reducer.legacyReducer(
-            urlDidChangeState,
-            ToolbarAction(
-                canSummarize: true,
-                readerModeState: .active,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.readerModeStateChanged
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.trailingPageActions.count, 2)
-        XCTAssertEqual(newState.trailingPageActions[0].actionType, .readerMode)
-        XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.readerView)
-        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
-    }
-
-    func test_summarizeModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeFeatureOn() {
-        setIsHostedSummarizerFeatureEnabled(enabled: true)
-        setupStore()
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
-        // we need this state change in order to populate the AddressBarState
-        // with the reader mode state from the Toolbar action
-        let readerModeStateChange = reducer.legacyReducer(
-            urlDidChangeState,
-            ToolbarAction(
-                readerModeState: .available,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.readerModeStateChanged
-            )
-        )
-        let newState = reducer.legacyReducer(
-            readerModeStateChange,
-            ToolbarAction(
-                canSummarize: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didSummarizeSettingsChange
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.trailingPageActions.count, 2)
-        XCTAssertEqual(newState.trailingPageActions[0].actionType, .summarizer)
-        XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.lightning)
-        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
-    }
-
     func test_websiteLoadingStateDidChangeAction_withLoadingTrue_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
@@ -361,8 +186,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.trailingPageActions.count, 1)
-        XCTAssertEqual(newState.trailingPageActions[0].actionType, .stopLoading)
         XCTAssertEqual(newState.navigationActions.count, 0)
     }
 
@@ -382,8 +205,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.trailingPageActions.count, 1)
-        XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
         XCTAssertEqual(newState.navigationActions.count, 0)
     }
 
@@ -406,9 +227,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.trailingPageActions.count, 1)
-        XCTAssertEqual(newState.trailingPageActions[0].actionType, .stopLoading)
-
         XCTAssertEqual(newState.navigationActions.count, 2)
         XCTAssertEqual(newState.navigationActions[0].actionType, .back)
         XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
@@ -423,9 +241,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
 
-        XCTAssertEqual(newState.trailingPageActions.count, 1)
-        XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
-
         XCTAssertEqual(newState.browserActions.count, 0)
     }
 
@@ -437,9 +252,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let newState = loadWebsiteAction(state: initialState, isShowingNavigationToolbar: false, reducer: reducer)
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-
-        XCTAssertEqual(newState.trailingPageActions.count, 1)
-        XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
 
         XCTAssertEqual(newState.browserActions.count, 3)
         XCTAssertEqual(newState.browserActions[0].actionType, .newTab)
@@ -605,8 +417,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions[0].actionType, .back)
         XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
 
-        XCTAssertEqual(newState.trailingPageActions.count, 0)
-
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .menu)
         XCTAssertEqual(newState.browserActions[1].actionType, .tabs)
@@ -633,8 +443,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions.count, 2)
         XCTAssertEqual(newState.navigationActions[0].actionType, .back)
         XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
-
-        XCTAssertEqual(newState.trailingPageActions.count, 0)
 
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .menu)
@@ -700,7 +508,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions.count, 0)
-        XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 1)
         XCTAssertEqual(newState.browserActions[0].actionType, .cancelEdit)
 
@@ -727,8 +534,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions.count, 0)
-
-        XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 1)
         XCTAssertEqual(newState.browserActions[0].actionType, .cancelEdit)
 
@@ -757,8 +562,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions.count, 0)
-
-        XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 1)
         XCTAssertEqual(newState.browserActions[0].actionType, .cancelEdit)
 
@@ -931,9 +734,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions.count, 0)
-
-        XCTAssertEqual(newState.trailingPageActions.count, 1)
-        XCTAssertEqual(newState.trailingPageActions[0].actionType, .reload)
         XCTAssertEqual(newState.browserActions.count, 0)
 
         XCTAssertEqual(newState.searchTerm, nil)
@@ -961,7 +761,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions.count, 0)
-        XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertEqual(newState.browserActions.count, 1)
         XCTAssertEqual(newState.browserActions[0].actionType, .cancelEdit)
 
@@ -1062,9 +861,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-
-        XCTAssertEqual(newState.trailingPageActions.count, 0)
-
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.isEmptySearch)
     }
@@ -1082,9 +878,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-
-        XCTAssertEqual(newState.trailingPageActions.count, 0)
-
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.didStartTyping)
         XCTAssertTrue(newState.isEmptySearch)
@@ -1104,7 +897,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.trailingPageActions.count, 0)
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.didStartTyping)
         XCTAssertFalse(newState.isEmptySearch)
