@@ -41,6 +41,7 @@ enum FeatureFlagID: String, CaseIterable {
     case improvedAppStoreReviewTriggerFeature
     case microsurvey
     case modernOnboardingUI
+    case multiDayOnboarding
     case nativeErrorPage
     case newBookmarkFolderTree
     case novaDesign
@@ -124,6 +125,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .httpsUpgrade,
                 .improvedAppStoreReviewTriggerFeature,
                 .microsurvey,
+                .multiDayOnboarding,
                 .nativeErrorPage,
                 .newBookmarkFolderTree,
                 .novaDesign,
