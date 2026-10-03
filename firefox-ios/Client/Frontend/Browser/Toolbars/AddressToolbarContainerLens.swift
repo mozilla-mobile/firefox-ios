@@ -21,20 +21,24 @@ struct AddressToolbarContainerLens: StateLens {
     let toolbarState: ToolbarState
     let leadingPageActions: [ToolbarActionConfiguration]
     let trailingPageActions: [ToolbarActionConfiguration]
+    let navigationActions: [ToolbarActionConfiguration]
 
     // MARK: - Private initializers
     private init(toolbarState: ToolbarState,
                  leadingPageActions: [ToolbarActionConfiguration],
-                 trailingPageActions: [ToolbarActionConfiguration]) {
+                 trailingPageActions: [ToolbarActionConfiguration],
+                 navigationActions: [ToolbarActionConfiguration]) {
         self.toolbarState = toolbarState
         self.leadingPageActions = leadingPageActions
         self.trailingPageActions = trailingPageActions
+        self.navigationActions = navigationActions
     }
 
     private init(windowUUID: WindowUUID) {
         self.init(toolbarState: ToolbarState(windowUUID: windowUUID),
                   leadingPageActions: [],
-                  trailingPageActions: [])
+                  trailingPageActions: [],
+                  navigationActions: [])
     }
 
     // MARK: - Lens initialization
@@ -64,9 +68,15 @@ struct AddressToolbarContainerLens: StateLens {
             isLoading: addressToolbar.isLoading,
             hasAlternativeLocationColor: hasAlternativeLocationColor)
 
+        let navigationActions = NavigationActionsBuilder.getActions(
+            isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
+            canGoBack: toolbarState.canGoBack,
+            canGoForward: toolbarState.canGoForward)
+
         self.init(toolbarState: toolbarState,
                   leadingPageActions: leadingPageActions,
-                  trailingPageActions: trailingPageActions)
+                  trailingPageActions: trailingPageActions,
+                  navigationActions: navigationActions)
     }
 
     private static func shouldHaveAlternativeLocationColor(toolbarState: ToolbarState) -> Bool {
