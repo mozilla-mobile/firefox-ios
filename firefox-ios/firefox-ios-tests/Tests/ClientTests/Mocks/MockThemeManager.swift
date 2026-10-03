@@ -11,6 +11,7 @@ class MockThemeManager: ThemeManager {
     private var currentThemeStorage: Theme = LightTheme()
 
     var resolvedThemeCalledCount = 0
+    var isPrivateThemeOverrideEnabled = true
 
     /// - Parameter currentTheme: the theme every lookup returns. Pass a Nova theme (e.g. `NovaLightTheme()`) to
     ///   exercise code paths gated on `Theme.isNova`.
