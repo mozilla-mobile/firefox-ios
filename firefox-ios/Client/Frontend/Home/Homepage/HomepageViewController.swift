@@ -1300,7 +1300,14 @@ final class HomepageViewController: UIViewController,
                 actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
             )
         case .jumpBackIn(let config):
-            guard let tab = tabManager.getTabForUUID(uuid: config.tabUUID) else { return }
+            guard let tab = tabManager.getTabForUUID(uuid: config.tabUUID) else {
+                logger.log(
+                    "Jump Back In tab \(config.tabUUID) selected but no longer exists",
+                    level: .warning,
+                    category: .homepage
+                )
+                return
+            }
             dispatchDidSelectCardItemAction(with: item)
             store.dispatch(
                 JumpBackInAction(
