@@ -160,6 +160,10 @@ final class BrowserScreen {
         webViewShowsText(containing: sel.BOOK_OF_MOZILLA_VERSE_TEXT.value, timeout: timeout)
     }
 
+    func assertBookOfMozillaPageDisplayed(timeout: TimeInterval = TIMEOUT) {
+        XCTAssertTrue(bookOfMozillaPageContentExists(timeout: timeout), "The Book of Mozilla page should be displayed")
+    }
+
     /// Scoped to the web view: an app-wide text search is also satisfied by a homepage tile or a tab
     /// label carrying the same page title, which cannot tell which page is on screen.
     private func webViewShowsText(containing text: String, timeout: TimeInterval) -> Bool {
@@ -739,6 +743,18 @@ final class BrowserScreen {
     func assertLinkExists(named name: String, timeout: TimeInterval = TIMEOUT) {
         let link = app.links[name].firstMatch
         BaseTestCase().mozWaitForElementToExist(link, timeout: timeout)
+    }
+
+    /// Delivers `url` through the system, the way a deeplink tapped in another app reaches Firefox.
+    /// iOS may ask to confirm opening the app, so accept that prompt when it appears.
+    @available(iOS 16.4, *)
+    func openDeeplinkFromOutsideApp(_ url: URL) {
+        XCUIDevice.shared.system.open(url)
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let openButton = springboard.alerts.buttons["Open"]
+        if openButton.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) {
+            openButton.waitAndTap()
+        }
     }
 
     func assertWebViewLinkTextExists(text: String, timeout: TimeInterval = TIMEOUT) {
