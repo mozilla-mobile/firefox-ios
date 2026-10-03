@@ -86,6 +86,47 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         XCTAssertEqual(readModfiedBookmark.url, newUrl)
     }
 
+    func testSave_movedBookmarkIsAddedAtEndOfFolder() async throws {
+        let folderGUID = try XCTUnwrap(testFolderGUID)
+        _ = await helper.addBookmark(title: "first", url: "https://www.first.com", position: 0, parentFolderGUID: folderGUID)
+        _ = await helper.addBookmark(title: "second", url: "https://www.second.com", position: 1, parentFolderGUID: folderGUID)
+        let bookmarkGUID = try await unwrapAsync {
+            return await helper.addBookmark(title: "third", url: "https://www.third.com")
+        }
+        let bookmark = try await unwrapAsync {
+            return await helper.readNode(guid: bookmarkGUID) as? BookmarkItemData
+        }
+        let subject = createSubject()
+
+        _ = await subject.save(bookmark: bookmark, parentFolderGUID: folderGUID)
+
+        let movedBookmark = try await unwrapAsync {
+            return await helper.readNode(guid: bookmarkGUID) as? BookmarkItemData
+        }
+        XCTAssertEqual(movedBookmark.parentGUID, folderGUID)
+        XCTAssertEqual(movedBookmark.position, 2)
+    }
+
+    func testSave_movedFolderIsAddedAtEndOfFolder() async throws {
+        let folderGUID = try XCTUnwrap(testFolderGUID)
+        _ = await helper.addBookmark(title: "first", url: "https://www.first.com", position: 0, parentFolderGUID: folderGUID)
+        let movingFolderGUID = try await unwrapAsync {
+            return await helper.addFolder(title: "moving folder")
+        }
+        let movingFolder = try await unwrapAsync {
+            return await helper.readNode(guid: movingFolderGUID) as? BookmarkFolderData
+        }
+        let subject = createSubject()
+
+        _ = await subject.save(bookmark: movingFolder, parentFolderGUID: folderGUID)
+
+        let movedFolder = try await unwrapAsync {
+            return await helper.readNode(guid: movingFolderGUID) as? BookmarkFolderData
+        }
+        XCTAssertEqual(movedFolder.parentGUID, folderGUID)
+        XCTAssertEqual(movedFolder.position, 1)
+    }
+
     func testSave_createNewFolder() async throws {
         // guid is not assigned since places will assign a custom one when creating a new bookmark
         let folder = BookmarkFolderData(guid: "",
