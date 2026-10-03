@@ -164,9 +164,10 @@ final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, Store
     /// such as after dismissing the keyboard on the homepage.
     func enablePanGestureOnHomepageIfNeeded() {
         let addressToolbarState = toolbarState?.addressToolbar
-        guard addressToolbarState?.didStartTyping == false,
+        guard addressToolbarState?.isEditing == false,
+              addressToolbarState?.didStartTyping == false,
               addressToolbarState?.url == nil,
-        toolbarState?.isShowingNavigationToolbar == true else { return }
+              toolbarState?.isShowingNavigationToolbar == true else { return }
         enablePanGestureRecognizer()
     }
     // MARK: - Pan Gesture Handling
