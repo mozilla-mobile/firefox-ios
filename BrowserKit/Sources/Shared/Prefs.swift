@@ -277,6 +277,10 @@ public struct PrefsKeys {
     // The day whose card was last shown.
     public static let onboardingDripLastCardActiveDay = "onboardingDripLastCardActiveDay"
 
+    // Set when the user declines the notifications card and dismisses the homescreen notification card respectively
+    public static let onboardingNotificationsDeclined = "onboardingNotificationsDeclined"
+    public static let onboardingNotificationCardDismissed = "onboardingNotificationCardDismissed"
+
     // MARK: - Apple Intelligence
     // Used to determine if Apple Intelligence is available
     public static let appleIntelligenceAvailable = "appleIntelligenceAvailableKey"

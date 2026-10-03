@@ -25,9 +25,8 @@ class ResetOnboardingDripSetting: HiddenSetting {
         prefs.removeObjectForKey(PrefsKeys.IntroSeen)
         prefs.removeObjectForKey(PrefsKeys.OnboardingLastCardSeen)
         prefs.removeObjectForKey(PrefsKeys.onboardingDripActiveDayCount)
-        // Notification card state, so the day-2 decline / homepage card replay from scratch
-        // prefs.removeObjectForKey(PrefsKeys.onboardingNotificationsDeclined)
-        // prefs.removeObjectForKey(PrefsKeys.onboardingNotificationCardDismissed)
+        prefs.removeObjectForKey(PrefsKeys.onboardingNotificationsDeclined)
+        prefs.removeObjectForKey(PrefsKeys.onboardingNotificationCardDismissed)
         settingsDelegate?.askedToReload()
     }
 }
