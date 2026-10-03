@@ -32,14 +32,14 @@ class ButtonToast: Toast {
 
     private var imageView: UIImageView = .build { imageView in }
 
-    private var labelStackView: UIStackView = .build { stackView in
+    private(set) var labelStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.setContentCompressionResistancePriority(.required, for: .vertical)
-        stackView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        stackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
 
-    private var titleLabel: UILabel = .build { label in
+    private(set) var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
@@ -106,6 +106,7 @@ class ButtonToast: Toast {
             titleLabel.lineBreakMode = .byClipping
             titleLabel.numberOfLines = 1 // if showing a description we can't wrap to the second line
             titleLabel.adjustsFontSizeToFitWidth = true
+            titleLabel.minimumScaleFactor = 0.7
 
             descriptionLabel.text = descriptionText
             labelStackView.addArrangedSubview(descriptionLabel)
@@ -179,7 +180,7 @@ class PasteControlToast: ButtonToast {
     private var theme: Theme?
     private var pasteControlTarget: UIViewController?
 
-    private lazy var pasteControl: UIPasteControl = {
+    private(set) lazy var pasteControl: UIPasteControl = {
         let pasteControlConfig = UIPasteControl.Configuration()
         pasteControlConfig.displayMode = .labelOnly
         pasteControlConfig.baseForegroundColor = theme?.colors.textInverted
@@ -206,7 +207,8 @@ class PasteControlToast: ButtonToast {
 
     override func setupPaddedButton(stackView: UIStackView, buttonText: String?) {
         stackView.addArrangedSubview(pasteControl)
-        pasteControl.setContentCompressionResistancePriority(.required, for: .horizontal)
+        pasteControl.setContentCompressionResistancePriority(UILayoutPriority(999), for: .horizontal)
+        pasteControl.setContentHuggingPriority(UILayoutPriority(751), for: .horizontal)
     }
 
     override func applyTheme(theme: Theme) {
