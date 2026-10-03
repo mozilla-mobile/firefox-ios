@@ -1655,22 +1655,22 @@ extension String {
         }
         public struct GenericError {
             public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.TitleLabel.v157",
+                key: "NativeErrorPage.GenericError.TitleLabel.v158",
                 tableName: "NativeErrorPage",
                 value: "Looks like there’s a problem with this site",
                 comment: "On error page, this is the title for generic error.")
             public static let DescriptionSuffix = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v157",
+                key: "NativeErrorPage.GenericError.Description.v158",
                 tableName: "NativeErrorPage",
                 value: "The site may be temporarily unavailable, it may have moved to a different address, or your firewall or proxy may be blocking the connection.\n\nCheck your connection settings and try again.",
                 comment: "Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again.")
             public static let DescriptionPrefixWithURL = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v157.withURL",
+                key: "NativeErrorPage.GenericError.Description.v158.withURL",
                 tableName: "NativeErrorPage",
                 value: "%1$@ couldn’t connect to %2$@.",
                 comment: "First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL.")
             public static let DescriptionPrefixWithoutURL = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v157.withoutURL",
+                key: "NativeErrorPage.GenericError.Description.v158.withoutURL",
                 tableName: "NativeErrorPage",
                 value: "%1$@ couldn’t reach the requested URL.",
                 comment: "First sentence of the generic error description when the requested URL is not available. %1$@ is the app name.")
@@ -9800,7 +9800,7 @@ extension String {
                     comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
             }
         }
-        struct v157 {
+        struct v158 {
             public static let TitleLabel = MZLocalizedString(
                 key: "NativeErrorPage.GenericError.TitleLabel.v131",
                 tableName: "NativeErrorPage",
