@@ -10,6 +10,7 @@ public protocol CrashManager: Sendable {
     var crashedLastLaunch: Bool { get }
     func captureError(error: Error)
     func setup(sendCrashReports: Bool)
+    func setFeatureFlags(_ featureBranches: [String: String])
     func send(message: String,
               category: LoggerCategory,
               level: LoggerLevel,
@@ -30,13 +31,17 @@ public protocol CustomCrashReport {
     var message: String { get }
 }
 
-/// **Note**: This class is safely `@unchecked Sendable` because we protect the only mutable state (`enabled`) with a manual
-/// synchronization method (a lock).
+/// **Note**: This class is safely `@unchecked Sendable` because we protect the mutable state (`enabled` and
+/// `featureBranches`) with a manual synchronization method (a lock).
 public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
     enum Environment: String {
         case nightly = "Nightly"
         case production = "Production"
     }
+
+    static let featureFlagsContextKey = "flags"
+    /// Sentry keeps at most 100 flags per event
+    static let maxFeatureFlags = 100
 
     // MARK: - Properties
     private let deviceAppHashKey = "SentryDeviceAppHash"
@@ -46,6 +51,7 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
     // We are using a lock to manually protect our mutable state to make this class @unchecked Sendable
     private let enabledLock = NSLock()
     private var enabled = false
+    private var featureBranches: [String: String] = [:]
 
     private var shouldSetup: Bool {
         enabledLock.lock()
@@ -161,6 +167,28 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
         setupIgnoreException()
     }
 
+    public func setFeatureFlags(_ featureBranches: [String: String]) {
+        enabledLock.lock()
+        defer { enabledLock.unlock() }
+        self.featureBranches = featureBranches
+        guard enabled else { return }
+
+        configureFeatureFlagsScope()
+    }
+
+    /// Converts feature branches to Sentry's feature flag context format. Sentry flags only support boolean
+    /// results, so each enrollment is encoded as a `feature:branch` flag that evaluated to `true`.
+    static func featureFlagsContext(from featureBranches: [String: String]) -> [String: Any]? {
+        guard !featureBranches.isEmpty else { return nil }
+
+        let values = featureBranches
+            .map { "\($0.key):\($0.value)" }
+            .sorted()
+            .prefix(maxFeatureFlags)
+            .map { ["flag": $0, "result": true] as [String: Any] }
+        return ["values": Array(values)]
+    }
+
     private func alterEventForCustomCrash(event: Sentry.Event, crash: CustomCrashReport) {
         event.fingerprint = [crash.typeName]
         // Sentry supports multiple exceptions in an event, modifying
@@ -254,11 +282,28 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
     private func configureScope() {
         let deviceAppHash = UserDefaults(suiteName: appInfo.sharedContainerIdentifier)?
             .string(forKey: self.deviceAppHashKey)
+        let featureFlagsContext = Self.featureFlagsContext(from: featureBranches)
         sentryWrapper.configureScope(scope: { scope in
             scope.setContext(value: [
                 "device_app_hash": deviceAppHash ?? self.defaultDeviceAppHash
             ], key: "appContext")
+            Self.apply(featureFlagsContext: featureFlagsContext, to: scope)
         })
+    }
+
+    private func configureFeatureFlagsScope() {
+        let featureFlagsContext = Self.featureFlagsContext(from: featureBranches)
+        sentryWrapper.configureScope(scope: { scope in
+            Self.apply(featureFlagsContext: featureFlagsContext, to: scope)
+        })
+    }
+
+    private static func apply(featureFlagsContext: [String: Any]?, to scope: Scope) {
+        if let featureFlagsContext {
+            scope.setContext(value: featureFlagsContext, key: featureFlagsContextKey)
+        } else {
+            scope.removeContext(key: featureFlagsContextKey)
+        }
     }
 
     /// If we have not already for this install, generate a completely random identifier for this device.
