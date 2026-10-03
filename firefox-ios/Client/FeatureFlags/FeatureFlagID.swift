@@ -17,7 +17,6 @@ enum FeatureFlagID: String, CaseIterable {
     case adsClient
     case aiKillSwitch
     case backgroundAudio
-    case badCertDomainErrorPage
     case bookmarksSearchFeature
     case cellularDataRestrictedErrorPage
     case customReaderModeScheme
@@ -45,7 +44,6 @@ enum FeatureFlagID: String, CaseIterable {
     case newBookmarkFolderTree
     case novaDesign
     case novaPrivateThemeOverride
-    case noInternetConnectionErrorPage
     case privacyDashboard
     case quickAnswers
     case recentSearches
@@ -109,7 +107,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .adsClient,
                 .aiKillSwitch,
                 .backgroundAudio,
-                .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
@@ -128,7 +125,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .newBookmarkFolderTree,
                 .novaDesign,
                 .novaPrivateThemeOverride,
-                .noInternetConnectionErrorPage,
                 .privacyDashboard,
                 .quickAnswers,
                 .recentSearches,

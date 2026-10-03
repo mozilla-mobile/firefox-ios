@@ -1112,7 +1112,7 @@ extension BrowserViewController: WKNavigationDelegate {
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         let nsError = error as NSError
-        if NativeErrorPageFeatureFlag().isNativeErrorPageEnabled {
+        if featureFlagsProvider.isEnabled(.nativeErrorPage) {
             store.dispatch(NativeErrorPageAction(
                 networkError: nsError,
                 windowUUID: windowUUID,
@@ -1230,7 +1230,7 @@ extension BrowserViewController: WKNavigationDelegate {
             if let errorPageURL = errorPageURLComponents.url {
                 let isBadCertError = NativeErrorPageHelper.isBadCertDomainError(error)
 
-                if NativeErrorPageFeatureFlag().isNativeErrorPageEnabled {
+                if featureFlagsProvider.isEnabled(.nativeErrorPage) {
                     if isBadCertError {
                         NativeErrorPageHelper.logCertificateErrorDetails(error: error, logger: logger)
                     }
