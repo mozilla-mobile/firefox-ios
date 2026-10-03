@@ -385,6 +385,7 @@
         "NavigationTest\/testOpenInNewTab_tabTrayExperimentOn()",
         "NavigationTest\/testPopUpBlocker_tabTrayExperimentOff()",
         "NavigationTest\/testPopUpBlocker_tabTrayExperimentOn()",
+        "NavigationTest\/testSSL()",
         "NavigationTest\/testScrollingBehaviorInAWebPage()",
         "NavigationTest\/testScrollsToTopWithMultipleTabs()",
         "NavigationTest\/testShareLink()",
