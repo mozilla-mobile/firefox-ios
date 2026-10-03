@@ -125,4 +125,31 @@ class BreachAlertsTests: XCTestCase {
         breachAlertsManager.loadBreaches { _ in }
         XCTAssertEqual(blockbusterBreach, breachAlertsManager.breachRecordForLogin(breachedLogin))
     }
+
+    func testLoadBreaches_withMockBreachAlerts_skipsFetch() {
+        let subject = createMockBreachAlertsSubject()
+        let expectation = expectation(description: "Breaches loaded")
+
+        subject.loadBreaches { maybeBreaches in
+            XCTAssertEqual(maybeBreaches.successValue, [])
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testFindUserBreaches_withMockBreachAlerts_returnsAllLogins() {
+        let subject = createMockBreachAlertsSubject()
+
+        let result = subject.findUserBreaches([unbreachedLogin, breachedLogin])
+
+        XCTAssertEqual(result.successValue, [unbreachedLogin, breachedLogin])
+        XCTAssertEqual(subject.breachRecordForLogin(unbreachedLogin)?.domain, "unbreached.com")
+    }
+
+    private func createMockBreachAlertsSubject() -> BreachAlertsManager {
+        let profile = MockProfile()
+        profile.prefs.setBool(true, forKey: PrefsKeys.useMockBreachAlerts)
+        return BreachAlertsManager(MockBreachAlertsClient(), profile: profile)
+    }
 }
