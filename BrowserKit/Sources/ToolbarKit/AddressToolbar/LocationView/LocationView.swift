@@ -33,7 +33,6 @@ final class LocationView: UIView,
     private var urlAbsolutePath: String?
     private var searchTerm: String?
     private var onTapLockIcon: (@MainActor (UIButton) -> Void)?
-    private var onLongPress: (@MainActor () -> Void)?
     private weak var delegate: LocationViewDelegate?
     private var theme: any Theme = LightTheme()
     private var isUnifiedSearchEnabled = false
@@ -55,7 +54,6 @@ final class LocationView: UIView,
     }
 
     private var tapGestureRecognizer: UITapGestureRecognizer?
-    private var longPressGestureRecognizer: UILongPressGestureRecognizer?
 
     /// Determines if the URL text field's content is wider than the visible area, accounting for a safe offset.
     /// An additional offset (default is 0) used when reader mode is available,
@@ -134,7 +132,6 @@ final class LocationView: UIView,
         super.init(frame: .zero)
         setupLayout()
         setupGradientLayer()
-        addLongPressGestureRecognizer()
     }
 
     required init?(coder: NSCoder) {
@@ -206,15 +203,9 @@ final class LocationView: UIView,
         updateIconContainer(isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
         handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
-        handleGesture(
-            &longPressGestureRecognizer,
-            type: UILongPressGestureRecognizer.self,
-            action: #selector(handleLongPress)
-        )
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         searchTerm = config.searchTerm
-        onLongPress = config.onLongPress
 
         layoutContainerView(isEditing: config.isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
         applyTheme(theme: theme)
@@ -652,11 +643,6 @@ final class LocationView: UIView,
     }
 
     // MARK: - Gesture Recognizers
-    private func addLongPressGestureRecognizer() {
-        let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(LocationView.handleLongPress))
-        urlTextField.addGestureRecognizer(gestureRecognizer)
-    }
-
     private func handleGesture<T: UIGestureRecognizer>(
         _ gesture: inout T?,
         type: T.Type,
@@ -678,13 +664,6 @@ final class LocationView: UIView,
     @objc
     private func didTapLockIcon() {
         onTapLockIcon?(lockIconButton)
-    }
-
-    @objc
-    private func handleLongPress(_ recognizer: UILongPressGestureRecognizer) {
-        if recognizer.state == .began {
-            onLongPress?()
-        }
     }
 
     // MARK: - MenuHelperURLBarInterface

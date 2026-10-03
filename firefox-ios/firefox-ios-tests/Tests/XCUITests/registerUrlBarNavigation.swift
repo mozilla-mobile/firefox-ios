@@ -25,12 +25,7 @@ func registerUrlBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppli
         }
 
         screenState.backAction = {
-            if isTablet {
-                // There is no Cancel option in iPad.
-                app.otherElements["PopoverDismissRegion"].waitAndTap()
-            } else {
-                app.buttons["PhotonMenu.close"].waitAndTap()
-            }
+            app.otherElements["PopoverDismissRegion"].waitAndTap()
         }
         screenState.dismissOnUse = true
     }
