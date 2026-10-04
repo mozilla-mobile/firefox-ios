@@ -72,9 +72,13 @@ class TrackingProtectionModel {
     let titleLabelA11yId = A11y.titleLabel
     let subtitleLabelA11yId = A11y.subtitleLabel
 
+    var originalURL: URL {
+        return InternalURL(url)?.originalURLFromErrorPage ?? url
+    }
+
     var websiteTitle: String {
         let websiteTitle: String?
-        if let internalURL = InternalURL(url), internalURL.isCertificateErrorURL {
+        if let internalURL = InternalURL(url), internalURL.isErrorPage {
             websiteTitle = internalURL.originalURLFromErrorPage?.baseDomain
         } else {
             websiteTitle = url.baseDomain
@@ -160,7 +164,7 @@ class TrackingProtectionModel {
     func getDetailsModel() -> TrackingProtectionDetailsModel {
         return TrackingProtectionDetailsModel(topLevelDomain: websiteTitle,
                                               title: displayTitle,
-                                              URL: url.absoluteDisplayString,
+                                              URL: originalURL.absoluteDisplayString,
                                               getLockIcon: getConnectionStatusImage(themeType:),
                                               connectionStatusMessage: connectionStatusString,
                                               connectionSecure: connectionSecure,
@@ -172,7 +176,7 @@ class TrackingProtectionModel {
             userDefaults: userDefaults,
             topLevelDomain: websiteTitle,
             title: displayTitle,
-            URL: url.absoluteDisplayString,
+            URL: originalURL.absoluteDisplayString,
             contentBlockerStats: contentBlockerStats,
             connectionSecure: connectionSecure
         )
@@ -187,18 +191,18 @@ class TrackingProtectionModel {
     @MainActor
     func toggleSiteSafelistStatus() {
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
-        ContentBlocker.shared.safelist(enable: contentBlockerStatus != .safelisted, url: url) {
+        ContentBlocker.shared.safelist(enable: !isURLSafelisted(), url: originalURL) {
         }
     }
 
     @MainActor
     func isURLSafelisted() -> Bool {
-        return ContentBlocker.shared.isSafelisted(url: url)
+        return ContentBlocker.shared.isSafelisted(url: originalURL)
     }
 
     @MainActor
     func onTapClearCookiesAndSiteData(controller: UIViewController) {
-        let alertMessage = String(format: clearCookiesAlertText, url.baseDomain ?? url.shortDisplayString)
+        let alertMessage = String(format: clearCookiesAlertText, originalURL.baseDomain ?? originalURL.shortDisplayString)
         let alert = UIAlertController(
             title: clearCookiesAlertTitle,
             message: alertMessage,
@@ -235,7 +239,7 @@ class TrackingProtectionModel {
 
     @MainActor
     func clearCookiesAndSiteData() {
-        guard let domain = url.baseDomain else { return }
+        guard let domain = originalURL.baseDomain else { return }
         Task {
             await CookiesClearable().clear(forDomain: domain)
             await SiteDataClearable().clear(forDomain: domain)
