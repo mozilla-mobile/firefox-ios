@@ -36,6 +36,7 @@ final class ReaderModeTests: XCTestCase {
         let tab = Tab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
         tab.nightMode = initiallyEnabled
         let webView = MockTabWebView(tab: tab)
+        webView.completesJavaScriptEvaluation = true
         tab.webView = webView
         let readerMode = ReaderMode(tab: tab)
         let pageShow = ReaderPageShowMessage()
@@ -46,8 +47,8 @@ final class ReaderModeTests: XCTestCase {
 
         readerMode.userContentController(webView.configuration.userContentController, didReceiveScriptMessage: pageShow)
 
-        XCTAssertEqual(webView.evaluatedScripts.count, 1, file: file, line: line)
-        let evaluation = try XCTUnwrap(webView.evaluatedScripts.last, file: file, line: line)
+        XCTAssertEqual(webView.evaluatedScripts.count, enabled ? 1 : 2, file: file, line: line)
+        let evaluation = try XCTUnwrap(webView.evaluatedScripts.first, file: file, line: line)
         XCTAssertEqual(
             evaluation.script,
             "window.__firefox__.NightMode.setEnabled(\(enabled))",
@@ -55,6 +56,11 @@ final class ReaderModeTests: XCTestCase {
             line: line
         )
         XCTAssertEqual(evaluation.world.name, "NightMode", file: file, line: line)
+        if !enabled {
+            let restoration = try XCTUnwrap(webView.evaluatedScripts.last, file: file, line: line)
+            XCTAssertEqual(restoration.script, "window.__firefox__.reader.restoreStyle()", file: file, line: line)
+            XCTAssertTrue(restoration.world === WKContentWorld.defaultClient, file: file, line: line)
+        }
         XCTAssertEqual(webView.loadCalled, 0, file: file, line: line)
         XCTAssertEqual(webView.reloadFromOriginCalled, 0, file: file, line: line)
     }
