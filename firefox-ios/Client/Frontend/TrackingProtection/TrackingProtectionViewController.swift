@@ -513,7 +513,7 @@ class TrackingProtectionViewController: UIViewController,
     }
 
     private func updateViewDetails() {
-        let headerIcon = FaviconImageViewModel(siteURLString: model.url.absoluteString,
+        let headerIcon = FaviconImageViewModel(siteURLString: model.originalURL.absoluteString,
                                                faviconCornerRadius: TPMenuUX.UX.faviconCornerRadius)
         headerContainer.setupDetails(subtitle: model.websiteTitle,
                                      title: model.displayTitle,
