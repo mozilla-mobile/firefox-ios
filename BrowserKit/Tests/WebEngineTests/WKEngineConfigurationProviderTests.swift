@@ -71,6 +71,127 @@ final class WKEngineConfigurationProviderTests: XCTestCase {
         XCTAssertFalse(afterStore.isPersistent)
     }
 
+    @available(iOS 17.0, *)
+    func testApplyProxyConfigurations_withConfigs_enablesProxy() {
+        // Clear any existing proxy configs before testing
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([], forcingSessionReset: false)
+
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([makeProxyConfiguration()])
+
+        XCTAssertTrue(DefaultWKEngineConfigurationProvider.isProxyEnabled)
+    }
+
+    @available(iOS 17.0, *)
+    func testApplyProxyConfigurations_withEmptyConfigs_disablesProxy() {
+        // Clear any existing proxy configs before testing
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([], forcingSessionReset: false)
+
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([makeProxyConfiguration()])
+
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([])
+
+        XCTAssertFalse(DefaultWKEngineConfigurationProvider.isProxyEnabled)
+    }
+
+    @available(iOS 17.0, *)
+    func testApplyProxyConfigurations_forcingSessionReset_appendsTriggerToBothStores() {
+        // Clear any existing proxy configs before testing
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([], forcingSessionReset: false)
+
+        let subject = createSubject()
+
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([makeProxyConfiguration()])
+
+        XCTAssertEqual(normalStore(subject).proxyConfigurations.count, 2)
+        XCTAssertEqual(privateStore(subject).proxyConfigurations.count, 2)
+    }
+
+    @available(iOS 17.0, *)
+    func testApplyProxyConfigurations_withEmptyConfigsForcingSessionReset_keepsOnlyTrigger() {
+        // Clear any existing proxy configs before testing
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([], forcingSessionReset: false)
+
+        let subject = createSubject()
+
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([])
+
+        XCTAssertEqual(normalStore(subject).proxyConfigurations.count, 1)
+        XCTAssertEqual(privateStore(subject).proxyConfigurations.count, 1)
+        XCTAssertFalse(DefaultWKEngineConfigurationProvider.isProxyEnabled)
+    }
+
+    @available(iOS 17.0, *)
+    func testApplyProxyConfigurations_withoutSessionReset_assignsConfigsAsIs() {
+        // Clear any existing proxy configs before testing
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([], forcingSessionReset: false)
+
+        let subject = createSubject()
+
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations(
+            [makeProxyConfiguration()],
+            forcingSessionReset: false
+        )
+
+        XCTAssertEqual(normalStore(subject).proxyConfigurations.count, 1)
+        XCTAssertEqual(privateStore(subject).proxyConfigurations.count, 1)
+        XCTAssertTrue(DefaultWKEngineConfigurationProvider.isProxyEnabled)
+    }
+
+    @available(iOS 17.0, *)
+    func testEndPrivateBrowsingSession_carriesProxyConfigurationsToNewPrivateStore() {
+        // Clear any existing proxy configs before testing
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([], forcingSessionReset: false)
+
+        let subject = createSubject()
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([makeProxyConfiguration()])
+        let beforeStore = privateStore(subject)
+
+        subject.endPrivateBrowsingSession()
+
+        let afterStore = privateStore(subject)
+        XCTAssertFalse(beforeStore === afterStore)
+        XCTAssertEqual(afterStore.proxyConfigurations.count, beforeStore.proxyConfigurations.count)
+    }
+
+    @available(iOS 17.0, *)
+    func testEndPrivateBrowsingSession_withoutProxy_leavesNewPrivateStoreUnproxied() {
+        // Clear any existing proxy configs before testing
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([], forcingSessionReset: false)
+
+        let subject = createSubject()
+
+        subject.endPrivateBrowsingSession()
+
+        XCTAssertTrue(privateStore(subject).proxyConfigurations.isEmpty)
+    }
+
+    // MARK: - Helpers
+    @available(iOS 17.0, *)
+    private func makeProxyConfiguration() -> ProxyConfiguration {
+        let hop = ProxyConfiguration.RelayHop(
+            http2RelayEndpoint: .url(URL(string: "https://proxy.invalid/")!)
+        )
+        return ProxyConfiguration(relayHops: [hop])
+    }
+
+    private func normalStore(_ subject: DefaultWKEngineConfigurationProvider) -> WKWebsiteDataStore {
+        return subject.createConfiguration(parameters: parameters(isPrivate: false))
+            .webViewConfiguration.websiteDataStore
+    }
+
+    private func privateStore(_ subject: DefaultWKEngineConfigurationProvider) -> WKWebsiteDataStore {
+        return subject.createConfiguration(parameters: parameters(isPrivate: true))
+            .webViewConfiguration.websiteDataStore
+    }
+
+    private func parameters(isPrivate: Bool) -> WKWebViewParameters {
+        return WKWebViewParameters(
+            blockPopups: true,
+            isPrivate: isPrivate,
+            autoPlay: .all,
+            schemeHandler: WKInternalSchemeHandler()
+        )
+    }
     // MARK: - Helpers
 
     private func createSubject() -> DefaultWKEngineConfigurationProvider {
