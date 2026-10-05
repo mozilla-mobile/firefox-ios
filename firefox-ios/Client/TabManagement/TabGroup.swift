@@ -12,6 +12,7 @@ struct TabGroup: Codable, Equatable, Identifiable, Sendable {
     let id: TabGroupID
     var title: String
     var color: TabGroupColor
+    var emoji: String?
     var tabIDs: [TabUUID]
 
     init(id: TabGroupID = UUID(), title: String, color: TabGroupColor = .blue, tabIDs: [TabUUID] = []) {
