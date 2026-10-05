@@ -13,7 +13,7 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockProfile: MockProfile!
     private var mockTabManager: MockTabManager!
     private var mockWindowManager: MockWindowManager!
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
     private var appState: AppState!
 
     override func setUp() async throws {
@@ -153,14 +153,5 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         self.appState = appState
         return appState
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

@@ -34,7 +34,7 @@ public final class QuickAnswersViewController: UIViewController,
 
     // MARK: - Properties
     private let backgroundRecordEffect: UIHostingController<BackgroundEffectView>
-    private lazy var closeButton: UIButton = .build {
+    private lazy var closeButton: UIButton = .build { [weak self] in
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
         } else {
@@ -44,7 +44,7 @@ public final class QuickAnswersViewController: UIViewController,
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.closeButtonContentInset
         $0.addAction(
-            UIAction(handler: { [weak self] _ in
+            UIAction(handler: { _ in
                 self?.dismiss(with: nil)
             }),
             for: .touchUpInside
@@ -233,8 +233,6 @@ public final class QuickAnswersViewController: UIViewController,
     }
 
     // MARK: - Presentation transition
-    /// Hides and offsets the content so `applyPresentationTransition` can bring it in alongside the
-    /// cross dissolve. Called by `CrossDissolveTransitionAnimator` before it starts animating.
     func prepareForPresentationTransition() {
         contentView.prepareForPresentationTransition()
         backgroundRecordEffect.view.alpha = 0.0
@@ -244,8 +242,6 @@ public final class QuickAnswersViewController: UIViewController,
         closeButton.alpha = 0.0
     }
 
-    /// Restores the content to its resting state. Called from inside the animation block of
-    /// `CrossDissolveTransitionAnimator`, so the content moves in step with the mask.
     func applyPresentationTransition() {
         contentView.applyPresentationTransition()
         backgroundRecordEffect.view.alpha = 1.0

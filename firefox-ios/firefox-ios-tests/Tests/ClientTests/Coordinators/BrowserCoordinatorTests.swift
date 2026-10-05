@@ -30,7 +30,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     private var glean: MockGleanWrapper!
     private var scrollDelegate: MockStatusBarScrollDelegate!
     private var browserViewController: MockBrowserViewController!
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
     private var homepageTabStateStore: HomepageTabStateStore!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
@@ -1637,6 +1637,56 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    // MARK: - Child coordinator lifetime
+
+    func testShowTabTray_tabTrayCoordinatorIsReleasedWithParent() throws {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
+        let subject = createSubject()
+
+        subject.showTabTray(selectedPanel: .tabs)
+
+        let child = try XCTUnwrap(subject.childCoordinators[TabTrayCoordinator.self])
+        trackForMemoryLeaks(child)
+    }
+
+    func testShowEditBookmarks_bookmarksCoordinatorIsReleasedWithParent() throws {
+        let subject = createSubject()
+        let folder = MockFxBookmarkNode(type: .folder,
+                                        guid: "0",
+                                        position: 0,
+                                        isRoot: false,
+                                        title: "TestFolder")
+        let bookmark = MockFxBookmarkNode(type: .bookmark,
+                                          guid: "1",
+                                          position: 0,
+                                          isRoot: false,
+                                          title: "TestBookmark")
+
+        subject.showEditBookmark(parentFolder: folder, bookmark: bookmark)
+
+        let child = try XCTUnwrap(subject.childCoordinators[BookmarksCoordinator.self])
+        trackForMemoryLeaks(child)
+    }
+
+    func testSettingsRoute_settingsCoordinatorIsReleasedWithParent() throws {
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        subject.handle(route: .settings(section: .general))
+
+        let child = try XCTUnwrap(subject.childCoordinators[SettingsCoordinator.self])
+        trackForMemoryLeaks(child)
+    }
+
+    func testShowMicrosurvey_microsurveyCoordinatorIsReleasedWithParent() throws {
+        let subject = createSubject()
+
+        subject.showMicrosurvey(model: MicrosurveyMock.model)
+
+        let child = try XCTUnwrap(subject.childCoordinators[MicrosurveyCoordinator.self])
+        trackForMemoryLeaks(child)
+    }
+
     // MARK: - Route handling
 
     // MARK: canHandle(route:)
@@ -1727,11 +1777,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         return AppState()
     }
 
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
     private func setupStoreWithAddressBar(isEditing: Bool) {
         var toolbarState = ToolbarState(windowUUID: windowUUID)
         toolbarState.addressToolbar = toolbarState.addressToolbar
@@ -1747,10 +1792,6 @@ final class BrowserCoordinatorTests: XCTestCase,
             )
         ))
         StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 
     // MARK: - Helpers
