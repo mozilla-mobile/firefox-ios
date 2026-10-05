@@ -13,7 +13,7 @@ body {
   transition-duration: 0.4s;
   margin-left: auto;
   margin-right: auto;
-  font-family: system-ui, sans-serif;
+  font-family: ui-sans-serif, sans-serif;
 }
 
 .bold {
@@ -35,7 +35,7 @@ body {
 
 .domain,
 .credits {
-  font-family: system-ui, sans-serif;
+  font-family: ui-sans-serif, sans-serif;
 }
 
 .domain {
@@ -290,7 +290,7 @@ body {
 .content .caption,
 .content .wp-caption-text,
 .content figcaption {
-  font-family: system-ui, sans-serif;
+  font-family: ui-sans-serif, sans-serif;
   margin: 0px !important;
   padding-top: 4px !important;
 }
@@ -478,7 +478,7 @@ body {
 .segmented-button > li > a {
   display: block;
   padding: 5px 0;
-  font-family: system-ui, sans-serif;
+  font-family: ui-sans-serif, sans-serif;
   font-weight: lighter;
 }
 

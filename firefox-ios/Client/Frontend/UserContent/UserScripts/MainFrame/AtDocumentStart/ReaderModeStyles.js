@@ -6,7 +6,7 @@ setFetchMethod(window.fetch);
 
 const THEME_CLASSES = ["light", "dark", "sepia"];
 const FONT_TYPES = {
-  "sans-serif": "system-ui, sans-serif",
+  "sans-serif": "ui-sans-serif, sans-serif",
   "serif": "ui-serif, serif",
 };
 const DEFAULT_DR_CONFIGS = {
