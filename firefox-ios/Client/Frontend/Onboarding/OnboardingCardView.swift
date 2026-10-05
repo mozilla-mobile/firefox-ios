@@ -8,7 +8,7 @@ import Common
 import Shared
 
 /// View that presents the day's onboarding cards
-struct OnboardingFlowView: View {
+struct OnboardingFlowView: View, ThemeableView {
     private struct UX {
         static let bodyPadding: CGFloat = 0
         static let hiddenOpacity: CGFloat = 0
@@ -21,10 +21,11 @@ struct OnboardingFlowView: View {
     }
 
     private let cards: [OnboardingCard]
-    private let windowUUID: WindowUUID
-    private let themeManager: ThemeManager
     private let onAction: (OnboardingCardButtonAction) -> Void
     private let onComplete: () -> Void
+    @State var theme: Theme
+    var windowUUID: WindowUUID
+    var themeManager: ThemeManager
 
     @State private var index = 0
 
@@ -38,13 +39,13 @@ struct OnboardingFlowView: View {
         self.cards = cards
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
         self.onAction = onAction
         self.onComplete = onComplete
     }
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
             let card = cards[min(index, cards.count - 1)]
             let secondaryAction: (() -> Void)? = card.secondaryButtonTitle == nil
             ? nil
@@ -64,16 +65,17 @@ struct OnboardingFlowView: View {
             )
         }
         .padding(UX.bodyPadding)
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
     private var gradient: some View {
-        let colors = gradientColors(for: themeManager.getCurrentTheme(for: windowUUID))
-        let radialGradient = RadialGradient(colors: [colors[2], .white.opacity(UX.hiddenOpacity)],
+        let colors = gradientColors(for: theme)
+        let radialGradient = RadialGradient(colors: [colors[safe: 2] ?? Color.clear, .white.opacity(UX.hiddenOpacity)],
                                             center: UX.radialGradientCentre,
                                             startRadius: UX.radialGradientStartRadius,
                                             endRadius: UX.radialGradientEndRadius)
 
-        let linearGradient = LinearGradient(colors: Array(colors[0...1]),
+        let linearGradient = LinearGradient(colors: Array(colors.prefix(2)),
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing)
             .overlay(radialGradient)
@@ -85,6 +87,8 @@ struct OnboardingFlowView: View {
     private func gradientColors(for theme: Theme) -> [Color] {
         guard !theme.isNova else {
             let gradient = theme.colors.gradientAccentSubtle.colors
+            // resolvedGradient is here incase gradientAccentSubtle changes for whatever reason
+            let resolvedGradient = gradient.count == 2 ? gradient : [UIColor.clear, UIColor.clear]
             let isDark = theme.type == .dark
             let orange = theme.colors.gradientAIStrongStop3.color.opacity(UX.radialGradientOrangeOpacity)
             if isDark {
@@ -176,7 +180,7 @@ struct OnboardingCardView: View {
 
     @ViewBuilder
     private var cardImage: some View {
-        if let name = theme.type == .dark ? card.darkImageName : card.lightImageName, let uiImage = UIImage(named: name) {
+        if let name = card.imageName, let uiImage = UIImage(named: name) {
             Image(uiImage: uiImage)
                 .resizable()
                 .scaledToFit()

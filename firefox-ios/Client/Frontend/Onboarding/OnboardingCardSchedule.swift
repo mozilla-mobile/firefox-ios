@@ -14,9 +14,7 @@ enum OnboardingCardButtonAction {
 struct OnboardingCard {
     let title: String
     let body: String
-    // Asset names in the Client bundle, or nil for a text-only card
-    let lightImageName: String?
-    let darkImageName: String?
+    let imageName: String?
     let primaryButtonTitle: String
     let primaryButtonAction: OnboardingCardButtonAction
     let secondaryButtonTitle: String?
@@ -25,8 +23,7 @@ struct OnboardingCard {
     init(
         title: String,
         body: String,
-        lightImageName: String? = nil,
-        darkImageName: String? = nil,
+        imageName: String? = nil,
         primaryButtonTitle: String = "Continue",
         primaryButtonAction: OnboardingCardButtonAction = .none,
         secondaryButtonTitle: String? = nil,
@@ -34,8 +31,7 @@ struct OnboardingCard {
     ) {
         self.title = title
         self.body = body
-        self.lightImageName = lightImageName
-        self.darkImageName = darkImageName
+        self.imageName = imageName
         self.primaryButtonTitle = primaryButtonTitle
         self.primaryButtonAction = primaryButtonAction
         self.secondaryButtonTitle = secondaryButtonTitle
@@ -50,8 +46,7 @@ enum OnboardingCardSchedule {
         2: [OnboardingCard(
             title: String.Onboarding.MultiDay.NotificationCard.Title,
             body: String.Onboarding.MultiDay.NotificationCard.BodyText,
-            lightImageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.notification,
-            darkImageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.notificationDark,
+            imageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.notification,
             primaryButtonTitle: String.Onboarding.MultiDay.NotificationCard.AcceptButtonText,
             primaryButtonAction: .enableNotifications,
             secondaryButtonTitle: String.Onboarding.MultiDay.NotificationCard.DeclineButtonText,
@@ -59,8 +54,7 @@ enum OnboardingCardSchedule {
         7: [OnboardingCard(
             title: String.Onboarding.MultiDay.SyncCard.Title,
             body: String.Onboarding.MultiDay.SyncCard.BodyText,
-            lightImageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.sync,
-            darkImageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.syncDark,
+            imageName: ImageIdentifiers.Onboarding.ContinuousOnboarding.sync,
             primaryButtonTitle: String.Onboarding.MultiDay.SyncCard.AcceptButtonText,
             primaryButtonAction: .none, // replace with something like .promptSignIn later
             secondaryButtonTitle: String.Onboarding.MultiDay.SyncCard.DeclineButtonText,

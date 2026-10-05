@@ -3,6 +3,16 @@
     {
       "filename" : "kitOnboardingSync.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "kitOnboardingSyncDark.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
