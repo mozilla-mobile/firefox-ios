@@ -81,10 +81,6 @@ class MockRustKeychain: @unchecked Sendable, KeychainProtocol {
         return keyValue
     }
 
-    func decryptCreditCardNum(encryptedCCNum: String) -> String? {
-        return "4242424242424242"
-    }
-
     func checkCanary(canary: String, text: String, key: String) throws -> Bool {
         return true
     }
