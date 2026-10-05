@@ -2491,6 +2491,7 @@
 		CB229C3DBF374FCB5F7BE2EC /* TabGroupsTabActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9861A6A024B27D42B33B475E /* TabGroupsTabActionsTests.swift */; };
 		C38C7F7C1F1A42D8937CCF25 /* TabGroupsSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38C7F7C1F1A42D8937CCF26 /* TabGroupsSessionStore.swift */; };
 		55EBB7718ABDD8B91B668150 /* TabGroupsTabActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE9110B09488F42C4FE72C6 /* TabGroupsTabActions.swift */; };
+		C38C7F7C1F1A42D8937CCF27 /* TabTrayViewController+TabGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38C7F7C1F1A42D8937CCF28 /* TabTrayViewController+TabGroups.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -12678,6 +12679,7 @@
 		9861A6A024B27D42B33B475E /* TabGroupsTabActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsTabActionsTests.swift; sourceTree = "<group>"; };
 		C38C7F7C1F1A42D8937CCF26 /* TabGroupsSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsSessionStore.swift; sourceTree = "<group>"; };
 		6EE9110B09488F42C4FE72C6 /* TabGroupsTabActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsTabActions.swift; sourceTree = "<group>"; };
+		C38C7F7C1F1A42D8937CCF28 /* TabTrayViewController+TabGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabTrayViewController+TabGroups.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -13463,6 +13465,7 @@
 				5A679E4A2B239FAE004F2B0D /* TabPeekViewController.swift */,
 				8A06DF5E2DE0C0EB007B7E9D /* TabTitleSupplementaryView.swift */,
 				21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */,
+				C38C7F7C1F1A42D8937CCF28 /* TabTrayViewController+TabGroups.swift */,
 				713F55C5012E4CE9B0DF22B7 /* TabGroupsTrayBars */,
 				C3CF0E0029664A6B8354B7DE /* TabGroupsContextMenu */,
 			);
@@ -20554,6 +20557,7 @@
 				8CE1E43A2B8C76C80026530B /* LoginListView.swift in Sources */,
 				8A832A9429DC99BA0025D5DD /* LaunchScreenViewController.swift in Sources */,
 				21E77E4E2AA8BA5200FABA10 /* TabTrayViewController.swift in Sources */,
+				C38C7F7C1F1A42D8937CCF27 /* TabTrayViewController+TabGroups.swift in Sources */,
 				E60D03181D511398002FE3F6 /* SyncDisplayState.swift in Sources */,
 				8AE89C4E2F118D090002E9C1 /* UnifiedAdsUserDataRemover.swift in Sources */,
 				0B7B957D2DCA3099007DC749 /* DocumentLogger.swift in Sources */,

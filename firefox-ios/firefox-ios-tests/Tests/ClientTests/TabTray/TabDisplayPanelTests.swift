@@ -4,6 +4,7 @@
 
 import Common
 import XCTest
+import TabDataStore
 
 @testable import Client
 final class TabDisplayPanelTests: XCTestCase {
@@ -31,6 +32,64 @@ final class TabDisplayPanelTests: XCTestCase {
                                     emptyTabs: false)
 
         XCTAssertFalse(subject.tabsState.isPrivateTabsEmpty)
+    }
+
+    @MainActor
+    func testNormalPanelShowsOnlySelectedGroupTabs() async throws {
+        let delegate = MockTabDisplayViewDragAndDropInteraction()
+        let subject = TabDisplayPanelViewController(isPrivateMode: false,
+                                                    windowUUID: .XCTestDefaultUUID,
+                                                    dragAndDropDelegate: delegate)
+        let ids = (0..<2).map { _ in UUID().uuidString }
+        let controller = try await groupController(tabIDs: [ids[0]])
+        subject.tabGroupsController = controller
+        let state = TabsPanelState(windowUUID: .XCTestDefaultUUID, isPrivateMode: false)
+            .copy(tabs: [TabModel.emptyState(tabUUID: ids[0], title: "A"),
+                         TabModel.emptyState(tabUUID: ids[1], title: "B")])
+
+        subject.newState(state: state)
+
+        XCTAssertEqual(subject.tabDisplayView.tabsState.tabs.map(\.tabUUID), [ids[0]])
+    }
+
+    @MainActor
+    func testGroupScrollTargetUsesVisibleIndex() async throws {
+        let delegate = MockTabDisplayViewDragAndDropInteraction()
+        let subject = TabDisplayPanelViewController(isPrivateMode: false,
+                                                    windowUUID: .XCTestDefaultUUID,
+                                                    dragAndDropDelegate: delegate)
+        let ids = (0..<4).map { _ in UUID().uuidString }
+        let controller = try await groupController(tabIDs: [ids[1], ids[3]])
+        subject.tabGroupsController = controller
+        let state = TabsPanelState(windowUUID: .XCTestDefaultUUID, isPrivateMode: false)
+            .copy(tabs: [TabModel.emptyState(tabUUID: ids[0], title: "A"),
+                         TabModel.emptyState(tabUUID: ids[1], title: "B"),
+                         TabModel.emptyState(tabUUID: ids[2], title: "C"),
+                         TabModel.emptyState(tabUUID: ids[3], title: "D")])
+        subject.newState(state: state)
+
+        XCTAssertEqual(subject.tabDisplayView.translatedScrollState(.init(toIndex: 3, withAnimation: false)),
+                       .init(toIndex: 1, withAnimation: false))
+        XCTAssertNil(subject.tabDisplayView.translatedScrollState(.init(toIndex: 0, withAnimation: false)))
+    }
+
+    @MainActor
+    private func groupController(tabIDs: [TabUUID]) async throws -> TabGroupsController {
+        let profile = makeProfile()
+        let records = tabIDs.map { id in
+            let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+            tab.tabUUID = id
+            return tab.dataForSaving()
+        }
+        let storage = MockTabGroupStorage()
+        let group = TabGroup(title: "Work", tabIDs: tabIDs)
+        await storage.setSnapshot(TabGroupSnapshot(groups: [group], tabs: records))
+        let manager = TabGroupManager(storage: storage)
+        try await manager.restore()
+        _ = try manager.openGroup(group.id, in: .XCTestDefaultUUID)
+        let controller = TabGroupsController(groupManager: manager, windowUUID: .XCTestDefaultUUID)
+        controller.selectGroup(id: group.id)
+        return controller
     }
 
     // MARK: - Private
