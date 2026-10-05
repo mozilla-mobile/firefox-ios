@@ -2,10 +2,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import AppIntents
 import Common
 import Foundation
 import Intents
 import IntentsUI
+import Shared
+import UIKit
 
 class SiriShortcuts {
     enum activityType: String {
@@ -68,5 +71,77 @@ class SiriShortcuts {
                 category: .settings
             )
         }
+    }
+}
+
+// MARK: - App Intents
+
+/// Resolving the term inside `perform()` re-runs the intent without filling the parameter in, which
+/// loops forever, so it is left to the framework to resolve before `perform()` is called.
+@available(iOS 16.0, *)
+struct SearchInFirefoxIntent: AppIntent {
+    static let title: LocalizedStringResource = "Search in Firefox"
+    static var openAppWhenRun: Bool { true }
+
+    @Parameter(title: "Search term", requestValueDialog: "What would you like to search for?")
+    var query: String
+
+    @MainActor
+    func perform() async throws -> some IntentResult {
+        // The internal scheme is unique to this build. The public `firefox` scheme is claimed by every
+        // Firefox variant, so on a device with more than one installed iOS picks an arbitrary winner.
+        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .alphanumerics),
+              let url = URL(string: "\(URL.mozInternalScheme)://open-text?text=\(encodedQuery)")
+        else {
+            return .result()
+        }
+
+        await UIApplication.shared.open(url)
+        return .result()
+    }
+}
+
+@available(iOS 18.0, *)
+struct MakeFirefoxDefaultBrowserIntent: AppIntent {
+    static let title: LocalizedStringResource = "Make Firefox Default Browser"
+    static var openAppWhenRun: Bool { true }
+
+    /// Siri speaks and waits for the user here, because opening Settings tears down the Siri session
+    /// and would otherwise cut the instructions off mid sentence.
+    @MainActor
+    func perform() async throws -> some IntentResult {
+        try await requestConfirmation(
+            actionName: .open,
+            dialog: "In Settings, tap Default Browser App, then choose Firefox."
+        )
+
+        DefaultApplicationHelper().openSettings()
+        return .result()
+    }
+}
+
+@available(iOS 18.0, *)
+struct FirefoxAppShortcuts: AppShortcutsProvider {
+    static var appShortcuts: [AppShortcut] {
+        AppShortcut(
+            intent: SearchInFirefoxIntent(),
+            phrases: [
+                "Search \(.applicationName)",
+                "Search in \(.applicationName)",
+                "Search the web with \(.applicationName)",
+                "Open a new tab in \(.applicationName) and search"
+            ],
+            shortTitle: "Search",
+            systemImageName: "magnifyingglass"
+        )
+        AppShortcut(
+            intent: MakeFirefoxDefaultBrowserIntent(),
+            phrases: [
+                "Make \(.applicationName) my default browser",
+                "Set \(.applicationName) as my default browser"
+            ],
+            shortTitle: "Set as Default",
+            systemImageName: "star"
+        )
     }
 }
