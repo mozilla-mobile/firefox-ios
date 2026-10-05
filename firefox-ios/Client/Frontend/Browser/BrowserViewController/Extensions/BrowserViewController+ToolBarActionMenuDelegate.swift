@@ -4,6 +4,7 @@
 
 import Common
 import Shared
+import SwiftUI
 import TipKit
 import UIKit
 
@@ -54,8 +55,8 @@ extension BrowserViewController {
         else { return }
 
         if let selectedTab = tabManager.selectedTab,
-            selectedTab.isFxHomeTab || !selectedTab.isLoading,
-            !state.microsurveyState.showPrompt {
+           selectedTab.isFxHomeTab || !selectedTab.isLoading,
+           !state.microsurveyState.showPrompt {
             present(navigationContextHintVC, animated: true)
             UIAccessibility.post(notification: .layoutChanged, argument: navigationContextHintVC)
         } else {
@@ -188,10 +189,7 @@ extension BrowserViewController {
             return makeNewTabMenu()
         case .tabs:
             toolbarTelemetry.tabTrayButtonLongPressed(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-            return .init(children: [
-                UIMenu(options: .displayInline, children: [getNewTabAction(), getNewPrivateTabAction()]),
-                UIMenu(options: .displayInline, children: [getCloseTabAction()])
-            ])
+            return makeTabsLongPressMenu()
         default:
             return nil
         }
@@ -340,20 +338,182 @@ extension BrowserViewController {
             title: String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton,
             image: UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
             attributes: .destructive
-        ) { _ in
-            if let tab = self.tabManager.selectedTab {
-                self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
-                self.tabManager.removeTab(tab.tabUUID)
-                store.dispatch(
-                    GeneralBrowserAction(
-                        windowUUID: self.windowUUID,
-                        actionType: GeneralBrowserActionType.didCloseTabFromToolbar
-                    )
-                )
-                self.updateTabCountUsingTabManager(self.tabManager)
-            }
+        ) { [weak self] _ in
+            self?.closeCurrentTabFromToolbar()
         }
         action.accessibilityIdentifier = StandardImageIdentifiers.Large.cross
         return action
+    }
+
+    func makeTabsLongPressMenu() -> UIMenu {
+        guard TabGroupsFeatureFlag.isEnabled, tabManager.selectedTab?.isPrivate == false else {
+            return defaultTabsLongPressMenu()
+        }
+        let controller = TabGroupsSessionStore.controller(for: windowUUID, tabManager: tabManager)
+        let creation = UIMenu(options: .displayInline, children: [getNewTabAction(), getNewPrivateTabAction()])
+        let groupActions: [UIMenuElement]
+        if controller.state.groups.isEmpty {
+            groupActions = [newToolbarGroupAction(movingCurrentTab: true)]
+        } else {
+            groupActions = [toolbarGroupDestinations(controller: controller, movingCurrentTab: false),
+                            toolbarGroupDestinations(controller: controller, movingCurrentTab: true)]
+        }
+        let visibleTabs = TabGroupsSessionStore.visibleNormalTabs(tabManager.normalTabs, for: windowUUID)
+        let attributes: UIMenuElement.Attributes = visibleTabs.isEmpty ? [.destructive, .disabled] : .destructive
+        let closeAll = UIAction(title: String(format: .TabGroups.CloseAllTabs, visibleTabs.count.formatted()),
+                                image: UIImage(systemName: "xmark"),
+                                identifier: UIAction.Identifier("tabGroupsToolbar.closeAllTabs"),
+                                attributes: attributes) { [weak self] _ in
+            guard TabGroupsFeatureFlag.isEnabled,
+                  let self,
+                  self.tabManager.selectedTab?.isPrivate == false else { return }
+            let tabs = TabGroupsSessionStore.visibleNormalTabs(self.tabManager.normalTabs, for: self.windowUUID)
+            TabGroupsTabActions(controller: controller, tabManager: self.tabManager).closeTabs(tabs)
+            self.updateTabCountUsingTabManager(self.tabManager)
+        }
+        return UIMenu(children: [creation,
+                                 UIMenu(options: .displayInline, children: groupActions),
+                                 UIMenu(options: .displayInline, children: [closeAll, getCloseTabAction()])])
+    }
+
+    private func defaultTabsLongPressMenu() -> UIMenu {
+        UIMenu(children: [
+            UIMenu(options: .displayInline, children: [getNewTabAction(), getNewPrivateTabAction()]),
+            UIMenu(options: .displayInline, children: [getCloseTabAction()])
+        ])
+    }
+
+    private func toolbarGroupDestinations(controller: TabGroupsController, movingCurrentTab: Bool) -> UIMenu {
+        let currentGroupID = movingCurrentTab ? tabManager.selectedTab?.groupID : controller.state.selectedGroupID
+        let ungroupedCount = tabManager.normalTabs.filter { $0.groupID == nil }.count
+        let ungroupedTitle = ungroupedCount == 1
+            ? "1 Tab"
+            : String(format: "%@ Tabs", ungroupedCount.formatted())
+        let ungrouped = UIAction(title: ungroupedTitle,
+                                 image: UIImage(named: StandardImageIdentifiers.Large.deviceMobileGradient)?
+                                    .withRenderingMode(.alwaysOriginal),
+                                 state: currentGroupID == nil ? .on : .off) { [weak self] _ in
+            guard TabGroupsFeatureFlag.isEnabled else { return }
+            if movingCurrentTab {
+                self?.moveCurrentTabToGroup(nil)
+            } else {
+                self?.switchToToolbarGroup(nil)
+            }
+        }
+        let groups: [UIMenuElement] = controller.state.groups.map { group in
+            UIAction(title: group.title,
+                     image: group.icon.badgeImage(color: group.color.uiColor),
+                     attributes: movingCurrentTab && !controller.canMoveTabs(to: group.id) ? .disabled : [],
+                     state: currentGroupID == group.id ? .on : .off) { [weak self] _ in
+                guard TabGroupsFeatureFlag.isEnabled else { return }
+                if movingCurrentTab {
+                    self?.moveCurrentTabToGroup(group.id)
+                } else {
+                    self?.switchToToolbarGroup(group.id)
+                }
+            }
+        }
+        let title = movingCurrentTab ? String.TabGroups.MoveToTabGroup : String.TabGroups.SwitchTabGroups
+        let identifier = movingCurrentTab ? "tabGroupsToolbar.moveToGroup" : "tabGroupsToolbar.switchGroups"
+        let imageName = movingCurrentTab ? "arrow.up.forward.square" : "rectangle.portrait.on.rectangle.portrait.angled"
+        return UIMenu(title: title,
+                      image: UIImage(systemName: imageName),
+                      identifier: UIMenu.Identifier(identifier),
+                      children: [UIMenu(options: .displayInline, children: [ungrouped]),
+                                 UIMenu(options: .displayInline, children: groups),
+                                 UIMenu(options: .displayInline,
+                                        children: [newToolbarGroupAction(movingCurrentTab: movingCurrentTab)])])
+    }
+
+    private func newToolbarGroupAction(movingCurrentTab: Bool) -> UIAction {
+        let tabID = movingCurrentTab ? tabManager.selectedTab?.tabUUID : nil
+        let hasGroups = !TabGroupsSessionStore.controller(for: windowUUID, tabManager: tabManager).state.groups.isEmpty
+        let title = movingCurrentTab && !hasGroups
+            ? String.TabGroups.MoveToNewTabGroup : String.TabGroups.NewTabGroupMenu
+        let image = hasGroups
+            ? UIImage.templateImageNamed(StandardImageIdentifiers.Large.newTabGroup)
+            : UIImage(systemName: "arrow.up.forward.square")
+        return UIAction(title: title,
+                        image: image,
+                        identifier: UIAction.Identifier("tabGroupsToolbar.newGroup")) { [weak self] _ in
+            guard TabGroupsFeatureFlag.isEnabled else { return }
+            self?.showNewTabGroupEditor(movingTabID: tabID)
+        }
+    }
+
+    func showNewTabGroupEditor(movingTabID: TabUUID? = nil) {
+        guard TabGroupsFeatureFlag.isEnabled,
+              tabManager.selectedTab?.isPrivate != true,
+              presentedViewController == nil else { return }
+        let controller = TabGroupsSessionStore.controller(for: windowUUID, tabManager: tabManager)
+        let editor = TabGroupEditorView(windowUUID: windowUUID,
+                                        themeManager: themeManager,
+                                        onCancel: { [weak self] in self?.dismiss(animated: true) }
+        ) { [weak self] name, icon, color in
+            guard TabGroupsFeatureFlag.isEnabled, let self else { return }
+            let tabIDs = movingTabID.map { [$0] } ?? []
+            if let movingTabID {
+                guard let tab = self.tabManager.getTabForUUID(uuid: movingTabID), !tab.isPrivate else { return }
+            }
+            let normalIDs = self.tabManager.normalTabs.map(\.tabUUID)
+            guard let groupID = controller.createGroup(name: name,
+                                                       icon: icon,
+                                                       color: color,
+                                                       tabIDs: tabIDs,
+                                                       normalTabIDs: normalIDs) else { return }
+            let tab = movingTabID.flatMap { self.tabManager.getTabForUUID(uuid: $0) }
+                ?? self.tabManager.addTab(nil, isPrivate: false, groupID: groupID)
+            self.tabManager.selectTab(tab)
+            controller.recordSelectedTab(tab.tabUUID, normalTabIDs: self.tabManager.normalTabs.map(\.tabUUID))
+            self.dismiss(animated: true)
+            self.updateTabCountUsingTabManager(self.tabManager)
+        }
+        let host = UIHostingController(rootView: editor)
+        host.modalPresentationStyle = .pageSheet
+        host.sheetPresentationController?.detents = [.large()]
+        present(host, animated: true)
+    }
+
+    private func switchToToolbarGroup(_ groupID: UUID?) {
+        guard TabGroupsFeatureFlag.isEnabled, tabManager.selectedTab?.isPrivate != true else { return }
+        let controller = TabGroupsSessionStore.controller(for: windowUUID, tabManager: tabManager)
+        Task { [weak self] in
+            guard let self, TabGroupsFeatureFlag.isEnabled else { return }
+            do {
+                let host = try await TabGroupsTabActions(controller: controller, tabManager: self.tabManager)
+                    .openGroup(groupID)
+                guard TabGroupsFeatureFlag.isEnabled else { return }
+                guard host == self.windowUUID else {
+                    try await activateTabGroupWindow(host, groupID: groupID)
+                    return
+                }
+                self.updateTabCountUsingTabManager(self.tabManager)
+            } catch {
+                DefaultLogger.shared.log("Could not open tab group: \(error)", level: .warning, category: .tabs)
+            }
+        }
+    }
+
+    private func moveCurrentTabToGroup(_ groupID: UUID?) {
+        guard TabGroupsFeatureFlag.isEnabled, let tab = tabManager.selectedTab, !tab.isPrivate else { return }
+        let controller = TabGroupsSessionStore.controller(for: windowUUID, tabManager: tabManager)
+        guard controller.canMoveTabs(to: groupID) else { return }
+        TabGroupsTabActions(controller: controller, tabManager: tabManager).moveTab(tab.tabUUID, to: groupID)
+        updateTabCountUsingTabManager(tabManager)
+    }
+
+    private func closeCurrentTabFromToolbar() {
+        guard let tab = tabManager.selectedTab else { return }
+        tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
+        if TabGroupsFeatureFlag.isEnabled, !tab.isPrivate {
+            let controller = TabGroupsSessionStore.controller(for: windowUUID)
+            TabGroupsTabActions(controller: controller, tabManager: tabManager).closeTabs([tab])
+        } else {
+            tabManager.removeTab(tab.tabUUID)
+        }
+        let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                          actionType: GeneralBrowserActionType.didCloseTabFromToolbar)
+        store.dispatch(action)
+        updateTabCountUsingTabManager(tabManager)
     }
 }
