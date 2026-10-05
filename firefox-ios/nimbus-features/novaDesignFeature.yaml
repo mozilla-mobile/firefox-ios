@@ -8,7 +8,7 @@ features:
         description: >
           Enables Nova design.
         type: Boolean
-        default: false
+        default: true
       privateThemeOverride:
         description: >
           If true, screens that opt in follow the regular light/dark Nova theme while the user is
