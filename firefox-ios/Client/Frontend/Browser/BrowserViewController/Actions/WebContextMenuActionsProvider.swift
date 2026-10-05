@@ -15,7 +15,7 @@ class WebContextMenuActionsProvider {
         case image
     }
 
-    private var actions = [UIAction]()
+    private var actions = [UIMenuElement]()
     private let menuType: MenuType
 
     private var telemetryOrigin: ContextMenuTelemetry.OriginExtra {
@@ -26,7 +26,7 @@ class WebContextMenuActionsProvider {
         self.menuType = menuType
     }
 
-    func build() -> [UIAction] {
+    func build() -> [UIMenuElement] {
         return actions
     }
 
@@ -43,6 +43,57 @@ class WebContextMenuActionsProvider {
                 addTab(url, false, currentTab)
                 Self.recordOptionSelectedTelemetry(option: .openInNewTab, originExtra: origin)
             })
+    }
+
+    func addOpenInTabGroup(url: URL,
+                           currentTab: Tab,
+                           groups: [TabGroup],
+                           ungroupedTabCount: Int,
+                           openInGroup: @escaping @MainActor (URL, TabGroupID?) -> Void,
+                           openInNewGroup: @escaping @MainActor (URL) -> Void) {
+        guard TabGroupsFeatureFlag.isEnabled, !currentTab.isPrivate,
+              case .web = menuType,
+              url.scheme?.caseInsensitiveCompare("javascript") != .orderedSame else { return }
+        let newGroup = UIAction(
+            title: groups.isEmpty ? .TabGroups.OpenInNewTabGroup : .TabGroups.NewTabGroupMenu,
+            image: groups.isEmpty
+                ? UIImage(systemName: "arrow.up.forward.square")
+                : UIImage.templateImageNamed(StandardImageIdentifiers.Large.newTabGroup),
+            identifier: UIAction.Identifier("linkContextMenu.openInNewTabGroup")
+        ) { [weak currentTab] _ in
+            guard TabGroupsFeatureFlag.isEnabled, let currentTab, !currentTab.isPrivate else { return }
+            openInNewGroup(url)
+        }
+        guard !groups.isEmpty else {
+            actions.append(newGroup)
+            return
+        }
+        let ungroupedTitle = ungroupedTabCount == 1
+            ? "1 Tab"
+            : String(format: "%@ Tabs", ungroupedTabCount.formatted())
+        let ungroupedIdentifier = UIAction.Identifier("linkContextMenu.openInUngroupedTabs")
+        let ungrouped = UIAction(title: ungroupedTitle,
+                                 image: UIImage(named: StandardImageIdentifiers.Large.deviceMobileGradient)?
+                                    .withRenderingMode(.alwaysOriginal),
+                                 identifier: ungroupedIdentifier) { [weak currentTab] _ in
+            guard TabGroupsFeatureFlag.isEnabled, let currentTab, !currentTab.isPrivate else { return }
+            openInGroup(url, nil)
+        }
+        let destinations = groups.map { group in
+            let identifier = UIAction.Identifier("linkContextMenu.openInTabGroup.\(group.id)")
+            return UIAction(title: group.title,
+                            image: group.icon.badgeImage(color: group.color.uiColor),
+                            identifier: identifier) { [weak currentTab] _ in
+                guard TabGroupsFeatureFlag.isEnabled, let currentTab, !currentTab.isPrivate else { return }
+                openInGroup(url, group.id)
+            }
+        }
+        actions.append(UIMenu(title: .TabGroups.OpenInTabGroup,
+                              image: UIImage(systemName: "arrow.up.forward.square"),
+                              identifier: UIMenu.Identifier("linkContextMenu.openInTabGroup"),
+                              children: [UIMenu(options: .displayInline, children: [ungrouped]),
+                                         UIMenu(options: .displayInline, children: destinations),
+                                         UIMenu(options: .displayInline, children: [newGroup])]))
     }
 
     @MainActor

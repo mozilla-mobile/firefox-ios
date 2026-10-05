@@ -441,7 +441,7 @@ extension BrowserViewController {
         }
     }
 
-    func showNewTabGroupEditor(movingTabID: TabUUID? = nil) {
+    func showNewTabGroupEditor(url: URL? = nil, movingTabID: TabUUID? = nil) {
         guard TabGroupsFeatureFlag.isEnabled,
               tabManager.selectedTab?.isPrivate != true,
               presentedViewController == nil else { return }
@@ -462,7 +462,7 @@ extension BrowserViewController {
                                                        tabIDs: tabIDs,
                                                        normalTabIDs: normalIDs) else { return }
             let tab = movingTabID.flatMap { self.tabManager.getTabForUUID(uuid: $0) }
-                ?? self.tabManager.addTab(nil, isPrivate: false, groupID: groupID)
+                ?? self.tabManager.addTab(url.map { URLRequest(url: $0) }, isPrivate: false, groupID: groupID)
             self.tabManager.selectTab(tab)
             controller.recordSelectedTab(tab.tabUUID, normalTabIDs: self.tabManager.normalTabs.map(\.tabUUID))
             self.dismiss(animated: true)
@@ -472,6 +472,38 @@ extension BrowserViewController {
         host.modalPresentationStyle = .pageSheet
         host.sheetPresentationController?.detents = [.large()]
         present(host, animated: true)
+    }
+
+    func openLinkInTabGroup(url: URL, groupID: TabGroupID?) {
+        guard TabGroupsFeatureFlag.isEnabled, tabManager.selectedTab?.isPrivate != true else { return }
+        Task { [weak self] in
+            guard let self, TabGroupsFeatureFlag.isEnabled else { return }
+            do {
+                let host: WindowUUID
+                if let groupID {
+                    host = try await self.tabManager.openTabGroup(groupID)
+                } else {
+                    host = self.windowUUID
+                }
+                guard TabGroupsFeatureFlag.isEnabled else { return }
+                let windows: WindowManager = AppContainer.shared.resolve()
+                guard let manager = host == self.windowUUID ? self.tabManager : windows.windows[host]?.tabManager else {
+                    return
+                }
+                let hostController = TabGroupsSessionStore.controller(for: host, tabManager: manager)
+                hostController.selectGroup(id: groupID)
+                let tab = manager.addTab(URLRequest(url: url), isPrivate: false, groupID: groupID)
+                manager.selectTab(tab)
+                hostController.recordSelectedTab(tab.tabUUID, normalTabIDs: manager.normalTabs.map(\.tabUUID))
+                if host == self.windowUUID {
+                    self.updateTabCountUsingTabManager(manager)
+                } else {
+                    try await activateTabGroupWindow(host, groupID: groupID)
+                }
+            } catch {
+                DefaultLogger.shared.log("Could not open link in tab group: \(error)", level: .warning, category: .tabs)
+            }
+        }
     }
 
     private func switchToToolbarGroup(_ groupID: UUID?) {
