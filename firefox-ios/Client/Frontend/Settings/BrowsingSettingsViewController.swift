@@ -17,8 +17,15 @@ protocol BrowsingSettingsDelegate: AnyObject, SupportSettingsDelegate {
 final class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     weak var parentCoordinator: BrowsingSettingsDelegate?
 
+    /// Keep the private theme override just for Settings, since this is also presented from the Site Menu.
+    private let _shouldUsePrivateOverride: Bool
+    override var shouldUsePrivateOverride: Bool { return _shouldUsePrivateOverride }
+    override var shouldBeInPrivateTheme: Bool { return false }
+
     init(profile: Profile,
-         windowUUID: WindowUUID) {
+         windowUUID: WindowUUID,
+         shouldUsePrivateOverride: Bool = true) {
+        self._shouldUsePrivateOverride = shouldUsePrivateOverride
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
         self.title = .Settings.Browsing.Title
