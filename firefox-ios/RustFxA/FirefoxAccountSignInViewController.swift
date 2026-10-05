@@ -407,7 +407,10 @@ extension FirefoxAccountSignInViewController {
             return signInVC
         }
 
-        let settingsTableViewController = SyncContentSettingsViewController(windowUUID: windowUUID)
+        let settingsTableViewController = SyncContentSettingsViewController(
+            windowUUID: windowUUID,
+            referringPage: referringPage
+        )
         settingsTableViewController.profile = profile
         return settingsTableViewController
     }
