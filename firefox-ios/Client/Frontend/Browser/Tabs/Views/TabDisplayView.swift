@@ -110,6 +110,9 @@ final class TabDisplayView: UIView,
         }
     }
     private(set) var selectedTabIDs = Set<TabUUID>()
+    var selectionProvider: (() -> Set<TabUUID>)?
+    var onToggleSelection: ((TabUUID) -> Void)?
+    var showsOnlySelectedTabs = false
     var onSelectionChange: (() -> Void)?
     private var performingChainedOperations = false
     private var tabsSectionManager: TabsSectionManager
@@ -272,6 +275,10 @@ final class TabDisplayView: UIView,
             let visibleIDs = Set(tabGroupsController.visibleTabIDs(normalTabIDs: sourceState.tabs.map(\.tabUUID)))
             displayedState.tabs = sourceState.tabs.filter { visibleIDs.contains($0.tabUUID) }
         }
+        if showsOnlySelectedTabs {
+            let selection = selectionProvider?() ?? selectedTabIDs
+            displayedState.tabs = displayedState.tabs.filter { selection.contains($0.tabUUID) }
+        }
         let isFiltered = displayedState.tabs.count != sourceState.tabs.count
         collectionView.dragInteractionEnabled = !isSelectingTabs && !isFiltered && !sortTabsByTitle
         if sortTabsByTitle {
@@ -286,6 +293,11 @@ final class TabDisplayView: UIView,
         dataSource.updateSnapshot(state: displayedState, animatingDifferences: window != nil)
         updateSelectionAppearance()
         onSelectionChange?()
+    }
+
+    func updateSelectedTabsPreview(from state: TabsPanelState) {
+        sourceState = state
+        refreshGroupFilter()
     }
 
     func translatedScrollState(_ scrollState: TabsPanelState.ScrollState?) -> TabsPanelState.ScrollState? {
@@ -310,7 +322,7 @@ final class TabDisplayView: UIView,
     }
 
     private func configureSelectionAppearance(_ cell: UICollectionViewCell, for tabID: TabUUID) {
-        let isSelected = selectedTabIDs.contains(tabID)
+        let isSelected = (selectionProvider?() ?? selectedTabIDs).contains(tabID)
         let selectionColor = selectedGroupColor ?? theme?.colors.actionPrimary ?? .systemBlue
         let isDefaultGroup = selectedGroup.map { TabGroupColorPalette.isDefault($0.color) } == true
         let ringColor = isDefaultGroup ? theme?.colors.iconSecondary ?? .secondaryLabel : selectionColor
@@ -447,7 +459,7 @@ final class TabDisplayView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         let background = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
-        collectionView.backgroundColor = background
+        collectionView.backgroundColor = showsOnlySelectedTabs ? .clear : background
         collectionView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
         updateSelectionAppearance()
         collectionView.visibleSupplementaryViews(ofKind: TabTitleSupplementaryView.cellIdentifier)
@@ -486,6 +498,10 @@ final class TabDisplayView: UIView,
 
     func toggleTabSelection(_ tabID: TabUUID) {
         guard isSelectingTabs, tabsState.tabs.contains(where: { $0.tabUUID == tabID }) else { return }
+        if let onToggleSelection {
+            onToggleSelection(tabID)
+            return
+        }
         if !selectedTabIDs.insert(tabID).inserted { selectedTabIDs.remove(tabID) }
         updateSelectionAppearance()
         onSelectionChange?()
