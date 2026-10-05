@@ -9,10 +9,8 @@ import UIKit
 final class IntensityVisualEffectView: UIVisualEffectView {
     private var animator: UIViewPropertyAnimator?
 
-    /// - Parameters:
-    ///   - effect: The visual effect to apply, for instance `UIBlurEffect(style: .dark)`.
-    ///   - intensity: The strength of the effect on a linear scale, from 0.0 for none to 1.0 for the
-    ///     full effect.
+    /// - Parameter intensity: The strength of the effect on a linear scale, from 0.0 for none to 1.0
+    ///   for the full effect.
     init(effect: UIVisualEffect, intensity: CGFloat) {
         super.init(effect: nil)
         animator = UIViewPropertyAnimator(duration: 1.0, curve: .linear) { [weak self] in

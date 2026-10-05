@@ -46,7 +46,6 @@ final class TransitionAnimator: NSObject,
         static let collapsedMaskScale: CGFloat = 0.1
         /// Where the mask starts fading out, relative to its radius, so its edge reads as soft.
         static let maskFadeStartLocation: NSNumber = 0.8
-        /// Strength of the blur, from 0.0 for no blur to 1.0 for the full effect.
         static let blurIntensity: CGFloat = 0.4
     }
 

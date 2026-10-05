@@ -217,16 +217,12 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
 
     // MARK: - Presentation transition
-    /// Hides and offsets the content so `applyPresentationTransition` can bring it in alongside the
-    /// cross dissolve. Both are driven by `CrossDissolveTransitionAnimator`.
     func prepareForPresentationTransition() {
         audioWaveform.alpha = 0.0
         placeholderLabel.alpha = 0.0
         placeholderLabel.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationSlideOffset)
     }
 
-    /// Restores the content to its resting state, from inside the animation block of
-    /// `CrossDissolveTransitionAnimator`.
     func applyPresentationTransition() {
         audioWaveform.alpha = 1.0
         placeholderLabel.alpha = 1.0
