@@ -9,7 +9,6 @@ import enum MozillaAppServices.AutofillApiError
 import func MozillaAppServices.checkCanary
 import func MozillaAppServices.createCanary
 import func MozillaAppServices.createKey
-import func MozillaAppServices.decryptString
 
 public enum LoginEncryptionKeyError: Error {
     case noKeyCreated
@@ -56,7 +55,6 @@ public protocol KeychainProtocol: Sendable {
     func createLoginsKeyData() throws -> String
     func queryKeychainForKey(key: String) -> Result<String?, Error>
     func createAndStoreKey(canaryPhrase: String, canaryIdentifier: String, keyIdentifier: String) throws -> String
-    func decryptCreditCardNum(encryptedCCNum: String) -> String?
     func checkCanary(canary: String,
                      text: String,
                      key: String) throws -> Bool
@@ -245,40 +243,12 @@ public final class RustKeychain: KeychainProtocol {
          return keyValue
     }
 
-    public func decryptCreditCardNum(encryptedCCNum: String) -> String? {
-        var keyValue: String?
-        (keyValue, _) = getCreditCardKeyData()
-
-        guard let keyValue else {
-            logger.log("Credit card decryption failed: encryption key unavailable from keychain.",
-                       level: .warning,
-                       category: .storage)
-            return nil
-        }
-
-        do {
-            return try decryptString(key: keyValue, ciphertext: encryptedCCNum)
-        } catch let err as NSError {
-            if let autofillStoreError = err as? AutofillApiError {
-                logAutofillStoreError(err: autofillStoreError,
-                                      errorDomain: err.domain,
-                                      errorMessage: "Error while decrypting credit card")
-            } else {
-                logger.log("Unknown error while decrypting credit card",
-                           level: .warning,
-                           category: .storage,
-                           description: err.localizedDescription)
-            }
-            return nil
-        }
-    }
-
     public func checkCanary(
         canary: String,
         text: String,
         key: String
     ) throws -> Bool {
-        return try decryptString(key: key, ciphertext: canary) == text
+        return try MozillaAppServices.checkCanary(canary: canary, text: text, encryptionKey: key)
     }
 
     private class func deleteKeychainSecClass(_ secClass: AnyObject) {

@@ -28,7 +28,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
                                                                         ccType: "VISA")
     private var sampleCreditCard = CreditCard(guid: "1",
                                               ccName: "Allen Burges",
-                                              ccNumberEnc: "4111111111111111",
+                                              ccNumber: "4111111111111111",
                                               ccNumberLast4: "1111",
                                               ccExpMonth: 3,
                                               ccExpYear: 2043,
@@ -155,8 +155,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
                                                      ccType: "MasterCard")
         subject.decryptedCreditCard = masterCard
         let value = subject.getConvertedCreditCardValues(
-            bottomSheetState: .save,
-            ccNumberDecrypted: masterCard.ccNumber
+            bottomSheetState: .save
         )
         let cardValue = try XCTUnwrap(value)
         XCTAssertEqual(cardValue.ccType, "MasterCard")
@@ -195,8 +194,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
                                                              ccType: "VISA")
         subject.decryptedCreditCard = upcomingExpiryCard
         let value = try XCTUnwrap(subject.getConvertedCreditCardValues(
-            bottomSheetState: .save,
-            ccNumberDecrypted: upcomingExpiryCard.ccNumber
+            bottomSheetState: .save
         ))
         XCTAssertEqual(value.ccExpMonth, Int64(upcomingMonth))
         XCTAssertEqual(value.ccExpYear, Int64(upcomingYear))
@@ -208,7 +206,6 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
 
         subject.state = .selectSavedCard
         let result = subject.getConvertedCreditCardValues(bottomSheetState: .selectSavedCard,
-                                                          ccNumberDecrypted: "1234567890123456",
                                                           row: 9999)
         XCTAssertNil(result)
     }
@@ -230,8 +227,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         subject.state = .save
         let value = try XCTUnwrap(
             subject.getConvertedCreditCardValues(
-                bottomSheetState: .save,
-                ccNumberDecrypted: ""
+                bottomSheetState: .save
             )
         )
 
@@ -249,11 +245,9 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         subject.decryptedCreditCard = samplePlainTextCard
 
         // convert the saved credit card and check values
-        let decryptedCCNumber = "4111111111111111"
         let value = try XCTUnwrap(
             subject.getConvertedCreditCardValues(
-                bottomSheetState: .update,
-                ccNumberDecrypted: decryptedCCNumber
+                bottomSheetState: .update
             )
         )
         XCTAssertEqual(value.ccName, self.samplePlainTextCard.ccName)
@@ -271,7 +265,6 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         let value = try XCTUnwrap(
             subject.getConvertedCreditCardValues(
                 bottomSheetState: .selectSavedCard,
-                ccNumberDecrypted: "",
                 row: 0
             )
         )
@@ -288,8 +281,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         subject.creditCards = [sampleCreditCard]
 
         let value = subject.getConvertedCreditCardValues(
-            bottomSheetState: .selectSavedCard,
-            ccNumberDecrypted: ""
+            bottomSheetState: .selectSavedCard
         )
         XCTAssertNil(value)
     }
@@ -302,7 +294,6 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
 
         let value = subject.getConvertedCreditCardValues(
             bottomSheetState: .selectSavedCard,
-            ccNumberDecrypted: "",
             row: -1
         )
         XCTAssertNil(value)
@@ -316,7 +307,6 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
 
         let value = subject.getConvertedCreditCardValues(
             bottomSheetState: .selectSavedCard,
-            ccNumberDecrypted: "",
             row: 1
         )
         XCTAssertNil(value)
@@ -331,7 +321,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         let updatedMonth: Int64 = 12
         let updatedYear: Int64 = 2048
         let newUnencryptedCreditCard = UnencryptedCreditCardFields(ccName: updatedName,
-                                                                   ccNumber: sampleCreditCardVal.ccNumberEnc,
+                                                                   ccNumber: sampleCreditCardVal.ccNumber,
                                                                    ccNumberLast4: sampleCreditCardVal.ccNumberLast4,
                                                                    ccExpMonth: updatedMonth,
                                                                    ccExpYear: updatedYear,
@@ -339,14 +329,14 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         let value = try XCTUnwrap(
             subject.updateDecryptedCreditCard(
                 from: sampleCreditCardVal,
-                with: sampleCreditCardVal.ccNumberEnc,
+                with: sampleCreditCardVal.ccNumber,
                 fieldValues: newUnencryptedCreditCard
             )
         )
         XCTAssertEqual(value.ccName, updatedName)
         XCTAssertEqual(value.ccExpMonth, updatedMonth)
         XCTAssertEqual(value.ccExpYear, updatedYear)
-        XCTAssertEqual(value.ccNumber, sampleCreditCardVal.ccNumberEnc)
+        XCTAssertEqual(value.ccNumber, sampleCreditCardVal.ccNumber)
     }
 
     @MainActor
@@ -416,7 +406,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
     func test_preloadedCreditCards_doesNotCallListCreditCards() throws {
         let secondCreditCard = CreditCard(guid: "2",
                                           ccName: "Jane Smith",
-                                          ccNumberEnc: "5555555555554444",
+                                          ccNumber: "5555555555554444",
                                           ccNumberLast4: "4444",
                                           ccExpMonth: 12,
                                           ccExpYear: 2040,
@@ -440,7 +430,6 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         let value = try XCTUnwrap(
             subject.getConvertedCreditCardValues(
                 bottomSheetState: .selectSavedCard,
-                ccNumberDecrypted: "",
                 row: 1
             )
         )
