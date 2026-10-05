@@ -91,7 +91,7 @@ final class CustomSearchViewController: SettingsTableViewController {
     }
 
     func createEngine(query: String, name: String) async throws -> OpenSearchEngine {
-        guard let template = getSearchTemplate(withString: query),
+        guard let template = getSearchTemplate(withString: addingSchemeIfNeeded(to: query)),
               let encodedTemplate = template.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed),
               let url = URL(string: encodedTemplate),
               url.isWebPage()
@@ -134,6 +134,12 @@ final class CustomSearchViewController: SettingsTableViewController {
         return searchEnginesManager.orderedEngines.contains { (engine) -> Bool in
             return engine.shortName == name || engine.searchTemplate == template
         }
+    }
+
+    func addingSchemeIfNeeded(to query: String) -> String {
+        let lowercasedQuery = query.lowercased()
+        let hasScheme = lowercasedQuery.hasPrefix("http://") || lowercasedQuery.hasPrefix("https://")
+        return hasScheme ? query : "https://" + query
     }
 
     func getSearchTemplate(withString query: String) -> String? {
