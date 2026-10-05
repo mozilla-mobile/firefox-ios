@@ -966,6 +966,49 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
         )
     }
 
+    @MainActor
+    func testClosingCardUsesGroupActionsOnlyForEnabledNormalTabs() {
+        for (enabled, isPrivate) in [(true, false), (false, false), (true, true)] {
+            setFeatureFlag(.tabGroups, isEnabled: enabled)
+            let manager = CardClosingTabManager()
+            let tabs = (0..<2).map { _ in
+                Tab(profile: mockProfile, isPrivate: isPrivate, windowUUID: .XCTestDefaultUUID)
+            }
+            manager.normalTabs = isPrivate ? [] : tabs
+            manager.privateTabs = isPrivate ? tabs : []
+            manager.selectedTab = tabs[1]
+            manager.tabsByUUID = Dictionary(uniqueKeysWithValues: tabs.map { ($0.tabUUID, $0) })
+            mockWindowManager = MockWindowManager(wrappedManager: WindowManagerImplementation(), tabManager: manager)
+            defer { TabGroupsSessionStore.removeController(for: manager.windowUUID) }
+            let action = TabPanelViewAction(panelType: isPrivate ? .privateTabs : .tabs,
+                                            tabUUID: tabs[0].tabUUID,
+                                            windowUUID: manager.windowUUID,
+                                            actionType: TabPanelViewActionType.closeTab)
+
+            createSubject().tabsPanelProvider.legacyMiddleware(appState, action)
+
+            let usesGroupActions = enabled && !isPrivate
+            XCTAssertEqual(manager.bulkRemovedTabIDs, usesGroupActions ? [tabs[0].tabUUID] : [])
+            XCTAssertEqual(manager.removeTabCalledWith, usesGroupActions ? [] : [tabs[0].tabUUID])
+        }
+    }
+
+    @MainActor
+    func testClosingAbsentCardDuringRestorePreservesRemoveTabPath() {
+        setFeatureFlag(.tabGroups, isEnabled: true)
+        mockTabManager.isRestoringTabs = true
+        let absentTabID = UUID().uuidString
+        let action = TabPanelViewAction(panelType: .tabs,
+                                        tabUUID: absentTabID,
+                                        windowUUID: .XCTestDefaultUUID,
+                                        actionType: TabPanelViewActionType.closeTab)
+
+        createSubject().tabsPanelProvider.legacyMiddleware(appState, action)
+
+        XCTAssertEqual(mockTabManager.removeTabCalledWith, [absentTabID])
+        XCTAssertFalse(mockTabManager.addTabWasCalled)
+    }
+
     // MARK: - Helpers
     private func createSubject() -> TabManagerMiddleware {
         let subject = TabManagerMiddleware(
@@ -1011,5 +1054,14 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
         )
         self.appState = appState
         return appState
+    }
+}
+
+@MainActor
+private final class CardClosingTabManager: MockTabManager {
+    private(set) var bulkRemovedTabIDs: [TabUUID] = []
+
+    override func removeTabs(_ tabs: [Tab]) {
+        bulkRemovedTabIDs += tabs.map(\.tabUUID)
     }
 }
