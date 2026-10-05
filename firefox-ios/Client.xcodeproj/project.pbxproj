@@ -2592,6 +2592,7 @@
 		C010A110B200C300D4000003 /* TabGroupColorPaletteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C010A110B200C300D4000004 /* TabGroupColorPaletteTests.swift */; };
 		8B3AB4911297D7DB371F3239 /* TabGroupsContextMenuViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B5DA90DD511CFBC2ECAAA6 /* TabGroupsContextMenuViewModelTests.swift */; };
 		531E4338D69953C61A8853F6 /* TabGroupsDestinationMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4C59D1413A28D31ED777C9 /* TabGroupsDestinationMenuTests.swift */; };
+		382BB53DD652430EB4CD5B4C /* TabGroupsSelectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 717DD1B9CC316F6F4B0B23E8 /* TabGroupsSelectionTests.swift */; };
 		0F4FCBCEAA7CA81C56F8EA29 /* TabGroupsTrayBarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA933440861EA55835F9D1EF /* TabGroupsTrayBarTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -13067,6 +13068,7 @@
 		C010A110B200C300D4000004 /* TabGroupColorPaletteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupColorPaletteTests.swift; sourceTree = "<group>"; };
 		16B5DA90DD511CFBC2ECAAA6 /* TabGroupsContextMenuViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsContextMenuViewModelTests.swift; sourceTree = "<group>"; };
 		9A4C59D1413A28D31ED777C9 /* TabGroupsDestinationMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsDestinationMenuTests.swift; sourceTree = "<group>"; };
+		717DD1B9CC316F6F4B0B23E8 /* TabGroupsSelectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsSelectionTests.swift; sourceTree = "<group>"; };
 		FA933440861EA55835F9D1EF /* TabGroupsTrayBarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsTrayBarTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -13904,6 +13906,7 @@
 				8ABB15C82D5A4E3900A4635C /* RemoteTabsMiddlewareTests.swift */,
 				219935F02B07DFA200E5966F /* TabDisplayPanelTests.swift */,
 				FA933440861EA55835F9D1EF /* TabGroupsTrayBarTests.swift */,
+				717DD1B9CC316F6F4B0B23E8 /* TabGroupsSelectionTests.swift */,
 				21ED80B22AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift */,
 				A1B2C3D02F0000010000AA01 /* TabDisplayViewGeometryTests.swift */,
 				21D8EA922ABE04F7003FF16E /* TabTrayViewControllerTests.swift */,
@@ -22114,6 +22117,7 @@
 				C0D3F1000000000000000004 /* SystemPhotoPickerTelemetryTests.swift in Sources */,
 				219935F12B07DFA200E5966F /* TabDisplayPanelTests.swift in Sources */,
 				0F4FCBCEAA7CA81C56F8EA29 /* TabGroupsTrayBarTests.swift in Sources */,
+				382BB53DD652430EB4CD5B4C /* TabGroupsSelectionTests.swift in Sources */,
 				0B7B053D2D647D00007FD7AC /* TemporaryDocumentTests.swift in Sources */,
 				C714D6372E46570700FC02E6 /* ShortcutsLibraryStateTests.swift in Sources */,
 				C24E2D2C2ECF9DEF00BBCFA7 /* TranslationsTelemetryTests.swift in Sources */,

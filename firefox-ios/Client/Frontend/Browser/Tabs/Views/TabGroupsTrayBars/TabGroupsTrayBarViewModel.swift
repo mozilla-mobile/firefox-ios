@@ -51,15 +51,29 @@ struct TabGroupsTrayBarViewModel: Equatable {
     let selectedPanel: TabTrayPanelType
     let doneAccessibilityLabel: String
     let addTabAccessibilityLabel: String
+    let finishSelectionAccessibilityLabel: String
     var colors: Colors = .system
     var groupIcon: TabGroupIcon?
     var groupColor: Color?
+    var selectedTabCount: Int?
 
+    var hasSelectedTabs: Bool { (selectedTabCount ?? 0) > 0 }
+    var selectionToggleTitle: String {
+        hasSelectedTabs ? String.TabGroups.DeselectAll : String.TabGroups.SelectAll
+    }
+    var selectionReviewTitle: String {
+        guard let selectedTabCount, selectedTabCount > 0 else { return String.TabGroups.SelectTabsPrompt }
+        return String(format: String.TabGroups.ShowSelections, selectedTabCount.formatted())
+    }
     var activeTint: Color { isGroupSelected ? groupColor ?? colors.emphasis : colors.emphasis }
 }
 
 enum TabGroupsTrayBarAction: Equatable {
     case addTab
+    case finishSelection
+    case toggleSelectAll
+    case showSelections
+    case createGroupFromSelection
     case selectPanel(TabTrayPanelType)
     case done
 }

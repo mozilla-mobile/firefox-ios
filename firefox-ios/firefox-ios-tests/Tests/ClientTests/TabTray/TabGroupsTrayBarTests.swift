@@ -10,6 +10,22 @@ import XCTest
 @testable import Client
 
 final class TabGroupsTrayBarTests: XCTestCase {
+    func testSelectionLabels_withNoSelection_promptAndSelectAll() {
+        let model = makeViewModel(selectedTabCount: 0)
+
+        XCTAssertEqual(model.selectionToggleTitle, String.TabGroups.SelectAll)
+        XCTAssertEqual(model.selectionReviewTitle, String.TabGroups.SelectTabsPrompt)
+        XCTAssertFalse(model.hasSelectedTabs)
+    }
+
+    func testSelectionLabels_withPartialSelection_showCountAndDeselectAll() {
+        let model = makeViewModel(selectedTabCount: 2)
+
+        XCTAssertEqual(model.selectionToggleTitle, String.TabGroups.DeselectAll)
+        XCTAssertEqual(model.selectionReviewTitle, String(format: String.TabGroups.ShowSelections, "2"))
+        XCTAssertTrue(model.hasSelectedTabs)
+    }
+
     func testActiveTint_onlyUsesGroupTintWhenGroupSelected() {
         var model = makeViewModel()
         model.groupColor = .orange
@@ -437,6 +453,97 @@ final class TabGroupsTrayBarTests: XCTestCase {
     }
 
     @MainActor
+    func testNativeToolbar_hostedAccessibilityRestoresAfterSelectionReview() throws {
+        guard #available(iOS 26.0, *) else { throw XCTSkip("Native glass toolbars require iOS 26.") }
+        let scene = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
+        let previousKeyWindow = scene.windows.first { $0.isKeyWindow }
+        let window = UIWindow(windowScene: scene)
+        window.frame = CGRect(x: 0, y: 0, width: 393, height: 200)
+        let controller = UIViewController()
+        window.rootViewController = controller
+        let host = UIToolbar(frame: CGRect(x: 0, y: 144, width: 393, height: 56))
+        controller.view.addSubview(host)
+        let toolbar = TabGroupsTrayNativeToolbar { _ in }
+        toolbar.update(viewModel: makeViewModel(), usesGlassButtons: true)
+        host.setItems(toolbar.makeHostedItems(), animated: false)
+        window.makeKeyAndVisible()
+        defer {
+            window.isHidden = true
+            previousKeyWindow?.makeKeyAndVisible()
+        }
+        host.layoutIfNeeded()
+        let row = try XCTUnwrap(host.items?.compactMap {
+            $0.customView as? TabGroupsTrayNativeToolbar.GlassRow
+        }.first)
+        let buttons = try accessibleButtons(in: row)
+
+        toolbar.update(viewModel: makeViewModel(selectedTabCount: 2), usesGlassButtons: true)
+        host.setItems(toolbar.makeHostedItems(), animated: false)
+        host.layoutIfNeeded()
+
+        let review = try XCTUnwrap(host.items?.compactMap { $0.customView as? UIButton }.first)
+        XCTAssertTrue(review.isAccessibilityElement)
+        XCTAssertTrue(review.isDescendant(of: host))
+        XCTAssertEqual(review.accessibilityIdentifier, "tabGroupsTray.showSelections")
+
+        toolbar.update(viewModel: makeViewModel(), usesGlassButtons: true)
+        host.setItems(toolbar.makeHostedItems(), animated: false)
+        host.layoutIfNeeded()
+        let restoredRow = try XCTUnwrap(host.items?.compactMap {
+            $0.customView as? TabGroupsTrayNativeToolbar.GlassRow
+        }.first)
+
+        XCTAssertTrue(restoredRow === row)
+        XCTAssertEqual(try accessibleButtons(in: restoredRow), buttons)
+        XCTAssertTrue(buttons.allSatisfy { $0.isAccessibilityElement && $0.isDescendant(of: host) })
+    }
+
+    @MainActor
+    func testNativeToolbar_selectionReviewDisablesAtZeroAndRestoresStandardItems() throws {
+        var receivedAction: TabGroupsTrayBarAction?
+        let toolbar = TabGroupsTrayNativeToolbar { receivedAction = $0 }
+        toolbar.update(viewModel: makeViewModel(selectedTabCount: 0), usesGlassButtons: false)
+
+        XCTAssertEqual(toolbar.items.count, 3)
+        let reviewButton = try XCTUnwrap(toolbar.items.first {
+            $0.accessibilityIdentifier == "tabGroupsTray.showSelections"
+        })
+        XCTAssertFalse(reviewButton.isEnabled)
+
+        toolbar.update(viewModel: makeViewModel(selectedTabCount: 2), usesGlassButtons: false)
+        XCTAssertTrue(reviewButton.isEnabled)
+        XCTAssertEqual(reviewButton.title, String(format: String.TabGroups.ShowSelections, "2"))
+        let action = try XCTUnwrap(reviewButton.action)
+        UIApplication.shared.sendAction(action, to: reviewButton.target, from: reviewButton, for: nil)
+        XCTAssertEqual(receivedAction, .showSelections)
+
+        toolbar.update(viewModel: makeViewModel(), usesGlassButtons: false)
+        XCTAssertEqual(toolbar.items.count, 5)
+        XCTAssertFalse(toolbar.items.contains(reviewButton))
+
+        if #available(iOS 26.0, *) {
+            toolbar.update(viewModel: makeViewModel(selectedTabCount: 0), usesGlassButtons: true)
+            XCTAssertFalse(try XCTUnwrap(reviewButton.customView as? UIButton).isEnabled)
+            XCTAssertTrue(reviewButton.hidesSharedBackground)
+            toolbar.update(viewModel: makeViewModel(selectedTabCount: 2), usesGlassButtons: true)
+            let button = try XCTUnwrap(reviewButton.customView as? UIButton)
+            let title = String(format: String.TabGroups.ShowSelections, "2")
+            XCTAssertTrue(button.isEnabled)
+            XCTAssertEqual(button.configuration?.title, title)
+            XCTAssertEqual(button.accessibilityLabel, title)
+            XCTAssertEqual(button.accessibilityIdentifier, "tabGroupsTray.showSelections")
+            receivedAction = nil
+            button.sendActions(for: .touchUpInside)
+            XCTAssertEqual(receivedAction, .showSelections)
+            toolbar.update(viewModel: makeViewModel(selectedTabCount: 2), usesGlassButtons: false)
+            XCTAssertNil(reviewButton.customView)
+            XCTAssertFalse(reviewButton.hidesSharedBackground)
+            toolbar.update(viewModel: makeViewModel(), usesGlassButtons: true)
+            XCTAssertFalse(toolbar.items.contains(reviewButton))
+        }
+    }
+
+    @MainActor
     @available(iOS 26.0, *)
     private func accessibleButtons(in row: TabGroupsTrayNativeToolbar.GlassRow) throws -> [UIButton] {
         let containers = try XCTUnwrap(row.accessibilityElements as? [UIView])
@@ -499,13 +606,16 @@ final class TabGroupsTrayBarTests: XCTestCase {
     private func makeViewModel(
         isGroupSelected: Bool = false,
         groupColor: Color? = nil,
-        selectedPanel: TabTrayPanelType = .tabs
+        selectedPanel: TabTrayPanelType = .tabs,
+        selectedTabCount: Int? = nil
     ) -> TabGroupsTrayBarViewModel {
         TabGroupsTrayBarViewModel(destinationTitle: "20 Tabs",
                                   isGroupSelected: isGroupSelected,
                                   selectedPanel: selectedPanel,
                                   doneAccessibilityLabel: String.TabGroups.Accessibility.DoneButton,
                                   addTabAccessibilityLabel: String.TabGroups.Accessibility.NewTabButton,
-                                  groupColor: groupColor)
+                                  finishSelectionAccessibilityLabel: String.TabGroups.Accessibility.DoneButton,
+                                  groupColor: groupColor,
+                                  selectedTabCount: selectedTabCount)
     }
 }
