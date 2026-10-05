@@ -1850,6 +1850,11 @@ extension String {
                     tableName: "Onboarding",
                     value: "Enable Notifications",
                     comment: "Button on the home screen popup requesting notification permissions. Tapping this button accepts the permission request.")
+                public static let AccessibilityCloseButtonText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableCloseButtonText.v159",
+                    tableName: "Onboarding",
+                    value: "Close",
+                    comment: "Voiceover text for the close button on the home screen popup requesting notification permissions. Tapping this button dismisses the popup.")
             }
             public struct SyncCard {
                 public static let Title = MZLocalizedString(
