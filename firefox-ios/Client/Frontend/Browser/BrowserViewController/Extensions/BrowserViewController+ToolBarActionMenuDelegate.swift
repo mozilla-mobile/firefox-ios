@@ -178,6 +178,7 @@ extension BrowserViewController {
             return makeNewTabMenu()
         case .tabs:
             toolbarTelemetry.tabTrayButtonLongPressed(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            if TabGroupsFeatureFlag.isEnabled { return makeTabsLongPressMenu() }
             return .init(children: [
                 UIMenu(options: .displayInline, children: [getNewTabAction(), getNewPrivateTabAction()]),
                 UIMenu(options: .displayInline, children: [getCloseTabAction()])
@@ -330,20 +331,154 @@ extension BrowserViewController {
             title: String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton,
             image: UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
             attributes: .destructive
-        ) { _ in
-            if let tab = self.tabManager.selectedTab {
-                self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
-                self.tabManager.removeTab(tab.tabUUID)
-                store.dispatch(
-                    GeneralBrowserAction(
-                        windowUUID: self.windowUUID,
-                        actionType: GeneralBrowserActionType.didCloseTabFromToolbar
-                    )
-                )
-                self.updateTabCountUsingTabManager(self.tabManager)
-            }
+        ) { [weak self] _ in
+            self?.closeCurrentTabFromToolbar()
         }
         action.accessibilityIdentifier = StandardImageIdentifiers.Large.cross
         return action
+    }
+
+    func makeTabsLongPressMenu() -> UIMenu {
+        let controller = TabGroupsFeatureFlag.isEnabled ? TabGroupsSessionStore.controller(for: windowUUID) : nil
+        let selectedTab = tabManager.selectedTab
+        let normalTabIsActive = selectedTab?.isPrivate == false
+        let selectedGroupID = controller?.state.selectedGroupID
+
+        let mobile = UIAction(title: String.TabGroups.Mobile,
+                              image: UIImage(named: StandardImageIdentifiers.Large.deviceMobile),
+                              state: normalTabIsActive && selectedGroupID == nil ? .on : .off) { [weak self] _ in
+            self?.switchToToolbarGroup(nil)
+        }
+        let groups: [UIMenuElement] = controller?.state.groups.map { group in
+            UIAction(title: group.title,
+                     image: tabGroupMenuIcon(group.emoji ?? "🗂️"),
+                     state: normalTabIsActive && selectedGroupID == group.id ? .on : .off) { [weak self] _ in
+                self?.switchToToolbarGroup(group.id)
+            }
+        } ?? []
+        let privateTabs = UIAction(title: String.TabsTray.TabsSelectorPrivateTabsTitle,
+                                   image: UIImage(named: StandardImageIdentifiers.Large.privateMode),
+                                   state: selectedTab?.isPrivate == true ? .on : .off) { [weak self] _ in
+            self?.switchToPrivateTabs()
+        }
+        let destinations = UIMenu(options: .displayInline, children: [mobile] + groups + [privateTabs])
+        let actions = toolbarTabActionsMenu(controller: controller, selectedTab: selectedTab)
+        return UIMenu(children: [destinations, actions])
+    }
+
+    private func toolbarTabActionsMenu(controller: TabGroupsController?, selectedTab: Tab?) -> UIMenu {
+        let newTab = UIAction(title: String.KeyboardShortcuts.NewTab,
+                              image: UIImage(named: StandardImageIdentifiers.Large.plus)) { [weak self] _ in
+            guard let self else { return }
+            self.openNewTabFromMenu(focusLocationField: self.newTabSettings == .blankPage, isPrivate: false)
+        }
+        let newPrivateTab = UIAction(title: String.KeyboardShortcuts.NewPrivateTab,
+                                     image: UIImage(named: StandardImageIdentifiers.Large.privateMode)) { [weak self] _ in
+            guard let self else { return }
+            self.openNewTabFromMenu(focusLocationField: self.newTabSettings == .blankPage, isPrivate: true)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .tabTray)
+        }
+        let closeTab = UIAction(title: String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton,
+                                image: UIImage(systemName: "xmark.square"),
+                                attributes: .destructive) { [weak self] _ in
+            self?.closeCurrentTabFromToolbar()
+        }
+        var actions: [UIMenuElement] = [newTab, newPrivateTab]
+        if let controller, let selectedTab, !selectedTab.isPrivate, !controller.state.groups.isEmpty {
+            actions.append(moveCurrentTabMenu(controller: controller))
+        }
+        actions.append(closeTab)
+        return UIMenu(options: .displayInline, children: actions)
+    }
+
+    private func moveCurrentTabMenu(controller: TabGroupsController) -> UIMenu {
+        let currentGroupID = controller.state.selectedGroupID
+        let mobile = UIAction(title: String.TabGroups.Mobile,
+                              image: UIImage(named: StandardImageIdentifiers.Large.deviceMobile),
+                              state: currentGroupID == nil ? .on : .off) { [weak self] _ in
+            self?.moveCurrentTabToGroup(nil)
+        }
+        let groups: [UIMenuElement] = controller.state.groups.map { group in
+            UIAction(title: group.title,
+                     image: tabGroupMenuIcon(group.emoji ?? "🗂️"),
+                     state: currentGroupID == group.id ? .on : .off) { [weak self] _ in
+                self?.moveCurrentTabToGroup(group.id)
+            }
+        }
+        return UIMenu(title: String.TabGroups.MoveToTabGroup,
+                      image: UIImage(named: StandardImageIdentifiers.Large.folder),
+                      children: [mobile] + groups)
+    }
+
+    private func tabGroupMenuIcon(_ emoji: String) -> UIImage {
+        let font = UIFont.preferredFont(forTextStyle: .title3)
+        let attributes: [NSAttributedString.Key: Any] = [.font: font]
+        let text = emoji as NSString
+        let textSize = text.size(withAttributes: attributes)
+        let imageSize = CGSize(width: max(font.lineHeight, textSize.width), height: font.lineHeight)
+        let image = UIGraphicsImageRenderer(size: imageSize).image { _ in
+            let origin = CGPoint(x: (imageSize.width - textSize.width) / 2,
+                                 y: (imageSize.height - textSize.height) / 2)
+            text.draw(at: origin, withAttributes: attributes)
+        }
+        return image.withRenderingMode(.alwaysOriginal)
+    }
+
+    private func switchToToolbarGroup(_ groupID: UUID?) {
+        let controller = TabGroupsSessionStore.controller(for: windowUUID, tabManager: tabManager)
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let host = try await TabGroupsTabActions(controller: controller, tabManager: self.tabManager)
+                    .openGroup(groupID)
+                guard host == self.windowUUID else {
+                    try await activateTabGroupWindow(host, groupID: groupID)
+                    return
+                }
+                let ids = self.tabManager.normalTabs.map(\.tabUUID)
+                if let id = controller.preferredTabID(normalTabIDs: ids),
+                   let tab = self.tabManager.getTabForUUID(uuid: id) {
+                    self.tabManager.selectTab(tab)
+                    controller.recordSelectedTab(id, normalTabIDs: ids)
+                } else {
+                    self.openBlankNewTab(focusLocationField: false)
+                }
+                self.updateTabCountUsingTabManager(self.tabManager)
+            } catch {
+                DefaultLogger.shared.log("Could not open tab group: \(error)", level: .warning, category: .tabs)
+            }
+        }
+    }
+
+    private func switchToPrivateTabs() {
+        if tabManager.selectedTab?.isPrivate == true { return }
+        if let tab = tabManager.privateTabs.last {
+            tabManager.selectTab(tab)
+        } else {
+            openBlankNewTab(focusLocationField: false, isPrivate: true)
+        }
+        updateTabCountUsingTabManager(tabManager)
+    }
+
+    private func moveCurrentTabToGroup(_ groupID: UUID?) {
+        guard let tab = tabManager.selectedTab, !tab.isPrivate else { return }
+        let controller = TabGroupsSessionStore.controller(for: windowUUID)
+        TabGroupsTabActions(controller: controller, tabManager: tabManager).moveTab(tab.tabUUID, to: groupID)
+        updateTabCountUsingTabManager(tabManager)
+    }
+
+    private func closeCurrentTabFromToolbar() {
+        guard let tab = tabManager.selectedTab else { return }
+        tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
+        if TabGroupsFeatureFlag.isEnabled, !tab.isPrivate {
+            let controller = TabGroupsSessionStore.controller(for: windowUUID)
+            TabGroupsTabActions(controller: controller, tabManager: tabManager).closeTabs([tab])
+        } else {
+            tabManager.removeTab(tab.tabUUID)
+        }
+        let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                          actionType: GeneralBrowserActionType.didCloseTabFromToolbar)
+        store.dispatch(action)
+        updateTabCountUsingTabManager(tabManager)
     }
 }
