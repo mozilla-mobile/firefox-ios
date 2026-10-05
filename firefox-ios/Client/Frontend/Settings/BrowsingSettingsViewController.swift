@@ -38,7 +38,7 @@ final class BrowsingSettingsViewController: SettingsTableViewController, Feature
             string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
 
         return [SettingSection(footerTitle: footerTitle,
-                               children: [DefaultBrowserSetting(theme: themeManager.getCurrentTheme(for: windowUUID))])]
+                               children: [DefaultBrowserSetting(theme: currentTheme())])]
     }
 
     override func generateSettings() -> [SettingSection] {
@@ -47,7 +47,7 @@ final class BrowsingSettingsViewController: SettingsTableViewController, Feature
         var linksSettings: [Setting] = [OpenWithSetting(settings: self, settingsDelegate: parentCoordinator)]
         var contentSection = [Setting]()
         if let profile {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            let theme = currentTheme()
             let offerToOpenCopiedLinksSettings = BoolSetting(
                 prefs: profile.prefs,
                 theme: theme,

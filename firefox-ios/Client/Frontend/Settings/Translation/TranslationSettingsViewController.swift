@@ -20,7 +20,7 @@ final class TranslationSettingsViewController: SettingsTableViewController {
     }
 
     private var theme: Theme {
-        themeManager.getCurrentTheme(for: windowUUID)
+        currentTheme()
     }
 
     override func generateSettings() -> [SettingSection] {

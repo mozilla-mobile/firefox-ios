@@ -30,7 +30,7 @@ final class CustomSearchViewController: SettingsTableViewController {
     private var engineTitle = ""
     private lazy var spinnerView: UIActivityIndicatorView = .build { [self] spinner in
         spinner.style = .medium
-        spinner.color = themeManager.getCurrentTheme(for: windowUUID).colors.iconSpinner
+        spinner.color = currentTheme().colors.iconSpinner
         spinner.hidesWhenStopped = true
     }
 
@@ -205,7 +205,7 @@ final class CustomSearchViewController: SettingsTableViewController {
             action: #selector(self.addCustomSearchEngine)
         )
         if #available(iOS 26.0, *) {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            let theme = currentTheme()
             self.navigationItem.rightBarButtonItem?.tintColor = theme.colors.textAccent
         }
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"

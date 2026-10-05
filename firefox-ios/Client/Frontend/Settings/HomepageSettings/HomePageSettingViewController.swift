@@ -39,7 +39,7 @@ final class HomePageSettingViewController: SettingsTableViewController,
             target: self,
             action: #selector(done))
         if #available(iOS 26.0, *) {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            let theme = currentTheme()
             navigationItem.rightBarButtonItem?.tintColor = theme.isNova
                 ? theme.colors.actionPrimary
                 : theme.colors.textPrimary
@@ -128,7 +128,7 @@ final class HomePageSettingViewController: SettingsTableViewController,
             if featureFlagsProvider.isEnabled(.homepageTrackerBlockerModule) {
                 let trackerBlockerModuleSetting = BoolSetting(
                     prefs: profile.prefs,
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    theme: currentTheme(),
                     prefKey: PrefsKeys.HomepageSettings.TrackerBlockerSection,
                     defaultValue: userPreferences.getPreferenceFor(.homepageTrackerBlockerModule),
                     titleText: .Settings.Homepage.CustomizeFirefoxHome.PrivacyReport
@@ -146,7 +146,7 @@ final class HomePageSettingViewController: SettingsTableViewController,
 
             let jumpBackInSetting = BoolSetting(
                 prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
+                theme: currentTheme(),
                 prefKey: PrefsKeys.HomepageSettings.JumpBackInSection,
                 defaultValue: userPreferences.getPreferenceFor(.homepageJumpBackinSectionDefault),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
@@ -163,7 +163,7 @@ final class HomePageSettingViewController: SettingsTableViewController,
 
             let bookmarksSetting = BoolSetting(
                 prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
+                theme: currentTheme(),
                 prefKey: PrefsKeys.HomepageSettings.BookmarksSection,
                 defaultValue: userPreferences.getPreferenceFor(.homepageBookmarksSectionDefault),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
@@ -183,7 +183,7 @@ final class HomePageSettingViewController: SettingsTableViewController,
         if isPocketSectionEnabled, let profile {
             let pocketSetting = BoolSetting(
                 prefs: profile.prefs,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
+                theme: currentTheme(),
                 prefKey: PrefsKeys.UserFeatureFlagPrefs.ASPocketStories,
                 defaultValue: true,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Stories

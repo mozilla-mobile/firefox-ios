@@ -9,6 +9,9 @@ class SearchEnginePicker: ThemedTableViewController {
     var engines: [OpenSearchEngine] = []
     var selectedSearchEngineID: String?
 
+    override var shouldUsePrivateOverride: Bool { return true }
+    override var shouldBeInPrivateTheme: Bool { return false }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,7 +31,7 @@ class SearchEnginePicker: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let engine = engines[indexPath.item]
         let cell = dequeueCellFor(indexPath: indexPath)
-        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        cell.applyTheme(theme: currentTheme())
         cell.textLabel?.text = engine.shortName
         let size = CGSize(width: OpenSearchEngine.UX.preferredIconSize,
                           height: OpenSearchEngine.UX.preferredIconSize)

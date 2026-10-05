@@ -24,7 +24,7 @@ final class QuickAnswersSettingsViewController: SettingsTableViewController, Use
     }
 
     private var theme: Theme {
-        themeManager.getCurrentTheme(for: windowUUID)
+        currentTheme()
     }
 
     override func generateSettings() -> [SettingSection] {
@@ -82,7 +82,11 @@ final class QuickAnswersSettingsViewController: SettingsTableViewController, Use
 
     @objc
     private func learnMoreTapped() {
-        let controller = SettingsContentViewController(windowUUID: windowUUID)
+        let controller = SettingsContentViewController(
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: true,
+            shouldBeInPrivateTheme: false
+        )
         controller.url = QuickAnswersCoordinator.learnMoreURL
         navigationController?.pushViewController(controller, animated: true)
     }
