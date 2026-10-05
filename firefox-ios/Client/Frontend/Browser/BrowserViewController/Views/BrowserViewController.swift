@@ -3453,7 +3453,9 @@ class BrowserViewController: UIViewController,
             logger.log("No request for openURLInNewTab", level: .debug, category: .tabs)
         }
 
-        let tab = tabManager.addTab(request, isPrivate: isPrivate)
+        let groupID = TabGroupsFeatureFlag.isEnabled && !isPrivate
+            ? TabGroupsSessionStore.controller(for: windowUUID, tabManager: tabManager).state.selectedGroupID : nil
+        let tab = tabManager.addTab(request, isPrivate: isPrivate, groupID: groupID)
         tabManager.selectTab(tab)
         return tab
     }
