@@ -23,24 +23,31 @@ public enum QuickAnswersTransitionType: Equatable, Sendable {
 
 /// The animator for a custom cross dissolve presentation and dismissal.
 /// Both directions animate the scale of a soft edged circular mask centered on the source rect, so the
-/// controller grows out of it when presenting and collapses back into it when dismissing. The presented
-/// controller animates its own content alongside the mask.
-final class CrossDissolveTransitionAnimator: NSObject,
-                                             UIViewControllerTransitioningDelegate,
-                                             UIViewControllerAnimatedTransitioning {
+/// controller grows out of it when presenting and collapses back into it when dismissing. A blur sits
+/// behind the mask to soften what stays on screen, and the presented controller animates its own content
+/// alongside the mask.
+final class TransitionAnimator: NSObject,
+                                UIViewControllerTransitioningDelegate,
+                                UIViewControllerAnimatedTransitioning {
     private struct UX {
-        static let presentationDuration: TimeInterval = 0.4
-        static let dismissalDuration: TimeInterval = 0.3
-        static let dismissalBlurFadeDuration: TimeInterval = 0.3
-        static let dismissalBlurFadeDelay: TimeInterval = 0.1
+        static let presentationDuration: TimeInterval = 0.3
+        static let presentationBlurFadeDuration: TimeInterval = 0.05
+        static let dismissalDuration: TimeInterval = 0.25
+        static let dismissalFadeDuration: TimeInterval = 0.15
+        static let dismissalFadeDelay: TimeInterval = 0.1
         /// Diameter of the mask, relative to the longest container side. Above 1.0 so the mask still
         /// covers the container corners once it reaches its final size.
         static let presentationMaskDiameterRatio: CGFloat = 2.3
         static let dismissalMaskDiameterRatio: CGFloat = 2.0
+        /// How much wider than tall the expanded mask ends up, so its soft edge clears the container
+        /// sides before it clears the top and bottom.
+        static let expandedMaskHorizontalScale: CGFloat = 1.3
         /// The collapsed mask scale. Not zero, since a zero scale transform can't be inverted.
-        static let collapsedMaskScale: CGFloat = 0.01
+        static let collapsedMaskScale: CGFloat = 0.1
         /// Where the mask starts fading out, relative to its radius, so its edge reads as soft.
-        static let maskFadeStartLocation: NSNumber = 0.9
+        static let maskFadeStartLocation: NSNumber = 0.8
+        /// Strength of the blur, from 0.0 for no blur to 1.0 for the full effect.
+        static let blurIntensity: CGFloat = 0.4
     }
 
     /// The rect, in the container view's coordinate space, the cross dissolve presentation
@@ -87,25 +94,29 @@ final class CrossDissolveTransitionAnimator: NSObject,
             return
         }
         let containerView = transitionContext.containerView
+        // The blur sits behind the presented controller, so what the mask hasn't covered yet blurs out
+        // instead of staying sharp.
+        let blurView = makeBlurView(frame: containerView.bounds)
+        blurView.alpha = 0.0
+        containerView.addSubview(blurView)
         containerView.addSubview(presentedController.view)
 
         let maskView = makeMaskView(for: containerView, diameterRatio: UX.presentationMaskDiameterRatio)
         maskView.transform = CGAffineTransform(scaleX: UX.collapsedMaskScale, y: UX.collapsedMaskScale)
         presentedController.view.mask = maskView
 
-        let blurView = makeBlurView(frame: containerView.bounds)
-        presentedController.view.addSubview(blurView)
-
         presentedController.prepareForPresentationTransition()
         UIView.animate(withDuration: UX.presentationDuration, delay: 0.0, options: .curveEaseOut) {
-            maskView.transform = .identity
-            blurView.alpha = 0.0
+            maskView.transform = CGAffineTransform(scaleX: UX.expandedMaskHorizontalScale, y: 1.0)
+            presentedController.applyPresentationTransition()
         } completion: { _ in
-            blurView.removeFromSuperview()
             presentedController.view.mask = nil
             transitionContext.completeTransition(true)
         }
-        presentedController.animatePresentationTransition()
+
+        UIView.animate(withDuration: UX.presentationBlurFadeDuration) {
+            blurView.alpha = 1.0
+        }
     }
 
     // MARK: - Dismissal
@@ -123,15 +134,20 @@ final class CrossDissolveTransitionAnimator: NSObject,
         let blurView = makeBlurView(frame: presentingController.view.bounds)
         presentingController.view.addSubview(blurView)
 
-        UIView.animate(withDuration: UX.dismissalDuration, delay: 0.0, options: .curveEaseOut) {
+        UIView.animate(withDuration: UX.dismissalFadeDuration,
+                       delay: UX.dismissalFadeDelay,
+                       options: .curveEaseOut) {
+            blurView.alpha = 0.0
+            maskView.alpha = 0.0
+        }
+
+        UIView.animate(withDuration: UX.dismissalDuration,
+                       delay: 0.0,
+                       options: .curveEaseOut) {
             maskView.transform = CGAffineTransform(scaleX: UX.collapsedMaskScale, y: UX.collapsedMaskScale)
         } completion: { _ in
             blurView.removeFromSuperview()
             transitionContext.completeTransition(true)
-        }
-
-        UIView.animate(withDuration: UX.dismissalBlurFadeDuration, delay: UX.dismissalBlurFadeDelay) {
-            blurView.alpha = 0.0
         }
     }
 
@@ -166,7 +182,8 @@ final class CrossDissolveTransitionAnimator: NSObject,
     }
 
     private func makeBlurView(frame: CGRect) -> UIVisualEffectView {
-        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+        let blurView = IntensityVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial),
+                                                 intensity: UX.blurIntensity)
         blurView.frame = frame
         return blurView
     }

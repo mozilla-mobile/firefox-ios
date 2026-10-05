@@ -14,7 +14,7 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         let subject = createSubject(transitionType: .crossDissolve(sourceRect: .zero))
 
         XCTAssertEqual(subject.modalPresentationStyle, .custom)
-        XCTAssertTrue(subject.transitioningDelegate is CrossDissolveTransitionAnimator)
+        XCTAssertTrue(subject.transitioningDelegate is TransitionAnimator)
     }
 
     func testInit_withFormSheetTransition_usesFormSheetPresentationAndNoTransitioningDelegate() {

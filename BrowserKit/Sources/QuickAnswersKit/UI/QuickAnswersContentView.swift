@@ -20,9 +20,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         static let resultCascadeStartDelay: TimeInterval = 0.1
         static let resultCascadeStagger: TimeInterval = 0.1
         /// How far below its final position the placeholder starts when presenting.
-        static let presentationSlideOffset: CGFloat = 30.0
-        static let presentationFadeDuration: TimeInterval = 0.4
-        static let presentationSlideDuration: TimeInterval = 0.3
+        static let presentationSlideOffset: CGFloat = 15.0
     }
 
     // MARK: - Subviews
@@ -144,10 +142,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         audioWaveform.startAnimating()
     }
 
-    func adjustBottomInsets(for height: CGFloat) {
-        scrollView.contentInset.bottom = height
-    }
-
     func configureOptIn(
         strings: QuickAnswersViewConfiguration.OptInStrings,
         learnMoreURL: URL?,
@@ -223,20 +217,20 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
 
     // MARK: - Presentation transition
-    /// Hides and offsets the content so `animatePresentationTransition` can bring it in alongside the
+    /// Hides and offsets the content so `applyPresentationTransition` can bring it in alongside the
     /// cross dissolve. Both are driven by `CrossDissolveTransitionAnimator`.
     func prepareForPresentationTransition() {
         audioWaveform.alpha = 0.0
+        placeholderLabel.alpha = 0.0
         placeholderLabel.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationSlideOffset)
     }
 
-    func animatePresentationTransition() {
-        UIView.animate(withDuration: UX.presentationFadeDuration, delay: 0.0, options: .curveEaseOut) { [self] in
-            audioWaveform.alpha = 1.0
-        }
-        UIView.animate(withDuration: UX.presentationSlideDuration) { [self] in
-            placeholderLabel.transform = .identity
-        }
+    /// Restores the content to its resting state, from inside the animation block of
+    /// `CrossDissolveTransitionAnimator`.
+    func applyPresentationTransition() {
+        audioWaveform.alpha = 1.0
+        placeholderLabel.alpha = 1.0
+        placeholderLabel.transform = .identity
     }
 
     // MARK: - Result animation

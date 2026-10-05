@@ -27,11 +27,9 @@ public final class QuickAnswersViewController: UIViewController,
         static let contentViewBottomPadding: CGFloat = 12.0
         static let contentViewHorizontalPadding: CGFloat = 24.0
         /// How far below its final position the background effect starts when presenting.
-        static let presentationSlideOffset: CGFloat = 30.0
+        static let presentationSlideOffset: CGFloat = 50.0
         /// How far above its final position the close button starts when presenting.
-        static let presentationCloseButtonOffset: CGFloat = -50.0
-        static let presentationFadeDuration: TimeInterval = 0.4
-        static let presentationSlideDuration: TimeInterval = 0.3
+        static let presentationCloseButtonOffset: CGFloat = -20.0
     }
 
     // MARK: - Properties
@@ -53,7 +51,7 @@ public final class QuickAnswersViewController: UIViewController,
         )
     }
     private let contentView: QuickAnswersContentView = .build()
-    private let transitionAnimator: CrossDissolveTransitionAnimator?
+    private let transitionAnimator: TransitionAnimator?
 
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
@@ -114,7 +112,7 @@ public final class QuickAnswersViewController: UIViewController,
         // The custom transition animator is only used for the cross dissolve transition; the form sheet
         // relies on the system presentation.
         if case let .crossDissolve(sourceRect) = transitionType {
-            self.transitionAnimator = CrossDissolveTransitionAnimator(sourceRect: sourceRect)
+            self.transitionAnimator = TransitionAnimator(sourceRect: sourceRect)
         } else {
             self.transitionAnimator = nil
         }
@@ -235,25 +233,25 @@ public final class QuickAnswersViewController: UIViewController,
     }
 
     // MARK: - Presentation transition
-    /// Hides and offsets the content so `animatePresentationTransition` can bring it in alongside the
-    /// cross dissolve. Both are driven by `CrossDissolveTransitionAnimator`.
+    /// Hides and offsets the content so `applyPresentationTransition` can bring it in alongside the
+    /// cross dissolve. Called by `CrossDissolveTransitionAnimator` before it starts animating.
     func prepareForPresentationTransition() {
         contentView.prepareForPresentationTransition()
+        backgroundRecordEffect.view.alpha = 0.0
         backgroundRecordEffect.view.transform = CGAffineTransform(translationX: 0.0,
                                                                   y: UX.presentationSlideOffset)
         closeButton.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationCloseButtonOffset)
         closeButton.alpha = 0.0
     }
 
-    func animatePresentationTransition() {
-        contentView.animatePresentationTransition()
-        UIView.animate(withDuration: UX.presentationFadeDuration, delay: 0.0, options: .curveEaseOut) { [self] in
-            closeButton.alpha = 1.0
-        }
-        UIView.animate(withDuration: UX.presentationSlideDuration) { [self] in
-            backgroundRecordEffect.view.transform = .identity
-            closeButton.transform = .identity
-        }
+    /// Restores the content to its resting state. Called from inside the animation block of
+    /// `CrossDissolveTransitionAnimator`, so the content moves in step with the mask.
+    func applyPresentationTransition() {
+        contentView.applyPresentationTransition()
+        backgroundRecordEffect.view.alpha = 1.0
+        backgroundRecordEffect.view.transform = .identity
+        closeButton.alpha = 1.0
+        closeButton.transform = .identity
     }
 
     private func fadeBackgroundEffectForResult() {
