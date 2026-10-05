@@ -60,56 +60,52 @@ final class PhotonActionSheetScreen {
         BaseTestCase().mozWaitForElementToNotExist(sel.ACTIVITY_LIST_VIEW.element(in: app), timeout: timeout)
     }
 
-    /// Asserts the share sheet header names the shared document. The sheet first shows a placeholder
-    /// header carrying the full file name, so only the base name is compared.
+    /// Asserts the share sheet header names the shared document. The sheet first shows a placeholder with
+    /// the full file name ("lorem_ipsum.pdf"), so the extension is ignored when comparing.
     func assertShareSheetDocumentName(_ name: String, timeout: TimeInterval = TIMEOUT) {
-        let caption = documentNameCaption(timeout: timeout) { $0 == name }
-        XCTAssertEqual(caption, name, "The share sheet should name the document currently displayed")
+        let caption = waitForHeaderCaption(sel.SHARE_SHEET_TOP_CAPTION, index: 0, timeout: timeout) {
+            documentName(in: $0) == name
+        } ?? ""
+        XCTAssertEqual(documentName(in: caption), name, "The share sheet should name the document currently displayed")
     }
 
     func assertShareSheetDocumentNameIsNot(_ name: String, timeout: TimeInterval = TIMEOUT) {
-        let caption = documentNameCaption(timeout: timeout)
-        XCTAssertNotEqual(caption, name, "The share sheet should not still name a previously shared document")
-    }
-
-    private func documentNameCaption(
-        timeout: TimeInterval,
-        until isExpected: @escaping (String) -> Bool = { _ in true }
-    ) -> String? {
-        let baseName: (String) -> String = { ($0 as NSString).deletingPathExtension }
-        let caption = headerCaption(sel.SHARE_SHEET_TOP_CAPTION, index: 0, timeout: timeout) { isExpected(baseName($0)) }
-        return caption.map(baseName)
+        let caption = waitForHeaderCaption(sel.SHARE_SHEET_TOP_CAPTION, index: 0, timeout: timeout) ?? ""
+        XCTAssertNotEqual(
+            documentName(in: caption),
+            name,
+            "The share sheet should not still name a previously shared document"
+        )
     }
 
     /// Asserts the sheet offers the document as a PDF file rather than as a web page link.
     func assertShareSheetOffersPdfDocument(timeout: TimeInterval = TIMEOUT) {
-        let caption = headerCaption(sel.SHARE_SHEET_BOTTOM_CAPTION, index: 1, timeout: timeout) { $0.contains("PDF") }
+        let caption = waitForHeaderCaption(sel.SHARE_SHEET_BOTTOM_CAPTION, index: 1, timeout: timeout) {
+            $0.contains("PDF")
+        } ?? ""
         XCTAssertTrue(
-            caption?.contains("PDF") == true,
-            "The share sheet should describe the shared item as a PDF document, found: \(caption ?? "nil")"
+            caption.contains("PDF"),
+            "The share sheet should describe the shared item as a PDF document, found: \(caption)"
         )
     }
 
-    /// Reads a share sheet header caption. iOS 26 tags captions with `selector`'s identifier; older iOS
-    /// leaves them untagged, so fall back to the header's `index`-th labelled leaf (name, then kind and size).
-    /// The header starts as a placeholder, so keep polling until `isExpected` holds, then return the last read.
-    private func headerCaption(
+    /// Strips the file extension: "lorem_ipsum.pdf" becomes "lorem_ipsum".
+    private func documentName(in caption: String) -> String {
+        return (caption as NSString).deletingPathExtension
+    }
+
+    /// Re-reads a header caption until `isExpected` accepts it, because the header starts as a placeholder.
+    /// On timeout it returns the last caption read, so the caller's assertion reports what was on screen.
+    private func waitForHeaderCaption(
         _ selector: Selector,
         index: Int,
         timeout: TimeInterval,
         until isExpected: (String) -> Bool = { _ in true }
     ) -> String? {
-        let taggedCaption = selector.element(in: app)
-        let header = sel.SHARE_SHEET_HEADER.element(in: app)
         let deadline = Date().addingTimeInterval(timeout)
         var lastCaption: String?
         repeat {
-            if taggedCaption.exists {
-                lastCaption = taggedCaption.label
-            } else if header.exists, let snapshot = try? header.snapshot() {
-                let captions = labelledLeaves(of: snapshot)
-                if captions.count > index { lastCaption = captions[index] }
-            }
+            lastCaption = readHeaderCaption(selector, index: index) ?? lastCaption
             if let caption = lastCaption, isExpected(caption) { return caption }
             usleep(100_000)
         } while Date() < deadline
@@ -117,6 +113,18 @@ final class PhotonActionSheetScreen {
             XCTFail("Timed out waiting for share sheet header caption \(index) in \(timeout) seconds")
         }
         return lastCaption
+    }
+
+    /// Reads a header caption once. iOS 26 tags captions with `selector`'s identifier; older iOS leaves them
+    /// untagged, so fall back to the header's `index`-th labelled leaf (name, then kind and size).
+    private func readHeaderCaption(_ selector: Selector, index: Int) -> String? {
+        let taggedCaption = selector.element(in: app)
+        if taggedCaption.exists { return taggedCaption.label }
+
+        let header = sel.SHARE_SHEET_HEADER.element(in: app)
+        guard header.exists, let snapshot = try? header.snapshot() else { return nil }
+        let captions = labelledLeaves(of: snapshot)
+        return captions.count > index ? captions[index] : nil
     }
 
     private func labelledLeaves(of snapshot: XCUIElementSnapshot) -> [String] {

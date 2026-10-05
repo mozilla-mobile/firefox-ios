@@ -160,6 +160,12 @@ extension Selector {
         )
     }
 
+    static func textFieldContainingButton(labeled label: String,
+                                          description: String,
+                                          groups: [String] = []) -> Selector {
+        Selector(strategy: .textFieldContainingButtonByLabel(label), value: label, description: description, groups: groups)
+    }
+
     static func staticTextLabelContains(_ text: String, description: String, groups: [String] = []) -> Selector {
         Selector(
             strategy: .predicate(
