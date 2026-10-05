@@ -42,7 +42,7 @@ struct OnboardingCard {
 
 /// This is the single table to edit to change which card(s) appear on which day. Keys are
 /// engagement-day numbers (the Nth distinct day the user opens the app).
-enum OnboardingDripSchedule {
+enum OnboardingCardSchedule {
     static let cardsByDay: [Int: [OnboardingCard]] = [
         2: [OnboardingCard(
             title: "Stay in the loop",

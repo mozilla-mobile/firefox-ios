@@ -274,13 +274,13 @@ public struct PrefsKeys {
     public static let defaultBrowserBannerShown = "defaultBrowserBannerShownKey"
 
     // Count of distinct active days
-    public static let onboardingDripActiveDayCount = "onboardingDripActiveDayCount"
+    public static let onboardingActiveDayCount = "onboardingActiveDayCount"
 
     // The calendar day that count last advanced,
-    public static let onboardingDripLastActiveDate = "onboardingDripLastActiveDate"
+    public static let onboardingLastActiveDate = "onboardingLastActiveDate"
 
     // The day whose card was last shown.
-    public static let onboardingDripLastCardActiveDay = "onboardingDripLastCardActiveDay"
+    public static let onboardingLastCardActiveDay = "onboardingLastCardActiveDay"
 
     // MARK: - Apple Intelligence
     // Used to determine if Apple Intelligence is available

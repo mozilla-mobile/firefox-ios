@@ -44,7 +44,7 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
 
     /// Counts the current launch as an active day for the drip (idempotent per calendar day).
     func recordContinuousOnboardingActiveDay() {
-        OnboardingDripScheduler(prefs: prefs).recordActiveDayIfNeeded()
+        OnboardingCardScheduler(prefs: prefs).recordActiveDayIfNeeded()
     }
 
     var shouldUseBrandRefreshConfiguration: Bool {
