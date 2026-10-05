@@ -9424,20 +9424,153 @@ extension String {
     }
 }
 
-// swiftlint:enable line_length
-
 extension String {
     public struct TabGroups {
+        public static let OriginalOrder = MZLocalizedString(
+            key: "TabGroups.ArrangeTabs.OriginalOrder.v158",
+            tableName: "TabsTray",
+            value: "Original Order",
+            comment: "Menu item that restores the original order of tabs in a group")
+        public static let TitleOrder = MZLocalizedString(
+            key: "TabGroups.ArrangeTabs.Title.v158",
+            tableName: "TabsTray",
+            value: "Title",
+            comment: "Menu item that sorts tabs in a group by title")
+        public static let SelectTabs = MZLocalizedString(
+            key: "TabGroups.SelectTabs.v158",
+            tableName: "TabsTray",
+            value: "Select Tabs",
+            comment: "Title shown when selecting tabs, before any tabs are selected")
+        public static let SelectedTabCountOne = MZLocalizedString(
+            key: "TabGroups.SelectedTabCount.One.v158",
+            tableName: "TabsTray",
+            value: "%d Selected",
+            comment: "Title when exactly one tab is selected; %d is the number of selected tabs")
+        public static let SelectedTabCountOther = MZLocalizedString(
+            key: "TabGroups.SelectedTabCount.Other.v158",
+            tableName: "TabsTray",
+            value: "%d Selected",
+            comment: "Title when multiple tabs are selected; %d is the number of selected tabs")
+        public static let FinishSelection = MZLocalizedString(
+            key: "TabGroups.FinishSelection.v158",
+            tableName: "TabsTray",
+            value: "Done selecting tabs",
+            comment: "Accessibility label for leaving tab selection mode")
+        public static let NewGroup = MZLocalizedString(
+            key: "TabGroups.NewGroup.v158",
+            tableName: "TabsTray",
+            value: "New Group",
+            comment: "Action to create a group from selected tabs")
+        public static let MoveToGroup = MZLocalizedString(
+            key: "TabGroups.MoveToGroup.v158",
+            tableName: "TabsTray",
+            value: "Move to Group",
+            comment: "Action to move selected tabs to another group")
+        public static let CloseSelectedTabs = MZLocalizedString(
+            key: "TabGroups.CloseSelectedTabs.v158",
+            tableName: "TabsTray",
+            value: "Close Tabs",
+            comment: "Action to close selected tabs")
+        public static let Mobile = MZLocalizedString(
+            key: "TabGroups.Mobile.v158",
+            tableName: "TabsTray",
+            value: "Mobile",
+            comment: "Name of the ungrouped tabs destination")
+        public static let PickerTitle = MZLocalizedString(
+            key: "TabGroups.PickerTitle.v158",
+            tableName: "TabsTray",
+            value: "Tab Groups",
+            comment: "Title of the tab group picker")
+        public static let Done = MZLocalizedString(
+            key: "TabGroups.Done.v158",
+            tableName: "TabsTray",
+            value: "Done",
+            comment: "Action that closes the tab group picker or tab tray")
+        public static let MoreOptions = MZLocalizedString(
+            key: "TabGroups.MoreOptions.v158",
+            tableName: "TabsTray",
+            value: "More tab options",
+            comment: "Accessibility label for the tab tray menu")
+        public static let TabCountOne = MZLocalizedString(
+            key: "TabGroups.TabCountOne.v158",
+            tableName: "TabsTray",
+            value: "%d Tab",
+            comment: "Tab count when there is exactly one tab; %d is the count")
+        public static let TabCountOther = MZLocalizedString(
+            key: "TabGroups.TabCountOther.v158",
+            tableName: "TabsTray",
+            value: "%d Tabs",
+            comment: "Tab count when there are multiple tabs; %d is the count")
+        public static let ArrangeTabsBy = MZLocalizedString(
+            key: "TabGroups.ArrangeTabsBy.v158",
+            tableName: "TabsTray",
+            value: "Arrange Tabs By",
+            comment: "Menu heading for tab sort options")
         public static let CustomizeGroup = MZLocalizedString(
             key: "TabGroups.CustomizeGroup.v158",
             tableName: "TabsTray",
             value: "Customize Group",
             comment: "Action and editor title for changing a group")
+        public static let Ungroup = MZLocalizedString(
+            key: "TabGroups.Ungroup.v158",
+            tableName: "TabsTray",
+            value: "Ungroup",
+            comment: "Action that removes a group but retains its tabs")
+        public static let TabSettings = MZLocalizedString(
+            key: "TabGroups.TabSettings.v158",
+            tableName: "TabsTray",
+            value: "Tab Settings",
+            comment: "Action that opens tab settings")
+        public static let NewEmptyGroup = MZLocalizedString(
+            key: "TabGroups.NewEmptyGroup.v158",
+            tableName: "TabsTray",
+            value: "New Empty Tab Group",
+            comment: "Action that creates an empty group")
+        public static let NewGroupWithOneTab = MZLocalizedString(
+            key: "TabGroups.NewGroupWithOneTab.v158",
+            tableName: "TabsTray",
+            value: "New Tab Group with %d Tab",
+            comment: "Action that creates a group with one tab; %d is the count")
+        public static let NewGroupWithMultipleTabs = MZLocalizedString(
+            key: "TabGroups.NewGroupWithMultipleTabs.v158",
+            tableName: "TabsTray",
+            value: "New Tab Group with %d Tabs",
+            comment: "Action that creates a group with multiple tabs; %d is the count")
+        public static let CloseTabsPromptOne = MZLocalizedString(
+            key: "TabGroups.CloseTabsPromptOne.v158",
+            tableName: "TabsTray",
+            value: "Close %d Tab?",
+            comment: "Confirmation prompt for closing one tab; %d is the count")
+        public static let CloseTabsPromptOther = MZLocalizedString(
+            key: "TabGroups.CloseTabsPromptOther.v158",
+            tableName: "TabsTray",
+            value: "Close %d Tabs?",
+            comment: "Confirmation prompt for closing multiple tabs; %d is the count")
+        public static let MoveTabsPromptOne = MZLocalizedString(
+            key: "TabGroups.MoveTabsPromptOne.v158",
+            tableName: "TabsTray",
+            value: "Move %d Tab To",
+            comment: "Title of the destination chooser for one tab; %d is the count")
+        public static let MoveTabsPromptOther = MZLocalizedString(
+            key: "TabGroups.MoveTabsPromptOther.v158",
+            tableName: "TabsTray",
+            value: "Move %d Tabs To",
+            comment: "Title of the destination chooser for multiple tabs; %d is the count")
+        public static let CreateAnotherGroup = MZLocalizedString(
+            key: "TabGroups.CreateAnotherGroup.v158",
+            tableName: "TabsTray",
+            value: "Create another group to move these tabs.",
+            comment: "Empty destination chooser message")
         public static let NewTabGroup = MZLocalizedString(
             key: "TabGroups.NewTabGroup.v158",
             tableName: "TabsTray",
             value: "New Tab Group",
             comment: "Action and editor title for creating a group")
+        public static let MoveToTabGroup = MZLocalizedString(
+            key: "TabGroups.MoveToTabGroup.v158",
+            tableName: "TabsTray",
+            value: "Move to Tab Group",
+            comment: "Context menu action for moving one tab")
         public static let GroupName = MZLocalizedString(
             key: "TabGroups.GroupName.v158",
             tableName: "TabsTray",
@@ -9525,3 +9658,5 @@ extension String {
             comment: "Name of the pink tab group color")
     }
 }
+
+// swiftlint:enable line_length
