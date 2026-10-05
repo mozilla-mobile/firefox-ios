@@ -2605,6 +2605,16 @@ extension String {
             tableName: "SearchHeaderTitle",
             value: "Google Search",
             comment: "When making a new search from the awesome bar, search results appear as the user write new letters in their search. This string will be used as a header for Google search results listed as suggestions.")
+        public static let ResultsAboveA11yAnnouncement = MZLocalizedString(
+            key: "Search.ResultsAbove.A11yAnnouncement.v158",
+            tableName: "Search",
+            value: "%d results available above",
+            comment: "When making a new search from the awesome bar, search results appear as the user write new letters in their search. This is the announcement VoiceOver reads to tell the user how many results are available, and that they are located above the address bar. %d is the number of results.")
+        public static let ResultsBelowA11yAnnouncement = MZLocalizedString(
+            key: "Search.ResultsBelow.A11yAnnouncement.v158",
+            tableName: "Search",
+            value: "%d results available below",
+            comment: "When making a new search from the awesome bar, search results appear as the user write new letters in their search. This is the announcement VoiceOver reads to tell the user how many results are available, and that they are located below the address bar. %d is the number of results.")
     }
 
     public struct SearchZero {
