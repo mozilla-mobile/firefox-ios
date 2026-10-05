@@ -19,14 +19,46 @@ struct TabGroupsTrayTopBar<MoreControl: View>: View {
 
     var body: some View {
         ZStack {
-            HStack {
-                Spacer()
-                moreControl
+            if viewModel.selectedTabCount != nil {
+                selectionHeader
+            } else {
+                HStack {
+                    Spacer()
+                    moreControl
+                }
+                destinationButton
             }
-            destinationButton
         }
         .padding(.horizontal, 20)
         .frame(height: TabGroupsTrayBarMetrics.topHeight)
+    }
+    private var selectionHeader: some View {
+        ZStack {
+            HStack {
+                Spacer()
+                Button {
+                    onAction(.finishSelection)
+                } label: {
+                    Image("checkmarkLarge")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                        .foregroundStyle(viewModel.colors.onEmphasis)
+                        .frame(width: TabGroupsTrayBarMetrics.buttonSize,
+                               height: TabGroupsTrayBarMetrics.buttonSize)
+                        .tabGroupsDoneStyle(tint: viewModel.colors.emphasis)
+                        .accessibilityHidden(true)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(viewModel.finishSelectionAccessibilityLabel)
+                .accessibilityIdentifier("tabGroupsTray.finishSelection")
+            }
+
+            Text(viewModel.selectionTitle)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(viewModel.colors.primaryText)
+        }
     }
 
     private var destinationButton: some View {
@@ -115,6 +147,61 @@ struct TabGroupsTrayBottomBar: View {
     let onAction: (TabGroupsTrayBarAction) -> Void
 
     var body: some View {
+        Group {
+            if let selectedTabCount = viewModel.selectedTabCount {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
+                        selectionButton(viewModel.newGroupTitle,
+                                        systemImage: "folder.badge.plus",
+                                        action: .createGroupFromSelection,
+                                        identifier: "createGroupFromSelection",
+                                        selectedTabCount: selectedTabCount)
+                        selectionButton(viewModel.moveToGroupTitle,
+                                        systemImage: "folder",
+                                        action: .moveSelectionToGroup,
+                                        identifier: "moveSelectionToGroup",
+                                        selectedTabCount: selectedTabCount)
+                        selectionButton(viewModel.closeSelectedTabsTitle,
+                                        systemImage: "xmark.rectangle",
+                                        action: .closeSelectedTabs,
+                                        identifier: "closeSelectedTabs",
+                                        selectedTabCount: selectedTabCount,
+                                        role: .destructive)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 8)
+                }
+            } else {
+                standardBar.padding(.horizontal, 20)
+            }
+        }
+        .foregroundStyle(viewModel.colors.primaryText)
+        .frame(height: TabGroupsTrayBarMetrics.bottomHeight)
+    }
+
+    private func selectionButton(_ title: String,
+                                 systemImage: String,
+                                 action: TabGroupsTrayBarAction,
+                                 identifier: String,
+                                 selectedTabCount: Int,
+                                 role: ButtonRole? = nil) -> some View {
+        Button(role: role) {
+            onAction(action)
+        } label: {
+            Label(title, systemImage: systemImage)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(role == .destructive ? viewModel.colors.destructive : viewModel.colors.primaryText)
+                .padding(.horizontal, 16)
+                .frame(height: 40)
+                .tabGroupsGlass(in: Capsule())
+        }
+        .buttonStyle(.plain)
+        .disabled(selectedTabCount == 0)
+        .opacity(selectedTabCount == 0 ? 0.5 : 1)
+        .accessibilityIdentifier("tabGroupsTray.\(identifier)")
+    }
+
+    private var standardBar: some View {
         HStack(spacing: 12) {
             addButton
             Spacer(minLength: 0)
@@ -122,9 +209,6 @@ struct TabGroupsTrayBottomBar: View {
             Spacer(minLength: 0)
             doneButton
         }
-        .foregroundStyle(viewModel.colors.primaryText)
-        .padding(.horizontal, 20)
-        .frame(height: TabGroupsTrayBarMetrics.bottomHeight)
     }
 
     private var addButton: some View {
@@ -148,7 +232,7 @@ struct TabGroupsTrayBottomBar: View {
     private var panelPicker: some View {
         HStack(spacing: 2) {
             panelButton(viewModel.privateTitle, panel: .privateTabs)
-            panelButton(viewModel.tabsTitle, panel: .tabs)
+            panelButton(viewModel.tabCountTitle, panel: .tabs)
             panelButton(viewModel.syncedTitle, panel: .syncedTabs)
         }
         .padding(3)
@@ -199,13 +283,13 @@ private extension View {
     func tabGroupsGlass<S: Shape>(in shape: S, tint: Color? = nil) -> some View {
         if #available(iOS 26.0, *) {
             if let tint {
-                glassEffect(.regular.tint(tint.opacity(0.18)).interactive(), in: shape)
+                glassEffect(.regular.tint(tint.opacity(TabGroupsTrayBarMetrics.groupTintOpacity)).interactive(), in: shape)
             } else {
                 glassEffect(.regular.interactive(), in: shape)
             }
         } else {
             background(.regularMaterial, in: shape)
-                .background(tint?.opacity(0.18) ?? .clear, in: shape)
+                .background(tint?.opacity(TabGroupsTrayBarMetrics.groupTintOpacity) ?? .clear, in: shape)
         }
     }
 
