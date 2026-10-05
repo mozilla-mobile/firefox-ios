@@ -18,7 +18,7 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled: true
           privateThemeOverride: false
       - channel: developer
         value:
