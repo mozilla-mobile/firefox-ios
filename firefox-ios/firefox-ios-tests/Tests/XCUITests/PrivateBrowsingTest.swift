@@ -23,6 +23,7 @@ class PrivateBrowsingTest: BaseTestCase {
     private var homePageScreen: HomePageScreen!
     private var contextMenuScreen: ContextMenuScreen!
     private var toolbarScreen: ToolbarScreen!
+    private var springboardScreen: SpringboardScreen!
 
     override func setUp() async throws {
         // Tabs are only saved once a restore has run, so the force close tests need session restore
@@ -35,6 +36,7 @@ class PrivateBrowsingTest: BaseTestCase {
         homePageScreen = HomePageScreen(app: app)
         contextMenuScreen = ContextMenuScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
+        springboardScreen = SpringboardScreen()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307004
@@ -314,10 +316,10 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Step 1: a deeplink from outside Firefox opens its website in a new tab. Links tapped inside a
         // private tab never leave the web view, so the deeplink has to come from the system
-        browserScreen.openDeeplinkFromOutsideApp(deeplink(opening: path(forTestPage: TestPages.exampleHTML)))
+        springboardScreen.openDeeplinkFromOutsideApp(deeplink(opening: path(forTestPage: TestPages.exampleHTML)))
         navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
-        browserScreen.assertExampleDomainTextExists()
+        browserScreen.assertExampleDomainPageDisplayed()
         toolbarScreen.assertTabsButtonValue(expectedCount: "2")
 
         // The deeplink carries no private parameter, so it must reuse the private browsing mode: its tab
