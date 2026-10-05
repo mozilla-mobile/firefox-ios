@@ -216,6 +216,7 @@ final class TabTrayViewController: UIViewController,
                           glyph: theme.colors.iconInverted)
         syncTabButton.style = .prominent
         syncTabButton.tintColor = glassTint
+        syncTabButton.setTitleTextAttributes([.foregroundColor: theme.colors.iconPrimary], for: .normal)
     }
 
     @available(iOS 26.0, *)
