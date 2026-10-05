@@ -122,15 +122,6 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         }
     }
 
-    override internal func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        // The find-in-page selection menu only appears if the webview is the first responder.
-        // Do not becomeFirstResponder on a mouse event.
-        if let event = event, event.allTouches?.contains(where: { $0.type != .indirectPointer }) ?? false {
-            becomeFirstResponder()
-        }
-        return super.hitTest(point, with: event)
-    }
-
     // swiftlint:disable unneeded_override
 #if compiler(>=6)
     override func evaluateJavaScript(
