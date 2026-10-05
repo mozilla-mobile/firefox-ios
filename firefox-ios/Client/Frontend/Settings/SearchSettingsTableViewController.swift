@@ -138,7 +138,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
         return defaultEngine.isCustomEngine ? customEngineCount > 1 : customEngineCount > 0
     }
 
-    override var shouldUsePrivateOverride: Bool { return true }
+    /// Keep the private theme override just for Settings, since this is also presented from the
+    /// address bar's "manage search engines" action.
+    private let _shouldUsePrivateOverride: Bool
+    override var shouldUsePrivateOverride: Bool { return _shouldUsePrivateOverride }
     override var shouldBeInPrivateTheme: Bool { return false }
 
     init(profile: Profile,
@@ -146,12 +149,14 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
          featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
          userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
          windowUUID: WindowUUID,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         shouldUsePrivateOverride: Bool = true) {
         self.profile = profile
         self.logger = logger
         self.featureFlagsProvider = featureFlagsProvider
         self.userPreferences = userPreferences
         model = searchEnginesManager
+        self._shouldUsePrivateOverride = shouldUsePrivateOverride
 
         super.init(windowUUID: windowUUID)
     }
@@ -557,7 +562,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
         switch section {
         case .defaultEngine:
             guard indexPath.item == 0 else { return nil }
-            let searchEnginePicker = SearchEnginePicker(windowUUID: windowUUID)
+            let searchEnginePicker = SearchEnginePicker(
+                windowUUID: windowUUID,
+                shouldUsePrivateOverride: shouldUsePrivateOverride
+            )
             // Order alphabetically, so that picker is always consistently ordered.
             // Every engine is a valid choice for the default engine, even the current default engine.
             searchEnginePicker.engines = model.orderedEngines.sorted { e, f in e.shortName < f.shortName }
@@ -567,7 +575,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
         case .alternateEngines:
             let isLastItem = indexPath.item + 1 == model.orderedEngines.count
             guard isLastItem else { return nil }
-            let customSearchEngineForm = CustomSearchViewController(windowUUID: windowUUID)
+            let customSearchEngineForm = CustomSearchViewController(
+                windowUUID: windowUUID,
+                shouldUsePrivateOverride: shouldUsePrivateOverride
+            )
             customSearchEngineForm.profile = self.profile
             navigationController?.pushViewController(customSearchEngineForm, animated: true)
         case .searchEnginesSuggestions, .preSearch, .googleLens:

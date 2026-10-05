@@ -3,14 +3,27 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 class SearchEnginePicker: ThemedTableViewController {
     weak var delegate: SearchEnginePickerDelegate?
     var engines: [OpenSearchEngine] = []
     var selectedSearchEngineID: String?
 
-    override var shouldUsePrivateOverride: Bool { return true }
+    /// Keep the private theme override just for Settings, since this is also presented from the
+    /// address bar's "manage search engines" action.
+    private let _shouldUsePrivateOverride: Bool
+    override var shouldUsePrivateOverride: Bool { return _shouldUsePrivateOverride }
     override var shouldBeInPrivateTheme: Bool { return false }
+
+    init(windowUUID: WindowUUID, shouldUsePrivateOverride: Bool = true) {
+        self._shouldUsePrivateOverride = shouldUsePrivateOverride
+        super.init(windowUUID: windowUUID)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
