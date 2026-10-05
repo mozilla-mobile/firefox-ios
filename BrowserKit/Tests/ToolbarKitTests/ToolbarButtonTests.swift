@@ -196,6 +196,26 @@ final class ToolbarButtonTests: XCTestCase {
         XCTAssertNotNil(button.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero))
     }
 
+    func testConfigure_withSystemSymbol_setsImage() {
+        let element = createToolbarElement(iconName: "bag.fill", a11yLabel: "Group")
+
+        button.configure(element: element)
+
+        XCTAssertNotNil(button.configuration?.image)
+        XCTAssertEqual(button.configuration?.image?.renderingMode, .alwaysTemplate)
+    }
+
+    func testConfigure_withUnknownIconName_clearsImage() {
+        let symbol = createToolbarElement(iconName: "bag.fill", a11yLabel: "Group")
+        let unknown = createToolbarElement(iconName: "missing-toolbar-icon", a11yLabel: "Group")
+        button.configure(element: symbol)
+        XCTAssertNotNil(button.configuration?.image)
+
+        button.configure(element: unknown)
+
+        XCTAssertNil(button.configuration?.image)
+    }
+
     // MARK: - Helper Methods
     private func createToolbarElement(
         iconName: String? = nil,
