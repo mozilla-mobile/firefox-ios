@@ -14,6 +14,7 @@ final class TabTrayCoordinatorTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
+        FxNimbus.shared.features.tabGroupsFeature.with { _, _ in TabGroupsFeature(enabled: false) }
         let mockTabManager = MockTabManager()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         mockRouter = MockRouter(navigationController: MockNavigationController())
@@ -23,6 +24,9 @@ final class TabTrayCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() async throws {
+        FxNimbus.shared.features.tabGroupsFeature.with { variables, prefs in
+            TabGroupsFeature(variables, prefs)
+        }
         mockRouter = nil
         profile = nil
         parentCoordinator = nil
@@ -35,6 +39,24 @@ final class TabTrayCoordinatorTests: XCTestCase {
 
         XCTAssertTrue(subject.childCoordinators.isEmpty)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
+    }
+
+    func testTabGroupsUIIsReadyWhenViewLoadsDuringInitialization() {
+        FxNimbus.shared.features.tabGroupsFeature.with { _, _ in TabGroupsFeature(enabled: true) }
+
+        let subject = createSubject()
+
+        XCTAssertNotNil(subject.tabTrayViewController?.tabGroupsController)
+        XCTAssertNotNil(subject.tabTrayViewController?.tabGroupsTopHost)
+        XCTAssertNotNil(subject.tabTrayViewController?.tabGroupsBottomHost)
+    }
+
+    func testTabGroupsUIIsAbsentWhenFlagIsDisabled() {
+        let subject = createSubject()
+
+        XCTAssertNil(subject.tabTrayViewController?.tabGroupsController)
+        XCTAssertNil(subject.tabTrayViewController?.tabGroupsTopHost)
+        XCTAssertNil(subject.tabTrayViewController?.tabGroupsBottomHost)
     }
 
     func testStart_RegularTabsPanel() {
@@ -91,6 +113,14 @@ final class TabTrayCoordinatorTests: XCTestCase {
         subject.didFinish()
 
         XCTAssertEqual(parentCoordinator.didDismissWasCalled, 1)
+    }
+
+    func testTabSettingsDelegatesToParent() {
+        let subject = createSubject()
+
+        subject.showTabSettings()
+
+        XCTAssertEqual(parentCoordinator.didRequestTabSettingsWasCalled, 1)
     }
 
     // MARK: - Preloading before presentation

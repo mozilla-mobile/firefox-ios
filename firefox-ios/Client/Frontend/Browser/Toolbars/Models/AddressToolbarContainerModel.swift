@@ -299,6 +299,7 @@ final class AddressToolbarContainerModel: Equatable {
                                   isShowingTopTabs: Bool,
                                   longPressMenuProvider: @escaping LongPressMenuProvider = { _ in nil },
                                   windowUUID: UUID) -> ToolbarElement {
+        let action = TabGroupsToolbarButtonViewModel.configure(action, for: windowUUID)
         return ToolbarElement(
             iconName: action.iconName,
             title: action.actionLabel,

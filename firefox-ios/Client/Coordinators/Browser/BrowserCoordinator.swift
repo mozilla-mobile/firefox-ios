@@ -1595,6 +1595,14 @@ final class BrowserCoordinator: BaseCoordinator,
         remove(child: coordinator)
     }
 
+    func didRequestTabSettings(from coordinator: TabTrayCoordinator) {
+        router.dismiss(animated: true) { [weak self] in
+            self?.showSettings(at: .newTab)
+        }
+        coordinator.dismissChildTabTrayPanels()
+        remove(child: coordinator)
+    }
+
     // MARK: - WindowEventCoordinator
 
     func coordinatorHandleWindowEvent(event: WindowEvent, uuid: WindowUUID) {

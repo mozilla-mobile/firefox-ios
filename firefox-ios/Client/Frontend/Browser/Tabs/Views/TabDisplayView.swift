@@ -32,11 +32,46 @@ final class TabDisplayView: UIView,
                       SwipeAnimatorDelegate,
                       InsetUpdatable {
     struct UX {
-        static let cornerRadius: CGFloat = 6.0
+        static let selectionRingGap: CGFloat = 5
+        static let selectionRingWidth: CGFloat = 3
+        static let selectionRingCornerRadius: CGFloat = 21
+    }
+
+    private final class SelectionRingView: UIView {
+        init(color: UIColor) {
+            super.init(frame: .zero)
+            translatesAutoresizingMaskIntoConstraints = false
+            isUserInteractionEnabled = false
+            backgroundColor = .clear
+            layer.borderColor = color.cgColor
+            layer.borderWidth = UX.selectionRingWidth
+            layer.cornerRadius = UX.selectionRingCornerRadius
+        }
+
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
     }
 
     let panelType: TabTrayPanelType
     private(set) var tabsState: TabsPanelState
+    private var sourceState: TabsPanelState
+    var tabGroupsController: TabGroupsController? {
+        didSet { refreshGroupFilter() }
+    }
+    var sortTabsByTitle = false {
+        didSet { refreshGroupFilter() }
+    }
+    var isSelectingTabs = false {
+        didSet {
+            if !isSelectingTabs { selectedTabIDs.removeAll() }
+            updateSelectionAppearance()
+        }
+    }
+    private(set) var selectedTabIDs = Set<TabUUID>()
+    var onSelectionChange: (() -> Void)?
+    var onCreateGroupForTab: ((TabUUID) -> Void)?
+    var onMoveTabToGroup: ((TabUUID, UUID?) -> Void)?
     private var performingChainedOperations = false
     private var tabsSectionManager: TabsSectionManager
     private let windowUUID: WindowUUID
@@ -50,37 +85,52 @@ final class TabDisplayView: UIView,
     lazy var dataSource =
     TabDisplayDiffableDataSource(
         collectionView: collectionView,
-        cellProvider: { [weak self] (collectionView, indexPath, sectionItem) ->
-            UICollectionViewCell in
+        cellProvider: { [weak self] collectionView, indexPath, sectionItem in
             guard let self else { return UICollectionViewCell() }
-
             switch sectionItem {
             case .tab(let tab):
-                let newTabTitle = tab.url == nil ? String.TabsTray.TabsSelectorBlankTabsTitle : nil
-                if isTabTrayUIExperimentsEnabled {
-                    guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: ExperimentTabCell.cellIdentifier,
-                        for: indexPath
-                    ) as? ExperimentTabCell else { return UICollectionViewCell() }
-
-                    let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
-                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId, newTabTitle: newTabTitle)
-                    if tab.tabUUID == self.minimizingTabUUID {
-                        cell.isHidden = true
-                    }
-                    return cell
-                } else {
-                    guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: TabCell.cellIdentifier,
-                        for: indexPath
-                    ) as? TabCell else { return UICollectionViewCell() }
-
-                    let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
-                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId, newTabTitle: newTabTitle)
-                    return cell
-                }
+                return self.makeTabCell(for: tab, in: collectionView, at: indexPath)
             }
         })
+
+    private func makeTabCell(for tab: TabModel,
+                             in collectionView: UICollectionView,
+                             at indexPath: IndexPath) -> UICollectionViewCell {
+        let newTabTitle = tab.url == nil ? String.TabsTray.TabsSelectorBlankTabsTitle : nil
+        let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
+        if isTabTrayUIExperimentsEnabled {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ExperimentTabCell.cellIdentifier,
+                for: indexPath
+            ) as? ExperimentTabCell else { return UICollectionViewCell() }
+
+            cell.configure(with: tab,
+                           theme: theme,
+                           delegate: self,
+                           a11yId: a11yId,
+                           newTabTitle: newTabTitle,
+                           selectedGroupColor: selectedGroupColor)
+            configureSelectionAppearance(cell, for: tab.tabUUID)
+            if tab.tabUUID == minimizingTabUUID {
+                cell.isHidden = true
+            }
+            return cell
+        }
+
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: TabCell.cellIdentifier,
+            for: indexPath
+        ) as? TabCell else { return UICollectionViewCell() }
+
+        cell.configure(with: tab,
+                       theme: theme,
+                       delegate: self,
+                       a11yId: a11yId,
+                       newTabTitle: newTabTitle,
+                       selectedGroupColor: selectedGroupColor)
+        configureSelectionAppearance(cell, for: tab.tabUUID)
+        return cell
+    }
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return tabTrayUtils.shouldDisplayExperimentUI()
@@ -137,6 +187,7 @@ final class TabDisplayView: UIView,
                 tabTrayUtils: TabTrayUtils = DefaultTabTrayUtils()) {
         self.panelType = panelType
         self.tabsState = state
+        self.sourceState = state
         self.tabsSectionManager = TabsSectionManager()
         self.windowUUID = windowUUID
         self.tabTrayUtils = tabTrayUtils
@@ -162,13 +213,10 @@ final class TabDisplayView: UIView,
             return
         }
 
-        tabsState = state
+        sourceState = state
+        refreshGroupFilter()
 
-        // Off screen (e.g. preloaded before the tab tray is presented) there is nothing to animate,
-        // so let UIKit reload instead of diffing.
-        dataSource.updateSnapshot(state: tabsState, animatingDifferences: window != nil)
-
-        if let scrollState = state.scrollState {
+        if let scrollState = translatedScrollState(state.scrollState) {
             scrollToTab(scrollState)
         }
 
@@ -178,6 +226,81 @@ final class TabDisplayView: UIView,
                 TabPanelViewModernAction.addNewTab(ofType: type),
                 forWindowUUID: self.windowUUID
             )
+        }
+    }
+
+    func refreshGroupFilter() {
+        var displayedState = sourceState
+        if panelType == .tabs, let tabGroupsController {
+            let visibleIDs = Set(tabGroupsController.visibleTabIDs(normalTabIDs: sourceState.tabs.map(\.tabUUID)))
+            displayedState.tabs = sourceState.tabs.filter { visibleIDs.contains($0.tabUUID) }
+        }
+        let isFiltered = displayedState.tabs.count != sourceState.tabs.count
+        collectionView.dragInteractionEnabled = !isFiltered && !sortTabsByTitle
+        if sortTabsByTitle {
+            displayedState.tabs.sort {
+                $0.tabTitle.localizedStandardCompare($1.tabTitle) == .orderedAscending
+            }
+        }
+        tabsState = displayedState
+        selectedTabIDs = selectedTabIDs.intersection(Set(displayedState.tabs.map(\.tabUUID)))
+        // Off screen (e.g. preloaded before the tab tray is presented) there is nothing to animate,
+        // so let UIKit reload instead of diffing.
+        dataSource.updateSnapshot(state: displayedState, animatingDifferences: window != nil)
+        updateSelectionAppearance()
+        onSelectionChange?()
+    }
+
+    func translatedScrollState(_ scrollState: TabsPanelState.ScrollState?) -> TabsPanelState.ScrollState? {
+        guard let scrollState,
+              let tabID = sourceState.tabs[safe: scrollState.toIndex]?.tabUUID,
+              let visibleIndex = tabsState.tabs.firstIndex(where: { $0.tabUUID == tabID }) else { return nil }
+        return TabsPanelState.ScrollState(toIndex: visibleIndex, withAnimation: scrollState.withAnimation)
+    }
+
+    private var selectedGroupColor: UIColor? {
+        guard panelType == .tabs,
+              let controller = tabGroupsController,
+              let group = controller.state.groups.first(where: { $0.id == controller.state.selectedGroupID }) else {
+            return nil
+        }
+        return group.color.uiColor
+    }
+
+    private func configureSelectionAppearance(_ cell: UICollectionViewCell, for tabID: TabUUID) {
+        let color = selectedGroupColor
+        if let cell = cell as? TabCell {
+            cell.setSelectedGroupColor(color, theme: theme)
+            cell.setTabSelectionMode(isSelectingTabs, theme: theme)
+        } else if let cell = cell as? ExperimentTabCell {
+            cell.setSelectedGroupColor(color, theme: theme)
+            cell.setTabSelectionMode(isSelectingTabs, theme: theme)
+        }
+        let showsRing = isSelectingTabs && selectedTabIDs.contains(tabID)
+        if let ring = cell.subviews.first(where: { $0 is SelectionRingView }) {
+            ring.isHidden = !showsRing
+            if let theme {
+                ring.layer.borderColor = theme.colors.actionPrimary.cgColor
+            }
+        } else if showsRing, let theme {
+            let ring = SelectionRingView(color: theme.colors.actionPrimary)
+            cell.clipsToBounds = false
+            cell.addSubview(ring)
+            NSLayoutConstraint.activate([
+                ring.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: -UX.selectionRingGap),
+                ring.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: UX.selectionRingGap),
+                ring.topAnchor.constraint(equalTo: cell.topAnchor, constant: -UX.selectionRingGap),
+                ring.bottomAnchor.constraint(equalTo: cell.bottomAnchor, constant: UX.selectionRingGap)
+            ])
+        }
+    }
+
+    private func updateSelectionAppearance() {
+        for cell in collectionView.visibleCells {
+            guard let indexPath = collectionView.indexPath(for: cell),
+                  let item = dataSource.itemIdentifier(for: indexPath),
+                  case .tab(let tab) = item else { continue }
+            configureSelectionAppearance(cell, for: tab.tabUUID)
         }
     }
 
@@ -253,6 +376,7 @@ final class TabDisplayView: UIView,
         self.theme = theme
         collectionView.backgroundColor = theme.isNova ? theme.colors.layer1 : theme.colors.layer3
         collectionView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
+        updateSelectionAppearance()
         collectionView.visibleSupplementaryViews(ofKind: TabTitleSupplementaryView.cellIdentifier)
             .compactMap { $0 as? TabTitleSupplementaryView }
             .forEach { $0.applyTheme(theme: theme) }
@@ -273,6 +397,13 @@ final class TabDisplayView: UIView,
             switch selectedItem {
             case .tab(let tabModel):
                 let tabUUID = tabModel.tabUUID
+                if isSelectingTabs {
+                    if !selectedTabIDs.insert(tabUUID).inserted { selectedTabIDs.remove(tabUUID) }
+                    updateSelectionAppearance()
+                    onSelectionChange?()
+                    return
+                }
+                tabGroupsController?.recordSelectedTab(tabUUID, normalTabIDs: sourceState.tabs.map(\.tabUUID))
                 let action = TabPanelViewAction(panelType: panelType,
                                                 tabUUID: tabUUID,
                                                 selectedTabIndex: indexPath.item,
@@ -296,10 +427,28 @@ final class TabDisplayView: UIView,
         guard getSection(for: indexPath.section) == .tabs
         else { return nil }
 
-        let tabVC = TabPeekViewController(tab: tabsState.tabs[indexPath.row], windowUUID: windowUUID)
+        guard let item = dataSource.itemIdentifier(for: indexPath),
+              case .tab(let tab) = item else { return nil }
+        let tabVC = TabPeekViewController(tab: tab, windowUUID: windowUUID)
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: { return tabVC },
-                                          actionProvider: tabVC.contextActions)
+                                          actionProvider: { [weak self] defaultActions in
+            let menu = tabVC.contextActions(defaultActions: defaultActions)
+            guard let self, self.panelType == .tabs, let controller = self.tabGroupsController else { return menu }
+            var destinations: [UIMenuElement] = [UIAction(title: String.TabGroups.Mobile) { [weak self] _ in
+                self?.onMoveTabToGroup?(tab.tabUUID, nil)
+            }]
+            destinations += controller.state.groups.map { group in
+                UIAction(title: group.title) { [weak self] _ in
+                    self?.onMoveTabToGroup?(tab.tabUUID, group.id)
+                }
+            }
+            destinations.append(UIAction(title: String.TabGroups.NewTabGroup) { [weak self] _ in
+                self?.onCreateGroupForTab?(tab.tabUUID)
+            })
+            let moveMenu = UIMenu(title: String.TabGroups.MoveToTabGroup, children: destinations)
+            return UIMenu(children: menu.children + [moveMenu])
+        })
     }
 
     // MARK: - TabCellDelegate
