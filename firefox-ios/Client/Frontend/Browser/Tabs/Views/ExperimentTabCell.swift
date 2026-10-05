@@ -36,6 +36,11 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
     var isSelectedTab: Bool { return tabModel?.isSelected ?? false }
     var animator: SwipeAnimator?
     weak var delegate: TabCellDelegate?
+    private lazy var closeAccessibilityAction = UIAccessibilityCustomAction(
+        name: .TabsTray.TabTrayCloseAccessibilityCustomAction,
+        target: animator,
+        selector: #selector(SwipeAnimator.closeWithoutGesture)
+    )
 
     private lazy var smallFaviconView: FaviconImageView = .build { view in
         view.isHidden = true
@@ -77,6 +82,10 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
     }
 
     private var borderLayer = CAShapeLayer()
+    private var selectedGroupColor: UIColor?
+    private var selectedGroupGradient: Gradient?
+    private var borderGradientColors: [CGColor]?
+    private var hidesSelectedBorder = false
 
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -92,7 +101,7 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         closeButtonBlurView.layer.cornerRadius = closeButtonBlurView.frame.height / 2
 
         // Handles initial draw and non-rotation layout changes (e.g. multitasking resize).
-        guard isSelectedTab, backgroundHolder.bounds != borderLayer.frame else { return }
+        guard isSelectedTab, !hidesSelectedBorder, backgroundHolder.bounds != borderLayer.frame else { return }
         redrawExternalBorder()
     }
 
@@ -100,7 +109,7 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         super.traitCollectionDidChange(previousTraitCollection)
 
         // Defers redraw via Task so the border updates after the rotation animation completes.
-        guard isSelectedTab,
+        guard isSelectedTab, !hidesSelectedBorder,
               previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
               || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass
         else { return }
@@ -129,11 +138,7 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
                                      closeButtonBlurView,
                                      closeButtonImageOverlay)
 
-        accessibilityCustomActions = [
-            UIAccessibilityCustomAction(name: .TabsTray.TabTrayCloseAccessibilityCustomAction,
-                                        target: animator,
-                                        selector: #selector(SwipeAnimator.closeWithoutGesture))
-        ]
+        accessibilityCustomActions = [closeAccessibilityAction]
 
         setupConstraints()
     }
@@ -147,10 +152,14 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         theme: Theme?,
         delegate: TabCellDelegate,
         a11yId: String,
-        newTabTitle: String?
+        newTabTitle: String?,
+        selectedGroupColor: UIColor? = nil,
+        selectedGroupGradient: Gradient? = nil
     ) {
         self.tabModel = tabModel
         self.delegate = delegate
+        self.selectedGroupColor = selectedGroupColor
+        self.selectedGroupGradient = selectedGroupGradient
 
         if let swipeAnimatorDelegate = delegate as? SwipeAnimatorDelegate {
             animator?.delegate = swipeAnimatorDelegate
@@ -160,7 +169,8 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
 
         accessibilityLabel = getA11yTitleLabel(tabModel: tabModel, newTabTitle: newTabTitle)
         isAccessibilityElement = true
-        accessibilityHint = .TabsTray.TabTraySwipeToCloseAccessibilityHint
+        accessibilityHint = hidesSelectedBorder ? nil : .TabsTray.TabTraySwipeToCloseAccessibilityHint
+        accessibilityCustomActions = hidesSelectedBorder ? nil : [closeAccessibilityAction]
         accessibilityIdentifier = a11yId
 
         updateUIForSelectedState(tabModel.isSelected,
@@ -312,6 +322,10 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         ).cgPath
 
         borderLayer.frame = backgroundHolder.bounds
+        if let borderGradientColors, backgroundHolder.bounds.width > 0, backgroundHolder.bounds.height > 0 {
+            borderLayer.strokeColor = UIColor(patternImage: gradientBorderImage(size: backgroundHolder.bounds.size,
+                                                                                colors: borderGradientColors)).cgColor
+        }
     }
 
     private func removeExternalBorder(from view: UIView) {
@@ -319,25 +333,52 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
     }
 
     func setSelectedState(isPrivate: Bool, theme: Theme) {
+        borderGradientColors = nil
+        guard !hidesSelectedBorder else {
+            setUnselectedState(theme: theme)
+            return
+        }
         // We are using a non-CALayer borderWidth for unselected cells for reduced graphics processing
         // we zero that value here when we are in the selected state to assign the CAShapeLayer
         backgroundHolder.layer.borderWidth = UX.zeroBorderWidth
 
-        if theme.isNova {
-            let gradientColor = UIColor(patternImage: gradientBorderImage(size: backgroundHolder.bounds.size,
-                                                                          colors: theme.colors.gradientAccent.cgColors))
-            addExternalBorder(to: backgroundHolder, color: gradientColor, width: UX.selectedBorderWidth)
+        if let selectedGroupGradient {
+            borderGradientColors = selectedGroupGradient.cgColors
+        } else if let selectedGroupColor {
+            addExternalBorder(to: backgroundHolder, color: selectedGroupColor, width: UX.selectedBorderWidth)
             return
+        } else if theme.isNova {
+            borderGradientColors = theme.colors.gradientAccent.cgColors
         }
-
-        let borderColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+        let borderColor = borderGradientColors == nil
+            ? (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent) : UIColor.clear
         addExternalBorder(to: backgroundHolder, color: borderColor, width: UX.selectedBorderWidth)
+        redrawExternalBorder()
     }
 
     func setUnselectedState(theme: Theme) {
+        borderGradientColors = nil
         removeExternalBorder(from: backgroundHolder)
         backgroundHolder.layer.borderColor = theme.colors.borderPrimary.cgColor
         backgroundHolder.layer.borderWidth = UX.unselectedBorderWidth
+    }
+
+    func setSelectedGroupColor(_ color: UIColor?, gradient: Gradient? = nil, theme: Theme?) {
+        selectedGroupColor = color
+        selectedGroupGradient = gradient
+        guard isSelectedTab, let theme else { return }
+        setSelectedState(isPrivate: tabModel?.isPrivate ?? false, theme: theme)
+    }
+
+    func setTabSelectionMode(_ isSelectingTabs: Bool, theme: Theme?) {
+        hidesSelectedBorder = isSelectingTabs
+        accessibilityHint = isSelectingTabs ? nil : .TabsTray.TabTraySwipeToCloseAccessibilityHint
+        accessibilityCustomActions = isSelectingTabs ? nil : [closeAccessibilityAction]
+        closeButton.isHidden = isSelectingTabs
+        closeButtonBlurView.isHidden = isSelectingTabs
+        closeButtonImageOverlay.isHidden = isSelectingTabs
+        guard isSelectedTab, let theme else { return }
+        setSelectedState(isPrivate: tabModel?.isPrivate ?? false, theme: theme)
     }
 
     // MARK: - UICollectionViewCell
@@ -346,6 +387,10 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         // Reset any close animations.
         super.prepareForReuse()
         tabModel = nil
+        selectedGroupColor = nil
+        selectedGroupGradient = nil
+        borderGradientColors = nil
+        hidesSelectedBorder = false
         accessibilityLabel = nil
         screenshotView.image = nil
         smallFaviconView.isHidden = true
