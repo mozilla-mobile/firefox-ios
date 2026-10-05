@@ -42,6 +42,8 @@ struct ToolbarActionConfiguration: Equatable {
     var badgeImageName: String?
     /// The image for the bottom badge in a `ToolbarButton`.
     var bottomBadgeImage: UIImage?
+    var bottomLeadingBadgeImage: UIImage?
+    var bottomLeadingBadgeShadowColor: UIColor?
     var maskImageName: String?
     var templateModeForImage = true
     var loadingConfig: LoadingConfig?
