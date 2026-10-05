@@ -29,10 +29,13 @@ struct NavigationToolbarContainerModel: Equatable {
         self.canShowNavigationHint = state.canShowNavigationHint
         self.isTranslucent = state.isTranslucent
         self.actions = lens.navigationToolbarActions.map { action in
+            let action = TabGroupsToolbarButtonViewModel.configure(action, for: windowUUID)
             return ToolbarElement(
                 iconName: action.iconName,
                 title: action.actionLabel,
                 badgeImageName: action.badgeImageName,
+                bottomLeadingBadgeImage: action.bottomLeadingBadgeImage,
+                bottomLeadingBadgeShadowColor: action.bottomLeadingBadgeShadowColor,
                 maskImageName: action.maskImageName,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
