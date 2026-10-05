@@ -5,15 +5,17 @@
 import SwiftUI
 import UIKit
 import Common
+import Shared
 
 /// View that presents the day's onboarding cards
 struct OnboardingFlowView: View {
     private struct UX {
         static let bodyPadding: CGFloat = 0
+        static let hiddenOpacity: CGFloat = 0
         static let radialGradientCentre = UnitPoint(x: 0.9, y: 0.1)
         static let radialGradientStartRadius: CGFloat = 0
         static let radialGradientEndRadius: CGFloat = 200
-        static let radialGadientOrangeOpacity: CGFloat = 0.28
+        static let radialGradientOrangeOpacity: CGFloat = 0.28
         static let linearGradientYellowOpacity: CGFloat = 0.25
         static let linearGradientPurpleOpacity: CGFloat = 0.2
     }
@@ -41,7 +43,7 @@ struct OnboardingFlowView: View {
     }
 
     var body: some View {
-        return ZStack(alignment: .topTrailing) {
+        ZStack(alignment: .topTrailing) {
             let theme = themeManager.getCurrentTheme(for: windowUUID)
             let card = cards[min(index, cards.count - 1)]
             let secondaryAction: (() -> Void)? = card.secondaryButtonTitle == nil
@@ -60,12 +62,13 @@ struct OnboardingFlowView: View {
                 onPrimary: { perform(card.primaryButtonAction) },
                 onSecondary: secondaryAction
             )
-        }.padding(UX.bodyPadding)
+        }
+        .padding(UX.bodyPadding)
     }
 
     private var gradient: some View {
         let colors = gradientColors(for: themeManager.getCurrentTheme(for: windowUUID))
-        let radialGradient = RadialGradient(colors: [colors[2], .white.opacity(0)],
+        let radialGradient = RadialGradient(colors: [colors[2], .white.opacity(UX.hiddenOpacity)],
                                             center: UX.radialGradientCentre,
                                             startRadius: UX.radialGradientStartRadius,
                                             endRadius: UX.radialGradientEndRadius)
@@ -83,18 +86,18 @@ struct OnboardingFlowView: View {
         guard !theme.isNova else {
             let gradient = theme.colors.gradientAccentSubtle.colors
             let isDark = theme.type == .dark
-            let orange = theme.colors.gradientAIStrongStop3.color.opacity(UX.radialGadientOrangeOpacity)
+            let orange = theme.colors.gradientAIStrongStop3.color.opacity(UX.radialGradientOrangeOpacity)
             if isDark {
-                return [Color(gradient[0]), Color(gradient[1]).opacity(0), orange]
+                return [Color(gradient[0]), Color(gradient[1]).opacity(UX.hiddenOpacity), orange]
             }
             return [Color(gradient[0]), Color(gradient[1]), orange]
         }
 
         let isDark = theme.type == .dark
-        let yellowOpacity = isDark ? 0.0 : UX.linearGradientYellowOpacity
+        let yellowOpacity = isDark ? UX.hiddenOpacity : UX.linearGradientYellowOpacity
         let yellow = theme.colors.gradientAIStrongStop3.color.opacity(yellowOpacity)
         let purple = theme.colors.gradientAIStrongStop1.color.opacity(UX.linearGradientPurpleOpacity)
-        let orange = theme.colors.gradientOnboardingStop4.color.opacity(UX.radialGadientOrangeOpacity)
+        let orange = theme.colors.gradientOnboardingStop4.color.opacity(UX.radialGradientOrangeOpacity)
         return [purple, yellow, orange]
     }
 
@@ -116,7 +119,24 @@ struct OnboardingCardView: View {
     private struct UX {
         static let maxImageHeight: CGFloat = 500
         static let titleLineSpacing: CGFloat = 2
+
+        static let imageBottomPadding: CGFloat = 4
+        static let titleBottomPadding: CGFloat = 2
+        static let bodyBottomPadding: CGFloat = 2
+        static let buttonsTopSpacing: CGFloat = 90
+        static let contentHorizontalPadding: CGFloat = 16
+        static let contentBottomPadding: CGFloat = 24
+
+        static let titleHorizontalPadding: CGFloat = 56
+        static let bodyHorizontalPadding: CGFloat = 24
+
+        static let buttonSpacing: CGFloat = 12
+        static let buttonsHorizontalPadding: CGFloat = 26
+        static let buttonCornerRadius: CGFloat = 28
+        static let primaryButtonVerticalPadding: CGFloat = 14
+        static let secondaryButtonVerticalPadding: CGFloat = 15
     }
+
     private let card: OnboardingCard
     private let theme: Theme
     private let onPrimary: () -> Void
@@ -140,15 +160,18 @@ struct OnboardingCardView: View {
 
     var body: some View {
         VStack {
-            cardImage.padding([.bottom], 4)
-            titleText.padding([.top], 0).padding([.bottom], 2)
-            bodyText.padding([.bottom], 2)
-            Spacer(minLength: 90)
+            cardImage
+                .padding(.bottom, UX.imageBottomPadding)
+            titleText
+                .padding(.bottom, UX.titleBottomPadding)
+            bodyText
+                .padding(.bottom, UX.bodyBottomPadding)
+            Spacer(minLength: UX.buttonsTopSpacing)
             buttons
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding([.leading, .trailing], 16)
-        .padding([.bottom], 24)
+        .padding(.horizontal, UX.contentHorizontalPadding)
+        .padding(.bottom, UX.contentBottomPadding)
     }
 
     @ViewBuilder
@@ -163,33 +186,31 @@ struct OnboardingCardView: View {
     }
 
     private var titleText: some View {
-        Text(card.title.replaceFirstOccurrence(of: "%@", with: "Firefox"))
+        Text(card.title.replaceFirstOccurrence(of: "%@", with: AppName.shortName.rawValue))
             .font(FXFontStyles.Bold.largeTitle.scaledSwiftUIFont())
             .foregroundColor(theme.colors.textPrimary.color)
             .multilineTextAlignment(.center)
             .lineSpacing(UX.titleLineSpacing)
             .fixedSize(horizontal: false, vertical: true)
             .accessibility(addTraits: .isHeader)
-            .padding([.leading, .trailing], 56)
-            .padding([.top, .bottom], 0)
+            .padding(.horizontal, UX.titleHorizontalPadding)
     }
 
     private var bodyText: some View {
-        Text(card.body.replaceFirstOccurrence(of: "%@", with: "Firefox"))
+        Text(card.body.replaceFirstOccurrence(of: "%@", with: AppName.shortName.rawValue))
             .font(FXFontStyles.Regular.title2.scaledSwiftUIFont())
             .foregroundColor(theme.colors.textSecondary.color)
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
-            .padding([.leading, .trailing], 24)
-            .padding([.top, .bottom], 0)
+            .padding(.horizontal, UX.bodyHorizontalPadding)
     }
 
     private var buttons: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: UX.buttonSpacing) {
             primaryButton
             secondaryButton
         }
-        .padding([.leading, .trailing], 26)
+        .padding(.horizontal, UX.buttonsHorizontalPadding)
     }
 
     private var primaryButton: some View {
@@ -198,12 +219,10 @@ struct OnboardingCardView: View {
                 .font(FXFontStyles.Bold.callout.scaledSwiftUIFont())
                 .foregroundColor(theme.colors.textInverted.color)
                 .frame(maxWidth: .infinity)
-                .padding([.top, .bottom], 14)
-                .padding([.leading, .trailing], 0)
+                .padding(.vertical, UX.primaryButtonVerticalPadding)
         }
-        .padding(0)
         .background(buttonColour)
-        .clipShape(RoundedRectangle(cornerRadius: 28))
+        .clipShape(RoundedRectangle(cornerRadius: UX.buttonCornerRadius))
     }
 
     @ViewBuilder
@@ -214,7 +233,7 @@ struct OnboardingCardView: View {
                     .font(FXFontStyles.Bold.callout.scaledSwiftUIFont())
                     .foregroundColor(buttonColour)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 15)
+                    .padding(.vertical, UX.secondaryButtonVerticalPadding)
             }
         }
     }
