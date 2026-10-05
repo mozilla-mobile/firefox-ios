@@ -317,6 +317,44 @@ final class TabGroupsSelectionTests: XCTestCase {
         XCTAssertNil(cell.subviews.first { $0.accessibilityIdentifier == "tabGroupsSelection.indicator" })
     }
 
+    func testClassicCell_selectionModeHidesAndRestoresCloseAccessibility() throws {
+        let cell = TabCell(frame: .zero)
+        trackForMemoryLeaks(cell)
+        cell.setTabSelectionMode(false, theme: nil)
+        let action = try XCTUnwrap(cell.accessibilityCustomActions?.first)
+        XCTAssertEqual(action.name, String.TabsTray.TabTrayCloseAccessibilityCustomAction)
+        XCTAssertEqual(cell.accessibilityHint, String.TabsTray.TabTraySwipeToCloseAccessibilityHint)
+
+        cell.setTabSelectionMode(true, theme: nil)
+
+        XCTAssertNil(cell.accessibilityHint)
+        XCTAssertNil(cell.accessibilityCustomActions)
+
+        cell.setTabSelectionMode(false, theme: nil)
+
+        XCTAssertEqual(cell.accessibilityHint, String.TabsTray.TabTraySwipeToCloseAccessibilityHint)
+        XCTAssertTrue(cell.accessibilityCustomActions?.first === action)
+    }
+
+    func testExperimentCell_selectionModeHidesAndRestoresCloseAccessibility() throws {
+        let cell = ExperimentTabCell(frame: .zero)
+        trackForMemoryLeaks(cell)
+        cell.setTabSelectionMode(false, theme: nil)
+        let action = try XCTUnwrap(cell.accessibilityCustomActions?.first)
+        XCTAssertEqual(action.name, String.TabsTray.TabTrayCloseAccessibilityCustomAction)
+        XCTAssertEqual(cell.accessibilityHint, String.TabsTray.TabTraySwipeToCloseAccessibilityHint)
+
+        cell.setTabSelectionMode(true, theme: nil)
+
+        XCTAssertNil(cell.accessibilityHint)
+        XCTAssertNil(cell.accessibilityCustomActions)
+
+        cell.setTabSelectionMode(false, theme: nil)
+
+        XCTAssertEqual(cell.accessibilityHint, String.TabsTray.TabTraySwipeToCloseAccessibilityHint)
+        XCTAssertTrue(cell.accessibilityCustomActions?.first === action)
+    }
+
     private func realizedCell(in subject: TabDisplayView, at index: Int = 0) throws -> UICollectionViewCell {
         subject.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
         subject.layoutIfNeeded()
