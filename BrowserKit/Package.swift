@@ -43,6 +43,9 @@ let package = Package(
         .library(
             name: "MLPAKit",
             targets: ["MLPAKit"]),
+        .library(
+            name: "VPNKit",
+            targets: ["VPNKit"]),
         .library(name: "SummarizeKit",
                  targets: ["SummarizeKit"]),
         .library(name: "JWTKit",
@@ -251,6 +254,17 @@ let package = Package(
         .testTarget(
             name: "MLPAKitTests",
             dependencies: ["MLPAKit", "AppAttestKit", "TestKit"],
+            swiftSettings: []
+        ),
+        .target(
+            name: "VPNKit",
+            dependencies: ["AppAttestKit", "Common", "Shared"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]),
+        .testTarget(
+            name: "VPNKitTests",
+            dependencies: ["VPNKit", "AppAttestKit", "TestKit"],
             swiftSettings: []
         ),
         .target(
