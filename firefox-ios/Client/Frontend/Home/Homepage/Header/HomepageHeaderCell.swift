@@ -17,7 +17,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         static let privateNovaLogoImageSize = CGSize(width: 72, height: 72)
         static let firefoxTextImageSize = CGSize(width: 90, height: 40)
         static let interImageSpacing: CGFloat = 10
-        static let quickAnswersButtonSize: CGFloat = 44
 
         static func contentWidth() -> CGFloat {
             return UX.firefoxLogoImageSize.width + UX.interImageSpacing + UX.firefoxTextImageSize.width
@@ -110,8 +109,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             logoContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             logoContainerView.trailingAnchor.constraint(lessThanOrEqualTo: quickAnswersButton.leadingAnchor),
 
-            quickAnswersButton.widthAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
-            quickAnswersButton.heightAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
             quickAnswersButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             quickAnswersButton.centerYAnchor.constraint(equalTo: logoContainerView.centerYAnchor),
             quickAnswersButton.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor),
@@ -206,7 +203,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     override func prepareForReuse() {
         super.prepareForReuse()
         cancelQuickAnswersTipObservation()
-        quickAnswersButton.stopGlow()
     }
 
     private func cancelQuickAnswersTipObservation() {

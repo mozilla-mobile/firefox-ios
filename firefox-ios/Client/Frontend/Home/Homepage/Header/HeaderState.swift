@@ -83,7 +83,8 @@ struct HeaderState: StateType, Equatable, Hashable {
             return defaultState(from: state)
         }
         return state.copy(
-            showQuickAnswersButton: showQuickAnswers && !state.isPrivate
+            showQuickAnswersButton: showQuickAnswers && !state.isPrivate,
+            isQuickAnswersOptInCompleted: quickAnswersAction.isOptInCompleted ?? state.isQuickAnswersOptInCompleted
         )
     }
 

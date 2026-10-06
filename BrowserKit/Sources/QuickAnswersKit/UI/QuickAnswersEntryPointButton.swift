@@ -7,17 +7,17 @@ import UIKit
 
 /// Capsule shaped button that opens the Quick Answers experience.
 ///
-/// It can show a temporary glow, a gradient border whose colors flow around the capsule while fading in and
-/// out, used to draw attention to the entry point. The glow stops on its own after `glowDuration` and only
-/// ever runs once per instance, so callers can ask for it on every configuration without restarting it.
+/// It can show a glow, a gradient border whose colors flow around the capsule while pulsing, to draw
+/// attention to the entry point. The glow stops on its own after `glowDuration` and only ever runs once per
+/// instance, so callers can ask for it on every configuration without restarting it.
 public final class QuickAnswersEntryPointButton: UIButton, ThemeApplicable {
     private struct UX {
         static let buttonSize: CGFloat = 44.0
         static let borderWidth: CGFloat = 1.5
-        static let flowDuration: CFTimeInterval = 2.5
+        static let flowDuration: CFTimeInterval = 3
         static let flowAnimationKey = "gradientFlow"
-        static let pulseDuration: CFTimeInterval = 2
-        static let pulseOpacityRange: (from: Float, to: Float) = (0.0, 1.0)
+        static let pulseDuration: CFTimeInterval = 1.5
+        static let pulseOpacityRange: (from: Float, to: Float) = (0.5, 1.0)
         static let pulseAnimationKey = "gradientPulse"
         static let fadeOutDuration: CFTimeInterval = 0.5
         static let fadeOutAnimationKey = "gradientFadeOut"
@@ -31,7 +31,6 @@ public final class QuickAnswersEntryPointButton: UIButton, ThemeApplicable {
     private let glowDuration: TimeInterval
     private var gradientStops: [UIColor] = []
     private var glowTask: Task<Void, Never>?
-    private var fadeOutTask: Task<Void, Never>?
     private var isGlowRequested = false
     private var hasGlowed = false
 
@@ -45,7 +44,7 @@ public final class QuickAnswersEntryPointButton: UIButton, ThemeApplicable {
         layer.type = .conic
         layer.startPoint = CGPoint(x: 0.5, y: 0.5)
         layer.endPoint = CGPoint(x: 1.0, y: 0.5)
-        layer.isHidden = true
+        layer.opacity = 0.0
         return layer
     }()
 
@@ -66,7 +65,6 @@ public final class QuickAnswersEntryPointButton: UIButton, ThemeApplicable {
 
     deinit {
         glowTask?.cancel()
-        fadeOutTask?.cancel()
     }
 
     override public var intrinsicContentSize: CGSize {
@@ -111,9 +109,7 @@ public final class QuickAnswersEntryPointButton: UIButton, ThemeApplicable {
 
     /// Whether the glow animations are currently running.
     var isGlowing: Bool {
-        return !gradientLayer.isHidden
-            && gradientLayer.animation(forKey: UX.flowAnimationKey) != nil
-            && gradientLayer.animation(forKey: UX.pulseAnimationKey) != nil
+        return gradientLayer.animation(forKey: UX.pulseAnimationKey) != nil
     }
 
     /// Requests the glow, which runs for `glowDuration` and then stops itself. Does nothing if the glow
@@ -125,61 +121,43 @@ public final class QuickAnswersEntryPointButton: UIButton, ThemeApplicable {
         beginGlowIfPossible()
     }
 
-    /// Fades the gradient out before hiding it. Calling it while the gradient is already hidden or fading
-    /// out does nothing.
+    /// Fades the gradient out. Does nothing if the gradient is already transparent or fading out.
     public func stopGlow() {
         isGlowRequested = false
         glowTask?.cancel()
         glowTask = nil
 
-        guard !gradientLayer.isHidden, fadeOutTask == nil else { return }
+        guard gradientLayer.opacity > 0 else { return }
 
         // The pulse owns the opacity, so it has to go before the fade can drive it. Picking up the
         // presentation layer's value avoids jumping to full opacity mid-pulse.
         let currentOpacity = gradientLayer.presentation()?.opacity ?? gradientLayer.opacity
         gradientLayer.removeAnimation(forKey: UX.pulseAnimationKey)
 
-        // Settle the model value first, so the layer stays transparent once the animation is removed.
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        gradientLayer.opacity = 0.0
-        CATransaction.commit()
-
         let fadeOut = CABasicAnimation(keyPath: "opacity")
         fadeOut.fromValue = currentOpacity
         fadeOut.toValue = 0.0
         fadeOut.duration = UX.fadeOutDuration
         fadeOut.timingFunction = CAMediaTimingFunction(name: .easeOut)
+
+        // Settle the model value in the same transaction, so the layer stays transparent once the
+        // animation is removed.
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        gradientLayer.opacity = 0.0
         gradientLayer.add(fadeOut, forKey: UX.fadeOutAnimationKey)
-
-        fadeOutTask = Task { [weak self] in
-            try? await Task.sleep(nanoseconds: UInt64(UX.fadeOutDuration * Double(NSEC_PER_SEC)))
-            guard !Task.isCancelled else { return }
-            self?.hideGradient()
-        }
-    }
-
-    /// Clears the gradient once it has faded out, the colors keep flowing until then.
-    private func hideGradient() {
-        fadeOutTask = nil
-        gradientLayer.removeAnimation(forKey: UX.flowAnimationKey)
-        gradientLayer.removeAnimation(forKey: UX.fadeOutAnimationKey)
-        gradientLayer.isHidden = true
+        CATransaction.commit()
     }
 
     private func beginGlowIfPossible() {
         guard isGlowRequested, !hasGlowed, gradientStops.count > 1 else { return }
         hasGlowed = true
 
-        fadeOutTask?.cancel()
-        fadeOutTask = nil
         gradientLayer.opacity = 1.0
-        gradientLayer.isHidden = false
         addFlowAnimation()
         addPulseAnimation()
 
-        let duration = glowDuration
-        glowTask = Task { [weak self] in
+        glowTask = Task { [weak self, duration = glowDuration] in
             try? await Task.sleep(nanoseconds: UInt64(duration * Double(NSEC_PER_SEC)))
             guard !Task.isCancelled else { return }
             self?.stopGlow()
@@ -193,7 +171,8 @@ public final class QuickAnswersEntryPointButton: UIButton, ThemeApplicable {
         let flow = CAKeyframeAnimation(keyPath: "colors")
         flow.values = (0...gradientStops.count).map { closedStops(shiftedBy: $0) }
         flow.duration = UX.flowDuration
-        flow.repeatCount = .infinity
+        // Outlives the fade out so the colors keep flowing until the gradient is fully transparent.
+        flow.repeatDuration = glowDuration + UX.fadeOutDuration
         gradientLayer.add(flow, forKey: UX.flowAnimationKey)
     }
 
@@ -210,25 +189,24 @@ public final class QuickAnswersEntryPointButton: UIButton, ThemeApplicable {
 
     /// Fills the icon's opaque pixels with the gradient, so it matches the border instead of being a flat tint.
     private func gradientTintedIcon() -> UIImage? {
-        guard let icon, gradientStops.count > 1 else { return nil }
-
-        let rect = CGRect(origin: .zero, size: icon.size)
-        let image = UIGraphicsImageRenderer(size: icon.size).image { context in
-            guard let gradient = CGGradient(
+        guard let icon,
+              let gradient = CGGradient(
                 colorsSpace: CGColorSpaceCreateDeviceRGB(),
                 colors: gradientStops.map(\.cgColor) as CFArray,
                 locations: nil
-            ) else { return }
+              )
+        else { return nil }
 
+        let rect = CGRect(origin: .zero, size: icon.size)
+        return UIGraphicsImageRenderer(size: icon.size).image { context in
             context.cgContext.drawLinearGradient(
                 gradient,
-                start: CGPoint(x: rect.midX, y: 0.0),
+                start: CGPoint(x: rect.midX, y: rect.minY),
                 end: CGPoint(x: rect.midX, y: rect.maxY),
                 options: []
             )
             icon.draw(in: rect, blendMode: .destinationIn, alpha: 1.0)
-        }
-        return image.withRenderingMode(.alwaysOriginal)
+        }.withRenderingMode(.alwaysOriginal)
     }
 
     /// Stops rotated by `shift`, with the leading one repeated at the end so the conic sweep has no seam.
@@ -247,11 +225,10 @@ public final class QuickAnswersEntryPointButton: UIButton, ThemeApplicable {
         gradientLayer.colors = closedStops(shiftedBy: 0)
         configuration?.image = gradientTintedIcon() ?? icon?.withRenderingMode(.alwaysTemplate)
 
-        if gradientLayer.animation(forKey: UX.flowAnimationKey) != nil {
+        if isGlowing {
             // Rebuild the keyframes so a theme change takes effect mid-glow.
             addFlowAnimation()
-        } else {
-            beginGlowIfPossible()
         }
+        beginGlowIfPossible()
     }
 }
