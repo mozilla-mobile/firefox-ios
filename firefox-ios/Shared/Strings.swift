@@ -2608,12 +2608,12 @@ extension String {
         public static let ResultsAboveA11yAnnouncement = MZLocalizedString(
             key: "Search.ResultsAbove.A11yAnnouncement.v158",
             tableName: "Search",
-            value: "%d results available above",
+            value: "Suggestions above: %d",
             comment: "When making a new search from the awesome bar, search results appear as the user write new letters in their search. This is the announcement VoiceOver reads to tell the user how many results are available, and that they are located above the address bar. %d is the number of results.")
         public static let ResultsBelowA11yAnnouncement = MZLocalizedString(
             key: "Search.ResultsBelow.A11yAnnouncement.v158",
             tableName: "Search",
-            value: "%d results available below",
+            value: "Suggestions below: %d",
             comment: "When making a new search from the awesome bar, search results appear as the user write new letters in their search. This is the announcement VoiceOver reads to tell the user how many results are available, and that they are located below the address bar. %d is the number of results.")
     }
 
