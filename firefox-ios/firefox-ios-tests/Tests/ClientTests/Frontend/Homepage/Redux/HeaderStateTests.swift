@@ -70,6 +70,71 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertFalse(state.showQuickAnswersButton)
     }
 
+    func test_init_optInNotCompleted_setsShowQuickAnswersGlowTrue() {
+        mockQuickAnswersStore.isQuickAnswersEnabled = true
+        mockQuickAnswersStore.isOptInCompleted = false
+
+        let state = createSubject()
+
+        XCTAssertTrue(state.showQuickAnswersGlow)
+    }
+
+    func test_init_optInCompleted_setsShowQuickAnswersGlowFalse() {
+        mockQuickAnswersStore.isQuickAnswersEnabled = true
+        mockQuickAnswersStore.isOptInCompleted = true
+
+        let state = createSubject()
+
+        XCTAssertFalse(state.showQuickAnswersGlow)
+    }
+
+    func test_init_quickAnswersDisabled_setsShowQuickAnswersGlowFalse() {
+        mockQuickAnswersStore.isQuickAnswersEnabled = false
+        mockQuickAnswersStore.isOptInCompleted = false
+
+        let state = createSubject()
+
+        XCTAssertFalse(state.showQuickAnswersGlow)
+    }
+
+    func test_quickAnswersDidUpdateSettings_optInCompleted_setsShowQuickAnswersGlowFalse() {
+        mockQuickAnswersStore.isQuickAnswersEnabled = true
+        let initialState = createSubject()
+        let reducer = headerReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            QuickAnswersMiddlewareAction(
+                isQuickAnswersEnabled: true,
+                isOptInCompleted: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: QuickAnswersMiddlewareActionType.didUpdateSettings
+            )
+        )
+
+        XCTAssertTrue(newState.showQuickAnswersButton)
+        XCTAssertFalse(newState.showQuickAnswersGlow)
+    }
+
+    func test_quickAnswersDidUpdateSettings_withoutOptInValue_keepsPreviousOptInState() {
+        mockQuickAnswersStore.isQuickAnswersEnabled = true
+        mockQuickAnswersStore.isOptInCompleted = true
+        let initialState = createSubject()
+        let reducer = headerReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            QuickAnswersMiddlewareAction(
+                isQuickAnswersEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: QuickAnswersMiddlewareActionType.didUpdateSettings
+            )
+        )
+
+        XCTAssertTrue(newState.isQuickAnswersOptInCompleted)
+        XCTAssertFalse(newState.showQuickAnswersGlow)
+    }
+
     func test_quickAnswersDidUpdateSettings_enabled_setsShowQuickAnswersButtonTrue() {
         let initialState = createSubject()
         let reducer = headerReducer()

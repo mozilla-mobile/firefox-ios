@@ -57,6 +57,39 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchedAction.isQuickAnswersEnabled, true)
     }
 
+    func test_didSettingsChange_whenOptInCompleted_dispatchesOptInCompleted() throws {
+        mockFeatureFlags.enabledFlags = [.quickAnswers]
+        mockUserPreferences.setPreferenceFor(.quickAnswers, to: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
+
+        let subject = createSubject()
+        let action = QuickAnswersAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: QuickAnswersActionType.didSettingsChange
+        )
+
+        subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? QuickAnswersMiddlewareAction)
+        XCTAssertEqual(dispatchedAction.isOptInCompleted, true)
+    }
+
+    func test_didSettingsChange_whenOptInNotCompleted_dispatchesOptInNotCompleted() throws {
+        mockFeatureFlags.enabledFlags = [.quickAnswers]
+        mockUserPreferences.setPreferenceFor(.quickAnswers, to: true)
+
+        let subject = createSubject()
+        let action = QuickAnswersAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: QuickAnswersActionType.didSettingsChange
+        )
+
+        subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? QuickAnswersMiddlewareAction)
+        XCTAssertEqual(dispatchedAction.isOptInCompleted, false)
+    }
+
     func test_didSettingsChange_whenFeatureFlagDisabled_dispatchesFalse() throws {
         mockFeatureFlags.enabledFlags = []
         mockUserPreferences.setPreferenceFor(.quickAnswers, to: true)

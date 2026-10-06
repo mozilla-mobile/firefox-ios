@@ -24,13 +24,16 @@ struct QuickAnswersMiddlewareAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let isQuickAnswersEnabled: Bool?
+    let isOptInCompleted: Bool?
 
     init(isQuickAnswersEnabled: Bool? = nil,
+         isOptInCompleted: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.isQuickAnswersEnabled = isQuickAnswersEnabled
+        self.isOptInCompleted = isOptInCompleted
     }
 }
 

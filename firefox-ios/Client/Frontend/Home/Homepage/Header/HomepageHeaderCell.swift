@@ -54,18 +54,15 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         imageView.contentMode = .scaleAspectFit
     }
 
-    private lazy var quickAnswersButton: UIButton = .build { [weak self] button in
-        button.configuration = .filled()
-        button.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.audioWave)?
-            .withRenderingMode(.alwaysTemplate)
-        button.configuration?.cornerStyle = .capsule
+    private lazy var quickAnswersButton: QuickAnswersEntryPointButton = {
+        let button = QuickAnswersEntryPointButton { [weak self] in
+            self?.quickAnswerButtonTapped()
+        }
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.accessibilityLabel = .QuickAnswers.AccessibilityLabels.OpenQuickAnswers
         button.accessibilityIdentifier = a11y.quickAnswersButton
-        button.adjustsImageSizeForAccessibilityContentSizeCategory = false
-        button.addAction(UIAction(handler: { _ in
-            self?.quickAnswerButtonTapped()
-        }), for: .touchUpInside)
-    }
+        return button
+    }()
     private lazy var logoCenterConstraint = logoContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
     private lazy var logoLeadingConstraint = logoContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
     private lazy var logoImageWidthConstraint = logoImage.widthAnchor.constraint(
@@ -154,6 +151,12 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         } else {
             cancelQuickAnswersTipObservation()
         }
+
+        if headerState.showQuickAnswersGlow {
+            quickAnswersButton.startGlow()
+        } else {
+            quickAnswersButton.stopGlow()
+        }
     }
 
     private func observeQuickAnswersTip() {
@@ -200,6 +203,12 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         }
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cancelQuickAnswersTipObservation()
+        quickAnswersButton.stopGlow()
+    }
+
     private func cancelQuickAnswersTipObservation() {
         tipObservationTask?.cancel()
         tipObservationTask = nil
@@ -227,7 +236,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     func applyTheme(theme: Theme) {
         logoTextImage.tintColor = logoTextColor ?? theme.colors.textPrimary
 
-        quickAnswersButton.configuration?.baseBackgroundColor = theme.colors.layer4
-        quickAnswersButton.configuration?.baseForegroundColor = theme.colors.actionPrimary
+        quickAnswersButton.applyTheme(theme: theme)
     }
 }

@@ -9,6 +9,8 @@ import Shared
 protocol QuickAnswersStore {
     /// Whether the Quick Answers feature flag is enabled and the user preference for it is enabled.
     var isQuickAnswersEnabled: Bool { get }
+    /// Whether the user has already accepted the Quick Answers opt-in.
+    var isOptInCompleted: Bool { get }
 }
 
 final class QuickAnswersMiddleware: QuickAnswersStore {
@@ -20,6 +22,10 @@ final class QuickAnswersMiddleware: QuickAnswersStore {
         let isFeatureFlagEnabled = featureFlagsProvider.isEnabled(.quickAnswers)
         let isUserPreferencesEnabled = userPreferences.getPreferenceFor(.quickAnswers)
         return isFeatureFlagEnabled && isUserPreferencesEnabled
+    }
+
+    var isOptInCompleted: Bool {
+        return prefs.boolForKey(PrefsKeys.QuickAnswers.optInCompleted) ?? false
     }
 
     init(
@@ -56,6 +62,7 @@ final class QuickAnswersMiddleware: QuickAnswersStore {
     private func handleInitializeAction(action: Action) {
         store.dispatch(QuickAnswersMiddlewareAction(
             isQuickAnswersEnabled: isQuickAnswersEnabled,
+            isOptInCompleted: isOptInCompleted,
             windowUUID: action.windowUUID,
             actionType: QuickAnswersMiddlewareActionType.didInitialize
         ))
@@ -65,6 +72,7 @@ final class QuickAnswersMiddleware: QuickAnswersStore {
     private func handleDidSettingsChangeAction(action: Action) {
         store.dispatch(QuickAnswersMiddlewareAction(
             isQuickAnswersEnabled: isQuickAnswersEnabled,
+            isOptInCompleted: isOptInCompleted,
             windowUUID: action.windowUUID,
             actionType: QuickAnswersMiddlewareActionType.didUpdateSettings
         ))

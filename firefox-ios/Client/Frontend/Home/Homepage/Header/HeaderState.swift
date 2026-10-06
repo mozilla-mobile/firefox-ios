@@ -13,6 +13,12 @@ struct HeaderState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var isPrivate: Bool
     var showQuickAnswersButton: Bool
+    var isQuickAnswersOptInCompleted: Bool
+
+    /// The entry point only glows while the user still has to go through the Quick Answers opt-in.
+    var showQuickAnswersGlow: Bool {
+        return showQuickAnswersButton && !isQuickAnswersOptInCompleted
+    }
 
     init(
         windowUUID: WindowUUID,
@@ -23,18 +29,21 @@ struct HeaderState: StateType, Equatable, Hashable {
         self.init(
             windowUUID: windowUUID,
             isPrivate: isPrivate,
-            showQuickAnswersButton: showQuickAnswersButton
+            showQuickAnswersButton: showQuickAnswersButton,
+            isQuickAnswersOptInCompleted: quickAnswersStore.isOptInCompleted
         )
     }
 
     private init(
         windowUUID: WindowUUID,
         isPrivate: Bool,
-        showQuickAnswersButton: Bool
+        showQuickAnswersButton: Bool,
+        isQuickAnswersOptInCompleted: Bool
     ) {
         self.windowUUID = windowUUID
         self.isPrivate = isPrivate
         self.showQuickAnswersButton = showQuickAnswersButton
+        self.isQuickAnswersOptInCompleted = isQuickAnswersOptInCompleted
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -82,7 +91,8 @@ struct HeaderState: StateType, Equatable, Hashable {
         return HeaderState(
             windowUUID: state.windowUUID,
             isPrivate: state.isPrivate,
-            showQuickAnswersButton: state.showQuickAnswersButton
+            showQuickAnswersButton: state.showQuickAnswersButton,
+            isQuickAnswersOptInCompleted: state.isQuickAnswersOptInCompleted
         )
     }
 }
