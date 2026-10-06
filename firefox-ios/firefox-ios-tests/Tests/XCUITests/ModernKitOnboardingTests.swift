@@ -537,7 +537,10 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     // Regression
     func testModernKitOnboardingSetAsDefaultBrowser() {
         if ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 18 {
-            XCTExpectFailure("Known failure: iOS 18", strict: false)
+            XCTExpectFailure(
+                "Known failure: iOS 18 - https://github.com/mozilla-mobile/firefox-ios/issues/35946",
+                strict: false
+            )
         }
         launchApp()
 
