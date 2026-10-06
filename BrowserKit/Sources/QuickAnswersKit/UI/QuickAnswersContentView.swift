@@ -10,6 +10,15 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         static let contentSpacing: CGFloat = 32.0
         static let animationDuration: TimeInterval = 0.2
         static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)
+        /// The vertical space the waveform and its spacing leave behind.
+        static let resultTranslationOffset = audioWaveformSize.height + contentSpacing
+        /// How far below their final position the result sections start before cascading in.
+        static let resultCascadeOffset: CGFloat = 30.0
+        static let resultSlideDuration: TimeInterval = 0.25
+        static let resultCascadeDuration: TimeInterval = 0.3
+        /// The sections start settling shortly after the transcript begins moving up.
+        static let resultCascadeStartDelay: TimeInterval = 0.1
+        static let resultCascadeStagger: TimeInterval = 0.1
     }
 
     // MARK: - Subviews
@@ -195,21 +204,37 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         }
     }
 
-    func configureAnswer(_ text: String, modelName: String) {
+    func configureResult(
+        _ text: String,
+        modelName: String,
+        sources: [SearchResult.Source],
+        onSourceTapped: @escaping (URL) -> Void
+    ) {
         searchingLabel.stopShimmering()
         searchingLabel.alpha = 0.0
+        answerLabel.text = text
         footerLabel.text = String(format: strings?.footerFormat ?? "", modelName)
-        UIView.animate(withDuration: UX.animationDuration) { [self] in
-            answerLabel.text = text
-            answerLabel.alpha = 1.0
-            footerLabel.alpha = 1.0
-        }
+        sourceView.configure(with: sources, onSourceTapped: onSourceTapped)
+        animateResultCascade()
     }
 
-    func configureSources(_ items: [SearchResult.Source], onSourceTapped: @escaping (URL) -> Void) {
-        sourceView.configure(with: items, onSourceTapped: onSourceTapped)
-        UIView.animate(withDuration: UX.animationDuration) { [self] in
-            sourceView.alpha = 1.0
+    private func animateResultCascade() {
+        let cascadingSections: [UIView] = [answerLabel, sourceView, footerLabel]
+        let finalTransform = CGAffineTransform(translationX: 0.0, y: -UX.resultTranslationOffset)
+        let cascadeStartTransform = finalTransform.translatedBy(x: 0.0, y: UX.resultCascadeOffset)
+
+        UIView.animate(withDuration: UX.resultSlideDuration, delay: 0.0, options: .curveEaseInOut) { [self] in
+            transcriptLabel.transform = finalTransform
+            cascadingSections.forEach { $0.transform = cascadeStartTransform }
+            audioWaveform.alpha = 0.0
+        }
+
+        for (index, section) in cascadingSections.enumerated() {
+            let delay = UX.resultCascadeStartDelay + Double(index) * UX.resultCascadeStagger
+            UIView.animate(withDuration: UX.resultCascadeDuration, delay: delay, options: .curveEaseOut) {
+                section.transform = finalTransform
+                section.alpha = 1.0
+            }
         }
     }
 

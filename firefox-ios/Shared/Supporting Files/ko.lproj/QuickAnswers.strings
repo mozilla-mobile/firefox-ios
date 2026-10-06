@@ -4,17 +4,29 @@
 /* Accessibility label for the button on the homepage that opens the Quick Answers feature. */
 "QuickAnswers.AccessibilityLabels.OpenQuickAnswers.v158" = "빠른 답변 열기";
 
+/* Link shown in the footer of the Quick Answers view - when tapped, it opens a privacy banner explaining how the feature handles user data. */
+"QuickAnswers.ContentView.AboutYourPrivacy.v158" = "개인 정보 보호 정보";
+
 /* Loading label shown in the Quick Answers view while an answer is being fetched. */
 "QuickAnswers.ContentView.Answering.v158" = "답변중…";
 
 /* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
 "QuickAnswers.ContentView.Footer.v158" = "%@에서 제공 · 답변에 오류가 있을 수 있습니다.";
 
+/* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak. */
+"QuickAnswers.ContentView.Listening.v158" = "무엇이든 물어보세요…";
+
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "무엇이든 물어보세요…";
 
+/* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
+"QuickAnswers.ContentView.SearchingSources.v158" = "소스 검색중…";
+
 /* Header label for the sources section shown below a Quick Answers result. */
 "QuickAnswers.ContentView.Sources.v158" = "원본";
+
+/* Loading label shown in the Quick Answers view while the question is being processed. */
+"QuickAnswers.ContentView.Thinking.v158" = "생각 중…";
 
 /* Button label on the Quick Answers permission alert to dismiss the alert without taking action. */
 "QuickAnswers.Errors.Cancel.v158" = "취소";
@@ -46,6 +58,9 @@
 /* Message shown in the permission alert when speech recognition access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox). */
 "QuickAnswers.Errors.SpeechRecognitionPermissionMessage.v158" = "%@가 음성 인식에 접근할 수 있도록 허용합니다.";
 
+/* Link text that opens more information about how Quick Answers works and how it uses your data. */
+"QuickAnswers.LearnMore.v158" = "더 알아보기…";
+
 /* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
 "QuickAnswers.OptIn.ContinueButton.v158" = "계속";
 
@@ -57,6 +72,45 @@
 
 /* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
 "QuickAnswers.OptIn.Title.v158" = "음성으로 물어보세요";
+
+/* Description displayed on the Quick Answers opt-in screen explaining how the feature works. */
+"QuickAnswers.OptInRedesign.Description.v158" = "음성으로 질문하세요. 몇 초 안에 출처가 있는 짧은 답변을 받으세요.";
+
+/* Description of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedDescription.v158" = "사용자의 목소리나 질문, 답변을 저장하지 않습니다.";
+
+/* Title of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedTitle.v158" = "아무것도 저장하지 않음";
+
+/* Description of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingDescription.v158" = "저희는 시스템을 학습하는 데 사용자의 데이터를 사용하지 않습니다.";
+
+/* Title of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingTitle.v158" = "사용자 데이터로 훈련하지 않음";
+
+/* Description of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignDescription.v158" = "우리는 목소리를 사용해서 사용자를 식별하지 않습니다.";
+
+/* Title of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158" = "사생활 보호를 고려한 설계";
+
+/* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
+"QuickAnswers.OptInRedesign.Title.v158" = "빠른 답변 사용해보기";
+
+/* Body text of the privacy banner shown on the Quick Answers screen, explaining how the feature handles user data. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.PrivacyBanner.Description.v158" = "%@는 사용자의 오디오나 질문을 저장하거나, AI 모델을 훈련하는 데 사용자의 데이터를 사용하거나, 사용자를 식별하는데 음성을 사용하지 않습니다.";
+
+/* Title of the privacy banner shown on the Quick Answers screen. */
+"QuickAnswers.PrivacyBanner.Title.v158" = "사생활 보호를 고려한 설계";
+
+/* Feature name as displayed in the iOS Quick Action menu (contextual menu displayed when long-pressing the browser app icon) */
+"QuickAnswers.QuickActions.Title.v158" = "빠른 답변";
+
+/* Accessibility label for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer. */
+"QuickAnswers.ReturnPill.ReturnToQuickAnswerAccessibilityLabel.v158" = "빠른 답변으로 돌아가기";
+
+/* Helper text for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer. */
+"QuickAnswers.ReturnPill.Subtitle.v158" = "탭으로 돌아가기";
 
 /* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
 "QuickAnswers.Tip.Message.v158" = "시작하려면 여기를 누르세요.";

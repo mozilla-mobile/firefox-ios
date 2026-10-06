@@ -106,6 +106,12 @@
 /* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Iestatīt kā noklusējuma pārlūku";
 
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonText" = "Piekrist un turpināt";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonTextV2" = "Turpināt";
+
 /* Save button label */
 "Save" = "Saglabāt";
 
@@ -133,8 +139,14 @@
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "Pievienot meklētāju";
 
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "UZSTĀDĪTIE MEKLĒTĀJI";
+
 /* Toast displayed after adding a search engine */
 "Settings.Search.NewSearchEngineAdded" = "Pievienots jauns meklētājs.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Atjaunot noklusējuma meklētājus";
 
 /* Label title for set as default browser row */
 "Settings.setAsDefaultBrowser" = "Iestatīt kā noklusējuma pārlūku";

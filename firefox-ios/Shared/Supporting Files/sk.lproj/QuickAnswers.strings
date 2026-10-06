@@ -4,17 +4,29 @@
 /* Accessibility label for the button on the homepage that opens the Quick Answers feature. */
 "QuickAnswers.AccessibilityLabels.OpenQuickAnswers.v158" = "Otvoriť Rýchle odpovede";
 
+/* Link shown in the footer of the Quick Answers view - when tapped, it opens a privacy banner explaining how the feature handles user data. */
+"QuickAnswers.ContentView.AboutYourPrivacy.v158" = "Informácie o vašom súkromí";
+
 /* Loading label shown in the Quick Answers view while an answer is being fetched. */
 "QuickAnswers.ContentView.Answering.v158" = "Načítava sa odpoveď…";
 
 /* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
 "QuickAnswers.ContentView.Footer.v158" = "Odpovede poskytuje %@ · Môžu obsahovať chyby.";
 
+/* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak. */
+"QuickAnswers.ContentView.Listening.v158" = "Počúvam, opýtajte sa na čokoľvek…";
+
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "Opýtajte sa čokoľvek…";
 
+/* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
+"QuickAnswers.ContentView.SearchingSources.v158" = "Vyhľadávajú sa zdroje…";
+
 /* Header label for the sources section shown below a Quick Answers result. */
 "QuickAnswers.ContentView.Sources.v158" = "Zdroje";
+
+/* Loading label shown in the Quick Answers view while the question is being processed. */
+"QuickAnswers.ContentView.Thinking.v158" = "Premýšľam…";
 
 /* Button label on the Quick Answers permission alert to dismiss the alert without taking action. */
 "QuickAnswers.Errors.Cancel.v158" = "Zrušiť";
@@ -46,6 +58,9 @@
 /* Message shown in the permission alert when speech recognition access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox). */
 "QuickAnswers.Errors.SpeechRecognitionPermissionMessage.v158" = "Povoľte aplikácii %@ prístup k rozpoznávaniu reči.";
 
+/* Link text that opens more information about how Quick Answers works and how it uses your data. */
+"QuickAnswers.LearnMore.v158" = "Ďalšie informácie…";
+
 /* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
 "QuickAnswers.OptIn.ContinueButton.v158" = "Pokračovať";
 
@@ -57,6 +72,45 @@
 
 /* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
 "QuickAnswers.OptIn.Title.v158" = "Opýtajte sa svojím hlasom";
+
+/* Description displayed on the Quick Answers opt-in screen explaining how the feature works. */
+"QuickAnswers.OptInRedesign.Description.v158" = "Opýtajte sa hlasom. O pár sekúnd dostanete stručnú odpoveď aj so zdrojmi.";
+
+/* Description of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedDescription.v158" = "Váš hlas, otázky ani odpovede neuchovávame.";
+
+/* Title of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedTitle.v158" = "Nič, čo poviete, sa neukladá";
+
+/* Description of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingDescription.v158" = "Vaše údaje nepoužívame na trénovanie našich systémov.";
+
+/* Title of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingTitle.v158" = "Vaše údaje sa nepoužívajú na trénovanie AI";
+
+/* Description of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignDescription.v158" = "Nepoužívame váš hlas na vašu identifikáciu.";
+
+/* Title of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158" = "Súkromie už v základe";
+
+/* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
+"QuickAnswers.OptInRedesign.Title.v158" = "Vyskúšajte Rýchle odpovede";
+
+/* Body text of the privacy banner shown on the Quick Answers screen, explaining how the feature handles user data. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.PrivacyBanner.Description.v158" = "%@ neukladá vaše zvukové záznamy ani otázky, nepoužíva vaše údaje na trénovanie modelov umelej inteligencie a ani vás neidentifikuje podľa hlasu.";
+
+/* Title of the privacy banner shown on the Quick Answers screen. */
+"QuickAnswers.PrivacyBanner.Title.v158" = "Súkromie už v návrhu";
+
+/* Feature name as displayed in the iOS Quick Action menu (contextual menu displayed when long-pressing the browser app icon) */
+"QuickAnswers.QuickActions.Title.v158" = "Rýchle odpovede";
+
+/* Accessibility label for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer. */
+"QuickAnswers.ReturnPill.ReturnToQuickAnswerAccessibilityLabel.v158" = "Späť na Rýchlu odpoveď";
+
+/* Helper text for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer. */
+"QuickAnswers.ReturnPill.Subtitle.v158" = "Ťuknutím sa vrátite";
 
 /* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
 "QuickAnswers.Tip.Message.v158" = "Začnite ťuknutím sem.";

@@ -355,15 +355,6 @@ final class DefaultWKEngineWebView: WKWebView,
         }
     }
 
-    override internal func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        // The find-in-page selection menu only appears if the webview is the first responder.
-        // Do not becomeFirstResponder on a mouse event.
-        if let event = event, event.allTouches?.contains(where: { $0.type != .indirectPointer }) ?? false {
-            becomeFirstResponder()
-        }
-        return super.hitTest(point, with: event)
-    }
-
     // MARK: - UIScrollViewDelegate
 
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {

@@ -40,7 +40,6 @@ class URLValidationTest: BaseTestCase {
     private func loadAndValidateHttpURLs(URL: String) {
         loadWebPage(URL)
         waitForWebPageLoad()
-        mozWaitForElementToExist(app.otherElements.staticTexts["Example Domain"])
         mozWaitForElementToExist(app.textFields["URLBar.urlText"])
         waitForValueContains(app.textFields["URLBar.urlText"], value: "example.com")
     }

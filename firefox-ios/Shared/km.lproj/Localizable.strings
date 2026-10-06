@@ -5,7 +5,7 @@
 "+" = "+";
 
 /* Authentication prompt message with no realm. %@ is the hostname of the site. */
-"A username and password are being requested by %@." = "ឈ្មោះ​អ្នក​ប្រើ និង​ពាក្យ​សម្ងាត់​​បាន​កំពុង​ស្នើ​ដោយ %@ ។";
+"A username and password are being requested by %@." = "អត្ថនាម និង​ពាក្យ​សម្ងាត់​​ត្រូវបាន​​ស្នើ​ដោយ %@។";
 
 /* Authentication prompt message with a realm. %1$@ is the hostname, %2$@ is the realm string. */
 "A username and password are being requested by %@. The site says: %@" = "ឈ្មោះ​អ្នក​ប្រើ និង​ពាក្យ​សម្ងាត់​កំពុង​ត្រូវ​បាន​ស្នើ​ដោយ %1$@ ។ តំបន់បណ្ដាញ​​ប្រាប់​ថា៖ %2$@";
@@ -158,7 +158,7 @@
 "Closing tab" = "បិទ​ផ្ទាំង";
 
 /* Context menu item for bookmarking a link URL */
-"ContextMenu.BookmarkLinkButtonTitle" = "ចំណាំ​តំណ";
+"ContextMenu.BookmarkLinkButtonTitle" = "ចំណាំបញ្ជាប់";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "ផ្ទាំងឯកជនថ្មី ត្រូវបានបើក";
@@ -350,7 +350,7 @@
 "FirefoxHome.Stories.Minutes.v140" = "នាទី: %d";
 
 /* Label showing how many pages there is in a search group. %d represents a number */
-"FirefoxHomepage.Common.PagesCount.v112" = "ទំៈព័រ: %d";
+"FirefoxHomepage.Common.PagesCount.v112" = "ទំព័រ៖ %d";
 
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "ការ​កំណត់";
@@ -641,10 +641,10 @@
 "Loading content…" = "កំពុង​ផ្ទុក​មាតិកា…";
 
 /* Authentication prompt log in button */
-"Log in" = "ចូល";
+"Log in" = "បញ្ជាប់ចូល";
 
 /* Toggle logins syncing setting */
-"Logins" = "ចូល";
+"Logins" = "ការបញ្ជាប់ចូល";
 
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "ស្វែងយល់​បន្ថែម";
@@ -656,28 +656,28 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "ស្វែងយល់បន្ថែម";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "ដើម្បីប្រើមុខងារ AutoFill សម្រាប់ Firefox អ្នកត្រូវតែបើកលេខសម្ងាត់ឧបករណ៍។";
+"Logins.PasscodeRequirement.Warning" = "ដើម្បីប្រើមុខងារស្វ័យបំពេញសម្រាប់ Firefox អ្នកត្រូវតែបើកកូដសម្ងាត់ឧបករណ៍។";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "នាំ​យក​ពាក្យ​សម្ងាត់​របស់​អ្នក​គ្រប់​ទីកន្លែង";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "បំពេញពាក្យសម្ងាត់ Firefox ដោយស្វ័យប្រវត្តិ";
+"Logins.WelcomeView.Title2" = "Firefox ស្វ័យបំពេញពាក្យសម្ងាត់";
 
 /* Title of the big blue button to enable AutoFill */
-"Logins.WelcomeView.TurnOnAutoFill" = "បើក​ការបំពេញ​ដោយស្វ័យប្រវត្តិ";
+"Logins.WelcomeView.TurnOnAutoFill" = "បើកមុខងារស្វ័យបំពេញ";
 
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "កុំ​រក្សាទុក";
 
 /* Button to not update the user's password */
-"LoginsHelper.DontUpdate.Button" = "កុំ​ធ្វើ​បច្ចុប្បន្នភាព";
+"LoginsHelper.DontUpdate.Button" = "កុំអាប់ដេត";
 
 /* Button to save the user's password */
-"LoginsHelper.SaveLogin.Button" = "រក្សាទុក​ការ​ចូល";
+"LoginsHelper.SaveLogin.Button" = "រក្សាទុកបញ្ជាប់ចូល";
 
 /* Button to update the user's password */
-"LoginsHelper.Update.Button" = "ធ្វើ​បច្ចុប្បន្នភាព";
+"LoginsHelper.Update.Button" = "អាប់ដេត";
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "តម្រង";
@@ -692,7 +692,7 @@
 "LoginsList.SelectPassword.Title" = "ជ្រើសរើសពាក្យសម្ងាត់ដើម្បីបំពេញ";
 
 /* Title for the list of logins */
-"LoginsList.Title" = "ការចូល​ដែល​បាន​រក្សាទុក";
+"LoginsList.Title" = "ការបញ្ជាប់ចូលត្រូវបានរក្សាទុក";
 
 /* Restore Tabs Prompt Description */
 "Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Firefox ដូចជា​បាន​គាំង​កាល​ពី​មុន។ តើ​អ្នក​ចង់​ស្ដារ​ផ្ទាំង​របស់​អ្នក​មែន​ទេ?";
@@ -710,13 +710,13 @@
 "Menu.AddBookmark.Label.v99" = "បន្ថែម";
 
 /* Toast displayed to the user after adding the item to the Shortcuts. */
-"Menu.AddPin.Confirm2" = "បន្ថែមទៅផ្លូវកាត់";
+"Menu.AddPin.Confirm2" = "បានបន្ថែមទៅផ្លូវកាត់";
 
 /* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
 "Menu.AddReadingList.Label.v99" = "បន្ថែម";
 
 /* Toast displayed to the user after adding the item to their reading list. */
-"Menu.AddToReadingList.Confirm" = "ចម្លងអាសយដ្ឋាន";
+"Menu.AddToReadingList.Confirm" = "បានចម្លងទៅបញ្ជីនៃការអាន";
 
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
 "Menu.AddToShortcuts.v99" = "បន្ថែមទៅផ្លូវកាត់";
@@ -728,19 +728,19 @@
 "Menu.Copy.Title" = "ចម្លងអាសយដ្ឋាន";
 
 /* Toast displayed to user after copy url pressed. */
-"Menu.CopyURL.Confirm" = "បាន​ចម្លង​ URL ទៅ​អង្គចងចាំ";
+"Menu.CopyURL.Confirm" = "បានចម្លង URL ទៅឃ្លីបប៊ត";
 
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
-"Menu.CustomizeHomePage.v99" = "កែ​គេហទំព័រ​តាមបំណង";
+"Menu.CustomizeHomePage.v99" = "កែទំព័រដើមតាមបំណង";
 
 /* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
-"Menu.Downloads.Label" = "ទាញយក";
+"Menu.Downloads.Label" = "ការដោនឡូដ";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "ការការពារត្រូវបានបិទសម្រាប់គេហទំព័រនេះ";
+"Menu.EnhancedTrackingProtectionOff.Title" = "ការការពារត្រូវបានបិទសម្រាប់វេបសាយនេះ";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "ការការពារត្រូវបានបើកសម្រាប់គេហទំព័រនេះ";
+"Menu.EnhancedTrackingProtectionOn.Title" = "ការការពារត្រូវបានបើកសម្រាប់វេបសាយនេះ";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "ជំនួយ";
@@ -755,10 +755,10 @@
 "Menu.NewTab.v99" = "ផ្ទាំង​ថ្មី";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
-"Menu.NightModeTurnOff.Label2" = "បិទម៉ូតងងិត";
+"Menu.NightModeTurnOff.Label2" = "បិទម៉ូតរាត្រី";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label2" = "បើកម៉ូតងងិត";
+"Menu.NightModeTurnOn.Label2" = "បើកម៉ូតរាត្រី";
 
 /* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "ពាក្យសម្ងាត់";
@@ -767,7 +767,7 @@
 "Menu.Paste.Title" = "បិទភ្ជាប់";
 
 /* The title for the button that lets you paste and go to a URL */
-"Menu.PasteAndGo.Title" = "ដាក់ចូល & ទៅ";
+"Menu.PasteAndGo.Title" = "បិទភ្ជាប់ និងទៅ";
 
 /* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "បញ្ជី​អាន​";
@@ -785,13 +785,13 @@
 "Menu.RemoveBookmark.Label.v99" = "យកចេញ";
 
 /* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
-"Menu.RemovedFromShortcuts.v99" = "លុបចេញពីផ្លូវកាត់";
+"Menu.RemovedFromShortcuts.v99" = "យកចេញពីផ្លូវកាត់";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
 "Menu.RemovePin.Confirm2.v99" = "បានយកចេញពីផ្លូវកាត់";
 
 /* Toast displayed to confirm to the user that his reading list item was correctly removed. */
-"Menu.RemoveReadingList.Confirm.v99" = "បានលុបចេញពីបញ្ជីអាន";
+"Menu.RemoveReadingList.Confirm.v99" = "បានយកចេញពីបញ្ជីអាន";
 
 /* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
 "Menu.RemoveReadingList.Label.v99" = "យកចេញ";
@@ -800,7 +800,7 @@
 "Menu.Share.v99" = "ចែក​រំលែក";
 
 /* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
-"Menu.SyncAndSaveData.v103" = "ធ្វើសមកាលកម្ម និងរក្សាទុកទិន្នន័យ";
+"Menu.SyncAndSaveData.v103" = "សមកាលកម្ម និងរក្សាទុកទិន្នន័យ";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "បានផ្ញើផ្ទាំង";
@@ -818,13 +818,13 @@
 "Menu.TrackingProtection.ProtectionSettings.Title" = "ការកំណត់ការការពារ";
 
 /* The title that shows the number of content cookies blocked */
-"Menu.TrackingProtectionBlockedContent.Title" = "កំពុងតាមដានខ្លឹមសារ";
+"Menu.TrackingProtectionBlockedContent.Title" = "មាតិកាតាមដាន";
 
 /* The title that shows the number of social URLs blocked */
-"Menu.TrackingProtectionBlockedSocial.Title" = "អ្នកតាមដានសង្គម";
+"Menu.TrackingProtectionBlockedSocial.Title" = "ការីតាមដានសង្គមមេឌា";
 
 /* The title that shows the number of cross-site URLs blocked */
-"Menu.TrackingProtectionCrossSiteTrackers.Title" = "កម្មវិធី​តាមដានឆ្លង​គេហទំព័រ";
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "ការីតាមដានឆ្លងវេបសាយ";
 
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Cryptominer";
@@ -908,25 +908,25 @@
 "PhotoLibrary.FirefoxWouldLikeAccessMessage" = "វា​អនុញ្ញាត​ឱ្យ​អ្នក​អាច​រក្សាទុក​រូបភាព​ទៅ​ក្នុង​របុំ​កាមេរ៉ា​របស់អ្នក។";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox ចង់​ចូល​​​ប្រើ​រូបថត​របស់​អ្នក";
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox ចង់បានអាក់សេសរូបថតរបស់អ្នក";
 
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "បិទ";
 
 /* Privacy section title */
-"Privacy" = "ភាព​ឯកជន";
+"Privacy" = "ឯកជនភាព";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Privacy Policy" = "គោលនយោបាយ​ឯកជន";
+"Privacy Policy" = "គោលការណ៍ឯកជនភាព";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "ការតភ្ជាប់មិនមានសុវត្ថិភាពទេ";
+"ProtectionStatus.NotSecure" = "ការតភ្ជាប់គឺគ្មានសុវត្ថិភាព";
 
 /* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "ការតភ្ជាប់មានសុវត្ថិភាព";
+"ProtectionStatus.Secure" = "ការតភ្ជាប់គឺមានសុវត្ថិភាព";
 
 /* Title for quick-search engines settings section. */
-"Quick-Search Engines" = "ម៉ាស៊ីនស្វែងរកឆាប់រហ័ស";
+"Quick-Search Engines" = "អេនជីនស្វែងរករហ័ស";
 
 /* A label indicating the action that a user can rate the Firefox app in the App store. */
 "Ratings.Settings.RateOnAppStore" = "វាយតម្លៃនៅលើ App Store";
@@ -962,10 +962,10 @@
 "Reload page" = "ផ្ទុក​ទំព័រ​​ឡើងវិញ";
 
 /* Title for the button that removes a reading list item */
-"Remove" = "លុប​ចេញ";
+"Remove" = "យកចេញ";
 
 /* Name for button removing current article from reading list in reader mode */
-"Remove from Reading List" = "លុប​ចេញពី​បញ្ជី​អាន";
+"Remove from Reading List" = "យកចេញពីបញ្ជីអាន";
 
 /* Cancel button text shown in reopen-alert at home page. */
 "ReopenAlert.Actions.Cancel" = "បោះបង់";
@@ -989,16 +989,16 @@
 "ScanQRCode.Error.OK.Button" = "យល់ព្រម";
 
 /* Text for the instructions label, displayed in the QR scanner view */
-"ScanQRCode.Instructions.Label" = "តម្រង់​កូដ QR នៅក្នុងស៊ុម ដើម្បីស្កេន";
+"ScanQRCode.Instructions.Label" = "តម្រឹមកូដQRនៅក្នុងស៊ុម ដើម្បីស្គែន";
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "ទិន្នន័យនេះមិនត្រឹមត្រូវ​ទេ";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "ចូលទៅកាន់ ‘ការកំណត់’ ឧបករណ៍ > ‘Firefox’។ អនុញ្ញាតឱ្យ Firefox ចូលប្រើកាមេរ៉ា។";
+"ScanQRCode.PermissionError.Message.v100" = "សូមចូលទៅកាន់ ‘ការកំណត់’ ឧបករណ៍ > ‘Firefox’។ អនុញ្ញាតឱ្យ Firefox អាចអាក់សេសកាមេរ៉ាបាន។";
 
 /* Title for the QR code scanner view. */
-"ScanQRCode.View.Title" = "ស្កេនកូដ QR";
+"ScanQRCode.View.Title" = "ស្គែនកូដQR";
 
 /* Open search section of settings */
 "Search" = "ស្វែងរក";
@@ -1010,22 +1010,22 @@
 "Search.Awesomebar.SwitchToTab" = "ប្ដូរ​ទៅ​ផ្ទាំង";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
-"Search.SuggestSectionTitle.v102" = "ការណែនាំរបស់ Firefox";
+"Search.SuggestSectionTitle.v102" = "Firefox ណែនាំ";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
-"Search.ThirdPartyEngines.AddMessage" = "ម៉ាស៊ីន​ស្វែងរក​ថ្មី​នឹង​បង្ហាញ​នៅ​ក្នុង​របារ​ស្វែងរក​រហ័ស។";
+"Search.ThirdPartyEngines.AddMessage" = "អេនជីន​ស្វែងរក​ថ្មី​នឹង​បង្ហាញ​នៅ​ក្នុង​របារ​ស្វែងរក​រហ័ស។";
 
 /* The success message that appears after a user sucessfully adds a new search engine */
-"Search.ThirdPartyEngines.AddSuccess" = "បាន​បន្ថែម​ម៉ាស៊ីន​ស្វែងរក!";
+"Search.ThirdPartyEngines.AddSuccess" = "បាន​បន្ថែម​អេនជីន​ស្វែងរក!";
 
 /* The title that asks the user to Add the search provider */
-"Search.ThirdPartyEngines.AddTitle" = "បន្ថែម​អ្នក​ផ្ដល់​សេវា​ស្វែងរក?";
+"Search.ThirdPartyEngines.AddTitle" = "ចង់បន្ថែមអ្នកផ្ដល់សេវាស្វែងរកដែរឬទេ?";
 
 /* The cancel button if you do not want to add a search engine. */
 "Search.ThirdPartyEngines.Cancel" = "បោះបង់​";
 
 /* A message explaining fault in custom search engine form. */
-"Search.ThirdPartyEngines.DuplicateErrorMessage" = "ម៉ាស៊ីនស្វែងរក ជាមួយចំណងជើងនេះ ឬ URL ដែល​បាន​បញ្ចូល​រួចហើយ។";
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "អេនជីនស្វែងរកជាមួយចំណងជើងនេះ ឬយូអអិលដែល​បាន​បញ្ចូល​រួចហើយ។";
 
 /* A title stating that we failed to add custom search engine. */
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "បរាជ័យ";
@@ -1064,13 +1064,13 @@
 "SendTo.DeviceList.Text" = "ឧបករណ៍​​ដែល​អាចប្រើបាន៖";
 
 /* Message in error prompt explaining why the URL is invalid. */
-"SendTo.Error.Message" = "មាន​តែ​តំណ HTTP និង HTTPS អាច​ចែករំលែក​បាន។";
+"SendTo.Error.Message" = "មានតែបញ្ជាប់ HTTP និង HTTPS ទើបអាចចែករំលែកបាន។";
 
 /* OK button to dismiss the error prompt. */
 "SendTo.Error.OK.Button" = "យល់ព្រម​";
 
 /* Title of error prompt displayed when an invalid URL is shared. */
-"SendTo.Error.Title" = "តំណ​ដែល​អ្នក​កំពុង​ព្យាយាម​ចែករំលែក​មិន​អាច​ចែករំលែក​បាន​ទេ។";
+"SendTo.Error.Title" = "បញ្ជាប់​ដែល​អ្នក​កំពុង​ព្យាយាម​ចែករំលែក​មិន​អាច​ចែករំលែក​បាន​ទេ។";
 
 /* Title of the dialog that allows you to send a tab to a different device */
 "SendTo.NavBar.Title" = "ផ្ញើ​ផ្ទាំង";

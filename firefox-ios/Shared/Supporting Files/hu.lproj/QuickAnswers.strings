@@ -4,17 +4,29 @@
 /* Accessibility label for the button on the homepage that opens the Quick Answers feature. */
 "QuickAnswers.AccessibilityLabels.OpenQuickAnswers.v158" = "Gyors válaszok megnyitása";
 
+/* Link shown in the footer of the Quick Answers view - when tapped, it opens a privacy banner explaining how the feature handles user data. */
+"QuickAnswers.ContentView.AboutYourPrivacy.v158" = "Az Ön adatvédelméről";
+
 /* Loading label shown in the Quick Answers view while an answer is being fetched. */
 "QuickAnswers.ContentView.Answering.v158" = "Megválaszolás…";
 
 /* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
 "QuickAnswers.ContentView.Footer.v158" = "A(z) %@ működteti · A válaszok hibákat tartalmazhatnak.";
 
+/* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak. */
+"QuickAnswers.ContentView.Listening.v158" = "Hallgatom, kérdezzen bármit…";
+
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "Kérdezzen bármit…";
 
+/* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
+"QuickAnswers.ContentView.SearchingSources.v158" = "Források keresése…";
+
 /* Header label for the sources section shown below a Quick Answers result. */
 "QuickAnswers.ContentView.Sources.v158" = "Források";
+
+/* Loading label shown in the Quick Answers view while the question is being processed. */
+"QuickAnswers.ContentView.Thinking.v158" = "Gondolkodás…";
 
 /* Button label on the Quick Answers permission alert to dismiss the alert without taking action. */
 "QuickAnswers.Errors.Cancel.v158" = "Mégse";
@@ -46,6 +58,9 @@
 /* Message shown in the permission alert when speech recognition access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox). */
 "QuickAnswers.Errors.SpeechRecognitionPermissionMessage.v158" = "Engedélyezze, hogy a %@ hozzáférjen a beszédfelismeréshez.";
 
+/* Link text that opens more information about how Quick Answers works and how it uses your data. */
+"QuickAnswers.LearnMore.v158" = "További tudnivalók…";
+
 /* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
 "QuickAnswers.OptIn.ContinueButton.v158" = "Folytatás";
 
@@ -57,6 +72,45 @@
 
 /* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
 "QuickAnswers.OptIn.Title.v158" = "Kérdezze az Ön hangjával";
+
+/* Description displayed on the Quick Answers opt-in screen explaining how the feature works. */
+"QuickAnswers.OptInRedesign.Description.v158" = "Kérdezzen a saját hangjával. Kapjon forrásokkal alátámasztott rövid választ másodpercek alatt.";
+
+/* Description of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedDescription.v158" = "Nem tároljuk a hangját, kérdéseit vagy válaszait.";
+
+/* Title of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedTitle.v158" = "Semmi sem lesz mentve";
+
+/* Description of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingDescription.v158" = "Nem használjuk az adatait a rendszereink betanításához.";
+
+/* Title of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingTitle.v158" = "Nincs tanítás az adataival";
+
+/* Description of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignDescription.v158" = "Nem használjuk a hangját arra, hogy azonosítsuk.";
+
+/* Title of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158" = "Tervezett adatvédelem";
+
+/* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
+"QuickAnswers.OptInRedesign.Title.v158" = "Próbálja ki a gyors válaszokat";
+
+/* Body text of the privacy banner shown on the Quick Answers screen, explaining how the feature handles user data. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.PrivacyBanner.Description.v158" = "A %@ nem tárolja a hangját vagy kérdéseit, nem használja az adatait MI-modellek betanítására, és nem használja a hangját az azonosításához.";
+
+/* Title of the privacy banner shown on the Quick Answers screen. */
+"QuickAnswers.PrivacyBanner.Title.v158" = "Tervezett adatvédelem";
+
+/* Feature name as displayed in the iOS Quick Action menu (contextual menu displayed when long-pressing the browser app icon) */
+"QuickAnswers.QuickActions.Title.v158" = "Gyors válaszok";
+
+/* Accessibility label for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer. */
+"QuickAnswers.ReturnPill.ReturnToQuickAnswerAccessibilityLabel.v158" = "Vissza a gyors válaszhoz";
+
+/* Helper text for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer. */
+"QuickAnswers.ReturnPill.Subtitle.v158" = "Koppintson a visszatéréshez";
 
 /* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
 "QuickAnswers.Tip.Message.v158" = "Koppintson a kezdéshez.";
