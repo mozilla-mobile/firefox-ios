@@ -120,7 +120,7 @@ final class OnboardingCardSchedulerTests: XCTestCase {
         let subject = createSubject(schedule: [1: [makeCard(title: "Day 1")]],
                                     date: { self.makeDate(year: 2026, month: 1, day: 1) })
         subject.recordActiveDayIfNeeded()
-        _ = subject.consumeDueCards()
+        _ = subject.getDueCards()
 
         subject.reset()
 
