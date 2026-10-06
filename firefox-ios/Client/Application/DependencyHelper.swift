@@ -16,6 +16,9 @@ class DependencyHelper {
         let profile: Profile = appDelegate.profile
         AppContainer.shared.register(service: profile as Profile)
 
+        let featureFlagsProvider = FeatureFlagsProvider(prefs: profile.prefs)
+        AppContainer.shared.register(service: featureFlagsProvider as FeatureFlagProviding)
+
         AppContainer.shared.register(service: appDelegate.searchEnginesManager)
 
         let diskImageStore: DiskImageStore =
@@ -52,9 +55,6 @@ class DependencyHelper {
         AppContainer.shared.register(service: gleanUsageReportingMetricsService)
 
         AppContainer.shared.register(service: appDelegate.shareTelemetry)
-
-        let featureFlagsProvider = FeatureFlagsProvider(prefs: profile.prefs)
-        AppContainer.shared.register(service: featureFlagsProvider as FeatureFlagProviding)
 
         let userFeaturePreferenceManager = UserFeaturePreferenceManager(prefs: profile.prefs)
         AppContainer.shared.register(service: userFeaturePreferenceManager as UserFeaturePreferring)
