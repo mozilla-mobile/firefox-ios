@@ -104,9 +104,8 @@ final class BrowserScreen {
         XCTAssertTrue(element.exists, "Expected UA text '\(text)' was not found in the web view.")
     }
 
-    /// Loads a user agent test page and asserts the mobile UA, retrying the load once. On a fresh
-    /// profile the content blocker reloads the tab when its lists finish compiling, which cancels
-    /// an in-flight navigation without an error page.
+    /// Loads a UA test page and asserts the mobile UA, retrying once: a fresh-profile content blocker reload
+    /// cancels the first navigation. Remove the retry once https://github.com/mozilla-mobile/firefox-ios/issues/35933 is fixed.
     func navigateToURLAndAssertMobileUserAgent(_ url: String, timeout: TimeInterval = TIMEOUT) {
         navigateToURL(url)
         let mobileUserAgent = userAgentText("MOBILE_UA")

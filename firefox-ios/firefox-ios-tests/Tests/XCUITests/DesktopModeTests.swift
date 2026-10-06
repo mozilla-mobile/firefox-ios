@@ -8,11 +8,13 @@ import XCTest
 // Tests for both platforms
 class DesktopModeTestsIpad: IpadOnlyTestCase {
     var browserScreen: BrowserScreen!
+    var toolbarScreen: ToolbarScreen!
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306852
     // Smoketest
     func testLongPressReload() {
         browserScreen = BrowserScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
 
         if skipPlatform { return }
         // Navigate and  verify the User Agent for DESKTOP
@@ -22,8 +24,7 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
         browserScreen.assertDesktopUserAgentIsDisplayed()
 
         // Activate the Desktop Site (Mobile User Agent)
-        navigator.goto(ReloadLongPressMenu)
-        navigator.performAction(Action.ToggleRequestDesktopSite)
+        toolbarScreen.toggleRequestDesktopSiteFromReloadMenu()
         waitUntilPageLoad()
 
         // Check the User Agent is Mobile
@@ -333,8 +334,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
         browserScreen.assertMobileUserAgentIsDisplayed()
-        toolbarScreen.toggleRequestDesktopSiteFromReloadMenu()
-        waitUntilPageLoad()
+        switchToDesktopSite()
         browserScreen.assertDesktopUserAgentIsDisplayed()
 
         // Step 10: Open the hamburger menu -> the menu is open.
@@ -354,8 +354,7 @@ class DesktopModeTestsIphone: BaseTestCase {
     }
 
     public func switchToDesktopSite() {
-        navigator.goto(ReloadLongPressMenu)
-        navigator.performAction(Action.ToggleRequestDesktopSite)
+        toolbarScreen.toggleRequestDesktopSiteFromReloadMenu()
         waitUntilPageLoad()
     }
 }
