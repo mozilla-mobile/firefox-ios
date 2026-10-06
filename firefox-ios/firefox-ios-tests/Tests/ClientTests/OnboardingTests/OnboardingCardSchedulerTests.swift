@@ -78,7 +78,7 @@ final class OnboardingCardSchedulerTests: XCTestCase {
         let subject = createSubject(schedule: [1: [makeCard(title: "Day 1")]])
 
         // currentActiveDay is still 0, which has no scheduled cards.
-        XCTAssertTrue(subject.consumeDueCards().isEmpty)
+        XCTAssertTrue(subject.getDueCards().isEmpty)
     }
 
     func testConsumeDueCards_returnsScheduledCardsForCurrentDay() {
@@ -89,7 +89,7 @@ final class OnboardingCardSchedulerTests: XCTestCase {
                                     date: { self.makeDate(year: 2026, month: 1, day: 1) })
         subject.recordActiveDayIfNeeded()
 
-        let cards = subject.consumeDueCards()
+        let cards = subject.getDueCards()
 
         XCTAssertEqual(cards.map { $0.title }, ["Day 1 - A", "Day 1 - B"])
     }
@@ -99,8 +99,8 @@ final class OnboardingCardSchedulerTests: XCTestCase {
                                     date: { self.makeDate(year: 2026, month: 1, day: 1) })
         subject.recordActiveDayIfNeeded()
 
-        XCTAssertFalse(subject.consumeDueCards().isEmpty)
-        XCTAssertTrue(subject.consumeDueCards().isEmpty)
+        XCTAssertFalse(subject.getDueCards().isEmpty)
+        XCTAssertTrue(subject.getDueCards().isEmpty)
     }
 
     func testConsumeDueCards_marksLastCardActiveDay() {
@@ -108,7 +108,7 @@ final class OnboardingCardSchedulerTests: XCTestCase {
                                     date: { self.makeDate(year: 2026, month: 1, day: 1) })
         subject.recordActiveDayIfNeeded()
 
-        _ = subject.consumeDueCards()
+        _ = subject.getDueCards()
 
         XCTAssertEqual(prefs.intForKey(PrefsKeys.onboardingLastCardActiveDay), 1)
     }

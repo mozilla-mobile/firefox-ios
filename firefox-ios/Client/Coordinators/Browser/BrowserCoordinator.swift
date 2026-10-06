@@ -299,7 +299,7 @@ final class BrowserCoordinator: BaseCoordinator,
         let manager = IntroScreenManager(prefs: profile.prefs)
         guard manager.shouldUseContinuousOnboarding, !manager.shouldShowIntroScreen else { return }
 
-        let cards = OnboardingDripScheduler(prefs: profile.prefs).getDueCards()
+        let cards = OnboardingCardScheduler(prefs: profile.prefs).getDueCards()
         guard !cards.isEmpty else { return }
 
         let view = DripOnboardingFlowView(
