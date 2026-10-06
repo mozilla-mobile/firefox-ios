@@ -19,6 +19,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         static let spacingBetweenSections: CGFloat = 44
         static let standardSingleItemHeight: CGFloat = 100
         static let sectionHeaderHeight: CGFloat = 75
+        static let embeddedAddressBarHeight: CGFloat = 50
 
         @MainActor
         static func leadingInset(
@@ -282,8 +283,14 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let shouldPinNewsHeader = featureFlagsProvider.isEnabled(.homepagePinnedHeader)
                                   && featureFlagsProvider.isEnabled(.homepageStoryCategories)
         header.pinToVisibleBounds = shouldPinNewsHeader
-        section.boundarySupplementaryItems = [header]
+        header.contentInsets = NSDirectionalEdgeInsets(
+            top: shouldPinNewsHeader ? -UX.embeddedAddressBarHeight : 0,
+            leading: horizontalInset,
+            bottom: UX.standardInset,
+            trailing: horizontalInset
+        )
 
+        section.boundarySupplementaryItems = [header]
         section.contentInsets = NSDirectionalEdgeInsets(
             top: UX.headerSectionSpacing,
             leading: horizontalInset,
