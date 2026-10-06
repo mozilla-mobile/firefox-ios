@@ -3,7 +3,6 @@
 - When refactoring existing code, check relevant files for existing tests and update them if necessary.
 - When adding new code, prefer to write easily mockable and testable code, and include tests where applicable.
 - Limit the amount of comments you put in the code to a strict minimum. You should almost never add comments, except sometimes on non-trivial code, function definitions if the arguments aren't self-explanatory, and class definitions and their members.
-- The same applies to documentation comments (`///`): keep them short and rare. Write one only when the name and signature don't already say it, and prefer a single line explaining *why* over restating *what* the code does. Don't document every property, UX constant, or parameter.
 - Do not remove existing comments unless they are directly related to what you are changing.
 
 ## Repository Structure
