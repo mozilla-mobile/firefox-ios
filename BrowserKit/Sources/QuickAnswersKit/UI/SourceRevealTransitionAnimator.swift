@@ -5,9 +5,7 @@
 import UIKit
 import ComponentLibrary
 
-/// The possible transition types to animate presentation and dismissal of `QuickAnswersViewController`.
 public enum QuickAnswersTransitionType: Equatable, Sendable {
-    /// A custom transition that reveals the controller out of `sourceRect`.
     case sourceReveal(sourceRect: CGRect)
     /// A system form sheet presentation, used on iPad.
     case formSheet
@@ -22,11 +20,8 @@ public enum QuickAnswersTransitionType: Equatable, Sendable {
     }
 }
 
-/// The animator for the source reveal presentation and dismissal.
 /// Both directions animate the scale of a soft edged circular mask centered on the source rect, so the
-/// controller grows out of it when presenting and collapses back into it when dismissing. A blur sits
-/// behind the mask to soften what stays on screen, and the presented controller animates its own content
-/// alongside the mask.
+/// controller grows out of it when presenting and collapses back into it when dismissing.
 final class SourceRevealTransitionAnimator: NSObject,
                                             UIViewControllerTransitioningDelegate,
                                             UIViewControllerAnimatedTransitioning {
@@ -36,25 +31,20 @@ final class SourceRevealTransitionAnimator: NSObject,
         static let dismissalDuration: TimeInterval = 0.25
         static let dismissalFadeDuration: TimeInterval = 0.15
         static let dismissalFadeDelay: TimeInterval = 0.1
-        /// Diameter of the mask, relative to the longest container side. Above 1.0 so the mask still
-        /// covers the container corners once it reaches its final size.
+        /// Relative to the longest container side. Above 1.0 so the mask still covers the container
+        /// corners once it reaches its final size.
         static let presentationMaskDiameterRatio: CGFloat = 2.3
         static let dismissalMaskDiameterRatio: CGFloat = 2.0
-        /// How much wider than tall the expanded mask ends up, so its soft edge clears the container
-        /// sides before it clears the top and bottom.
+        /// Wider than tall, so the mask's soft edge clears the container sides before its top and bottom.
         static let expandedMaskHorizontalScale: CGFloat = 1.3
         /// The collapsed mask scale. Not zero, since a zero scale transform can't be inverted.
         static let collapsedMaskScale: CGFloat = 0.1
-        /// Where the mask starts fading out, relative to its radius, so its edge reads as soft.
         static let maskFadeStartLocation: NSNumber = 0.8
         static let blurIntensity: CGFloat = 0.4
     }
 
-    /// The rect, in the container view's coordinate space, the presentation animation
-    /// originates from.
+    /// In the container view's coordinate space.
     private let sourceRect: CGRect
-    /// Whether the controller is presenting the opt-in, which covers part of the content the
-    /// presentation would otherwise bring in.
     private let isOptInVisible: Bool
 
     init(sourceRect: CGRect, isOptInVisible: Bool) {
@@ -98,8 +88,7 @@ final class SourceRevealTransitionAnimator: NSObject,
             return
         }
         let containerView = transitionContext.containerView
-        // The blur sits behind the presented controller, so what the mask hasn't covered yet blurs out
-        // instead of staying sharp.
+        // Sits behind the presented controller, so what the mask hasn't covered yet blurs out.
         let blurView = makeBlurView(frame: containerView.bounds)
         blurView.alpha = 0.0
         containerView.addSubview(blurView)
@@ -133,8 +122,8 @@ final class SourceRevealTransitionAnimator: NSObject,
         let maskView = makeMaskView(for: containerView, diameterRatio: UX.dismissalMaskDiameterRatio)
         containerView.mask = maskView
 
-        // The blur is added to the presenting controller, which stays on screen, so unlike the mask it
-        // has to be torn down once the transition completes.
+        // Added to the presenting controller, which stays on screen, so unlike the mask it has to be
+        // torn down once the transition completes.
         let blurView = makeBlurView(frame: presentingController.view.bounds)
         presentingController.view.addSubview(blurView)
 
@@ -156,8 +145,8 @@ final class SourceRevealTransitionAnimator: NSObject,
     }
 
     // MARK: - Helpers
-    /// A circle centered on `sourceRect`, large enough to cover `containerView`, whose edge fades out
-    /// instead of ending abruptly.
+    /// A circle centered on `sourceRect`, covering `containerView`, whose edge fades out rather than
+    /// ending abruptly.
     private func makeMaskView(for containerView: UIView, diameterRatio: CGFloat) -> UIView {
         let diameter = max(containerView.bounds.width, containerView.bounds.height) * diameterRatio
         let maskView = UIView(

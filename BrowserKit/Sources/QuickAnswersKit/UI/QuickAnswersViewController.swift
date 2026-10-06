@@ -26,9 +26,7 @@ public final class QuickAnswersViewController: UIViewController,
         static let contentViewTopPadding: CGFloat = 32.0
         static let contentViewBottomPadding: CGFloat = 12.0
         static let contentViewHorizontalPadding: CGFloat = 24.0
-        /// How far below its final position the background effect starts when presenting.
         static let presentationSlideOffset: CGFloat = 50.0
-        /// How far above its final position the close button starts when presenting.
         static let presentationCloseButtonOffset: CGFloat = -20.0
     }
 

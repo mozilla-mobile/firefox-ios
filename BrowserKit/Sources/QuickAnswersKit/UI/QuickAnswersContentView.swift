@@ -19,7 +19,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         /// The sections start settling shortly after the transcript begins moving up.
         static let resultCascadeStartDelay: TimeInterval = 0.1
         static let resultCascadeStagger: TimeInterval = 0.1
-        /// How far below its final position the placeholder starts when presenting.
         static let presentationSlideOffset: CGFloat = 15.0
     }
 
