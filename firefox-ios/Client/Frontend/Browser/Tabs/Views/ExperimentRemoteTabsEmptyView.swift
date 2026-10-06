@@ -150,7 +150,7 @@ class ExperimentRemoteTabsEmptyView: UIView,
     }
 
     func applyTheme(theme: Theme) {
-        iconImageView.tintColor = theme.isNova ? theme.colors.iconDisabled : theme.colors.actionPrimary
+        iconImageView.tintColor = theme.colors.iconDisabled
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
         signInButton.applyTheme(theme: theme)
