@@ -1645,7 +1645,6 @@
 		C21326992F5713F000746393 /* SummarizerLanguageProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21326982F5713F000746393 /* SummarizerLanguageProviderTests.swift */; };
 		C2200A6A2B7D148C00DC062A /* ContentBlockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */; };
 		C22753402A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C227533F2A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift */; };
-		C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */; };
 		C234BFC02EBB8321004BF5A8 /* SettingsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BFBF2EBB82E1004BF5A8 /* SettingsNavigationController.swift */; };
 		C234BFC22EBB8356004BF5A8 /* ModalSettingsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BFC12EBB8352004BF5A8 /* ModalSettingsNavigationController.swift */; };
 		C23889DF2A4EFCE500429673 /* ShareSheetCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889DE2A4EFCE500429673 /* ShareSheetCoordinator.swift */; };
@@ -11064,7 +11063,6 @@
 		C21326982F5713F000746393 /* SummarizerLanguageProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerLanguageProviderTests.swift; sourceTree = "<group>"; };
 		C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockerTests.swift; sourceTree = "<group>"; };
 		C227533F2A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteDataManagementViewModel.swift; sourceTree = "<group>"; };
-		C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntensityVisualEffectView.swift; sourceTree = "<group>"; };
 		C234BFBF2EBB82E1004BF5A8 /* SettingsNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigationController.swift; sourceTree = "<group>"; };
 		C234BFC12EBB8352004BF5A8 /* ModalSettingsNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalSettingsNavigationController.swift; sourceTree = "<group>"; };
 		C23889DE2A4EFCE500429673 /* ShareSheetCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetCoordinator.swift; sourceTree = "<group>"; };
@@ -17362,7 +17360,6 @@
 				8A48807B2E68922400AD43D5 /* GleanOhttpUploader.swift */,
 				8A8F541F2E5CB8AF00C0207F /* GleanPingUploader.swift */,
 				C8BA0E7527F20B8E00DD8214 /* HistoryDeletionUtility.swift */,
-				C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */,
 				F85C7F112721048E004BDBA4 /* Layout.swift */,
 				5AD3B67B2CF65DE300AFA1FE /* LocaleProvider.swift */,
 				C8DC90B92A0669540008832B /* MarkupParser */,
@@ -20151,7 +20148,6 @@
 				ECD8E8062FFBE6A2002092C6 /* WaybackCodes.swift in Sources */,
 				218208DC2F9C0D1D00A899D1 /* TabTrayIpadSelectorView.swift in Sources */,
 				C7F5331A2E5799AA0089DEC7 /* ShortcutsLibraryTelemetry.swift in Sources */,
-				C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */,
 				8ADC2A102A33758E00543DAA /* FxALaunchParams.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E17496382991A2720096900A /* AdaptiveStack.swift in Sources */,

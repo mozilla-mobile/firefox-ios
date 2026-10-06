@@ -11,7 +11,7 @@ import Common
 struct BlendedBlobsGradient: View {
     private struct UX {
         /// Per blob values, cycled when there are more blobs than entries.
-        static let speeds: [CGFloat] = [0.8, 0.6, 1.1]
+        static let speeds: [CGFloat] = [1.5, 1.4, 1.3]
         /// Blob radius, relative to the region radius. Above 1.0 so the blobs overflow the region
         /// and the mask, rather than their own edges, defines the shape.
         static let blobRadiusRatios: [CGFloat] = [1.5, 2, 1.3]

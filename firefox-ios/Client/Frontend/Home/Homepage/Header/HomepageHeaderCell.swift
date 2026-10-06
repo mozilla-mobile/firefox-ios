@@ -212,7 +212,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             .formSheet
         } else {
             // convert the button frame to the parent window frame to have correct transition.
-            .crossDissolve(sourceRect: quickAnswersButton.convert(quickAnswersButton.bounds, to: nil))
+            .sourceReveal(sourceRect: quickAnswersButton.convert(quickAnswersButton.bounds, to: nil))
         }
         store.dispatch(
             NavigationBrowserAction(

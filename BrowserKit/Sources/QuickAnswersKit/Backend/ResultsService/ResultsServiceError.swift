@@ -12,15 +12,6 @@ enum ResultsServiceError: Error, Equatable {
     case unableToCreateService
     case unknown(String)
 
-    var shouldRetry: Bool {
-        switch self {
-        case .invalidResponse, .noMessage:
-            return false
-        default:
-            return true
-        }
-    }
-
     var telemetryLabel: String {
         switch self {
         case .invalidResponse: return "invalid_response"
