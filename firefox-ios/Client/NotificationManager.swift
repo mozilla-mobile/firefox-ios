@@ -22,6 +22,29 @@ protocol NotificationManagerProtocol: Sendable {
     func findDeliveredNotificationForId(id: String) async -> UNNotification?
 }
 
+extension NotificationManagerProtocol {
+    /// Requests notification authorization and, when granted, enables the default notification
+    /// categories and registers for push notifications.
+    func enableNotifications(
+        userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
+        requestAuthorization { granted, error in
+            guard error == nil, granted else { return }
+
+            DispatchQueue.main.async {
+                if userDefaults.object(forKey: PrefsKeys.Notifications.SyncNotifications) == nil {
+                    userDefaults.set(true, forKey: PrefsKeys.Notifications.SyncNotifications)
+                }
+                if userDefaults.object(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
+                    userDefaults.set(true, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+                }
+                notificationCenter.post(name: .RegisterForPushNotifications)
+            }
+        }
+    }
+}
+
 // TODO: FXIOS-14114 - NotificationManager @unchecked Sendable
 final class NotificationManager: NotificationManagerProtocol, @unchecked Sendable {
     private let telemetry: NotificationManagerTelemetry
