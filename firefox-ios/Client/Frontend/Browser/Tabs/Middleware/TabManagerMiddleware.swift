@@ -1009,7 +1009,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
               let url = tab.url?.absoluteString, !url.isEmpty
         else { return nil }
 
-        var title = (tab.tabState.title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        var title = (tab.displayTitle ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         if title.isEmpty {
             title = url
         }

@@ -67,12 +67,6 @@ protocol LegacyTabDelegate: AnyObject {
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
-struct TabState {
-    var isPrivate = false
-    var url: URL?
-    var title: String?
-}
-
 enum TabUrlType: String {
     case regular
     case search
@@ -92,6 +86,8 @@ class Tab: NSObject,
            ContentBlockerTab,
            TabWebViewDelegate,
            UIGestureRecognizerDelegate {
+    var groupID: TabGroupID?
+
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
         get {
@@ -114,10 +110,6 @@ class Tab: NSObject,
     let windowUUID: WindowUUID
 
     var urlType: TabUrlType = .regular
-
-    var tabState: TabState {
-        return TabState(isPrivate: _isPrivate, url: url, title: displayTitle)
-    }
 
     // PageMetadata is derived from the page content itself, and as such lags behind the
     // rest of the tab.
@@ -487,6 +479,7 @@ class Tab: NSObject,
 
     init(profile: Profile,
          isPrivate: Bool = false,
+         groupID: TabGroupID? = nil,
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
          tabCreatedTime: Date = Date(),
@@ -494,6 +487,7 @@ class Tab: NSObject,
          logger: Logger = DefaultLogger.shared,
          documentLogger: DocumentLogger = AppContainer.shared.resolve(),
          dispatchQueue: DispatchQueueInterface = DispatchQueue.global(qos: .background)) {
+        self.groupID = groupID
         self.nightMode = false
         self.windowUUID = windowUUID
         self.noImageMode = false

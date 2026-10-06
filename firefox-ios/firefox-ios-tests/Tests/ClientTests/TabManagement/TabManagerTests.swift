@@ -3,10 +3,51 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import WebKit
 import XCTest
 @testable import Client
 
 final class TabManagerTests: TabManagerTestsBase {
+    @MainActor
+    func testAddTabAcceptsGroupIDThroughProtocolWithoutChangingPrivacy() {
+        let subject: any TabManager = createSubject()
+        let groupID = UUID()
+
+        let normal = subject.addTab(zombie: true, groupID: groupID)
+        let privateTab = subject.addTab(zombie: true, isPrivate: true, groupID: groupID)
+        let ungrouped = subject.addTab(zombie: true)
+
+        XCTAssertEqual(normal.groupID, groupID)
+        XCTAssertFalse(normal.isPrivate)
+        XCTAssertEqual(privateTab.groupID, groupID)
+        XCTAssertTrue(privateTab.isPrivate)
+        XCTAssertNil(ungrouped.groupID)
+        XCTAssertEqual(subject.normalTabs, [normal, ungrouped])
+        XCTAssertEqual(subject.privateTabs, [privateTab])
+    }
+
+    @MainActor
+    func testPopupPreservesParentPrivacyAndGroupID() {
+        for isPrivate in [false, true] {
+            let groupID = UUID()
+            let parent = Tab(profile: mockProfile,
+                             isPrivate: isPrivate,
+                             groupID: groupID,
+                             windowUUID: tabWindowUUID)
+            let subject = createSubject(tabs: [parent])
+
+            let popup = subject.addPopupForParentTab(profile: mockProfile,
+                                                     parentTab: parent,
+                                                     configuration: WKWebViewConfiguration())
+
+            XCTAssertEqual(popup.groupID, groupID)
+            XCTAssertEqual(popup.isPrivate, isPrivate)
+            XCTAssertEqual(subject.tabs, [parent, popup])
+            XCTAssertEqual(subject.normalTabs, isPrivate ? [] : [parent, popup])
+            XCTAssertEqual(subject.privateTabs, isPrivate ? [parent, popup] : [])
+        }
+    }
+
     @MainActor
     func testRecentlyAccessedNormalTabs() {
         setupNimbusTabTrayUIExperimentTesting(isEnabled: false)

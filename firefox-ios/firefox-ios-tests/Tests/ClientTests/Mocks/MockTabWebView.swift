@@ -136,9 +136,13 @@ class MockTab: Tab {
     var enqueueDocumentCalled = 0
     var overrideReaderModeState: ReaderModeState?
 
-    init(profile: Profile, isPrivate: Bool = false, windowUUID: WindowUUID, isHomePage: Bool = false) {
+    init(profile: Profile,
+         isPrivate: Bool = false,
+         groupID: TabGroupID? = nil,
+         windowUUID: WindowUUID,
+         isHomePage: Bool = false) {
         self.isHomePage = isHomePage
-        super.init(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
+        super.init(profile: profile, isPrivate: isPrivate, groupID: groupID, windowUUID: windowUUID)
     }
 
     override var readerModeState: ReaderModeState? {

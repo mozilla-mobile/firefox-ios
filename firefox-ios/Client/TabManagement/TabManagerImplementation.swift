@@ -345,25 +345,28 @@ final class TabManagerImplementation: NSObject,
     }
 
     // MARK: - Add Tab
-    func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
+    func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool, groupID: TabGroupID? = nil) -> Tab {
         return addTab(request,
                       afterTab: afterTab,
                       flushToDisk: true,
                       zombie: false,
-                      isPrivate: isPrivate)
+                      isPrivate: isPrivate,
+                      groupID: groupID)
     }
 
     @discardableResult
     func addTab(_ request: URLRequest? = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
-                isPrivate: Bool = false
+                isPrivate: Bool = false,
+                groupID: TabGroupID? = nil
     ) -> Tab {
         return addTab(request,
                       afterTab: afterTab,
                       flushToDisk: true,
                       zombie: zombie,
-                      isPrivate: isPrivate)
+                      isPrivate: isPrivate,
+                      groupID: groupID)
     }
 
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, isPrivate: Bool = false) {
@@ -396,14 +399,19 @@ final class TabManagerImplementation: NSObject,
     ///   - flushToDisk: Will save session data and persist tabs data to disk if true
     ///   - zombie: Whether it should create the webview right away for this tab or not
     ///   - isPrivate: Whether the tab should be created in private mode or not
+    ///   - groupID: The group identifier, or nil for an ungrouped tab
     /// - Returns: the newly created tab
     private func addTab(_ request: URLRequest? = nil,
                         afterTab: Tab? = nil,
                         flushToDisk: Bool,
                         zombie: Bool,
-                        isPrivate: Bool = false
+                        isPrivate: Bool = false,
+                        groupID: TabGroupID? = nil
     ) -> Tab {
-        let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
+        let tab = Tab(profile: profile,
+                      isPrivate: isPrivate,
+                      groupID: groupID,
+                      windowUUID: windowUUID)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
@@ -1230,6 +1238,7 @@ final class TabManagerImplementation: NSObject,
         assert(Thread.isMainThread)
         let popup = Tab(profile: profile,
                         isPrivate: parentTab.isPrivate,
+                        groupID: parentTab.groupID,
                         windowUUID: windowUUID)
         // Configure the tab for the child popup webview. In this scenario we need to be sure to pass along
         // the specific `configuration` that we are given by the WKUIDelegate callback, since if we do not
