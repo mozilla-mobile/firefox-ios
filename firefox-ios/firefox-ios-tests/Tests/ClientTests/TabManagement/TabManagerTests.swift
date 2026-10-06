@@ -4,10 +4,82 @@
 
 import Foundation
 import TabDataStore
+import WebKit
 import XCTest
 @testable import Client
 
 final class TabManagerTests: TabManagerTestsBase {
+    @MainActor
+    func testAddTab_withGroupID_preservesNormalBrowsing() {
+        let subject: any TabManager = createSubject()
+        let groupID = UUID()
+
+        let tab = subject.addTab(zombie: true, groupID: groupID)
+
+        XCTAssertEqual(tab.groupID, groupID)
+        XCTAssertFalse(tab.isPrivate)
+        XCTAssertEqual(subject.normalTabs, [tab])
+        XCTAssertTrue(subject.privateTabs.isEmpty)
+    }
+
+    @MainActor
+    func testAddTab_withGroupID_preservesPrivateBrowsing() {
+        let subject: any TabManager = createSubject()
+        let groupID = UUID()
+
+        let tab = subject.addTab(zombie: true, isPrivate: true, groupID: groupID)
+
+        XCTAssertEqual(tab.groupID, groupID)
+        XCTAssertTrue(tab.isPrivate)
+        XCTAssertTrue(subject.normalTabs.isEmpty)
+        XCTAssertEqual(subject.privateTabs, [tab])
+    }
+
+    @MainActor
+    func testAddTab_withoutGroupID_createsUngroupedTab() {
+        let subject: any TabManager = createSubject()
+
+        let tab = subject.addTab(zombie: true)
+
+        XCTAssertNil(tab.groupID)
+        XCTAssertEqual(subject.normalTabs, [tab])
+        XCTAssertTrue(subject.privateTabs.isEmpty)
+    }
+
+    @MainActor
+    func testAddPopupForParentTab_withNormalParent_inheritsPrivacyAndGroupID() {
+        let groupID = UUID()
+        let parent = Tab(profile: mockProfile, groupID: groupID, windowUUID: tabWindowUUID)
+        let subject = createSubject(tabs: [parent])
+
+        let popup = subject.addPopupForParentTab(profile: mockProfile,
+                                                 parentTab: parent,
+                                                 configuration: WKWebViewConfiguration())
+
+        XCTAssertEqual(popup.groupID, groupID)
+        XCTAssertFalse(popup.isPrivate)
+        XCTAssertEqual(subject.tabs, [parent, popup])
+        XCTAssertEqual(subject.normalTabs, [parent, popup])
+        XCTAssertTrue(subject.privateTabs.isEmpty)
+    }
+
+    @MainActor
+    func testAddPopupForParentTab_withPrivateParent_inheritsPrivacyAndGroupID() {
+        let groupID = UUID()
+        let parent = Tab(profile: mockProfile, isPrivate: true, groupID: groupID, windowUUID: tabWindowUUID)
+        let subject = createSubject(tabs: [parent])
+
+        let popup = subject.addPopupForParentTab(profile: mockProfile,
+                                                 parentTab: parent,
+                                                 configuration: WKWebViewConfiguration())
+
+        XCTAssertEqual(popup.groupID, groupID)
+        XCTAssertTrue(popup.isPrivate)
+        XCTAssertEqual(subject.tabs, [parent, popup])
+        XCTAssertTrue(subject.normalTabs.isEmpty)
+        XCTAssertEqual(subject.privateTabs, [parent, popup])
+    }
+
     @MainActor
     func testRecentlyAccessedNormalTabs() {
         setupNimbusTabTrayUIExperimentTesting(isEnabled: false)

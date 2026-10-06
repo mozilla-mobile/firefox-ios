@@ -41,6 +41,64 @@ class TabTests: XCTestCase {
         try await super.tearDown()
     }
 
+    func testGroupID_whenNormalTabCreated_defaultsToNil() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+
+        XCTAssertNil(tab.groupID)
+        XCTAssertFalse(tab.isPrivate)
+    }
+
+    func testGroupID_whenPrivateTabCreated_defaultsToNil() {
+        let tab = Tab(profile: mockProfile, isPrivate: true, windowUUID: windowUUID)
+
+        XCTAssertNil(tab.groupID)
+        XCTAssertTrue(tab.isPrivate)
+    }
+
+    func testGroupID_whenNormalTabCreatedWithGroup_preservesPrivacy() {
+        let groupID = UUID()
+        let tab = Tab(profile: mockProfile, groupID: groupID, windowUUID: windowUUID)
+
+        XCTAssertEqual(tab.groupID, groupID)
+        XCTAssertFalse(tab.isPrivate)
+        XCTAssertTrue(tab.isNormal)
+    }
+
+    func testGroupID_whenPrivateTabCreatedWithGroup_preservesPrivacy() {
+        let groupID = UUID()
+        let tab = Tab(profile: mockProfile, isPrivate: true, groupID: groupID, windowUUID: windowUUID)
+
+        XCTAssertEqual(tab.groupID, groupID)
+        XCTAssertTrue(tab.isPrivate)
+        XCTAssertFalse(tab.isNormal)
+    }
+
+    func testGroupID_whenChangedOnNormalTab_preservesPrivacy() {
+        let tab = Tab(profile: mockProfile, groupID: UUID(), windowUUID: windowUUID)
+        let groupID = UUID()
+
+        tab.groupID = groupID
+        XCTAssertEqual(tab.groupID, groupID)
+        XCTAssertFalse(tab.isPrivate)
+
+        tab.groupID = nil
+        XCTAssertNil(tab.groupID)
+        XCTAssertFalse(tab.isPrivate)
+    }
+
+    func testGroupID_whenChangedOnPrivateTab_preservesPrivacy() {
+        let tab = Tab(profile: mockProfile, isPrivate: true, groupID: UUID(), windowUUID: windowUUID)
+        let groupID = UUID()
+
+        tab.groupID = groupID
+        XCTAssertEqual(tab.groupID, groupID)
+        XCTAssertTrue(tab.isPrivate)
+
+        tab.groupID = nil
+        XCTAssertNil(tab.groupID)
+        XCTAssertTrue(tab.isPrivate)
+    }
+
     func testShareURL_RemovingReaderModeComponents() {
         let url = URL(string: "http://localhost:123/reader-mode/page?url=https://mozilla.org")!
 
