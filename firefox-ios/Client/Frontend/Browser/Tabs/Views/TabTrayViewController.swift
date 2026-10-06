@@ -497,6 +497,11 @@ final class TabTrayViewController: UIViewController,
         return tabTrayState?.isPrivateMode ?? false
     }
 
+    /// This override predates the Nova implementation and must remain unchanged.
+    var isNovaPrivateOverride: Bool {
+        return false
+    }
+
     func applyTheme() {
         childPanelThemes = childPanelControllers.compactMap { panel in
             (panel.topViewController as? TabTrayThemeable)?.retrieveTheme()

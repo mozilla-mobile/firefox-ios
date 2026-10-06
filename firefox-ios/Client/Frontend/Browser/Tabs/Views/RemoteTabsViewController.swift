@@ -198,6 +198,11 @@ class RemoteTabsViewController: UIViewController,
         return false
     }
 
+    /// This override predates the Nova implementation and must remain unchanged.
+    var isNovaPrivateOverride: Bool {
+        return false
+    }
+
     func applyTheme() {
         let theme = retrieveTheme()
         emptyView.applyTheme(theme: theme)
