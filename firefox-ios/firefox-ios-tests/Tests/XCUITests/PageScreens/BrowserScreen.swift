@@ -89,17 +89,31 @@ final class BrowserScreen {
         }
     }
 
-    private func assertUserAgentTextExists(_ text: String, timeout: TimeInterval = TIMEOUT) {
+    private func userAgentText(_ text: String) -> XCUIElement {
         let pred = NSPredicate(
             format: "elementType == %d AND label == %@",
             XCUIElement.ElementType.staticText.rawValue,
             text
         )
-        let query = app.webViews.descendants(matching: .staticText).matching(pred)
-        let element = query.firstMatch
+        return app.webViews.descendants(matching: .staticText).matching(pred).firstMatch
+    }
 
+    private func assertUserAgentTextExists(_ text: String, timeout: TimeInterval = TIMEOUT) {
+        let element = userAgentText(text)
         BaseTestCase().mozWaitForElementToExist(element, timeout: timeout)
         XCTAssertTrue(element.exists, "Expected UA text '\(text)' was not found in the web view.")
+    }
+
+    /// Loads a UA test page and asserts the mobile UA, retrying once: a fresh-profile content blocker reload
+    /// cancels the first navigation. Remove the retry once https://github.com/mozilla-mobile/firefox-ios/issues/35933 is fixed.
+    func navigateToURLAndAssertMobileUserAgent(_ url: String, timeout: TimeInterval = TIMEOUT) {
+        navigateToURL(url)
+        let mobileUserAgent = userAgentText("MOBILE_UA")
+        if BaseTestCase().mozWaitForElementToExist(mobileUserAgent, timeout: timeout, failOnTimeout: false) {
+            return
+        }
+        navigateToURL(url)
+        assertMobileUserAgentIsDisplayed(timeout: timeout)
     }
 
     func assertDesktopUserAgentIsDisplayed(timeout: TimeInterval = TIMEOUT) {
