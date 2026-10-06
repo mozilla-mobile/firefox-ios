@@ -19,6 +19,17 @@ final class OnboardingCardSchedulerTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - init
+
+    func testInit_withDefaultDependencies_recordsActiveDay() {
+        // Construct with the default schedule and date provider
+        let subject = OnboardingCardScheduler(prefs: prefs)
+
+        subject.recordActiveDayIfNeeded()
+
+        XCTAssertEqual(subject.currentActiveDay, 1)
+    }
+
     // MARK: - currentActiveDay
 
     func testCurrentActiveDay_whenNothingStored_defaultsToZero() {
@@ -100,6 +111,30 @@ final class OnboardingCardSchedulerTests: XCTestCase {
         _ = subject.consumeDueCards()
 
         XCTAssertEqual(prefs.intForKey(PrefsKeys.onboardingLastCardActiveDay), 1)
+    }
+
+    // MARK: - Debug helpers
+    // TODO: - Remove these if / when we remove the debug settings
+
+    func testReset_clearsStoredProgress() {
+        let subject = createSubject(schedule: [1: [makeCard(title: "Day 1")]],
+                                    date: { self.makeDate(year: 2026, month: 1, day: 1) })
+        subject.recordActiveDayIfNeeded()
+        _ = subject.consumeDueCards()
+
+        subject.reset()
+
+        XCTAssertNil(prefs.intForKey(PrefsKeys.onboardingActiveDayCount))
+        XCTAssertNil(prefs.intForKey(PrefsKeys.onboardingLastActiveDate))
+        XCTAssertNil(prefs.intForKey(PrefsKeys.onboardingLastCardActiveDay))
+    }
+
+    func testSimulateNextDay_setsLastActiveDateToPreviousDay() {
+        let subject = createSubject(date: { self.makeDate(year: 2026, month: 1, day: 2) })
+
+        subject.simulateNextDay()
+
+        XCTAssertEqual(prefs.intForKey(PrefsKeys.onboardingLastActiveDate), 2026_01_01)
     }
 
     // MARK: - Helpers
