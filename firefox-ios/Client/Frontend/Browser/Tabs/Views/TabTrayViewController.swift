@@ -214,9 +214,7 @@ final class TabTrayViewController: UIViewController,
                           StandardImageIdentifiers.Large.checkmark,
                           background: theme.colors.actionPrimary,
                           glyph: theme.colors.iconInverted)
-        syncTabButton.style = .prominent
-        syncTabButton.tintColor = glassTint
-        syncTabButton.setTitleTextAttributes([.foregroundColor: theme.colors.iconPrimary], for: .normal)
+        syncTabButton.tintColor = theme.colors.iconPrimary
     }
 
     @available(iOS 26.0, *)
