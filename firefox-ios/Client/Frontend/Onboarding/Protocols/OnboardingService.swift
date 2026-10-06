@@ -175,7 +175,7 @@ final class OnboardingService: UserFeaturePreferenceProvider {
 
     private func handleRequestNotifications(from cardName: String, with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.askForNotificationPermission)
-        askForNotificationPermission(from: cardName)
+        notificationManager.enableNotifications(userDefaults: userDefaults, notificationCenter: notificationCenter)
     }
 
     private func handleSyncSignIn(
@@ -225,24 +225,6 @@ final class OnboardingService: UserFeaturePreferenceProvider {
             userInterfaceIdiom: UIDevice.current.userInterfaceIdiom
         )
         navigationDelegate?.finishOnboardingFlow()
-    }
-
-    private func askForNotificationPermission(from cardName: String) {
-        notificationManager.requestAuthorization { [weak self] (granted: Bool, error: Error?) in
-            guard error == nil, let self = self else { return }
-
-            DispatchQueue.main.async {
-                if granted {
-                    if self.userDefaults.object(forKey: PrefsKeys.Notifications.SyncNotifications) == nil {
-                        self.userDefaults.set(granted, forKey: PrefsKeys.Notifications.SyncNotifications)
-                    }
-                    if self.userDefaults.object(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
-                        self.userDefaults.set(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
-                    }
-                    self.notificationCenter.post(name: .RegisterForPushNotifications)
-                }
-            }
-        }
     }
 
     private func registerForNotification() {

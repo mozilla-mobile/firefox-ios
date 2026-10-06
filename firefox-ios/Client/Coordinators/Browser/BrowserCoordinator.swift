@@ -296,6 +296,9 @@ final class BrowserCoordinator: BaseCoordinator,
         presentHardcodedOnboardingDripIfNeeded()
     }
 
+    // needed to display login page after sync onboarding card is dismissed
+    private var pendingOnboardingCardAction: OnboardingCardButtonAction = .none
+
     // Presents the day-based onboarding card over the current tab
     private func presentHardcodedOnboardingDripIfNeeded() {
         guard browserViewController.presentedViewController == nil else { return }
@@ -314,7 +317,9 @@ final class BrowserCoordinator: BaseCoordinator,
                 self?.handleOnboardingCardAction(action)
             },
             onComplete: { [weak self] in
-                self?.browserViewController.dismiss(animated: true)
+                self?.browserViewController.dismiss(animated: true) { [weak self] in
+                    self?.completeOnboardingCardAction()
+                }
             }
         )
 
@@ -326,9 +331,31 @@ final class BrowserCoordinator: BaseCoordinator,
 
     private func handleOnboardingCardAction(_ action: OnboardingCardButtonAction) {
         switch action {
+        case .enableNotifications:
+            NotificationManager().enableNotifications()
         case .declineNotifications:
             profile.prefs.setBool(true, forKey: PrefsKeys.onboardingNotificationsDeclined)
-        case .enableNotifications, .none:
+        case .signIn:
+            // Presented in completeOnboardingCardAction once the onboarding card is dismissed.
+            pendingOnboardingCardAction = .signIn
+        case .none:
+            break
+        }
+    }
+
+    // Runs any navigation from an onboarding card action, after the onboarding card is dismissed.
+    private func completeOnboardingCardAction() {
+        let action = pendingOnboardingCardAction
+        pendingOnboardingCardAction = .none
+        switch action {
+        case .signIn:
+            let fxaParameters = FxASignInViewParameters(
+                launchParameters: FxALaunchParams(entrypoint: .introOnboarding, query: [:]),
+                flowType: .emailLoginFlow,
+                referringPage: .onboarding
+            )
+            showSignInView(fxaParameters: fxaParameters)
+        default:
             break
         }
     }
