@@ -223,8 +223,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         placeholderLabel.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationSlideOffset)
     }
 
-    /// The opt-in sits on top of the placeholder and the waveform, so those stay hidden while the user
-    /// hasn't consented yet.
     func applyPresentationTransition(isOptInVisible: Bool) {
         audioWaveform.alpha = isOptInVisible ? 0.0 : 1.0
         placeholderLabel.alpha = isOptInVisible ? 0.0 : 1.0
