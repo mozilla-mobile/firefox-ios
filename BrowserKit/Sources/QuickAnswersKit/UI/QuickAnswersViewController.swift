@@ -51,7 +51,7 @@ public final class QuickAnswersViewController: UIViewController,
         )
     }
     private let contentView: QuickAnswersContentView = .build()
-    private let transitionAnimator: TransitionAnimator?
+    private let transitionAnimator: SourceRevealTransitionAnimator?
 
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
@@ -109,10 +109,10 @@ public final class QuickAnswersViewController: UIViewController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.stringsConfiguration = stringsConfiguration
-        // The custom transition animator is only used for the cross dissolve transition; the form sheet
+        // The custom transition animator is only used for the source reveal transition; the form sheet
         // relies on the system presentation.
-        if case let .crossDissolve(sourceRect) = transitionType {
-            self.transitionAnimator = TransitionAnimator(sourceRect: sourceRect)
+        if case let .sourceReveal(sourceRect) = transitionType {
+            self.transitionAnimator = SourceRevealTransitionAnimator(sourceRect: sourceRect)
         } else {
             self.transitionAnimator = nil
         }

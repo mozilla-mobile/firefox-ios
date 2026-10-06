@@ -562,13 +562,13 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let action = getNavigationBrowserAction(
             for: .tapOnQuickAnswersButton,
-            destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+            destination: .quickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
         )
         let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(
             newState.navigationDestination?.destination,
-            .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+            .quickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
         )
     }
 
@@ -592,13 +592,13 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let navigateAction = getNavigationBrowserAction(
             for: .tapOnQuickAnswersButton,
-            destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+            destination: .quickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
         )
         let navigatedState = reducer.legacyReducer(initialState, navigateAction)
 
         let handledAction = getNavigationBrowserAction(
             for: .navigationDestinationHandled,
-            destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+            destination: .quickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
         )
         let handledState = reducer.legacyReducer(navigatedState, handledAction)
 

@@ -3,17 +3,18 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import ComponentLibrary
 
 /// The possible transition types to animate presentation and dismissal of `QuickAnswersViewController`.
 public enum QuickAnswersTransitionType: Equatable, Sendable {
-    /// A custom cross dissolve that zooms the controller in from `sourceRect`.
-    case crossDissolve(sourceRect: CGRect)
+    /// A custom transition that reveals the controller out of `sourceRect`.
+    case sourceReveal(sourceRect: CGRect)
     /// A system form sheet presentation, used on iPad.
     case formSheet
 
     var modalPresentationStyle: UIModalPresentationStyle {
         switch self {
-        case .crossDissolve:
+        case .sourceReveal:
             return .custom
         case .formSheet:
             return .formSheet
@@ -21,14 +22,14 @@ public enum QuickAnswersTransitionType: Equatable, Sendable {
     }
 }
 
-/// The animator for a custom cross dissolve presentation and dismissal.
+/// The animator for the source reveal presentation and dismissal.
 /// Both directions animate the scale of a soft edged circular mask centered on the source rect, so the
 /// controller grows out of it when presenting and collapses back into it when dismissing. A blur sits
 /// behind the mask to soften what stays on screen, and the presented controller animates its own content
 /// alongside the mask.
-final class TransitionAnimator: NSObject,
-                                UIViewControllerTransitioningDelegate,
-                                UIViewControllerAnimatedTransitioning {
+final class SourceRevealTransitionAnimator: NSObject,
+                                            UIViewControllerTransitioningDelegate,
+                                            UIViewControllerAnimatedTransitioning {
     private struct UX {
         static let presentationDuration: TimeInterval = 0.3
         static let presentationBlurFadeDuration: TimeInterval = 0.05
@@ -49,8 +50,8 @@ final class TransitionAnimator: NSObject,
         static let blurIntensity: CGFloat = 0.4
     }
 
-    /// The rect, in the container view's coordinate space, the cross dissolve presentation
-    /// animation originates from.
+    /// The rect, in the container view's coordinate space, the presentation animation
+    /// originates from.
     private let sourceRect: CGRect
 
     init(sourceRect: CGRect) {

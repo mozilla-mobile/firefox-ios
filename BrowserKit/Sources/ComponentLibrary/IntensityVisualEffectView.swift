@@ -6,12 +6,12 @@ import UIKit
 
 /// A visual effect view that applies its effect at a fraction of its full strength, which UIKit doesn't
 /// expose. The effect is driven by a paused animator held at the requested fraction.
-final class IntensityVisualEffectView: UIVisualEffectView {
+public final class IntensityVisualEffectView: UIVisualEffectView {
     private var animator: UIViewPropertyAnimator?
 
     /// - Parameter intensity: The strength of the effect on a linear scale, from 0.0 for none to 1.0
     ///   for the full effect.
-    init(effect: UIVisualEffect, intensity: CGFloat) {
+    public init(effect: UIVisualEffect, intensity: CGFloat) {
         super.init(effect: nil)
         animator = UIViewPropertyAnimator(duration: 1.0, curve: .linear) { [weak self] in
             self?.effect = effect
