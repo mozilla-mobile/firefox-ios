@@ -23,6 +23,7 @@ protocol SpringboardSelectorsSet {
     var SEARCH_WIDGETS_FIELD: Selector { get }
     var QUICK_ACTIONS_LABEL: Selector { get }
     var DONE_BUTTON: Selector { get }
+    var OPEN_APP_CONFIRMATION_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -51,6 +52,7 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
         static let searchWidgetsField = "Search Widgets"
         static let quickActionsLabel = "Quick Actions"
         static let doneButton = "Done"
+        static let openAppConfirmationButton = "Open"
     }
 
     let FENNEC_ICONS = Selector(
@@ -177,6 +179,12 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
         groups: ["springboard", "widget"]
     )
 
+    let OPEN_APP_CONFIRMATION_BUTTON = Selector.buttonId(
+        IDs.openAppConfirmationButton,
+        description: "Open button in the system alert confirming a URL should open the app",
+        groups: ["springboard", "deeplink"]
+    )
+
     var all: [Selector] {
         [
             FENNEC_ICONS,
@@ -196,7 +204,8 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
             CONFIRM_ADD_WIDGET_BUTTON,
             SEARCH_WIDGETS_FIELD,
             QUICK_ACTIONS_LABEL,
-            DONE_BUTTON
+            DONE_BUTTON,
+            OPEN_APP_CONFIRMATION_BUTTON
         ]
     }
 }
