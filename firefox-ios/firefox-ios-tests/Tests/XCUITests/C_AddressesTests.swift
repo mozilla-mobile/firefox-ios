@@ -334,6 +334,7 @@ class O_AddressesTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2549850
+    // Known failure: iOS 17, 18
     func testAutofillAddressesByTapingEmailField() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
