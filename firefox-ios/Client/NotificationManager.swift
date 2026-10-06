@@ -7,7 +7,7 @@ import Foundation
 import UserNotifications
 import Shared
 
-protocol NotificationManagerProtocol {
+protocol NotificationManagerProtocol: Sendable {
     func requestAuthorization(completion: @escaping @Sendable (Bool, Error?) -> Void)
     func requestAuthorization() async throws -> Bool
     func getNotificationSettings(sendTelemetry: Bool) async -> UNNotificationSettings
