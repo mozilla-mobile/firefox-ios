@@ -53,9 +53,13 @@ final class SourceRevealTransitionAnimator: NSObject,
     /// The rect, in the container view's coordinate space, the presentation animation
     /// originates from.
     private let sourceRect: CGRect
+    /// Whether the controller is presenting the opt-in, which covers part of the content the
+    /// presentation would otherwise bring in.
+    private let isOptInVisible: Bool
 
-    init(sourceRect: CGRect) {
+    init(sourceRect: CGRect, isOptInVisible: Bool) {
         self.sourceRect = sourceRect
+        self.isOptInVisible = isOptInVisible
     }
 
     // MARK: - UIViewControllerTransitioningDelegate
@@ -106,9 +110,9 @@ final class SourceRevealTransitionAnimator: NSObject,
         presentedController.view.mask = maskView
 
         presentedController.prepareForPresentationTransition()
-        UIView.animate(withDuration: UX.presentationDuration, delay: 0.0, options: .curveEaseOut) {
+        UIView.animate(withDuration: UX.presentationDuration, delay: 0.0, options: .curveEaseOut) { [self] in
             maskView.transform = CGAffineTransform(scaleX: UX.expandedMaskHorizontalScale, y: 1.0)
-            presentedController.applyPresentationTransition()
+            presentedController.applyPresentationTransition(isOptInVisible: isOptInVisible)
         } completion: { _ in
             presentedController.view.mask = nil
             transitionContext.completeTransition(true)

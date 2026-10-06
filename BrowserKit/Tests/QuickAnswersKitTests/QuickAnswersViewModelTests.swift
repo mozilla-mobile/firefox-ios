@@ -204,6 +204,18 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockService.recordVoiceCalledCount, 0)
     }
 
+    func testIsOptInRequired_whenOptInNotCompleted_isTrue() {
+        let subject = createSubject()
+
+        XCTAssertTrue(subject.isOptInRequired)
+    }
+
+    func testIsOptInRequired_whenOptInCompleted_isFalse() {
+        let subject = createSubject(prefs: optInCompletedPrefs())
+
+        XCTAssertFalse(subject.isOptInRequired)
+    }
+
     func testCompleteOptIn_persistsConsentAndStartsRecording() {
         let prefs = MockProfilePrefs()
         let finalResult = SpeechResult(text: "Hello", isFinal: true)

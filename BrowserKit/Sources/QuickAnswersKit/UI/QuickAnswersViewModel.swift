@@ -29,6 +29,11 @@ final class QuickAnswersViewModel {
         return model.displayName
     }
 
+    /// Whether the flow starts on the opt-in screen rather than on the recording one.
+    var isOptInRequired: Bool {
+        return !store.isOptInCompleted
+    }
+
     init(
         prefs: Prefs,
         telemetry: QuickAnswersTelemetry,

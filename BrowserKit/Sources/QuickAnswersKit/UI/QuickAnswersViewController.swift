@@ -112,7 +112,10 @@ public final class QuickAnswersViewController: UIViewController,
         // The custom transition animator is only used for the source reveal transition; the form sheet
         // relies on the system presentation.
         if case let .sourceReveal(sourceRect) = transitionType {
-            self.transitionAnimator = SourceRevealTransitionAnimator(sourceRect: sourceRect)
+            self.transitionAnimator = SourceRevealTransitionAnimator(
+                sourceRect: sourceRect,
+                isOptInVisible: viewModel.isOptInRequired
+            )
         } else {
             self.transitionAnimator = nil
         }
@@ -242,8 +245,8 @@ public final class QuickAnswersViewController: UIViewController,
         closeButton.alpha = 0.0
     }
 
-    func applyPresentationTransition() {
-        contentView.applyPresentationTransition()
+    func applyPresentationTransition(isOptInVisible: Bool) {
+        contentView.applyPresentationTransition(isOptInVisible: isOptInVisible)
         backgroundRecordEffect.view.alpha = 1.0
         backgroundRecordEffect.view.transform = .identity
         closeButton.alpha = 1.0

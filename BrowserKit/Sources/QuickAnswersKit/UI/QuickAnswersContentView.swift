@@ -63,7 +63,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         $0.adjustsFontForContentSizeCategory = true
     }
     private let optInView: OptInView = .build()
-    private var isOptInVisible = false
     private var theme: Theme?
     private var strings: QuickAnswersViewConfiguration.ContentViewStrings?
 
@@ -160,7 +159,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
 
     func showOptIn() {
-        isOptInVisible = true
         contentView.addSubview(optInView)
         optInView.pinToSuperview()
         placeholderLabel.alpha = 0.0
@@ -168,7 +166,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
 
     func hideOptIn() {
-        isOptInVisible = false
         UIView.animate(withDuration: UX.animationDuration) {
             self.optInView.alpha = 0.0
             self.placeholderLabel.alpha = 1.0
@@ -228,7 +225,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
 
     /// The opt-in sits on top of the placeholder and the waveform, so those stay hidden while the user
     /// hasn't consented yet.
-    func applyPresentationTransition() {
+    func applyPresentationTransition(isOptInVisible: Bool) {
         audioWaveform.alpha = isOptInVisible ? 0.0 : 1.0
         placeholderLabel.alpha = isOptInVisible ? 0.0 : 1.0
         placeholderLabel.transform = .identity
