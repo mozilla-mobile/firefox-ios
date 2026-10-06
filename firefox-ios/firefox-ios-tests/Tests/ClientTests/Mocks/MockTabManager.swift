@@ -133,13 +133,15 @@ class MockTabManager: TabManager {
     func addTab(_ request: URLRequest?,
                 afterTab: Tab?,
                 zombie: Bool,
-                isPrivate: Bool
+                isPrivate: Bool,
+                groupID: TabGroupID?
     ) -> Tab {
         addTabWasCalled = true
         let isHomePage = request?.url?.absoluteString == "internal://local/about/home"
         return MockTab(
             profile: MockProfile.unmanaged(),
             isPrivate: isPrivate,
+            groupID: groupID,
             windowUUID: windowUUID,
             isHomePage: isHomePage
         )

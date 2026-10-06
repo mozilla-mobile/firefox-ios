@@ -62,12 +62,14 @@ protocol TabManager: AnyObject {
     ///   - zombie: Whether the webview should be created right away or not,
     ///   only set to false if you need to select the tab right away
     ///   - isPrivate: whether the tabs should be created in private mode or not
+    ///   - groupID: The group identifier, or nil for an ungrouped tab
     /// - Returns: The newly created tab
     @discardableResult
     func addTab(_ request: URLRequest?,
                 afterTab: Tab?,
                 zombie: Bool,
-                isPrivate: Bool) -> Tab
+                isPrivate: Bool,
+                groupID: TabGroupID?) -> Tab
 
     // MARK: - Remove tab
 
@@ -137,12 +139,14 @@ extension TabManager {
     func addTab(_ request: URLRequest? = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
-                isPrivate: Bool = false
+                isPrivate: Bool = false,
+                groupID: TabGroupID? = nil
     ) -> Tab {
         addTab(request,
                afterTab: afterTab,
                zombie: zombie,
-               isPrivate: isPrivate)
+               isPrivate: isPrivate,
+               groupID: groupID)
     }
 
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, isPrivate: Bool = false) {
