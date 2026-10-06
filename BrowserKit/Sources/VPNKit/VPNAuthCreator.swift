@@ -1,0 +1,83 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import AppAttestKit
+import DeviceCheck
+import Foundation
+import Shared
+
+public protocol VPNAuthCreating {
+    func makeAuthService(using prefs: Prefs) -> VPNAuthenticating?
+    func makeProxyTokenService(using prefs: Prefs) -> VPNProxyTokenFetching?
+}
+
+/// Assembles the VPN App Attest auth stack from `Prefs`.
+public struct VPNAuthCreator: VPNAuthCreating {
+    private static let keyIDKeychainService = "org.mozilla.browserkit.vpn.appattest.keyid"
+    private static let keyIDKeychainAccount = "default"
+
+    private let keyStore: AppAttestKeyIDStore
+    private let appAttestService: AppAttestServiceProtocol
+    private let tokenStore: VPNTokenStore
+
+    /// `keyStore` is resolved in the body rather than defaulted inline, because a public default
+    /// argument cannot reference the private constants above.
+    public init(
+        keyStore: AppAttestKeyIDStore? = nil,
+        appAttestService: AppAttestServiceProtocol = DCAppAttestService.shared,
+        tokenStore: VPNTokenStore = KeychainVPNTokenStore()
+    ) {
+        self.keyStore = keyStore ?? KeychainAppAttestKeyIDStore(
+            service: Self.keyIDKeychainService,
+            account: Self.keyIDKeychainAccount
+        )
+        self.appAttestService = appAttestService
+        self.tokenStore = tokenStore
+    }
+
+    public func makeAuthService(using prefs: Prefs) -> VPNAuthenticating? {
+        let environment = resolveEnvironment(using: prefs)
+
+        // One instance serves both the `AppAttestClient` transport and the refresh endpoint.
+        let server = VPNAppAttestServer(with: environment, tokenStore: tokenStore)
+
+        guard let client = try? AppAttestClient(
+            appAttestService: appAttestService,
+            remoteServer: server,
+            keyStore: keyStore
+        ) else {
+            return nil
+        }
+        return VPNAuthService(
+            appAttestClient: client,
+            sessionRefresher: server,
+            tokenStore: tokenStore
+        )
+    }
+
+    public func makeProxyTokenService(using prefs: Prefs) -> VPNProxyTokenFetching? {
+        guard let authService = makeAuthService(using: prefs) else { return nil }
+        return VPNProxyTokenService(
+            with: resolveEnvironment(using: prefs),
+            authService: authService
+        )
+    }
+
+    /// Also clears stored credentials when the environment changes, so the app re-attests against
+    /// the correct server.
+    private func resolveEnvironment(using prefs: Prefs) -> VPNEnvironment {
+        let environmentKey = prefs.stringForKey(PrefsKeys.VPNSettings.endpointEnvironment) ?? ""
+        let environment = VPNEnvironment(rawValue: environmentKey) ?? .prod
+
+        prefs.resetIfEnvironmentChanged(
+            environment.rawValue,
+            forKey: PrefsKeys.VPNSettings.lastUsedEnvironment
+        ) {
+            try? keyStore.clearKeyID()
+            try? tokenStore.clear()
+        }
+
+        return environment
+    }
+}

@@ -171,6 +171,11 @@ public struct PrefsKeys {
         public static let lastUsedEnvironment = "mlpaLastUsedEnvironment"
     }
 
+    public struct VPNSettings {
+        public static let endpointEnvironment = "vpnEndpointEnvironment"
+        public static let lastUsedEnvironment = "vpnLastUsedEnvironment"
+    }
+
     public struct UserFeatureFlagPrefs {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"

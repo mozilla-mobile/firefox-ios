@@ -18,6 +18,11 @@
         },
         {
           "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "VPNKit",
+          "name" : "VPNKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
           "identifier" : "MLPAKit",
           "name" : "MLPAKit"
         },
@@ -330,6 +335,13 @@
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "AppAttestKitTests",
         "name" : "AppAttestKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "VPNKitTests",
+        "name" : "VPNKitTests"
       }
     },
     {

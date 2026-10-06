@@ -16,7 +16,7 @@ struct BlockedTrackerItem: Hashable {
 }
 
 // MARK: BlockedTrackersTableViewController
-class BlockedTrackersTableViewController: UIViewController,
+final class BlockedTrackersTableViewController: UIViewController,
                                           Themeable,
                                           UITableViewDelegate,
                                           Notifiable,
@@ -138,16 +138,17 @@ class BlockedTrackersTableViewController: UIViewController,
 
     private func setupDataSource() {
         trackersTable.diffableDataSource =
-        UITableViewDiffableDataSource<Int, BlockedTrackerItem>(tableView: trackersTable) { (tableView, indexPath, item)
-            -> UITableViewCell? in
-            guard let cell = tableView.dequeueReusableCell(
+        UITableViewDiffableDataSource<Int, BlockedTrackerItem>(
+            tableView: trackersTable
+        ) { [weak self] tableView, indexPath, item -> UITableViewCell? in
+            guard let self, let cell = tableView.dequeueReusableCell(
                 withIdentifier: BlockedTrackerCell.cellIdentifier,
                 for: indexPath
             ) as? BlockedTrackerCell else { return UITableViewCell() }
 
-            let isLastItem = indexPath.row == (self.model.getItems().count - 1)
+            let isLastItem = indexPath.row == model.getItems().count - 1
             cell.configure(with: item, hideDivider: isLastItem)
-            cell.applyTheme(theme: self.currentTheme())
+            cell.applyTheme(theme: currentTheme())
             return cell
         }
     }

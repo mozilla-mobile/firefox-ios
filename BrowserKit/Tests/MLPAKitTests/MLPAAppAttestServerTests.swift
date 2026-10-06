@@ -46,7 +46,7 @@ final class MLPAAppAttestServerTests: XCTestCase {
             _ = try await subject.fetchChallenge(for: AppAttestTestData.keyID)
             XCTFail("Expected fetchChallenge to throw on server error.")
         } catch let error as AppAttestServiceError {
-            XCTAssertEqual(error, .serverError(description: "500: error"))
+            XCTAssertEqual(error, .serverError(statusCode: 500, description: "error"))
         } catch {
             XCTFail("Unexpected error type: \(error)")
         }
@@ -99,7 +99,7 @@ final class MLPAAppAttestServerTests: XCTestCase {
             )
             XCTFail("Expected sendAttestation to throw on server error.")
         } catch let error as AppAttestServiceError {
-            XCTAssertEqual(error, .serverError(description: "403: Forbidden"))
+            XCTAssertEqual(error, .serverError(statusCode: 403, description: "Forbidden"))
         } catch {
             XCTFail("Unexpected error type: \(error)")
         }

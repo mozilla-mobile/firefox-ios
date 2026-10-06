@@ -1,0 +1,424 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+@testable import AppAttestKit
+import DeviceCheck
+import XCTest
+import TestKit
+
+@testable import VPNKit
+
+final class VPNAuthServiceTests: XCTestCase {
+    // MARK: - Cached session
+
+    func test_authenticate_returnsCachedDSJ_whenFresh_withoutNetwork() async throws {
+        let tokenStore = MockVPNTokenStore(initial: freshSession)
+        let remoteServer = MockAppAttestRemoteServer()
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
+        let subject = try makeSubject(remoteServer: remoteServer, refresher: refresher, tokenStore: tokenStore)
+
+        let result = try await subject.authenticate()
+
+        XCTAssertEqual(result, "cached-dsj")
+        XCTAssertEqual(remoteServer.fetchChallengeCallCount, 0)
+        XCTAssertEqual(remoteServer.sendAttestationCallCount, 0)
+        XCTAssertEqual(refresher.refreshCallCount, 0)
+    }
+
+    // MARK: - Assertion refresh
+
+    func test_authenticate_refreshesViaAssertion_whenPastRenewAfter() async throws {
+        let tokenStore = MockVPNTokenStore(initial: renewableSession)
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let remoteServer = MockAppAttestRemoteServer()
+        let refresher = MockVPNSessionRefresher(
+            tokenStore: tokenStore,
+            sessionToReturn: refreshedSession
+        )
+        let subject = try makeSubject(
+            remoteServer: remoteServer,
+            keyStore: keyStore,
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        let result = try await subject.authenticate()
+
+        XCTAssertEqual(result, "refreshed-dsj")
+        XCTAssertEqual(refresher.refreshCallCount, 1)
+        XCTAssertEqual(remoteServer.sendAttestationCallCount, 0, "Should not re-attest on refresh")
+        XCTAssertEqual(keyStore.loadKeyID(), AppAttestTestData.keyID, "Key must be preserved")
+    }
+
+    func test_authenticate_refreshesViaAssertion_whenExpired() async throws {
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
+        let refresher = MockVPNSessionRefresher(
+            tokenStore: tokenStore,
+            sessionToReturn: refreshedSession
+        )
+        let subject = try makeSubject(
+            remoteServer: MockAppAttestRemoteServer(),
+            keyStore: MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID),
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        let result = try await subject.authenticate()
+
+        XCTAssertEqual(result, "refreshed-dsj")
+        XCTAssertEqual(refresher.refreshCallCount, 1)
+    }
+
+    func test_refresh_signsChallengeBoundPayload() async throws {
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
+        let remoteServer = MockAppAttestRemoteServer()
+        remoteServer.challengeToReturn = AppAttestTestData.assertionChallenge
+        let refresher = MockVPNSessionRefresher(
+            tokenStore: tokenStore,
+            sessionToReturn: refreshedSession
+        )
+        let subject = try makeSubject(
+            remoteServer: remoteServer,
+            keyStore: MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID),
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        _ = try await subject.refresh()
+
+        let assertion = try XCTUnwrap(refresher.lastAssertion)
+        XCTAssertEqual(assertion.challenge, AppAttestTestData.assertionChallenge)
+        // The signed payload must contain the challenge, so the server can rebuild identical bytes.
+        let payload = try XCTUnwrap(JSONSerialization.jsonObject(with: assertion.payload) as? [String: Any])
+        XCTAssertEqual(payload["challenge"] as? String, AppAttestTestData.assertionChallenge)
+    }
+
+    func test_refresh_throws_whenNoKeyEnrolled() async throws {
+        let tokenStore = MockVPNTokenStore()
+        let subject = try makeSubject(
+            remoteServer: MockAppAttestRemoteServer(),
+            keyStore: MockAppAttestKeyIDStore(),        // no keyId
+            refresher: MockVPNSessionRefresher(tokenStore: tokenStore),
+            tokenStore: tokenStore
+        )
+
+        do {
+            _ = try await subject.refresh()
+            XCTFail("Expected refresh to throw without an enrolled key.")
+        } catch let error as VPNAuthError {
+            XCTAssertEqual(error, .notEnrolled)
+        }
+    }
+
+    // MARK: - Fallbacks
+
+    func test_authenticate_keepsValidCachedDSJ_whenRefreshFails() async throws {
+        let tokenStore = MockVPNTokenStore(initial: renewableSession)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
+        refresher.refreshError = AppAttestServiceError.serverError(statusCode: 500, description: "down")
+        let remoteServer = MockAppAttestRemoteServer()
+        let subject = try makeSubject(
+            remoteServer: remoteServer,
+            keyStore: MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID),
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        let result = try await subject.authenticate()
+
+        XCTAssertEqual(result, "renewable-dsj", "Should fall back to the still-valid cached session")
+        XCTAssertEqual(
+            remoteServer.sendAttestationCallCount,
+            0,
+            "Must not re-attest while a valid session exists"
+        )
+    }
+
+    func test_authenticate_rethrowsTransportError_andKeepsKey_whenSessionExpired() async throws {
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
+        refresher.refreshError = URLError(.notConnectedToInternet)
+        let remoteServer = MockAppAttestRemoteServer()
+        let subject = try makeSubject(
+            remoteServer: remoteServer,
+            keyStore: keyStore,
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        do {
+            _ = try await subject.authenticate()
+            XCTFail("Expected authenticate to surface the transport error.")
+        } catch let error as URLError {
+            XCTAssertEqual(error.code, .notConnectedToInternet)
+        }
+
+        XCTAssertEqual(
+            keyStore.loadKeyID(),
+            AppAttestTestData.keyID,
+            "A transient network failure must not discard the attested key"
+        )
+        XCTAssertEqual(remoteServer.sendAttestationCallCount, 0, "Must not re-attest on a transport failure")
+        XCTAssertEqual(tokenStore.clearCallCount, 0, "Must not clear the session on a transport failure")
+    }
+
+    func test_authenticate_rethrowsTransportError_andKeepsKey_whenNoSession() async throws {
+        let tokenStore = MockVPNTokenStore()
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
+        refresher.refreshError = URLError(.timedOut)
+        let remoteServer = MockAppAttestRemoteServer()
+        let subject = try makeSubject(
+            remoteServer: remoteServer,
+            keyStore: keyStore,
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        do {
+            _ = try await subject.authenticate()
+            XCTFail("Expected authenticate to surface the transport error.")
+        } catch let error as URLError {
+            XCTAssertEqual(error.code, .timedOut)
+        }
+
+        XCTAssertEqual(
+            keyStore.loadKeyID(),
+            AppAttestTestData.keyID,
+            "Having no cached session is not a reason to abandon the device identity"
+        )
+        XCTAssertEqual(remoteServer.sendAttestationCallCount, 0, "Must not re-attest on a transport failure")
+    }
+
+    func test_authenticate_reEnrolls_whenRefreshIsRejected_evenWithValidCache() async throws {
+        // Past renewAfter but still 28 days from expiry, which is the window the ordering decides.
+        let tokenStore = MockVPNTokenStore(initial: renewableSession)
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
+        refresher.refreshError = AppAttestServiceError.serverError(statusCode: 401, description: "unknown-key-id")
+        let subject = try makeSubject(
+            remoteServer: enrollingServer(tokenStore: tokenStore),
+            keyStore: keyStore,
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        let result = try await subject.authenticate()
+
+        XCTAssertEqual(
+            result,
+            "new-dsj",
+            "A session the backend no longer recognizes must not be served just because it is unexpired"
+        )
+        XCTAssertEqual(keyStore.loadKeyID(), "mock-key-id", "Should attest a fresh key")
+    }
+
+    func test_authenticate_reEnrolls_whenRefreshIsRejected() async throws {
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
+        // The backend answers 401 with reason `dsj-device-not-found` once its device record is gone.
+        refresher.refreshError = AppAttestServiceError.serverError(statusCode: 401, description: "dsj-device-not-found")
+        let subject = try makeSubject(
+            remoteServer: enrollingServer(tokenStore: tokenStore),
+            keyStore: keyStore,
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        let result = try await subject.authenticate()
+
+        XCTAssertEqual(result, "new-dsj", "A rejected credential is only recoverable by re-enrolling")
+        XCTAssertEqual(keyStore.loadKeyID(), "mock-key-id", "Should attest a fresh key")
+    }
+
+    func test_authenticate_reEnrolls_whenSecureEnclaveKeyIsInvalid() async throws {
+        // The stored keyId outlived its Secure Enclave key, so signing fails and only re-attesting fixes it.
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let service = MockAppAttestService(isSupported: true)
+        service.assertionError = DCError(.invalidKey)
+        let subject = try makeSubject(
+            remoteServer: enrollingServer(tokenStore: tokenStore),
+            keyStore: keyStore,
+            refresher: MockVPNSessionRefresher(tokenStore: tokenStore),
+            tokenStore: tokenStore,
+            appAttestService: service
+        )
+
+        let result = try await subject.authenticate()
+
+        XCTAssertEqual(result, "new-dsj", "An unusable key must be replaced rather than reported forever")
+        XCTAssertEqual(keyStore.loadKeyID(), "mock-key-id", "Should attest a fresh key")
+    }
+
+    func test_authenticate_rethrows_whenRefreshHitsServerOutage() async throws {
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
+        refresher.refreshError = AppAttestServiceError.serverError(statusCode: 503, description: "unavailable")
+        let remoteServer = MockAppAttestRemoteServer()
+        let subject = try makeSubject(
+            remoteServer: remoteServer,
+            keyStore: keyStore,
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        do {
+            _ = try await subject.authenticate()
+            XCTFail("Expected authenticate to surface the outage.")
+        } catch let error as AppAttestServiceError {
+            XCTAssertEqual(error, .serverError(statusCode: 503, description: "unavailable"))
+        }
+
+        XCTAssertEqual(
+            keyStore.loadKeyID(),
+            AppAttestTestData.keyID,
+            "An outage is retryable, so the attested key must survive"
+        )
+        XCTAssertEqual(remoteServer.sendAttestationCallCount, 0, "Must not re-attest on an outage")
+    }
+
+    func test_authenticate_keepsStaleSession_whenEnrollmentFails() async throws {
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
+        let failingSession = MockURLSession(with: Data("boom".utf8), response: httpResponse(statusCode: 500))
+        let server = VPNAppAttestServer(with: .dev, urlSession: failingSession, tokenStore: tokenStore)
+        let subject = try makeSubject(
+            remoteServer: server,
+            keyStore: MockAppAttestKeyIDStore(),   // no keyId, so refresh reports notEnrolled
+            refresher: server,
+            tokenStore: tokenStore
+        )
+
+        do {
+            _ = try await subject.authenticate()
+            XCTFail("Expected authenticate to throw when enrollment fails.")
+        } catch let error as AppAttestServiceError {
+            XCTAssertEqual(error, .serverError(statusCode: 500, description: "boom"))
+        }
+
+        XCTAssertEqual(
+            tokenStore.load(),
+            expiredSession,
+            "A failed enrollment must not leave the device with neither a key nor a session"
+        )
+    }
+
+    func test_authenticate_enrolls_whenNoSessionAndNoKey() async throws {
+        let tokenStore = MockVPNTokenStore()
+        let keyStore = MockAppAttestKeyIDStore()
+        let refresher = MockVPNSessionRefresher(tokenStore: tokenStore)
+        let subject = try makeSubject(
+            remoteServer: enrollingServer(tokenStore: tokenStore),
+            keyStore: keyStore,
+            refresher: refresher,
+            tokenStore: tokenStore
+        )
+
+        let result = try await subject.authenticate()
+
+        XCTAssertEqual(result, "new-dsj")
+        XCTAssertEqual(keyStore.loadKeyID(), "mock-key-id")
+    }
+
+    func test_authenticate_throws_whenEnrollmentFails() async throws {
+        let tokenStore = MockVPNTokenStore()
+        let failingSession = MockURLSession(with: Data("boom".utf8), response: httpResponse(statusCode: 500))
+        let server = VPNAppAttestServer(with: .dev, urlSession: failingSession, tokenStore: tokenStore)
+        let subject = try makeSubject(remoteServer: server, refresher: server, tokenStore: tokenStore)
+
+        do {
+            _ = try await subject.authenticate()
+            XCTFail("Expected authenticate to throw when enrollment fails.")
+        } catch let error as AppAttestServiceError {
+            XCTAssertEqual(error, .serverError(statusCode: 500, description: "boom"))
+        }
+    }
+
+    func test_reset_clearsKeyAndSession() async throws {
+        let tokenStore = MockVPNTokenStore(initial: freshSession)
+        let keyStore = MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID)
+        let subject = try makeSubject(
+            remoteServer: MockAppAttestRemoteServer(),
+            keyStore: keyStore,
+            refresher: MockVPNSessionRefresher(tokenStore: tokenStore),
+            tokenStore: tokenStore
+        )
+
+        try subject.reset()
+
+        XCTAssertNil(tokenStore.load())
+        XCTAssertNil(keyStore.loadKeyID())
+    }
+
+    // MARK: - Fixtures
+
+    /// Valid and well inside its renewal window: no network expected.
+    private var freshSession: VPNDeviceSession {
+        VPNDeviceSession(
+            deviceSessionJwt: "cached-dsj",
+            expiresAtMilliseconds: 32503680000000,
+            renewAfterMilliseconds: 32503600000000
+        )
+    }
+
+    /// Still valid, but past its renewal timestamp, so a proactive refresh is due.
+    private var renewableSession: VPNDeviceSession {
+        VPNDeviceSession(
+            deviceSessionJwt: "renewable-dsj",
+            expiresAtMilliseconds: 32503680000000,
+            renewAfterMilliseconds: 1000
+        )
+    }
+
+    private var expiredSession: VPNDeviceSession {
+        VPNDeviceSession(deviceSessionJwt: "old-dsj", expiresAtMilliseconds: 1000, renewAfterMilliseconds: 1000)
+    }
+
+    private var refreshedSession: VPNDeviceSession {
+        VPNDeviceSession(
+            deviceSessionJwt: "refreshed-dsj",
+            expiresAtMilliseconds: 32503680000000,
+            renewAfterMilliseconds: 32503600000000
+        )
+    }
+
+    /// A real server fed combined challenge + enrollment JSON so both calls decode and a session
+    /// is persisted.
+    private func enrollingServer(tokenStore: VPNTokenStore) -> VPNAppAttestServer {
+        let json = #"{"challenge":"c","deviceSessionJwt":"new-dsj","expiresAt":32503680000000,"renewAfter":32503600000000}"#
+        let urlSession = MockURLSession(with: Data(json.utf8), response: httpResponse(statusCode: 200))
+        return VPNAppAttestServer(with: .dev, urlSession: urlSession, tokenStore: tokenStore)
+    }
+
+    private func makeSubject(
+        remoteServer: AppAttestRemoteServerProtocol,
+        keyStore: AppAttestKeyIDStore = MockAppAttestKeyIDStore(),
+        refresher: VPNSessionRefreshing,
+        tokenStore: VPNTokenStore,
+        appAttestService: AppAttestServiceProtocol = MockAppAttestService(isSupported: true)
+    ) throws -> VPNAuthService {
+        let client = try AppAttestClient(
+            appAttestService: appAttestService,
+            remoteServer: remoteServer,
+            keyStore: keyStore
+        )
+        return VPNAuthService(
+            appAttestClient: client,
+            sessionRefresher: refresher,
+            tokenStore: tokenStore
+        )
+    }
+
+    private func httpResponse(statusCode: Int) -> HTTPURLResponse {
+        return HTTPURLResponse(
+            url: URL(string: "https://example.com")!,
+            statusCode: statusCode,
+            httpVersion: nil,
+            headerFields: nil
+        )!
+    }
+}

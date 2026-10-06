@@ -44,9 +44,32 @@ final class DocumentPickerScreen {
         return nil
     }
 
+    /// A freshly booted simulator can show Save before the picker accepts it, so wait for it to be
+    /// enabled and tap once more if the first tap left the picker open.
     func save() {
-        saveButton.waitAndTap()
+        tapSaveWhenEnabled()
         resolveDuplicateNameAlertIfPresented()
+        guard isStillOpenAfterSave() else { return }
+        tapSaveWhenEnabled()
+        resolveDuplicateNameAlertIfPresented()
+    }
+
+    private func tapSaveWhenEnabled(timeout: TimeInterval = TIMEOUT_LONG) {
+        let predicate = NSPredicate(format: "exists == true && hittable == true && enabled == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: saveButton)
+        guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else {
+            XCTFail("The document picker's Save button never became enabled in \(timeout) seconds")
+            return
+        }
+        saveButton.tap()
+    }
+
+    /// The Save button turns into a spinner once the save is accepted, so an enabled Save button
+    /// still on screen after the probe means the tap was ignored.
+    private func isStillOpenAfterSave() -> Bool {
+        let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: saveButton)
+        guard XCTWaiter().wait(for: [expectation], timeout: TIMEOUT_PICKER_PROBE) != .completed else { return false }
+        return saveButton.exists && saveButton.isEnabled
     }
 
     /// Saving a document whose name is already taken in the chosen folder prompts before overwriting.
