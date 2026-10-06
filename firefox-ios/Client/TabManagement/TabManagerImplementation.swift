@@ -19,14 +19,12 @@ final class TabManagerImplementation: NSObject,
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
     var isRestoringTabs = false
     var notificationCenter: NotificationProtocol
-    private(set) var tabs: [Tab] {
-        didSet {
-            // Invalidate cache on every mutation to keep it always updated.
-            tabsInternalCache = nil
-        }
-    }
+    private let tabCollection: TabCollection
 
-    private var tabsInternalCache: (normal: [Tab], private: [Tab])?
+    private(set) var tabs: [Tab] {
+        get { tabCollection.tabs }
+        set { tabCollection.tabs = newValue }
+    }
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
@@ -43,8 +41,8 @@ final class TabManagerImplementation: NSObject,
         return tabs[selectedIndex]
     }
 
-    var normalTabs: [Tab] { tabSplit().normal }
-    var privateTabs: [Tab] { tabSplit().private }
+    var normalTabs: [Tab] { tabCollection.normalTabs }
+    var privateTabs: [Tab] { tabCollection.tabs(in: .private) }
 
     /// The non-persistent data store is shared across all windows so private tabs can share cookies.
     /// It must only be cleared once no window has any private tabs left open.
@@ -124,7 +122,7 @@ final class TabManagerImplementation: NSObject,
         self.windowUUID = uuid.uuid
         self.profile = profile
         self.logger = logger
-        self.tabs = tabs
+        self.tabCollection = TabCollection(tabs: tabs)
 
         super.init()
 
@@ -158,25 +156,6 @@ final class TabManagerImplementation: NSObject,
         }
 
         return nil
-    }
-
-    /// Single O(n) pass that splits `tabs` into normal and private lists.
-    /// Result is cached until the next `tabs` mutation.
-    private func tabSplit() -> (normal: [Tab], private: [Tab]) {
-        if let cached = tabsInternalCache { return cached }
-        var normalTabs = [Tab]()
-        var privateTabs = [Tab]()
-        normalTabs.reserveCapacity(tabs.count)
-        for tab in tabs {
-            if tab.isPrivate {
-                privateTabs.append(tab)
-            } else {
-                normalTabs.append(tab)
-            }
-        }
-        let result = (normal: normalTabs, private: privateTabs)
-        tabsInternalCache = result
-        return result
     }
 
     // MARK: - Add/Remove Delegate

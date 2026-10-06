@@ -128,7 +128,7 @@ class MockTab: Tab {
 
     init(profile: Profile, isPrivate: Bool = false, windowUUID: WindowUUID, isHomePage: Bool = false) {
         self.isHomePage = isHomePage
-        super.init(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
+        super.init(profile: profile, group: isPrivate ? .private : .normal, windowUUID: windowUUID)
     }
 
     override var readerModeState: ReaderModeState? {

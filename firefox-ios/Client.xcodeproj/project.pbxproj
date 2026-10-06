@@ -697,6 +697,7 @@
 		5A37861D29A2C37C006B3A34 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A37861C29A2C37C006B3A34 /* Common */; };
 		5A3A2A0D287F742C00B79EAC /* BackgroundSyncUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A2A0C287F742C00B79EAC /* BackgroundSyncUtility.swift */; };
 		5A3A7DDC2889EC5D0065F81A /* MockBookmarksHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A7DDB2889EC5D0065F81A /* MockBookmarksHandler.swift */; };
+		19C7B9CB6B26416CAD35A654 /* TabCollectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D52F01F78519454083134948 /* TabCollectionTests.swift */; };
 		5A475E8E29DB89C7009C13FD /* TabManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A475E8929DB87F2009C13FD /* TabManagerTests.swift */; };
 		5A475E8F29DB89CE009C13FD /* MockTabDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A475E8C29DB888E009C13FD /* MockTabDataStore.swift */; };
 		5A475E9129DB8AA7009C13FD /* MockDiskImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A475E9029DB8AA7009C13FD /* MockDiskImageStore.swift */; };
@@ -711,6 +712,8 @@
 		5A70EF19295E2E1600790249 /* DependencyHelperMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A70EF18295E2E1600790249 /* DependencyHelperMock.swift */; };
 		5A70EF1F295E3DFC00790249 /* UnitTestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A70EF1E295E3DFC00790249 /* UnitTestAppDelegate.swift */; };
 		5A70EF21295E3E0B00790249 /* UnitTestSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A70EF20295E3E0B00790249 /* UnitTestSceneDelegate.swift */; };
+		BCF65ADFAF6C4AFD94F04B76 /* TabGroupMembership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4246D5BC85DD44F8ADEDF6F3 /* TabGroupMembership.swift */; };
+		DCF0BBF120D94EBDB06F480B /* TabCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E857CAEC2A491497CBEA91 /* TabCollection.swift */; };
 		5A8017E029CE15D90047120D /* TabManagerImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8017DF29CE15D90047120D /* TabManagerImplementation.swift */; };
 		5A81C5DD2A4C981A00BE88C2 /* PasswordManagerCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A81C5DC2A4C981A00BE88C2 /* PasswordManagerCoordinatorTests.swift */; };
 		5A871488292EA1440039A5BD /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = 5A871487292EA1440039A5BD /* Fuzi */; };
@@ -9424,6 +9427,7 @@
 		5A32C2B52AD8517200A9B5A4 /* MetricKitWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricKitWrapper.swift; sourceTree = "<group>"; };
 		5A3A2A0C287F742C00B79EAC /* BackgroundSyncUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundSyncUtility.swift; sourceTree = "<group>"; };
 		5A3A7DDB2889EC5D0065F81A /* MockBookmarksHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBookmarksHandler.swift; sourceTree = "<group>"; };
+		D52F01F78519454083134948 /* TabCollectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCollectionTests.swift; sourceTree = "<group>"; };
 		5A475E8929DB87F2009C13FD /* TabManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerTests.swift; sourceTree = "<group>"; };
 		5A475E8C29DB888E009C13FD /* MockTabDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabDataStore.swift; sourceTree = "<group>"; };
 		5A475E9029DB8AA7009C13FD /* MockDiskImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDiskImageStore.swift; sourceTree = "<group>"; };
@@ -9433,6 +9437,8 @@
 		5A70EF18295E2E1600790249 /* DependencyHelperMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyHelperMock.swift; sourceTree = "<group>"; };
 		5A70EF1E295E3DFC00790249 /* UnitTestAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTestAppDelegate.swift; sourceTree = "<group>"; };
 		5A70EF20295E3E0B00790249 /* UnitTestSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTestSceneDelegate.swift; sourceTree = "<group>"; };
+		4246D5BC85DD44F8ADEDF6F3 /* TabGroupMembership.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupMembership.swift; sourceTree = "<group>"; };
+		F8E857CAEC2A491497CBEA91 /* TabCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCollection.swift; sourceTree = "<group>"; };
 		5A8017DF29CE15D90047120D /* TabManagerImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerImplementation.swift; sourceTree = "<group>"; };
 		5A81C5DC2A4C981A00BE88C2 /* PasswordManagerCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerCoordinatorTests.swift; sourceTree = "<group>"; };
 		5A96FB592D94356C00917B12 /* ScreenshotSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotSetting.swift; sourceTree = "<group>"; };
@@ -14714,6 +14720,8 @@
 				39455F761FC83F430088A22C /* TabEventHandler.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				5A64225029CB506500EEC3E5 /* TabManagerDelegate.swift */,
+				4246D5BC85DD44F8ADEDF6F3 /* TabGroupMembership.swift */,
+				F8E857CAEC2A491497CBEA91 /* TabCollection.swift */,
 				5A8017DF29CE15D90047120D /* TabManagerImplementation.swift */,
 				8A3FF9CB2FB408A1001F5DE9 /* TabRestorationResult.swift */,
 				8A3F08AB2FB40B8B001F5DE9 /* TabRestorer.swift */,
@@ -15372,6 +15380,7 @@
 				8A3FD28F2FABB9BA001F5DE9 /* TabManagerReorderTabsTests.swift */,
 				8AE65C042FE219A500CBBE66 /* TabManagerRestoreScreenshotTests.swift */,
 				8AFC09552FA54A240070CA11 /* TabManagerRestoreTabsTests.swift */,
+				D52F01F78519454083134948 /* TabCollectionTests.swift */,
 				5A475E8929DB87F2009C13FD /* TabManagerTests.swift */,
 				8AFC09562FA54A240070CA11 /* TabManagerTestsBase.swift */,
 				8A3F08AD2FB40BD0001F5DE9 /* TabRestorerTests.swift */,
@@ -20923,6 +20932,8 @@
 				8A48808C2E68DD8100AD43D5 /* PingUploaderProtocol.swift in Sources */,
 				ABEF80D52A254185003F52C4 /* CreditCardBottomSheetFooterView.swift in Sources */,
 				C869912E28917688007ACC5C /* WallpaperDataService.swift in Sources */,
+				BCF65ADFAF6C4AFD94F04B76 /* TabGroupMembership.swift in Sources */,
+				DCF0BBF120D94EBDB06F480B /* TabCollection.swift in Sources */,
 				5A8017E029CE15D90047120D /* TabManagerImplementation.swift in Sources */,
 				8AABBD012A001ADF0089941E /* ApplicationHelper.swift in Sources */,
 				E633E2DA1C21EAF8001FFF6C /* PasswordDetailViewController.swift in Sources */,
@@ -21649,6 +21660,7 @@
 				C24E2D2A2ECF960000BBCFA7 /* MockTranslationsTelemetry.swift in Sources */,
 				8ADEC6832A40F208002D2ED8 /* AppSettingsTableViewControllerTests.swift in Sources */,
 				8CC6023F301C89A80041B7D0 /* WebCompatReportRecorderTests.swift in Sources */,
+				19C7B9CB6B26416CAD35A654 /* TabCollectionTests.swift in Sources */,
 				5A475E8E29DB89C7009C13FD /* TabManagerTests.swift in Sources */,
 				21A44806304B48400054DF7C /* TrailingPageActionsBuilderTests.swift in Sources */,
 				0B5CAF0D2E40DA89008B5D5A /* MockSummarizationChecker.swift in Sources */,

@@ -92,16 +92,10 @@ class Tab: NSObject,
            ContentBlockerTab,
            TabWebViewDelegate,
            UIGestureRecognizerDelegate {
-    private var _isPrivate = false
-    private(set) var isPrivate: Bool {
-        get {
-            return _isPrivate
-        }
-        set {
-            if _isPrivate != newValue {
-                _isPrivate = newValue
-            }
-        }
+    let group: TabGroupMembership
+
+    var isPrivate: Bool {
+        group.isPrivate
     }
 
     var isNormal: Bool {
@@ -116,7 +110,7 @@ class Tab: NSObject,
     var urlType: TabUrlType = .regular
 
     var tabState: TabState {
-        return TabState(isPrivate: _isPrivate, url: url, title: displayTitle)
+        return TabState(isPrivate: isPrivate, url: url, title: displayTitle)
     }
 
     // PageMetadata is derived from the page content itself, and as such lags behind the
@@ -486,7 +480,7 @@ class Tab: NSObject,
     private let documentLogger: DocumentLogger
 
     init(profile: Profile,
-         isPrivate: Bool = false,
+         group: TabGroupMembership = .normal,
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
          tabCreatedTime: Date = Date(),
@@ -494,6 +488,7 @@ class Tab: NSObject,
          logger: Logger = DefaultLogger.shared,
          documentLogger: DocumentLogger = AppContainer.shared.resolve(),
          dispatchQueue: DispatchQueueInterface = DispatchQueue.global(qos: .background)) {
+        self.group = group
         self.nightMode = false
         self.windowUUID = windowUUID
         self.noImageMode = false
@@ -506,7 +501,6 @@ class Tab: NSObject,
         self.documentLogger = documentLogger
         self.removeDispatchQueue = dispatchQueue
         super.init()
-        self.isPrivate = isPrivate
 #if DEBUG
         debugTabCount += 1
 #endif
@@ -517,6 +511,26 @@ class Tab: NSObject,
             object: .tab,
             value: isPrivate ? .privateTab : .normalTab
         )
+    }
+
+    convenience init(profile: Profile,
+                     isPrivate: Bool,
+                     windowUUID: WindowUUID,
+                     faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
+                     tabCreatedTime: Date = Date(),
+                     fileManager: FileManagerProtocol = FileManager.default,
+                     logger: Logger = DefaultLogger.shared,
+                     documentLogger: DocumentLogger = AppContainer.shared.resolve(),
+                     dispatchQueue: DispatchQueueInterface = DispatchQueue.global(qos: .background)) {
+        self.init(profile: profile,
+                  group: isPrivate ? .private : .normal,
+                  windowUUID: windowUUID,
+                  faviconHelper: faviconHelper,
+                  tabCreatedTime: tabCreatedTime,
+                  fileManager: fileManager,
+                  logger: logger,
+                  documentLogger: documentLogger,
+                  dispatchQueue: dispatchQueue)
     }
 
     weak var navigationDelegate: WKNavigationDelegate? {

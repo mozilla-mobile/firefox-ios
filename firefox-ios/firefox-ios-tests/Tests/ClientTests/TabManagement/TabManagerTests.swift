@@ -8,6 +8,20 @@ import XCTest
 
 final class TabManagerTests: TabManagerTestsBase {
     @MainActor
+    func testNormalTabsIncludeCustomGroupsInGlobalOrder() {
+        let custom = Tab(profile: mockProfile, group: .custom(UUID()), windowUUID: tabWindowUUID)
+        let normal = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
+        let privateTab = Tab(profile: mockProfile, group: .private, windowUUID: tabWindowUUID)
+        let secondCustom = Tab(profile: mockProfile, group: .custom(UUID()), windowUUID: tabWindowUUID)
+        let tabs = [custom, privateTab, normal, secondCustom]
+        let subject = createSubject(tabs: tabs)
+
+        XCTAssertEqual(subject.tabs, tabs)
+        XCTAssertEqual(subject.normalTabs, [custom, normal, secondCustom])
+        XCTAssertEqual(subject.privateTabs, [privateTab])
+    }
+
+    @MainActor
     func testRecentlyAccessedNormalTabs() {
         setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         var tabs = generateTabs(count: 5)

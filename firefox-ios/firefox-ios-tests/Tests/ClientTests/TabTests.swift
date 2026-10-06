@@ -41,6 +41,42 @@ class TabTests: XCTestCase {
         try await super.tearDown()
     }
 
+    func testNormalGroupPreservesNormalTabBehavior() {
+        let tab = Tab(profile: mockProfile, group: .normal, windowUUID: windowUUID)
+
+        XCTAssertEqual(tab.group, .normal)
+        XCTAssertFalse(tab.isPrivate)
+        XCTAssertTrue(tab.isNormal)
+        XCTAssertFalse(tab.tabState.isPrivate)
+    }
+
+    func testPrivateGroupPreservesPrivateTabBehavior() {
+        let tab = Tab(profile: mockProfile, group: .private, windowUUID: windowUUID)
+
+        XCTAssertEqual(tab.group, .private)
+        XCTAssertTrue(tab.isPrivate)
+        XCTAssertFalse(tab.isNormal)
+        XCTAssertTrue(tab.tabState.isPrivate)
+    }
+
+    func testCustomGroupUsesNormalTabBehavior() {
+        let groupID = UUID()
+        let tab = Tab(profile: mockProfile, group: .custom(groupID), windowUUID: windowUUID)
+
+        XCTAssertEqual(tab.group, .custom(groupID))
+        XCTAssertFalse(tab.isPrivate)
+        XCTAssertTrue(tab.isNormal)
+        XCTAssertFalse(tab.tabState.isPrivate)
+    }
+
+    func testBooleanInitializerMapsToMembership() {
+        let normalTab = Tab(profile: mockProfile, isPrivate: false, windowUUID: windowUUID)
+        let privateTab = Tab(profile: mockProfile, isPrivate: true, windowUUID: windowUUID)
+
+        XCTAssertEqual(normalTab.group, .normal)
+        XCTAssertEqual(privateTab.group, .private)
+    }
+
     func testShareURL_RemovingReaderModeComponents() {
         let url = URL(string: "http://localhost:123/reader-mode/page?url=https://mozilla.org")!
 
