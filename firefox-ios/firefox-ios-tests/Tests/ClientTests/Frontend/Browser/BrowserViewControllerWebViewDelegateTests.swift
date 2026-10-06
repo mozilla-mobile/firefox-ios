@@ -183,16 +183,16 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     @MainActor
-    func testWebViewDecidePolicyForNavigationAction_allowsLoading_whenBlobSchemeWithNavigationTypeOther() {
+    func testWebViewDecidePolicyForNavigationAction_cancelLoading_whenBlobSchemeWithNavigationTypeOther() {
         let subject = createSubject()
         let tab = createTab()
-        let blob = URL(string: "blob://blobfile")!
+        let blob = URL(string: "blob:https://example.com/4a1b4a40-7aa5-4ff7-a34c-b54c32ce1339")!
         tabManager.tabs = [tab]
 
         subject.webView(tab.webView!,
                         decidePolicyFor: MockNavigationAction(url: blob,
                                                               type: .other)) { policy in
-            XCTAssertEqual(policy, .allow)
+            XCTAssertEqual(policy, .cancel)
         }
     }
 

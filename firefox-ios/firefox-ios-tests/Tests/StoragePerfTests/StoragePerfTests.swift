@@ -7,23 +7,10 @@ import Shared
 @testable import Storage
 import XCTest
 
-class MockFiles: FileAccessor {
-    var rootPath: String
-
-    init() {
-        let docPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        rootPath = (docPath as NSString).appendingPathComponent("testing")
-    }
-}
-
 class HistoryFrecencyPerfTests: XCTestCase {
     func testFrecencyPerf() throws {
-        let files = MockFiles()
-        let placesDatabasePath = URL(
-            fileURLWithPath: (try files.getAndEnsureDirectory()),
-            isDirectory: true
-        ).appendingPathComponent("places.db").path
-        let places = RustPlaces(databasePath: placesDatabasePath)
+        let files = makeTemporaryFiles()
+        let places = RustPlaces(databasePath: files.pathEnsuringRoot(for: "places.db"))
         _ = places.reopenIfClosed()
         let count = 100
 

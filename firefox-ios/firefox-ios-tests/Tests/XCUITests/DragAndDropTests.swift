@@ -294,7 +294,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
 
         navigator.openURL("developer.mozilla.org/en-US")
         waitUntilPageLoad()
-        let searchField = app.webViews["Web content"].searchFields.firstMatch
+        let searchField = app.webViews["Web content"].textFields.firstMatch
         app.webViews["Web content"].buttons["Search"].waitAndTap()
 
         // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered

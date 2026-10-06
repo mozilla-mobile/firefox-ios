@@ -82,10 +82,17 @@ toolbar:
       enabled:
         description: Whether reader mode was opened or closed
         type: boolean
+      has_summarizer:
+        description: |
+            Whether the tapped button was the combined reader mode with summarizer
+            button, which also offers summarization on long press
+        type: boolean
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+      - https://github.com/mozilla-mobile/firefox-ios/issues/35362
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35361
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never

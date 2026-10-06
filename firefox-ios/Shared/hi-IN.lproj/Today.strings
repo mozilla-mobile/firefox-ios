@@ -1,23 +1,23 @@
 /* Close Private Tabs button label */
-"TodayWidget.ClosePrivateTabsButton" = "निजी टैब बंद करें";
+"TodayWidget.ClosePrivateTabsButton" = "प्राइवेट टैब बंद करें";
 
 /* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV2" = "निजी टैब बंद करें";
+"TodayWidget.ClosePrivateTabsLabelV2" = "प्राइवेट टैब\nबंद करें";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "अपने होम स्क्रीन पर Firefox शॉर्टकट जोड़ें।";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "अपनी होम स्क्रीन पर Firefox शॉर्टकट जोड़ें।";
 
 /* Go to link pasted on the clipboard */
-"TodayWidget.GoToCopiedLinkLabelV1" = "कॉपी की गई लिंक पर जाएं";
+"TodayWidget.GoToCopiedLinkLabelV1" = "कॉपी किए गए लिंक पर जाएं";
 
 /* Go to copied link */
-"TodayWidget.GoToCopiedLinkLabelV2" = "कॉपी की गई लिंक पर जाएं";
+"TodayWidget.GoToCopiedLinkLabelV2" = "कॉपी किए गए\nलिंक पर जाएं";
 
 /* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
-"TodayWidget.MoreTabsLabel" = "+%d और अधिक…";
+"TodayWidget.MoreTabsLabel" = "+%d और…";
 
 /* Open New Tab button label */
-"TodayWidget.NewTabButtonLabelV1" = "नयी खोज";
+"TodayWidget.NewTabButtonLabelV1" = "नई सर्च";
 
 /* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
 "TodayWidget.NoOpenTabsLabel" = "कोई खुला टैब नहीं।";
@@ -26,25 +26,31 @@
 "TodayWidget.OpenFirefoxLabel" = "Firefox खोलें";
 
 /* Open New Private Tab button label */
-"TodayWidget.PrivateTabButtonLabelV1" = "निजी खोज";
+"TodayWidget.PrivateTabButtonLabelV1" = "प्राइवेट सर्च";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "अपनी होम स्क्रीन पर Firefox शॉर्टकट जोड़ें। विजेट जोड़ने के बाद, उसे एडिट करने और कोई दूसरा शॉर्टकट चुनने के लिए दबाकर रखें।";
 
 /* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "तुरंत कारवाई";
+"TodayWidget.QuickActionsGalleryTitle" = "क्विक ऐक्शन";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
 "TodayWidget.QuickActionsGalleryTitleV2" = "Firefox शॉर्टकट";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescriptionV2" = "अपने खुले टैब में शॉर्टकट जोड़ें।";
+"TodayWidget.QuickViewGalleryDescriptionV2" = "अपने खुले टैब के शॉर्टकट जोड़ें।";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "क्विक व्यू";
 
 /* Search in Firefox. Do not translate the word Firefox */
-"TodayWidget.SearchInFirefoxV2" = "Firefox में खोजें";
+"TodayWidget.SearchInFirefoxV2" = "Firefox में\nसर्च करें";
 
 /* Search in private tab */
-"TodayWidget.SearchInPrivateTabLabelV2" = "निजी टैब में खोजें";
+"TodayWidget.SearchInPrivateTabLabelV2" = "प्राइवेट टैब में\nसर्च करें";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryDescription" = "अक्सर और हाल ही में देखी गई साइट पर शॉर्टकट जोड़ें।";
+"TodayWidget.TopSitesGalleryDescription" = "अक्सर और हाल ही में देखी गई साइटों के शॉर्टकट जोड़ें।";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "टॉप साइट";

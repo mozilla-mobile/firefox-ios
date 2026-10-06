@@ -31,6 +31,10 @@ final class MockCreditCardProvider: CreditCardProvider, @unchecked Sendable {
     private(set) var lastDeletedID: String?
     var deleteResult: (status: Bool, error: Error?) = (false, nil)
     var updateResult: (status: Bool?, error: Error?) = (nil, nil)
+    var creditCards: [CreditCard]?
+    var listCreditCardsError: Error?
+    var shouldDeferListCreditCardsCompletion = false
+    private(set) var deferredListCreditCardsCompletion: (@Sendable ([CreditCard]?, Error?) -> Void)?
 
     func addCreditCard(
         creditCard: UnencryptedCreditCardFields,
@@ -45,9 +49,13 @@ final class MockCreditCardProvider: CreditCardProvider, @unchecked Sendable {
         lastDeletedID = id
         completion(deleteResult.status, deleteResult.error)
     }
-    func listCreditCards(completion: @escaping ([CreditCard]?, Error?) -> Void) {
+    func listCreditCards(completion: @escaping @Sendable ([CreditCard]?, Error?) -> Void) {
         listCreditCardsCalledCount += 1
-        completion([exampleCreditCard], nil)
+        if shouldDeferListCreditCardsCompletion {
+            deferredListCreditCardsCompletion = completion
+            return
+        }
+        completion(creditCards ?? [exampleCreditCard], listCreditCardsError)
     }
     func updateCreditCard(
         id: String,

@@ -25,6 +25,8 @@ protocol GleanWrapper: Sendable {
     func recordUrl(for metric: UrlMetricType, value: URL)
     func recordDatetime(for metric: DatetimeMetricType, value: Date)
     func recordUUID(for metric: UuidMetricType, value: UUID)
+    func recordObject<ObjectValue>(for metric: ObjectMetricType<ObjectValue>,
+                                   value: ObjectValue) where ObjectValue: ObjectSerialize
 
     // MARK: Timing Metrics
     /// You should nullify any references to the timer after stopping it
@@ -113,6 +115,13 @@ struct DefaultGleanWrapper: GleanWrapper {
     }
 
     func recordUUID(for metric: UuidMetricType, value: UUID) {
+        metric.set(value)
+    }
+
+    func recordObject<ObjectValue>(
+        for metric: ObjectMetricType<ObjectValue>,
+        value: ObjectValue
+    ) where ObjectValue: ObjectSerialize {
         metric.set(value)
     }
 

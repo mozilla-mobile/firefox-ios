@@ -667,7 +667,7 @@ enum CheckmarkSettingStyle {
     case rightSide
 }
 
-class CheckmarkSetting: Setting {
+final class CheckmarkSetting: Setting {
     private struct UX {
         static let defaultInset: CGFloat = 0
         static let cellIndentationWidth: CGFloat = 42
@@ -775,7 +775,7 @@ class CheckmarkSetting: Setting {
 // A helper class for prefs that deal with sync. Handles reloading the tableView data if changes to
 // the fxAccount happen.
 class AccountSetting: Setting {
-    unowned var settings: SettingsTableViewController
+    unowned let settings: SettingsTableViewController
 
     var profile: Profile? {
         return settings.profile

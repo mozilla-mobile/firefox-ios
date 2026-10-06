@@ -100,6 +100,7 @@ final class ZoomingTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306948
+    // Regression
     func testSwitchingZoomedTabs() {
         validateZoomLevelOnSwitchingTabs()
         // Repeat all steps in private browsing

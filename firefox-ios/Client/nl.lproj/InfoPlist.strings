@@ -23,7 +23,7 @@
 "NSPhotoLibraryAddUsageDescription" = "Hiermee kunt u foto’s opslaan.";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Firefox gebruikt spraakherkenning om uw spraak naar tekst te converteren voor gesproken zoekopdrachten.";
+"NSSpeechRecognitionUsageDescription" = "Hiermee kan Firefox uw audio omzetten in tekst.";
 
 /* (No Comment) */
 "Scan QR Code" = "QR-code scannen";

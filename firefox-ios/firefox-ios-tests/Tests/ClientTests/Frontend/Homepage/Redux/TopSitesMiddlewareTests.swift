@@ -86,7 +86,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             unifiedAdsTelemetry: unifiedAdsTelemetry
         )
         let config = TopSiteConfiguration(
-            site: Site.createSponsoredSite(fromUnifiedTile: MockSponsoredTileData.defaultSuccessData.first!)
+            site: MockSponsoredTileData.defaultSuccessData.first!
         )
         let action = TopSitesAction(
             telemetryConfig: TopSitesTelemetryConfig(
@@ -246,7 +246,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             unifiedAdsTelemetry: unifiedAdsTelemetry
         )
         let config = TopSiteConfiguration(
-            site: Site.createSponsoredSite(fromUnifiedTile: MockSponsoredTileData.defaultSuccessData.first!)
+            site: MockSponsoredTileData.defaultSuccessData.first!
         )
         let action = TopSitesAction(
             telemetryConfig: TopSitesTelemetryConfig(isZeroSearch: true, position: 0, topSiteConfiguration: config),
@@ -675,15 +675,6 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
     func setupAppState() -> Client.AppState {
         appState = AppState()
         return appState
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }
 

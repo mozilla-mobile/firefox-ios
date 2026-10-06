@@ -9,7 +9,7 @@ features:
         description: >
           Whether the feature is enabled or not.
         type: Boolean
-        default: false
+        default: true
       supportedLocales:
         description: >
           The list of supported locale identifiers for the summarizer language expansion according to BCP47 standard.
@@ -22,10 +22,5 @@ features:
           - "es"
           - "de"
           - "pt"
-    defaults:
-      - channel: beta
-        value:
-          enabled: false
-      - channel: developer
-        value:
-          enabled: false
+          - "ja"
+          - "jp"

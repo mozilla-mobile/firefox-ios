@@ -61,6 +61,30 @@ final class TabTrayCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
     }
 
+    func testStart_reselectingSamePanel_reusesTabsCoordinator() {
+        let subject = createSubject()
+        let navigationController = UINavigationController()
+
+        subject.start(panelType: .tabs, navigationController: navigationController)
+        subject.start(panelType: .tabs, navigationController: navigationController)
+        subject.start(panelType: .tabs, navigationController: navigationController)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+    }
+
+    func testStart_switchingBetweenPanels_createsOneCoordinatorPerPanel() {
+        let subject = createSubject()
+        let regularNavigationController = UINavigationController()
+        let privateNavigationController = UINavigationController()
+
+        for _ in 0..<3 {
+            subject.start(panelType: .tabs, navigationController: regularNavigationController)
+            subject.start(panelType: .privateTabs, navigationController: privateNavigationController)
+        }
+
+        XCTAssertEqual(subject.childCoordinators.count, 2)
+    }
+
     func testDidFinishCalled() {
         let subject = createSubject()
         subject.start(panelType: .tabs, navigationController: UINavigationController())

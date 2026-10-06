@@ -36,7 +36,9 @@ public protocol ThemeColourPalette {
     var layerSurfaceMedium: UIColor { get }
     var layerSurfaceMediumAlpha: UIColor { get }
     var layerSurfaceMediumAlt: UIColor { get }
+    var layerSurfaceMediumAltGlass: UIColor { get }
     var layerGradientSummary: Gradient { get }
+    var layerToolbarGlass: UIColor { get }
 
     // MARK: - Actions
     var actionPrimary: UIColor { get }
@@ -113,6 +115,7 @@ public protocol ThemeColourPalette {
     var layerAccentSubtle: UIColor { get }
     var layerInverse: UIColor { get }
     var layerGlassTintNova: UIColor { get }
+    var layerGlassSelectedFill: UIColor { get }
     var textToast: UIColor { get }
     var iconInverted: UIColor { get }
     var iconOnColorDisabled: UIColor { get }

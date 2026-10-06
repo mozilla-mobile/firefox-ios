@@ -1,20 +1,29 @@
+/* iOS Home screen shortcut menu: Option to launch the app to the app icon customization screen */
+"App Icon" = "ऐप आइकन";
+
 /* (No Comment) */
-"New Private Tab" = "नया निजी टैब";
+"New Private Tab" = "नया प्राइवेट टैब";
 
 /* (No Comment) */
 "New Tab" = "नया टैब";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
+"NSCameraUsageDescription" = "Firefox आपके कैमरे का इस्तेमाल QR कोड स्कैन करने या फ़ोटो और वीडियो लेने के लिए कर सकता है।";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "आपके सेव किए गए पासवर्ड और पेमेंट के तरीके एक्सेस करने के लिए Firefox को Face ID की ज़रूरत है।";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "आपके द्वारा देखे गए वेबसाइट आपके स्थान का अनुरोध कर सकते हैं।";
+"NSLocationWhenInUseUsageDescription" = "आप जिन वेबसाइटों पर जाते हैं, वे आपकी लोकेशन का अनुरोध कर सकती हैं।";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "यह आपको वीडियो लेने और अपलोड करने देता है।";
+"NSMicrophoneUsageDescription" = "Firefox ऑडियो रिकॉर्ड और अपलोड करने के लिए आपके माइक्रोफ़ोन का इस्तेमाल करता है।";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "यह आपको फोटो सहेजने देता है।";
+"NSPhotoLibraryAddUsageDescription" = "इससे आप फ़ोटो सेव कर सकते हैं।";
+
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "इससे Firefox आपके ऑडियो को टेक्स्ट में बदल सकता है।";
 
 /* (No Comment) */
 "Scan QR Code" = "QR कोड स्कैन करें";

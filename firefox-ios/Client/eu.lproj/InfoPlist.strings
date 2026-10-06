@@ -23,7 +23,7 @@
 "NSPhotoLibraryAddUsageDescription" = "Honekin argazkiak gorde ditzakezu.";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Firefoxek hizketaren ezagutza erabiltzen du zure ahotsa testura bihurtzeko ahots bidezko bilaketarako.";
+"NSSpeechRecognitionUsageDescription" = "Honek zure audioa transkribatzen uzten dio Firefoxi.";
 
 /* (No Comment) */
 "Scan QR Code" = "Eskaneatu QR kodea";

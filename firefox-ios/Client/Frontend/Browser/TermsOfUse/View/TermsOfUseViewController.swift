@@ -159,10 +159,11 @@ final class TermsOfUseViewController: UIViewController,
                                      actionType: ComponentActionType.addComponent,
                                      component: .termsOfUse)
         store.dispatch(action)
+        let uuid = windowUUID
         store.subscribe(self) {
             $0.select { appState in
-                appState.componentState(TermsOfUseState.self, for: .termsOfUse, window: self.windowUUID)
-                ?? TermsOfUseState(windowUUID: self.windowUUID)
+                appState.componentState(TermsOfUseState.self, for: .termsOfUse, window: uuid)
+                ?? TermsOfUseState(windowUUID: uuid)
             }
         }
     }

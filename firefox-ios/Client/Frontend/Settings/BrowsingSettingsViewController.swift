@@ -6,7 +6,7 @@ import Common
 import Shared
 
 /// Child settings pages browsing actions
-protocol BrowsingSettingsDelegate: AnyObject {
+protocol BrowsingSettingsDelegate: AnyObject, SupportSettingsDelegate {
     @MainActor
     func pressedMailApp()
 
@@ -14,7 +14,7 @@ protocol BrowsingSettingsDelegate: AnyObject {
     func pressedAutoPlay()
 }
 
-class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+final class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     weak var parentCoordinator: BrowsingSettingsDelegate?
 
     init(profile: Profile,
@@ -85,7 +85,7 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
             if featureFlagsProvider.isEnabled(.adBlocker) {
                 contentSection.append(AdBlockerSetting(
                     prefs: profile.prefs,
-                    supportDelegate: parentCoordinator as? SupportSettingsDelegate,
+                    supportDelegate: parentCoordinator,
                     settingDidChange: { isEnabled in
                         if isEnabled {
                             Task {
@@ -97,6 +97,9 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                         }
                     }
                 ))
+            }
+            if featureFlagsProvider.isEnabled(.backgroundAudio) {
+                contentSection.append(BackgroundAudioSetting(prefs: profile.prefs))
             }
             contentSection += [
                 BlockPopupSetting(prefs: profile.prefs),

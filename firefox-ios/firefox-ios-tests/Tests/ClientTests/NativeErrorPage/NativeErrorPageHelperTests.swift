@@ -4,10 +4,26 @@
 
 import TestKit
 import XCTest
+import Shared
 
 @testable import Client
 
 final class NativeErrorPageHelperTests: XCTestCase {
+    private struct MockCellularDataStateProvider: CellularDataStateProvider {
+        let isRestricted: Bool
+    }
+
+    override func setUp() async throws {
+        try await super.setUp()
+        let profile = MockProfile()
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
+    }
+
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
+        try await super.tearDown()
+    }
+
     // MARK: - Helpers
 
     private func makeBadCertDomainError(
@@ -38,49 +54,6 @@ final class NativeErrorPageHelperTests: XCTestCase {
             domain: NSURLErrorDomain,
             code: code,
             userInfo: [NSUnderlyingErrorKey: underlying]
-        )
-    }
-
-    // MARK: - shouldShowNativeBadCertDomainErrorPage
-
-    func testShouldShowNativeBadCertDomainErrorPage_returnsTrueWhenFlagEnabledAndBadCertDomain() {
-        let error = makeBadCertDomainError()
-        XCTAssertTrue(
-            NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
-                for: error,
-                isOtherErrorPagesEnabled: true
-            )
-        )
-    }
-
-    func testShouldShowNativeBadCertDomainErrorPage_returnsFalseWhenFlagDisabled() {
-        let error = makeBadCertDomainError()
-        XCTAssertFalse(
-            NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
-                for: error,
-                isOtherErrorPagesEnabled: false
-            )
-        )
-    }
-
-    func testShouldShowNativeBadCertDomainErrorPage_returnsFalseForOtherCertError() {
-        let error = makeOtherCertError()
-        XCTAssertFalse(
-            NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
-                for: error,
-                isOtherErrorPagesEnabled: true
-            )
-        )
-    }
-
-    func testShouldShowNativeBadCertDomainErrorPage_returnsFalseForNoInternetError() {
-        let noInternetCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
-        let error = NSError(domain: NSURLErrorDomain, code: noInternetCode, userInfo: [:])
-        XCTAssertFalse(
-            NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
-                for: error,
-                isOtherErrorPagesEnabled: true
-            )
         )
     }
 
@@ -151,12 +124,18 @@ final class NativeErrorPageHelperTests: XCTestCase {
     // MARK: - parseErrorDetails
 
     func testParseErrorDetails_noInternetError_withURL_returnsNoInternetModel() {
+        setupNimbusNativeErrorPageTesting(isEnabled: true,
+                                          noInternetConnectionErrorIsEnabled: true,
+                                          badCertDomainErrorPageIsEnabled: true)
         let url = URL(string: "https://example.com")!
         let noInternetCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
         let error = NSError(domain: NSURLErrorDomain, code: noInternetCode, userInfo: [
             NSURLErrorFailingURLErrorKey: url
         ])
-        let helper = NativeErrorPageHelper(error: error)
+        let helper = NativeErrorPageHelper(
+            error: error,
+            cellularDataStateProvider: MockCellularDataStateProvider(isRestricted: false)
+        )
 
         let model = helper.parseErrorDetails()
 
@@ -166,9 +145,15 @@ final class NativeErrorPageHelperTests: XCTestCase {
     }
 
     func testParseErrorDetails_noFailingURL_returnsNoInternetModel() {
+        setupNimbusNativeErrorPageTesting(isEnabled: true,
+                                          noInternetConnectionErrorIsEnabled: true,
+                                          badCertDomainErrorPageIsEnabled: true)
         let noInternetCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
         let error = NSError(domain: NSURLErrorDomain, code: noInternetCode, userInfo: [:])
-        let helper = NativeErrorPageHelper(error: error)
+        let helper = NativeErrorPageHelper(
+            error: error,
+            cellularDataStateProvider: MockCellularDataStateProvider(isRestricted: false)
+        )
 
         let model = helper.parseErrorDetails()
 
@@ -176,7 +161,79 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertNil(model.url)
     }
 
+    func testParseErrorDetails_noInternetError_whenCellularDataRestricted_returnsRestrictedModel() {
+        setupNimbusNativeErrorPageTesting(isEnabled: false, noInternetConnectionErrorIsEnabled: false)
+        setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: true)
+        let url = URL(string: "https://example.com")!
+        let noInternetCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+        let error = NSError(domain: NSURLErrorDomain, code: noInternetCode, userInfo: [
+            NSURLErrorFailingURLErrorKey: url
+        ])
+        let helper = NativeErrorPageHelper(
+            error: error,
+            cellularDataStateProvider: MockCellularDataStateProvider(isRestricted: true)
+        )
+
+        let model = helper.parseErrorDetails()
+
+        XCTAssertEqual(model, .cellularDataRestricted)
+    }
+
+    func testParseErrorDetails_noInternetError_whenCellularDataRestrictionFeatureDisabled_returnsNoInternetModel() {
+        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: true)
+        setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: false)
+        let url = URL(string: "https://example.com")!
+        let noInternetCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+        let error = NSError(domain: NSURLErrorDomain, code: noInternetCode, userInfo: [
+            NSURLErrorFailingURLErrorKey: url
+        ])
+        let helper = NativeErrorPageHelper(
+            error: error,
+            cellularDataStateProvider: MockCellularDataStateProvider(isRestricted: true)
+        )
+
+        let model = helper.parseErrorDetails()
+
+        XCTAssertEqual(model, .internetConnection)
+    }
+
+    func testParseErrorDetails_otherError_whenCellularDataRestricted_returnsGenericModel() {
+        let url = URL(string: "https://example.com")!
+        let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorNetworkConnectionLost, userInfo: [
+            NSURLErrorFailingURLErrorKey: url
+        ])
+        let helper = NativeErrorPageHelper(
+            error: error,
+            cellularDataStateProvider: MockCellularDataStateProvider(isRestricted: true)
+        )
+
+        let model = helper.parseErrorDetails()
+
+        XCTAssertEqual(model, .generic(GenericErrorModel(url: url)))
+    }
+
+    private func setupNimbusNativeErrorPageTesting(
+        isEnabled: Bool,
+        noInternetConnectionErrorIsEnabled: Bool
+    ) {
+        FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
+            return NativeErrorPageFeature(
+                enabled: isEnabled,
+                noInternetConnectionError: noInternetConnectionErrorIsEnabled
+            )
+        }
+    }
+
+    private func setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.cellularDataRestrictedErrorPageFeature.with { _, _ in
+            return CellularDataRestrictedErrorPageFeature(enabled: isEnabled)
+        }
+    }
+
     func testParseErrorDetails_certError_withURL_returnsSecurityModel() {
+        setupNimbusNativeErrorPageTesting(isEnabled: true,
+                                          noInternetConnectionErrorIsEnabled: true,
+                                          badCertDomainErrorPageIsEnabled: true)
         let url = URL(string: "https://example.com")!
         let error = NSError(
             domain: NSURLErrorDomain,
@@ -187,33 +244,14 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         let model = helper.parseErrorDetails()
 
-        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertTrue(model.isRegularUI)
     }
 
-    func testParseErrorDetails_certErrorBadCertDomain_returnsAdvancedSection() {
-        let url = URL(string: "https://example.com")!
-        let error = NSError(
-            domain: NSURLErrorDomain,
-            code: NSURLErrorServerCertificateUntrusted,
-            userInfo: [
-                NSURLErrorFailingURLErrorKey: url,
-                NSUnderlyingErrorKey: NSError(
-                    domain: "NSURLErrorDomain",
-                    code: NSURLErrorServerCertificateUntrusted,
-                    userInfo: ["_kCFStreamErrorCodeKey": -9843]
-                )
-            ]
-        )
-        let helper = NativeErrorPageHelper(error: error)
-
-        let model = helper.parseErrorDetails()
-
-        XCTAssertNotNil(model.advancedSection)
-        XCTAssertFalse(model.isRegularUI)
-    }
-
     func testParseErrorDetails_genericError_withURL_returnsGenericModel() {
+        setupNimbusNativeErrorPageTesting(isEnabled: true,
+                                          noInternetConnectionErrorIsEnabled: true,
+                                          badCertDomainErrorPageIsEnabled: true)
         let url = URL(string: "https://example.com")!
         let error = NSError(domain: NSURLErrorDomain, code: -1, userInfo: [
             NSURLErrorFailingURLErrorKey: url
@@ -222,7 +260,7 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         let model = helper.parseErrorDetails()
 
-        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.advancedSection)
         XCTAssertTrue(model.isRegularUI)
     }
@@ -260,6 +298,24 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertNil(logger.savedExtra)
     }
 
+    func testParseErrorDetails_certCodeWithNonURLErrorDomain_returnsGenericModel() {
+        setupNimbusNativeErrorPageTesting(isEnabled: true,
+                                          noInternetConnectionErrorIsEnabled: true,
+                                          badCertDomainErrorPageIsEnabled: true)
+        let url = URL(string: "https://example.com")!
+        let error = NSError(
+            domain: "SomeOtherDomain",
+            code: NSURLErrorServerCertificateUntrusted,
+            userInfo: [NSURLErrorFailingURLErrorKey: url]
+        )
+        let helper = NativeErrorPageHelper(error: error)
+
+        let model = helper.parseErrorDetails()
+
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
+        XCTAssertNil(model.advancedSection)
+    }
+
     // MARK: - getCertDetails
 
     func testGetCertDetails_missingFailingURL_returnsNil() {
@@ -281,21 +337,6 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertNil(helper.getCertDetails())
     }
 
-    func testParseErrorDetails_certCodeWithNonURLErrorDomain_returnsGenericModel() {
-        let url = URL(string: "https://example.com")!
-        let error = NSError(
-            domain: "SomeOtherDomain",
-            code: NSURLErrorServerCertificateUntrusted,
-            userInfo: [NSURLErrorFailingURLErrorKey: url]
-        )
-        let helper = NativeErrorPageHelper(error: error)
-
-        let model = helper.parseErrorDetails()
-
-        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
-        XCTAssertNil(model.advancedSection)
-    }
-
     // MARK: - ErrorPageModel computed properties
 
     func testInternetConnectionModel_hasCorrectComputedProperties() {
@@ -303,6 +344,23 @@ final class NativeErrorPageHelperTests: XCTestCase {
 
         XCTAssertEqual(model.title, .NativeErrorPage.NoInternetConnection.TitleLabel)
         XCTAssertEqual(model.description, .NativeErrorPage.NoInternetConnection.Description)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
+        XCTAssertNil(model.url)
+        XCTAssertNil(model.advancedSection)
+        XCTAssertTrue(model.isRegularUI)
+    }
+
+    func testCellularDataRestrictedModel_hasCorrectComputedProperties() {
+        let model = ErrorPageModel.cellularDataRestricted
+
+        XCTAssertEqual(
+            model.title,
+            String(format: .NativeErrorPage.CellularDataRestricted.TitleLabel, AppName.shortName.rawValue)
+        )
+        XCTAssertEqual(
+            model.description,
+            String(format: .NativeErrorPage.CellularDataRestricted.Description, AppName.shortName.rawValue)
+        )
         XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
         XCTAssertNil(model.advancedSection)
@@ -341,8 +399,12 @@ final class NativeErrorPageHelperTests: XCTestCase {
         let model = ErrorPageModel.generic(GenericErrorModel(url: testURL))
 
         XCTAssertEqual(model.title, .NativeErrorPage.GenericError.TitleLabel)
-        XCTAssertEqual(model.description, .NativeErrorPage.GenericError.Description)
-        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertEqual(model.description, String(format: .NativeErrorPage.GenericError.DescriptionPrefixWithURL,
+                                                 AppName.shortName.description,
+                                                 testURL.host!)
+                       + " " +
+                       String.NativeErrorPage.GenericError.DescriptionSuffix)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertEqual(model.url, testURL)
         XCTAssertNil(model.advancedSection)
         XCTAssertTrue(model.isRegularUI)
@@ -352,8 +414,11 @@ final class NativeErrorPageHelperTests: XCTestCase {
         let model = ErrorPageModel.generic(GenericErrorModel(url: nil))
 
         XCTAssertEqual(model.title, .NativeErrorPage.GenericError.TitleLabel)
-        XCTAssertEqual(model.description, .NativeErrorPage.GenericError.Description)
-        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.securityError)
+        XCTAssertEqual(model.description, String(format: .NativeErrorPage.GenericError.DescriptionPrefixWithoutURL,
+                                                 AppName.shortName.description)
+                       + " " +
+                       String.NativeErrorPage.GenericError.DescriptionSuffix)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.noInternetConnection)
         XCTAssertNil(model.url)
         XCTAssertNil(model.advancedSection)
         XCTAssertTrue(model.isRegularUI)
@@ -404,5 +469,19 @@ final class NativeErrorPageHelperTests: XCTestCase {
         let generic1 = ErrorPageModel.generic(GenericErrorModel(url: url))
         let generic2 = ErrorPageModel.generic(GenericErrorModel(url: url))
         XCTAssertEqual(generic1, generic2)
+    }
+
+    private func setupNimbusNativeErrorPageTesting(
+        isEnabled: Bool,
+        noInternetConnectionErrorIsEnabled: Bool = false,
+        badCertDomainErrorPageIsEnabled: Bool = false
+    ) {
+        FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
+            NativeErrorPageFeature(
+                badCertDomainErrorPage: badCertDomainErrorPageIsEnabled,
+                enabled: isEnabled,
+                noInternetConnectionError: noInternetConnectionErrorIsEnabled
+            )
+        }
     }
 }

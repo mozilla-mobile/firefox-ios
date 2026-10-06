@@ -90,7 +90,7 @@ def xcodebuild_log(request, tmp_path_factory):
 def fixture_build_fennec(request):
     if not request.config.getoption("--build-dev"):
         return
-    command = "xcodebuild build-for-testing -project Client.xcodeproj -scheme Fennec -configuration Fennec -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2'"
+    command = "xcodebuild build-for-testing -project Client.xcodeproj -scheme Fennec -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2'"
     try:
         logging.info("Building app")
         subprocess.check_output(

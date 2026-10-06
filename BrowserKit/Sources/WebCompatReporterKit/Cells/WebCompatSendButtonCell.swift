@@ -33,12 +33,19 @@ final class WebCompatSendButtonCell: UICollectionViewListCell, ThemeApplicable {
         ])
     }
 
-    func configure(title: String, isEnabled: Bool, a11yIdentifier: String, onTap: @escaping () -> Void) {
+    func configure(
+        title: String,
+        isEnabled: Bool,
+        a11yIdentifier: String,
+        accessibilityHint: String?,
+        onTap: @escaping () -> Void
+    ) {
         tapHandler = onTap
         button.configure(
             viewModel: PrimaryRoundedButtonViewModel(title: title, a11yIdentifier: a11yIdentifier)
         )
         button.isEnabled = isEnabled
+        button.accessibilityHint = accessibilityHint
     }
 
     // MARK: - ThemeApplicable

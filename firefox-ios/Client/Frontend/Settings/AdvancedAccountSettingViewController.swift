@@ -53,7 +53,7 @@ private class CustomFxAContentServerEnableSetting: BoolSetting {
       }
   }
 
-class AdvancedAccountSettingViewController: SettingsTableViewController {
+final class AdvancedAccountSettingViewController: SettingsTableViewController {
     fileprivate var customFxAContentURI: String?
     fileprivate var customSyncTokenServerURI: String?
 
@@ -84,7 +84,8 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
             defaultValue: false,
             attributedTitleText: NSAttributedString(
                 string: .AdvancedAccountUseStageServer,
-                attributes: attributes)) { isOn in
+                attributes: attributes)) { [weak self] isOn in
+            guard let self else { return }
             self.settings = self.generateSettings()
             self.tableView.reloadData()
         }
@@ -94,7 +95,8 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
             prefKey: PrefsKeys.KeyUseReactFxA,
             defaultValue: false,
             attributedTitleText: NSAttributedString(string: .SettingsAdvancedAccountUseReactContentServer)
-        ) { isOn in
+        ) { [weak self] isOn in
+            guard let self else { return }
             self.settings = self.generateSettings()
             self.tableView.reloadData()
         }
@@ -111,7 +113,8 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
             accessibilityIdentifier: "CustomSyncTokenServerURISetting")
 
         let autoconfigSettings = [
-            CustomFxAContentServerEnableSetting(prefs: prefs) { isOn in
+            CustomFxAContentServerEnableSetting(prefs: prefs) { [weak self] isOn in
+                guard let self else { return }
                 self.settings = self.generateSettings()
                 self.tableView.reloadData()
             },

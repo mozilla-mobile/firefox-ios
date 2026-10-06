@@ -70,8 +70,6 @@ final class AddressToolbarContainer: UIView,
         static let accessoryViewGradientOffset: CGFloat = 74
     }
 
-    typealias SubscriberStateType = ToolbarState
-
     private let toolbarHelper: ToolbarHelperInterface
     private var windowUUID: WindowUUID?
     private var profile: Profile?
@@ -104,7 +102,7 @@ final class AddressToolbarContainer: UIView,
         }
     }
 
-    var parent: UIStackView?
+    weak var parent: UIStackView?
     var onContainerTap: (() -> Void)?
     private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
     private lazy var leftSkeletonAddressBar: RegularBrowserAddressToolbar = .build()
@@ -221,7 +219,7 @@ final class AddressToolbarContainer: UIView,
         guard #available(iOS 26.0, *), let windowUUID else { return 0 }
 
         let isEditingAddress = state?.addressToolbar.isEditing == true
-        let shouldShowKeyboard = state?.addressToolbar.shouldShowKeyboard
+        let isAccessoryViewVisible = state?.isAccessoryViewVisible ?? false
         let isBottomToolbar = state?.toolbarPosition == .bottom
         let shouldAdjustForAccessory = hasAccessoryView &&
                                        !isEditingAddress &&
@@ -231,21 +229,15 @@ final class AddressToolbarContainer: UIView,
 
         /// We want to check here if the keyboard accessory view state has changed
         /// To avoid spamming redux actions.
-        guard hasAccessoryView != shouldShowKeyboard else { return accessoryViewOffset }
-        store.dispatch(
-            ToolbarAction(
-                shouldShowKeyboard: hasAccessoryView,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange
-            )
-        )
+        guard hasAccessoryView != isAccessoryViewVisible else { return accessoryViewOffset }
+        // Dispatch action to change address bar to minimized state
+        store.dispatch(ToolbarModernAction.accessoryViewVisibilityChanged(isVisible: hasAccessoryView),
+                       forWindowUUID: windowUUID)
 
         if shouldAdjustForAccessory {
             let height = frame.height + UX.accessoryViewGradientOffset
             accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
             accessoryViewGradient.opacity = 1
-            // Dispatch action to change address bar to minimized state
-            store.dispatch(ToolbarModernAction.accessoryViewDidShow, forWindowUUID: windowUUID)
         }
         return accessoryViewOffset
     }
@@ -323,7 +315,7 @@ final class AddressToolbarContainer: UIView,
 
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return ToolbarState(appState: appState, uuid: windowUUID)
+                return AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
             })
         })
     }
@@ -341,9 +333,9 @@ final class AddressToolbarContainer: UIView,
         store.unsubscribe(self)
     }
 
-    func newState(state: ToolbarState) {
-        self.state = state
-        updateModel(toolbarState: state)
+    func newState(state: AddressToolbarContainerLens) {
+        self.state = state.toolbarState
+        updateModel(addressToolbarContainerLens: state)
     }
 
     // MARK: - AlphaDimmable
@@ -355,26 +347,31 @@ final class AddressToolbarContainer: UIView,
         }
 
         let isMinimizedAddressBar = alpha.isZero
-        updateSkeletonAddressBarsAlpha(isMinimizedAddressBar: isMinimizedAddressBar)
+        updateSkeletonAddressBarsAlpha(forMinimizedAddressBar: isMinimizedAddressBar)
     }
 
-    private func updateModel(toolbarState: ToolbarState) {
+    private func updateModel(addressToolbarContainerLens: AddressToolbarContainerLens) {
         guard let windowUUID, let profile else { return }
+        let toolbarState = addressToolbarContainerLens.toolbarState
         let newModel = AddressToolbarContainerModel(state: toolbarState,
+                                                    addressToolbarContainerLens: addressToolbarContainerLens,
                                                     profile: profile,
                                                     windowUUID: windowUUID)
 
         shouldDisplayCompact = newModel.shouldDisplayCompact
 
         guard self.model != newModel else { return }
-        updateSkeletonAddressBarsAlpha(isMinimizedAddressBar: newModel.isAddressBarMinimized)
-        if #available(iOS 26.0, *), !newModel.shouldShowKeyboard, !newModel.isAddressBarMinimized {
+        updateSkeletonAddressBarsAlpha(forMinimizedAddressBar: newModel.isAddressBarMinimized)
+        if #available(iOS 26.0, *), !newModel.isAccessoryViewVisible, !newModel.isAddressBarMinimized {
             accessoryViewGradient.opacity = 0
         }
         // in case we are in edit mode but overlay is not active yet we have to activate it
         // so that `inOverlayMode` is set to true so we avoid getting stuck in overlay mode
+        // Redux already has isEditing == true here, so we only sync the local flag/UI to avoid
+        // re-dispatch didStartEditingUrl, which can race with an in-flight cancelEdit.
         if newModel.isEditing, !inOverlayMode {
-            enterOverlayMode(nil, pasted: false, search: true)
+            inOverlayMode = true
+            delegate?.addressToolbarDidEnterOverlayMode(self)
         }
         updateProgressBarPosition(toolbarState.toolbarPosition)
         // When frame is zero it means the toolbar hasn't appeared on screen yet for the first time
@@ -419,10 +416,10 @@ final class AddressToolbarContainer: UIView,
         rightSkeletonAddressBar.accessibilityIdentifier = AccessibilityIdentifiers.Browser.AddressToolbar.trailingSkeleton
     }
 
-    private func updateSkeletonAddressBarsAlpha(isMinimizedAddressBar: Bool) {
+    private func updateSkeletonAddressBarsAlpha(forMinimizedAddressBar: Bool) {
         guard toolbarHelper.isSwipingTabsEnabled else { return }
 
-        let alpha: CGFloat = isMinimizedAddressBar ? 0 : 1
+        let alpha: CGFloat = forMinimizedAddressBar ? 0 : 1
         leftSkeletonAddressBar.alpha = alpha
         rightSkeletonAddressBar.alpha = alpha
     }
@@ -649,6 +646,7 @@ final class AddressToolbarContainer: UIView,
     // MARK: - Overlay Mode
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
         guard let windowUUID else { return }
+
         inOverlayMode = true
         delegate?.addressToolbarDidEnterOverlayMode(self)
 

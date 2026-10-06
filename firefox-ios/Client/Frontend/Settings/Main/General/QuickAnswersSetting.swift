@@ -24,8 +24,7 @@ final class QuickAnswersSetting: Setting, UserFeaturePreferenceProvider {
 
     override var status: NSAttributedString? {
         let isSwitchOn = userPreferences.getPreferenceFor(.quickAnswers)
-        // TODO: - FXIOS-14720 Add Strings
-        let statusString: String = isSwitchOn ? "On" : "Off"
+        let statusString: String = isSwitchOn ? .QuickAnswers.Settings.StatusOn : .QuickAnswers.Settings.StatusOff
         return NSAttributedString(string: statusString)
     }
 
@@ -38,10 +37,9 @@ final class QuickAnswersSetting: Setting, UserFeaturePreferenceProvider {
         self.settingsDelegate = settingsDelegate
         self.userPreferences = userPreferences
         let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
-        // TODO: - FXIOS-14720 Add Strings
         super.init(
             title: NSAttributedString(
-                string: "Quick Answers",
+                string: .QuickAnswers.Settings.Title,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]

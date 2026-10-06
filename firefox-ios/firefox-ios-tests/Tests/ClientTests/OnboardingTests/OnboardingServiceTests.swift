@@ -91,13 +91,6 @@ class MockSearchBarLocationSaver: SearchBarLocationSaverProtocol {
         saveUserSearchBarLocationCalled = true
         savedProfile = profile
     }
-
-    func migrateBottomBarPositionToTopOnIPad(
-        profile: Profile,
-        userInterfaceIdiom: UIUserInterfaceIdiom
-    ) {
-        // no-op for now
-    }
 }
 
 class MockOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
@@ -111,10 +104,6 @@ class MockOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     func sendDismissButtonTappedTelemetry() {
         sendDismissButtonTappedTelemetryCalled = true
     }
-
-    func sendWallpaperSelectorViewTelemetry() {}
-    func sendWallpaperSelectorCloseTelemetry() {}
-    func sendWallpaperSelectorSelectedTelemetry(wallpaperName: String, wallpaperType: String) {}
 }
 
 class MockActivityEventHelper: ActivityEventHelper {
@@ -152,7 +141,7 @@ final class OnboardingServiceTests: XCTestCase {
         mockDefaultApplicationHelper = MockApplicationHelper()
         mockNotificationCenter = MockNotificationCenter()
         mockSearchBarLocationSaver = MockSearchBarLocationSaver()
-        mockProfile = MockProfile(databasePrefix: "OnboardingServiceTests")
+        mockProfile = makeProfile()
         mockThemeManager = MockThemeManager()
         mockTelemetryUtility = MockOnboardingTelemetryUtility()
 

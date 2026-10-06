@@ -4,6 +4,7 @@
 
 import Common
 import ComponentLibrary
+import Glean
 import MozillaAppServices
 import Redux
 import SwiftUI
@@ -29,7 +30,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     private var glean: MockGleanWrapper!
     private var scrollDelegate: MockStatusBarScrollDelegate!
     private var browserViewController: MockBrowserViewController!
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
     private var homepageTabStateStore: HomepageTabStateStore!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
@@ -301,6 +302,44 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(mockRouter.presentedViewController is TrackerBlockerSheetViewController)
     }
 
+    func testShowTrackerBlockerSheet_whenAddressBarIsEditing_releasesKeyboard() throws {
+        setupStoreWithAddressBar(isEditing: true)
+        let subject = createSubject()
+
+        subject.showTrackerBlockerSheet()
+
+        let actions = mockStore.dispatchedModernActions.compactMap { $0 as? ToolbarModernAction }
+        XCTAssertEqual(actions.count, 1)
+        guard case .didKeyboardRequestChange(let shouldShow) = try XCTUnwrap(actions.first) else {
+            XCTFail("Expected a didKeyboardRequestChange action")
+            return
+        }
+        XCTAssertFalse(shouldShow)
+    }
+
+    func testShowTrackerBlockerSheet_whenAddressBarIsNotEditing_doesNotReleaseKeyboard() {
+        setupStoreWithAddressBar(isEditing: false)
+        let subject = createSubject()
+
+        subject.showTrackerBlockerSheet()
+
+        XCTAssertTrue(mockStore.dispatchedModernActions.compactMap { $0 as? ToolbarModernAction }.isEmpty)
+    }
+
+    func testShowTrackerBlockerSheet_recordsDashboardViewed() throws {
+        typealias ExtraType = GleanMetrics.TrackerBlocker.DashboardViewedExtra
+        let subject = createSubject()
+
+        subject.showTrackerBlockerSheet()
+
+        let recorded = glean.savedExtras.compactMap { $0 as? ExtraType }
+        let savedExtras = try XCTUnwrap(recorded.first)
+        XCTAssertEqual(recorded.count, 1)
+        // Nothing has been blocked against the test profile, so the sheet opens empty and unbanded.
+        XCTAssertEqual(savedExtras.dashboardState, "empty")
+        XCTAssertNil(savedExtras.figures)
+    }
+
     func testStartShareSheetCoordinator_addsShareSheetCoordinator() {
         let subject = createSubject()
 
@@ -435,12 +474,17 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     func testShowGoogleLensCamera_whenCameraUnavailable_doesNotPresentOrLeaveChild() {
-        // The simulator has no camera, so the coordinator finishes immediately and cleans
-        // itself up without presenting anything.
-        let subject = createSubject()
+        // Availability is injected rather than read from the simulator, which reports a camera
+        // on a developer machine but not on CI, running the same iOS version.
+        var availabilityCalled = false
+        let subject = createSubject(isCameraAvailable: {
+            availabilityCalled = true
+            return false
+        })
 
         subject.showGoogleLensCamera()
 
+        XCTAssertTrue(availabilityCalled)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
         XCTAssertEqual(mockRouter.presentCalled, 0)
     }
@@ -779,6 +823,23 @@ final class BrowserCoordinatorTests: XCTestCase,
 
         XCTAssertNotNil(termsOfUseLinkVC)
         XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
+    func testAskedToOpen_pushesSettingsContentViewController() throws {
+        let subject = createSubject()
+        let navigationController = UINavigationController()
+        let mockNavigationController = try XCTUnwrap(mockRouter.navigationController as? MockNavigationController)
+        mockNavigationController.presentedViewController = navigationController
+        let url = try XCTUnwrap(URL(string: "https://support.mozilla.org"))
+        let title = NSAttributedString(string: "Support")
+
+        subject.askedToOpen(url: url, withTitle: title)
+
+        let contentViewController = try XCTUnwrap(
+            navigationController.topViewController as? SettingsContentViewController
+        )
+        XCTAssertEqual(contentViewController.url, url)
+        XCTAssertEqual(contentViewController.settingsTitle, title)
     }
 
     func testPopToBVC_popsViewControllers() {
@@ -1267,6 +1328,21 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(browserViewController.presentSignInReferringPage, ReferringPage.none)
     }
 
+    func testHandleFxaPairingPresentsPairingFlow() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key&v=2"
+        )!
+
+        let result = testCanHandleAndHandle(subject, route: .fxaPairing(url: pairingURL))
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(browserViewController.presentPairingCount, 1)
+        XCTAssertEqual(browserViewController.presentPairingURL, pairingURL)
+    }
+
     // MARK: - App action route
 
     func testHandleClosePrivateTabs_returnsTrue() {
@@ -1561,6 +1637,56 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    // MARK: - Child coordinator lifetime
+
+    func testShowTabTray_tabTrayCoordinatorIsReleasedWithParent() throws {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
+        let subject = createSubject()
+
+        subject.showTabTray(selectedPanel: .tabs)
+
+        let child = try XCTUnwrap(subject.childCoordinators[TabTrayCoordinator.self])
+        trackForMemoryLeaks(child)
+    }
+
+    func testShowEditBookmarks_bookmarksCoordinatorIsReleasedWithParent() throws {
+        let subject = createSubject()
+        let folder = MockFxBookmarkNode(type: .folder,
+                                        guid: "0",
+                                        position: 0,
+                                        isRoot: false,
+                                        title: "TestFolder")
+        let bookmark = MockFxBookmarkNode(type: .bookmark,
+                                          guid: "1",
+                                          position: 0,
+                                          isRoot: false,
+                                          title: "TestBookmark")
+
+        subject.showEditBookmark(parentFolder: folder, bookmark: bookmark)
+
+        let child = try XCTUnwrap(subject.childCoordinators[BookmarksCoordinator.self])
+        trackForMemoryLeaks(child)
+    }
+
+    func testSettingsRoute_settingsCoordinatorIsReleasedWithParent() throws {
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        subject.handle(route: .settings(section: .general))
+
+        let child = try XCTUnwrap(subject.childCoordinators[SettingsCoordinator.self])
+        trackForMemoryLeaks(child)
+    }
+
+    func testShowMicrosurvey_microsurveyCoordinatorIsReleasedWithParent() throws {
+        let subject = createSubject()
+
+        subject.showMicrosurvey(model: MicrosurveyMock.model)
+
+        let child = try XCTUnwrap(subject.childCoordinators[MicrosurveyCoordinator.self])
+        trackForMemoryLeaks(child)
+    }
+
     // MARK: - Route handling
 
     // MARK: canHandle(route:)
@@ -1628,22 +1754,49 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(browserViewController.handleQuery, "firefox")
     }
 
+    func testHandle_completesPendingDeeplinkTabActivity() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+        AppEventQueue.started(.pendingDeeplinkTab(windowUUID))
+        defer {
+            if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
+                AppEventQueue.completed(.pendingDeeplinkTab(windowUUID))
+            }
+        }
+        XCTAssertTrue(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
+
+        let route = Route.search(url: URL(string: "https://example.com")!, isPrivate: false)
+        subject.handle(route: route)
+
+        XCTAssertFalse(AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)))
+    }
+
     // MARK: - StoreTestUtility
     func setupAppState() -> AppState {
         return AppState()
     }
 
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
+    private func setupStoreWithAddressBar(isEditing: Bool) {
+        var toolbarState = ToolbarState(windowUUID: windowUUID)
+        toolbarState.addressToolbar = toolbarState.addressToolbar
+            .copy(isEditing: isEditing)
+            .copy(shouldShowKeyboard: isEditing)
 
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
+        mockStore = MockStoreForMiddleware(state: AppState(
+            presentedComponents: PresentedComponentsState(
+                components: [
+                    .browserViewController(BrowserViewControllerState(windowUUID: windowUUID)),
+                    .toolbar(toolbarState)
+                ]
+            )
+        ))
+        StoreTestUtilityHelper.setupStore(with: mockStore)
     }
 
     // MARK: - Helpers
     private func createSubject(googleLensService: GoogleLensServicing = GoogleLensService(),
+                               isCameraAvailable: @escaping @MainActor () -> Bool = { true },
                                file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserCoordinator {
         let subject = BrowserCoordinator(router: mockRouter,
@@ -1653,7 +1806,8 @@ final class BrowserCoordinatorTests: XCTestCase,
                                          profile: profile,
                                          glean: glean,
                                          applicationHelper: applicationHelper,
-                                         googleLensService: googleLensService)
+                                         googleLensService: googleLensService,
+                                         isCameraAvailable: isCameraAvailable)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

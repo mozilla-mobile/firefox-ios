@@ -524,7 +524,7 @@
 "Hotkeys.ShowNextTab.DiscoveryTitle" = "Mostra scheda successiva";
 
 /* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Visualizza scheda precedente";
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Mostra scheda precedente";
 
 /* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
 "InactiveTabs.TabTray.CloseButtonTitle" = "Chiudi tutte le schede inattive";
@@ -1079,7 +1079,7 @@
 "SendTo.NoDevicesFound.Message" = "Al momento non risultano disponibili per la sincronizzazione ulteriori dispositivi connessi a questo account Firefox.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Apri le impostazioni di Firefox ed effettua l’accesso per continuare.";
+"SendTo.NotSignedIn.Message" = "Apri Firefox, vai alle impostazioni ed effettua l’accesso per continuare.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Title" = "Accesso all’account Firefox non effettuato.";
@@ -1091,13 +1091,13 @@
 "SentTab_TabArrivingNotification_NoDevice_body" = "È arrivata una nuova scheda da un altro dispositivo.";
 
 /* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
-"SentTab_TabArrivingNotification_NoDevice_title" = "Ricezione scheda";
+"SentTab_TabArrivingNotification_NoDevice_title" = "Scheda ricevuta";
 
 /* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
 "SentTab_TabArrivingNotification_WithDevice_body" = "È arrivata una nuova scheda in %@";
 
 /* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
-"SentTab_TabArrivingNotification_WithDevice_title" = "Ricezione scheda da %@";
+"SentTab_TabArrivingNotification_WithDevice_title" = "Scheda ricevuta da %@";
 
 /* Body of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.body" = "Tocca per iniziare";
@@ -1331,7 +1331,7 @@
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ classico";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
-"Settings.Home.Option.Wallpaper.CollectionTitle" = "SCHERMATA INIZIALE";
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "SCHERMATA DI APERTURA";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
 "Settings.Home.Option.Wallpaper.LearnMore.v106" = "Ulteriori informazioni";
@@ -1517,7 +1517,7 @@
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "Gruppi di schede";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
-"Settings.Tabs.CustomizeTabsSection.Title" = "Personalizza barra delle schede";
+"Settings.Tabs.CustomizeTabsSection.Title" = "Personalizza pannello delle schede";
 
 /* In the settings menu, this is the title for the Tabs customization section option */
 "Settings.Tabs.Title" = "Schede";
@@ -1658,7 +1658,7 @@
 "Tabs %@ to %@ of %@" = "Schede da %1$@ a %2$@ di %3$@";
 
 /* Accessibility label for the Tabs Tray view. */
-"Tabs Tray" = "Barra delle schede";
+"Tabs Tray" = "Pannello delle schede";
 
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "Annulla";

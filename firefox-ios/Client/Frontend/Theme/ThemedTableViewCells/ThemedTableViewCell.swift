@@ -50,6 +50,7 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        contentConfiguration = nil
         textLabel?.text = nil
         textLabel?.textAlignment = .natural
         textLabel?.font = FXFontStyles.Regular.body.scaledFont()

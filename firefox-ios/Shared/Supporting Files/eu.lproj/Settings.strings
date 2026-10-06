@@ -61,6 +61,24 @@
 /* Settings section title for the old Firefox account */
 "FxA.FirefoxAccount.v119" = "Kontua";
 
+/* Label of the toggle that enables or disables the Quick Answers feature on the Quick Answers settings screen. */
+"QuickAnswers.Settings.EnableQuickAnswers.v158" = "Gaitu erantzun azkarrak";
+
+/* Footer text on the Quick Answers settings screen explaining the feature and its privacy policy. */
+"QuickAnswers.Settings.Footer.v158" = "Galdetu zerbait ozen eta jaso erantzun laburrak. Ez dugu zure ahots, galdera edo erantzunik gordetzen.";
+
+/* Link button on the Quick Answers settings screen that opens more information about the feature. */
+"QuickAnswers.Settings.LearnMore.v158" = "Argibide gehiago";
+
+/* Status text shown next to the Quick Answers row in the general settings when the feature is disabled. */
+"QuickAnswers.Settings.StatusOff.v158" = "Desaktibatuta";
+
+/* Status text shown next to the Quick Answers row in the general settings when the feature is enabled. */
+"QuickAnswers.Settings.StatusOn.v158" = "Aktibatuta";
+
+/* Title shown in the navigation bar and as the toggle label on the Quick Answers settings screen. */
+"QuickAnswers.Settings.Title.v158" = "Erantzun azkarrak";
+
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Helbideak";
 
@@ -74,7 +92,7 @@
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "Blokeatuta";
 
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
-"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Blokeatuta**: eginbidea ez duzu ikusiko eta ezingo duzu erabili. Gailu barruko AArako, deskargatutako modeloak kendu egingo dira.";
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Blokeatuta**: eginbidea ez duzu ikusiko eta ezingo duzu erabili. Gailu barruko AArako, deskargatutako ereduak kendu egingo dira.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Orriak eta laburpenak inoiz ez dira gordetzen.";
@@ -169,6 +187,9 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Erreprodukzio automatikoa";
 
+/* VoiceOver custom action name for a settings row's Learn More link. */
+"Settings.BoolSetting.LearnMoreAction.v157" = "Argibide gehiago";
+
 /* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
 "Settings.Browsing.AdBlocker.Description.v155" = "Iragarkiak eta iragarkiekin lotutako jarraipen-elementuak murrizten ditu. Gune batek apurtuta badirudi, saiatu hau desaktibatzen.";
 
@@ -177,6 +198,9 @@
 
 /* Title for the Ad Blocker toggle in the Browsing settings page. */
 "Settings.Browsing.AdBlocker.Title.v155" = "Iragarki blokeatzailea";
+
+/* Title for the Background Audio toggle in the Browsing settings page. When enabled, audio from web pages continues playing after the app is backgrounded. */
+"Settings.Browsing.BackgroundAudio.Title.v156" = "Atzeko planoko audioa";
 
 /* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
 "Settings.Browsing.BlockAds.Title.v153" = "Blokeatu iragarkiak";
@@ -216,6 +240,9 @@
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Kontua";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the brand title for the section containing the Wrexham AFC wallpapers. */
+"Settings.Home.Option.Wallpaper.WrexhamBrandTitle.v155" = "Wrexham A.F.C.";
 
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsStatus.v112" = "Aktibatu egin behar da hau fitxak jasotzeko eta beste gailu batean saioa hastean jakinarazpena jasotzeko.";

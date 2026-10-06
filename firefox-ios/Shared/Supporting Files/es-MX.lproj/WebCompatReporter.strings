@@ -25,11 +25,20 @@
 /* Title of the issue category a user picks when video or audio does not play on a site, in the Report a Website Issue form. */
 "WebCompatReporter.Category.VideoOrAudio.v154" = "El audio o el video no se reproducen";
 
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no issue type has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint.v156" = "Primero, elige un tipo de problema";
+
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156" = "Escoge una subcategoría para el tipo de problema que elegiste";
+
 /* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "Describe el problema en detalle";
 
 /* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.DetailsPlaceholder.v154" = "Describe el problema en detalle (opcional)";
+
+/* Error message shown under the URL field when the address entered has an invalid format, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLError.v155" = "Ingresa una URL válida";
 
 /* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
 "WebCompatReporter.Fields.URLLabel.v154" = "URL";
@@ -43,11 +52,53 @@
 /* Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form. */
 "WebCompatReporter.IssueSection.Title.v154" = "Problema del sitio";
 
+/* Bullet on the Report Preview screen, for the amount of memory the device has. */
+"WebCompatReporter.Preview.Data.AvailableMemory.v155" = "Memoria disponible en tu dispositivo";
+
+/* Bullet on the Report Preview screen, for trackers blocked on the reported page. */
+"WebCompatReporter.Preview.Data.BlockedTrackers.v155" = "Hostname de los rastreadores bloqueados en esta página";
+
+/* Bullet on the Report Preview screen, for the device's own language and region settings. */
+"WebCompatReporter.Preview.Data.DeviceLocale.v155" = "Idioma principal y país de tu dispositivo";
+
+/* Bullet on the Report Preview screen, for whether the device has a touchscreen. */
+"WebCompatReporter.Preview.Data.HasTouchscreen.v155" = "Si tu dispositivo tiene pantalla táctil";
+
+/* Bullet on the Report Preview screen, for the problem picked and the details typed. */
+"WebCompatReporter.Preview.Data.IssueAndDescription.v155" = "Tipo de problema seleccionado y descripción (si la agregaste)";
+
+/* Bullet on the Report Preview screen. Only tablet or not is sent, no device make or model. */
+"WebCompatReporter.Preview.Data.IsTablet.v155" = "Si tu dispositivo es una tablet";
+
+/* Bullet on the Report Preview screen, for web frameworks known to break mobile pages. */
+"WebCompatReporter.Preview.Data.PageElements.v155" = "Información sobre elementos de la página que suelen causar problemas de navegación";
+
+/* Bullet on the Report Preview screen, for a list of the user's preferred languages for websites as they were communicated by the browser to the page */
+"WebCompatReporter.Preview.Data.PageLanguages.v155" = "Preferencias de idioma transmitidas a la página";
+
+/* Bullet on the Report Preview screen. The reported page's address is shown underneath it. */
+"WebCompatReporter.Preview.Data.PageURL.v155" = "URL de la página";
+
+/* Bullet on the Report Preview screen, for the screen's physical pixels per layout point. */
+"WebCompatReporter.Preview.Data.PixelDensity.v155" = "Densidad de pixeles de la pantalla";
+
+/* Bullet on the Report Preview screen, for whether the page was open in private browsing. */
+"WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155" = "Si estás navegando en modo privado";
+
+/* Bullet on the Report Preview screen, for the tracking protection strength the user has chosen. */
+"WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155" = "Parámetros de Protección de rastreo mejorada para este sitio";
+
+/* Bullet on the Report Preview screen. Those three versions are only ever sent as tokens inside the user agent, never as fields of their own. %@ is the app name (e.g. Firefox). */
+"WebCompatReporter.Preview.Data.UserAgent.v155" = "Agente de usuario de tu navegador, incluyendo versiones de iOS, %@ y tu motor del navegador";
+
 /* Accessibility label for the page screenshot thumbnail on the Report Preview screen. */
 "WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154" = "Captura de pantalla de la página reportada. Toca dos veces para verla en pantalla completa.";
 
 /* Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen. */
 "WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154" = "Cerrar";
+
+/* Row on the Report Preview screen that opens the Technical Data screen, and that screen's title. */
+"WebCompatReporter.Preview.TechnicalData.v155" = "Datos técnicos";
 
 /* Title of the Report Preview screen, which shows the data that will be sent with a website issue report. */
 "WebCompatReporter.Preview.Title.v154" = "Vista previa del reporte";
@@ -99,4 +150,7 @@
 
 /* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.PlaybackFails.v154" = "El video o el audio no se reproducen";
+
+/* Message of the toast shown after the user successfully submits a website issue report. */
+"WebCompatReporter.Toast.ReportSent.v155" = "Reporte enviado";
 

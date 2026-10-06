@@ -244,7 +244,11 @@ final class LibraryScreen {
     }
 
     func deleteFolder(folderName: String) {
-        app.tables.cells.buttons["Remove \(folderName)"].waitAndTap()
+        if #available(iOS 17, *) {
+            app.tables.cells.buttons["Remove \(folderName)"].waitAndTap()
+        } else {
+            app.tables.cells.buttons["Delete \(folderName)"].waitAndTap()
+        }
         deleteButton.waitAndTap()
     }
 

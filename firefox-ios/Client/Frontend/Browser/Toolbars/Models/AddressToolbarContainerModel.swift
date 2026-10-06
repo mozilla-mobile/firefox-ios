@@ -37,6 +37,7 @@ final class AddressToolbarContainerModel: Equatable {
     let shouldAnimate: Bool
     let hasAlternativeLocationColor: Bool
     let isAddressBarMinimized: Bool
+    let isAccessoryViewVisible: Bool
 
     let windowUUID: UUID
 
@@ -202,6 +203,7 @@ final class AddressToolbarContainerModel: Equatable {
     @MainActor
     init(
         state: ToolbarState,
+        addressToolbarContainerLens: AddressToolbarContainerLens,
         profile: Profile,
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         toolbarHelper: ToolbarHelperInterface = ToolbarHelper(),
@@ -211,7 +213,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.navigationActions = Self.mapActions(state.addressToolbar.navigationActions,
                                                  isShowingTopTabs: state.isShowingTopTabs,
                                                  windowUUID: windowUUID)
-        self.leadingPageActions = Self.mapActions(state.addressToolbar.leadingPageActions,
+        self.leadingPageActions = Self.mapActions(addressToolbarContainerLens.leadingPageActions,
                                                   isShowingTopTabs: state.isShowingTopTabs,
                                                   windowUUID: windowUUID)
         self.trailingPageActions = Self.mapActions(state.addressToolbar.trailingPageActions,
@@ -227,6 +229,8 @@ final class AddressToolbarContainerModel: Equatable {
         // If the user has selected an alternative search engine, use that. Otherwise, use the default engine.
         let searchEngineModel = state.addressToolbar.alternativeSearchEngine
                                 ?? searchEnginesManager.defaultEngine?.generateModel()
+        // TODO: Remove once all actions that need hasAlternativeLocationColor are migrated into the lens.
+        // Can't drop this yet, still used here for uxConfiguration's background tint.
         let hasAlternativeLocationColor = state.toolbarPosition == .top &&
                                             !state.isShowingTopTabs &&
                                             state.isShowingNavigationToolbar
@@ -251,6 +255,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.canShowNavigationHint = state.canShowNavigationHint
         self.shouldAnimate = state.shouldAnimate
         self.isAddressBarMinimized = state.isAddressBarMinimized
+        self.isAccessoryViewVisible = state.isAccessoryViewVisible
         self.hasAlternativeLocationColor = hasAlternativeLocationColor
         self.toolbarLayoutStyle = state.toolbarLayout
         self.toolbarHelper = toolbarHelper
@@ -386,6 +391,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.canShowNavigationHint == rhs.canShowNavigationHint &&
         lhs.shouldAnimate == rhs.shouldAnimate &&
         lhs.isAddressBarMinimized == rhs.isAddressBarMinimized &&
+        lhs.isAccessoryViewVisible == rhs.isAccessoryViewVisible &&
         lhs.hasAlternativeLocationColor == rhs.hasAlternativeLocationColor &&
 
         lhs.windowUUID == rhs.windowUUID

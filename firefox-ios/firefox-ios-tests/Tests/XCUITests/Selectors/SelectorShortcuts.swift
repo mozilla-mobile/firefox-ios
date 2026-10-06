@@ -130,6 +130,21 @@ extension Selector {
         )
     }
 
+    static func iconById(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(
+            strategy: .predicate(
+                NSPredicate(
+                    format: "elementType == %d AND identifier == %@",
+                    XCUIElement.ElementType.icon.rawValue,
+                    id
+                )
+            ),
+            value: id,
+            description: description,
+            groups: groups
+        )
+    }
+
     static func staticTextByExactLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
         Selector(
             strategy: .predicate(
@@ -143,6 +158,12 @@ extension Selector {
             description: description,
             groups: groups
         )
+    }
+
+    static func textFieldContainingButton(labeled label: String,
+                                          description: String,
+                                          groups: [String] = []) -> Selector {
+        Selector(strategy: .textFieldContainingButtonByLabel(label), value: label, description: description, groups: groups)
     }
 
     static func staticTextLabelContains(_ text: String, description: String, groups: [String] = []) -> Selector {
@@ -179,6 +200,20 @@ extension Selector {
                  value: id,
                  description: description,
                  groups: groups
+        )
+    }
+
+    static func searchFieldByIdOrLabel(_ value: String, description: String, groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (identifier == %@ OR label == %@)",
+            XCUIElement.ElementType.searchField.rawValue,
+            value,
+            value
+        )
+        return Selector(strategy: .predicate(predicate),
+                        value: value,
+                        description: description,
+                        groups: groups
         )
     }
 
@@ -296,6 +331,26 @@ extension Selector {
             format: "elementType == %d AND label CONTAINS[c] %@",
             XCUIElement.ElementType.button.rawValue,
             text
+        )
+
+        return Selector(
+            strategy: .predicate(predicate),
+            value: text,
+            description: description,
+            groups: groups
+        )
+    }
+
+    /// Matches a button whose label contains either text, for elements labelled differently per scheme.
+    static func buttonLabelContainsEither(_ text: String,
+                                          or otherText: String,
+                                          description: String,
+                                          groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (label CONTAINS[c] %@ OR label CONTAINS[c] %@)",
+            XCUIElement.ElementType.button.rawValue,
+            text,
+            otherText
         )
 
         return Selector(

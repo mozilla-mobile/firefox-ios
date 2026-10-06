@@ -59,10 +59,12 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layerSurfaceMedium = FXColors.DarkGrey80
     var layerSurfaceMediumAlpha = FXColors.DarkGrey80.withAlphaComponent(0.8)
     var layerSurfaceMediumAlt = FXColors.DarkGrey40
+    var layerSurfaceMediumAltGlass = FXColors.DarkGrey40
     var layerGradientSummary = Gradient(colors: [
         FXColors.Red70,
         FXColors.Orange50
     ])
+    var layerToolbarGlass: UIColor = FXColors.DarkGrey60
 
     // MARK: - Actions
     var actionPrimary: UIColor = FXColors.Blue30
@@ -140,6 +142,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layerAccentSubtle: UIColor { NovaMissingToken.color("layerAccentSubtle") }
     var layerInverse: UIColor { NovaMissingToken.color("layerInverse") }
     var layerGlassTintNova: UIColor { NovaMissingToken.color("layerGlassTintNova") }
+    var layerGlassSelectedFill: UIColor { NovaMissingToken.color("layerGlassSelectedFill") }
     var textToast: UIColor { NovaMissingToken.color("textToast") }
     var iconInverted: UIColor { NovaMissingToken.color("iconInverted") }
     var iconOnColorDisabled: UIColor { NovaMissingToken.color("iconOnColorDisabled") }

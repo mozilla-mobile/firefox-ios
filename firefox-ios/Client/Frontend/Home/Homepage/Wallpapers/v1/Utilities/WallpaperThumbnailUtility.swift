@@ -72,7 +72,7 @@ class WallpaperThumbnailUtility {
                     withFolderName: key)
                 else { break }
 
-                try storageUtility.store(thumbnail, withName: fileName, andKey: key)
+                try storageUtility.store(thumbnail, withName: fileName)
             }
         }
     }

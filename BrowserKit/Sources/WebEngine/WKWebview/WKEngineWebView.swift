@@ -289,7 +289,8 @@ final class DefaultWKEngineWebView: WKWebView,
         refresh.configure(with: scrollView) { [weak self] in
             self?.delegate?.webViewNeedsReload()
         }
-        guard pullRefreshViewType != UIRefreshControl.self else { return }
+
+        guard !(refresh is UIRefreshControl) else { return }
         scrollView.addSubview(refresh)
         refresh.translatesAutoresizingMaskIntoConstraints = false
         pullRefreshViewHeightConstraint = refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height)
@@ -304,6 +305,9 @@ final class DefaultWKEngineWebView: WKWebView,
     }
 
     private func removePullRefresh() {
+        if pullRefreshView is UIRefreshControl {
+            scrollView.refreshControl = nil
+        }
         pullRefreshView?.removeFromSuperview()
         pullRefreshViewWidthConstraint = nil
         pullRefreshViewHeightConstraint = nil
@@ -349,15 +353,6 @@ final class DefaultWKEngineWebView: WKWebView,
                 self.delegate?.tabWebView(self, searchSelection: selection)
             }
         }
-    }
-
-    override internal func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        // The find-in-page selection menu only appears if the webview is the first responder.
-        // Do not becomeFirstResponder on a mouse event.
-        if let event = event, event.allTouches?.contains(where: { $0.type != .indirectPointer }) ?? false {
-            becomeFirstResponder()
-        }
-        return super.hitTest(point, with: event)
     }
 
     // MARK: - UIScrollViewDelegate

@@ -14,15 +14,18 @@ channels:
   - release
 include:
   - nimbus-features/adBlockerFeature.yaml
+  - nimbus-features/backgroundAudioFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/addressBarGestureToOpenTabTrayFeature.yaml
   - nimbus-features/aiKillSwitchFeature.yaml
   - nimbus-features/bookmarksSearchFeature.yaml
+  - nimbus-features/cellularDataRestrictedErrorPageFeature.yaml
   - nimbus-features/customReaderModeSchemeFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
   - nimbus-features/firefoxJpGuideDefaultSite.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
+  - nimbus-features/gleanServerKnobs.yaml
   - nimbus-features/googleLensFeature.yaml
   - nimbus-features/homepageRedesignFeature.yaml
   - nimbus-features/homepageTrackerBlockerModuleFeature.yaml
@@ -56,3 +59,4 @@ include:
   - nimbus-features/trendingSearchesFeature.yaml
   - nimbus-features/vpnFeature.yaml
   - nimbus-features/waybackMachineFeature.yaml
+  - nimbus-features/webViewDocumentFetchRefactorFeature.yaml

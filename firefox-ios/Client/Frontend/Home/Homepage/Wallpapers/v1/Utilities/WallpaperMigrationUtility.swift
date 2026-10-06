@@ -61,11 +61,9 @@ struct WallpaperMigrationUtility {
         with storageUtility: WallpaperStorageUtility
     ) throws {
         try storageUtility.store(portrait,
-                                 withName: wallpaper.portraitID,
-                                 andKey: wallpaper.id)
+                                 withName: wallpaper.portraitID)
         try storageUtility.store(landscape,
-                                 withName: wallpaper.landscapeID,
-                                 andKey: wallpaper.id)
+                                 withName: wallpaper.landscapeID)
         try storageUtility.store(wallpaper)
     }
 

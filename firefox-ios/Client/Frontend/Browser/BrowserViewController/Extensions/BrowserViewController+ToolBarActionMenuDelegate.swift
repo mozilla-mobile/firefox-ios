@@ -94,32 +94,6 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         summarizeToolbarEntryContextHintVC.stopTimer()
     }
 
-    // MARK: - Translation CFR
-    func configureTranslationContextualHint(for view: UIView) {
-        guard let state = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
-        // Show up arrow for iPad and landscape or top address bar; otherwise show down arrow
-        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
-        let shouldShowUpArrow = state.toolbarPosition == .top || !showNavToolbar
-
-        translationContextHintVC.configure(
-            anchor: view,
-            withArrowDirection: shouldShowUpArrow ? .up : .down,
-            andDelegate: self,
-            presentedUsing: { [weak self] in
-                self?.presentContextualHint(for: .translation)
-            },
-            actionOnDismiss: { [weak view] in
-                UIAccessibility.post(notification: .layoutChanged, argument: view)
-            },
-            andActionForButton: { },
-            overlayState: overlayManager)
-    }
-
-    private func presentTranslationContextualHint() {
-        present(translationContextHintVC, animated: true)
-        UIAccessibility.post(notification: .layoutChanged, argument: translationContextHintVC)
-    }
-
     @MainActor
     func configureGoogleLensTip(for button: UIButton) {
         guard #available(iOS 17.0, *),
@@ -173,34 +147,13 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         scrollController.showToolbars(animated: true)
         switch hintType {
         case .summarizeToolbarEntry: presentSummarizeToolbarEntryContextualHint()
-        case .translation: presentTranslationContextualHint()
         case .navigation: presentNavigationContextualHint()
         default: break
         }
     }
 
-    func dismissToolbarCFRs(with windowUUID: WindowUUID) {
-        guard let toolbarState = store.state.componentState(
-            ToolbarState.self,
-            for: .toolbar,
-            window: windowUUID
-        ) else {
-            return
-        }
-        let translationAction = toolbarState.addressToolbar.leadingPageActions.first(where: { $0.actionType == .translate })
-        if translationAction == nil {
-            resetTranslationCFRTimer()
-        }
-    }
-
     func resetCFRsTimer() {
         resetSummarizeToolbarCFRTimer()
-    }
-
-    // Reset the CFR timer for the translation button to avoid presenting the CFR
-    // In cases, such as if translation icon is not available
-    private func resetTranslationCFRTimer() {
-        translationContextHintVC.stopTimer()
     }
 
     func dismissUrlBar() {

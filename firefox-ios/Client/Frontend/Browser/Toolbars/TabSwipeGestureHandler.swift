@@ -234,6 +234,7 @@ final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, Store
                 webPagePreview.setScreenshot(url: nil)
             }
         } else {
+            webPagePreview.isHidden = nextTab == nil
             webPagePreview.alpha = 1.0
             webPagePreview.setScreenshot(nextTab)
         }

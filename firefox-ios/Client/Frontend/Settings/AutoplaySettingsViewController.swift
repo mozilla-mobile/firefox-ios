@@ -6,7 +6,7 @@ import Common
 import Foundation
 import Shared
 
-class AutoplaySettingsViewController: SettingsTableViewController {
+final class AutoplaySettingsViewController: SettingsTableViewController {
     private let prefs: Prefs
     private var currentChoice: AutoplayAction?
 
@@ -38,9 +38,9 @@ class AutoplaySettingsViewController: SettingsTableViewController {
             title: NSAttributedString(string: .Settings.Autoplay.AllowAudioAndVideo),
             subtitle: nil,
             accessibilityIdentifier: AccessibilityIdentifiers.Settings.Autoplay.allowAudioAndVideo,
-            isChecked: { return self.currentChoice == AutoplayAction.allowAudioAndVideo },
-            onChecked: {
-                self.currentChoice = AutoplayAction.allowAudioAndVideo
+            isChecked: { [weak self] in return self?.currentChoice == AutoplayAction.allowAudioAndVideo },
+            onChecked: { [weak self] in
+                self?.currentChoice = AutoplayAction.allowAudioAndVideo
                 onFinished()
             }
         )
@@ -49,9 +49,9 @@ class AutoplaySettingsViewController: SettingsTableViewController {
             title: NSAttributedString(string: .Settings.Autoplay.BlockAudio),
             subtitle: nil,
             accessibilityIdentifier: AccessibilityIdentifiers.Settings.Autoplay.blockAudio,
-            isChecked: { return self.currentChoice == AutoplayAction.blockAudio },
-            onChecked: {
-                self.currentChoice = AutoplayAction.blockAudio
+            isChecked: { [weak self] in return self?.currentChoice == AutoplayAction.blockAudio },
+            onChecked: { [weak self] in
+                self?.currentChoice = AutoplayAction.blockAudio
                 onFinished()
             }
         )
@@ -60,9 +60,9 @@ class AutoplaySettingsViewController: SettingsTableViewController {
             title: NSAttributedString(string: .Settings.Autoplay.BlockAudioAndVideo),
             subtitle: nil,
             accessibilityIdentifier: AccessibilityIdentifiers.Settings.Autoplay.blockAudioAndVideo,
-            isChecked: { return self.currentChoice == AutoplayAction.blockAudioAndVideo },
-            onChecked: {
-                self.currentChoice = AutoplayAction.blockAudioAndVideo
+            isChecked: { [weak self] in return self?.currentChoice == AutoplayAction.blockAudioAndVideo },
+            onChecked: { [weak self] in
+                self?.currentChoice = AutoplayAction.blockAudioAndVideo
                 onFinished()
             }
         )

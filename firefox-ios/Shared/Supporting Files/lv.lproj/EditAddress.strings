@@ -1,3 +1,6 @@
 /* Title for the interface option where users can add a new address for autofill purposes. This facilitates quicker form completion by automatically filling in the user's address information. */
 "Addresses.EditAddress.AutofillAddAddressTitle.v129" = "Pievienot adresi";
 
+/* Suggestion to try again after an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Mēģināt vēlreiz";
+

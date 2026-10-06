@@ -80,8 +80,8 @@ final class ReadingListScreen {
     func waitForReadingListsPanel() {
         BaseTestCase().waitForElementsToExist(
             [sel.EMPTY_READING_LIST_1.element(in: app),
-            sel.EMPTY_READING_LIST_2.element(in: app),
-            sel.EMPTY_READING_LIST_3.element(in: app)]
+             sel.EMPTY_READING_LIST_2.element(in: app),
+             sel.EMPTY_READING_LIST_3.element(in: app)]
         )
     }
     func waitForArticle(_ title: String) {

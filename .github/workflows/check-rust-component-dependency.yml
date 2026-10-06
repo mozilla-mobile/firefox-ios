@@ -16,13 +16,13 @@ jobs:
       matrix:
         python-version: [3.10.16]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       with:
         persist-credentials: false
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -72,7 +72,7 @@ jobs:
         git diff --quiet || (git add firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved firefox-ios/Client.xcodeproj/project.pbxproj focus-ios/Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved focus-ios/Blockzilla.xcodeproj/project.pbxproj)
 
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v6
+      uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
       if: env.BRANCH_CREATED == 'false'
       with:
         commit-message: Auto update SPM with latest rust-component release ${{ env.rust_version }}

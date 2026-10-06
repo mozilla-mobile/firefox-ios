@@ -39,6 +39,52 @@ fileprivate extension ForeignBytes {
     init(bufferPointer: UnsafeBufferPointer<UInt8>) {
         self.init(len: Int32(bufferPointer.count), data: bufferPointer.baseAddress)
     }
+
+    init(rawBufferPointer: UnsafeRawBufferPointer) {
+        self.init(
+            len: Int32(rawBufferPointer.count),
+            data: rawBufferPointer.baseAddress?.assumingMemoryBound(to: UInt8.self)
+        )
+    }
+}
+
+// Converter for `&[u8]` / `[ByRef] bytes` arguments.
+//
+// Conforms to `FfiConverter` so the compiler enforces the full converter
+// method set. Only the scope-bound `lower(_:_body:)` overload is sound —
+// zero-copy byte buffers only flow foreign -> Rust, and only in argument
+// position. The four protocol-witness methods (`lift`, `lower`, `read`,
+// `write`) `fatalError` at runtime if anyone reaches them.
+//
+// The scope-bound `lower` takes a closure because the `ForeignBytes`
+// pointer is only guaranteed valid for the duration of
+// `Data.withUnsafeBytes`. Callers must run the full FFI call inside
+// the closure body.
+fileprivate enum FfiConverterByRefBytes: FfiConverter {
+    typealias SwiftType = Data
+    typealias FfiType = ForeignBytes
+
+    static func lower<R>(_ value: Data, _ body: (ForeignBytes) throws -> R) rethrows -> R {
+        return try value.withUnsafeBytes { rawBuf in
+            try body(ForeignBytes(rawBufferPointer: rawBuf))
+        }
+    }
+
+    static func lower(_ value: Data) -> ForeignBytes {
+        fatalError("ByRef bytes cannot use the plain lower: returning ForeignBytes escapes the Data.withUnsafeBytes scope. Use the scope-bound lower(_:_body:) overload instead.")
+    }
+
+    static func lift(_ value: ForeignBytes) throws -> Data {
+        fatalError("ByRef bytes cannot be lifted: zero-copy &[u8] only flows foreign->Rust")
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        fatalError("ByRef bytes cannot be read from a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
+
+    static func write(_ value: Data, into buf: inout [UInt8]) {
+        fatalError("ByRef bytes cannot be written to a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
 }
 
 // For every type used in the interface, we provide helper methods for conveniently
@@ -493,7 +539,11 @@ fileprivate struct FfiConverterString: FfiConverter {
             return String()
         }
         let bytes = UnsafeBufferPointer<UInt8>(start: value.data!, count: Int(value.len))
-        return String(bytes: bytes, encoding: String.Encoding.utf8)!
+        // Use Swift's native UTF-8 decoder; `String(bytes:encoding:.utf8)` goes
+        // through Foundation's NSString and silently strips a leading U+FEFF BOM.
+        // Invalid UTF-8 substitutes U+FFFD instead of trapping (unreachable
+        // given Rust's `String` invariant).
+        return String(decoding: bytes, as: UTF8.self)
     }
 
     public static func lower(_ value: String) -> RustBuffer {
@@ -509,7 +559,8 @@ fileprivate struct FfiConverterString: FfiConverter {
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> String {
         let len: Int32 = try readInt(&buf)
-        return String(bytes: try readBytes(&buf, count: Int(len)), encoding: String.Encoding.utf8)!
+        // See `lift` above for why we avoid Foundation's NSString-backed decoder here.
+        return String(decoding: try readBytes(&buf, count: Int(len)), as: UTF8.self)
     }
 
     public static func write(_ value: String, into buf: inout [UInt8]) {
@@ -594,11 +645,12 @@ open class ContextIdComponent: ContextIdComponentProtocol, @unchecked Sendable {
 public convenience init(initContextId: String, creationTimestampS: Int64, runningInTestAutomation: Bool, callback: ContextIdCallback) {
     let handle =
         try! rustCall() {
+        uniffiCallStatus in
     uniffi_context_id_fn_constructor_contextidcomponent_new(
         FfiConverterString.lower(initContextId),
         FfiConverterInt64.lower(creationTimestampS),
         FfiConverterBool.lower(runningInTestAutomation),
-        FfiConverterCallbackInterfaceContextIdCallback_lower(callback),$0
+        FfiConverterCallbackInterfaceContextIdCallback_lower(callback),uniffiCallStatus
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -620,8 +672,9 @@ public convenience init(initContextId: String, creationTimestampS: Int64, runnin
      * Regenerate the context ID.
      */
 open func forceRotation()throws   {try rustCallWithError(FfiConverterTypeApiError_lift) {
+        uniffiCallStatus in
     uniffi_context_id_fn_method_contextidcomponent_force_rotation(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -631,9 +684,10 @@ open func forceRotation()throws   {try rustCallWithError(FfiConverterTypeApiErro
      */
 open func request(rotationDaysInS: UInt8)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeApiError_lift) {
+        uniffiCallStatus in
     uniffi_context_id_fn_method_contextidcomponent_request(
             self.uniffiCloneHandle(),
-        FfiConverterUInt8.lower(rotationDaysInS),$0
+        FfiConverterUInt8.lower(rotationDaysInS),uniffiCallStatus
     )
 })
 }
@@ -643,8 +697,9 @@ open func request(rotationDaysInS: UInt8)throws  -> String  {
      * no-op ContextIdCallback instead.
      */
 open func unsetCallback()throws   {try rustCallWithError(FfiConverterTypeApiError_lift) {
+        uniffiCallStatus in
     uniffi_context_id_fn_method_contextidcomponent_unset_callback(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -697,7 +752,8 @@ public func FfiConverterTypeContextIDComponent_lower(_ value: ContextIdComponent
 
 
 
-public enum ApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
+public 
+enum ApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -788,9 +844,8 @@ fileprivate struct UniffiCallbackInterfaceContextIdCallback {
     // Create the VTable using a series of closures.
     // Swift automatically converts these into C callback functions.
     //
-    // This creates 1-element array, since this seems to be the only way to construct a const
-    // pointer that we can pass to the Rust code.
-    static let vtable: [UniffiVTableCallbackInterfaceContextIdCallback] = [UniffiVTableCallbackInterfaceContextIdCallback(
+    // Store the vtable directly.
+    static let vtable: UniffiVTableCallbackInterfaceContextIdCallback = UniffiVTableCallbackInterfaceContextIdCallback(
         uniffiFree: { (uniffiHandle: UInt64) -> () in
             do {
                 try FfiConverterCallbackInterfaceContextIdCallback.handleMap.remove(handle: uniffiHandle)
@@ -855,11 +910,23 @@ fileprivate struct UniffiCallbackInterfaceContextIdCallback {
                 writeReturn: writeReturn
             )
         }
-    )]
+    )
+
+    // Rust stores this pointer for future callback invocations, so it must live
+    // for the process lifetime (not just for the init function call).
+    //
+    // `nonisolated(unsafe)` is needed under Swift 6 strict concurrency.
+    // This is safe because the pointee is initialized once during static init
+    // and never mutated by either side of the FFI.  Its fields are C function pointers.
+    nonisolated(unsafe) static let vtablePtr: UnsafePointer<UniffiVTableCallbackInterfaceContextIdCallback> = {
+        let ptr = UnsafeMutablePointer<UniffiVTableCallbackInterfaceContextIdCallback>.allocate(capacity: 1)
+        ptr.initialize(to: vtable)
+        return UnsafePointer(ptr)
+    }()
 }
 
 private func uniffiCallbackInitContextIdCallback() {
-    uniffi_context_id_fn_init_callback_vtable_contextidcallback(UniffiCallbackInterfaceContextIdCallback.vtable)
+    uniffi_context_id_fn_init_callback_vtable_contextidcallback(UniffiCallbackInterfaceContextIdCallback.vtablePtr)
 }
 
 // FfiConverter protocol for callback interfaces
@@ -937,22 +1004,22 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_context_id_checksum_method_contextidcomponent_force_rotation() != 61947) {
+    if (uniffi_context_id_checksum_method_contextidcomponent_force_rotation() != 48000) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_context_id_checksum_method_contextidcomponent_request() != 61547) {
+    if (uniffi_context_id_checksum_method_contextidcomponent_request() != 63026) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_context_id_checksum_method_contextidcomponent_unset_callback() != 16438) {
+    if (uniffi_context_id_checksum_method_contextidcomponent_unset_callback() != 20779) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_context_id_checksum_constructor_contextidcomponent_new() != 59882) {
+    if (uniffi_context_id_checksum_constructor_contextidcomponent_new() != 16770) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_context_id_checksum_method_contextidcallback_persist() != 13731) {
+    if (uniffi_context_id_checksum_method_contextidcallback_persist() != 24127) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_context_id_checksum_method_contextidcallback_rotated() != 19936) {
+    if (uniffi_context_id_checksum_method_contextidcallback_rotated() != 26399) {
         return InitializationResult.apiChecksumMismatch
     }
 

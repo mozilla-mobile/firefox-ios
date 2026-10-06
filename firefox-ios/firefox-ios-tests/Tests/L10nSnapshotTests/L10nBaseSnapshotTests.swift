@@ -39,6 +39,14 @@ class L10nBaseSnapshotTests: XCTestCase {
         navigator.synchronizeWithUserState()
     }
 
+    @MainActor
+    override func tearDown() async throws {
+        navigator = nil
+        userState = nil
+        app = nil
+        try await super.tearDown()
+    }
+
     func springboardStart(_ app: XCUIApplication, args: [String] = []) {
         XCUIDevice.shared.press(.home)
         app.launchArguments += [LaunchArguments.Test] + args

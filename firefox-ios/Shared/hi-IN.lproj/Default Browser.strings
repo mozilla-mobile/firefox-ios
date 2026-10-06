@@ -1,11 +1,29 @@
-/* Button string to learn how to set your default browser. */
-"DefaultBrowserCard.Button.v2" = "सीखें कैसे";
-
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Firefox में स्वचालित रूप से वेबसाइट, ईमेल और संदेशों को खोलने के लिए लिंक सेट करें।";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox को अपना डिफ़ॉल्ट ब्राउज़र बनाना एक खुले और सबके लिए सुलभ इंटरनेट के पक्ष में वोट है।";
 
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Title" = "अपना तयशुदा ब्राउज़र बदलें";
+"DefaultBrowserCard.BetterInternet.Title.v108" = "बेहतर इंटरनेट को डिफ़ॉल्ट बनाएं";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "तरीका जानें";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "वेबसाइट, ईमेल और मैसेज में मिलने वाले लिंक को Firefox में अपने आप खुलने के लिए सेट करें।";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "रफ़्तार, सुरक्षा और प्राइवेसी अपने आप पाने के लिए Firefox को अपना डिफ़ॉल्ट ब्राउज़र चुनें।";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "रोज़ की ब्राउज़िंग को बेहतर बनाएं";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox हर महीने औसतन प्रति यूज़र 3,000+ ट्रैकर ब्लॉक करता है। प्राइवेसी की चिंता से मुक्ति के लिए हमें अपना डिफ़ॉल्ट ब्राउज़र बनाएं।";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox ने प्राइवेसी का पूरा ध्यान रखा है";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "अपना डिफ़ॉल्ट ब्राउज़र बदलें";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserOnboarding.Button" = "सेटिंग पर जाएं";
@@ -14,14 +32,17 @@
 "DefaultBrowserOnboarding.Description1" = "1. सेटिंग पर जाएं";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. डिफ़ॉल्ट ब्राउज़र के रूप में टैप करें";
+"DefaultBrowserOnboarding.Description2" = "2. 'डिफ़ॉल्ट ब्राउज़र ऐप' पर टैप करें";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. Firefox चुनें";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
-"DefaultBrowserOnboarding.Screenshot" = "तयशुदा ब्राउज़र ऐप";
+"DefaultBrowserOnboarding.Screenshot" = "डिफ़ॉल्ट ब्राउज़र ऐप";
+
+/* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
+"DefaultBrowserOnboarding.SkipButton" = "बाद में करें";
 
 /* Menu option for setting Firefox as default browser. */
-"Settings.DefaultBrowserMenuItem" = "तयशुदा ब्राउज़र के रूप में सेट करें";
+"Settings.DefaultBrowserMenuItem" = "डिफ़ॉल्ट ब्राउज़र के रूप में सेट करें";
 

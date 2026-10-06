@@ -43,8 +43,6 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = true
         case .relay:
             hintTypeShouldBePresented = canRelayMaskCFRBePresented
-        case .translation:
-            hintTypeShouldBePresented = canTranslationCFRBePresented
         case .summarizeToolbarEntry:
             hintTypeShouldBePresented = true
         }
@@ -58,10 +56,6 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         guard overlayState != nil else { return false }
 
         return overlayState?.inOverlayMode ?? false
-    }
-
-    private var canTranslationCFRBePresented: Bool {
-        return featureFlagsProvider.isEnabled(.translation)
     }
 
     @MainActor

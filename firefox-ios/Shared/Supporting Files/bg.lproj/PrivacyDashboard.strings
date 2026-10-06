@@ -1,3 +1,6 @@
+/* On the Privacy Dashboard popup, the accessibility label read out for one of the tracker category rows. The first placeholder (%1$@) is the category's name, such as Fingerprinters. The second placeholder (%2$@) is how many trackers of that category we've blocked this week. */
+"PrivacyDashboard.CategoryAccessibilityLabel.v156" = "%1$@, блокирано: %2$@";
+
 /* On the Privacy Dashboard popup, the title text for the bar & label showing how many cross-site tracking cookies we've blocked. */
 "PrivacyDashboard.CrossSiteTrackers.v155" = "Бисквитки за следене в различни сайтове";
 
@@ -6,6 +9,9 @@
 
 /* On the Privacy Dashboard popup, the text for the header when we have blocked some trackers this week. This is going to have, above it, in bold letters, the number of trackers blocked this week. */
 "PrivacyDashboard.HeaderLabel.v155" = "Проследяването е спряно тази седмица";
+
+/* On the Privacy Dashboard popup, the accessibility label read out for the weekly count. The count and the header below it are two separate labels on screen, but are read out as this one sentence. The placeholder (%@) is how many trackers we've blocked this week. */
+"PrivacyDashboard.HeaderLabelAccessibilityLabel.v156" = "Спирани проследявания тази седмица: %@";
 
 /* On the Privacy Dashboard popup, the text for the header of the popup, in the case where we have not yet blocked any trackers yet. The placeholder %@ will be the app name, Firefox. */
 "PrivacyDashboard.HeaderLabelForNoTrackersBlocked.v155" = "%@ спира проследявания, докато сърфирате. Ще ги видите тук.";

@@ -293,7 +293,10 @@ final class AddressToolbarContainerModelTests: XCTestCase {
 
     @MainActor
     private func createSubject(withState state: ToolbarState) -> AddressToolbarContainerModel {
+        let appState = AppState(presentedComponents: PresentedComponentsState(components: [.toolbar(state)]))
+        let lens = AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
         return AddressToolbarContainerModel(state: state,
+                                            addressToolbarContainerLens: lens,
                                             profile: mockProfile,
                                             windowUUID: windowUUID)
     }
@@ -304,7 +307,6 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     ) -> AddressBarState {
         return AddressBarState(windowUUID: windowUUID,
                                navigationActions: [],
-                               leadingPageActions: [],
                                trailingPageActions: [],
                                browserActions: [],
                                editingAccessoryAction: makeEditingAccessoryAction(
@@ -390,7 +392,8 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             isTranslationsEnabled: true,
                             previousTabScreenshot: nil,
                             nextTabScreenshot: nil,
-                            isAddressBarMinimized: false)
+                            isAddressBarMinimized: false,
+                            isAccessoryViewVisible: false)
     }
 
     private func createToolbarStateWithAlternativeSearchEngine(searchEngine: SearchEngineModel) -> ToolbarState {
@@ -413,7 +416,8 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             isTranslationsEnabled: true,
                             previousTabScreenshot: nil,
                             nextTabScreenshot: nil,
-                            isAddressBarMinimized: false)
+                            isAddressBarMinimized: false,
+                            isAccessoryViewVisible: false)
     }
 
     @MainActor

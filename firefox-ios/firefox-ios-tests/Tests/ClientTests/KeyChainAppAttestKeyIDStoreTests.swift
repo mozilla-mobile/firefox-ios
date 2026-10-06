@@ -12,6 +12,10 @@ final class KeychainAppAttestKeyIDStoreTests: XCTestCase {
     private static let testService = "org.mozilla.browserkit.appattest.keyid.test"
     private static let testAccount = "test"
 
+    override func setUp() {
+        super.setUp()
+    }
+
     override func tearDown() {
         // Clean up after each test so keychain state doesn't leak between tests.
         let subject = createSubject()

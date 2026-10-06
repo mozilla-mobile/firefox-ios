@@ -13,12 +13,12 @@ struct SummarizerLanguageProviderTests {
         websiteLanguageProvider.mockError = NSError(domain: "", code: 0)
         let subject = createSubject()
 
-        let locale = await subject.getLanguage(
+        let languages = await subject.getLanguage(
             userPreference: .websiteLanguage,
             supportedLocales: [],
             languageSampleSource: MockLanguageSampleSource()
         )
-        #expect(locale == nil)
+        #expect(languages == nil)
     }
 
     @Test
@@ -26,12 +26,12 @@ struct SummarizerLanguageProviderTests {
         websiteLanguageProvider.detectedLanguage = "fr"
         let subject = createSubject()
 
-        let locale = await subject.getLanguage(
+        let languages = await subject.getLanguage(
             userPreference: .websiteLanguage,
             supportedLocales: [Locale(identifier: "en-GB")],
             languageSampleSource: MockLanguageSampleSource()
         )
-        #expect(locale == nil)
+        #expect(languages == nil)
     }
 
     @Test
@@ -39,7 +39,7 @@ struct SummarizerLanguageProviderTests {
         websiteLanguageProvider.detectedLanguage = "fr"
         let subject = createSubject()
 
-        let locale = await subject.getLanguage(
+        let languages = await subject.getLanguage(
             userPreference: .websiteLanguage,
             supportedLocales: [
                 Locale(identifier: "fr-FR"),
@@ -48,7 +48,9 @@ struct SummarizerLanguageProviderTests {
             languageSampleSource: MockLanguageSampleSource()
         )
 
-        #expect(locale == Locale(identifier: websiteLanguageProvider.detectedLanguage))
+        let detectedLocale = Locale(identifier: websiteLanguageProvider.detectedLanguage)
+        #expect(languages?.summaryLocale == detectedLocale)
+        #expect(languages?.pageLocale == detectedLocale)
     }
 
     @Test
@@ -56,13 +58,14 @@ struct SummarizerLanguageProviderTests {
         websiteLanguageProvider.detectedLanguage = "de"
         let subject = createSubject()
 
-        let locale = await subject.getLanguage(
+        let languages = await subject.getLanguage(
             userPreference: .customLocale(Locale(identifier: "de")),
             supportedLocales: [Locale(identifier: "de")],
             languageSampleSource: MockLanguageSampleSource()
         )
 
-        #expect(locale == Locale(identifier: "de"))
+        #expect(languages?.summaryLocale == Locale(identifier: "de"))
+        #expect(languages?.pageLocale == Locale(identifier: "de"))
     }
 
     @Test
@@ -70,13 +73,28 @@ struct SummarizerLanguageProviderTests {
         websiteLanguageProvider.detectedLanguage = "it"
         let subject = createSubject()
 
-        let locale = await subject.getLanguage(
+        let languages = await subject.getLanguage(
             userPreference: .customLocale(Locale(identifier: "de")),
             supportedLocales: [Locale(identifier: "it")],
             languageSampleSource: MockLanguageSampleSource()
         )
 
-        #expect(locale == nil)
+        #expect(languages == nil)
+    }
+
+    @Test
+    func test_getLanguage_whenCustomLocaleDiffersFromWebsiteLanguage_reportsBothLocales() async {
+        websiteLanguageProvider.detectedLanguage = "de"
+        let subject = createSubject()
+
+        let languages = await subject.getLanguage(
+            userPreference: .customLocale(Locale(identifier: "it")),
+            supportedLocales: [Locale(identifier: "de"), Locale(identifier: "it")],
+            languageSampleSource: MockLanguageSampleSource()
+        )
+
+        #expect(languages?.summaryLocale == Locale(identifier: "it"))
+        #expect(languages?.pageLocale == Locale(identifier: "de"))
     }
 
     private func createSubject() -> DefaultSummarizerLanguageProvider {

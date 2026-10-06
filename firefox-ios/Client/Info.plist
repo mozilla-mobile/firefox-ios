@@ -134,7 +134,7 @@
 		<true/>
 	</dict>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Firefox uses speech recognition to convert your voice to text for voice search.</string>
+	<string>This lets Firefox transcribe your audio.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Firefox can use your camera to scan QR codes or take photos and video.</string>
 	<key>NSFaceIDUsageDescription</key>
@@ -215,6 +215,7 @@
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>fetch</string>
 		<string>processing</string>
 		<string>remote-notification</string>

@@ -98,22 +98,22 @@
 "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151" = "Translation";
 
 /* This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
-"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "Blocking means you won’t see new or current features with AI in %@, or pop-ups about them.";
+"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "Blocking means you won’t see new or current AI enhancements in %@, or pop-ups about them.";
 
 /* In the AI Controls settings, this is the text for the link that takes the user more information on AI features. */
 "Settings.AIControls.BlockAIEnhancementsLink.v151" = "See what is and isn’t included";
 
 /* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
-"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "Block Features With AI";
+"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "Block AI Enhancements";
 
 /* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
-"Settings.AIControls.BlockedInformation.v151" = "New and current features with AI are blocked by default. Unblock specific features below.";
+"Settings.AIControls.BlockedInformation.v151" = "New and current AI enhancements are blocked by default. Unblock specific features below.";
 
 /* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
 "Settings.AIControls.HeaderCard.Link.v151" = "Learn more";
 
 /* This is the message for the Header Card under the AI Controls settings section. */
-"Settings.AIControls.HeaderCard.Message.v151" = "That includes whether to use features with AI.";
+"Settings.AIControls.HeaderCard.Message.v151" = "That includes whether to use features enhanced with AI.";
 
 /* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
 "Settings.AIControls.HeaderCard.Title.v151" = "You always have a choice in %@";
@@ -169,6 +169,15 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Autoplay";
 
+/* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
+"Settings.Browsing.AdBlocker.Description.v155" = "Reduces ads and ad-related trackers. If a site looks broken, try turning this off.";
+
+/* Link text below the Ad Blocker toggle description that opens a support page with more information. */
+"Settings.Browsing.AdBlocker.LearnMore.v155" = "Learn more";
+
+/* Title for the Ad Blocker toggle in the Browsing settings page. */
+"Settings.Browsing.AdBlocker.Title.v155" = "Ad Blocker";
+
 /* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
 "Settings.Browsing.BlockAds.Title.v153" = "Block Ads";
 
@@ -188,7 +197,7 @@
 "Settings.Browsing.Title.v137" = "Browsing";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v136" = "Learn more";
+"Settings.CrashReports.Link.v136" = "Learn More";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "This helps us diagnose and fix issues with the browser.";
@@ -197,7 +206,7 @@
 "Settings.CrashReports.Title.v135" = "Automatically Send Crash Reports";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v136" = "Learn more";
+"Settings.DailyUsagePing.Link.v136" = "Learn More";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. %@ is the company name (e.g. Mozilla). */
 "Settings.DailyUsagePing.Message.v135" = "This helps %@ to estimate active users.";
@@ -207,6 +216,9 @@
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Account";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the brand title for the section containing the Wrexham AFC wallpapers. */
+"Settings.Home.Option.Wallpaper.WrexhamBrandTitle.v155" = "Wrexham A.F.C.";
 
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsStatus.v112" = "This must be turned on to receive tabs and get notified when you sign in on another device.";

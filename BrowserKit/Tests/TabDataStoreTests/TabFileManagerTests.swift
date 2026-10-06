@@ -16,6 +16,10 @@ final class TabFileManagerTests: XCTestCase {
                                                sharedContainerIdentifier: "id")
     }
 
+    override func tearDown() {
+        super.tearDown()
+    }
+
     func testWriteWindowDataThenRetrieve() throws {
         let subject = DefaultTabFileManager()
         let windowData = createMockWindow()

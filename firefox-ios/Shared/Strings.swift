@@ -359,19 +359,6 @@ extension String {
                 value: "Tap to summarize this page. Touch and hold for Reader View.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the summarize button on the new toolbar layout.")
         }
-
-        public struct Translations {
-            public static let Title = MZLocalizedString(
-                key: "ContextualHints.Translations.Title.v145",
-                tableName: "ContextualHints",
-                value: "%@ Speaks Your Language",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new translation icon on the toolbar. %@ is the app name (e.g. Firefox).")
-            public static let Body = MZLocalizedString(
-                key: "ContextualHints.Translations.Body.v145",
-                tableName: "ContextualHints",
-                value: "Fast, private translations are ready when you are.",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar.")
-        }
     }
 }
 
@@ -1652,17 +1639,41 @@ extension String {
                 value: "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi.",
                 comment: "On error page, this is the description for no internet connection.")
         }
+        public struct CellularDataRestricted {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.CellularDataRestricted.TitleLabel.v156",
+                tableName: "NativeErrorPage",
+                value: "Cellular data is turned off for %@.",
+                comment: "On error page, title shown when the app can't connect because cellular data is turned off " +
+                         "for this specific app in iOS settings. %@ is the app name (e.g. Firefox).")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.CellularDataRestricted.Description.v156",
+                tableName: "NativeErrorPage",
+                value: "Connect to Wi-Fi or go to iOS Settings and turn on cellular data for %@.",
+                comment: "On error page, message shown when the app can't connect because cellular data is turned off " +
+                         "for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox).")
+        }
         public struct GenericError {
             public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.TitleLabel.v131",
+                key: "NativeErrorPage.GenericError.TitleLabel.v158",
                 tableName: "NativeErrorPage",
-                value: "Be careful. Something doesn’t look right.",
+                value: "Looks like there’s a problem with this site",
                 comment: "On error page, this is the title for generic error.")
-            public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v134",
+            public static let DescriptionSuffix = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v158",
                 tableName: "NativeErrorPage",
-                value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
-                comment: "On error page, this is the description for a generic error. %@ is the site url.")
+                value: "The site may be temporarily unavailable, it may have moved to a different address, or your firewall or proxy may be blocking the connection.\n\nCheck your connection settings and try again.",
+                comment: "Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again.")
+            public static let DescriptionPrefixWithURL = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v158.withURL",
+                tableName: "NativeErrorPage",
+                value: "%1$@ couldn’t connect to %2$@.",
+                comment: "First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL.")
+            public static let DescriptionPrefixWithoutURL = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v158.withoutURL",
+                tableName: "NativeErrorPage",
+                value: "%1$@ couldn’t reach the requested URL.",
+                comment: "First sentence of the generic error description when the requested URL is not available. %1$@ is the app name.")
         }
         public struct BadCertDomain {
             public static let AdvancedButton = MZLocalizedString(
@@ -2379,39 +2390,6 @@ extension String {
             }
         }
 
-        public struct Wallpaper {
-            public static let Title = MZLocalizedString(
-                key: "Onboarding.Wallpaper.Title.v114",
-                tableName: "Onboarding",
-                value: "Choose a %@ Wallpaper",
-                comment: "Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. %@ is the app name (e.g. Firefox).")
-            public static let Action = MZLocalizedString(
-                key: "Onboarding.Wallpaper.Action.v114",
-                tableName: "Onboarding",
-                value: "Set Wallpaper",
-                comment: "Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper.")
-            public static let SelectorTitle = MZLocalizedString(
-                key: "Onboarding.Wallpaper.SelectorTitle.v114",
-                tableName: "Onboarding",
-                value: "Try a splash of color",
-                comment: "Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
-            public static let SelectorDescription = MZLocalizedString(
-                key: "Onboarding.Wallpaper.Description.v114",
-                tableName: "Onboarding",
-                value: "Choose a wallpaper that speaks to you.",
-                comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
-            public static let ClassicWallpaper = MZLocalizedString(
-                key: "Onboarding.Wallpaper.Accessibility.Classic.v114",
-                tableName: "Onboarding",
-                value: "Classic Wallpaper",
-                comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
-            public static let LimitedEditionWallpaper = MZLocalizedString(
-                key: "Onboarding.Wallpaper.Accessibility.LimitedEdition.v114",
-                tableName: "Onboarding",
-                value: "Limited Edition Wallpaper",
-                comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
-        }
-
         public struct Sync {
             public static let SkipAction = MZLocalizedString(
                 key: "Onboarding.Sync.Skip.Action.v114",
@@ -2450,6 +2428,12 @@ extension String {
             value: "Trackers blocked this week",
             comment: "On the Privacy Dashboard popup, the text for the header when we have blocked some trackers this week. This is going to have, above it, in bold letters, the number of trackers blocked this week."
         )
+        public static let HeaderLabelAccessibilityLabel = MZLocalizedString(
+            key: "PrivacyDashboard.HeaderLabelAccessibilityLabel.v156",
+            tableName: "PrivacyDashboard",
+            value: "Trackers blocked this week: %@",
+            comment: "On the Privacy Dashboard popup, the accessibility label read out for the weekly count. The count and the header below it are two separate labels on screen, but are read out as this one sentence. The placeholder (%@) is how many trackers we've blocked this week."
+        )
         public static let CrossSiteTrackers = MZLocalizedString(
             key: "PrivacyDashboard.CrossSiteTrackers.v155",
             tableName: "PrivacyDashboard",
@@ -2473,6 +2457,12 @@ extension String {
             tableName: "PrivacyDashboard",
             value: "Social Media Trackers",
             comment: "On the Privacy Dashboard popup, the title text for the bar & label showing how many social media trackers we've blocked."
+        )
+        public static let CategoryAccessibilityLabel = MZLocalizedString(
+            key: "PrivacyDashboard.CategoryAccessibilityLabel.v156",
+            tableName: "PrivacyDashboard",
+            value: "%1$@, blocked: %2$@",
+            comment: "On the Privacy Dashboard popup, the accessibility label read out for one of the tracker category rows. The first placeholder (%1$@) is the category's name, such as Fingerprinters. The second placeholder (%2$@) is how many trackers of that category we've blocked this week."
         )
         public static let TotalTrackersBlockedSince = MZLocalizedString(
             key: "PrivacyDashboard.TotalTrackersBlockedSince.v155",
@@ -2767,6 +2757,352 @@ extension String {
     }
 }
 
+// MARK: - Quick Answers
+extension String {
+    public struct QuickAnswers {
+        public static let LearnMore = MZLocalizedString(
+            key: "QuickAnswers.LearnMore.v158",
+            tableName: "QuickAnswers",
+            value: "Learn more…",
+            comment: "Link text that opens more information about how Quick Answers works and how it uses your data."
+        )
+
+        public struct OptIn {
+            public static let Title = MZLocalizedString(
+                key: "QuickAnswers.OptIn.Title.v158",
+                tableName: "QuickAnswers",
+                value: "Ask With Your Voice",
+                comment: "Title displayed on the Quick Answers opt-in screen that introduces the voice feature."
+            )
+
+            public static let Description = MZLocalizedString(
+                key: "QuickAnswers.OptIn.Description.v158",
+                tableName: "QuickAnswers",
+                value: "Ask a question out loud, and get a short answer. We don’t store your voice or questions.",
+                comment: "Description displayed on the Quick Answers opt-in screen explaining how the feature works and its privacy policy."
+            )
+
+            public static let LearnMore = MZLocalizedString(
+                key: "QuickAnswers.OptIn.LearnMore.v158",
+                tableName: "QuickAnswers",
+                value: "Learn more",
+                comment: "Link text on the Quick Answers opt-in screen that opens more information about the feature."
+            )
+
+            public static let ContinueButton = MZLocalizedString(
+                key: "QuickAnswers.OptIn.ContinueButton.v158",
+                tableName: "QuickAnswers",
+                value: "Continue",
+                comment: "Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature."
+            )
+        }
+
+        public struct OptInRedesign {
+            public static let Title = MZLocalizedString(
+                key: "QuickAnswers.OptInRedesign.Title.v158",
+                tableName: "QuickAnswers",
+                value: "Try Quick Answers",
+                comment: "Title displayed on the Quick Answers opt-in screen that introduces the voice feature."
+            )
+
+            public static let Description = MZLocalizedString(
+                key: "QuickAnswers.OptInRedesign.Description.v158",
+                tableName: "QuickAnswers",
+                value: "Ask a question with your voice. Get a short answer with sources in seconds.",
+                comment: "Description displayed on the Quick Answers opt-in screen explaining how the feature works."
+            )
+
+            public static let NothingGetsSavedTitle = MZLocalizedString(
+                key: "QuickAnswers.OptInRedesign.NothingGetsSavedTitle.v158",
+                tableName: "QuickAnswers",
+                value: "Nothing Gets Saved",
+                comment: "Title of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored."
+            )
+
+            public static let NothingGetsSavedDescription = MZLocalizedString(
+                key: "QuickAnswers.OptInRedesign.NothingGetsSavedDescription.v158",
+                tableName: "QuickAnswers",
+                value: "We don’t store your voice, questions, or answers.",
+                comment: "Description of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored."
+            )
+
+            public static let PrivateByDesignTitle = MZLocalizedString(
+                key: "QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158",
+                tableName: "QuickAnswers",
+                value: "Private By Design",
+                comment: "Title of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them."
+            )
+
+            public static let PrivateByDesignDescription = MZLocalizedString(
+                key: "QuickAnswers.OptInRedesign.PrivateByDesignDescription.v158",
+                tableName: "QuickAnswers",
+                value: "We don’t use your voice to identify you.",
+                comment: "Description of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them."
+            )
+
+            public static let NoTrainingTitle = MZLocalizedString(
+                key: "QuickAnswers.OptInRedesign.NoTrainingTitle.v158",
+                tableName: "QuickAnswers",
+                value: "No Training With Your Data",
+                comment: "Title of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems."
+            )
+
+            public static let NoTrainingDescription = MZLocalizedString(
+                key: "QuickAnswers.OptInRedesign.NoTrainingDescription.v158",
+                tableName: "QuickAnswers",
+                value: "We don’t use your data to train our systems.",
+                comment: "Description of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems."
+            )
+        }
+
+        public struct ContentView {
+            public static let Placeholder = MZLocalizedString(
+                key: "QuickAnswers.ContentView.Placeholder.v158",
+                tableName: "QuickAnswers",
+                value: "Ask anything…",
+                comment: "Placeholder text shown in the Quick Answers view before the user starts speaking."
+            )
+
+            public static let Listening = MZLocalizedString(
+                key: "QuickAnswers.ContentView.Listening.v158",
+                tableName: "QuickAnswers",
+                value: "Listening, ask anything…",
+                comment: "Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak."
+            )
+
+            public static let Answering = MZLocalizedString(
+                key: "QuickAnswers.ContentView.Answering.v158",
+                tableName: "QuickAnswers",
+                value: "Answering…",
+                comment: "Loading label shown in the Quick Answers view while an answer is being fetched."
+            )
+
+            public static let Thinking = MZLocalizedString(
+                key: "QuickAnswers.ContentView.Thinking.v158",
+                tableName: "QuickAnswers",
+                value: "Thinking…",
+                comment: "Loading label shown in the Quick Answers view while the question is being processed."
+            )
+
+            public static let SearchingSources = MZLocalizedString(
+                key: "QuickAnswers.ContentView.SearchingSources.v158",
+                tableName: "QuickAnswers",
+                value: "Searching sources…",
+                comment: "Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer."
+            )
+
+            public static let FooterFormat = MZLocalizedString(
+                key: "QuickAnswers.ContentView.Footer.v158",
+                tableName: "QuickAnswers",
+                value: "Powered by %@ · Answers can contain mistakes.",
+                comment: "Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa."
+            )
+
+            public static let Sources = MZLocalizedString(
+                key: "QuickAnswers.ContentView.Sources.v158",
+                tableName: "QuickAnswers",
+                value: "Sources",
+                comment: "Header label for the sources section shown below a Quick Answers result."
+            )
+
+            public static let AboutYourPrivacy = MZLocalizedString(
+                key: "QuickAnswers.ContentView.AboutYourPrivacy.v158",
+                tableName: "QuickAnswers",
+                value: "About Your Privacy",
+                comment: "Link shown in the footer of the Quick Answers view - when tapped, it opens a privacy banner explaining how the feature handles user data."
+            )
+        }
+
+        public struct PrivacyBanner {
+            public static let Title = MZLocalizedString(
+                key: "QuickAnswers.PrivacyBanner.Title.v158",
+                tableName: "QuickAnswers",
+                value: "Private by Design",
+                comment: "Title of the privacy banner shown on the Quick Answers screen."
+            )
+
+            public static let DescriptionFormat = MZLocalizedString(
+                key: "QuickAnswers.PrivacyBanner.Description.v158",
+                tableName: "QuickAnswers",
+                value: "%@ doesn’t store your audio or questions, use your data to train AI models, or use your voice to identify you.",
+                comment: "Body text of the privacy banner shown on the Quick Answers screen, explaining how the feature handles user data. %@ is the name of the app (e.g. Firefox)."
+            )
+        }
+
+        public struct ReturnPill {
+            public static let Subtitle = MZLocalizedString(
+                key: "QuickAnswers.ReturnPill.Subtitle.v158",
+                tableName: "QuickAnswers",
+                value: "Tap to return",
+                comment: "Helper text for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer."
+            )
+            public static let ReturnToQuickAnswerAccessibilityLabel = MZLocalizedString(
+                key: "QuickAnswers.ReturnPill.ReturnToQuickAnswerAccessibilityLabel.v158",
+                tableName: "QuickAnswers",
+                value: "Return to Quick Answer",
+                comment: "Accessibility label for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer."
+            )
+        }
+
+        public struct AccessibilityLabels {
+            public static let Close = MZLocalizedString(
+                key: "QuickAnswers.AccessibilityLabels.Close.v158",
+                tableName: "QuickAnswers",
+                value: "Close",
+                comment: "Accessibility label for the close button on the Quick Answers screen."
+            )
+
+            public static let OpenQuickAnswers = MZLocalizedString(
+                key: "QuickAnswers.AccessibilityLabels.OpenQuickAnswers.v158",
+                tableName: "QuickAnswers",
+                value: "Open Quick Answers",
+                comment: "Accessibility label for the button on the homepage that opens the Quick Answers feature."
+            )
+        }
+
+        public struct Errors {
+            public static let PermissionAlertTitle = MZLocalizedString(
+                key: "QuickAnswers.Errors.PermissionAlertTitle.v158",
+                tableName: "QuickAnswers",
+                value: "Change Settings to Use Quick Answers",
+                comment: "Title of the alert shown when the user has denied microphone or speech recognition permissions needed for Quick Answers."
+            )
+
+            public static let MicrophonePermissionMessage = MZLocalizedString(
+                key: "QuickAnswers.Errors.MicrophonePermissionMessage.v158",
+                tableName: "QuickAnswers",
+                value: "Allow %@ to access the Microphone.",
+                comment: "Message shown in the permission alert when microphone access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox)."
+            )
+
+            public static let SpeechRecognitionPermissionMessage = MZLocalizedString(
+                key: "QuickAnswers.Errors.SpeechRecognitionPermissionMessage.v158",
+                tableName: "QuickAnswers",
+                value: "Allow %@ to access Speech Recognition.",
+                comment: "Message shown in the permission alert when speech recognition access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox)."
+            )
+
+            public static let OpenSettings = MZLocalizedString(
+                key: "QuickAnswers.Errors.OpenSettings.v158",
+                tableName: "QuickAnswers",
+                value: "Open Settings",
+                comment: "Button label on the permission alert that opens the iOS Settings app so the user can grant permissions."
+            )
+
+            public static let Cancel = MZLocalizedString(
+                key: "QuickAnswers.Errors.Cancel.v158",
+                tableName: "QuickAnswers",
+                value: "Cancel",
+                comment: "Button label on the Quick Answers permission alert to dismiss the alert without taking action."
+            )
+
+            public static let DailyLimitTitle = MZLocalizedString(
+                key: "QuickAnswers.Errors.DailyLimitTitle.v158",
+                tableName: "QuickAnswers",
+                value: "Daily Limit Reached",
+                comment: "Title of the alert shown when the user has exceeded the daily usage limit for Quick Answers."
+            )
+
+            public static let DailyLimitMessage = MZLocalizedString(
+                key: "QuickAnswers.Errors.DailyLimitMessage.v158",
+                tableName: "QuickAnswers",
+                value: "Try Quick Answers again tomorrow.",
+                comment: "Message shown in the alert when the user has exceeded the daily usage limit for Quick Answers."
+            )
+
+            public static let GenericErrorTitle = MZLocalizedString(
+                key: "QuickAnswers.Errors.GenericErrorTitle.v158",
+                tableName: "QuickAnswers",
+                value: "Couldn’t get an answer",
+                comment: "Title of the alert shown when Quick Answers encounters an unexpected error."
+            )
+
+            public static let GenericErrorMessage = MZLocalizedString(
+                key: "QuickAnswers.Errors.GenericErrorMessage.v158",
+                tableName: "QuickAnswers",
+                value: "Try asking again later.",
+                comment: "Message shown in the alert when Quick Answers encounters an unexpected error."
+            )
+
+            public static let OK = MZLocalizedString(
+                key: "QuickAnswers.Errors.OK.v158",
+                tableName: "QuickAnswers",
+                value: "OK",
+                comment: "Button label to dismiss the Quick Answers error alert."
+            )
+        }
+
+        public struct Tip {
+            public static let Title = MZLocalizedString(
+                key: "QuickAnswers.Tip.Title.v158",
+                tableName: "QuickAnswers",
+                value: "Ask Out Loud for Quick Answers",
+                comment: "Title of the tooltip that introduces the Quick Answers feature on the homepage."
+            )
+
+            public static let Message = MZLocalizedString(
+                key: "QuickAnswers.Tip.Message.v158",
+                tableName: "QuickAnswers",
+                value: "Tap here to get started.",
+                comment: "Message of the tooltip that introduces the Quick Answers feature on the homepage."
+            )
+        }
+
+        public struct Settings {
+            public static let Title = MZLocalizedString(
+                key: "QuickAnswers.Settings.Title.v158",
+                tableName: "Settings",
+                value: "Quick Answers",
+                comment: "Title shown in the navigation bar and as the toggle label on the Quick Answers settings screen."
+            )
+
+            public static let EnableQuickAnswers = MZLocalizedString(
+                key: "QuickAnswers.Settings.EnableQuickAnswers.v158",
+                tableName: "Settings",
+                value: "Enable Quick Answers",
+                comment: "Label of the toggle that enables or disables the Quick Answers feature on the Quick Answers settings screen."
+            )
+
+            public static let Footer = MZLocalizedString(
+                key: "QuickAnswers.Settings.Footer.v158",
+                tableName: "Settings",
+                value: "Ask out loud and get short answers. We don’t store your voice, questions, or answers.",
+                comment: "Footer text on the Quick Answers settings screen explaining the feature and its privacy policy."
+            )
+
+            public static let LearnMore = MZLocalizedString(
+                key: "QuickAnswers.Settings.LearnMore.v158",
+                tableName: "Settings",
+                value: "Learn more",
+                comment: "Link button on the Quick Answers settings screen that opens more information about the feature."
+            )
+
+            public static let StatusOn = MZLocalizedString(
+                key: "QuickAnswers.Settings.StatusOn.v158",
+                tableName: "Settings",
+                value: "On",
+                comment: "Status text shown next to the Quick Answers row in the general settings when the feature is enabled."
+            )
+
+            public static let StatusOff = MZLocalizedString(
+                key: "QuickAnswers.Settings.StatusOff.v158",
+                tableName: "Settings",
+                value: "Off",
+                comment: "Status text shown next to the Quick Answers row in the general settings when the feature is disabled."
+            )
+        }
+
+        public struct QuickActions {
+            public static let Title = MZLocalizedString(
+                key: "QuickAnswers.QuickActions.Title.v158",
+                tableName: "QuickAnswers",
+                value: "Quick Answers",
+                comment: "Feature name as displayed in the iOS Quick Action menu (contextual menu displayed when long-pressing the browser app icon)"
+            )
+        }
+    }
+}
+
 // MARK: - Settings screen
 extension String {
     public struct Settings {
@@ -2785,6 +3121,15 @@ extension String {
                     tableName: "Settings",
                     value: "Scroll to Hide Tab and Address Bar",
                     comment: "In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar."
+                )
+            }
+
+            public struct AccessibilityLabels {
+                public static let LearnMoreAction = MZLocalizedString(
+                    key: "Settings.BoolSetting.LearnMoreAction.v157",
+                    tableName: "Settings",
+                    value: "Learn More",
+                    comment: "VoiceOver custom action name for a settings row's Learn More link."
                 )
             }
         }
@@ -3013,6 +3358,12 @@ extension String {
                 tableName: "Settings",
                 value: "Block Ads",
                 comment: "Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements."
+            )
+            public static let BackgroundAudio = MZLocalizedString(
+                key: "Settings.Browsing.BackgroundAudio.Title.v156",
+                tableName: "Settings",
+                value: "Background Audio",
+                comment: "Title for the Background Audio toggle in the Browsing settings page. When enabled, audio from web pages continues playing after the app is backgrounded."
             )
 
             public struct AdBlocker {
@@ -4513,6 +4864,18 @@ extension String {
                 value: "Describe the issue in detail (optional)",
                 comment: "Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form."
             )
+            public static let ChooseIssueTypeAccessibilityHint = MZLocalizedString(
+                key: "WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint.v156",
+                tableName: "WebCompatReporter",
+                value: "Choose an issue type first",
+                comment: "Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no issue type has been selected yet, in the Report a Website Issue form."
+            )
+            public static let ChooseSubOptionAccessibilityHint = MZLocalizedString(
+                key: "WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156",
+                tableName: "WebCompatReporter",
+                value: "Choose a specific problem for your selected issue type",
+                comment: "Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form."
+            )
         }
         public struct AdditionalInfo {
             public static let Title = MZLocalizedString(
@@ -4689,6 +5052,26 @@ extension String {
             value: "Loading Document",
             comment: "The accessibility label read when loading a document in the web view's custom document loading UI."
         )
+    }
+}
+
+// MARK: - Google Lens
+extension String {
+    public struct GoogleLens {
+        /// The full-screen interstitial shown while a Google Lens image search is loading.
+        public struct Interstitial {
+            public static let LoadingLabel = MZLocalizedString(
+                key: "GoogleLens.Interstitial.LoadingLabel.v156",
+                tableName: "GoogleLens",
+                value: "Finding Image Results…",
+                comment: "Label shown next to a loading spinner on the full screen state that appears while an image is being searched with Google Lens.")
+
+            public static let CancelButtonTitle = MZLocalizedString(
+                key: "GoogleLens.Interstitial.CancelButtonTitle.v156",
+                tableName: "GoogleLens",
+                value: "Cancel",
+                comment: "Title of the button that stops an in-progress Google Lens image search and returns the user to what they were looking at before.")
+        }
     }
 }
 
@@ -8793,6 +9176,18 @@ extension String {
     /// https://github.com/mozilla-mobile/firefox-ios/wiki/How-to-add-and-modify-Strings#oldstrings-struct
     /// periphery:ignore - These strings are getting removed every couple of months
     struct OldStrings {
+        struct v157 {
+            public static let Title = MZLocalizedString(
+                key: "ContextualHints.Translations.Title.v145",
+                tableName: "ContextualHints",
+                value: "%@ Speaks Your Language",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new translation icon on the toolbar. %@ is the app name (e.g. Firefox).")
+            public static let Body = MZLocalizedString(
+                key: "ContextualHints.Translations.Body.v145",
+                tableName: "ContextualHints",
+                value: "Fast, private translations are ready when you are.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar.")
+        }
         struct v153 {
             public static let AppMenuReportSiteIssueTitleString = MZLocalizedString(
                 key: "Menu.ReportSiteIssueAction.Title",
@@ -9367,11 +9762,55 @@ extension String {
                 tableName: "WebCompatReporter",
                 value: "URL",
                 comment: "Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form.")
-             public static let DetailsAccessibilityLabel = MZLocalizedString(
+            public static let DetailsAccessibilityLabel = MZLocalizedString(
                 key: "WebCompatReporter.Fields.DetailsAccessibilityLabel.v154",
                 tableName: "WebCompatReporter",
                 value: "Describe the issue in detail",
                 comment: "Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form.")
+            public struct Wallpaper {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Wallpaper.Title.v114",
+                    tableName: "Onboarding",
+                    value: "Choose a %@ Wallpaper",
+                    comment: "Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. %@ is the app name (e.g. Firefox).")
+                public static let Action = MZLocalizedString(
+                    key: "Onboarding.Wallpaper.Action.v114",
+                    tableName: "Onboarding",
+                    value: "Set Wallpaper",
+                    comment: "Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper.")
+                public static let SelectorTitle = MZLocalizedString(
+                    key: "Onboarding.Wallpaper.SelectorTitle.v114",
+                    tableName: "Onboarding",
+                    value: "Try a splash of color",
+                    comment: "Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
+                public static let SelectorDescription = MZLocalizedString(
+                    key: "Onboarding.Wallpaper.Description.v114",
+                    tableName: "Onboarding",
+                    value: "Choose a wallpaper that speaks to you.",
+                    comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
+                public static let ClassicWallpaper = MZLocalizedString(
+                    key: "Onboarding.Wallpaper.Accessibility.Classic.v114",
+                    tableName: "Onboarding",
+                    value: "Classic Wallpaper",
+                    comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
+                public static let LimitedEditionWallpaper = MZLocalizedString(
+                    key: "Onboarding.Wallpaper.Accessibility.LimitedEdition.v114",
+                    tableName: "Onboarding",
+                    value: "Limited Edition Wallpaper",
+                    comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
+            }
+        }
+        struct v158 {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.TitleLabel.v131",
+                tableName: "NativeErrorPage",
+                value: "Be careful. Something doesn’t look right.",
+                comment: "On error page, this is the title for generic error.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v134",
+                tableName: "NativeErrorPage",
+                value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
+                comment: "On error page, this is the description for a generic error. %@ is the site url.")
         }
     }
 }

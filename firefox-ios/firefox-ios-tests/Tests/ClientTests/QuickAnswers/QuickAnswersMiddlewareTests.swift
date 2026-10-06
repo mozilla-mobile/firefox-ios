@@ -10,7 +10,7 @@ import XCTest
 
 @MainActor
 final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
     private var mockProfile: MockProfile!
     private var mockFeatureFlags: MockNimbusFeatureFlags!
     private var mockUserPreferences: MockUserFeaturePreferences!
@@ -171,15 +171,6 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
                 ]
             )
         )
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 
     // MARK: - Helpers

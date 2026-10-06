@@ -1,0 +1,6 @@
+/* On the Privacy Dashboard popup, the accessibility label read out for one of the tracker category rows. The first placeholder (%1$@) is the category's name, such as Fingerprinters. The second placeholder (%2$@) is how many trackers of that category we've blocked this week. */
+"PrivacyDashboard.CategoryAccessibilityLabel.v156" = "%1$@, aizturēts: %2$@";
+
+/* On the Privacy Dashboard popup, the accessibility label read out for the weekly count. The count and the header below it are two separate labels on screen, but are read out as this one sentence. The placeholder (%@) is how many trackers we've blocked this week. */
+"PrivacyDashboard.HeaderLabelAccessibilityLabel.v156" = "Šonedēļ aizturētie izsekotāji: %@";
+

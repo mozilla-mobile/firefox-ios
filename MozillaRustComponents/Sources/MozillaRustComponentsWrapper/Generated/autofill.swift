@@ -39,6 +39,52 @@ fileprivate extension ForeignBytes {
     init(bufferPointer: UnsafeBufferPointer<UInt8>) {
         self.init(len: Int32(bufferPointer.count), data: bufferPointer.baseAddress)
     }
+
+    init(rawBufferPointer: UnsafeRawBufferPointer) {
+        self.init(
+            len: Int32(rawBufferPointer.count),
+            data: rawBufferPointer.baseAddress?.assumingMemoryBound(to: UInt8.self)
+        )
+    }
+}
+
+// Converter for `&[u8]` / `[ByRef] bytes` arguments.
+//
+// Conforms to `FfiConverter` so the compiler enforces the full converter
+// method set. Only the scope-bound `lower(_:_body:)` overload is sound —
+// zero-copy byte buffers only flow foreign -> Rust, and only in argument
+// position. The four protocol-witness methods (`lift`, `lower`, `read`,
+// `write`) `fatalError` at runtime if anyone reaches them.
+//
+// The scope-bound `lower` takes a closure because the `ForeignBytes`
+// pointer is only guaranteed valid for the duration of
+// `Data.withUnsafeBytes`. Callers must run the full FFI call inside
+// the closure body.
+fileprivate enum FfiConverterByRefBytes: FfiConverter {
+    typealias SwiftType = Data
+    typealias FfiType = ForeignBytes
+
+    static func lower<R>(_ value: Data, _ body: (ForeignBytes) throws -> R) rethrows -> R {
+        return try value.withUnsafeBytes { rawBuf in
+            try body(ForeignBytes(rawBufferPointer: rawBuf))
+        }
+    }
+
+    static func lower(_ value: Data) -> ForeignBytes {
+        fatalError("ByRef bytes cannot use the plain lower: returning ForeignBytes escapes the Data.withUnsafeBytes scope. Use the scope-bound lower(_:_body:) overload instead.")
+    }
+
+    static func lift(_ value: ForeignBytes) throws -> Data {
+        fatalError("ByRef bytes cannot be lifted: zero-copy &[u8] only flows foreign->Rust")
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        fatalError("ByRef bytes cannot be read from a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
+
+    static func write(_ value: Data, into buf: inout [UInt8]) {
+        fatalError("ByRef bytes cannot be written to a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
 }
 
 // For every type used in the interface, we provide helper methods for conveniently
@@ -487,7 +533,11 @@ fileprivate struct FfiConverterString: FfiConverter {
             return String()
         }
         let bytes = UnsafeBufferPointer<UInt8>(start: value.data!, count: Int(value.len))
-        return String(bytes: bytes, encoding: String.Encoding.utf8)!
+        // Use Swift's native UTF-8 decoder; `String(bytes:encoding:.utf8)` goes
+        // through Foundation's NSString and silently strips a leading U+FEFF BOM.
+        // Invalid UTF-8 substitutes U+FFFD instead of trapping (unreachable
+        // given Rust's `String` invariant).
+        return String(decoding: bytes, as: UTF8.self)
     }
 
     public static func lower(_ value: String) -> RustBuffer {
@@ -503,7 +553,8 @@ fileprivate struct FfiConverterString: FfiConverter {
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> String {
         let len: Int32 = try readInt(&buf)
-        return String(bytes: try readBytes(&buf, count: Int(len)), encoding: String.Encoding.utf8)!
+        // See `lift` above for why we avoid Foundation's NSString-backed decoder here.
+        return String(decoding: try readBytes(&buf, count: Int(len)), as: UTF8.self)
     }
 
     public static func write(_ value: String, into buf: inout [UInt8]) {
@@ -606,87 +657,98 @@ open class AddressesBridgedEngine: AddressesBridgedEngineProtocol, @unchecked Se
     
 open func apply(serverModifiedMillis: Int64)throws  -> [String]  {
     return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_addressesbridgedengine_apply(
             self.uniffiCloneHandle(),
-        FfiConverterInt64.lower(serverModifiedMillis),$0
+        FfiConverterInt64.lower(serverModifiedMillis),uniffiCallStatus
     )
 })
 }
     
 open func ensureCurrentSyncId(newSyncId: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_addressesbridgedengine_ensure_current_sync_id(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(newSyncId),$0
+        FfiConverterString.lower(newSyncId),uniffiCallStatus
     )
 })
 }
     
 open func lastSync()throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_addressesbridgedengine_last_sync(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func reset()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_addressesbridgedengine_reset(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func resetSyncId()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_addressesbridgedengine_reset_sync_id(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func setUploaded(newTimestamp: Int64, uploadedIds: [String])throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_addressesbridgedengine_set_uploaded(
             self.uniffiCloneHandle(),
         FfiConverterInt64.lower(newTimestamp),
-        FfiConverterSequenceString.lower(uploadedIds),$0
+        FfiConverterSequenceString.lower(uploadedIds),uniffiCallStatus
     )
 }
 }
     
 open func storeIncoming(incomingEnvelopesAsJson: [String])throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_addressesbridgedengine_store_incoming(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceString.lower(incomingEnvelopesAsJson),$0
+        FfiConverterSequenceString.lower(incomingEnvelopesAsJson),uniffiCallStatus
     )
 }
 }
     
 open func syncFinished()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_addressesbridgedengine_sync_finished(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func syncId()throws  -> String?  {
     return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_addressesbridgedengine_sync_id(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func syncStarted()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_addressesbridgedengine_sync_started(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func wipe()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_addressesbridgedengine_wipe(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -749,9 +811,15 @@ public protocol StoreProtocol: AnyObject, Sendable {
     
     func addCreditCard(cc: UpdatableCreditCardFields) throws  -> CreditCard
     
+    func addCreditCardWithMeta(entryWithMeta: UpdatableCreditCardFieldsWithMeta) throws  -> CreditCard
+    
     func addManyAddressTombstones(tombstones: [AddressTombstone]) throws  -> [AddressBulkTombstoneResultEntry]
     
     func addManyAddressesWithMeta(entriesWithMeta: [UpdatableAddressFieldsWithMeta]) throws  -> [AddressBulkResultEntry]
+    
+    func addManyCreditCardTombstones(tombstones: [CreditCardTombstone]) throws  -> [CreditCardBulkTombstoneResultEntry]
+    
+    func addManyCreditCardsWithMeta(entriesWithMeta: [UpdatableCreditCardFieldsWithMeta]) throws  -> [CreditCardBulkResultEntry]
     
     func addPassport(p: UpdatablePassportFields) throws  -> Passport
     
@@ -772,8 +840,23 @@ public protocol StoreProtocol: AnyObject, Sendable {
     
     /**
      * Removes every address and every address tombstone.
+     *
+     * A migration primitive: it leaves the sync mirror intact and produces no
+     * tombstones, so the deletions are never uploaded and a synced profile gets
+     * the records back on the next sync. Use `delete_address` to delete on the
+     * user's behalf.
      */
     func deleteAllAddresses() throws 
+    
+    /**
+     * Removes every credit card and every credit card tombstone.
+     *
+     * A migration primitive: it leaves the sync mirror intact and produces no
+     * tombstones, so the deletions are never uploaded and a synced profile gets
+     * the records back on the next sync. Use `delete_credit_card` to delete on the
+     * user's behalf.
+     */
+    func deleteAllCreditCards() throws 
     
     func deleteCreditCard(guid: String) throws  -> Bool
     
@@ -827,6 +910,8 @@ public protocol StoreProtocol: AnyObject, Sendable {
     
     func updateCreditCard(guid: String, cc: UpdatableCreditCardFields) throws 
     
+    func updateCreditCardWithMeta(entryWithMeta: UpdatableCreditCardFieldsWithMeta) throws 
+    
     func updatePassport(guid: String, p: UpdatablePassportFields) throws 
     
 }
@@ -872,8 +957,9 @@ open class Store: StoreProtocol, @unchecked Sendable {
 public convenience init(dbpath: String)throws  {
     let handle =
         try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_constructor_store_new(
-        FfiConverterString.lower(dbpath),$0
+        FfiConverterString.lower(dbpath),uniffiCallStatus
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -893,54 +979,90 @@ public convenience init(dbpath: String)throws  {
     
 open func addAddress(a: UpdatableAddressFields)throws  -> Address  {
     return try  FfiConverterTypeAddress_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_add_address(
             self.uniffiCloneHandle(),
-        FfiConverterTypeUpdatableAddressFields_lower(a),$0
+        FfiConverterTypeUpdatableAddressFields_lower(a),uniffiCallStatus
     )
 })
 }
     
 open func addAddressWithMeta(entryWithMeta: UpdatableAddressFieldsWithMeta)throws  -> Address  {
     return try  FfiConverterTypeAddress_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_add_address_with_meta(
             self.uniffiCloneHandle(),
-        FfiConverterTypeUpdatableAddressFieldsWithMeta_lower(entryWithMeta),$0
+        FfiConverterTypeUpdatableAddressFieldsWithMeta_lower(entryWithMeta),uniffiCallStatus
     )
 })
 }
     
 open func addCreditCard(cc: UpdatableCreditCardFields)throws  -> CreditCard  {
     return try  FfiConverterTypeCreditCard_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_add_credit_card(
             self.uniffiCloneHandle(),
-        FfiConverterTypeUpdatableCreditCardFields_lower(cc),$0
+        FfiConverterTypeUpdatableCreditCardFields_lower(cc),uniffiCallStatus
+    )
+})
+}
+    
+open func addCreditCardWithMeta(entryWithMeta: UpdatableCreditCardFieldsWithMeta)throws  -> CreditCard  {
+    return try  FfiConverterTypeCreditCard_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_store_add_credit_card_with_meta(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeUpdatableCreditCardFieldsWithMeta_lower(entryWithMeta),uniffiCallStatus
     )
 })
 }
     
 open func addManyAddressTombstones(tombstones: [AddressTombstone])throws  -> [AddressBulkTombstoneResultEntry]  {
     return try  FfiConverterSequenceTypeAddressBulkTombstoneResultEntry.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_add_many_address_tombstones(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceTypeAddressTombstone.lower(tombstones),$0
+        FfiConverterSequenceTypeAddressTombstone.lower(tombstones),uniffiCallStatus
     )
 })
 }
     
 open func addManyAddressesWithMeta(entriesWithMeta: [UpdatableAddressFieldsWithMeta])throws  -> [AddressBulkResultEntry]  {
     return try  FfiConverterSequenceTypeAddressBulkResultEntry.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_add_many_addresses_with_meta(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceTypeUpdatableAddressFieldsWithMeta.lower(entriesWithMeta),$0
+        FfiConverterSequenceTypeUpdatableAddressFieldsWithMeta.lower(entriesWithMeta),uniffiCallStatus
+    )
+})
+}
+    
+open func addManyCreditCardTombstones(tombstones: [CreditCardTombstone])throws  -> [CreditCardBulkTombstoneResultEntry]  {
+    return try  FfiConverterSequenceTypeCreditCardBulkTombstoneResultEntry.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_store_add_many_credit_card_tombstones(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceTypeCreditCardTombstone.lower(tombstones),uniffiCallStatus
+    )
+})
+}
+    
+open func addManyCreditCardsWithMeta(entriesWithMeta: [UpdatableCreditCardFieldsWithMeta])throws  -> [CreditCardBulkResultEntry]  {
+    return try  FfiConverterSequenceTypeCreditCardBulkResultEntry.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_store_add_many_credit_cards_with_meta(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceTypeUpdatableCreditCardFieldsWithMeta.lower(entriesWithMeta),uniffiCallStatus
     )
 })
 }
     
 open func addPassport(p: UpdatablePassportFields)throws  -> Passport  {
     return try  FfiConverterTypePassport_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_add_passport(
             self.uniffiCloneHandle(),
-        FfiConverterTypeUpdatablePassportFields_lower(p),$0
+        FfiConverterTypeUpdatablePassportFields_lower(p),uniffiCallStatus
     )
 })
 }
@@ -952,127 +1074,163 @@ open func addPassport(p: UpdatablePassportFields)throws  -> Passport  {
      */
 open func addressesBridgedEngine() -> AddressesBridgedEngine  {
     return try!  FfiConverterTypeAddressesBridgedEngine_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_addresses_bridged_engine(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func countAllAddresses()throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_count_all_addresses(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func countAllCreditCards()throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_count_all_credit_cards(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func countAllPassports()throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_count_all_passports(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func deleteAddress(guid: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_delete_address(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(guid),$0
+        FfiConverterString.lower(guid),uniffiCallStatus
     )
 })
 }
     
     /**
      * Removes every address and every address tombstone.
+     *
+     * A migration primitive: it leaves the sync mirror intact and produces no
+     * tombstones, so the deletions are never uploaded and a synced profile gets
+     * the records back on the next sync. Use `delete_address` to delete on the
+     * user's behalf.
      */
 open func deleteAllAddresses()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_delete_all_addresses(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+}
+}
+    
+    /**
+     * Removes every credit card and every credit card tombstone.
+     *
+     * A migration primitive: it leaves the sync mirror intact and produces no
+     * tombstones, so the deletions are never uploaded and a synced profile gets
+     * the records back on the next sync. Use `delete_credit_card` to delete on the
+     * user's behalf.
+     */
+open func deleteAllCreditCards()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_store_delete_all_credit_cards(
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func deleteCreditCard(guid: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_delete_credit_card(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(guid),$0
+        FfiConverterString.lower(guid),uniffiCallStatus
     )
 })
 }
     
 open func deletePassport(guid: String)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_delete_passport(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(guid),$0
+        FfiConverterString.lower(guid),uniffiCallStatus
     )
 })
 }
     
 open func getAddress(guid: String)throws  -> Address  {
     return try  FfiConverterTypeAddress_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_get_address(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(guid),$0
+        FfiConverterString.lower(guid),uniffiCallStatus
     )
 })
 }
     
 open func getAllAddresses()throws  -> [Address]  {
     return try  FfiConverterSequenceTypeAddress.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_get_all_addresses(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func getAllCreditCards()throws  -> [CreditCard]  {
     return try  FfiConverterSequenceTypeCreditCard.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_get_all_credit_cards(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func getAllPassports()throws  -> [Passport]  {
     return try  FfiConverterSequenceTypePassport.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_get_all_passports(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func getCreditCard(guid: String)throws  -> CreditCard  {
     return try  FfiConverterTypeCreditCard_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_get_credit_card(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(guid),$0
+        FfiConverterString.lower(guid),uniffiCallStatus
     )
 })
 }
     
 open func getPassport(guid: String)throws  -> Passport  {
     return try  FfiConverterTypePassport_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_get_passport(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(guid),$0
+        FfiConverterString.lower(guid),uniffiCallStatus
     )
 })
 }
     
 open func registerWithSyncManager()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_register_with_sync_manager(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1084,15 +1242,17 @@ open func registerWithSyncManager()  {try! rustCall() {
      * database.
      */
 open func runMaintenance()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_run_maintenance(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func scrubEncryptedData()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_scrub_encrypted_data(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1107,75 +1267,93 @@ open func scrubEncryptedData()throws   {try rustCallWithError(FfiConverterTypeAu
      */
 open func scrubUndecryptableCreditCardDataForRemoteReplacement(localEncryptionKey: String)throws  -> CreditCardsDeletionMetrics  {
     return try  FfiConverterTypeCreditCardsDeletionMetrics_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_scrub_undecryptable_credit_card_data_for_remote_replacement(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(localEncryptionKey),$0
+        FfiConverterString.lower(localEncryptionKey),uniffiCallStatus
     )
 })
 }
     
 open func shutdown()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_shutdown(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func touchAddress(guid: String)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_touch_address(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(guid),$0
+        FfiConverterString.lower(guid),uniffiCallStatus
     )
 }
 }
     
 open func touchCreditCard(guid: String)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_touch_credit_card(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(guid),$0
+        FfiConverterString.lower(guid),uniffiCallStatus
     )
 }
 }
     
 open func touchPassport(guid: String)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_touch_passport(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(guid),$0
+        FfiConverterString.lower(guid),uniffiCallStatus
     )
 }
 }
     
 open func updateAddress(guid: String, a: UpdatableAddressFields)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_update_address(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),
-        FfiConverterTypeUpdatableAddressFields_lower(a),$0
+        FfiConverterTypeUpdatableAddressFields_lower(a),uniffiCallStatus
     )
 }
 }
     
 open func updateAddressWithMeta(entryWithMeta: UpdatableAddressFieldsWithMeta)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_update_address_with_meta(
             self.uniffiCloneHandle(),
-        FfiConverterTypeUpdatableAddressFieldsWithMeta_lower(entryWithMeta),$0
+        FfiConverterTypeUpdatableAddressFieldsWithMeta_lower(entryWithMeta),uniffiCallStatus
     )
 }
 }
     
 open func updateCreditCard(guid: String, cc: UpdatableCreditCardFields)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_update_credit_card(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),
-        FfiConverterTypeUpdatableCreditCardFields_lower(cc),$0
+        FfiConverterTypeUpdatableCreditCardFields_lower(cc),uniffiCallStatus
+    )
+}
+}
+    
+open func updateCreditCardWithMeta(entryWithMeta: UpdatableCreditCardFieldsWithMeta)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_store_update_credit_card_with_meta(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeUpdatableCreditCardFieldsWithMeta_lower(entryWithMeta),uniffiCallStatus
     )
 }
 }
     
 open func updatePassport(guid: String, p: UpdatablePassportFields)throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_method_store_update_passport(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),
-        FfiConverterTypeUpdatablePassportFields_lower(p),$0
+        FfiConverterTypeUpdatablePassportFields_lower(p),uniffiCallStatus
     )
 }
 }
@@ -1566,6 +1744,141 @@ public func FfiConverterTypeCreditCard_lower(_ value: CreditCard) -> RustBuffer 
 
 
 /**
+ * Metadata fields managed internally by the library: the guid, timestamps and
+ * local sync state. These are automatically set on `add_credit_card` and
+ * updated on operations like `touch` and `update_credit_card`. Not included in
+ * `UpdatableCreditCardFields`; use `add_credit_card_with_meta` when importing
+ * records that already have metadata.
+ */
+public struct CreditCardMeta: Equatable, Hashable {
+    public var guid: String
+    public var timeCreated: Int64
+    public var timeLastUsed: Int64?
+    public var timeLastModified: Int64
+    public var timesUsed: Int64
+    public var syncChangeCounter: Int64
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(guid: String, timeCreated: Int64, timeLastUsed: Int64?, timeLastModified: Int64, timesUsed: Int64, syncChangeCounter: Int64) {
+        self.guid = guid
+        self.timeCreated = timeCreated
+        self.timeLastUsed = timeLastUsed
+        self.timeLastModified = timeLastModified
+        self.timesUsed = timesUsed
+        self.syncChangeCounter = syncChangeCounter
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension CreditCardMeta: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeCreditCardMeta: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CreditCardMeta {
+        return
+            try CreditCardMeta(
+                guid: FfiConverterString.read(from: &buf), 
+                timeCreated: FfiConverterInt64.read(from: &buf), 
+                timeLastUsed: FfiConverterOptionInt64.read(from: &buf), 
+                timeLastModified: FfiConverterInt64.read(from: &buf), 
+                timesUsed: FfiConverterInt64.read(from: &buf), 
+                syncChangeCounter: FfiConverterInt64.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: CreditCardMeta, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.guid, into: &buf)
+        FfiConverterInt64.write(value.timeCreated, into: &buf)
+        FfiConverterOptionInt64.write(value.timeLastUsed, into: &buf)
+        FfiConverterInt64.write(value.timeLastModified, into: &buf)
+        FfiConverterInt64.write(value.timesUsed, into: &buf)
+        FfiConverterInt64.write(value.syncChangeCounter, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardMeta_lift(_ buf: RustBuffer) throws -> CreditCardMeta {
+    return try FfiConverterTypeCreditCardMeta.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardMeta_lower(_ value: CreditCardMeta) -> RustBuffer {
+    return FfiConverterTypeCreditCardMeta.lower(value)
+}
+
+
+/**
+ * A tombstone for a record deleted locally but not yet uploaded, supplied to
+ * `add_many_credit_card_tombstones` when migrating from another store.
+ */
+public struct CreditCardTombstone: Equatable, Hashable {
+    public var guid: String
+    public var timeDeleted: Int64
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(guid: String, timeDeleted: Int64) {
+        self.guid = guid
+        self.timeDeleted = timeDeleted
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension CreditCardTombstone: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeCreditCardTombstone: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CreditCardTombstone {
+        return
+            try CreditCardTombstone(
+                guid: FfiConverterString.read(from: &buf), 
+                timeDeleted: FfiConverterInt64.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: CreditCardTombstone, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.guid, into: &buf)
+        FfiConverterInt64.write(value.timeDeleted, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardTombstone_lift(_ buf: RustBuffer) throws -> CreditCardTombstone {
+    return try FfiConverterTypeCreditCardTombstone.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardTombstone_lower(_ value: CreditCardTombstone) -> RustBuffer {
+    return FfiConverterTypeCreditCardTombstone.lower(value)
+}
+
+
+/**
  * Metrics tracking scrubbing of credit cards that cannot be decrypted, see
  */
 public struct CreditCardsDeletionMetrics: Equatable, Hashable {
@@ -1944,6 +2257,64 @@ public func FfiConverterTypeUpdatableCreditCardFields_lower(_ value: UpdatableCr
 
 
 /**
+ * A credit card together with its metadata, passed to `add_credit_card_with_meta`
+ * and `update_credit_card_with_meta` when importing a record from another store.
+ */
+public struct UpdatableCreditCardFieldsWithMeta: Equatable, Hashable {
+    public var fields: UpdatableCreditCardFields
+    public var meta: CreditCardMeta
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(fields: UpdatableCreditCardFields, meta: CreditCardMeta) {
+        self.fields = fields
+        self.meta = meta
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension UpdatableCreditCardFieldsWithMeta: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeUpdatableCreditCardFieldsWithMeta: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UpdatableCreditCardFieldsWithMeta {
+        return
+            try UpdatableCreditCardFieldsWithMeta(
+                fields: FfiConverterTypeUpdatableCreditCardFields.read(from: &buf), 
+                meta: FfiConverterTypeCreditCardMeta.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: UpdatableCreditCardFieldsWithMeta, into buf: inout [UInt8]) {
+        FfiConverterTypeUpdatableCreditCardFields.write(value.fields, into: &buf)
+        FfiConverterTypeCreditCardMeta.write(value.meta, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeUpdatableCreditCardFieldsWithMeta_lift(_ buf: RustBuffer) throws -> UpdatableCreditCardFieldsWithMeta {
+    return try FfiConverterTypeUpdatableCreditCardFieldsWithMeta.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeUpdatableCreditCardFieldsWithMeta_lower(_ value: UpdatableCreditCardFieldsWithMeta) -> RustBuffer {
+    return FfiConverterTypeUpdatableCreditCardFieldsWithMeta.lower(value)
+}
+
+
+/**
  * What you pass to create or update a passport.
  */
 public struct UpdatablePassportFields: Equatable, Hashable {
@@ -2027,8 +2398,7 @@ public func FfiConverterTypeUpdatablePassportFields_lower(_ value: UpdatablePass
     return FfiConverterTypeUpdatablePassportFields.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * A bulk insert result entry, returned per input record by `add_many_addresses_with_meta`
  */
@@ -2103,8 +2473,7 @@ public func FfiConverterTypeAddressBulkResultEntry_lower(_ value: AddressBulkRes
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * Per-record result of `add_many_address_tombstones`.
  */
@@ -2180,7 +2549,8 @@ public func FfiConverterTypeAddressBulkTombstoneResultEntry_lower(_ value: Addre
 
 
 
-public enum AutofillApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
+public 
+enum AutofillApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -2288,6 +2658,156 @@ public func FfiConverterTypeAutofillApiError_lift(_ buf: RustBuffer) throws -> A
 public func FfiConverterTypeAutofillApiError_lower(_ value: AutofillApiError) -> RustBuffer {
     return FfiConverterTypeAutofillApiError.lower(value)
 }
+
+
+/**
+ * A bulk insert result entry, returned per input record by `add_many_credit_cards_with_meta`
+ */
+
+public enum CreditCardBulkResultEntry: Equatable, Hashable {
+    
+    case success(creditCard: CreditCard
+    )
+    case error(message: String
+    )
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension CreditCardBulkResultEntry: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeCreditCardBulkResultEntry: FfiConverterRustBuffer {
+    typealias SwiftType = CreditCardBulkResultEntry
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CreditCardBulkResultEntry {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .success(creditCard: try FfiConverterTypeCreditCard.read(from: &buf)
+        )
+        
+        case 2: return .error(message: try FfiConverterString.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: CreditCardBulkResultEntry, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .success(creditCard):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeCreditCard.write(creditCard, into: &buf)
+            
+        
+        case let .error(message):
+            writeInt(&buf, Int32(2))
+            FfiConverterString.write(message, into: &buf)
+            
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardBulkResultEntry_lift(_ buf: RustBuffer) throws -> CreditCardBulkResultEntry {
+    return try FfiConverterTypeCreditCardBulkResultEntry.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardBulkResultEntry_lower(_ value: CreditCardBulkResultEntry) -> RustBuffer {
+    return FfiConverterTypeCreditCardBulkResultEntry.lower(value)
+}
+
+
+
+/**
+ * Per-record result of `add_many_credit_card_tombstones`.
+ */
+
+public enum CreditCardBulkTombstoneResultEntry: Equatable, Hashable {
+    
+    case success(guid: String
+    )
+    case error(message: String
+    )
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension CreditCardBulkTombstoneResultEntry: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeCreditCardBulkTombstoneResultEntry: FfiConverterRustBuffer {
+    typealias SwiftType = CreditCardBulkTombstoneResultEntry
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CreditCardBulkTombstoneResultEntry {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .success(guid: try FfiConverterString.read(from: &buf)
+        )
+        
+        case 2: return .error(message: try FfiConverterString.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: CreditCardBulkTombstoneResultEntry, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .success(guid):
+            writeInt(&buf, Int32(1))
+            FfiConverterString.write(guid, into: &buf)
+            
+        
+        case let .error(message):
+            writeInt(&buf, Int32(2))
+            FfiConverterString.write(message, into: &buf)
+            
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardBulkTombstoneResultEntry_lift(_ buf: RustBuffer) throws -> CreditCardBulkTombstoneResultEntry {
+    return try FfiConverterTypeCreditCardBulkTombstoneResultEntry.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardBulkTombstoneResultEntry_lower(_ value: CreditCardBulkTombstoneResultEntry) -> RustBuffer {
+    return FfiConverterTypeCreditCardBulkTombstoneResultEntry.lower(value)
+}
+
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2440,6 +2960,31 @@ fileprivate struct FfiConverterSequenceTypeCreditCard: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterSequenceTypeCreditCardTombstone: FfiConverterRustBuffer {
+    typealias SwiftType = [CreditCardTombstone]
+
+    public static func write(_ value: [CreditCardTombstone], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeCreditCardTombstone.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [CreditCardTombstone] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [CreditCardTombstone]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeCreditCardTombstone.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceTypePassport: FfiConverterRustBuffer {
     typealias SwiftType = [Passport]
 
@@ -2482,6 +3027,31 @@ fileprivate struct FfiConverterSequenceTypeUpdatableAddressFieldsWithMeta: FfiCo
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             seq.append(try FfiConverterTypeUpdatableAddressFieldsWithMeta.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypeUpdatableCreditCardFieldsWithMeta: FfiConverterRustBuffer {
+    typealias SwiftType = [UpdatableCreditCardFieldsWithMeta]
+
+    public static func write(_ value: [UpdatableCreditCardFieldsWithMeta], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeUpdatableCreditCardFieldsWithMeta.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [UpdatableCreditCardFieldsWithMeta] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [UpdatableCreditCardFieldsWithMeta]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeUpdatableCreditCardFieldsWithMeta.read(from: &buf))
         }
         return seq
     }
@@ -2536,12 +3106,63 @@ fileprivate struct FfiConverterSequenceTypeAddressBulkTombstoneResultEntry: FfiC
         return seq
     }
 }
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypeCreditCardBulkResultEntry: FfiConverterRustBuffer {
+    typealias SwiftType = [CreditCardBulkResultEntry]
+
+    public static func write(_ value: [CreditCardBulkResultEntry], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeCreditCardBulkResultEntry.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [CreditCardBulkResultEntry] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [CreditCardBulkResultEntry]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeCreditCardBulkResultEntry.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypeCreditCardBulkTombstoneResultEntry: FfiConverterRustBuffer {
+    typealias SwiftType = [CreditCardBulkTombstoneResultEntry]
+
+    public static func write(_ value: [CreditCardBulkTombstoneResultEntry], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeCreditCardBulkTombstoneResultEntry.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [CreditCardBulkTombstoneResultEntry] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [CreditCardBulkTombstoneResultEntry]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeCreditCardBulkTombstoneResultEntry.read(from: &buf))
+        }
+        return seq
+    }
+}
 /**
  * Create a new, random, encryption key.
  */
 public func createAutofillKey()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
-    uniffi_autofill_fn_func_create_autofill_key($0
+        uniffiCallStatus in
+    uniffi_autofill_fn_func_create_autofill_key(uniffiCallStatus
     )
 })
 }
@@ -2551,9 +3172,10 @@ public func createAutofillKey()throws  -> String  {
  */
 public func decryptString(key: String, ciphertext: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_func_decrypt_string(
         FfiConverterString.lower(key),
-        FfiConverterString.lower(ciphertext),$0
+        FfiConverterString.lower(ciphertext),uniffiCallStatus
     )
 })
 }
@@ -2562,9 +3184,10 @@ public func decryptString(key: String, ciphertext: String)throws  -> String  {
  */
 public func encryptString(key: String, cleartext: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
     uniffi_autofill_fn_func_encrypt_string(
         FfiConverterString.lower(key),
-        FfiConverterString.lower(cleartext),$0
+        FfiConverterString.lower(cleartext),uniffiCallStatus
     )
 })
 }
@@ -2593,7 +3216,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_func_encrypt_string() != 64714) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_addressesbridgedengine_apply() != 49642) {
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_apply() != 22429) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_addressesbridgedengine_ensure_current_sync_id() != 44860) {
@@ -2608,16 +3231,16 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_method_addressesbridgedengine_reset_sync_id() != 61259) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_addressesbridgedengine_set_uploaded() != 35043) {
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_set_uploaded() != 44509) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_addressesbridgedengine_store_incoming() != 58340) {
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_store_incoming() != 41524) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_addressesbridgedengine_sync_finished() != 34855) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_addressesbridgedengine_sync_id() != 3467) {
+    if (uniffi_autofill_checksum_method_addressesbridgedengine_sync_id() != 34389) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_addressesbridgedengine_sync_started() != 54649) {
@@ -2635,10 +3258,19 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_method_store_add_credit_card() != 39831) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_add_many_address_tombstones() != 63625) {
+    if (uniffi_autofill_checksum_method_store_add_credit_card_with_meta() != 12334) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_add_many_addresses_with_meta() != 55046) {
+    if (uniffi_autofill_checksum_method_store_add_many_address_tombstones() != 50580) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_add_many_addresses_with_meta() != 7513) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_add_many_credit_card_tombstones() != 7008) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_add_many_credit_cards_with_meta() != 13714) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_add_passport() != 41691) {
@@ -2662,6 +3294,9 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_method_store_delete_all_addresses() != 25310) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_autofill_checksum_method_store_delete_all_credit_cards() != 37337) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_autofill_checksum_method_store_delete_credit_card() != 33261) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -2671,13 +3306,13 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_method_store_get_address() != 1991) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_get_all_addresses() != 36726) {
+    if (uniffi_autofill_checksum_method_store_get_all_addresses() != 9297) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_get_all_credit_cards() != 8890) {
+    if (uniffi_autofill_checksum_method_store_get_all_credit_cards() != 19499) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_get_all_passports() != 59026) {
+    if (uniffi_autofill_checksum_method_store_get_all_passports() != 59270) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_get_credit_card() != 31148) {
@@ -2717,6 +3352,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_update_credit_card() != 23488) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_update_credit_card_with_meta() != 33534) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_update_passport() != 64688) {

@@ -7,14 +7,11 @@ import Redux
 
 @MainActor
 final class SearchEngineSelectionMiddleware {
-    private let profile: Profile
     private let logger: Logger
     private let searchEnginesManager: SearchEnginesManagerProvider
 
-    init(profile: Profile = AppContainer.shared.resolve(),
-         searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(SearchEnginesManager.self),
+    init(searchEnginesManager: SearchEnginesManagerProvider = AppContainer.shared.resolve(SearchEnginesManager.self),
          logger: Logger = DefaultLogger.shared) {
-        self.profile = profile
         self.logger = logger
         self.searchEnginesManager = searchEnginesManager
     }

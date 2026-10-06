@@ -16,7 +16,7 @@ class SearchViewControllerTest: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile(firefoxSuggest: MockRustFirefoxSuggest())
+        profile = makeProfile(firefoxSuggest: MockRustFirefoxSuggest())
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
 
         let mockSearchEngineProvider = MockSearchEngineProvider()

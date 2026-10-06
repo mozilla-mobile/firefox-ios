@@ -43,8 +43,7 @@ final class AdBlockerSetting: BoolSetting {
             title: title,
             subtitle: subtitleText,
             learnMoreText: learnMoreText,
-            a11yId: AccessibilityIdentifiers.Settings.Browsing.adBlockerLearnMore,
-            theme: theme
+            a11yId: AccessibilityIdentifiers.Settings.Browsing.adBlockerLearnMore
         )
 
         control.configureSwitch(
@@ -59,6 +58,8 @@ final class AdBlockerSetting: BoolSetting {
 
         cell.accessoryView = control
         cell.selectionStyle = .none
+        cell.layoutMargins = UX.cellLayoutMarginsForCurrentOS
+        cell.separatorInset = UX.cellSeparatorInsetForCurrentOS
 
         cell.learnMoreDidTap = { [weak self] in
             let url = SupportUtils.URLForTopic(AdBlockerSetting.learnMoreTopic)

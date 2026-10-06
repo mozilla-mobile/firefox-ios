@@ -201,7 +201,9 @@ final class SummarizeCoordinator: BaseCoordinator,
     func summarizerServiceDidStart(_ text: String) {
         summarizerTelemetry.summarizationStarted(
             lengthWords: text.numberOfWords,
-            lengthChars: Int32(clamping: text.count)
+            lengthChars: Int32(clamping: text.count),
+            summaryLanguage: config?.summaryLocale?.identifier,
+            pageLanguage: config?.pageLocale?.identifier
         )
     }
 

@@ -49,11 +49,11 @@ private struct PreviewModel: OnboardingCardInfoModelProtocol {
     var image: UIImage? { UIImage(named: imageID, in: Bundle.module, compatibleWith: nil) }
 }
 
-enum OnboardingType: String, Codable, Sendable {
+private enum OnboardingType: String, Codable, Sendable {
     case freshInstall = "fresh-install"
 }
 
-enum OnboardingMultipleChoiceAction: String, CaseIterable, Codable, Sendable {
+private enum OnboardingMultipleChoiceAction: String, CaseIterable, Codable, Sendable {
     case themeDark = "theme-dark"
     case themeLight = "theme-light"
     case themeSystemDefault = "theme-system-default"
@@ -77,7 +77,7 @@ enum OnboardingMultipleChoiceAction: String, CaseIterable, Codable, Sendable {
     }
 }
 
-enum OnboardingInstructionsPopupActions: String, CaseIterable, Codable, Sendable {
+private enum OnboardingInstructionsPopupActions: String, CaseIterable, Codable, Sendable {
     case dismiss
     case dismissAndNextCard = "dismiss-and-next-card"
     case openIosFxSettings = "open-ios-fx-settings"
@@ -86,7 +86,7 @@ enum OnboardingInstructionsPopupActions: String, CaseIterable, Codable, Sendable
     var id: String { rawValue }
 }
 
-enum OnboardingActions: String, CaseIterable, Codable, Sendable {
+private enum OnboardingActions: String, CaseIterable, Codable, Sendable {
     case endOnboarding = "end-onboarding"
     case forwardOneCard = "forward-one-card"
     case forwardTwoCard = "forward-two-card"

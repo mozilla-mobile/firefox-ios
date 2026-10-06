@@ -5,12 +5,20 @@
 import UIKit
 import Common
 
-// TODO: - FXIOS-14720 Add Strings and accessibility ids
 final class QuickAnswersContentView: UIView, ThemeApplicable {
     private struct UX {
         static let contentSpacing: CGFloat = 32.0
         static let animationDuration: TimeInterval = 0.2
         static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)
+        /// The vertical space the waveform and its spacing leave behind.
+        static let resultTranslationOffset = audioWaveformSize.height + contentSpacing
+        /// How far below their final position the result sections start before cascading in.
+        static let resultCascadeOffset: CGFloat = 30.0
+        static let resultSlideDuration: TimeInterval = 0.25
+        static let resultCascadeDuration: TimeInterval = 0.3
+        /// The sections start settling shortly after the transcript begins moving up.
+        static let resultCascadeStartDelay: TimeInterval = 0.1
+        static let resultCascadeStagger: TimeInterval = 0.1
     }
 
     // MARK: - Subviews
@@ -23,19 +31,17 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     private let audioWaveform: AudioWaveformView = .build()
     private let placeholderLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.title2.scaledFont()
-        $0.text = "Ask anything…"
         $0.numberOfLines = 0
         $0.textAlignment = .center
         $0.adjustsFontForContentSizeCategory = true
     }
-    private let transcriptLabel: UILabel = .build {
+    private let transcriptLabel: TranscriptLabel = .build {
         $0.font = FXFontStyles.Regular.title2.scaledFont()
         $0.numberOfLines = 0
         $0.adjustsFontForContentSizeCategory = true
     }
     private let searchingLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.callout.scaledFont()
-        $0.text = "Answering…"
         $0.alpha = 0.0
         $0.adjustsFontForContentSizeCategory = true
     }
@@ -56,6 +62,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
     private let optInView: OptInView = .build()
     private var theme: Theme?
+    private var strings: QuickAnswersViewConfiguration.ContentViewStrings?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -122,6 +129,13 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
 
     // MARK: - Configuration
+    func configureStrings(_ strings: QuickAnswersViewConfiguration.ContentViewStrings) {
+        self.strings = strings
+        placeholderLabel.text = strings.placeholder
+        searchingLabel.text = strings.answering
+        sourceView.configureStrings(sourcesHeader: strings.sources)
+    }
+
     func startAudioWaveformAnimation() {
         audioWaveform.startAnimating()
     }
@@ -131,12 +145,14 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
 
     func configureOptIn(
+        strings: QuickAnswersViewConfiguration.OptInStrings,
         learnMoreURL: URL?,
         theme: Theme,
         onContinue: @escaping () -> Void,
         onLearnMore: @escaping (URL) -> Void
     ) {
         optInView.configure(
+            strings: strings,
             learnMoreURL: learnMoreURL,
             theme: theme,
             onContinue: onContinue,
@@ -166,16 +182,10 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         // if the placeholder is visible then hide it before adding text to the transcription label.
         // This is needed to don't overlap the show of the transcription with the placeholder label
         guard placeholderLabel.alpha == 1.0 else {
-            UIView.transition(
-                with: transcriptLabel,
-                duration: UX.animationDuration,
-                options: .transitionCrossDissolve
-            ) { [self] in
-                transcriptLabel.text = text
-            }
+            transcriptLabel.setTranscript(text, animated: true)
             return
         }
-        transcriptLabel.text = text
+        transcriptLabel.setTranscript(text, animated: true)
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             placeholderLabel.alpha = 0.0
         }
@@ -194,21 +204,37 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         }
     }
 
-    func configureAnswer(_ text: String, modelName: String) {
+    func configureResult(
+        _ text: String,
+        modelName: String,
+        sources: [SearchResult.Source],
+        onSourceTapped: @escaping (URL) -> Void
+    ) {
         searchingLabel.stopShimmering()
         searchingLabel.alpha = 0.0
-        footerLabel.text = "Powered by \(modelName) · Answers can contain mistakes."
-        UIView.animate(withDuration: UX.animationDuration) { [self] in
-            answerLabel.text = text
-            answerLabel.alpha = 1.0
-            footerLabel.alpha = 1.0
-        }
+        answerLabel.text = text
+        footerLabel.text = String(format: strings?.footerFormat ?? "", modelName)
+        sourceView.configure(with: sources, onSourceTapped: onSourceTapped)
+        animateResultCascade()
     }
 
-    func configureSources(_ items: [SearchResult.Source], onSourceTapped: @escaping (URL) -> Void) {
-        sourceView.configure(with: items, onSourceTapped: onSourceTapped)
-        UIView.animate(withDuration: UX.animationDuration) { [self] in
-            sourceView.alpha = 1.0
+    private func animateResultCascade() {
+        let cascadingSections: [UIView] = [answerLabel, sourceView, footerLabel]
+        let finalTransform = CGAffineTransform(translationX: 0.0, y: -UX.resultTranslationOffset)
+        let cascadeStartTransform = finalTransform.translatedBy(x: 0.0, y: UX.resultCascadeOffset)
+
+        UIView.animate(withDuration: UX.resultSlideDuration, delay: 0.0, options: .curveEaseInOut) { [self] in
+            transcriptLabel.transform = finalTransform
+            cascadingSections.forEach { $0.transform = cascadeStartTransform }
+            audioWaveform.alpha = 0.0
+        }
+
+        for (index, section) in cascadingSections.enumerated() {
+            let delay = UX.resultCascadeStartDelay + Double(index) * UX.resultCascadeStagger
+            UIView.animate(withDuration: UX.resultCascadeDuration, delay: delay, options: .curveEaseOut) {
+                section.transform = finalTransform
+                section.alpha = 1.0
+            }
         }
     }
 
@@ -217,7 +243,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         self.theme = theme
         audioWaveform.applyTheme(theme: theme)
         placeholderLabel.textColor = theme.colors.textSecondary
-        transcriptLabel.textColor = theme.colors.textPrimary
+        transcriptLabel.foregroundColor = theme.colors.textPrimary
         searchingLabel.textColor = theme.colors.textSecondary
         answerLabel.textColor = theme.colors.textPrimary
         footerLabel.textColor = theme.colors.textSecondary

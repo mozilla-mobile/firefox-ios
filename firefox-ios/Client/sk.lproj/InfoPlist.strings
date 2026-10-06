@@ -23,7 +23,7 @@
 "NSPhotoLibraryAddUsageDescription" = "Toto vám umožňuje ukladať fotky.";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Firefox používa rozpoznávanie reči na prevod vášho hlasu na text pre hlasové vyhľadávanie.";
+"NSSpeechRecognitionUsageDescription" = "Toto umožňuje Firefoxu prepísať váš zvuk na text.";
 
 /* (No Comment) */
 "Scan QR Code" = "Skenovanie QR kódu";

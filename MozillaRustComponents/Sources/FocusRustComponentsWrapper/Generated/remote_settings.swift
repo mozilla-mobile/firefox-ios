@@ -39,6 +39,52 @@ fileprivate extension ForeignBytes {
     init(bufferPointer: UnsafeBufferPointer<UInt8>) {
         self.init(len: Int32(bufferPointer.count), data: bufferPointer.baseAddress)
     }
+
+    init(rawBufferPointer: UnsafeRawBufferPointer) {
+        self.init(
+            len: Int32(rawBufferPointer.count),
+            data: rawBufferPointer.baseAddress?.assumingMemoryBound(to: UInt8.self)
+        )
+    }
+}
+
+// Converter for `&[u8]` / `[ByRef] bytes` arguments.
+//
+// Conforms to `FfiConverter` so the compiler enforces the full converter
+// method set. Only the scope-bound `lower(_:_body:)` overload is sound —
+// zero-copy byte buffers only flow foreign -> Rust, and only in argument
+// position. The four protocol-witness methods (`lift`, `lower`, `read`,
+// `write`) `fatalError` at runtime if anyone reaches them.
+//
+// The scope-bound `lower` takes a closure because the `ForeignBytes`
+// pointer is only guaranteed valid for the duration of
+// `Data.withUnsafeBytes`. Callers must run the full FFI call inside
+// the closure body.
+fileprivate enum FfiConverterByRefBytes: FfiConverter {
+    typealias SwiftType = Data
+    typealias FfiType = ForeignBytes
+
+    static func lower<R>(_ value: Data, _ body: (ForeignBytes) throws -> R) rethrows -> R {
+        return try value.withUnsafeBytes { rawBuf in
+            try body(ForeignBytes(rawBufferPointer: rawBuf))
+        }
+    }
+
+    static func lower(_ value: Data) -> ForeignBytes {
+        fatalError("ByRef bytes cannot use the plain lower: returning ForeignBytes escapes the Data.withUnsafeBytes scope. Use the scope-bound lower(_:_body:) overload instead.")
+    }
+
+    static func lift(_ value: ForeignBytes) throws -> Data {
+        fatalError("ByRef bytes cannot be lifted: zero-copy &[u8] only flows foreign->Rust")
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        fatalError("ByRef bytes cannot be read from a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
+
+    static func write(_ value: Data, into buf: inout [UInt8]) {
+        fatalError("ByRef bytes cannot be written to a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
 }
 
 // For every type used in the interface, we provide helper methods for conveniently
@@ -471,7 +517,11 @@ fileprivate struct FfiConverterString: FfiConverter {
             return String()
         }
         let bytes = UnsafeBufferPointer<UInt8>(start: value.data!, count: Int(value.len))
-        return String(bytes: bytes, encoding: String.Encoding.utf8)!
+        // Use Swift's native UTF-8 decoder; `String(bytes:encoding:.utf8)` goes
+        // through Foundation's NSString and silently strips a leading U+FEFF BOM.
+        // Invalid UTF-8 substitutes U+FFFD instead of trapping (unreachable
+        // given Rust's `String` invariant).
+        return String(decoding: bytes, as: UTF8.self)
     }
 
     public static func lower(_ value: String) -> RustBuffer {
@@ -487,7 +537,8 @@ fileprivate struct FfiConverterString: FfiConverter {
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> String {
         let len: Int32 = try readInt(&buf)
-        return String(bytes: try readBytes(&buf, count: Int(len)), encoding: String.Encoding.utf8)!
+        // See `lift` above for why we avoid Foundation's NSString-backed decoder here.
+        return String(decoding: try readBytes(&buf, count: Int(len)), as: UTF8.self)
     }
 
     public static func write(_ value: String, into buf: inout [UInt8]) {
@@ -649,8 +700,9 @@ open class RemoteSettingsClient: RemoteSettingsClientProtocol, @unchecked Sendab
      */
 open func collectionName() -> String  {
     return try!  FfiConverterString.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_remote_settings_fn_method_remotesettingsclient_collection_name(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -668,9 +720,10 @@ open func collectionName() -> String  {
      */
 open func getAttachment(record: RemoteSettingsRecord)throws  -> Data  {
     return try  FfiConverterData.lift(try rustCallWithError(FfiConverterTypeRemoteSettingsError_lift) {
+        uniffiCallStatus in
     uniffi_remote_settings_fn_method_remotesettingsclient_get_attachment(
             self.uniffiCloneHandle(),
-        FfiConverterTypeRemoteSettingsRecord_lower(record),$0
+        FfiConverterTypeRemoteSettingsRecord_lower(record),uniffiCallStatus
     )
 })
 }
@@ -680,8 +733,9 @@ open func getAttachment(record: RemoteSettingsRecord)throws  -> Data  {
      */
 open func getLastModifiedTimestamp() -> UInt64?  {
     return try!  FfiConverterOptionUInt64.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_remote_settings_fn_method_remotesettingsclient_get_last_modified_timestamp(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -706,9 +760,10 @@ open func getLastModifiedTimestamp() -> UInt64?  {
      */
 open func getRecords(syncIfEmpty: Bool = false) -> [RemoteSettingsRecord]?  {
     return try!  FfiConverterOptionSequenceTypeRemoteSettingsRecord.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_remote_settings_fn_method_remotesettingsclient_get_records(
             self.uniffiCloneHandle(),
-        FfiConverterBool.lower(syncIfEmpty),$0
+        FfiConverterBool.lower(syncIfEmpty),uniffiCallStatus
     )
 })
 }
@@ -721,16 +776,18 @@ open func getRecords(syncIfEmpty: Bool = false) -> [RemoteSettingsRecord]?  {
      */
 open func getRecordsMap(syncIfEmpty: Bool = false) -> [String: RemoteSettingsRecord]?  {
     return try!  FfiConverterOptionDictionaryStringTypeRemoteSettingsRecord.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_remote_settings_fn_method_remotesettingsclient_get_records_map(
             self.uniffiCloneHandle(),
-        FfiConverterBool.lower(syncIfEmpty),$0
+        FfiConverterBool.lower(syncIfEmpty),uniffiCallStatus
     )
 })
 }
     
 open func resetStorage()throws   {try rustCallWithError(FfiConverterTypeRemoteSettingsError_lift) {
+        uniffiCallStatus in
     uniffi_remote_settings_fn_method_remotesettingsclient_reset_storage(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -739,15 +796,17 @@ open func resetStorage()throws   {try rustCallWithError(FfiConverterTypeRemoteSe
      * Shutdown the client, releasing the SQLite connection used to cache records.
      */
 open func shutdown()  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_remote_settings_fn_method_remotesettingsclient_shutdown(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
     
 open func sync()throws   {try rustCallWithError(FfiConverterTypeRemoteSettingsError_lift) {
+        uniffiCallStatus in
     uniffi_remote_settings_fn_method_remotesettingsclient_sync(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -899,9 +958,10 @@ open class RemoteSettingsService: RemoteSettingsServiceProtocol, @unchecked Send
 public convenience init(storageDir: String, config: RemoteSettingsConfig) {
     let handle =
         try! rustCall() {
+        uniffiCallStatus in
     uniffi_remote_settings_fn_constructor_remotesettingsservice_new(
         FfiConverterString.lower(storageDir),
-        FfiConverterTypeRemoteSettingsConfig_lower(config),$0
+        FfiConverterTypeRemoteSettingsConfig_lower(config),uniffiCallStatus
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -921,8 +981,9 @@ public convenience init(storageDir: String, config: RemoteSettingsConfig) {
     
 open func clientUrl() -> String  {
     return try!  FfiConverterString.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_remote_settings_fn_method_remotesettingsservice_client_url(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -934,9 +995,10 @@ open func clientUrl() -> String  {
      */
 open func makeClient(collectionName: String) -> RemoteSettingsClient  {
     return try!  FfiConverterTypeRemoteSettingsClient_lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_remote_settings_fn_method_remotesettingsservice_make_client(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(collectionName),$0
+        FfiConverterString.lower(collectionName),uniffiCallStatus
     )
 })
 }
@@ -949,8 +1011,9 @@ open func makeClient(collectionName: String) -> RemoteSettingsClient  {
      */
 open func sync()throws  -> [String]  {
     return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeRemoteSettingsError_lift) {
+        uniffiCallStatus in
     uniffi_remote_settings_fn_method_remotesettingsservice_sync(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -965,9 +1028,10 @@ open func sync()throws  -> [String]  {
      * execution can cause weird effects.
      */
 open func updateConfig(config: RemoteSettingsConfig)throws   {try rustCallWithError(FfiConverterTypeRemoteSettingsError_lift) {
+        uniffiCallStatus in
     uniffi_remote_settings_fn_method_remotesettingsservice_update_config(
             self.uniffiCloneHandle(),
-        FfiConverterTypeRemoteSettingsConfig_lower(config),$0
+        FfiConverterTypeRemoteSettingsConfig_lower(config),uniffiCallStatus
     )
 }
 }
@@ -1528,7 +1592,8 @@ public func FfiConverterTypeUptakeEventExtras_lower(_ value: UptakeEventExtras) 
 /**
  * Public error class, this is what we return to consumers
  */
-public enum RemoteSettingsError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
+public 
+enum RemoteSettingsError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -1627,8 +1692,7 @@ public func FfiConverterTypeRemoteSettingsError_lower(_ value: RemoteSettingsErr
     return FfiConverterTypeRemoteSettingsError.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * The Remote Settings server that the client should use.
  */
@@ -1714,8 +1778,7 @@ public func FfiConverterTypeRemoteSettingsServer_lower(_ value: RemoteSettingsSe
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * Remote Settings sync status.
  */
@@ -2135,10 +2198,6 @@ fileprivate struct FfiConverterDictionaryStringTypeRemoteSettingsRecord: FfiConv
 }
 
 
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- */
 public typealias RsJsonObject = String
 
 #if swift(>=5.8)
@@ -2193,43 +2252,43 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsclient_collection_name() != 54184) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsclient_collection_name() != 48183) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsclient_get_attachment() != 10695) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsclient_get_attachment() != 13035) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsclient_get_last_modified_timestamp() != 46461) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsclient_get_last_modified_timestamp() != 23618) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsclient_get_records() != 52048) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsclient_get_records() != 56703) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsclient_get_records_map() != 50710) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsclient_get_records_map() != 24179) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsclient_reset_storage() != 27780) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsclient_reset_storage() != 57897) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsclient_shutdown() != 43691) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsclient_shutdown() != 48468) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsclient_sync() != 4946) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsclient_sync() != 35602) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsservice_client_url() != 35003) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsservice_client_url() != 7441) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsservice_make_client() != 46337) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsservice_make_client() != 53616) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsservice_sync() != 41684) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsservice_sync() != 918) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsservice_update_config() != 23848) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsservice_update_config() != 12284) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_constructor_remotesettingsservice_new() != 24841) {
+    if (uniffi_remote_settings_checksum_constructor_remotesettingsservice_new() != 3276) {
         return InitializationResult.apiChecksumMismatch
     }
 

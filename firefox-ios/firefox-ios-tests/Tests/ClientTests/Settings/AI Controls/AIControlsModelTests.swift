@@ -8,14 +8,14 @@ import Shared
 @testable import Client
 
 class AIControlsModelTests: XCTestCase, StoreTestUtility {
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
     var mockPrefs: MockProfilePrefs!
     var mockProfile: MockProfile!
     var mockGleanWrapper: MockGleanWrapper!
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile(databasePrefix: "test")
+        mockProfile = makeProfile()
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
             PrefsKeys.Settings.translationsFeature: false,
@@ -375,14 +375,5 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
                 ]
             )
         )
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

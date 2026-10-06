@@ -16,8 +16,10 @@ enum FeatureFlagID: String, CaseIterable {
     case addressBarMenu
     case adsClient
     case aiKillSwitch
+    case backgroundAudio
     case badCertDomainErrorPage
     case bookmarksSearchFeature
+    case cellularDataRestrictedErrorPage
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
     case downloadLiveActivities
@@ -29,7 +31,7 @@ enum FeatureFlagID: String, CaseIterable {
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
     case homepagePinnedHeader
-    case homepageSearchBar
+    case homepageAnimatedCenterSearchBar
     case homepageStoryCategories
     case homepageTrackerBlockerModule
     case hostedSummarizer
@@ -42,6 +44,7 @@ enum FeatureFlagID: String, CaseIterable {
     case nativeErrorPage
     case newBookmarkFolderTree
     case novaDesign
+    case novaPrivateThemeOverride
     case noInternetConnectionErrorPage
     case privacyDashboard
     case quickAnswers
@@ -58,6 +61,7 @@ enum FeatureFlagID: String, CaseIterable {
     case summarizerPermissiveGuardrails
     case tabScrollRefactorFeature
     case tabTrayiPadUIExperiments
+    case tabTrayScreenshotButtonStyle
     case tabTrayTranslucency
     case tabTrayUIExperiments
     case tosFeature
@@ -69,6 +73,7 @@ enum FeatureFlagID: String, CaseIterable {
     case videoIntroOnboarding
     case vpnFeature
     case waybackMachine
+    case webViewDocumentFetchRefactor
 
     /// The user preferences key for features that support user-togglable settings.
     /// Returns `nil` for features that are not user-configurable.
@@ -103,6 +108,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .addressBarMenu,
                 .adsClient,
                 .aiKillSwitch,
+                .backgroundAudio,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
                 .customReaderModeScheme,
@@ -111,7 +117,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .googleLens,
                 .homepageAddShortcutTile,
                 .homepagePinnedHeader,
-                .homepageSearchBar,
+                .homepageAnimatedCenterSearchBar,
                 .homepageStoryCategories,
                 .homepageTrackerBlockerModule,
                 .hostedSummarizer,
@@ -121,6 +127,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .newBookmarkFolderTree,
                 .novaDesign,
+                .novaPrivateThemeOverride,
                 .noInternetConnectionErrorPage,
                 .privacyDashboard,
                 .quickAnswers,
@@ -132,6 +139,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .summarizerLanguageExpansion,
                 .summarizerPermissiveGuardrails,
                 .tabScrollRefactorFeature,
+                .tabTrayScreenshotButtonStyle,
                 .tabTrayUIExperiments,
                 .touFeature,
                 .translation,
@@ -139,7 +147,8 @@ enum FeatureFlagID: String, CaseIterable {
                 .trendingSearches,
                 .unifiedSearch,
                 .vpnFeature,
-                .waybackMachine:
+                .waybackMachine,
+                .webViewDocumentFetchRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil

@@ -33,6 +33,7 @@ extension PingUploaderProtocol {
         request.timeoutInterval = connectionTimeout
         request.httpMethod = HTTPMethod.post.rawValue
         request.httpShouldHandleCookies = false
+        request.httpBody = data
 
         return request
     }

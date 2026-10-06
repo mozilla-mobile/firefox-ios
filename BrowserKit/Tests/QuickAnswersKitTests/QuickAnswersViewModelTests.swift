@@ -62,6 +62,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(states[3], .loadingSearchResult)
         XCTAssertEqual(states[4], .showSearchResult(searchResult, nil))
         XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastRequestedModel, .exa)
         XCTAssertEqual(mockTelemetry.recordingStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastRecordingOutcome, true)
@@ -69,10 +70,12 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastResultsOutcome, true)
+        XCTAssertEqual(mockTelemetry.lastResultsModel, .exa)
+        XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 0)
     }
 
     func testStartFlow_withRecordError_receivesError() {
-        mockService.shouldThrowSpeechError = true
+        mockService.speechErrorToThrow = .unknown("Unknown error occurred")
         let expectation = XCTestExpectation()
         var states = [QuickAnswersViewModel.State]()
         let subject = createSubject(prefs: optInCompletedPrefs())
@@ -100,6 +103,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastRecordingOutcome, false)
         XCTAssertNotNil(mockTelemetry.lastRecordingErrorType)
+        XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 0)
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 0)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 0)
     }
@@ -133,6 +137,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastResultsOutcome, false)
+        XCTAssertEqual(mockTelemetry.lastResultsModel, .exa)
     }
 
     func testStartFlow_whenServiceNotInitialized_emitsServiceNotInitializedError() {
@@ -146,6 +151,44 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastRecordingOutcome, false)
         XCTAssertEqual(mockTelemetry.lastRecordingErrorType, "service_not_initialized")
+    }
+
+    // MARK: - Permission Denied Tests
+
+    func testStartFlow_whenMicrophonePermissionDenied_recordsPermissionDeniedOnly() {
+        mockService.speechErrorToThrow = .microphonePermissionDenied(isFirstTime: true)
+        let expectation = XCTestExpectation()
+        let subject = createSubject(prefs: optInCompletedPrefs())
+
+        subject.onStateChange = { state in
+            guard case .speechResult(_, .microphonePermissionDenied) = state else { return }
+            expectation.fulfill()
+        }
+        subject.startFlow()
+
+        wait(for: [expectation])
+
+        XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastPermissionDenied, .microphone)
+        XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 0)
+    }
+
+    func testStartFlow_whenSpeechRecognitionPermissionDenied_recordsPermissionDeniedOnly() {
+        mockService.speechErrorToThrow = .speechRecognitionPermissionDenied(isFirstTime: false)
+        let expectation = XCTestExpectation()
+        let subject = createSubject(prefs: optInCompletedPrefs())
+
+        subject.onStateChange = { state in
+            guard case .speechResult(_, .speechRecognitionPermissionDenied) = state else { return }
+            expectation.fulfill()
+        }
+        subject.startFlow()
+
+        wait(for: [expectation])
+
+        XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastPermissionDenied, .speechRecognition)
+        XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 0)
     }
 
     // MARK: - Opt-In Tests
@@ -226,6 +269,13 @@ final class QuickAnswersViewModelTests: XCTestCase {
         let subject = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .liner))
 
         XCTAssertEqual(subject.modelDisplayName, QuickAnswersModel.liner.displayName)
+    }
+
+    func testInit_withLinerModel_recordsRequestedWithModel() {
+        _ = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .liner))
+
+        XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastRequestedModel, .liner)
     }
 
     // MARK: - Helper

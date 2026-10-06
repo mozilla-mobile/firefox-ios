@@ -32,9 +32,9 @@ final class OnboardingLaunchScreenViewControllerTests: XCTestCase {
 
     // MARK: - Initialization Tests
 
-    func test_init_setsPrefersStatusBarHiddenToTrue() {
+    func test_init_setsPrefersStatusBarHiddenToFalse() {
         let subject = createSubject()
-        XCTAssertTrue(subject.prefersStatusBarHidden)
+        XCTAssertFalse(subject.prefersStatusBarHidden)
     }
 
     // MARK: - View Lifecycle Tests

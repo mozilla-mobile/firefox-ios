@@ -51,6 +51,23 @@ public protocol AutopushProtocol {
     ///            and the scope the push notification was for
     /// - Throws: If the native push client was unable to decrypt the payload
     func decrypt(payload: [String: String]) async throws -> DecryptResponse
+
+    /// Verifies active subscriptions and re-subscribes any that were dropped by the push servers.
+    /// Callers should check `Autopush.shouldVerifySubscriptions(prefs:now:)` first to avoid creating an
+    /// `Autopush` instance when verification isn't due.
+    ///
+    /// - Parameters:
+    ///   - forceVerify: A boolean value indicating whether the PushManager's rate limiting should be circumvented
+    ///   - prefs: A set of prefs associated with the user's profile, used to store the verification timestamp
+    /// - Returns: The new subscriptions keyed by scope, empty if the PushManager rate limited the verification,
+    ///            nothing changed, or the PushManager does not have a UAID yet.
+    ///            Consumers must forward new endpoints to their servers (e.g. FxA)
+    /// - Throws: In the following scenarios:
+    ///     - An error occurred sending an channel list retrieval request to the autopush server
+    ///     - An error occurred accessing the PushManager's persisted storage
+    ///     - An error occurred re-subscribing a changed subscription
+    @discardableResult
+    func verifyActiveSubscriptions(forceVerify: Bool, prefs: Prefs) async throws -> [String: SubscriptionResponse]
 }
 
 public actor Autopush {
@@ -71,6 +88,19 @@ public actor Autopush {
     /// Initializer for tests that want to inject a mock push manager
     public init(withPushManager pushManager: PushManagerProtocol) {
         self.pushManager = pushManager
+    }
+
+    /// Whether enough time has passed since the last successful verification to verify subscriptions again
+    ///
+    /// - Parameters:
+    ///   - prefs: A set of prefs associated with the user's profile
+    ///   - now: The current timestamp, in milliseconds
+    public static func shouldVerifySubscriptions(prefs: Prefs, now: Timestamp = Date.now()) -> Bool {
+        guard let lastVerification = prefs.timestampForKey(PrefsKeys.AutopushVerificationTimestamp),
+              lastVerification <= now else {
+            return true
+        }
+        return now - lastVerification >= AppConstants.autopushVerificationInterval
     }
 }
 
@@ -93,5 +123,21 @@ extension Autopush: AutopushProtocol {
 
     public func decrypt(payload: [String: String]) async throws -> DecryptResponse {
         return try pushManager.decrypt(payload: payload)
+    }
+
+    @discardableResult
+    public func verifyActiveSubscriptions(
+        forceVerify: Bool = false,
+        prefs: Prefs
+    ) async throws -> [String: SubscriptionResponse] {
+        let subscriptionChanges = try pushManager.verifyConnection(forceVerify: forceVerify)
+        prefs.setTimestamp(Date.now(), forKey: PrefsKeys.AutopushVerificationTimestamp)
+
+        // Re-subscribe the returned `subscriptionChanges`
+        var newSubscriptions = [String: SubscriptionResponse]()
+        for change in subscriptionChanges {
+            newSubscriptions[change.scope] = try pushManager.subscribe(scope: change.scope, appServerSey: nil)
+        }
+        return newSubscriptions
     }
 }

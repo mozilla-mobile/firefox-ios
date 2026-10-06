@@ -14,11 +14,6 @@ private let SuggestedSite4 = "foobar buffer length"
 private let SuggestedSite5 = "foobar burn cd"
 private let SuggestedSite6 = "foobar/ b"
 
-private let IngestSuggestionsCell = "Ingest new suggestions now"
-// Nimbus applies fetched recipes on the launch after the fetch, so two attempts is the floor.
-private let SuggestRolloutLaunchAttempts = 5
-private let SuggestRolloutProbeTimeout: TimeInterval = 5
-
 class SearchTests: FeatureFlaggedTestBase {
     var toolbarScreen: ToolbarScreen!
     var browserScreen: BrowserScreen!
@@ -74,6 +69,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2436093
+    // Regression
     func testPromptPresence() {
         // Suggestion is on by default (starting on Oct 24th 2017), so the prompt should not appear
         app.launch()
@@ -242,6 +238,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2436091
+    // Regression
     func testSearchWithFirefoxOption() {
         app.launch()
         navigator.openURL(path(forTestPage: TestPages.mozillaBook))
@@ -307,6 +304,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306943
+    // Smoketest
     func testSearchIconOnAboutHome() throws {
         app.launch()
         if iPad() {
@@ -369,11 +367,13 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306886
     // SmokeTest
-    func testBottomVIewURLBar() throws {
+    func testBottomViewURLBar_trendingRecentSearchesExperimentOff() throws {
         let toolbarScreen = ToolbarScreen(app: app)
         let browserScreen = BrowserScreen(app: app)
         let firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
 
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "trending-searches-feature")
         app.launch()
         if iPad() {
             throw XCTSkip("Toolbar option not available for iPad")
@@ -425,7 +425,68 @@ class SearchTests: FeatureFlaggedTestBase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4367103
+    // SmokeTest
+    func testBottomViewURLBar_trendingRecentSearchesExperimentOn() throws {
+        let toolbarScreen = ToolbarScreen(app: app)
+        let browserScreen = BrowserScreen(app: app)
+        let searchScreen = SearchScreen(app: app)
+
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        app.launch()
+        if iPad() {
+            throw XCTSkip("Toolbar option not available for iPad")
+        } else {
+            // Tap on toolbar bottom setting
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(ToolbarSettings)
+            navigator.performAction(Action.SelectToolbarBottom)
+            navigator.goto(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+
+            // URL bar is moved to the bottom of the screen
+            let menuSettingsButton = toolbarScreen.getToolbarSettingsMenuButtonElement()
+            let firstTopSite = app.links.element(boundBy: 0)
+            toolbarScreen.assertSettingsButtonExists()
+            let urlBar = browserScreen.getAddressBarElement()
+            XCTAssertTrue(urlBar.isAbove(element: menuSettingsButton))
+            XCTAssertTrue(urlBar.isBelow(element: firstTopSite))
+
+            // In a new tab, tap on the URL bar
+            navigator.goto(NewTabScreen)
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+            urlBar.waitAndTap()
+
+            // The URL bar is focused and the keyboard is displayed
+            validateUrlHasFocusAndKeyboardIsDisplayed()
+
+            // Open a website
+            navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
+
+            // The keyboard is dismissed and page is correctly loaded
+            let keyboardCount = app.keyboards.count
+            XCTAssert(keyboardCount == 0, "The keyboard is shown")
+            waitUntilPageLoad()
+
+            // Tap on the URL bar
+            urlBar.waitAndTap()
+
+            // The URL bar is focused, Top Sites panel is displayed and the keyboard pops-up
+            validateUrlHasFocusAndKeyboardIsDisplayed()
+            searchScreen.assertTrendingSearchesSectionTitle(with: "Google")
+
+            // Tap the back icon <
+            browserScreen.tapCancelButtonOnUrlBarExist()
+
+            // The focused is dismissed from the URL bar
+            browserScreen.assertKeyboardFocusState(isFocusedOniPad: false)
+        }
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306942
+    // Regression
     func testSearchSuggestions() throws {
         guard #available(iOS 17.0, *) else { return }
 
@@ -526,13 +587,38 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2753076
-    // Regresssion
+    // Regression
     func testFirefoxSuggestPartialNonSponsored() {
         launchWithFirefoxSuggestRollout()
         verifySearchSuggestion(searchTerm: "fifa",
                                expectedMatch: "Wikipedia - FIFA World Cup",
                                hasFirefoxSuggest: true,
                                isSponsored: false)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753075
+    // Regression
+    func testFirefoxSuggestNonSponsoredUI() {
+        let keyword = "fifa"
+        let suggestion = "Wikipedia - FIFA World Cup"
+        launchWithFirefoxSuggestRollout()
+
+        // Step 1: A keyword triggers a non sponsored result in the Firefox Suggest section
+        browserScreen.searchAndAssertSuggestResult(term: keyword, title: suggestion, kind: .nonSponsored)
+
+        // Step 2: The result sits at the bottom of the Firefox Suggest section, not marked as sponsored
+        browserScreen.assertNonSponsoredSuggestRowUI(title: suggestion)
+
+        // Step 3: The non sponsored result is NOT displayed in private mode
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButtonHittable()
+        navigator.goto(TabTray)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.goto(NewTabScreen)
+        browserScreen.searchFromAddressBar(term: keyword)
+        browserScreen.assertAddressBarContains(value: keyword)
+        browserScreen.assertSuggestResult(title: suggestion, kind: .nonSponsored, shouldExist: false)
+        browserScreen.assertFirefoxSuggestHeader(shouldExist: false)
     }
 
     private func verifySearchSuggestion(searchTerm: String,
@@ -575,37 +661,10 @@ class SearchTests: FeatureFlaggedTestBase {
         }
     }
 
-    /// On release builds Firefox Suggest is enabled by a Nimbus rollout rather than a channel default, and
-    /// Nimbus only applies fetched recipes on the launch that follows the fetch, hence the relaunches.
     private func launchWithFirefoxSuggestRollout() {
         app.launch()
         waitForTabsButtonHittable()
-
-        for _ in 1...SuggestRolloutLaunchAttempts {
-            relaunchKeepingProfile()
-            navigator.goto(SettingsScreen)
-            navigator.performAction(Action.OpenSecretSettings)
-            navigator.goto(FirefoxSuggestSettings)
-            // The ingest row only exists while the feature is enabled, so it doubles as the enrollment probe.
-            guard mozWaitForElementToExist(app.cells[IngestSuggestionsCell],
-                                           timeout: SuggestRolloutProbeTimeout,
-                                           failOnTimeout: false) else { continue }
-            navigator.performAction(Action.IngestNewSuggestionsNow)
-            navigator.goto(HomePanelsScreen)
-            return
-        }
-
-        XCTFail("Firefox Suggest was not enabled after \(SuggestRolloutLaunchAttempts) launches")
-    }
-
-    /// The Nimbus database lives inside the test profile, so clearing it would discard the fetched rollout.
-    private func relaunchKeepingProfile() {
-        app.terminate()
-        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
-        app.launchArguments = app.launchArguments.filter { $0 != LaunchArguments.ClearProfile }
-        app.launch()
-        waitForTabsButtonHittable()
-        navigator.nowAt(NewTabScreen)
+        enrollInFirefoxSuggestRollout()
     }
 
     /// Clears the address bar before typing, so the term can be retyped without appending to itself.
@@ -636,16 +695,14 @@ class SearchTests: FeatureFlaggedTestBase {
         launchWithFirefoxSuggestRollout()
 
         // Step 1: Type a keyword that trigers a sponsored result
-        browserScreen.tapOnAddressBar()
-        browserScreen.tapClearButtonIfExists()
-        browserScreen.typeOnSearchBar(text: "Amazon")
+        browserScreen.searchFromAddressBar(term: "Amazon")
 
         // Step 2: Sponsored result should be specified
-        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
+        browserScreen.assertSuggestResult(title: "Amazon.com - Official Site", kind: .sponsored, shouldExist: true)
 
         // Step 3: Turn the device to landscape and observe the sponsored result
         settingsScreen.rotateDevice(to: .landscapeLeft)
-        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
+        browserScreen.assertSuggestResult(title: "Amazon.com - Official Site", kind: .sponsored, shouldExist: true)
         navigator.performAction(Action.CloseURLBarOpen)
 
         // Step 4: Trigger a sponsored result in private mode
@@ -655,10 +712,8 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.goto(TabTray)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.goto(NewTabScreen)
-        browserScreen.tapOnAddressBar()
-        browserScreen.tapClearButtonIfExists()
-        browserScreen.typeOnSearchBar(text: "Amazon")
-        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: false)
+        browserScreen.searchFromAddressBar(term: "Amazon")
+        browserScreen.assertSuggestResult(title: "Amazon.com - Official Site", kind: .sponsored, shouldExist: false)
     }
 
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
@@ -752,6 +807,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3374353
+    // Regression
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff() {
         app.launch()
         // Disable general search suggests
@@ -832,6 +888,7 @@ class SearchTests: FeatureFlaggedTestBase {
         }
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
 
         app.launch()
         navigator.goto(SearchSettings)
@@ -859,6 +916,7 @@ class SearchTests: FeatureFlaggedTestBase {
         }
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
         app.launch()
 
         navigator.goto(SearchSettings)
@@ -959,6 +1017,7 @@ class SearchTests: FeatureFlaggedTestBase {
         }
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "trending-searches-feature")
 
         app.launch()
 
@@ -988,6 +1047,7 @@ class SearchTests: FeatureFlaggedTestBase {
         }
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "trending-searches-feature")
         app.launch()
 
         enterTextOnSearchBar(text: "example")

@@ -54,6 +54,7 @@ class DatabaseFixtureTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2459133
+   // Regression
    func testHistoryDatabaseFixture() throws {
        toolbarScreen.assertTabsButtonExists()
        toolbarScreen.tapSettingsMenuButton()

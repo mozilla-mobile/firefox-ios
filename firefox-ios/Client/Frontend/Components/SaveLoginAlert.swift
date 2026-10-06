@@ -15,7 +15,7 @@ struct SaveLoginAlertViewModel {
 
 class SaveLoginAlert: UIView, ThemeApplicable {
     var saveAction: (() -> Void)?
-    var notNotAction: (() -> Void)?
+    var notNowAction: (() -> Void)?
     // Used to persist the alert a certain amount of time only
     var shouldPersist = false
     private var glassEffectView: UIVisualEffectView?
@@ -142,7 +142,7 @@ class SaveLoginAlert: UIView, ThemeApplicable {
 
     @objc
     private func notNowButtonPressed() {
-        notNotAction?()
+        notNowAction?()
     }
 
     @objc

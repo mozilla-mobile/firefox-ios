@@ -98,7 +98,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         struct TrackerBlockerModuleConstants {
-            static let height: CGFloat = 50
+            /// The section grows past this when the pill needs more room, e.g. with larger dynamic type
+            static let minimumHeight: CGFloat = 50
         }
 
         struct BookmarksConstants {
@@ -157,7 +158,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 config: configuration
             )
         case .trackerBlockerModule:
-            return createTrackerBlockerModuleSectionLayout(for: traitCollection)
+            return createTrackerBlockerModuleSectionLayout(for: environment)
         case .pocket:
             return createStoriesSectionLayout(for: environment)
         case .bookmarks:
@@ -444,17 +445,17 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     private func createTrackerBlockerModuleSectionLayout(
-        for traitCollection: UITraitCollection
+        for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(UX.TrackerBlockerModuleConstants.height)
+            heightDimension: .absolute(getTrackerBlockerModuleCellHeight(environment: environment))
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: itemSize, subitem: item, count: 1)
         let section = NSCollectionLayoutSection(group: group)
 
-        let leadingInset = UX.leadingInset(traitCollection: traitCollection)
+        let leadingInset = UX.leadingInset(traitCollection: environment.traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: leadingInset,
@@ -585,7 +586,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func getPrivacyNoticeSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         // Ensures we should be showing the privacy notice
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
-              state.shouldShowPrivacyNotice else { return 0 }
+              state.privacyNoticeState.shouldShowPrivacyNotice else { return 0 }
 
         var totalHeight: CGFloat = 0
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
@@ -774,11 +775,39 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return bookmarksMeasurement.totalHeight
     }
 
-    private func getTrackerBlockerModuleSectionHeight() -> CGFloat {
+    private func getTrackerBlockerModuleSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
               state.trackerBlockerModuleState.shouldShowSection else { return 0 }
 
-        return UX.TrackerBlockerModuleConstants.height + UX.spacingBetweenSections
+        return getTrackerBlockerModuleCellHeight(environment: environment) + UX.spacingBetweenSections
+    }
+
+    /// Creates a "dummy" tracker blocker pill cell and returns the height it needs, so that the pill doesn't
+    /// overlap the following section when dynamic type makes it taller than the minimum height.
+    private func getTrackerBlockerModuleCellHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        let blockedTrackerCount = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)?
+            .trackerBlockerModuleState.blockedTrackerCount ?? 0
+        let leadingInset = UX.leadingInset(traitCollection: environment.traitCollection)
+        let cellWidth = normalizedDimension(max(0, environment.container.contentSize.width - leadingInset * 2))
+        let measurementKey = HomepageLayoutMeasurementCache.TrackerBlockerModuleMeasurement.Key(
+            blockedTrackerCount: blockedTrackerCount,
+            cellWidth: cellWidth,
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
+        )
+
+        // Reuse the cached result when the key matches, overwrite it when inputs change.
+        if let cachedHeight = measurementsCache.height(for: measurementKey) {
+            return cachedHeight
+        }
+
+        let cell = TrackerBlockerModuleCell()
+        cell.configure(count: blockedTrackerCount, theme: LightTheme(), onTap: nil)
+        let fittingHeight = HomepageDimensionCalculator.fittingHeight(for: cell, width: cellWidth)
+        let height = max(fittingHeight, UX.TrackerBlockerModuleConstants.minimumHeight)
+
+        measurementsCache.setHeight(height, for: measurementKey)
+
+        return height
     }
 
     /// Creates a "dummy" search bar section and returns its height
@@ -787,7 +816,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return 0
         }
 
-        let searchState = state.searchState
+        let searchState = state.searchBarState
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let measurementKey = HomepageLayoutMeasurementCache.SearchBarMeasurement.Key(
             shouldShowSearchBar: searchState.shouldShowSearchBar,
@@ -876,7 +905,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let privacyNoticeHeight = getPrivacyNoticeSectionHeight(environment: environment)
         let topSitesHeight = getShortcutsSectionHeight(environment: environment)
         let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
-        let trackerBlockerModuleHeight = getTrackerBlockerModuleSectionHeight()
+        let trackerBlockerModuleHeight = getTrackerBlockerModuleSectionHeight(environment: environment)
         let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
 

@@ -52,11 +52,6 @@ final class SendDataSetting: BoolSetting {
             // Special Case (EXP-4780, FXIOS-10534) disable studies if usage data is disabled
             // and studies should be toggled back on after re-enabling Telemetry
             self.enabled = sendUsageDataPref
-        } else {
-            // We make sure to set this on initialization, in case the setting is turned off
-            // in which case, we would to make sure that users are opted out of experiments
-            guard let key = prefKey else { return }
-            Experiments.setTelemetrySetting(prefs?.boolForKey(key) ?? true)
         }
     }
 
@@ -69,8 +64,7 @@ final class SendDataSetting: BoolSetting {
             title: title,
             subtitle: subtitle,
             learnMoreText: learnMoreText,
-            a11yId: learnMoreA11yId,
-            theme: theme
+            a11yId: learnMoreA11yId
         )
 
         control.configureSwitch(
@@ -86,7 +80,8 @@ final class SendDataSetting: BoolSetting {
 
         cell.accessoryView = control
         cell.selectionStyle = .none
-
+        cell.layoutMargins = UX.cellLayoutMarginsForCurrentOS
+        cell.separatorInset = UX.cellSeparatorInsetForCurrentOS
         cell.contentView.alpha = enabled ? 1.0 : 0.5
 
         cell.learnMoreDidTap = { [weak self] in

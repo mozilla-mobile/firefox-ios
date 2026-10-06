@@ -1,0 +1,18 @@
+/* Body of notification sent to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "आस-पास कुछ ढूंढें। या कुछ मज़ेदार खोजें।";
+
+/* Title of notification sent to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "अपनी पहली सर्च शुरू करें";
+
+/* Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox). */
+"Engagement.Notification.Treatment.A.Body.v114" = "%@ में प्राइवेट ब्राउज़िंग आपकी जानकारी सेव नहीं करती और छिपे हुए ट्रैकर ब्लॉक करती है।";
+
+/* Title of notification sent to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "बिना कोई निशान छोड़े ब्राउज़ करें";
+
+/* Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox). */
+"Engagement.Notification.Treatment.B.Body.v114" = "%@ में कुकीज़ या हिस्ट्री सेव किए बिना ब्राउज़ करें।";
+
+/* Title of notification sent to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "प्राइवेट ब्राउज़िंग आज़माएं";
+

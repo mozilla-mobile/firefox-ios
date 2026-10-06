@@ -178,6 +178,9 @@
 /* Title for the Ad Blocker toggle in the Browsing settings page. */
 "Settings.Browsing.AdBlocker.Title.v155" = "ตัวปิดกั้นโฆษณา";
 
+/* Title for the Background Audio toggle in the Browsing settings page. When enabled, audio from web pages continues playing after the app is backgrounded. */
+"Settings.Browsing.BackgroundAudio.Title.v156" = "เสียงพื้นหลัง";
+
 /* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
 "Settings.Browsing.BlockAds.Title.v153" = "ปิดกั้นโฆษณา";
 
@@ -216,6 +219,9 @@
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "บัญชี";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the brand title for the section containing the Wrexham AFC wallpapers. */
+"Settings.Home.Option.Wallpaper.WrexhamBrandTitle.v155" = "สโมสรฟุตบอลเร็กซ์แฮม";
 
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsStatus.v112" = "ต้องเปิดตัวเลือกนี้เพื่อรับแท็บและรับการแจ้งเตือนเมื่อคุณลงชื่อเข้าบนอุปกรณ์อื่น";

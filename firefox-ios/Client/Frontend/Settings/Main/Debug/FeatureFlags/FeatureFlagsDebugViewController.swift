@@ -46,6 +46,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .backgroundAudio,
+                titleText: format(string: "Background Audio"),
+                statusText: format(string: "Toggle to allow audio to continue playing when the app is backgrounded.")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .addressBarGestureToOpenTabTrayInteractive,
                 titleText: format(string: "Address bar gesture interactive"),
                 statusText: format(string: "Toggle to enable fancier animations for address bar swipe gestures")
@@ -150,9 +157,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .homepageSearchBar,
-                titleText: format(string: "Homepage Search Bar"),
-                statusText: format(string: "Toggle to enable homepage search bar for redesign")
+                with: .homepageAnimatedCenterSearchBar,
+                titleText: format(string: "Homepage Animated Center Search Bar"),
+                statusText: format(string: "Toggle to enable homepage animated center search bar for redesign")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -217,6 +224,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .novaDesign,
                 titleText: format(string: "Nova Design"),
                 statusText: format(string: "Toggle to enable Nova design")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .novaPrivateThemeOverride,
+                titleText: format(string: "Nova Private Theme Override"),
+                statusText: format(string: "Toggle to disable purple theme for private mode")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -305,6 +319,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .tabTrayScreenshotButtonStyle,
+                titleText: format(string: "Tab Tray Screenshot Button Style"),
+                statusText: format(string: "Toggle to use the screenshot style tab tray button in the toolbar")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .tabTrayUIExperiments,
                 titleText: format(string: "Tab Tray UI Experiment"),
                 statusText: format(string: "Toggle to use the new tab tray UI")
@@ -350,6 +371,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .waybackMachine,
                 titleText: format(string: "Wayback Machine"),
                 statusText: format(string: "Toggle to show Wayback Machine fallback on native error pages")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .webViewDocumentFetchRefactor,
+                titleText: format(string: "Webview Document Refactor"),
+                statusText: format(string: "Toggle to enable document sharing to fetch WebView data directly")
             ) { [weak self] _ in
                 self?.reloadView()
             },

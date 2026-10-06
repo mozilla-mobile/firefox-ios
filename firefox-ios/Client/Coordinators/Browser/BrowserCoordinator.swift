@@ -63,6 +63,8 @@ final class BrowserCoordinator: BaseCoordinator,
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let googleLensService: GoogleLensServicing
+    private lazy var trackerBlockerTelemetry = TrackerBlockerTelemetry(gleanWrapper: glean)
+    private let isCameraAvailable: @MainActor () -> Bool
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
@@ -79,7 +81,10 @@ final class BrowserCoordinator: BaseCoordinator,
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-         googleLensService: GoogleLensServicing = GoogleLensService()) {
+         googleLensService: GoogleLensServicing = GoogleLensService(),
+         isCameraAvailable: @escaping @MainActor () -> Bool = {
+             UIImagePickerController.isSourceTypeAvailable(.camera)
+         }) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.screenshotService = screenshotService
         self.profile = profile
@@ -94,6 +99,7 @@ final class BrowserCoordinator: BaseCoordinator,
         self.applicationHelper = applicationHelper
         self.glean = glean
         self.googleLensService = googleLensService
+        self.isCameraAvailable = isCameraAvailable
         super.init(router: router)
 
         browserViewController.browserDelegate = self
@@ -228,8 +234,9 @@ final class BrowserCoordinator: BaseCoordinator,
         )
         add(child: bookmarksCoordinator)
         bookmarksCoordinator.start(parentFolder: parentFolder, bookmark: bookmark)
-        navigationController.onViewDismissed = { [weak self] in
+        navigationController.onViewDismissed = { [weak self, weak bookmarksCoordinator] in
             // Remove coordinator when user drags down to dismiss modal
+            guard let bookmarksCoordinator else { return }
             self?.didFinish(from: bookmarksCoordinator)
         }
         present(navigationController)
@@ -295,7 +302,8 @@ final class BrowserCoordinator: BaseCoordinator,
         guard hasBrowserLoaded else { return false }
 
         switch route {
-        case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser, .sharesheet:
+        case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .fxaPairing,
+                .defaultBrowser, .sharesheet:
             return true
         case let .settings(section):
             return canHandleSettings(with: section)
@@ -339,6 +347,9 @@ final class BrowserCoordinator: BaseCoordinator,
         case let .fxaSignIn(params):
             handle(fxaParams: params)
 
+        case let .fxaPairing(url):
+            browserViewController.presentPairingViewController(url)
+
         case let .defaultBrowser(section):
             switch section {
             case .systemSettings:
@@ -346,6 +357,11 @@ final class BrowserCoordinator: BaseCoordinator,
             case .tutorial:
                 startLaunch(with: .defaultBrowser)
             }
+        }
+
+        if route.willSelectTabOnHandling,
+           AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
+            AppEventQueue.completed(.pendingDeeplinkTab(windowUUID))
         }
     }
 
@@ -463,8 +479,10 @@ final class BrowserCoordinator: BaseCoordinator,
         add(child: settingsCoordinator)
         settingsCoordinator.start(with: section)
 
-        navigationController.onViewDismissed = { [weak self] in
-            self?.didFinishSettings(from: settingsCoordinator)
+        navigationController.onViewDismissed = { [weak self, weak settingsCoordinator] in
+            if let settingsCoordinator {
+                self?.didFinishSettings(from: settingsCoordinator)
+            }
             onDismiss?()
         }
         present(navigationController)
@@ -678,6 +696,19 @@ final class BrowserCoordinator: BaseCoordinator,
         nav.pushViewController(viewController, animated: true)
     }
 
+    func pressedOpenSupportPage(url: URL) {
+        askedToOpen(url: url, withTitle: nil)
+    }
+
+    func askedToOpen(url: URL?, withTitle title: NSAttributedString?) {
+        guard let url,
+              let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
+        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        viewController.settingsTitle = title
+        viewController.url = url
+        nav.pushViewController(viewController, animated: true)
+    }
+
     func presentSavePDFController() {
         guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
 
@@ -746,9 +777,6 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func showSearchEngineSelection(forSourceView sourceView: UIView) {
         guard !childCoordinators.contains(where: { $0 is SearchEngineSelectionCoordinator }) else { return }
-        let isEditing = store.state.componentState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: windowUUID)?.addressToolbar.isEditing == true
 
         let navigationController = DismissableNavigationViewController()
         if navigationController.shouldUseiPadSetup() {
@@ -760,15 +788,7 @@ final class BrowserCoordinator: BaseCoordinator,
             navigationController.modalPresentationStyle = .pageSheet
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
-            if isEditing {
-                store.dispatch(
-                    ToolbarAction(
-                        shouldShowKeyboard: false,
-                        windowUUID: windowUUID,
-                        actionType: ToolbarActionType.keyboardStateDidChange
-                    )
-                )
-            }
+            releaseAddressBarKeyboardIfEditing()
         }
 
         let coordinator = DefaultSearchEngineSelectionCoordinator(
@@ -782,6 +802,17 @@ final class BrowserCoordinator: BaseCoordinator,
         coordinator.start()
 
         present(navigationController)
+    }
+
+    /// Gives up the address bar's claim on the keyboard, while staying in editing mode, before a sheet is
+    /// presented over the browser. Without this the address bar takes the keyboard back on top of the sheet
+    /// the next time the toolbar is reconfigured, which a bottom address bar does on every rotation.
+    private func releaseAddressBarKeyboardIfEditing() {
+        let isEditing = store.state.componentState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: windowUUID)?.addressToolbar.isEditing == true
+        guard isEditing else { return }
+        store.dispatch(ToolbarModernAction.didKeyboardRequestChange(shouldShow: false), forWindowUUID: windowUUID)
     }
 
     // MARK: - BrowserNavigationHandler
@@ -838,13 +869,25 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showTrackerBlockerSheet() {
+        let stateProvider = TrackerBlockerSheetStateProvider(
+            statsStore: DefaultTrackerBlockStatsStoreUtility(prefs: profile.prefs)
+        )
+        let state = stateProvider.sheetState()
+
+        trackerBlockerTelemetry.dashboardViewed(
+            presentation: state.presentation,
+            lifetimeCount: state.lifetimeTotal
+        )
+
+        // The homepage's dismiss-keyboard tap gesture ignores touches that land on a cell, so tapping the
+        // tracker blocker module leaves the address bar editing with the keyboard still spoken for.
+        releaseAddressBarKeyboardIfEditing()
+
         let viewController = TrackerBlockerSheetViewController(
             windowUUID: windowUUID,
+            state: state,
             themeManager: themeManager
         )
-        if let sheet = viewController.sheetPresentationController {
-            sheet.detents = [.medium()]
-        }
         router.present(viewController, animated: true)
     }
 
@@ -1039,9 +1082,11 @@ final class BrowserCoordinator: BaseCoordinator,
         add(child: tabTrayCoordinator)
         tabTrayCoordinator.start(with: selectedPanel)
 
-        navigationController.onViewDismissed = { [weak self] in
+        navigationController.onViewDismissed = { [weak self, weak tabTrayCoordinator] in
             guard let self else { return }
-            self.didDismissTabTray(from: tabTrayCoordinator)
+            if let tabTrayCoordinator {
+                self.didDismissTabTray(from: tabTrayCoordinator)
+            }
             store.dispatch(
                 TabTrayAction(
                     windowUUID: self.windowUUID,
@@ -1186,6 +1231,7 @@ final class BrowserCoordinator: BaseCoordinator,
         let coordinator = CameraCoordinator(
             parentCoordinatorDelegate: self,
             router: router,
+            isCameraAvailable: isCameraAvailable(),
             cameraReason: .googleLens
         ) { [weak self] image in
             guard let image else { return }
@@ -1314,8 +1360,9 @@ final class BrowserCoordinator: BaseCoordinator,
         add(child: coordinator)
         coordinator.start()
 
-        navigationController.onViewDismissed = { [weak self] in
+        navigationController.onViewDismissed = { [weak self, weak coordinator] in
             // Remove coordinator when user drags down to dismiss modal
+            guard let coordinator else { return }
             self?.didFinish(from: coordinator)
         }
 
@@ -1518,14 +1565,69 @@ final class BrowserCoordinator: BaseCoordinator,
         forShareTab tab: ShareTab
     ) async -> ShareType {
         guard let temporaryDocument = tab.temporaryDocument,
-              !temporaryDocument.isDownloading,
-              let fileURL = await temporaryDocument.download() else {
+              !temporaryDocument.isDownloading else {
+            // If no temporary document, share the tab as usual with a web URL
+            return .tab(url: tabURL, tab: tab)
+        }
+
+        // [FXIOS-15182]: Read document data straight from the already-authenticated WebView, instead of re-downloading it.
+        if featureFlagsProvider.isEnabled(.webViewDocumentFetchRefactor),
+           let fileURL = await documentFileFromWebView(tab, tabURL: tabURL) {
+            return .file(url: fileURL, remoteURL: tabURL)
+        }
+
+        guard let fileURL = await temporaryDocument.download() else {
             // If no file was downloaded, simply share the tab as usual with a web URL
             return .tab(url: tabURL, tab: tab)
         }
 
         // If we successfully got a temp file URL, share it like a downloaded file
         return .file(url: fileURL, remoteURL: tabURL)
+    }
+
+    /// Reads the rendered document from the tab WebView, and writes the data to a temporary file for sharing.
+    /// Because the data is pulled directly from the WebView, any auth already performed is honored.
+    private func documentFileFromWebView(_ tab: ShareTab, tabURL: URL) async -> URL? {
+        guard let webView = tab.webView else { return nil }
+
+        let readDocumentJS = """
+        const embed = document.querySelector('embed');
+        const src = embed ? embed.src : window.location.href;
+        const response = await fetch(src);
+        const blob = await response.blob();
+        return await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(blob);
+        });
+        """
+
+        do {
+            let result = try await webView.callAsyncJavaScript(readDocumentJS, contentWorld: .defaultClient)
+            guard let base64 = result as? String,
+                  let data = Data(base64Encoded: base64) else { return nil }
+            let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
+                .appendingPathComponent(Self.shareableFilename(for: tabURL, mimeType: tab.mimeType))
+            try data.write(to: fileURL)
+            return fileURL
+        } catch {
+            logger.log("WebView document fetch failed: \(error.localizedDescription)",
+                       level: .warning,
+                       category: .shareSheet)
+            return nil
+        }
+    }
+
+    private static func shareableFilename(for url: URL, mimeType: String?) -> String {
+        let lastComponent = url.lastPathComponent
+        if !lastComponent.isEmpty, !(lastComponent as NSString).pathExtension.isEmpty {
+            return lastComponent
+        }
+        if let mimeType, let fileExtension = MIMEType.fileExtensionFromMIMEType(mimeType) {
+            return "document.\(fileExtension)"
+        }
+        return "document"
     }
 
     /// Utility. Performs the supplied action if a coordinator of the indicated type

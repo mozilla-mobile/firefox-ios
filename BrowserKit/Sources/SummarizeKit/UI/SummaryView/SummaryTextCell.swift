@@ -26,7 +26,14 @@ final class SummaryTextCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     private func setup() {
         contentView.addSubview(summaryView)
-        summaryView.pinToSuperview()
+        NSLayoutConstraint.activate([
+            summaryView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            summaryView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                 constant: SummaryCellUX.horizontalPadding),
+            summaryView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                  constant: -SummaryCellUX.horizontalPadding),
+            summaryView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
     }
 
     func configure(text: NSAttributedString?, a11yId: String) {

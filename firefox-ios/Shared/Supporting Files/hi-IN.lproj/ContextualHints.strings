@@ -1,0 +1,15 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode. */
+"ContextualHints.FeltDeletion.Body.v122" = "नया प्राइवेट सेशन शुरू करने के लिए यहां टैप करें। अपनी हिस्ट्री, कुकीज़ — सबकुछ डिलीट करें।";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the description of the one that explains how to search with Google Lens from the address toolbar. */
+"ContextualHints.Toolbar.GoogleLens.Description.v154" = "जो आप देख रहे हैं उसे सर्च करने के लिए अपना कैमरा इस्तेमाल करें या कोई फ़ोटो चुनें।";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the title of the one that explains how to search with Google Lens from the address toolbar. */
+"ContextualHints.Toolbar.GoogleLens.Title.v154" = "Google Lens से सर्च करें";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar. */
+"ContextualHints.Translations.Body.v145" = "तेज़ और प्राइवेट अनुवाद तैयार हैं, जब आप चाहें।";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new translation icon on the toolbar. %@ is the app name (e.g. Firefox). */
+"ContextualHints.Translations.Title.v145" = "%@ आपकी भाषा बोलता है";
+

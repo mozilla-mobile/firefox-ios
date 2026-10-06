@@ -12,7 +12,4 @@ enum OnboardingReason: String {
 protocol OnboardingTelemetryProtocol: AnyObject {
     func sendGoToSettingsButtonTappedTelemetry()
     func sendDismissButtonTappedTelemetry()
-    func sendWallpaperSelectorViewTelemetry()
-    func sendWallpaperSelectorCloseTelemetry()
-    func sendWallpaperSelectorSelectedTelemetry(wallpaperName: String, wallpaperType: String)
 }

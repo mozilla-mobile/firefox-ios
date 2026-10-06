@@ -7,6 +7,7 @@ import Foundation
 
 protocol LoginSettingsSelectorsSet {
     var LOGIN_LIST: Selector { get }
+    var LOGIN_DETAIL_LIST: Selector { get }
     var SUBMIT_BUTTON: Selector { get }
     var SAVE_BUTTON: Selector { get }
     var NAVBAR_PASSWORDS: Selector { get }
@@ -33,6 +34,7 @@ protocol LoginSettingsSelectorsSet {
 struct LoginSettingsSelectors: LoginSettingsSelectorsSet {
     private enum IDs {
         static let loginList = "Login List"
+        static let loginDetailList = "Login Detail List"
         static let submitButton = "submit"
         static let saveButton = AccessibilityIdentifiers.SaveLoginAlert.saveButton
         static let navbarTitle = "Passwords"
@@ -55,6 +57,12 @@ struct LoginSettingsSelectors: LoginSettingsSelectorsSet {
     let LOGIN_LIST = Selector.tableIdOrLabel(
         IDs.loginList,
         description: "Login List table",
+        groups: ["settings", "logins"]
+    )
+
+    let LOGIN_DETAIL_LIST = Selector.tableIdOrLabel(
+        IDs.loginDetailList,
+        description: "Login Detail List table",
         groups: ["settings", "logins"]
     )
 
@@ -181,7 +189,7 @@ struct LoginSettingsSelectors: LoginSettingsSelectorsSet {
         )
     }
 
-    var all: [Selector] { [LOGIN_LIST, SUBMIT_BUTTON, SAVE_BUTTON, NAVBAR_PASSWORDS,
+    var all: [Selector] { [LOGIN_LIST, LOGIN_DETAIL_LIST, SUBMIT_BUTTON, SAVE_BUTTON, NAVBAR_PASSWORDS,
                            EMPTY_STATE_LABEL, EDIT_BUTTON, ADD_BUTTON, PASSWORD_ADD_BUTTON,
                            ADD_CREDENTIAL_TABLE, WEBSITE_FIELD_CELL, USERNAME_FIELD_CELL,
                            SAVE_BUTTON_CELL, SAVED_PASSWORDS_LABEL, SAVE_PASSWORDS_TOGGLE,

@@ -23,7 +23,7 @@
 "NSPhotoLibraryAddUsageDescription" = "Z tym móžeće fota składować.";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Firefox rěčenske spóznaće wužiwa, zo by waš hłós do teksta za hłosowe pytanje přetworił.";
+"NSSpeechRecognitionUsageDescription" = "To Firefox zmóžnja, waše awdio transkribować.";
 
 /* (No Comment) */
 "Scan QR Code" = "QR-kod skenować";

@@ -8,9 +8,10 @@ import UIKit
 
 @testable import Client
 
-class MockToolbarHelper: ToolbarHelperInterface {
+class MockToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
+        static let novaToolbarBackgroundAlphaForBlur: CGFloat = 0.90
     }
 
     var reduceTransparencyEnabled = false
@@ -26,6 +27,15 @@ class MockToolbarHelper: ToolbarHelperInterface {
     var glassEffectAlpha: CGFloat {
         guard shouldBlur() else { return 1 }
         if #available(iOS 26, *) { return .zero } else { return UX.backgroundAlphaForBlur }
+    }
+
+    @MainActor
+    var novaToolbarGlassEffectAlpha: CGFloat {
+        guard featureFlagsProvider.isEnabled(.novaDesign), #unavailable(iOS 26) else {
+            return glassEffectAlpha
+        }
+        // for Nova themes on iOS 18 we want to use a different alpha for both top and bottom toolbar
+        return shouldBlur() ? UX.novaToolbarBackgroundAlphaForBlur : glassEffectAlpha
     }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {

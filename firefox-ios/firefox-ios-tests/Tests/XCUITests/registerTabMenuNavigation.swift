@@ -5,6 +5,21 @@
 import XCTest
 import MappaMundi
 
+/// Taps the main menu's More row to reveal the expanded options. The menu keeps its expanded state
+/// between presentations on iOS 16, where the row is absent because the options are already shown.
+@MainActor
+func expandTabMenuIfNeeded(in app: XCUIApplication) {
+    let moreLess = app.tables.cells[AccessibilityIdentifiers.MainMenu.moreLess]
+    let expandedRow = app.tables.cells[AccessibilityIdentifiers.MainMenu.addToShortcuts]
+    let deadline = Date().addingTimeInterval(TIMEOUT)
+    while !moreLess.exists, !expandedRow.exists, Date() < deadline {
+        usleep(10000)
+    }
+    if moreLess.exists {
+        moreLess.tap()
+    }
+}
+
 @MainActor
 func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(BrowserTabMenuMore) { screenState in
@@ -45,8 +60,7 @@ func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
             app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.downloads], to: LibraryPanel_Downloads
         )
         // More Options
-        screenState.tap(
-            app.tables.cells["MainMenu.MoreLess"], to: BrowserTabMenuMore)
+        screenState.gesture(to: BrowserTabMenuMore) { expandTabMenuIfNeeded(in: app) }
         // Tracking Protections
         screenState.tap(
             app.buttons["Protections are ON"], to: EnhancedTrackingProtection)

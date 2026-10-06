@@ -7,7 +7,7 @@ import Shared
 import Common
 import Security
 
-class NativeErrorPageHelper {
+class NativeErrorPageHelper: FeatureFlaggable {
     private enum Constants {
         static let certErrorQueryParam = "certerror"
         static let badCertQueryParam = "badcert"
@@ -30,13 +30,20 @@ class NativeErrorPageHelper {
     }
 
     var error: NSError
+    private let cellularDataStateProvider: any CellularDataStateProvider
 
     var errorDescriptionItem: String {
         return error.localizedDescription
     }
 
-    init(error: NSError) {
+    let featureFlags = NativeErrorPageFeatureFlag()
+
+    init(
+        error: NSError,
+        cellularDataStateProvider: any CellularDataStateProvider = SystemCellularDataStateProvider.shared
+    ) {
         self.error = error
+        self.cellularDataStateProvider = cellularDataStateProvider
     }
 
     // MARK: - Static Helpers
@@ -61,14 +68,6 @@ class NativeErrorPageHelper {
     static func isBadCertDomainError(_ error: NSError) -> Bool {
         guard isCertificateErrorCode(error.code) else { return false }
         return certStreamErrorCode(from: error) == NativeGeckoCode.badCertDomain.rawValue
-    }
-
-    /// Centralized predicate for whether we should show the native UI for a wrong-host certificate error.
-    static func shouldShowNativeBadCertDomainErrorPage(
-        for error: NSError,
-        isOtherErrorPagesEnabled: Bool
-    ) -> Bool {
-        return isOtherErrorPagesEnabled && isBadCertDomainError(error)
     }
 
     /// Builds the full set of URL query items for an error page, including
@@ -119,16 +118,26 @@ class NativeErrorPageHelper {
     // MARK: - Instance Methods
 
     func parseErrorDetails() -> ErrorPageModel {
+        if featureFlagsProvider.isEnabled(.cellularDataRestrictedErrorPage) &&
+            cellularDataStateProvider.isRestrictedOfflineError(error) {
+            return .cellularDataRestricted
+        }
+
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
             switch error.code {
-            case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
+            case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+                 where featureFlags.isNICErrorPageEnabled:
                 return .internetConnection
-            case NSURLErrorServerCertificateUntrusted,
-                 NSURLErrorServerCertificateHasBadDate,
-                 NSURLErrorServerCertificateHasUnknownRoot,
-                 NSURLErrorServerCertificateNotYetValid:
+            case let errorCode
+                where [
+                    NSURLErrorServerCertificateUntrusted,
+                    NSURLErrorServerCertificateHasBadDate,
+                    NSURLErrorServerCertificateHasUnknownRoot,
+                    NSURLErrorServerCertificateNotYetValid
+                ].contains(errorCode)
+                && featureFlags.isBadCertDomainErrorPageEnabled:
                 return Self.buildCertificateErrorModel(for: error, url: url)
-            case _ where WaybackCodes.isWaybackCode(error.code):
+            case _ where WaybackCodes.isWaybackCode(error.code) && featureFlags.isWaybackEnabled:
                 return .wayback(WaybackErrorModel(url: url))
             default:
                 return .generic(GenericErrorModel(url: url))

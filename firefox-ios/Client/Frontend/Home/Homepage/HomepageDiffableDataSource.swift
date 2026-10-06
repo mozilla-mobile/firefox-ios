@@ -126,7 +126,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         snapshot.appendSections([.header])
         snapshot.appendItems([headerItem], toSection: .header)
 
-        if state.shouldShowPrivacyNotice {
+        if state.privacyNoticeState.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])
             snapshot.appendItems([.privacyNotice], toSection: .privacyNotice)
         }
@@ -134,6 +134,11 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         if let configuration = state.messageState.messageCardConfiguration {
             snapshot.appendSections([.messageCard])
             snapshot.appendItems([.messageCard(configuration)], toSection: .messageCard)
+        }
+
+        if state.searchBarState.shouldShowSearchBar {
+            snapshot.appendSections([.searchBar])
+            snapshot.appendItems([.searchBar], toSection: .searchBar)
         }
 
         if let topSitesSnapshotData = getTopSites(with: state.topSitesState, and: textColor) {
@@ -166,11 +171,6 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
 
         snapshot.appendSections([.spacer])
         snapshot.appendItems([.spacer], toSection: .spacer)
-
-        if state.searchState.shouldShowSearchBar {
-            snapshot.appendSections([.searchBar])
-            snapshot.appendItems([.searchBar], toSection: .searchBar)
-        }
 
         if let stories = getMerinoStories(with: state.merinoState, selectedNewsfeedCategoryID: selectedNewsfeedCategoryID) {
             let pocketSection = HomeSection.pocket(textColor)

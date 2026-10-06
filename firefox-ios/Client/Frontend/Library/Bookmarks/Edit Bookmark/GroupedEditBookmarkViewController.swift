@@ -124,10 +124,6 @@ final class GroupedEditBookmarkViewController: UIViewController,
         if let isDragging = transitionCoordinator?.isInteractive, !isDragging {
             navigationController?.setNavigationBarHidden(true, animated: false)
         }
-        // Save when popping the view off the navigation stack (when in library)
-        if isMovingFromParent {
-            viewModel.saveBookmark()
-        }
         onViewWillDisappear?()
     }
 
@@ -151,12 +147,11 @@ final class GroupedEditBookmarkViewController: UIViewController,
 
     @objc
     func saveButtonAction() {
-        // If we are in the standalone version of edit bookmark, we should save before dismissing
         if navigationController?.viewControllers.first == self {
             viewModel.saveBookmark()
             viewModel.didFinish()
         } else {
-            // If we are in the library, save will happen in viewWillDisappear
+            viewModel.saveBookmark()
             navigationController?.popViewController(animated: true)
         }
     }

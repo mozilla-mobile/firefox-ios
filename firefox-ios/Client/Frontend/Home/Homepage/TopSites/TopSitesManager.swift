@@ -107,12 +107,10 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
     // MARK: Sponsored tiles (Unified Tiles)
     func fetchSponsoredSites() async -> [Site] {
         guard shouldLoadSponsoredTiles else { return [] }
-        let unifiedTiles = await fetchUnifiedTilesWithTimeout()
-
-        return unifiedTiles.compactMap { Site.createSponsoredSite(fromUnifiedTile: $0) }
+        return await fetchSponsoredSitesWithTimeout()
     }
 
-    private func fetchUnifiedTilesWithTimeout() async -> [UnifiedTile] {
+    private func fetchSponsoredSitesWithTimeout() async -> [Site] {
         await withCheckedContinuation { continuation in
             let fetchState = SponsoredTilesFetchState()
             let timeoutTask = startSponsoredTilesTimeout(
@@ -134,7 +132,7 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
 
     private func startSponsoredTilesTimeout(
         fetchState: SponsoredTilesFetchState,
-        continuation: CheckedContinuation<[UnifiedTile], Never>
+        continuation: CheckedContinuation<[Site], Never>
     ) -> Task<Void, Never> {
         return Task { [logger, sponsoredTilesFetchTimeoutNanoseconds] in
             do {
@@ -157,15 +155,15 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
     }
 
     private static func resumeSponsoredTilesFetch(
-        _ result: UnifiedTileResult,
+        _ result: SponsoredTileResult,
         fetchState: SponsoredTilesFetchState,
-        continuation: CheckedContinuation<[UnifiedTile], Never>,
+        continuation: CheckedContinuation<[Site], Never>,
         logger: Logger?
     ) {
         switch result {
-        case .success(let unifiedTiles):
+        case .success(let sponsoredSites):
             fetchState.resumeOnce {
-                continuation.resume(returning: unifiedTiles)
+                continuation.resume(returning: sponsoredSites)
             }
         case .failure:
             logger?.log(

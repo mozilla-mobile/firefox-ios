@@ -14,7 +14,7 @@ import DesignSystem
 
 final class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     enum Section: String {
-        case defaultBrowser, general, privacy, usageData, crashReports, studies, rollouts, dailyUsagePing, search, siri, integration, mozilla, secret
+        case defaultBrowser, general, privacy, usageData, crashReports, rollouts, dailyUsagePing, search, siri, integration, mozilla, secret
 
         var headerText: String? {
             switch self {
@@ -22,7 +22,6 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
             case .general: return UIConstants.strings.general
             case .privacy: return UIConstants.strings.toggleSectionPrivacy
             case .usageData: return nil
-            case .studies: return nil
             case .rollouts: return nil
             case .search: return UIConstants.strings.settingsSearchTitle
             case .siri: return UIConstants.strings.siriShortcutsTitle
@@ -42,7 +41,7 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
                 ]
 
             if TelemetryManager.shared.isTelemetryFeatureEnabled {
-                sections.append(contentsOf: [.studies, .usageData])
+                sections.append(.usageData)
             }
 
             sections.append(contentsOf: [
@@ -126,8 +125,6 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
 
     private func initializeToggles() {
         let blockFontsToggle = BlockerToggle(label: UIConstants.strings.labelBlockFonts, setting: SettingsToggle.blockFonts)
-        let studiesSubtitle = String(format: UIConstants.strings.detailTextStudies, AppInfo.productName)
-        let studiesToggle = BlockerToggle(label: UIConstants.strings.labelStudies, setting: SettingsToggle.studies, subtitle: studiesSubtitle)
         let rolloutsSubtitle = String(format: UIConstants.strings.detailTextRollouts, AppInfo.productName)
         let rolloutsToggle = BlockerToggle(label: UIConstants.strings.labelRollouts, setting: SettingsToggle.rollouts, subtitle: rolloutsSubtitle)
         let usageDataSubtitle = String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName)
@@ -156,9 +153,6 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
         }
         if let usageDataIndex = getSectionIndex(Section.usageData) {
             toggles[usageDataIndex] = [0: usageDataToggle]
-        }
-        if let studiesIndex = getSectionIndex(Section.studies) {
-            toggles[studiesIndex] = [0: studiesToggle]
         }
         if let rolloutsIndex = getSectionIndex(Section.rollouts) {
             toggles[rolloutsIndex] = [0: rolloutsToggle]
@@ -234,9 +228,6 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
                     toggle.isOn = TelemetryManager.shared.isNewTosEnabled
                 } else {
                     toggle.isOn = Settings.getToggle(blockerToggle.setting)
-                }
-                if blockerToggle.setting == .studies {
-                    toggle.isEnabled = Settings.getToggle(.sendAnonymousUsageData)
                 }
                 toggles[sectionIndex]?[cellIndex] = blockerToggle
             }
@@ -347,8 +338,6 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
             }
         case .usageData:
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
-        case .studies:
-            cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .rollouts:
             cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
         case .search:
@@ -430,7 +419,6 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
             if authenticationManager.canEvaluatePolicy { return 3 }
             return 2
         case .usageData: return 1
-        case .studies: return 1
         case .rollouts: return 1
         case .search: return 3
         case .siri: return 3
@@ -464,7 +452,6 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
             let actions: [(Int?, Selector)] = [
                 (getSectionIndex(.usageData), #selector(tappedLearnMoreFooter)),
                 (getSectionIndex(.search), #selector(tappedLearnMoreSearchSuggestionsFooter)),
-                (getSectionIndex(.studies), #selector(tappedLearnMoreStudies)),
                 (getSectionIndex(.rollouts), #selector(tappedLearnMoreRollouts)),
                 (getSectionIndex(.crashReports), #selector(tappedLearnMoreCrashReports)),
                 (getSectionIndex(.dailyUsagePing), #selector(tappedLearnMoreDailyUsagePing))
@@ -587,11 +574,6 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     @objc
-    func tappedLearnMoreStudies(gestureRecognizer: UIGestureRecognizer) {
-        tappedFooter(forSupportTopic: .studies)
-    }
-
-    @objc
     func tappedLearnMoreRollouts(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(forSupportTopic: .rollouts)
     }
@@ -631,25 +613,6 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
             Utils.reloadSafariContentBlocker()
         }
 
-        func disableAndTurnOffStudiesToggle(_ sender: UISwitch) {
-            // Gray out the toggle
-            sender.isOn = false
-            sender.isEnabled = false
-            sender.alpha = 0.5
-            NimbusWrapper.shared.nimbus.experimentParticipation = false
-            updateSetting(false, forToggle: .studies)
-        }
-
-        // Find the 'studies' toggle
-        let studiesToggle = toggles.values
-            .flatMap { $0.values }
-            .first(where: { $0.setting == .studies })?.toggle
-
-        // Find the 'Send usage data' toggle
-        let sendAnonymousUsageDataToggle = toggles.values
-            .flatMap { $0.values }
-            .first(where: { $0.setting == .sendAnonymousUsageData })?.toggle
-
         // The following settings are special and need to be in effect immediately.
         if toggle.setting == .sendAnonymousUsageData {
             Glean.shared.setCollectionEnabled(sender.isOn)
@@ -658,24 +621,6 @@ final class SettingsViewController: UIViewController, UITableViewDataSource, UIT
                 NimbusWrapper.shared.nimbus.resetTelemetryIdentifiers()
             } else {
                 UsageProfileManager.checkAndSetUsageProfileId()
-            }
-
-            // Disable and turn off 'studies' if 'sendAnonymousUsageData' is turned off
-            if let studiesToggle = studiesToggle {
-                if !sender.isOn {
-                    disableAndTurnOffStudiesToggle(studiesToggle)
-                } else {
-                    // Restore toggle's appearance
-                    studiesToggle.isEnabled = true
-                    studiesToggle.alpha = 1.0
-                }
-            }
-        } else if toggle.setting == .studies {
-            // Ensure 'studies' is disabled if 'sendAnonymousUsageData' is turned off, even when 'studies' is being enabled.
-            if sendAnonymousUsageDataToggle?.isOn == true {
-                NimbusWrapper.shared.nimbus.experimentParticipation = sender.isOn
-            } else {
-                disableAndTurnOffStudiesToggle(sender)
             }
         } else if toggle.setting == .rollouts {
             // Rollouts have their own independent toggle

@@ -81,6 +81,7 @@
 		8C28008F2D49354400ED6D07 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8C28008E2D49354400ED6D07 /* Shared */; };
 		8C2800912D49357C00ED6D07 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 8C2800902D49357C00ED6D07 /* Shared */; };
 		8C75DF662D3E636A00924EAB /* TelemetryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C75DF652D3E636A00924EAB /* TelemetryManager.swift */; };
+		8C84071C3061392F00EA1EB9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C84071B3061392F00EA1EB9 /* SceneDelegate.swift */; };
 		8C8906AC2D0B3E9F003734FE /* UsageProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */; };
 		8C90C3BE2D48F0DB00DDA361 /* GleanUsageReportingMetricsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C90C3BD2D48F0DB00DDA361 /* GleanUsageReportingMetricsService.swift */; };
 		8CEA96EE2FE5300800F6E96E /* PrivacyProtectionWindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA96ED2FE5300800F6E96E /* PrivacyProtectionWindowManager.swift */; };
@@ -710,6 +711,7 @@
 		8C0AB2282D817EC700E88035 /* ProfileIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIdentifier.swift; sourceTree = "<group>"; };
 		8C1B5DEC2BC43C19001B1964 /* SearchWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWidgetView.swift; sourceTree = "<group>"; };
 		8C75DF652D3E636A00924EAB /* TelemetryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryManager.swift; sourceTree = "<group>"; };
+		8C84071B3061392F00EA1EB9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		8C8906AB2D0B3E9F003734FE /* UsageProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageProfileManager.swift; sourceTree = "<group>"; };
 		8C90C3BD2D48F0DB00DDA361 /* GleanUsageReportingMetricsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanUsageReportingMetricsService.swift; sourceTree = "<group>"; };
 		8CEA96ED2FE5300800F6E96E /* PrivacyProtectionWindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyProtectionWindowManager.swift; sourceTree = "<group>"; };
@@ -1973,6 +1975,7 @@
 				C82F45F8281A76EF000D7D84 /* ShortcutsPresenter.swift */,
 				1215EC0828D316B500AECC75 /* NavigationPath.swift */,
 				1D96A2D82BA2490D00EF7CC7 /* WebEngineRefactorFlagManager.swift */,
+				8C84071B3061392F00EA1EB9 /* SceneDelegate.swift */,
 			);
 			path = Blockzilla;
 			sourceTree = "<group>";
@@ -2709,6 +2712,7 @@
 				D3426AED1DB846310016DA5A /* DomainCompletion.swift in Sources */,
 				D3E251FB1DAF0668005918DC /* AppInfo.swift in Sources */,
 				31421EB12176492A0015F48B /* TitleActivityItemProvider.swift in Sources */,
+				8C84071C3061392F00EA1EB9 /* SceneDelegate.swift in Sources */,
 				C89AA96D271720330089838F /* SystemThemeDelegate.swift in Sources */,
 				E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */,
 				C8AC706427DF972B00165824 /* AuthenticationManager.swift in Sources */,
@@ -7322,7 +7326,7 @@
 			repositoryURL = "https://github.com/mozilla/glean-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 69.0.0;
+				version = 70.1.0;
 			};
 		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {

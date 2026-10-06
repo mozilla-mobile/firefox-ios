@@ -127,8 +127,8 @@ final class BookmarksViewController: SiteTableViewController,
         return button
     }()
 
-    private lazy var emptyStateView: BookmarksFolderEmptyStateView = .build { emptyStateView in
-        emptyStateView.signInAction = { [weak self] in
+    private lazy var emptyStateView: BookmarksFolderEmptyStateView = .build { [weak self] emptyStateView in
+        emptyStateView.signInAction = {
             self?.bookmarkCoordinatorDelegate?.showSignIn()
         }
     }
@@ -338,10 +338,11 @@ final class BookmarksViewController: SiteTableViewController,
     /// table view data source immediately for responsiveness.
     private func deleteBookmarkNode(_ indexPath: IndexPath, bookmarkNode: FxBookmarkNode) {
         tableView.beginUpdates()
-        // Removes the bookmark from local data arrays for optimistic UI update, then re-queries and reloads the table
-        // because deleting a node while searching can alter the bookmarks tree at lower depths.
+        // Removes the bookmark from local data arrays for optimistic UI update. Search mode later refreshes the tree and
+        // table because deleting a node while searching can alter the bookmarks tree at lower depths.
         viewModel.remove(bookmark: bookmarkNode, afterAsyncRemoval: { [weak self] in
-            self?.tableView.reloadData()
+            guard let self, self.viewModel.isShowingSearchResults else { return }
+            self.tableView.reloadData()
         })
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
@@ -673,7 +674,7 @@ final class BookmarksViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(
-            style: .destructive,
+            style: .normal,
             title: .BookmarksPanelDeleteTableAction
         ) { [weak self] (_, _, completion) in
             guard let self else {
@@ -685,6 +686,7 @@ final class BookmarksViewController: SiteTableViewController,
             self.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
             completion(true)
         }
+        deleteAction.backgroundColor = .systemRed
 
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
@@ -851,6 +853,25 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         return [editAction, removeAction]
     }
 
+    /// The folder the detail view should edit `node` in. Search reaches bookmarks outside the folder
+    /// the panel is showing, and the detail view saves into whichever folder it is handed, so a hit
+    /// from elsewhere needs its own parent, not the displayed one.
+    func parentFolder(of node: FxBookmarkNode, whenDisplaying displayedFolder: FxBookmarkNode) async -> FxBookmarkNode {
+        guard let parentGUID = node.parentGUID, parentGUID != displayedFolder.guid else {
+            return displayedFolder
+        }
+        return await withCheckedContinuation { continuation in
+            bookmarksHandler.getBookmarksTree(rootGUID: parentGUID, recursive: false) { result in
+                switch result {
+                case .success(let data):
+                    continuation.resume(returning: (data as? BookmarkFolderData) ?? displayedFolder)
+                case .failure:
+                    continuation.resume(returning: displayedFolder)
+                }
+            }
+        }
+    }
+
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
         guard let defaultActions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else {
             return nil
@@ -865,7 +886,10 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                   let bookmarkFolder = self.viewModel.bookmarkFolder else {
                 return
             }
-            self.bookmarkCoordinatorDelegate?.showBookmarkDetail(for: bookmarkNode, folder: bookmarkFolder)
+            Task { @MainActor in
+                let folder = await self.parentFolder(of: bookmarkNode, whenDisplaying: bookmarkFolder)
+                self.bookmarkCoordinatorDelegate?.showBookmarkDetail(for: bookmarkNode, folder: folder)
+            }
         }).items
         actions.append(editBookmark)
 

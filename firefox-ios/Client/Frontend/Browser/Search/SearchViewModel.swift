@@ -36,8 +36,7 @@ class SearchViewModel: FeatureFlaggable,
     var recentSearches = [String]()
     let model: SearchEnginesManager
     var suggestions: [String]? = []
-    // TODO: FXIOS-12588 This global property is not concurrency safe
-    nonisolated(unsafe) static var userAgent: String?
+    static var userAgent: String?
     var searchFeature: FeatureHolder<Search>
     private var searchTelemetry: SearchTelemetry
 
@@ -393,8 +392,8 @@ class SearchViewModel: FeatureFlaggable,
             return
         }
 
-        recentSearchProvider.loadRecentSearches { searchTerms in
-            ensureMainThread { [weak self] in
+        recentSearchProvider.loadRecentSearches { [weak self] searchTerms in
+            ensureMainThread {
                 self?.recentSearches = searchTerms
                 self?.delegate?.reloadTableView()
             }
@@ -414,8 +413,8 @@ class SearchViewModel: FeatureFlaggable,
     func clearRecentSearches() {
         searchTelemetry.recentSearchesClearButtonTapped()
 
-        recentSearchProvider.clear { result in
-            ensureMainThread { [weak self] in
+        recentSearchProvider.clear { [weak self] result in
+            ensureMainThread {
                 if case .success = result {
                     self?.recentSearches = []
                     self?.delegate?.reloadTableView()

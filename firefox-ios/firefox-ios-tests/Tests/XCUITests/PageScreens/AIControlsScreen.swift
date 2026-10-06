@@ -71,11 +71,13 @@ final class AIControlsScreen {
 
     // MARK: - Helpers
 
+    /// The matched element spans the whole row, label included. Tapping its centre lands on the label,
+    /// which iOS 16 ignores, so the nested switch control is tapped instead.
     private func setToggle(_ toggle: XCUIElement, on: Bool) {
         BaseTestCase().mozWaitForElementToExist(toggle)
-        if (toggle.value as? String) != (on ? "1" : "0") {
-            toggle.waitAndTap()
-        }
+        guard (toggle.value as? String) != (on ? "1" : "0") else { return }
+        let control = toggle.switches.firstMatch
+        (control.exists ? control : toggle).waitAndTap()
     }
 
     private func assertToggle(_ toggle: XCUIElement, isOn: Bool, name: String) {

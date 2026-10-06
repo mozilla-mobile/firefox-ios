@@ -11,6 +11,10 @@ import MozillaAppServices
 final class CuratedRecommendationCacheUtilityTests: XCTestCase {
     var testFileURL: URL!
 
+    override func setUp() async throws {
+        try await super.setUp()
+    }
+
     override func tearDown() async throws {
         try? FileManager.default.removeItem(at: testFileURL)
         testFileURL = nil

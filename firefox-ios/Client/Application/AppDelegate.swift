@@ -10,9 +10,9 @@ import Glean
 import TabDataStore
 import TipKit
 
+import class Account.Autopush
+import class Account.RustFirefoxAccounts
 import class MozillaAppServices.Viaduct
-import struct MozillaAppServices.RustAdsClient
-import enum MozillaAppServices.MozAdsEnvironment
 
 class AppDelegate: UIResponder,
                    UIApplicationDelegate,
@@ -144,6 +144,10 @@ class AppDelegate: UIResponder,
 
         widgetManager = TopSitesWidgetManager(topSitesProvider: topSitesProvider)
 
+        if featureFlagsProvider.isEnabled(.backgroundAudio) {
+            BackgroundAudioHelper.shared.configure(prefs: profile.prefs)
+        }
+
         addObservers()
 
         /// Prewarm translation resources off the main thread
@@ -209,6 +213,7 @@ class AppDelegate: UIResponder,
             profile?.pollCommands(forcePoll: false)
         }
 
+        verifyAutopushSubscriptions()
         prefetchMerinoStories()
         updateWallpaperMetadata()
         loadBackgroundTabs()
@@ -302,6 +307,29 @@ class AppDelegate: UIResponder,
             ensureMainThread { [weak self] in
                 self?.isLoadingBackgroundTabs = false
                 self?.backgroundTabLoader.loadBackgroundTabs()
+            }
+        }
+    }
+
+    private func verifyAutopushSubscriptions() {
+        guard Autopush.shouldVerifySubscriptions(prefs: profile.prefs) else { return }
+
+        Task { [profile] in
+            do {
+                let autopush = try await Autopush(files: profile.files)
+                let newSubscriptions = try await autopush.verifyActiveSubscriptions(prefs: profile.prefs)
+                if let fxaSubscription = newSubscriptions[RustFirefoxAccounts.pushScope] {
+                    RustFirefoxAccounts.shared.pushNotifications.updatePushRegistration(
+                        subscriptionResponse: fxaSubscription
+                    )
+                }
+            } catch let error {
+                logger.log(
+                    "Failed to verify push subscriptions",
+                    level: .warning,
+                    category: .setup,
+                    description: error.localizedDescription
+                )
             }
         }
     }

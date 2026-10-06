@@ -54,7 +54,7 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
     }
 
     private lazy var waybackErrorIcon: UIImageView = .build { imageView in
-        imageView.image = UIImage(systemName: "exclamationmark.triangle.fill")
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.warning)
         imageView.contentMode = .scaleAspectFit
         imageView.setContentHuggingPriority(.required, for: .horizontal)
         imageView.isAccessibilityElement = false
@@ -203,7 +203,6 @@ final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDe
         }
 
         waybackFooterTextView.attributedText = attributedString
-        waybackFooterTextView.accessibilityLabel = fullText
     }
 
     /// Updates the wayback area to reflect idle, loading, or failed state.

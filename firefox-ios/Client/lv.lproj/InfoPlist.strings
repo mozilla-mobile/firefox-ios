@@ -7,6 +7,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox ir nepieciešams Face ID, lai piekļūtu saglabātajām parolēm un maksājumu veidiem.";
+
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Lapas, ko apmeklējat var prasīt jūsu atrašanās vietu.";
 

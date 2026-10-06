@@ -53,7 +53,7 @@
 "Modified %@" = "Modificata %@";
 
 /* Label displayed when no logins are found after searching. */
-"No logins found" = "Nessun accesso disponibile";
+"No logins found" = "Nessuna credenziale trovata";
 
 /* Label displayed when no logins are found after searching. */
 "NoLoginsFound.Title.v122" = "Nessuna password trovata";

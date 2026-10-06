@@ -7,18 +7,20 @@ import UIKit
 @MainActor
 final class ErrorHandler {
     private weak var presenter: UIViewController?
+    private let strings: QuickAnswersViewConfiguration.ErrorStrings
     private var onDismiss: (() -> Void)?
 
     init(
         presenter: UIViewController,
+        strings: QuickAnswersViewConfiguration.ErrorStrings,
         onDismiss: (() -> Void)?
     ) {
         self.presenter = presenter
+        self.strings = strings
         self.onDismiss = onDismiss
     }
 
     // MARK: - Speech Errors
-    // TODO: - FXIOS-14720 Add Strings and accessibility ids
     func handleSpeechError(_ error: SpeechError) {
         switch error {
         // if it is the first time the permission was viewed it means the OS alert was shown
@@ -26,14 +28,14 @@ final class ErrorHandler {
         case .microphonePermissionDenied(let isFirstTime):
             handlePermissionDenied(
                 isFirstTime: isFirstTime,
-                title: "Change Settings to Use Quick Answers",
-                message: "Allow Firefox to access the Microphone."
+                title: strings.permissionAlertTitle,
+                message: strings.microphonePermissionMessage
             )
         case .speechRecognitionPermissionDenied(let isFirstTime):
             handlePermissionDenied(
                 isFirstTime: isFirstTime,
-                title: "Change Settings to Use Quick Answers",
-                message: "Allow Firefox to access Speech Recognition."
+                title: strings.permissionAlertTitle,
+                message: strings.speechRecognitionPermissionMessage
             )
         default:
             showCatchAllErrorAlert()
@@ -56,8 +58,8 @@ final class ErrorHandler {
         switch error {
         case .rateLimited:
             showCatchAllErrorAlert(
-                title: "Daily Limit Reached",
-                message: "Try Quick Answers again tomorrow."
+                title: strings.dailyLimitTitle,
+                message: strings.dailyLimitMessage
             )
         default:
             showCatchAllErrorAlert()
@@ -66,7 +68,6 @@ final class ErrorHandler {
 
     // MARK: - Private
 
-    // TODO: - FXIOS-14720 Add Strings and accessibility ids
     private func showPermissionAlert(title: String, message: String) {
         let alertController = UIAlertController(
             title: title,
@@ -74,7 +75,7 @@ final class ErrorHandler {
             preferredStyle: .alert
         )
         alertController.addAction(
-            UIAlertAction(title: "Open Settings", style: .default) { [weak self] _ in
+            UIAlertAction(title: strings.openSettings, style: .default) { [weak self] _ in
                 self?.onDismiss?()
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url)
@@ -82,25 +83,21 @@ final class ErrorHandler {
             }
         )
         alertController.addAction(
-            UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+            UIAlertAction(title: strings.cancel, style: .cancel) { [weak self] _ in
                 self?.onDismiss?()
             }
         )
         presenter?.present(alertController, animated: true)
     }
 
-    // TODO: - FXIOS-14720 Add Strings and accessibility ids
-    private func showCatchAllErrorAlert(
-        title: String = "Couldn't get an answer",
-        message: String = "Try asking again later."
-    ) {
+    private func showCatchAllErrorAlert(title: String? = nil, message: String? = nil) {
         let alertController = UIAlertController(
-            title: title,
-            message: message,
+            title: title ?? strings.genericErrorTitle,
+            message: message ?? strings.genericErrorMessage,
             preferredStyle: .alert
         )
         alertController.addAction(
-            UIAlertAction(title: "Ok", style: .default) { [weak self] _ in
+            UIAlertAction(title: strings.ok, style: .default) { [weak self] _ in
                 self?.onDismiss?()
             }
         )

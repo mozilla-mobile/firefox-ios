@@ -22,6 +22,8 @@ private struct NovaLightColourPalette: ThemeColourPalette {
     var layer4: UIColor = NovaColors.Gray15
     var layerSurfaceLow = NovaColors.Gray10
     var layerSurfaceMedium = NovaColors.White
+    var layerSurfaceMediumAlt: UIColor = NovaColors.White
+    var layerSurfaceMediumAltGlass = NovaColors.White
     var layerSurfaceMediumAlpha = NovaColors.White.withAlphaComponent(0.4)
     var layerAccentSubtle: UIColor = NovaColors.VioletDesaturated10
     var layerInverse: UIColor = NovaColors.Gray70
@@ -32,8 +34,10 @@ private struct NovaLightColourPalette: ThemeColourPalette {
     var layerSepia: UIColor = NovaColors.Yellow0
     var layerAutofillText: UIColor = NovaColors.VioletDesaturated30
     var layerSelectedText: UIColor = NovaColors.VioletDesaturated30
-    var layerGlassTintNova: UIColor = NovaColors.VioletDesaturated10.withAlphaComponent(0.45)
+    var layerGlassTintNova: UIColor = .clear
+    var layerGlassSelectedFill: UIColor = NovaColors.Gray15
     var layerAccentPrivateNonOpaque: UIColor { layerAccentSubtle }
+    var layerToolbarGlass: UIColor = NovaColors.Gray5
 
     // MARK: - Action
 
@@ -129,7 +133,6 @@ private struct NovaLightColourPalette: ThemeColourPalette {
     var layerCriticalSubdued: UIColor = LightTheme().colors.layerCriticalSubdued
     var layerEmphasis: UIColor = LightTheme().colors.layerEmphasis
     var layer5Hover: UIColor = LightTheme().colors.layer5Hover
-    var layerSurfaceMediumAlt: UIColor = LightTheme().colors.layerSurfaceMediumAlt
     var indicatorActive: UIColor = LightTheme().colors.indicatorActive
     var indicatorInactive: UIColor = LightTheme().colors.indicatorInactive
     var iconAccentViolet: UIColor = LightTheme().colors.iconAccentViolet

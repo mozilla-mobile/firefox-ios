@@ -23,7 +23,7 @@ struct CustomSearchError: MaybeErrorType {
     }
 }
 
-class CustomSearchViewController: SettingsTableViewController {
+final class CustomSearchViewController: SettingsTableViewController {
     private let faviconFetcher: SiteImageHandler
     private let logger: Logger
     private var urlString: String?
@@ -163,10 +163,10 @@ class CustomSearchViewController: SettingsTableViewController {
                 if let text = text { return !text.isEmpty }
 
                 return false
-            }, settingDidChange: { fieldText in
+            }, settingDidChange: { [weak self] fieldText in
                 guard let title = fieldText else { return }
-                self.engineTitle = title
-                self.updateSaveButton()
+                self?.engineTitle = title
+                self?.updateSaveButton()
             })
         titleField.textField.text = engineTitle
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
@@ -178,9 +178,9 @@ class CustomSearchViewController: SettingsTableViewController {
             settingIsValid: { text in
                 // Can check url text text validity here.
                 return true
-            }, settingDidChange: { fieldText in
-                self.urlString = fieldText
-                self.updateSaveButton()
+            }, settingDidChange: { [weak self] fieldText in
+                self?.urlString = fieldText
+                self?.updateSaveButton()
             })
 
         urlField.textField.autocapitalizationType = .none

@@ -57,11 +57,17 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .aiKillSwitch:
             return checkAiKillSwitchFeature()
 
+        case .backgroundAudio:
+            return checkBackgroundAudioFeature()
+
         case .badCertDomainErrorPage:
             return checkBadCertDomainErrorPageFeature()
 
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
+
+        case .cellularDataRestrictedErrorPage:
+            return checkCellularDataRestrictedErrorPageFeature()
 
         case .customReaderModeScheme:
             return checkCustomReaderModeSchemeFeature()
@@ -93,8 +99,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .homepagePinnedHeader:
             return checkHomepagePinnedHeaderFeature()
 
-        case .homepageSearchBar:
-            return checkHomepageSearchBarFeature()
+        case .homepageAnimatedCenterSearchBar:
+            return checkHomepageAnimatedCenterSearchBarFeature()
 
         case .homepageStoryCategories:
             return checkHomepageStoriesCaterogiesFeature()
@@ -130,6 +136,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .novaDesign:
             return checkNovaDesignFeature()
+
+        case .novaPrivateThemeOverride:
+            return checkNovaPrivateThemeOverrideFeature()
 
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature()
@@ -179,6 +188,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .tabTrayiPadUIExperiments:
             return checkTabTrayiPadUIExperiments()
 
+        case .tabTrayScreenshotButtonStyle:
+            return checkTabTrayScreenshotButtonStyleFeature()
+
         case .tabTrayTranslucency:
             return checkTabTrayTranslucencyFeature()
 
@@ -211,6 +223,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .waybackMachine:
             return checkWaybackMachineFeature()
+
+        case .webViewDocumentFetchRefactor:
+            return checkWebViewDocumentFetchRefactor()
 
         // This feature flag has no Nimbus configuration because it is only tied to a user setting.
         // Requesting Nimbus configuration for it is a developer error.
@@ -246,8 +261,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.homepageRedesignFeature.value().pinnedHeaderEnabled
     }
 
-    private func checkHomepageSearchBarFeature() -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().searchBar
+    private func checkHomepageAnimatedCenterSearchBarFeature() -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().animatedCenterSearchBar
     }
 
     private func checkHomepageStoriesCaterogiesFeature() -> Bool {
@@ -261,6 +276,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     private func checkTabTrayiPadUIExperiments() -> Bool {
         let config = nimbus.features.tabTrayUiExperiments.value()
         return config.iPadUpdateEnabled
+    }
+
+    private func checkTabTrayScreenshotButtonStyleFeature() -> Bool {
+        return nimbus.features.toolbarRefactorFeature.value().tabTrayButtonType == .screenshot
     }
 
     private func checkTabTrayTranslucencyFeature() -> Bool {
@@ -425,6 +444,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.novaDesignFeature.value().enabled
     }
 
+    private func checkNovaPrivateThemeOverrideFeature() -> Bool {
+        return nimbus.features.novaDesignFeature.value().privateThemeOverride
+    }
+
     private func checkAiKillSwitchFeature() -> Bool {
         return nimbus.features.aiKillSwitchFeature.value().enabled
     }
@@ -434,11 +457,17 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     }
 
     private func checkAdBlockerFeature() -> Bool {
-        return nimbus.features.adBlockerFeature.value().enabled
+        // Hardcoded on so the ad blocker is enabled for everyone, without risking changes to the code directly.
+        return true
+    }
+
+    private func checkBackgroundAudioFeature() -> Bool {
+        return nimbus.features.backgroundAudioFeature.value().enabled
     }
 
     private func checkAdBlockerBadgeFeature() -> Bool {
-        return nimbus.features.adBlockerFeature.value().badgeEnabled
+        // Hardcoded on so the ad blocker is enabled for everyone, without risking changes to the code directly.
+        return true
     }
 
     func checkStartAtHomeConfiguration() -> StartAtHome {
@@ -477,11 +506,19 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.waybackMachineFeature.value().enabled
     }
 
+    private func checkWebViewDocumentFetchRefactor() -> Bool {
+        return nimbus.features.webViewDocumentFetchRefactorFeature.value().enabled
+    }
+
     private func checkVPNFeature() -> Bool {
         return nimbus.features.vpnFeature.value().enabled
     }
 
     private func checkPrivacyDashboardFeature() -> Bool {
         return nimbus.features.privacyDashboardFeature.value().enabled
+    }
+
+    private func checkCellularDataRestrictedErrorPageFeature() -> Bool {
+        return nimbus.features.cellularDataRestrictedErrorPageFeature.value().enabled
     }
 }

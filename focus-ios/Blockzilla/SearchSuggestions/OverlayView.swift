@@ -258,17 +258,18 @@ final class OverlayView: UIView {
      */
 	func getAttributedButtonTitle(phrase: String, localizedStringFormat: String) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIColor.primaryText])
-		let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIFont.body17,
-                                                                           .foregroundColor: UIColor.primaryText])
+		let attributes: [NSAttributedString.Key: Any] = [
+			.font: UIFont.body17,
+			.foregroundColor: UIColor.primaryText
+		]
+		let phraseString = NSAttributedString(string: phrase, attributes: attributes)
 		if phrase != searchQuery {
-			let searchString = NSAttributedString(string: searchQuery, attributes: [.font: UIFont.body17,
-                                                                                    .foregroundColor: UIColor.primaryText])
+			let searchString = NSAttributedString(string: searchQuery, attributes: attributes)
 			// split suggestion into searchQuery and suggested part
 			let suggestion = phrase.components(separatedBy: searchQuery)
 			// suggestion was split
 			if suggestion.count > 1 {
-                let restOfSuggestion = NSAttributedString(string: suggestion[1], attributes: [.font: UIFont.body17,
-                                                                                              .foregroundColor: UIColor.primaryText])
+                let restOfSuggestion = NSAttributedString(string: suggestion[1], attributes: attributes)
 				attributedString.append(searchString)
 				attributedString.append(restOfSuggestion)
 				return attributedString

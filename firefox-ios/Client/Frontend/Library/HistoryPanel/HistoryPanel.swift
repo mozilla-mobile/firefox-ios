@@ -246,8 +246,8 @@ class HistoryPanel: UIViewController,
         // Avoid refreshing if search is in progress
         guard !viewModel.isSearchInProgress else { return }
 
-        viewModel.reloadData { success in
-            ensureMainThread { [weak self] in
+        viewModel.reloadData { [weak self] success in
+            ensureMainThread {
                 self?.applySnapshot(animatingDifferences: animating)
             }
         }
@@ -496,8 +496,9 @@ class HistoryPanel: UIViewController,
                     assertionFailure("FXIOS-11563 We should never have duplicates! Log how you made this crash happen.")
                 }
 
+                // FXIOS-10996 Force unique while we investigate history panel crashes
                 snapshot.appendItems(
-                    sectionDataUniqued.map { HistoryItem.site($0) }, // FXIOS-10996 Force unique while we investigate history panel crashes
+                    sectionDataUniqued.map { HistoryItem.site($0) },
                     toSection: section
                 )
             }

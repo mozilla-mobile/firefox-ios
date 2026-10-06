@@ -70,9 +70,7 @@ class LaunchPairingFromURLSetting: HiddenSetting {
               let profile = settings.profile,
               let accountManager = pairingAuthenticatorProvider() else { return }
 
-        // Converts the raw /pair URL into the supplicant OAuth URL; loading /pair
-        // directly sends non-desktop browsers to /pair/unsupported. Mirrors the
-        // real-scan path in FirefoxAccountSignInViewController.
+        // Mirrors the in-app QR scanner path in FirefoxAccountSignInViewController.
         accountManager.beginPairingAuthentication(
             pairingUrl: pairingUrl,
             entrypoint: "pairing_debug",

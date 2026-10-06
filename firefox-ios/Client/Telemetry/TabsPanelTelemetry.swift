@@ -6,7 +6,20 @@ import Foundation
 import Glean
 import Common
 
-struct TabsPanelTelemetry {
+protocol TabsPanelTelemetryProtocol {
+    typealias Mode = TabsPanelTelemetry.Mode
+    typealias CloseAllPanelOption = TabsPanelTelemetry.CloseAllPanelOption
+
+    func newTabButtonTapped(mode: Mode)
+    func tabModeSelected(mode: Mode)
+    func tabSelected(at index: Int?, mode: Mode)
+    func closeAllTabsSheetOptionSelected(option: CloseAllPanelOption, mode: Mode)
+    func tabClosed(mode: Mode)
+    func doneButtonTapped(mode: Mode)
+    func deleteNormalTabsSheetOptionSelected(period: TabsDeletionPeriod)
+}
+
+struct TabsPanelTelemetry: TabsPanelTelemetryProtocol {
     enum Mode: String {
         case normal
         case `private`

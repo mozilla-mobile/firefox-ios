@@ -7,7 +7,7 @@ import UIKit
 public protocol OnboardingCardInfoModelProtocol: Sendable {
     associatedtype OnboardingType: Sendable
     associatedtype OnboardingPopupActionType: Sendable
-    associatedtype OnboardingMultipleChoiceActionType: Hashable & Sendable
+    associatedtype OnboardingMultipleChoiceActionType: Hashable, Sendable
     associatedtype OnboardingActionType: RawRepresentable, Sendable where OnboardingActionType.RawValue == String
     var cardType: OnboardingCardType { get }
     var name: String { get }

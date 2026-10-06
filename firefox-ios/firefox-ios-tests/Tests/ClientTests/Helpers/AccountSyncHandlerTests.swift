@@ -12,7 +12,6 @@ import Common
 class AccountSyncHandlerTests: XCTestCase {
     private var profile: MockProfile!
     private var syncManager: ClientSyncManagerSpy!
-    private var queue: MockDispatchQueue!
     private var mockWindowManager: MockWindowManager!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
@@ -20,7 +19,6 @@ class AccountSyncHandlerTests: XCTestCase {
         try await super.setUp()
         self.profile = MockProfile()
         self.syncManager = profile.syncManager as? ClientSyncManagerSpy
-        self.queue = MockDispatchQueue()
         let mockTabManager =  MockTabManager()
         DependencyHelperMock().bootstrapDependencies(
             injectedWindowManager: mockWindowManager,
@@ -36,7 +34,6 @@ class AccountSyncHandlerTests: XCTestCase {
     override func tearDown() async throws {
         self.syncManager = nil
         self.profile = nil
-        self.queue = nil
         self.mockWindowManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
@@ -46,7 +43,7 @@ class AccountSyncHandlerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "sync is not called without an account")
         expectation.isInverted = true
         profile.hasSyncableAccountMock = false
-        let subject = AccountSyncHandler(with: profile, queue: queue, onSyncCompleted: {
+        let subject = AccountSyncHandler(with: profile, debounceTime: 0.1, onSyncCompleted: {
             expectation.fulfill()
         })
         let tab = createTab(profile: profile)
@@ -58,7 +55,7 @@ class AccountSyncHandlerTests: XCTestCase {
 
     func testTabDidGainFocus_syncWithAccount() {
         let expectation = XCTestExpectation(description: "storeAndSyncTabs called after listed time of tab gaining focus")
-        let subject = AccountSyncHandler(with: profile, debounceTime: 0.1, queue: queue, queueDelay: 0.1, onSyncCompleted: {
+        let subject = AccountSyncHandler(with: profile, debounceTime: 0.1, onSyncCompleted: {
             expectation.fulfill()
         })
         let tab = createTab(profile: profile)
@@ -72,7 +69,7 @@ class AccountSyncHandlerTests: XCTestCase {
         let expectation = XCTestExpectation(
             description: "storeAndSyncTabs only called once from multiple tab actions")
         let subject = AccountSyncHandler(
-            with: profile, debounceTime: 0.1, queue: DispatchQueue.global(), queueDelay: 0.1, onSyncCompleted: {
+            with: profile, debounceTime: 0.1, onSyncCompleted: {
                 expectation.fulfill()
             })
         let tab = createTab(profile: profile)
@@ -89,7 +86,7 @@ class AccountSyncHandlerTests: XCTestCase {
             description: "storeAndSyncTabs called multiple times if outside of debounce time")
         expectation.expectedFulfillmentCount = 2
         let subject = AccountSyncHandler(
-            with: profile, debounceTime: 0.1, queue: DispatchQueue.global(), queueDelay: 0.1, onSyncCompleted: {
+            with: profile, debounceTime: 0.1, onSyncCompleted: {
                 expectation.fulfill()
             })
         let tab = createTab(profile: profile)

@@ -77,21 +77,25 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4035799
+    // Regression
     func testModernTermsOfUseLinkDisplayAndDismissal() {
         verifyLinkDisplayAndDismissal(for: .termsOfUse)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4035800
+    // Regression
     func testModernPrivacyNoticeLinkDisplayAndDismissal() {
         verifyLinkDisplayAndDismissal(for: .privacyNotice)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4035801
+    // Regression
     func testModernManageBottomSheetDisplayAndDismissal() {
         verifyLinkDisplayAndDismissal(for: .manage)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4035796
+    // Regression
     func testModernManageBottomSheetContent() {
         launchApp()
 
@@ -105,11 +109,13 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4035802
+    // Regression
     func testModernCrashReportsToggle() {
         verifyManageDataToggle(.crashReports)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4035803
+    // Regression
     func testModernTechnicalDataToggle() {
         verifyManageDataToggle(.technicalData)
     }
@@ -182,6 +188,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4035645
+    // Regression
     func testModernKitOnboardingToolbarPlacementTop() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -258,6 +265,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4035640
+    // Regression
     func testModernKitOnboardingThemeSelection() throws {
         launchApp()
 
@@ -294,6 +302,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3309013
+    // Regression
     func testModernKitOnboardingCardsCopy() throws {
         launchApp()
 
@@ -336,12 +345,47 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertSyncScreen()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3309014
+    // Regression
+    func testModernKitOnboardingCardsImages() throws {
+        launchApp()
+
+        onboardingScreen.assertTermsOfServiceShowsImage()
+        onboardingScreen.handleTermsOfService()
+
+        // Step 3: Set as Default Browser card shows its illustration
+        onboardingScreen.assertModernWelcomeScreen()
+        onboardingScreen.assertCurrentCardShowsImage()
+        onboardingScreen.goToNextScreenViaSecondary()
+
+        if iPad() {
+            // iPad does not show the address bar card; a11y IDs still increase by one.
+            onboardingScreen.currentScreen += 1
+        } else {
+            // Step 4: Address bar card - its illustrations are part of the Top/Bottom option buttons
+            onboardingScreen.assertToolbarCustomizationScreen()
+            onboardingScreen.assertCurrentCardOptionsShowImages()
+            onboardingScreen.goToNextScreenViaPrimary()
+        }
+
+        // Step 5: Theme card - its illustrations are part of the Automatic/Light/Dark option buttons
+        onboardingScreen.assertModernThemeCustomizationScreen()
+        onboardingScreen.assertCurrentCardOptionsShowImages()
+        onboardingScreen.goToNextScreenViaPrimary()
+
+        // Step 6: Sync card shows its illustration
+        onboardingScreen.assertSyncScreen()
+        onboardingScreen.assertCurrentCardShowsImage()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/4035641
+    // Regression
     func testModernKitOnboardingLightThemeSelection() throws {
         verifyThemeSelection(theme: "Light")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4035642
+    // Regression
     func testModernKitOnboardingDarkThemeSelection() throws {
         verifyThemeSelection(theme: "Dark", restoreLightThemeAfterwards: true)
     }
@@ -513,6 +557,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4038427
+    // Regression
     func testModernKitOnboardingDefaultBrowserSkip() {
         launchApp()
 

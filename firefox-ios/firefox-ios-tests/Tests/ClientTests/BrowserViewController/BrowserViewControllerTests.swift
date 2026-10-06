@@ -25,7 +25,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     override func setUp() async throws {
         try await super.setUp()
         tabManager = MockTabManager()
-        profile = MockProfile()
+        profile = makeProfile()
         browserCoordinator = MockBrowserCoordinator()
         appStartupTelemetry = MockAppStartupTelemetry()
         recordVisitManager = MockRecordVisitObservationManager()
@@ -37,7 +37,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
-        profile.shutdown()
         profile = nil
         tabManager = nil
         appStartupTelemetry = nil
@@ -58,7 +57,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 advertiser: "test advertiser",
                 iabCategory: "999 - Test Category",
                 impressionReportingURL: URL(string: "https://example.com/ios_test_impression_reporting_url"),
-                clickReportingURL: URL(string: "https://example.com/ios_test_click_reporting_url")
+                clickReportingURL: URL(string: "https://example.com/ios_test_click_reporting_url"),
+                suggestionId: "test-suggestion-id"
             ),
             position: 3,
             didTap: false
@@ -588,82 +588,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(recordVisitManager.lastVisitObservation)
     }
 
-    // MARK: - updateInContentHomePanel
-
-    // NSURLErrorServerCertificateUntrusted alone is not enough to trigger the native
-    // error page — it also needs certerror=SSL_ERROR_BAD_CERT_DOMAIN in the URL.
-    func testUpdateInContentHomePanel_withNonBadCertDomainCertError_doesNotShowNativeErrorPage() {
-        setupNimbusNativeErrorPageTesting(
-            isEnabled: true,
-            noInternetConnectionErrorIsEnabled: true,
-            badCertDomainErrorPageIsEnabled: true
-        )
-        let subject = createSubject()
-        let certErrorCode = NSURLErrorServerCertificateUntrusted
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)"
-        )!
-
-        subject.updateInContentHomePanel(errorPageURL)
-
-        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
-    }
-
-    // A bad-cert-domain URL has both code=<cert error> AND certerror=SSL_ERROR_BAD_CERT_DOMAIN
-    func testUpdateInContentHomePanel_withBadCertDomainErrorURL_showsNativeErrorPage() {
-        setupNimbusNativeErrorPageTesting(
-            isEnabled: true,
-            noInternetConnectionErrorIsEnabled: true,
-            badCertDomainErrorPageIsEnabled: true
-        )
-        let subject = createSubject()
-        let certErrorCode = NSURLErrorServerCertificateUntrusted
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)&certerror=SSL_ERROR_BAD_CERT_DOMAIN"
-        )!
-
-        subject.updateInContentHomePanel(errorPageURL)
-
-        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 1)
-    }
-
-    func testUpdateInContentHomePanel_withNonCertErrorURL_doesNotShowNativeErrorPage() {
-        setupNimbusNativeErrorPageTesting(
-            isEnabled: true,
-            noInternetConnectionErrorIsEnabled: false,
-            badCertDomainErrorPageIsEnabled: true
-        )
-        let subject = createSubject()
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(NSURLErrorBadServerResponse)"
-        )!
-
-        subject.updateInContentHomePanel(errorPageURL)
-
-        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
-    }
-
-    func testUpdateInContentHomePanel_withCertErrorURL_andFeatureFlagDisabled_doesNotShowNativeErrorPage() {
-        setupNimbusNativeErrorPageTesting(
-            isEnabled: true,
-            noInternetConnectionErrorIsEnabled: true,
-            badCertDomainErrorPageIsEnabled: false
-        )
-        let subject = createSubject()
-        let certErrorCode = NSURLErrorServerCertificateUntrusted
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)"
-        )!
-
-        subject.updateInContentHomePanel(errorPageURL)
-
-        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
-    }
-
     // MARK: - rebuildNativeErrorPageStateIfNeeded
 
     func testRebuildNativeErrorPageStateIfNeeded_validWaybackURL_dispatchesReceivedError() {
@@ -745,36 +669,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let close = nav[1][0].items[0]
         XCTAssertEqual(close.title, String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton)
         XCTAssertEqual(close.iconString, StandardImageIdentifiers.Large.cross)
-    }
-
-    func testDismissToolbarCFRs_mismatchedWindowUUID() {
-        let toolbarWindow = WindowUUID.XCTestDefaultUUID
-        let mismatchedWindow = WindowUUID.DefaultUITestingUUID
-
-        let state = AppState(presentedComponents: PresentedComponentsState(components: [
-            .browserViewController(BrowserViewControllerState(windowUUID: toolbarWindow)),
-            .toolbar(ToolbarState(windowUUID: toolbarWindow)),
-        ]))
-        mockStore = MockStoreForMiddleware(state: state)
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-
-        createSubject().dismissToolbarCFRs(with: mismatchedWindow)
-    }
-
-    func testDismissToolbarCFRs_ToolbarAddedForWindow() {
-        let window = WindowUUID.XCTestDefaultUUID
-
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-        createSubject().dismissToolbarCFRs(with: window)
-
-        let state = AppState(presentedComponents: PresentedComponentsState(components: [
-            .browserViewController(BrowserViewControllerState(windowUUID: window)),
-            .toolbar(ToolbarState(windowUUID: window)),
-        ]))
-        mockStore = MockStoreForMiddleware(state: state)
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-        createSubject().dismissToolbarCFRs(with: window)
     }
 
     @MainActor
@@ -932,15 +826,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         )
         self.appState = appState
         return appState
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }
 

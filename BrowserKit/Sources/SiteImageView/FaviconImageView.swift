@@ -69,11 +69,6 @@ public final class FaviconImageView: UIImageView, SiteImageView {
               canMakeRequest(with: siteURLString)
         else { return }
 
-        // If a new request is being made on an existing image it is likely a cell or view being reused.
-        // Continuing to display the previous image in this case would never be desired so reset to nil
-        image = nil
-        backgroundColor = .clear
-
         let id = UUID()
         uniqueID = id
         currentURLString = siteURLString
@@ -82,6 +77,19 @@ public final class FaviconImageView: UIImageView, SiteImageView {
                                    imageType: .favicon,
                                    siteURL: siteURL,
                                    siteResource: viewModel.siteResource)
+
+        // Set directly rather than through `updateImage`, which would blank the view for a frame.
+        if let cachedImage = imageFetcher.getImageFromMemory(model: model) {
+            backgroundColor = .clear
+            setImage(image: cachedImage)
+            return
+        }
+
+        // If a new request is being made on an existing image it is likely a cell or view being reused.
+        // Continuing to display the previous image in this case would never be desired so reset to nil
+        image = nil
+        backgroundColor = .clear
+
         updateImage(model: model)
     }
 

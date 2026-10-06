@@ -161,7 +161,9 @@ final class URLExtensionTests: XCTestCase {
         let testCases = [
             ("https://www.google.com", (nil, "google.com")),
             ("https://blog.engineering.company.com", ("blog.engineering.", "blog.engineering.company.com")),
-            ("https://long-extended-subdomain-name-containing-many-letters-and-dashes.badssl.com", ("long-extended-subdomain-name-containing-many-letters-and-dashes.", "long-extended-subdomain-name-containing-many-letters-and-dashes.badssl.com")),
+            ("https://long-extended-subdomain-name-containing-many-letters-and-dashes.badssl.com",
+             ("long-extended-subdomain-name-containing-many-letters-and-dashes.",
+              "long-extended-subdomain-name-containing-many-letters-and-dashes.badssl.com")),
             ("http://com:org@m.canadacomputers.co.uk", (nil, "canadacomputers.co.uk")),
             ("https://www.wix.com/blog/what-is-a-subdomain", (nil, "wix.com")),
             ("nothing", (nil, "nothing")),

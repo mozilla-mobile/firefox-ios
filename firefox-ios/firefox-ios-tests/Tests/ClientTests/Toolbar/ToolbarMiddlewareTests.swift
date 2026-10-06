@@ -760,6 +760,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
         XCTAssertEqual(savedExtras.enabled, false)
+        XCTAssertEqual(savedExtras.hasSummarizer, false)
     }
 
     func testDidTapButton_tapOnReaderModeWithSummarizerButton_dispatchesShowReaderModes() throws {
@@ -777,6 +778,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
         XCTAssertEqual(savedExtras.isPrivate, false)
         XCTAssertEqual(savedExtras.enabled, false)
+        XCTAssertEqual(savedExtras.hasSummarizer, true)
     }
 
     func testDidTapButton_tapOnReloadButton_dispatchesReloadWebsite() throws {
@@ -1016,7 +1018,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             buttonType: .readerModeWithSummarizer,
             expectedActionType: .showSummarizer,
             expectation: expectation(description: "The show summarizer action should have been dispatched.")) { action in
-                XCTAssertEqual(action.summarizerTrigger, .toolbarIcon)
+                XCTAssertEqual(action.summarizerTrigger, .readerModeWithSummarizerButton)
         }
     }
 
@@ -1441,16 +1443,5 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
             a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton
         )
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    // In order to avoid flaky tests, we should reset the store
-    // similar to production
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

@@ -9,7 +9,7 @@ private struct UX {
     static let infinitySymbol = "\u{221E}"
 }
 
-/// Adds tab-count display capability to any ToolbaButton subclass.
+/// Adds tab-count display capability to any ToolbarButton subclass.
 protocol TabCountable: AnyObject {
     /// Updates accessibility value, large-content title, and returns the
     /// display string for the current tab count.

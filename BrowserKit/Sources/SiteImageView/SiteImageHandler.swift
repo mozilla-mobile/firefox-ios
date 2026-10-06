@@ -7,6 +7,8 @@ import Common
 
 public protocol SiteImageHandler: Sendable {
     func getImage(model: SiteImageModel) async -> UIImage
+
+    func getImageFromMemory(model: SiteImageModel) -> UIImage?
     func cacheFaviconURL(siteURL: URL, faviconURL: URL)
     func clearAllCaches()
 }
@@ -48,6 +50,11 @@ public final class DefaultSiteImageHandler: SiteImageHandler {
         case .favicon:
             return await getFaviconImage(imageModel: model)
         }
+    }
+
+    public func getImageFromMemory(model: SiteImageModel) -> UIImage? {
+        guard model.imageType == .favicon else { return nil }
+        return imageHandler.fetchFaviconFromMemory(imageModel: model)
     }
 
     public func cacheFaviconURL(siteURL: URL, faviconURL: URL) {

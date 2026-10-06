@@ -39,6 +39,25 @@ struct ResultsServiceFactoryTests {
         #expect(mockLLMCreator.createAppAttestLiteLLMCallCount == 1, "Should attempt to create LLM client")
     }
 
+    @Test(arguments: [
+        (QuickAnswersModel.exa, MLPAServiceType.quickAnswersExa),
+        (QuickAnswersModel.liner, MLPAServiceType.quickAnswersLiner)
+    ])
+    func test_make_usesTheServiceTypeOfTheConfiguredModel(
+        model: QuickAnswersModel,
+        expectedServiceType: MLPAServiceType
+    ) throws {
+        let mockLLMCreator = MockLLMClientCreator()
+        mockLLMCreator.clientToReturn = MockLiteLLMClient()
+        let configFetcher = MockQuickAnswersConfigFetcher()
+        configFetcher.model = model
+        let subject = createSubject(liteLLMCreator: mockLLMCreator)
+
+        _ = try subject.make(prefs: MockProfilePrefs(), configFetcher: configFetcher)
+
+        #expect(mockLLMCreator.lastServiceType == expectedServiceType)
+    }
+
     // MARK: - Helper
     private func createSubject(
         liteLLMCreator: LiteLLMCreating = MockLLMClientCreator(),

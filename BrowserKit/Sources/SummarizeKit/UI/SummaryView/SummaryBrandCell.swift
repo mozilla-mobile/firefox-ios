@@ -45,8 +45,10 @@ final class SummaryBrandCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                   constant: SummaryCellUX.horizontalPadding),
+            containerView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor,
+                                                    constant: -SummaryCellUX.horizontalPadding),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
                                                   constant: -UX.containerViewBottomPadding),
 

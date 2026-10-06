@@ -96,6 +96,7 @@ class DesktopModeTestsIphone: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306855
+    // Regression
     func testSameHostInMultipleTabs() {
         if skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
@@ -136,6 +137,7 @@ class DesktopModeTestsIphone: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306854
     // Smoketest
+    // Regression
     func testChangeModeInSameTab() {
         if skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))

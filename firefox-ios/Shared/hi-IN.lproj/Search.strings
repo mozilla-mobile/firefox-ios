@@ -1,6 +1,9 @@
 /* Label for search engine buttons. %@ is the name of the search engine. */
-"%@ search" = "%@ खोज";
+"%@ search" = "%@ सर्च";
 
 /* Label for search settings button. */
-"Search Settings" = "सेटिंग खोजें";
+"Search Settings" = "सर्च सेटिंग";
+
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a label for sponsored Firefox suggestions. */
+"Search.SponsoredSuggestionDescription.v119" = "स्पॉन्सर्ड";
 

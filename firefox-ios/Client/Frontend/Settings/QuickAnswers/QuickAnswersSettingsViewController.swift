@@ -16,8 +16,7 @@ final class QuickAnswersSettingsViewController: SettingsTableViewController, Use
     init(prefs: Prefs, windowUUID: WindowUUID) {
         self.prefs = prefs
         super.init(style: .grouped, windowUUID: windowUUID)
-        // TODO: - FXIOS-14720 Add Strings
-        self.title = "Quick Answers"
+        self.title = .QuickAnswers.Settings.Title
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -38,8 +37,7 @@ final class QuickAnswersSettingsViewController: SettingsTableViewController, Use
             theme: theme,
             prefKey: PrefsKeys.Settings.quickAnswersFeature,
             defaultValue: userPreferences.getPreferenceFor(.quickAnswers),
-            // TODO: - FXIOS-14720 Add Strings
-            titleText: "Quick Answers"
+            titleText: .QuickAnswers.Settings.Title
         ) { [weak self] _ in
             guard let self else { return }
             // Instead of passing the updated value here, we are using determining
@@ -52,8 +50,7 @@ final class QuickAnswersSettingsViewController: SettingsTableViewController, Use
                 )
             )
         }
-        // TODO: - FXIOS-14720 Add Strings
-        let footer = "Ask out loud and get short answers. We don’t store your voice, questions, or answers."
+        let footer: String = .QuickAnswers.Settings.Footer
         return SettingSection(
             footerTitle: NSAttributedString(string: footer),
             children: [enableFeatureSwitch]
@@ -67,8 +64,7 @@ final class QuickAnswersSettingsViewController: SettingsTableViewController, Use
         ) as? ThemedTableSectionHeaderFooterView else { return nil }
 
         let linkButtonViewModel = LinkButtonViewModel(
-            // TODO: - FXIOS-14720 Add Strings
-            title: "Learn more",
+            title: .QuickAnswers.Settings.LearnMore,
             a11yIdentifier: AccessibilityIdentifiers.Settings.QuickAnswers.learnMoreButton,
             font: FXFontStyles.Regular.caption1.scaledFont(),
             contentInsets: UX.buttonContentInsets

@@ -29,6 +29,10 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         }
     }
 
+    override func tearDownWithError() throws {
+        try super.tearDownWithError()
+    }
+
     @available(iOS 26, *)
     func testSummarizerRespondNonStreaming() async throws {
         let subject = createSubject(respondWith: ["hello", "world"])
