@@ -535,11 +535,18 @@ final class HomepageViewController: UIViewController,
 
         view.addSubview(embeddedAddressBarView)
 
-        NSLayoutConstraint.activate([
-            embeddedAddressBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            embeddedAddressBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            embeddedAddressBarView.heightAnchor.constraint(equalToConstant: 50)
-        ])
+        NSLayoutConstraint.activate(
+            [
+                embeddedAddressBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                embeddedAddressBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                embeddedAddressBarView.heightAnchor.constraint(
+                    equalToConstant: HomepageSectionLayoutProvider.UX.embeddedAddressBarHeight
+                ),
+                embeddedAddressBarView.topAnchor.constraint(
+                    greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor
+                )
+            ]
+        )
     }
 
     private func constrainEmbeddedAddressBar(toSearchBarCell cell: SearchBarCell) {
