@@ -28,6 +28,7 @@ final class VPNManager: VPNManaging {
     private let logger: Logger
     private let guardian: VPNGuardian
     private let serverlist: VPNServerlist
+    private let prefs: Prefs
     private let windowManager: WindowManager
     private let userPreferences: UserFeaturePreferring
 
@@ -40,7 +41,7 @@ final class VPNManager: VPNManaging {
 
     init(
         logger: Logger = DefaultLogger.shared,
-        clientConfig: VPNGuardian.Configuration = .staging,
+        clientConfig: VPNGuardian.Configuration = .prod,
         profile: Profile = AppContainer.shared.resolve(),
         windowManager: WindowManager = AppContainer.shared.resolve(),
         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
@@ -52,6 +53,7 @@ final class VPNManager: VPNManaging {
             logger: logger
         )
         self.serverlist = VPNServerlist(rsService: profile.remoteSettingsService, logger: logger)
+        self.prefs = profile.prefs
         self.windowManager = windowManager
         self.userPreferences = userPreferences
     }
@@ -76,12 +78,10 @@ final class VPNManager: VPNManaging {
         do {
             let pass = try await self.guardian.getPass()
 
-//            guard let server = await self.serverlist.selectServer() else {
-//                throw VPNError.noServerFound
-//            }
-
-            // TODO: Hardcode server to point at staging for this foxfooding
-            let server = VPNGuardian.Server(hostname: "stage.m1.fastly-masque.net", port: 2499, city: "", countryCode: "")
+            let countryCode = self.prefs.stringForKey(PrefsKeys.Settings.vpnLocation)
+            guard let server = await self.serverlist.selectServer(countryCode: countryCode) else {
+                throw VPNError.noServerFound
+            }
 
             self.logger.log(
                 "Got Guardian proxy pass — expires \(pass.expiresAt), usage \(String(describing: pass.usage)); server \(server.hostname):\(server.port) (\(server.city), \(server.countryCode))",

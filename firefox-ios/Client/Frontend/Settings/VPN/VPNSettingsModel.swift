@@ -143,8 +143,7 @@ final class VPNSettingsModel: ObservableObject {
         )
     }
 
-    /// TODO: FXIOS-16373 Only persists the pick for now — the `VPNManager` still connects to its
-    /// hardcoded server and does not read this preference.
+    /// Persists the pick; `VPNManager` reads it the next time the VPN is started.
     func selectLocation(code: String) {
         guard selectedLocationCode != code else { return }
 

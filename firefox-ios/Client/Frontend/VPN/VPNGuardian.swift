@@ -13,7 +13,7 @@ final class VPNGuardian: Sendable {
         var baseURL: URL {
             switch self {
             case .prod:
-                return URL(string: "https://vpn.mozilla.com")!
+                return URL(string: "https://vpn.mozilla.org")!
             case .staging:
                 return URL(string: "https://vpn-mozilla-nonprod-stage.global.ssl.fastly.net")!
             }
