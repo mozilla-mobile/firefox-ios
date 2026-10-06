@@ -41,7 +41,7 @@ struct OnboardingCardScheduler {
 
     /// Returns the current active days cards and records them as shown
     /// Returns an empty array when nothing is due
-    func consumeDueCards() -> [OnboardingCard] {
+    func getDueCards() -> [OnboardingCard] {
         let day = currentActiveDay
         let cards = schedule[day] ?? []
         guard !cards.isEmpty, lastCardActiveDay != day else { return [] }
@@ -84,7 +84,7 @@ struct OnboardingCardScheduler {
         return Int(prefs.intForKey(PrefsKeys.onboardingLastCardActiveDay) ?? 0)
     }
 
-    /// A comparable date key (e.g. 2026_09_03) used to detect a new active calendar day.
+    // A comparable date key (e.g. 2026_09_03) used to detect a new active calendar day.
     private func dayKey(for date: Date) -> Int {
         let comps = Calendar.current.dateComponents([.year, .month, .day], from: date)
         return (comps.year ?? 0) * 10_000 + (comps.month ?? 0) * 100 + (comps.day ?? 0)
