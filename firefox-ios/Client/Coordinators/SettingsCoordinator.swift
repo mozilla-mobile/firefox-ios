@@ -426,13 +426,13 @@ final class SettingsCoordinator: BaseCoordinator,
     /// Reuses the model created by `pressedVPN` so a pick on the location screen is reflected
     /// on the VPN settings screen once it is popped back to.
     private func pressedVPNLocation() {
-//        guard let vpnSettingsModel else { return }
-//
-//        let viewController = UIHostingController(
-//            rootView: VPNLocationSelectionView(model: vpnSettingsModel)
-//        )
-//        viewController.title = .Settings.VPN.LocationSection.ScreenTitle
-//        router.push(viewController)
+        guard let vpnSettingsModel else { return }
+
+        let viewController = UIHostingController(
+            rootView: VPNLocationSelectionView(model: vpnSettingsModel)
+        )
+        viewController.title = .Settings.VPN.LocationSection.ScreenTitle
+        router.push(viewController)
     }
 
     func pressedCustomizeAppIcon() {
