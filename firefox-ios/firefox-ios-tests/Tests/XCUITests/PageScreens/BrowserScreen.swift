@@ -89,17 +89,32 @@ final class BrowserScreen {
         }
     }
 
-    private func assertUserAgentTextExists(_ text: String, timeout: TimeInterval = TIMEOUT) {
+    private func userAgentText(_ text: String) -> XCUIElement {
         let pred = NSPredicate(
             format: "elementType == %d AND label == %@",
             XCUIElement.ElementType.staticText.rawValue,
             text
         )
-        let query = app.webViews.descendants(matching: .staticText).matching(pred)
-        let element = query.firstMatch
+        return app.webViews.descendants(matching: .staticText).matching(pred).firstMatch
+    }
 
+    private func assertUserAgentTextExists(_ text: String, timeout: TimeInterval = TIMEOUT) {
+        let element = userAgentText(text)
         BaseTestCase().mozWaitForElementToExist(element, timeout: timeout)
         XCTAssertTrue(element.exists, "Expected UA text '\(text)' was not found in the web view.")
+    }
+
+    /// Loads a user agent test page and asserts the mobile UA, retrying the load once. On a fresh
+    /// profile the content blocker reloads the tab when its lists finish compiling, which cancels
+    /// an in-flight navigation without an error page.
+    func navigateToURLAndAssertMobileUserAgent(_ url: String, timeout: TimeInterval = TIMEOUT) {
+        navigateToURL(url)
+        let mobileUserAgent = userAgentText("MOBILE_UA")
+        if BaseTestCase().mozWaitForElementToExist(mobileUserAgent, timeout: timeout, failOnTimeout: false) {
+            return
+        }
+        navigateToURL(url)
+        assertMobileUserAgentIsDisplayed(timeout: timeout)
     }
 
     func assertDesktopUserAgentIsDisplayed(timeout: TimeInterval = TIMEOUT) {

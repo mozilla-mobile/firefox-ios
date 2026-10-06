@@ -273,9 +273,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         let lvhURL = "http://lvh.me:\(serverPort)/test-fixture/test-user-agent.html"
 
         // Visit news.google.com
-        browserScreen.navigateToURL(newsLocaltestURL)
-        waitUntilPageLoad()
-        browserScreen.assertMobileUserAgentIsDisplayed()
+        browserScreen.navigateToURLAndAssertMobileUserAgent(newsLocaltestURL)
 
         // Step 1: Open the hamburger menu -> the dot menu is opened.
         navigateToBrowserTabMenu()
@@ -335,7 +333,9 @@ class DesktopModeTestsIphone: BaseTestCase {
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
         browserScreen.assertMobileUserAgentIsDisplayed()
-        switchToDesktopSite()
+        toolbarScreen.toggleRequestDesktopSiteFromReloadMenu()
+        waitUntilPageLoad()
+        browserScreen.assertDesktopUserAgentIsDisplayed()
 
         // Step 10: Open the hamburger menu -> the menu is open.
         navigateToBrowserTabMenu()
