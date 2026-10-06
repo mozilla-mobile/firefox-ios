@@ -200,7 +200,7 @@ final class TabTrayViewController: UIViewController,
 
     @available(iOS 26.0, *)
     private func applyToolbarGlassButtonTints(theme: Theme) {
-        guard isNovaDesignEnabled else { return }
+        guard theme.isNova else { return }
         let glassTint = theme.colors.layerGlassTintNova
         setProminentGlass(deleteButton,
                           StandardImageIdentifiers.Large.delete,
@@ -495,6 +495,11 @@ final class TabTrayViewController: UIViewController,
     var shouldBeInPrivateTheme: Bool {
         let tabTrayState = store.state.componentState(TabTrayState.self, for: .tabsTray, window: windowUUID)
         return tabTrayState?.isPrivateMode ?? false
+    }
+
+    /// This override predates the Nova implementation and must remain unchanged.
+    var isSubjectToNovaPrivateOverride: Bool {
+        return false
     }
 
     func applyTheme() {

@@ -4,6 +4,9 @@
 /* Accessibility label for the button on the homepage that opens the Quick Answers feature. */
 "QuickAnswers.AccessibilityLabels.OpenQuickAnswers.v158" = "Opna hraðsvör";
 
+/* Link shown in the footer of the Quick Answers view - when tapped, it opens a privacy banner explaining how the feature handles user data. */
+"QuickAnswers.ContentView.AboutYourPrivacy.v158" = "Um friðhelgi þína";
+
 /* Loading label shown in the Quick Answers view while an answer is being fetched. */
 "QuickAnswers.ContentView.Answering.v158" = "Svara…";
 
@@ -46,6 +49,9 @@
 /* Message shown in the permission alert when speech recognition access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox). */
 "QuickAnswers.Errors.SpeechRecognitionPermissionMessage.v158" = "Leyfa %@ aðgang að talgreiningu.";
 
+/* Link text that opens more information about how Quick Answers works and how it uses your data. */
+"QuickAnswers.LearnMore.v158" = "Kanna nánar…";
+
 /* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
 "QuickAnswers.OptIn.ContinueButton.v158" = "Halda áfram";
 
@@ -57,6 +63,9 @@
 
 /* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
 "QuickAnswers.OptIn.Title.v158" = "Spyrðu með því að tala";
+
+/* Feature name as displayed in the iOS Quick Action menu (contextual menu displayed when long-pressing the browser app icon) */
+"QuickAnswers.QuickActions.Title.v158" = "Hraðsvör";
 
 /* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
 "QuickAnswers.Tip.Message.v158" = "Ýttu hér til að byrja.";

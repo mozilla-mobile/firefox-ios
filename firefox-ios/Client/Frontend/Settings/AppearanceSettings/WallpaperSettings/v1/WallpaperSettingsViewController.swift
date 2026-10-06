@@ -133,8 +133,8 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
                 ofKind: UICollectionView.elementKindSectionHeader,
                 withReuseIdentifier: WallpaperSettingsHeaderView.cellIdentifier,
                 for: indexPath) as? WallpaperSettingsHeaderView,
-              let headerViewModel = viewModel.sectionHeaderViewModel(for: indexPath.section, dismissView: {
-                  self.dismissView()
+              let headerViewModel = viewModel.sectionHeaderViewModel(for: indexPath.section, dismissView: { [weak self] in
+                  self?.dismissView()
               })
         else { return UICollectionReusableView() }
 
@@ -194,7 +194,9 @@ private extension WallpaperSettingsViewController {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .vertical
 
-        let layout = UICollectionViewCompositionalLayout(sectionProvider: { ix, environment in
+        let layout = UICollectionViewCompositionalLayout(sectionProvider: { [weak self] ix, environment in
+            guard let self else { return nil }
+
             let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(UX.cardWidth),
                                                   heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -239,8 +241,8 @@ private extension WallpaperSettingsViewController {
         let toast = ButtonToast(
             viewModel: viewModel,
             theme: currentTheme(),
-            completion: { buttonPressed in
-                if buttonPressed { self.dismissView() }
+            completion: { [weak self] buttonPressed in
+                if buttonPressed { self?.dismissView() }
             })
 
         toast.showToast(viewController: self,

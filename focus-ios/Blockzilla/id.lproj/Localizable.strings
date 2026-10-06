@@ -328,9 +328,6 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla berusaha untuk mengumpulkan hanya apa yang kami perlu untuk menghadirkan dan meningkatkan %@ untuk setiap orang.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies" = "%@ dapat memasang dan menjalankan kajian dari waktu ke waktu.";
-
 /* Title for section in settings menu */
 "Settings.general" = "Umum";
 
@@ -444,9 +441,6 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Kirim data penggunaan";
-
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies" = "Kajian";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Gunakan Touch ID untuk membuka aplikasi";

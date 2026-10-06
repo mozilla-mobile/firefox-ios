@@ -97,15 +97,18 @@ class PairingTests: BaseTestCase {
         )
         connect.tap()
 
-        // FXIOS-16685: a successful pairing signs the user in, starts Sync and CLOSES the
-        // pairing modal, so success is the modal going away, not a card rendering in it.
+        // A successful pairing keeps the modal open on the content server's confirmation screen.
         // The functional test asserts the account side (device registered, Connected Services).
-        guard waitForModalToClose(timeout: 120) else {
-            attachScreenshot(named: "v2-modal-did-not-close")
-            XCTFail("Pairing modal stayed open after Connect")
+        guard waitForElement(labelled: "Your device is connected", timeout: 120) != nil else {
+            attachScreenshot(named: "v2-no-confirmation-screen")
+            XCTFail("No pairing confirmation screen after Connect")
             return
         }
-        attachScreenshot(named: "v2-pairing-modal-closed")
+        guard assertPairingModalIsOpen() else { return }
+        attachScreenshot(named: "v2-pairing-confirmation")
+
+        app.navigationBars.buttons["Close"].firstMatch.tap()
+        XCTAssertTrue(waitForModalToClose(timeout: TIMEOUT), "Pairing modal did not close after Close")
     }
 
     /// Capture screenshots of the "Launch pairing from URL" debug option: the

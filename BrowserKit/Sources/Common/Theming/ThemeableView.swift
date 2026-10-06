@@ -75,6 +75,7 @@ struct ThemeChangeListener<Content: View>: View {
                                   shouldBeInPrivateTheme: privacyOverride ?? false)
             // Resolves the theme once the environment is available, which it isn't in a view's initializer.
             .onAppear { updateTheme() }
+            .onChange(of: privacyOverride) { _ in updateTheme() }
     }
 
     private var themedContent: some View {
