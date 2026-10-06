@@ -12,7 +12,7 @@ import XCTest
 
 @MainActor
 final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
     private var gleanWrapper: MockGleanWrapper!
     private var pageContextReader: MockWebCompatPageContextReader!
 
@@ -345,15 +345,6 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
                 ]
             )
         )
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 
     // MARK: - Helpers

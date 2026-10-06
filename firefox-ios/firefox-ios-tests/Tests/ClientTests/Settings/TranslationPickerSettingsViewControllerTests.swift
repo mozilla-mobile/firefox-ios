@@ -75,15 +75,6 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
         )
     }
 
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
-    }
-
     // MARK: - Helpers
 
     private func createSubject() -> TranslationPickerSettingsViewController {

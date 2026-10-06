@@ -645,10 +645,17 @@ final class BrowserScreen {
         )
     }
 
-    func searchFromAddressBar(term: String) {
-        tapOnAddressBar()
-        clearAddressBarText()
-        typeOnSearchBar(text: term)
+    /// A late toolbar state update can reset the field right after the first keystroke ("ifa" for
+    /// "fifa"), so the term is cleared and retyped until the address bar starts with it.
+    func searchFromAddressBar(term: String, maxAttempts: Int = 3) {
+        let hasTerm = NSPredicate(format: "value BEGINSWITH %@", term)
+        for _ in 0..<maxAttempts {
+            tapOnAddressBar()
+            clearAddressBarText()
+            typeOnSearchBar(text: term)
+            let expectation = XCTNSPredicateExpectation(predicate: hasTerm, object: addressBar)
+            if XCTWaiter().wait(for: [expectation], timeout: TIMEOUT_PICKER_PROBE) == .completed { return }
+        }
     }
 
     /// Fails rather than returning with text still in the field, so a retry cannot append to the

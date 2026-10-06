@@ -262,13 +262,4 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
         self.appState = appState
         return appState
     }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
-    }
 }

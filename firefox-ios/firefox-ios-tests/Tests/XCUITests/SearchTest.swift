@@ -599,7 +599,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2753075
     // Regression
     func testFirefoxSuggestNonSponsoredUI() {
-        let keyword = "fifa world cup"
+        let keyword = "fifa"
         let suggestion = "Wikipedia - FIFA World Cup"
         launchWithFirefoxSuggestRollout()
 

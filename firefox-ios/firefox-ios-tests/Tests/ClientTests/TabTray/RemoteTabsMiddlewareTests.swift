@@ -205,13 +205,4 @@ final class RemoteTabsMiddlewareTests: XCTestCase, StoreTestUtility {
         appState = AppState()
         return appState
     }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
-    }
 }

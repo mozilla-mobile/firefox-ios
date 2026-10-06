@@ -201,6 +201,36 @@ class FxAWebViewModelTests: XCTestCase {
         XCTAssertFalse(FxAPageType.settingsPage.allowsPairOAuthStart)
     }
 
+    // MARK: - OAuth login dismissal
+
+    /// The content server shows its pairing confirmation screen after `oauth_login`.
+    func testPairingPagesStayOpenAfterOAuthLogin() {
+        let url = URL(string: "https://accounts.firefox.com/pair")!
+
+        for pageType in [FxAPageType.qrCode(url: url), .pairingV2(url: url)] {
+            XCTAssertFalse(didDismissOnOAuthLogin(pageType: pageType, data: ["code": "code", "state": "state"]))
+            XCTAssertFalse(didDismissOnOAuthLogin(pageType: pageType, data: nil))
+        }
+    }
+
+    func testEmailAndSettingsPagesDismissOnOAuthLogin() {
+        for pageType in [FxAPageType.emailLoginFlow, .settingsPage] {
+            XCTAssertTrue(didDismissOnOAuthLogin(pageType: pageType, data: ["code": "code", "state": "state"]))
+            XCTAssertTrue(didDismissOnOAuthLogin(pageType: pageType, data: nil))
+        }
+    }
+
+    private func didDismissOnOAuthLogin(pageType: FxAPageType, data: Any?) -> Bool {
+        let viewModel = FxAWebViewModel(pageType: pageType,
+                                        profile: MockProfile(),
+                                        deepLinkParams: deeplinkParams,
+                                        telemetry: FxAWebViewTelemetry(telemetryWrapper: MockTelemetryWrapper()))
+        var dismissed = false
+        viewModel.onDismissController = { dismissed = true }
+        viewModel.handleRemote(command: "fxaccounts:oauth_login", id: nil, data: data, webView: WKWebView())
+        return dismissed
+    }
+
     // MARK: - Pair OAuth reply
 
     func testPairOAuthReplyParametersSerializesTheParametersVerbatim() {

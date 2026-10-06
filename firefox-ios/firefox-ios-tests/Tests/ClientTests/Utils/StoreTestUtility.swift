@@ -9,10 +9,24 @@ import XCTest
 @testable import Client
 
 @MainActor
-protocol StoreTestUtility {
+protocol StoreTestUtility: AnyObject {
+    var mockStore: MockStoreForMiddleware<AppState>! { get set }
     func setupAppState() -> AppState
     func setupStore()
     func resetStore()
+}
+
+extension StoreTestUtility {
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    func resetStore() {
+        // XCTest keeps test case instances for the whole run; without this the recorded actions outlive the test.
+        mockStore = nil
+        StoreTestUtilityHelper.resetStore()
+    }
 }
 
 /// Utility class used when replacing the global store for testing purposes

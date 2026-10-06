@@ -1,11 +1,11 @@
 /* Explanatory caption below the Additional Info section. %1$@ is the app name (e.g. Firefox). %2$@ is replaced by the tappable 'Learn more' link, in the Report a Website Issue form. */
-"WebCompatReporter.AdditionalInfo.FooterText.v154" = "Twoje zgłoszenie pomoże nam zrozumieć i rozwiązać problemy w przeglądarce %1$@, aby ulepszyć ją dla wszystkich. %2$@";
+"WebCompatReporter.AdditionalInfo.FooterText.v154" = "Twoje zgłoszenie pomoże nam zrozumieć i rozwiązać problemy w przeglądarce %1$@, by ulepszyć ją dla wszystkich. %2$@";
 
 /* Label of the toggle that includes the list of trackers blocked on the page with the report, in the Report a Website Issue form. */
 "WebCompatReporter.AdditionalInfo.IncludeBlockedList.v154" = "Wyślij listę elementów zablokowanych przez ochronę przed śledzeniem";
 
 /* Label of the toggle that includes a screenshot of the page with the report, in the Report a Website Issue form. */
-"WebCompatReporter.AdditionalInfo.IncludeScreenshot.v154" = "Automatycznie dołącz zrzut ekranu, aby pokazać problem";
+"WebCompatReporter.AdditionalInfo.IncludeScreenshot.v154" = "Automatycznie dołącz zrzut ekranu, by pokazać problem";
 
 /* Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form. */
 "WebCompatReporter.AdditionalInfo.LearnMore.v154" = "Więcej informacji";

@@ -30,7 +30,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     private var glean: MockGleanWrapper!
     private var scrollDelegate: MockStatusBarScrollDelegate!
     private var browserViewController: MockBrowserViewController!
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
     private var homepageTabStateStore: HomepageTabStateStore!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
@@ -1777,11 +1777,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         return AppState()
     }
 
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
     private func setupStoreWithAddressBar(isEditing: Bool) {
         var toolbarState = ToolbarState(windowUUID: windowUUID)
         toolbarState.addressToolbar = toolbarState.addressToolbar
@@ -1797,10 +1792,6 @@ final class BrowserCoordinatorTests: XCTestCase,
             )
         ))
         StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 
     // MARK: - Helpers
