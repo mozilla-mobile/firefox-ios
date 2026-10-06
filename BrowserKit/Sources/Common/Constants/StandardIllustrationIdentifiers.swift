@@ -10,13 +10,6 @@ import Foundation
 public struct StandardIllustrationIdentifiers {
     // Custom illustrations exported at feature-specific dimensions
     public struct Exports {
-    }
-
-    // Reusable illustration kits
-    public struct Kit {
-    }
-
-    // Pictogram illustrations
-    public struct Pictograms {
+        public static let picShieldCheckmark = "picShieldCheckmark"
     }
 }
