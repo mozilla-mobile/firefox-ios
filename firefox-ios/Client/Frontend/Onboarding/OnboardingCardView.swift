@@ -92,9 +92,9 @@ struct OnboardingFlowView: View, ThemeableView {
             let isDark = theme.type == .dark
             let orange = theme.colors.gradientAIStrongStop3.color.opacity(UX.radialGradientOrangeOpacity)
             if isDark {
-                return [Color(gradient[0]), Color(gradient[1]).opacity(UX.hiddenOpacity), orange]
+                return [Color(resolvedGradient[0]), Color(resolvedGradient[1]).opacity(UX.hiddenOpacity), orange]
             }
-            return [Color(gradient[0]), Color(gradient[1]), orange]
+            return [Color(resolvedGradient[0]), Color(resolvedGradient[1]), orange]
         }
 
         let isDark = theme.type == .dark
