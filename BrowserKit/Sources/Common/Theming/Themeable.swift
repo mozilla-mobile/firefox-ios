@@ -17,7 +17,7 @@ public protocol Themeable: ThemeUUIDIdentifiable {
     /// Whether `shouldUsePrivateOverride` is gated behind the Nova private theme override feature. Set to
     /// `false` only on overrides that predate the Nova implementation like SyncedTabs.
     /// Must be redeclared per subclass.
-    nonisolated var isNovaPrivateOverride: Bool { get }
+    nonisolated var isSubjectToNovaPrivateOverride: Bool { get }
 
     @MainActor
     var themeManager: ThemeManager { get }
@@ -63,7 +63,7 @@ public protocol InjectedThemeUUIDIdentifiable: AnyObject {
 extension Themeable {
     public var shouldUsePrivateOverride: Bool { return false }
     public var shouldBeInPrivateTheme: Bool { return false }
-    public var isNovaPrivateOverride: Bool { return true }
+    public var isSubjectToNovaPrivateOverride: Bool { return true }
 
     /// Updates subviews of the `Themeable` view, which can specify whether it wants to use the
     /// base theme via `getCurrentTheme` or override the private mode theme via `resolvedTheme`
@@ -75,7 +75,7 @@ extension Themeable {
         assert(uuid != .unavailable, "Theme applicable view has `unavailable` window UUID. Unexpected.")
 
         let theme: Theme
-        if isNovaPrivateOverride {
+        if isSubjectToNovaPrivateOverride {
             theme = themeManager.resolveTheme(for: uuid,
                                               shouldUsePrivateOverride: shouldUsePrivateOverride,
                                               shouldBeInPrivateTheme: shouldBeInPrivateTheme)

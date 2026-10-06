@@ -171,7 +171,7 @@ final class RemoteTabsPanel: UIViewController,
     }
 
     /// This override predates the Nova implementation and must remain unchanged.
-    var isNovaPrivateOverride: Bool {
+    var isSubjectToNovaPrivateOverride: Bool {
         return false
     }
 
