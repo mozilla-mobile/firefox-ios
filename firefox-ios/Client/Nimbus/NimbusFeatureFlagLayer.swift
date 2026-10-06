@@ -60,9 +60,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .backgroundAudio:
             return checkBackgroundAudioFeature()
 
-        case .badCertDomainErrorPage:
-            return checkBadCertDomainErrorPageFeature()
-
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
 
@@ -139,9 +136,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .novaPrivateThemeOverride:
             return checkNovaPrivateThemeOverrideFeature()
-
-        case .noInternetConnectionErrorPage:
-            return checkNICErrorPageFeature()
 
         case .privacyDashboard:
             return checkPrivacyDashboardFeature()
@@ -378,14 +372,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkNativeErrorPageFeature() -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().enabled
-    }
-
-    private func checkNICErrorPageFeature() -> Bool {
-        return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
-    }
-
-    private func checkBadCertDomainErrorPageFeature() -> Bool {
-        return nimbus.features.nativeErrorPageFeature.value().badCertDomainErrorPage
     }
 
     private func checkImprovedAppStoreReviewTriggerFeature() -> Bool {
