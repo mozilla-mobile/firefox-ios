@@ -160,6 +160,14 @@ final class BrowserScreen {
         webViewShowsText(containing: sel.BOOK_OF_MOZILLA_VERSE_TEXT.value, timeout: timeout)
     }
 
+    func assertExampleDomainPageDisplayed(timeout: TimeInterval = TIMEOUT) {
+        XCTAssertTrue(exampleDomainTextExists(timeout: timeout), "The Example Domain page should be displayed")
+    }
+
+    func assertBookOfMozillaPageDisplayed(timeout: TimeInterval = TIMEOUT) {
+        XCTAssertTrue(bookOfMozillaPageContentExists(timeout: timeout), "The Book of Mozilla page should be displayed")
+    }
+
     /// Scoped to the web view: an app-wide text search is also satisfied by a homepage tile or a tab
     /// label carrying the same page title, which cannot tell which page is on screen.
     private func webViewShowsText(containing text: String, timeout: TimeInterval) -> Bool {

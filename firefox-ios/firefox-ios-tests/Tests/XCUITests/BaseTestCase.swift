@@ -803,4 +803,13 @@ enum AppScheme {
     case fennec
     case firefox
     case firefoxBeta
+
+    /// Mirrors MOZ_INTERNAL_URL_SCHEME in each build's xcconfig.
+    var internalURLScheme: String {
+        switch self {
+        case .fennec: return "fennec"
+        case .firefox: return "firefox-internal"
+        case .firefoxBeta: return "firefox-beta"
+        }
+    }
 }

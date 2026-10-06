@@ -453,6 +453,7 @@
         "PrivateBrowsingTest\/testClearIndexedDB_tabTrayExperimentOff()",
         "PrivateBrowsingTest\/testClosePrivateTabsOptionClosesPrivateTabs()",
         "PrivateBrowsingTest\/testClosePrivateTabsOptionClosesPrivateTabs_tabTrayExperimentOff()",
+        "PrivateBrowsingTest\/testDeeplinkOpensInPrivateBrowsing()",
         "PrivateBrowsingTest\/testForceCloseDuringPrivateBrowsingSession()",
         "PrivateBrowsingTest\/testHamburgerMenuNewPrivateTab_tabTrayExperimentOff()",
         "PrivateBrowsingTest\/testHamburgerMenuNewPrivateTab_tabTrayExperimentOn()",
