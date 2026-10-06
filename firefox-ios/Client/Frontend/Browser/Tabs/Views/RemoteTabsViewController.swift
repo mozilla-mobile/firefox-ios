@@ -50,6 +50,10 @@ class RemoteTabsViewController: UIViewController,
         guard case .empty = state.contentState else { return false }
         return true
     }
+    private var tableViewContent: [ClientAndTabs]? {
+        guard case .tabs = state.contentState else { return nil }
+        return state.clientAndTabs
+    }
     private lazy var emptyView: RemoteTabsEmptyViewProtocol = {
         if isTabTrayUIExperimentsEnabled {
             let view = ExperimentRemoteTabsEmptyView()
@@ -159,8 +163,13 @@ class RemoteTabsViewController: UIViewController,
     }
 
     func newState(state: RemoteTabsPanelState) {
+        let previousTableViewContent = tableViewContent
         self.state = state
-        reloadUI()
+        updateUI()
+
+        if previousTableViewContent != tableViewContent {
+            tableView.reloadData()
+        }
     }
 
     private func reloadUI() {
