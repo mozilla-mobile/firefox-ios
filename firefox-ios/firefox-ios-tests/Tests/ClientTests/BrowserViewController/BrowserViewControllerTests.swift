@@ -698,6 +698,19 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, .navigationButtonDoubleTapped)
     }
 
+    // MARK: - Key commands
+
+    @MainActor
+    func testKeyCommands_includesControlF5ForReloadIgnoringCache() throws {
+        let subject = createSubject()
+
+        let command = try XCTUnwrap(subject.keyCommands?.first {
+            $0.input == UIKeyCommand.f5 && $0.modifierFlags == .control
+        })
+
+        XCTAssertEqual(command.action, #selector(BrowserViewController.reloadTabIgnoringCacheKeyCommand))
+    }
+
     // MARK: - Tab manager restore
 
     @MainActor
