@@ -1,0 +1,18 @@
+# The configuration for the searchConfigV3Feature feature
+features:
+  search-config-v3-feature:
+    description: >
+      Feature flag to manage rollout of search-config-v3, the new search engine configuration with per-access-point partner codes
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false

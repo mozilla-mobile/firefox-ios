@@ -7,6 +7,15 @@ import Common
 import Shared
 import Storage
 
+struct SearchEngineFlags {
+    static var isSearchConfigV3Enabled: Bool {
+        let flagProvider: FeatureFlagProviding = AppContainer.shared.resolve()
+        let flag = flagProvider.isEnabled(.searchConfigV3)
+        DefaultLogger.shared.log("[SEC][v3] Search engine v3 enabled? \(flag)", level: .info, category: .remoteSettings)
+        return flag
+    }
+}
+
 protocol SearchEnginesManagerProvider: AnyObject, Sendable {
     @MainActor
     var defaultEngine: OpenSearchEngine? { get }
