@@ -690,7 +690,9 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func presentAdBlockerSettings() {
-        let browsingSettings = BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
+        let browsingSettings = BrowsingSettingsViewController(profile: profile,
+                                                              windowUUID: windowUUID,
+                                                              shouldUsePrivateOverride: false)
         browsingSettings.parentCoordinator = self
         let navigationController = DismissableNavigationViewController(rootViewController: browsingSettings)
         setupAdBlockerSettingsDetents(for: navigationController)
@@ -713,13 +715,21 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func pressedMailApp() {
         guard let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
-        let viewController = OpenWithSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        let viewController = OpenWithSettingsViewController(
+            prefs: profile.prefs,
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: false
+        )
         nav.pushViewController(viewController, animated: true)
     }
 
     func pressedAutoPlay() {
         guard let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
-        let viewController = AutoplaySettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        let viewController = AutoplaySettingsViewController(
+            prefs: profile.prefs,
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: false
+        )
         nav.pushViewController(viewController, animated: true)
     }
 
