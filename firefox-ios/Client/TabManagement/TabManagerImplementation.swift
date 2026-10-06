@@ -1081,7 +1081,7 @@ final class TabManagerImplementation: NSObject,
 
     private func didSelectTab(_ url: URL?) {
         tabsTelemetry.stopTabSwitchMeasurement()
-        let isNativeErrorPage = NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
+        let isNativeErrorPage = featureFlagsProvider.isEnabled(.nativeErrorPage)
 
         // If app starts with error url, first homepage appears and
         // then error page is loaded. To directly load error page
@@ -1334,7 +1334,7 @@ final class TabManagerImplementation: NSObject,
         let arraySlice = tabs[0..<deletedIndex]
 
         // Get the count of similar tabs on left side of the array
-        let mappedDeletedIndex = arraySlice.filter({ removedTab.isSameTypeAs($0) }).count
+        let mappedDeletedIndex = arraySlice.count(where: { removedTab.isSameTypeAs($0) })
         let filteredTabs = tabs.filter({ removedTab.isSameTypeAs($0) })
 
         // Now that we know at which index in the subarray the removedTab was removed, we can look for its nearest left or

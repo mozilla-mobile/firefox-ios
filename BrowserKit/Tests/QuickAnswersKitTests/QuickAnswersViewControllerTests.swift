@@ -10,11 +10,11 @@ import TestKit
 
 @MainActor
 final class QuickAnswersViewControllerTests: XCTestCase {
-    func testInit_withCrossDissolveTransition_usesCustomPresentationAndTransitioningDelegate() {
-        let subject = createSubject(transitionType: .crossDissolve(sourceRect: .zero))
+    func testInit_withSourceRevealTransition_usesCustomPresentationAndTransitioningDelegate() {
+        let subject = createSubject(transitionType: .sourceReveal(sourceRect: .zero))
 
         XCTAssertEqual(subject.modalPresentationStyle, .custom)
-        XCTAssertTrue(subject.transitioningDelegate is CrossDissolveTransitionAnimator)
+        XCTAssertTrue(subject.transitioningDelegate is SourceRevealTransitionAnimator)
     }
 
     func testInit_withFormSheetTransition_usesFormSheetPresentationAndNoTransitioningDelegate() {

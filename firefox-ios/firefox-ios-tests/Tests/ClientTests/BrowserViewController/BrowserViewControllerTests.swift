@@ -761,17 +761,9 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         }
     }
 
-    private func setupNimbusNativeErrorPageTesting(
-        isEnabled: Bool,
-        noInternetConnectionErrorIsEnabled: Bool,
-        badCertDomainErrorPageIsEnabled: Bool
-    ) {
+    private func setupNimbusNativeErrorPageTesting(isEnabled: Bool) {
         FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
-            return NativeErrorPageFeature(
-                badCertDomainErrorPage: badCertDomainErrorPageIsEnabled,
-                enabled: isEnabled,
-                noInternetConnectionError: noInternetConnectionErrorIsEnabled
-            )
+            return NativeErrorPageFeature(enabled: isEnabled)
         }
     }
 

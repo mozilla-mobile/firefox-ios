@@ -55,13 +55,33 @@ final class DocumentPickerScreen {
     }
 
     private func tapSaveWhenEnabled(timeout: TimeInterval = TIMEOUT_LONG) {
-        let predicate = NSPredicate(format: "exists == true && hittable == true && enabled == true")
-        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: saveButton)
-        guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else {
-            XCTFail("The document picker's Save button never became enabled in \(timeout) seconds")
-            return
+        let deadline = Date().addingTimeInterval(timeout)
+        repeat {
+            if let button = onScreenSaveButton, button.isEnabled, button.isHittable {
+                button.tap()
+                return
+            }
+            usleep(250_000)
+        } while Date() < deadline
+        XCTFail("The document picker's Save button never became enabled in \(timeout) seconds. \(pickerState)")
+    }
+
+    /// Jenkins can match a "Save" button with no valid frame, which is never hittable, so only
+    /// consider matches laid out on screen.
+    private var onScreenSaveButton: XCUIElement? {
+        sel.SAVE_BUTTON.query(in: app).allElementsBoundByIndex.first {
+            !$0.frame.isEmpty && app.frame.intersects($0.frame)
         }
-        saveButton.tap()
+    }
+
+    /// Jenkins drops report attachments, so the failure message must describe the picker. Avoids
+    /// isHittable, which itself fails when a Save match has no valid frame.
+    private var pickerState: String {
+        let saveMatches = sel.SAVE_BUTTON.query(in: app).allElementsBoundByIndex
+            .map { "frame: \($0.frame), enabled: \($0.isEnabled)" }
+        let titles = app.navigationBars.allElementsBoundByIndex.map(\.identifier)
+        let alerts = app.alerts.allElementsBoundByIndex.map(\.label)
+        return "Save matches: \(saveMatches), navigation bars: \(titles), alerts: \(alerts)"
     }
 
     /// The Save button turns into a spinner once the save is accepted, so an enabled Save button
@@ -69,23 +89,29 @@ final class DocumentPickerScreen {
     private func isStillOpenAfterSave() -> Bool {
         let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: saveButton)
         guard XCTWaiter().wait(for: [expectation], timeout: TIMEOUT_PICKER_PROBE) != .completed else { return false }
-        return saveButton.exists && saveButton.isEnabled
+        return onScreenSaveButton?.isEnabled ?? false
     }
 
-    /// Saving a document whose name is already taken in the chosen folder prompts before overwriting.
-    /// Keep both copies, so an earlier save is never destroyed and the new file is suffixed instead.
+    /// Saving a document whose name is already taken prompts before overwriting; keep both copies.
+    /// A tap during the alert's appear animation is ignored, so tap again while the alert stays up.
     private func resolveDuplicateNameAlertIfPresented() {
         let alert = app.alerts.firstMatch
         guard alert.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) else { return }
-        for label in ["Keep Both", "Replace"] where alert.buttons[label].exists {
-            alert.buttons[label].waitAndTap()
-            return
+        guard let button = ["Keep Both", "Replace"].map({ alert.buttons[$0] }).first(where: \.exists) else { return }
+        for _ in 1...2 {
+            button.mozWaitElementHittable(timeout: TIMEOUT)
+            button.tap()
+            if BaseTestCase().mozWaitForElementToNotExist(alert, timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) {
+                return
+            }
         }
+        XCTFail("The duplicate name alert stayed open. \(pickerState)")
     }
 
     /// The Save button turns into a spinner while the file is written, so it vanishes before the picker
-    /// does; the file name field stays up until the picker is really gone.
+    /// does; the file name field stays up until the picker is really gone, unless an alert hides it.
     func assertDismissed(timeout: TimeInterval = TIMEOUT_LONG) {
+        BaseTestCase().mozWaitForElementToNotExist(app.alerts.firstMatch, timeout: TIMEOUT_PICKER_PROBE)
         BaseTestCase().mozWaitForElementToNotExist(saveButton, timeout: timeout)
         BaseTestCase().mozWaitForElementToNotExist(sel.FILE_NAME_FIELD.element(in: app), timeout: timeout)
         BaseTestCase().mozWaitForElementToNotExist(untaggedFileNameField, timeout: timeout)
