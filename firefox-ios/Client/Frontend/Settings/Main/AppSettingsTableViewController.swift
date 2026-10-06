@@ -562,7 +562,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         if featureFlagsProvider.isEnabled(.multiDayOnboarding) {
             hiddenDebugOptions.append(AdvanceOnboardingDripSetting(settings: self, settingsDelegate: self))
             hiddenDebugOptions.append(ResetOnboardingDripSetting(settings: self, settingsDelegate: self))
-            for day in OnboardingDripSchedule.cardsByDay.keys.sorted() {
+            for day in OnboardingCardSchedule.cardsByDay.keys.sorted() {
                 hiddenDebugOptions.append(
                     JumpToOnboardingDripDaySetting(settings: self, settingsDelegate: self, day: day)
                 )

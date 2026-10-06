@@ -20,11 +20,11 @@ class ResetOnboardingDripSetting: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard let prefs = settings.profile?.prefs else { return }
-        OnboardingDripScheduler(prefs: prefs).reset()
+        OnboardingCardScheduler(prefs: prefs).reset()
         // Normal first-run onboarding (day 1)
         prefs.removeObjectForKey(PrefsKeys.IntroSeen)
         prefs.removeObjectForKey(PrefsKeys.OnboardingLastCardSeen)
-        prefs.removeObjectForKey(PrefsKeys.onboardingDripActiveDayCount)
+        prefs.removeObjectForKey(PrefsKeys.onboardingActiveDayCount)
         // Notification card state, so the day-2 decline / homepage card replay from scratch
         // prefs.removeObjectForKey(PrefsKeys.onboardingNotificationsDeclined)
         // prefs.removeObjectForKey(PrefsKeys.onboardingNotificationCardDismissed)
@@ -47,7 +47,7 @@ class AdvanceOnboardingDripSetting: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard let prefs = settings.profile?.prefs else { return }
-        OnboardingDripScheduler(prefs: prefs).simulateNextDay()
+        OnboardingCardScheduler(prefs: prefs).simulateNextDay()
         settingsDelegate?.askedToReload()
     }
 }
@@ -70,7 +70,7 @@ class JumpToOnboardingDripDaySetting: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard let prefs = settings.profile?.prefs else { return }
-        OnboardingDripScheduler(prefs: prefs).jump(toDay: day)
+        OnboardingCardScheduler(prefs: prefs).jump(toDay: day)
         // Mark first-run onboarding as seen so the drip (which only runs post-day-1) shows the card.
         prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
         settingsDelegate?.askedToReload()
