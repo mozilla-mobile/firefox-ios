@@ -78,6 +78,9 @@ In the future `ScreenState` classes will have the following rules:
 - There will be a clear top level division of responsibilities to the sub-reducers.
 - `@Copyable` macro will no longer be needed and reduce repetition and mental overhead when reading `ScreenState` files.
 
+### Neutral Consequences
+- N/A
+
 ### Negative Consequences
 
 - Developers used to the old architecture will have to navigate a level deeper to see functionality in sub-states in some cases.
