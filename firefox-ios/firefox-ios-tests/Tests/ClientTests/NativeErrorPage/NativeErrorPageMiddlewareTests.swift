@@ -13,7 +13,7 @@ final class NativeErrorPageMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockTabManager: MockTabManager!
     private var mockWindowManager: MockWindowManager!
     private var mockLogger: MockLogger!
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -86,14 +86,5 @@ final class NativeErrorPageMiddlewareTests: XCTestCase, StoreTestUtility {
                 ]
             )
         )
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

@@ -15,7 +15,7 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         tabManager = MockTabManager()
         DependencyHelperMock().bootstrapDependencies()
         mockVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
@@ -23,12 +23,10 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
     }
 
     override func tearDown() async throws {
-        profile.shutdown()
         profile = nil
         DependencyHelperMock().reset()
         mockVC = nil
         tabManager = nil
-        mockStore = nil
         resetStore()
         try await super.tearDown()
     }
@@ -110,14 +108,5 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
 
     func setupAppState() -> AppState {
         return AppState()
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

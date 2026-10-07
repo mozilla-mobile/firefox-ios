@@ -1,0 +1,18 @@
+# The configuration for the multiDayOnboardingFeature feature
+features:
+  multi-day-onboarding-feature:
+    description: >
+      Multi-day progressive onboarding
+    variables:
+      useMultiDayOnboarding:
+        description: >
+          Whether or not multi-day onboarding is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true

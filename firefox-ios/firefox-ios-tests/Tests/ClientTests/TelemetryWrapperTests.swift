@@ -18,7 +18,7 @@ class TelemetryWrapperTests: XCTestCase {
     @MainActor
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         Self.setupTelemetry(with: profile)
         Experiments.events.clearEvents()
     }

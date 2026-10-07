@@ -10,6 +10,7 @@ import QuickAnswersKit
 @testable import Client
 
 final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
+    var mockStore: MockStoreForMiddleware<AppState>!
     let storeUtilityHelper = StoreTestUtilityHelper()
 
     override func setUp() async throws {
@@ -561,13 +562,13 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let action = getNavigationBrowserAction(
             for: .tapOnQuickAnswersButton,
-            destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+            destination: .quickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
         )
         let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(
             newState.navigationDestination?.destination,
-            .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+            .quickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
         )
     }
 
@@ -591,13 +592,13 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let navigateAction = getNavigationBrowserAction(
             for: .tapOnQuickAnswersButton,
-            destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+            destination: .quickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
         )
         let navigatedState = reducer.legacyReducer(initialState, navigateAction)
 
         let handledAction = getNavigationBrowserAction(
             for: .navigationDestinationHandled,
-            destination: .quickAnswers(transitionType: .crossDissolve(sourceRect: .zero))
+            destination: .quickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
         )
         let handledState = reducer.legacyReducer(navigatedState, handledAction)
 
@@ -697,18 +698,5 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
                 ]
             )
         )
-    }
-
-    func setupStore() {
-        StoreTestUtilityHelper.setupStore(
-            with: setupAppState(),
-            middlewares: []
-        )
-    }
-
-    // In order to avoid flaky tests, we should reset the store
-    // similar to production
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

@@ -21,7 +21,6 @@ final class TabManagerRestoreScreenshotTests: TabManagerTestsBase, StoreTestUtil
 
     override func tearDown() async throws {
         resetStore()
-        mockStore = nil
         try await super.tearDown()
     }
 
@@ -70,16 +69,5 @@ final class TabManagerRestoreScreenshotTests: TabManagerTestsBase, StoreTestUtil
     @MainActor
     func setupAppState() -> AppState {
         return AppState()
-    }
-
-    @MainActor
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    @MainActor
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import UIKit
 import Common
+import ComponentLibrary
 
 /// This class is used as a custom Context Menu for long press action throughout the application.
 /// It was also used as the Main menu in our application, and the code is a bit tangled in here

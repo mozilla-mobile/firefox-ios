@@ -1655,15 +1655,25 @@ extension String {
         }
         public struct GenericError {
             public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.TitleLabel.v131",
+                key: "NativeErrorPage.GenericError.TitleLabel.v158",
                 tableName: "NativeErrorPage",
-                value: "Be careful. Something doesn’t look right.",
+                value: "Looks like there’s a problem with this site",
                 comment: "On error page, this is the title for generic error.")
-            public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v134",
+            public static let DescriptionSuffix = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v158",
                 tableName: "NativeErrorPage",
-                value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
-                comment: "On error page, this is the description for a generic error. %@ is the site url.")
+                value: "The site may be temporarily unavailable, it may have moved to a different address, or your firewall or proxy may be blocking the connection.\n\nCheck your connection settings and try again.",
+                comment: "Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again.")
+            public static let DescriptionPrefixWithURL = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v158.withURL",
+                tableName: "NativeErrorPage",
+                value: "%1$@ couldn’t connect to %2$@.",
+                comment: "First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL.")
+            public static let DescriptionPrefixWithoutURL = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v158.withoutURL",
+                tableName: "NativeErrorPage",
+                value: "%1$@ couldn’t reach the requested URL.",
+                comment: "First sentence of the generic error description when the requested URL is not available. %1$@ is the app name.")
         }
         public struct BadCertDomain {
             public static let AdvancedButton = MZLocalizedString(
@@ -1800,6 +1810,75 @@ extension String {
             tableName: "Onboarding",
             value: "Skip",
             comment: "Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page.")
+
+        public struct MultiDay {
+            public struct NotificationCard {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.MultiDay.NotificationCard.Title.v159",
+                    tableName: "Onboarding",
+                    value: "Stay in the Loop",
+                    comment: "Title for the onboarding card requesting permissions to send notifications.  “Stay in the loop” means “Remain informed”.")
+                public static let BodyText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.NotificationCard.BodyText.v159",
+                    tableName: "Onboarding",
+                    value: "Get %@ protection updates, tips, and your privacy report.",
+                    comment: "Body of the onboarding card requesting permissions to send notifications, with examples of notifications the user will receive. %@ is the name of the app (e.g., Firefox).")
+                public static let AcceptButtonText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.NotificationCard.AcceptButtonText.v159",
+                    tableName: "Onboarding",
+                    value: "Enable Notifications",
+                    comment: "Primary button on the onboarding card requesting permission to send notifications. Tapping this button accepts the permission request.")
+                public static let DeclineButtonText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.NotificationCard.DeclineButtonText.v159",
+                    tableName: "Onboarding",
+                    value: "Not Now",
+                    comment: "Secondary button on the onboarding card requesting permission to send notifications. Tapping this button declines the permission request.")
+            }
+            public struct HomeScreenNotificationsPopup {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.MultiDay.HomeScreenNotificationsPopup.Title.v159",
+                    tableName: "Onboarding",
+                    value: "Get fresh privacy features",
+                    comment: "Title of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on privacy features.")
+                public static let BodyText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.HomeScreenNotificationsPopup.BodyText.v159",
+                    tableName: "Onboarding",
+                    value: "Stay up to date on %@’s latest news.",
+                    comment: "Body of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on news. %@ is a placeholder for the app name (e.g., Firefox).")
+                public static let EnableButtonText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableButtonText.v158",
+                    tableName: "Onboarding",
+                    value: "Enable Notifications",
+                    comment: "Button on the home screen popup requesting notification permissions. Tapping this button accepts the permission request.")
+                public static let AccessibilityCloseButtonText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableCloseButtonText.v159",
+                    tableName: "Onboarding",
+                    value: "Close",
+                    comment: "Voiceover text for the close button on the home screen popup requesting notification permissions. Tapping this button dismisses the popup.")
+            }
+            public struct SyncCard {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.MultiDay.SyncCard.Title.v159",
+                    tableName: "Onboarding",
+                    value: "Sync Your Stuff",
+                    comment: "Title of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information).")
+                public static let BodyText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.SyncCard.BodyText.v159",
+                    tableName: "Onboarding",
+                    value: "Instantly get passwords, history, and more on any device.",
+                    comment: "Body of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information).")
+                public static let AcceptButtonText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.SyncCard.AcceptButtonText.v159",
+                    tableName: "Onboarding",
+                    value: "Sign in to Sync",
+                    comment: "Primary button on the onboarding card that prompts users to enable syncing for their account data. Tapping it directs the user sign into to their Mozilla account to access the feature.")
+                public static let DeclineButtonText = MZLocalizedString(
+                    key: "Onboarding.MultiDay.NotificationCard.DeclineButtonText.v159",
+                    tableName: "Onboarding",
+                    value: "Not Now",
+                    comment: "Secondary button on the onboarding card that prompts users to enable syncing for their account data. Tapping this button dismisses the prompt and closes the card.")
+            }
+        }
 
         public struct Modern {
             public struct Welcome {
@@ -2595,6 +2674,16 @@ extension String {
             tableName: "SearchHeaderTitle",
             value: "Google Search",
             comment: "When making a new search from the awesome bar, search results appear as the user write new letters in their search. This string will be used as a header for Google search results listed as suggestions.")
+        public static let ResultsAboveA11yAnnouncement = MZLocalizedString(
+            key: "Search.ResultsAbove.A11yAnnouncement.v158",
+            tableName: "Search",
+            value: "Suggestions above: %d",
+            comment: "When making a new search from the awesome bar, search results appear as the user write new letters in their search. This is the announcement VoiceOver reads to tell the user how many results are available, and that they are located above the address bar. %d is the number of results.")
+        public static let ResultsBelowA11yAnnouncement = MZLocalizedString(
+            key: "Search.ResultsBelow.A11yAnnouncement.v158",
+            tableName: "Search",
+            value: "Suggestions below: %d",
+            comment: "When making a new search from the awesome bar, search results appear as the user write new letters in their search. This is the announcement VoiceOver reads to tell the user how many results are available, and that they are located below the address bar. %d is the number of results.")
     }
 
     public struct SearchZero {
@@ -9789,6 +9878,18 @@ extension String {
                     value: "Limited Edition Wallpaper",
                     comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
             }
+        }
+        struct v158 {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.TitleLabel.v131",
+                tableName: "NativeErrorPage",
+                value: "Be careful. Something doesn’t look right.",
+                comment: "On error page, this is the title for generic error.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v134",
+                tableName: "NativeErrorPage",
+                value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
+                comment: "On error page, this is the description for a generic error. %@ is the site url.")
         }
     }
 }

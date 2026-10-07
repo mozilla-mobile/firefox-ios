@@ -214,8 +214,7 @@ final class TabTrayViewController: UIViewController,
                           StandardImageIdentifiers.Large.checkmark,
                           background: theme.colors.actionPrimary,
                           glyph: theme.colors.iconInverted)
-        syncTabButton.style = .prominent
-        syncTabButton.tintColor = glassTint
+        syncTabButton.tintColor = theme.colors.iconPrimary
     }
 
     @available(iOS 26.0, *)
@@ -495,6 +494,11 @@ final class TabTrayViewController: UIViewController,
     var shouldBeInPrivateTheme: Bool {
         let tabTrayState = store.state.componentState(TabTrayState.self, for: .tabsTray, window: windowUUID)
         return tabTrayState?.isPrivateMode ?? false
+    }
+
+    /// This override predates the Nova implementation and must remain unchanged.
+    var isSubjectToNovaPrivateOverride: Bool {
+        return false
     }
 
     func applyTheme() {

@@ -28,7 +28,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         mockGleanWrapper = MockGleanWrapper()
         mockRecentSearchProvider = MockRecentSearchProvider()
         tabManager = MockTabManager()
-        profile = MockProfile()
+        profile = makeProfile()
         summarizerConfigFactory = MockSummarizerConfigFactory()
         windowManager = MockWindowManager(wrappedManager: WindowManagerImplementation(), tabManager: tabManager)
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: windowManager,
@@ -484,7 +484,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         setIsHostedSummaryEnabled(true)
         let expectation = XCTestExpectation(description: "Store should dispatch an action")
         let subject = createSubject(manager: toolbarManager)
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         tabManager.selectedTab = tab
         summarizerConfigFactory.returnedConfig = .defaultConfig
@@ -898,7 +898,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func testDidTapButton_tapOnSummarizerButton_dispatchesShowSummarizer() throws {
         summarizerConfigFactory.returnedConfig = .defaultConfig
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         tabManager.selectedTab = tab
 
@@ -1443,16 +1443,5 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             a11yLabel: .AddressToolbar.GoogleLens.A11yLabel,
             a11yId: AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton
         )
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    // In order to avoid flaky tests, we should reset the store
-    // similar to production
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

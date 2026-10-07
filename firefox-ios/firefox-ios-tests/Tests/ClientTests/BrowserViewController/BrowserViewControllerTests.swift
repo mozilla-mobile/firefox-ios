@@ -588,82 +588,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(recordVisitManager.lastVisitObservation)
     }
 
-    // MARK: - updateInContentHomePanel
-
-    // NSURLErrorServerCertificateUntrusted alone is not enough to trigger the native
-    // error page — it also needs certerror=SSL_ERROR_BAD_CERT_DOMAIN in the URL.
-    func testUpdateInContentHomePanel_withNonBadCertDomainCertError_doesNotShowNativeErrorPage() {
-        setupNimbusNativeErrorPageTesting(
-            isEnabled: true,
-            noInternetConnectionErrorIsEnabled: true,
-            badCertDomainErrorPageIsEnabled: true
-        )
-        let subject = createSubject()
-        let certErrorCode = NSURLErrorServerCertificateUntrusted
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)"
-        )!
-
-        subject.updateInContentHomePanel(errorPageURL)
-
-        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
-    }
-
-    // A bad-cert-domain URL has both code=<cert error> AND certerror=SSL_ERROR_BAD_CERT_DOMAIN
-    func testUpdateInContentHomePanel_withBadCertDomainErrorURL_showsNativeErrorPage() {
-        setupNimbusNativeErrorPageTesting(
-            isEnabled: true,
-            noInternetConnectionErrorIsEnabled: true,
-            badCertDomainErrorPageIsEnabled: true
-        )
-        let subject = createSubject()
-        let certErrorCode = NSURLErrorServerCertificateUntrusted
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)&certerror=SSL_ERROR_BAD_CERT_DOMAIN"
-        )!
-
-        subject.updateInContentHomePanel(errorPageURL)
-
-        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 1)
-    }
-
-    func testUpdateInContentHomePanel_withNonCertErrorURL_doesNotShowNativeErrorPage() {
-        setupNimbusNativeErrorPageTesting(
-            isEnabled: true,
-            noInternetConnectionErrorIsEnabled: false,
-            badCertDomainErrorPageIsEnabled: true
-        )
-        let subject = createSubject()
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(NSURLErrorBadServerResponse)"
-        )!
-
-        subject.updateInContentHomePanel(errorPageURL)
-
-        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
-    }
-
-    func testUpdateInContentHomePanel_withCertErrorURL_andFeatureFlagDisabled_doesNotShowNativeErrorPage() {
-        setupNimbusNativeErrorPageTesting(
-            isEnabled: true,
-            noInternetConnectionErrorIsEnabled: true,
-            badCertDomainErrorPageIsEnabled: false
-        )
-        let subject = createSubject()
-        let certErrorCode = NSURLErrorServerCertificateUntrusted
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)"
-        )!
-
-        subject.updateInContentHomePanel(errorPageURL)
-
-        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
-    }
-
     // MARK: - rebuildNativeErrorPageStateIfNeeded
 
     func testRebuildNativeErrorPageStateIfNeeded_validWaybackURL_dispatchesReceivedError() {
@@ -837,17 +761,9 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         }
     }
 
-    private func setupNimbusNativeErrorPageTesting(
-        isEnabled: Bool,
-        noInternetConnectionErrorIsEnabled: Bool,
-        badCertDomainErrorPageIsEnabled: Bool
-    ) {
+    private func setupNimbusNativeErrorPageTesting(isEnabled: Bool) {
         FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
-            return NativeErrorPageFeature(
-                badCertDomainErrorPage: badCertDomainErrorPageIsEnabled,
-                enabled: isEnabled,
-                noInternetConnectionError: noInternetConnectionErrorIsEnabled
-            )
+            return NativeErrorPageFeature(enabled: isEnabled)
         }
     }
 
@@ -902,15 +818,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         )
         self.appState = appState
         return appState
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }
 

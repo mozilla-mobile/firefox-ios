@@ -11,13 +11,14 @@ import SummarizeKit
 @testable import Client
 
 final class AddressBarStateTests: XCTestCase, StoreTestUtility {
+    var mockStore: MockStoreForMiddleware<AppState>!
     let storeUtilityHelper = StoreTestUtilityHelper()
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockProfile: MockProfile!
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         setIsHostedSummarizerFeatureEnabled(enabled: false)
         setIsSummarizerLanguageExpansionEnabled(enabled: false)
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: MockTabManager())
@@ -1260,18 +1261,5 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
                 ]
             )
         )
-    }
-
-    func setupStore() {
-        StoreTestUtilityHelper.setupStore(
-            with: setupAppState(),
-            middlewares: [ToolbarMiddleware().toolbarProvider]
-        )
-    }
-
-    // In order to avoid flaky tests, we should reset the store
-    // similar to production
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

@@ -676,15 +676,6 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         appState = AppState()
         return appState
     }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
-    }
 }
 
 private final class FallbackTopSitesManager: TopSitesManagerInterface, @unchecked Sendable {

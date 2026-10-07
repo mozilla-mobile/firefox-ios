@@ -30,18 +30,13 @@ class NativeErrorPageHelper: FeatureFlaggable {
     }
 
     var error: NSError
-    private let cellularDataStateProvider: any CellularDataStateProvider
 
     var errorDescriptionItem: String {
         return error.localizedDescription
     }
 
-    init(
-        error: NSError,
-        cellularDataStateProvider: any CellularDataStateProvider = SystemCellularDataStateProvider.shared
-    ) {
+    init(error: NSError) {
         self.error = error
-        self.cellularDataStateProvider = cellularDataStateProvider
     }
 
     // MARK: - Static Helpers
@@ -66,14 +61,6 @@ class NativeErrorPageHelper: FeatureFlaggable {
     static func isBadCertDomainError(_ error: NSError) -> Bool {
         guard isCertificateErrorCode(error.code) else { return false }
         return certStreamErrorCode(from: error) == NativeGeckoCode.badCertDomain.rawValue
-    }
-
-    /// Centralized predicate for whether we should show the native UI for a wrong-host certificate error.
-    static func shouldShowNativeBadCertDomainErrorPage(
-        for error: NSError,
-        isOtherErrorPagesEnabled: Bool
-    ) -> Bool {
-        return isOtherErrorPagesEnabled && isBadCertDomainError(error)
     }
 
     /// Builds the full set of URL query items for an error page, including
@@ -124,11 +111,6 @@ class NativeErrorPageHelper: FeatureFlaggable {
     // MARK: - Instance Methods
 
     func parseErrorDetails() -> ErrorPageModel {
-        if featureFlagsProvider.isEnabled(.cellularDataRestrictedErrorPage) &&
-            cellularDataStateProvider.isRestrictedOfflineError(error) {
-            return .cellularDataRestricted
-        }
-
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
             switch error.code {
             case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
@@ -138,7 +120,7 @@ class NativeErrorPageHelper: FeatureFlaggable {
                  NSURLErrorServerCertificateHasUnknownRoot,
                  NSURLErrorServerCertificateNotYetValid:
                 return Self.buildCertificateErrorModel(for: error, url: url)
-            case _ where WaybackCodes.isWaybackCode(error.code):
+            case _ where WaybackCodes.isWaybackCode(error.code) && featureFlagsProvider.isEnabled(.waybackMachine):
                 return .wayback(WaybackErrorModel(url: url))
             default:
                 return .generic(GenericErrorModel(url: url))

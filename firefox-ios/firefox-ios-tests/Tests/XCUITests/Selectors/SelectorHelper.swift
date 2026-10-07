@@ -15,6 +15,7 @@ enum SelectorStrategy {
     case collectionViewById(String)
     case tableById(String)
     case textFieldById(String)
+    case textFieldContainingButtonByLabel(String) // text field that holds a button with this label
     case imageById(String)
     case otherInTablesById(String)
     case tableCellById(String)
@@ -79,6 +80,8 @@ extension Selector {
             return app.tables[value]
         case .textFieldById:
             return app.textFields[value]
+        case .textFieldContainingButtonByLabel(let label):
+            return app.textFields.containing(Self.buttonLabeled(label)).firstMatch
         case .imageById:
             return app.images[value]
         case .otherInTablesById(let id):
@@ -112,6 +115,10 @@ extension Selector {
         }
     }
 
+    private static func buttonLabeled(_ label: String) -> NSPredicate {
+        NSPredicate(format: "elementType == %d AND label == %@", XCUIElement.ElementType.button.rawValue, label)
+    }
+
     @MainActor
     func query(in app: XCUIApplication) -> XCUIElementQuery {
         switch strategy {
@@ -138,6 +145,8 @@ extension Selector {
             return app.tables.matching(identifier: value)
         case .textFieldById:
             return app.textFields.matching(identifier: value)
+        case .textFieldContainingButtonByLabel(let label):
+            return app.textFields.containing(Self.buttonLabeled(label))
         case .imageById:
             return app.images.matching(identifier: value)
         case .otherInTablesById(let id):

@@ -64,7 +64,7 @@ class BreachAlertsTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        self.breachAlertsManager = BreachAlertsManager(MockBreachAlertsClient(), profile: MockProfile())
+        self.breachAlertsManager = BreachAlertsManager(MockBreachAlertsClient(), profile: makeProfile())
     }
 
     override func tearDown() {

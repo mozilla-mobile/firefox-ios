@@ -186,7 +186,7 @@ final class BookmarksPanelViewModelTests: XCTestCase {
 
     func testGetSiteDetails_whenNotPinnedTopSite_returnsBasicSite() {
         let expectation = expectation(description: "get site details")
-        profile = MockProfile(
+        profile = makeProfile(
             injectedPinnedSites: MockPinnedSites(
                 stubbedIsPinnedtopSite: false
             )
@@ -206,7 +206,7 @@ final class BookmarksPanelViewModelTests: XCTestCase {
 
     func testGetSiteDetails_whenIsPinnedTopSite_returnsPinnedSite() {
         let expectation = expectation(description: "get site details")
-        profile = MockProfile(
+        profile = makeProfile(
             injectedPinnedSites: MockPinnedSites(
                 stubbedIsPinnedtopSite: true
             )

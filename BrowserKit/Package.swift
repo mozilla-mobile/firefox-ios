@@ -43,6 +43,9 @@ let package = Package(
         .library(
             name: "MLPAKit",
             targets: ["MLPAKit"]),
+        .library(
+            name: "VPNKit",
+            targets: ["VPNKit"]),
         .library(name: "SummarizeKit",
                  targets: ["SummarizeKit"]),
         .library(name: "JWTKit",
@@ -78,7 +81,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "8.12.0"),
+            exact: "8.13.0"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
@@ -254,6 +257,17 @@ let package = Package(
             swiftSettings: []
         ),
         .target(
+            name: "VPNKit",
+            dependencies: ["AppAttestKit", "Common", "Shared"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]),
+        .testTarget(
+            name: "VPNKitTests",
+            dependencies: ["VPNKit", "AppAttestKit", "TestKit"],
+            swiftSettings: []
+        ),
+        .target(
             name: "SummarizeKit",
             dependencies: [
                 "AppAttestKit",
@@ -304,7 +318,7 @@ let package = Package(
             ]),
         .target(
             name: "QuickAnswersKit",
-            dependencies: ["Common", "Shared", "MLPAKit", "LLMKit", "SiteImageView"],
+            dependencies: ["Common", "ComponentLibrary", "Shared", "MLPAKit", "LLMKit", "SiteImageView"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"])
             ]

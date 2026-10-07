@@ -34,7 +34,7 @@ final class EditFolderViewModelTests: XCTestCase {
         try await super.setUp()
         folderFetcher = MockFolderHierarchyFetcher()
         bookmarksSaver = MockBookmarksSaver()
-        profile = MockProfile()
+        profile = makeProfile()
         parentFolderSelector = MockParentFolderSelector()
     }
 

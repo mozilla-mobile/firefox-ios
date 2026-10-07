@@ -15,7 +15,7 @@ final class AppLaunchUtilTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         TelemetryContextualIdentifier.clearUserDefaults()
-        profile = MockProfile()
+        profile = makeProfile()
     }
 
     override func tearDown() async throws {

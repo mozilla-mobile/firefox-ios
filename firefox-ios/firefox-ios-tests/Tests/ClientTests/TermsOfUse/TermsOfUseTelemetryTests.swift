@@ -239,7 +239,7 @@ final class TermsOfUseTelemetryTests: XCTestCase {
     }
 
     func testSetUsageMetrics_ToU() {
-        let mockProfile = MockProfile()
+        let mockProfile = makeProfile()
         let acceptedDate = Date()
 
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)

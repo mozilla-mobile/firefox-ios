@@ -34,7 +34,7 @@ final class GroupedEditFolderViewModelTests: XCTestCase {
         try await super.setUp()
         folderFetcher = MockGroupedFolderHierarchyFetcher()
         bookmarksSaver = MockBookmarksSaver()
-        profile = MockProfile()
+        profile = makeProfile()
         parentFolderSelector = MockGroupedParentFolderSelector()
     }
 

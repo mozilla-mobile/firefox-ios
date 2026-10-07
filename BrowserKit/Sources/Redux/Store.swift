@@ -27,6 +27,10 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
             let deadSubscriptions = subscriptions.filter { $0.subscriber == nil }
             subscriptions.subtract(deadSubscriptions)
 
+            // Each subscription receives the same old/new pair, so check equality once here
+            // to avoid looping over subscriptions unnecessarily
+            guard oldValue != state else { return }
+
             // Now safely iterate through live subscriptions
             subscriptions.forEach {
                 $0.newValues(oldState: oldValue, newState: state)

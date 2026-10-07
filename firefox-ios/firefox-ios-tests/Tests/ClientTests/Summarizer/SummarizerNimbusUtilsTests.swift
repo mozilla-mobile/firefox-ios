@@ -13,7 +13,7 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
         // Set features to default values
         setHostedSummarizerFeature()

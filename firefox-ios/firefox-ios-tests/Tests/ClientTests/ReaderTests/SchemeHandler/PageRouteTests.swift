@@ -173,10 +173,10 @@ final class PageRouteTests: XCTestCase {
 
     private func makeSubject(
         cache: ReaderModeCache = MockReaderModeCache(),
-        profile: Profile = MockProfile(),
+        profile: Profile? = nil,
         extractor: @escaping PageRoute.Extractor
     ) -> PageRoute {
-        return PageRoute(cache: cache, profile: profile, extractor: extractor)
+        return PageRoute(cache: cache, profile: profile ?? makeProfile(), extractor: extractor)
     }
 
     // Fails the test if the extractor is called — used for tests that should

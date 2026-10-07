@@ -120,7 +120,7 @@ class MockBrowserViewController: BrowserViewController {
         openURLInNewTabURL = url
         openURLInNewTabIsPrivate = isPrivate
         openURLInNewTabCount += 1
-        return Tab(profile: MockProfile(), windowUUID: windowUUID)
+        return Tab(profile: profile, windowUUID: windowUUID)
     }
 
     override func closeAllPrivateTabs() {

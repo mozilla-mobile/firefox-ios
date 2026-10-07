@@ -26,6 +26,8 @@ public final class QuickAnswersViewController: UIViewController,
         static let contentViewTopPadding: CGFloat = 32.0
         static let contentViewBottomPadding: CGFloat = 12.0
         static let contentViewHorizontalPadding: CGFloat = 24.0
+        static let presentationSlideOffset: CGFloat = 50.0
+        static let presentationCloseButtonOffset: CGFloat = -20.0
     }
 
     // MARK: - Properties
@@ -47,7 +49,7 @@ public final class QuickAnswersViewController: UIViewController,
         )
     }
     private let contentView: QuickAnswersContentView = .build()
-    private let transitionAnimator: CrossDissolveTransitionAnimator?
+    private let transitionAnimator: SourceRevealTransitionAnimator?
 
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
@@ -105,13 +107,12 @@ public final class QuickAnswersViewController: UIViewController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.stringsConfiguration = stringsConfiguration
-        // The custom transition animator is only used for the cross dissolve transition; the form sheet
+        // The custom transition animator is only used for the source reveal transition; the form sheet
         // relies on the system presentation.
-        if case let .crossDissolve(sourceRect) = transitionType {
-            self.transitionAnimator = CrossDissolveTransitionAnimator(
-                themeManager: themeManager,
-                windowUUID: windowUUID,
-                sourceRect: sourceRect
+        if case let .sourceReveal(sourceRect) = transitionType {
+            self.transitionAnimator = SourceRevealTransitionAnimator(
+                sourceRect: sourceRect,
+                isOptInVisible: viewModel.isOptInRequired
             )
         } else {
             self.transitionAnimator = nil
@@ -232,10 +233,28 @@ public final class QuickAnswersViewController: UIViewController,
         )
     }
 
+    // MARK: - Presentation transition
+    func prepareForPresentationTransition() {
+        contentView.prepareForPresentationTransition()
+        backgroundRecordEffect.view.alpha = 0.0
+        backgroundRecordEffect.view.transform = CGAffineTransform(translationX: 0.0,
+                                                                  y: UX.presentationSlideOffset)
+        closeButton.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationCloseButtonOffset)
+        closeButton.alpha = 0.0
+    }
+
+    func applyPresentationTransition(isOptInVisible: Bool) {
+        contentView.applyPresentationTransition(isOptInVisible: isOptInVisible)
+        backgroundRecordEffect.view.alpha = 1.0
+        backgroundRecordEffect.view.transform = .identity
+        closeButton.alpha = 1.0
+        closeButton.transform = .identity
+    }
+
     private func fadeBackgroundEffectForResult() {
         UIView.animate(withDuration: UX.recordWaveEffectFadeDuration,
-                       delay: UX.recordWaveEffectFadeDelay) {
-            self.backgroundRecordEffect.view.alpha = UX.recordWaveEffectResultOpacity
+                       delay: UX.recordWaveEffectFadeDelay) { [self] in
+            backgroundRecordEffect.view.alpha = UX.recordWaveEffectResultOpacity
         }
     }
 

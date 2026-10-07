@@ -552,8 +552,22 @@ class AppSettingsTableViewController: SettingsTableViewController,
         hiddenDebugOptions.append(ResetTipsSetting(settings: self))
         hiddenDebugOptions.append(ChangeMLPAEndpointSetting(settings: self))
         hiddenDebugOptions.append(QuickAnswersModelSetting(settings: self))
+        hiddenDebugOptions.append(ChangeVPNEndpointSetting(settings: self))
+        hiddenDebugOptions.append(TriggerVPNAttestationSetting(settings: self))
+        hiddenDebugOptions.append(RefreshVPNSessionSetting(settings: self))
+        hiddenDebugOptions.append(FetchVPNProxyTokenSetting(settings: self))
+        hiddenDebugOptions.append(ClearVPNSessionSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
+        if featureFlagsProvider.isEnabled(.multiDayOnboarding) {
+            hiddenDebugOptions.append(AdvanceOnboardingDripSetting(settings: self, settingsDelegate: self))
+            hiddenDebugOptions.append(ResetOnboardingDripSetting(settings: self, settingsDelegate: self))
+            for day in OnboardingCardSchedule.cardsByDay.keys.sorted() {
+                hiddenDebugOptions.append(
+                    JumpToOnboardingDripDaySetting(settings: self, settingsDelegate: self, day: day)
+                )
+            }
+        }
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
         #endif
 

@@ -21,7 +21,7 @@ class SearchEnginesManagerTests: XCTestCase {
         try await super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
         mockSearchEngineProvider = MockSearchEngineProvider()
         searchEnginesManager = SearchEnginesManager(
             prefs: profile.prefs,
