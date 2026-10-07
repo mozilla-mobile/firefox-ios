@@ -103,6 +103,32 @@ class SearchEnginesManagerTests: XCTestCase {
         // Persistence can't be tested without the fixture changing.
     }
 
+    func testDefaultEngine_withDuplicateEngineName_keepsBothEngines() {
+        guard let testImage = UIImage(named: "wikipedia", in: Bundle(for: SearchEnginesManagerTests.self), with: nil) else {
+            XCTFail("Check that image is bundled for testing")
+            return
+        }
+
+        let originalEngine = searchEnginesManager.orderedEngines[0]
+        let duplicateEngine = OpenSearchEngine(engineID: "DuplicateEngine",
+                                               shortName: originalEngine.shortName,
+                                               telemetrySuffix: nil,
+                                               image: testImage,
+                                               searchTemplate: "http://mozilla.org/find?q={searchTerms}",
+                                               suggestTemplate: nil,
+                                               isCustomEngine: true)
+        searchEnginesManager.addSearchEngine(duplicateEngine)
+        let engineCount = searchEnginesManager.orderedEngines.count
+
+        searchEnginesManager.defaultEngine = duplicateEngine
+
+        XCTAssertEqual(searchEnginesManager.orderedEngines.count, engineCount)
+        XCTAssertEqual(searchEnginesManager.orderedEngines[0].engineID, duplicateEngine.engineID)
+        XCTAssertTrue(searchEnginesManager.orderedEngines.contains { $0.engineID == originalEngine.engineID })
+        XCTAssertTrue(searchEnginesManager.isEngineDefault(duplicateEngine))
+        XCTAssertFalse(searchEnginesManager.isEngineDefault(originalEngine))
+    }
+
     func testOrderedEngines() {
         // Persistence can't be tested without the default fixture changing.
         // Remaining engines should be appended in alphabetical order.
