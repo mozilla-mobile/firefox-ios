@@ -55,15 +55,38 @@ final class DocumentPickerScreen {
     }
 
     private func tapSaveWhenEnabled(timeout: TimeInterval = TIMEOUT_LONG) {
+        if waitForEnabledSaveButton(timeout: TIMEOUT_PICKER_PROBE) == nil {
+            openOnDeviceLocation()
+        }
+        guard let button = waitForEnabledSaveButton(timeout: timeout) else {
+            XCTFail("The document picker's Save button never became enabled in \(timeout) seconds. \(pickerState)")
+            return
+        }
+        button.tap()
+    }
+
+    private func waitForEnabledSaveButton(timeout: TimeInterval) -> XCUIElement? {
         let deadline = Date().addingTimeInterval(timeout)
         repeat {
             if let button = onScreenSaveButton, button.isEnabled, button.isHittable {
-                button.tap()
-                return
+                return button
             }
             usleep(250_000)
         } while Date() < deadline
-        XCTFail("The document picker's Save button never became enabled in \(timeout) seconds. \(pickerState)")
+        return nil
+    }
+
+    /// The picker reopens on the location it was last left in, which can refuse saves (e.g. iCloud Drive
+    /// without an account), so walk back to the Browse list and pick the device's own storage.
+    private func openOnDeviceLocation() {
+        let location = sel.ON_DEVICE_LOCATION.element(in: app)
+        let backButton = sel.BACK_BUTTON.element(in: app)
+        for _ in 1...5 where !location.exists && backButton.exists {
+            backButton.tap()
+            _ = location.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false)
+        }
+        guard location.exists else { return }
+        location.tap()
     }
 
     /// Jenkins can match a "Save" button with no valid frame, which is never hittable, so only
@@ -79,7 +102,9 @@ final class DocumentPickerScreen {
     private var pickerState: String {
         let saveMatches = sel.SAVE_BUTTON.query(in: app).allElementsBoundByIndex
             .map { "frame: \($0.frame), enabled: \($0.isEnabled)" }
-        let titles = app.navigationBars.allElementsBoundByIndex.map(\.identifier)
+        let titles = app.navigationBars.allElementsBoundByIndex.map { bar in
+            "\(bar.identifier) \(bar.staticTexts.allElementsBoundByIndex.map(\.label))"
+        }
         let alerts = app.alerts.allElementsBoundByIndex.map(\.label)
         return "Save matches: \(saveMatches), navigation bars: \(titles), alerts: \(alerts)"
     }
