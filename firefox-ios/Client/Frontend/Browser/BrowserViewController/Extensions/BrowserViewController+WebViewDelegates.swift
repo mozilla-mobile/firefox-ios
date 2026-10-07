@@ -1458,10 +1458,12 @@ private extension BrowserViewController {
     }
 
     // Handle MarketPlaceKitNavigation
-    // Allow only explicit user tap on a top level link
     private func shouldAllowMarketplaceKitNavigation(navigationType: WKNavigationType,
-                                                     isMainFrame: Bool) -> Bool {
-        return navigationType == .linkActivated && isMainFrame
+                                                     isMainFrame: Bool,
+                                                     url: URL? = nil) -> Bool {
+        guard isMainFrame else { return false }
+        // .linkActivated = real tap; .other = JS-initiated / redirect (altstore.io uses this).
+        return navigationType == .linkActivated || navigationType == .other
     }
 
     // Recognize a iTunes Store URL. These all trigger the native apps. Note that appstore.com and phobos.apple.com
