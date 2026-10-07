@@ -185,6 +185,11 @@ final class LoginSettingsScreen {
         } while passcode.exists && attempts > 0
     }
 
+    /// The simulator has no Face ID enrolled, so device owner authentication always asks for the passcode.
+    func assertPasscodePromptShown(timeout: TimeInterval = TIMEOUT_LONG) {
+        BaseTestCase().mozWaitForElementToExist(sel.PASSCODE_FIELD.element(in: springboard), timeout: timeout)
+    }
+
     func assertLoginCreatedFirstMatch() {
         let firstStaticText = sel.LOGIN_LIST.element(in: app).staticTexts.firstMatch
         BaseTestCase().mozWaitForElementToExist(firstStaticText)
