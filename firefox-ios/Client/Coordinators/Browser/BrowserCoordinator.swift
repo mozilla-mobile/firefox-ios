@@ -1553,9 +1553,9 @@ final class BrowserCoordinator: BaseCoordinator,
         browserViewController.view.endEditing(true)
         browserViewController.dismissUrlBar()
         browserViewController.contentContainer.removeContent()
-        browserViewController.header.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        browserViewController.overKeyboardContainer.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        browserViewController.bottomContainer.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        browserViewController.header.removeAllArrangedViews()
+        browserViewController.overKeyboardContainer.removeAllArrangedViews()
+        browserViewController.bottomContainer.removeAllArrangedViews()
         browserViewController.removeFromParent()
     }
 
