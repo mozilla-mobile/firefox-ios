@@ -555,6 +555,19 @@ final class SettingsCoordinator: BaseCoordinator,
         router.push(viewController)
     }
 
+    func pressedAdBlockerExceptions() {
+        let viewController = AdBlockerExceptionsViewController(windowUUID: windowUUID)
+        router.push(viewController)
+    }
+
+    func pressedRegionalAdBlockLists() {
+        let viewController = AdBlockerRegionalListsViewController(
+            windowUUID: windowUUID,
+            prefs: profile.prefs
+        )
+        router.push(viewController)
+    }
+
     // MARK: - SupportSettingsDelegate
 
     func pressedOpenSupportPage(url: URL) {

@@ -3067,6 +3067,120 @@ extension String {
                     comment: "Link text below the Ad Blocker toggle description that opens a support page with more information."
                 )
             }
+
+            public struct Exceptions {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.Title.v157",
+                    tableName: "Settings",
+                    value: "Exceptions",
+                    comment: "Title for the Ad Blocker exceptions screen, where users manage sites that are exempt from ad blocking."
+                )
+                public static let EmptyStateDescription = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.EmptyState.v157",
+                    tableName: "Settings",
+                    value: "Sites where you've turned off ad blocking appear here.",
+                    comment: "Description shown on the Ad Blocker exceptions screen when no exceptions have been added."
+                )
+                public static let FooterDescription = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.Footer.v157",
+                    tableName: "Settings",
+                    value: "Ad blocking is off on these sites.",
+                    comment: "Footer text shown above the list of exception sites on the Ad Blocker exceptions screen."
+                )
+                public static let FooterLearnMore = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.FooterLearnMore.v157",
+                    tableName: "Settings",
+                    value: "Learn more…",
+                    comment: "Link text in the footer of the Ad Blocker exceptions screen that opens a support page."
+                )
+                public static let AddAlertTitle = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.AddAlert.Title.v157",
+                    tableName: "Settings",
+                    value: "Add Exception",
+                    comment: "Title of the alert dialog for adding a new ad blocker exception site."
+                )
+                public static let AddAlertMessage = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.AddAlert.Message.v157",
+                    tableName: "Settings",
+                    value: "Enter a site address.",
+                    comment: "Message in the alert dialog prompting the user to enter a website address for the ad blocker exception."
+                )
+                public static let AddAlertPlaceholder = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.AddAlert.Placeholder.v157",
+                    tableName: "Settings",
+                    value: "e.g. example.com",
+                    comment: "Placeholder text in the text field of the Add Exception alert dialog."
+                )
+                public static let AddAlertSave = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.AddAlert.Save.v157",
+                    tableName: "Settings",
+                    value: "Save",
+                    comment: "Button label to save a new ad blocker exception site."
+                )
+                public static let AddAlertCancel = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.AddAlert.Cancel.v157",
+                    tableName: "Settings",
+                    value: "Cancel",
+                    comment: "Button label to cancel adding a new ad blocker exception site."
+                )
+                public static let DeleteConfirmationTitle = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.DeleteConfirmation.Title.v157",
+                    tableName: "Settings",
+                    value: "Delete exceptions?",
+                    comment: "Title of the confirmation alert when deleting multiple ad blocker exception sites."
+                )
+                public static let DeleteConfirmationButton = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.DeleteConfirmation.Delete.v157",
+                    tableName: "Settings",
+                    value: "Delete",
+                    comment: "Button label to confirm deleting ad blocker exception sites."
+                )
+                public static let SelectAllButton = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.SelectAll.v157",
+                    tableName: "Settings",
+                    value: "Select All",
+                    comment: "Button label to select all sites in the ad blocker exceptions list for deletion."
+                )
+                public static let DeselectAllButton = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.DeselectAll.v157",
+                    tableName: "Settings",
+                    value: "Deselect All",
+                    comment: "Button label to deselect all sites in the ad blocker exceptions list."
+                )
+                public static let EditButton = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.Edit.v157",
+                    tableName: "Settings",
+                    value: "Edit",
+                    comment: "Button label to enter edit mode on the ad blocker exceptions list."
+                )
+                public static let DoneButton = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.Exceptions.Done.v157",
+                    tableName: "Settings",
+                    value: "Done",
+                    comment: "Button label to exit edit mode on the ad blocker exceptions list."
+                )
+            }
+
+            public struct RegionalLists {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.RegionalLists.Title.v157",
+                    tableName: "Settings",
+                    value: "Regional Lists",
+                    comment: "Title for the regional ad-blocking lists screen, where users enable extra lists for specific languages or regions."
+                )
+                public static let EmptyStateDescription = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.RegionalLists.EmptyState.v157",
+                    tableName: "Settings",
+                    value: "No regional lists are available at this time.",
+                    comment: "Description shown on the regional ad-blocking lists screen when no lists are available."
+                )
+                public static let FooterDescription = MZLocalizedString(
+                    key: "Settings.Browsing.AdBlocker.RegionalLists.Footer.v157",
+                    tableName: "Settings",
+                    value: "Enable additional lists to block ads specific to certain languages or regions.",
+                    comment: "Footer text shown below the list of regional ad-blocking lists explaining their purpose."
+                )
+            }
         }
 
         public struct AIControls {

@@ -1769,7 +1769,15 @@
 		C7F538D52E5E66120089DEC7 /* ShortcutsLibraryMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F538D42E5E66120089DEC7 /* ShortcutsLibraryMiddlewareTests.swift */; };
 		C7F5683DC329455783CCB143 /* RemoteSettingsServiceSyncCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5683DC329455783CCB141 /* RemoteSettingsServiceSyncCoordinatorTests.swift */; };
 		C7F5683DC329455783CCB144 /* MockRemoteSettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5683DC329455783CCB142 /* MockRemoteSettingsService.swift */; };
+		C484F415B36D99E8358BD8A2 /* AdBlockerExceptionsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE48A1C84CB9514C1B9BEF5E /* AdBlockerExceptionsStorage.swift */; };
+		35CEDCA7F337E85D05530BD7 /* AdBlockerExceptionsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C489B50C1F6DF1D15E6720E /* AdBlockerExceptionsSetting.swift */; };
+		915281B64FA737FBC13DDEC1 /* AdBlockerExceptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC771A4F33D009E874F5BA1 /* AdBlockerExceptionsViewController.swift */; };
+		F2E1D0C9B8A7F6E5D4C3B2A1 /* AdBlockerRegionalListsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F2 /* AdBlockerRegionalListsSetting.swift */; };
+		A3F2E1D0C9B8A7F6E5D4C3B2 /* AdBlockerRegionalListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A7B8C9D0E1F2A3 /* AdBlockerRegionalListsViewController.swift */; };
 		C7F5684AA329455783CCB200 /* AdBlockerSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5684AA329455783CCB201 /* AdBlockerSetting.swift */; };
+		27FD3AB6E57310A87A8D2E0E /* AdBlockerExceptionsStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D435A3880AA387280F2BBB78 /* AdBlockerExceptionsStorageTests.swift */; };
+		EBF50177E590E8C7AB410C20 /* AdBlockerExceptionsSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685B6EDA80C052AC02C4CB55 /* AdBlockerExceptionsSettingTests.swift */; };
+		B4A3F2E1D0C9B8A7F6E5D4C3 /* AdBlockerRegionalListsSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D4E5F6A7B8C9D0E1F2A3B4 /* AdBlockerRegionalListsSettingTests.swift */; };
 		C7F5684BA329455783CCB300 /* AdBlockerSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5684BA329455783CCB301 /* AdBlockerSettingTests.swift */; };
 		C7FA9AE62E4B7D0D004F2CA1 /* TopSitesSectionLayoutProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA9AE52E4B7D0D004F2CA1 /* TopSitesSectionLayoutProvider.swift */; };
 		C7FA9E1E2E4BD4D1004F2CA1 /* AddShortcutsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA9E1D2E4BD4D1004F2CA1 /* AddShortcutsSetting.swift */; };
@@ -11053,7 +11061,15 @@
 		C7F538D42E5E66120089DEC7 /* ShortcutsLibraryMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryMiddlewareTests.swift; sourceTree = "<group>"; };
 		C7F5683DC329455783CCB141 /* RemoteSettingsServiceSyncCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSettingsServiceSyncCoordinatorTests.swift; sourceTree = "<group>"; };
 		C7F5683DC329455783CCB142 /* MockRemoteSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRemoteSettingsService.swift; sourceTree = "<group>"; };
+		EE48A1C84CB9514C1B9BEF5E /* AdBlockerExceptionsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlockerExceptionsStorage.swift; sourceTree = "<group>"; };
+		8C489B50C1F6DF1D15E6720E /* AdBlockerExceptionsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlockerExceptionsSetting.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A7B8C9D0E1F2 /* AdBlockerRegionalListsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlockerRegionalListsSetting.swift; sourceTree = "<group>"; };
+		3AC771A4F33D009E874F5BA1 /* AdBlockerExceptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlockerExceptionsViewController.swift; sourceTree = "<group>"; };
+		B2C3D4E5F6A7B8C9D0E1F2A3 /* AdBlockerRegionalListsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlockerRegionalListsViewController.swift; sourceTree = "<group>"; };
 		C7F5684AA329455783CCB201 /* AdBlockerSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlockerSetting.swift; sourceTree = "<group>"; };
+		D435A3880AA387280F2BBB78 /* AdBlockerExceptionsStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlockerExceptionsStorageTests.swift; sourceTree = "<group>"; };
+		685B6EDA80C052AC02C4CB55 /* AdBlockerExceptionsSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlockerExceptionsSettingTests.swift; sourceTree = "<group>"; };
+		C3D4E5F6A7B8C9D0E1F2A3B4 /* AdBlockerRegionalListsSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlockerRegionalListsSettingTests.swift; sourceTree = "<group>"; };
 		C7F5684BA329455783CCB301 /* AdBlockerSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlockerSettingTests.swift; sourceTree = "<group>"; };
 		C7FA9AE52E4B7D0D004F2CA1 /* TopSitesSectionLayoutProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesSectionLayoutProvider.swift; sourceTree = "<group>"; };
 		C7FA9E1D2E4BD4D1004F2CA1 /* AddShortcutsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddShortcutsSetting.swift; sourceTree = "<group>"; };
@@ -13288,6 +13304,8 @@
 				ED8B49B72D6CF2AE00743444 /* AppIconSelection */,
 				2152473D2D6E4A4A0078D78A /* AutoFillPasswordSettingsViewController.swift */,
 				8A15AB742D5FDB80008BB03C /* AutoplaySettingsViewController.swift */,
+				3AC771A4F33D009E874F5BA1 /* AdBlockerExceptionsViewController.swift */,
+				B2C3D4E5F6A7B8C9D0E1F2A3 /* AdBlockerRegionalListsViewController.swift */,
 				8ADED55B2D6679B200345293 /* BrowsingSettingsViewController.swift */,
 				0B62EFD11AD63CD100ACB9CD /* Clearables.swift */,
 				D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */,
@@ -14600,6 +14618,8 @@
 				DB58110000000000000003 /* NavigationBarMiddleButtonSelectionViewTests.swift */,
 				FBADD1700000000000000001 /* LaunchPairingFromURLSettingTests.swift */,
 				C2FA00322FFF000100AD1FBD /* ResetTipsSettingTests.swift */,
+				685B6EDA80C052AC02C4CB55 /* AdBlockerExceptionsSettingTests.swift */,
+				C3D4E5F6A7B8C9D0E1F2A3B4 /* AdBlockerRegionalListsSettingTests.swift */,
 				C7F5684BA329455783CCB301 /* AdBlockerSettingTests.swift */,
 				BGA100010000000100000002 /* BackgroundAudioHelperTests.swift */,
 				BGA100010000000100000004 /* BackgroundAudioSettingTests.swift */,
@@ -14618,6 +14638,8 @@
 			children = (
 				AA25A74D2FB4C88200A55859 /* QuickAnswersSetting.swift */,
 				C7F5684AA329455783CCB201 /* AdBlockerSetting.swift */,
+				8C489B50C1F6DF1D15E6720E /* AdBlockerExceptionsSetting.swift */,
+				A1B2C3D4E5F6A7B8C9D0E1F2 /* AdBlockerRegionalListsSetting.swift */,
 				61DD72D02F5936AF002BFEA6 /* AIControlsSetting.swift */,
 				AAD861A72E9E748100F6E0E0 /* TranslationSetting.swift */,
 				BCBE058B2E3A871B004B6039 /* SummarizeSetting.swift */,
@@ -15107,6 +15129,7 @@
 			isa = PBXGroup;
 			children = (
 				391C28153007C38D00833828 /* TrackerBlockStats */,
+				EE48A1C84CB9514C1B9BEF5E /* AdBlockerExceptionsStorage.swift */,
 				EBB894F8219398E500EB91A0 /* ContentBlocker.swift */,
 				EBB894F9219398E500EB91A0 /* ContentBlocker+Safelist.swift */,
 				EBB894F7219398E500EB91A0 /* TabContentBlocker.swift */,
@@ -17594,6 +17617,7 @@
 				391C281B3007C3D700833828 /* TrackingProtectionPageStatsTests.swift */,
 				8A86DAD7277298DE00D7BFFF /* ClosedTabsStoreTests.swift */,
 				C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */,
+				D435A3880AA387280F2BBB78 /* AdBlockerExceptionsStorageTests.swift */,
 				ADB10C102D900000001AB003 /* ASAdBlockerListFetcherTests.swift */,
 				8A93F86329D37314004159D9 /* Coordinators */,
 				FB16062100000000000000D0 /* GoogleLens */,
@@ -20463,6 +20487,11 @@
 				8AB893A62C73AFBA00DAEED7 /* MockLoginProvider.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
 				211046C92A7ADE9000A7309F /* BlockPopupSetting.swift in Sources */,
+				C484F415B36D99E8358BD8A2 /* AdBlockerExceptionsStorage.swift in Sources */,
+				35CEDCA7F337E85D05530BD7 /* AdBlockerExceptionsSetting.swift in Sources */,
+				915281B64FA737FBC13DDEC1 /* AdBlockerExceptionsViewController.swift in Sources */,
+				F2E1D0C9B8A7F6E5D4C3B2A1 /* AdBlockerRegionalListsSetting.swift in Sources */,
+				A3F2E1D0C9B8A7F6E5D4C3B2 /* AdBlockerRegionalListsViewController.swift in Sources */,
 				C7F5684AA329455783CCB200 /* AdBlockerSetting.swift in Sources */,
 				1DAEEE002D93532900F4B42D /* UIImage+RenderingUtilities.swift in Sources */,
 				8A3233FC286270CF003E1C33 /* FxBookmarkNode.swift in Sources */,
@@ -21166,6 +21195,9 @@
 				8A827E362C20CB5B008D5E3C /* MicrosurveyPromptMiddlewareTests.swift in Sources */,
 				0B6AB0412DCA3CB900F03AF6 /* DocumentLoggerTests.swift in Sources */,
 				215360652D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift in Sources */,
+				27FD3AB6E57310A87A8D2E0E /* AdBlockerExceptionsStorageTests.swift in Sources */,
+				EBF50177E590E8C7AB410C20 /* AdBlockerExceptionsSettingTests.swift in Sources */,
+				B4A3F2E1D0C9B8A7F6E5D4C3 /* AdBlockerRegionalListsSettingTests.swift in Sources */,
 				C7F5684BA329455783CCB300 /* AdBlockerSettingTests.swift in Sources */,
 				BGA100010000000100000001 /* BackgroundAudioHelperTests.swift in Sources */,
 				BGA100010000000100000003 /* BackgroundAudioSettingTests.swift in Sources */,

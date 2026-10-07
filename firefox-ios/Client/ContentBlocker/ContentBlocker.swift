@@ -182,6 +182,7 @@ class ContentBlocker: Notifiable {
             }
             Task { @MainActor [weak self] in
                 await self?.reloadAdBlockerList()
+                await self?.reloadRegionalLists()
                 self?.prefsChanged()
             }
         default:
@@ -502,12 +503,41 @@ extension ContentBlocker {
               let range = json.range(of: "]", options: .backwards) else {
             return nil
         }
-        return json.replacingCharacters(in: range, with: safelistAsJSON() + "]")
+        let exceptionsJSON = AdBlockerExceptionsStorage.shared.exceptionsAsJSON()
+        return json.replacingCharacters(in: range, with: safelistAsJSON() + exceptionsJSON + "]")
     }
 
     private func compileAdBlockerList(_ encoded: String) async {
-        let identifier = ASAdBlockerListFetcher.adBlockerRecordID
-        // If the hash of the encoded list matches the cached hash, we can skip compilation and setup.
+        await compileRuleList(identifier: ASAdBlockerListFetcher.adBlockerRecordID, encoded: encoded)
+    }
+
+    // MARK: - Regional Lists
+
+    func reloadRegionalLists(enabledIDs: [String]? = nil) async {
+        let enabled = enabledIDs
+            ?? UserDefaults.standard.stringArray(forKey: PrefsKeys.EnabledRegionalAdBlockLists)
+            ?? []
+
+        for recordID in enabled {
+            guard let json = await adBlockerListFetcher.fetchRegionalListJSON(recordID: recordID) else {
+                logger.log("Skipping regional list \(recordID), not available.",
+                           level: .info,
+                           category: .adblock)
+                continue
+            }
+            await compileRuleList(identifier: recordID, encoded: json)
+        }
+    }
+
+    func removeRegionalList(identifier: String) async {
+        guard let ruleStore else { return }
+        UserDefaults.standard.removeObject(forKey: identifier)
+        try? await ruleStore.removeContentRuleList(forIdentifier: identifier)
+    }
+
+    // MARK: - Shared Compilation
+
+    private func compileRuleList(identifier: String, encoded: String) async {
         let hash = calculateHash(for: Data(encoded.utf8))
         if let hash, hash == UserDefaults.standard.string(forKey: identifier) {
             return
@@ -523,7 +553,7 @@ extension ContentBlocker {
                 UserDefaults.standard.set(hash, forKey: identifier)
             }
         } catch {
-            logger.log("Ad-blocker list compile failed: \(error.localizedDescription)",
+            logger.log("Rule list compile failed for \(identifier): \(error.localizedDescription)",
                        level: .warning,
                        category: .adblock)
         }

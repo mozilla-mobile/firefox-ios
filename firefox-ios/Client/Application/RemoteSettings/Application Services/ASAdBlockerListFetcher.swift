@@ -10,6 +10,12 @@ protocol AdBlockerListFetcherProtocol: Sendable {
     /// Remote Settings collection.
     /// - Returns: the WebKit content-rule JSON as a string, or nil if it could not be fetched.
     func fetchAdBlockerListJSON() async -> String?
+
+    /// Returns the record IDs of all available regional ad-block lists (e.g. `ad-block-regional-de`).
+    func fetchAvailableRegionalListIDs() async -> [String]
+
+    /// Fetches the WebKit content-rule JSON for a single regional ad-block record.
+    func fetchRegionalListJSON(recordID: String) async -> String?
 }
 
 /// Fetches the single `ad-blocker` record (and its attachment) from the
@@ -45,9 +51,9 @@ final class ASAdBlockerListFetcher: AdBlockerListFetcherProtocol {
         self.logger = logger
     }
 
+    static let regionalRecordPrefix = "ad-block-regional-"
+
     func fetchAdBlockerListJSON() async -> String? {
-        // Bridge the blocking work onto `fetchQueue` so the synchronous FFI calls never block the
-        // caller's thread (which may be the main actor) or a cooperative-pool thread.
         return await withCheckedContinuation { continuation in
             Self.fetchQueue.async { [self] in
                 continuation.resume(returning: loadAdBlockerListJSON())
@@ -55,7 +61,41 @@ final class ASAdBlockerListFetcher: AdBlockerListFetcherProtocol {
         }
     }
 
+    func fetchAvailableRegionalListIDs() async -> [String] {
+        return await withCheckedContinuation { continuation in
+            Self.fetchQueue.async { [self] in
+                continuation.resume(returning: loadAvailableRegionalListIDs())
+            }
+        }
+    }
+
+    func fetchRegionalListJSON(recordID: String) async -> String? {
+        return await withCheckedContinuation { continuation in
+            Self.fetchQueue.async { [self] in
+                continuation.resume(returning: loadRecordJSON(recordID: recordID))
+            }
+        }
+    }
+
     private func loadAdBlockerListJSON() -> String? {
+        return loadRecordJSON(recordID: Self.adBlockerRecordID)
+    }
+
+    private func loadAvailableRegionalListIDs() -> [String] {
+        guard let client = clientProvider(), let records = client.getRecords(syncIfEmpty: true) else {
+            logger.log("Regional list discovery failed: nil client or no records.",
+                       level: .warning,
+                       category: .remoteSettings)
+            return []
+        }
+
+        return records
+            .filter { $0.id.hasPrefix(Self.regionalRecordPrefix) && !$0.deleted }
+            .map { $0.id }
+            .sorted()
+    }
+
+    private func loadRecordJSON(recordID: String) -> String? {
         guard let client = clientProvider(), let records = client.getRecords(syncIfEmpty: true) else {
             logger.log("Ad-blocker list fetch failed: nil client or no records.",
                        level: .warning,
@@ -63,8 +103,8 @@ final class ASAdBlockerListFetcher: AdBlockerListFetcherProtocol {
             return nil
         }
 
-        guard let record = records.first(where: { $0.id == Self.adBlockerRecordID }) else {
-            logger.log("No ad-blocker record found in tracking protection collection.",
+        guard let record = records.first(where: { $0.id == recordID }) else {
+            logger.log("No record found for \(recordID) in tracking protection collection.",
                        level: .warning,
                        category: .remoteSettings)
             return nil
@@ -73,7 +113,7 @@ final class ASAdBlockerListFetcher: AdBlockerListFetcherProtocol {
         guard let data = try? client.getAttachment(record: record),
               let json = String(data: data, encoding: .utf8),
               !json.isEmpty else {
-            logger.log("Failed to fetch ad-blocker list attachment for record \(record.id).",
+            logger.log("Failed to fetch attachment for record \(record.id).",
                        level: .warning,
                        category: .remoteSettings)
             return nil

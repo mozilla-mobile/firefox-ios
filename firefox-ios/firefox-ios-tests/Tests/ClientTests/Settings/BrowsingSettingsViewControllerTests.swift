@@ -2,8 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Shared
 import Testing
-
 import XCTest
 
 @testable import Client
@@ -79,6 +79,65 @@ final class BrowsingSettingsViewControllerTests: XCTestCase {
         let hasBackgroundAudio = contentSection?.children.contains(where: { $0 is BackgroundAudioSetting }) ?? false
 
         XCTAssertTrue(hasBackgroundAudio)
+    }
+
+    func testGenerateSettings_whenAdBlockerOnAndPrefOn_includesExceptionsRow() {
+        featureFlags.enabledFlags = [.adBlocker]
+        profile.prefs.setBool(true, forKey: PrefsKeys.BlockAds)
+        let subject = createSubject()
+
+        let sections = subject.generateSettings()
+        let contentSection = sections.last
+        let hasExceptions = contentSection?.children.contains(where: { $0 is AdBlockerExceptionsSetting }) ?? false
+
+        XCTAssertTrue(hasExceptions)
+    }
+
+    func testGenerateSettings_whenAdBlockerOnAndPrefOff_omitsExceptionsRow() {
+        featureFlags.enabledFlags = [.adBlocker]
+        profile.prefs.setBool(false, forKey: PrefsKeys.BlockAds)
+        let subject = createSubject()
+
+        let sections = subject.generateSettings()
+        let contentSection = sections.last
+        let hasExceptions = contentSection?.children.contains(where: { $0 is AdBlockerExceptionsSetting }) ?? false
+
+        XCTAssertFalse(hasExceptions)
+    }
+
+    func testGenerateSettings_whenAdBlockerFlagOff_omitsExceptionsRow() {
+        featureFlags.enabledFlags = []
+        let subject = createSubject()
+
+        let sections = subject.generateSettings()
+        let contentSection = sections.last
+        let hasExceptions = contentSection?.children.contains(where: { $0 is AdBlockerExceptionsSetting }) ?? false
+
+        XCTAssertFalse(hasExceptions)
+    }
+
+    func testGenerateSettings_whenAdBlockerOnAndPrefOn_includesRegionalListsRow() {
+        featureFlags.enabledFlags = [.adBlocker]
+        profile.prefs.setBool(true, forKey: PrefsKeys.BlockAds)
+        let subject = createSubject()
+
+        let sections = subject.generateSettings()
+        let contentSection = sections.last
+        let hasRegional = contentSection?.children.contains(where: { $0 is AdBlockerRegionalListsSetting }) ?? false
+
+        XCTAssertTrue(hasRegional)
+    }
+
+    func testGenerateSettings_whenAdBlockerOnAndPrefOff_omitsRegionalListsRow() {
+        featureFlags.enabledFlags = [.adBlocker]
+        profile.prefs.setBool(false, forKey: PrefsKeys.BlockAds)
+        let subject = createSubject()
+
+        let sections = subject.generateSettings()
+        let contentSection = sections.last
+        let hasRegional = contentSection?.children.contains(where: { $0 is AdBlockerRegionalListsSetting }) ?? false
+
+        XCTAssertFalse(hasRegional)
     }
 
     // MARK: - Helper

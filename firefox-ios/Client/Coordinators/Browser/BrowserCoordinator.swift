@@ -682,6 +682,21 @@ final class BrowserCoordinator: BaseCoordinator,
         nav.pushViewController(viewController, animated: true)
     }
 
+    func pressedAdBlockerExceptions() {
+        guard let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
+        let viewController = AdBlockerExceptionsViewController(windowUUID: windowUUID)
+        nav.pushViewController(viewController, animated: true)
+    }
+
+    func pressedRegionalAdBlockLists() {
+        guard let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
+        let viewController = AdBlockerRegionalListsViewController(
+            windowUUID: windowUUID,
+            prefs: profile.prefs
+        )
+        nav.pushViewController(viewController, animated: true)
+    }
+
     func presentSavePDFController() {
         guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
 

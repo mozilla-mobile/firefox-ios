@@ -5,6 +5,8 @@
 
 final class MockAdBlockerListFetcher: AdBlockerListFetcherProtocol, @unchecked Sendable {
     var jsonToReturn: String?
+    var regionalListIDs: [String] = []
+    var regionalJSON: [String: String] = [:]
     private(set) var fetchCallCount = 0
 
     init(jsonToReturn: String?) {
@@ -14,5 +16,13 @@ final class MockAdBlockerListFetcher: AdBlockerListFetcherProtocol, @unchecked S
     func fetchAdBlockerListJSON() async -> String? {
         fetchCallCount += 1
         return jsonToReturn
+    }
+
+    func fetchAvailableRegionalListIDs() async -> [String] {
+        return regionalListIDs
+    }
+
+    func fetchRegionalListJSON(recordID: String) async -> String? {
+        return regionalJSON[recordID]
     }
 }

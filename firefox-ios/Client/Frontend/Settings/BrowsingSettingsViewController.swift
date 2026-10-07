@@ -12,6 +12,12 @@ protocol BrowsingSettingsDelegate: AnyObject {
 
     @MainActor
     func pressedAutoPlay()
+
+    @MainActor
+    func pressedAdBlockerExceptions()
+
+    @MainActor
+    func pressedRegionalAdBlockLists()
 }
 
 class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlaggable {
@@ -86,7 +92,7 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                 contentSection.append(AdBlockerSetting(
                     prefs: profile.prefs,
                     supportDelegate: parentCoordinator as? SupportSettingsDelegate,
-                    settingDidChange: { isEnabled in
+                    settingDidChange: { [weak self] isEnabled in
                         if isEnabled {
                             Task {
                                 await ContentBlocker.shared.reloadAdBlockerList()
@@ -95,8 +101,23 @@ class BrowsingSettingsViewController: SettingsTableViewController, FeatureFlagga
                         } else {
                             ContentBlocker.shared.prefsChanged()
                         }
+                        self?.settings = self?.generateSettings() ?? []
+                        self?.tableView.reloadData()
                     }
                 ))
+
+                let isAdBlockerOn = profile.prefs.boolForKey(PrefsKeys.BlockAds) ?? false
+                if isAdBlockerOn {
+                    contentSection.append(AdBlockerExceptionsSetting(
+                        theme: theme,
+                        settingsDelegate: parentCoordinator
+                    ))
+                    contentSection.append(AdBlockerRegionalListsSetting(
+                        theme: theme,
+                        prefs: profile.prefs,
+                        settingsDelegate: parentCoordinator
+                    ))
+                }
             }
             if featureFlagsProvider.isEnabled(.backgroundAudio) {
                 contentSection.append(BackgroundAudioSetting(prefs: profile.prefs))

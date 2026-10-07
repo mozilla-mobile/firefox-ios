@@ -86,6 +86,10 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     func pressedAutoPlay() {}
 
+    func pressedAdBlockerExceptions() {}
+
+    func pressedRegionalAdBlockLists() {}
+
     // MARK: PrivacySettingsDelegate
 
     func pressedCreditCard() {}

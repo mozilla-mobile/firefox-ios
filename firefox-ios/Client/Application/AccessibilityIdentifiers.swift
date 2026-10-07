@@ -810,6 +810,21 @@ struct AccessibilityIdentifiers {
             static let adBlockerTitle = "AdBlocker"
             static let adBlockerLearnMore = "AdBlockerLearnMore"
             static let backgroundAudio = "BackgroundAudio"
+
+            struct AdBlockerExceptions {
+                static let title = "AdBlockerExceptions"
+                static let settingRow = "AdBlockerExceptionsRow"
+                static let addButton = "AdBlockerExceptionsAdd"
+                static let editButton = "AdBlockerExceptionsEdit"
+                static let deleteButton = "AdBlockerExceptionsDelete"
+                static let selectAllButton = "AdBlockerExceptionsSelectAll"
+                static let emptyState = "AdBlockerExceptionsEmptyState"
+            }
+
+            struct AdBlockerRegionalLists {
+                static let settingRow = "AdBlockerRegionalListsRow"
+                static let emptyState = "AdBlockerRegionalListsEmptyState"
+            }
         }
 
         struct Summarize {

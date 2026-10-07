@@ -75,6 +75,8 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript, Featu
         var rules = isEnabled ? BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict) : []
         if isAdBlockingEnabled {
             rules.append(ASAdBlockerListFetcher.adBlockerRecordID)
+            let regional = userPrefs.stringArrayForKey(PrefsKeys.EnabledRegionalAdBlockLists) ?? []
+            rules.append(contentsOf: regional)
         }
         return rules
     }
