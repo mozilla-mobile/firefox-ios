@@ -20,61 +20,35 @@ struct QuickAnswersEntryPointButtonTests {
     }
 
     @Test
-    func test_startGlow_whenThemeApplied_startsGlowing() {
+    func test_configure_whenNotGlowing_doesNotGlow() {
         let subject = createSubject()
-        subject.applyTheme(theme: theme)
 
-        subject.startGlow()
+        let didStartGlow = subject.configure(theme: theme, glowing: false)
 
+        #expect(didStartGlow == false)
+        #expect(subject.isGlowing == false)
+    }
+
+    @Test
+    func test_configure_whenGlowingTrue_startsGlowing() {
+        let subject = createSubject()
+
+        let didStartGlow = subject.configure(theme: theme, glowing: true)
+
+        #expect(didStartGlow == true)
         #expect(subject.isGlowing == true)
     }
 
     @Test
-    func test_startGlow_beforeThemeApplied_startsGlowingOnceThemeIsApplied() {
+    func test_configure_calledTwice_startsTheGlowOnlyOnce() {
         let subject = createSubject()
+        subject.configure(theme: theme, glowing: true)
 
-        subject.startGlow()
-        #expect(subject.isGlowing == false)
+        let didStartGlow = subject.configure(theme: theme, glowing: true)
 
-        subject.applyTheme(theme: theme)
-
-        #expect(subject.isGlowing == true)
+        #expect(didStartGlow == false)
     }
-
-    @Test
-    func test_stopGlow_stopsGlowing() {
-        let subject = createSubject()
-        subject.applyTheme(theme: theme)
-        subject.startGlow()
-
-        subject.stopGlow()
-
-        #expect(subject.isGlowing == false)
-    }
-
-    @Test
-    func test_startGlow_afterGlowStopped_doesNotGlowAgain() {
-        let subject = createSubject()
-        subject.applyTheme(theme: theme)
-        subject.startGlow()
-        subject.stopGlow()
-
-        subject.startGlow()
-
-        #expect(subject.isGlowing == false)
-    }
-
-    @Test
-    func test_glow_afterGlowDuration_stopsOnItsOwn() async throws {
-        let subject = createSubject(glowDuration: 0.1)
-        subject.applyTheme(theme: theme)
-
-        subject.startGlow()
-        try await Task.sleep(nanoseconds: 300_000_000)
-
-        #expect(subject.isGlowing == false)
-    }
-
+    
     @Test
     func test_tap_callsOnTap() {
         var tapCount = 0

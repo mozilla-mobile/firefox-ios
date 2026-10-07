@@ -70,18 +70,18 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertFalse(state.showQuickAnswersButton)
     }
 
-    func test_init_optInNotCompleted_setsShowQuickAnswersGlowTrue() {
+    func test_init_storeShouldShowGlow_setsShowQuickAnswersGlowTrue() {
         mockQuickAnswersStore.isQuickAnswersEnabled = true
-        mockQuickAnswersStore.isOptInCompleted = false
+        mockQuickAnswersStore.shouldShowGlow = true
 
         let state = createSubject()
 
         XCTAssertTrue(state.showQuickAnswersGlow)
     }
 
-    func test_init_optInCompleted_setsShowQuickAnswersGlowFalse() {
+    func test_init_storeShouldNotShowGlow_setsShowQuickAnswersGlowFalse() {
         mockQuickAnswersStore.isQuickAnswersEnabled = true
-        mockQuickAnswersStore.isOptInCompleted = true
+        mockQuickAnswersStore.shouldShowGlow = false
 
         let state = createSubject()
 
@@ -90,15 +90,16 @@ final class HeaderStateTests: XCTestCase {
 
     func test_init_quickAnswersDisabled_setsShowQuickAnswersGlowFalse() {
         mockQuickAnswersStore.isQuickAnswersEnabled = false
-        mockQuickAnswersStore.isOptInCompleted = false
+        mockQuickAnswersStore.shouldShowGlow = true
 
         let state = createSubject()
 
         XCTAssertFalse(state.showQuickAnswersGlow)
     }
 
-    func test_quickAnswersDidUpdateSettings_optInCompleted_setsShowQuickAnswersGlowFalse() {
+    func test_quickAnswersDidUpdateSettings_shouldNotShowGlow_setsShowQuickAnswersGlowFalse() {
         mockQuickAnswersStore.isQuickAnswersEnabled = true
+        mockQuickAnswersStore.shouldShowGlow = true
         let initialState = createSubject()
         let reducer = headerReducer()
 
@@ -106,7 +107,7 @@ final class HeaderStateTests: XCTestCase {
             initialState,
             QuickAnswersMiddlewareAction(
                 isQuickAnswersEnabled: true,
-                isOptInCompleted: true,
+                shouldShowGlow: false,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: QuickAnswersMiddlewareActionType.didUpdateSettings
             )
@@ -116,9 +117,9 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertFalse(newState.showQuickAnswersGlow)
     }
 
-    func test_quickAnswersDidUpdateSettings_withoutOptInValue_keepsPreviousOptInState() {
+    func test_quickAnswersDidUpdateSettings_withoutGlowValue_setsShowQuickAnswersGlowFalse() {
         mockQuickAnswersStore.isQuickAnswersEnabled = true
-        mockQuickAnswersStore.isOptInCompleted = true
+        mockQuickAnswersStore.shouldShowGlow = true
         let initialState = createSubject()
         let reducer = headerReducer()
 
@@ -131,7 +132,25 @@ final class HeaderStateTests: XCTestCase {
             )
         )
 
-        XCTAssertTrue(newState.isQuickAnswersOptInCompleted)
+        XCTAssertFalse(newState.showQuickAnswersGlow)
+    }
+
+    func test_quickAnswersDidUpdateSettings_disabledWithGlow_setsShowQuickAnswersGlowFalse() {
+        mockQuickAnswersStore.isQuickAnswersEnabled = true
+        mockQuickAnswersStore.shouldShowGlow = true
+        let initialState = createSubject()
+        let reducer = headerReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            QuickAnswersMiddlewareAction(
+                isQuickAnswersEnabled: false,
+                shouldShowGlow: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: QuickAnswersMiddlewareActionType.didUpdateSettings
+            )
+        )
+
         XCTAssertFalse(newState.showQuickAnswersGlow)
     }
 

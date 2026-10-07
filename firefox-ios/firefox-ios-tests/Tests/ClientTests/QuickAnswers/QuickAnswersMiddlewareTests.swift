@@ -57,7 +57,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchedAction.isQuickAnswersEnabled, true)
     }
 
-    func test_didSettingsChange_whenOptInCompleted_dispatchesOptInCompleted() throws {
+    func test_didSettingsChange_whenOptInCompleted_dispatchesShouldShowGlowFalse() throws {
         mockFeatureFlags.enabledFlags = [.quickAnswers]
         mockUserPreferences.setPreferenceFor(.quickAnswers, to: true)
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
@@ -71,10 +71,10 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? QuickAnswersMiddlewareAction)
-        XCTAssertEqual(dispatchedAction.isOptInCompleted, true)
+        XCTAssertEqual(dispatchedAction.shouldShowGlow, false)
     }
 
-    func test_didSettingsChange_whenOptInNotCompleted_dispatchesOptInNotCompleted() throws {
+    func test_didSettingsChange_whenOptInNotCompleted_dispatchesShouldShowGlowTrue() throws {
         mockFeatureFlags.enabledFlags = [.quickAnswers]
         mockUserPreferences.setPreferenceFor(.quickAnswers, to: true)
 
@@ -87,7 +87,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? QuickAnswersMiddlewareAction)
-        XCTAssertEqual(dispatchedAction.isOptInCompleted, false)
+        XCTAssertEqual(dispatchedAction.shouldShowGlow, true)
     }
 
     func test_didSettingsChange_whenFeatureFlagDisabled_dispatchesFalse() throws {
@@ -191,6 +191,68 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchedAction.isQuickAnswersEnabled, false)
     }
 
+    // MARK: - didShowGlow
+    func test_shouldShowGlow_whenOptInNotCompletedAndGlowNeverShown_returnsTrue() {
+        let subject = createSubject()
+
+        XCTAssertTrue(subject.shouldShowGlow)
+    }
+
+    func test_shouldShowGlow_whenOptInCompleted_returnsFalse() {
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
+
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.shouldShowGlow)
+    }
+
+    func test_didShowGlow_belowMaxGlowCount_keepsShouldShowGlowTrueOnNextSession() {
+        showGlow(on: createSubject(), times: Int(QuickAnswersMiddleware.maxGlowCount) - 1)
+
+        XCTAssertTrue(createSubject().shouldShowGlow)
+    }
+
+    func test_didShowGlow_atMaxGlowCount_setsShouldShowGlowFalseOnNextSession() {
+        showGlow(on: createSubject(), times: Int(QuickAnswersMiddleware.maxGlowCount))
+
+        XCTAssertFalse(createSubject().shouldShowGlow)
+    }
+
+    func test_didShowGlow_atMaxGlowCount_keepsShouldShowGlowTrueForTheSameSession() {
+        let subject = createSubject()
+        XCTAssertTrue(subject.shouldShowGlow)
+
+        showGlow(on: subject, times: Int(QuickAnswersMiddleware.maxGlowCount))
+
+        XCTAssertTrue(subject.shouldShowGlow)
+    }
+
+    func test_didShowGlow_whenOptInCompletedDuringTheSession_setsShouldShowGlowFalse() {
+        let subject = createSubject()
+        XCTAssertTrue(subject.shouldShowGlow)
+
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
+
+        XCTAssertFalse(subject.shouldShowGlow)
+    }
+
+    func test_didShowGlow_whenOptInCompleted_doesNotCountTheGlow() {
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
+        let subject = createSubject()
+
+        showGlow(on: subject, times: Int(QuickAnswersMiddleware.maxGlowCount))
+
+        XCTAssertNil(mockProfile.prefs.intForKey(PrefsKeys.QuickAnswers.glowCount))
+    }
+
+    func test_didShowGlow_doesNotDispatchAnyAction() {
+        let subject = createSubject()
+
+        showGlow(on: subject, times: 1)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
     // MARK: - StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
@@ -207,6 +269,16 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Helpers
+
+    private func showGlow(on subject: QuickAnswersMiddleware, times: Int) {
+        let action = QuickAnswersAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: QuickAnswersActionType.didShowGlow
+        )
+        for _ in 0..<times {
+            subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
+        }
+    }
 
     private func createSubject() -> QuickAnswersMiddleware {
         let subject = QuickAnswersMiddleware(

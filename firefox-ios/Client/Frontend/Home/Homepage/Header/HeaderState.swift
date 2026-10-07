@@ -13,12 +13,8 @@ struct HeaderState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var isPrivate: Bool
     var showQuickAnswersButton: Bool
-    var isQuickAnswersOptInCompleted: Bool
-
-    /// The entry point only glows while the user still has to go through the Quick Answers opt-in.
-    var showQuickAnswersGlow: Bool {
-        return showQuickAnswersButton && !isQuickAnswersOptInCompleted
-    }
+    /// Whether the entry point should glow, as decided by the Quick Answers middleware.
+    var showQuickAnswersGlow: Bool
 
     init(
         windowUUID: WindowUUID,
@@ -30,7 +26,7 @@ struct HeaderState: StateType, Equatable, Hashable {
             windowUUID: windowUUID,
             isPrivate: isPrivate,
             showQuickAnswersButton: showQuickAnswersButton,
-            isQuickAnswersOptInCompleted: quickAnswersStore.isOptInCompleted
+            showQuickAnswersGlow: showQuickAnswersButton && quickAnswersStore.shouldShowGlow
         )
     }
 
@@ -38,12 +34,12 @@ struct HeaderState: StateType, Equatable, Hashable {
         windowUUID: WindowUUID,
         isPrivate: Bool,
         showQuickAnswersButton: Bool,
-        isQuickAnswersOptInCompleted: Bool
+        showQuickAnswersGlow: Bool
     ) {
         self.windowUUID = windowUUID
         self.isPrivate = isPrivate
         self.showQuickAnswersButton = showQuickAnswersButton
-        self.isQuickAnswersOptInCompleted = isQuickAnswersOptInCompleted
+        self.showQuickAnswersGlow = showQuickAnswersGlow
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -82,9 +78,10 @@ struct HeaderState: StateType, Equatable, Hashable {
         else {
             return defaultState(from: state)
         }
-        return state.copy(
-            showQuickAnswersButton: showQuickAnswers && !state.isPrivate
-        )
+        let showQuickAnswersButton = showQuickAnswers && !state.isPrivate
+        return state
+            .copy(showQuickAnswersButton: showQuickAnswersButton)
+            .copy(showQuickAnswersGlow: showQuickAnswersButton && quickAnswersAction.shouldShowGlow)
     }
 
     static func defaultState(from state: HeaderState) -> HeaderState {
@@ -92,7 +89,7 @@ struct HeaderState: StateType, Equatable, Hashable {
             windowUUID: state.windowUUID,
             isPrivate: state.isPrivate,
             showQuickAnswersButton: state.showQuickAnswersButton,
-            isQuickAnswersOptInCompleted: state.isQuickAnswersOptInCompleted
+            showQuickAnswersGlow: state.showQuickAnswersGlow
         )
     }
 }

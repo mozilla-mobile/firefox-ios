@@ -26,6 +26,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     private var headerState: HeaderState?
+    private var theme: Theme?
     private var logoTextColor: UIColor?
     private var showiPadSetup = false
     private weak var tipPresenter: UIViewController?
@@ -149,11 +150,26 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             cancelQuickAnswersTipObservation()
         }
 
-        if headerState.showQuickAnswersGlow {
-            quickAnswersButton.startGlow()
-        } else {
-            quickAnswersButton.stopGlow()
-        }
+        updateQuickAnswersButton()
+    }
+
+    /// Configures the entry point once both the state and the theme are known. Cells built only to measure
+    /// the layout never get a theme, so they cannot start a glow that would be counted but never seen.
+    private func updateQuickAnswersButton() {
+        guard let headerState, let theme else { return }
+
+        let didStartGlow = quickAnswersButton.configure(
+            theme: theme,
+            glowing: headerState.showQuickAnswersGlow
+        )
+        // Only a glow that actually started is counted, so the middleware can cap how often it runs.
+        guard didStartGlow else { return }
+        store.dispatch(
+            QuickAnswersAction(
+                windowUUID: headerState.windowUUID,
+                actionType: QuickAnswersActionType.didShowGlow
+            )
+        )
     }
 
     private func observeQuickAnswersTip() {
@@ -230,8 +246,9 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
+        self.theme = theme
         logoTextImage.tintColor = logoTextColor ?? theme.colors.textPrimary
 
-        quickAnswersButton.applyTheme(theme: theme)
+        updateQuickAnswersButton()
     }
 }
