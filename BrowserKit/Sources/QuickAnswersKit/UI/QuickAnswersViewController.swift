@@ -67,6 +67,10 @@ public final class QuickAnswersViewController: UIViewController,
         }
     )
     private var hasAppeared = false
+    private lazy var privacyTipPresenter = QuickAnswersPrivacyTipPresenter(
+        presenter: self,
+        strings: stringsConfiguration.privacyBanner
+    )
 
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
@@ -231,6 +235,18 @@ public final class QuickAnswersViewController: UIViewController,
                 self?.dismiss(with: url)
             }
         )
+        if QuickAnswersPrivacyTipPresenter.isSupported {
+            contentView.configurePrivacyLink { [weak self] in
+                self?.presentPrivacyTip()
+            }
+        }
+    }
+
+    private func presentPrivacyTip() {
+        privacyTipPresenter.present(
+            from: contentView.privacyTipSourceView,
+            iconColor: themeManager.getCurrentTheme(for: currentWindowUUID).colors.textSecondary
+        )
     }
 
     // MARK: - Presentation transition
@@ -278,7 +294,7 @@ public final class QuickAnswersViewController: UIViewController,
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        view.backgroundColor = theme.colors.layer2
+        view.backgroundColor = theme.colors.layer1
         closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
         contentView.applyTheme(theme: theme)

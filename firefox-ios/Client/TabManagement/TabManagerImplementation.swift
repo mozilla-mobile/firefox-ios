@@ -1310,7 +1310,7 @@ final class TabManagerImplementation: NSObject,
         tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
 
         if flushToDisk {
-            commitChanges()
+            commitChanges()commitChanges()
         }
     }
 

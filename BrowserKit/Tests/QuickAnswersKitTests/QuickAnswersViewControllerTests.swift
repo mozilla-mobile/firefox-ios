@@ -64,7 +64,12 @@ extension QuickAnswersViewConfiguration {
             placeholder: "Ask anything",
             answering: "Answering",
             footerFormat: "Powered by %@",
-            sources: "Sources"
+            sources: "Sources",
+            aboutYourPrivacy: "About Your Privacy"
+        ),
+        privacyBanner: .init(
+            title: "Private by Design",
+            description: "Firefox doesn’t store your audio or questions"
         ),
         errors: .mock,
         closeAccessibilityLabel: "Close",
