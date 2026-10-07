@@ -134,6 +134,7 @@ public struct PrefsKeys {
 
     public struct QuickAnswers {
         public static let optInCompleted = "quickAnswers.optInCompleted"
+        public static let entryPointButtonGlowCount = "quickAnswers.entryPointButtonGlowCount"
         public static let modelOverride = "quickAnswers.modelOverride"
     }
 
