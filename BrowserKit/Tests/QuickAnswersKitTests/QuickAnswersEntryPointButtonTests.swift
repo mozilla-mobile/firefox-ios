@@ -48,7 +48,7 @@ struct QuickAnswersEntryPointButtonTests {
 
         #expect(didStartGlow == false)
     }
-    
+
     @Test
     func test_tap_callsOnTap() {
         var tapCount = 0
