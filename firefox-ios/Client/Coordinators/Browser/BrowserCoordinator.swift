@@ -234,8 +234,9 @@ final class BrowserCoordinator: BaseCoordinator,
         )
         add(child: bookmarksCoordinator)
         bookmarksCoordinator.start(parentFolder: parentFolder, bookmark: bookmark)
-        navigationController.onViewDismissed = { [weak self] in
+        navigationController.onViewDismissed = { [weak self, weak bookmarksCoordinator] in
             // Remove coordinator when user drags down to dismiss modal
+            guard let bookmarksCoordinator else { return }
             self?.didFinish(from: bookmarksCoordinator)
         }
         present(navigationController)
@@ -287,6 +288,33 @@ final class BrowserCoordinator: BaseCoordinator,
                        category: .coordinator)
             findAndHandle(route: savedRoute)
         }
+
+        presentHardcodedOnboardingDripIfNeeded()
+    }
+
+    // Presents the day-based onboarding card over the current tab
+    private func presentHardcodedOnboardingDripIfNeeded() {
+        guard browserViewController.presentedViewController == nil else { return }
+
+        let manager = IntroScreenManager(prefs: profile.prefs)
+        guard manager.shouldUseContinuousOnboarding, !manager.shouldShowIntroScreen else { return }
+
+        let cards = OnboardingCardScheduler(prefs: profile.prefs).getDueCards()
+        guard !cards.isEmpty else { return }
+
+        let view = OnboardingFlowView(
+            cards: cards,
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            onComplete: { [weak self] in
+                self?.browserViewController.dismiss(animated: true)
+            }
+        )
+
+        let hostingController = PortraitOnlyHostingController(rootView: view)
+        hostingController.modalPresentationStyle = .fullScreen
+        hostingController.modalTransitionStyle = .crossDissolve
+        browserViewController.present(hostingController, animated: true)
     }
 
     // MARK: - ETPCoordinatorSSLStatusDelegate
@@ -478,8 +506,10 @@ final class BrowserCoordinator: BaseCoordinator,
         add(child: settingsCoordinator)
         settingsCoordinator.start(with: section)
 
-        navigationController.onViewDismissed = { [weak self] in
-            self?.didFinishSettings(from: settingsCoordinator)
+        navigationController.onViewDismissed = { [weak self, weak settingsCoordinator] in
+            if let settingsCoordinator {
+                self?.didFinishSettings(from: settingsCoordinator)
+            }
             onDismiss?()
         }
         present(navigationController)
@@ -1079,9 +1109,11 @@ final class BrowserCoordinator: BaseCoordinator,
         add(child: tabTrayCoordinator)
         tabTrayCoordinator.start(with: selectedPanel)
 
-        navigationController.onViewDismissed = { [weak self] in
+        navigationController.onViewDismissed = { [weak self, weak tabTrayCoordinator] in
             guard let self else { return }
-            self.didDismissTabTray(from: tabTrayCoordinator)
+            if let tabTrayCoordinator {
+                self.didDismissTabTray(from: tabTrayCoordinator)
+            }
             store.dispatch(
                 TabTrayAction(
                     windowUUID: self.windowUUID,
@@ -1355,8 +1387,9 @@ final class BrowserCoordinator: BaseCoordinator,
         add(child: coordinator)
         coordinator.start()
 
-        navigationController.onViewDismissed = { [weak self] in
+        navigationController.onViewDismissed = { [weak self, weak coordinator] in
             // Remove coordinator when user drags down to dismiss modal
+            guard let coordinator else { return }
             self?.didFinish(from: coordinator)
         }
 
@@ -1501,12 +1534,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
             // Notify theme manager
             themeManager.windowDidClose(uuid: uuid)
-
-            // Clean up views and ensure BVC for the window is freed
-            browserViewController.view.endEditing(true)
-            browserViewController.dismissUrlBar()
-            browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
-            browserViewController.removeFromParent()
+            releaseBrowserViewController()
         case .libraryOpened:
             // Auto-close library panel if it was opened in another iPad window. [FXIOS-8095]
             guard uuid != windowUUID else { return }
@@ -1546,6 +1574,17 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - Private helpers
+
+    private func releaseBrowserViewController() {
+        // Clean up views and ensure BVC and its adjacent views for the window are freed.
+        browserViewController.view.endEditing(true)
+        browserViewController.dismissUrlBar()
+        browserViewController.contentContainer.removeContent()
+        browserViewController.header.removeAllArrangedViews()
+        browserViewController.overKeyboardContainer.removeAllArrangedViews()
+        browserViewController.bottomContainer.removeAllArrangedViews()
+        browserViewController.removeFromParent()
+    }
 
     /// Tabs displaying content other than a HTML MIME type can be downloaded and treated as files when shared. This method
     /// attempts to download any such files. If there is no file to download, returns just a regular `ShareType.tab`.

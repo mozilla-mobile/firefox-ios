@@ -11,12 +11,11 @@ import Shared
 final class HomePageSettingViewControllerTests: XCTestCase, FeatureFlagTestUtility {
     internal var mockProfile: MockProfile!
     internal var mockNimbusLayer: MockNimbusFeatureFlagLayer!
-    private var wallpaperManager: WallpaperManagerMock!
     private var delegate: MockSettingsDelegate!
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockNimbusLayer = MockNimbusFeatureFlagLayer()
 
         DependencyHelperMock().bootstrapDependencies(
@@ -26,14 +25,12 @@ final class HomePageSettingViewControllerTests: XCTestCase, FeatureFlagTestUtili
         )
 
         delegate = MockSettingsDelegate()
-        wallpaperManager = WallpaperManagerMock()
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
         mockProfile = nil
         delegate = nil
-        wallpaperManager = nil
         mockNimbusLayer = nil
 
         try await super.tearDown()
@@ -163,7 +160,6 @@ final class HomePageSettingViewControllerTests: XCTestCase, FeatureFlagTestUtili
 
     private func createSubject() -> HomePageSettingViewController {
         let subject = HomePageSettingViewController(prefs: mockProfile.prefs,
-                                                    wallpaperManager: wallpaperManager,
                                                     settingsDelegate: delegate,
                                                     tabManager: MockTabManager())
         trackForMemoryLeaks(subject)

@@ -265,9 +265,6 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Unviar datos d'usu";
 
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies" = "Estudios";
-
 /* Title for settings section to enable different Siri Shortcuts. */
 "Settinsg.siriShortcutsTitle" = "ATAYOS DE SIRI";
 

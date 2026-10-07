@@ -15,7 +15,7 @@ final class FxSuggestTelemetryTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        Self.setupTelemetry(with: MockProfile())
+        Self.setupTelemetry(with: makeProfile())
         TelemetryContextualIdentifier.clearUserDefaults()
         gleanWrapper = MockGleanWrapper()
     }

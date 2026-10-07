@@ -60,9 +60,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .backgroundAudio:
             return checkBackgroundAudioFeature()
 
-        case .badCertDomainErrorPage:
-            return checkBadCertDomainErrorPageFeature()
-
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
 
@@ -128,6 +125,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .modernOnboardingUI:
             return checkMondernOnboardingUIFeature()
 
+        case .multiDayOnboarding:
+            return checkMultiDayOnboardingFeature()
         case .nativeErrorPage:
             return checkNativeErrorPageFeature()
 
@@ -139,9 +138,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .novaPrivateThemeOverride:
             return checkNovaPrivateThemeOverrideFeature()
-
-        case .noInternetConnectionErrorPage:
-            return checkNICErrorPageFeature()
 
         case .privacyDashboard:
             return checkPrivacyDashboardFeature()
@@ -380,14 +376,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.nativeErrorPageFeature.value().enabled
     }
 
-    private func checkNICErrorPageFeature() -> Bool {
-        return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
-    }
-
-    private func checkBadCertDomainErrorPageFeature() -> Bool {
-        return nimbus.features.nativeErrorPageFeature.value().badCertDomainErrorPage
-    }
-
     private func checkImprovedAppStoreReviewTriggerFeature() -> Bool {
         return nimbus.features.improvedAppStoreReviewTriggerFeature.value().enabled
     }
@@ -520,5 +508,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkCellularDataRestrictedErrorPageFeature() -> Bool {
         return nimbus.features.cellularDataRestrictedErrorPageFeature.value().enabled
+    }
+
+    private func checkMultiDayOnboardingFeature() -> Bool {
+        return nimbus.features.multiDayOnboardingFeature.value().useMultiDayOnboarding
     }
 }

@@ -29,6 +29,10 @@ final class QuickAnswersViewModel {
         return model.displayName
     }
 
+    var isOptInRequired: Bool {
+        return !store.isOptInCompleted
+    }
+
     init(
         prefs: Prefs,
         telemetry: QuickAnswersTelemetry,

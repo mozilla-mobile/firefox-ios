@@ -12,7 +12,7 @@ import XCTest
 
 @MainActor
 final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
     private var gleanWrapper: MockGleanWrapper!
     private var pageContextReader: MockWebCompatPageContextReader!
 
@@ -347,15 +347,6 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
         )
     }
 
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
-    }
-
     // MARK: - Helpers
 
     private func submitAction() -> WebCompatReporterViewAction {
@@ -402,7 +393,7 @@ final class WebCompatReporterMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func makeTab(url: String) -> Tab {
-        let tab = Tab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.url = URL(string: url)
         return tab
     }

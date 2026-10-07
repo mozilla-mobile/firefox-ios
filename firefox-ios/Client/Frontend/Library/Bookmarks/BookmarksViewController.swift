@@ -127,8 +127,8 @@ final class BookmarksViewController: SiteTableViewController,
         return button
     }()
 
-    private lazy var emptyStateView: BookmarksFolderEmptyStateView = .build { emptyStateView in
-        emptyStateView.signInAction = { [weak self] in
+    private lazy var emptyStateView: BookmarksFolderEmptyStateView = .build { [weak self] emptyStateView in
+        emptyStateView.signInAction = {
             self?.bookmarkCoordinatorDelegate?.showSignIn()
         }
     }
@@ -276,7 +276,8 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     private func updateParentViewControllerTitle() {
-        if !viewModel.isRootNode, let folderTitle = viewModel.bookmarkFolder?.title {
+        if !viewModel.isRootNode, let folder = viewModel.bookmarkFolder {
+            let folderTitle = LocalizedRootBookmarkFolderStrings[folder.guid] ?? folder.title
             notificationCenter.post(name: .LibraryPanelBookmarkTitleChanged,
                                     withObject: nil,
                                     withUserInfo: ["title": folderTitle])

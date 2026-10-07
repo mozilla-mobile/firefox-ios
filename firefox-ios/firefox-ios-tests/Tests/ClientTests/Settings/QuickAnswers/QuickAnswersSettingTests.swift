@@ -16,7 +16,7 @@ final class QuickAnswersSettingTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
         delegate = MockGeneralSettingsDelegate()
         settings = SettingsTableViewController(
             style: .plain,

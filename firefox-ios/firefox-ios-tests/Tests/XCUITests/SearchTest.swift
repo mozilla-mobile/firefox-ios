@@ -569,7 +569,7 @@ class SearchTests: FeatureFlaggedTestBase {
             // https://github.com/mozilla-mobile/firefox-ios/issues/35243
             if !iPad() {
                 verifySearchSuggestion(searchTerm: "amazon",
-                                       expectedMatch: "Amazon.com - Official Site",
+                                       expectedMatch: "Amazon",
                                        hasFirefoxSuggest: true,
                                        isSponsored: true)
             }
@@ -581,7 +581,7 @@ class SearchTests: FeatureFlaggedTestBase {
     func testFirefoxSuggestPartialSponsored() {
         launchWithFirefoxSuggestRollout()
         verifySearchSuggestion(searchTerm: "amaz",
-                               expectedMatch: "Amazon.com - Official Site",
+                               expectedMatch: "Amazon",
                                hasFirefoxSuggest: true,
                                isSponsored: true)
     }
@@ -594,6 +594,31 @@ class SearchTests: FeatureFlaggedTestBase {
                                expectedMatch: "Wikipedia - FIFA World Cup",
                                hasFirefoxSuggest: true,
                                isSponsored: false)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753075
+    // Regression
+    func testFirefoxSuggestNonSponsoredUI() {
+        let keyword = "fifa"
+        let suggestion = "Wikipedia - FIFA World Cup"
+        launchWithFirefoxSuggestRollout()
+
+        // Step 1: A keyword triggers a non sponsored result in the Firefox Suggest section
+        browserScreen.searchAndAssertSuggestResult(term: keyword, title: suggestion, kind: .nonSponsored)
+
+        // Step 2: The result sits at the bottom of the Firefox Suggest section, not marked as sponsored
+        browserScreen.assertNonSponsoredSuggestRowUI(title: suggestion)
+
+        // Step 3: The non sponsored result is NOT displayed in private mode
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButtonHittable()
+        navigator.goto(TabTray)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.goto(NewTabScreen)
+        browserScreen.searchFromAddressBar(term: keyword)
+        browserScreen.assertAddressBarContains(value: keyword)
+        browserScreen.assertSuggestResult(title: suggestion, kind: .nonSponsored, shouldExist: false)
+        browserScreen.assertFirefoxSuggestHeader(shouldExist: false)
     }
 
     private func verifySearchSuggestion(searchTerm: String,
@@ -617,7 +642,9 @@ class SearchTests: FeatureFlaggedTestBase {
         if hasFirefoxSuggest {
             // A suggest query interrupted while the term is still being typed is dropped silently and
             // never retried, so the term is retyped to trigger a fresh one.
-            let match = app.tables.staticTexts[expectedMatch]
+            let match = app.tables.staticTexts.matching(
+                NSPredicate(format: "label CONTAINS %@", expectedMatch)
+            ).firstMatch
             var attemptsLeft = 2
             while attemptsLeft > 0, !mozWaitForElementToExist(match, timeout: 5, failOnTimeout: false) {
                 attemptsLeft -= 1

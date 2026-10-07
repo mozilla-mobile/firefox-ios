@@ -23,6 +23,7 @@ class PrivateBrowsingTest: BaseTestCase {
     private var homePageScreen: HomePageScreen!
     private var contextMenuScreen: ContextMenuScreen!
     private var toolbarScreen: ToolbarScreen!
+    private var springboardScreen: SpringboardScreen!
 
     override func setUp() async throws {
         // Tabs are only saved once a restore has run, so the force close tests need session restore
@@ -35,6 +36,7 @@ class PrivateBrowsingTest: BaseTestCase {
         homePageScreen = HomePageScreen(app: app)
         contextMenuScreen = ContextMenuScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
+        springboardScreen = SpringboardScreen()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307004
@@ -302,6 +304,43 @@ class PrivateBrowsingTest: BaseTestCase {
         toolbarScreen.assertTabsButtonValue(expectedCount: "2")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3168534
+    // Regression
+    func testDeeplinkOpensInPrivateBrowsing() {
+        guard #available(iOS 16.4, *) else { return }
+
+        // Precondition: private browsing with a website already open
+        enterPrivateBrowsingMode()
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
+        waitUntilPageLoad()
+
+        // Step 1: a deeplink from outside Firefox opens its website in a new tab. Links tapped inside a
+        // private tab never leave the web view, so the deeplink has to come from the system
+        springboardScreen.openDeeplinkFromOutsideApp(deeplink(opening: path(forTestPage: TestPages.exampleHTML)))
+        navigator.nowAt(BrowserTab)
+        waitUntilPageLoad()
+        browserScreen.assertExampleDomainPageDisplayed()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "2")
+
+        // The deeplink carries no private parameter, so it must reuse the private browsing mode: its tab
+        // shares the panel with the page only ever opened in private, while regular browsing has just one tab
+        navigator.goto(TabTray)
+        tabTray.assertCellExists(named: TestLabels.mozillaBook)
+        tabTray.assertCellExists(named: TestLabels.exampleDomain)
+        tabTray.assertTabCount(2)
+
+        // Step 2: the first opened website is still displayed in private browsing
+        tabTray.tapOnCell(named: TestLabels.mozillaBook)
+        navigator.nowAt(BrowserTab)
+        browserScreen.assertBookOfMozillaPageDisplayed()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "2")
+    }
+
+    private func deeplink(opening target: String) -> URL {
+        let encodedTarget = target.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? target
+        return URL(string: "\(currentScheme.internalURLScheme)://open-url?url=\(encodedTarget)")!
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307012
     // Smoketest
     func testLongPressLinkOptionsPrivateMode() {
@@ -477,8 +516,7 @@ class PrivateBrowsingTestIphone: BaseTestCase {
 
         // Check that the tab has changed
         waitUntilPageLoad()
-        browserScreen.addressToolbarContainValue(value: "iana")
-        browserScreen.assertRFCLinkExist()
+        browserScreen.assertReservedTLDNamesLinkExist()
         toolbarScreen.assertTabsButtonValue(expectedCount: "2")
     }
 }

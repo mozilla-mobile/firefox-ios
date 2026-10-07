@@ -15,7 +15,7 @@ class ZoomPageManagerTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        self.profile = MockProfile()
+        self.profile = makeProfile()
         self.zoomStore = MockZoomStore()
         await DependencyHelperMock().bootstrapDependencies()
     }

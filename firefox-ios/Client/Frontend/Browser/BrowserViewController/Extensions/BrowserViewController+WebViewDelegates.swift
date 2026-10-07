@@ -1112,7 +1112,7 @@ extension BrowserViewController: WKNavigationDelegate {
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         let nsError = error as NSError
-        if NativeErrorPageFeatureFlag().isNativeErrorPageEnabled {
+        if featureFlagsProvider.isEnabled(.nativeErrorPage) {
             store.dispatch(NativeErrorPageAction(
                 networkError: nsError,
                 windowUUID: windowUUID,
@@ -1228,24 +1228,13 @@ extension BrowserViewController: WKNavigationDelegate {
             )
 
             if let errorPageURL = errorPageURLComponents.url {
-                let noInternetErrorCode = Int(
-                    CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
-                )
-                let featureFlag = NativeErrorPageFeatureFlag()
-
-                let isWaybackError = WaybackCodes.isWaybackCode(error.code)
-                let isNoInternetError = error.code == noInternetErrorCode
                 let isBadCertError = NativeErrorPageHelper.isBadCertDomainError(error)
 
-                let shouldShowNoInternetErrorPage = isNoInternetError && featureFlag.isNICErrorPageEnabled
-                let shouldShowBadCertErrorPage = isBadCertError && featureFlag.isBadCertDomainErrorPageEnabled
-                let shouldShowWaybackErrorPage = isWaybackError && featureFlag.isWaybackEnabled
-
-                if shouldShowNoInternetErrorPage || shouldShowBadCertErrorPage || shouldShowWaybackErrorPage {
+                if featureFlagsProvider.isEnabled(.nativeErrorPage) {
                     if isBadCertError {
                         NativeErrorPageHelper.logCertificateErrorDetails(error: error, logger: logger)
                     }
-                    // TODO: FXIOS-15800 Move error type determination to NativeErrorPageMiddleware
+
                     let action = NativeErrorPageAction(
                         networkError: error,
                         windowUUID: windowUUID,
@@ -1469,10 +1458,12 @@ private extension BrowserViewController {
     }
 
     // Handle MarketPlaceKitNavigation
-    // Allow only explicit user tap on a top level link
     private func shouldAllowMarketplaceKitNavigation(navigationType: WKNavigationType,
-                                                     isMainFrame: Bool) -> Bool {
-        return navigationType == .linkActivated && isMainFrame
+                                                     isMainFrame: Bool,
+                                                     url: URL? = nil) -> Bool {
+        guard isMainFrame else { return false }
+        // .linkActivated = real tap; .other = JS-initiated / redirect (altstore.io uses this).
+        return navigationType == .linkActivated || navigationType == .other
     }
 
     // Recognize a iTunes Store URL. These all trigger the native apps. Note that appstore.com and phobos.apple.com

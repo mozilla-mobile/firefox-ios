@@ -17,8 +17,8 @@ class EditFolderCell: UITableViewCell,
         }
         static let textFieldHorizontalPadding: CGFloat = 16.0
     }
-    private lazy var titleTextField: TextField = .build { view in
-        view.addAction(UIAction(handler: { [weak self] _ in
+    private lazy var titleTextField: TextField = .build { [weak self] view in
+        view.addAction(UIAction(handler: { _ in
             self?.titleTextFieldDidChange()
         }), for: .editingChanged)
         view.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.titleTextField

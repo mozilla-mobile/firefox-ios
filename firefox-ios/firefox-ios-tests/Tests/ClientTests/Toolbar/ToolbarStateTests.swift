@@ -16,7 +16,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         DependencyHelperMock().bootstrapDependencies()
 
         // We must reset the global mock store prior to each test
@@ -653,16 +653,5 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
                 ]
             )
         )
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    // In order to avoid flaky tests, we should reset the store
-    // similar to production
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

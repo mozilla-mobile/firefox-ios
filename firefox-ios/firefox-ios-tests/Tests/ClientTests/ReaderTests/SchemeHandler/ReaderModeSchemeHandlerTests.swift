@@ -19,7 +19,7 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
         mockFlags.enabledFlags = [.customReaderModeScheme]
         DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: mockFlags)
         tabManager = MockTabManager()
-        subject = ReaderModeSchemeHandler(profile: MockProfile(), tabManager: tabManager)
+        subject = ReaderModeSchemeHandler(profile: makeProfile(), tabManager: tabManager)
     }
 
     override func tearDown() async throws {
@@ -169,7 +169,7 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
 
     func test_start_validURL_passesValidationAndReachesRoute() throws {
         // A non-private selected tab routes the request through the disk cache.
-        tabManager.selectedTab = Tab(profile: MockProfile(), windowUUID: tabManager.windowUUID)
+        tabManager.selectedTab = Tab(profile: makeProfile(), windowUUID: tabManager.windowUUID)
 
         let articleURL = URL(string: "https://example.com/article")!
         try DiskReaderModeCache.shared.put(articleURL, PageRouteTests.fixtureReadabilityResult())
@@ -196,7 +196,7 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
     func test_start_featureFlagDisabledAfterRegistration_rejectsRequest() throws {
         // Register the handler the way the app does (via TabConfigurationProvider) while the
         // feature is enabled, then turn the flag off and confirm the handler rejects the request.
-        let provider = TabConfigurationProvider(profile: MockProfile(), tabManager: tabManager)
+        let provider = TabConfigurationProvider(profile: makeProfile(), tabManager: tabManager)
         let configuration = provider.configuration(isPrivate: false).webViewConfiguration
         let handler = try XCTUnwrap(
             configuration.urlSchemeHandler(forURLScheme: ReaderModeSchemeHandler.scheme) as? ReaderModeSchemeHandler,

@@ -13,12 +13,12 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockProfile: MockProfile!
     private var mockTabManager: MockTabManager!
     private var mockWindowManager: MockWindowManager!
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
     private var appState: AppState!
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockTabManager = MockTabManager()
         mockTabManager.tabRestoreHasFinished = true
         mockWindowManager = MockWindowManager(
@@ -123,7 +123,7 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Helpers
-    private func createSubject(with mockProfile: Profile = MockProfile()) -> StartAtHomeMiddleware {
+    private func createSubject(with mockProfile: Profile) -> StartAtHomeMiddleware {
         /// 9 Sep 2001 8:00 pm GMT + 0
         let testDate = Date(timeIntervalSince1970: 1_000_065_600)
         let lastSessionDate = Calendar.current.date(
@@ -153,14 +153,5 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         self.appState = appState
         return appState
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

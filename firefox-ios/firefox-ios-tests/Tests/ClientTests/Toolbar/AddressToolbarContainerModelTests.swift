@@ -16,7 +16,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: MockNimbusFeatureFlags())
 
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         searchEnginesManager = await SearchEnginesManager(
             prefs: mockProfile.prefs,
             files: mockProfile.files,
@@ -293,7 +293,10 @@ final class AddressToolbarContainerModelTests: XCTestCase {
 
     @MainActor
     private func createSubject(withState state: ToolbarState) -> AddressToolbarContainerModel {
+        let appState = AppState(presentedComponents: PresentedComponentsState(components: [.toolbar(state)]))
+        let lens = AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
         return AddressToolbarContainerModel(state: state,
+                                            addressToolbarContainerLens: lens,
                                             profile: mockProfile,
                                             windowUUID: windowUUID)
     }
@@ -303,8 +306,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         isGoogleLensEnabled: Bool = false
     ) -> AddressBarState {
         return AddressBarState(windowUUID: windowUUID,
-                               navigationActionsState: NavigationActionsState(windowUUID: windowUUID),
-                               leadingPageActions: [],
+                               navigationActions: [],
                                trailingPageActions: [],
                                browserActions: [],
                                editingAccessoryAction: makeEditingAccessoryAction(

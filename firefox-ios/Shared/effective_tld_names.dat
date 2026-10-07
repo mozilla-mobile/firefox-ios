@@ -6809,7 +6809,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2026-07-24T16:40:16Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2026-09-30T19:51:07Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -7627,7 +7627,7 @@ coffee
 // https://www.iana.org/domains/root/db/college.html
 college
 
-// cologne : dotKoeln GmbH
+// cologne : domainworx Service & Management GmbH
 // https://www.iana.org/domains/root/db/cologne.html
 cologne
 
@@ -8843,7 +8843,7 @@ kitchen
 // https://www.iana.org/domains/root/db/kiwi.html
 kiwi
 
-// koeln : dotKoeln GmbH
+// koeln : domainworx Service & Management GmbH
 // https://www.iana.org/domains/root/db/koeln.html
 koeln
 
@@ -12766,8 +12766,10 @@ co.no
 // Combell.com : https://www.combell.com
 // Submitted by Combell Team <support@combell.com>
 webhosting.be
+site.webhosting.be
 prvw.eu
 hosting-cluster.nl
+site.hosting-cluster.nl
 
 // Contentful GmbH : https://www.contentful.com
 // Submitted by Contentful Developer Experience Team <prd-ecosystem-dx@contentful.com>
@@ -12840,6 +12842,13 @@ dyndns.dappnode.io
 // Submitted by Paul Biggar <ops@darklang.com>
 builtwithdark.com
 darklang.io
+
+// Databricks, Inc. : https://www.databricks.com/
+// Submitted by Databricks Enterprise Security <entsec@databricks.com>
+aws.databricksapps.com
+*.azure.databricksapps.com
+gcp.databricksapps.com
+aws-gov.databricksapps.us
 
 // DataDetect, LLC. : https://datadetect.com
 // Submitted by Andrew Banchich <abanchich@sceven.com>
@@ -13622,6 +13631,10 @@ preview.site
 // Submitted by Jason Zhu <jason@owtware.com>
 filegear.me
 
+// Files.com : https://www.files.com/
+// Submitted by Caleb Hearth <ops+public-suffix@files.com>
+hosted-by-files.com
+
 // Firebase, Inc.
 // Submitted by Chris Raynor <chris@firebase.com>
 firebaseapp.com
@@ -13770,6 +13783,10 @@ gitlab.io
 // Submitted by Aljaž Starc <me@aljaxus.eu>
 gitapp.si
 gitpage.si
+
+// Glide : https://www.glideapps.com
+// Submitted by Glide Engineering <engineering@heyglide.com>
+glideos.app
 
 // Global NOG Alliance : https://nogalliance.org/
 // Submitted by Sander Steffann <sander@nogalliance.org>
@@ -14015,6 +14032,7 @@ here.now
 // Heroku : https://www.heroku.com/
 // Submitted by Shumon Huque <public-dns@salesforce.com>
 herokuapp.com
+*.compute.herokuapp.com
 
 // Heyflow : https://www.heyflow.com
 // Submitted by Mirko Nitschke <tech@heyflow.com>
@@ -14220,6 +14238,10 @@ ipifony.net
 home64.de
 ipv64.de
 ipv64.net
+
+// IQHost / IQ Group : https://iqhost.pl/
+// Submitted by Adam Buhl <admin@iqhost.pl>
+iqhs.pl
 
 // ir.md : https://nic.ir.md
 // Submitted by Ali Soizi <info@nic.ir.md>
@@ -15360,8 +15382,6 @@ qcx.io
 // QNAP System Inc : https://www.qnap.com
 // Submitted by Nick Chang <cloudadmin@qnap.com>
 myqnapcloud.cn
-alpha-myqnapcloud.com
-dev-myqnapcloud.com
 mycloudnas.com
 mynascloud.com
 myqnapcloud.com
@@ -15990,6 +16010,10 @@ realtime.supabase.co
 storage.supabase.co
 supabase.in
 supabase.net
+
+// Surge : https://surge.sh
+// Submitted by Brock Whitten <support@surge.sh>
+surge.sh
 
 // Syncloud : https://syncloud.org
 // Submitted by Boris Rybalkin <syncloud@syncloud.it>

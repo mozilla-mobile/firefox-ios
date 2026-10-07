@@ -89,17 +89,31 @@ final class BrowserScreen {
         }
     }
 
-    private func assertUserAgentTextExists(_ text: String, timeout: TimeInterval = TIMEOUT) {
+    private func userAgentText(_ text: String) -> XCUIElement {
         let pred = NSPredicate(
             format: "elementType == %d AND label == %@",
             XCUIElement.ElementType.staticText.rawValue,
             text
         )
-        let query = app.webViews.descendants(matching: .staticText).matching(pred)
-        let element = query.firstMatch
+        return app.webViews.descendants(matching: .staticText).matching(pred).firstMatch
+    }
 
+    private func assertUserAgentTextExists(_ text: String, timeout: TimeInterval = TIMEOUT) {
+        let element = userAgentText(text)
         BaseTestCase().mozWaitForElementToExist(element, timeout: timeout)
         XCTAssertTrue(element.exists, "Expected UA text '\(text)' was not found in the web view.")
+    }
+
+    /// Loads a UA test page and asserts the mobile UA, retrying once: a fresh-profile content blocker reload
+    /// cancels the first navigation. Remove the retry once https://github.com/mozilla-mobile/firefox-ios/issues/35933 is fixed.
+    func navigateToURLAndAssertMobileUserAgent(_ url: String, timeout: TimeInterval = TIMEOUT) {
+        navigateToURL(url)
+        let mobileUserAgent = userAgentText("MOBILE_UA")
+        if BaseTestCase().mozWaitForElementToExist(mobileUserAgent, timeout: timeout, failOnTimeout: false) {
+            return
+        }
+        navigateToURL(url)
+        assertMobileUserAgentIsDisplayed(timeout: timeout)
     }
 
     func assertDesktopUserAgentIsDisplayed(timeout: TimeInterval = TIMEOUT) {
@@ -158,6 +172,14 @@ final class BrowserScreen {
 
     func bookOfMozillaPageContentExists(timeout: TimeInterval = TIMEOUT) -> Bool {
         webViewShowsText(containing: sel.BOOK_OF_MOZILLA_VERSE_TEXT.value, timeout: timeout)
+    }
+
+    func assertExampleDomainPageDisplayed(timeout: TimeInterval = TIMEOUT) {
+        XCTAssertTrue(exampleDomainTextExists(timeout: timeout), "The Example Domain page should be displayed")
+    }
+
+    func assertBookOfMozillaPageDisplayed(timeout: TimeInterval = TIMEOUT) {
+        XCTAssertTrue(bookOfMozillaPageContentExists(timeout: timeout), "The Book of Mozilla page should be displayed")
     }
 
     /// Scoped to the web view: an app-wide text search is also satisfied by a homepage tile or a tab
@@ -379,8 +401,8 @@ final class BrowserScreen {
         XCTFail("The URL bar is still in editing mode after \(maxAttempts) Cancel taps")
     }
 
-    func assertRFCLinkExist(timeout: TimeInterval = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(sel.LINK_RFC_2606.element(in: app), timeout: timeout)
+    func assertReservedTLDNamesLinkExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.LINK_RESERVED_TLD_NAMES.element(in: app), timeout: timeout)
     }
 
     func addressToolbarContainValue(value: String) {
@@ -613,6 +635,28 @@ final class BrowserScreen {
         assertSuggestResult(title: title, kind: kind)
     }
 
+    /// Asserts the non-sponsored `title` row directly follows the Firefox Suggest header, which holds
+    /// a single entry, and has no "Sponsored" description.
+    func assertNonSponsoredSuggestRowUI(title: String, timeout: TimeInterval = TIMEOUT) {
+        let header = sel.FIREFOX_SUGGEST_HEADER.element(in: app)
+        let row = app.tables.cells.containing(.staticText, identifier: title).firstMatch
+        assertWebElements(header, row, row.staticTexts[title])
+
+        // Search engine suggestions arriving late shift the table, so poll until the layout settles
+        let isDirectlyBelowHeader = NSPredicate { _, _ in abs(row.frame.minY - header.frame.maxY) <= 1 }
+        let expectation = XCTNSPredicateExpectation(predicate: isDirectlyBelowHeader, object: nil)
+        XCTAssertEqual(
+            XCTWaiter().wait(for: [expectation], timeout: timeout),
+            .completed,
+            "The suggestion is not the row directly under the Firefox Suggest header"
+        )
+        assertWebElements(shouldExist: false, row.staticTexts[sel.SPONSORED_LABEL.value])
+    }
+
+    func assertFirefoxSuggestHeader(shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
+        assertWebElements(shouldExist: shouldExist, sel.FIREFOX_SUGGEST_HEADER.element(in: app), timeout: timeout)
+    }
+
     /// Asserts on an address bar row backed by local data (browsing history or bookmarks), which is
     /// listed by page title rather than under the Firefox Suggest section.
     func assertSuggestionRow(titled title: String, shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
@@ -623,10 +667,17 @@ final class BrowserScreen {
         )
     }
 
-    func searchFromAddressBar(term: String) {
-        tapOnAddressBar()
-        clearAddressBarText()
-        typeOnSearchBar(text: term)
+    /// A late toolbar state update can reset the field right after the first keystroke ("ifa" for
+    /// "fifa"), so the term is cleared and retyped until the address bar starts with it.
+    func searchFromAddressBar(term: String, maxAttempts: Int = 3) {
+        let hasTerm = NSPredicate(format: "value BEGINSWITH %@", term)
+        for _ in 0..<maxAttempts {
+            tapOnAddressBar()
+            clearAddressBarText()
+            typeOnSearchBar(text: term)
+            let expectation = XCTNSPredicateExpectation(predicate: hasTerm, object: addressBar)
+            if XCTWaiter().wait(for: [expectation], timeout: TIMEOUT_PICKER_PROBE) == .completed { return }
+        }
     }
 
     /// Fails rather than returning with text still in the field, so a retry cannot append to the

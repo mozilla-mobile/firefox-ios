@@ -660,6 +660,15 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
     func listCandidates() throws  -> [LoginCandidate]
     
     /**
+     * Like `list_candidates()`, but only the logins whose origin is one of `origins`, or whose
+     * host is one of `domains` or a subdomain of one. Meant as a pre-filter for consumers with
+     * their own origin matching: the result is a superset of what they match, as long as
+     * `domains` holds the base domain (eTLD+1, which the caller computes) of every host they
+     * accept subdomains of.
+     */
+    func listCandidatesByOrigin(origins: [String], domains: [String]) throws  -> [LoginCandidate]
+    
+    /**
      * Stores that the user dismissed the breach alert for a login.
      */
     func recordBreachAlertDismissal(id: String) throws 
@@ -1055,6 +1064,24 @@ open func listCandidates()throws  -> [LoginCandidate]  {
         uniffiCallStatus in
     uniffi_logins_fn_method_loginstore_list_candidates(
             self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+    
+    /**
+     * Like `list_candidates()`, but only the logins whose origin is one of `origins`, or whose
+     * host is one of `domains` or a subdomain of one. Meant as a pre-filter for consumers with
+     * their own origin matching: the result is a superset of what they match, as long as
+     * `domains` holds the base domain (eTLD+1, which the caller computes) of every host they
+     * accept subdomains of.
+     */
+open func listCandidatesByOrigin(origins: [String], domains: [String])throws  -> [LoginCandidate]  {
+    return try  FfiConverterSequenceTypeLoginCandidate.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+        uniffiCallStatus in
+    uniffi_logins_fn_method_loginstore_list_candidates_by_origin(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceString.lower(origins),
+        FfiConverterSequenceString.lower(domains),uniffiCallStatus
     )
 })
 }
@@ -2772,6 +2799,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_list_candidates() != 2252) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginstore_list_candidates_by_origin() != 40597) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_record_breach_alert_dismissal() != 64238) {

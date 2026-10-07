@@ -19,7 +19,7 @@ final class TranslationsServiceTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockLogger = MockLogger()
         mockTabManager = MockTabManager()
         mockWindowManager = MockWindowManager(

@@ -58,6 +58,8 @@ class SearchViewController: SiteTableViewController,
         static let IconBorderWidth: CGFloat = 0.5
 
         static let AppendButtonSize: CGFloat = 44
+
+        static let resultsAnnouncementDelay: TimeInterval = 2
     }
 
     var searchDelegate: SearchViewControllerDelegate?
@@ -68,6 +70,7 @@ class SearchViewController: SiteTableViewController,
     var searchTelemetry: SearchTelemetry?
 
     private var selectedIndexPath: IndexPath?
+    private let resultsAnnouncementDebouncer = MainActorDebouncer(delay: UX.resultsAnnouncementDelay)
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -183,6 +186,7 @@ class SearchViewController: SiteTableViewController,
     override func viewWillDisappear(_ animated: Bool) {
         searchDelegate?.searchViewControllerWillHide(self)
         searchTelemetry?.stopImpressionTimer()
+        resultsAnnouncementDebouncer.cancel()
         super.viewWillDisappear(animated)
     }
 
@@ -292,6 +296,34 @@ class SearchViewController: SiteTableViewController,
 
     func reloadTableView() {
         tableView.reloadData()
+        scheduleResultsAnnouncement()
+    }
+
+    private func scheduleResultsAnnouncement() {
+        guard UIAccessibility.isVoiceOverRunning, !viewModel.searchQuery.isEmpty else {
+            resultsAnnouncementDebouncer.cancel()
+            return
+        }
+
+        resultsAnnouncementDebouncer.call { [weak self] in
+            self?.announceResultsCount()
+        }
+    }
+
+    private func announceResultsCount() {
+        let resultsCount = (0..<tableView.numberOfSections).reduce(0) { count, section in
+            count + tableView.numberOfRows(inSection: section)
+        }
+        guard resultsCount > 0 else { return }
+
+        let format: String = viewModel.isBottomSearchBar
+            ? .Search.ResultsAboveA11yAnnouncement
+            : .Search.ResultsBelowA11yAnnouncement
+        let announcement = NSAttributedString(
+            string: String(format: format, resultsCount),
+            attributes: [.accessibilitySpeechQueueAnnouncement: true]
+        )
+        UIAccessibility.post(notification: .announcement, argument: announcement)
     }
 
     func reloadSearchEngines() {
@@ -337,10 +369,7 @@ class SearchViewController: SiteTableViewController,
     /// In this state, we surface two types of content:
     /// - Trending searches: popular or curated terms shown to inspire discovery.
     /// - Recent searches: the user’s own past searches for quick re-access.
-    ///
-    /// We clear telemetry here since we're showing users a new set of searches.
     private func loadZeroSearchData() {
-        searchTelemetry?.clearZeroSearchSectionSeen()
         viewModel.loadTrendingSearches()
         viewModel.retrieveRecentSearches()
     }

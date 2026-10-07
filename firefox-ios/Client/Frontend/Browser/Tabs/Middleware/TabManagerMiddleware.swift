@@ -730,8 +730,8 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     @MainActor
     private func provideProfileImage(forWindow windowUUID: WindowUUID, accountData: AccountData) {
         if let iconURL = accountData.iconURL {
-            GeneralizedImageFetcher().getImageFor(url: iconURL) { image in
-                ensureMainThread { [weak self] in
+            GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
+                ensureMainThread {
                     self?.dispatchProfileImage(
                         windowUUID: windowUUID,
                         profileImage: image

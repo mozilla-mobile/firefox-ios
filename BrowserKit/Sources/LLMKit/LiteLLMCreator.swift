@@ -36,8 +36,14 @@ public struct LiteLLMCreator: LiteLLMCreating {
         let mlpaEnvironmentKey = prefs.stringForKey(PrefsKeys.MLPASettings.mlpaEndpointEnvironment) ?? ""
         let mlpaEnvironment = MLPAEnvironment(rawValue: mlpaEnvironmentKey) ?? .prod
 
-        // Reset attestation key if environment has changed
-        resetKeyIfEnvironmentChanged(prefs: prefs, currentEnvironment: mlpaEnvironment)
+        // Reset attestation key if environment has changed, so the app re-attests with the
+        // correct server
+        prefs.resetIfEnvironmentChanged(
+            mlpaEnvironment.rawValue,
+            forKey: PrefsKeys.MLPASettings.lastUsedEnvironment
+        ) {
+            try? keyStore.clearKeyID()
+        }
 
         guard let endPoint = MLPAConstants.completionsEndpoint(with: mlpaEnvironment),
               let client = try? AppAttestClient(
@@ -53,20 +59,5 @@ public struct LiteLLMCreator: LiteLLMCreating {
             serviceType: serviceType
         )
         return LiteLLMClient(authenticator: authenticator, baseURL: endPoint)
-    }
-
-    /// Resets the App Attest key if the MLPA environment has changed since last use.
-    ///
-    /// This ensures that when switching between environments (prod/staging/dev),
-    /// the app will re-attest with the correct server.
-    private func resetKeyIfEnvironmentChanged(prefs: Prefs, currentEnvironment: MLPAEnvironment) {
-        let lastUsedEnvironment = prefs.stringForKey(PrefsKeys.MLPASettings.lastUsedEnvironment)
-        let currentEnvironmentValue = currentEnvironment.rawValue
-
-        if let lastUsedEnvironment, lastUsedEnvironment != currentEnvironmentValue {
-            try? keyStore.clearKeyID()
-        }
-
-        prefs.setString(currentEnvironmentValue, forKey: PrefsKeys.MLPASettings.lastUsedEnvironment)
     }
 }
