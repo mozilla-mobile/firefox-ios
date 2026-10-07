@@ -1534,12 +1534,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
             // Notify theme manager
             themeManager.windowDidClose(uuid: uuid)
-
-            // Clean up views and ensure BVC for the window is freed
-            browserViewController.view.endEditing(true)
-            browserViewController.dismissUrlBar()
-            browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
-            browserViewController.removeFromParent()
+            releaseBrowserViewController()
         case .libraryOpened:
             // Auto-close library panel if it was opened in another iPad window. [FXIOS-8095]
             guard uuid != windowUUID else { return }
@@ -1579,6 +1574,17 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - Private helpers
+
+    private func releaseBrowserViewController() {
+        // Clean up views and ensure BVC and its adjacent views for the window are freed.
+        browserViewController.view.endEditing(true)
+        browserViewController.dismissUrlBar()
+        browserViewController.contentContainer.removeContent()
+        browserViewController.header.removeAllArrangedViews()
+        browserViewController.overKeyboardContainer.removeAllArrangedViews()
+        browserViewController.bottomContainer.removeAllArrangedViews()
+        browserViewController.removeFromParent()
+    }
 
     /// Tabs displaying content other than a HTML MIME type can be downloaded and treated as files when shared. This method
     /// attempts to download any such files. If there is no file to download, returns just a regular `ShareType.tab`.

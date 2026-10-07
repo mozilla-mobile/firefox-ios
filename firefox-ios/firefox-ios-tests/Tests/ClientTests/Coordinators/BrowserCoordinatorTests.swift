@@ -1636,6 +1636,89 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    // MARK: - WindowEventCoordinator
+    func testWindowWillClose_matchingUUID_removesContentAndDetachesBrowserViewController() {
+        let subject = createSubject()
+        let bvc = subject.browserViewController
+        let parent = UIViewController()
+        parent.addChild(bvc)
+        bvc.didMove(toParent: parent)
+
+        let homepage = HomepageViewController(windowUUID: windowUUID,
+                                              tabManager: tabManager,
+                                              overlayManager: overlayModeManager,
+                                              toastContainer: UIView())
+        bvc.contentContainer.add(content: homepage)
+        bvc.header.addArrangedSubview(UIView())
+        bvc.overKeyboardContainer.addArrangedSubview(UIView())
+        bvc.bottomContainer.addArrangedSubview(UIView())
+
+        subject.coordinatorHandleWindowEvent(event: .windowWillClose, uuid: windowUUID)
+
+        XCTAssertNil(bvc.contentContainer.contentController)
+        XCTAssertNil(homepage.view.superview)
+        XCTAssertFalse(bvc.contentContainer.hasAnyHomepage)
+        XCTAssertTrue(bvc.header.arrangedSubviews.isEmpty)
+        XCTAssertTrue(bvc.overKeyboardContainer.arrangedSubviews.isEmpty)
+        XCTAssertTrue(bvc.bottomContainer.arrangedSubviews.isEmpty)
+        XCTAssertNil(bvc.parent)
+        XCTAssertTrue(parent.children.isEmpty)
+    }
+
+    func testWindowWillClose_matchingUUID_removesWebViewContent() {
+        let subject = createSubject()
+        let bvc = subject.browserViewController
+        let webview = WebviewViewController(webView: WKWebView())
+        bvc.contentContainer.add(content: webview)
+        XCTAssertTrue(bvc.contentContainer.hasWebView)
+
+        subject.coordinatorHandleWindowEvent(event: .windowWillClose, uuid: windowUUID)
+
+        XCTAssertNil(bvc.contentContainer.contentController)
+        XCTAssertNil(webview.view.superview)
+        XCTAssertFalse(bvc.contentContainer.hasWebView)
+    }
+
+    func testWindowWillClose_matchingUUID_releasesEmbeddedContent() {
+        let subject = createSubject()
+        let bvc = subject.browserViewController
+        weak var weakWebview: WebviewViewController?
+
+        autoreleasepool {
+            let webview = WebviewViewController(webView: WKWebView())
+            weakWebview = webview
+            bvc.contentContainer.add(content: webview)
+
+            subject.coordinatorHandleWindowEvent(event: .windowWillClose, uuid: windowUUID)
+        }
+
+        XCTAssertNil(weakWebview, "Embedded content should be freed once the window closes.")
+    }
+
+    func testWindowWillClose_differentUUID_doesNotReleaseBrowserViewController() {
+        let subject = createSubject()
+        let bvc = subject.browserViewController
+        let parent = UIViewController()
+        parent.addChild(bvc)
+        bvc.didMove(toParent: parent)
+
+        let webview = WebviewViewController(webView: WKWebView())
+        bvc.contentContainer.add(content: webview)
+        bvc.header.addArrangedSubview(UIView())
+        bvc.overKeyboardContainer.addArrangedSubview(UIView())
+        bvc.bottomContainer.addArrangedSubview(UIView())
+
+        subject.coordinatorHandleWindowEvent(event: .windowWillClose, uuid: UUID())
+
+        XCTAssertTrue(bvc.contentContainer.contentController === webview)
+        XCTAssertNotNil(webview.view.superview)
+        XCTAssertTrue(bvc.contentContainer.hasWebView)
+        XCTAssertEqual(bvc.header.arrangedSubviews.count, 1)
+        XCTAssertEqual(bvc.overKeyboardContainer.arrangedSubviews.count, 1)
+        XCTAssertEqual(bvc.bottomContainer.arrangedSubviews.count, 1)
+        XCTAssertTrue(bvc.parent === parent)
+    }
+
     // MARK: - Child coordinator lifetime
 
     func testShowTabTray_tabTrayCoordinatorIsReleasedWithParent() throws {
