@@ -111,7 +111,7 @@ final class TabScrollHandler: NSObject,
         return windowUUID
     }
 
-    /// Returns true when the scrollview contentSize height is bigger than device height plus delta
+    /// Returns true when the scrollview contentSize height is bigger than viewport height plus delta
     /// and voice over is turned off
     var shouldUpdateUIWhenScrolling: Bool {
         let voiceOverOff = !UIAccessibility.isVoiceOverRunning
@@ -120,7 +120,7 @@ final class TabScrollHandler: NSObject,
 
     // If scrollview contentSize is bigger than scrollview height scroll is enabled
     var hasScrollableContent: Bool {
-        return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) <
+        return (scrollViewHeight + 2 * UIConstants.ToolbarHeight) <
             contentSize.height
     }
 

@@ -378,6 +378,7 @@
 		21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */; };
 		21B359C62AEAC20300FF09E3 /* TabsSectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B359C52AEAC20300FF09E3 /* TabsSectionManager.swift */; };
 		21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */; };
+		21CE97CF3070240500B9ACA2 /* AccessoryViewProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CE97CE3070240500B9ACA2 /* AccessoryViewProviderTests.swift */; };
 		21D151262AFC28960062D891 /* TabManagerMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D151252AFC28960062D891 /* TabManagerMiddleware.swift */; };
 		21D8843F2A7959D000AF144C /* HomePageSettingViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D8843E2A7959D000AF144C /* HomePageSettingViewControllerTests.swift */; };
 		21D884412A79628E00AF144C /* MockSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D884402A79628E00AF144C /* MockSettingsDelegate.swift */; };
@@ -3315,6 +3316,7 @@
 		21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerWebViewDelegateTests.swift; sourceTree = "<group>"; };
 		21B359C52AEAC20300FF09E3 /* TabsSectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsSectionManager.swift; sourceTree = "<group>"; };
 		21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockOverlayModeManager.swift; sourceTree = "<group>"; };
+		21CE97CE3070240500B9ACA2 /* AccessoryViewProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryViewProviderTests.swift; sourceTree = "<group>"; };
 		21D151252AFC28960062D891 /* TabManagerMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerMiddleware.swift; sourceTree = "<group>"; };
 		21D8843E2A7959D000AF144C /* HomePageSettingViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageSettingViewControllerTests.swift; sourceTree = "<group>"; };
 		21D884402A79628E00AF144C /* MockSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsDelegate.swift; sourceTree = "<group>"; };
@@ -13971,6 +13973,7 @@
 		43B658D729CE249D00C9EF08 /* CreditCard */ = {
 			isa = PBXGroup;
 			children = (
+				21CE97CE3070240500B9ACA2 /* AccessoryViewProviderTests.swift */,
 				ABEF80D82A2F283D003F52C4 /* CreditCardBottomSheetViewModelTests.swift */,
 				96AF8C1B29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift */,
 				967EDABE29D769A10089208D /* CreditCardInputFieldTests.swift */,
@@ -21483,6 +21486,7 @@
 				8A5BD95A28788A3D000FE773 /* TopSitesHelperTests.swift in Sources */,
 				C29B64832AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift in Sources */,
 				61A164492CE7BE84001D6058 /* WallpaperStateTests.swift in Sources */,
+				21CE97CF3070240500B9ACA2 /* AccessoryViewProviderTests.swift in Sources */,
 				8A6B799D2CDBDAE4003C3077 /* MockSponsoredTileData.swift in Sources */,
 				401F68F62D94966D00786D0C /* RemoteTabsPanelDelegateMock.swift in Sources */,
 				8A7A26E329D4ACF300EA76F1 /* SceneCoordinatorTests.swift in Sources */,
