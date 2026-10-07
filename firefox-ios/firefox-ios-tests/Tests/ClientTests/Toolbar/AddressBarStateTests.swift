@@ -499,12 +499,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         let stateWithURL = reducer.legacyReducer(initialState, didChangeURLAction)
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             stateWithURL,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.cancelEditOnHomepage
-            )
+            ToolbarModernAction.cancelEditOnHomepage,
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
@@ -517,12 +515,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.cancelEditOnHomepage
-            )
+            ToolbarModernAction.cancelEditOnHomepage,
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
@@ -636,12 +632,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(editingState.isEditing)
         XCTAssertTrue(editingState.shouldShowKeyboard)
 
-        let scrolledState = reducer.legacyReducer(
+        let scrolledState = reducer.modernReducer(
             editingState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.cancelEditOnHomepage
-            )
+            ToolbarModernAction.cancelEditOnHomepage,
+            windowUUID
         )
         XCTAssertTrue(scrolledState.isEditing)
         XCTAssertFalse(scrolledState.shouldShowKeyboard)
