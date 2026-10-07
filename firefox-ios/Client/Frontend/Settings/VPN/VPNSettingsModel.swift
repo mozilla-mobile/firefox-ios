@@ -143,7 +143,8 @@ final class VPNSettingsModel: ObservableObject {
         )
     }
 
-    /// Persists the pick; `VPNManager` reads it the next time the VPN is started.
+    /// Persists the pick and, if the VPN is on, restarts it so the new location applies immediately.
+    /// `start()` is called without `stop()` so traffic never drops off the proxy mid-switch.
     func selectLocation(code: String) {
         guard selectedLocationCode != code else { return }
 
@@ -156,5 +157,8 @@ final class VPNSettingsModel: ObservableObject {
             to: code,
             from: previousCode
         )
+
+        guard isVPNOn, let vpnManager else { return }
+        Task { await vpnManager.start() }
     }
 }
