@@ -50,13 +50,8 @@ struct DocumentPickerSelectors: DocumentPickerSelectorsSet {
     )
 
     // "On My iPhone" or "On My iPad" in the picker's Browse list of locations.
-    let ON_DEVICE_LOCATION = Selector(
-        strategy: .predicate(NSPredicate(
-            format: "elementType == %d AND identifier BEGINSWITH %@",
-            XCUIElement.ElementType.cell.rawValue,
-            IDs.onDeviceLocationPrefix
-        )),
-        value: IDs.onDeviceLocationPrefix,
+    let ON_DEVICE_LOCATION = Selector.cellIdBeginsWith(
+        IDs.onDeviceLocationPrefix,
         description: "On-device storage location in the iOS document picker",
         groups: ["documentPicker", "system"]
     )
