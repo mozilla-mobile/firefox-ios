@@ -28,6 +28,7 @@ struct AppState: StateType, Sendable {
                                         for component: AppComponent,
                                         window: WindowUUID?) -> S? {
         return presentedComponents.components
+            .lazy
             .compactMap {
                 switch ($0, component) {
                 case (.browserViewController(let state), .browserViewController): return state as? S

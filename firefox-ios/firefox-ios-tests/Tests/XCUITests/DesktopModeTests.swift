@@ -8,11 +8,13 @@ import XCTest
 // Tests for both platforms
 class DesktopModeTestsIpad: IpadOnlyTestCase {
     var browserScreen: BrowserScreen!
+    var toolbarScreen: ToolbarScreen!
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306852
     // Smoketest
     func testLongPressReload() {
         browserScreen = BrowserScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
 
         if skipPlatform { return }
         // Navigate and  verify the User Agent for DESKTOP
@@ -22,8 +24,7 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
         browserScreen.assertDesktopUserAgentIsDisplayed()
 
         // Activate the Desktop Site (Mobile User Agent)
-        navigator.goto(ReloadLongPressMenu)
-        navigator.performAction(Action.ToggleRequestDesktopSite)
+        toolbarScreen.toggleRequestDesktopSiteFromReloadMenu()
         waitUntilPageLoad()
 
         // Check the User Agent is Mobile
@@ -273,9 +274,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         let lvhURL = "http://lvh.me:\(serverPort)/test-fixture/test-user-agent.html"
 
         // Visit news.google.com
-        browserScreen.navigateToURL(newsLocaltestURL)
-        waitUntilPageLoad()
-        browserScreen.assertMobileUserAgentIsDisplayed()
+        browserScreen.navigateToURLAndAssertMobileUserAgent(newsLocaltestURL)
 
         // Step 1: Open the hamburger menu -> the dot menu is opened.
         navigateToBrowserTabMenu()
@@ -336,6 +335,7 @@ class DesktopModeTestsIphone: BaseTestCase {
         navigator.goto(BrowserTab)
         browserScreen.assertMobileUserAgentIsDisplayed()
         switchToDesktopSite()
+        browserScreen.assertDesktopUserAgentIsDisplayed()
 
         // Step 10: Open the hamburger menu -> the menu is open.
         navigateToBrowserTabMenu()
@@ -354,8 +354,7 @@ class DesktopModeTestsIphone: BaseTestCase {
     }
 
     public func switchToDesktopSite() {
-        navigator.goto(ReloadLongPressMenu)
-        navigator.performAction(Action.ToggleRequestDesktopSite)
+        toolbarScreen.toggleRequestDesktopSiteFromReloadMenu()
         waitUntilPageLoad()
     }
 }

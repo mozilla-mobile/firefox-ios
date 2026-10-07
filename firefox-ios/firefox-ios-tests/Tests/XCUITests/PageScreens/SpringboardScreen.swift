@@ -72,10 +72,24 @@ final class SpringboardScreen {
         sel.DONT_ALLOW_NOTIFICATIONS_BUTTON.element(in: springboard)
     }
 
+    private var openAppConfirmationButton: XCUIElement {
+        sel.OPEN_APP_CONFIRMATION_BUTTON.element(in: springboard)
+    }
+
     // MARK: - System Actions
 
     func pressHomeButton() {
         XCUIDevice.shared.press(.home)
+    }
+
+    /// Delivers `url` through the system, the way a deeplink tapped in another app reaches Firefox.
+    /// iOS may ask to confirm opening the app, so accept that prompt when it appears.
+    @available(iOS 16.4, *)
+    func openDeeplinkFromOutsideApp(_ url: URL) {
+        XCUIDevice.shared.system.open(url)
+        if openAppConfirmationButton.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) {
+            openAppConfirmationButton.waitAndTap()
+        }
     }
 
     // MARK: - Icon Actions

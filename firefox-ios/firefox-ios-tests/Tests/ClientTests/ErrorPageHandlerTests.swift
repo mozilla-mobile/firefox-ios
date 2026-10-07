@@ -79,7 +79,7 @@ final class ErrorPageHandlerTests: XCTestCase {
 
     @MainActor
     func testLoadPage_withOfflineErrorAndRestrictedCellularData_showsCellularDataGuidance() throws {
-        setupNimbusNativeErrorPageTesting(isEnabled: false, noInternetConnectionErrorIsEnabled: false)
+        setupNimbusNativeErrorPageTesting(isEnabled: false)
         setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: true)
         let subject = ErrorPageHelper(
             certStore: nil,
@@ -121,7 +121,7 @@ final class ErrorPageHandlerTests: XCTestCase {
 
     @MainActor
     func testResponseForErrorWebPage_withRestrictedCellularDataAndFeatureDisabled_usesDefaultContent() throws {
-        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: true)
+        setupNimbusNativeErrorPageTesting(isEnabled: true)
         setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: false)
         let errorURL = try XCTUnwrap(URL(string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)" +
             "?url=https%3A%2F%2Fexample.com%2F&code=\(NSURLErrorNotConnectedToInternet)" +
@@ -136,7 +136,7 @@ final class ErrorPageHandlerTests: XCTestCase {
 
     @MainActor
     func testLoadPage_withRestrictedCellularDataAndFeatureDisabled_keepsDefaultErrorPage() throws {
-        setupNimbusNativeErrorPageTesting(isEnabled: true, noInternetConnectionErrorIsEnabled: true)
+        setupNimbusNativeErrorPageTesting(isEnabled: true)
         setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: false)
         let subject = ErrorPageHelper(
             certStore: nil,
@@ -223,15 +223,9 @@ private extension ErrorPageHandlerTests {
         return URL(string: urlString)!
     }
 
-    func setupNimbusNativeErrorPageTesting(
-        isEnabled: Bool,
-        noInternetConnectionErrorIsEnabled: Bool
-    ) {
+    func setupNimbusNativeErrorPageTesting(isEnabled: Bool) {
         FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
-            return NativeErrorPageFeature(
-                enabled: isEnabled,
-                noInternetConnectionError: noInternetConnectionErrorIsEnabled
-            )
+            return NativeErrorPageFeature(enabled: isEnabled)
         }
     }
 
