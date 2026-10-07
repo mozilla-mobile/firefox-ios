@@ -70,36 +70,23 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertFalse(state.showQuickAnswersButton)
     }
 
-    func test_init_storeShouldShowGlow_setsShowQuickAnswersGlowTrue() {
-        mockQuickAnswersStore.isQuickAnswersEnabled = true
-        mockQuickAnswersStore.shouldShowGlow = true
+    func test_init_storeShouldStartGlow_setsShouldStartQuickAnswersButtonGlowTrue() {
+        mockQuickAnswersStore.shouldStartEntryPointButtonGlow = true
 
         let state = createSubject()
 
-        XCTAssertTrue(state.showQuickAnswersGlow)
+        XCTAssertTrue(state.shouldStartQuickAnswersButtonGlow)
     }
 
-    func test_init_storeShouldNotShowGlow_setsShowQuickAnswersGlowFalse() {
-        mockQuickAnswersStore.isQuickAnswersEnabled = true
-        mockQuickAnswersStore.shouldShowGlow = false
+    func test_init_storeShouldNotStartGlow_setsShouldStartQuickAnswersButtonGlowFalse() {
+        mockQuickAnswersStore.shouldStartEntryPointButtonGlow = false
 
         let state = createSubject()
 
-        XCTAssertFalse(state.showQuickAnswersGlow)
+        XCTAssertFalse(state.shouldStartQuickAnswersButtonGlow)
     }
 
-    func test_init_quickAnswersDisabled_setsShowQuickAnswersGlowFalse() {
-        mockQuickAnswersStore.isQuickAnswersEnabled = false
-        mockQuickAnswersStore.shouldShowGlow = true
-
-        let state = createSubject()
-
-        XCTAssertFalse(state.showQuickAnswersGlow)
-    }
-
-    func test_quickAnswersDidUpdateSettings_shouldNotShowGlow_setsShowQuickAnswersGlowFalse() {
-        mockQuickAnswersStore.isQuickAnswersEnabled = true
-        mockQuickAnswersStore.shouldShowGlow = true
+    func test_quickAnswersDidUpdateSettings_shouldStartGlow_setsShouldStartQuickAnswersButtonGlowTrue() {
         let initialState = createSubject()
         let reducer = headerReducer()
 
@@ -107,19 +94,33 @@ final class HeaderStateTests: XCTestCase {
             initialState,
             QuickAnswersMiddlewareAction(
                 isQuickAnswersEnabled: true,
-                shouldShowGlow: false,
+                shouldStartEntryPointButtonGlow: true,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: QuickAnswersMiddlewareActionType.didUpdateSettings
             )
         )
 
-        XCTAssertTrue(newState.showQuickAnswersButton)
-        XCTAssertFalse(newState.showQuickAnswersGlow)
+        XCTAssertTrue(newState.shouldStartQuickAnswersButtonGlow)
     }
 
-    func test_quickAnswersDidUpdateSettings_withoutGlowValue_setsShowQuickAnswersGlowFalse() {
-        mockQuickAnswersStore.isQuickAnswersEnabled = true
-        mockQuickAnswersStore.shouldShowGlow = true
+    func test_quickAnswersDidUpdateSettings_shouldNotStartGlow_setsShouldStartQuickAnswersButtonGlowFalse() {
+        let initialState = createSubject()
+        let reducer = headerReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            QuickAnswersMiddlewareAction(
+                isQuickAnswersEnabled: true,
+                shouldStartEntryPointButtonGlow: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: QuickAnswersMiddlewareActionType.didUpdateSettings
+            )
+        )
+
+        XCTAssertFalse(newState.shouldStartQuickAnswersButtonGlow)
+    }
+
+    func test_quickAnswersDidUpdateSettings_withoutGlowValue_setsShouldStartQuickAnswersButtonGlowFalse() {
         let initialState = createSubject()
         let reducer = headerReducer()
 
@@ -132,26 +133,7 @@ final class HeaderStateTests: XCTestCase {
             )
         )
 
-        XCTAssertFalse(newState.showQuickAnswersGlow)
-    }
-
-    func test_quickAnswersDidUpdateSettings_disabledWithGlow_setsShowQuickAnswersGlowFalse() {
-        mockQuickAnswersStore.isQuickAnswersEnabled = true
-        mockQuickAnswersStore.shouldShowGlow = true
-        let initialState = createSubject()
-        let reducer = headerReducer()
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            QuickAnswersMiddlewareAction(
-                isQuickAnswersEnabled: false,
-                shouldShowGlow: true,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: QuickAnswersMiddlewareActionType.didUpdateSettings
-            )
-        )
-
-        XCTAssertFalse(newState.showQuickAnswersGlow)
+        XCTAssertFalse(newState.shouldStartQuickAnswersButtonGlow)
     }
 
     func test_quickAnswersDidUpdateSettings_enabled_setsShowQuickAnswersButtonTrue() {

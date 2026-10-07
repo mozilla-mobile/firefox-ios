@@ -20,20 +20,20 @@ struct QuickAnswersEntryPointButtonTests {
     }
 
     @Test
-    func test_configure_whenNotGlowing_doesNotGlow() {
+    func test_configure_whenShouldNotStartGlowing_doesNotGlow() {
         let subject = createSubject()
 
-        let didStartGlow = subject.configure(theme: theme, glowing: false)
+        let didStartGlow = subject.configure(theme: theme, shouldStartGlowing: false)
 
         #expect(didStartGlow == false)
         #expect(subject.isGlowing == false)
     }
 
     @Test
-    func test_configure_whenGlowingTrue_startsGlowing() {
+    func test_configure_whenShouldStartGlowing_startsGlowing() {
         let subject = createSubject()
 
-        let didStartGlow = subject.configure(theme: theme, glowing: true)
+        let didStartGlow = subject.configure(theme: theme, shouldStartGlowing: true)
 
         #expect(didStartGlow == true)
         #expect(subject.isGlowing == true)
@@ -42,11 +42,33 @@ struct QuickAnswersEntryPointButtonTests {
     @Test
     func test_configure_calledTwice_startsTheGlowOnlyOnce() {
         let subject = createSubject()
-        subject.configure(theme: theme, glowing: true)
+        subject.configure(theme: theme, shouldStartGlowing: true)
 
-        let didStartGlow = subject.configure(theme: theme, glowing: true)
+        let didStartGlow = subject.configure(theme: theme, shouldStartGlowing: true)
 
         #expect(didStartGlow == false)
+    }
+
+    @Test
+    func test_stopGlow_whenGlowing_stopsGlowing() {
+        let subject = createSubject()
+        subject.configure(theme: theme, shouldStartGlowing: true)
+
+        subject.stopGlow()
+
+        #expect(subject.isGlowing == false)
+    }
+
+    @Test
+    func test_stopGlow_thenConfigure_doesNotGlowAgain() {
+        let subject = createSubject()
+        subject.configure(theme: theme, shouldStartGlowing: true)
+        subject.stopGlow()
+
+        let didStartGlow = subject.configure(theme: theme, shouldStartGlowing: true)
+
+        #expect(didStartGlow == false)
+        #expect(subject.isGlowing == false)
     }
 
     @Test
@@ -60,11 +82,8 @@ struct QuickAnswersEntryPointButtonTests {
     }
 
     // MARK: - Helper
-    private func createSubject(
-        glowDuration: TimeInterval = 5.0,
-        onTap: @escaping () -> Void = {}
-    ) -> QuickAnswersEntryPointButton {
-        let subject = QuickAnswersEntryPointButton(glowDuration: glowDuration, onTap: onTap)
+    private func createSubject(onTap: @escaping () -> Void = {}) -> QuickAnswersEntryPointButton {
+        let subject = QuickAnswersEntryPointButton(onTap: onTap)
         subject.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
         return subject
     }

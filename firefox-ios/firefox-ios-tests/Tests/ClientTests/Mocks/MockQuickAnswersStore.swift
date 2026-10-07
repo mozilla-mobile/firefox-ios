@@ -8,5 +8,5 @@ import Foundation
 
 final class MockQuickAnswersStore: QuickAnswersStore {
     var isQuickAnswersEnabled = false
-    var shouldShowGlow = false
+    var shouldStartEntryPointButtonGlow = false
 }

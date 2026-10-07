@@ -9,19 +9,18 @@ import Shared
 protocol QuickAnswersStore {
     /// Whether the Quick Answers feature flag is enabled and the user preference for it is enabled.
     var isQuickAnswersEnabled: Bool { get }
-    /// Whether the entry point glow still has to run: it stops for good once the user has consented, and
-    /// otherwise runs during at most `QuickAnswersMiddleware.maxGlowCount` sessions. The cap is evaluated
-    /// once per session, so a glow counted now only takes effect on the next one.
-    var shouldShowGlow: Bool { get }
+    /// Whether the entry point button should glow, until the user opts in or the glow count reaches its cap.
+    var shouldStartEntryPointButtonGlow: Bool { get }
 }
 
 final class QuickAnswersMiddleware: QuickAnswersStore {
-    /// How many times the glow is allowed to run while the user has not consented yet.
-    static let maxGlowCount: Int32 = 3
+    static let maxGlowCount = 3
 
     private let prefs: Prefs
     let featureFlagsProvider: FeatureFlagProviding
     let userPreferences: UserFeaturePreferring
+    /// Read once per session, so counting a glow doesn't stop the one currently running.
+    private lazy var isWithinGlowCap = glowCount < Self.maxGlowCount
 
     var isQuickAnswersEnabled: Bool {
         let isFeatureFlagEnabled = featureFlagsProvider.isEnabled(.quickAnswers)
@@ -29,20 +28,16 @@ final class QuickAnswersMiddleware: QuickAnswersStore {
         return isFeatureFlagEnabled && isUserPreferencesEnabled
     }
 
+    var shouldStartEntryPointButtonGlow: Bool {
+        return isQuickAnswersEnabled && !isOptInCompleted && isWithinGlowCap
+    }
+
     private var isOptInCompleted: Bool {
         return prefs.boolForKey(PrefsKeys.QuickAnswers.optInCompleted) ?? false
     }
 
-    var shouldShowGlow: Bool {
-        return !isOptInCompleted && isWithinGlowCap
-    }
-
-    /// Read once, so that counting a glow cannot lower the cap while that same glow is still running: the
-    /// new value would reach the header state mid animation and tear the glow down.
-    private lazy var isWithinGlowCap: Bool = glowCount < Self.maxGlowCount
-
-    private var glowCount: Int32 {
-        return prefs.intForKey(PrefsKeys.QuickAnswers.glowCount) ?? 0
+    private var glowCount: Int {
+        return Int(prefs.intForKey(PrefsKeys.QuickAnswers.entryPointButtonGlowCount) ?? 0)
     }
 
     init(
@@ -70,8 +65,8 @@ final class QuickAnswersMiddleware: QuickAnswersStore {
             self.handleInitializeAction(action: action)
         case QuickAnswersActionType.didSettingsChange:
             self.handleDidSettingsChangeAction(action: action)
-        case QuickAnswersActionType.didShowGlow:
-            self.handleDidShowGlowAction()
+        case QuickAnswersActionType.didStartEntryPointButtonGlow:
+            self.handleDidStartEntryPointButtonGlowAction()
         default:
             break
         }
@@ -81,7 +76,7 @@ final class QuickAnswersMiddleware: QuickAnswersStore {
     private func handleInitializeAction(action: Action) {
         store.dispatch(QuickAnswersMiddlewareAction(
             isQuickAnswersEnabled: isQuickAnswersEnabled,
-            shouldShowGlow: shouldShowGlow,
+            shouldStartEntryPointButtonGlow: shouldStartEntryPointButtonGlow,
             windowUUID: action.windowUUID,
             actionType: QuickAnswersMiddlewareActionType.didInitialize
         ))
@@ -91,16 +86,14 @@ final class QuickAnswersMiddleware: QuickAnswersStore {
     private func handleDidSettingsChangeAction(action: Action) {
         store.dispatch(QuickAnswersMiddlewareAction(
             isQuickAnswersEnabled: isQuickAnswersEnabled,
-            shouldShowGlow: shouldShowGlow,
+            shouldStartEntryPointButtonGlow: shouldStartEntryPointButtonGlow,
             windowUUID: action.windowUUID,
             actionType: QuickAnswersMiddlewareActionType.didUpdateSettings
         ))
     }
 
-    /// Counts a glow that just ran, so the glow eventually stops for users who never consent. Consenting
-    /// users stop glowing regardless of the count, so their glows do not need to be counted.
-    private func handleDidShowGlowAction() {
+    private func handleDidStartEntryPointButtonGlowAction() {
         guard !isOptInCompleted, glowCount < Self.maxGlowCount else { return }
-        prefs.setInt(glowCount + 1, forKey: PrefsKeys.QuickAnswers.glowCount)
+        prefs.setInt(Int32(glowCount + 1), forKey: PrefsKeys.QuickAnswers.entryPointButtonGlowCount)
     }
 }

@@ -5,11 +5,7 @@
 import Common
 import UIKit
 
-/// Capsule shaped button that opens the Quick Answers experience.
-///
-/// `configure(theme:glowing:)` is the only entry point: it applies the colors and, the first time it is
-/// asked to glow, runs a gradient glow that stops itself after `glowDuration`. The glow runs at most once
-/// per instance, so callers can ask for it on every configuration without restarting it.
+/// Capsule shaped button that opens Quick Answers. It glows at most once per instance, for `UX.glowDuration`.
 public final class QuickAnswersEntryPointButton: UIButton {
     private struct UX {
         static let borderWidth: CGFloat = 1
@@ -23,17 +19,12 @@ public final class QuickAnswersEntryPointButton: UIButton {
 
     private let icon = UIImage(named: StandardImageIdentifiers.Large.audioWave)
     private let onTap: () -> Void
-    private let glowDuration: TimeInterval
     private var gradientStops: [UIColor] = []
-    /// Background color shown whenever the glow is not running, on versions without a glass configuration.
     private var restingBackgroundColor: UIColor = .clear
     private var glowTask: Task<Void, Never>?
     private var hasGlowed = false
 
-    /// Hosts the gradients so they are drawn as part of the button's background, which keeps them aligned
-    /// with the background's shape and press animations.
     private let borderView = UIView()
-    /// Masks the border gradient to a capsule stroke, so only the rim of the gradient shows through.
     private let borderMask = CAShapeLayer()
     private let borderGradientLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
@@ -42,7 +33,6 @@ public final class QuickAnswersEntryPointButton: UIButton {
         layer.opacity = 0.0
         return layer
     }()
-    /// Fills the capsule behind the border, and is the only gradient whose colors move.
     private let backgroundGradientLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
         layer.startPoint = CGPoint(x: 0.5, y: 0.0)
@@ -51,19 +41,12 @@ public final class QuickAnswersEntryPointButton: UIButton {
         layer.masksToBounds = true
         return layer
     }()
-    /// Whether the glow is currently showing.
+
     var isGlowing: Bool {
         return borderGradientLayer.opacity > 0
     }
 
-    /// - Parameters:
-    ///   - glowDuration: How long the glow runs before stopping itself.
-    ///   - onTap: Called when the button is tapped.
-    public init(
-        glowDuration: TimeInterval? = nil,
-        onTap: @escaping () -> Void
-    ) {
-        self.glowDuration = glowDuration ?? UX.glowDuration
+    public init(onTap: @escaping () -> Void) {
         self.onTap = onTap
         super.init(frame: .zero)
         setupButton()
@@ -116,10 +99,9 @@ public final class QuickAnswersEntryPointButton: UIButton {
         backgroundGradientLayer.cornerRadius = bounds.height / 2
     }
 
-    /// Applies the theme's colors and, the first time `glowing` is true, runs the glow once.
-    /// - Returns: Whether this call started the glow, so callers can count it only once.
+    /// - Returns: Whether this call started the glow.
     @discardableResult
-    public func configure(theme: Theme, glowing: Bool) -> Bool {
+    public func configure(theme: Theme, shouldStartGlowing: Bool) -> Bool {
         gradientStops = [
             theme.colors.gradientAIStrongStop1,
             theme.colors.gradientAIStrongStop2,
@@ -131,13 +113,12 @@ public final class QuickAnswersEntryPointButton: UIButton {
         configuration?.image = gradientTintedIcon() ?? icon?.withRenderingMode(.alwaysTemplate)
 
         if isGlowing {
-            // Rebuild the keyframes so a theme change takes effect mid-glow.
             addFlowAnimation()
         } else {
             applyBackgroundColor(restingBackgroundColor)
         }
 
-        guard glowing, !hasGlowed else { return false }
+        guard shouldStartGlowing, !hasGlowed else { return false }
         startGlow()
         return true
     }
@@ -148,18 +129,16 @@ public final class QuickAnswersEntryPointButton: UIButton {
         hasGlowed = true
         borderGradientLayer.opacity = 1.0
         backgroundGradientLayer.opacity = UX.backgroundOpacity
-        // The gradients sit behind the background color, so it has to be transparent while they show.
         applyBackgroundColor(.clear)
         addFlowAnimation()
 
-        glowTask = Task { [weak self, duration = glowDuration] in
-            try? await Task.sleep(nanoseconds: UInt64(duration * Double(NSEC_PER_SEC)))
+        glowTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: UInt64(UX.glowDuration * Double(NSEC_PER_SEC)))
             guard !Task.isCancelled else { return }
             self?.stopGlow()
         }
     }
 
-    /// Fades the gradients out and brings the resting background back.
     func stopGlow() {
         glowTask?.cancel()
         glowTask = nil
@@ -187,8 +166,6 @@ public final class QuickAnswersEntryPointButton: UIButton {
         fadeOut.duration = UX.fadeOutDuration
         fadeOut.timingFunction = CAMediaTimingFunction(name: .easeOut)
 
-        // Settle the model value in the same transaction, so the layer stays transparent once the
-        // animation is removed.
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         layer.opacity = 0.0
@@ -196,9 +173,7 @@ public final class QuickAnswersEntryPointButton: UIButton {
         CATransaction.commit()
     }
 
-    /// Steps the background's stops one position along the gradient on every keyframe. Core Animation
-    /// interpolates between the color arrays, so each stop fades into its neighbor and the colors appear
-    /// to flow across the capsule.
+    /// Rotates the gradient stops on every keyframe, so the colors appear to flow across the capsule.
     private func addFlowAnimation() {
         backgroundGradientLayer.removeAnimation(forKey: UX.flowAnimationKey)
         let flow = CAKeyframeAnimation(keyPath: "colors")
@@ -208,7 +183,6 @@ public final class QuickAnswersEntryPointButton: UIButton {
         backgroundGradientLayer.add(flow, forKey: UX.flowAnimationKey)
     }
 
-    /// Fills the icon's opaque pixels with the gradient, so it matches the border instead of being a flat tint.
     private func gradientTintedIcon() -> UIImage? {
         guard let icon,
               let gradient = CGGradient(

@@ -17,6 +17,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         static let privateNovaLogoImageSize = CGSize(width: 72, height: 72)
         static let firefoxTextImageSize = CGSize(width: 90, height: 40)
         static let interImageSpacing: CGFloat = 10
+        static let quickAnswersButtonSize: CGFloat = 44
 
         static func contentWidth() -> CGFloat {
             return UX.firefoxLogoImageSize.width + UX.interImageSpacing + UX.firefoxTextImageSize.width
@@ -110,6 +111,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             logoContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             logoContainerView.trailingAnchor.constraint(lessThanOrEqualTo: quickAnswersButton.leadingAnchor),
 
+            quickAnswersButton.widthAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
+            quickAnswersButton.heightAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
             quickAnswersButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             quickAnswersButton.centerYAnchor.constraint(equalTo: logoContainerView.centerYAnchor),
             quickAnswersButton.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor),
@@ -153,21 +156,19 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         updateQuickAnswersButton()
     }
 
-    /// Configures the entry point once both the state and the theme are known. Cells built only to measure
-    /// the layout never get a theme, so they cannot start a glow that would be counted but never seen.
+    /// Waits for both state and theme, so cells built only for sizing never start a glow.
     private func updateQuickAnswersButton() {
         guard let headerState, let theme else { return }
 
         let didStartGlow = quickAnswersButton.configure(
             theme: theme,
-            glowing: headerState.showQuickAnswersGlow
+            shouldStartGlowing: headerState.shouldStartQuickAnswersButtonGlow
         )
-        // Only a glow that actually started is counted, so the middleware can cap how often it runs.
         guard didStartGlow else { return }
         store.dispatch(
             QuickAnswersAction(
                 windowUUID: headerState.windowUUID,
-                actionType: QuickAnswersActionType.didShowGlow
+                actionType: QuickAnswersActionType.didStartEntryPointButtonGlow
             )
         )
     }
@@ -214,11 +215,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
                 }
             }
         }
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        cancelQuickAnswersTipObservation()
     }
 
     private func cancelQuickAnswersTipObservation() {

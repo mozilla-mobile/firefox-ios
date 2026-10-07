@@ -57,7 +57,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchedAction.isQuickAnswersEnabled, true)
     }
 
-    func test_didSettingsChange_whenOptInCompleted_dispatchesShouldShowGlowFalse() throws {
+    func test_didSettingsChange_whenOptInCompleted_dispatchesShouldStartEntryPointButtonGlowFalse() throws {
         mockFeatureFlags.enabledFlags = [.quickAnswers]
         mockUserPreferences.setPreferenceFor(.quickAnswers, to: true)
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
@@ -71,10 +71,10 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? QuickAnswersMiddlewareAction)
-        XCTAssertEqual(dispatchedAction.shouldShowGlow, false)
+        XCTAssertEqual(dispatchedAction.shouldStartEntryPointButtonGlow, false)
     }
 
-    func test_didSettingsChange_whenOptInNotCompleted_dispatchesShouldShowGlowTrue() throws {
+    func test_didSettingsChange_whenOptInNotCompleted_dispatchesShouldStartEntryPointButtonGlowTrue() throws {
         mockFeatureFlags.enabledFlags = [.quickAnswers]
         mockUserPreferences.setPreferenceFor(.quickAnswers, to: true)
 
@@ -87,7 +87,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? QuickAnswersMiddlewareAction)
-        XCTAssertEqual(dispatchedAction.shouldShowGlow, true)
+        XCTAssertEqual(dispatchedAction.shouldStartEntryPointButtonGlow, true)
     }
 
     func test_didSettingsChange_whenFeatureFlagDisabled_dispatchesFalse() throws {
@@ -191,64 +191,79 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchedAction.isQuickAnswersEnabled, false)
     }
 
-    // MARK: - didShowGlow
-    func test_shouldShowGlow_whenOptInNotCompletedAndGlowNeverShown_returnsTrue() {
+    // MARK: - didStartEntryPointButtonGlow
+    func test_shouldStartEntryPointButtonGlow_whenEnabledAndNeverGlowed_returnsTrue() {
+        enableQuickAnswers()
+
         let subject = createSubject()
 
-        XCTAssertTrue(subject.shouldShowGlow)
+        XCTAssertTrue(subject.shouldStartEntryPointButtonGlow)
     }
 
-    func test_shouldShowGlow_whenOptInCompleted_returnsFalse() {
+    func test_shouldStartEntryPointButtonGlow_whenQuickAnswersDisabled_returnsFalse() {
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.shouldStartEntryPointButtonGlow)
+    }
+
+    func test_shouldStartEntryPointButtonGlow_whenOptInCompleted_returnsFalse() {
+        enableQuickAnswers()
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
 
         let subject = createSubject()
 
-        XCTAssertFalse(subject.shouldShowGlow)
+        XCTAssertFalse(subject.shouldStartEntryPointButtonGlow)
     }
 
-    func test_didShowGlow_belowMaxGlowCount_keepsShouldShowGlowTrueOnNextSession() {
-        showGlow(on: createSubject(), times: Int(QuickAnswersMiddleware.maxGlowCount) - 1)
+    func test_didStartEntryPointButtonGlow_belowMaxGlowCount_keepsGlowOnNextSession() {
+        enableQuickAnswers()
 
-        XCTAssertTrue(createSubject().shouldShowGlow)
+        startGlow(on: createSubject(), times: QuickAnswersMiddleware.maxGlowCount - 1)
+
+        XCTAssertTrue(createSubject().shouldStartEntryPointButtonGlow)
     }
 
-    func test_didShowGlow_atMaxGlowCount_setsShouldShowGlowFalseOnNextSession() {
-        showGlow(on: createSubject(), times: Int(QuickAnswersMiddleware.maxGlowCount))
+    func test_didStartEntryPointButtonGlow_atMaxGlowCount_stopsGlowOnNextSession() {
+        enableQuickAnswers()
 
-        XCTAssertFalse(createSubject().shouldShowGlow)
+        startGlow(on: createSubject(), times: QuickAnswersMiddleware.maxGlowCount)
+
+        XCTAssertFalse(createSubject().shouldStartEntryPointButtonGlow)
     }
 
-    func test_didShowGlow_atMaxGlowCount_keepsShouldShowGlowTrueForTheSameSession() {
+    func test_didStartEntryPointButtonGlow_atMaxGlowCount_keepsGlowForTheSameSession() {
+        enableQuickAnswers()
         let subject = createSubject()
-        XCTAssertTrue(subject.shouldShowGlow)
+        XCTAssertTrue(subject.shouldStartEntryPointButtonGlow)
 
-        showGlow(on: subject, times: Int(QuickAnswersMiddleware.maxGlowCount))
+        startGlow(on: subject, times: QuickAnswersMiddleware.maxGlowCount)
 
-        XCTAssertTrue(subject.shouldShowGlow)
+        XCTAssertTrue(subject.shouldStartEntryPointButtonGlow)
     }
 
-    func test_didShowGlow_whenOptInCompletedDuringTheSession_setsShouldShowGlowFalse() {
+    func test_shouldStartEntryPointButtonGlow_whenOptInCompletedDuringTheSession_returnsFalse() {
+        enableQuickAnswers()
         let subject = createSubject()
-        XCTAssertTrue(subject.shouldShowGlow)
+        XCTAssertTrue(subject.shouldStartEntryPointButtonGlow)
 
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
 
-        XCTAssertFalse(subject.shouldShowGlow)
+        XCTAssertFalse(subject.shouldStartEntryPointButtonGlow)
     }
 
-    func test_didShowGlow_whenOptInCompleted_doesNotCountTheGlow() {
+    func test_didStartEntryPointButtonGlow_whenOptInCompleted_doesNotCountTheGlow() {
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
         let subject = createSubject()
 
-        showGlow(on: subject, times: Int(QuickAnswersMiddleware.maxGlowCount))
+        startGlow(on: subject, times: QuickAnswersMiddleware.maxGlowCount)
 
-        XCTAssertNil(mockProfile.prefs.intForKey(PrefsKeys.QuickAnswers.glowCount))
+        XCTAssertNil(mockProfile.prefs.intForKey(PrefsKeys.QuickAnswers.entryPointButtonGlowCount))
     }
 
-    func test_didShowGlow_doesNotDispatchAnyAction() {
+    func test_didStartEntryPointButtonGlow_doesNotDispatchAnyAction() {
         let subject = createSubject()
 
-        showGlow(on: subject, times: 1)
+        startGlow(on: subject, times: 1)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
@@ -270,10 +285,15 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Helpers
 
-    private func showGlow(on subject: QuickAnswersMiddleware, times: Int) {
+    private func enableQuickAnswers() {
+        mockFeatureFlags.enabledFlags = [.quickAnswers]
+        mockUserPreferences.setPreferenceFor(.quickAnswers, to: true)
+    }
+
+    private func startGlow(on subject: QuickAnswersMiddleware, times: Int) {
         let action = QuickAnswersAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: QuickAnswersActionType.didShowGlow
+            actionType: QuickAnswersActionType.didStartEntryPointButtonGlow
         )
         for _ in 0..<times {
             subject.quickAnswersProvider.legacyMiddleware(mockStore.state, action)

@@ -13,8 +13,7 @@ struct HeaderState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var isPrivate: Bool
     var showQuickAnswersButton: Bool
-    /// Whether the entry point should glow, as decided by the Quick Answers middleware.
-    var showQuickAnswersGlow: Bool
+    var shouldStartQuickAnswersButtonGlow: Bool
 
     init(
         windowUUID: WindowUUID,
@@ -26,7 +25,7 @@ struct HeaderState: StateType, Equatable, Hashable {
             windowUUID: windowUUID,
             isPrivate: isPrivate,
             showQuickAnswersButton: showQuickAnswersButton,
-            showQuickAnswersGlow: showQuickAnswersButton && quickAnswersStore.shouldShowGlow
+            shouldStartQuickAnswersButtonGlow: quickAnswersStore.shouldStartEntryPointButtonGlow
         )
     }
 
@@ -34,12 +33,12 @@ struct HeaderState: StateType, Equatable, Hashable {
         windowUUID: WindowUUID,
         isPrivate: Bool,
         showQuickAnswersButton: Bool,
-        showQuickAnswersGlow: Bool
+        shouldStartQuickAnswersButtonGlow: Bool
     ) {
         self.windowUUID = windowUUID
         self.isPrivate = isPrivate
         self.showQuickAnswersButton = showQuickAnswersButton
-        self.showQuickAnswersGlow = showQuickAnswersGlow
+        self.shouldStartQuickAnswersButtonGlow = shouldStartQuickAnswersButtonGlow
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -78,10 +77,9 @@ struct HeaderState: StateType, Equatable, Hashable {
         else {
             return defaultState(from: state)
         }
-        let showQuickAnswersButton = showQuickAnswers && !state.isPrivate
         return state
-            .copy(showQuickAnswersButton: showQuickAnswersButton)
-            .copy(showQuickAnswersGlow: showQuickAnswersButton && quickAnswersAction.shouldShowGlow)
+            .copy(showQuickAnswersButton: showQuickAnswers && !state.isPrivate)
+            .copy(shouldStartQuickAnswersButtonGlow: quickAnswersAction.shouldStartEntryPointButtonGlow)
     }
 
     static func defaultState(from state: HeaderState) -> HeaderState {
@@ -89,7 +87,7 @@ struct HeaderState: StateType, Equatable, Hashable {
             windowUUID: state.windowUUID,
             isPrivate: state.isPrivate,
             showQuickAnswersButton: state.showQuickAnswersButton,
-            showQuickAnswersGlow: state.showQuickAnswersGlow
+            shouldStartQuickAnswersButtonGlow: state.shouldStartQuickAnswersButtonGlow
         )
     }
 }

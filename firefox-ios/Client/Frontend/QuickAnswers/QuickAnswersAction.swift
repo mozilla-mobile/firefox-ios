@@ -24,24 +24,22 @@ struct QuickAnswersMiddlewareAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let isQuickAnswersEnabled: Bool?
-    /// Whether the entry point glow still has to run, as decided by `QuickAnswersMiddleware`.
-    let shouldShowGlow: Bool
+    let shouldStartEntryPointButtonGlow: Bool
 
     init(isQuickAnswersEnabled: Bool? = nil,
-         shouldShowGlow: Bool = false,
+         shouldStartEntryPointButtonGlow: Bool = false,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.isQuickAnswersEnabled = isQuickAnswersEnabled
-        self.shouldShowGlow = shouldShowGlow
+        self.shouldStartEntryPointButtonGlow = shouldStartEntryPointButtonGlow
     }
 }
 
 enum QuickAnswersActionType: ActionType {
     case didSettingsChange
-    /// The entry point started glowing, so the glow has to be counted towards its display cap.
-    case didShowGlow
+    case didStartEntryPointButtonGlow
 }
 
 enum QuickAnswersMiddlewareActionType: ActionType {
