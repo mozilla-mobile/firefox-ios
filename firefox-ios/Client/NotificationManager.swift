@@ -32,15 +32,13 @@ extension NotificationManagerProtocol {
         requestAuthorization { granted, error in
             guard error == nil, granted else { return }
 
-            DispatchQueue.main.async {
-                if userDefaults.object(forKey: PrefsKeys.Notifications.SyncNotifications) == nil {
-                    userDefaults.set(true, forKey: PrefsKeys.Notifications.SyncNotifications)
-                }
-                if userDefaults.object(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
-                    userDefaults.set(true, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
-                }
-                notificationCenter.post(name: .RegisterForPushNotifications)
+            if userDefaults.object(forKey: PrefsKeys.Notifications.SyncNotifications) == nil {
+                userDefaults.set(true, forKey: PrefsKeys.Notifications.SyncNotifications)
             }
+            if userDefaults.object(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
+                userDefaults.set(true, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+            }
+            notificationCenter.post(name: .RegisterForPushNotifications)
         }
     }
 }

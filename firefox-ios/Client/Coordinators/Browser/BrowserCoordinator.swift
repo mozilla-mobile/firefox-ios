@@ -69,6 +69,7 @@ final class BrowserCoordinator: BaseCoordinator,
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
+    private var pendingOnboardingCardAction: OnboardingCardButtonAction = .none
 
     override var isDismissible: Bool { false }
 
@@ -295,9 +296,6 @@ final class BrowserCoordinator: BaseCoordinator,
 
         presentHardcodedOnboardingDripIfNeeded()
     }
-
-    // needed to display login page after sync onboarding card is dismissed
-    private var pendingOnboardingCardAction: OnboardingCardButtonAction = .none
 
     // Presents the day-based onboarding card over the current tab
     private func presentHardcodedOnboardingDripIfNeeded() {
