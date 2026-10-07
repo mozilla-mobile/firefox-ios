@@ -16,7 +16,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         router = MockRouter(navigationController: UINavigationController())
-        profile = MockProfile()
+        profile = makeProfile()
         parentCoordinator = MockLibraryCoordinatorDelegate()
         navigationHandler = MockLibraryNavigationHandler()
     }

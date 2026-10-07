@@ -18,7 +18,7 @@ class FxAWebViewModelTests: XCTestCase {
         try await super.setUp()
         deeplinkParams = FxALaunchParams(entrypoint: .browserMenu, query: ["test_key": "test_value"])
         viewModel = FxAWebViewModel(pageType: .settingsPage,
-                                    profile: MockProfile(),
+                                    profile: makeProfile(),
                                     deepLinkParams: deeplinkParams,
                                     telemetry: FxAWebViewTelemetry(telemetryWrapper: MockTelemetryWrapper()))
     }
@@ -222,7 +222,7 @@ class FxAWebViewModelTests: XCTestCase {
 
     private func didDismissOnOAuthLogin(pageType: FxAPageType, data: Any?) -> Bool {
         let viewModel = FxAWebViewModel(pageType: pageType,
-                                        profile: MockProfile(),
+                                        profile: makeProfile(),
                                         deepLinkParams: deeplinkParams,
                                         telemetry: FxAWebViewTelemetry(telemetryWrapper: MockTelemetryWrapper()))
         var dismissed = false

@@ -17,7 +17,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockFeatureFlags = MockNimbusFeatureFlags()
         mockUserPreferences = MockUserFeaturePreferences()
         DependencyHelperMock().bootstrapDependencies(

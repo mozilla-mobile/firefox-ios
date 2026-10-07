@@ -21,7 +21,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockTabManager = MockTabManager()
         mockWindowManager = MockWindowManager(
             wrappedManager: WindowManagerImplementation(),
@@ -472,7 +472,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func setupWebViewForTabManager(isHomePage: Bool = false) {
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID, isHomePage: isHomePage)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID, isHomePage: isHomePage)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
     }

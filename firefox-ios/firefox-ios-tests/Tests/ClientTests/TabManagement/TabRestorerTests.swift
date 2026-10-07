@@ -15,7 +15,7 @@ final class TabRestorerTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
         mockDataStore = MockTabDataStore()
         mockDelegate = MockTabRestorerDelegate(profile: mockProfile)

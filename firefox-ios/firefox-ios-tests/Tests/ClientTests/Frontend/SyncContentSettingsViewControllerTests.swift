@@ -15,7 +15,7 @@ class SyncContentSettingsViewControllerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
         syncContentSettingsVC = SyncContentSettingsViewController(windowUUID: windowUUID)
         syncContentSettingsVC?.profile = profile
     }

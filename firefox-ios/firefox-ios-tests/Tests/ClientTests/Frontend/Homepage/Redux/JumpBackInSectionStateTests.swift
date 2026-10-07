@@ -14,7 +14,7 @@ final class JumpBackInSectionStateTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
         setupNimbusHomepageJumpBackInSectionDefaultTesting(isEnabled: false)
     }

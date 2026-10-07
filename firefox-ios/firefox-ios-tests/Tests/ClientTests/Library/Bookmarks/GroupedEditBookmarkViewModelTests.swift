@@ -35,7 +35,7 @@ class GroupedEditBookmarkViewModelTests: XCTestCase {
         try await super.setUp()
         folderFetcher = MockGroupedFolderHierarchyFetcher()
         bookmarksSaver = MockBookmarksSaver()
-        profile = MockProfile()
+        profile = makeProfile()
     }
 
     override func tearDown() async throws {

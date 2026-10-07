@@ -20,7 +20,7 @@ final class RemoteTabCreatorTests: XCTestCase {
     }
 
     func testGivenTabIsPrivate_thenReturnNil() {
-        let tab = Tab(profile: MockProfile(),
+        let tab = Tab(profile: makeProfile(),
                       isPrivate: true,
                       windowUUID: .XCTestDefaultUUID)
         let result = RemoteTabCreator.toRemoteTab(from: tab)
@@ -28,14 +28,14 @@ final class RemoteTabCreatorTests: XCTestCase {
     }
 
     func testGivenTabHasNoURL_thenReturnNil() {
-        let tab = Tab(profile: MockProfile(),
+        let tab = Tab(profile: makeProfile(),
                       windowUUID: .XCTestDefaultUUID)
         let result = RemoteTabCreator.toRemoteTab(from: tab)
         XCTAssertNil(result)
     }
 
     func testGivenTabIsInternalURL_thenReturnsNil() {
-        let tab = Tab(profile: MockProfile(),
+        let tab = Tab(profile: makeProfile(),
                       windowUUID: .XCTestDefaultUUID)
         tab.url = URL(string: "internal://local/about/home")
         let result = RemoteTabCreator.toRemoteTab(from: tab)
@@ -43,7 +43,7 @@ final class RemoteTabCreatorTests: XCTestCase {
     }
 
     func testGivenTabIsJavascriptURL_thenReturnsNil() {
-        let tab = Tab(profile: MockProfile(),
+        let tab = Tab(profile: makeProfile(),
                       windowUUID: .XCTestDefaultUUID)
         tab.url = URL(string: "javascript:thisisaURL.com")
         let result = RemoteTabCreator.toRemoteTab(from: tab)
@@ -51,7 +51,7 @@ final class RemoteTabCreatorTests: XCTestCase {
     }
 
     func testGivenTabHasNilHost_thenReturnsNil() {
-        let tab = Tab(profile: MockProfile(),
+        let tab = Tab(profile: makeProfile(),
                       windowUUID: .XCTestDefaultUUID)
         tab.url = URL(string: "api/v1/users")
         let result = RemoteTabCreator.toRemoteTab(from: tab)
@@ -59,7 +59,7 @@ final class RemoteTabCreatorTests: XCTestCase {
     }
 
     func testGivenTabHasProperURL_thenReturnsRemoteTab() {
-        let tab = Tab(profile: MockProfile(),
+        let tab = Tab(profile: makeProfile(),
                       windowUUID: .XCTestDefaultUUID)
         tab.url = URL(string: "https://thisisaURL.com")
         let result = RemoteTabCreator.toRemoteTab(from: tab)

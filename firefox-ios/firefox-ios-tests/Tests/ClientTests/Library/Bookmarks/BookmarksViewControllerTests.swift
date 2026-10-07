@@ -23,7 +23,7 @@ final class BookmarksViewControllerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
     }
 
     override func tearDown() async throws {
