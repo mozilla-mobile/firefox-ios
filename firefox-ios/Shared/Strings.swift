@@ -1817,7 +1817,7 @@ extension String {
                     key: "Onboarding.MultiDay.NotificationCard.Title.v159",
                     tableName: "Onboarding",
                     value: "Stay in the Loop",
-                    comment: "Title for the onboarding card requesting permissions to send notifications.")
+                    comment: "Title for the onboarding card requesting permissions to send notifications.  “Stay in the loop” means \"Remain informed\".")
                 public static let BodyText = MZLocalizedString(
                     key: "Onboarding.MultiDay.NotificationCard.BodyText.v159",
                     tableName: "Onboarding",
