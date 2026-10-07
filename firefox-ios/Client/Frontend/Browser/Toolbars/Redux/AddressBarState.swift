@@ -136,6 +136,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         switch action {
         case .didKeyboardRequestChange(let shouldShow):
             return state.copy(shouldShowKeyboard: shouldShow)
+        case .cancelEditOnHomepage:
+            return handleCancelEditOnHomepageAction(state: state, windowUUID: actionWindowUUID)
         default:
             return defaultState(from: state)
         }
@@ -187,9 +189,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         case ToolbarActionType.didStartEditingUrl:
             return handleDidStartEditingUrlAction(state: state, action: action)
-
-        case ToolbarActionType.cancelEditOnHomepage:
-            return handleCancelEditOnHomepageAction(state: state, action: action)
 
         case ToolbarActionType.cancelEdit:
             return handleCancelEditAction(state: state, action: action)
@@ -391,17 +390,16 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     @MainActor
-    private static func handleCancelEditOnHomepageAction(state: Self, action: Action) -> Self {
-        guard action is ToolbarAction else { return defaultState(from: state) }
-
-        if state.url == nil {
-            return handleCancelEditAction(state: state, action: action)
-        } else {
+    private static func handleCancelEditOnHomepageAction(state: Self, windowUUID: WindowUUID) -> Self {
+        guard state.url == nil else {
             // This case can occur when scrolling on homepage or in search view
             // and the user is still in isEditing mode (aka Cancel button is shown)
             // But we don't show the keyboard and the cursor is not active
             return state.copy(shouldShowKeyboard: false)
         }
+
+        let cancelEditAction = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+        return handleCancelEditAction(state: state, action: cancelEditAction)
     }
 
     @MainActor
