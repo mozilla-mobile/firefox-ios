@@ -292,6 +292,7 @@ public struct PrefsKeys {
     // Used for enabling test data for merino stories on non-dev builds
     public static let useMerinoTestData = "useMerinoTestData"
 
+    // Used for showing mock breach alerts on saved logins, for testing the breach alerts UI
     public static let useMockBreachAlerts = "useMockBreachAlerts"
 
     public struct Usage {

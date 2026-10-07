@@ -112,7 +112,7 @@ final class BreachAlertsManager: @unchecked Sendable {
     ///         - an array of LoginRecords of breaches in the original list.
     func findUserBreaches(_ logins: [LoginRecord]) -> Maybe<Set<LoginRecord>> {
         if isUsingMockBreaches {
-            breaches = mockBreaches(for: logins)
+            breaches = BreachAlertsTestData().breaches(forDomains: Array(loginsByHostname(logins).keys))
         }
 
         var result = Set<LoginRecord>()
@@ -181,18 +181,6 @@ final class BreachAlertsManager: @unchecked Sendable {
     // MARK: - Helper Functions
     private var isUsingMockBreaches: Bool {
         return profile.prefs.boolForKey(PrefsKeys.useMockBreachAlerts) ?? false
-    }
-
-    private func mockBreaches(for logins: [LoginRecord]) -> Set<BreachRecord> {
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let breachDate = dateFormatter.string(from: Date(timeIntervalSinceNow: 24 * 60 * 60))
-        return Set(loginsByHostname(logins).keys.map { domain in
-            BreachRecord(name: domain,
-                         title: domain,
-                         domain: domain,
-                         breachDate: breachDate,
-                         description: "Mock breach alert")
-        })
     }
 
     private func baseDomainForLogin(_ login: LoginRecord) -> String {

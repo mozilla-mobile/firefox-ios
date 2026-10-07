@@ -402,6 +402,7 @@
 		21FB441A2E7B3AE500A8818D /* MockRecordVisitObservationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FB44192E7B3AE500A8818D /* MockRecordVisitObservationManager.swift */; };
 		23D57E6E25ED6F2700883FAD /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D57E6D25ED6F2700883FAD /* SearchViewController.swift */; };
 		23ED80FF25C89C9800D0E9D5 /* DefaultBrowserOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23ED80FE25C89C9800D0E9D5 /* DefaultBrowserOnboardingViewController.swift */; };
+		250706C6454E0543B605F235 /* BreachAlertsTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CFB7B4CA3F5B1DDAB9CE94 /* BreachAlertsTestData.swift */; };
 		253648E12B2111C100D5C2C5 /* SearchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253648E02B2111C100D5C2C5 /* SearchViewControllerTests.swift */; };
 		254B760A2B7B44EE00AB8526 /* NimbusFirefoxSuggestFeatureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254B76092B7B44EE00AB8526 /* NimbusFirefoxSuggestFeatureLayer.swift */; };
 		274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */; };
@@ -9395,6 +9396,7 @@
 		50A14E949294B2A85CD33CEA /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/Menu.strings; sourceTree = "<group>"; };
 		50B44A7F80EE0532276DE9C8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Intro.strings; sourceTree = "<group>"; };
 		50CB4382AE62CA8EDC4CAE05 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LoginManager.strings; sourceTree = "<group>"; };
+		50CFB7B4CA3F5B1DDAB9CE94 /* BreachAlertsTestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsTestData.swift; sourceTree = "<group>"; };
 		51614CF895A46ADD3C81ACC1 /* gd */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gd; path = gd.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		517E452081637F97A6FC1441 /* hy-AM */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hy-AM"; path = "hy-AM.lproj/ClearHistoryConfirm.strings"; sourceTree = "<group>"; };
 		520249978BE024E29169017C /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ka; path = ka.lproj/Storage.strings; sourceTree = "<group>"; };
@@ -17354,6 +17356,7 @@
 				CA90753724929B22005B794D /* NoLoginsView.swift */,
 				CAC458F0249429C20042561A /* PasswordManagerSelectionHelper.swift */,
 				CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */,
+				50CFB7B4CA3F5B1DDAB9CE94 /* BreachAlertsTestData.swift */,
 				CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */,
 				CA4ACE4824C8C91500F55894 /* BreachAlertsDetailView.swift */,
 				C8163850268A0899004C7160 /* AddCredentialViewController.swift */,
@@ -20615,6 +20618,7 @@
 				1D05C9832D9CCF720081540C /* RemoteSettingsServiceSyncCoordinator.swift in Sources */,
 				AA02C9832D9CCF720081540C /* RemoteSettingsGleanTelemetry.swift in Sources */,
 				CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */,
+				250706C6454E0543B605F235 /* BreachAlertsTestData.swift in Sources */,
 				8AB8572727D93AEC0075C173 /* TopSiteHistoryManager.swift in Sources */,
 				C81A8F2526D3ED1900EBA539 /* UIWindow+Extension.swift in Sources */,
 				ED8B49B92D6CF72700743444 /* AppIcon.swift in Sources */,
