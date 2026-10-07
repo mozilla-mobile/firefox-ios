@@ -8,6 +8,8 @@ protocol DocumentPickerSelectorsSet {
     var SAVE_BUTTON: Selector { get }
     var FILE_NAME_FIELD: Selector { get }
     var UNTAGGED_FILE_NAME_FIELD: Selector { get }
+    var BACK_BUTTON: Selector { get }
+    var ON_DEVICE_LOCATION: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -16,6 +18,8 @@ struct DocumentPickerSelectors: DocumentPickerSelectorsSet {
         static let saveButton = "Save"
         static let fileNameField = "DOCPicker.filenameTextField"
         static let fileNameFieldTagsButton = "Tags"
+        static let backButton = "BackButton"
+        static let onDeviceLocationPrefix = "DOC.sidebar.item.On My "
     }
 
     let SAVE_BUTTON = Selector.buttonIdOrLabel(
@@ -38,5 +42,24 @@ struct DocumentPickerSelectors: DocumentPickerSelectorsSet {
         groups: ["documentPicker", "system"]
     )
 
-    var all: [Selector] { [SAVE_BUTTON, FILE_NAME_FIELD, UNTAGGED_FILE_NAME_FIELD] }
+    // Leads one level up from the current location, up to the Browse list of locations.
+    let BACK_BUTTON = Selector.buttonInNavigationBarByLabel(
+        IDs.backButton,
+        description: "Back button in the iOS document picker",
+        groups: ["documentPicker", "system"]
+    )
+
+    // "On My iPhone" or "On My iPad" in the picker's Browse list of locations.
+    let ON_DEVICE_LOCATION = Selector(
+        strategy: .predicate(NSPredicate(
+            format: "elementType == %d AND identifier BEGINSWITH %@",
+            XCUIElement.ElementType.cell.rawValue,
+            IDs.onDeviceLocationPrefix
+        )),
+        value: IDs.onDeviceLocationPrefix,
+        description: "On-device storage location in the iOS document picker",
+        groups: ["documentPicker", "system"]
+    )
+
+    var all: [Selector] { [SAVE_BUTTON, FILE_NAME_FIELD, UNTAGGED_FILE_NAME_FIELD, BACK_BUTTON, ON_DEVICE_LOCATION] }
 }
