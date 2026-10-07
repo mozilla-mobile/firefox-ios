@@ -233,6 +233,7 @@ class LoginTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306964
+    // Regression
     func testSearchLogin() {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()

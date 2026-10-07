@@ -46,6 +46,7 @@ class DragAndDropTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2390210
+    // Regression
     func testRearrangeMoreThan3TabsTabTraytab() {
         // Arranging more than 3 to check that it works moving tabs between lines
         let thirdWebsite = (url: "example.com", tabName: "Example Domain. Currently selected tab.")
@@ -109,6 +110,7 @@ class DragAndDropTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2361192
+    // Regression
     func testDragAndDropHomeTabTabsTray() {
         navigator.openNewURL(urlString: secondWebsite.url)
         waitUntilPageLoad()
@@ -289,6 +291,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2417438
     // This test drags the address bar and since it is not possible to drop it on another app,
     // lets do it in a search box
+    // Regression
     func testDragAddressBarIntoSearchBox() {
         if skipPlatform { return }
 

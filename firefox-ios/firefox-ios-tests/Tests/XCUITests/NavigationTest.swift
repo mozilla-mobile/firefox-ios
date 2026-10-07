@@ -51,6 +51,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
+    // Regression
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"
         let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
@@ -181,6 +182,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441495
+    // Regression
     func testScrollingBehaviorInAWebPage() {
         navigator.nowAt(HomePanelsScreen)
         navigator.openURL(website_1["url"]!)
@@ -237,6 +239,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441923
+    // Regression
     func testLongPressOnAddressBar() {
         // `Paste & Go` and `Paste` are only built when the pasteboard holds a string, so seed it
         // from the test process rather than copying in-app, which triggers the cross-process paste
@@ -533,6 +536,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2695828
+    // Regression
     func testBackArrowNavigation() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)

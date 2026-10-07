@@ -156,6 +156,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323802
+    // Regression
     func testBarDisappearsWhenReloading() {
         userState.url = path(forTestPage: TestPages.mozillaBook)
         openFindInPageFromMenu(openSite: userState.url!)

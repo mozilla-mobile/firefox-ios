@@ -61,6 +61,7 @@ class SettingsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307041
+    // Regression
     func testOpenMailAppSettings() {
         app.launch()
         waitForTabsButton()
