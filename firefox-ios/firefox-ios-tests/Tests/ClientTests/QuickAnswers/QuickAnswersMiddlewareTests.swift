@@ -58,8 +58,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didSettingsChange_whenOptInCompleted_dispatchesShouldStartEntryPointButtonGlowFalse() throws {
-        mockFeatureFlags.enabledFlags = [.quickAnswers]
-        mockUserPreferences.setPreferenceFor(.quickAnswers, to: true)
+        enableQuickAnswers()
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
 
         let subject = createSubject()
@@ -75,8 +74,7 @@ final class QuickAnswersMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didSettingsChange_whenOptInNotCompleted_dispatchesShouldStartEntryPointButtonGlowTrue() throws {
-        mockFeatureFlags.enabledFlags = [.quickAnswers]
-        mockUserPreferences.setPreferenceFor(.quickAnswers, to: true)
+        enableQuickAnswers()
 
         let subject = createSubject()
         let action = QuickAnswersAction(
