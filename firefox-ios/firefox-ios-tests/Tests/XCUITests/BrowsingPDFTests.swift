@@ -114,6 +114,7 @@ class BrowsingPDFTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307119
+    // Regression
     func testLongPressOnPDFLinkToAddToReadingList() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()

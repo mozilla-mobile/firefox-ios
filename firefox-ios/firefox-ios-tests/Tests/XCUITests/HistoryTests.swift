@@ -79,6 +79,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307301
+    // Regression
     func testOpenSyncDevices() {
         // Firefox sync page should be available
         navigator.nowAt(NewTabScreen)

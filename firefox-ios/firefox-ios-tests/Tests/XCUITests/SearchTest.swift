@@ -767,6 +767,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2753105
+    // Regression
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {
         app.launch()
         navigator.goto(SearchSettings)
