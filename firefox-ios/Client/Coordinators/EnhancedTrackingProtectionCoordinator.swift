@@ -38,7 +38,6 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
     ) {
         let tab = tabManager.selectedTab
         let url = tab?.url ?? URL(fileURLWithPath: "")
-        let displayTitle = tab?.displayTitle ?? ""
         let contentBlockerStatus = tab?.contentBlocker?.status ?? .blocking
         let contentBlockerStats = tab?.contentBlocker?.stats
         let connectionSecure = secureConnectionDelegate.showHasOnlySecureContentInTrackingPanel
