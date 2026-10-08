@@ -235,13 +235,14 @@ public final class QuickAnswersViewController: UIViewController,
                 self?.dismiss(with: url)
             }
         )
-        if QuickAnswersPrivacyTipPresenter.isSupported {
+        if #available(iOS 17.0, *) {
             contentView.configurePrivacyLink { [weak self] in
                 self?.presentPrivacyTip()
             }
         }
     }
 
+    @available(iOS 17.0, *)
     private func presentPrivacyTip() {
         privacyTipPresenter.present(
             from: contentView.privacyTipSourceView,

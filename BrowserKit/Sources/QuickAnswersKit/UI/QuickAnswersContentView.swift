@@ -10,7 +10,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     private struct UX {
         static let contentSpacing: CGFloat = 32.0
         static let footerSpacing: CGFloat = 2.0
-        static let privacyIconSize: CGFloat = 14.0
+        static let privacyIconSize = CGSize(width: 14.0, height: 14.0)
         static let privacyIconPadding: CGFloat = 2.0
         static let privacyButtonContentInsets = NSDirectionalEdgeInsets(
             top: 0.0,
@@ -18,7 +18,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             bottom: 8.0,
             trailing: 8.0
         )
-        static let privacyButtonA11yIdentifier = "QuickAnswers.AboutYourPrivacyButton"
         static let animationDuration: TimeInterval = 0.2
         static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)
         /// The vertical space the waveform and its spacing leave behind.
@@ -69,7 +68,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     /// Groups the footer disclaimer and the privacy link so they cascade in as a single section.
     private let footerStackView: UIStackView = .build {
         $0.axis = .vertical
-        $0.alignment = .fill
         $0.spacing = UX.footerSpacing
         $0.alpha = 0.0
     }
@@ -79,51 +77,26 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         $0.textAlignment = .center
         $0.adjustsFontForContentSizeCategory = true
     }
-    private lazy var privacyButton: UIButton = .build { [weak self] in
-        $0.isHidden = true
-        $0.accessibilityIdentifier = UX.privacyButtonA11yIdentifier
+    private let privacyButton: UIButton = .build {
         $0.configuration = .plain()
         $0.configuration?.contentInsets = UX.privacyButtonContentInsets
+        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.informationFill)?
+            .createScaled(UX.privacyIconSize)
+            .withRenderingMode(.alwaysTemplate)
         $0.configuration?.imagePadding = UX.privacyIconPadding
         $0.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
             outgoing.font = FXFontStyles.Regular.caption2.scaledFont()
             return outgoing
         }
-        $0.addAction(UIAction { _ in self?.onPrivacyTapped?() }, for: .touchUpInside)
     }
     private let optInView: OptInView = .build()
     private var theme: Theme?
     private var strings: QuickAnswersViewConfiguration.ContentViewStrings?
-    private var onPrivacyTapped: (() -> Void)?
-
-    // MARK: - Footer constraints
-    /// Keeps the footer right below the sources, unless `footerBottomSnapConstraint` pulls it further down.
-    private lazy var footerTopConstraint: NSLayoutConstraint = {
-        let constraint = footerStackView.topAnchor.constraint(
-            equalTo: sourceView.bottomAnchor,
-            constant: UX.contentSpacing
-        )
-        constraint.priority = .defaultLow
-        return constraint
-    }()
-    private lazy var footerBottomConstraint = footerStackView.bottomAnchor.constraint(
-        equalTo: contentView.bottomAnchor
-    )
-    /// Pulls the footer onto the bottom edge of the viewport. The constant compensates for the upward
-    /// shift the result sections get from `animateResultCascade`. It yields to the required minimum
-    /// spacing below the sources, so an answer that turns out to fill the view keeps the footer in place.
-    private lazy var footerBottomSnapConstraint: NSLayoutConstraint = {
-        let constraint = footerStackView.bottomAnchor.constraint(
-            equalTo: scrollView.frameLayoutGuide.bottomAnchor,
-            constant: UX.resultTranslationOffset
-        )
-        constraint.priority = .defaultHigh
-        return constraint
-    }()
 
     /// The view the privacy tip popover has to be anchored to.
-    var privacyTipSourceView: UIView { privacyButton }
+    @available(iOS 17.0, *)
+    var privacyTipSourceView: UIView { privacyButton.imageView ?? privacyButton }
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -138,7 +111,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     // MARK: - Setup
     private func setupSubviews() {
         footerStackView.addArrangedSubview(footerLabel)
-        footerStackView.addArrangedSubview(privacyButton)
         contentView.addSubviews(
             audioWaveform,
             placeholderLabel,
@@ -184,12 +156,10 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             sourceView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             sourceView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            footerTopConstraint,
-            footerStackView.topAnchor.constraint(greaterThanOrEqualTo: sourceView.bottomAnchor,
-                                                 constant: UX.contentSpacing),
+            footerStackView.topAnchor.constraint(equalTo: sourceView.bottomAnchor, constant: UX.contentSpacing),
             footerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             footerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            footerBottomConstraint
+            footerStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 
@@ -200,21 +170,13 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         searchingLabel.text = strings.answering
         sourceView.configureStrings(sourcesHeader: strings.sources)
         privacyButton.configuration?.title = strings.aboutYourPrivacy
-        privacyButton.configuration?.image = privacyIcon()
     }
 
-    /// Reveals the privacy link. It stays hidden until configured, since the tip it opens is unavailable before iOS 17.
+    /// Adds the privacy link to the footer, since the tip it opens is unavailable before iOS 17.
+    @available(iOS 17.0, *)
     func configurePrivacyLink(onPrivacyTapped: @escaping () -> Void) {
-        self.onPrivacyTapped = onPrivacyTapped
-        privacyButton.isHidden = false
-    }
-
-    /// The acorn icon is only available at 24pt, so it is redrawn at the size the footer expects.
-    private func privacyIcon() -> UIImage? {
-        let side = UIFontMetrics(forTextStyle: .caption2).scaledValue(for: UX.privacyIconSize)
-        return UIImage(named: StandardImageIdentifiers.Large.informationFill)?
-            .createScaled(CGSize(width: side, height: side))
-            .withRenderingMode(.alwaysTemplate)
+        privacyButton.addAction(UIAction { _ in onPrivacyTapped() }, for: .touchUpInside)
+        footerStackView.addArrangedSubview(privacyButton)
     }
 
     func startAudioWaveformAnimation() {
@@ -292,7 +254,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         answerLabel.text = text
         footerLabel.text = String(format: strings?.footerFormat ?? "", modelName)
         sourceView.configure(with: sources, onSourceTapped: onSourceTapped)
-        snapFooterToBottomIfNeeded()
         animateResultCascade()
     }
 
@@ -307,19 +268,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         audioWaveform.alpha = isOptInVisible ? 0.0 : 1.0
         placeholderLabel.alpha = isOptInVisible ? 0.0 : 1.0
         placeholderLabel.transform = .identity
-    }
-
-    /// Pins the footer to the bottom edge when the answer is short enough to leave room below it, so it
-    /// does not float right under the sources. A result that already fills the view is left untouched.
-    private func snapFooterToBottomIfNeeded() {
-        layoutIfNeeded()
-        // The result sections end up shifted up by `resultTranslationOffset`, so that is the height the
-        // content actually takes on screen.
-        let visibleContentHeight = contentView.frame.height - UX.resultTranslationOffset
-        guard visibleContentHeight < scrollView.bounds.height else { return }
-        footerBottomConstraint.constant = UX.resultTranslationOffset
-        footerBottomSnapConstraint.isActive = true
-        layoutIfNeeded()
     }
 
     // MARK: - Result animation

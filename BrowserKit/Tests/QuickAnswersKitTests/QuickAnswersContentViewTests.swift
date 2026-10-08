@@ -20,6 +20,7 @@ struct QuickAnswersContentViewTests {
     let privacyTapSpy = PrivacyTapSpy()
 
     @Test
+    @available(iOS 17.0, *)
     func test_privacyLinkTap_notifiesOnce() {
         let subject = createSubject()
 
@@ -29,6 +30,7 @@ struct QuickAnswersContentViewTests {
     }
 
     // MARK: - Helper
+    @available(iOS 17.0, *)
     private func createSubject() -> QuickAnswersContentView {
         let subject = QuickAnswersContentView()
         subject.configureStrings(QuickAnswersViewConfiguration.mock.contentView)

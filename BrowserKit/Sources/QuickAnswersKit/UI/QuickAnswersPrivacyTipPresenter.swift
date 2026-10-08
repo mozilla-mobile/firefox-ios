@@ -11,15 +11,7 @@ import TipKit
 final class QuickAnswersPrivacyTipPresenter {
     private struct UX {
         /// The natural size of the acorn icon, which TipKit would otherwise scale up.
-        static let imageSize = CGSize(width: 24.0, height: 24.0)
-    }
-
-    /// TipKit is unavailable before iOS 17, so the link opening this tip has to stay hidden there.
-    static var isSupported: Bool {
-        if #available(iOS 17.0, *) {
-            return true
-        }
-        return false
+        static let imageSize = CGSize(width: 26.0, height: 26.0)
     }
 
     private weak var presenter: UIViewController?
@@ -36,8 +28,9 @@ final class QuickAnswersPrivacyTipPresenter {
         invalidationTask?.cancel()
     }
 
+    @available(iOS 17.0, *)
     func present(from sourceView: UIView, iconColor: UIColor) {
-        guard #available(iOS 17.0, *), let presenter else { return }
+        guard let presenter else { return }
         let tip = QuickAnswersPrivacyTip(strings: strings, iconColor: iconColor)
         let popover = TipUIPopoverViewController(tip, sourceItem: sourceView)
         popover.imageSize = UX.imageSize

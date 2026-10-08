@@ -10,7 +10,6 @@ import TipKit
 import UIKit
 
 /// The tip presented when the user taps the "About your privacy" link of the Quick Answers content view.
-/// Strings are injected since `QuickAnswersKit` has no access to the localized strings of the app.
 @available(iOS 17.0, *)
 struct QuickAnswersPrivacyTip: Tip {
     /// TipKit invalidates a tip for good once its close button is tapped, and a tip that is already
@@ -19,8 +18,6 @@ struct QuickAnswersPrivacyTip: Tip {
     let id = "QuickAnswersPrivacyTip-\(UUID().uuidString)"
 
     private let strings: QuickAnswersViewConfiguration.PrivacyBannerStrings
-    /// The tint is baked into the asset since `Tip` exposes the icon as an `Image`, which carries no styling,
-    /// and `TipUIPopoverViewController.imageStyle` is only available from iOS 18.
     private let icon: Image?
 
     init(strings: QuickAnswersViewConfiguration.PrivacyBannerStrings, iconColor: UIColor) {
