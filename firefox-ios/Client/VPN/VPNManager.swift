@@ -10,7 +10,7 @@ import Network
 import WebEngine
 
 @MainActor
-protocol VPNManaging {
+protocol VPNRunnable {
     var isRunning: Bool { get }
     func start() async
     func stop() async
@@ -22,14 +22,15 @@ enum VPNError: Error {
 }
 
 @available(iOS 17.0, *)
-final class VPNManager: VPNManaging {
+final class VPNManager: VPNRunnable {
     private static let secretKey = "VPNGuardianSecret"
     private let logger: Logger
     private let guardian: VPNGuardian
-    private let serverlist: VPNServerManager
+    private let serverManager: VPNServerManager
     private let windowManager: WindowManager
     private let userPreferences: UserFeaturePreferring
 
+    // TODO: fxios-16876 This will get used when we wire up VPN Connection
     var isRunning: Bool {
         self.userPreferences.getPreferenceFor(.vpnFeature)
     }
@@ -50,7 +51,7 @@ final class VPNManager: VPNManaging {
             configuration: clientConfig,
             logger: logger
         )
-        self.serverlist = VPNServerManager(
+        self.serverManager = VPNServerManager(
             client: profile.remoteSettingsService.makeClient(collectionName: VPNServerManager.collectionName),
             logger: logger
         )
@@ -58,9 +59,8 @@ final class VPNManager: VPNManaging {
         self.userPreferences = userPreferences
     }
 
-    /// Guardian's shared auth secret, supplied at runtime via the `VPN_GUARDIAN_SECRET` environment
-    /// variable so it never lands in source control. Set it on the Run action of a local, unshared
-    /// copy of the Fennec scheme — the shared schemes are tracked in git, `xcuserdata` is not.
+    // TODO: FXIOS-16874 This will go away with VPNKit integration.
+    // Guardian's shared auth secret, supplied at runtime via the `VPN_GUARDIAN_SECRET` environment
     private static func guardianAuthHeaders(logger: Logger) -> [String: String] {
         let secret = Bundle.main.object(forInfoDictionaryKey: secretKey) as? String
         guard let secret, !secret.isEmpty else {
@@ -78,12 +78,9 @@ final class VPNManager: VPNManaging {
         do {
             let pass = try await self.guardian.getPass()
 
-//            guard let server = await self.serverlist.selectServer() else {
-//                throw VPNError.noServerFound
-//            }
-
-            // TODO: FXIOS-16874 Hardcode server to point at staging for this foxfooding
-            let server = VPNGuardian.Server(hostname: "stage.m1.fastly-masque.net", port: 2499, city: "", countryCode: "")
+            guard let server = await self.serverManager.selectServer() else {
+                throw VPNError.noServerFound
+            }
 
             self.logger.log(
                 "Got Guardian proxy pass — expires \(pass.expiresAt), usage \(String(describing: pass.usage)); server \(server.hostname):\(server.port) (\(server.city), \(server.countryCode))",
