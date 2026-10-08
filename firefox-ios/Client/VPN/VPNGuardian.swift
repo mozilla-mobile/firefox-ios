@@ -5,7 +5,12 @@
 import Common
 import Foundation
 
-final class VPNGuardian: Sendable {
+protocol VPNGuardianProviding: Sendable {
+    func getPass() async throws -> VPNGuardian.ProxyPass
+    func passRotation(after initial: VPNGuardian.ProxyPass) -> AsyncStream<VPNGuardian.ProxyPass>
+}
+
+final class VPNGuardian: VPNGuardianProviding {
     enum Configuration {
         case prod
         case staging

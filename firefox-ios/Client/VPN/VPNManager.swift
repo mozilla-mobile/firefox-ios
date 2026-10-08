@@ -22,17 +22,30 @@ enum VPNError: Error {
 }
 
 @available(iOS 17.0, *)
-final class VPNManager: VPNRunnable {
+@MainActor
+protocol ProxyConfigurator {
+    func applyProxyConfigurations(_ configs: [ProxyConfiguration], forcingSessionReset: Bool)
+}
+
+@available(iOS 17.0, *)
+struct DefaultProxyConfigurator: ProxyConfigurator {
+    func applyProxyConfigurations(_ configs: [ProxyConfiguration], forcingSessionReset: Bool) {
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations(configs, forcingSessionReset: forcingSessionReset)
+    }
+}
+
+@available(iOS 17.0, *)
+final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
     private static let secretKey = "VPNGuardianSecret"
     private let logger: Logger
-    private let guardian: VPNGuardian
-    private let serverManager: VPNServerManager
+    private let guardian: VPNGuardianProviding
+    private let serverManager: VPNServerManaging
     private let windowManager: WindowManager
-    private let userPreferences: UserFeaturePreferring
+    private let proxyApplier: ProxyConfigurator
 
     // TODO: fxios-16876 This will get used when we wire up VPN Connection
     var isRunning: Bool {
-        self.userPreferences.getPreferenceFor(.vpnFeature)
+        userPreferences.getPreferenceFor(.vpnFeature)
     }
 
     private var activeServer: VPNGuardian.Server?
@@ -43,42 +56,29 @@ final class VPNManager: VPNRunnable {
         clientConfig: VPNGuardian.Configuration = .staging,
         profile: Profile = AppContainer.shared.resolve(),
         windowManager: WindowManager = AppContainer.shared.resolve(),
-        userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
+        guardian: VPNGuardianProviding? = nil,
+        serverManager: VPNServerManaging? = nil,
+        proxyApplier: ProxyConfigurator = DefaultProxyConfigurator()
     ) {
         self.logger = logger
-        self.guardian = VPNGuardian(
+        self.guardian = guardian ?? VPNGuardian(
             authHeaders: Self.guardianAuthHeaders(logger: logger),
             configuration: clientConfig,
             logger: logger
         )
-        self.serverManager = VPNServerManager(
+        self.serverManager = serverManager ?? VPNServerManager(
             client: profile.remoteSettingsService.makeClient(collectionName: VPNServerManager.collectionName),
             logger: logger
         )
         self.windowManager = windowManager
-        self.userPreferences = userPreferences
-    }
-
-    // TODO: FXIOS-16874 This will go away with VPNKit integration.
-    // Guardian's shared auth secret, supplied at runtime via the `VPN_GUARDIAN_SECRET` environment
-    private static func guardianAuthHeaders(logger: Logger) -> [String: String] {
-        let secret = Bundle.main.object(forInfoDictionaryKey: secretKey) as? String
-        guard let secret, !secret.isEmpty else {
-            logger.log(
-                "\(secretKey) is unset — Guardian pass requests will fail to authenticate",
-                level: .warning,
-                category: .settings
-            )
-            return [:]
-        }
-        return ["secret": secret]
+        self.proxyApplier = proxyApplier
     }
 
     func start() async {
         do {
             let pass = try await self.guardian.getPass()
 
-            guard let server = await self.serverManager.selectServer() else {
+            guard let server = await self.serverManager.selectServer(countryCode: nil) else {
                 throw VPNError.noServerFound
             }
 
@@ -105,6 +105,21 @@ final class VPNManager: VPNRunnable {
         self.userPreferences.setPreferenceFor(.vpnFeature, to: false)
     }
 
+    // TODO: FXIOS-16874 This will go away with VPNKit integration.
+    // Guardian's shared auth secret, supplied at runtime via the `VPN_GUARDIAN_SECRET` environment
+    private static func guardianAuthHeaders(logger: Logger) -> [String: String] {
+        let secret = Bundle.main.object(forInfoDictionaryKey: secretKey) as? String
+        guard let secret, !secret.isEmpty else {
+            logger.log(
+                "\(secretKey) is unset — Guardian pass requests will fail to authenticate",
+                level: .warning,
+                category: .settings
+            )
+            return [:]
+        }
+        return ["secret": secret]
+    }
+
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the new
     /// bearer token. The endpoint is unchanged, so this rotates without forcing a session
     /// reset: WebKit keeps its existing connection pool, in-flight requests finish under the
@@ -118,10 +133,7 @@ final class VPNManager: VPNRunnable {
                 guard let self,
                       let server = self.activeServer else { return }
                 let config = self.buildProxyConfig(server: server, pass: new)
-                DefaultWKEngineConfigurationProvider.applyProxyConfigurations(
-                    [config],
-                    forcingSessionReset: false
-                )
+                self.proxyApplier.applyProxyConfigurations([config], forcingSessionReset: false)
                 self.logger.log(
                     "Rotated VPN proxy pass — next expiry \(new.expiresAt)",
                     level: .info,
@@ -141,7 +153,7 @@ final class VPNManager: VPNRunnable {
     /// down, which takes the network process with it.
     private func applyProxyAndRebuildWebViews(configs: [ProxyConfiguration]) async {
         await tearDownWebViews()
-        DefaultWKEngineConfigurationProvider.applyProxyConfigurations(configs)
+        proxyApplier.applyProxyConfigurations(configs, forcingSessionReset: true)
         restoreSelectedTabs()
     }
 
