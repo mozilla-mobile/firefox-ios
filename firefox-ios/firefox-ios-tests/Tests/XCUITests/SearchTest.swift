@@ -637,6 +637,7 @@ class SearchTests: FeatureFlaggedTestBase {
         // Search engine suggestions
         mozWaitForElementToExist(siteTable.otherElements["Google Search"])
         mozWaitForElementToExist(siteTable.staticTexts[searchTerm])
+        scrollSuggestionsIfLandscape()
 
         // Firefox Suggest is displayed
         if hasFirefoxSuggest {
@@ -649,6 +650,7 @@ class SearchTests: FeatureFlaggedTestBase {
             while attemptsLeft > 0, !mozWaitForElementToExist(match, timeout: 5, failOnTimeout: false) {
                 attemptsLeft -= 1
                 typeSearchTerm(searchTerm)
+                scrollSuggestionsIfLandscape()
             }
             mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
             mozWaitForElementToExist(match)
@@ -674,8 +676,11 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.tapOnAddressBar()
         browserScreen.tapClearButtonIfExists()
         browserScreen.typeOnSearchBar(text: searchTerm)
+    }
+
+    private func scrollSuggestionsIfLandscape() {
         if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
-            app.tables["SiteTable"].cells.firstMatch.swipeUp()
+            app.tables["SiteTable"].swipeUp()
         }
     }
 
