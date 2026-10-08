@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "La posedanto de %@ ne bone agordis ĝin kaj pro tio ne eblas krei sekuran konekton al ĝi.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Tiu ĉi retejo povus esti provizore ne atingebla, ĝi eble moviĝis al alia retadreso aŭ via retbarilo aŭ retperanto povus bloki la konekton.\nKontrolu vian retajn agordojn kaj provu denove.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ ne povis atingi la petitan retadreson.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ ne povis konektiĝi al %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Estu singarda. Io ne ĝustas.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Ŝajne estas problemo kun tiu ĉi retejo";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Reen (rekomendita)";

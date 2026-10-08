@@ -404,7 +404,7 @@
 "FxA.SyncNow" = "Sincrunizà avà";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "Firefox Sync s'hè cunnessu à %@";
+"FxAPush_DeviceConnected_body" = "Firefox Sync s’hè cunnessu à %@";
 
 /* Title of a notification displayed when another device has connected to FxA. */
 "FxAPush_DeviceConnected_title" = "Sync cunnessu";

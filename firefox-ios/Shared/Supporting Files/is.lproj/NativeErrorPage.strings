@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Eigandi %@ hefur ekki sett það upp rétt og ekki er hægt að búa til örugga tengingu.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Vefsvæðið gæti verið tímabundið óaðgengilegt, það gæti hafa verið flutt á annað vistfang eða að eldveggurinn þinn eða milliþjónn gæti verið að loka fyrir tenginguna.\n\nAthugaðu tengistillingarnar þínar og reyndu aftur.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ náði ekki í umbeðna vefslóð.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ gat ekki tengst %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Farðu varlega. Eitthvað lítur ekki út fyrir að vera rétt.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Það virðist vera vandamál með þetta vefsvæði";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Fara til baka (ráðlagt)";

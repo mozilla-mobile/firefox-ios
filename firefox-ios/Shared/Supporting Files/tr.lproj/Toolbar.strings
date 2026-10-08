@@ -26,7 +26,7 @@
 "Toolbar.Translation.ButtonActive.AccessibilityLabel.v145" = "Sayfayı orijinal dilinde göster";
 
 /* Accessibility label for the translation button that can be displayed in the address toolbar and used to translate a webpage. */
-"Toolbar.Translation.ButtonInactive.AccessibilityLabel.v145" = "Sayfayı çevir";
+"Toolbar.Translation.ButtonInactive.AccessibilityLabel.v145" = "Sayfa çevirisi";
 
 /* Accessibility label for a loading button that can be displayed in the address toolbar to indicate that the page is in the process of being translated. */
 "Toolbar.Translation.LoadingButton.AccessibilityLabel.v145" = "Sayfa çevriliyor";

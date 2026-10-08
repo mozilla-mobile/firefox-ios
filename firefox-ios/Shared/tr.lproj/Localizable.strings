@@ -1415,7 +1415,7 @@
 "Settings.NewTab.TopSectionName" = "Göster";
 
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
-"Settings.NewTab.TopSectionNameFooter" = "Yeni bir sekme açarken ne yükleneceğini seçin";
+"Settings.NewTab.TopSectionNameFooter" = "Yeni sekme açtığınızda yüklenecek sayfayı seçin";
 
 /* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
 "Settings.NoImageModeBlockImages.Label.v99" = "Resimleri engelle";

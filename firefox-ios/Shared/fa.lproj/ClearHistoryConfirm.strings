@@ -2,8 +2,8 @@
 "Cancel" = "لغو";
 
 /* The confirmation button that clears history even when Sync is connected. */
-"OK" = "تایید";
+"OK" = "تأیید";
 
 /* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
-"This action will clear all of your private data, including history from your synced devices." = "این عمل تمامی داده های خصوصی شما را پاک می‌کند، شامل تاریخچه که از روی دستگاه‌های همگام شما وجود دارد.";
+"This action will clear all of your private data, including history from your synced devices." = "این اقدام تمام داده‌های خصوصی شما، از جمله تاریخچه دستگاه‌های همگام‌سازی‌شده را پاک خواهد کرد.";
 

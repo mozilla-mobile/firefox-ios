@@ -74,7 +74,7 @@
 "Translations.Sheet.ShowOriginalButton.v145" = "Orijinalini göster";
 
 /* This is the title for the bottom sheet view that allows users to configure their language preferences for the translations feature. */
-"Translations.Sheet.TitleLabel.v145" = "Sayfayı çevir";
+"Translations.Sheet.TitleLabel.v145" = "Sayfa çevirisi";
 
 /* This is the less descriptive text for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. */
 "Translations.Sheet.ToLabel.v145" = "Hedef";

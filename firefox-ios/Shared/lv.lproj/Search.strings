@@ -4,3 +4,9 @@
 /* Label for search settings button. */
 "Search Settings" = "Meklēšanas iestatījumi";
 
+/* When making a new search from the awesome bar, search results appear as the user write new letters in their search. This is the announcement VoiceOver reads to tell the user how many results are available, and that they are located above the address bar. %d is the number of results. */
+"Search.ResultsAbove.A11yAnnouncement.v158" = "Augstāk esošie ieteikumi: %d";
+
+/* When making a new search from the awesome bar, search results appear as the user write new letters in their search. This is the announcement VoiceOver reads to tell the user how many results are available, and that they are located below the address bar. %d is the number of results. */
+"Search.ResultsBelow.A11yAnnouncement.v158" = "Zemāk esošie ieteikumi: %d";
+

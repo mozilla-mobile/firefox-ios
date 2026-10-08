@@ -22,8 +22,20 @@
 /* On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "Šūnapraides dati ir izslēgti %@.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Vietne var būt īslaicīgi nepieejama, tā var būt pārvietota uz citu adresi vai ugunsmūris vai starpniekserveris aiztur savienojumu.\n\nJāpārbauda savienojuma iestatījumi un jāmēģina vēlreiz.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ nevarēja sasniegt pieprasīto URL.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ nevarēja izveidot savienojumu ar %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Uzmanīgi! Kaut kas neizskatās pareizi.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Izskatās, ka ar šo vietni ir sarežģījumi";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Doties atpakaļ (ieteicams)";

@@ -1,0 +1,78 @@
+/* Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice */
+"FirefoxHome.PrivacyNotice.Body.v148" = "ما’ve به‌روزرسانی‌شده ما %1$@ به reflect جدیدترین ویژگی‌ها در %2$@. %3$@";
+
+/* Label for the “Learn More” link inserted into the second placeholder of the Privacy Notice body label. This text will appear as a tappable link directing users to detailed information about what has changed in the updated Privacy Notice. */
+"FirefoxHome.PrivacyNotice.LearnMoreLink.v148" = "بیشتر بدانید";
+
+/* Label for the “Privacy Notice” link inserted into the first placeholder of the Privacy Notice body label. This text will appear as a tappable link that opens the updated Firefox Privacy Notice. */
+"FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148" = "اعلامیهٔ حریم خصوصی";
+
+/* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
+"FirefoxHome.ScreenTitle.v144" = "صفحهٔ اصلی";
+
+/* This is the label, combined with a newspaper icon and a ^ chevron, used to show affordance that scrolling the homepage up reveals the News section containing a collection of trending news articles */
+"FirefoxHome.Stories.NewsAffordanceLabel.v149" = "اخبار";
+
+/* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
+"FirefoxHome.Stories.NewsSectionTitle.v149" = "اخبار";
+
+/* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
+"FirefoxHomepage.FeltDeletion.Link.v122" = "داده‌های مرور خصوصی پاک شد";
+
+/* The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. %@ is the app name (e.g. Firefox). */
+"FirefoxHomepage.FeltPrivacyUI.Body.v122" = "%@ deletes شما کوکی‌ها, تاریخچه, و وبگاه datیک when شما بستن همه شما خصوصی زبانه‌ها.";
+
+/* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
+"FirefoxHomepage.FeltPrivacyUI.Link.v122" = "چه کسانی ممکن است فعالیت من را ببینند؟";
+
+/* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
+"FirefoxHomepage.FeltPrivacyUI.Title.v122" = "هیچ ردی روی این دستگاه باقی نگذارید";
+
+/* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
+"FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "جست‌و‌جو یا ورود نشانی";
+
+/* The description for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription.v153.v2" = "نشانی وبگاه را وارد کنید.";
+
+/* The title for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle.v153.v2" = "افزودن میانبر";
+
+/* The title for the button that cancels adding a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.CancelButtonTitle.v153" = "لغو";
+
+/* The error message shown when a user enters an invalid website URL in the add shortcut alert on the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.InvalidURLErrorMessage.v153" = "یک نشانی معتبر وارد کنید";
+
+/* The title for the button that saves a new website shortcut to the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.SaveButtonTitle.v153" = "ذخیره";
+
+/* The title for the tile on the Firefox homepage shortcuts section that lets users add a new website shortcut. */
+"FirefoxHomepage.Shortcuts.AddShortcut.TileTitle.v153" = "افزودن میانبر";
+
+/* The placeholder text for the URL text field in the add shortcut alert on the Firefox homepage shortcuts section. */
+"FirefoxHomepage.Shortcuts.AddShortcut.URLTextFieldPlaceholder.v153" = "نشانی وبگاه";
+
+/* This is the navigation title for the Shortcuts Library view */
+"FirefoxHomepage.Shortcuts.Library.Title.v143" = "میانبرها";
+
+/* Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website. */
+"FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139" = "سنجاق‌شده: %@";
+
+/* This is the section title for the Shortcuts section on Firefox Homepage. */
+"FirefoxHomepage.Shortcuts.SectionTitle.v142" = "میانبرها";
+
+/* On the homepage, in the category selection bar, in the stories section, this will be the title of the button indicating that all story categories are currently selected. */
+"FirefoxHomepage.Stories.AllStoryCategories.v151" = "همه";
+
+/* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
+"FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@ِ %2$@";
+
+/* The text shown when we turn on the Tracker Blocker feature on the homepage, and the number of trackers blocked is zero. */
+"FirefoxHomepage.TrackerBlocker.NoTrackersBlocked.v153" = "شما’re محافظت‌شده";
+
+/* The numbers of trackers we've blocked since we started tracking. The %@ placeholder is the actual number of trackers blocked. */
+"FirefoxHomepage.TrackerBlocker.TrackersBlocked.v153b" = "ردیاب‌ها مسدود: %@";
+
+/* The numbers of trackers we've blocked since we started tracking. The %@ placeholder is the actual number of trackers blocked. */
+"FirefoxHomepage.TrackerBlocker.TrackersBlocked.v155" = "ردیاب‌ها مسدود: %@";
+

@@ -1,0 +1,9 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "شما don’t have هر دیگر دستگاه‌ها متصل به این حساب کاربری در دسترس به همگام‌سازی.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "شما هستند نیست signed در به شما حساب کاربری.";
+
+/* The Toast message that appears when the user press copy on the share sheet with a file like a pdf */
+"ShareExtension.FileCopiedToClipboard.Title.v139" = "پرونده رونوشت‌شده به کلیپ‌بورد";
+

@@ -1,0 +1,108 @@
+/* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
+"NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "پیشرفته";
+
+/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ به این وبگاه اعتماد ندارد، زیرا گواهی پیدا‌شده برای %2$@ معتبر نیست.";
+
+/* On certificate error page, this is the security information shown in the advanced section. */
+"NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "این وبگاه اجازهٔ اتصال‌های ناامن را نمی‌دهد.";
+
+/* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "ممکن است لازم باشد وارد شبکهٔ Wi-Fi شوید یا تنظیمات VPN خود را بررسی کنید.";
+
+/* On certificate error page, this is the second warning message in the advanced section for users on corporate networks. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "اگر در شبکهٔ سازمانی هستید، تیم پشتیبانی شما ممکن است اطلاعات بیشتری داشته باشد.";
+
+/* On certificate error page, this is the description explaining the security risk. */
+"NativeErrorPage.BadCertDomain.Description.v149" = "فردی که خود را جای این وبگاه جا زده است ممکن است تلاش کند اطلاعات شخصی شما را سرقت کند. تنظیمات اتصال شما نیز ممکن است نادرست پیکربندی شده باشند.";
+
+/* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
+"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "کد خطا: %@";
+
+/* On certificate error page, this is the text on a button that will hide the advanced information section. */
+"NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "پنهان کردن پیشرفته";
+
+/* On certificate error page, this is a link to learn more about certificate errors. */
+"NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "بیشتر بدانید";
+
+/* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "ادامه به %@ (پرخطر)";
+
+/* On certificate error page, this is the title warning the user about a potential security issue. */
+"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "مراقب باشید. چیزی درست به نظر نمی‌رسد.";
+
+/* On certificate error page, this is a link that will show the site’s certificate details. */
+"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "نمایش گواهی وبگاه";
+
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "بارگیری مجدد";
+
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v155" = "تلاش دوباره";
+
+/* On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.Description.v156" = "به Wi-Fi متصل شوید یا به تنظیمات iOS بروید و دادهٔ همراه را برای %@ روشن کنید.";
+
+/* On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "دادهٔ همراه برای %@ خاموش است.";
+
+/* On error page, this is the description for a generic error. %@ is the site url. */
+"NativeErrorPage.GenericError.Description.v134" = "مالک %@ آن را به‌درستی پیکربندی نکرده است و نمی‌توان اتصال امنی ایجاد کرد.";
+
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "ممکن است وبگاه موقتاً در دسترس نباشد، ممکن است به نشانی دیگری منتقل شده باشد یا فایروال یا پروکسی شما ممکن است اتصال را مسدود کرده باشد.\n\nتنظیمات اتصال به اینترنت خود را بررسی کرده و دوباره تلاش کنید.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ نتوانست به نشانی اینترنتی درخواستی دسترسی پیدا کند.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ نتوانست به %2$@ متصل شود.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "مراقب باشید. چیزی درست به نظر نمی‌رسد.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "به نظر می‌رسد این وبگاه دچار مشکل شده است";
+
+/* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
+"NativeErrorPage.GoBackButton.v149" = "بازگشت (پیشنهاد می‌شود)";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "تلاش کنید connecting در یک متفاوت دستگاه. بررسی شما مودم یا مسیریاب. قطع اتصال و اتصال مجدد به Wi-Fi.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Looks like وجود دارد’ یک مشکل با شما اینترنت اتصال.";
+
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v155" = "Checking Archive…";
+
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v155" = "نتوانستیم به سرویس بایگانی دسترسی پیدا کنیم.";
+
+/* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.Wayback.Error.Description.v154" = "ممکن است وبگاه مشغول یا در دسترس نباشد. بعداً دوباره تلاش کنید. اگر صفحه‌های دیگر هم بارگذاری نمی‌شوند، اتصال Wi-Fi یا دادهٔ خود را بررسی کنید. %@ همچنین می‌تواند Wayback Machine را برای نسخهٔ قدیمی‌تر این صفحه جست‌و‌جو کند.";
+
+/* Footer text below the wayback button/card, explaining that the app can look for an archived version of the page via the Internet Archive's Wayback Machine. %1$@ is the app name (e.g. Firefox). %2$@ is the link text (Wayback Machine), which is a tappable link that opens web.archive.org. */
+"NativeErrorPage.Wayback.Error.FooterDescription.v155" = "%1$@ می‌تواند نسخهٔ قدیمی‌تری از این صفحه را از %2$@ در Internet Archive پیدا کند.";
+
+/* The tappable link text within the Wayback footer description, opens web.archive.org. */
+"NativeErrorPage.Wayback.Error.LinkText.v155" = "Wayback Machine";
+
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "نسخهٔ بایگانی‌شده‌ای پیدا نشد.";
+
+/* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
+"NativeErrorPage.Wayback.Error.Retry.v154" = "تلاش دوباره";
+
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
+"NativeErrorPage.Wayback.Error.Search.v155" = "جست‌و‌جو در وب";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.SearchWayback.v155" = "نمایش نسخهٔ بایگانی‌شده";
+
+/* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
+"NativeErrorPage.Wayback.Error.Title.v154" = "اتصال ممکن نیست";
+
+/* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
+"NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Wayback Machine را برای نسخهٔ بایگانی‌شدهٔ این صفحه جست‌و‌جو می‌کند.";
+
