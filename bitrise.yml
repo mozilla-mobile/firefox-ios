@@ -210,7 +210,7 @@ workflows:
             envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
 
     - xcode-test-without-building@0:
-        timeout: 1800
+        timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
         - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
@@ -329,7 +329,7 @@ workflows:
     steps:
     - pull-intermediate-files@1: {}
     - xcode-test-without-building@0:
-        timeout: 1800
+        timeout: 1200
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
@@ -2081,7 +2081,7 @@ workflows:
             cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun"
     - xcode-test-without-building@0:
         title: "Unit Tests - iPhone 17 (iOS 26.5), 3 repetitions"
-        timeout: 1800
+        timeout: 1200
         is_always_run: true
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
@@ -2187,7 +2187,7 @@ workflows:
             echo "Found UITest .xctestrun: $FOCUS_UI_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH --value "$FOCUS_UI_XCTESTRUN"
     - xcode-test-without-building@0:
-        timeout: 1800
+        timeout: 1200
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
         - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
@@ -2269,7 +2269,7 @@ workflows:
         - title: Check if build is scheduled or regular to set the test plan
     - pull-intermediate-files@1: {}
     - xcode-test-without-building@0:
-        timeout: 1800
+        timeout: 1200
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
