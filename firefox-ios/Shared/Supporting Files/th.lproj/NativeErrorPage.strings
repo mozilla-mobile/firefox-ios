@@ -40,11 +40,29 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v155" = "ลองอีกครั้ง";
 
+/* On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.Description.v156" = "เชื่อมต่อกับ Wi-Fi หรือไปที่การตั้งค่า iOS เพื่อเปิดข้อมูลเซลลูลาร์ให้ %@";
+
+/* On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "ข้อมูลเซลลูลาร์ปิดอยู่สำหรับ %@";
+
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "เจ้าของ %@ ไม่ได้ตั้งค่าให้ถูกต้อง และไม่สามารถสร้างการเชื่อมต่อแบบปลอดภัยได้";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "ไซต์อาจไม่พร้อมให้บริการชั่วคราว ย้ายไปยังที่อยู่อื่น ถูกไฟร์วอลล์หรือพร็อกซีปิดกั้นการเชื่อมต่อ\n\nตรวจสอบการตั้งค่าการเชื่อมต่อของคุณแล้วลองอีกครั้ง";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ เข้าถึง URL ที่ร้องขอไม่ได้";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ เชื่อมต่อกับ %2$@ ไม่ได้";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "ระวังหน่อย มีบางอย่างผิดปกติ";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "ดูเหมือนว่าไซต์นี้จะมีปัญหา";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "ย้อนกลับ (แนะนำ)";

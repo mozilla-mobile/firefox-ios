@@ -1,0 +1,93 @@
+/* Accessibility label for the close button on the Quick Answers screen. */
+"QuickAnswers.AccessibilityLabels.Close.v158" = "ปิด";
+
+/* Accessibility label for the button on the homepage that opens the Quick Answers feature. */
+"QuickAnswers.AccessibilityLabels.OpenQuickAnswers.v158" = "เปิดคำตอบด่วน";
+
+/* Link shown in the footer of the Quick Answers view - when tapped, it opens a privacy banner explaining how the feature handles user data. */
+"QuickAnswers.ContentView.AboutYourPrivacy.v158" = "เกี่ยวกับความเป็นส่วนตัวของคุณ";
+
+/* Loading label shown in the Quick Answers view while an answer is being fetched. */
+"QuickAnswers.ContentView.Answering.v158" = "กำลังตอบ…";
+
+/* Placeholder text shown in the Quick Answers view before the user starts speaking. */
+"QuickAnswers.ContentView.Placeholder.v158" = "ถามอะไรก็ได้…";
+
+/* Header label for the sources section shown below a Quick Answers result. */
+"QuickAnswers.ContentView.Sources.v158" = "แหล่งที่มา";
+
+/* Loading label shown in the Quick Answers view while the question is being processed. */
+"QuickAnswers.ContentView.Thinking.v158" = "กำลังคิด…";
+
+/* Button label on the Quick Answers permission alert to dismiss the alert without taking action. */
+"QuickAnswers.Errors.Cancel.v158" = "ยกเลิก";
+
+/* Title of the alert shown when the user has exceeded the daily usage limit for Quick Answers. */
+"QuickAnswers.Errors.DailyLimitTitle.v158" = "ถึงขีดจำกัดรายวันแล้ว";
+
+/* Message shown in the alert when Quick Answers encounters an unexpected error. */
+"QuickAnswers.Errors.GenericErrorMessage.v158" = "ลองถามใหม่อีกครั้งในภายหลัง";
+
+/* Title of the alert shown when Quick Answers encounters an unexpected error. */
+"QuickAnswers.Errors.GenericErrorTitle.v158" = "ไม่สามารถหาคำตอบได้";
+
+/* Message shown in the permission alert when microphone access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.Errors.MicrophonePermissionMessage.v158" = "อนุญาตให้ %@ เข้าถึงไมโครโฟน";
+
+/* Button label to dismiss the Quick Answers error alert. */
+"QuickAnswers.Errors.OK.v158" = "ตกลง";
+
+/* Button label on the permission alert that opens the iOS Settings app so the user can grant permissions. */
+"QuickAnswers.Errors.OpenSettings.v158" = "เปิดการตั้งค่า";
+
+/* Title of the alert shown when the user has denied microphone or speech recognition permissions needed for Quick Answers. */
+"QuickAnswers.Errors.PermissionAlertTitle.v158" = "เปลี่ยนการตั้งค่าเพื่อใช้งานคำตอบด่วน";
+
+/* Link text that opens more information about how Quick Answers works and how it uses your data. */
+"QuickAnswers.LearnMore.v158" = "เรียนรู้เพิ่มเติม…";
+
+/* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
+"QuickAnswers.OptIn.ContinueButton.v158" = "ดำเนินการต่อ";
+
+/* Description displayed on the Quick Answers opt-in screen explaining how the feature works and its privacy policy. */
+"QuickAnswers.OptIn.Description.v158" = "ถามคำถามด้วยเสียงของคุณ แล้วรับคำตอบสั้น ๆ จะไม่มีการบันทึกเสียงหรือคำถามของคุณ";
+
+/* Link text on the Quick Answers opt-in screen that opens more information about the feature. */
+"QuickAnswers.OptIn.LearnMore.v158" = "เรียนรู้เพิ่มเติม";
+
+/* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
+"QuickAnswers.OptIn.Title.v158" = "ถามด้วยเสียงของคุณ";
+
+/* Description displayed on the Quick Answers opt-in screen explaining how the feature works. */
+"QuickAnswers.OptInRedesign.Description.v158" = "ถามคำถามด้วยเสียง รับคำตอบสั้น ๆ พร้อมแหล่งอ้างอิงในไม่กี่วินาที";
+
+/* Description of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedDescription.v158" = "เราไม่เก็บเสียง คำถาม หรือคำตอบของคุณ";
+
+/* Title of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedTitle.v158" = "ไม่มีอะไรถูกบันทึกไว้";
+
+/* Description of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingDescription.v158" = "ข้อมูลของคุณจะไม่ถูกนำไปใช้ฝึกระบบของเรา";
+
+/* Title of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingTitle.v158" = "ไม่มีการนำข้อมูลของคุณไปฝึก";
+
+/* Description of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignDescription.v158" = "เราไม่นำเสียงของคุณไปใช้ระบุตัวตน";
+
+/* Title of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158" = "ออกแบบมาให้เป็นส่วนตัว";
+
+/* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
+"QuickAnswers.OptInRedesign.Title.v158" = "ลองใช้คำตอบด่วน";
+
+/* Body text of the privacy banner shown on the Quick Answers screen, explaining how the feature handles user data. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.PrivacyBanner.Description.v158" = "%@ ไม่เก็บเสียงหรือคำถามของคุณ ไม่นำข้อมูลของคุณไปใช้ฝึกโมเดล AI หรือใช้เสียงของคุณเพื่อระบุตัวตน";
+
+/* Title of the privacy banner shown on the Quick Answers screen. */
+"QuickAnswers.PrivacyBanner.Title.v158" = "ออกแบบมาให้เป็นส่วนตัว";
+
+/* Feature name as displayed in the iOS Quick Action menu (contextual menu displayed when long-pressing the browser app icon) */
+"QuickAnswers.QuickActions.Title.v158" = "คำตอบด่วน";
+

@@ -355,6 +355,40 @@
 /* Title for the welcome card in the v2 onboarding flow. */
 "Onboarding.Modern.Welcome.Title.v145" = "Попрощайтесь с жуткими трекерами";
 
+/* Body of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on news. %@ is a placeholder for the app name (e.g., Firefox). */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.BodyText.v159" = "Будьте в курсе последних новостей %@.";
+
+/* Button on the home screen popup requesting notification permissions. Tapping this button accepts the permission request. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableButtonText.v158" = "Включить уведомления";
+
+/* Voiceover text for the close button on the home screen popup requesting notification permissions. Tapping this button dismisses the popup. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableCloseButtonText.v159" = "Закрыть";
+
+/* Title of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on privacy features. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.Title.v159" = "Получите новые возможности приватности";
+
+/* Primary button on the onboarding card requesting permission to send notifications. Tapping this button accepts the permission request. */
+"Onboarding.MultiDay.NotificationCard.AcceptButtonText.v159" = "Включить уведомления";
+
+/* Body of the onboarding card requesting permissions to send notifications, with examples of notifications the user will receive. %@ is the name of the app (e.g., Firefox). */
+"Onboarding.MultiDay.NotificationCard.BodyText.v159" = "Получайте обновления защиты, советы и отчёт о конфиденциальности %@.";
+
+/* Secondary button on the onboarding card requesting permission to send notifications. Tapping this button declines the permission request.
+Secondary button on the onboarding card that prompts users to enable syncing for their account data. Tapping this button dismisses the prompt and closes the card. */
+"Onboarding.MultiDay.NotificationCard.DeclineButtonText.v159" = "Не сейчас";
+
+/* Title for the onboarding card requesting permissions to send notifications.  “Stay in the loop” means “Remain informed”. */
+"Onboarding.MultiDay.NotificationCard.Title.v159" = "Будьте в курсе";
+
+/* Primary button on the onboarding card that prompts users to enable syncing for their account data. Tapping it directs the user sign into to their Mozilla account to access the feature. */
+"Onboarding.MultiDay.SyncCard.AcceptButtonText.v159" = "Войти в Синхронизацию";
+
+/* Body of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information). */
+"Onboarding.MultiDay.SyncCard.BodyText.v159" = "Мгновенно получайте пароли, историю и многое другое на любом устройстве.";
+
+/* Title of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information). */
+"Onboarding.MultiDay.SyncCard.Title.v159" = "Синхронизируйте свои данные";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Продолжить";
 

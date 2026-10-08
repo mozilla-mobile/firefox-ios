@@ -28,6 +28,9 @@
 /* Loading label shown in the Quick Answers view while the question is being processed. */
 "QuickAnswers.ContentView.Thinking.v158" = "Düşünülüyor…";
 
+/* Button label on the Quick Answers permission alert to dismiss the alert without taking action. */
+"QuickAnswers.Errors.Cancel.v158" = "İptal";
+
 /* Message shown in the alert when the user has exceeded the daily usage limit for Quick Answers. */
 "QuickAnswers.Errors.DailyLimitMessage.v158" = "Hızlı cevapları yarın yeniden deneyin.";
 
@@ -40,6 +43,9 @@
 /* Title of the alert shown when Quick Answers encounters an unexpected error. */
 "QuickAnswers.Errors.GenericErrorTitle.v158" = "Cevap alınamadı";
 
+/* Message shown in the permission alert when microphone access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.Errors.MicrophonePermissionMessage.v158" = "%@ uygulamasının mikrofona erişmesine izin verin.";
+
 /* Button label to dismiss the Quick Answers error alert. */
 "QuickAnswers.Errors.OK.v158" = "Tamam";
 
@@ -49,17 +55,53 @@
 /* Title of the alert shown when the user has denied microphone or speech recognition permissions needed for Quick Answers. */
 "QuickAnswers.Errors.PermissionAlertTitle.v158" = "Hızlı cevapları kullanmak için ayarları değiştirin";
 
+/* Message shown in the permission alert when speech recognition access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.Errors.SpeechRecognitionPermissionMessage.v158" = "%@ uygulamasının konuşma tanımaya erişmesine izin verin.";
+
 /* Link text that opens more information about how Quick Answers works and how it uses your data. */
 "QuickAnswers.LearnMore.v158" = "Daha fazla bilgi…";
 
 /* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
 "QuickAnswers.OptIn.ContinueButton.v158" = "Devam et";
 
+/* Description displayed on the Quick Answers opt-in screen explaining how the feature works and its privacy policy. */
+"QuickAnswers.OptIn.Description.v158" = "Sorunuzu konuşarak sorun, kısa bir cevap alın. Sesinizi ve sorularınızı saklamıyoruz.";
+
 /* Link text on the Quick Answers opt-in screen that opens more information about the feature. */
 "QuickAnswers.OptIn.LearnMore.v158" = "Daha fazla bilgi al";
 
 /* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
 "QuickAnswers.OptIn.Title.v158" = "Konuşarak soru sorun";
+
+/* Description displayed on the Quick Answers opt-in screen explaining how the feature works. */
+"QuickAnswers.OptInRedesign.Description.v158" = "Sorunuzu konuşarak sorun, saniyeler içinde kaynaklarıyla birlikte kısa bir cevap alın.";
+
+/* Description of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedDescription.v158" = "Sesinizi, sorularınızı ve cevaplarınızı saklamıyoruz.";
+
+/* Title of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedTitle.v158" = "Hiçbir şey kaydedilmez";
+
+/* Description of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingDescription.v158" = "Sistemlerimizi eğitmek için verilerinizi kullanmıyoruz.";
+
+/* Title of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingTitle.v158" = "Verileriniz eğitimde kullanılmaz";
+
+/* Description of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignDescription.v158" = "Sizi ayırt etmek için sesinizi kullanmıyoruz.";
+
+/* Title of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158" = "Özünde gizlilik var";
+
+/* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
+"QuickAnswers.OptInRedesign.Title.v158" = "Hızlı cevapları deneyin";
+
+/* Body text of the privacy banner shown on the Quick Answers screen, explaining how the feature handles user data. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.PrivacyBanner.Description.v158" = "%@ ses kayıtlarınızı ve sorularınızı saklamaz, verilerinizi yapay zekâ modellerini eğitmek için kullanmaz ve sizi tanımak için sesinizi kullanmaz.";
+
+/* Title of the privacy banner shown on the Quick Answers screen. */
+"QuickAnswers.PrivacyBanner.Title.v158" = "Özünde gizlilik var";
 
 /* Feature name as displayed in the iOS Quick Action menu (contextual menu displayed when long-pressing the browser app icon) */
 "QuickAnswers.QuickActions.Title.v158" = "Hızlı cevaplar";
@@ -72,4 +114,7 @@
 
 /* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
 "QuickAnswers.Tip.Message.v158" = "Başlamak için buraya dokunun.";
+
+/* Title of the tooltip that introduces the Quick Answers feature on the homepage. */
+"QuickAnswers.Tip.Title.v158" = "Hızlı cevap için konuşarak sorun";
 
