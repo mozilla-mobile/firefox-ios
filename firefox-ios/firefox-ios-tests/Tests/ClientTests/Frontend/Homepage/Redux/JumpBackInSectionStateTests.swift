@@ -56,6 +56,31 @@ final class JumpBackInSectionStateTests: XCTestCase {
     }
 
     @MainActor
+    func test_initializeAction_storesTabUUID_withoutRetainingTab() {
+        let reducer = jumpBackInSectionReducer()
+        weak var weakTab: Tab?
+        var tabUUID: TabUUID?
+        var newState: JumpBackInSectionState?
+
+        autoreleasepool {
+            let tab = createTab(urlString: "www.mozilla.org")
+            weakTab = tab
+            tabUUID = tab.tabUUID
+            newState = reducer.legacyReducer(
+                createSubject(),
+                TabManagerAction(
+                    recentTabs: [tab],
+                    windowUUID: .XCTestDefaultUUID,
+                    actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
+                )
+            )
+        }
+
+        XCTAssertEqual(newState?.jumpBackInTabs.first?.tabUUID, tabUUID)
+        XCTAssertNil(weakTab, "Jump Back In state should not keep a closed tab alive")
+    }
+
+    @MainActor
     func test_fetchMostRecentSyncedTabAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = jumpBackInSectionReducer()
