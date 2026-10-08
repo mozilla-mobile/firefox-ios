@@ -236,11 +236,6 @@ class Tab: NSObject,
             return url.lastPathComponent
         }
 
-        if featureFlagsProvider.isEnabled(.nativeErrorPage),
-           let host = InternalURL(url)?.originalURLFromErrorPage?.host {
-            return host
-        }
-
         if let lastTitle = lastTitle, !lastTitle.isEmpty {
             return lastTitle
         }
