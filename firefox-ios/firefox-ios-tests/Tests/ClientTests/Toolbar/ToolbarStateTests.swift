@@ -145,12 +145,10 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                searchTerm: "text",
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didPasteSearchTerm)
+            ToolbarModernAction.didPasteSearchTerm(searchTerm: "text"),
+            windowUUID
         )
 
         XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)

@@ -129,6 +129,9 @@ enum ToolbarModernAction: ModernAction {
     /// The user scrolled the homepage or search view while the address bar was still in editing mode.
     /// Cancels editing (or, if already on a website, just hides the keyboard).
     case cancelEditOnHomepage
+
+    /// The user pasted text into the address bar, entering editing mode with the pasted term.
+    case didPasteSearchTerm(searchTerm: String?)
 }
 
 enum ToolbarActionType: ActionType {
@@ -140,7 +143,6 @@ enum ToolbarActionType: ActionType {
     case borderPositionChanged
     case toolbarPositionChanged
     case showMenuWarningBadge
-    case didPasteSearchTerm
     case didStartEditingUrl
     case cancelEdit
     case animationStateChanged

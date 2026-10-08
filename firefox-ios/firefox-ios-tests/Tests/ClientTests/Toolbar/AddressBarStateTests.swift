@@ -319,13 +319,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let reducer = addressBarReducer()
         let searchTerm = "mozilla"
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                searchTerm: searchTerm,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didPasteSearchTerm
-            )
+            ToolbarModernAction.didPasteSearchTerm(searchTerm: searchTerm),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
