@@ -367,6 +367,13 @@ final class SettingsCoordinator: BaseCoordinator,
         router.push(viewController)
     }
 
+    func pressedVPN() {
+        let viewController = VPNSettingsViewController(
+            windowUUID: windowUUID
+        )
+        router.push(viewController)
+    }
+
     func pressedContentBlocker() {
         let viewController = ContentBlockerSettingViewController(windowUUID: windowUUID, prefs: profile.prefs)
         viewController.settingsDelegate = self

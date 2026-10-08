@@ -448,6 +448,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
         }
 
+        if featureFlagsProvider.isEnabled(.vpnFeature) {
+            privacySettings.append(VPNSetting(settings: self, settingsDelegate: parentCoordinator))
+        }
+
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
         if let profile {
