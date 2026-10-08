@@ -77,13 +77,7 @@ class TrackingProtectionModel {
     }
 
     var websiteTitle: String {
-        let websiteTitle: String?
-        if let internalURL = InternalURL(url), internalURL.isErrorPage {
-            websiteTitle = internalURL.originalURLFromErrorPage?.baseDomain
-        } else {
-            websiteTitle = url.baseDomain
-        }
-        return websiteTitle ?? ""
+        return originalURL.baseDomain ?? ""
     }
 
     let secureStatusString = String.Menu.EnhancedTrackingProtection.connectionSecureLabel
