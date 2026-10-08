@@ -295,7 +295,7 @@ public final class QuickAnswersViewController: UIViewController,
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = theme.colors.layer2
         closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
         contentView.applyTheme(theme: theme)

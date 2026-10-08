@@ -10,7 +10,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     private struct UX {
         static let contentSpacing: CGFloat = 32.0
         static let footerSpacing: CGFloat = 2.0
-        static let privacyIconSize = CGSize(width: 14.0, height: 14.0)
+        static let privacyIconSize = CGSize(width: 18.0, height: 18.0)
         static let privacyIconPadding: CGFloat = 2.0
         static let privacyButtonContentInsets = NSDirectionalEdgeInsets(
             top: 0.0,
@@ -80,7 +80,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     private let privacyButton: UIButton = .build {
         $0.configuration = .plain()
         $0.configuration?.contentInsets = UX.privacyButtonContentInsets
-        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.informationFill)?
+        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.information)?
             .createScaled(UX.privacyIconSize)
             .withRenderingMode(.alwaysTemplate)
         $0.configuration?.imagePadding = UX.privacyIconPadding

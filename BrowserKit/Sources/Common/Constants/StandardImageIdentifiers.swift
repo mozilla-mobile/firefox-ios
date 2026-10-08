@@ -88,7 +88,6 @@ public struct StandardImageIdentifiers {
         public static let home = "homeLarge"
         public static let image = "imageLarge"
         public static let information = "informationLarge"
-        public static let informationFill = "informationFillLarge"
         public static let lightbulb = "lightbulbLarge"
         public static let lightning = "lightningLarge"
         public static let lightningFill = "lightningFillLarge"
