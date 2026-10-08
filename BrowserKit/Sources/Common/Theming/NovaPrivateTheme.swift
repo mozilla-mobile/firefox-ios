@@ -36,7 +36,7 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var layerAutofillText: UIColor = NovaColors.VioletDesaturated30.withAlphaComponent(0.55)
     var layerSelectedText: UIColor = NovaColors.VioletDesaturated30.withAlphaComponent(0.55)
     var layerGlassTintNova: UIColor = .clear
-    var layerGlassSelectedFill: UIColor = NovaColors.VioletDesaturated70
+    var layerGlassSelectedFill: UIColor = NovaColors.VioletDesaturated90
     var layerAccentPrivateNonOpaque: UIColor { layerAccentSubtle }
     var layerToolbarGlass: UIColor = NovaColors.VioletDesaturated60
 
