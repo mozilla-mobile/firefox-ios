@@ -44,6 +44,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Full Flow Tests
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4035806
     // Smoketest
     func testModernKitOnboardingFullFlowWithToS() throws {
         launchApp()
@@ -492,6 +493,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.exitSignInFlow()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306816
     func testModernKitOnboardingSkipSync() throws {
         launchApp()
 
