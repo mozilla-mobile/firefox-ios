@@ -4,7 +4,6 @@
 
 import UIKit
 import Common
-import Shared
 
 final class QuickAnswersContentView: UIView, ThemeApplicable {
     private struct UX {
