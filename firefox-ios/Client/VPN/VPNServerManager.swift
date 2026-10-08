@@ -9,7 +9,11 @@ import Foundation
 /// Reads the `vpn-serverlist` Remote Settings collection (the same collection desktop Firefox
 /// uses — see `toolkit/components/ipprotection/IPProtectionServerlist.sys.mjs`) and exposes a
 /// flat selection API. Records are Country-rooted: Country → City → Server → Protocol.
-final class VPNServerManager: Sendable {
+protocol VPNServerManaging: Sendable {
+    func selectServer(countryCode: String?) async -> VPNGuardian.Server?
+}
+
+final class VPNServerManager: VPNServerManaging {
     static let collectionName = "vpn-serverlist"
     static let recommendedCountryCode = "REC"
 
