@@ -137,14 +137,14 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
 
             self.enableEngine(defaultEngine)
             // The default engine is always first in the list.
-            var orderedEngines = self.orderedEngines.filter { engine in engine.shortName != defaultEngine.shortName }
+            var orderedEngines = self.orderedEngines.filter { engine in engine.engineID != defaultEngine.engineID }
             orderedEngines.insert(defaultEngine, at: 0)
             self.orderedEngines = orderedEngines
         }
     }
 
     func isEngineDefault(_ engine: OpenSearchEngine) -> Bool {
-        return defaultEngine?.shortName == engine.shortName
+        return defaultEngine?.engineID == engine.engineID
     }
 
     // The keys of this dictionary are used as a set.
