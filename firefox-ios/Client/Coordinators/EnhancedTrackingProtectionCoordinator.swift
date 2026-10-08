@@ -49,7 +49,6 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
         let etpViewModel = TrackingProtectionModel(
             userDefaults: UserDefaults(suiteName: AppInfo.sharedContainerIdentifier),
             url: url,
-            displayTitle: displayTitle,
             connectionSecure: connectionSecure,
             globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
             contentBlockerStatus: contentBlockerStatus,
