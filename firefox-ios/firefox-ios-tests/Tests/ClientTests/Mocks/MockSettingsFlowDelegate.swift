@@ -20,6 +20,7 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
     var showPasswordManagerCalled = 0
     var savedShouldShowOnboarding = false
     var showQRCodeCalled = 0
+    var pressedVPNCalled = 0
 
     func showDevicePassCode() {
         showDevicePassCodeCalled += 1
@@ -91,6 +92,10 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
     func pressedCreditCard() {}
 
     func pressedClearPrivateData() {}
+
+    func pressedVPN() {
+        pressedVPNCalled += 1
+    }
 
     func pressedContentBlocker() {}
 
