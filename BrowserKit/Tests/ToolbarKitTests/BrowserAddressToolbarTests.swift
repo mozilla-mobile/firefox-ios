@@ -195,34 +195,6 @@ final class BrowserAddressToolbarTests: XCTestCase {
     }
 
     @MainActor
-    func testContextMenuPreview_targetsEntireAddressBar() throws {
-        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
-        let subject = createConfiguredSubject()
-        subject.frame = window.bounds
-        window.addSubview(subject)
-        window.layoutIfNeeded()
-        let interaction = try XCTUnwrap(findContextMenuInteraction(in: subject))
-        let configuration = try XCTUnwrap(
-            subject.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero)
-        )
-
-        let preview = subject.contextMenuInteraction(
-            interaction,
-            previewForHighlightingMenuWithConfiguration: configuration
-        )
-
-        XCTAssertTrue(preview?.view is LocationContainer)
-    }
-
-    @MainActor
-    func testContextMenuConfiguration_whenAddressBarIsActive_returnsConfiguration() throws {
-        let subject = createConfiguredSubject()
-        let interaction = try XCTUnwrap(findContextMenuInteraction(in: subject))
-
-        XCTAssertNotNil(subject.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero))
-    }
-
-    @MainActor
     func testContextMenuConfiguration_whenAddressBarIsMinimized_returnsNil() throws {
         let subject = createConfiguredSubject(isAddressBarMinimized: true)
         let interaction = try XCTUnwrap(findContextMenuInteraction(in: subject))
@@ -244,6 +216,33 @@ final class BrowserAddressToolbarTests: XCTestCase {
         let interaction = try XCTUnwrap(findContextMenuInteraction(in: subject))
 
         XCTAssertNil(subject.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero))
+    }
+
+    @MainActor
+    func testPerformAfterContextMenuDismissal_withoutMenu_runsImmediately() {
+        let subject = createSubject()
+        var actionCount = 0
+
+        subject.performAfterContextMenuDismissal { actionCount += 1 }
+
+        XCTAssertEqual(actionCount, 1)
+    }
+
+    @MainActor
+    func testPerformAfterContextMenuDismissal_withoutAnimator_runsAtMenuEnd() throws {
+        let subject = createConfiguredSubject()
+        let interaction = try XCTUnwrap(findContextMenuInteraction(in: subject))
+        let configuration = try XCTUnwrap(
+            subject.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero)
+        )
+        var actionCount = 0
+        subject.contextMenuInteraction(interaction, willDisplayMenuFor: configuration, animator: nil)
+        subject.performAfterContextMenuDismissal { actionCount += 1 }
+        XCTAssertEqual(actionCount, 0)
+
+        subject.contextMenuInteraction(interaction, willEndFor: configuration, animator: nil)
+
+        XCTAssertEqual(actionCount, 1)
     }
 
     // MARK: Test helper

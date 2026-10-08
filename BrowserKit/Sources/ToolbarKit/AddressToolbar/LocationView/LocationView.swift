@@ -142,6 +142,7 @@ final class LocationView: UIView,
         super.becomeFirstResponder()
         // Skip if urlTextField is already first responder to avoid triggering duplicate delegate callbacks
         guard !urlTextField.isFirstResponder else { return true }
+        urlTextField.isUserInteractionEnabled = true
         return urlTextField.becomeFirstResponder()
     }
 
@@ -461,7 +462,7 @@ final class LocationView: UIView,
     }
 
     private func restoreLocationViewSize() {
-        urlTextField.isUserInteractionEnabled = true
+        urlTextField.isUserInteractionEnabled = isEditing
         isUserInteractionEnabled = true
         UIView.animate(
             withDuration: UX.identityResetAnimationDuration,
@@ -546,6 +547,7 @@ final class LocationView: UIView,
 
     private func configureURLPlaceholder(basedOn config: LocationViewConfiguration) {
         isEditing = config.isEditing
+        urlTextField.isUserInteractionEnabled = isEditing && !isAddressBarMinimized
         if !isEditing && config.url != nil {
             // allow proper centering of the urlTextField removing placeholder size.
             urlTextField.placeholder = nil
@@ -648,7 +650,7 @@ final class LocationView: UIView,
         type: T.Type,
         action: Selector
     ) {
-        if isURLTextFieldCentered {
+        if !isEditing || isURLTextFieldCentered {
             if gesture == nil {
                 let newGesture = type.init(target: self, action: action)
                 addGestureRecognizer(newGesture)

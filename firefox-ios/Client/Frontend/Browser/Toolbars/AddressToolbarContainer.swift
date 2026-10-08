@@ -648,6 +648,10 @@ final class AddressToolbarContainer: UIView,
         toolbar.setAutocompleteSuggestion(suggestion)
     }
 
+    func performAfterContextMenuDismissal(_ action: @escaping () -> Void) {
+        toolbar.performAfterContextMenuDismissal(action)
+    }
+
     // MARK: - Overlay Mode
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
         guard let windowUUID else { return }

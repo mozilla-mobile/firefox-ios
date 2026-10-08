@@ -74,6 +74,9 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         }
         button.menu = UIMenu(children: [deferredMenu])
         button.showsMenuAsPrimaryAction = false
+        if #available(iOS 16.0, *) {
+            button.preferredMenuElementOrder = .fixed
+        }
 
         button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.addNewTabButton
         button.accessibilityLabel = .AddTabAccessibilityLabel

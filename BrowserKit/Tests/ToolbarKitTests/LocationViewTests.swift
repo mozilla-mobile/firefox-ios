@@ -21,6 +21,34 @@ final class LocationViewTests: XCTestCase {
         try await super.tearDown()
     }
 
+    func testBecomeFirstResponder_whenNotEditing_focusesTextFieldAndNotifiesDelegate() throws {
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 320, height: 640))
+        let viewController = UIViewController()
+        window.rootViewController = viewController
+        let subject = createSubject()
+        subject.configure(makeConfig(url: testURL), delegate: delegate)
+        subject.frame = CGRect(x: 0, y: 0, width: 320, height: 44)
+        viewController.view.addSubview(subject)
+        window.makeKeyAndVisible()
+        defer {
+            _ = subject.resignFirstResponder()
+            window.isHidden = true
+        }
+        let textField = try XCTUnwrap(findTextField(in: subject))
+        XCTAssertFalse(textField.isUserInteractionEnabled)
+
+        XCTAssertTrue(subject.becomeFirstResponder())
+
+        XCTAssertTrue(textField.isUserInteractionEnabled)
+        XCTAssertTrue(textField.isFirstResponder)
+        XCTAssertEqual(delegate.didBeginEditingCallCount, 1)
+    }
+
+    private func findTextField(in view: UIView) -> UITextField? {
+        if let textField = view as? UITextField { return textField }
+        return view.subviews.lazy.compactMap(findTextField).first
+    }
+
     // MARK: - Icon Container Arrangement
     func testConfigure_whenNotEditingWithURL_showsLockIcon() {
         let subject = createSubject()

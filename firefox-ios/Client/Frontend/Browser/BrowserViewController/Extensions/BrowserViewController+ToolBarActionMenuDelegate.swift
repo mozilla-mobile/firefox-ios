@@ -200,8 +200,14 @@ extension BrowserViewController {
                 title: .PasteAndGoTitle,
                 image: UIImage(named: StandardImageIdentifiers.Large.clipboard)?.withRenderingMode(.alwaysTemplate)
             ) { [weak self] _ in
-                guard let self, let pasteboardContents = UIPasteboard.general.string else { return }
-                addressToolbarContainer.delegate?.openBrowser(searchTerm: pasteboardContents)
+                UIPasteboard.general.asyncString { pasteboardContents in
+                    guard let pasteboardContents else { return }
+                    ensureMainThread {
+                        self?.addressToolbarContainer.performAfterContextMenuDismissal {
+                            self?.addressToolbarContainer.delegate?.openBrowser(searchTerm: pasteboardContents)
+                        }
+                    }
+                }
             }
             pasteAndGoAction.accessibilityIdentifier = AccessibilityIdentifiers.Photon.pasteAndGoAction
             actions.append(pasteAndGoAction)
@@ -210,8 +216,14 @@ extension BrowserViewController {
                 title: .PasteTitle,
                 image: UIImage(named: StandardImageIdentifiers.Large.clipboard)?.withRenderingMode(.alwaysTemplate)
             ) { [weak self] _ in
-                guard let self, let pasteboardContents = UIPasteboard.general.string else { return }
-                addressToolbarContainer.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+                UIPasteboard.general.asyncString { pasteboardContents in
+                    guard let pasteboardContents else { return }
+                    ensureMainThread {
+                        self?.addressToolbarContainer.performAfterContextMenuDismissal {
+                            self?.addressToolbarContainer.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+                        }
+                    }
+                }
             }
             pasteAction.accessibilityIdentifier = AccessibilityIdentifiers.Photon.pasteAction
             actions.append(pasteAction)

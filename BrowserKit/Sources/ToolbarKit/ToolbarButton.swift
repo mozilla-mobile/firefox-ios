@@ -303,9 +303,23 @@ class ToolbarButton: UIButton,
             return super.contextMenuInteraction(interaction, configurationForMenuAtLocation: location)
         }
         guard let menu = provider(), !menu.children.isEmpty else { return nil }
-        return UIContextMenuConfiguration(actionProvider: { _ in
+        let configuration = UIContextMenuConfiguration(actionProvider: { _ in
             return menu
         })
+        if #available(iOS 16.0, *) {
+            configuration.preferredMenuElementOrder = .fixed
+        }
+        return configuration
+    }
+
+    override func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        willDisplayMenuFor configuration: UIContextMenuConfiguration,
+        animator: (any UIContextMenuInteractionAnimating)?
+    ) {
+        super.contextMenuInteraction(interaction, willDisplayMenuFor: configuration, animator: animator)
+        guard case .menu = currentElement?.longPressBehavior else { return }
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
     }
 
     private func imageConfiguredForRTL(for element: ToolbarElement) -> UIImage? {
