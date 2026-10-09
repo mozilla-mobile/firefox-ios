@@ -22,6 +22,12 @@ class TrackingProtectionTests: BaseTestCase {
     var trackingProtectionScreen: TrackingProtectionScreen!
     var settingsScreen: SettingScreen!
 
+    /// Most tests start in Tracking Protection settings and launch the app themselves through a
+    /// Settings deeplink, so the app is not launched here.
+    override func setUpApp() {
+        setUpLaunchArguments()
+    }
+
     private func disableEnableTrackingProtectionForSite() {
         navigator.performAction(Action.TrackingProtectionperSiteToggle)
     }
@@ -90,6 +96,7 @@ class TrackingProtectionTests: BaseTestCase {
         let adblockTesterURL = "https://adblock-tester.com/"
 
         // Step 2: Go to Settings -> Tracking Protection -> Standard TP is enabled by default.
+        launchIntoSettings()
         navigator.goto(TrackingProtectionSettings)
         trackingProtectionScreen.assertTrackingProtectionSwitchValue(isOn: true)
 
@@ -135,6 +142,7 @@ class TrackingProtectionTests: BaseTestCase {
         let mainMenu = MainMenuScreen(app: app)
         let sslScreen = SSLWarningScreen(app: app)
 
+        app.launch()
         // Step 1: the page is correctly loaded
         navigator.nowAt(NewTabScreen)
         navigator.openURL("https://www.mozilla.org/")
@@ -165,7 +173,7 @@ class TrackingProtectionTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2318742
     // Regression
     func testProtectionLevelMoreInfoMenu() {
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(TrackingProtectionSettings)
         // See Basic mode info
         app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].waitAndTap()
@@ -194,6 +202,7 @@ class TrackingProtectionTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307063
     // Regression
     func testStrictTrackingProtection() {
+        launchIntoSettings()
         navigator.goto(TrackingProtectionSettings)
         // Enable Strict Protection Level
         enableStrictMode()
