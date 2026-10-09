@@ -51,8 +51,14 @@ actor DefaultResultsService: ResultsService {
     private func makeMessages(for transcription: String, config: LLMConfig) -> [QuickAnswersMessage] {
         var messages: [QuickAnswersMessage] = []
 //        if !config.instructions.isEmpty {
-        // swiftlint:disable:this
-            messages.append(LiteLLMMessage(role: .system, content: config.instructions.appending("Respond in markdown highlighting what is important.")))
+        messages.append(
+            LiteLLMMessage(
+                role: .system,
+                content: config.instructions.appending(
+                    "Respond in markdown highlighting what is important."
+                )
+            )
+        )
 //        }
         guard configFetcher.model.supportsAssistantRole else {
             // Exa answers the last message and searches the web with it, so the context has to travel
