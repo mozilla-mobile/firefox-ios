@@ -30,7 +30,7 @@ final class RelayMaskSettingsViewController: SettingsTableViewController {
 
     override func generateSettings() -> [SettingSection] {
         guard let profile, let tabManager else { return [] }
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         let showEmailMaskSuggestions = BoolSetting(prefs: profile.prefs,
                                                    theme: theme,
                                                    prefKey: PrefsKeys.ShowRelayMaskSuggestions,
@@ -81,7 +81,11 @@ final class RelayMaskSettingsViewController: SettingsTableViewController {
 
     @objc
     func learnMoreTapped() {
-        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        let viewController = SettingsContentViewController(
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: true,
+            shouldBeInPrivateTheme: false
+        )
         viewController.url = SupportUtils.URLForRelayMaskLearnMoreArticle
         navigationController?.pushViewController(viewController, animated: true)
         relayController.telemetry.learnMoreTapped()

@@ -31,6 +31,9 @@ class PasswordDetailViewController: SensitiveViewController,
 
     private var viewModel: PasswordDetailViewControllerModel
 
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
     private var isEditingFieldData = false {
         didSet {
             if isEditingFieldData != oldValue {
@@ -120,7 +123,9 @@ class PasswordDetailViewController: SensitiveViewController,
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
     }
 
     func applyTheme() {

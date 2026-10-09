@@ -17,6 +17,8 @@ struct CreditCardItemRow: View {
 
     // Theming
     let windowUUID: WindowUUID
+    var shouldUsePrivateOverride = false
+    var shouldBeInPrivateTheme = false
     @Environment(\.themeManager)
     var themeManager
     @State var titleTextColor: Color = .clear
@@ -53,11 +55,15 @@ struct CreditCardItemRow: View {
         .background(ClearBackgroundView())
         .padding(.vertical, addPadding ? 8 : 0)
         .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.resolveTheme(for: windowUUID,
+                                                        shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                                        shouldBeInPrivateTheme: shouldBeInPrivateTheme))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.resolveTheme(for: windowUUID,
+                                                        shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                                        shouldBeInPrivateTheme: shouldBeInPrivateTheme))
         }
     }
 

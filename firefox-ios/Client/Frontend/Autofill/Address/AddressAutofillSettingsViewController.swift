@@ -30,6 +30,15 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    private func currentTheme() -> Theme {
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+    }
+
     // MARK: Views
 
     /// Hosting controller for the empty state view in address autofill settings.
@@ -92,7 +101,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
                 let viewModel = ButtonToastViewModel(labelText: errorType.message,
                                                      buttonText: errorType.actionTitle)
                 let toast = ButtonToast(viewModel: viewModel,
-                                        theme: themeManager.getCurrentTheme(for: windowUUID),
+                                        theme: currentTheme(),
                                         completion: { buttonTap in
                     if buttonTap {
                         errorType.action()
@@ -102,7 +111,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
             default:
                 let viewModel = PlainToastViewModel(labelText: status.message)
                 let toast = PlainToast(viewModel: viewModel,
-                                       theme: themeManager.getCurrentTheme(for: windowUUID))
+                                       theme: currentTheme())
                 show(toast: toast)
             }
         }
@@ -152,7 +161,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
 
     /// Applies the current theme to the view.
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         view.backgroundColor = theme.colors.layer1
     }
 
