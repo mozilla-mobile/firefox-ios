@@ -14,7 +14,7 @@ final class RelayMaskSettingsViewControllerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        self.profile = MockProfile()
+        self.profile = makeProfile()
         self.tabManager = MockTabManager()
     }
 

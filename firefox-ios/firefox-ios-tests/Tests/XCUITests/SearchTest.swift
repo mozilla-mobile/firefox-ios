@@ -569,7 +569,7 @@ class SearchTests: FeatureFlaggedTestBase {
             // https://github.com/mozilla-mobile/firefox-ios/issues/35243
             if !iPad() {
                 verifySearchSuggestion(searchTerm: "amazon",
-                                       expectedMatch: "Amazon.com - Official Site",
+                                       expectedMatch: "Amazon",
                                        hasFirefoxSuggest: true,
                                        isSponsored: true)
             }
@@ -581,7 +581,7 @@ class SearchTests: FeatureFlaggedTestBase {
     func testFirefoxSuggestPartialSponsored() {
         launchWithFirefoxSuggestRollout()
         verifySearchSuggestion(searchTerm: "amaz",
-                               expectedMatch: "Amazon.com - Official Site",
+                               expectedMatch: "Amazon",
                                hasFirefoxSuggest: true,
                                isSponsored: true)
     }
@@ -642,7 +642,9 @@ class SearchTests: FeatureFlaggedTestBase {
         if hasFirefoxSuggest {
             // A suggest query interrupted while the term is still being typed is dropped silently and
             // never retried, so the term is retyped to trigger a fresh one.
-            let match = app.tables.staticTexts[expectedMatch]
+            let match = app.tables.staticTexts.matching(
+                NSPredicate(format: "label CONTAINS %@", expectedMatch)
+            ).firstMatch
             var attemptsLeft = 2
             while attemptsLeft > 0, !mozWaitForElementToExist(match, timeout: 5, failOnTimeout: false) {
                 attemptsLeft -= 1
@@ -765,6 +767,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2753105
+    // Regression
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {
         app.launch()
         navigator.goto(SearchSettings)

@@ -15,7 +15,7 @@ class StartAtHomeHelperTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        profile = MockProfile()
+        profile = makeProfile()
         tabManager = MockTabManager()
 
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)

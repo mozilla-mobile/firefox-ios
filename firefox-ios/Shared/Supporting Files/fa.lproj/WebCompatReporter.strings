@@ -1,0 +1,156 @@
+/* Explanatory caption below the Additional Info section. %1$@ is the app name (e.g. Firefox). %2$@ is replaced by the tappable 'Learn more' link, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.FooterText.v154" = "گزارش شما به ما کمک می‌کند مشکلات %1$@ را درک و برطرف کنیم تا برای همه بهتر شود. %2$@";
+
+/* Label of the toggle that includes the list of trackers blocked on the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeBlockedList.v154" = "ارسال listِ items مسدود by ردیابی محافظت";
+
+/* Label of the toggle that includes a screenshot of the page with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.IncludeScreenshot.v154" = "خودکارally شامل کردن یک screenshot به نمایش مشکل";
+
+/* Tappable link at the end of the Additional Info caption that opens a page explaining how the report data is used, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.LearnMore.v154" = "بیشتر بدانید";
+
+/* Header of the section containing optional toggles that control extra data included with the report, in the Report a Website Issue form. */
+"WebCompatReporter.AdditionalInfo.Title.v154" = "افزودنitional اطلاعات";
+
+/* Title of the issue category a user picks when a site's layout or design is broken, in the Report a Website Issue form. */
+"WebCompatReporter.Category.DesignBroken.v154" = "Design است broken";
+
+/* Title of the issue category a user picks for problems not covered by the other options, in the Report a Website Issue form. */
+"WebCompatReporter.Category.Other.v154" = "دیگر";
+
+/* Title of the issue category a user picks when a site does not work at all, in the Report a Website Issue form. */
+"WebCompatReporter.Category.SiteNotUsable.v154" = "وبگاه است نیست usable";
+
+/* Title of the issue category a user picks when video or audio does not play on a site, in the Report a Website Issue form. */
+"WebCompatReporter.Category.VideoOrAudio.v154" = "ویدیو یا صدا does نیست play";
+
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no issue type has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseIssueTypeAccessibilityHint.v156" = "انتخاب کنید یک مشکل نوع اول";
+
+/* Accessibility hint spoken on the Preview and Send Report buttons when they are disabled because no specific problem has been selected yet, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.ChooseSubOptionAccessibilityHint.v156" = "انتخاب کنید یک خاص مشکل برای شما انتخاب‌شده مشکل نوع";
+
+/* Accessibility label for the multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsAccessibilityLabel.v154" = "Describe مشکل در detail";
+
+/* Placeholder shown in the optional multiline field where the user can describe the website problem in their own words, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.DetailsPlaceholder.v154" = "Describe مشکل در detail (اختیاری)";
+
+/* Error message shown under the URL field when the address entered has an invalid format, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLError.v155" = "یک نشانی معتبر وارد کنید";
+
+/* Leading label of the editable row showing the web address being reported, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLLabel.v154" = "نشانی اینترنتی";
+
+/* Placeholder shown in the URL field when no web address has been entered, in the Report a Website Issue form. */
+"WebCompatReporter.Fields.URLPlaceholder.v154" = "نشانی اینترنتی";
+
+/* Placeholder shown in the issue-type pull-down before the user has picked a website problem category, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.CategoryPlaceholder.v154" = "انتخاب کنید مشکل نوع…";
+
+/* Header of the section where the user picks the type of website problem they are reporting, in the Report a Website Issue form. */
+"WebCompatReporter.IssueSection.Title.v154" = "وبگاه مشکل";
+
+/* Bullet on the Report Preview screen, for the amount of memory the device has. */
+"WebCompatReporter.Preview.Data.AvailableMemory.v155" = "شما دستگاه’ در دسترس memory";
+
+/* Bullet on the Report Preview screen, for trackers blocked on the reported page. */
+"WebCompatReporter.Preview.Data.BlockedTrackers.v155" = "Hostnamesِ ردیاب‌ها مسدود در این صفحه";
+
+/* Bullet on the Report Preview screen, for the device's own language and region settings. */
+"WebCompatReporter.Preview.Data.DeviceLocale.v155" = "Primary زبان و کشورِ شما دستگاه";
+
+/* Bullet on the Report Preview screen, for whether the device has a touchscreen. */
+"WebCompatReporter.Preview.Data.HasTouchscreen.v155" = "اینکه دستگاه شما صفحهٔ لمسی دارد یا نه";
+
+/* Bullet on the Report Preview screen, for the problem picked and the details typed. */
+"WebCompatReporter.Preview.Data.IssueAndDescription.v155" = "مشکل نوع شما انتخاب‌شده و هر توضیح شما added";
+
+/* Bullet on the Report Preview screen. Only tablet or not is sent, no device make or model. */
+"WebCompatReporter.Preview.Data.IsTablet.v155" = "Whether یا نیست شما دستگاه است یک tablet";
+
+/* Bullet on the Report Preview screen, for web frameworks known to break mobile pages. */
+"WebCompatReporter.Preview.Data.PageElements.v155" = "اطلاعات دربارهٔ عناصر صفحه‌ای که شناخته شده‌اند باعث مشکلات وبگاه می‌شوند";
+
+/* Bullet on the Report Preview screen, for a list of the user's preferred languages for websites as they were communicated by the browser to the page */
+"WebCompatReporter.Preview.Data.PageLanguages.v155" = "زبان ترجیحات ارسال‌شده به این صفحه";
+
+/* Bullet on the Report Preview screen. The reported page's address is shown underneath it. */
+"WebCompatReporter.Preview.Data.PageURL.v155" = "صفحه نشانی اینترنتی";
+
+/* Bullet on the Report Preview screen, for the screen's physical pixels per layout point. */
+"WebCompatReporter.Preview.Data.PixelDensity.v155" = "شما صفحه’ pixel density";
+
+/* Bullet on the Report Preview screen, for whether the page was open in private browsing. */
+"WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155" = "مرور خصوصی status: در یا خاموش";
+
+/* Bullet on the Report Preview screen, for the tracking protection strength the user has chosen. */
+"WebCompatReporter.Preview.Data.TrackingProtectionSetting.v155" = "محافظت پیشرفته در برابر ردیابی setting برای این وبگاه";
+
+/* Bullet on the Report Preview screen. Those three versions are only ever sent as tokens inside the user agent, never as fields of their own. %@ is the app name (e.g. Firefox). */
+"WebCompatReporter.Preview.Data.UserAgent.v155" = "عامل کاربر مرورگر شما که شامل نسخهٔ iOS، نسخهٔ %@ و نسخهٔ موتور مرورگر است";
+
+/* Accessibility label for the page screenshot thumbnail on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotAccessibilityLabel.v154" = "تصویر صفحه‌ای که گزارش می‌کنید. برای نمایش تمام‌صفحه دو بار ضربه بزنید.";
+
+/* Accessibility label for the button that closes the full-screen screenshot viewer on the Report Preview screen. */
+"WebCompatReporter.Preview.ScreenshotCloseAccessibilityLabel.v154" = "بستن";
+
+/* Row on the Report Preview screen that opens the Technical Data screen, and that screen's title. */
+"WebCompatReporter.Preview.TechnicalData.v155" = "فنی داده";
+
+/* Title of the Report Preview screen, which shows the data that will be sent with a website issue report. */
+"WebCompatReporter.Preview.Title.v154" = "گزارش پیش‌نمایش";
+
+/* Title of the button that submits the website issue report, in the Report a Website Issue form. */
+"WebCompatReporter.SendButton.Title.v154" = "ارسال گزارش";
+
+/* Accessibility label for the navigation bar button that dismisses the Report a Website Issue form without sending a report. */
+"WebCompatReporter.Sheet.CloseButtonAccessibilityLabel.v154" = "بستن";
+
+/* Title of the navigation bar button that opens a preview of the report before sending, in the Report a Website Issue form. */
+"WebCompatReporter.Sheet.PreviewButton.v154" = "پیش‌نمایش";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.BrowserBlocked.v154" = "مرورگر است مسدود یا unsupported";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ButtonsNotWorking.v154" = "دکمه‌ها یا پیوندها نیست working";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.CaptionsMissing.v154" = "زیرنویس‌ها هستند مفقود";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ImagesNotLoaded.v154" = "تصاویر نیست بارگذاری‌شده";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsMisaligned.v154" = "Items هستند ناهم‌تراز";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsNotVisible.v154" = "Items نیست fully قابل مشاهده";
+
+/* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.ItemsOverlapped.v154" = "Items هستند هم‌پوشان";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MediaControlsBroken.v154" = "Mediیک کنترل‌ها هستند broken یا مفقود";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.MissingItems.v154" = "مفقود items";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoAudio.v154" = "وجود دارد است نه صدا";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.NoVideo.v154" = "وجود دارد است نه ویدیو";
+
+/* A specific sub-option under the 'Site is not usable' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PageNotLoading.v154" = "صفحه نیست در حال بارگذاری به‌درستی";
+
+/* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
+"WebCompatReporter.SubOption.PlaybackFails.v154" = "ویدیو یا صدا does نیست play";
+
+/* Message of the toast shown after the user successfully submits a website issue report. */
+"WebCompatReporter.Toast.ReportSent.v155" = "گزارش ارسال‌شده";
+

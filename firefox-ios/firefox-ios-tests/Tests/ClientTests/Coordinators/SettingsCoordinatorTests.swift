@@ -681,7 +681,7 @@ final class SettingsCoordinatorTests: XCTestCase {
             tabManager: MockTabManager(),
             relayController: MockRelayController(),
             gleanUsageReportingMetricsService: MockGleanUsageReportingMetricsService(
-                profile: MockProfile()
+                profile: makeProfile()
             )
         )
         trackForMemoryLeaks(subject)

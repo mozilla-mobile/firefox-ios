@@ -2083,7 +2083,7 @@ class BrowserViewController: UIViewController,
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && NativeErrorPageFeatureFlag().isNativeErrorPageEnabled {
+        } else if isErrorURL && featureFlagsProvider.isEnabled(.nativeErrorPage) {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()

@@ -101,13 +101,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .badCertDomainErrorPage,
-                titleText: format(string: "Bad Cert Domain Native Error Page"),
-                statusText: format(string: "Toggle to display the natively created bad cert domain error page")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .bookmarksSearchFeature,
                 titleText: format(string: "Bookmarks Search"),
                 statusText: format(string: "Toggle to enable bookmarks panel search feature")
@@ -200,6 +193,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .multiDayOnboarding,
+                titleText: format(string: "Multi-day Onboarding"),
+                statusText: format(string: "Toggle to enable multi-day onboarding")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .nativeErrorPage,
                 titleText: format(string: "Native Error Page"),
                 statusText: format(string: "Toggle to display natively created error pages")
@@ -210,13 +210,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .newBookmarkFolderTree,
                 titleText: format(string: "New Bookmarks Folder Tree"),
                 statusText: format(string: "Toggle to use new bookmarks folder tree UI")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .noInternetConnectionErrorPage,
-                titleText: format(string: "NIC Native Error Page"),
-                statusText: format(string: "Toggle to display natively created no internet connection error page")
             ) { [weak self] _ in
                 self?.reloadView()
             },

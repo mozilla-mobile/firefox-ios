@@ -59,26 +59,28 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
     private var isValidReleaseName: Bool {
         if skipReleaseNameCheck { return true }
 
-        return AppInfo.bundleIdentifier == "org.mozilla.ios.Firefox"
-                || AppInfo.bundleIdentifier == "org.mozilla.ios.FirefoxBeta"
+        return bundleIdentifier() == "org.mozilla.ios.Firefox"
+                || bundleIdentifier() == "org.mozilla.ios.FirefoxBeta"
     }
 
     private var environment: Environment {
         var environment = Environment.production
-        if AppInfo.appVersion == appInfo.nightlyAppVersion, appInfo.buildChannel == .beta {
+        if appVersion() == appInfo.nightlyAppVersion, appInfo.buildChannel == .beta {
             environment = Environment.nightly
         }
         return environment
     }
 
     private var releaseName: String {
-        return "\(AppInfo.bundleIdentifier)@\(AppInfo.appVersion)"
+        return "\(bundleIdentifier())@\(appVersion())"
     }
 
     private let appInfo: BrowserKitInformation
     private let sentryWrapper: SentryWrapper
     private let isSimulator: Bool
     private let skipReleaseNameCheck: Bool
+    private let bundleIdentifier: @Sendable () -> String
+    private let appVersion: @Sendable () -> String
 
     // Only enable app hang tracking in Beta for now
     private var shouldEnableAppHangTracking: Bool {
@@ -95,14 +97,21 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
 
     // MARK: - Init
 
+    /// - Parameters:
+    ///   - bundleIdentifier: Provides the app's bundle identifier, read lazily since `AppInfo` requires an app bundle
+    ///   - appVersion: Provides the app's version, read lazily since `AppInfo` requires an app bundle
     public init(appInfo: BrowserKitInformation = BrowserKitInformation.shared,
                 sentryWrapper: SentryWrapper = DefaultSentry(),
                 isSimulator: Bool = DeviceInfo.isSimulator(),
-                skipReleaseNameCheck: Bool = false) {
+                skipReleaseNameCheck: Bool = false,
+                bundleIdentifier: @escaping @Sendable () -> String = { AppInfo.bundleIdentifier },
+                appVersion: @escaping @Sendable () -> String = { AppInfo.appVersion }) {
         self.appInfo = appInfo
         self.sentryWrapper = sentryWrapper
         self.isSimulator = isSimulator
         self.skipReleaseNameCheck = skipReleaseNameCheck
+        self.bundleIdentifier = bundleIdentifier
+        self.appVersion = appVersion
     }
 
     // MARK: - CrashManager protocol

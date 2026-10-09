@@ -136,9 +136,10 @@ struct DefaultBookmarksSaver: BookmarksSaver {
                     }
                 }
             } else {
+                let updatedPosition = bookmark.parentGUID == parentFolderGUID ? bookmark.position : position
                 profile.places.updateBookmarkNode(guid: bookmark.guid,
                                                   parentGUID: parentFolderGUID,
-                                                  position: bookmark.position,
+                                                  position: updatedPosition,
                                                   title: bookmark.title,
                                                   url: bookmark.url) { result in
                     switch result {
@@ -174,9 +175,10 @@ struct DefaultBookmarksSaver: BookmarksSaver {
                     }
                 }
             } else {
+                let updatedPosition = folder.parentGUID == parentFolderGUID ? folder.position : position
                 profile.places.updateBookmarkNode(guid: folder.guid,
                                                   parentGUID: parentFolderGUID,
-                                                  position: folder.position,
+                                                  position: updatedPosition,
                                                   title: folder.title) { result in
                     switch result {
                     case .success:

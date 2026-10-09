@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Chủ sở hữu của %@ chưa thiết lập đúng cách và không thể tạo kết nối an toàn.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Trang web có thể tạm thời không khả dụng, có thể đã được chuyển đến địa chỉ khác hoặc tường lửa hoặc máy chủ proxy của bạn đang chặn kết nối.\n\nKiểm tra cài đặt kết nối của bạn và thử lại.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ không thể truy cập URL được yêu cầu.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ không thể kết nối đến %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Hãy cẩn thận. Có điều gì đó không ổn.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Có vẻ như có vấn đề với trang web này";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Quay lại (Khuyến nghị)";

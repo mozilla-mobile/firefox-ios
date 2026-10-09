@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Vlastník servera %@ ho nenastavil správne a nie je možné vytvoriť zabezpečené pripojenie.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Stránka môže byť dočasne nedostupná, presunutá na inú adresu alebo pripojenie môže blokovať firewall či proxy server.\n\nSkontrolujte nastavenia pripojenia a skúste to znova.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "Aplikácii %1$@ sa nepodarilo načítať požadovanú adresu URL.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "Aplikácii %1$@ sa nepodarilo pripojiť k adrese %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Buďte opatrní. Niečo nie je v poriadku.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Zdá sa, že s touto stránkou je problém";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Prejsť naspäť (odporúča sa)";

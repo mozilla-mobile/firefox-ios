@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Der Besitzer von %@ hat es nicht korrekt eingerichtet und eine sichere Verbindung kann nicht erstellt werden.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Die Website ist möglicherweise vorübergehend nicht erreichbar, wurde an eine andere Adresse verschoben oder die Verbindung wird durch Ihre Firewall oder Ihren Proxy blockiert.\n\nÜberprüfen Sie Ihre Verbindungseinstellungen und versuchen Sie es erneut.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ konnte nicht auf die angeforderte URL zugreifen.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ konnte keine Verbindung zu %2$@ herstellen.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Seien Sie vorsichtig. Irgendetwas stimmt hier nicht.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Anscheinend gibt es ein Problem mit dieser Website";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Zurück (empfohlen)";

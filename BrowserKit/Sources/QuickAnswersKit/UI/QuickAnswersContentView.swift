@@ -19,6 +19,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         /// The sections start settling shortly after the transcript begins moving up.
         static let resultCascadeStartDelay: TimeInterval = 0.1
         static let resultCascadeStagger: TimeInterval = 0.1
+        static let presentationSlideOffset: CGFloat = 15.0
     }
 
     // MARK: - Subviews
@@ -140,10 +141,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         audioWaveform.startAnimating()
     }
 
-    func adjustBottomInsets(for height: CGFloat) {
-        scrollView.contentInset.bottom = height
-    }
-
     func configureOptIn(
         strings: QuickAnswersViewConfiguration.OptInStrings,
         learnMoreURL: URL?,
@@ -218,6 +215,20 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         animateResultCascade()
     }
 
+    // MARK: - Presentation transition
+    func prepareForPresentationTransition() {
+        audioWaveform.alpha = 0.0
+        placeholderLabel.alpha = 0.0
+        placeholderLabel.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationSlideOffset)
+    }
+
+    func applyPresentationTransition(isOptInVisible: Bool) {
+        audioWaveform.alpha = isOptInVisible ? 0.0 : 1.0
+        placeholderLabel.alpha = isOptInVisible ? 0.0 : 1.0
+        placeholderLabel.transform = .identity
+    }
+
+    // MARK: - Result animation
     private func animateResultCascade() {
         let cascadingSections: [UIView] = [answerLabel, sourceView, footerLabel]
         let finalTransform = CGAffineTransform(translationX: 0.0, y: -UX.resultTranslationOffset)

@@ -1,0 +1,120 @@
+/* Accessibility label for the close button on the Quick Answers screen. */
+"QuickAnswers.AccessibilityLabels.Close.v158" = "بستن";
+
+/* Accessibility label for the button on the homepage that opens the Quick Answers feature. */
+"QuickAnswers.AccessibilityLabels.OpenQuickAnswers.v158" = "باز کردن سریع پاسخ‌ها";
+
+/* Link shown in the footer of the Quick Answers view - when tapped, it opens a privacy banner explaining how the feature handles user data. */
+"QuickAnswers.ContentView.AboutYourPrivacy.v158" = "About شما حریم خصوصی";
+
+/* Loading label shown in the Quick Answers view while an answer is being fetched. */
+"QuickAnswers.ContentView.Answering.v158" = "Answering…";
+
+/* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
+"QuickAnswers.ContentView.Footer.v158" = "ارائه‌شده by %@ · Answersمی‌تواند contain اشتباه‌ها.";
+
+/* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak. */
+"QuickAnswers.ContentView.Listening.v158" = "در حال گوش دادن, ask هر چیزی…";
+
+/* Placeholder text shown in the Quick Answers view before the user starts speaking. */
+"QuickAnswers.ContentView.Placeholder.v158" = "Ask هر چیزی…";
+
+/* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
+"QuickAnswers.ContentView.SearchingSources.v158" = "جست‌و‌جوing منابع…";
+
+/* Header label for the sources section shown below a Quick Answers result. */
+"QuickAnswers.ContentView.Sources.v158" = "منابع";
+
+/* Loading label shown in the Quick Answers view while the question is being processed. */
+"QuickAnswers.ContentView.Thinking.v158" = "در حال فکر کردن…";
+
+/* Button label on the Quick Answers permission alert to dismiss the alert without taking action. */
+"QuickAnswers.Errors.Cancel.v158" = "لغو";
+
+/* Message shown in the alert when the user has exceeded the daily usage limit for Quick Answers. */
+"QuickAnswers.Errors.DailyLimitMessage.v158" = "تلاش کنید سریع پاسخ‌ها دوباره فردا.";
+
+/* Title of the alert shown when the user has exceeded the daily usage limit for Quick Answers. */
+"QuickAnswers.Errors.DailyLimitTitle.v158" = "روزانه محدودیت رسیده";
+
+/* Message shown in the alert when Quick Answers encounters an unexpected error. */
+"QuickAnswers.Errors.GenericErrorMessage.v158" = "تلاش کنید asking دوباره بعداً.";
+
+/* Title of the alert shown when Quick Answers encounters an unexpected error. */
+"QuickAnswers.Errors.GenericErrorTitle.v158" = "Couldn’t دریافت یک پاسخ";
+
+/* Message shown in the permission alert when microphone access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.Errors.MicrophonePermissionMessage.v158" = "اجازه دادن %@ به دسترسی میکروفون.";
+
+/* Button label to dismiss the Quick Answers error alert. */
+"QuickAnswers.Errors.OK.v158" = "تأیید";
+
+/* Button label on the permission alert that opens the iOS Settings app so the user can grant permissions. */
+"QuickAnswers.Errors.OpenSettings.v158" = "باز‌کردن تنظیمات";
+
+/* Title of the alert shown when the user has denied microphone or speech recognition permissions needed for Quick Answers. */
+"QuickAnswers.Errors.PermissionAlertTitle.v158" = "تغییر تنظیمات به استفاده سریع پاسخ‌ها";
+
+/* Message shown in the permission alert when speech recognition access has been denied for the Quick Answers feature. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.Errors.SpeechRecognitionPermissionMessage.v158" = "اجازه دادن %@ به دسترسی گفتار تشخیص.";
+
+/* Link text that opens more information about how Quick Answers works and how it uses your data. */
+"QuickAnswers.LearnMore.v158" = "بیشتر بدانید…";
+
+/* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
+"QuickAnswers.OptIn.ContinueButton.v158" = "ادامه";
+
+/* Description displayed on the Quick Answers opt-in screen explaining how the feature works and its privacy policy. */
+"QuickAnswers.OptIn.Description.v158" = "Ask یک پرسش بیرون بلند, و دریافت یک کوتاه پاسخ. ما don’t ذخیره شما صدا یا پرسش‌ها.";
+
+/* Link text on the Quick Answers opt-in screen that opens more information about the feature. */
+"QuickAnswers.OptIn.LearnMore.v158" = "بیشتر بدانید";
+
+/* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
+"QuickAnswers.OptIn.Title.v158" = "Ask با شما صدا";
+
+/* Description displayed on the Quick Answers opt-in screen explaining how the feature works. */
+"QuickAnswers.OptInRedesign.Description.v158" = "Ask یک پرسش با شما صدا. دریافت یک کوتاه پاسخ با منابع در ثانیه.";
+
+/* Description of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedDescription.v158" = "ما don’t ذخیره شما صدا, پرسش‌ها, یا پاسخ‌ها.";
+
+/* Title of the first privacy row on the Quick Answers opt-in screen, explaining that nothing the user says is stored. */
+"QuickAnswers.OptInRedesign.NothingGetsSavedTitle.v158" = "هیچ‌چیز ذخیره نمی‌شود";
+
+/* Description of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingDescription.v158" = "ما از داده‌های شما برای آموزش سامانه‌های خود استفاده نمی‌کنیم.";
+
+/* Title of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
+"QuickAnswers.OptInRedesign.NoTrainingTitle.v158" = "خیر آموزش با شما داده";
+
+/* Description of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignDescription.v158" = "ما don’t استفاده شما صدا به identify شما.";
+
+/* Title of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158" = "خصوصی By Design";
+
+/* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
+"QuickAnswers.OptInRedesign.Title.v158" = "تلاش کنید سریع پاسخ‌ها";
+
+/* Body text of the privacy banner shown on the Quick Answers screen, explaining how the feature handles user data. %@ is the name of the app (e.g. Firefox). */
+"QuickAnswers.PrivacyBanner.Description.v158" = "%@ صدا یا پرسش‌های شما را ذخیره نمی‌کند، از داده‌های شما برای آموزش مدل‌های هوش مصنوعی استفاده نمی‌کند و از صدای شما برای شناسایی‌تان استفاده نمی‌کند.";
+
+/* Title of the privacy banner shown on the Quick Answers screen. */
+"QuickAnswers.PrivacyBanner.Title.v158" = "خصوصی by Design";
+
+/* Feature name as displayed in the iOS Quick Action menu (contextual menu displayed when long-pressing the browser app icon) */
+"QuickAnswers.QuickActions.Title.v158" = "سریع پاسخ‌ها";
+
+/* Accessibility label for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer. */
+"QuickAnswers.ReturnPill.ReturnToQuickAnswerAccessibilityLabel.v158" = "Return به سریع پاسخ";
+
+/* Helper text for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer. */
+"QuickAnswers.ReturnPill.Subtitle.v158" = "Tap به return";
+
+/* Message of the tooltip that introduces the Quick Answers feature on the homepage. */
+"QuickAnswers.Tip.Message.v158" = "برای شروع اینجا ضربه بزنید.";
+
+/* Title of the tooltip that introduces the Quick Answers feature on the homepage. */
+"QuickAnswers.Tip.Title.v158" = "Ask بیرون بلند برای سریع پاسخ‌ها";
+

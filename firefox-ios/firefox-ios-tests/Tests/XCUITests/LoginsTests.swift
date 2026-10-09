@@ -233,6 +233,7 @@ class LoginTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306964
+    // Regression
     func testSearchLogin() {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
@@ -284,6 +285,33 @@ class LoginTest: BaseTestCase {
         // XCTAssertEqual(emailValue as! String, mailLogin)
         // let passwordValue = app.webViews.secureTextFields.element(boundBy: 0).value!
         // XCTAssertEqual(passwordValue as! String, "••••••••")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306957
+    // Regression
+    func testUseSavedPasswordAsksForAuthentication() {
+        // Precondition: a login is saved for the test server
+        saveLogin(givenUrl: testLoginPage)
+
+        // Step 1: a login form for the saved login is opened
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(urlLogin)
+        waitUntilPageLoad()
+        webFormScreen.waitForLoginForm()
+
+        // Step 2: the keyboard is shown with the saved password option
+        webFormScreen.tapUsernameField()
+
+        // Step 3: the saved password option asks for device authentication
+        webFormScreen.tapUseSavedPasswordButton()
+        loginSettingsScreen.assertPasscodePromptShown()
+
+        // Step 4: the simulator's passcode prompt has no Cancel, so unlock it and close the saved logins
+        // sheet instead, which returns to the web page without filling the saved login
+        loginSettingsScreen.unlockLoginsView()
+        webFormScreen.closeSavedLoginsSheet()
+        webFormScreen.waitForLoginForm()
+        webFormScreen.assertUsernameFieldIsEmpty()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306953

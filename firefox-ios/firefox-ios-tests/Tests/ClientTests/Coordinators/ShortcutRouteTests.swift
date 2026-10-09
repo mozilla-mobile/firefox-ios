@@ -91,7 +91,7 @@ final class ShortcutRouteTests: XCTestCase {
 
     func createSubject() -> RouteBuilder {
         let subject = RouteBuilder()
-        subject.configure(isPrivate: false, prefs: MockProfile().prefs)
+        subject.configure(isPrivate: false, prefs: makeProfile().prefs)
         trackForMemoryLeaks(subject)
         return subject
     }

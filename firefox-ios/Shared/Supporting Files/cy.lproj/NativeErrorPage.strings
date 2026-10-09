@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Nid yw perchennog %@ wedi ei osod yn iawn ac nid oes modd creu cysylltiad diogel.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Mae'n bosibl nad yw'r wefan ar gael dros dro, efallai ei bod wedi symud i gyfeiriad arall, neu efallai bod eich mur cadarn neu ddirprwy yn rhwystro'r cysylltiad.\n\nGwiriwch eich gosodiadau cysylltiad a rhowch gynnig arall arni.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "Gall %1$@ ddim cyrraedd yr URL y gofynnwyd amdano.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "Gall %1$@ ddim cysylltu â %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Byddwch yn ofalus. Nid yw rhywbeth yn edrych yn iawn.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Mae'n ymddangos bod problem gyda'r wefan hon";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Ewch Nôl (Argymell)";

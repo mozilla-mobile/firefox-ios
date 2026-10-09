@@ -15,7 +15,7 @@ final class WebServerUtilTests: XCTestCase {
         try await super.setUp()
         mockReaderMode = MockReaderModeHandlers()
         mockWebServer = MockWebServer()
-        profile = MockProfile()
+        profile = makeProfile()
     }
 
     override func tearDown() async throws {

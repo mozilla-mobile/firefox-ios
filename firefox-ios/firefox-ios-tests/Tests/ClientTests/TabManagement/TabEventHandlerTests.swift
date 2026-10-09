@@ -24,7 +24,7 @@ class TabEventHandlerTests: XCTestCase {
 
     @MainActor
     func testEventDelivery() {
-        let tab = Tab(profile: MockProfile(),
+        let tab = Tab(profile: makeProfile(),
                       windowUUID: windowUUID)
         let handler = DummyHandler()
 

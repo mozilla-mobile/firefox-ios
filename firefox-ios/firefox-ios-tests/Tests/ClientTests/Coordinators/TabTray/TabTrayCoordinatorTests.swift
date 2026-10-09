@@ -17,7 +17,7 @@ final class TabTrayCoordinatorTests: XCTestCase {
         let mockTabManager = MockTabManager()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         mockRouter = MockRouter(navigationController: MockNavigationController())
-        profile = MockProfile()
+        profile = makeProfile()
         parentCoordinator = MockTabTrayCoordinatorDelegate()
         tabManager = mockTabManager
     }

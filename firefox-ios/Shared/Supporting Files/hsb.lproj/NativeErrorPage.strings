@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Swójstwownik %@ njeje jo korektnje konfigurował a wěsty zwisk njeda so wutworić.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Sydło snano na chwilu k dispoziciji njeje, je so snano k druhej adresy přesunyło abo waša wohnjowa murja abo waš proksy zwisk blokujetej.\n\nPřepruwujće nastajenja swojeho zwiska a spytajće hišće raz.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ njemóžeše trěbny URL docpěć.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ njemóžeše z %2$@ zwjazać.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Budźće kedźbliwy. Něšto w porjadku njeje.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Zda so, zo je problem z tutym sydłom";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Wróćo (doporučeny)";

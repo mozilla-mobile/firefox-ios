@@ -222,6 +222,7 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        updateWallpaperConstraints(availableWallpaperHeight: homepageState.wallpaperState.availableWallpaperHeight)
 
         /// FXIOS-13970: Legacy homepage layout was appearing blank on iOS 15. The root cause was from applying the diffable
         /// data source snapshot before the view had finished it's first layout pass, causing the snapshot to be ignored.
@@ -1299,10 +1300,18 @@ final class HomepageViewController: UIViewController,
                 actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
             )
         case .jumpBackIn(let config):
+            guard let tab = tabManager.getTabForUUID(uuid: config.tabUUID) else {
+                logger.log(
+                    "Jump Back In tab \(config.tabUUID) selected but no longer exists",
+                    level: .warning,
+                    category: .homepage
+                )
+                return
+            }
             dispatchDidSelectCardItemAction(with: item)
             store.dispatch(
                 JumpBackInAction(
-                    tab: config.tab,
+                    tab: tab,
                     windowUUID: self.windowUUID,
                     actionType: JumpBackInActionType.tapOnCell
                 )

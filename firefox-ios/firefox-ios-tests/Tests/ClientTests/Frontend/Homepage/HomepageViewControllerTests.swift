@@ -335,7 +335,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_restoreContentOffset_withStoredOffset_setsCollectionViewOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         homepageTabStateStore.updateState(for: tab.tabUUID) { $0.scrollOffsetY = 180 }
@@ -359,7 +359,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_restoreContentOffset_withoutStoredOffset_scrollsToTop() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         let subject = createSubject(tabManager: tabManager)
@@ -382,7 +382,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_restoreContentOffset_whenNotForcedAndSameTab_doesNotRestoreStoredOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         homepageTabStateStore.updateState(for: tab.tabUUID) { $0.scrollOffsetY = 180 }
@@ -407,7 +407,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_viewDidDisappear_savesVerticalScrollOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         let subject = createSubject(tabManager: tabManager)
@@ -431,7 +431,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_stopScrollingAndSaveVerticalScrollOffset_savesCurrentOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         let subject = createSubject(tabManager: tabManager)
@@ -455,7 +455,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_scrollViewDidEndDragging_savesVerticalScrollOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         let subject = createSubject(tabManager: tabManager)
@@ -479,7 +479,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     func test_scrollViewDidEndDecelerating_savesVerticalScrollOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
         let subject = createSubject(tabManager: tabManager)
@@ -499,6 +499,30 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         subject.scrollViewDidEndDecelerating(UIScrollView())
 
         XCTAssertEqual(homepageTabStateStore.state(for: tab.tabUUID).scrollOffsetY, 140)
+    }
+
+    func test_didSelectJumpBackInItem_withOpenTab_dispatchesTapOnCellWithThatTab() throws {
+        let tab = Tab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.url = URL(string: "https://www.mozilla.org")!
+        let tabManager = MockTabManager()
+        tabManager.tabsByUUID = [tab.tabUUID: tab]
+        let subject = createSubject(tabManager: tabManager)
+
+        try selectJumpBackInItem(for: tab, in: subject)
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.last as? JumpBackInAction)
+        XCTAssertEqual(action.actionType as? JumpBackInActionType, .tapOnCell)
+        XCTAssertIdentical(action.tab, tab)
+    }
+
+    func test_didSelectJumpBackInItem_withClosedTab_dispatchesNothing() throws {
+        let tab = Tab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.url = URL(string: "https://www.mozilla.org")!
+        let subject = createSubject(tabManager: MockTabManager())
+
+        try selectJumpBackInItem(for: tab, in: subject)
+
+        XCTAssertTrue(mockStore.dispatchedActions.isEmpty)
     }
 
     func test_newState_updatesWallpaperHeightConstraint_withAvailableWallpaperHeight() throws {
@@ -524,6 +548,39 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             wallpaperView.constraints.first(where: { $0.firstAttribute == .height && $0.firstItem === wallpaperView })
         )
         XCTAssertEqual(wallpaperHeightConstraint.constant, 300)
+    }
+
+    /// Shows `tab` as the only Jump Back In item on `subject`'s homepage and taps it. Only the actions the tap
+    /// dispatches are left in `mockStore`.
+    private func selectJumpBackInItem(for tab: Tab, in subject: HomepageViewController) throws {
+        var state = HomepageState.reducer.legacyReducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            TabManagerAction(
+                recentTabs: [tab],
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
+            )
+        )
+        state = HomepageState.reducer.legacyReducer(
+            state,
+            JumpBackInAction(
+                isEnabled: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: JumpBackInActionType.toggleShowSectionSetting
+            )
+        )
+        subject.loadViewIfNeeded()
+        subject.newState(state: state)
+
+        let collectionView = try XCTUnwrap(
+            subject.view.subviews.first(where: { $0 is UICollectionView }) as? UICollectionView
+        )
+        let dataSource = try XCTUnwrap(collectionView.dataSource as? HomepageDiffableDataSource)
+        let config = try XCTUnwrap(state.jumpBackInState.jumpBackInTabs.first)
+        let indexPath = try XCTUnwrap(dataSource.indexPath(for: .jumpBackIn(config)))
+
+        mockStore.dispatchedActions.removeAll()
+        subject.collectionView(collectionView, didSelectItemAt: indexPath)
     }
 
     private func createSubject(

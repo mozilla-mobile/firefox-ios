@@ -107,6 +107,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354300
+    // Regression
     func testAddTabFromContext() {
         navigator.openURL(urlExample)
         // Initially there is only one tab open
@@ -127,6 +128,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354447
+    // Regression
     func testSwitchBetweenTabs() {
         // Open two urls from tab tray and switch between them
         navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
@@ -223,6 +225,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354579
+    // Regression
     func testCloseAllTabs() {
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
@@ -246,6 +249,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354580
+    // Regression
     func testCloseAllTabsPrivateMode() {
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
@@ -332,6 +336,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307047
+    // Regression
     func testOpenTabsViewCurrentTabThumbnail() {
         // Open ten or more tabs
         navigator.nowAt(NewTabScreen)
@@ -756,6 +761,7 @@ class TabsTestsIphone: BaseTestCase {
 // and closing the tabs by tapping 'x' button
 class TabsTestsIpad: IpadOnlyTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307023
+    // Regression
     func testUpdateTabCounter() {
         if skipPlatform { return }
         // Open three tabs by tapping on '+' button

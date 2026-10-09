@@ -23,7 +23,7 @@ extension GleanMetrics {
             // Intentionally left private, no external user can instantiate a new global object.
         }
 
-        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 9, day: 30, hour: 5, minute: 26, second: 56))
+        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 10, day: 8, hour: 5, minute: 13, second: 42))
     }
 
     enum AdsClient {

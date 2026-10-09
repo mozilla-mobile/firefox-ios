@@ -75,7 +75,7 @@ final class AddressListViewModelTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockLogger = MockLogger()
         mockAutofill = MockAutofill()
         mockThemeManager = MockThemeManager()

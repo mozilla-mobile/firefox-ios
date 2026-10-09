@@ -14,7 +14,7 @@ class ContextualHintViewProviderTests: XCTestCase {
     private var profile: MockProfile!
 
     override func setUp() async throws {
-        profile = MockProfile()
+        profile = makeProfile()
         try await super.setUp()
     }
 

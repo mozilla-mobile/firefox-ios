@@ -15,7 +15,7 @@ final class HomePageSettingViewControllerTests: XCTestCase, FeatureFlagTestUtili
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockNimbusLayer = MockNimbusFeatureFlagLayer()
 
         DependencyHelperMock().bootstrapDependencies(
