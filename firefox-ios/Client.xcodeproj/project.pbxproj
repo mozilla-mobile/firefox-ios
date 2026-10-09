@@ -703,6 +703,7 @@
 		5A3A2A0D287F742C00B79EAC /* BackgroundSyncUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A2A0C287F742C00B79EAC /* BackgroundSyncUtility.swift */; };
 		5A3A7DDC2889EC5D0065F81A /* MockBookmarksHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A7DDB2889EC5D0065F81A /* MockBookmarksHandler.swift */; };
 		5A475E8E29DB89C7009C13FD /* TabManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A475E8929DB87F2009C13FD /* TabManagerTests.swift */; };
+		B1A9E0022FA0000000C0FFEE /* BlankPageNavigationDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A9E0012FA0000000C0FFEE /* BlankPageNavigationDelegateTests.swift */; };
 		5A475E8F29DB89CE009C13FD /* MockTabDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A475E8C29DB888E009C13FD /* MockTabDataStore.swift */; };
 		5A475E9129DB8AA7009C13FD /* MockDiskImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A475E9029DB8AA7009C13FD /* MockDiskImageStore.swift */; };
 		5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */; };
@@ -789,6 +790,7 @@
 		610216552FBFA7100091151F /* ConversionValueUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610216512FBFA7100091151F /* ConversionValueUpdater.swift */; };
 		610216562FBFA7100091151F /* ConversionActivityLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610216502FBFA7100091151F /* ConversionActivityLogger.swift */; };
 		610216572FBFA7100091151F /* ConversionDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610216522FBFA7100091151F /* ConversionDataManager.swift */; };
+		611442B3306F31F4000A7343 /* BlankPageNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611442B2306F31F4000A7343 /* BlankPageNavigationDelegate.swift */; };
 		612194E32CE507CF001664BB /* WallpaperBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */; };
 		612194E62CE50A93001664BB /* WallpaperAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E52CE50A93001664BB /* WallpaperAction.swift */; };
 		612194E82CE50A9B001664BB /* WallpaperState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E72CE50A9B001664BB /* WallpaperState.swift */; };
@@ -9534,6 +9536,7 @@
 		5A3A2A0C287F742C00B79EAC /* BackgroundSyncUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundSyncUtility.swift; sourceTree = "<group>"; };
 		5A3A7DDB2889EC5D0065F81A /* MockBookmarksHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBookmarksHandler.swift; sourceTree = "<group>"; };
 		5A475E8929DB87F2009C13FD /* TabManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerTests.swift; sourceTree = "<group>"; };
+		B1A9E0012FA0000000C0FFEE /* BlankPageNavigationDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlankPageNavigationDelegateTests.swift; sourceTree = "<group>"; };
 		5A475E8C29DB888E009C13FD /* MockTabDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabDataStore.swift; sourceTree = "<group>"; };
 		5A475E9029DB8AA7009C13FD /* MockDiskImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDiskImageStore.swift; sourceTree = "<group>"; };
 		5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
@@ -9647,6 +9650,7 @@
 		610216512FBFA7100091151F /* ConversionValueUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionValueUpdater.swift; sourceTree = "<group>"; };
 		610216522FBFA7100091151F /* ConversionDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionDataManager.swift; sourceTree = "<group>"; };
 		610216532FBFA7100091151F /* ConversionEventTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionEventTracker.swift; sourceTree = "<group>"; };
+		611442B2306F31F4000A7343 /* BlankPageNavigationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlankPageNavigationDelegate.swift; sourceTree = "<group>"; };
 		612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperBackgroundView.swift; sourceTree = "<group>"; };
 		612194E52CE50A93001664BB /* WallpaperAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperAction.swift; sourceTree = "<group>"; };
 		612194E72CE50A9B001664BB /* WallpaperState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperState.swift; sourceTree = "<group>"; };
@@ -14861,6 +14865,7 @@
 				8A0A7C3F2F61F03200D00820 /* TabWebView.swift */,
 				BD0D40792D83124E00C38511 /* TabWebViewPreview.swift */,
 				1D558A592BEE7D07001EF527 /* WindowSimpleTabsCoordinator.swift */,
+				611442B2306F31F4000A7343 /* BlankPageNavigationDelegate.swift */,
 			);
 			path = TabManagement;
 			sourceTree = "<group>";
@@ -15514,6 +15519,7 @@
 				8AE65C042FE219A500CBBE66 /* TabManagerRestoreScreenshotTests.swift */,
 				8AFC09552FA54A240070CA11 /* TabManagerRestoreTabsTests.swift */,
 				5A475E8929DB87F2009C13FD /* TabManagerTests.swift */,
+				B1A9E0012FA0000000C0FFEE /* BlankPageNavigationDelegateTests.swift */,
 				8AFC09562FA54A240070CA11 /* TabManagerTestsBase.swift */,
 				8A3F08AD2FB40BD0001F5DE9 /* TabRestorerTests.swift */,
 				8AD08D1627E91AC800B8E907 /* TabsTelemetryTests.swift */,
@@ -21182,6 +21188,7 @@
 				C72748242ECE180E003B394D /* MerinoTestDataSetting.swift in Sources */,
 				C2FA00312FFF000100AD1FBD /* ResetTipsSetting.swift in Sources */,
 				8AEDB11529F9F00400F2A53B /* SceneContainer.swift in Sources */,
+				611442B3306F31F4000A7343 /* BlankPageNavigationDelegate.swift in Sources */,
 				B23620512B9BAAF3000B1DE7 /* AddressFormData.swift in Sources */,
 				AB42CC742A1F5240003C9594 /* CreditCardBottomSheetViewController.swift in Sources */,
 				2199D3E230472D2800BB96F4 /* LeadingPageActionsBuilder.swift in Sources */,
@@ -21800,6 +21807,7 @@
 				8ADEC6832A40F208002D2ED8 /* AppSettingsTableViewControllerTests.swift in Sources */,
 				8CC6023F301C89A80041B7D0 /* WebCompatReportRecorderTests.swift in Sources */,
 				5A475E8E29DB89C7009C13FD /* TabManagerTests.swift in Sources */,
+				B1A9E0022FA0000000C0FFEE /* BlankPageNavigationDelegateTests.swift in Sources */,
 				21A44806304B48400054DF7C /* TrailingPageActionsBuilderTests.swift in Sources */,
 				0B5CAF0D2E40DA89008B5D5A /* MockSummarizationChecker.swift in Sources */,
 				E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */,

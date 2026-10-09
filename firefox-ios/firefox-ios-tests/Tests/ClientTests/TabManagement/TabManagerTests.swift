@@ -405,6 +405,109 @@ final class TabManagerTests: TabManagerTestsBase {
         XCTAssertEqual(subject.tabs.count, 0)
     }
 
+    // MARK: - Proxy change
+
+    @MainActor
+    func testTearDownWebViewsForProxyChange_allWebViewsAreNil() async {
+        let subject = createSubject()
+        let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        let tab2 = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab2)
+        subject.selectTab(tab1)
+
+        await subject.tearDownWebViewsForProxyChange()
+
+        XCTAssertNil(tab1.webView, "The selected tab's WebView should also be torn down")
+        XCTAssertNil(tab2.webView)
+    }
+
+    @MainActor
+    func testTearDownWebViewsForProxyChange_savesSelectedTabSession() async throws {
+        let subject = createSubject()
+        let tab = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab)
+        mockSessionStore.saveTabSessionCallCount = 0
+
+        await subject.tearDownWebViewsForProxyChange()
+
+        XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 1)
+        XCTAssertEqual(mockSessionStore.tabID, try XCTUnwrap(UUID(uuidString: tab.tabUUID)))
+    }
+
+    @MainActor
+    func testTearDownWebViewsForProxyChange_keepsTabsAndSelection() async {
+        let subject = createSubject()
+        let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        _ = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab1)
+
+        await subject.tearDownWebViewsForProxyChange()
+
+        XCTAssertEqual(subject.tabs.count, 2)
+        XCTAssertTrue(subject.selectedTab === tab1)
+    }
+
+    @MainActor
+    func testTearDownWebViewsForProxyChange_zombieTabsUnaffected() async {
+        let tabs = generateTabs(count: 3)
+        let subject = createSubject(tabs: tabs)
+        subject.selectTab(tabs[0])
+
+        await subject.tearDownWebViewsForProxyChange()
+
+        XCTAssertNil(tabs[1].webView)
+        XCTAssertNil(tabs[2].webView)
+        XCTAssertEqual(subject.tabs.count, 3)
+    }
+
+    @MainActor
+    func testTearDownWebViewsForProxyChange_emptyTabList_doesNotCrash() async {
+        let subject = createSubject()
+
+        await subject.tearDownWebViewsForProxyChange()
+
+        XCTAssertEqual(subject.tabs.count, 0)
+        XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 0)
+    }
+
+    @MainActor
+    func testRestoreSelectedTabForProxyChange_recreatesSelectedTabWebView() async {
+        let subject = createSubject()
+        let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        let tab2 = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab2)
+        subject.selectTab(tab1)
+        await subject.tearDownWebViewsForProxyChange()
+
+        subject.restoreSelectedTabForProxyChange()
+
+        XCTAssertNotNil(tab1.webView)
+        XCTAssertNil(tab2.webView, "Background tabs should stay offloaded until selected")
+    }
+
+    @MainActor
+    func testRestoreSelectedTabForProxyChange_fetchesSelectedTabSession() async throws {
+        let subject = createSubject()
+        let tab = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab)
+        await subject.tearDownWebViewsForProxyChange()
+        mockSessionStore.fetchTabSessionCalls = []
+
+        subject.restoreSelectedTabForProxyChange()
+
+        XCTAssertEqual(mockSessionStore.fetchTabSessionCalls, [try XCTUnwrap(UUID(uuidString: tab.tabUUID))])
+    }
+
+    @MainActor
+    func testRestoreSelectedTabForProxyChange_noSelectedTab_doesNothing() {
+        let subject = createSubject()
+
+        subject.restoreSelectedTabForProxyChange()
+
+        XCTAssertNil(subject.selectedTab)
+        XCTAssertTrue(mockSessionStore.fetchTabSessionCalls.isEmpty)
+    }
+
     // MARK: - selectTab neighbour screenshot preloading (ADR 0008)
 
     @MainActor
