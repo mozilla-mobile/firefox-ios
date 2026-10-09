@@ -56,6 +56,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         firefoxHomePageScreen.assertTopSitesItemCellExist()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3110602
     // Smoketest
     func testModernKitOnboardingFullFlowToSAlreadyAccepted() throws {
         launchApp()
@@ -181,6 +182,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertOverlayIsClosed(for: link)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3110602
     func testModernKitOnboardingWelcomeScreen() throws {
         launchApp()
 
@@ -494,6 +496,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306816
+    // https://mozilla.testrail.io/index.php?/cases/view/3080079
     func testModernKitOnboardingSkipSync() throws {
         launchApp()
 
@@ -601,6 +604,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Accessibility Tests
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3132678
     func testModernKitOnboardingAccessibility() throws {
         launchApp()
 
@@ -621,6 +625,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Multiple Choice UI Tests
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3129578
     func testModernKitOnboardingMultipleChoiceUI() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -644,6 +649,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     }
 
     // MARK: Skipping Onboarding with Close Button
+    // https://mozilla.testrail.io/index.php?/cases/view/1905345
     func testModernKitOnboardingCloseOptionLastCard() {
         launchApp()
 
