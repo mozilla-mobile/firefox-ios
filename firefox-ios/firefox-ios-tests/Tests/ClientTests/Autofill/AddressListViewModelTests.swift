@@ -337,7 +337,7 @@ final class MockAutofill: AddressProvider, SyncAutofillProvider, @unchecked Send
         reportPreSyncKeyRetrievalFailureCalled += 1
     }
 
-    func verifyCreditCards(key: String, completionHandler: @escaping @Sendable (Bool) -> Void) {
+    func verifyCreditCards(completionHandler: @escaping @Sendable (Bool) -> Void) {
         verifyCreditCardsCalled += 1
         completionHandler(creditCardsVerified)
     }

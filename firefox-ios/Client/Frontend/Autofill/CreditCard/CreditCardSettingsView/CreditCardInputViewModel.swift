@@ -292,8 +292,7 @@ final class CreditCardInputViewModel: ObservableObject, @unchecked Sendable {
     public func setupViewValues() {
         guard let creditCard = creditCard else { return }
         nameOnCard = creditCard.ccName
-        cardNumber = autofill.decryptCreditCardNumber(
-            encryptedCCNum: creditCard.ccNumberEnc) ?? ""
+        cardNumber = creditCard.ccNumber
         let month = creditCard.ccExpMonth
         isRightBarButtonEnabled = initialStateToEnableTopRightButton()
         let formattedMonth = month < 10 ? String(format: "%02d", month) : String(month)

@@ -26,7 +26,7 @@ class CreditCardBottomSheetViewControllerTests: XCTestCase {
                                                                         ccType: "VISA")
     private var sampleCreditCard = CreditCard(guid: "1",
                                               ccName: "Allen Burges",
-                                              ccNumberEnc: "4111111111111111",
+                                              ccNumber: "4111111111111111",
                                               ccNumberLast4: "1111",
                                               ccExpMonth: 3,
                                               ccExpYear: 2043,
@@ -79,7 +79,7 @@ class CreditCardBottomSheetViewControllerTests: XCTestCase {
 
         let secondCreditCard = CreditCard(guid: "2",
                                           ccName: "Jane Smith",
-                                          ccNumberEnc: "5555555555554444",
+                                          ccNumber: "5555555555554444",
                                           ccNumberLast4: "4444",
                                           ccExpMonth: 12,
                                           ccExpYear: 2040,

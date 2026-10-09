@@ -181,7 +181,7 @@ class CreditCardInputViewModelTests: XCTestCase {
         viewModel.numberIsValid = false
         viewModel.creditCard = CreditCard(guid: "1",
                                           ccName: "Allen Burges",
-                                          ccNumberEnc: "1234567891234567",
+                                          ccNumber: "1234567891234567",
                                           ccNumberLast4: "4567",
                                           ccExpMonth: 1234567,
                                           ccExpYear: 2023,

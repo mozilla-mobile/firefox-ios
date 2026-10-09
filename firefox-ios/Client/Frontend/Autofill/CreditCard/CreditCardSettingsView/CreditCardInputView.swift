@@ -245,7 +245,7 @@ struct CreditCardEditView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleCreditCard = CreditCard(guid: "12345678",
                                           ccName: "Tim Apple",
-                                          ccNumberEnc: "12345678",
+                                          ccNumber: "12345678",
                                           ccNumberLast4: "4321",
                                           ccExpMonth: 1234,
                                           ccExpYear: 2026,
