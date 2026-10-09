@@ -792,16 +792,11 @@ class SearchViewController: SiteTableViewController,
         case .openedTabs:
             if viewModel.filteredOpenedTabs.count > indexPath.row {
                 let openedTab = viewModel.filteredOpenedTabs[indexPath.row]
-                twoLineCell.descriptionLabel.isHidden = false
-                twoLineCell.titleLabel.text = openedTab.title ?? openedTab.lastTitle
-                twoLineCell.descriptionLabel.text = String.SearchSuggestionCellSwitchToTabLabel
-                twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
-                twoLineCell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
-                twoLineCell.leftImageView.layer.borderWidth = UX.IconBorderWidth
-                if let urlString = openedTab.url?.absoluteString {
-                    twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
-                }
-                twoLineCell.accessoryView = nil
+                configureOpenedTabsCell(
+                    twoLineCell,
+                    openedTab.title ?? openedTab.lastTitle,
+                    openedTab.url?.absoluteString
+                )
                 cell = twoLineCell
             }
         case .remoteTabs:
@@ -809,15 +804,13 @@ class SearchViewController: SiteTableViewController,
                viewModel.filteredRemoteClientTabs.count > indexPath.row {
                 let remoteTab = viewModel.filteredRemoteClientTabs[indexPath.row].tab
                 let remoteClient = viewModel.filteredRemoteClientTabs[indexPath.row].client
-                twoLineCell.descriptionLabel.isHidden = false
-                twoLineCell.titleLabel.text = remoteTab.title
-                twoLineCell.descriptionLabel.text = remoteClient.name
-                twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
-                twoLineCell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
-                twoLineCell.leftImageView.layer.borderWidth = UX.IconBorderWidth
                 let urlString = remoteTab.URL.absoluteString
-                twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
-                twoLineCell.accessoryView = nil
+                configureRemoteTabsCell(
+                    twoLineCell,
+                    remoteTab.title,
+                    remoteClient.name,
+                    urlString
+                )
                 cell = twoLineCell
             }
         case .history:
@@ -845,19 +838,12 @@ class SearchViewController: SiteTableViewController,
 
         case .firefoxSuggestions:
             let firefoxSuggestion = viewModel.firefoxSuggestions[indexPath.row]
-            twoLineCell.titleLabel.text = firefoxSuggestion.title
-            if firefoxSuggestion.isSponsored {
-                twoLineCell.descriptionLabel.isHidden = false
-                twoLineCell.descriptionLabel.text = .Search.SponsoredSuggestionDescription
-            } else {
-                twoLineCell.descriptionLabel.isHidden = true
-            }
-            twoLineCell.leftOverlayImageView.image = nil
-            twoLineCell.leftImageView.contentMode = .scaleAspectFit
-            twoLineCell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
-            twoLineCell.leftImageView.layer.borderWidth = UX.IconBorderWidth
-            twoLineCell.leftImageView.manuallySetImage(firefoxSuggestion.iconImage ?? UIImage())
-            twoLineCell.accessoryView = nil
+            configureFirefoxSuggestionsCell(
+                twoLineCell,
+                firefoxSuggestion.title,
+                firefoxSuggestion.isSponsored,
+                firefoxSuggestion.iconImage ?? UIImage()
+            )
             cell = twoLineCell
         }
 
@@ -888,6 +874,39 @@ class SearchViewController: SiteTableViewController,
         return viewModel
     }
 
+    private func configureOpenedTabsCell(
+        _ cell: TwoLineImageOverlayCell,
+        _ title: String?,
+        _ urlString: String?
+    ) {
+        cell.descriptionLabel.isHidden = false
+        cell.titleLabel.text = title
+        cell.descriptionLabel.text = String.SearchSuggestionCellSwitchToTabLabel
+        cell.leftOverlayImageView.image = openAndSyncTabBadge
+        cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
+        cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
+        if let urlString = urlString {
+            cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
+        }
+        cell.accessoryView = nil
+    }
+
+    private func configureRemoteTabsCell(
+        _ cell: TwoLineImageOverlayCell,
+        _ title: String,
+        _ description: String,
+        _ urlString: String
+    ) {
+        cell.descriptionLabel.isHidden = false
+        cell.titleLabel.text = title
+        cell.descriptionLabel.text = description
+        cell.leftOverlayImageView.image = openAndSyncTabBadge
+        cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
+        cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
+        cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
+        cell.accessoryView = nil
+    }
+
     private func configureBookmarksAndHistoryCell(
         _ cell: TwoLineImageOverlayCell,
         _ title: String,
@@ -901,6 +920,27 @@ class SearchViewController: SiteTableViewController,
         cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
         cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
         cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: description))
+        cell.accessoryView = nil
+    }
+
+    private func configureFirefoxSuggestionsCell(
+        _ cell: TwoLineImageOverlayCell,
+        _ title: String,
+        _ isSponsored: Bool,
+        _ iconImage: UIImage
+    ) {
+        cell.titleLabel.text = title
+        if isSponsored {
+            cell.descriptionLabel.isHidden = false
+            cell.descriptionLabel.text = .Search.SponsoredSuggestionDescription
+        } else {
+            cell.descriptionLabel.isHidden = true
+        }
+        cell.leftOverlayImageView.image = nil
+        cell.leftImageView.contentMode = .scaleAspectFit
+        cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
+        cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
+        cell.leftImageView.manuallySetImage(iconImage)
         cell.accessoryView = nil
     }
 
