@@ -13,7 +13,6 @@ final class TrackingProtectionModelTests: XCTestCase {
 
         let trackingProtectionModel = TrackingProtectionModel(userDefaults: nil,
                                                               url: URL(string: "https://www.google.com")!,
-                                                              displayTitle: "TitleTest",
                                                               connectionSecure: false,
                                                               globalETPIsEnabled: false,
                                                               contentBlockerStatus: .disabled,

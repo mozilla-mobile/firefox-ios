@@ -513,7 +513,7 @@ class TrackingProtectionViewController: UIViewController,
     }
 
     private func updateViewDetails() {
-        let headerIcon = FaviconImageViewModel(siteURLString: model.url.absoluteString,
+        let headerIcon = FaviconImageViewModel(siteURLString: model.originalURL.absoluteString,
                                                faviconCornerRadius: TPMenuUX.UX.faviconCornerRadius)
         headerContainer.setupDetails(subtitle: model.websiteTitle,
                                      title: model.displayTitle,
@@ -534,7 +534,7 @@ class TrackingProtectionViewController: UIViewController,
 
     private func updateConnectionStatus() {
         let isInternalCertErrorURL = InternalURL(model.url)?.isCertificateErrorURL ?? false
-        let origin = CertStore.origin(for: model.url) ?? ""
+        let origin = CertStore.origin(for: model.originalURL) ?? ""
         let isManuallyTrusted = profile?.certStore.hasCertificate(forOrigin: origin) ?? false
         model.connectionSecure = model.selectedTab?.webView?.hasOnlySecureContent ?? false
         connectionStatusView.setConnectionStatus(image: model.getConnectionStatusImage(themeType: currentTheme().type),

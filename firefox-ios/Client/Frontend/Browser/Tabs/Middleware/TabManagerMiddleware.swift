@@ -949,21 +949,18 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             return
         }
 
-        let subtitle: String?
-        if let internalURL = InternalURL(selectedTab.url), internalURL.isCertificateErrorURL {
-            subtitle = internalURL.originalURLFromErrorPage?.baseDomain
-        } else {
-            subtitle = selectedTab.url?.baseDomain
-        }
+        let siteURL = InternalURL(selectedTab.url)?.originalURLFromErrorPage ?? selectedTab.url
+        let displayTitle = InternalURL(selectedTab.url)?.originalURLFromErrorPage?.shortDisplayString ??
+                           selectedTab.displayTitle
 
         store.dispatch(
             MainMenuAction(
                 windowUUID: windowUUID,
                 actionType: MainMenuActionType.updateSiteProtectionsHeader,
                 siteProtectionsData: SiteProtectionsData(
-                    title: selectedTab.displayTitle,
-                    subtitle: subtitle,
-                    image: selectedTab.url?.absoluteString,
+                    title: displayTitle,
+                    subtitle: siteURL?.baseDomain,
+                    image: siteURL?.absoluteString,
                     state: getSiteProtectionState(for: selectedTab)
                 )
             )
@@ -972,7 +969,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
 
     private func getSiteProtectionState(for selectedTab: Tab) -> SiteProtectionsState {
         let isContentBlockingConfigEnabled = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
-        guard let url = selectedTab.url,
+        guard let url = InternalURL(selectedTab.url)?.originalURLFromErrorPage ?? selectedTab.url,
               !ContentBlocker.shared.isSafelisted(url: url),
               isContentBlockingConfigEnabled else { return .off }
 

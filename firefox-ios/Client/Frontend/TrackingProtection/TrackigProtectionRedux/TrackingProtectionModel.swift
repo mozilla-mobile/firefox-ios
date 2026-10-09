@@ -12,6 +12,7 @@ import CryptoKit
 import X509
 import SwiftASN1
 
+@MainActor
 class TrackingProtectionModel {
     // MARK: - Constants
     private let userDefaults: UserDefaultsInterface?
@@ -19,7 +20,6 @@ class TrackingProtectionModel {
     var contentBlockerStats: TPPageStats?
     var certificates = [Certificate]()
     let url: URL
-    let displayTitle: String
     var connectionSecure: Bool
     let globalETPIsEnabled: Bool
     var selectedTab: Tab?
@@ -72,14 +72,17 @@ class TrackingProtectionModel {
     let titleLabelA11yId = A11y.titleLabel
     let subtitleLabelA11yId = A11y.subtitleLabel
 
+    var displayTitle: String {
+        return InternalURL(url)?.originalURLFromErrorPage?.shortDisplayString ??
+               selectedTab?.displayTitle ?? ""
+    }
+
+    var originalURL: URL {
+        return InternalURL(url)?.originalURLFromErrorPage ?? url
+    }
+
     var websiteTitle: String {
-        let websiteTitle: String?
-        if let internalURL = InternalURL(url), internalURL.isCertificateErrorURL {
-            websiteTitle = internalURL.originalURLFromErrorPage?.baseDomain
-        } else {
-            websiteTitle = url.baseDomain
-        }
-        return websiteTitle ?? ""
+        return originalURL.baseDomain ?? ""
     }
 
     let secureStatusString = String.Menu.EnhancedTrackingProtection.connectionSecureLabel
@@ -130,7 +133,6 @@ class TrackingProtectionModel {
 
     init(userDefaults: UserDefaultsInterface?,
          url: URL,
-         displayTitle: String,
          connectionSecure: Bool,
          globalETPIsEnabled: Bool,
          contentBlockerStatus: BlockerStatus,
@@ -138,7 +140,6 @@ class TrackingProtectionModel {
          selectedTab: Tab?) {
         self.userDefaults = userDefaults
         self.url = url
-        self.displayTitle = displayTitle
         self.connectionSecure = connectionSecure
         self.globalETPIsEnabled = globalETPIsEnabled
         self.contentBlockerStatus = contentBlockerStatus
@@ -160,7 +161,7 @@ class TrackingProtectionModel {
     func getDetailsModel() -> TrackingProtectionDetailsModel {
         return TrackingProtectionDetailsModel(topLevelDomain: websiteTitle,
                                               title: displayTitle,
-                                              URL: url.absoluteDisplayString,
+                                              URL: originalURL.absoluteDisplayString,
                                               getLockIcon: getConnectionStatusImage(themeType:),
                                               connectionStatusMessage: connectionStatusString,
                                               connectionSecure: connectionSecure,
@@ -172,7 +173,7 @@ class TrackingProtectionModel {
             userDefaults: userDefaults,
             topLevelDomain: websiteTitle,
             title: displayTitle,
-            URL: url.absoluteDisplayString,
+            URL: originalURL.absoluteDisplayString,
             contentBlockerStats: contentBlockerStats,
             connectionSecure: connectionSecure
         )
@@ -184,21 +185,18 @@ class TrackingProtectionModel {
             .withRenderingMode(.alwaysTemplate)
     }
 
-    @MainActor
     func toggleSiteSafelistStatus() {
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
-        ContentBlocker.shared.safelist(enable: contentBlockerStatus != .safelisted, url: url) {
+        ContentBlocker.shared.safelist(enable: !isURLSafelisted(), url: originalURL) {
         }
     }
 
-    @MainActor
     func isURLSafelisted() -> Bool {
-        return ContentBlocker.shared.isSafelisted(url: url)
+        return ContentBlocker.shared.isSafelisted(url: originalURL)
     }
 
-    @MainActor
     func onTapClearCookiesAndSiteData(controller: UIViewController) {
-        let alertMessage = String(format: clearCookiesAlertText, url.baseDomain ?? url.shortDisplayString)
+        let alertMessage = String(format: clearCookiesAlertText, originalURL.baseDomain ?? originalURL.shortDisplayString)
         let alert = UIAlertController(
             title: clearCookiesAlertTitle,
             message: alertMessage,
@@ -233,9 +231,8 @@ class TrackingProtectionModel {
         controller.present(alert, animated: true, completion: nil)
     }
 
-    @MainActor
     func clearCookiesAndSiteData() {
-        guard let domain = url.baseDomain else { return }
+        guard let domain = originalURL.baseDomain else { return }
         Task {
             await CookiesClearable().clear(forDomain: domain)
             await SiteDataClearable().clear(forDomain: domain)
