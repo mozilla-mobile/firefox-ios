@@ -231,9 +231,15 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         let gesture = MockSwipeUpPanGestureRecognizer()
         gesture.state = .ended
         gesture.gestureLocation = CGPoint(x: 150, y: 100)
+        // this should avoid flaky test by ensuring the test ends and all the actions were dispatched
+        let expectation = expectation(description: "wait for store to dispatch close tab action")
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
 
         subject.handlePanGestureForTesting(gesture)
-
+        
+        wait(for: [expectation])
         XCTAssertLessThan(tabPreview.previewCardFrame.midY, previewFrame.midY)
         assertRecordedEvent(outcome: .tabClosed)
     }
