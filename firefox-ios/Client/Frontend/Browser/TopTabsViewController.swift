@@ -64,7 +64,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         return collectionView
     }()
 
-    private lazy var newTab: UIButton = .build { button in
+    private lazy var newTab: UIButton = .build { [weak self] button in
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus), for: .normal)
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
