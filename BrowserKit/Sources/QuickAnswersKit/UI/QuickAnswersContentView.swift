@@ -271,9 +271,9 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
     }
 
     // MARK: - Presentation transition
-    func prepareForPresentationTransition(sourceRect: CGRect, containerWidth: CGFloat) {
+    func prepareForPresentationTransition(sourceRect: CGRect, containerWidth: CGFloat, isOptInVisible: Bool) {
         let topSafeAreaInset = window?.safeAreaInsets.top ?? 0.0
-        audioWaveform.alpha = 1.0
+        audioWaveform.alpha = isOptInVisible ? 0.0 : 1.0
         audioWaveform.transform = CGAffineTransform(
             translationX: sourceRect.midX - containerWidth / 2.0,
             y: UX.scrollContentTopInset + UX.audioWaveformSize.height + topSafeAreaInset - sourceRect.midY - 0.0

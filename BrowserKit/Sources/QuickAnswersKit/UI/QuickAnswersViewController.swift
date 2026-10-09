@@ -277,10 +277,11 @@ public final class QuickAnswersViewController: UIViewController,
     }
 
     // MARK: - Presentation transition
-    func prepareForPresentationTransition(sourceRect: CGRect) {
+    func prepareForPresentationTransition(sourceRect: CGRect, isOptInVisible: Bool) {
         contentView.prepareForPresentationTransition(
             sourceRect: sourceRect,
-            containerWidth: view.window?.bounds.width ?? view.bounds.width
+            containerWidth: view.window?.bounds.width ?? view.bounds.width,
+            isOptInVisible: isOptInVisible
         )
         backgroundRecordEffect.view.alpha = 0.0
         backgroundRecordEffect.view.transform = CGAffineTransform(translationX: 0.0,

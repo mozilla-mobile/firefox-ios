@@ -98,7 +98,10 @@ final class SourceRevealTransitionAnimator: NSObject,
         let maskView = makeMaskView(for: containerView, diameterRatio: UX.presentationMaskDiameterRatio)
         maskView.transform = CGAffineTransform(scaleX: UX.collapsedMaskScale, y: UX.collapsedMaskScale)
         presentedController.view.mask = maskView
-        quickAnswersController.prepareForPresentationTransition(sourceRect: sourceRect)
+        quickAnswersController.prepareForPresentationTransition(
+            sourceRect: sourceRect,
+            isOptInVisible: isOptInVisible
+        )
         UIView.animate(withDuration: UX.presentationDuration, delay: 0.0, options: .curveEaseOut) { [self] in
             maskView.transform = CGAffineTransform(scaleX: UX.expandedMaskHorizontalScale, y: 1.0)
             quickAnswersController.applyPresentationTransition(isOptInVisible: isOptInVisible)
