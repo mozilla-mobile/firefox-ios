@@ -83,7 +83,7 @@ struct ContextMenuSelectors: ContextMenuSelectorsSet {
         description: "Toast button to switch to the newly opened private tab",
         groups: ["contextmenu"]
     )
-    
+
     let REQUEST_DESKTOP_SITE = Selector.buttonByLabel(
         IDs.requestDesktopSite,
         description: "Request desktop site from the reload button",
