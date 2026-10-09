@@ -126,6 +126,13 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
             }
         }
 
+        let perDeviceSyncEnabled = FxNimbus.shared
+            .features
+            .perDeviceSync
+            .value()
+            .perDeviceSyncEnabled
+        profile.prefs.setBool(perDeviceSyncEnabled, forKey: PrefsKeys.PerDeviceSyncEnabled)
+
         RustFirefoxAccounts.startup(prefs: profile.prefs) { manager in
             self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
             AppEventQueue.signal(event: .accountManagerInitialized)
