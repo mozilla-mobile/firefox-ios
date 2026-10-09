@@ -122,8 +122,9 @@ enum Experiments {
             // becomes `NimbusDisabled`, and every onboarding card is filtered out.
             let rootPath = FileManager.default.containerURL(
                 forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier
-            )?.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-            profilePath = URL(fileURLWithPath: rootPath)
+            )?.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[safe: 0]
+            profilePath = rootPath.map {
+                URL(fileURLWithPath: $0)
                 .appendingPathComponent("profile.profile")
                 .path
         }
