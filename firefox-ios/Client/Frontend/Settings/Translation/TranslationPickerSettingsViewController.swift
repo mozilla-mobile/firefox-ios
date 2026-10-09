@@ -39,7 +39,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
     )
 
     private lazy var doneButton: UIBarButtonItem = {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         guard #available(iOS 26.0, *), theme.isNova else {
             return UIBarButtonItem(
                 barButtonSystemItem: .done,
@@ -77,6 +77,15 @@ final class TranslationPickerSettingsViewController: UIViewController,
 
     let windowUUID: WindowUUID
     private var state: TranslationSettingsState
+
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    private func currentTheme() -> Theme {
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+    }
 
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -192,7 +201,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
                 accessibilityIdentifier: AccessibilityIdentifiers.Settings.Translation.toggleSwitch,
                 target: self,
                 action: #selector(didToggleTranslations(_:)),
-                theme: themeManager.getCurrentTheme(for: windowUUID)
+                theme: currentTheme()
             )
         }
 
@@ -206,7 +215,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
                 accessibilityIdentifier: AccessibilityIdentifiers.Settings.Translation.autoTranslateSwitch,
                 target: self,
                 action: #selector(didToggleAutoTranslate(_:)),
-                theme: themeManager.getCurrentTheme(for: windowUUID)
+                theme: currentTheme()
             )
         }
 
@@ -216,7 +225,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             TranslationAddLanguageCell, TranslationSettingsItem
         > { [weak self] cell, _, _ in
             guard let self else { return }
-            cell.configure(theme: themeManager.getCurrentTheme(for: windowUUID))
+            cell.configure(theme: currentTheme())
         }
 
         let dataSource = TranslationSettingsDiffableDataSource(
@@ -288,7 +297,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
     ) -> UICollectionView.CellRegistration<TranslationLanguageCell, TranslationSettingsItem> {
         UICollectionView.CellRegistration { [weak self] cell, _, item in
             guard let self, case let .language(details) = item else { return }
-            cell.configure(with: details, theme: themeManager.getCurrentTheme(for: windowUUID))
+            cell.configure(with: details, theme: currentTheme())
             if details.isDeviceLanguage {
                 cell.accessories = [.reorder(displayed: .always)]
             } else {
@@ -391,7 +400,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
     // MARK: - Theming
 
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         view.backgroundColor = theme.colors.layer1
         collectionView.setCollectionViewLayout(makeLayout(backgroundColor: theme.colors.layer1), animated: false)
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary

@@ -90,7 +90,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueCellFor(indexPath: indexPath)
-        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        cell.applyTheme(theme: currentTheme())
         if indexPath.section == sectionArrow {
             cell.accessoryType = .disclosureIndicator
             cell.textLabel?.text = .SettingsWebsiteDataTitle

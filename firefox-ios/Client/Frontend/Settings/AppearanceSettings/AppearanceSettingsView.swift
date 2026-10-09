@@ -15,15 +15,27 @@ protocol AppearanceSettingsDelegate: AnyObject {
 }
 
 /// The main view displaying the settings for the appearance menu.
-struct AppearanceSettingsView: View {
+struct AppearanceSettingsView: ThemeableView {
     let windowUUID: WindowUUID
+    let themeManager: ThemeManager
     weak var delegate: AppearanceSettingsDelegate?
     var isWallpaperSectionEnabled = false
 
-    @Environment(\.themeManager)
-    var themeManager
+    @State var theme: Theme
 
-    @State private var currentTheme: Theme?
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    init(windowUUID: WindowUUID,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         delegate: AppearanceSettingsDelegate? = nil,
+         isWallpaperSectionEnabled: Bool = false) {
+        self.windowUUID = windowUUID
+        self.themeManager = themeManager
+        self.delegate = delegate
+        self.isWallpaperSectionEnabled = isWallpaperSectionEnabled
+        self.theme = themeManager.resolveTheme(for: windowUUID, privateOverride: false)
+    }
 
     /// Compute the theme option to display in the ThemeSelectionView.
     /// - Returns: .automatic if system theme or automatic brightness is enabled;
@@ -37,7 +49,7 @@ struct AppearanceSettingsView: View {
     }
 
     private var viewBackground: Color {
-        return Color(currentTheme?.colors.layer1 ?? UIColor.clear)
+        return Color(theme.colors.layer1)
     }
 
     private struct UX {
@@ -54,37 +66,31 @@ struct AppearanceSettingsView: View {
             VStack(spacing: UX.spacingCurrentOS) {
                 // Section for selecting the browser theme.
                 BrowserThemeSection(
-                    theme: currentTheme,
+                    theme: theme,
                     themeOption: themeOption,
                     onThemeSelected: updateBrowserTheme,
                     cornerRadius: UX.cornerRadius
                 )
 
                 if isWallpaperSectionEnabled {
-                    WallpaperSection(theme: currentTheme, cornerRadius: UX.cornerRadius) {
+                    WallpaperSection(theme: theme, cornerRadius: UX.cornerRadius) {
                         delegate?.pressedWallpaper()
                     }
                 }
 
                 // Section for toggling website appearance (e.g., dark mode).
-                WebsiteAppearanceSection(theme: currentTheme, onChange: setWebsiteDarkMode, cornerRadius: UX.cornerRadius)
+                WebsiteAppearanceSection(theme: theme, onChange: setWebsiteDarkMode, cornerRadius: UX.cornerRadius)
 
-                PageZoomSection(theme: currentTheme, cornerRadius: UX.cornerRadius) {
+                PageZoomSection(theme: theme, cornerRadius: UX.cornerRadius) {
                     delegate?.pressedPageZoom()
                 }
 
                 Spacer()
             }
         }
-        .modifier(PaddingStyle(theme: currentTheme, spacing: UX.spacing))
+        .modifier(PaddingStyle(theme: theme, spacing: UX.spacing))
         .background(viewBackground)
-        .onAppear {
-            currentTheme = themeManager.getCurrentTheme(for: windowUUID)
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            currentTheme = themeManager.getCurrentTheme(for: windowUUID)
-        }
+        .listenToThemeChanges(in: self, theme: $theme)
     }
 
     // MARK: Subcomponents

@@ -22,6 +22,15 @@ final class TranslationLanguagePickerViewController: UIViewController,
 
     let windowUUID: WindowUUID
     private let localeProvider: LocaleProvider
+
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    private func currentTheme() -> Theme {
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+    }
     private let allLanguages: [String]
     private var filteredLanguages: [String]
 
@@ -110,7 +119,7 @@ final class TranslationLanguagePickerViewController: UIViewController,
         let native = localeProvider.nativeLanguageName(for: code)
         let localized = localeProvider.localizedLanguageName(for: code)
         cell.configure(native: native, localized: native == localized ? nil : localized)
-        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        cell.applyTheme(theme: currentTheme())
         return cell
     }
 
@@ -152,7 +161,7 @@ final class TranslationLanguagePickerViewController: UIViewController,
     // MARK: - Theming
 
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         view.backgroundColor = theme.colors.layer1
         tableView.backgroundColor = theme.colors.layer1
         searchController.searchBar.tintColor = theme.colors.actionPrimary
