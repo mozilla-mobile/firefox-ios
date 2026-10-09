@@ -51,7 +51,7 @@ actor DefaultResultsService: ResultsService {
     private func makeMessages(for transcription: String, config: LLMConfig) -> [QuickAnswersMessage] {
         var messages: [QuickAnswersMessage] = []
 //        if !config.instructions.isEmpty {
-        //swiflint: disable next
+        //swiftlint: disable next
             messages.append(LiteLLMMessage(role: .system, content: config.instructions.appending("Respond in markdown highlighting what is important.")))
 //        }
         guard configFetcher.model.supportsAssistantRole else {
