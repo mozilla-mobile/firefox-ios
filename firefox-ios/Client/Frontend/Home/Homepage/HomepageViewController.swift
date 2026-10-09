@@ -59,6 +59,11 @@ final class HomepageViewController: UIViewController,
     private var didFinishFirstLayout = false
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
+    private lazy var embeddedAddressBarView: UIView = .build { view in
+        view.backgroundColor = .clear
+        view.isUserInteractionEnabled = false
+    }
+    private var embeddedAddressBarViewTopCellConstraint: NSLayoutConstraint?
     private var collectionViewTopContentInset: CGFloat = 0
 
     private var currentHomepageTabState: HomepageTabState {
@@ -527,6 +532,23 @@ final class HomepageViewController: UIViewController,
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+
+        view.addSubview(embeddedAddressBarView)
+
+        NSLayoutConstraint.activate([
+            embeddedAddressBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            embeddedAddressBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            embeddedAddressBarView.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+
+    private func constrainEmbeddedAddressBar(toSearchBarCell cell: SearchBarCell) {
+        embeddedAddressBarViewTopCellConstraint?.isActive = false
+
+        let constraint = embeddedAddressBarView.topAnchor.constraint(equalTo: cell.topAnchor)
+        constraint.priority = UILayoutPriority(999)
+        embeddedAddressBarViewTopCellConstraint = constraint
+        constraint.isActive = true
     }
 
     private func configureCollectionView() {
@@ -657,6 +679,7 @@ final class HomepageViewController: UIViewController,
         case .searchBar:
             return configuredCell(cellType: SearchBarCell.self, at: indexPath) { cell in
                 cell.applyTheme(theme: currentTheme)
+                constrainEmbeddedAddressBar(toSearchBarCell: cell)
             }
         case .jumpBackIn(let tab):
             return configuredCell(cellType: JumpBackInCell.self, at: indexPath) { cell in
