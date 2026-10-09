@@ -8,6 +8,9 @@ import Foundation
 import Shared
 
 public protocol VPNAuthCreating {
+    /// The entry point for callers that just need a proxy credential.
+    /// (wraps the whole enroll/refresh/exchange flow)
+    func makeTokenProvider(using prefs: Prefs) -> VPNTokenProviding?
     func makeAuthService(using prefs: Prefs) -> VPNAuthenticating?
     func makeProxyTokenService(using prefs: Prefs) -> VPNProxyTokenFetching?
 }
@@ -37,8 +40,10 @@ public struct VPNAuthCreator: VPNAuthCreating {
     }
 
     public func makeAuthService(using prefs: Prefs) -> VPNAuthenticating? {
-        let environment = resolveEnvironment(using: prefs)
+        return makeAuthService(with: resolveEnvironment(using: prefs))
+    }
 
+    private func makeAuthService(with environment: VPNEnvironment) -> VPNAuthenticating? {
         // One instance serves both the `AppAttestClient` transport and the refresh endpoint.
         let server = VPNAppAttestServer(with: environment, tokenStore: tokenStore)
 
@@ -61,6 +66,16 @@ public struct VPNAuthCreator: VPNAuthCreating {
         return VPNProxyTokenService(
             with: resolveEnvironment(using: prefs),
             authService: authService
+        )
+    }
+
+    public func makeTokenProvider(using prefs: Prefs) -> VPNTokenProviding? {
+        let environment = resolveEnvironment(using: prefs)
+        guard let authService = makeAuthService(with: environment) else { return nil }
+
+        return VPNTokenProvider(
+            authService: authService,
+            tokenService: VPNProxyTokenService(with: environment, authService: authService)
         )
     }
 
