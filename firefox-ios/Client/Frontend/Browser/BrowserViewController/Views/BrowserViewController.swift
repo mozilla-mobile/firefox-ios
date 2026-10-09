@@ -583,7 +583,11 @@ class BrowserViewController: UIViewController,
         let newParent = isBottomSearchBar ? overKeyboardContainer : header
 
         addressToolbarContainer.removeFromParent()
-        addressToolbarContainer.addToParent(parent: newParent, addToTop: !isBottomSearchBar)
+        addressToolbarContainer.addToParent(
+            parent: newParent,
+            addToTop: !isBottomSearchBar,
+            belowView: isBottomSearchBar ? nil : topTabsViewController?.view
+        )
 
         if isSwipingTabsEnabled {
             webPagePreview.invalidateScreenshotData()

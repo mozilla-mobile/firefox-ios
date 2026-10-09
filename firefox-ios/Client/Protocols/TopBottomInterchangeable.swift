@@ -19,8 +19,17 @@ extension TopBottomInterchangeable {
     }
 
     func addToParent(parent: UIStackView, addToTop: Bool = true) {
+        addToParent(parent: parent, addToTop: addToTop, belowView: nil)
+    }
+
+    /// Adds `self` to `parent`, directly below `belowView` when it's already an arranged subview there.
+    /// Falls back to `addToTop`/`addToBottom` when `belowView` is nil or not present, so callers can keep
+    /// a sibling (the top tabs strip) pinned above `self` regardless of insertion order.
+    func addToParent(parent: UIStackView, addToTop: Bool = true, belowView: UIView?) {
         self.parent = parent
-        if addToTop {
+        if let belowView, let index = parent.arrangedSubviews.firstIndex(of: belowView) {
+            parent.insertArrangedView(self, position: index + 1)
+        } else if addToTop {
             parent.addArrangedViewToTop(self)
         } else {
             parent.addArrangedViewToBottom(self)
