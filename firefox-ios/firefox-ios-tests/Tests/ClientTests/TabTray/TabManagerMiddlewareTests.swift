@@ -203,7 +203,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, TabManagerMiddlewareActionType.fetchedRecentTabs)
-        XCTAssertEqual(actionCalled.recentTabs?.first?.tabState.title, "www.mozilla.org")
+        XCTAssertEqual(actionCalled.recentTabs?.first?.displayTitle, "www.mozilla.org")
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -230,7 +230,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, TabManagerMiddlewareActionType.fetchedRecentTabs)
-        XCTAssertEqual(actionCalled.recentTabs?.first?.tabState.title, "www.mozilla.org")
+        XCTAssertEqual(actionCalled.recentTabs?.first?.displayTitle, "www.mozilla.org")
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -257,7 +257,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, TabManagerMiddlewareActionType.fetchedRecentTabs)
-        XCTAssertEqual(actionCalled.recentTabs?.first?.tabState.title, "www.mozilla.org")
+        XCTAssertEqual(actionCalled.recentTabs?.first?.displayTitle, "www.mozilla.org")
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -284,7 +284,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, TabManagerMiddlewareActionType.fetchedRecentTabs)
-        XCTAssertEqual(actionCalled.recentTabs?.first?.tabState.title, "www.mozilla.org")
+        XCTAssertEqual(actionCalled.recentTabs?.first?.displayTitle, "www.mozilla.org")
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -311,7 +311,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, TabManagerMiddlewareActionType.fetchedRecentTabs)
-        XCTAssertEqual(actionCalled.recentTabs?.first?.tabState.title, "www.mozilla.org")
+        XCTAssertEqual(actionCalled.recentTabs?.first?.displayTitle, "www.mozilla.org")
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -338,7 +338,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, TabManagerMiddlewareActionType.fetchedRecentTabs)
-        XCTAssertEqual(actionCalled.recentTabs?.first?.tabState.title, "www.mozilla.org")
+        XCTAssertEqual(actionCalled.recentTabs?.first?.displayTitle, "www.mozilla.org")
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
@@ -365,7 +365,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, TabManagerMiddlewareActionType.fetchedRecentTabs)
-        XCTAssertEqual(actionCalled.recentTabs?.first?.tabState.title, "www.mozilla.org")
+        XCTAssertEqual(actionCalled.recentTabs?.first?.displayTitle, "www.mozilla.org")
 
         releaseMiddlewareProvidersFromMemory(subject)
     }
