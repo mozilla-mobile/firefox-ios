@@ -344,7 +344,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
 
         return [SettingSection(footerTitle: footerTitle,
-                               children: [DefaultBrowserSetting(theme: themeManager.getCurrentTheme(for: windowUUID))])]
+                               children: [DefaultBrowserSetting(theme: currentTheme())])]
     }
 
     private func getAccountSetting() -> [SettingSection] {
@@ -375,7 +375,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SearchSetting(
                 settingsDelegate: parentCoordinator,
                 searchEnginesManager: searchEnginesManager,
-                theme: themeManager.getCurrentTheme(for: windowUUID)
+                theme: currentTheme()
             ),
             NewTabPageSetting(settings: self, settingsDelegate: parentCoordinator),
             HomeSetting(settings: self, settingsDelegate: parentCoordinator),
@@ -393,7 +393,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         if UIApplication.shared.supportsAlternateIcons {
             generalSettings.append(
                 AppIconSetting(
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    theme: currentTheme(),
                     settingsDelegate: parentCoordinator
                 )
             )
@@ -434,7 +434,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             privacySettings.append(
                 BoolSetting(
                     prefs: profile.prefs,
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    theme: currentTheme(),
                     prefKey: PrefsKeys.Settings.closePrivateTabs,
                     defaultValue: true,
                     titleText: .AppSettingsClosePrivateTabsTitle,
@@ -451,12 +451,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
         if let profile {
-            privacySettings.append(NotificationsSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
+            privacySettings.append(NotificationsSetting(theme: currentTheme(),
                                                         profile: profile,
                                                         settingsDelegate: parentCoordinator))
         }
 
-        privacySettings.append(PrivacyPolicySetting(theme: themeManager.getCurrentTheme(for: windowUUID),
+        privacySettings.append(PrivacyPolicySetting(theme: currentTheme(),
                                                     settingsDelegate: parentCoordinator))
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle),
@@ -475,7 +475,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 SentFromFirefoxSetting(
                     prefs: profile.prefs,
                     delegate: settingsDelegate,
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    theme: currentTheme(),
                     settingsDelegate: parentCoordinator
                 )
             )
@@ -499,7 +499,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         supportSettings.append(contentsOf: [
             OpenSupportPageSetting(delegate: settingsDelegate,
-                                   theme: themeManager.getCurrentTheme(for: windowUUID),
+                                   theme: currentTheme(),
                                    settingsDelegate: parentCoordinator),
         ])
 
@@ -659,7 +659,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     override func applyTheme() {
         super.applyTheme()
         if #available(iOS 26.0, *) {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            let theme = currentTheme()
             navigationItem.rightBarButtonItem?.tintColor = theme.isNova
                 ? theme.colors.actionPrimary
                 : theme.colors.textPrimary

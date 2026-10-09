@@ -30,19 +30,27 @@ final class CustomSearchViewController: SettingsTableViewController {
     private var engineTitle = ""
     private lazy var spinnerView: UIActivityIndicatorView = .build { [self] spinner in
         spinner.style = .medium
-        spinner.color = themeManager.getCurrentTheme(for: windowUUID).colors.iconSpinner
+        spinner.color = currentTheme().colors.iconSpinner
         spinner.hidesWhenStopped = true
     }
 
     let searchEnginesManager: SearchEnginesManager
 
+    /// Keep the private theme override just for Settings, since this is also presented from the
+    /// address bar's "manage search engines" action.
+    private let _shouldUsePrivateOverride: Bool
+    override var shouldUsePrivateOverride: Bool { return _shouldUsePrivateOverride }
+    override var shouldBeInPrivateTheme: Bool { return false }
+
     init(windowUUID: WindowUUID,
          faviconFetcher: SiteImageHandler = DefaultSiteImageHandler.factory(),
          searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         shouldUsePrivateOverride: Bool = true) {
         self.faviconFetcher = faviconFetcher
         self.searchEnginesManager = searchEnginesManager
         self.logger = logger
+        self._shouldUsePrivateOverride = shouldUsePrivateOverride
         super.init(windowUUID: windowUUID)
     }
 
@@ -211,7 +219,7 @@ final class CustomSearchViewController: SettingsTableViewController {
             action: #selector(self.addCustomSearchEngine)
         )
         if #available(iOS 26.0, *) {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            let theme = currentTheme()
             self.navigationItem.rightBarButtonItem?.tintColor = theme.colors.textAccent
         }
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
