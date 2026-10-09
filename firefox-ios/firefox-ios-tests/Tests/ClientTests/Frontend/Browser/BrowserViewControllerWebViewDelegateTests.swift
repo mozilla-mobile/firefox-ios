@@ -588,4 +588,223 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
         XCTAssertTrue(subject.googleLensSearches.isEmpty)
     }
+
+    // MARK: - Context menu element resolution
+    // See FXIOS-14918: WebKit's native long-press gesture isn't synchronized with the page's
+    // touchstart/mousedown listener, so the JS-reported elements can be missing or stale by the time
+    // WebKit asks for a menu. `resolveContextMenuElements` must fall back to native-only data instead
+    // of letting the custom menu (and actions like "Open in Private Tab") be replaced by WebKit's default one.
+
+    @MainActor
+    func testResolveContextMenuElements_noContextHelper_fallsBackToLinkOnly() {
+        let url = URL(string: "https://example.com")!
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: url, from: nil)
+
+        XCTAssertEqual(elements.link, url)
+        XCTAssertNil(elements.image)
+        XCTAssertEqual(elements.title, url.normalizedHost, "Must not fall back to the raw URL as a title")
+        XCTAssertNil(elements.alt)
+    }
+
+    @MainActor
+    func testResolveContextMenuElements_jsElementsNotYetReported_fallsBackToLinkOnly() {
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: url, from: contextHelper)
+
+        XCTAssertEqual(elements.link, url)
+        XCTAssertEqual(elements.title, url.normalizedHost, "Must not fall back to the raw URL as a title")
+    }
+
+    @MainActor
+    func testResolveContextMenuElements_jsElementsMatchNativeURL_usesReportedElements() {
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: url, image: nil, title: "Example", alt: nil)
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: url, from: contextHelper)
+
+        XCTAssertEqual(elements.title, "Example")
+    }
+
+    @MainActor
+    func testResolveContextMenuElements_jsElementsMatchViaDifferentHostEncoding_usesReportedElements() {
+        // WebKit's native `linkURL` for an internationalized domain is Punycode-encoded, while the JS bridge
+        // percent-encodes the raw Unicode string it reads from the page — the two must still be recognized
+        // as the same link.
+        let nativeURL = URL(string: "https://xn--mnchen-3ya.de/stra%C3%9Fe")!
+        let jsReportedURL = URL(string: "https://m%C3%BCnchen.de/stra%C3%9Fe")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: jsReportedURL, image: nil, title: "München", alt: nil)
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: nativeURL, from: contextHelper)
+
+        XCTAssertEqual(elements.title, "München")
+    }
+
+    @MainActor
+    func testResolveContextMenuElements_jsElementsAreStale_fallsBackToLinkOnly() {
+        let url = URL(string: "https://example.com")!
+        let staleURL = URL(string: "https://previous-long-press.example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: staleURL, image: nil, title: "Stale", alt: nil)
+
+        let elements = BrowserViewController.resolveContextMenuElements(for: url, from: contextHelper)
+
+        XCTAssertEqual(elements.link, url)
+        XCTAssertEqual(
+            elements.title,
+            url.normalizedHost,
+            "Stale JS-reported data for a different link must not be used, and must not fall back to the raw URL"
+        )
+    }
+
+    @MainActor
+    func testContextMenuHelperReset_clearsPreviouslyReportedElements() {
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(
+            link: URL(string: "https://example.com"),
+            image: nil,
+            title: "Example",
+            alt: nil
+        )
+
+        contextHelper.reset()
+
+        XCTAssertNil(contextHelper.elements)
+    }
+
+    // MARK: - Context menu dismiss reset guard
+    // See FXIOS-14918 review feedback: a stale dismiss callback for an earlier long press can fire after
+    // a later long press has already reported its own elements over the JS bridge. Resetting unconditionally
+    // in that case would discard the newer data.
+
+    @MainActor
+    func testShouldResetContextMenuElements_matchingLink_returnsTrue() {
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: url, image: nil, title: "Example", alt: nil)
+
+        let shouldReset = BrowserViewController.shouldResetContextMenuElements(
+            afterDismissing: url,
+            contextHelper: contextHelper
+        )
+
+        XCTAssertTrue(shouldReset)
+    }
+
+    @MainActor
+    func testShouldResetContextMenuElements_newerLongPressAlreadyOverwroteElements_returnsFalse() {
+        let dismissedURL = URL(string: "https://example.com")!
+        let newerURL = URL(string: "https://newer-long-press.example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+        contextHelper.elements = ContextMenuHelper.Elements(link: newerURL, image: nil, title: "Newer", alt: nil)
+
+        let shouldReset = BrowserViewController.shouldResetContextMenuElements(
+            afterDismissing: dismissedURL,
+            contextHelper: contextHelper
+        )
+
+        XCTAssertFalse(shouldReset, "Must not discard a newer long press's already-reported elements")
+    }
+
+    @MainActor
+    func testShouldResetContextMenuElements_noElements_returnsFalse() {
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: createTab())
+
+        let shouldReset = BrowserViewController.shouldResetContextMenuElements(
+            afterDismissing: url,
+            contextHelper: contextHelper
+        )
+
+        XCTAssertFalse(shouldReset)
+    }
+
+    @MainActor
+    func testShouldResetContextMenuElements_noContextHelper_returnsFalse() {
+        let url = URL(string: "https://example.com")!
+
+        let shouldReset = BrowserViewController.shouldResetContextMenuElements(
+            afterDismissing: url,
+            contextHelper: nil
+        )
+
+        XCTAssertFalse(shouldReset)
+    }
+
+    // MARK: - Context menu dismiss telemetry origin
+    // See FXIOS-14918 review feedback: the origin must be captured once when the menu is shown and
+    // reused when it's dismissed, rather than re-derived from `ContextMenuHelper.elements`, which the
+    // JS bridge can overwrite while the menu is open.
+
+    @MainActor
+    func testContextMenuDidEnd_bridgeReportsImageMidMenu_dismissedReusesShownOrigin() throws {
+        let gleanWrapper = MockGleanWrapper()
+        let subject = createSubject(gleanWrapper: gleanWrapper)
+        let url = URL(string: "https://example.com/photo-link")!
+        subject.pendingContextMenuTelemetry = (url: url, origin: .webLink)
+
+        subject.contextMenuDidEnd(for: url)
+
+        let dismissedExtras = try XCTUnwrap(gleanWrapper.savedExtras.last as? GleanMetrics.ContextMenu.DismissedExtra)
+        XCTAssertEqual(
+            dismissedExtras.origin,
+            ContextMenuTelemetry.OriginExtra.webLink.rawValue,
+            "Must reuse the origin captured at show time, not re-derive it from elements the JS bridge overwrote mid-menu"
+        )
+    }
+
+    @MainActor
+    func testContextMenuDidEnd_consumesPendingOrigin() {
+        let subject = createSubject()
+        let url = URL(string: "https://example.com")!
+        subject.pendingContextMenuTelemetry = (url: url, origin: .imageLink)
+
+        subject.contextMenuDidEnd(for: url)
+
+        XCTAssertNil(subject.pendingContextMenuTelemetry, "The captured origin must be consumed on dismiss")
+    }
+
+    @MainActor
+    func testContextMenuDidEnd_noPendingOrigin_recordsNoDismissedEvent() {
+        let gleanWrapper = MockGleanWrapper()
+        let subject = createSubject(gleanWrapper: gleanWrapper)
+
+        subject.contextMenuDidEnd(for: URL(string: "https://example.com")!)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 0, "Dismiss with no matching show must not manufacture an event")
+    }
+
+    @MainActor
+    func testContextMenuDidEnd_staleDismissForEarlierMenu_doesNotStealNewerOrigin() {
+        let gleanWrapper = MockGleanWrapper()
+        let subject = createSubject(gleanWrapper: gleanWrapper)
+        let earlierURL = URL(string: "https://example.com/earlier")!
+        let newerURL = URL(string: "https://example.com/newer")!
+        subject.pendingContextMenuTelemetry = (url: newerURL, origin: .imageLink)
+
+        subject.contextMenuDidEnd(for: earlierURL)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 0, "A dismiss for a superseded long press must not fire")
+        XCTAssertNil(subject.pendingContextMenuTelemetry, "The stale entry must still be cleared")
+    }
+
+    @MainActor
+    func testContextMenuDidEnd_stillResetsMatchingContextHelperElements() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let url = URL(string: "https://example.com")!
+        let contextHelper = ContextMenuHelper(tab: tab)
+        contextHelper.elements = ContextMenuHelper.Elements(link: url, image: nil, title: "Example", alt: nil)
+        tab.addContentScript(contextHelper, name: ContextMenuHelper.name())
+
+        subject.contextMenuDidEnd(for: url)
+
+        XCTAssertNil(contextHelper.elements, "The telemetry refactor must not change the existing reset behavior")
+    }
 }
