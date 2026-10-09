@@ -643,6 +643,44 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             )
         )
     }
+
+    // MARK: - Embedded address bar
+    func test_viewDidLoad_withFlagEnabledAndTopPosition_addsEmbeddedAddressBar() {
+        let embeddedAddressBar = loadEmbeddedAddressBar(isFlagEnabled: true, position: .top)
+
+        XCTAssertNotNil(embeddedAddressBar)
+    }
+
+    func test_viewDidLoad_withFlagEnabledAndBottomPosition_doesNotAddEmbeddedAddressBar() {
+        let embeddedAddressBar = loadEmbeddedAddressBar(isFlagEnabled: true, position: .bottom)
+
+        XCTAssertNil(embeddedAddressBar)
+    }
+
+    func test_viewDidLoad_withFlagDisabledAndTopPosition_doesNotAddEmbeddedAddressBar() {
+        let embeddedAddressBar = loadEmbeddedAddressBar(isFlagEnabled: false, position: .top)
+
+        XCTAssertNil(embeddedAddressBar)
+    }
+
+    private func loadEmbeddedAddressBar(isFlagEnabled: Bool, position: SearchBarPosition) -> UIView? {
+        let featureFlags = MockNimbusFeatureFlags()
+        if isFlagEnabled {
+            featureFlags.enabledFlags = [.homepageAnimatedCenterSearchBar]
+        }
+        let userPreferences = MockUserFeaturePreferences()
+        userPreferences.searchBarPosition = position
+        DependencyHelperMock().bootstrapDependencies(
+            injectedFeatureFlagProvider: featureFlags,
+            injectedUserFeaturePreferences: userPreferences
+        )
+
+        let sut = createSubject()
+        sut.loadViewIfNeeded()
+        return sut.view.subviews.first {
+            $0.accessibilityIdentifier == AccessibilityIdentifiers.FirefoxHomepage.EmbeddedAddressBar.view
+        }
+    }
 }
 
 // FXIOS-13346 / FXIOS-13343 - needed to update tests since we added a bandaid fix to not call

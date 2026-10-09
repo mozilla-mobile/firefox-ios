@@ -302,6 +302,10 @@ struct AccessibilityIdentifiers {
             static let itemCell = "SearchBarCell"
         }
 
+        struct EmbeddedAddressBar {
+            static let view = "EmbeddedAddressBar"
+        }
+
         struct Pocket {
             static let allCategory = "Category.All"
             static let category = "Category"
