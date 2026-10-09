@@ -42,7 +42,7 @@ final class MockWindowManager: WindowManager {
     }
 
     func allWindowTabManagers() -> [TabManager] {
-        wrappedManager.allWindowTabManagers()
+        overrideWindows ? [tabManager] : wrappedManager.allWindowTabManagers()
     }
 
     func allWindowUUIDs(includingReserved: Bool) -> [WindowUUID] {
