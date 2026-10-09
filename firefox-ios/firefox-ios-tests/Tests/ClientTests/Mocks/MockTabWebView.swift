@@ -50,8 +50,18 @@ final class MockTabWebView: TabWebView {
         set { mockInteractionState = newValue as? Data }
     }
 
-    override init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID, certStore: CertStore) {
-        super.init(frame: frame, configuration: configuration, windowUUID: windowUUID, certStore: certStore)
+    override init(
+        frame: CGRect,
+        configuration: WKWebViewConfiguration,
+        windowUUID: WindowUUID,
+        certStore: CertStore,
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
+        super.init(frame: frame,
+                   configuration: configuration,
+                   windowUUID: windowUUID,
+                   certStore: certStore,
+                   notificationCenter: notificationCenter)
     }
 
     init(tab: Tab) {

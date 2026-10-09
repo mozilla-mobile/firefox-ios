@@ -20,7 +20,7 @@ protocol TabWebViewDelegate: AnyObject {
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool
 }
 
-class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
+class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifiable {
     lazy var accessoryView: AccessoryViewProvider = .build(nil, {
         AccessoryViewProvider(windowUUID: self.windowUUID)
     })
@@ -31,6 +31,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     private var theme: Theme?
     private var uiTestLeakView: UIView? // Used for automation
     private var certStore: CertStore
+    var notificationCenter: any NotificationProtocol
 
     deinit {
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
@@ -76,20 +77,6 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         return isHardwareKeyboardConnected
     }
 
-    private func observeHardwareKeyboardChanges() {
-        guard #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .pad else { return }
-
-        [Notification.Name.GCKeyboardDidConnect, .GCKeyboardDidDisconnect].forEach {
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(hardwareKeyboardDidChange),
-                                                   name: $0,
-                                                   object: nil)
-        }
-    }
-
-    @objc
-    private func hardwareKeyboardDidChange() { reloadInputViews() }
-
     func configure(delegate: TabWebViewDelegate,
                    navigationDelegate: WKNavigationDelegate?) {
         self.delegate = delegate
@@ -114,9 +101,16 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         }
     }
 
-    init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID, certStore: CertStore) {
+    init(
+        frame: CGRect,
+        configuration: WKWebViewConfiguration,
+        windowUUID: WindowUUID,
+        certStore: CertStore,
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
         self.windowUUID = windowUUID
         self.certStore = certStore
+        self.notificationCenter = notificationCenter
         super.init(frame: frame, configuration: configuration)
         observeHardwareKeyboardChanges()
     }
@@ -206,6 +200,26 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
 
     func setPullRefreshVisibility(isVisible: Bool) {
         pullRefresh?.isHidden = !isVisible
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .GCKeyboardDidConnect, .GCKeyboardDidDisconnect:
+            ensureMainThread {
+                self.reloadInputViews()
+            }
+        default: return
+        }
+    }
+
+    private func observeHardwareKeyboardChanges() {
+        guard #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .pad else { return }
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.GCKeyboardDidConnect, .GCKeyboardDidDisconnect]
+        )
     }
 
     // MARK: - ThemeApplicable
