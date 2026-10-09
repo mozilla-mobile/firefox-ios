@@ -569,6 +569,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             }
         }
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
+        hiddenDebugOptions.append(MockBreachAlertsSetting(settings: self, settingsDelegate: self))
         #endif
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
