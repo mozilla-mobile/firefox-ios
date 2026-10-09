@@ -216,7 +216,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.leadingPageActions = Self.mapActions(addressToolbarContainerLens.leadingPageActions,
                                                   isShowingTopTabs: state.isShowingTopTabs,
                                                   windowUUID: windowUUID)
-        self.trailingPageActions = Self.mapActions(state.addressToolbar.trailingPageActions,
+        self.trailingPageActions = Self.mapActions(addressToolbarContainerLens.trailingPageActions,
                                                    isShowingTopTabs: state.isShowingTopTabs,
                                                    windowUUID: windowUUID)
         self.browserActions = Self.mapActions(state.addressToolbar.browserActions,
