@@ -52,8 +52,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339256
     func testCheckHomeSettingsByDefault() {
-        app.launch()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(HomeSettings)
 
         settingsHomepageScreen.assertSectionsAreDisplayed()
@@ -81,9 +80,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         guard !iPad() else {
             throw XCTSkip("The navigation toolbar middle button cannot be configured on iPad")
         }
-        app.launch()
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(HomeSettings)
         // Enter a webpage
         enterWebPageAsHomepage(text: path(forTestPage: TestPages.exampleHTML))
@@ -114,8 +111,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339258
     func testClipboard() {
-        app.launch()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         // Check that what's in clipboard is copied
         UIPasteboard.general.string = websiteUrl1
         navigator.goto(HomeSettings)
@@ -134,10 +130,8 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         guard !iPad() else {
             throw XCTSkip("The navigation toolbar middle button cannot be configured on iPad")
         }
-        app.launch()
         // Go to homepage settings
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(HomeSettings)
         // Firefox home and custom URL options are displayed, Firefox Home is selected by default
         settingsHomepageScreen.assertFirefoxHomeIsSelectedAsCurrentHomepage()
@@ -164,11 +158,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339489
     func testDisableTopSitesSettingsRemovesSection() {
-        app.launch()
-        mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
-        )
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(HomeSettings)
         app.cells[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage].waitAndTap()
         XCTAssertTrue(app.switches["Shortcuts"].exists)

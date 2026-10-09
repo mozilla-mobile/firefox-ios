@@ -9,16 +9,18 @@ class NewTabSettingsTest: BaseTestCase {
     var browserScreen: BrowserScreen!
     var newTabSettingsScreen: NewTabSettingsScreen!
     var topSiteScreen: TopSitesScreen!
-    var toolbarScreen: ToolbarScreen!
+
+    /// Every test starts in New Tab settings, so each launches the app itself through a Settings deeplink.
+    override func setUpApp() {
+        setUpLaunchArguments()
+    }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307026
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
-        toolbarScreen = ToolbarScreen(app: app)
 
-        toolbarScreen.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(NewTabSettings)
         newTabSettingsScreen.assertDefaultOptionsAreVisible()
     }
@@ -29,10 +31,8 @@ class NewTabSettingsTest: BaseTestCase {
         topSiteScreen = TopSitesScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
-        toolbarScreen = ToolbarScreen(app: app)
 
-        toolbarScreen.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(NewTabSettings)
         newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
 
@@ -49,8 +49,7 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307028
     func testChangeNewTabSettingsShowFirefoxHome() {
         // Set to history page first since FF Home is default
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
@@ -80,7 +79,7 @@ class NewTabSettingsTest: BaseTestCase {
         browserScreen = BrowserScreen(app: app)
         let targetURL = "mozilla.org"
 
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(NewTabSettings)
         newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
         // Check the placeholder value
@@ -100,7 +99,7 @@ class NewTabSettingsTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307030
     func testChangeNewTabSettingsLabel() {
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         // Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectNewTabAsCustomURL)
         navigator.nowAt(NewTabSettings)
@@ -127,11 +126,9 @@ class NewTabSettingsTest: BaseTestCase {
     func testKeyboardNotRaisedWhenTabOpenedFromTabTray() {
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
         browserScreen = BrowserScreen(app: app)
-        toolbarScreen = ToolbarScreen(app: app)
 
         // Add New tab and set it as Blank
-        toolbarScreen.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(NewTabSettings)
         newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
         navigator.performAction(Action.SelectNewTabAsBlankPage)
@@ -158,13 +155,11 @@ class NewTabSettingsTest: BaseTestCase {
         }
         browserScreen = BrowserScreen(app: app)
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
-        toolbarScreen = ToolbarScreen(app: app)
         topSiteScreen = TopSitesScreen(app: app)
         let springBoardScreen = SpringboardScreen(springboard: springboard)
 
         // Step 1: set the new tab page to Blank
-        toolbarScreen.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(NewTabSettings)
         newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
         navigator.performAction(Action.SelectNewTabAsBlankPage)
@@ -224,14 +219,12 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306875
     // Smoketest
     func testNewTabCustomURLKeyboardNotRaised() {
-        toolbarScreen = ToolbarScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
         let targetURL = "mozilla.org"
 
         // Set a custom URL
-        toolbarScreen.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectNewTabAsCustomURL)
         // Check the value typed

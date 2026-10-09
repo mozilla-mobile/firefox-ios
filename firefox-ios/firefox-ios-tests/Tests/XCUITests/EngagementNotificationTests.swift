@@ -21,15 +21,18 @@ class EngagementNotificationTests: BaseTestCase {
         springboardScreen = SpringboardScreen()
     }
 
+    /// Both tests start in Settings and launch the app themselves through a Settings deeplink.
+    override func setUpApp() {
+        setUpLaunchArguments()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307101
     // Regression
     func testDontAllowNotifications() throws {
         if #unavailable(iOS 17) {
             throw XCTSkip("setUp() fails to remove app intermittently")
         }
-        // Skip login
-        navigator.nowAt(BrowserTab)
-        waitForTabsButton()
+        launchIntoSettings()
         // Navigate to "Tips and Features"
         // Toggle on switch position
         navigator.goto(NotificationsSettings)
@@ -55,9 +58,7 @@ class EngagementNotificationTests: BaseTestCase {
         if #unavailable(iOS 17) {
             throw XCTSkip("setUp() fails to remove app intermittently")
         }
-        // Skip login
-        navigator.nowAt(BrowserTab)
-        waitForTabsButton()
+        launchIntoSettings()
         // Navigate to "Tips and Features"
         // Toggle on switch position
         navigator.goto(NotificationsSettings)

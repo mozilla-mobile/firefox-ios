@@ -39,7 +39,12 @@ class NavigationTest: FeatureFlaggedTestSuite {
         try await super.setUp()
 
         browserScreen = BrowserScreen(app: app)
-        launchApp()
+        // These tests launch the app themselves, straight into Settings through a deeplink
+        let settingsDeeplinkTests = ["testTapSigninShowsFxAFromSettings", "testPopUpBlocker",
+                                     "testValidatePopUpWindows", "testOpenExternalLink"]
+        if !settingsDeeplinkTests.contains(where: name.contains) {
+            launchApp()
+        }
     }
 
     private func restartTheApp() {
@@ -114,9 +119,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441493
     func testTapSigninShowsFxAFromSettings() {
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+        launchIntoSettings()
         // Open FxAccount from settings menu and check the Sign in to Firefox screen
         let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
             .staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton]
@@ -347,8 +350,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         let browserScreen = BrowserScreen(app: app)
 
         // Check that it is enabled by default
-        navigator.nowAt(BrowserTab)
-        toolbarScreen.assertTabToolbarMenuButtonExists()
+        launchIntoSettings()
         navigator.goto(BrowsingSettings)
         settingsScreen.waitForBrowsingLinksSection()
         settingsScreen.assertBlockPopUpsSwitchIsOn()
@@ -420,8 +422,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     // https://mozilla.testrail.io/index.php?/cases/view/2307022
     // In this test, the parent window opens a child and in the child it creates a fake link 'link-created-by-parent'
     func testValidatePopUpWindows() {
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(BrowsingSettings)
         let switchBlockPopUps = app.tables.cells.switches[AccessibilityIdentifiers.Settings.Browsing.blockPopUps]
         switchBlockPopUps.waitAndTap()
@@ -565,7 +566,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     // https://mozilla.testrail.io/index.php?/cases/view/2721282
     func testOpenExternalLink() {
         // Go to Settings -> Browsing and disable "Block external links" toggle
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(BrowsingSettings)
         mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.links])
         let switchBlockLinks = app.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockExternal.title]

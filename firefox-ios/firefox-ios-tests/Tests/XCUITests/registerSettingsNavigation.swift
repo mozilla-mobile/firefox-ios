@@ -9,6 +9,14 @@ import MappaMundi
 func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     let table = app.tables.element(boundBy: 0)
 
+    // Where `launchIntoSettings` places the navigator: the browser behind Settings, reached through a deeplink.
+    // Entering Settings from here gives it a back edge, which `nowAt(SettingsScreen)` would not.
+    map.addScreenState(SettingsDeeplinkEntry) { screenState in
+        screenState.noop(to: SettingsScreen)
+        screenState.noop(to: NewTabScreen)
+        screenState.noop(to: BrowserTab)
+    }
+
     map.addScreenState(SettingsScreen) { screenState in
         screenState.tap(table.cells["Sync"], to: SyncSettings, if: "fxaUsername != nil")
         screenState.tap(table.cells["SignInToSync"], to: Intro_FxASignin, if: "fxaUsername == nil")
