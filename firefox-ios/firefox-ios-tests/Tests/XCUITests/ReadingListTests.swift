@@ -9,6 +9,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
     private var readingListScreen: ReadingListScreen!
     private var toolBarScreen: ToolbarScreen!
     private var browserScreen: BrowserScreen!
+    private var mainMenuScreen: MainMenuScreen!
 
     override func setUp() async throws {
         launchArguments.append(LaunchArguments.SkipAppleIntelligence)
@@ -16,6 +17,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         readingListScreen = ReadingListScreen(app: app)
         toolBarScreen = ToolbarScreen(app: app)
         browserScreen = BrowserScreen(app: app)
+        mainMenuScreen = MainMenuScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306994
@@ -296,5 +298,29 @@ class ReadingListTests: FeatureFlaggedTestBase {
         // Check that Settings layouts options are shown
         readingListScreen.openReaderModeSettings()
         readingListScreen.assertReaderModeOptionsVisible()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3895120
+    // Regression
+    func testReaderViewMainMenuButton() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        // The menu item is only enabled once the page is known to be readerable
+        readingListScreen.assertReaderButtonExists()
+        navigator.goto(BrowserTabMenuMore)
+        mainMenuScreen.assertReaderViewIsBelowPageZoom()
+        mainMenuScreen.assertReaderViewIs(on: false)
+
+        mainMenuScreen.tapReaderView()
+        readingListScreen.assertReaderListContentVisible()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenuMore)
+        mainMenuScreen.assertReaderViewIs(on: true)
     }
 }
