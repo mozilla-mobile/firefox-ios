@@ -7,6 +7,7 @@ import Foundation
 public struct QuickAnswersViewConfiguration: Sendable {
     public let optIn: OptInStrings
     public let contentView: ContentViewStrings
+    public let privacyBanner: PrivacyBannerStrings
     public let errors: ErrorStrings
     public let closeAccessibilityLabel: String
     public let appName: String
@@ -30,12 +31,31 @@ public struct QuickAnswersViewConfiguration: Sendable {
         public let answering: String
         public let footerFormat: String
         public let sources: String
+        public let aboutYourPrivacy: String
 
-        public init(placeholder: String, answering: String, footerFormat: String, sources: String) {
+        public init(
+            placeholder: String,
+            answering: String,
+            footerFormat: String,
+            sources: String,
+            aboutYourPrivacy: String
+        ) {
             self.placeholder = placeholder
             self.answering = answering
             self.footerFormat = footerFormat
             self.sources = sources
+            self.aboutYourPrivacy = aboutYourPrivacy
+        }
+    }
+
+    /// Strings of the tip shown when the user taps the "About your privacy" link in the content view footer.
+    public struct PrivacyBannerStrings: Sendable {
+        public let title: String
+        public let description: String
+
+        public init(title: String, description: String) {
+            self.title = title
+            self.description = description
         }
     }
 
@@ -79,12 +99,14 @@ public struct QuickAnswersViewConfiguration: Sendable {
     public init(
         optIn: OptInStrings,
         contentView: ContentViewStrings,
+        privacyBanner: PrivacyBannerStrings,
         errors: ErrorStrings,
         closeAccessibilityLabel: String,
         appName: String
     ) {
         self.optIn = optIn
         self.contentView = contentView
+        self.privacyBanner = privacyBanner
         self.errors = errors
         self.closeAccessibilityLabel = closeAccessibilityLabel
         self.appName = appName
