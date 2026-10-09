@@ -9,6 +9,7 @@ import AuthenticationServices
 import Common
 
 import class Account.RustFirefoxAccounts
+import enum MozillaAppServices.EngineChoicesModel
 import enum MozillaAppServices.OAuthScope
 import enum MozillaAppServices.ServiceStatus
 import enum MozillaAppServices.SyncEngineSelection
@@ -347,6 +348,15 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
         return engineEnablements
     }
 
+    func getEngineChoices() -> EngineChoicesModel {
+        let perDeviceSyncEnabled = self.profile?.prefs.boolForKey(PrefsKeys.PerDeviceSyncEnabled) ?? false
+        let engineEnablements = getEngineEnablementChangesForAccount()
+
+        return perDeviceSyncEnabled
+        ? .device(enabled: engineEnablements.compactMap { $0.value ? $0.key : nil })
+        : .account(enabledChanges: engineEnablements)
+    }
+
     public struct ScopedKeyError: MaybeErrorType {
         public let description = "No key data found for scope."
     }
@@ -558,6 +568,12 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
     }
 
     func updateEnginePrefs(declined: [String]) {
+        // Only update local engine prefs if per-device sync is disabled i.e. we're performing
+        // a legacy sync.
+        guard !(self.profile?.prefs.boolForKey(PrefsKeys.PerDeviceSyncEnabled) ?? false) else {
+            return
+        }
+
         // Save declined/enabled engines - we assume the engines
         // not included in the returned `declined` property of the
         // result of the sync manager `sync` are enabled.
@@ -626,7 +642,7 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
                         let params = SyncParams(
                             reason: why,
                             engines: SyncEngineSelection.some(engines: rustEngines),
-                            enabledChanges: self.getEngineEnablementChangesForAccount(),
+                            engineChoicesModel: self.getEngineChoices(),
                             localEncryptionKeys: localEncryptionKeys,
                             authInfo: self.createSyncAuthInfo(key: key,
                                                               accessTokenInfo: accessTokenInfo,

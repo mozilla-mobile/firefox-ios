@@ -194,8 +194,77 @@ class RustSyncManagerTests: XCTestCase {
         XCTAssertFalse(changes["creditcards"]!)
     }
 
+    func testGetEngineChoices_withPerDeviceSyncDisabledAndRecentChanges_returnsAccountModelWithChanges() {
+        profile.prefs.setBool(false, forKey: PrefsKeys.PerDeviceSyncEnabled)
+        profile.prefs.setBool(true, forKey: Keys.bookmarksStateChangedPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.tabsStateChangedPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.tabsEnabledPrefKey)
+
+        let model = rustSyncManager.getEngineChoices()
+
+        XCTAssertEqual(model, .account(enabledChanges: ["bookmarks": true, "tabs": false]))
+    }
+
+    func testGetEngineChoices_withPerDeviceSyncDisabledAndNewAccount_returnsAccountModelWithAllEngines() {
+        profile.prefs.setBool(false, forKey: PrefsKeys.PerDeviceSyncEnabled)
+        UserDefaults.standard.set(["tabs", "creditcards"], forKey: "fxa.cwts.declinedSyncEngines")
+
+        let model = rustSyncManager.getEngineChoices()
+
+        let expectedChanges = [
+            "bookmarks": true,
+            "creditcards": false,
+            "history": true,
+            "passwords": true,
+            "tabs": false,
+            "addresses": true
+        ]
+        XCTAssertEqual(model, .account(enabledChanges: expectedChanges))
+    }
+
+    func testGetEngineChoices_withPerDeviceSyncEnabledAndNewAccount_returnsDeviceModelWithEnabledEngines() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.PerDeviceSyncEnabled)
+        UserDefaults.standard.set(["tabs", "creditcards"], forKey: "fxa.cwts.declinedSyncEngines")
+
+        let model = rustSyncManager.getEngineChoices()
+
+        guard case .device(let enabled) = model else {
+            XCTFail("Expected device model, got \(model)")
+            return
+        }
+        XCTAssertEqual(Set(enabled), ["bookmarks", "history", "passwords", "addresses"])
+        XCTAssertEqual(enabled.count, 4)
+    }
+
+    func testGetEngineChoices_withPerDeviceSyncEnabledAndRecentChanges_returnsDeviceModel() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.PerDeviceSyncEnabled)
+        profile.prefs.setBool(true, forKey: Keys.bookmarksStateChangedPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.tabsStateChangedPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.tabsEnabledPrefKey)
+
+        let model = rustSyncManager.getEngineChoices()
+
+        guard case .device(let enabled) = model else {
+            XCTFail("Expected device model, got \(model)")
+            return
+        }
+        XCTAssertTrue(enabled.contains("bookmarks"))
+        XCTAssertFalse(enabled.contains("tabs"))
+    }
+
+    func testGetEngineChoices_withNewAccount_clearsDeclinedEngines() {
+        UserDefaults.standard.set(["tabs"], forKey: "fxa.cwts.declinedSyncEngines")
+
+        _ = rustSyncManager.getEngineChoices()
+
+        XCTAssertNil(UserDefaults.standard.stringArray(forKey: "fxa.cwts.declinedSyncEngines"))
+    }
+
     // Temp. Disabled: https://mozilla-hub.atlassian.net/browse/FXIOS-7505
     func testUpdateEnginePrefs_bookmarksEnabled() throws {
+        profile.prefs.setBool(false, forKey: PrefsKeys.PerDeviceSyncEnabled)
         profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
         profile.prefs.setBool(true, forKey: Keys.bookmarksStateChangedPrefKey)
 
@@ -205,9 +274,21 @@ class RustSyncManagerTests: XCTestCase {
         let key = try XCTUnwrap(profile.prefs.boolForKey(Keys.bookmarksEnabledPrefKey))
         XCTAssertFalse(key)
         XCTAssertNil(profile.prefs.boolForKey(Keys.bookmarksStateChangedPrefKey))
+
+        // Test with per-device sync enabled
+        profile.prefs.setBool(true, forKey: PrefsKeys.PerDeviceSyncEnabled)
+        profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.bookmarksStateChangedPrefKey)
+
+        rustSyncManager.updateEnginePrefs(declined: declined)
+
+        let key2 = try XCTUnwrap(profile.prefs.boolForKey(Keys.bookmarksEnabledPrefKey))
+        XCTAssertTrue(key2)
+        XCTAssertTrue(profile.prefs.boolForKey(Keys.bookmarksStateChangedPrefKey)!)
     }
 
     func testUpdateEnginePrefs_creditCardEnabled() throws {
+        profile.prefs.setBool(false, forKey: PrefsKeys.PerDeviceSyncEnabled)
         profile.prefs.setBool(true, forKey: Keys.creditcardsEnabledPrefKey)
         profile.prefs.setBool(true, forKey: Keys.creditcardsStateChangedPrefKey)
 
@@ -217,9 +298,21 @@ class RustSyncManagerTests: XCTestCase {
         let key = try XCTUnwrap(profile.prefs.boolForKey(Keys.creditcardsEnabledPrefKey))
         XCTAssertFalse(key)
         XCTAssertNil(profile.prefs.boolForKey(Keys.creditcardsStateChangedPrefKey))
+
+        // Test with per-device sync enabled
+        profile.prefs.setBool(true, forKey: PrefsKeys.PerDeviceSyncEnabled)
+        profile.prefs.setBool(true, forKey: Keys.creditcardsEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.creditcardsStateChangedPrefKey)
+
+        rustSyncManager.updateEnginePrefs(declined: declined)
+
+        let key2 = try XCTUnwrap(profile.prefs.boolForKey(Keys.creditcardsEnabledPrefKey))
+        XCTAssertTrue(key2)
+        XCTAssertTrue(profile.prefs.boolForKey(Keys.creditcardsStateChangedPrefKey)!)
     }
 
     func testUpdateEnginePrefs_historyEnabled() throws {
+        profile.prefs.setBool(false, forKey: PrefsKeys.PerDeviceSyncEnabled)
         profile.prefs.setBool(true, forKey: Keys.historyEnabledPrefKey)
         profile.prefs.setBool(false, forKey: Keys.historyStateChangedPrefKey)
 
@@ -229,9 +322,21 @@ class RustSyncManagerTests: XCTestCase {
         let key = try XCTUnwrap(profile.prefs.boolForKey(Keys.historyEnabledPrefKey))
         XCTAssertTrue(key)
         XCTAssertNil(profile.prefs.boolForKey(Keys.historyStateChangedPrefKey))
+
+        // Test with per-device sync enabled
+        profile.prefs.setBool(true, forKey: PrefsKeys.PerDeviceSyncEnabled)
+        profile.prefs.setBool(true, forKey: Keys.historyEnabledPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.historyStateChangedPrefKey)
+
+        rustSyncManager.updateEnginePrefs(declined: declined)
+
+        let key2 = try XCTUnwrap(profile.prefs.boolForKey(Keys.historyEnabledPrefKey))
+        XCTAssertTrue(key2)
+        XCTAssertFalse(profile.prefs.boolForKey(Keys.historyStateChangedPrefKey)!)
     }
 
     func testUpdateEnginePrefs_passwordsEnabled() throws {
+        profile.prefs.setBool(false, forKey: PrefsKeys.PerDeviceSyncEnabled)
         profile.prefs.setBool(false, forKey: Keys.passwordsEnabledPrefKey)
         profile.prefs.setBool(false, forKey: Keys.passwordsStateChangedPrefKey)
 
@@ -241,9 +346,21 @@ class RustSyncManagerTests: XCTestCase {
         let key = try XCTUnwrap(profile.prefs.boolForKey(Keys.passwordsEnabledPrefKey))
         XCTAssertFalse(key)
         XCTAssertNil(profile.prefs.boolForKey(Keys.passwordsStateChangedPrefKey))
+
+        // Test with per-device sync enabled
+        profile.prefs.setBool(true, forKey: PrefsKeys.PerDeviceSyncEnabled)
+        profile.prefs.setBool(false, forKey: Keys.passwordsEnabledPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.passwordsStateChangedPrefKey)
+
+        rustSyncManager.updateEnginePrefs(declined: declined)
+
+        let key2 = try XCTUnwrap(profile.prefs.boolForKey(Keys.passwordsEnabledPrefKey))
+        XCTAssertFalse(key2)
+        XCTAssertFalse(profile.prefs.boolForKey(Keys.passwordsStateChangedPrefKey)!)
     }
 
     func testUpdateEnginePrefs_tabsEnabled() throws {
+        profile.prefs.setBool(false, forKey: PrefsKeys.PerDeviceSyncEnabled)
         profile.prefs.setBool(false, forKey: Keys.tabsEnabledPrefKey)
         profile.prefs.setBool(true, forKey: Keys.tabsStateChangedPrefKey)
 
@@ -253,11 +370,23 @@ class RustSyncManagerTests: XCTestCase {
         let key = try XCTUnwrap(profile.prefs.boolForKey(Keys.tabsEnabledPrefKey))
         XCTAssertTrue(key)
         XCTAssertNil(profile.prefs.boolForKey(Keys.tabsStateChangedPrefKey))
+
+        // Test with per-device sync enabled
+        profile.prefs.setBool(true, forKey: PrefsKeys.PerDeviceSyncEnabled)
+        profile.prefs.setBool(false, forKey: Keys.tabsEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.tabsStateChangedPrefKey)
+
+        rustSyncManager.updateEnginePrefs(declined: declined)
+
+        let key2 = try XCTUnwrap(profile.prefs.boolForKey(Keys.tabsEnabledPrefKey))
+        XCTAssertFalse(key2)
+        XCTAssertTrue(profile.prefs.boolForKey(Keys.tabsStateChangedPrefKey)!)
     }
 
     // FXIOS-8331: Disable History Highlight tests while FXIOS-8059 (Epic) is in progress
     // FXIOS-8367: Added a ticket to enable these tests when we re-enable history highlights
     func testUpdateEnginePrefs_addressesEnabled() throws {
+        profile.prefs.setBool(false, forKey: PrefsKeys.PerDeviceSyncEnabled)
         profile.prefs.setBool(true, forKey: Keys.addressesEnabledPrefKey)
         profile.prefs.setBool(true, forKey: Keys.addressesStateChangedPrefKey)
 
@@ -267,11 +396,23 @@ class RustSyncManagerTests: XCTestCase {
         let key = try XCTUnwrap(profile.prefs.boolForKey(Keys.addressesEnabledPrefKey))
         XCTAssertTrue(key)
         XCTAssertNil(profile.prefs.boolForKey(Keys.addressesStateChangedPrefKey))
+
+        // Test with per-device sync enabled
+        profile.prefs.setBool(true, forKey: PrefsKeys.PerDeviceSyncEnabled)
+        profile.prefs.setBool(true, forKey: Keys.addressesEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.addressesStateChangedPrefKey)
+
+        rustSyncManager.updateEnginePrefs(declined: declined)
+
+        let key2 = try XCTUnwrap(profile.prefs.boolForKey(Keys.addressesEnabledPrefKey))
+        XCTAssertTrue(key2)
+        XCTAssertTrue(profile.prefs.boolForKey(Keys.addressesStateChangedPrefKey)!)
     }
 
     // FXIOS-8331: Disable History Highlight tests while FXIOS-8059 (Epic) is in progress
     // FXIOS-8367: Added a ticket to enable these tests when we re-enable history highlights
     func testUpdateEnginePrefs_addressesDisabled() throws {
+        profile.prefs.setBool(false, forKey: PrefsKeys.PerDeviceSyncEnabled)
         profile.prefs.setBool(false, forKey: Keys.addressesEnabledPrefKey)
         profile.prefs.setBool(false, forKey: Keys.addressesStateChangedPrefKey)
 
@@ -281,6 +422,17 @@ class RustSyncManagerTests: XCTestCase {
         let key = try XCTUnwrap(profile.prefs.boolForKey(Keys.addressesEnabledPrefKey))
         XCTAssertFalse(key)
         XCTAssertNil(profile.prefs.boolForKey(Keys.addressesStateChangedPrefKey))
+
+        // Test with per-device sync enabled
+        profile.prefs.setBool(true, forKey: PrefsKeys.PerDeviceSyncEnabled)
+        profile.prefs.setBool(false, forKey: Keys.addressesEnabledPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.addressesStateChangedPrefKey)
+
+        rustSyncManager.updateEnginePrefs(declined: declined)
+
+        let key2 = try XCTUnwrap(profile.prefs.boolForKey(Keys.addressesEnabledPrefKey))
+        XCTAssertFalse(key2)
+        XCTAssertFalse(profile.prefs.boolForKey(Keys.addressesStateChangedPrefKey)!)
     }
 
     func test_applicationDidBecomeActive_updateSignInPrefs() throws {
