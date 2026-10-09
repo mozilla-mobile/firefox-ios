@@ -90,6 +90,16 @@ final class SettingScreen {
         newTab.swipeUp()
     }
 
+    func waitForSettingsRoot(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.SETTINGS_TITLE.element(in: app), timeout: timeout)
+    }
+
+    /// Waits on the theme buttons rather than the "Appearance" title: Appearance opened through
+    /// a deeplink has no navigation title.
+    func waitForThemeOptions(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.DARK_THEME_BUTTON.element(in: app), timeout: timeout)
+    }
+
     func waitForBrowsingLinksSection() {
         let browsingSection = sel.BROWSING_LINKS_SECTION.element(in: app)
         BaseTestCase().mozWaitForElementToExist(browsingSection)

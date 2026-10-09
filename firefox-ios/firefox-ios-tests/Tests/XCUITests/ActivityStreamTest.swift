@@ -312,11 +312,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2861436
     func testShortcutsToggle() {
-        app.launch()
-        mozWaitForElementToExist(TopSiteCellgroup, timeout: TIMEOUT_LONG)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        launchIntoSettings()
         //  Go to customize homepage
-        navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         navigator.performAction(Action.SelectShortcuts)
         let shortCutSwitch = app.switches["TopSitesUserPrefsKey"]

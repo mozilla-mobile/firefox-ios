@@ -20,9 +20,14 @@ class DisplaySettingTests: BaseTestCase {
         settingScreen = SettingScreen(app: app)
     }
 
+    /// Both tests start in Settings and launch the app themselves through a Settings deeplink.
+    override func setUpApp() {
+        setUpLaunchArguments()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2337485
     func testCheckDisplaySettingsDefault() {
-        navigator.goto(SettingsScreen)
+        launchIntoSettings()
         settingScreen.navigateToDisplaySettings()
         waitForElementsToExist(
             [
@@ -43,7 +48,7 @@ class DisplaySettingTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3298823
     func testCheckSystemThemeChanges() {
-        navigator.goto(SettingsScreen)
+        launchIntoSettings()
         settingScreen.navigateToDisplaySettings()
 
         // Select Light mode

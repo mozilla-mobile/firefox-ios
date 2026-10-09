@@ -508,6 +508,39 @@ class BaseTestCase: XCTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
     }
 
+    /// Launches the app straight into a Settings screen by using a deeplink as the launch, which skips
+    /// the menu taps. A deeplink sent to an already running app costs more than the taps it replaces,
+    /// so this only pays off as the launch. Falls back to `app.launch()` and the menu below iOS 16.4.
+    /// With `.general` the navigator ends at `SettingsScreen` and can route anywhere from there.
+    /// With `.theme` it ends at `DisplaySettings` with no route out: go back with
+    /// `SettingScreen.tapBackToSettings()`, then call `settingsRootReachedByDeeplink()`.
+    func launchIntoSettings(_ section: SettingsDeeplink = .general) {
+        guard #available(iOS 16.4, *) else {
+            app.launch()
+            waitForTabsButton()
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(section.screen)
+            return
+        }
+        app.open(URL(string: "\(currentScheme.internalURLScheme)://deep-link?url=/settings/\(section.rawValue)")!)
+        let settingScreen = SettingScreen(app: app)
+        switch section {
+        case .general:
+            settingScreen.waitForSettingsRoot(timeout: TIMEOUT_LONG)
+            settingsRootReachedByDeeplink()
+        case .theme:
+            settingScreen.waitForThemeOptions(timeout: TIMEOUT_LONG)
+            navigator.nowAt(DisplaySettings)
+        }
+    }
+
+    /// Tells the navigator that the Settings root on screen was opened by a deeplink, so that it
+    /// enters `SettingsScreen` with a back edge to the browser instead of being forced there with `nowAt`.
+    func settingsRootReachedByDeeplink() {
+        navigator.nowAt(SettingsDeeplinkEntry)
+        navigator.goto(SettingsScreen)
+    }
+
     func waitForTabsButtonHittable(timeout: Double = TIMEOUT) {
         mozWaitElementHittable(element: app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: timeout)
     }
@@ -796,6 +829,19 @@ extension BaseTestCase {
 
     var isFennec: Bool {
         return currentScheme == .fennec
+    }
+}
+
+/// Settings sections reachable through `<scheme>://deep-link?url=/settings/<rawValue>`.
+enum SettingsDeeplink: String {
+    case general
+    case theme
+
+    var screen: String {
+        switch self {
+        case .general: return SettingsScreen
+        case .theme: return DisplaySettings
+        }
     }
 }
 
