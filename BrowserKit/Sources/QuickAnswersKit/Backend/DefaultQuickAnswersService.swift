@@ -21,7 +21,7 @@ final class DefaultQuickAnswersService: QuickAnswersService {
 
     private let engine: TranscriptionEngine
     private let resultsService: ResultsService
-    private var state: RecordingState = .idle
+    private(set) var state: RecordingState = .idle
     private var recordingTask: Task<Void, Error>?
     private var continuation: AsyncThrowingStream<SpeechResult, any Error>.Continuation?
 
