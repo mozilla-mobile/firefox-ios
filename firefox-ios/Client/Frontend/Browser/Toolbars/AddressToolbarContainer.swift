@@ -651,12 +651,7 @@ final class AddressToolbarContainer: UIView,
         delegate?.addressToolbarDidEnterOverlayMode(self)
 
         if pasted {
-            let action = ToolbarAction(
-                searchTerm: locationText,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didPasteSearchTerm
-            )
-            store.dispatch(action)
+            store.dispatch(ToolbarModernAction.didPasteSearchTerm(searchTerm: locationText), forWindowUUID: windowUUID)
 
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         } else {

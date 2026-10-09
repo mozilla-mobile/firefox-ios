@@ -125,6 +125,13 @@ enum ToolbarModernAction: ModernAction {
     /// was set to `false` by a path that doesn't fully leave overlay mode (like scrolling the
     /// homepage mid-edit via `cancelEditOnHomepage`)
     case didKeyboardRequestChange(shouldShow: Bool)
+
+    /// The user scrolled the homepage or search view while the address bar was still in editing mode.
+    /// Cancels editing (or, if already on a website, just hides the keyboard).
+    case cancelEditOnHomepage
+
+    /// The user pasted text into the address bar, entering editing mode with the pasted term.
+    case didPasteSearchTerm(searchTerm: String?)
 }
 
 enum ToolbarActionType: ActionType {
@@ -136,9 +143,7 @@ enum ToolbarActionType: ActionType {
     case borderPositionChanged
     case toolbarPositionChanged
     case showMenuWarningBadge
-    case didPasteSearchTerm
     case didStartEditingUrl
-    case cancelEditOnHomepage
     case cancelEdit
     case animationStateChanged
     case readerModeStateChanged
