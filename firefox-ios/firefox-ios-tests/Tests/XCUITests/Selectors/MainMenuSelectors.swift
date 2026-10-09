@@ -16,6 +16,8 @@ protocol MainMenuSelectorSet {
     var SITE_PROTECTIONS: Selector { get }
     var PAGE_ZOOM: Selector { get }
     var READER_VIEW: Selector { get }
+    var READER_VIEW_STATUS_ON: Selector { get }
+    var READER_VIEW_STATUS_OFF: Selector { get }
     var FIND_IN_PAGE: Selector { get }
     var SUMMARIZE_PAGE: Selector { get }
     var CLOSE_BUTTON: Selector { get }
@@ -35,6 +37,9 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         static let siteProtections = "Protections"
         static let pageZoom = AccessibilityIdentifiers.MainMenu.zoom
         static let readerView = AccessibilityIdentifiers.MainMenu.readerView
+        // The row status has no accessibility identifier, it is matched on its label
+        static let readerViewStatusOn = "On"
+        static let readerViewStatusOff = "Off"
         static let findInPage = AccessibilityIdentifiers.MainMenu.findInPage
         static let summarizePage = AccessibilityIdentifiers.MainMenu.summarizePage
         static let closeButton = AccessibilityIdentifiers.MainMenu.HeaderView.closeButton
@@ -105,6 +110,18 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         groups: ["MainMenu"]
     )
 
+    let READER_VIEW_STATUS_ON = Selector.staticTextByLabel(
+        IDs.readerViewStatusOn,
+        description: "On status of the Reader View cell in the expanded Main Menu",
+        groups: ["MainMenu"]
+    )
+
+    let READER_VIEW_STATUS_OFF = Selector.staticTextByLabel(
+        IDs.readerViewStatusOff,
+        description: "Off status of the Reader View cell in the expanded Main Menu",
+        groups: ["MainMenu"]
+    )
+
     let FIND_IN_PAGE = Selector.tableCellById(
         IDs.findInPage,
         description: "Find in Page cell in Main Menu",
@@ -125,6 +142,6 @@ struct MainMenuSelectors: MainMenuSelectorSet {
 
     var all: [Selector] { [DESKTOP_SITE, BOOKMARKS_BUTTON, HISTORY_BUTTON, DOWNLOADS_BUTTON,
                            PASSWORDS_BUTTON, SIGN_IN_CELL, SETTINGS_CELL, BOOKMARK_PAGE,
-                           SITE_PROTECTIONS, PAGE_ZOOM, READER_VIEW, FIND_IN_PAGE,
-                           SUMMARIZE_PAGE, CLOSE_BUTTON] }
+                           SITE_PROTECTIONS, PAGE_ZOOM, READER_VIEW, READER_VIEW_STATUS_ON,
+                           READER_VIEW_STATUS_OFF, FIND_IN_PAGE, SUMMARIZE_PAGE, CLOSE_BUTTON] }
 }

@@ -267,6 +267,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
+        BrowserScreen(app: app).assertPrivateModeMessageCardExists()
         validateSummarizePageMainMenuButton(mainMenuScreen)
     }
 

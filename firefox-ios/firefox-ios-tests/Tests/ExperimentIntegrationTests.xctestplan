@@ -158,6 +158,7 @@
         "PrintTests",
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",
+        "ReadingListTests\/testReaderViewMainMenuButton()",
         "ReportSiteTests",
         "ScreenGraphTest",
         "SearchSettingsSuggestUITests",

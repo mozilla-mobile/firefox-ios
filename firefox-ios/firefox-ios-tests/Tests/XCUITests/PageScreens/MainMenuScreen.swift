@@ -109,11 +109,11 @@ final class MainMenuScreen {
         )
     }
 
-    /// The cell's state pill is a static text reading "On" or "Off".
     func assertReaderViewIs(on isOn: Bool, timeout: TimeInterval = TIMEOUT) {
         let readerView = sel.READER_VIEW.element(in: app)
+        let status = isOn ? sel.READER_VIEW_STATUS_ON : sel.READER_VIEW_STATUS_OFF
         BaseTestCase().mozWaitForElementToExist(readerView, timeout: timeout)
-        BaseTestCase().mozWaitForElementToExist(readerView.staticTexts[isOn ? "On" : "Off"], timeout: timeout)
+        BaseTestCase().mozWaitForElementToExist(readerView.staticTexts[status.value], timeout: timeout)
     }
 
     func tapReaderView() {
