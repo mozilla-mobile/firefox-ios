@@ -129,7 +129,6 @@ final class AudioWaveformView: UIView, ThemeApplicable {
     }
 }
 
-
 @available(iOS 17, *)
 #Preview {
     let form = AudioWaveformView(frame: .init(origin: .init(x: 100, y: 300), size: .init(width: 30.0, height: 40.0)))

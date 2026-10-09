@@ -240,7 +240,6 @@ struct BackgroundEffectView: ThemeableView {
     }
 }
 
-
 #Preview {
     BackgroundEffectView(
         state: BackgroundEffectState(),

@@ -215,7 +215,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
             searchingLabel.alpha = 1.0
         }
     }
-    
+
     private func applyColorToTranscript(_ color: UIColor) {
         transcriptLabel.foregroundColor = color
         transcriptLabel.setTranscript(transcriptLabel.attributedText?.string ?? "", animated: false)
@@ -276,7 +276,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         audioWaveform.alpha = 1.0
         audioWaveform.transform = CGAffineTransform(
             translationX: sourceRect.midX - containerWidth / 2.0,
-            y: UX.scrollContentTopInset + UX.audioWaveformSize.height + topSafeAreaInset - sourceRect.midY - 20.0
+            y: UX.scrollContentTopInset + UX.audioWaveformSize.height + topSafeAreaInset - sourceRect.midY - 0.0
         )
         placeholderLabel.alpha = 0.0
         placeholderLabel.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationSlideOffset)

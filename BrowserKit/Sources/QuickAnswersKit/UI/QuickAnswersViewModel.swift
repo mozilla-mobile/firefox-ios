@@ -149,6 +149,7 @@ final class QuickAnswersViewModel {
     private func stopRecordingVoice() async throws {
         recordVoiceTask?.cancel()
         recordVoiceTask = nil
+        feedbackPlayer.playRecordingEnd()
         try await service?.stopRecording()
     }
 
