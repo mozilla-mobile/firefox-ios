@@ -85,6 +85,14 @@ final class StatusBarOverlay: UIView,
         updateStatusBarAlpha(isHomepage: isHomepage, needsNoStatusBar: needsNoStatusBar)
     }
 
+    /// Recomputes the overlay's alpha from the current `scrollOffset`, without resetting it.
+    /// Use for ambient state changes (wallpaper, search bar position) on the same content —
+    /// unlike `resetState`, which assumes new content and forces the scroll position back to the top.
+    func refresh() {
+        let isHomepage = savedIsHomepage ?? false
+        updateStatusBarAlpha(isHomepage: isHomepage, needsNoStatusBar: needsNoStatusBar(isHomepage: isHomepage))
+    }
+
     func showOverlay(animated: Bool) {
         let backgroundAlpha = toolbarHelper.novaToolbarGlassEffectAlpha
 
@@ -189,7 +197,7 @@ final class StatusBarOverlay: UIView,
         switch notification.name {
         case .WallpaperDidChange, .SearchBarPositionDidChange:
             ensureMainThread {
-                self.resetState(isHomepage: self.savedIsHomepage ?? false)
+                self.refresh()
             }
         default: break
         }

@@ -80,6 +80,18 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStatusBarScrollDelegate.savedScrollView, scrollView)
     }
 
+    func test_scrollViewDidScroll_withoutWallpaper_stillUpdatesStatusBarScrollDelegate() {
+        let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
+        let homepageVC = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
+        let scrollView = UIScrollView()
+
+        mockStatusBarScrollDelegate.savedScrollView = nil
+
+        homepageVC.scrollViewDidScroll(scrollView)
+
+        XCTAssertEqual(mockStatusBarScrollDelegate.savedScrollView, scrollView)
+    }
+
     func test_scrollToTop_updatesStatusBarScrollDelegate_andSetsCollectionViewOffset() {
         let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
         let homepageVC = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
