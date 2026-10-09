@@ -25,13 +25,13 @@ fileprivate extension RustBuffer {
     }
 
     static func from(_ ptr: UnsafeBufferPointer<UInt8>) -> RustBuffer {
-        try! rustCall { ffi_viaduct_hyper_rustbuffer_from_bytes(ForeignBytes(bufferPointer: ptr), $0) }
+        try! rustCall { ffi_viaduct_backend_rust_rustbuffer_from_bytes(ForeignBytes(bufferPointer: ptr), $0) }
     }
 
     // Frees the buffer in place.
     // The buffer must not be used after this is called.
     func deallocate() {
-        try! rustCall { ffi_viaduct_hyper_rustbuffer_free(self, $0) }
+        try! rustCall { ffi_viaduct_backend_rust_rustbuffer_free(self, $0) }
     }
 }
 
@@ -327,7 +327,7 @@ private func makeRustCall<T, E: Swift.Error>(
     _ callback: (UnsafeMutablePointer<RustCallStatus>) -> T,
     errorHandler: ((RustBuffer) throws -> E)?
 ) throws -> T {
-    uniffiEnsureViaductHyperInitialized()
+    uniffiEnsureViaductBackendRustInitialized()
     var callStatus = RustCallStatus.init()
     let returnedVal = callback(&callStatus)
     try uniffiCheckCallStatus(callStatus: callStatus, errorHandler: errorHandler)
@@ -508,14 +508,14 @@ fileprivate struct FfiConverterString: FfiConverter {
     }
 }
 /**
- * Set the viaduct backend to the `hyper`-based one with HTTPS support.
+ * Set the viaduct backend to the `reqwest`-based one with HTTPS support.
  *
- * Named `viaduct_init_backend_hyper` since that reads better on iOS/Swift where there aren't any
+ * Named `viaduct_init_backend_rust` since that reads better on iOS/Swift where there aren't any
  * namespaces.  Once we move to UniFII 0.31 we can use the renaming feature to do this instead.
  */
-public func viaductInitBackendHyper()  {try! rustCall() {
+public func viaductInitBackendRust()  {try! rustCall() {
         uniffiCallStatus in
-    uniffi_viaduct_hyper_fn_func_viaduct_init_backend_hyper(uniffiCallStatus
+    uniffi_viaduct_backend_rust_fn_func_viaduct_init_backend_rust(uniffiCallStatus
     )
 }
 }
@@ -531,11 +531,11 @@ private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
     let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
-    let scaffolding_contract_version = ffi_viaduct_hyper_uniffi_contract_version()
+    let scaffolding_contract_version = ffi_viaduct_backend_rust_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_viaduct_hyper_checksum_func_viaduct_init_backend_hyper() != 26532) {
+    if (uniffi_viaduct_backend_rust_checksum_func_viaduct_init_backend_rust() != 1949) {
         return InitializationResult.apiChecksumMismatch
     }
 
@@ -544,7 +544,7 @@ private let initializationResult: InitializationResult = {
 
 // Make the ensure init function public so that other modules which have external type references to
 // our types can call it.
-public func uniffiEnsureViaductHyperInitialized() {
+public func uniffiEnsureViaductBackendRustInitialized() {
     switch initializationResult {
     case .ok:
         break
