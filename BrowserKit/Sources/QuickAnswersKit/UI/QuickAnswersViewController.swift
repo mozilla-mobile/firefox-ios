@@ -162,8 +162,8 @@ public final class QuickAnswersViewController: UIViewController,
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
                                              constant: UX.closeButtonSidePadding),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                  constant: -UX.closeButtonSidePadding),
+            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                  constant: UX.closeButtonSidePadding),
 
             contentView.topAnchor.constraint(equalTo: closeButton.bottomAnchor,
                                              constant: UX.contentViewTopPadding),
@@ -234,8 +234,8 @@ public final class QuickAnswersViewController: UIViewController,
     }
 
     // MARK: - Presentation transition
-    func prepareForPresentationTransition() {
-        contentView.prepareForPresentationTransition()
+    func prepareForPresentationTransition(sourceRect: CGRect) {
+        contentView.prepareForPresentationTransition(sourceRect: sourceRect)
         backgroundRecordEffect.view.alpha = 0.0
         backgroundRecordEffect.view.transform = CGAffineTransform(translationX: 0.0,
                                                                   y: UX.presentationSlideOffset)

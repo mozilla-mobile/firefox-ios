@@ -154,6 +154,29 @@ struct BlendedBlobsGradient: View {
     }
 }
 
+struct TopTrailingGlow: View {
+    let color: UIColor
+
+    var body: some View {
+        GeometryReader { geo in
+            let colors = [
+                color.withAlphaComponent(0.25).color,
+                color.withAlphaComponent(0.1).color,
+                color.withAlphaComponent(0.0).color
+            ]
+            Rectangle()
+                .fill(
+                    RadialGradient(
+                        gradient: SwiftUI.Gradient(colors: colors),
+                        center: .topTrailing,
+                        startRadius: 0.0,
+                        endRadius: geo.size.width
+                    )
+                )
+        }
+    }
+}
+
 struct BackgroundEffectView: ThemeableView {
     @State var theme: Theme
     let windowUUID: WindowUUID
@@ -166,14 +189,22 @@ struct BackgroundEffectView: ThemeableView {
     }
 
     var body: some View {
-        BlendedBlobsGradient(
-            colors: [
-                theme.colors.gradientAIStrongStop1.color,
-                theme.colors.gradientAIStrongStop2.color,
-                theme.colors.gradientAIStrongStop3.color
-            ]
-        )
+        ZStack {
+            TopTrailingGlow(color: theme.colors.gradientAIStrongStop1)
+            BlendedBlobsGradient(
+                colors: [
+                    theme.colors.gradientAIStrongStop1.color,
+                    theme.colors.gradientAIStrongStop2.color,
+                    theme.colors.gradientAIStrongStop3.color
+                ]
+            )
+        }
         .ignoresSafeArea()
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
+}
+
+
+#Preview {
+    BackgroundEffectView(windowUUID: .XCTestDefaultUUID, themeManager: DefaultThemeManager(sharedContainerIdentifier: ""))
 }

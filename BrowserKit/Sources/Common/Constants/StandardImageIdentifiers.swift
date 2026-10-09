@@ -124,6 +124,7 @@ public struct StandardImageIdentifiers {
         public static let shieldSlash = "shieldSlashLarge"
         public static let soccerBall = "soccerBallLarge"
         public static let socialMedia = "socialMediaLarge"
+        public static let sparkle = "sparkleLarge"
         public static let subtract = "subtractLarge"
         public static let summarizer = "summarizerLarge"
         public static let sync = "syncLarge"

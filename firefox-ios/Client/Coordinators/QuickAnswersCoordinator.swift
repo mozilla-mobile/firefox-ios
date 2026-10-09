@@ -67,7 +67,8 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
                 placeholder: .QuickAnswers.ContentView.Placeholder,
                 answering: .QuickAnswers.ContentView.Answering,
                 footerFormat: .QuickAnswers.ContentView.FooterFormat,
-                sources: .QuickAnswers.ContentView.Sources
+                sources: .QuickAnswers.ContentView.Sources,
+                answerHeader: .QuickAnswers.ContentView.AnswerHeader
             ),
             errors: .init(
                 permissionAlertTitle: .QuickAnswers.Errors.PermissionAlertTitle,

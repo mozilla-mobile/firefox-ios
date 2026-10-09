@@ -64,7 +64,8 @@ extension QuickAnswersViewConfiguration {
             placeholder: "Ask anything",
             answering: "Answering",
             footerFormat: "Powered by %@",
-            sources: "Sources"
+            sources: "Sources",
+            answerHeader: "Quick Answer"
         ),
         errors: .mock,
         closeAccessibilityLabel: "Close",

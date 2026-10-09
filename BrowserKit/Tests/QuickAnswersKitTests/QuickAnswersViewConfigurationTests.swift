@@ -29,13 +29,15 @@ struct QuickAnswersViewConfigurationTests {
             placeholder: "ask",
             answering: "loading",
             footerFormat: "Powered by %@",
-            sources: "Sources"
+            sources: "Sources",
+            answerHeader: "Quick Answer"
         )
 
         #expect(subject.placeholder == "ask")
         #expect(subject.answering == "loading")
         #expect(subject.footerFormat == "Powered by %@")
         #expect(subject.sources == "Sources")
+        #expect(subject.answerHeader == "Quick Answer")
     }
 
     @Test
@@ -69,7 +71,7 @@ struct QuickAnswersViewConfigurationTests {
     func testConfiguration_storesAllSections() {
         let subject = QuickAnswersViewConfiguration(
             optIn: .init(title: "t", description: "d", learnMore: "l", continueButton: "c"),
-            contentView: .init(placeholder: "p", answering: "a", footerFormat: "f", sources: "s"),
+            contentView: .init(placeholder: "p", answering: "a", footerFormat: "f", sources: "s", answerHeader: "h"),
             errors: .init(
                 permissionAlertTitle: "",
                 microphonePermissionMessage: "",

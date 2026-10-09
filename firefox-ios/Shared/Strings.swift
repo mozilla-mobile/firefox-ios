@@ -2977,6 +2977,13 @@ extension String {
                 comment: "Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa."
             )
 
+            public static let AnswerHeader = MZLocalizedString(
+                key: "QuickAnswers.ContentView.AnswerHeader.v160",
+                tableName: "QuickAnswers",
+                value: "Quick Answer",
+                comment: "Header label shown at the top of the card containing the Quick Answers result."
+            )
+
             public static let Sources = MZLocalizedString(
                 key: "QuickAnswers.ContentView.Sources.v158",
                 tableName: "QuickAnswers",
