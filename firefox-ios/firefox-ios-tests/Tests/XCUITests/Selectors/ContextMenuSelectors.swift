@@ -30,7 +30,7 @@ struct ContextMenuSelectors: ContextMenuSelectorsSet {
         static let requestDesktopSite = "Request Desktop Site"
     }
 
-    let CONTEXT_MENU_TABLE = Selector.collectionViewIdOrLabel(
+    let CONTEXT_MENU_TABLE = Selector.tableIdOrLabel(
         "Context Menu",
         description: "Context Menu table",
         groups: ["contextmenu"]
