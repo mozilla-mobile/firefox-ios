@@ -2950,21 +2950,21 @@ extension String {
             )
 
             public static let ListeningFollowUp = MZLocalizedString(
-                key: "QuickAnswers.ContentView.ListeningFollowUp.v159",
+                key: "QuickAnswers.ContentView.ListeningFollowUp.v160",
                 tableName: "QuickAnswers",
                 value: "Listening, ask a follow-up…",
                 comment: "Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to ask a follow-up question about the previous answer."
             )
 
             public static let ResultHeader = MZLocalizedString(
-                key: "QuickAnswers.ContentView.ResultHeader.v159",
+                key: "QuickAnswers.ContentView.ResultHeader.v160",
                 tableName: "QuickAnswers",
                 value: "QUICK ANSWER",
                 comment: "Header label shown above the body of a Quick Answers result, labeling the text below it as a short answer to the user's question."
             )
 
             public static let FollowUpButton = MZLocalizedString(
-                key: "QuickAnswers.ContentView.FollowUpButton.v159",
+                key: "QuickAnswers.ContentView.FollowUpButton.v160",
                 tableName: "QuickAnswers",
                 value: "Ask a Follow-Up",
                 comment: "Button shown below a Quick Answers result that the user taps to ask a follow-up question about the answer."
