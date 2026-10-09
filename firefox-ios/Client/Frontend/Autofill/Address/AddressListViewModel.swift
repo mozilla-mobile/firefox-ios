@@ -52,7 +52,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     let currentRegionCode: String
     var isDarkTheme: Bool {
-        themeManager.getCurrentTheme(for: windowUUID).type == .dark
+        themeManager.resolveTheme(for: windowUUID, privateOverride: false).type == .dark
     }
     var hasSyncableAccount: Bool {
         profile.hasSyncableAccount()

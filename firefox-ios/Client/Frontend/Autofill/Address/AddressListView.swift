@@ -35,6 +35,7 @@ struct AddressListView: View {
     @State var imageColor: Color = .clear
     @State var listColor: Color = .clear
     @State private var accentColor: Color?
+    @State private var sheetColorScheme: ColorScheme?
 
     @State private var isLandscape = false
 
@@ -50,6 +51,8 @@ struct AddressListView: View {
                         ForEach(viewModel.addresses, id: \.self) { address in
                             AddressCellView(
                                 windowUUID: windowUUID,
+                                shouldUsePrivateOverride: true,
+                                shouldBeInPrivateTheme: false,
                                 address: address,
                                 onTap: {
                                     if viewModel.isEditingFeatureEnabled {
@@ -84,14 +87,15 @@ struct AddressListView: View {
                 }
             }
             .tint(accentColor)
+            .preferredColorScheme(sheetColorScheme)
         }
         .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.resolveTheme(for: windowUUID, privateOverride: false))
             viewModel.editAddressWebViewManager.preloadWebView()
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.resolveTheme(for: windowUUID, privateOverride: false))
         }
         .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
             isLandscape = UIDevice.current.orientation.isLandscape
@@ -153,6 +157,7 @@ struct AddressListView: View {
         imageColor = Color(color.iconSecondary)
         listColor = Color(color.layer1)
         accentColor = theme.isNova ? Color(color.actionPrimary) : nil
+        sheetColorScheme = themeManager.isPrivateThemeOverrideEnabled ? theme.type.colorScheme : nil
     }
 
     @ViewBuilder var contentUnavailableView: some View {

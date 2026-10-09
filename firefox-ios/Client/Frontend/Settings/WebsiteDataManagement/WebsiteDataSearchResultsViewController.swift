@@ -8,6 +8,9 @@ import WebKit
 import Common
 
 final class WebsiteDataSearchResultsViewController: ThemedTableViewController {
+    override var shouldUsePrivateOverride: Bool { return true }
+    override var shouldBeInPrivateTheme: Bool { return false }
+
     private enum Section: Int {
         case sites = 0
         case clearButton = 1
@@ -47,7 +50,7 @@ final class WebsiteDataSearchResultsViewController: ThemedTableViewController {
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width,
                                                                       height: SettingsUX.TableViewHeaderFooterHeight))
-        footer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        footer.applyTheme(theme: currentTheme())
         footer.showBorder(for: .top, shouldShowSectionBorders)
         tableView.tableFooterView = footer
 
@@ -117,7 +120,7 @@ final class WebsiteDataSearchResultsViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueCellFor(indexPath: indexPath)
-        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        cell.applyTheme(theme: currentTheme())
         guard let section = Section(rawValue: indexPath.section) else {
             return ThemedTableViewCell()
         }
@@ -134,7 +137,7 @@ final class WebsiteDataSearchResultsViewController: ThemedTableViewController {
             cell.setAccessibilities(
                 traits: .button,
                 identifier: AccessibilityIdentifiers.Settings.ClearData.clearAllWebsiteData)
-            cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            cell.applyTheme(theme: currentTheme())
             return cell
         }
     }
