@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import GameController
 import WebKit
 
 import class Storage.CertStore
@@ -61,9 +62,33 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
+        // Workaround to avoid crash: https://mozilla.sentry.io/issues/3081569597/?project=6176941
+        // For iPads with hardware keyboard we remove our custom `AccessoryView` as a temporary solution.
+        if shouldSuppressAccessoryViewOniPad { return nil }
 
         return accessoryView
     }
+
+    private var shouldSuppressAccessoryViewOniPad: Bool {
+        guard #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .pad else { return false }
+        let isHardwareKeyboardConnected = GCKeyboard.coalesced != nil
+
+        return isHardwareKeyboardConnected
+    }
+
+    private func observeHardwareKeyboardChanges() {
+        guard #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .pad else { return }
+
+        [Notification.Name.GCKeyboardDidConnect, .GCKeyboardDidDisconnect].forEach {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(hardwareKeyboardDidChange),
+                                                   name: $0,
+                                                   object: nil)
+        }
+    }
+
+    @objc
+    private func hardwareKeyboardDidChange() { reloadInputViews() }
 
     func configure(delegate: TabWebViewDelegate,
                    navigationDelegate: WKNavigationDelegate?) {
@@ -93,6 +118,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         self.windowUUID = windowUUID
         self.certStore = certStore
         super.init(frame: frame, configuration: configuration)
+        observeHardwareKeyboardChanges()
     }
 
     required init?(coder: NSCoder) {
