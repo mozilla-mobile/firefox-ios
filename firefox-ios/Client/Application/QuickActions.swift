@@ -11,6 +11,7 @@ enum ShortcutType: String {
     case newPrivateTab = "NewPrivateTab"
     case openLastBookmark = "OpenLastBookmark"
     case appIcon = "AppIcon"
+    case mergeWindows = "MergeWindows"
 
     var type: String {
         return Bundle.main.bundleIdentifier! + ".\(self.rawValue)"
@@ -78,6 +79,17 @@ struct QuickActionsImplementation: QuickActions {
             } else {
                 dynamicShortcutItems.append(openLastBookmarkShortcut)
             }
+        case .mergeWindows:
+            let mergeWindowsShortcut = UIMutableApplicationShortcutItem(
+                type: ShortcutType.mergeWindows.type,
+                localizedTitle: .QuickActionsCombineWindowsTitle,
+                localizedSubtitle: nil,
+                icon: UIApplicationShortcutIcon(templateImageName: StandardImageIdentifiers.Large.tabTray),
+                userInfo: userData as [String: NSSecureCoding]
+            )
+
+            dynamicShortcutItems.removeAll { $0.type == ShortcutType.mergeWindows.type }
+            dynamicShortcutItems.insert(mergeWindowsShortcut, at: 0)
         default:
             break
         }

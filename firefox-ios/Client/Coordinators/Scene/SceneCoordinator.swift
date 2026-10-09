@@ -146,6 +146,7 @@ class SceneCoordinator: BaseCoordinator,
 
         let windowInfo = AppWindowInfo(tabManager: tabManager, sceneCoordinator: self)
         windowManager.newBrowserWindowConfigured(windowInfo, uuid: windowUUID)
+        MergeWindowsQuickActionController().update()
 
         add(child: browserCoordinator)
         browserCoordinator.start(with: launchType)

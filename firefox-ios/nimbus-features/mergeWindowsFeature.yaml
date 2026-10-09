@@ -1,0 +1,19 @@
+# The configuration for the mergeWindowsFeature feature
+features:
+  merge-windows-feature:
+    description: >
+      This property determines whether the "Combine Windows" home screen Quick Action is offered
+      on iPad when two or more windows are open
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true
