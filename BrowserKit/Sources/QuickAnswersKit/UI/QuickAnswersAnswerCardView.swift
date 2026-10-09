@@ -53,7 +53,7 @@ final class QuickAnswersAnswerCardView: UIView, ThemeApplicable {
         effect: UIBlurEffect(
             style: .systemThickMaterial
         ),
-        intensity: 0.5
+        intensity: 0.8
     )
     private let headerIconView: UIImageView = .build {
         $0.image = UIImage(named: StandardImageIdentifiers.Large.sparkle)
@@ -69,6 +69,8 @@ final class QuickAnswersAnswerCardView: UIView, ThemeApplicable {
         $0.adjustsFontForContentSizeCategory = true
     }
     private var headerGradientColors: [UIColor] = []
+    private var bodyMarkdown = ""
+    private var theme: Theme?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -114,8 +116,17 @@ final class QuickAnswersAnswerCardView: UIView, ThemeApplicable {
     // MARK: - Configuration
     func configure(header: String, body: String) {
         headerLabel.text = header
-        bodyLabel.text = body
+        bodyMarkdown = body
+        applyBody()
         setNeedsLayout()
+    }
+
+    private func applyBody() {
+        guard let theme else {
+            bodyLabel.text = bodyMarkdown
+            return
+        }
+        bodyLabel.attributedText = QuickAnswersMarkdownFormatter(theme: theme).format(markdown: bodyMarkdown)
     }
 
     /// Fills the header text with the AI gradient, since a label can't take a gradient text color directly.
@@ -133,6 +144,7 @@ final class QuickAnswersAnswerCardView: UIView, ThemeApplicable {
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
+        self.theme = theme
         layer.borderColor = theme.colors.borderPrimary.cgColor
         headerGradientColors = [
             theme.colors.gradientAIStrongStop1,
@@ -141,5 +153,6 @@ final class QuickAnswersAnswerCardView: UIView, ThemeApplicable {
         ]
         applyHeaderGradient()
         bodyLabel.textColor = theme.colors.textPrimary
+        applyBody()
     }
 }

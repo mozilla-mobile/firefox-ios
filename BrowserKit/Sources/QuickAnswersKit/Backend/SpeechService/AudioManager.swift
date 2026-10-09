@@ -15,7 +15,7 @@ final class AudioManager: AudioManagerProtocol {
 
     init(
         audioEngine: AudioEngineProvider = AVAudioEngine(),
-        audioSession: AudioSessionProvider = AVAudioSession(),
+        audioSession: AudioSessionProvider = AVAudioSession.sharedInstance(),
         logger: Logger = DefaultLogger.shared
     ) {
         self.audioEngine = audioEngine
@@ -24,7 +24,9 @@ final class AudioManager: AudioManagerProtocol {
     }
 
     func configureAudioSession() throws {
-        try audioSession.setCategory(.record, mode: .measurement, options: [.duckOthers])
+        // `.playAndRecord` lets the recording start and end sounds, and their haptics, play during the recording.
+        try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [.duckOthers, .defaultToSpeaker])
+        try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
     }
 

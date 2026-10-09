@@ -11,16 +11,19 @@ import TestKit
 final class QuickAnswersViewModelTests: XCTestCase {
     private var mockService: MockTestQuickAnswersService!
     private var mockTelemetry: MockQuickAnswersTelemetry!
+    private var mockFeedbackPlayer: MockRecordingFeedbackPlayer!
 
     override func setUp() async throws {
         try await super.setUp()
         mockService = MockTestQuickAnswersService()
         mockTelemetry = MockQuickAnswersTelemetry()
+        mockFeedbackPlayer = MockRecordingFeedbackPlayer()
     }
 
     override func tearDown() async throws {
         mockService = nil
         mockTelemetry = nil
+        mockFeedbackPlayer = nil
         try await super.tearDown()
     }
 
@@ -72,6 +75,8 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.lastResultsOutcome, true)
         XCTAssertEqual(mockTelemetry.lastResultsModel, .exa)
         XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 0)
+        XCTAssertEqual(mockFeedbackPlayer.playRecordingStartCalledCount, 1)
+        XCTAssertEqual(mockFeedbackPlayer.playRecordingEndCalledCount, 1)
     }
 
     func testStartFlow_withRecordError_receivesError() {
@@ -106,6 +111,8 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 0)
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 0)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 0)
+        XCTAssertEqual(mockFeedbackPlayer.playRecordingStartCalledCount, 1)
+        XCTAssertEqual(mockFeedbackPlayer.playRecordingEndCalledCount, 0)
     }
 
     func testStartFlow_withSearchError_receivesError() {
@@ -299,6 +306,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
             prefs: prefs,
             telemetry: mockTelemetry,
             configFetcher: configFetcher,
+            feedbackPlayer: mockFeedbackPlayer,
             makeService: { _, _ in
                 return self.mockService
             }
@@ -312,6 +320,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         let model = QuickAnswersViewModel(
             prefs: prefs,
             telemetry: mockTelemetry,
+            feedbackPlayer: mockFeedbackPlayer,
             makeService: { _, _ in throw ServiceInitError() }
         )
         trackForMemoryLeaks(model)

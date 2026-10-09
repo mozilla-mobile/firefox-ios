@@ -9,6 +9,7 @@ public struct QuickAnswersViewConfiguration: Sendable {
     public let contentView: ContentViewStrings
     public let errors: ErrorStrings
     public let closeAccessibilityLabel: String
+    public let followUpAccessibilityLabel: String
     public let appName: String
 
     public struct OptInStrings: Sendable {
@@ -89,12 +90,14 @@ public struct QuickAnswersViewConfiguration: Sendable {
         contentView: ContentViewStrings,
         errors: ErrorStrings,
         closeAccessibilityLabel: String,
+        followUpAccessibilityLabel: String,
         appName: String
     ) {
         self.optIn = optIn
         self.contentView = contentView
         self.errors = errors
         self.closeAccessibilityLabel = closeAccessibilityLabel
+        self.followUpAccessibilityLabel = followUpAccessibilityLabel
         self.appName = appName
     }
 }

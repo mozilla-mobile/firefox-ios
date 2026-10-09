@@ -43,6 +43,7 @@ protocol AudioSessionProvider: Sendable {
         options: AVAudioSession.CategoryOptions
     ) throws
     func setActive(_ active: Bool, options: AVAudioSession.SetActiveOptions) throws
+    func setAllowHapticsAndSystemSoundsDuringRecording(_ inValue: Bool) throws
 }
 
 protocol AudioManagerProtocol {

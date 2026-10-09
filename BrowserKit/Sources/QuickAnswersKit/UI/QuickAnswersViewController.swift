@@ -12,35 +12,34 @@ public final class QuickAnswersViewController: UIViewController,
                                                UIAdaptivePresentationControllerDelegate,
                                                Themeable {
     private struct UX {
-        static let closeButtonSidePadding: CGFloat = 16.0
-        static let closeButtonPadding: CGFloat = 13.0
-        static let closeButtonContentInset = NSDirectionalEdgeInsets(
-            top: UX.closeButtonPadding,
-            leading: UX.closeButtonPadding,
-            bottom: UX.closeButtonPadding,
-            trailing: UX.closeButtonPadding
+        static let titleFadeDuration: TimeInterval = 0.2
+        static let followUpButtonSize: CGFloat = 62.0
+        static let followUpButtonImagePadding: CGFloat = 8.0
+        static let followUpButtonContentInsets = NSDirectionalEdgeInsets(
+            top: 0.0,
+            leading: 19.0,
+            bottom: 0.0,
+            trailing: 19.0
         )
-        static let recordWaveEffectResultOpacity: CGFloat = 0.4
-        static let recordWaveEffectFadeDuration: TimeInterval = 0.3
-        static let recordWaveEffectFadeDelay: TimeInterval = 0.2
-        static let contentViewTopPadding: CGFloat = 32.0
-        static let contentViewBottomPadding: CGFloat = 12.0
-        static let contentViewHorizontalPadding: CGFloat = 24.0
+        static let followUpTitleRevealDelay: TimeInterval = 0.35
+        static let followUpTitleRevealDuration: TimeInterval = 0.5
+        static let followUpTitleRevealDamping: CGFloat = 0.8
+        static let followUpTitleVisibleDuration: TimeInterval = 1.0
+        static let followUpFadeOutDuration: TimeInterval = 0.3
+        static let resultBackgroundFadeDuration: TimeInterval = 0.3
+        static let resultBackgroundFadeDelay: TimeInterval = 0.2
         static let presentationSlideOffset: CGFloat = 50.0
-        static let presentationCloseButtonOffset: CGFloat = -20.0
+        static let presentationNavigationBarOffset: CGFloat = -20.0
     }
 
     // MARK: - Properties
     private let backgroundRecordEffect: UIHostingController<BackgroundEffectView>
+    private let backgroundEffectState: BackgroundEffectState
     private lazy var closeButton: UIButton = .build { [weak self] in
-        if #available(iOS 26, *) {
-            $0.configuration = .prominentGlass()
-        } else {
-            $0.configuration = .filled()
-        }
-        $0.configuration?.cornerStyle = .capsule
-        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
-        $0.configuration?.contentInsets = UX.closeButtonContentInset
+        $0.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
         $0.addAction(
             UIAction(handler: { _ in
                 self?.dismiss(with: nil)
@@ -48,6 +47,20 @@ public final class QuickAnswersViewController: UIViewController,
             for: .touchUpInside
         )
     }
+    private let titleLabel: UILabel = .build {
+        $0.font = FXFontStyles.Bold.body.scaledFont()
+        $0.adjustsFontForContentSizeCategory = true
+        $0.alpha = 0.0
+    }
+    private lazy var followUpButton: QuickAnswersEntryPointButton = .build(nil) { [weak self] in
+        QuickAnswersEntryPointButton {
+            self?.startFollowUp()
+        }
+    }
+    /// Keeps the follow-up button collapsed to its icon while the title is hidden.
+    private lazy var followUpButtonCollapsedWidth = followUpButton.widthAnchor.constraint(
+        equalToConstant: UX.followUpButtonSize
+    )
     private let contentView: QuickAnswersContentView = .build()
     private let transitionAnimator: SourceRevealTransitionAnimator?
 
@@ -67,6 +80,7 @@ public final class QuickAnswersViewController: UIViewController,
         }
     )
     private var hasAppeared = false
+    private var transcript = ""
 
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
@@ -119,8 +133,14 @@ public final class QuickAnswersViewController: UIViewController,
         }
         self.viewModel = viewModel
         self.learnMoreURL = learnMoreURL
+        let backgroundEffectState = BackgroundEffectState()
+        self.backgroundEffectState = backgroundEffectState
         self.backgroundRecordEffect = UIHostingController(
-            rootView: BackgroundEffectView(windowUUID: windowUUID, themeManager: themeManager)
+            rootView: BackgroundEffectView(
+                state: backgroundEffectState,
+                windowUUID: windowUUID,
+                themeManager: themeManager
+            )
         )
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = transitionType.modalPresentationStyle
@@ -153,27 +173,44 @@ public final class QuickAnswersViewController: UIViewController,
     private func setupSubviews() {
         closeButton.accessibilityLabel = stringsConfiguration.closeAccessibilityLabel
         contentView.configureStrings(stringsConfiguration.contentView)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: closeButton)
+        navigationItem.titleView = titleLabel
+        setupFollowUpToolbar()
         setupBackgroundEffect()
-        view.addSubviews(
-            contentView,
-            closeButton,
-        )
+        view.addSubview(contentView)
+        setContentScrollView(contentView.scrollView, for: [.top, .bottom])
 
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
-                                             constant: UX.closeButtonSidePadding),
-            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                  constant: UX.closeButtonSidePadding),
-
-            contentView.topAnchor.constraint(equalTo: closeButton.bottomAnchor,
-                                             constant: UX.contentViewTopPadding),
-            contentView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                                                 constant: UX.contentViewHorizontalPadding),
-            contentView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                                                  constant: -UX.contentViewHorizontalPadding),
-            contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                                                constant: -UX.contentViewBottomPadding),
+            contentView.topAnchor.constraint(equalTo: view.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+    }
+
+    private func setupFollowUpToolbar() {
+        followUpButton.accessibilityLabel = stringsConfiguration.followUpAccessibilityLabel
+        // TODO: localize the follow-up title.
+        followUpButton.configuration?.title = "Ask a follow-up"
+        followUpButton.configuration?.imagePadding = UX.followUpButtonImagePadding
+        followUpButton.configuration?.contentInsets = UX.followUpButtonContentInsets
+        followUpButton.contentHorizontalAlignment = .leading
+        followUpButton.clipsToBounds = true
+        followUpButton.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer {
+            var attributes = $0
+            attributes.font = FXFontStyles.Bold.body.scaledFont()
+            return attributes
+        }
+        NSLayoutConstraint.activate([
+            followUpButtonCollapsedWidth,
+            followUpButton.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.followUpButtonSize),
+            followUpButton.heightAnchor.constraint(equalToConstant: UX.followUpButtonSize),
+        ])
+        let followUpItem = UIBarButtonItem(customView: followUpButton)
+        if #available(iOS 26, *) {
+            followUpItem.hidesSharedBackground = true
+        }
+        toolbarItems = [.flexibleSpace(), followUpItem, .flexibleSpace()]
     }
 
     private func setupBackgroundEffect() {
@@ -196,18 +233,18 @@ public final class QuickAnswersViewController: UIViewController,
                 if let error {
                     self?.errorHandler.handleSpeechError(error)
                 } else {
+                    self?.transcript = result.text
                     self?.contentView.configureTranscript(result.text)
                 }
             case .loadingSearchResult:
                 UIAccessibility.post(notification: .screenChanged, argument: self?.contentView)
-                self?.triggerHaptic()
                 self?.contentView.configureSearching()
             case .showSearchResult(let result, let error):
                 if let error {
                     self?.errorHandler.handleSearchError(error)
                 } else {
-                    self?.triggerHaptic()
-                    self?.fadeBackgroundEffectForResult()
+                    self?.showResultBackground()
+                    self?.showFollowUpButton()
                     self?.contentView.configureResult(
                         result.resultText,
                         modelName: self?.viewModel.modelDisplayName ?? "",
@@ -217,6 +254,12 @@ public final class QuickAnswersViewController: UIViewController,
                         self?.dismiss(with: url)
                     }
                 }
+            }
+        }
+        contentView.onTranscriptVisibilityChange = { [weak self] isTranscriptVisible in
+            UIView.animate(withDuration: UX.titleFadeDuration) {
+                self?.titleLabel.alpha = isTranscriptVisible ? 0.0 : 1.0
+                self?.titleLabel.text = isTranscriptVisible ? nil : self?.transcript
             }
         }
         contentView.configureOptIn(
@@ -235,39 +278,82 @@ public final class QuickAnswersViewController: UIViewController,
 
     // MARK: - Presentation transition
     func prepareForPresentationTransition(sourceRect: CGRect) {
-        contentView.prepareForPresentationTransition(sourceRect: sourceRect)
+        contentView.prepareForPresentationTransition(
+            sourceRect: sourceRect,
+            containerWidth: view.window?.bounds.width ?? view.bounds.width
+        )
         backgroundRecordEffect.view.alpha = 0.0
         backgroundRecordEffect.view.transform = CGAffineTransform(translationX: 0.0,
                                                                   y: UX.presentationSlideOffset)
-        closeButton.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationCloseButtonOffset)
-        closeButton.alpha = 0.0
+        navigationController?.navigationBar.transform = CGAffineTransform(
+            translationX: 0.0,
+            y: UX.presentationNavigationBarOffset
+        )
+        navigationController?.navigationBar.alpha = 0.0
     }
 
     func applyPresentationTransition(isOptInVisible: Bool) {
         contentView.applyPresentationTransition(isOptInVisible: isOptInVisible)
         backgroundRecordEffect.view.alpha = 1.0
         backgroundRecordEffect.view.transform = .identity
-        closeButton.alpha = 1.0
-        closeButton.transform = .identity
+        navigationController?.navigationBar.alpha = 1.0
+        navigationController?.navigationBar.transform = .identity
     }
 
-    private func fadeBackgroundEffectForResult() {
-        UIView.animate(withDuration: UX.recordWaveEffectFadeDuration,
-                       delay: UX.recordWaveEffectFadeDelay) { [self] in
-            backgroundRecordEffect.view.alpha = UX.recordWaveEffectResultOpacity
+    private func showResultBackground() {
+        withAnimation(.easeInOut(duration: UX.resultBackgroundFadeDuration).delay(UX.resultBackgroundFadeDelay)) {
+            backgroundEffectState.isShowingResult = true
         }
     }
 
-    private func dismiss(with url: URL?) {
-        triggerHaptic()
-        viewModel.dismiss()
-        navigationHandler?.dismissQuickAnswers(with: url.flatMap(QuickAnswersNavigationType.url))
+    private func showFollowUpButton() {
+        navigationController?.setToolbarHidden(false, animated: true)
+        guard followUpButton.configuration?.title != nil else { return }
+        animateFollowUpTitle(isVisible: true, delay: UX.followUpTitleRevealDelay) { [weak self] in
+            self?.animateFollowUpTitle(isVisible: false, delay: UX.followUpTitleVisibleDuration) {
+                self?.followUpButton.configuration?.title = nil
+            }
+        }
     }
 
-    private func triggerHaptic() {
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.prepare()
-        generator.impactOccurred()
+    private func animateFollowUpTitle(isVisible: Bool, delay: TimeInterval, completion: @escaping () -> Void) {
+        UIView.animate(
+            withDuration: UX.followUpTitleRevealDuration,
+            delay: delay,
+            usingSpringWithDamping: UX.followUpTitleRevealDamping,
+            initialSpringVelocity: 0.0
+        ) { [self] in
+            followUpButtonCollapsedWidth.isActive = !isVisible
+            navigationController?.toolbar.layoutIfNeeded()
+        } completion: { _ in
+            completion()
+        }
+    }
+
+    private func startFollowUp() {
+        navigationController?.setToolbarHidden(true, animated: true)
+        withAnimation(.easeInOut(duration: UX.followUpFadeOutDuration)) {
+            backgroundEffectState.isShowingResult = false
+        }
+        UIView.animate(withDuration: UX.followUpFadeOutDuration, delay: 0.0, options: .curveEaseIn) { [self] in
+            titleLabel.alpha = 0.0
+        }
+        contentView.hideForFollowUp(duration: UX.followUpFadeOutDuration) { [weak self] in
+            self?.restartFlow()
+        }
+    }
+
+    private func restartFlow() {
+        titleLabel.text = nil
+        transcript = ""
+        contentView.resetForFollowUp()
+        followUpButton.configuration?.title = nil
+        viewModel.startFollowUp()
+    }
+
+    private func dismiss(with url: URL?) {
+        viewModel.dismiss()
+        navigationHandler?.dismissQuickAnswers(with: url.flatMap(QuickAnswersNavigationType.url))
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
@@ -278,9 +364,11 @@ public final class QuickAnswersViewController: UIViewController,
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        view.backgroundColor = theme.colors.layer2
-        closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
-        closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
+        view.backgroundColor = theme.colors.layer1
+        closeButton.tintColor = theme.colors.iconPrimary
+        titleLabel.textColor = theme.colors.textPrimary
+        followUpButton.configure(theme: theme, shouldStartGlowing: false)
+        followUpButton.configuration?.baseForegroundColor = theme.colors.textPrimary
         contentView.applyTheme(theme: theme)
     }
 }

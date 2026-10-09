@@ -20,6 +20,7 @@ final class QuickAnswersViewModel {
     private let telemetry: QuickAnswersTelemetry
     private let store: Store
     private let model: QuickAnswersModel
+    private let feedbackPlayer: RecordingFeedbackPlayer
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
     var onStateChange: ((State) -> Void)?
@@ -37,6 +38,7 @@ final class QuickAnswersViewModel {
         prefs: Prefs,
         telemetry: QuickAnswersTelemetry,
         configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa),
+        feedbackPlayer: RecordingFeedbackPlayer = DefaultRecordingFeedbackPlayer(),
         makeService: (Prefs, QuickAnswersConfigFetcher) throws -> QuickAnswersService = { prefs, configFetcher in
             try DefaultQuickAnswersService(configFetcher: configFetcher, prefs: prefs)
         }
@@ -44,6 +46,7 @@ final class QuickAnswersViewModel {
         self.telemetry = telemetry
         self.store = Store(prefs: prefs)
         self.model = configFetcher.model
+        self.feedbackPlayer = feedbackPlayer
         do {
             self.service = try makeService(prefs, configFetcher)
         } catch {
@@ -67,6 +70,12 @@ final class QuickAnswersViewModel {
         telemetry.consentShown(agreed: true)
         store.setOptInCompleted()
         startFlow()
+    }
+
+    /// Starts a new recording so the user can ask a follow up question. The exchanges already made are
+    /// kept by the service and sent along with the new question.
+    func startFollowUp() {
+        startRecordingVoice()
     }
 
     /// Tears down the flow when the view is being dismissed, recording the relevant telemetry.
@@ -100,10 +109,11 @@ final class QuickAnswersViewModel {
     }
 
     private func recordVoiceTask(service: QuickAnswersService) async throws {
-        onStateChange?(.recordingStarted)
         telemetry.recordingStarted()
         do {
             let stream = try await service.record()
+            await feedbackPlayer.playRecordingStart()
+            onStateChange?(.recordingStarted)
             for try await result in stream {
                 try Task.checkCancellation()
                 onStateChange?(.speechResult(result, nil))
@@ -112,6 +122,7 @@ final class QuickAnswersViewModel {
 
                 telemetry.recordingCompleted(outcome: true, errorType: nil)
                 try? await service.stopRecording()
+                feedbackPlayer.playRecordingEnd()
                 await searchVoiceResult(result, service: service)
 
                 break

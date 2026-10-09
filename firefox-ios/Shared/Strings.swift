@@ -3038,6 +3038,13 @@ extension String {
                 comment: "Accessibility label for the close button on the Quick Answers screen."
             )
 
+            public static let FollowUp = MZLocalizedString(
+                key: "QuickAnswers.AccessibilityLabels.FollowUp.v160",
+                tableName: "QuickAnswers",
+                value: "Ask a follow-up question",
+                comment: "Accessibility label for the button shown below a Quick Answers result that starts recording a new question."
+            )
+
             public static let OpenQuickAnswers = MZLocalizedString(
                 key: "QuickAnswers.AccessibilityLabels.OpenQuickAnswers.v158",
                 tableName: "QuickAnswers",

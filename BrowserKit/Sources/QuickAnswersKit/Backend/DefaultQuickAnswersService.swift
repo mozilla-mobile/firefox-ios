@@ -54,10 +54,13 @@ final class DefaultQuickAnswersService: QuickAnswersService {
 
     /// Stops the current recording session by cancelling any recording task, stopping the underlying engine,
     /// and resets the service to the `.idle` state.
+    ///
+    /// The state is reset even when the engine fails to stop, otherwise the service would stay `.recording`
+    /// and every following `record()` would throw `.alreadyRecording`.
     func stopRecording() async throws {
         cleanUp()
+        defer { state = .idle }
         try await engine.stop()
-        state = .idle
     }
 
     /// Performs a search for the given transcription using the ResultsService.

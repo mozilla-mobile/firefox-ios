@@ -33,6 +33,7 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         let viewModel = QuickAnswersViewModel(
             prefs: MockProfilePrefs(),
             telemetry: MockQuickAnswersTelemetry(),
+            feedbackPlayer: MockRecordingFeedbackPlayer(),
             makeService: { _, _ in
                 MockTestQuickAnswersService()
             }
@@ -69,6 +70,7 @@ extension QuickAnswersViewConfiguration {
         ),
         errors: .mock,
         closeAccessibilityLabel: "Close",
+        followUpAccessibilityLabel: "Follow up",
         appName: "Firefox"
     )
 }

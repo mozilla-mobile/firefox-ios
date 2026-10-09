@@ -177,12 +177,45 @@ struct TopTrailingGlow: View {
     }
 }
 
+/// A vertical wash of the given color laid over the blobs once a result is shown, so the answer
+/// stays readable.
+struct ResultWash: View {
+    private struct UX {
+        static let stops: [(location: CGFloat, opacity: CGFloat)] = [
+            (0.3, 0.0),
+            (0.6, 0.42),
+            (0.76, 0.5),
+            (0.88, 0.26),
+            (1.0, 0.16)
+        ]
+    }
+
+    let color: UIColor
+
+    var body: some View {
+        let stops = UX.stops.map {
+            SwiftUI.Gradient.Stop(color: color.withAlphaComponent($0.opacity).color, location: $0.location)
+        }
+        LinearGradient(gradient: SwiftUI.Gradient(stops: stops), startPoint: .top, endPoint: .bottom)
+    }
+}
+
+final class BackgroundEffectState: ObservableObject {
+    @Published var isShowingResult = false
+}
+
 struct BackgroundEffectView: ThemeableView {
+    private struct UX {
+        static let resultBlobsOpacity: CGFloat = 0.5
+    }
+
     @State var theme: Theme
+    @ObservedObject var state: BackgroundEffectState
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
 
-    init(windowUUID: WindowUUID, themeManager: ThemeManager) {
+    init(state: BackgroundEffectState, windowUUID: WindowUUID, themeManager: ThemeManager) {
+        self.state = state
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -198,6 +231,9 @@ struct BackgroundEffectView: ThemeableView {
                     theme.colors.gradientAIStrongStop3.color
                 ]
             )
+            .opacity(state.isShowingResult ? UX.resultBlobsOpacity : 1.0)
+            ResultWash(color: theme.colors.layer1)
+                .opacity(state.isShowingResult ? 1.0 : 0.0)
         }
         .ignoresSafeArea()
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
@@ -206,5 +242,9 @@ struct BackgroundEffectView: ThemeableView {
 
 
 #Preview {
-    BackgroundEffectView(windowUUID: .XCTestDefaultUUID, themeManager: DefaultThemeManager(sharedContainerIdentifier: ""))
+    BackgroundEffectView(
+        state: BackgroundEffectState(),
+        windowUUID: .XCTestDefaultUUID,
+        themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
+    )
 }

@@ -224,7 +224,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     private func quickAnswerButtonTapped() {
         guard let headerState else { return }
-        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
         let transitionType: QuickAnswersTransitionType = if showiPadSetup {
             .formSheet
         } else {

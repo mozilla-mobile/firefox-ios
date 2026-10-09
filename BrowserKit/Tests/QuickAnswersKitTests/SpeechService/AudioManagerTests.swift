@@ -22,9 +22,19 @@ struct AudioManagerTests {
         try subject.configureAudioSession()
 
         #expect(session.setCategoryCalls.count == 1)
-        #expect(session.setCategoryCalls[0].category == .record)
+        #expect(session.setCategoryCalls[0].category == .playAndRecord)
         #expect(session.setCategoryCalls[0].mode == .measurement)
         #expect(session.setCategoryCalls[0].options.contains(.duckOthers))
+        #expect(session.setCategoryCalls[0].options.contains(.defaultToSpeaker))
+    }
+
+    @Test
+    func test_configureAudioSession_allowsHapticsDuringRecording() throws {
+        let subject = createSubject()
+
+        try subject.configureAudioSession()
+
+        #expect(session.allowHapticsAndSystemSoundsDuringRecording == true)
     }
 
     @Test

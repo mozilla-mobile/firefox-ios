@@ -5,9 +5,13 @@
 import UIKit
 import Common
 
-final class QuickAnswersContentView: UIView, ThemeApplicable {
+final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicable {
     private struct UX {
-        static let contentSpacing: CGFloat = 32.0
+        static let scrollContentTopInset: CGFloat = 32.0
+        static let scrollContentBottomInset: CGFloat = 12.0
+        static let horizontalPadding: CGFloat = 24.0
+        static let transcriptVisibilityThreshold: CGFloat = 0.5
+        static let contentSpacing: CGFloat = 24.0
         static let searchLabelTopPadding: CGFloat = 24.0
         static let animationDuration: TimeInterval = 0.2
         static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)
@@ -21,13 +25,17 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         static let resultCascadeStartDelay: TimeInterval = 0.1
         static let resultCascadeStagger: TimeInterval = 0.1
         static let presentationSlideOffset: CGFloat = 15.0
+        static let followUpSlideOffset: CGFloat = 100.0
+        static let followUpFadeInDuration: TimeInterval = 0.2
     }
 
     // MARK: - Subviews
-    private let scrollView: UIScrollView = .build {
+    let scrollView: UIScrollView = .build {
         $0.showsVerticalScrollIndicator = false
         $0.alwaysBounceVertical = false
         $0.clipsToBounds = false
+        $0.contentInset.top = UX.scrollContentTopInset
+        $0.contentInset.bottom = UX.scrollContentBottomInset
     }
     private let contentView: UIView = .build()
     private let audioWaveform: AudioWaveformView = .build()
@@ -58,11 +66,15 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         $0.font = FXFontStyles.Regular.footnote.scaledFont()
         $0.numberOfLines = 0
         $0.alpha = 0.0
+        $0.textAlignment = .center
         $0.adjustsFontForContentSizeCategory = true
     }
     private let optInView: OptInView = .build()
     private var theme: Theme?
     private var strings: QuickAnswersViewConfiguration.ContentViewStrings?
+    private var isTranscriptVisible = true
+    private var isShowingResult = false
+    var onTranscriptVisibilityChange: ((Bool) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -86,15 +98,18 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             footerLabel
         )
         scrollView.addSubview(contentView)
+        scrollView.delegate = self
         addSubview(scrollView)
 
         scrollView.pinToSuperview()
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.leadingAnchor,
+                                                 constant: UX.horizontalPadding),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.trailingAnchor,
+                                                  constant: -UX.horizontalPadding),
             contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            scrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
 
             audioWaveform.topAnchor.constraint(equalTo: contentView.topAnchor),
             audioWaveform.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -113,13 +128,13 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             searchingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             searchingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            answerCardView.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: UX.contentSpacing),
+            answerCardView.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: 24.0),
             answerCardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             answerCardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            sourceView.topAnchor.constraint(equalTo: answerCardView.bottomAnchor, constant: UX.contentSpacing),
-            sourceView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            sourceView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            sourceView.topAnchor.constraint(equalTo: answerCardView.bottomAnchor, constant: 16.0),
+            sourceView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20.0),
+            sourceView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20.0),
 
             footerLabel.topAnchor.constraint(equalTo: sourceView.bottomAnchor, constant: UX.contentSpacing),
             footerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -220,15 +235,48 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         answerCardView.configure(header: strings?.answerHeader ?? "", body: text)
         footerLabel.text = String(format: strings?.footerFormat ?? "", modelName)
         sourceView.configure(with: sources, onSourceTapped: onSourceTapped)
+        isShowingResult = true
         animateResultCascade()
     }
 
+    /// Fades and slides down the content inside the scroll view, so the scroll view safe area doesn't change.
+    func hideForFollowUp(duration: TimeInterval, completion: @escaping () -> Void) {
+        UIView.animate(withDuration: duration, delay: 0.0, options: .curveEaseIn) { [self] in
+            contentView.alpha = 0.0
+            contentView.transform = CGAffineTransform(translationX: 0.0, y: UX.followUpSlideOffset)
+        } completion: { _ in
+            completion()
+        }
+    }
+
+    func resetForFollowUp() {
+        isShowingResult = false
+        isTranscriptVisible = true
+        if let theme {
+            transcriptLabel.foregroundColor = theme.colors.textPrimary
+        }
+        transcriptLabel.setTranscript("", animated: false)
+        transcriptLabel.alpha = 1.0
+        transcriptLabel.transform = .identity
+        [answerCardView, sourceView, footerLabel].forEach {
+            $0.alpha = 0.0
+            $0.transform = .identity
+        }
+        placeholderLabel.alpha = 1.0
+        audioWaveform.alpha = 1.0
+        contentView.transform = .identity
+        UIView.animate(withDuration: UX.followUpFadeInDuration) { [self] in
+            contentView.alpha = 1.0
+        }
+    }
+
     // MARK: - Presentation transition
-    func prepareForPresentationTransition(sourceRect: CGRect) {
+    func prepareForPresentationTransition(sourceRect: CGRect, containerWidth: CGFloat) {
+        let topSafeAreaInset = window?.safeAreaInsets.top ?? 0.0
         audioWaveform.alpha = 1.0
         audioWaveform.transform = CGAffineTransform(
-            translationX: sourceRect.midX - 201.0,
-            y: 32 + 25 + 62 - sourceRect.midY - 50
+            translationX: sourceRect.midX - containerWidth / 2.0,
+            y: UX.scrollContentTopInset + UX.audioWaveformSize.height + topSafeAreaInset - sourceRect.midY - 20.0
         )
         placeholderLabel.alpha = 0.0
         placeholderLabel.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationSlideOffset)
@@ -260,6 +308,20 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
                 section.alpha = 1.0
             }
         }
+    }
+
+    // MARK: - UIScrollViewDelegate
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let transcriptFrame = transcriptLabel.convert(transcriptLabel.bounds, to: self)
+        guard isShowingResult, transcriptFrame.height > 0.0 else { return }
+        let hiddenHeight = scrollView.safeAreaInsets.top - transcriptFrame.minY
+        let visibleFraction = 1.0 - min(max(hiddenHeight / transcriptFrame.height, 0.0), 1.0)
+        transcriptLabel.alpha = visibleFraction
+
+        let isVisible = visibleFraction > UX.transcriptVisibilityThreshold
+        guard isVisible != isTranscriptVisible else { return }
+        isTranscriptVisible = isVisible
+        onTranscriptVisibilityChange?(isVisible)
     }
 
     // MARK: - ThemeApplicable

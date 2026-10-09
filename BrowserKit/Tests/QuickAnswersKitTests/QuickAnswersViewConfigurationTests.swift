@@ -85,12 +85,14 @@ struct QuickAnswersViewConfigurationTests {
                 ok: ""
             ),
             closeAccessibilityLabel: "close",
+            followUpAccessibilityLabel: "followUp",
             appName: "Firefox"
         )
 
         #expect(subject.optIn.title == "t")
         #expect(subject.contentView.placeholder == "p")
         #expect(subject.closeAccessibilityLabel == "close")
+        #expect(subject.followUpAccessibilityLabel == "followUp")
         #expect(subject.appName == "Firefox")
     }
 }

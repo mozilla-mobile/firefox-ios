@@ -51,7 +51,10 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             learnMoreURL: Self.learnMoreURL,
             stringsConfiguration: makeStringsConfiguration()
         )
-        router.present(controller, animated: shouldAnimateTransition)
+        let navigationController = UINavigationController(rootViewController: controller)
+        navigationController.modalPresentationStyle = controller.modalPresentationStyle
+        navigationController.transitioningDelegate = controller.transitioningDelegate
+        router.present(navigationController, animated: shouldAnimateTransition)
     }
 
     private func makeStringsConfiguration() -> QuickAnswersViewConfiguration {
@@ -86,6 +89,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
                 ok: .QuickAnswers.Errors.OK
             ),
             closeAccessibilityLabel: .QuickAnswers.AccessibilityLabels.Close,
+            followUpAccessibilityLabel: .QuickAnswers.AccessibilityLabels.FollowUp,
             appName: appName
         )
     }

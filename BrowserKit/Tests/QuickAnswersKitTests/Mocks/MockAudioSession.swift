@@ -21,6 +21,7 @@ final class MockAudioSession: AudioSessionProvider, @unchecked Sendable {
 
     var setCategoryCalls: [CategoryCallParams] = []
     var setActiveCalls: [ActiveCallParams] = []
+    var allowHapticsAndSystemSoundsDuringRecording: Bool?
     var recordPermission: AVAudioSession.RecordPermission {
         return micPermission ? .granted : .denied
     }
@@ -48,5 +49,9 @@ final class MockAudioSession: AudioSessionProvider, @unchecked Sendable {
         options: AVAudioSession.SetActiveOptions
     ) throws {
         setActiveCalls.append(ActiveCallParams(active: active, options: options))
+    }
+
+    func setAllowHapticsAndSystemSoundsDuringRecording(_ inValue: Bool) throws {
+        allowHapticsAndSystemSoundsDuringRecording = inValue
     }
 }

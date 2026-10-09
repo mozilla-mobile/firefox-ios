@@ -72,7 +72,7 @@ final class SourceRevealTransitionAnimator: NSObject,
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let isPresenting = transitionContext.viewController(forKey: .to) is QuickAnswersViewController
+        let isPresenting = quickAnswersController(in: transitionContext.viewController(forKey: .to)) != nil
         guard isPresenting else {
             animateDismissal(transitionContext)
             return
@@ -82,7 +82,8 @@ final class SourceRevealTransitionAnimator: NSObject,
 
     // MARK: - Presentation
     private func animatePresentation(_ transitionContext: UIViewControllerContextTransitioning) {
-        guard let presentedController = transitionContext.viewController(forKey: .to) as? QuickAnswersViewController
+        guard let presentedController = transitionContext.viewController(forKey: .to),
+              let quickAnswersController = quickAnswersController(in: presentedController)
         else {
             transitionContext.completeTransition(false)
             return
@@ -97,10 +98,10 @@ final class SourceRevealTransitionAnimator: NSObject,
         let maskView = makeMaskView(for: containerView, diameterRatio: UX.presentationMaskDiameterRatio)
         maskView.transform = CGAffineTransform(scaleX: UX.collapsedMaskScale, y: UX.collapsedMaskScale)
         presentedController.view.mask = maskView
-        presentedController.prepareForPresentationTransition(sourceRect: sourceRect)
+        quickAnswersController.prepareForPresentationTransition(sourceRect: sourceRect)
         UIView.animate(withDuration: UX.presentationDuration, delay: 0.0, options: .curveEaseOut) { [self] in
             maskView.transform = CGAffineTransform(scaleX: UX.expandedMaskHorizontalScale, y: 1.0)
-            presentedController.applyPresentationTransition(isOptInVisible: isOptInVisible)
+            quickAnswersController.applyPresentationTransition(isOptInVisible: isOptInVisible)
         } completion: { _ in
             presentedController.view.mask = nil
             transitionContext.completeTransition(true)
@@ -144,6 +145,11 @@ final class SourceRevealTransitionAnimator: NSObject,
     }
 
     // MARK: - Helpers
+    private func quickAnswersController(in controller: UIViewController?) -> QuickAnswersViewController? {
+        let rootController = (controller as? UINavigationController)?.viewControllers.first ?? controller
+        return rootController as? QuickAnswersViewController
+    }
+
     /// A circle centered on `sourceRect`, covering `containerView`, whose edge fades out rather than
     /// ending abruptly.
     private func makeMaskView(for containerView: UIView, diameterRatio: CGFloat) -> UIView {

@@ -318,7 +318,19 @@ let package = Package(
             ]),
         .target(
             name: "QuickAnswersKit",
-            dependencies: ["Common", "ComponentLibrary", "Shared", "MLPAKit", "LLMKit", "SiteImageView"],
+            dependencies: [
+                "Common",
+                "ComponentLibrary",
+                "Down",
+                "Shared",
+                "MLPAKit",
+                "LLMKit",
+                "SiteImageView"
+            ],
+            resources: [
+                .process("UI/record_start.mp3"),
+                .process("UI/record_end.mp3")
+            ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"])
             ]
