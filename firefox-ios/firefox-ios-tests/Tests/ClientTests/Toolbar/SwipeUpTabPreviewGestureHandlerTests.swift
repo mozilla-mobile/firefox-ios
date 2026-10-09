@@ -238,7 +238,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         }
 
         subject.handlePanGestureForTesting(gesture)
-        
+
         wait(for: [expectation])
         XCTAssertLessThan(tabPreview.previewCardFrame.midY, previewFrame.midY)
         assertRecordedEvent(outcome: .tabClosed)
