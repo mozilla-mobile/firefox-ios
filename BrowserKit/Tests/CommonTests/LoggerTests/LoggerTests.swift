@@ -23,6 +23,16 @@ final class LoggerTests: XCTestCase {
         cleanUp()
     }
 
+    // MARK: - Feature flags
+
+    func testSetFeatureFlags_forwardsToCrashManager() {
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder, crashManager: crashManager)
+
+        subject.setFeatureFlags(["homepage": "control"])
+
+        XCTAssertEqual(crashManager.savedFeatureFlags, ["homepage": "control"])
+    }
+
     // MARK: - Log to SwiftyBeaver and Sentry crash manager
 
     func testLog_debug() {
@@ -273,6 +283,11 @@ final class MockCrashManager: CrashManager, @unchecked Sendable {
     var savedSendCrashReportsCalled = 0
     func setup(sendCrashReports: Bool) {
         savedSendCrashReportsCalled += 1
+    }
+
+    var savedFeatureFlags: [String: String]?
+    func setFeatureFlags(_ featureBranches: [String: String]) {
+        savedFeatureFlags = featureBranches
     }
 
     var message: String?

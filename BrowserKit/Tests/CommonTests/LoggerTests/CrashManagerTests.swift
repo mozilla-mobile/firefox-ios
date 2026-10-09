@@ -2,9 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Sentry
 import XCTest
 @testable import Common
-import Sentry
 
 final class CrashManagerTests: XCTestCase {
     private static let bundleIdentifier = "org.mozilla.ios.Firefox"
@@ -14,6 +14,7 @@ final class CrashManagerTests: XCTestCase {
     override func setUp() {
         super.setUp()
         sentryWrapper = MockSentryWrapper()
+        sentryWrapper.dsn = validDSN
     }
 
     override func tearDown() {
@@ -25,12 +26,7 @@ final class CrashManagerTests: XCTestCase {
     // MARK: - Setup
 
     func testSetup_isSimulator_notSetup() {
-        sentryWrapper.dsn = "12345"
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: true,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject(isSimulator: true)
         subject.setup(sendCrashReports: true)
 
         XCTAssertEqual(sentryWrapper.startWithConfigureOptionsCalled, 0)
@@ -38,12 +34,7 @@ final class CrashManagerTests: XCTestCase {
     }
 
     func testSetup_sendNoUsageData_notSetup() {
-        sentryWrapper.dsn = "12345"
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject()
         subject.setup(sendCrashReports: false)
 
         XCTAssertEqual(sentryWrapper.startWithConfigureOptionsCalled, 0)
@@ -51,11 +42,8 @@ final class CrashManagerTests: XCTestCase {
     }
 
     func testSetup_noDSN_notSetup() {
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        sentryWrapper.dsn = nil
+        let subject = createSubject()
         subject.setup(sendCrashReports: true)
 
         XCTAssertEqual(sentryWrapper.startWithConfigureOptionsCalled, 0)
@@ -63,12 +51,7 @@ final class CrashManagerTests: XCTestCase {
     }
 
     func testSetup_isSetup() {
-        sentryWrapper.dsn = "12345"
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject()
         subject.setup(sendCrashReports: true)
 
         XCTAssertEqual(sentryWrapper.startWithConfigureOptionsCalled, 1)
@@ -76,12 +59,7 @@ final class CrashManagerTests: XCTestCase {
     }
 
     func testSetup_isSetupTwice_notCalledTwice() {
-        sentryWrapper.dsn = "12345"
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject()
         subject.setup(sendCrashReports: true)
         subject.setup(sendCrashReports: true)
 
@@ -92,32 +70,20 @@ final class CrashManagerTests: XCTestCase {
     // MARK: - crashedLastLaunch
 
     func testCrashedLastLaunch_false() {
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject()
         XCTAssertFalse(subject.crashedLastLaunch)
     }
 
     func testCrashedLastLaunch_true() {
         sentryWrapper.mockCrashedInLastRun = true
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject()
         XCTAssertTrue(subject.crashedLastLaunch)
     }
 
     // MARK: - Send message
 
     func testSendMessage_notEnabled_doesNothing() {
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject()
         subject.send(message: "A message",
                      category: .setup,
                      level: .debug,
@@ -128,12 +94,7 @@ final class CrashManagerTests: XCTestCase {
     }
 
     func testSendMessageFatal_enabledDebug_sendBreadcrumb() {
-        sentryWrapper.dsn = "12345"
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject()
         subject.setup(sendCrashReports: true)
 
         subject.send(message: "A message",
@@ -147,13 +108,8 @@ final class CrashManagerTests: XCTestCase {
     }
 
     func testSendMessageFatal_enabledBeta_sendMessage() {
-        sentryWrapper.dsn = "12345"
         setupAppInformation(buildChannel: .beta)
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject()
         subject.setup(sendCrashReports: true)
 
         subject.send(message: "A message",
@@ -167,13 +123,8 @@ final class CrashManagerTests: XCTestCase {
     }
 
     func testSendMessageInfo_enabledBeta_sendBreadcrumb() {
-        sentryWrapper.dsn = "12345"
         setupAppInformation(buildChannel: .beta)
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject()
         subject.setup(sendCrashReports: true)
 
         subject.send(message: "A message",
@@ -187,13 +138,8 @@ final class CrashManagerTests: XCTestCase {
     }
 
     func testSendMessageFatal_enabledRelease_sendMessage() {
-        sentryWrapper.dsn = "12345"
         setupAppInformation(buildChannel: .release)
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject()
         subject.setup(sendCrashReports: true)
 
         subject.send(message: "A message",
@@ -207,13 +153,8 @@ final class CrashManagerTests: XCTestCase {
     }
 
     func testSendMessageInfo_enabledRelease_sendBreadcrumb() {
-        sentryWrapper.dsn = "12345"
         setupAppInformation(buildChannel: .release)
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject()
         subject.setup(sendCrashReports: true)
 
         subject.send(message: "A message",
@@ -283,11 +224,7 @@ final class CrashManagerTests: XCTestCase {
     }
 
     func testSetup_firefoxBetaBundle_isSetup() {
-        sentryWrapper.dsn = validDSN
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          bundleIdentifier: { "org.mozilla.ios.FirefoxBeta" },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject(skipReleaseNameCheck: false, bundleIdentifier: "org.mozilla.ios.FirefoxBeta")
 
         subject.setup(sendCrashReports: true)
 
@@ -295,11 +232,7 @@ final class CrashManagerTests: XCTestCase {
     }
 
     func testSetup_otherBundle_notSetup() {
-        sentryWrapper.dsn = validDSN
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          bundleIdentifier: { "org.mozilla.ios.Fennec" },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject(skipReleaseNameCheck: false, bundleIdentifier: "org.mozilla.ios.Fennec")
 
         subject.setup(sendCrashReports: true)
 
@@ -408,12 +341,7 @@ final class CrashManagerTests: XCTestCase {
         BrowserKitInformation.shared.configure(buildChannel: buildChannel,
                                                nightlyAppVersion: nightlyAppVersion,
                                                sharedContainerIdentifier: "")
-        sentryWrapper.dsn = validDSN
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
-                                          isSimulator: false,
-                                          skipReleaseNameCheck: true,
-                                          bundleIdentifier: { Self.bundleIdentifier },
-                                          appVersion: { Self.appVersion })
+        let subject = createSubject()
         subject.setup(sendCrashReports: true)
         return subject
     }
@@ -424,8 +352,110 @@ private struct MockCustomCrashReport: Error, CustomCrashReport {
     let message = "Rust panicked"
 }
 
+// MARK: - Feature flags
+extension CrashManagerTests {
+    func testFeatureFlagsContext_empty_returnsNil() {
+        XCTAssertNil(DefaultCrashManager.featureFlagsContext(from: [:]))
+    }
+
+    func testFeatureFlagsContext_encodesFeatureAndBranchSortedWithTrueResult() {
+        let context = DefaultCrashManager.featureFlagsContext(from: ["tab-tray": "treatment-a",
+                                                                     "homepage": "control"])
+        let values = context?["values"] as? [[String: Any]]
+
+        XCTAssertEqual(values?.compactMap { $0["flag"] as? String }, ["homepage:control", "tab-tray:treatment-a"])
+        XCTAssertEqual(values?.compactMap { $0["result"] as? Bool }, [true, true])
+    }
+
+    func testFeatureFlagsContext_capsAtMaxFeatureFlags() {
+        let featureBranches = Dictionary(uniqueKeysWithValues: (0..<150).map { ("feature-\($0)", "branch") })
+
+        let values = DefaultCrashManager.featureFlagsContext(from: featureBranches)?["values"] as? [[String: Any]]
+
+        XCTAssertEqual(values?.count, DefaultCrashManager.maxFeatureFlags)
+    }
+
+    func testSetFeatureFlags_beforeSetup_doesNotConfigureScope() {
+        let subject = createSubject()
+
+        subject.setFeatureFlags(["homepage": "control"])
+
+        XCTAssertEqual(sentryWrapper.configureScopeCalled, 0)
+        XCTAssertNil(featureFlags(in: sentryWrapper.scope))
+    }
+
+    func testSetFeatureFlags_beforeSetup_appliedOnSetup() {
+        let subject = createSubject()
+
+        subject.setFeatureFlags(["homepage": "control"])
+        subject.setup(sendCrashReports: true)
+
+        XCTAssertEqual(featureFlags(in: sentryWrapper.scope), ["homepage:control"])
+    }
+
+    func testSetFeatureFlags_setupNotAllowed_doesNotConfigureScope() {
+        let subject = createSubject()
+
+        subject.setup(sendCrashReports: false)
+        subject.setFeatureFlags(["homepage": "control"])
+
+        XCTAssertEqual(sentryWrapper.configureScopeCalled, 0)
+    }
+
+    func testSetFeatureFlags_afterSetup_updatesScope() {
+        let subject = createSubject()
+        subject.setup(sendCrashReports: true)
+
+        subject.setFeatureFlags(["homepage": "control"])
+
+        XCTAssertEqual(featureFlags(in: sentryWrapper.scope), ["homepage:control"])
+    }
+
+    func testSetFeatureFlags_replacesPreviousFlags() {
+        let subject = createSubject()
+        subject.setup(sendCrashReports: true)
+
+        subject.setFeatureFlags(["homepage": "control", "tab-tray": "treatment-a"])
+        subject.setFeatureFlags(["tab-tray": "treatment-b"])
+
+        XCTAssertEqual(featureFlags(in: sentryWrapper.scope), ["tab-tray:treatment-b"])
+    }
+
+    func testSetFeatureFlags_empty_removesFlagsContext() {
+        let subject = createSubject()
+        subject.setup(sendCrashReports: true)
+        subject.setFeatureFlags(["homepage": "control"])
+
+        subject.setFeatureFlags([:])
+
+        XCTAssertNil(featureFlags(in: sentryWrapper.scope))
+    }
+
+    func testSetup_keepsAppContextAlongsideFeatureFlags() {
+        let subject = createSubject()
+        subject.setFeatureFlags(["homepage": "control"])
+
+        subject.setup(sendCrashReports: true)
+
+        let context = sentryWrapper.scope.serialize()["context"] as? [String: Any]
+        XCTAssertNotNil(context?["appContext"])
+        XCTAssertNotNil(context?[DefaultCrashManager.featureFlagsContextKey])
+    }
+}
+
 // MARK: - Helpers
 extension CrashManagerTests {
+    private func createSubject(isSimulator: Bool = false,
+                               skipReleaseNameCheck: Bool = true,
+                               bundleIdentifier: String = CrashManagerTests.bundleIdentifier,
+                               appVersion: String = CrashManagerTests.appVersion) -> DefaultCrashManager {
+        return DefaultCrashManager(sentryWrapper: sentryWrapper,
+                                   isSimulator: isSimulator,
+                                   skipReleaseNameCheck: skipReleaseNameCheck,
+                                   bundleIdentifier: { bundleIdentifier },
+                                   appVersion: { appVersion })
+    }
+
     private func setupAppInformation(buildChannel: AppBuildChannel) {
         BrowserKitInformation.shared.configure(buildChannel: buildChannel,
                                                nightlyAppVersion: "",
@@ -433,8 +463,16 @@ extension CrashManagerTests {
     }
 }
 
+/// Returns the feature flag names recorded in the scope's Sentry `flags` context
+func featureFlags(in scope: Scope) -> [String]? {
+    let context = scope.serialize()["context"] as? [String: Any]
+    let flags = context?[DefaultCrashManager.featureFlagsContextKey] as? [String: Any]
+    let values = flags?["values"] as? [[String: Any]]
+    return values?.compactMap { $0["flag"] as? String }
+}
+
 // MARK: - MockSentryWrapper
-private final class MockSentryWrapper: SentryWrapper, @unchecked Sendable {
+final class MockSentryWrapper: SentryWrapper, @unchecked Sendable {
     var mockCrashedInLastRun = false
     var crashedInLastRun: Bool {
         return mockCrashedInLastRun
@@ -468,8 +506,10 @@ private final class MockSentryWrapper: SentryWrapper, @unchecked Sendable {
         savedBreadcrumb = crumb
     }
 
+    let scope = Scope()
     var configureScopeCalled = 0
     func configureScope(scope: @escaping (Scope) -> Void) {
         configureScopeCalled += 1
+        scope(self.scope)
     }
 }
