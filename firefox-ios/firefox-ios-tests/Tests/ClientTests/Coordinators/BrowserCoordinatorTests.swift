@@ -569,13 +569,55 @@ final class BrowserCoordinatorTests: XCTestCase,
         setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
         let subject = createSubject()
         subject.browserViewController = browserViewController
+        let exp = expectation(description: "present called")
+        mockRouter.onPresent = { exp.fulfill() }
+
         subject.showTabTray(selectedPanel: .tabs)
+        wait(for: [exp], timeout: 5)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
         let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? DismissableNavigationViewController)
         XCTAssertEqual(mockRouter.presentCalledWithAnimation, 1)
         XCTAssertTrue(presentedVC.topViewController is TabTrayViewController)
+    }
+
+    func testShowTabTray_withExperiment_presentsOnNextRunLoopTurn() throws {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        let exp = expectation(description: "present called")
+        mockRouter.onPresent = { exp.fulfill() }
+
+        subject.showTabTray(selectedPanel: .tabs)
+
+        // The coordinator and the preloaded tray exist right away, but the presentation is deferred one turn
+        // so the heavy UIKit window attach doesn't extend the tap's main-thread turn.
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertEqual(mockRouter.presentCalledWithAnimation, 0)
+        let tray = try XCTUnwrap((subject.childCoordinators[0] as? TabTrayCoordinator)?.tabTrayViewController)
+        XCTAssertTrue(tray.isViewLoaded)
+
+        wait(for: [exp], timeout: 5)
+        XCTAssertEqual(mockRouter.presentCalledWithAnimation, 1)
+    }
+
+    func testShowTabTray_withExperiment_whenSomethingElseGotPresented_removesTabTrayCoordinator() {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showTabTray(selectedPanel: .tabs)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        // Simulate another modal being presented before the deferred tab tray presentation runs
+        mockRouter.presentCalled = 1
+
+        let exp = expectation(description: "deferred presentation ran")
+        DispatchQueue.main.async { exp.fulfill() }
+        wait(for: [exp], timeout: 5)
+
+        XCTAssertEqual(mockRouter.presentCalledWithAnimation, 0)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
     func testShowTabTray_withPrivateTabs_withoutExperiment_showDefaultPresentation() throws {
@@ -594,7 +636,11 @@ final class BrowserCoordinatorTests: XCTestCase,
         setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
         let subject = createSubject()
         subject.browserViewController = browserViewController
+        let exp = expectation(description: "present called")
+        mockRouter.onPresent = { exp.fulfill() }
+
         subject.showTabTray(selectedPanel: .privateTabs)
+        wait(for: [exp], timeout: 5)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)

@@ -789,13 +789,18 @@ final class TabTrayViewController: UIViewController,
         }
 
         let isSyncTabsPanel = tabTrayState.isSyncTabsPanel
-        var toolbarItems: [UIBarButtonItem]
+        let items: [UIBarButtonItem]
         if tabTrayUtils.shouldDisplayExperimentUI() {
-            toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
+            items = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
         } else {
-            toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+            items = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
         }
-        setToolbarItems(toolbarItems, animated: true)
+        setToolbarItemsIfChanged(items)
+    }
+
+    private func setToolbarItemsIfChanged(_ items: [UIBarButtonItem]) {
+        guard items != toolbarItems else { return }
+        setToolbarItems(items, animated: true)
     }
 
     private func setupToolbarForIpad() {
@@ -808,8 +813,8 @@ final class TabTrayViewController: UIViewController,
         }
 
         navigationController?.isToolbarHidden = true
-        let toolbarItems = tabTrayState.isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
-        setToolbarItems(toolbarItems, animated: true)
+        let items = tabTrayState.isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        setToolbarItemsIfChanged(items)
     }
 
     private func createSegmentedControl(
@@ -873,6 +878,14 @@ final class TabTrayViewController: UIViewController,
         } else {
             navigationHandler?.start(panelType: panelType, navigationController: currentPanel)
         }
+    }
+
+    func preloadSelectedPanelForPresentation() {
+        loadViewIfNeeded()
+        let panel = tabTrayUtils.shouldDisplayExperimentUI() ? currentExperimentPanel : currentPanel
+        guard let panel, let tabsPanel = panel.topViewController as? TabDisplayPanelViewController else { return }
+        panel.loadViewIfNeeded()
+        tabsPanel.loadViewIfNeeded()
     }
 
     private func showPanel(_ panel: UIViewController) {

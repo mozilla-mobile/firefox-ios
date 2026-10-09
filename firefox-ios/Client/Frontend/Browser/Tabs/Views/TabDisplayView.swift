@@ -164,7 +164,9 @@ final class TabDisplayView: UIView,
 
         tabsState = state
 
-        dataSource.updateSnapshot(state: tabsState)
+        // Off screen (e.g. preloaded before the tab tray is presented) there is nothing to animate,
+        // so let UIKit reload instead of diffing.
+        dataSource.updateSnapshot(state: tabsState, animatingDifferences: window != nil)
 
         if let scrollState = state.scrollState {
             scrollToTab(scrollState)

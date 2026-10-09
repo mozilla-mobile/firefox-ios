@@ -46,6 +46,7 @@ class MockRouter: NSObject, Router {
                  presentationStyle: UIModalPresentationStyle) {
         presentedViewController = viewController
         presentCalledWithAnimation += 1
+        onPresent?()
     }
 
     func dismiss(animated: Bool, completion: (() -> Void)?) {
