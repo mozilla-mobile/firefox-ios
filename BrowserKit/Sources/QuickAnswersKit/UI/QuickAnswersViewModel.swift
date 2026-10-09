@@ -149,9 +149,6 @@ final class QuickAnswersViewModel {
     private func stopRecordingVoice() async throws {
         recordVoiceTask?.cancel()
         recordVoiceTask = nil
-        if let service = service as? DefaultQuickAnswersService, service.state == .recording {
-            feedbackPlayer.playRecordingEnd()
-        }
         try await service?.stopRecording()
     }
 
