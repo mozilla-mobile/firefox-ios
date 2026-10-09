@@ -51,6 +51,7 @@ class IntegrationTests: BaseTestCase {
         }
         launchArguments.append(LaunchArguments.DisableAnimations)
         launchArguments.append("\(LaunchArguments.ServerPort)\(serverPort)")
+        launchArguments.append("\(LaunchArguments.SyncLogLevelPrefix)debug")
         try await super.setUp()
         browserScreen = BrowserScreen(app: app)
     }

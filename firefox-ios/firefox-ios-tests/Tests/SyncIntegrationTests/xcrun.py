@@ -14,9 +14,11 @@ class XCRun(object):
         self.logger.info('Running: {}'.format(' '.join(args)))
         subprocess.check_call(args)
 
+    def device(self, device='iPhone 17'):
+        return os.environ.get("SIMULATOR_UDID", device)
+
     def boot(self, device='iPhone 17'):
-        ios_device = os.environ.get("SIMULATOR_UDID", device)
-        self._run('boot', ios_device)
+        self._run('boot', self.device(device))
 
     def install(self, device='all'):
         self._run('install', device)
