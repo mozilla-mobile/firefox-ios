@@ -227,10 +227,6 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
         let route = ReaderFileRoute()
         let allowedPaths = [
             "reader-mode/styles/Reader.css",
-            "reader-mode/fonts/NewYorkMedium-Regular.otf",
-            "reader-mode/fonts/NewYorkMedium-Bold.otf",
-            "reader-mode/fonts/NewYorkMedium-RegularItalic.otf",
-            "reader-mode/fonts/NewYorkMedium-BoldItalic.otf",
         ]
 
         for path in allowedPaths {
@@ -250,7 +246,7 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
             // Attempts to escape reader-mode/ and reach Info.plist via ../
             "reader-mode/styles/../../../Info.plist",
             // Valid file but accessed via traversal instead of its canonical path
-            "reader-mode/styles/../../fonts/NewYorkMedium-Regular.otf",
+            "reader-mode/styles/../../styles/Reader.css",
         ]
 
         for path in traversalPaths {
