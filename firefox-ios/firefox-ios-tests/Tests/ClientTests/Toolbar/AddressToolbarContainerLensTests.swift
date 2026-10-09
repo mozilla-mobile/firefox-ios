@@ -113,6 +113,34 @@ final class AddressToolbarContainerLensTests: XCTestCase {
         XCTAssertEqual(subject.leadingPageActions.first?.hasCustomColor, true)
     }
 
+    // MARK: - browserActions, derived straight from ToolbarState (no action involved)
+
+    func testInit_whenEditing_returnsOnlyCancelEditBrowserAction() {
+        let subject = createSubject(isShowingNavigationToolbar: true, isEditing: true)
+
+        XCTAssertEqual(subject.browserActions.count, 1)
+        XCTAssertEqual(subject.browserActions[0].actionType, .cancelEdit)
+    }
+
+    func testInit_notEditing_showingNavigationToolbar_returnsEmptyBrowserActions() {
+        let subject = createSubject(isShowingNavigationToolbar: true, isEditing: false)
+
+        XCTAssertTrue(subject.browserActions.isEmpty)
+    }
+
+    func testInit_notEditing_notShowingNavToolbar_notShowingTopTabs_returnsNewTabMenuAndTabsActions() {
+        let subject = createSubject(isShowingTopTabs: false,
+                                    isShowingNavigationToolbar: false,
+                                    numberOfTabs: 2,
+                                    url: url)
+
+        XCTAssertEqual(subject.browserActions.count, 3)
+        XCTAssertEqual(subject.browserActions[0].actionType, .newTab)
+        XCTAssertEqual(subject.browserActions[1].actionType, .menu)
+        XCTAssertEqual(subject.browserActions[2].actionType, .tabs)
+        XCTAssertEqual(subject.browserActions[2].numberOfTabs, 2)
+    }
+
     // MARK: - Helpers
 
     private func createSubject(
@@ -121,12 +149,15 @@ final class AddressToolbarContainerLensTests: XCTestCase {
         isShowingNavigationToolbar: Bool = true,
         canGoBack: Bool = false,
         canGoForward: Bool = false,
+        isEditing: Bool = false,
         isEmptySearch: Bool = true,
         isLoading: Bool = false,
+        numberOfTabs: Int = 1,
         url: URL? = nil
     ) -> AddressToolbarContainerLens {
         let addressToolbar = AddressBarState(windowUUID: windowUUID)
             .copy(url: url)
+            .copy(isEditing: isEditing)
             .copy(isLoading: isLoading)
             .copy(isEmptySearch: isEmptySearch)
 
@@ -137,6 +168,7 @@ final class AddressToolbarContainerLensTests: XCTestCase {
             .copy(isShowingTopTabs: isShowingTopTabs)
             .copy(canGoBack: canGoBack)
             .copy(canGoForward: canGoForward)
+            .copy(numberOfTabs: numberOfTabs)
 
         let appState = AppState(presentedComponents: PresentedComponentsState(components: [.toolbar(toolbarState)]))
         return AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
