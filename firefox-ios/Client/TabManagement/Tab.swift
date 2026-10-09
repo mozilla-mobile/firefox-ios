@@ -86,7 +86,24 @@ class Tab: NSObject,
            ContentBlockerTab,
            TabWebViewDelegate,
            UIGestureRecognizerDelegate {
-    var groupID: TabGroupID?
+    private var initialGroupID: TabGroupID?
+    private weak var groupMembership: (any TabGroupMembershipLookup)?
+
+    var groupID: TabGroupID? {
+        guard let groupMembership else { return initialGroupID }
+        guard !isPrivate, let groupID = groupMembership.groupID(for: tabUUID),
+              groupMembership.activeWindow(for: groupID) == windowUUID else { return nil }
+        return groupID
+    }
+
+    func isBound(to lookup: any TabGroupMembershipLookup) -> Bool {
+        groupMembership === lookup
+    }
+
+    func bindGroupMembership(to lookup: any TabGroupMembershipLookup) {
+        groupMembership = lookup
+        initialGroupID = nil
+    }
 
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
@@ -487,7 +504,7 @@ class Tab: NSObject,
          logger: Logger = DefaultLogger.shared,
          documentLogger: DocumentLogger = AppContainer.shared.resolve(),
          dispatchQueue: DispatchQueueInterface = DispatchQueue.global(qos: .background)) {
-        self.groupID = groupID
+        self.initialGroupID = groupID
         self.nightMode = false
         self.windowUUID = windowUUID
         self.noImageMode = false
@@ -638,7 +655,7 @@ class Tab: NSObject,
     }
 
     /// Performs cleanup because deinit may be delayed by retain cycles or long-lived references.
-    func close() async {
+    func close(preservingDocuments: Bool = false) async {
         await webView?.pauseAllMediaPlayback()
 
         webView?.stopLoading()
@@ -658,7 +675,9 @@ class Tab: NSObject,
         webViewLoadingObserver = nil
         webView = nil
 
-        deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
+        if !preservingDocuments {
+            deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
+        }
         addUITestMemoryLeakDetectionUIElement()
     }
 
