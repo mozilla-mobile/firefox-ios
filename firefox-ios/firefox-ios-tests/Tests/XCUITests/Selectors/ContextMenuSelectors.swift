@@ -27,9 +27,10 @@ struct ContextMenuSelectors: ContextMenuSelectorsSet {
         static let shareLink = "Share Link"
         static let bookmarkLink = "Bookmark Link"
         static let switchButton = "Switch"
+        static let requestDesktopSite = "Request Desktop Site"
     }
 
-    let CONTEXT_MENU_TABLE = Selector.tableIdOrLabel(
+    let CONTEXT_MENU_TABLE = Selector.collectionViewIdOrLabel(
         "Context Menu",
         description: "Context Menu table",
         groups: ["contextmenu"]
@@ -82,7 +83,13 @@ struct ContextMenuSelectors: ContextMenuSelectorsSet {
         description: "Toast button to switch to the newly opened private tab",
         groups: ["contextmenu"]
     )
+    
+    let REQUEST_DESKTOP_SITE = Selector.buttonByLabel(
+        IDs.requestDesktopSite,
+        description: "Request desktop site from the reload button",
+        groups: ["contextmenu"]
+    )
 
     var all: [Selector] { [OPEN_IN_PRIVATE_TAB, CONTEXT_MENU_TABLE, OPEN_IN_NEW_TAB, OPEN_IN_NEW_PRIVATE_TAB,
-                           COPY_LINK, DOWNLOAD_LINK, SHARE_LINK, BOOKMARK_LINK, SWITCH_BUTTON] }
+                           COPY_LINK, DOWNLOAD_LINK, SHARE_LINK, BOOKMARK_LINK, SWITCH_BUTTON, REQUEST_DESKTOP_SITE] }
 }
