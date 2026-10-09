@@ -894,7 +894,7 @@ public protocol StoreProtocol: AnyObject, Sendable {
      * NB: This function was created to unblock iOS credit card users who are unable to sync records and should not be used
      * outside of this use case.
      */
-    func scrubUndecryptableCreditCardDataForRemoteReplacement(localEncryptionKey: String) throws  -> CreditCardsDeletionMetrics
+    func scrubUndecryptableCreditCardDataForRemoteReplacement() throws  -> CreditCardsDeletionMetrics
     
     func shutdown() 
     
@@ -954,12 +954,13 @@ open class Store: StoreProtocol, @unchecked Sendable {
     public func uniffiCloneHandle() -> UInt64 {
         return try! rustCall { uniffi_autofill_fn_clone_store(self.handle, $0) }
     }
-public convenience init(dbpath: String)throws  {
+public convenience init(dbpath: String, encdec: EncryptorDecryptor)throws  {
     let handle =
         try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
         uniffiCallStatus in
     uniffi_autofill_fn_constructor_store_new(
-        FfiConverterString.lower(dbpath),uniffiCallStatus
+        FfiConverterString.lower(dbpath),
+        FfiConverterTypeEncryptorDecryptor_lower(encdec),uniffiCallStatus
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -1265,12 +1266,11 @@ open func scrubEncryptedData()throws   {try rustCallWithError(FfiConverterTypeAu
      * NB: This function was created to unblock iOS credit card users who are unable to sync records and should not be used
      * outside of this use case.
      */
-open func scrubUndecryptableCreditCardDataForRemoteReplacement(localEncryptionKey: String)throws  -> CreditCardsDeletionMetrics  {
+open func scrubUndecryptableCreditCardDataForRemoteReplacement()throws  -> CreditCardsDeletionMetrics  {
     return try  FfiConverterTypeCreditCardsDeletionMetrics_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
         uniffiCallStatus in
     uniffi_autofill_fn_method_store_scrub_undecryptable_credit_card_data_for_remote_replacement(
-            self.uniffiCloneHandle(),
-        FfiConverterString.lower(localEncryptionKey),uniffiCallStatus
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -1651,12 +1651,14 @@ public func FfiConverterTypeAddressTombstone_lower(_ value: AddressTombstone) ->
 
 
 /**
- * What you get back as a credit-card.
+ * What you get back as a credit-card. The number comes back decrypted;
+ * it is empty for a scrubbed card or one saved without a number. A number
+ * the key cannot read fails the read.
  */
 public struct CreditCard: Equatable, Hashable {
     public var guid: String
     public var ccName: String
-    public var ccNumberEnc: String
+    public var ccNumber: String
     public var ccNumberLast4: String
     public var ccExpMonth: Int64
     public var ccExpYear: Int64
@@ -1668,10 +1670,10 @@ public struct CreditCard: Equatable, Hashable {
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(guid: String, ccName: String, ccNumberEnc: String, ccNumberLast4: String, ccExpMonth: Int64, ccExpYear: Int64, ccType: String, timeCreated: Int64, timeLastUsed: Int64?, timeLastModified: Int64, timesUsed: Int64) {
+    public init(guid: String, ccName: String, ccNumber: String, ccNumberLast4: String, ccExpMonth: Int64, ccExpYear: Int64, ccType: String, timeCreated: Int64, timeLastUsed: Int64?, timeLastModified: Int64, timesUsed: Int64) {
         self.guid = guid
         self.ccName = ccName
-        self.ccNumberEnc = ccNumberEnc
+        self.ccNumber = ccNumber
         self.ccNumberLast4 = ccNumberLast4
         self.ccExpMonth = ccExpMonth
         self.ccExpYear = ccExpYear
@@ -1700,7 +1702,7 @@ public struct FfiConverterTypeCreditCard: FfiConverterRustBuffer {
             try CreditCard(
                 guid: FfiConverterString.read(from: &buf), 
                 ccName: FfiConverterString.read(from: &buf), 
-                ccNumberEnc: FfiConverterString.read(from: &buf), 
+                ccNumber: FfiConverterString.read(from: &buf), 
                 ccNumberLast4: FfiConverterString.read(from: &buf), 
                 ccExpMonth: FfiConverterInt64.read(from: &buf), 
                 ccExpYear: FfiConverterInt64.read(from: &buf), 
@@ -1715,7 +1717,7 @@ public struct FfiConverterTypeCreditCard: FfiConverterRustBuffer {
     public static func write(_ value: CreditCard, into buf: inout [UInt8]) {
         FfiConverterString.write(value.guid, into: &buf)
         FfiConverterString.write(value.ccName, into: &buf)
-        FfiConverterString.write(value.ccNumberEnc, into: &buf)
+        FfiConverterString.write(value.ccNumber, into: &buf)
         FfiConverterString.write(value.ccNumberLast4, into: &buf)
         FfiConverterInt64.write(value.ccExpMonth, into: &buf)
         FfiConverterInt64.write(value.ccExpYear, into: &buf)
@@ -2184,22 +2186,21 @@ public func FfiConverterTypeUpdatableAddressFieldsWithMeta_lower(_ value: Updata
 
 
 /**
- * What you pass to create or update a credit-card.
+ * What you pass to create or update a credit-card. The number is given in
+ * cleartext; the store encrypts it and derives the last-4 digits itself.
  */
 public struct UpdatableCreditCardFields: Equatable, Hashable {
     public var ccName: String
-    public var ccNumberEnc: String
-    public var ccNumberLast4: String
+    public var ccNumber: String
     public var ccExpMonth: Int64
     public var ccExpYear: Int64
     public var ccType: String
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(ccName: String, ccNumberEnc: String, ccNumberLast4: String, ccExpMonth: Int64, ccExpYear: Int64, ccType: String) {
+    public init(ccName: String, ccNumber: String, ccExpMonth: Int64, ccExpYear: Int64, ccType: String) {
         self.ccName = ccName
-        self.ccNumberEnc = ccNumberEnc
-        self.ccNumberLast4 = ccNumberLast4
+        self.ccNumber = ccNumber
         self.ccExpMonth = ccExpMonth
         self.ccExpYear = ccExpYear
         self.ccType = ccType
@@ -2222,8 +2223,7 @@ public struct FfiConverterTypeUpdatableCreditCardFields: FfiConverterRustBuffer 
         return
             try UpdatableCreditCardFields(
                 ccName: FfiConverterString.read(from: &buf), 
-                ccNumberEnc: FfiConverterString.read(from: &buf), 
-                ccNumberLast4: FfiConverterString.read(from: &buf), 
+                ccNumber: FfiConverterString.read(from: &buf), 
                 ccExpMonth: FfiConverterInt64.read(from: &buf), 
                 ccExpYear: FfiConverterInt64.read(from: &buf), 
                 ccType: FfiConverterString.read(from: &buf)
@@ -2232,8 +2232,7 @@ public struct FfiConverterTypeUpdatableCreditCardFields: FfiConverterRustBuffer 
 
     public static func write(_ value: UpdatableCreditCardFields, into buf: inout [UInt8]) {
         FfiConverterString.write(value.ccName, into: &buf)
-        FfiConverterString.write(value.ccNumberEnc, into: &buf)
-        FfiConverterString.write(value.ccNumberLast4, into: &buf)
+        FfiConverterString.write(value.ccNumber, into: &buf)
         FfiConverterInt64.write(value.ccExpMonth, into: &buf)
         FfiConverterInt64.write(value.ccExpYear, into: &buf)
         FfiConverterString.write(value.ccType, into: &buf)
@@ -3167,27 +3166,41 @@ public func createAutofillKey()throws  -> String  {
 })
 }
 /**
- * Decrypt an arbitrary string - `key` must have come from `create_key()`
- * and `ciphertext` must have come from `encrypt_string()`
+ * Create a Store with StaticKeyManager by passing in a db path and a
+ * static key
  */
-public func decryptString(key: String, ciphertext: String)throws  -> String  {
-    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+public func createAutofillStoreWithStaticKeyManager(path: String, key: String)throws  -> Store  {
+    return try  FfiConverterTypeStore_lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
         uniffiCallStatus in
-    uniffi_autofill_fn_func_decrypt_string(
-        FfiConverterString.lower(key),
-        FfiConverterString.lower(ciphertext),uniffiCallStatus
+    uniffi_autofill_fn_func_create_autofill_store_with_static_key_manager(
+        FfiConverterString.lower(path),
+        FfiConverterString.lower(key),uniffiCallStatus
     )
 })
 }
 /**
- * Encrypt an arbitrary string - `key` must have come from `create_key()`
+ * Similar to create_static_key_manager above, create a
+ * ManagedEncryptorDecryptor by passing in a KeyManager
  */
-public func encryptString(key: String, cleartext: String)throws  -> String  {
-    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+public func createManagedEncdec(keyManager: KeyManager) -> EncryptorDecryptor  {
+    return try!  FfiConverterTypeEncryptorDecryptor_lift(try! rustCall() {
         uniffiCallStatus in
-    uniffi_autofill_fn_func_encrypt_string(
-        FfiConverterString.lower(key),
-        FfiConverterString.lower(cleartext),uniffiCallStatus
+    uniffi_autofill_fn_func_create_managed_encdec(
+        FfiConverterTypeKeyManager_lower(keyManager),uniffiCallStatus
+    )
+})
+}
+/**
+ * Utility function to create a StaticKeyManager to be used for the time
+ * being until support lands for [trait implementation of an UniFFI
+ * interface](https://mozilla.github.io/uniffi-rs/next/proc_macro/index.html#structs-implementing-traits)
+ * in UniFFI.
+ */
+public func createStaticKeyManager(key: String) -> KeyManager  {
+    return try!  FfiConverterTypeKeyManager_lift(try! rustCall() {
+        uniffiCallStatus in
+    uniffi_autofill_fn_func_create_static_key_manager(
+        FfiConverterString.lower(key),uniffiCallStatus
     )
 })
 }
@@ -3210,10 +3223,13 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_func_create_autofill_key() != 38716) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_func_decrypt_string() != 40907) {
+    if (uniffi_autofill_checksum_func_create_autofill_store_with_static_key_manager() != 23621) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_func_encrypt_string() != 64714) {
+    if (uniffi_autofill_checksum_func_create_managed_encdec() != 62667) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_func_create_static_key_manager() != 38775) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_addressesbridgedengine_apply() != 22429) {
@@ -3330,7 +3346,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_method_store_scrub_encrypted_data() != 13990) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_method_store_scrub_undecryptable_credit_card_data_for_remote_replacement() != 12482) {
+    if (uniffi_autofill_checksum_method_store_scrub_undecryptable_credit_card_data_for_remote_replacement() != 27462) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_shutdown() != 46136) {
@@ -3360,10 +3376,11 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_method_store_update_passport() != 64688) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_autofill_checksum_constructor_store_new() != 12483) {
+    if (uniffi_autofill_checksum_constructor_store_new() != 20484) {
         return InitializationResult.apiChecksumMismatch
     }
 
+    uniffiEnsureDbCryptoInitialized()
     return InitializationResult.ok
 }()
 
