@@ -236,8 +236,6 @@ extension URL {
             }
         }
 
-        suffix = suffix ?? tokens.last
-
         var baseDomain: String?
         if additionalPartCount > 0 {
             if let suffix = suffix {
