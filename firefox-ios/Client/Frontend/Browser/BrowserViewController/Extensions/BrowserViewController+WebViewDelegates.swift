@@ -39,6 +39,10 @@ extension BrowserViewController: WKUIDelegate {
 
             if url.scheme == "whatsapp" && UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:])
+            } else if url.scheme == "mailto" {
+                handleMailToNavigation(url: url)
+            } else if ["sms", "tel", "facetime", "facetime-audio"].contains(url.scheme) {
+                handleSpecialSchemeNavigation(url: url, tab: parentTab)
             }
 
             return nil

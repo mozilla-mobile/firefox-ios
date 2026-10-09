@@ -345,6 +345,43 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    // MARK: - Create web view
+
+    @MainActor
+    func testWebViewCreateWebView_withMailtoScheme_showsMailAlertWithoutOpeningTab() {
+        let subject = createPresentSpySubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let url = URL(string: "mailto:test@example.com")!
+
+        let newWebView = subject.webView(tab.webView!,
+                                         createWebViewWith: WKWebViewConfiguration(),
+                                         for: MockNavigationAction(url: url, type: .linkActivated),
+                                         windowFeatures: WKWindowFeatures())
+
+        XCTAssertNil(newWebView)
+        XCTAssertTrue(tabManager.lastSelectedTabs.isEmpty)
+        XCTAssertEqual(subject.presentedAlertMessage, .ExternalMailLinkConfirmation)
+    }
+
+    @MainActor
+    func testWebViewCreateWebView_withSmsScheme_showsSmsAlertWithoutOpeningTab() {
+        let subject = createPresentSpySubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let url = URL(string: "sms:+15555555555")!
+
+        let newWebView = subject.webView(tab.webView!,
+                                         createWebViewWith: WKWebViewConfiguration(),
+                                         for: MockNavigationAction(url: url, type: .linkActivated),
+                                         windowFeatures: WKWindowFeatures())
+
+        XCTAssertNil(newWebView)
+        XCTAssertTrue(tabManager.lastSelectedTabs.isEmpty)
+        XCTAssertEqual(subject.presentedAlertMessage, .ExternalSmsLinkConfirmation)
+    }
+
     // MARK: - Authentication
 
     @MainActor
@@ -405,6 +442,15 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
                                             tabManager: tabManager,
                                             gleanWrapper: gleanWrapper,
                                             userInitiatedQueue: MockDispatchQueue())
+        trackForMemoryLeaks(subject)
+        return subject
+    }
+
+    @MainActor
+    private func createPresentSpySubject() -> PresentSpyBrowserViewController {
+        let subject = PresentSpyBrowserViewController(profile: profile,
+                                                      tabManager: tabManager,
+                                                      userInitiatedQueue: MockDispatchQueue())
         trackForMemoryLeaks(subject)
         return subject
     }
@@ -587,5 +633,15 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         subject.webView(tab.webView!, didFinish: nil)
 
         XCTAssertTrue(subject.googleLensSearches.isEmpty)
+    }
+}
+
+private final class PresentSpyBrowserViewController: BrowserViewController {
+    var presentedAlertMessage: String?
+
+    override func present(_ viewControllerToPresent: UIViewController,
+                          animated flag: Bool,
+                          completion: (() -> Void)? = nil) {
+        presentedAlertMessage = (viewControllerToPresent as? UIAlertController)?.message
     }
 }
