@@ -10,18 +10,16 @@ private let defaultURL = "https://www.mozilla.org/en-US/book/"
 @MainActor
 func registerUrlBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(URLBarLongPressMenu) { screenState in
-        let menu = app.tables["Context Menu"].firstMatch
-
         if #unavailable(iOS 16) {
             screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
                 UIPasteboard.general.string = userState.url ?? defaultURL
-                menu.otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.waitAndTap()
+                app.cells.buttons[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.waitAndTap()
             }
         }
 
         screenState.gesture(forAction: Action.SetURLByPasting) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
-            menu.cells[AccessibilityIdentifiers.Photon.pasteAction].firstMatch.waitAndTap()
+            app.cells.buttons[AccessibilityIdentifiers.Photon.pasteAction].firstMatch.waitAndTap()
         }
 
         screenState.backAction = {

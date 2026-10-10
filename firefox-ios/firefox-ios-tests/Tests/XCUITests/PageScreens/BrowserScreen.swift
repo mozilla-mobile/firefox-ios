@@ -487,29 +487,13 @@ final class BrowserScreen {
         ])
     }
 
-    /// The close button is only built for the bottom-sheet style. The menu is a popover — which has
-    /// no close button — on iPad before iOS 26, so the expectation is skipped there.
-    func assertAddressBarContextMenuCloseButtonExists() {
-        if BaseTestCase().iPad() {
-            if #unavailable(iOS 26) { return }
-        }
-        BaseTestCase().mozWaitForElementToExist(sel.CONTEXT_MENU_CLOSE_BUTTON.element(in: app))
-    }
-
     func tapContextMenuCopyAddress() {
         sel.CONTEXT_MENU_COPY_ADDRESS.element(in: app).waitAndTap()
         BaseTestCase().mozWaitForElementToNotExist(sel.ADDRESS_BAR_CONTEXT_MENU.element(in: app))
     }
 
     func dismissAddressBarContextMenu() {
-        let closeButton = sel.CONTEXT_MENU_CLOSE_BUTTON.element(in: app)
-        if closeButton.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) {
-            closeButton.waitAndTap()
-        } else {
-            // iPad popover: dismissed by tapping outside it. The bottom of the screen is safe to
-            // tap because iPad has no bottom toolbar option and the fixture has no content there.
-            app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)).tap()
-        }
+        app.otherElements["Preview"].waitAndTap()
         BaseTestCase().mozWaitForElementToNotExist(sel.ADDRESS_BAR_CONTEXT_MENU.element(in: app))
     }
 
