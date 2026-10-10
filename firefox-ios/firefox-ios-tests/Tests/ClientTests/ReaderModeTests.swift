@@ -33,7 +33,7 @@ final class ReaderModeTests: XCTestCase {
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws {
-        let tab = Tab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.nightMode = initiallyEnabled
         let webView = MockTabWebView(tab: tab)
         webView.completesJavaScriptEvaluation = true
