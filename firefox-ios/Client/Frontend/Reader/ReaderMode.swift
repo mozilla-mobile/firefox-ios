@@ -56,6 +56,18 @@ class ReaderMode: TabContentScript {
         switch readerPageEvent {
         case .pageShow:
             if let tab = tab {
+                let webView = tab.webView
+                let nightMode = tab.nightMode
+                webView?.evaluateJavaScript(
+                    NightModeHelper.jsCallbackBuilder(nightMode),
+                    in: nil,
+                    in: .world(name: NightModeHelper.name())
+                ) { [weak webView] _ in
+                    guard !nightMode else { return }
+                    webView?.evaluateJavascriptInDefaultContentWorld(
+                        "\(ReaderModeInfo.namespace.rawValue).restoreStyle()"
+                    )
+                }
                 delegate?.readerMode(self, didDisplayReaderizedContentForTab: tab)
             }
         }
