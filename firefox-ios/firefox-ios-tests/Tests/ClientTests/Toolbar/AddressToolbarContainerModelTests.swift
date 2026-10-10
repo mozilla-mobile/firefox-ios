@@ -9,7 +9,7 @@ import XCTest
 
 final class AddressToolbarContainerModelTests: XCTestCase {
     private var mockProfile: MockProfile!
-    private var searchEnginesManager: SearchEnginesManagerProvider!
+    private var searchEnginesManager: SearchEnginesManager!
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
@@ -216,6 +216,111 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         XCTAssertNil(model.addressToolbarConfig.locationViewConfiguration.editingAccessoryAction)
     }
 
+    // MARK: - Search term in address bar
+
+    @MainActor
+    func testShouldDisplaySearchTerm_whenFlagEnabled_andDefaultEngineSearchURL_returnsTrue() {
+        let model = createSubject(withState: createToolbarState(), isSearchTermInAddressBarEnabled: true)
+        let url = URL(string: "http://firefox.com/find?q=hello+world")
+
+        XCTAssertTrue(model.shouldDisplaySearchTerm(for: url))
+    }
+
+    @MainActor
+    func testShouldDisplaySearchTerm_whenFlagDisabled_andDefaultEngineSearchURL_returnsFalse() {
+        let model = createSubject(withState: createToolbarState())
+        let url = URL(string: "http://firefox.com/find?q=test")
+
+        XCTAssertEqual(model.searchTermFromURL(url), "test")
+        XCTAssertFalse(model.shouldDisplaySearchTerm(for: url))
+    }
+
+    @MainActor
+    func testShouldDisplaySearchTerm_whenFlagEnabled_andNonSearchURL_returnsFalse() {
+        let model = createSubject(withState: createToolbarState(), isSearchTermInAddressBarEnabled: true)
+
+        XCTAssertFalse(model.shouldDisplaySearchTerm(for: URL(string: "https://mozilla.org")))
+        XCTAssertFalse(model.shouldDisplaySearchTerm(for: nil))
+    }
+
+    @MainActor
+    func testShouldDisplaySearchTerm_whenFlagEnabled_andEmptySearchQuery_returnsFalse() {
+        let model = createSubject(withState: createToolbarState(), isSearchTermInAddressBarEnabled: true)
+
+        XCTAssertFalse(model.shouldDisplaySearchTerm(for: URL(string: "http://firefox.com/find?q=")))
+    }
+
+    @MainActor
+    func testShouldDisplaySearchTerm_whenFlagEnabled_andNonDefaultEngineSearchURL_returnsFalse() {
+        let nonDefaultEngine = OpenSearchEngine(engineID: "other",
+                                                shortName: "Other",
+                                                telemetrySuffix: nil,
+                                                image: UIImage(),
+                                                searchTemplate: "http://example.com/search?q={searchTerms}",
+                                                suggestTemplate: nil,
+                                                trendingTemplate: nil,
+                                                isCustomEngine: true)
+        searchEnginesManager.orderedEngines.append(nonDefaultEngine)
+        let model = createSubject(withState: createToolbarState(), isSearchTermInAddressBarEnabled: true)
+        let url = URL(string: "http://example.com/search?q=test")
+
+        XCTAssertEqual(model.searchTermFromURL(url), "test")
+        XCTAssertFalse(model.shouldDisplaySearchTerm(for: url))
+    }
+
+    @MainActor
+    func testAddressToolbarConfig_whenFlagEnabled_andDefaultEngineSearchURL_displaysSearchTerm() {
+        let url = URL(string: "http://firefox.com/find?q=test")
+        let model = createSubject(withState: createToolbarState(url: url), isSearchTermInAddressBarEnabled: true)
+        let locationConfig = model.addressToolbarConfig.locationViewConfiguration
+
+        XCTAssertEqual(locationConfig.url, url)
+        XCTAssertEqual(locationConfig.searchTerm, "test")
+        XCTAssertTrue(locationConfig.shouldDisplaySearchTerm)
+    }
+
+    @MainActor
+    func testAddressToolbarConfig_whenFlagDisabled_andDefaultEngineSearchURL_doesNotDisplaySearchTerm() {
+        let url = URL(string: "http://firefox.com/find?q=test")
+        let model = createSubject(withState: createToolbarState(url: url))
+        let locationConfig = model.addressToolbarConfig.locationViewConfiguration
+
+        XCTAssertEqual(locationConfig.url, url)
+        XCTAssertEqual(locationConfig.searchTerm, "test")
+        XCTAssertFalse(locationConfig.shouldDisplaySearchTerm)
+    }
+
+    @MainActor
+    func testAddressToolbarConfig_whenFlagEnabled_andNonSearchURL_doesNotDisplaySearchTerm() {
+        let url = URL(string: "https://mozilla.org")
+        let model = createSubject(withState: createToolbarState(url: url), isSearchTermInAddressBarEnabled: true)
+        let locationConfig = model.addressToolbarConfig.locationViewConfiguration
+
+        XCTAssertEqual(locationConfig.url, url)
+        XCTAssertNil(locationConfig.searchTerm)
+        XCTAssertFalse(locationConfig.shouldDisplaySearchTerm)
+    }
+
+    @MainActor
+    func testConfigureSkeletonAddressBar_whenFlagEnabled_andDefaultEngineSearchURL_displaysSearchTerm() {
+        let model = createSubject(withState: createToolbarState(), isSearchTermInAddressBarEnabled: true)
+        let tab = createTab(url: URL(string: "http://firefox.com/find?q=test"))
+        let locationConfig = model.getSkeletonAddressBarConfiguration(for: tab).locationViewConfiguration
+
+        XCTAssertEqual(locationConfig.searchTerm, "test")
+        XCTAssertTrue(locationConfig.shouldDisplaySearchTerm)
+    }
+
+    @MainActor
+    func testConfigureSkeletonAddressBar_whenFlagDisabled_andDefaultEngineSearchURL_doesNotDisplaySearchTerm() {
+        let model = createSubject(withState: createToolbarState())
+        let tab = createTab(url: URL(string: "http://firefox.com/find?q=test"))
+        let locationConfig = model.getSkeletonAddressBarConfiguration(for: tab).locationViewConfiguration
+
+        XCTAssertNil(locationConfig.searchTerm)
+        XCTAssertFalse(locationConfig.shouldDisplaySearchTerm)
+    }
+
     @MainActor
     func testConfigureSkeletonAddressBar_uxConfiguration() {
         let model = createSubject(withState: createToolbarState())
@@ -292,18 +397,26 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     // MARK: - Private helpers
 
     @MainActor
-    private func createSubject(withState state: ToolbarState) -> AddressToolbarContainerModel {
+    private func createSubject(withState state: ToolbarState,
+                               isSearchTermInAddressBarEnabled: Bool = false) -> AddressToolbarContainerModel {
         let appState = AppState(presentedComponents: PresentedComponentsState(components: [.toolbar(state)]))
         let lens = AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
+        let featureFlagsProvider = MockNimbusFeatureFlags()
+        if isSearchTermInAddressBarEnabled {
+            featureFlagsProvider.enabledFlags = [.searchTermInAddressBar]
+        }
         return AddressToolbarContainerModel(state: state,
                                             addressToolbarContainerLens: lens,
                                             profile: mockProfile,
+                                            searchEnginesManager: searchEnginesManager,
+                                            featureFlagsProvider: featureFlagsProvider,
                                             windowUUID: windowUUID)
     }
 
     private func createAddressBarState(
         withSearchEngine: SearchEngineModel?,
-        isGoogleLensEnabled: Bool = false
+        isGoogleLensEnabled: Bool = false,
+        url: URL? = nil
     ) -> AddressBarState {
         return AddressBarState(windowUUID: windowUUID,
                                navigationActions: [],
@@ -313,7 +426,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                    isGoogleLensEnabled: isGoogleLensEnabled
                                ),
                                borderPosition: nil,
-                               url: nil,
+                               url: url,
                                searchTerm: nil,
                                lockIconButtonA11yId: nil,
                                lockIconImageName: nil,
@@ -327,7 +440,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                canSummarize: false,
                                translationConfiguration: nil,
                                didStartTyping: false,
-                               isEmptySearch: true,
+                               isEmptySearch: url == nil,
                                alternativeSearchEngine: withSearchEngine,
                                isNovaDesignEnabled: false)
     }
@@ -369,7 +482,8 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     private func createToolbarState(toolbarPosition: AddressToolbarPosition = .top,
                                     isShowingNavigationToolbar: Bool = true,
                                     isShowingTopTabs: Bool = true,
-                                    isGoogleLensEnabled: Bool = false) -> ToolbarState {
+                                    isGoogleLensEnabled: Bool = false,
+                                    url: URL? = nil) -> ToolbarState {
         return ToolbarState(windowUUID: windowUUID,
                             toolbarPosition: toolbarPosition,
                             toolbarLayout: .version1,
@@ -377,7 +491,8 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             isPrivateMode: false,
                             addressToolbar: createAddressBarState(
                                 withSearchEngine: nil,
-                                isGoogleLensEnabled: isGoogleLensEnabled
+                                isGoogleLensEnabled: isGoogleLensEnabled,
+                                url: url
                             ),
                             navigationToolbar: createBasicNavigationBarState(),
                             isShowingNavigationToolbar: isShowingNavigationToolbar,
