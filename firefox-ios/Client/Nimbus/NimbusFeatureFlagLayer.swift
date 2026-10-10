@@ -154,6 +154,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .reportBrokenSite:
             return checkReportBrokenSiteFeature()
 
+        case .searchTermInAddressBar:
+            return checkSearchTermInAddressBarFeature()
+
         case .sentFromFirefox:
             return checkSentFromFirefoxFeature()
 
@@ -291,6 +294,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     private func checkUnifiedSearchFeature() -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.unifiedSearch
+    }
+
+    private func checkSearchTermInAddressBarFeature() -> Bool {
+        return nimbus.features.toolbarRefactorFeature.value().searchTermInAddressBar
     }
 
     private func checkRelayIntegration() -> Bool {
