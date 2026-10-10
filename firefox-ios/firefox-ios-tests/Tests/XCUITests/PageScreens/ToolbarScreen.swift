@@ -155,18 +155,11 @@ final class ToolbarScreen {
     /// Long-presses Reload and taps the first menu row (Request Desktop/Mobile Site), retrying once.
     /// Content blocker reloads swap Reload for Stop mid-press: https://github.com/mozilla-mobile/firefox-ios/issues/35933
     func toggleRequestDesktopSiteFromReloadMenu() {
-        let contextMenu = ContextMenuSelectors().CONTEXT_MENU_TABLE.element(in: app)
-        let firstMenuRow = contextMenu.cells.element(boundBy: 0)
-        for _ in 1...2 {
-            let reloadButton = sel.RELOAD_BUTTON.element(in: app)
-            BaseTestCase().mozWaitForElementToExist(reloadButton)
-            reloadButton.press(forDuration: 1)
-            if BaseTestCase().mozWaitForElementToExist(firstMenuRow, timeout: 5, failOnTimeout: false) {
-                firstMenuRow.waitAndTap()
-                return
-            }
-        }
-        XCTFail("The Reload long-press menu did not open")
+        let requestDesktopSiteMenuItem = ContextMenuSelectors().REQUEST_DESKTOP_SITE.element(in: app)
+        let reloadButton = sel.RELOAD_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(reloadButton)
+        reloadButton.press(forDuration: 1)
+        requestDesktopSiteMenuItem.waitAndTap()
     }
 
     func getToolbarSettingsMenuButtonElement() -> XCUIElement {

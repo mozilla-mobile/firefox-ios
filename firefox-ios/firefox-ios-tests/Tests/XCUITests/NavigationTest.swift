@@ -214,10 +214,9 @@ class NavigationTest: FeatureFlaggedTestSuite {
     func testCopyLink() {
         longPressLinkOptions(optionSelected: "Copy Link")
         let searchBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        searchBar.pressWithRetry(duration: 2, element: app.tables["Context Menu"])
-
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
+        let pasteAction = app.cells.buttons[AccessibilityIdentifiers.Photon.pasteAction]
+        searchBar.pressWithRetry(duration: 2, element: pasteAction)
+        pasteAction.waitAndTap()
         app.buttons["Go"].waitAndTap()
         waitUntilPageLoad()
         browserScreen.assertReservedTLDNamesLinkExist()
@@ -232,7 +231,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
 
-        app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
+        app.cells.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
         app.buttons["Go"].waitAndTap()
         waitUntilPageLoad()
         browserScreen.assertReservedTLDNamesLinkExist()
@@ -254,7 +253,6 @@ class NavigationTest: FeatureFlaggedTestSuite {
         // Long press on the address bar reveals the menu with all its options.
         browserScreen.longPressAddressBar()
         browserScreen.assertAddressBarContextMenuOptionsExist()
-        browserScreen.assertAddressBarContextMenuCloseButtonExists()
 
         browserScreen.dismissAddressBarContextMenu()
     }

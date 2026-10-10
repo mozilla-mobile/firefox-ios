@@ -17,6 +17,7 @@ public class BrowserAddressToolbar: UIView,
                                     ThemeApplicable,
                                     ToolbarButtonCaching,
                                     LocationViewDelegate,
+                                    UIContextMenuInteractionDelegate,
                                     UIDragInteractionDelegate {
     private enum UX {
         static let horizontalSpace: CGFloat = 8
@@ -31,11 +32,29 @@ public class BrowserAddressToolbar: UIView,
         static let iconsAnimationDelay: CGFloat = 0.075
     }
 
+    // Avoids a Swift linker failure where a directly stored @MainActor
+    // closure emits an unresolved getter on Xcode 27.
+    private final class LongPressMenuProvider {
+        private let provider: @MainActor () -> UIMenu?
+
+        init(provider: @escaping @MainActor () -> UIMenu?) {
+            self.provider = provider
+        }
+
+        @MainActor
+        func makeMenu() -> UIMenu? {
+            return provider()
+        }
+    }
+
     public var notificationCenter: any NotificationProtocol = NotificationCenter.default
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
     private var droppableUrl: URL?
+    private var longPressMenuProvider: LongPressMenuProvider?
     private var addressBarPosition: AddressToolbarPosition = .bottom
+    private var isContextMenuPresented = false
+    private var actionsAfterContextMenuDismissal: [() -> Void] = []
 
     var cachedButtonReferences = [String: ToolbarButton]()
 
@@ -165,6 +184,13 @@ public class BrowserAddressToolbar: UIView,
         animated: Bool
     ) {
         updateBorder(borderPosition: config.borderConfiguration.borderPosition)
+        let isContextMenuEnabled = !config.locationViewConfiguration.isEditing &&
+                                   !config.uxConfiguration.isAddressBarMinimized
+        if isContextMenuEnabled, let provider = config.longPressMenuProvider {
+            longPressMenuProvider = LongPressMenuProvider(provider: provider)
+        } else {
+            longPressMenuProvider = nil
+        }
 
         locationView.configure(
             config.locationViewConfiguration,
@@ -212,6 +238,7 @@ public class BrowserAddressToolbar: UIView,
         locationContainer.addSubview(locationView)
         locationContainer.addSubview(locationDividerView)
         locationContainer.addSubview(trailingPageActionStack)
+        locationView.addInteraction(UIContextMenuInteraction(delegate: self))
 
         toolbarContainerView.addSubview(navigationActionStack)
         toolbarContainerView.addSubview(locationContainer)
@@ -548,6 +575,90 @@ public class BrowserAddressToolbar: UIView,
         locationContainer.applyTheme(theme: theme)
         locationView.applyTheme(theme: theme)
         self.theme = theme
+    }
+
+    // MARK: - UIContextMenuInteractionDelegate
+    public func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        guard let menu = longPressMenuProvider?.makeMenu(), !menu.children.isEmpty else { return nil }
+        let configuration = UIContextMenuConfiguration(actionProvider: { _ in
+            return menu
+        })
+        if #available(iOS 16.0, *) {
+            configuration.preferredMenuElementOrder = .fixed
+        }
+        return configuration
+    }
+
+    public func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        return contextMenuPreview()
+    }
+
+    public func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        previewForDismissingMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        return contextMenuPreview()
+    }
+
+    public func performAfterContextMenuDismissal(_ action: @escaping () -> Void) {
+        guard isContextMenuPresented else {
+            action()
+            return
+        }
+        actionsAfterContextMenuDismissal.append(action)
+    }
+
+    public func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        willDisplayMenuFor configuration: UIContextMenuConfiguration,
+        animator: (any UIContextMenuInteractionAnimating)?
+    ) {
+        isContextMenuPresented = true
+    }
+
+    public func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        willEndFor configuration: UIContextMenuConfiguration,
+        animator: (any UIContextMenuInteractionAnimating)?
+    ) {
+        guard let animator else {
+            finishContextMenuDismissal()
+            return
+        }
+        animator.addCompletion { [weak self] in
+            self?.finishContextMenuDismissal()
+        }
+    }
+
+    private func finishContextMenuDismissal() {
+        isContextMenuPresented = false
+        let actions = actionsAfterContextMenuDismissal
+        actionsAfterContextMenuDismissal.removeAll()
+        actions.forEach { $0() }
+    }
+
+    private func contextMenuPreview() -> UITargetedPreview? {
+        guard let snapshot = locationContainer.snapshotView(afterScreenUpdates: false) else { return nil }
+        let parameters = UIPreviewParameters()
+        parameters.backgroundColor = locationContainer.backgroundColor
+        parameters.visiblePath = UIBezierPath(
+            roundedRect: locationContainer.bounds,
+            cornerRadius: locationContainer.layer.cornerRadius
+        )
+        let target = UIPreviewTarget(
+            container: self,
+            center: locationContainer.convert(
+                CGPoint(x: locationContainer.bounds.midX, y: locationContainer.bounds.midY),
+                to: self
+            )
+        )
+        return UITargetedPreview(view: snapshot, parameters: parameters, target: target)
     }
 
     // MARK: - UIDragInteractionDelegate

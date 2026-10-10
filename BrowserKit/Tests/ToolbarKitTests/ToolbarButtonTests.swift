@@ -158,6 +158,44 @@ final class ToolbarButtonTests: XCTestCase {
         XCTAssertNil(button.menu)
     }
 
+    func testConfigure_withMenuLongPressBehavior_configuresLongPressMenu() throws {
+        let element = createToolbarElement(
+            a11yLabel: "Test",
+            longPressBehavior: .menu {
+                UIMenu(children: [UIAction(title: "Action") { _ in }])
+            }
+        )
+
+        button.configure(element: element)
+        let interaction = try XCTUnwrap(button.contextMenuInteraction)
+
+        XCTAssertFalse(button.showsMenuAsPrimaryAction)
+        XCTAssertNil(button.menu)
+        XCTAssertTrue(button.isContextMenuInteractionEnabled)
+        XCTAssertNotNil(button.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero))
+    }
+
+    func testConfigure_withUnavailableLongPressMenu_returnsNoConfiguration() throws {
+        let element = createToolbarElement(
+            a11yLabel: "Test",
+            longPressBehavior: .menu { nil }
+        )
+        button.configure(element: element)
+        let interaction = try XCTUnwrap(button.contextMenuInteraction)
+
+        XCTAssertNil(button.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero))
+    }
+
+    func testConfigure_withMenuElements_returnsPrimaryActionMenuConfiguration() throws {
+        let menuElement = ToolbarMenuElement(title: "First", a11yIdentifier: "firstAction")
+        let element = createToolbarElement(a11yLabel: "Test", menuElements: [menuElement])
+
+        button.configure(element: element)
+        let interaction = try XCTUnwrap(button.contextMenuInteraction)
+
+        XCTAssertNotNil(button.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero))
+    }
+
     // MARK: - Helper Methods
     private func createToolbarElement(
         iconName: String? = nil,
@@ -173,9 +211,8 @@ final class ToolbarButtonTests: XCTestCase {
         a11yLabel: String,
         a11yHint: String? = nil,
         a11yId: String = "testId",
-        hasLongPressAction: Bool = false,
+        longPressBehavior: ToolbarLongPressBehavior = .none,
         onSelected: ((UIButton) -> Void)? = nil,
-        onLongPress: ((UIButton) -> Void)? = nil,
         menuElements: [ToolbarMenuElement] = []
     ) -> ToolbarElement {
         return ToolbarElement(
@@ -192,9 +229,8 @@ final class ToolbarButtonTests: XCTestCase {
             a11yLabel: a11yLabel,
             a11yHint: a11yHint,
             a11yId: a11yId,
-            hasLongPressAction: hasLongPressAction,
+            longPressBehavior: longPressBehavior,
             onSelected: onSelected,
-            onLongPress: onLongPress,
             menuElements: menuElements
         )
     }

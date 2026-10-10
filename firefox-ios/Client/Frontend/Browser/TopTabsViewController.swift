@@ -13,7 +13,7 @@ protocol TopTabsDelegate: AnyObject {
     @MainActor
     func topTabsDidPressNewTab(_ isPrivate: Bool)
     @MainActor
-    func topTabsDidLongPressNewTab(button: UIButton)
+    func topTabsNewTabMenu() -> UIMenu?
     @MainActor
     func topTabsDidChangeTab()
     @MainActor
@@ -64,16 +64,19 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         return collectionView
     }()
 
-    private lazy var newTab: UIButton = .build { button in
+    private lazy var newTab: UIButton = .build { [weak self] button in
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus), for: .normal)
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
 
-        let longPressRecognizer = UILongPressGestureRecognizer(
-            target: self,
-            action: #selector(TopTabsViewController.newTabLongPressed)
-        )
-        button.addGestureRecognizer(longPressRecognizer)
+        let deferredMenu = UIDeferredMenuElement.uncached { [weak self] completion in
+            completion(self?.delegate?.topTabsNewTabMenu()?.children ?? [])
+        }
+        button.menu = UIMenu(children: [deferredMenu])
+        button.showsMenuAsPrimaryAction = false
+        if #available(iOS 16.0, *) {
+            button.preferredMenuElementOrder = .fixed
+        }
 
         button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.addNewTabButton
         button.accessibilityLabel = .AddTabAccessibilityLabel
@@ -228,13 +231,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
     func newTabTapped() {
         delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
         store.dispatch(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapNewTab))
-    }
-
-    @objc
-    func newTabLongPressed(_ gestureRecognizer: UILongPressGestureRecognizer) {
-        if gestureRecognizer.state == .began {
-            delegate?.topTabsDidLongPressNewTab(button: newTab)
-        }
     }
 
     @objc

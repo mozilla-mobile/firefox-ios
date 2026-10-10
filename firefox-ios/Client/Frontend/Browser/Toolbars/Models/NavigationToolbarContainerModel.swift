@@ -19,12 +19,16 @@ struct NavigationToolbarContainerModel: Equatable {
     }
 
     @MainActor
-    init(state: ToolbarState, windowUUID: WindowUUID) {
+    init(
+        state: ToolbarState,
+        longPressMenuProvider: @escaping @MainActor (ToolbarActionConfiguration.ActionType) -> UIMenu? = { _ in nil },
+        windowUUID: WindowUUID
+    ) {
         self.displayBorder = state.navigationToolbar.displayBorder
         self.canShowNavigationHint = state.canShowNavigationHint
         self.isTranslucent = state.isTranslucent
         self.actions = state.navigationToolbar.actions.map { action in
-            ToolbarElement(
+            return ToolbarElement(
                 iconName: action.iconName,
                 title: action.actionLabel,
                 badgeImageName: action.badgeImageName,
@@ -42,13 +46,15 @@ struct NavigationToolbarContainerModel: Equatable {
                 a11yCustomActionName: action.a11yCustomActionName,
                 a11yCustomAction: NavigationToolbarContainerModel.getA11yCustomAction(action: action,
                                                                                       windowUUID: windowUUID),
-                hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs),
+                longPressBehavior: NavigationToolbarContainerModel.makeLongPressBehavior(
+                    action: action,
+                    isShowingTopTabs: state.isShowingTopTabs,
+                    longPressMenuProvider: longPressMenuProvider,
+                    windowUUID: windowUUID
+                ),
                 previousTabScreenshot: action.previousTabScreenshot,
                 nextTabScreenshot: action.nextTabScreenshot,
-                onSelected: NavigationToolbarContainerModel.getOnSelected(action: action, windowUUID: windowUUID),
-                onLongPress: NavigationToolbarContainerModel.getOnLongPress(action: action,
-                                                                            state: state,
-                                                                            windowUUID: windowUUID)
+                onSelected: NavigationToolbarContainerModel.getOnSelected(action: action, windowUUID: windowUUID)
             )
         }
         self.windowUUID = windowUUID
@@ -77,16 +83,28 @@ struct NavigationToolbarContainerModel: Equatable {
     }
 
     @MainActor
-    private static func getOnLongPress(action: ToolbarActionConfiguration,
-                                       state: ToolbarState,
-                                       windowUUID: WindowUUID) -> ((UIButton) -> Void)? {
-        return action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs) ? { button in
-            let action = ToolbarMiddlewareAction(buttonType: action.actionType,
-                                                 buttonTapped: button,
-                                                 gestureType: .longPress,
-                                                 windowUUID: windowUUID,
-                                                 actionType: ToolbarMiddlewareActionType.didTapButton)
-            store.dispatch(action)
-        } : nil
+    private static func makeLongPressBehavior(
+        action: ToolbarActionConfiguration,
+        isShowingTopTabs: Bool,
+        longPressMenuProvider: @escaping @MainActor (ToolbarActionConfiguration.ActionType) -> UIMenu?,
+        windowUUID: WindowUUID
+    ) -> ToolbarLongPressBehavior {
+        guard action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs) else {
+            return .none
+        }
+
+        switch action.actionType {
+        case .tabs, .newTab:
+            return .menu { longPressMenuProvider(action.actionType) }
+        default:
+            return .action { button in
+                let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                     buttonTapped: button,
+                                                     gestureType: .longPress,
+                                                     windowUUID: windowUUID,
+                                                     actionType: ToolbarMiddlewareActionType.didTapButton)
+                store.dispatch(action)
+            }
+        }
     }
 }
