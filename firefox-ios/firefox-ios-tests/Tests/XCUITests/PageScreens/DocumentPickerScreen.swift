@@ -18,6 +18,14 @@ final class DocumentPickerScreen {
 
     private var saveButton: XCUIElement { sel.SAVE_BUTTON.element(in: app) }
     private var untaggedFileNameField: XCUIElement { sel.UNTAGGED_FILE_NAME_FIELD.element(in: app) }
+    // iOS 27 presents the duplicate name alert from SpringBoard rather than the app.
+    private var alerts: XCUIElementQuery {
+        if #available(iOS 27, *) {
+            return XCUIApplication(bundleIdentifier: "com.apple.springboard").alerts
+        } else {
+            return app.alerts
+        }
+    }
 
     /// Anchors on the picker's own Save button rather than a location label such as "On My iPhone":
     /// the picker opens on whichever location was last used, so the label is not reliably present.
@@ -105,8 +113,8 @@ final class DocumentPickerScreen {
         let titles = app.navigationBars.allElementsBoundByIndex.map { bar in
             "\(bar.identifier) \(bar.staticTexts.allElementsBoundByIndex.map(\.label))"
         }
-        let alerts = app.alerts.allElementsBoundByIndex.map(\.label)
-        return "Save matches: \(saveMatches), navigation bars: \(titles), alerts: \(alerts)"
+        let alertLabels = alerts.allElementsBoundByIndex.map(\.label)
+        return "Save matches: \(saveMatches), navigation bars: \(titles), alerts: \(alertLabels)"
     }
 
     /// The Save button turns into a spinner once the save is accepted, so an enabled Save button
@@ -120,7 +128,7 @@ final class DocumentPickerScreen {
     /// Saving a document whose name is already taken prompts before overwriting; keep both copies.
     /// A tap during the alert's appear animation is ignored, so tap again while the alert stays up.
     private func resolveDuplicateNameAlertIfPresented() {
-        let alert = app.alerts.firstMatch
+        let alert = alerts.firstMatch
         guard alert.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) else { return }
         guard let button = ["Keep Both", "Replace"].map({ alert.buttons[$0] }).first(where: \.exists) else { return }
         for _ in 1...2 {
@@ -136,7 +144,7 @@ final class DocumentPickerScreen {
     /// The Save button turns into a spinner while the file is written, so it vanishes before the picker
     /// does; the file name field stays up until the picker is really gone, unless an alert hides it.
     func assertDismissed(timeout: TimeInterval = TIMEOUT_LONG) {
-        BaseTestCase().mozWaitForElementToNotExist(app.alerts.firstMatch, timeout: TIMEOUT_PICKER_PROBE)
+        BaseTestCase().mozWaitForElementToNotExist(alerts.firstMatch, timeout: TIMEOUT_PICKER_PROBE)
         BaseTestCase().mozWaitForElementToNotExist(saveButton, timeout: timeout)
         BaseTestCase().mozWaitForElementToNotExist(sel.FILE_NAME_FIELD.element(in: app), timeout: timeout)
         BaseTestCase().mozWaitForElementToNotExist(untaggedFileNameField, timeout: timeout)

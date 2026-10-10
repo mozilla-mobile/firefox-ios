@@ -67,15 +67,24 @@ class CopyPasteTest: BaseTestCase {
             }
         }
         searchOrEnterAddressTextField.tap()
+        waitForExistence(app.keyboards.keys.element(at: 0))
         searchOrEnterAddressTextField.tap()
 
         // Copy URL into clipboard
+        // On iOS 27 the edit menu's ">" button is "Next Page"; "Forward" would match the
+        // browser toolbar button hidden behind the keyboard.
         if #unavailable(iOS 16) {
             waitForHittable(app.menuItems["show.next.items.menu.button"].firstMatch)
+        } else if #available(iOS 27, *) {
+            waitForHittable(iPad() ? app.buttons["Next Page"] : app.menuItems["Copy"])
         } else {
             waitForHittable(app.buttons["Forward"].firstMatch)
         }
-        if iPad(), #available(iOS 26, *) {
+        if iPad(), #available(iOS 27, *) {
+            app.buttons["Next Page"].tap()
+            XCTAssertTrue(app.buttons["Copy"].isEnabled)
+            app.buttons["Copy"].tap()
+        } else if iPad(), #available(iOS 26, *) {
             app.buttons["Forward"].firstMatch.tap()
             XCTAssertTrue(app.buttons["Copy"].isEnabled)
             app.buttons["Copy"].tap()

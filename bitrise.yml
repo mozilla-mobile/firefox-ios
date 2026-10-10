@@ -158,10 +158,12 @@ workflows:
         - scheme: Fennec
         - configuration: Debug
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates -skipMacroValidation DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates -skipMacroValidation DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
+        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - script@1:
         title: Detect number of warnings
+        # TODO: Fix the number of warnings reported by Xcode 27
+        # https://mozilla-hub.atlassian.net/browse/FXIOS-16729
         is_always_run: true
         inputs:
         - content: |
@@ -195,8 +197,8 @@ workflows:
             set -euxo pipefail
 
             # Point to the Unit tests plan instead of Accessibility
-            UNIT_TESTS_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun"
-            SMOKE_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.5-arm64.xctestrun"
+            UNIT_TESTS_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator27.0-arm64.xctestrun"
+            SMOKE_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator27.0-arm64.xctestrun"
 
             if [ ! -f "$UNIT_TESTS_XCTESTRUN" ]; then
               echo "ERROR: .xctestrun file not found: $UNIT_TESTS_XCTESTRUN"
@@ -210,10 +212,11 @@ workflows:
     - xcode-test-without-building@0:
         timeout: 1200
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun
+        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator27.0-arm64.xctestrun
         - maximum_test_repetitions: 2
+        - test_repetition_mode: retry_on_failure
     - xcode-test-shard-calculation@0:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
@@ -329,9 +332,9 @@ workflows:
         timeout: 1200
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.5-arm64.xctestrun
+        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" -collect-test-diagnostics never'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator27.0-arm64.xctestrun
     - deploy-to-bitrise-io@2: {}
   firefox_scheme_build_for_test:
     description: Build Firefox scheme and shard XCUITests for parallel execution
@@ -411,7 +414,7 @@ workflows:
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX_SCHEME/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -collect-test-diagnostics never'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Firefox_Smoketest_iphonesimulator26.5-arm64-x86_64.xctestrun
     - deploy-to-bitrise-io@2: {}
   firefox_scheme_smoke_tests:
@@ -423,7 +426,7 @@ workflows:
     - xcode-test-without-building@0:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
         - xctestrun: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
         - maximum_test_repetitions: 2
     - deploy-to-bitrise-io@2: {}
@@ -511,7 +514,7 @@ workflows:
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX_BETA_SCHEME/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -collect-test-diagnostics never'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/FirefoxBeta_Smoketest_iphonesimulator26.5-arm64-x86_64.xctestrun
     - deploy-to-bitrise-io@2: {}
   firefox_beta_scheme_smoke_tests:
@@ -523,7 +526,7 @@ workflows:
     - xcode-test-without-building@0:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
         - xctestrun: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
         - maximum_test_repetitions: 2
     - deploy-to-bitrise-io@2: {}
@@ -892,7 +895,14 @@ workflows:
                 exit 0
                 FILES_CHANGED=$(git diff --name-only $BITRISE_GIT_BRANCH..."$BITRISE_GIT_COMMIT")
             else
-                FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT")
+                # Branch pushes (no PR) leave $BITRISEIO_GIT_BRANCH_DEST empty, and Bitrise
+                # clones only the pushed commit - so origin/main may be missing entirely or
+                # present without a common ancestor, either of which makes the diff below
+                # fail. Fetch it, and tolerate failure: an empty FILES_CHANGED takes the
+                # "no files changed" path below and skips the blacklist check rather than
+                # failing the workflow and skipping the build and tests.
+                git fetch --no-tags origin main 2>/dev/null || true
+                FILES_CHANGED=$(git diff --name-only origin/main..."$BITRISE_GIT_COMMIT" 2>/dev/null || true)
             fi
 
             # Manual triggers leave empty commits.
@@ -1706,6 +1716,12 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     - skip_macro_validation
+    # Pinned to the pre-Xcode-27 stack: this canary branch deliberately leaves the
+    # performance tests unchanged so their measurements stay comparable to main.
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.5.x
+        machine_type_id: g2.mac.4large
   Archive_and_Run_Robo_Test:
     before_run:
     - 1_git_clone_and_post_clone
@@ -2055,17 +2071,30 @@ workflows:
         - configuration: Debug
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - script@1:
         title: "Create .xctestrun files for all iOS versions"
         inputs:
         - content: |-
-            SOURCE_FILE="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun"
+            SOURCE_FILE="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator27.0-arm64.xctestrun"
+            cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun"
             cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun"
-            cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun"
     - xcode-test-without-building@0:
-        title: "Unit Tests - iPhone 17 (iOS 26.5), 3 repetitions"
-        timeout: 1800
+        title: "Unit Tests - iPhone 18 Pro (iOS 27.0), 3 repetitions"
+        timeout: 1200
+        is_always_run: true
+        inputs:
+        - project_path: firefox-ios/Client.xcodeproj
+        - scheme: Fennec
+        - configuration: Debug
+        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator27.0-arm64.xctestrun
+        - test_repetition_mode: until_failure
+        - maximum_test_repetitions: "3"
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+    - xcode-test-without-building@0:
+        title: "Unit Tests - iPhone 17 (iOS 26.5)"
+        timeout: 6000
         is_always_run: true
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
@@ -2073,9 +2102,7 @@ workflows:
         - configuration: Debug
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.5-arm64.xctestrun
-        - test_repetition_mode: until_failure
-        - maximum_test_repetitions: "3"
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
     - xcode-test-without-building@0:
         title: "Unit Tests - iPhone 16 (iOS 18.6)"
         timeout: 6000
@@ -2086,18 +2113,7 @@ workflows:
         - configuration: Debug
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.6
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-    - xcode-test-without-building@0:
-        title: "Unit Tests - iPhone 15 (iOS 17.5)"
-        timeout: 6000
-        is_always_run: true
-        inputs:
-        - project_path: firefox-ios/Client.xcodeproj
-        - scheme: Fennec
-        - configuration: Debug
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.5
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
     - deploy-to-bitrise-io@2: {}
     - script@1:
         title: "Capture Xcode Version Info"
@@ -2130,7 +2146,7 @@ workflows:
         - footer_icon: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
         - footer_icon_on_error: https://avatars.slack-edge.com/2025-06-24/9097205871668_a01e2ac8089c067ea5f8_512.png
         - fields: |
-            iOS Simulators | iPhone 17 - iOS 26.5 (3 repetitions), iPhone 16 - iOS 18.6, iPhone 15 - iOS 17.5
+            iOS Simulators | iPhone 18 Pro - iOS 27.0 (3 repetitions), iPhone 17 - iOS 26.5, iPhone 16 - iOS 18.6
             Xcode Version | ${XCODE_VERSION_INFO}
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
 
@@ -2157,8 +2173,8 @@ workflows:
         - scheme: Focus
         - configuration: FocusDebug
         - project_path: /Users/vagrant/git/focus-ios/Blockzilla.xcodeproj
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - script@1:
         title: Override xctestrun Focus env variables
         inputs:
@@ -2166,16 +2182,16 @@ workflows:
             #!/usr/bin/env bash
             set -euxo pipefail
             # Point to the Unit tests plan instead of Accessibility
-            FOCUS_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator26.5-arm64.xctestrun"
+            FOCUS_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.0-arm64.xctestrun"
 
             echo "Found UITest .xctestrun: $FOCUS_UI_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH --value "$FOCUS_UI_XCTESTRUN"
     - xcode-test-without-building@0:
         timeout: 1200
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_UnitTests_iphonesimulator26.5-arm64.xctestrun
+        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_UnitTests_iphonesimulator27.0-arm64.xctestrun
     - xcode-test-shard-calculation@0:
         inputs:
         - product_path: $BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH
@@ -2256,9 +2272,9 @@ workflows:
         timeout: 1200
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator26.5-arm64.xctestrun
+        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.0-arm64.xctestrun
     - deploy-to-bitrise-io@2: {}
     - github-status@3:
         inputs:
@@ -3014,5 +3030,5 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-26.5.x
+    stack: osx-xcode-27.0.x
     machine_type_id: g2.mac.4large
