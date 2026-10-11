@@ -38,12 +38,15 @@ final class AddressToolbarContainerModel: Equatable {
     let hasAlternativeLocationColor: Bool
     let isAddressBarMinimized: Bool
     let isAccessoryViewVisible: Bool
+    let isSearchTermInAddressBarEnabled: Bool
 
     let windowUUID: UUID
 
     @MainActor
     var addressToolbarConfig: AddressToolbarConfiguration {
-        let term = searchTerm ?? searchTermFromURL(url)
+        let locationURL = isEmptySearch ? nil : url
+        let urlSearchTerm = searchTermFromURL(locationURL)
+        let term = searchTerm ?? urlSearchTerm
         let backgroundAlpha = toolbarHelper.glassEffectAlpha
         let shouldBlur = toolbarHelper.shouldBlur()
         let uxConfiguration: AddressToolbarUXConfiguration = .experiment(
@@ -71,9 +74,10 @@ final class AddressToolbarContainerModel: Equatable {
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
-            url: isEmptySearch ? nil : url,
+            url: locationURL,
             droppableUrl: droppableUrl,
             searchTerm: isEmptySearch ? nil : term,
+            shouldDisplaySearchTerm: shouldDisplaySearchTerm(urlSearchTerm),
             isEditing: isEditing,
             didStartTyping: didStartTyping,
             shouldShowKeyboard: shouldShowKeyboard,
@@ -164,6 +168,7 @@ final class AddressToolbarContainerModel: Equatable {
             lockIconNeedsTheming = hasSecureContent
         }
 
+        let urlSearchTerm = searchTermFromURL(url)
         let locationViewConfiguration = LocationViewConfiguration(
             searchEngineImageViewA11yId: "",
             searchEngineImageViewA11yLabel: "",
@@ -177,7 +182,8 @@ final class AddressToolbarContainerModel: Equatable {
             safeListedURLImageName: safeListedURLImageName,
             url: url,
             droppableUrl: nil,
-            searchTerm: nil,
+            searchTerm: urlSearchTerm,
+            shouldDisplaySearchTerm: shouldDisplaySearchTerm(urlSearchTerm),
             isEditing: false,
             didStartTyping: false,
             shouldShowKeyboard: false,
@@ -207,6 +213,7 @@ final class AddressToolbarContainerModel: Equatable {
         profile: Profile,
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         toolbarHelper: ToolbarHelperInterface = ToolbarHelper(),
+        featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         windowUUID: UUID
     ) {
         self.borderPosition = state.addressToolbar.borderPosition
@@ -259,6 +266,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.hasAlternativeLocationColor = hasAlternativeLocationColor
         self.toolbarLayoutStyle = state.toolbarLayout
         self.toolbarHelper = toolbarHelper
+        self.isSearchTermInAddressBarEnabled = featureFlagsProvider.isEnabled(.searchTermInAddressBar)
     }
 
     @MainActor
@@ -270,6 +278,10 @@ final class AddressToolbarContainerModel: Equatable {
         }
 
         return searchEnginesManager.queryForSearchURL(searchURL)
+    }
+
+    private func shouldDisplaySearchTerm(_ urlSearchTerm: String?) -> Bool {
+        return isSearchTermInAddressBarEnabled && urlSearchTerm?.isEmpty == false
     }
 
     @MainActor

@@ -19,6 +19,12 @@ features:
           The style of the tab tray button in the toolbar.
         type: TabTrayButtonType
         default: number
+      search_term_in_address_bar:
+        description: >
+          Shows the search term instead of the URL in the address bar when the
+          current page is a search results page of the default search engine.
+        type: Boolean
+        default: false
 
     defaults:
       - channel: beta
@@ -26,11 +32,13 @@ features:
           unified_search: false
           layout: version1
           tab_tray_button_type: number
+          search_term_in_address_bar: false
       - channel: developer
         value:
           unified_search: false
           layout: version1
           tab_tray_button_type: number
+          search_term_in_address_bar: false
 
 enums:
   ToolbarLayoutType:

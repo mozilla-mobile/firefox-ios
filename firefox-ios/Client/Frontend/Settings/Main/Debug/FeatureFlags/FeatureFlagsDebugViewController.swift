@@ -270,6 +270,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .searchTermInAddressBar,
+                titleText: format(string: "Search Term in Address Bar"),
+                statusText: format(string: "Toggle to show the search term instead of the URL for default engine searches")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .sentFromFirefox,
                 titleText: format(string: "Sent from Firefox"),
                 statusText: format(string: "Toggle to enable Sent from Firefox to append text to WhatsApp shares")

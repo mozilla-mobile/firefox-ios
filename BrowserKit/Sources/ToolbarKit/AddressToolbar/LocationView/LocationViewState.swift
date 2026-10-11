@@ -21,6 +21,7 @@ public struct LocationViewConfiguration {
     public let url: URL?
     public let droppableUrl: URL?
     public let searchTerm: String?
+    public let shouldDisplaySearchTerm: Bool
     public let isEditing: Bool
     public let didStartTyping: Bool
     public let shouldShowKeyboard: Bool
@@ -43,6 +44,7 @@ public struct LocationViewConfiguration {
         url: URL?,
         droppableUrl: URL?,
         searchTerm: String?,
+        shouldDisplaySearchTerm: Bool = false,
         isEditing: Bool,
         didStartTyping: Bool,
         shouldShowKeyboard: Bool,
@@ -64,6 +66,7 @@ public struct LocationViewConfiguration {
         self.url = url
         self.droppableUrl = droppableUrl
         self.searchTerm = searchTerm
+        self.shouldDisplaySearchTerm = shouldDisplaySearchTerm
         self.isEditing = isEditing
         self.didStartTyping = didStartTyping
         self.shouldShowKeyboard = shouldShowKeyboard
