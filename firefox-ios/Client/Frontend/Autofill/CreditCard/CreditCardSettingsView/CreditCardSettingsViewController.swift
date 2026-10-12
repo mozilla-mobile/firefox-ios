@@ -42,6 +42,9 @@ class CreditCardSettingsViewController: SensitiveViewController, UIAdaptivePrese
         return viewModel.windowUUID
     }
 
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
     // MARK: Initializers
     init(creditCardViewModel: CreditCardSettingsViewModel,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -146,7 +149,9 @@ class CreditCardSettingsViewController: SensitiveViewController, UIAdaptivePrese
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
     }
 
     func applyTheme() {

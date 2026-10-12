@@ -8,6 +8,9 @@ import Common
 import ComponentLibrary
 
 class ClearPrivateDataTableViewController: ThemedTableViewController {
+    override var shouldUsePrivateOverride: Bool { return true }
+    override var shouldBeInPrivateTheme: Bool { return false }
+
     private var clearButton: UITableViewCell?
 
     private let sectionArrow = 0

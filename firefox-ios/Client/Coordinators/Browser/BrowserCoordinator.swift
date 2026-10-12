@@ -1140,7 +1140,21 @@ final class BrowserCoordinator: BaseCoordinator,
         if featureFlagsProvider.isEnabled(.tabTrayUIExperiments) &&
             UIDevice.current.userInterfaceIdiom != .pad && selectedPanel != .syncedTabs {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
-            present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
+            // Present on the next runloop turn so setup and tap feedback render first,
+            // keeping each main-thread turn short and reducing the risk of a hang during presentation.
+            DispatchQueue.main.async { [weak self, weak tabTrayCoordinator] in
+                guard let self, let tabTrayCoordinator, childCoordinators.contains(where: { $0 === tabTrayCoordinator })
+                else { return }
+
+                // Defense in case something else was presented while we waited a runloop turn,
+                // presenting now would fail silently and leave a stale coordinator
+                // that blocks the next tab tray open, so remove it instead.
+                guard !router.isPresenting else {
+                    remove(child: tabTrayCoordinator)
+                    return
+                }
+                present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
+            }
         } else {
             present(navigationController)
         }

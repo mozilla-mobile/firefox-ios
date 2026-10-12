@@ -240,6 +240,7 @@ analyzer_rules: # Rules run by `swiftlint analyze`
   - unused_import
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
+  - .git/
   # Firefox specific
   - build/
   - .build/
