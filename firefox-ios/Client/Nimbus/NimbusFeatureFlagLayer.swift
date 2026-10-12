@@ -63,6 +63,12 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
 
+        case .browserDataExport:
+            return nimbus.features.browserDataTransferFeature.value().exportEnabled
+
+        case .browserDataImport:
+            return nimbus.features.browserDataTransferFeature.value().importEnabled
+
         case .cellularDataRestrictedErrorPage:
             return checkCellularDataRestrictedErrorPageFeature()
 

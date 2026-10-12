@@ -18,6 +18,8 @@ enum FeatureFlagID: String, CaseIterable {
     case aiKillSwitch
     case backgroundAudio
     case bookmarksSearchFeature
+    case browserDataExport
+    case browserDataImport
     case cellularDataRestrictedErrorPage
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
@@ -110,6 +112,8 @@ enum FeatureFlagID: String, CaseIterable {
                 .aiKillSwitch,
                 .backgroundAudio,
                 .bookmarksSearchFeature,
+                .browserDataExport,
+                .browserDataImport,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,

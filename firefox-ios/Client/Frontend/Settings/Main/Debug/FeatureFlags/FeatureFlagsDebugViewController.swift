@@ -108,6 +108,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .browserDataExport,
+                titleText: format(string: "Browser Data Export"),
+                statusText: format(string: "Toggle to enable exporting bookmarks and history to another browser")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .browserDataImport,
+                titleText: format(string: "Browser Data Import"),
+                statusText: format(string: "Toggle to enable importing bookmarks and history from another browser")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .customReaderModeScheme,
                 titleText: format(string: "Custom Reader Mode Scheme"),
                 statusText: format(string: "Toggle to serve reader mode via the readermode:// scheme handler")
