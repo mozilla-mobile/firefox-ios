@@ -9,7 +9,8 @@ import Shared
 
 let page1 = "http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)"
 let page2 = "http://localhost:\(serverPort)/test-fixture/test-example.html"
-let serverPort = ProcessInfo.processInfo.environment["WEBSERVER_PORT"] ?? "\(Int.random(in: 1025..<65000))"
+// Choose a dynamic port to avoid WebKit's restricted ports.
+let serverPort = ProcessInfo.processInfo.environment["WEBSERVER_PORT"] ?? "\(Int.random(in: 49152..<65000))"
 @MainActor
 let urlBarAddress = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
 @MainActor

@@ -5,6 +5,9 @@
 import Foundation
 
 struct TabGroup: Codable, Equatable, Identifiable, Sendable {
+    static let defaultColor = CodableColor(red: 0.20, green: 0.44, blue: 0.90)
+    static let defaultIcon = TabGroupIcon.sfSymbol("rectangle.portrait.on.rectangle.portrait.angled.fill")
+
     let id: TabGroupID
     var title: String
     var color: CodableColor
@@ -13,8 +16,8 @@ struct TabGroup: Codable, Equatable, Identifiable, Sendable {
 
     init(id: TabGroupID = UUID(),
          title: String,
-         color: CodableColor = CodableColor(red: 0.20, green: 0.44, blue: 0.90),
-         icon: TabGroupIcon = .sfSymbol("rectangle.portrait.on.rectangle.portrait.angled.fill"),
+         color: CodableColor = TabGroup.defaultColor,
+         icon: TabGroupIcon = TabGroup.defaultIcon,
          tabIDs: [TabUUID] = []) {
         self.id = id
         self.title = title

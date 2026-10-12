@@ -18,7 +18,12 @@ enum TabsDeletionPeriod: String {
 // MARK: - TabManager protocol
 @MainActor
 protocol TabManager: AnyObject {
+    var tabGroupManager: TabGroupManager { get }
     nonisolated var windowUUID: WindowUUID { get }
+    @discardableResult
+    func openTabGroup(_ groupID: TabGroupID) async throws -> WindowUUID
+    func deleteTabGroup(_ groupID: TabGroupID) throws
+    func prepareForWindowClose()
     var isRestoringTabs: Bool { get }
     var tabRestoreHasFinished: Bool { get }
     var recentlyAccessedNormalTabs: [Tab] { get }

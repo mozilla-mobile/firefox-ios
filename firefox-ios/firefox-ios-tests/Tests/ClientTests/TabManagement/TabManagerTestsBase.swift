@@ -15,6 +15,7 @@ import Common
 class TabManagerTestsBase: XCTestCase {
     var tabWindowUUID: WindowUUID!
     var mockTabStore: MockTabDataStore!
+    var mockGroupStorage: MockTabGroupStorage!
     var mockSessionStore: MockTabSessionStore!
     var mockProfile: MockProfile!
     var mockDiskImageStore: MockDiskImageStore!
@@ -35,6 +36,7 @@ class TabManagerTestsBase: XCTestCase {
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
+        mockGroupStorage = MockTabGroupStorage()
         mockSessionStore = MockTabSessionStore()
         mockThemeManager = await MockThemeManager()
         setIsDeeplinkOptimizationRefactorEnabled(false)
@@ -44,6 +46,7 @@ class TabManagerTestsBase: XCTestCase {
         mockProfile = nil
         mockDiskImageStore = nil
         mockTabStore = nil
+        mockGroupStorage = nil
         mockSessionStore = nil
         mockThemeManager = nil
         DependencyHelperMock().reset()
@@ -55,6 +58,7 @@ class TabManagerTestsBase: XCTestCase {
     @MainActor
     func createSubject(tabs: [Tab] = [],
                        windowUUID: WindowUUID? = nil,
+                       groupManager: TabGroupManager? = nil,
                        file: StaticString = #filePath,
                        line: UInt = #line) -> TabManagerImplementation {
         let subject = TabManagerImplementation(
@@ -62,6 +66,7 @@ class TabManagerTestsBase: XCTestCase {
             imageStore: mockDiskImageStore,
             uuid: ReservedWindowUUID(uuid: windowUUID ?? tabWindowUUID, isNew: false),
             tabDataStore: mockTabStore,
+            tabGroupManager: groupManager ?? TabGroupManager(storage: mockGroupStorage),
             tabSessionStore: mockSessionStore,
             themeManager: mockThemeManager,
             tabs: tabs
