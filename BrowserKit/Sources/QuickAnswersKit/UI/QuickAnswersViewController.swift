@@ -22,7 +22,6 @@ public final class QuickAnswersViewController: UIViewController,
         static let contentViewTopPadding: CGFloat = 32.0
         static let contentViewBottomPadding: CGFloat = 12.0
         static let contentViewHorizontalPadding: CGFloat = 24.0
-        static let presentationCloseButtonOffset: CGFloat = -20.0
         static let titleFadeDuration: TimeInterval = 0.2
         static let resultBackgroundFadeDuration: TimeInterval = 0.3
         static let resultBackgroundFadeDelay: TimeInterval = 0.2
@@ -72,7 +71,6 @@ public final class QuickAnswersViewController: UIViewController,
         presenter: self,
         strings: stringsConfiguration.privacyBanner
     )
-    private var transcript = ""
 
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
@@ -159,8 +157,10 @@ public final class QuickAnswersViewController: UIViewController,
         view.addSubviews(
             backgroundEffectView,
             contentView,
-            closeButton,
         )
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: closeButton)
+        navigationItem.titleView = titleLabel
+        setContentScrollView(contentView.scrollView, for: .top)
 
         backgroundEffectView.pinToSuperview()
 
@@ -183,7 +183,6 @@ public final class QuickAnswersViewController: UIViewController,
                 if let error {
                     self?.errorHandler.handleSpeechError(error)
                 } else {
-                    self?.transcript = result.text
                     self?.contentView.configureTranscript(result.text)
                 }
             case .loadingSearchResult:
@@ -207,10 +206,10 @@ public final class QuickAnswersViewController: UIViewController,
                 }
             }
         }
-        contentView.onTranscriptVisibilityChange = { [weak self] isTranscriptVisible in
+        contentView.onTranscriptVisibilityChange = { [weak self] isTranscriptVisible, transcript in
             UIView.animate(withDuration: UX.titleFadeDuration) {
                 self?.titleLabel.alpha = isTranscriptVisible ? 0.0 : 1.0
-                self?.titleLabel.text = isTranscriptVisible ? nil : self?.transcript
+                self?.titleLabel.text = isTranscriptVisible ? nil : transcript
             }
         }
         contentView.configureOptIn(
@@ -241,20 +240,27 @@ public final class QuickAnswersViewController: UIViewController,
     }
 
     // MARK: - Presentation transition
-    func prepareForPresentationTransition() {
-        contentView.prepareForPresentationTransition()
+    func prepareForPresentationTransition(sourceRect: CGRect, isOptInVisible: Bool) {
+        contentView.prepareForPresentationTransition(
+            sourceRect: sourceRect,
+            containerWidth: view.frame.width,
+            isOptInVisible: isOptInVisible
+        )
         backgroundEffectView.alpha = 0.0
         backgroundEffectView.prepareForPresentationTransition()
-        closeButton.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationCloseButtonOffset)
-        closeButton.alpha = 0.0
+        navigationController?.navigationBar.transform = CGAffineTransform(
+            translationX: 0.0,
+            y: UX.presentationNavigationBarOffset
+        )
+        navigationController?.navigationBar.alpha = 0.0
     }
 
     func applyPresentationTransition(isOptInVisible: Bool) {
         contentView.applyPresentationTransition(isOptInVisible: isOptInVisible)
         backgroundEffectView.alpha = 1.0
         backgroundEffectView.applyPresentationTransition()
-        closeButton.alpha = 1.0
-        closeButton.transform = .identity
+        navigationController?.navigationBar.alpha = 1.0
+        navigationController?.navigationBar.transform = .identity
     }
 
     private func dismiss(with url: URL?) {
