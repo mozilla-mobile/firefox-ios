@@ -38,6 +38,7 @@ import csv
 import json
 import os
 import re
+import subprocess
 import sys
 
 import yaml
@@ -197,27 +198,131 @@ def repo_relative(path, in_scope):
     return None
 
 
-def cmd_coverage(ids, roots, rules, report_path):
+def xccov_files(report_path, in_scope):
+    """Returns {path: [function]} from an xccov JSON report."""
     with open(report_path) as f:
         report = json.load(f)
-    in_scope = set(source_files(roots))
-    totals = collections.defaultdict(collections.Counter)
-    seen = set()
+    files = {}
     for target in report.get("targets", []):
         for entry in target.get("files", []):
             path = repo_relative(entry["path"], in_scope)
-            if path is None or path in seen:
-                continue
-            seen.add(path)
-            rule, error = resolve(path, rules)
-            functions = entry.get("functions") or [{"name": "", **entry}]
-            for fn in functions:
-                feature = rule.feature_for_symbol(fn["name"]) if rule else "UNMAPPED"
-                totals[feature]["executable_lines"] += fn["executableLines"]
-                totals[feature]["covered_lines"] += fn["coveredLines"]
-            if rule:
-                for feature in {rule.feature_for_symbol(fn["name"]) for fn in functions}:
-                    totals[feature]["files_with_coverage_data"] += 1
+            if path is not None and path not in files:
+                files[path] = entry.get("functions") or [{"name": "", **entry}]
+    return files
+
+
+def line_counts(segments):
+    """Returns {line: execution count} for executable lines, matching llvm-cov's LineCoverageStats.
+
+    Each segment is [line, column, count, has_count, is_region_entry, is_gap_region].
+    """
+    counts, wrapped = {}, None
+    by_line = collections.defaultdict(list)
+    for seg in segments:
+        by_line[seg[0]].append(seg)
+    if not segments:
+        return counts
+    for line in range(segments[0][0], segments[-1][0] + 1):
+        starts = by_line.get(line, [])
+        region_starts = [s for s in starts if s[3] and s[4] and not s[5]]
+        skipped = bool(starts) and not starts[0][3] and starts[0][4]
+        mapped = not skipped and ((wrapped is not None and wrapped[3]) or region_starts)
+        if mapped:
+            count = wrapped[2] if wrapped is not None else 0
+            for s in region_starts:
+                count = max(count, s[2])
+            counts[line] = count
+        if starts:
+            wrapped = starts[-1]
+    return counts
+
+
+def demangle(names):
+    if not names:
+        return {}
+    out = subprocess.run(["xcrun", "swift-demangle", "--simplified"], input="\n".join(names),
+                         capture_output=True, text=True, check=True).stdout.splitlines()
+    return dict(zip(names, out)) if len(out) == len(names) else {n: n for n in names}
+
+
+def llvm_cov_files(profdata, binaries, paths, in_scope):
+    """Returns {path: [function]} read directly from instrumented binaries for `paths`.
+
+    Used for files that xccov drops, which happens when Xcode attributes a Swift package's
+    coverage to a different binary than the one that ran.
+    """
+    command = ["xcrun", "llvm-cov", "export", "-instr-profile", profdata, binaries[0]]
+    for binary in binaries[1:]:
+        command += ["-object", binary]
+    command += [os.path.join(REPO_ROOT, p) for p in sorted(paths)]
+    export = json.loads(subprocess.run(command, capture_output=True, text=True, check=True).stdout)
+    files = {}
+    for data in export.get("data", []):
+        lines_by_path, summaries = {}, {}
+        for entry in data.get("files", []):
+            path = repo_relative(entry["filename"], in_scope)
+            if path in paths:
+                lines_by_path[path] = line_counts(entry.get("segments", []))
+                summaries[path] = entry["summary"]["lines"]
+        ranges = collections.defaultdict(list)
+        for fn in data.get("functions", []):
+            regions = [r for r in fn.get("regions", []) if r[5] == 0]
+            path = repo_relative(fn["filenames"][0], in_scope) if fn.get("filenames") else None
+            if path in lines_by_path and regions:
+                ranges[path].append((fn["name"], min(r[0] for r in regions), max(r[2] for r in regions)))
+        names = demangle(sorted({name for fns in ranges.values() for name, _, _ in fns}))
+        for path, counts in lines_by_path.items():
+            functions = collections.defaultdict(lambda: {"executableLines": 0, "coveredLines": 0})
+            spans = sorted(ranges.get(path, []), key=lambda r: r[2] - r[1])
+            for line, count in counts.items():
+                owner = next((names.get(n, n) for n, start, end in spans if start <= line <= end), "")
+                functions[owner]["executableLines"] += 1
+                functions[owner]["coveredLines"] += 1 if count > 0 else 0
+            files[path] = scale_to_summary([{"name": name, **c} for name, c in functions.items()], summaries[path])
+    return files
+
+
+def scale_to_summary(functions, summary):
+    """Scales per-function line counts so the file totals equal llvm-cov's file summary.
+
+    xccov and llvm-cov count a nested closure's lines in both the closure and its parent, so their
+    file totals exceed the number of distinct executable lines. Matching them keeps files read this
+    way comparable with files from the xccov report.
+    """
+    for key, target in (("executableLines", summary["count"]), ("coveredLines", summary["covered"])):
+        current = sum(f[key] for f in functions)
+        if not functions:
+            continue
+        if current == 0:
+            functions[0][key] = target
+            continue
+        scaled = [f[key] * target / current for f in functions]
+        for f, value in zip(functions, scaled):
+            f[key] = int(value)
+        remainder = target - sum(f[key] for f in functions)
+        order = sorted(range(len(functions)), key=lambda i: scaled[i] - int(scaled[i]), reverse=True)
+        for i in order[:remainder]:
+            functions[i][key] += 1
+    return functions
+
+
+def cmd_coverage(ids, roots, rules, report_path, profdata=None, binaries=()):
+    in_scope = set(source_files(roots))
+    files = xccov_files(report_path, in_scope)
+    if profdata and binaries:
+        missing = {p for p in in_scope - set(files) if resolve(p, rules)[0] and resolve(p, rules)[0].feature != "EXCLUDED"}
+        files.update(llvm_cov_files(profdata, list(binaries), missing, in_scope))
+    totals = collections.defaultdict(collections.Counter)
+    seen = set(files)
+    for path, functions in files.items():
+        rule, error = resolve(path, rules)
+        for fn in functions:
+            feature = rule.feature_for_symbol(fn["name"]) if rule else "UNMAPPED"
+            totals[feature]["executable_lines"] += fn["executableLines"]
+            totals[feature]["covered_lines"] += fn["coveredLines"]
+        if rule:
+            for feature in {rule.feature_for_symbol(fn["name"]) for fn in functions}:
+                totals[feature]["files_with_coverage_data"] += 1
     for path in in_scope - seen:
         rule, _ = resolve(path, rules)
         feature = rule.feature if rule else "UNMAPPED"
@@ -239,6 +344,8 @@ def main():
     sub.add_parser("lines")
     cov = sub.add_parser("coverage")
     cov.add_argument("report", help="JSON from `xcrun xccov view --report --json <bundle>.xcresult`")
+    cov.add_argument("--profdata", help="Coverage.profdata from DerivedData/Build/ProfileData, used for files the report is missing")
+    cov.add_argument("--binary", action="append", default=[], help="Instrumented binary to read with --profdata (repeatable)")
     args = parser.parse_args()
     ids, roots, rules = load()
     if args.command == "check":
@@ -247,7 +354,7 @@ def main():
         return cmd_files(ids, roots, rules)
     if args.command == "lines":
         return cmd_lines(ids, roots, rules)
-    return cmd_coverage(ids, roots, rules, args.report)
+    return cmd_coverage(ids, roots, rules, args.report, args.profdata, args.binary)
 
 
 if __name__ == "__main__":

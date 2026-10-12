@@ -22,6 +22,18 @@ xcrun xccov view --report --json Test.xcresult > coverage.json
 uv run firefox-ios/feature-map/feature_map.py coverage coverage.json   # CSV: covered/executable lines per feature, plus code the run did not measure
 ```
 
+The `xccov` report leaves out some Swift packages. Xcode looks for their coverage in a different binary from the one that ran. Affected packages include `Common`, `Redux` and `QuickAnswersKit`. To fill those gaps, pass the run's profile data and the instrumented binaries. For any file missing from the report, line counts are then read directly with `llvm-cov`:
+
+```bash
+DD=~/Library/Developer/Xcode/DerivedData/Client-<hash>
+P=$DD/Build/Products/Debug-iphonesimulator
+uv run firefox-ios/feature-map/feature_map.py coverage coverage.json \
+  --profdata "$(ls -t $DD/Build/ProfileData/*/Coverage.profdata | head -1)" \
+  --binary "$P/Client.app/Client.debug.dylib" \
+  --binary "$P/PackageFrameworks/Common.framework/Common" \
+  --binary "$P/PackageFrameworks/Redux.framework/Redux"
+```
+
 ## How rules resolve
 
 - **The most specific rule wins, and rule order doesn't matter.** An exact file path beats a glob. Among globs, the one with more literal path segments wins, then the longer pattern. Two equally specific rules matching one file is an error.
