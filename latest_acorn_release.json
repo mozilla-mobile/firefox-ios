@@ -1,9 +1,9 @@
 {
-    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/399714478",
-    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/399714478/assets",
-    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/399714478/assets{?name,label}",
-    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.131.0",
-    "id": 399714478,
+    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/407401947",
+    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/407401947/assets",
+    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/407401947/assets{?name,label}",
+    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.136.0",
+    "id": 407401947,
     "author": {
         "login": "mdiaz040",
         "id": 302285759,
@@ -25,18 +25,18 @@
         "user_view_type": "public",
         "site_admin": false
     },
-    "node_id": "RE_kwDOI1CID84X0yiu",
-    "tag_name": "v1.131.0",
+    "node_id": "RE_kwDOI1CID84YSHXb",
+    "tag_name": "v1.136.0",
     "target_commitish": "main",
-    "name": "v1.131.0",
+    "name": "v1.136.0",
     "draft": false,
     "immutable": false,
     "prerelease": false,
-    "created_at": "2026-09-30T04:15:07Z",
-    "updated_at": "2026-09-30T04:17:05Z",
-    "published_at": "2026-09-30T04:17:05Z",
+    "created_at": "2026-10-09T01:19:58Z",
+    "updated_at": "2026-10-09T01:21:03Z",
+    "published_at": "2026-10-09T01:21:03Z",
     "assets": [],
-    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.131.0",
-    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.131.0",
-    "body": "# [Changelog]\r\n### [v1.131.0]\u2028\r\n### Added\r\n#### Desktop\u2028\r\n- SVG\r\n    - ill-feature-pin-sites-taskbar-email-dark.svg\r\n    - ill-feature-pin-sites-taskbar-email-light.svg\r\n    - ill-feature-pin-sites-taskbar-gaming-dark.svg\r\n    - ill-feature-pin-sites-taskbar-gaming-light.svg\r\n    - ill-feature-pin-sites-taskbar-media-dark.svg\r\n    - ill-feature-pin-sites-taskbar-media-light.svg\r\n    - ill-feature-pin-sites-taskbar-socialchat-dark.svg\r\n    - ill-feature-pin-sites-taskbar-socialchat-light.svg\r\n    - ill-feature-pin-sites-taskbar-value-dark.svg\r\n    - ill-feature-pin-sites-taskbar-value-light.svg\r\n"
+    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.136.0",
+    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.136.0",
+    "body": "# [Changelog]\r\n### [v1.136.0]\u2028\r\n### Added\r\n#### Mobile\r\n- PDF\r\n    - onboardingAdBlockerMobileLandscapeDark.pdf\r\n    - onboardingAdBlockerMobileLandscapeLight.pdf\r\n    - onboardingAdBlockerMobileLandscapePrivate.pdf\r\n    - onboardingAdBlockerMobilePortraitDark.pdf\r\n    - onboardingAdBlockerMobilePortraitLight.pdf\r\n    - onboardingAdBlockerMobilePortraitPrivate.pdf\r\n    - onboardingAdBlockerTabletLandscapeDark.pdf\r\n    - onboardingAdBlockerTabletLandscapeLight.pdf\r\n    - onboardingAdBlockerTabletLandscapePrivate.pdf\r\n    - onboardingAdBlockerTabletPortraitDark.pdf\r\n    - onboardingAdBlockerTabletPortraitLight.pdf\r\n    - onboardingAdBlockerTabletPortraitPrivate.pdf\r\n\r\n### Deleted\r\n#### Mobile\r\n- PDF\r\n    - onboardingAdBlockerDark.pdf\r\n    - onboardingAdBlockerLight.pdf"
 }
