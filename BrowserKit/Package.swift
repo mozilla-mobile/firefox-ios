@@ -318,7 +318,15 @@ let package = Package(
             ]),
         .target(
             name: "QuickAnswersKit",
-            dependencies: ["Common", "ComponentLibrary", "Shared", "MLPAKit", "LLMKit", "SiteImageView"],
+            dependencies: [
+                "Common",
+                "ComponentLibrary",
+                "Down",
+                "Shared",
+                "MLPAKit",
+                "LLMKit",
+                "SiteImageView"
+            ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"])
             ]

@@ -59,6 +59,7 @@ public struct QuickAnswersViewConfiguration: Sendable {
         public init(title: String, description: String) {
             self.title = title
             self.description = description
+            self.answerHeader = answerHeader
         }
     }
 
