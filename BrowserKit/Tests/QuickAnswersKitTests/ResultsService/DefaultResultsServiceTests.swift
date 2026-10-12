@@ -171,12 +171,46 @@ struct DefaultResultsServiceTests {
         }
     }
 
+    @Test
+    func test_fetchResults_followUpWithAssistantRoleModel_sendsPreviousTurnAsMessages() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWith = ["Sunny"]
+        let subject = createSubject(client: client, model: .liner)
+
+        _ = try await subject.fetchResults(for: "What is the weather?")
+        _ = try await subject.fetchResults(for: "And tomorrow?")
+
+        let messages = client.lastMessages.compactMap { $0 as? QuickAnswersMessage }.filter { $0.role != .system }
+        #expect(messages.map(\.role) == [.user, .assistant, .user])
+        #expect(messages.map(\.content) == ["What is the weather?", "Sunny", "And tomorrow?"])
+    }
+
+    @Test
+    func test_fetchResults_followUpWithoutAssistantRoleModel_inlinesPreviousTurnInQuestion() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWith = ["Sunny"]
+        let subject = createSubject(client: client, model: .exa)
+
+        _ = try await subject.fetchResults(for: "What is the weather?")
+        _ = try await subject.fetchResults(for: "And tomorrow?")
+
+        let messages = client.lastMessages.compactMap { $0 as? QuickAnswersMessage }.filter { $0.role != .system }
+        #expect(messages.count == 1)
+        #expect(messages.first?.role == .user)
+        #expect(
+            messages.first?.content
+                == "The user asked \"What is the weather?\" and was told \"Sunny\". Considering that, answer: And tomorrow?"
+        )
+    }
+
     // MARK: - Helper
     private func createSubject(
         client: LiteLLMClientProtocol,
-        config: QuickAnswersConfig = QuickAnswersConfig()
+        config: QuickAnswersConfig = QuickAnswersConfig(),
+        model: QuickAnswersModel = .exa
     ) -> DefaultResultsService {
         let configFetcher = MockQuickAnswersConfigFetcher(configToReturn: config)
+        configFetcher.model = model
         let subject = DefaultResultsService(client: client, configFetcher: configFetcher)
         testHelper.trackForMemoryLeaks(subject)
         return subject

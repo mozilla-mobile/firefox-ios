@@ -40,6 +40,8 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         static let resultCascadeStartDelay: TimeInterval = 0.1
         static let resultCascadeStagger: TimeInterval = 0.1
         static let presentationSlideOffset: CGFloat = 15.0
+        static let followUpSlideOffset: CGFloat = 100.0
+        static let followUpFadeInDuration: TimeInterval = 0.2
     }
 
     // MARK: - Subviews
@@ -278,6 +280,37 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         sourceView.configure(with: sources, onSourceTapped: onSourceTapped)
         hasDisplayedResults = true
         animateResultCascade()
+    }
+
+    /// Fades and slides down the content inside the scroll view, so the scroll view safe area doesn't change.
+    func hideForFollowUp(duration: TimeInterval, completion: @escaping () -> Void) {
+        UIView.animate(withDuration: duration, delay: 0.0, options: .curveEaseIn) { [self] in
+            contentView.alpha = 0.0
+            contentView.transform = CGAffineTransform(translationX: 0.0, y: UX.followUpSlideOffset)
+        } completion: { _ in
+            completion()
+        }
+    }
+
+    func resetForFollowUp() {
+        isShowingResult = false
+        isTranscriptVisible = true
+        if let theme {
+            transcriptLabel.foregroundColor = theme.colors.textPrimary
+        }
+        transcriptLabel.setTranscript("", animated: false)
+        transcriptLabel.alpha = 1.0
+        transcriptLabel.transform = .identity
+        [answerCardView, sourceView, footerLabel].forEach {
+            $0.alpha = 0.0
+            $0.transform = .identity
+        }
+        placeholderLabel.alpha = 1.0
+        audioWaveform.alpha = 1.0
+        contentView.transform = .identity
+        UIView.animate(withDuration: UX.followUpFadeInDuration) { [self] in
+            contentView.alpha = 1.0
+        }
     }
 
     // MARK: - Presentation transition

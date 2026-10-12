@@ -94,6 +94,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
                 ok: .QuickAnswers.Errors.OK
             ),
             closeAccessibilityLabel: .QuickAnswers.AccessibilityLabels.Close,
+            followUpAccessibilityLabel: .QuickAnswers.AccessibilityLabels.FollowUp,
             appName: appName
         )
     }

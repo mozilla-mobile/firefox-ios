@@ -18,6 +18,15 @@ public enum QuickAnswersModel: String, CaseIterable, Sendable {
         }
     }
 
+    /// Whether the provider accepts `assistant` messages. Exa's answer endpoint doesn't: it answers the
+    /// last user message, so for it the conversation history is inlined into the question instead.
+    var supportsAssistantRole: Bool {
+        return switch self {
+        case .exa: false
+        case .liner: true
+        }
+    }
+
     /// The user-facing name of the model.
     public var displayName: String {
         return switch self {
