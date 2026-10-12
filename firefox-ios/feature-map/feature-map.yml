@@ -1,0 +1,476 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Attributes Firefox iOS source files to features in features.yml.
+# The most specific matching rule wins: an exact file path beats a glob, and among
+# globs the one with more literal path segments wins. Rule order does not matter.
+# `by: ai` marks rules that were generated and not yet reviewed; delete it once a
+# person has checked the rule. See README.md.
+
+roots:
+  - firefox-ios/Client
+  - firefox-ios/Storage
+  - firefox-ios/Providers
+  - firefox-ios/WidgetKit
+  - firefox-ios/CredentialProvider
+  - firefox-ios/RustFxA
+  - firefox-ios/Extensions
+  - firefox-ios/ThirdParty
+  - firefox-ios/Shared
+  - firefox-ios/Sync
+  - firefox-ios/Push
+  - firefox-ios/Account
+  - BrowserKit/Sources
+
+rules:
+  # Excluded: generated code, strings, third-party code, test support
+  - {path: "firefox-ios/Client/Generated/**", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/Storage/Generated/**", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/Storage/ThirdParty/**", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/ThirdParty/**", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/Shared/Strings.swift", feature: EXCLUDED, by: ai}
+  - {path: "BrowserKit/Sources/Common/Constants/EffectiveTLDNames.swift", feature: EXCLUDED, by: ai}
+  - {path: "BrowserKit/Sources/TestKit/**", feature: EXCLUDED, by: ai}
+  - {path: "BrowserKit/Sources/ExecutableContentBlockingGenerator/**", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/Client/Application/AccessibilityIdentifiers.swift", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/Client/Application/UITestAppDelegate.swift", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/Client/Application/UnitTestAppDelegate.swift", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/Client/Application/UnitTestSceneDelegate.swift", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/Client/Application/WindowManager+DebugUtilities.swift", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/Client/Application/DebugSettingsBundleOptions.swift", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Debug/**", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/Client/Experiments/Settings/**", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/Storage/MockRustKeychain.swift", feature: EXCLUDED, by: ai}
+  - {path: "firefox-ios/Providers/Merino/MerinoTestData.swift", feature: EXCLUDED, by: ai}
+
+  # Shared: browser shell
+  - {path: "firefox-ios/Client/Application/**", feature: SHARED.SHELL, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/**", feature: SHARED.SHELL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/BrowserViewController/**", feature: SHARED.SHELL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Event Queue/**", feature: SHARED.SHELL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/BrowserPrompts.swift", feature: SHARED.SHELL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/KeyboardPressesHandler.swift", feature: UI.GEST, by: ai}
+  - {path: "firefox-ios/Client/ApplicationHelper.swift", feature: SHARED.SHELL, by: ai}
+  - {path: "firefox-ios/Client/PrivacyWindowHelper.swift", feature: SHARED.SHELL, by: ai}
+  - {path: "firefox-ios/Client/AccessoryViewProvider.swift", feature: SHARED.SHELL, by: ai}
+  - {path: "firefox-ios/Client/Helpers/UserActivityHandler.swift", feature: OS.ASSIST, by: ai}
+  - {path: "firefox-ios/Client/Helpers/MenuBuilderHelper.swift", feature: UI.GEST, by: ai}
+  - {path: "firefox-ios/Client/Protocols/**", feature: SHARED.SHELL, by: ai}
+  - {path: "firefox-ios/Client/Protocols/CanRemoveQuickActionBookmark.swift", feature: OS.ASSIST, by: ai}
+
+  # Shell files that belong to a feature
+  - {path: "firefox-ios/Client/Application/AppDelegate+PushNotifications.swift", feature: ENG.NOTIF, by: ai}
+  - {path: "firefox-ios/Client/Application/AppDelegate+SyncSentTabs.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Client/Application/QuickActions.swift", feature: OS.ASSIST, by: ai}
+  - {path: "firefox-ios/Client/Application/WindowManager.swift", feature: TABS.WIN, by: ai}
+  - {path: "firefox-ios/Client/Application/WindowEventCoordinator.swift", feature: TABS.WIN, by: ai}
+  - {path: "firefox-ios/Client/Application/DefaultBrowserUtility.swift", feature: OS.DEF, by: ai}
+  - {path: "firefox-ios/Client/Application/AppLaunchUtil.swift", feature: APP.START, by: ai}
+  - {path: "firefox-ios/Client/Application/LaunchSessionProvider.swift", feature: APP.START, by: ai}
+  - {path: "firefox-ios/Client/Application/BackgroundFirefoxSuggestIngestUtility.swift", feature: SRCH.SUG, by: ai}
+  - {path: "firefox-ios/Client/Application/BackgroundNotificationSurfaceUtility.swift", feature: ENG.NOTIF, by: ai}
+  - {path: "firefox-ios/Client/Application/BackgroundSyncUtility.swift", feature: ACCT.SYNC, by: ai}
+  - {path: "firefox-ios/Client/Application/AppleIntelligenceUtil.swift", feature: AI.CTRL, by: ai}
+  - {path: "firefox-ios/Client/Application/WebServer.swift", feature: SHARED.WEB, by: ai}
+  - {path: "firefox-ios/Client/Application/WebServerUtil.swift", feature: SHARED.WEB, by: ai}
+  - {path: "firefox-ios/Client/Application/ConversionTracking/**", feature: SHARED.TELEMETRY, by: ai}
+  - {path: "firefox-ios/Client/Application/RemoteSettings/**", feature: SHARED.EXPERIMENTS, by: ai}
+  - {path: "firefox-ios/Client/Application/RemoteSettings/RemoteRecords/PasswordRuleRecord.swift", feature: CRED.GEN, by: ai}
+  - {path: "firefox-ios/Client/Application/RemoteSettings/Application Services/ASSearchEngine*.swift", feature: SRCH.ENG, by: ai}
+  - {path: "firefox-ios/Client/Application/RemoteSettings/Application Services/TranslationsVersionHelper.swift", feature: TRANS.SET, by: ai}
+  - {path: "firefox-ios/Client/Application/RemoteSettings/Application Services/ASTranslationModelsFetcher.swift", feature: TRANS.SET, by: ai}
+  - {path: "firefox-ios/Client/Application/RemoteSettings/Application Services/ASAIRemoteConfig.swift", feature: AI.CTRL, by: ai}
+  - {path: "firefox-ios/Client/Application/RemoteSettings/Application Services/ASAdBlockerListFetcher.swift", feature: PROT.ADB, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/AddressAutofillCoordinator.swift", feature: CRED.ADDR, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/CredentialAutofillCoordinator.swift", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/PasswordManagerCoordinator.swift", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/QuickAnswersCoordinator.swift", feature: AI.QA, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/SettingsCoordinator.swift", feature: SET.FRAME, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/EnhancedTrackingProtectionCoordinator.swift", feature: PROT.ETP, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/ShareSheetCoordinator.swift", feature: OS.SHARE, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/WebCompatReport*.swift", feature: BRW.WEBC, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/CameraCoordinator.swift", feature: SRCH.VIS, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/PhotoPickerCoordinator.swift", feature: SRCH.VIS, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/SummarizeCoordinator.swift", feature: AI.SUM, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/Router/**", feature: OS.DEEP, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/Router/FxAPairingURLParser.swift", feature: ACCT.SIGN, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/Launch/**", feature: APP.START, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/LaunchView/**", feature: APP.START, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/LaunchView/OnboardingLaunchScreenViewController.swift", feature: ENG.ONB, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/TabTray/**", feature: TABS.TRAY, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/TabTray/RemoteTabsCoordinator.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/Library/LibraryCoordinator.swift", feature: LIB.BMK, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/Library/LibraryPanelCoordinatorDelegate.swift", feature: LIB.BMK, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/Library/BookmarksCoordinator.swift", feature: LIB.BMK, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/Library/HistoryCoordinator.swift", feature: LIB.HIST, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/Library/DownloadsCoordinator.swift", feature: LIB.DL, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/Library/ReadingListCoordinator.swift", feature: LIB.RL, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/QRCode/**", feature: SRCH.VIS, by: ai}
+  - {path: "firefox-ios/Client/Coordinators/Scene/ScreenshotService.swift", feature: OS.SHARE, by: ai}
+
+  # Shared: architecture, utilities, UI infrastructure
+  - {path: "firefox-ios/Client/Extensions/**", feature: SHARED.ARCH, by: ai}
+  - {path: "firefox-ios/Client/Extensions/PDFDocument+Extension.swift", feature: BRW.PDF, by: ai}
+  - {path: "firefox-ios/Client/Extensions/URL+Mail.swift", feature: BRW.LINKS, by: ai}
+  - {path: "firefox-ios/Client/Utils/**", feature: SHARED.ARCH, by: ai}
+  - {path: "firefox-ios/Client/Utils/DownloadLiveActivityUtil.swift", feature: OS.WID, by: ai}
+  - {path: "firefox-ios/Client/Utils/BackgroundTabLoader.swift", feature: TABS.TRAY, by: ai}
+  - {path: "firefox-ios/Client/Utils/HistoryDeletionUtility.swift", feature: LIB.HIST, by: ai}
+  - {path: "firefox-ios/Client/Utils/SponsoredContentFilterUtility.swift", feature: HOME.SC, by: ai}
+  - {path: "firefox-ios/Client/Utils/CuratedRecommendationCacheUtility.swift", feature: HOME.STORY, by: ai}
+  - {path: "firefox-ios/Client/Utils/Glean*.swift", feature: SHARED.TELEMETRY, by: ai}
+  - {path: "firefox-ios/Client/Utils/PingUploaderProtocol.swift", feature: SHARED.TELEMETRY, by: ai}
+  - {path: "firefox-ios/Client/Utils/LocaleProvider.swift", feature: SHARED.ARCH, by: ai}
+  - {path: "firefox-ios/Client/Redux/**", feature: SHARED.ARCH, by: ai}
+  - {path: "firefox-ios/Client/GeneralizedImageFetcher.swift", feature: SHARED.ARCH, by: ai}
+  - {path: "firefox-ios/Client/ProfilePrefsReader.swift", feature: SHARED.DATA, by: ai}
+  - {path: "firefox-ios/Client/UserNotificationCenterProtocol.swift", feature: ENG.NOTIF, by: ai}
+  - {path: "firefox-ios/Client/NotificationManager.swift", feature: ENG.NOTIF, by: ai}
+  - {path: "firefox-ios/Client/AccountSyncHandler.swift", feature: ACCT.SYNC, by: ai}
+  - {path: "firefox-ios/Client/CrashTracker.swift", feature: APP.CRASH, by: ai}
+  - {path: "firefox-ios/Client/RatingPromptManager.swift", feature: ENG.SURV, by: ai}
+  - {path: "firefox-ios/Client/IntroScreenManager.swift", feature: ENG.ONB, by: ai}
+  - {path: "firefox-ios/Client/TermsOfServiceManager.swift", feature: ENG.TOU, by: ai}
+  - {path: "firefox-ios/Client/PrivacyNoticeHelper.swift", feature: ENG.TOU, by: ai}
+  - {path: "firefox-ios/Client/Frontend/*.swift", feature: SHARED.UI, by: ai}
+  - {path: "firefox-ios/Client/Frontend/DevicePicker*.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Client/Frontend/InstructionsView.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Client/Frontend/AutoplayAccessors.swift", feature: BRW.MEDIA, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Components/**", feature: SHARED.UI, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Components/SaveLoginAlert.swift", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Widgets/**", feature: SHARED.UI, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Widgets/PrivateModeButton.swift", feature: PRIV.MODE, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Theme/**", feature: SHARED.UI, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Theme/PrivateModeUI.swift", feature: PRIV.MODE, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Accessors/HomePageAccessors.swift", feature: HOME.SET, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Accessors/NewTabAccessors.swift", feature: HOME.SET, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Extensions/SiriShortcuts.swift", feature: OS.ASSIST, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Extensions/DevicePickerViewController.swift", feature: ACCT.SEND, by: ai}
+
+  # Shared: telemetry and experiments
+  - {path: "firefox-ios/Client/Telemetry/**", feature: SHARED.TELEMETRY, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/TabsTelemetry.swift", feature: TABS.TRAY, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/TabsPanelTelemetry.swift", feature: TABS.TRAY, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/NotificationManagerTelemetry.swift", feature: ENG.NOTIF, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/ContextMenuTelemetry.swift", feature: BRW.CTX, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/HomepageTelemetry.swift", feature: HOME.SET, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/AppStartupTelemetry.swift", feature: APP.START, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/AutoplaySettingTelemetry.swift", feature: BRW.MEDIA, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/ShareExtensionTelemetry.swift", feature: OS.EXT, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/ActionExtensionTelemetry.swift", feature: OS.EXT, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/FxSuggestTelemetry.swift", feature: SRCH.SUG, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/HistoryDeletionUtilityTelemetry.swift", feature: LIB.HIST, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/GoogleLensTelemetry.swift", feature: SRCH.VIS, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/SystemPhotoPickerTelemetry.swift", feature: SRCH.VIS, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/SystemCameraTelemetry.swift", feature: SRCH.VIS, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/SponsoredTileTelemetry.swift", feature: HOME.SC, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/ShortcutsLibraryTelemetry.swift", feature: HOME.SC, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/DefaultBrowserUtilityTelemetry.swift", feature: OS.DEF, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/SearchTelemetry.swift", feature: SRCH.ENG, by: ai}
+  - {path: "firefox-ios/Client/Telemetry/AdsTelemetryHelper.swift", feature: SRCH.ENG, by: ai}
+  - {path: "firefox-ios/Client/Experiments/**", feature: SHARED.EXPERIMENTS, by: ai}
+  - {path: "firefox-ios/Client/Experiments/Messaging/**", feature: ENG.CFR, by: ai}
+  - {path: "firefox-ios/Client/Nimbus/**", feature: SHARED.EXPERIMENTS, by: ai}
+  - {path: "firefox-ios/Client/Nimbus/NimbusFirefoxSuggestFeatureLayer.swift", feature: SRCH.SUG, by: ai}
+  - {path: "firefox-ios/Client/Nimbus/OnboardingFeatureLayer/**", feature: ENG.ONB, by: ai}
+  - {path: "firefox-ios/Client/FeatureFlags/**", feature: SHARED.EXPERIMENTS, by: ai}
+
+  # Shared: web engine integration
+  - {path: "firefox-ios/Client/TabManagement/**", feature: SHARED.WEB, by: ai}
+  - {path: "firefox-ios/Client/TabManagement/TabManager*.swift", feature: TABS.TRAY, by: ai}
+  - {path: "firefox-ios/Client/TabManagement/TabRestor*.swift", feature: APP.SESS, by: ai}
+  - {path: "firefox-ios/Client/TabManagement/RemoteTabCreator.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Client/TabManagement/WindowSimpleTabsCoordinator.swift", feature: TABS.WIN, by: ai}
+  - {path: "firefox-ios/Client/TabManagement/Tab+ChangeUserAgent.swift", feature: BRW.ZOOM, by: ai}
+  - {path: "firefox-ios/Client/TabManagement/SwipeUpTabWebViewPreview.swift", feature: UI.GEST, by: ai}
+  - {path: "firefox-ios/Client/TabManagement/TabWebViewPreview.swift", feature: UI.GEST, by: ai}
+  - {path: "firefox-ios/Client/TabManagement/BackForwardList.swift", feature: BRW.NAV, by: ai}
+  - {path: "firefox-ios/Client/TabManagement/Document/**", feature: BRW.PDF, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TabContentsScripts/**", feature: SHARED.WEB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TabContentsScripts/ContextMenuHelper.swift", feature: BRW.CTX, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TabContentsScripts/NightModeHelper.swift", feature: SET.THEME, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TabContentsScripts/BackgroundAudioHelper.swift", feature: BRW.MEDIA, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TabContentsScripts/NoImageModeHelper.swift", feature: BRW.NAV, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TabContentsScripts/PrintHelper.swift", feature: BRW.PDF, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TabContentsScripts/FindInPageHelper.swift", feature: BRW.FIND, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TabContentsScripts/DownloadContentScript.swift", feature: LIB.DL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TabContentsScripts/LoginsHelper.swift", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TabContentsScripts/FormAutofillHelper/**", feature: CRED.ADDR, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TabContentsScripts/FormAutofillHelper/*CreditCard*.swift", feature: CRED.CC, by: ai}
+  - {path: "firefox-ios/Client/Frontend/InternalSchemeHandler/**", feature: SHARED.WEB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/InternalSchemeHandler/ErrorPageHelper.swift", feature: BRW.ERR, by: ai}
+  - {path: "firefox-ios/Client/Frontend/InternalSchemeHandler/SystemCellularDataStateProvider.swift", feature: BRW.ERR, by: ai}
+  - {path: "firefox-ios/Client/Frontend/InternalSchemeHandler/AboutHomeHandler.swift", feature: HOME.SET, by: ai}
+  - {path: "firefox-ios/Client/ContentBlocker/**", feature: PROT.ETP, by: ai}
+  - {path: "firefox-ios/Client/ContentBlocker/TrackerBlockStats/**", feature: PROT.DASH, by: ai}
+
+  # Browser frontend
+  - {path: "firefox-ios/Client/Frontend/Browser/TopTab*.swift", feature: TABS.STRIP, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/RelayController*.swift", feature: CRED.MASK, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/RelayMaskTelemetry.swift", feature: CRED.MASK, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/TranslationToastHandler.swift", feature: TRANS.PAGE, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/ToastType.swift", feature: UI.TOAST, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Toasts/**", feature: UI.TOAST, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Toasts/DownloadToast.swift", feature: LIB.DL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/*Clipboard*.swift", feature: BRW.CTX, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/MetadataParserHelper.swift", feature: SHARED.WEB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Mail*.swift", feature: BRW.LINKS, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/OpenWithSettingsViewController.swift", feature: BRW.LINKS, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/PrivateModeButton.swift", feature: PRIV.MODE, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/FindInPageBar.swift", feature: BRW.FIND, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/ContextMenuPreviewViewController.swift", feature: BRW.CTX, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/TextContentDetector.swift", feature: BRW.CTX, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/TabPrintPageRenderer.swift", feature: BRW.PDF, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/SearchSuggestClient.swift", feature: SRCH.SUG, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/SearchLoader.swift", feature: SRCH.URL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/ThirdPartySearchAlerts.swift", feature: SRCH.ENG, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/String+Punycode.swift", feature: SRCH.URL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/URIFixup.swift", feature: SRCH.URL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Authenticator.swift", feature: BRW.NAV, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/PrivilegedRequest.swift", feature: SHARED.WEB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/BackForward*.swift", feature: BRW.NAV, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/SwipeAnimator.swift", feature: UI.GEST, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/ScreenshotHelper.swift", feature: TABS.TRAY, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/QRCodeViewController.swift", feature: SRCH.VIS, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/FirefoxTabContentBlocker.swift", feature: PROT.ETP, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/RecordVisitObservationManager.swift", feature: LIB.HIST, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/DownloadHelper/**", feature: LIB.DL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/OpenInHelper/**", feature: LIB.DL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/MainMenu/**", feature: UI.MENU, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Search/**", feature: SRCH.SUG, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Search/ClientTabsSearchWrapper.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/SearchEngines/**", feature: SRCH.ENG, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/StartAtHome/**", feature: HOME.SET, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/TabScrollController/**", feature: UI.TB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/TermsOfUse/**", feature: ENG.TOU, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/WebCompat/**", feature: BRW.WEBC, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/WebView/**", feature: SHARED.WEB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/WebView/PullRefreshView.swift", feature: BRW.NAV, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/WebView/WebViewNavigationHandler.swift", feature: BRW.NAV, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/WebView/TemporaryDocumentLoadingView.swift", feature: BRW.PDF, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Zoom/**", feature: BRW.ZOOM, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Tabs/**", feature: TABS.TRAY, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Tabs/**/RemoteTabs*.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Tabs/Views/ExperimentRemoteTabsEmptyView.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Tabs/Views/*PrivateTabsView.swift", feature: PRIV.MODE, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Tabs/Action/TopTabsAction.swift", feature: TABS.STRIP, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Toolbars/**", feature: UI.TB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Toolbars/TabSwipeGestureHandler.swift", feature: UI.GEST, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Toolbars/SwipeUpTabPreviewGestureHandler.swift", feature: UI.GEST, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Toolbars/SwipeGestureFeatureFlagProvider.swift", feature: UI.GEST, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Toolbars/Autocompletable.swift", feature: SRCH.URL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Toolbars/OverlayModeManager.swift", feature: SRCH.URL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Browser/Toolbars/Redux/TranslationsConfiguration.swift", feature: TRANS.PAGE, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TabToolbar/**", feature: SRCH.URL, by: ai}
+
+  # Homepage
+  - {path: "firefox-ios/Client/Frontend/Home/**", feature: HOME.SET, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/UnifiedAds/**", feature: HOME.SC, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/PrivateHome/**", feature: PRIV.MODE, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/TopSites/**", feature: HOME.SC, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/Layout/TopSitesSectionLayoutProvider.swift", feature: HOME.SC, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/JumpBackIn/**", feature: HOME.JBI, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/JumpBackIn/SyncedTabCell.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/Bookmark/**", feature: HOME.JBI, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/SearchBar/**", feature: SRCH.URL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/SectionHeader/News*.swift", feature: HOME.STORY, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/SectionHeader/StoryCategoryPickerView.swift", feature: HOME.STORY, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/Merino/**", feature: HOME.STORY, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/TrackerBlockerModule/**", feature: PROT.DASH, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/ContextMenu/**", feature: BRW.CTX, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/Wallpapers/**", feature: HOME.WALL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/MessageCard/**", feature: ENG.CFR, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Home/Homepage/PrivacyNotice/**", feature: ENG.TOU, by: ai}
+  - {path: "firefox-ios/Client/Frontend/StoriesFeed/**", feature: HOME.STORY, by: ai}
+  - {path: "firefox-ios/Client/Frontend/ShortcutsLibrary/**", feature: HOME.SC, by: ai}
+
+  # Library
+  - {path: "firefox-ios/Client/Frontend/Library/**", feature: LIB.BMK, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Library/HistoryPanel/**", feature: LIB.HIST, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Library/HistoryTelemetry.swift", feature: LIB.HIST, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Library/ClearHistorySheetProvider.swift", feature: LIB.HIST, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Library/RecentlyClosedTabsPanel.swift", feature: TABS.CLOSED, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Library/Downloads/**", feature: LIB.DL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Library/Reader/**", feature: LIB.RL, by: ai}
+
+  # Settings: settings rows and screens belong to the feature they configure
+  - {path: "firefox-ios/Client/Frontend/Settings/**", feature: SET.FRAME, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/DefaultBrowserSetting.swift", feature: OS.DEF, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Privacy/ClearPrivateDataSetting.swift", feature: PROT.CLEAR, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Privacy/PasswordManagerSetting.swift", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Privacy/AutofillPasswordSetting.swift", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Privacy/AddressAutofillSetting.swift", feature: CRED.ADDR, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Privacy/AutofillCreditCardSettings.swift", feature: CRED.CC, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Privacy/AutofillRelayMaskSetting.swift", feature: CRED.MASK, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Privacy/ContentBlockerSetting.swift", feature: PROT.ETP, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Privacy/NotificationsSetting.swift", feature: ENG.NOTIF, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/AutoplaySetting.swift", feature: BRW.MEDIA, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/BackgroundAudioSetting.swift", feature: BRW.MEDIA, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/OpenWithSetting.swift", feature: BRW.LINKS, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/BrowsingSetting.swift", feature: BRW.NAV, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/NoImageModeSetting.swift", feature: BRW.NAV, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/BlockPopupSetting.swift", feature: BRW.NAV, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/SummarizeSetting.swift", feature: AI.SUM, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/ThemeSetting.swift", feature: SET.THEME, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/AdBlockerSetting.swift", feature: PROT.ADB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/AppIconSetting.swift", feature: SET.ICON, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/SearchSetting.swift", feature: SRCH.ENG, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/SiriPageSetting.swift", feature: OS.ASSIST, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/HomeSetting.swift", feature: HOME.SET, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/NewTabPageSetting.swift", feature: HOME.SET, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/SearchBarSetting.swift", feature: UI.TB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/QuickAnswersSetting.swift", feature: AI.QA, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/TranslationSetting.swift", feature: TRANS.SET, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/General/AIControlsSetting.swift", feature: AI.CTRL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/About/AppStoreReviewSetting.swift", feature: ENG.SURV, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Support/ShowIntroductionSetting.swift", feature: ENG.ONB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Support/StudiesToggleSetting.swift", feature: PROT.DATA, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Support/SendDataSetting.swift", feature: PROT.DATA, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Support/SentFromFirefoxSetting.swift", feature: OS.SHARE, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Account/**", feature: ACCT.SIGN, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Main/Account/SyncNowSetting.swift", feature: ACCT.SYNC, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/CustomSearchViewController.swift", feature: SRCH.ENG, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/SearchSettingsTableViewController.swift", feature: SRCH.ENG, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/SearchEnginePicker.swift", feature: SRCH.ENG, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/FirefoxSuggestSettingsViewController.swift", feature: SRCH.SUG, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/ContentBlockerSettingViewController.swift", feature: PROT.ETP, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/TPAccessoryInfo.swift", feature: PROT.ETP, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/AdvancedAccountSettingViewController.swift", feature: ACCT.SIGN, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/SyncContentSettingsViewController.swift", feature: ACCT.SYNC, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/NewTabContentSettingsViewController.swift", feature: HOME.SET, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Clearables.swift", feature: PROT.CLEAR, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/ClearPrivateDataTableViewController.swift", feature: PROT.CLEAR, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/WebsiteDataManagement/**", feature: PROT.CLEAR, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/AutoFillPasswordSettingsViewController.swift", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/PasswordDetailViewController.swift", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/RelayMaskSettingsViewController.swift", feature: CRED.MASK, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/AutoplaySettingsViewController.swift", feature: BRW.MEDIA, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/NotificationsSettingsViewController.swift", feature: ENG.NOTIF, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/SiriSettingsViewController.swift", feature: OS.ASSIST, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/BrowsingSettingsViewController.swift", feature: BRW.NAV, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/SearchBar/**", feature: UI.TB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/AppearanceSettings/**", feature: SET.THEME, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/AppearanceSettings/AddressBarS*.swift", feature: UI.TB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/AppearanceSettings/NavigationBarMiddleButtonSelectionView.swift", feature: UI.TB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/AppearanceSettings/Generic views/**", feature: SHARED.UI, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/AppearanceSettings/Zoom/**", feature: BRW.ZOOM, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/AppearanceSettings/WallpaperSettings/**", feature: HOME.WALL, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/ThemeSettings/**", feature: SET.THEME, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/QuickAnswers/**", feature: AI.QA, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/AppIconSelection/**", feature: SET.ICON, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/HomepageSettings/**", feature: HOME.SET, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/HomepageSettings/TopSitesSettings/**", feature: HOME.SC, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Translation/**", feature: TRANS.SET, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/Summarize/**", feature: AI.SUM, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Settings/AIControls/**", feature: AI.CTRL, by: ai}
+
+  # Other feature folders
+  - {path: "firefox-ios/Client/Frontend/Autofill/**", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Autofill/AutofillFooterView.swift", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Autofill/Address/**", feature: CRED.ADDR, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Autofill/CreditCard/**", feature: CRED.CC, by: ai}
+  - {path: "firefox-ios/Client/Frontend/AuthenticationManager/**", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Client/Frontend/PasswordManagement/**", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Client/Frontend/PasswordGenerator/**", feature: CRED.GEN, by: ai}
+  - {path: "firefox-ios/Client/Frontend/ContextualHint/**", feature: ENG.CFR, by: ai}
+  - {path: "firefox-ios/Client/Frontend/DefaultBrowserOnboarding/**", feature: OS.DEF, by: ai}
+  - {path: "firefox-ios/Client/Frontend/FeltPrivacy/**", feature: PRIV.MODE, by: ai}
+  - {path: "firefox-ios/Client/Frontend/GoogleLens/**", feature: SRCH.VIS, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Microsurvey/**", feature: ENG.SURV, by: ai}
+  - {path: "firefox-ios/Client/Frontend/SurveySurface/**", feature: ENG.SURV, by: ai}
+  - {path: "firefox-ios/Client/Frontend/NativeErrorPage/**", feature: BRW.ERR, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Wayback/**", feature: BRW.ERR, by: ai}
+  - {path: "firefox-ios/Client/Frontend/NotificationSurface/**", feature: ENG.NOTIF, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Onboarding/**", feature: ENG.ONB, by: ai}
+  - {path: "firefox-ios/Client/Frontend/QuickAnswers/**", feature: AI.QA, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Reader/**", feature: BRW.READ, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Share/**", feature: OS.SHARE, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Share/SendToDevice*.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Summarizer/**", feature: AI.SUM, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TrackingProtection/**", feature: PROT.ETP, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TrackingProtection/CertificatesHelpers/**", feature: PROT.HTTPS, by: ai}
+  - {path: "firefox-ios/Client/Frontend/TrackingProtection/BlockedTrackersHelpers/**", feature: PROT.DASH, by: ai}
+  - {path: "firefox-ios/Client/Frontend/Translations/**", feature: TRANS.PAGE, by: ai}
+  - {path: "firefox-ios/Client/Frontend/WebCompatReporter/**", feature: BRW.WEBC, by: ai}
+
+  # App extensions and other targets
+  - {path: "firefox-ios/WidgetKit/**", feature: OS.WID, by: ai}
+  - {path: "firefox-ios/CredentialProvider/**", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Extensions/ActionExtension/**", feature: OS.EXT, by: ai}
+  - {path: "firefox-ios/Extensions/ShareTo/**", feature: OS.EXT, by: ai}
+  - {path: "firefox-ios/Extensions/ShareTo/SendToDevice.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Extensions/NotificationService/**", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/RustFxA/**", feature: ACCT.SIGN, by: ai}
+  - {path: "firefox-ios/RustFxA/PushNotificationSetup.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Account/**", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Push/**", feature: APP.SVC, by: ai}
+  - {path: "firefox-ios/Sync/**", feature: ACCT.SYNC, by: ai}
+  - {path: "firefox-ios/Shared/**", feature: SHARED.ARCH, by: ai}
+
+  # Storage and providers
+  - {path: "firefox-ios/Storage/**", feature: APP.SVC, by: ai}
+  - {path: "firefox-ios/Storage/ReadingList.swift", feature: LIB.RL, by: ai}
+  - {path: "firefox-ios/Storage/SQL/*ReadingList*.swift", feature: LIB.RL, by: ai}
+  - {path: "firefox-ios/Storage/RecentlyClosedTabs.swift", feature: TABS.CLOSED, by: ai}
+  - {path: "firefox-ios/Storage/RemoteTabs.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Storage/Clients.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Storage/ZoomLevelStore.swift", feature: BRW.ZOOM, by: ai}
+  - {path: "firefox-ios/Storage/CertStore.swift", feature: PROT.HTTPS, by: ai}
+  - {path: "firefox-ios/Storage/PinnedSites.swift", feature: HOME.SC, by: ai}
+  - {path: "firefox-ios/Storage/DefaultSuggestedSites.swift", feature: HOME.SC, by: ai}
+  - {path: "firefox-ios/Storage/SQL/SQLitePinnedSites.swift", feature: HOME.SC, by: ai}
+  - {path: "firefox-ios/Storage/Sites/**", feature: SHARED.DATA, by: ai}
+  - {path: "firefox-ios/Storage/Rust/RustAutofill.swift", feature: CRED.ADDR, by: ai}
+  - {path: "firefox-ios/Storage/Rust/UnencryptedAddressFields.swift", feature: CRED.ADDR, by: ai}
+  - {path: "firefox-ios/Storage/Rust/UnencryptedCreditCardFields.swift", feature: CRED.CC, by: ai}
+  - {path: "firefox-ios/Storage/Rust/RustLogins.swift", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Storage/RustKeychain.swift", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Storage/Rust/RustPlaces.swift", feature: LIB.BMK, by: ai}
+  - {path: "firefox-ios/Storage/Rust/RustFirefoxSugges*.swift", feature: SRCH.SUG, by: ai}
+  - {path: "firefox-ios/Storage/Rust/RustRemoteTabs.swift", feature: ACCT.SEND, by: ai}
+  - {path: "firefox-ios/Providers/**", feature: SHARED.DATA, by: ai}
+  - {path: "firefox-ios/Providers/RustSyncManager.swift", feature: ACCT.SYNC, by: ai}
+  - {path: "firefox-ios/Providers/SyncDisplayState.swift", feature: ACCT.SYNC, by: ai}
+  - {path: "firefox-ios/Providers/TopSites*.swift", feature: HOME.SC, by: ai}
+  - {path: "firefox-ios/Providers/LoginRecordExtension.swift", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Providers/Merino/**", feature: HOME.STORY, by: ai}
+  - {path: "firefox-ios/Providers/RustProtocols/AutofillProvider.swift", feature: CRED.ADDR, by: ai}
+  - {path: "firefox-ios/Providers/RustProtocols/LoginProvider.swift", feature: CRED.PW, by: ai}
+  - {path: "firefox-ios/Providers/RustProtocols/PlacesProvider.swift", feature: LIB.BMK, by: ai}
+  - {path: "firefox-ios/Providers/RustProtocols/TabsProvider.swift", feature: ACCT.SEND, by: ai}
+
+  # BrowserKit
+  - {path: "BrowserKit/Sources/ActionExtensionKit/**", feature: OS.EXT, by: ai}
+  - {path: "BrowserKit/Sources/AppAttestKit/**", feature: AI.SUM, by: ai}
+  - {path: "BrowserKit/Sources/Common/**", feature: SHARED.ARCH, by: ai}
+  - {path: "BrowserKit/Sources/Common/Theming/**", feature: SET.THEME, by: ai}
+  - {path: "BrowserKit/Sources/Common/ReaderMode/**", feature: BRW.READ, by: ai}
+  - {path: "BrowserKit/Sources/Common/Utilities/MenuHelper/**", feature: BRW.CTX, by: ai}
+  - {path: "BrowserKit/Sources/Common/Utilities/*Font*.swift", feature: SHARED.UI, by: ai}
+  - {path: "BrowserKit/Sources/Common/Utilities/TextStyling.swift", feature: SHARED.UI, by: ai}
+  - {path: "BrowserKit/Sources/ComponentLibrary/**", feature: SHARED.UI, by: ai}
+  - {path: "BrowserKit/Sources/ContentBlockingGenerator/**", feature: PROT.ETP, by: ai}
+  - {path: "BrowserKit/Sources/JWTKit/**", feature: AI.SUM, by: ai}
+  - {path: "BrowserKit/Sources/LLMKit/**", feature: AI.SUM, by: ai}
+  - {path: "BrowserKit/Sources/MLPAKit/**", feature: AI.SUM, by: ai}
+  - {path: "BrowserKit/Sources/MenuKit/**", feature: UI.MENU, by: ai}
+  - {path: "BrowserKit/Sources/OnboardingKit/**", feature: ENG.ONB, by: ai}
+  - {path: "BrowserKit/Sources/QuickAnswersKit/**", feature: AI.QA, by: ai}
+  - {path: "BrowserKit/Sources/Redux/**", feature: SHARED.ARCH, by: ai}
+  - {path: "BrowserKit/Sources/Shared/**", feature: SHARED.ARCH, by: ai}
+  - {path: "BrowserKit/Sources/SiteImageView/**", feature: APP.SVC, by: ai}
+  - {path: "BrowserKit/Sources/SummarizeKit/**", feature: AI.SUM, by: ai}
+  - {path: "BrowserKit/Sources/TabDataStore/**", feature: APP.SESS, by: ai}
+  - {path: "BrowserKit/Sources/ToolbarKit/**", feature: UI.TB, by: ai}
+  - {path: "BrowserKit/Sources/UnifiedSearchKit/**", feature: SRCH.ENG, by: ai}
+  - {path: "BrowserKit/Sources/VPNKit/**", feature: PROT.VPN, by: ai}
+  - {path: "BrowserKit/Sources/WebCompatReporterKit/**", feature: BRW.WEBC, by: ai}
+  - {path: "BrowserKit/Sources/WebEngine/**", feature: SHARED.WEB, by: ai}
+  - {path: "BrowserKit/Sources/WebEngine/WKWebview/Scripts/ReaderMode/**", feature: BRW.READ, by: ai}
+  - {path: "BrowserKit/Sources/WebEngine/WKWebview/Scripts/PrintContentScript.swift", feature: BRW.PDF, by: ai}
+  - {path: "BrowserKit/Sources/WebEngine/WKWebview/Scripts/AdsTelemetryContentScript.swift", feature: SHARED.TELEMETRY, by: ai}
+  - {path: "BrowserKit/Sources/WebEngine/WKWebview/Internal/WKErrorPageHandler.swift", feature: BRW.ERR, by: ai}
+  - {path: "BrowserKit/Sources/WebEngine/WKWebview/Alerts/**", feature: BRW.NAV, by: ai}
+  - {path: "BrowserKit/Sources/WebEngine/Security/**", feature: PROT.HTTPS, by: ai}
+  - {path: "BrowserKit/Sources/WebEngine/EnginePullRefreshView.swift", feature: BRW.NAV, by: ai}

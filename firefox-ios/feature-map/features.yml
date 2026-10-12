@@ -1,0 +1,350 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Feature IDs used by feature-map.yml. IDs are shared with the cross-platform
+# Firefox feature taxonomy and must stay stable; rename `name`, never `id`.
+
+features:
+  - id: BRW.NAV
+    area: "Browsing & page content"
+    name: "Navigation & page loading"
+    ios: true
+  - id: BRW.FIND
+    area: "Browsing & page content"
+    name: "Find in page"
+    ios: true
+  - id: BRW.ZOOM
+    area: "Browsing & page content"
+    name: "Zoom, panning & desktop site"
+    ios: true
+  - id: BRW.READ
+    area: "Browsing & page content"
+    name: "Reader mode"
+    ios: true
+  - id: BRW.PDF
+    area: "Browsing & page content"
+    name: "PDFs, documents & printing"
+    ios: true
+  - id: BRW.CTX
+    area: "Browsing & page content"
+    name: "Context menus, text selection & input"
+    ios: true
+  - id: BRW.MEDIA
+    area: "Browsing & page content"
+    name: "Media playback"
+    ios: true
+  - id: BRW.ERR
+    area: "Browsing & page content"
+    name: "Error pages & offline"
+    ios: true
+  - id: BRW.LINKS
+    area: "Browsing & page content"
+    name: "External links & app links"
+    ios: true
+  - id: BRW.WEBC
+    area: "Browsing & page content"
+    name: "Web compatibility & broken-site reporting"
+    ios: true
+  - id: SRCH.URL
+    area: "Address bar & search"
+    name: "URL entry, focus & autocomplete"
+    ios: true
+  - id: SRCH.ENG
+    area: "Address bar & search"
+    name: "Search engines & search settings"
+    ios: true
+  - id: SRCH.SUG
+    area: "Address bar & search"
+    name: "Search suggestions & Firefox Suggest"
+    ios: true
+  - id: SRCH.REC
+    area: "Address bar & search"
+    name: "Recent & trending searches"
+    ios: true
+  - id: SRCH.VIS
+    area: "Address bar & search"
+    name: "Visual & voice search"
+    ios: true
+  - id: TABS.TRAY
+    area: "Tabs & windows"
+    name: "Tab tray & tab management"
+    ios: true
+  - id: TABS.STRIP
+    area: "Tabs & windows"
+    name: "Tab strip (tablet / top tabs)"
+    ios: true
+  - id: TABS.GRP
+    area: "Tabs & windows"
+    name: "Tab groups & collections"
+    ios: false
+  - id: TABS.CLOSED
+    area: "Tabs & windows"
+    name: "Recently closed & inactive tabs"
+    ios: true
+  - id: TABS.WIN
+    area: "Tabs & windows"
+    name: "Multi-window & split view"
+    ios: true
+  - id: HOME.SET
+    area: "Homepage & new tab"
+    name: "Homepage layout & settings"
+    ios: true
+  - id: HOME.SC
+    area: "Homepage & new tab"
+    name: "Shortcuts & top sites"
+    ios: true
+  - id: HOME.STORY
+    area: "Homepage & new tab"
+    name: "Stories & content recommendations"
+    ios: true
+  - id: HOME.JBI
+    area: "Homepage & new tab"
+    name: "Jump back in & recent content"
+    ios: true
+  - id: HOME.WALL
+    area: "Homepage & new tab"
+    name: "Wallpapers"
+    ios: true
+  - id: LIB.BMK
+    area: "Library (saved content)"
+    name: "Bookmarks"
+    ios: true
+  - id: LIB.HIST
+    area: "Library (saved content)"
+    name: "History"
+    ios: true
+  - id: LIB.RL
+    area: "Library (saved content)"
+    name: "Reading list"
+    ios: true
+  - id: LIB.DL
+    area: "Library (saved content)"
+    name: "Downloads"
+    ios: true
+  - id: PRIV.MODE
+    area: "Private browsing"
+    name: "Private tabs & mode"
+    ios: true
+  - id: PRIV.LOCK
+    area: "Private browsing"
+    name: "Private mode lock"
+    ios: false
+  - id: PROT.ETP
+    area: "Privacy & security protections"
+    name: "Tracking protection & site trust panel"
+    ios: true
+  - id: PROT.DASH
+    area: "Privacy & security protections"
+    name: "Privacy dashboard & tracker stats"
+    ios: true
+  - id: PROT.ADB
+    area: "Privacy & security protections"
+    name: "Ad & cookie-banner blocking"
+    ios: true
+  - id: PROT.HTTPS
+    area: "Privacy & security protections"
+    name: "HTTPS & connection security"
+    ios: true
+  - id: PROT.PERM
+    area: "Privacy & security protections"
+    name: "Site permissions"
+    ios: true
+  - id: PROT.CLEAR
+    area: "Privacy & security protections"
+    name: "Clear browsing data"
+    ios: true
+  - id: PROT.VPN
+    area: "Privacy & security protections"
+    name: "VPN & IP protection"
+    ios: true
+  - id: PROT.DATA
+    area: "Privacy & security protections"
+    name: "Data collection preferences"
+    ios: true
+  - id: CRED.PW
+    area: "Passwords & autofill"
+    name: "Saved passwords"
+    ios: true
+  - id: CRED.GEN
+    area: "Passwords & autofill"
+    name: "Password generator"
+    ios: true
+  - id: CRED.PASSKEY
+    area: "Passwords & autofill"
+    name: "Passkeys & WebAuthn"
+    ios: false
+  - id: CRED.ADDR
+    area: "Passwords & autofill"
+    name: "Address autofill"
+    ios: true
+  - id: CRED.CC
+    area: "Passwords & autofill"
+    name: "Payment method autofill"
+    ios: true
+  - id: CRED.MASK
+    area: "Passwords & autofill"
+    name: "Email masks (Relay)"
+    ios: true
+  - id: ACCT.SIGN
+    area: "Accounts & sync"
+    name: "Sign-in & account management"
+    ios: true
+  - id: ACCT.SYNC
+    area: "Accounts & sync"
+    name: "Data sync"
+    ios: true
+  - id: ACCT.SEND
+    area: "Accounts & sync"
+    name: "Send tab & synced tabs"
+    ios: true
+  - id: UI.TB
+    area: "App chrome: toolbar & menu"
+    name: "Toolbar & address bar layout"
+    ios: true
+  - id: UI.MENU
+    area: "App chrome: toolbar & menu"
+    name: "Main menu"
+    ios: true
+  - id: UI.GEST
+    area: "App chrome: toolbar & menu"
+    name: "Gestures & keyboard shortcuts"
+    ios: true
+  - id: UI.TOAST
+    area: "App chrome: toolbar & menu"
+    name: "Toasts & snackbars"
+    ios: true
+  - id: SET.FRAME
+    area: "Settings & personalization"
+    name: "Settings framework & search"
+    ios: true
+  - id: SET.THEME
+    area: "Settings & personalization"
+    name: "Theme & appearance"
+    ios: true
+  - id: SET.ICON
+    area: "Settings & personalization"
+    name: "App icon"
+    ios: true
+  - id: SET.LANG
+    area: "Settings & personalization"
+    name: "Language & locale"
+    ios: false
+  - id: ENG.ONB
+    area: "Onboarding, messaging & engagement"
+    name: "Onboarding & tours"
+    ios: true
+  - id: ENG.TOU
+    area: "Onboarding, messaging & engagement"
+    name: "Terms of use consent"
+    ios: true
+  - id: ENG.CFR
+    area: "Onboarding, messaging & engagement"
+    name: "Contextual hints & in-app messages"
+    ios: true
+  - id: ENG.SURV
+    area: "Onboarding, messaging & engagement"
+    name: "Surveys & rating prompts"
+    ios: true
+  - id: ENG.NOTIF
+    area: "Onboarding, messaging & engagement"
+    name: "Notifications"
+    ios: true
+  - id: OS.SHARE
+    area: "OS integration"
+    name: "Share out (share sheet)"
+    ios: true
+  - id: OS.EXT
+    area: "OS integration"
+    name: "Share into Firefox & extensions"
+    ios: true
+  - id: OS.WID
+    area: "OS integration"
+    name: "Widgets & live activities"
+    ios: true
+  - id: OS.DEEP
+    area: "OS integration"
+    name: "Deep links & URL schemes"
+    ios: true
+  - id: OS.DEF
+    area: "OS integration"
+    name: "Default browser"
+    ios: true
+  - id: OS.ASSIST
+    area: "OS integration"
+    name: "Assistants & launcher shortcuts"
+    ios: true
+  - id: OS.CTAB
+    area: "OS integration"
+    name: "Custom tabs & web apps"
+    ios: false
+  - id: TRANS.PAGE
+    area: "Translations"
+    name: "Page translation"
+    ios: true
+  - id: TRANS.SET
+    area: "Translations"
+    name: "Translation settings & language models"
+    ios: true
+  - id: AI.SUM
+    area: "AI features"
+    name: "Summarizer"
+    ios: true
+  - id: AI.QA
+    area: "AI features"
+    name: "Quick answers & assistant"
+    ios: true
+  - id: AI.CHAT
+    area: "AI features"
+    name: "Chatbot & smart window"
+    ios: false
+  - id: AI.CTRL
+    area: "AI features"
+    name: "AI controls"
+    ios: true
+  - id: EXT.ADDON
+    area: "Add-ons & extensions"
+    name: "Add-ons"
+    ios: false
+  - id: APP.START
+    area: "App lifecycle & data"
+    name: "Launch & startup"
+    ios: true
+  - id: APP.UPD
+    area: "App lifecycle & data"
+    name: "Install, update & migration"
+    ios: true
+  - id: APP.SESS
+    area: "App lifecycle & data"
+    name: "Session restore & data loss"
+    ios: true
+  - id: APP.CRASH
+    area: "App lifecycle & data"
+    name: "Crash reporting"
+    ios: true
+  - id: APP.SVC
+    area: "App lifecycle & data"
+    name: "Background services & storage"
+    ios: true
+
+# Code that serves many features. Attribute here rather than forcing it into one feature.
+shared:
+  - id: SHARED.SHELL
+    name: "Browser shell: app/scene lifecycle, browser view controller, coordinators, routing"
+  - id: SHARED.ARCH
+    name: "Architecture and utilities: Redux, dependency injection, extensions, helpers"
+  - id: SHARED.UI
+    name: "Shared UI: component library, theming infrastructure, generic views"
+  - id: SHARED.DATA
+    name: "Shared data layer: profile, storage infrastructure, networking"
+  - id: SHARED.WEB
+    name: "Web engine integration: web views, user scripts, internal schemes"
+  - id: SHARED.TELEMETRY
+    name: "Telemetry infrastructure"
+  - id: SHARED.EXPERIMENTS
+    name: "Nimbus, feature flags and remote configuration infrastructure"
+
+# Code that is not counted toward any feature or shared bucket.
+excluded:
+  - id: EXCLUDED
+    name: "Generated code, strings, third-party code and test support"
