@@ -341,10 +341,12 @@ final class BackgroundEffectView: UIView, ThemeApplicable {
     }
 }
 
+@available(iOS 17, *)
 #Preview {
-    BackgroundEffectView(
-        state: BackgroundEffectState(),
-        windowUUID: .XCTestDefaultUUID,
-        themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
-    )
+    let controller = UIViewController()
+    let view = BackgroundEffectView(parentController: controller)
+    controller.view.addSubview(view)
+    view.pinToSuperview()
+    view.applyTheme(theme: DarkTheme())
+    return controller
 }

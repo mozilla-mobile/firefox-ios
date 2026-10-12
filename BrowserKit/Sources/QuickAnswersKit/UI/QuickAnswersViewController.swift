@@ -150,6 +150,8 @@ public final class QuickAnswersViewController: UIViewController,
 
         backgroundEffectView.pinToSuperview()
 
+        backgroundEffectView.pinToSuperview()
+
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: view.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
