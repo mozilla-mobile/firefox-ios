@@ -136,13 +136,3 @@ final class AudioWaveformView: UIView, ThemeApplicable {
         barLayers.forEach { $0.colors = gradient }
     }
 }
-
-@available(iOS 17, *)
-#Preview {
-    let form = AudioWaveformView(frame: .init(origin: .init(x: 100, y: 300), size: .init(width: 30.0, height: 40.0)))
-    form.startAnimating()
-    form.applyTheme(theme: LightTheme())
-    let controller = UIViewController()
-    controller.view.addSubview(form)
-    return controller
-}
