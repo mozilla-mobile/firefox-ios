@@ -2083,7 +2083,7 @@ class BrowserViewController: UIViewController,
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && NativeErrorPageFeatureFlag().isNativeErrorPageEnabled {
+        } else if isErrorURL && featureFlagsProvider.isEnabled(.nativeErrorPage) {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
@@ -4606,7 +4606,8 @@ extension BrowserViewController: SearchViewControllerDelegate {
         let searchSettingsTableViewController = SearchSettingsTableViewController(
             profile: profile,
             searchEnginesManager: searchEnginesManager,
-            windowUUID: windowUUID
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: false
         )
         let navController = ModalSettingsNavigationController(rootViewController: searchSettingsTableViewController)
         self.present(navController, animated: true, completion: nil)

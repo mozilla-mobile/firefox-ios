@@ -326,6 +326,7 @@
         "LoginTest\/testSearchLogin()",
         "LoginTest\/testSearchSavedLoginsByURL()",
         "LoginTest\/testSearchSavedLoginsByUsername()",
+        "LoginTest\/testUseSavedPasswordAsksForAuthentication()",
         "LoginTest\/testVerifyPasswordsSettingMenu()",
         "LoginTest\/testVerifyUpdatedPasswordIsNotSaved()",
         "MicrosurveyTests",

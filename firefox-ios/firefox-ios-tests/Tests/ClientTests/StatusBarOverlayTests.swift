@@ -21,7 +21,7 @@ final class StatusBarOverlayTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        self.profile = MockProfile()
+        self.profile = makeProfile()
         self.wallpaperManager = WallpaperManagerMock()
         self.notificationCenter = MockNotificationCenter()
         self.featureFlags = MockNimbusFeatureFlags()

@@ -1,27 +1,48 @@
-/* Button string to learn how to set your default browser. */
-"DefaultBrowserCard.Button.v2" = "چگونگی کار را یاد بگیرید";
-
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "پیوندهای وب سایت ها ، ایمیل ها و پیام ها را تنظیم کنید تا به طور خودکار در Firefox باز شوند.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "تنظیم Firefox به عنوان مرورگر پیش‌فرض، رای دادن به اینترنتی آزاد و در دسترس است.";
 
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Title" = "مرورگر یش‌فرض خود تغییر دهید";
+"DefaultBrowserCard.BetterInternet.Title.v108" = "استفاده از مرورگر پیش‌فرض برای اینترنتی بهتر";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "آموزش نحوه انجام";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "پیوندهای وبگاه‌ها، رایانامه‌ها و پیام‌ها را طوری تنظیم کنید که به طور خودکار در Firefox باز شوند.";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Firefox را به عنوان مرورگر پیش‌فرض انتخاب کنید تا سرعت، امنیت و حریم خصوصی خودکار شوند.";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "ارتقای تجربه وب‌گردی روزمره";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox به طور متوسط بیش از ۳,۰۰۰ ردیاب را در ماه برای هر کاربر مسدود می‌کند. ما را برای آسودگی خاطر در حریم خصوصی، مرورگر پیش‌فرض خود قرار دهید.";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox حریم خصوصی شما را کاملاً پوشش می‌دهد";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "مرورگر پیش‌فرض خود را تغییر دهید";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserOnboarding.Button" = "برو به تنظیمات";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description1" = "1. برو به تنظیمات";
+"DefaultBrowserOnboarding.Description1" = "۱. برو به تنظیمات";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "۲. تبدیل به مرورگر پیش‌فرض";
+"DefaultBrowserOnboarding.Description2" = "۲. برنامه مرورگر پیش‌فرض را لمس کنید";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description3" = "3. Firefox را انتخاب کنید";
+"DefaultBrowserOnboarding.Description3" = "۳. Firefox را انتخاب کنید";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
-"DefaultBrowserOnboarding.Screenshot" = "مرورگر پیش‌فرض";
+"DefaultBrowserOnboarding.Screenshot" = "برنامه مرورگر پیش‌فرض";
+
+/* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
+"DefaultBrowserOnboarding.SkipButton" = "بعداً این کار را انجام می‌دهم";
 
 /* Menu option for setting Firefox as default browser. */
-"Settings.DefaultBrowserMenuItem" = "تبدیل به مرورگر پیش‌فرض";
+"Settings.DefaultBrowserMenuItem" = "تنظیم به عنوان مرورگر پیش‌فرض";
 

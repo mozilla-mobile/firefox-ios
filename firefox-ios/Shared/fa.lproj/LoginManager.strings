@@ -16,6 +16,21 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "حذف";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "لغو";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "حذف";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "نمی‌توانید این اقدام را بازگردانید.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "این کار گذرواژه را از همهٔ دستگاه‌های همگام‌سازی‌شدهٔ شما حذف می‌کند.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "گذرواژه حذف شود؟";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "عدم انتخاب همه";
 
@@ -25,17 +40,23 @@
 /* Hide password text selection menu item */
 "Hide" = "مخفی کردن";
 
+/* This message appears briefly as a notification (toast) to inform the user that a password has been successfully removed. */
+"LoginList.DeleteToast.v135" = "گذرواژه حذف شد";
+
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
-"Logins will be permanently removed." = "ورود‌ها برای همیشه حذف شد.";
+"Logins will be permanently removed." = "ورودها برای همیشه حذف خواهند شد.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
-"Logins will be removed from all connected devices." = "ورود‌ها بر روی تمامی دستگاه‌ها حذف شد.";
+"Logins will be removed from all connected devices." = "ورودها از همه دستگاه‌های متصل حذف خواهند شد.";
 
 /* Label describing when the current login was last modified. %@ is the timestamp. */
 "Modified %@" = "تغییر یافته %@";
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "هیچ ورودی یافت نشد";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "گذرواژه‌ای پیدا نشد";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "باز‌شده و پر";
@@ -47,10 +68,13 @@
 "Reveal" = "آشکارساختن";
 
 /* Title for the search field at the top of the Logins list screen */
-"Search" = "جست و جو";
+"Search" = "جست‌و‌جو";
 
 /* Accessibility label for the search input field in the Logins list */
 "Search Input Field" = "بخش ورود اطلاعات جست‌و‌جو";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "جست‌و‌جو";
 
 /* Label for the button used to select all logins. */
 "Select All" = "انتخاب همه";
@@ -59,5 +83,5 @@
 "Username" = "نام کاربری";
 
 /* Label displayed above the website row in Login Detail View. */
-"Website" = "پایگاه اینترنتی";
+"Website" = "وبگاه";
 

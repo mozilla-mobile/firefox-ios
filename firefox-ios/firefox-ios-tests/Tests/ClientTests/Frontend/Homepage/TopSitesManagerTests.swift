@@ -15,7 +15,7 @@ final class TopSitesManagerTests: XCTestCase {
     private var mockNotificationCenter: MockNotificationCenter!
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         mockNotificationCenter = MockNotificationCenter()
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }

@@ -17,7 +17,6 @@ enum FeatureFlagID: String, CaseIterable {
     case adsClient
     case aiKillSwitch
     case backgroundAudio
-    case badCertDomainErrorPage
     case bookmarksSearchFeature
     case cellularDataRestrictedErrorPage
     case customReaderModeScheme
@@ -41,16 +40,17 @@ enum FeatureFlagID: String, CaseIterable {
     case improvedAppStoreReviewTriggerFeature
     case microsurvey
     case modernOnboardingUI
+    case multiDayOnboarding
     case nativeErrorPage
     case newBookmarkFolderTree
     case novaDesign
     case novaPrivateThemeOverride
-    case noInternetConnectionErrorPage
     case privacyDashboard
     case quickAnswers
     case recentSearches
     case relayIntegration
     case reportBrokenSite
+    case searchConfigV3
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case shouldUseBrandRefreshConfiguration
@@ -109,7 +109,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .adsClient,
                 .aiKillSwitch,
                 .backgroundAudio,
-                .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
@@ -124,11 +123,11 @@ enum FeatureFlagID: String, CaseIterable {
                 .httpsUpgrade,
                 .improvedAppStoreReviewTriggerFeature,
                 .microsurvey,
+                .multiDayOnboarding,
                 .nativeErrorPage,
                 .newBookmarkFolderTree,
                 .novaDesign,
                 .novaPrivateThemeOverride,
-                .noInternetConnectionErrorPage,
                 .privacyDashboard,
                 .quickAnswers,
                 .recentSearches,

@@ -166,6 +166,9 @@
 /* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
 "Settings.Autoplay.SettingsTitle.v137" = "Automatisk afspilning";
 
+/* VoiceOver custom action name for a settings row's Learn More link. */
+"Settings.BoolSetting.LearnMoreAction.v157" = "Læs mere";
+
 /* Description text for the Ad Blocker toggle in the Browsing settings page, explaining its purpose and a tip for troubleshooting broken sites. */
 "Settings.Browsing.AdBlocker.Description.v155" = "Reducerer reklamer og annoncerelaterede sporings-mekanismer. Hvis et websted ikke ser ud til at virke som det skal, kan du prøve at slå dette fra.";
 

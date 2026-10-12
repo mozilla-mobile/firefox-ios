@@ -376,6 +376,11 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(undoLastTabClosedKeyCommand), input: "t", modifierFlags: [.command, .shift]),
             UIKeyCommand(action: #selector(newNormalTabKeyCommand), input: "n", modifierFlags: [.command, .shift]),
             UIKeyCommand(action: #selector(zoomIn), input: "=", modifierFlags: .command),
+            UIKeyCommand(
+                action: #selector(reloadTabIgnoringCacheKeyCommand),
+                input: UIKeyCommand.f5,
+                modifierFlags: .control
+            ),
             UIKeyCommand(action: #selector(selectTabTwo), input: "2", modifierFlags: .command),
             UIKeyCommand(action: #selector(selectTabThree), input: "3", modifierFlags: .command),
             UIKeyCommand(action: #selector(selectTabFour), input: "4", modifierFlags: .command),

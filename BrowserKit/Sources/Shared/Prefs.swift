@@ -134,6 +134,7 @@ public struct PrefsKeys {
 
     public struct QuickAnswers {
         public static let optInCompleted = "quickAnswers.optInCompleted"
+        public static let entryPointButtonGlowCount = "quickAnswers.entryPointButtonGlowCount"
         public static let modelOverride = "quickAnswers.modelOverride"
     }
 
@@ -272,6 +273,15 @@ public struct PrefsKeys {
 
     // Used to only show the Default Browser Banner, in Main Menu, until is dismissed by the user
     public static let defaultBrowserBannerShown = "defaultBrowserBannerShownKey"
+
+    // Count of distinct active days
+    public static let onboardingActiveDayCount = "onboardingActiveDayCount"
+
+    // The calendar day that count last advanced,
+    public static let onboardingLastActiveDate = "onboardingLastActiveDate"
+
+    // The day whose card was last shown.
+    public static let onboardingLastCardActiveDay = "onboardingLastCardActiveDay"
 
     // MARK: - Apple Intelligence
     // Used to determine if Apple Intelligence is available

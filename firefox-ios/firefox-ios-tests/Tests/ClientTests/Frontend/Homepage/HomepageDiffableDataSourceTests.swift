@@ -17,7 +17,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockNimbusLayer = MockNimbusFeatureFlagLayer()
 
         DependencyHelperMock().bootstrapDependencies(
@@ -683,7 +683,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
 
     @MainActor
     private func createTab(urlString: String) -> Tab {
-        let tab = Tab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.url = URL(string: urlString)!
         return tab
     }

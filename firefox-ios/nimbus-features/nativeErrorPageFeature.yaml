@@ -9,25 +9,10 @@ features:
           If true, the feature is active.
         type: Boolean
         default: false
-      no_internet_connection_error:
-        description: >
-          This feature is for managing the roll out of the no interet connection native error page feature
-        type: Boolean
-        default: false
-      bad-cert-domain-error-page:
-        description: >
-          This feature is for managing the roll out of the bad certificate domain native error page
-        type: Boolean
-        default: false
-
     defaults:
       - channel: beta
         value:
           enabled: false
-          no_internet_connection_error: false
-          bad-cert-domain-error-page: false
       - channel: developer
         value:
           enabled: false
-          no_internet_connection_error: false
-          bad-cert-domain-error-page: false

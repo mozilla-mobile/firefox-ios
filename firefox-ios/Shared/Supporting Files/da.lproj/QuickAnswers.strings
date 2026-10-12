@@ -13,6 +13,9 @@
 /* Button label on the permission alert that opens the iOS Settings app so the user can grant permissions. */
 "QuickAnswers.Errors.OpenSettings.v158" = "Åbn Indstillinger";
 
+/* Link text that opens more information about how Quick Answers works and how it uses your data. */
+"QuickAnswers.LearnMore.v158" = "Læs mere…";
+
 /* Button on the Quick Answers opt-in screen that the user taps to accept and start using the feature. */
 "QuickAnswers.OptIn.ContinueButton.v158" = "Fortsæt";
 

@@ -8,32 +8,105 @@ import Common
 
 @testable import Client
 
+@MainActor
 class AccessoryViewProviderTests: XCTestCase {
-    var accessoryViewProvider: AccessoryViewProvider!
-
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-
-        accessoryViewProvider = AccessoryViewProvider()
     }
 
-    override func tearDown() {
-        super.tearDown()
-
-        accessoryViewProvider = nil
+    override func tearDown() async throws {
+        try await super.tearDown()
         AppContainer.shared.reset()
     }
 
-    func testReloadForCreditCardView() {
-        accessoryViewProvider.reloadViewFor(.creditCard)
+    func testReloadForStandardView_showsNoAutofillButton() {
+        let subject = createSubject()
+        subject.reloadViewFor(.standard)
 
-        XCTAssert(accessoryViewProvider.showCreditCard)
+        XCTAssertFalse(containsAutofillButton(subject))
     }
 
-    func testReloadForStandardView() {
-        accessoryViewProvider.reloadViewFor(.standard)
+    func testReloadForCreditCardView_showsCreditCardButton() {
+        let subject = createSubject()
+        subject.reloadViewFor(.creditCard)
 
-        XCTAssertFalse(accessoryViewProvider.showCreditCard)
+        XCTAssertTrue(containsIdentifier(
+            AccessibilityIdentifiers.Browser.KeyboardAccessory.creditCardAutofillButton,
+            in: subject
+        ))
+    }
+
+    func testReloadForAddressView_showsAddressButton() {
+        let subject = createSubject()
+        subject.reloadViewFor(.address)
+
+        XCTAssertTrue(containsIdentifier(
+            AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton,
+            in: subject
+        ))
+    }
+
+    func testReloadForLoginView_showsLoginButton() {
+        let subject = createSubject()
+        subject.reloadViewFor(.login)
+
+        XCTAssertTrue(containsIdentifier(
+            AccessibilityIdentifiers.Autofill.footerPrimaryAction,
+            in: subject
+        ))
+    }
+
+    func testReloadForPasswordGeneratorView_showsPasswordGeneratorButton() {
+        let subject = createSubject()
+        subject.reloadViewFor(.passwordGenerator)
+
+        XCTAssertTrue(containsIdentifier(
+            AccessibilityIdentifiers.PasswordGenerator.keyboardButton,
+            in: subject
+        ))
+    }
+
+    func testReloadForRelayEmailMaskView_showsRelayMaskButton() {
+        let subject = createSubject()
+        subject.reloadViewFor(.relayEmailMask)
+
+        XCTAssertTrue(containsIdentifier(
+            AccessibilityIdentifiers.Browser.KeyboardAccessory.relayMaskAutofillButton,
+            in: subject
+        ))
+    }
+
+    func testReloadBackToStandardView_hidesPreviousAutofillButton() {
+        let subject = createSubject()
+        subject.reloadViewFor(.creditCard)
+        subject.reloadViewFor(.standard)
+
+        XCTAssertFalse(containsAutofillButton(subject))
+    }
+
+    // MARK: - Helpers
+
+    private let autofillIdentifiers = [
+        AccessibilityIdentifiers.Browser.KeyboardAccessory.creditCardAutofillButton,
+        AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton,
+        AccessibilityIdentifiers.Browser.KeyboardAccessory.relayMaskAutofillButton,
+        AccessibilityIdentifiers.Autofill.footerPrimaryAction,
+        AccessibilityIdentifiers.PasswordGenerator.keyboardButton
+    ]
+
+    private func createSubject() -> AccessoryViewProvider {
+        let subject = AccessoryViewProvider(windowUUID: .XCTestDefaultUUID)
+        trackForMemoryLeaks(subject)
+        return subject
+    }
+
+    private func containsIdentifier(_ identifier: String, in subject: AccessoryViewProvider) -> Bool {
+        subject.toolbarItems.contains { $0.accessibilityIdentifier == identifier }
+    }
+
+    private func containsAutofillButton(_ subject: AccessoryViewProvider) -> Bool {
+        let identifiers = Set(subject.toolbarItems.compactMap { $0.accessibilityIdentifier })
+        return !identifiers.isDisjoint(with: autofillIdentifiers)
     }
 }

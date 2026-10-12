@@ -5,13 +5,12 @@
 import Foundation
 import Common
 
-// TODO: FXIOS-12817 Fix @unchecked Sendable to due non-Sendable type 'Tab'
-struct JumpBackInTabConfiguration: @unchecked Sendable,
+struct JumpBackInTabConfiguration: Sendable,
                                    Equatable,
                                    Hashable,
                                    CustomStringConvertible,
                                    CustomDebugStringConvertible {
-    let tab: Tab
+    let tabUUID: TabUUID
     let titleText: String
     let descriptionText: String
     let siteURL: String
@@ -20,7 +19,7 @@ struct JumpBackInTabConfiguration: @unchecked Sendable,
     }
 
     public var debugDescription: String {
-        return "JumpBackInTabConfiguration (\(tab))"
+        return "JumpBackInTabConfiguration (\(tabUUID))"
     }
 
     public var description: String {

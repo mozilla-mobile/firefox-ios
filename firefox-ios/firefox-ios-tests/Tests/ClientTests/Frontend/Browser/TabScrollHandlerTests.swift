@@ -25,13 +25,12 @@ final class TabScrollHandlerTests: XCTestCase {
         try await super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         delegate = MockTabScrollHandlerDelegate()
     }
 
     override func tearDown() async throws {
-        mockProfile?.shutdown()
         mockProfile = nil
         tab = nil
         delegate = nil
@@ -263,10 +262,28 @@ final class TabScrollHandlerTests: XCTestCase {
         XCTAssertEqual(delegate.hideCount, 0)
     }
 
+    // MARK: - hasScrollableContent
+
+    func test_hasScrollableContent_contentTallerThanViewportPlusToolbars_isTrue() {
+        // createSubject sets the scroll view's own frame height to 2000, independent of the
+        // simulator/device's actual screen size.
+        let tallContentSize = CGSize(width: 320, height: 2000 + 2 * UIConstants.ToolbarHeight + 1)
+        let subject = createSubject(contentSize: tallContentSize)
+
+        XCTAssertTrue(subject.hasScrollableContent)
+    }
+
+    func test_hasScrollableContent_contentShorterThanViewportPlusToolbars_isFalse() {
+        let shortContentSize = CGSize(width: 320, height: 2000 + 2 * UIConstants.ToolbarHeight - 1)
+        let subject = createSubject(contentSize: shortContentSize)
+
+        XCTAssertFalse(subject.hasScrollableContent)
+    }
+
     // MARK: - endDrag checks
 
     func test_endDrag_atBottom_preventsCommit() {
-        let contentOffset = CGPoint(x: 0, y: 1980)
+        let contentOffset = CGPoint(x: 0, y: 3980)
         let subject = createSubject()
         tabProvider.scrollView?.contentOffset = contentOffset
 
@@ -407,7 +424,7 @@ final class TabScrollHandlerTests: XCTestCase {
 
     // MARK: - Setup
 
-    private func createSubject(contentSize: CGSize = CGSize(width: 200, height: 2000)) -> TabScrollHandler {
+    private func createSubject(contentSize: CGSize = CGSize(width: 200, height: 4000)) -> TabScrollHandler {
         let subject = TabScrollHandler(windowUUID: .XCTestDefaultUUID, delegate: delegate)
 
         // Create tab and scrollView

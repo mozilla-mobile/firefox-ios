@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Ο ιδιοκτήτης του %@ δεν έχει το έχει ρυθμίσει σωστά και δεν είναι δυνατή η πραγματοποίηση μιας ασφαλούς σύνδεσης.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Ο ιστότοπος ενδέχεται να μην είναι προσωρινά διαθέσιμος, να έχει μεταφερθεί σε άλλη διεύθυνση ή η σύνδεση να αποκλείεται από το τείχος προστασίας ή τον διακομιστή μεσολάβησής σας.\n\nΕλέγξτε τις ρυθμίσεις σύνδεσης και δοκιμάστε ξανά.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "Δεν ήταν δυνατή η σύνδεση του %1$@ στο ζητούμενο URL.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "Δεν ήταν δυνατή η σύνδεση του %1$@ στο %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Να προσέχετε. Κάτι δεν πάει καλά.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Φαίνεται ότι υπάρχει κάποιο πρόβλημα με αυτόν τον ιστότοπο";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Επιστροφή (Προτείνεται)";

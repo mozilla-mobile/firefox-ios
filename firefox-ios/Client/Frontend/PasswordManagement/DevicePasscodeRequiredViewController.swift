@@ -32,6 +32,19 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
 
     var parentType: ParentControllerType = .passwords
 
+    private let _shouldUsePrivateOverride: Bool
+    override var shouldUsePrivateOverride: Bool { return _shouldUsePrivateOverride }
+
+    init(windowUUID: WindowUUID,
+         shouldUsePrivateOverride: Bool = true) {
+        self._shouldUsePrivateOverride = shouldUsePrivateOverride
+        super.init(windowUUID: windowUUID)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -73,7 +86,11 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
 
     @objc
     func learnMoreButtonTapped(_ sender: UIButton) {
-        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        let viewController = SettingsContentViewController(
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: true,
+            shouldBeInPrivateTheme: false
+        )
         viewController.url = SupportUtils.URLForTopic("manage-saved-passwords-firefox-ios")
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -81,7 +98,9 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
     override func applyTheme() {
         super.applyTheme()
 
-        let currentTheme = themeManager.getCurrentTheme(for: windowUUID)
-        learnMoreButton.applyTheme(theme: currentTheme)
+        let theme = themeManager.resolveTheme(for: windowUUID,
+                                              shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                              shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+        learnMoreButton.applyTheme(theme: theme)
     }
 }

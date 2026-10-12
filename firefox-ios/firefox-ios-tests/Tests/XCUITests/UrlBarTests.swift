@@ -22,6 +22,7 @@ class UrlBarTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306888
+    // Regression
     func testNewTabUrlBar() {
         // Visit any website and select the URL bar
         browserScreen.navigateToURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
@@ -46,6 +47,7 @@ class UrlBarTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306887
+    // Regression
     func testSearchEngineLogo() {
         tapUrlBarValidateKeyboardAndIcon()
         // Type a search term and hit "go"
@@ -75,6 +77,7 @@ class UrlBarTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3167400
     // https://mozilla.testrail.io/index.php?/cases/view/3167424
+    // Regression
     func testCopyURLFromAddressBar() {
         // A decoy on the pasteboard makes the assertion meaningful: if "Copy Address" silently does
         // nothing, the paste below yields the decoy instead of the page URL and the test fails.
@@ -98,6 +101,7 @@ class UrlBarTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3167548
+    // Regression
     func testClearTextInAddressBar() {
         // Tap on the address bar of a new tab
         browserScreen.tapOnAddressBar()
@@ -122,6 +126,7 @@ class UrlBarTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3279353
     // https://mozilla.testrail.io/index.php?/cases/view/3279354
+    // Regression
     func testEditURLInAddressBar() {
         // Open a website
         browserScreen.navigateToURL(urlExample)

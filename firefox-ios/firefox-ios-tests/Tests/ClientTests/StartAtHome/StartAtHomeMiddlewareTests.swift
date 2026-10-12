@@ -18,7 +18,7 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockTabManager = MockTabManager()
         mockTabManager.tabRestoreHasFinished = true
         mockWindowManager = MockWindowManager(
@@ -123,7 +123,7 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Helpers
-    private func createSubject(with mockProfile: Profile = MockProfile()) -> StartAtHomeMiddleware {
+    private func createSubject(with mockProfile: Profile) -> StartAtHomeMiddleware {
         /// 9 Sep 2001 8:00 pm GMT + 0
         let testDate = Date(timeIntervalSince1970: 1_000_065_600)
         let lastSessionDate = Calendar.current.date(

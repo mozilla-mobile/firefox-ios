@@ -75,7 +75,7 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
         FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
             HomepageRedesignFeature(categoriesEnabled: false)

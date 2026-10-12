@@ -22,7 +22,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
         tabManager = MockTabManager()
         fileManager = MockFileManager()
     }
@@ -414,7 +414,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let tab = MockTabWebView(frame: .zero,
                                  configuration: WKWebViewConfiguration(),
                                  windowUUID: .XCTestDefaultUUID,
-                                 certStore: MockProfile().certStore)
+                                 certStore: makeProfile().certStore)
         tab.loadedURL = url
         return tab
     }

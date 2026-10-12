@@ -7,11 +7,17 @@ import Combine
 
 public protocol Themeable: ThemeUUIDIdentifiable {
     /// Whether we should override / force the theme to be private or not private. Goes against the basic theme set up.
+    /// Note: subclasses must redeclare this themselves — protocol extension defaults aren't part of the vtable.
     nonisolated var shouldUsePrivateOverride: Bool { get }
 
     /// Determines if we want views to be in private theme or not.
     @MainActor
     var shouldBeInPrivateTheme: Bool { get }
+
+    /// Whether `shouldUsePrivateOverride` is gated behind the Nova private theme override feature. Set to
+    /// `false` only on overrides that predate the Nova implementation like SyncedTabs.
+    /// Must be redeclared per subclass.
+    nonisolated var isSubjectToNovaPrivateOverride: Bool { get }
 
     @MainActor
     var themeManager: ThemeManager { get }
@@ -57,6 +63,7 @@ public protocol InjectedThemeUUIDIdentifiable: AnyObject {
 extension Themeable {
     public var shouldUsePrivateOverride: Bool { return false }
     public var shouldBeInPrivateTheme: Bool { return false }
+    public var isSubjectToNovaPrivateOverride: Bool { return true }
 
     /// Updates subviews of the `Themeable` view, which can specify whether it wants to use the
     /// base theme via `getCurrentTheme` or override the private mode theme via `resolvedTheme`
@@ -68,7 +75,11 @@ extension Themeable {
         assert(uuid != .unavailable, "Theme applicable view has `unavailable` window UUID. Unexpected.")
 
         let theme: Theme
-        if shouldUsePrivateOverride {
+        if isSubjectToNovaPrivateOverride {
+            theme = themeManager.resolveTheme(for: uuid,
+                                              shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                              shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+        } else if shouldUsePrivateOverride {
             theme = themeManager.resolvedTheme(with: shouldBeInPrivateTheme)
         } else {
             theme = themeManager.getCurrentTheme(for: uuid)

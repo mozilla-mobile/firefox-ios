@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "De eigenaar van %@ heeft deze niet juist ingesteld en er kan geen beveiligde verbinding tot stand worden gebracht.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "De website kan tijdelijk niet beschikbaar zijn, is mogelijk naar een ander adres verplaatst, of uw firewall of proxy blokkeert mogelijk de verbinding.\n\nControleer uw verbindingsinstellingen en probeer het opnieuw.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ kan de opgevraagde URL niet bereiken.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ kan geen verbinding maken met %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Wees voorzichtig. Er is iets niet in orde.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Het lijkt erop dat er een probleem met deze website is";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Teruggaan (Aanbevolen)";

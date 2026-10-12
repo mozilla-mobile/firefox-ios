@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Storage
 
 @testable import Client
 
@@ -33,7 +34,7 @@ class MockShareTab: ShareTab {
         self.webView = TabWebView(frame: CGRect.zero,
                                   configuration: .init(),
                                   windowUUID: .XCTestDefaultUUID,
-                                  certStore: MockProfile().certStore)
+                                  certStore: CertStore())
         self.temporaryDocument = withTemporaryDocument
     }
 }

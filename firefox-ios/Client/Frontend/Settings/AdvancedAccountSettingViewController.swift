@@ -76,7 +76,7 @@ final class AdvancedAccountSettingViewController: SettingsTableViewController {
             return []
         }
 
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         let attributes = [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
         let useStage = BoolSetting(
             prefs: prefs,

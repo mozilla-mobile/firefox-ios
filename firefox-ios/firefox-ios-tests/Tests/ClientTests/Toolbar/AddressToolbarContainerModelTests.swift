@@ -16,7 +16,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: MockNimbusFeatureFlags())
 
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         searchEnginesManager = await SearchEnginesManager(
             prefs: mockProfile.prefs,
             files: mockProfile.files,

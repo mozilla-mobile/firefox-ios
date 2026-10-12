@@ -21,7 +21,7 @@ final class ToUExperimentsTrackingTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
         tracking = ToUExperimentsTracking(prefs: profile.prefs)
     }
 

@@ -537,6 +537,7 @@ class TodayWidgetTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2783001
+    // Regression
     func testFxShortcutSearchWidget() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("iOS 16 is required")

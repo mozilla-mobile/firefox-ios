@@ -95,6 +95,15 @@ class ThemeableTests: XCTestCaseRootViewController {
         XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 1)
     }
 
+    func test_updateThemeApplicableSubviews_whenSubclassOverridesPrivateTheme_returnsProperTheme() {
+        let subject = TestsThemeableSubclass(themeManager: mockThemeManager)
+
+        subject.updateThemeApplicableSubviews(UIView(), for: .XCTestDefaultUUID)
+
+        XCTAssertEqual(mockThemeManager.getCurrentThemeCallCount, 0)
+        XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 1)
+    }
+
     func test_updateThemeApplicableSubviews_withDefault_forcePrivateTheme_returnsProperTheme() {
         testThemeable.shouldUsePrivateOverride = false
         testThemeable.shouldBeInPrivateTheme = true
@@ -121,6 +130,36 @@ class TestsTableView: NSObject, UITableViewDataSource, UITableViewDelegate {
                                                  for: indexPath as IndexPath)
         return cell
     }
+}
+
+// MARK: - Subclass override
+
+/// Mirrors `ThemedNavigationController` / `SettingsNavigationController`: the base class conforms to
+/// `Themeable` and declares the private override properties so that a subclass can override them.
+class TestsThemeableBase: UIViewController, @MainActor Themeable {
+    var themeManager: ThemeManager
+    var themeListenerCancellable: Any?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
+    var shouldUsePrivateOverride: Bool { return false }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    init(themeManager: ThemeManager) {
+        self.themeManager = themeManager
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme() {}
+    var currentWindowUUID: UUID? { return .XCTestDefaultUUID }
+}
+
+final class TestsThemeableSubclass: TestsThemeableBase {
+    override var shouldUsePrivateOverride: Bool { return true }
+    override var shouldBeInPrivateTheme: Bool { return false }
 }
 
 // MARK: - TestsThemeable

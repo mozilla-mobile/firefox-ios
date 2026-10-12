@@ -14,7 +14,7 @@ final class DefaultFolderHierarchyFetcherTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         testFolderGuid = await addFolder(title: testFolderTitle)
     }
 
@@ -44,7 +44,6 @@ final class DefaultFolderHierarchyFetcherTests: XCTestCase {
     }
 
     func testAddFolderToPreviousAddedFolderGUID_returnsFolderWithIndentationHigherThenPreviousFolder() async throws {
-        mockProfile.reopen()
         let subject = createSubject()
         let previousFolders = await subject.fetchFolders()
         let previouslyAddedFolder = try XCTUnwrap(previousFolders.first)

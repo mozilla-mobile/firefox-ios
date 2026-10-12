@@ -30,6 +30,9 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     var url: URL?
     var timer: Timer?
 
+    let shouldUsePrivateOverride: Bool
+    let shouldBeInPrivateTheme: Bool
+
     var isLoaded = false {
         didSet {
             if isLoaded {
@@ -94,10 +97,14 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
 
     init(title: NSAttributedString? = nil,
          windowUUID: WindowUUID,
+         shouldUsePrivateOverride: Bool = false,
+         shouldBeInPrivateTheme: Bool = false,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.settingsTitle = title
         self.windowUUID = windowUUID
+        self.shouldUsePrivateOverride = shouldUsePrivateOverride
+        self.shouldBeInPrivateTheme = shouldBeInPrivateTheme
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
@@ -165,7 +172,9 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
     }
 
     private func makeInterstitialViews() -> InterstitialViews {

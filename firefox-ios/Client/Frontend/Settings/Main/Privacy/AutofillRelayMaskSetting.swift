@@ -20,7 +20,7 @@ class AutofillRelayMaskSetting: Setting {
         self.settings = settings as? AppSettingsTableViewController
         self.settingsDelegate = settingsDelegate
 
-        let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
+        let theme = settings.currentTheme()
         super.init(
             title: NSAttributedString(
                 string: .RelayMask.RelayEmailMaskSettingsTitle,

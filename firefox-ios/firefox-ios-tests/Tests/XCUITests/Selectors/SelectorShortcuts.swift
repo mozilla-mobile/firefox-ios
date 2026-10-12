@@ -103,6 +103,13 @@ extension Selector {
         return Selector(strategy: .predicate(p), value: id, description: description, groups: groups)
     }
 
+    static func cellIdBeginsWith(_ prefix: String, description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND identifier BEGINSWITH %@",
+                            XCUIElement.ElementType.cell.rawValue,
+                            prefix)
+        return Selector(strategy: .predicate(p), value: prefix, description: description, groups: groups)
+    }
+
     static func cellByLabel(_ label: String, description: String, groups: [String]) -> Selector {
         let p = NSPredicate(format: "elementType == %d AND label == %@",
                             XCUIElement.ElementType.cell.rawValue,

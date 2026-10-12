@@ -15,7 +15,7 @@ final class RemoteTabsMiddlewareTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }

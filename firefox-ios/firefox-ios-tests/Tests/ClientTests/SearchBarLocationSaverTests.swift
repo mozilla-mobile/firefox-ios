@@ -13,12 +13,11 @@ class SearchBarLocationSaverTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
     override func tearDown() async throws {
-        profile.shutdown()
         profile = nil
 
         DependencyHelperMock().reset()

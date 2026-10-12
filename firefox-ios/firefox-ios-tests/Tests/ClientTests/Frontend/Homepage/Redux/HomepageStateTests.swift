@@ -13,7 +13,7 @@ final class HomepageStateTests: XCTestCase, FeatureFlagTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockNimbusLayer = MockNimbusFeatureFlagLayer()
 
         DependencyHelperMock().bootstrapDependencies(
@@ -125,7 +125,7 @@ final class HomepageStateTests: XCTestCase, FeatureFlagTestUtility {
     }
 
     func test_trackerBlockerModuleState_withFeatureDisabledAndPreferenceEnabled_returnsExpectedState() {
-        let profile = MockProfile()
+        let profile = makeProfile()
         let mockNimbusLayer = MockNimbusFeatureFlagLayer()
         let userPreferences = UserFeaturePreferenceManager(prefs: profile.prefs, backendLayer: mockNimbusLayer)
         userPreferences.setPreferenceFor(.homepageTrackerBlockerModule, to: true)

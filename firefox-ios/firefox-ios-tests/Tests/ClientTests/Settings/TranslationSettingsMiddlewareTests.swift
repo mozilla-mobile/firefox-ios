@@ -17,7 +17,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockModelsFetcher = MockTranslationModelsFetcher()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()

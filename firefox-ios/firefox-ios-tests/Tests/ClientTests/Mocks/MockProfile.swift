@@ -127,6 +127,14 @@ extension XCTestCase {
     }
 }
 
+extension MockProfile {
+    /// Creates a profile that is not cleaned up at test teardown; it is shut down and its directory removed
+    /// only when it is released. For code that is not a test case and so cannot call `makeProfile()`.
+    static func unmanaged() -> MockProfile {
+        return MockProfile()
+    }
+}
+
 // TODO: FXIOS-12610 Profile should be refactored so it is **not** `Sendable`.
 final class MockProfile: Client.Profile, @unchecked Sendable {
     public var rustFxA: RustFirefoxAccounts {
@@ -147,7 +155,8 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
     private let databases = DatabaseRegistry()
     private let injectedPinnedSites: MockablePinnedSites?
 
-    init(
+    /// Private to this file so tests go through `makeProfile()`, which cleans up when the test ends.
+    fileprivate init(
         firefoxSuggest: RustFirefoxSuggestProtocol? = nil,
         remoteSettingsService: RemoteSettingsService = RemoteSettingsService(unsafeFromHandle: 0),
         injectedPinnedSites: MockablePinnedSites? = nil

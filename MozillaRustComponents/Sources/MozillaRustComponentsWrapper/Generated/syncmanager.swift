@@ -592,6 +592,8 @@ public protocol SyncManagerProtocol: AnyObject, Sendable {
     
     /**
      * Perform a sync.  See [SyncParams] and [SyncResult] for details on how this works
+     *
+     * Fails with [SyncManagerError::Busy] if a sync is already in progress.
      */
     func sync(params: SyncParams) throws  -> SyncResult
     
@@ -682,6 +684,8 @@ open func getAvailableEngines() -> [String]  {
     
     /**
      * Perform a sync.  See [SyncParams] and [SyncResult] for details on how this works
+     *
+     * Fails with [SyncManagerError::Busy] if a sync is already in progress.
      */
 open func sync(params: SyncParams)throws  -> SyncResult  {
     return try  FfiConverterTypeSyncResult_lift(try rustCallWithError(FfiConverterTypeSyncManagerError_lift) {
@@ -1688,16 +1692,16 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_sync_manager_checksum_method_syncmanager_disconnect() != 33773) {
+    if (uniffi_sync_manager_checksum_method_syncmanager_disconnect() != 53220) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_sync_manager_checksum_method_syncmanager_get_available_engines() != 20365) {
+    if (uniffi_sync_manager_checksum_method_syncmanager_get_available_engines() != 47967) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_sync_manager_checksum_method_syncmanager_sync() != 25870) {
+    if (uniffi_sync_manager_checksum_method_syncmanager_sync() != 38154) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_sync_manager_checksum_constructor_syncmanager_new() != 14797) {
+    if (uniffi_sync_manager_checksum_constructor_syncmanager_new() != 9801) {
         return InitializationResult.apiChecksumMismatch
     }
 

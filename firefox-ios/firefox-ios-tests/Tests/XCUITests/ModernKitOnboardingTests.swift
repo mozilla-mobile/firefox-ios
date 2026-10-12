@@ -227,6 +227,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4035645 [Config] nav:bottombar
+    // Regression
     func testModernKitOnboardingToolbarPlacementBottom() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")

@@ -52,7 +52,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
         try await super.setUp()
         setIsHostedSummarizerEnabled(true)
         DependencyHelperMock().bootstrapDependencies()
-        browserViewController = MockBrowserViewController(profile: MockProfile(), tabManager: MockTabManager())
+        browserViewController = MockBrowserViewController(profile: makeProfile(), tabManager: MockTabManager())
         router = MockRouter(navigationController: MockNavigationController())
         parentCoordinator = MockParentCoordinator()
         prefs = MockProfilePrefs()
@@ -178,7 +178,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
         trigger: SummarizerTrigger = .mainMenu) -> SummarizeCoordinator {
         let subject = SummarizeCoordinator(browserSnapshot: UIImage(),
                                            browserSnapshotTopOffset: 0.0,
-                                           webView: MockTabWebView(tab: MockTab(profile: MockProfile(),
+                                           webView: MockTabWebView(tab: MockTab(profile: makeProfile(),
                                                                                 windowUUID: .XCTestDefaultUUID)),
                                            summarizerServiceFactory: MockSummarizerServiceFactory(),
                                            parentCoordinatorDelegate: parentCoordinator,

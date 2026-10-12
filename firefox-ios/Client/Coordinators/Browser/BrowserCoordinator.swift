@@ -288,6 +288,33 @@ final class BrowserCoordinator: BaseCoordinator,
                        category: .coordinator)
             findAndHandle(route: savedRoute)
         }
+
+        presentHardcodedOnboardingDripIfNeeded()
+    }
+
+    // Presents the day-based onboarding card over the current tab
+    private func presentHardcodedOnboardingDripIfNeeded() {
+        guard browserViewController.presentedViewController == nil else { return }
+
+        let manager = IntroScreenManager(prefs: profile.prefs)
+        guard manager.shouldUseContinuousOnboarding, !manager.shouldShowIntroScreen else { return }
+
+        let cards = OnboardingCardScheduler(prefs: profile.prefs).getDueCards()
+        guard !cards.isEmpty else { return }
+
+        let view = OnboardingFlowView(
+            cards: cards,
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            onComplete: { [weak self] in
+                self?.browserViewController.dismiss(animated: true)
+            }
+        )
+
+        let hostingController = PortraitOnlyHostingController(rootView: view)
+        hostingController.modalPresentationStyle = .fullScreen
+        hostingController.modalTransitionStyle = .crossDissolve
+        browserViewController.present(hostingController, animated: true)
     }
 
     // MARK: - ETPCoordinatorSSLStatusDelegate
@@ -663,7 +690,9 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func presentAdBlockerSettings() {
-        let browsingSettings = BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
+        let browsingSettings = BrowsingSettingsViewController(profile: profile,
+                                                              windowUUID: windowUUID,
+                                                              shouldUsePrivateOverride: false)
         browsingSettings.parentCoordinator = self
         let navigationController = DismissableNavigationViewController(rootViewController: browsingSettings)
         setupAdBlockerSettingsDetents(for: navigationController)
@@ -686,13 +715,21 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func pressedMailApp() {
         guard let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
-        let viewController = OpenWithSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        let viewController = OpenWithSettingsViewController(
+            prefs: profile.prefs,
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: false
+        )
         nav.pushViewController(viewController, animated: true)
     }
 
     func pressedAutoPlay() {
         guard let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
-        let viewController = AutoplaySettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        let viewController = AutoplaySettingsViewController(
+            prefs: profile.prefs,
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: false
+        )
         nav.pushViewController(viewController, animated: true)
     }
 
@@ -703,7 +740,11 @@ final class BrowserCoordinator: BaseCoordinator,
     func askedToOpen(url: URL?, withTitle title: NSAttributedString?) {
         guard let url,
               let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
-        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        let viewController = SettingsContentViewController(
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: true,
+            shouldBeInPrivateTheme: false
+        )
         viewController.settingsTitle = title
         viewController.url = url
         nav.pushViewController(viewController, animated: true)
@@ -1099,7 +1140,21 @@ final class BrowserCoordinator: BaseCoordinator,
         if featureFlagsProvider.isEnabled(.tabTrayUIExperiments) &&
             UIDevice.current.userInterfaceIdiom != .pad && selectedPanel != .syncedTabs {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
-            present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
+            // Present on the next runloop turn so setup and tap feedback render first,
+            // keeping each main-thread turn short and reducing the risk of a hang during presentation.
+            DispatchQueue.main.async { [weak self, weak tabTrayCoordinator] in
+                guard let self, let tabTrayCoordinator, childCoordinators.contains(where: { $0 === tabTrayCoordinator })
+                else { return }
+
+                // Defense in case something else was presented while we waited a runloop turn,
+                // presenting now would fail silently and leave a stale coordinator
+                // that blocks the next tab tray open, so remove it instead.
+                guard !router.isPresenting else {
+                    remove(child: tabTrayCoordinator)
+                    return
+                }
+                present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
+            }
         } else {
             present(navigationController)
         }
@@ -1507,12 +1562,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
             // Notify theme manager
             themeManager.windowDidClose(uuid: uuid)
-
-            // Clean up views and ensure BVC for the window is freed
-            browserViewController.view.endEditing(true)
-            browserViewController.dismissUrlBar()
-            browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
-            browserViewController.removeFromParent()
+            releaseBrowserViewController()
         case .libraryOpened:
             // Auto-close library panel if it was opened in another iPad window. [FXIOS-8095]
             guard uuid != windowUUID else { return }
@@ -1552,6 +1602,17 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - Private helpers
+
+    private func releaseBrowserViewController() {
+        // Clean up views and ensure BVC and its adjacent views for the window are freed.
+        browserViewController.view.endEditing(true)
+        browserViewController.dismissUrlBar()
+        browserViewController.contentContainer.removeContent()
+        browserViewController.header.removeAllArrangedViews()
+        browserViewController.overKeyboardContainer.removeAllArrangedViews()
+        browserViewController.bottomContainer.removeAllArrangedViews()
+        browserViewController.removeFromParent()
+    }
 
     /// Tabs displaying content other than a HTML MIME type can be downloaded and treated as files when shared. This method
     /// attempts to download any such files. If there is no file to download, returns just a regular `ShareType.tab`.

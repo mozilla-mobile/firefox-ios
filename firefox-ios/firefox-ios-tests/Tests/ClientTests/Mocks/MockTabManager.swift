@@ -122,7 +122,7 @@ class MockTabManager: TabManager {
     func expireLoginAlerts() {}
 
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
-        return Tab(profile: MockProfile(), windowUUID: windowUUID)
+        return Tab(profile: profile, windowUUID: windowUUID)
     }
 
     func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],
@@ -137,7 +137,12 @@ class MockTabManager: TabManager {
     ) -> Tab {
         addTabWasCalled = true
         let isHomePage = request?.url?.absoluteString == "internal://local/about/home"
-        return MockTab(profile: MockProfile(), isPrivate: isPrivate, windowUUID: windowUUID, isHomePage: isHomePage)
+        return MockTab(
+            profile: MockProfile.unmanaged(),
+            isPrivate: isPrivate,
+            windowUUID: windowUUID,
+            isHomePage: isHomePage
+        )
     }
 
     func backgroundRemoveAllTabs(isPrivate: Bool,

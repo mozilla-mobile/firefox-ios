@@ -320,7 +320,8 @@ final class SettingsCoordinatorTests: XCTestCase {
         subject.showDevicePassCode()
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
-        XCTAssertTrue(mockRouter.pushedViewController is DevicePasscodeRequiredViewController)
+        let passcodeViewController = mockRouter.pushedViewController as? DevicePasscodeRequiredViewController
+        XCTAssertEqual(passcodeViewController?.shouldUsePrivateOverride, true)
     }
 
     func testCreditCardSettings_showsCreditCardVC() {
@@ -681,7 +682,7 @@ final class SettingsCoordinatorTests: XCTestCase {
             tabManager: MockTabManager(),
             relayController: MockRelayController(),
             gleanUsageReportingMetricsService: MockGleanUsageReportingMetricsService(
-                profile: MockProfile()
+                profile: makeProfile()
             )
         )
         trackForMemoryLeaks(subject)

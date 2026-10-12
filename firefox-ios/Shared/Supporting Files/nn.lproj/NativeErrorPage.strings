@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Eigaren av %@ har ikkje konfigurert det rett, og ei sikker tilkopling kan ikkje opprettast.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Nettstaden kan vere mellombels utilgjengeleg, han kan ha vorte flytta til ei anna adresse, eller brannmuren eller proxyen din kan blokkere tilkoplinga.\n\nKontroller tilkoplingsinnstillingane dine, og prøv på nytt.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ klarte ikkje å nå den etterspurde nettadressa.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ klarte ikkje å kople til %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Ver varsam. Noko ser ikkje rett ut.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Det ser ut til at det er eit problem med denne nettstaden";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Gå tilbake (tilrådd)";

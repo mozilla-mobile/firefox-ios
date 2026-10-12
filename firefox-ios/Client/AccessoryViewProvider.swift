@@ -202,8 +202,7 @@ final class AccessoryViewProvider: UIView,
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
 
-        super.init(frame: CGRect(width: UIScreen.main.bounds.width,
-                                 height: UX.accessoryViewHeight))
+        super.init(frame: CGRect(width: 0, height: UX.accessoryViewHeight))
 
         setupLayout()
         configureToolbarItems()
@@ -284,20 +283,22 @@ final class AccessoryViewProvider: UIView,
 
     private func setupHeightSpacer(_ spacer: UIView, height: CGFloat) {
         NSLayoutConstraint.activate([
-            spacer.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
+            spacer.leadingAnchor.constraint(equalTo: leadingAnchor),
+            spacer.trailingAnchor.constraint(equalTo: trailingAnchor),
             spacer.heightAnchor.constraint(equalToConstant: height)
         ])
         spacer.accessibilityElementsHidden = true
     }
 
     private func setupLayout() {
+        addSubviews(toolbarTopHeightSpacer, toolbar)
+
         [previousButton, nextButton].forEach { navigationButtonsStackView.addArrangedSubview($0) }
         setupHeightSpacer(toolbarTopHeightSpacer, height: UX.spacerViewHeight)
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
         if #unavailable(iOS 26.0) { layer.cornerRadius = UX.cornerRadius }
 
-        addSubviews(toolbarTopHeightSpacer, toolbar)
         if #available(iOS 26.0, *) {
             NSLayoutConstraint.activate([
                 previousButton.widthAnchor.constraint(equalToConstant: UX.buttonsWidth),

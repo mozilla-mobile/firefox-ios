@@ -144,6 +144,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3197644
+    // Regression
     func testOpenNewTabButtonOnToolbar() throws {
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         app.launch()

@@ -301,6 +301,106 @@ final class ContentContainerTests: XCTestCase {
         XCTAssertNil(homepage.view.superview)
     }
 
+    // MARK: - removeContent()
+    func testRemoveContent_removesHomepageAndClearsState() {
+        let subject = createSubject()
+        let homepage = createHomepage()
+        subject.add(content: homepage)
+
+        subject.removeContent()
+
+        XCTAssertNil(homepage.view.superview)
+        XCTAssertNil(subject.contentController)
+        XCTAssertNil(subject.contentView)
+        XCTAssertFalse(subject.hasHomepage)
+        XCTAssertFalse(subject.hasAnyHomepage)
+    }
+
+    func testRemoveContent_removesPrivateHomepageAndClearsState() {
+        let subject = createSubject()
+        let privateHomepage = PrivateHomepageViewController(
+            windowUUID: .XCTestDefaultUUID,
+            overlayManager: overlayModeManager
+        )
+        subject.add(content: privateHomepage)
+
+        subject.removeContent()
+
+        XCTAssertNil(privateHomepage.view.superview)
+        XCTAssertNil(subject.contentController)
+        XCTAssertFalse(subject.hasPrivateHomepage)
+    }
+
+    func testRemoveContent_removesWebView() {
+        // Unlike add(content:), which intentionally keeps the webview around,
+        // removeContent must drop it so the window can be freed.
+        let subject = createSubject()
+        let webview = WebviewViewController(webView: WKWebView())
+        subject.add(content: webview)
+
+        subject.removeContent()
+
+        XCTAssertNil(webview.view.superview)
+        XCTAssertNil(subject.contentController)
+        XCTAssertNil(subject.contentView)
+        XCTAssertFalse(subject.hasWebView)
+    }
+
+    func testRemoveContent_removesContentFromParentViewController() {
+        let subject = createSubject()
+        let parent = UIViewController()
+        let webview = WebviewViewController(webView: WKWebView())
+
+        parent.addChild(webview)
+        subject.add(content: webview)
+        webview.didMove(toParent: parent)
+
+        XCTAssertNotNil(webview.parent)
+
+        subject.removeContent()
+
+        XCTAssertNil(webview.parent)
+        XCTAssertTrue(parent.children.isEmpty)
+    }
+
+    func testRemoveContent_allowsSameContentTypeToBeAddedAgain() {
+        let subject = createSubject()
+        subject.add(content: WebviewViewController(webView: WKWebView()))
+        XCTAssertFalse(subject.canAdd(content: WebviewViewController(webView: WKWebView())))
+
+        subject.removeContent()
+
+        XCTAssertTrue(subject.canAdd(content: WebviewViewController(webView: WKWebView())))
+        XCTAssertTrue(subject.canAdd(content: createHomepage()))
+    }
+
+    func testRemoveContent_releasesContentController() {
+        let subject = createSubject()
+        weak var weakWebview: WebviewViewController?
+
+        autoreleasepool {
+            let webview = WebviewViewController(webView: WKWebView())
+            weakWebview = webview
+            subject.add(content: webview)
+            XCTAssertNotNil(weakWebview)
+
+            subject.removeContent()
+        }
+
+        XCTAssertNil(weakWebview, "ContentContainer should not keep its content alive after removeContent.")
+    }
+
+    func testRemoveContent_calledTwice_doesNotCrash() {
+        let subject = createSubject()
+        subject.add(content: WebviewViewController(webView: WKWebView()))
+
+        subject.removeContent()
+        subject.removeContent()
+
+        XCTAssertNil(subject.contentController)
+        XCTAssertTrue(subject.subviews.isEmpty)
+    }
+
     private func createSubject() -> ContentContainer {
         let subject = ContentContainer()
         trackForMemoryLeaks(subject)

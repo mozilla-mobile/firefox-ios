@@ -223,6 +223,11 @@ final class TabDisplayPanelViewController: UIViewController,
         return tabTrayState?.isPrivateMode ?? false
     }
 
+    /// This override predates the Nova implementation and must remain unchanged.
+    var isSubjectToNovaPrivateOverride: Bool {
+        return false
+    }
+
     // MARK: - Fade view & status bar view
 
     private func setupFadeView() {

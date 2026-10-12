@@ -40,14 +40,29 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v155" = "Повторити спробу";
 
+/* On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.Description.v156" = "Під'єднайтеся до Wi-Fi або відкрийте параметри iOS та ввімкніть мобільні дані для %@.";
+
 /* On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "Мобільні дані вимкнено для %@.";
 
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Власник %@ не налаштував його належним чином, тому неможливо створити захищене з'єднання.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Сайт може бути тимчасово недоступним, його адреса могла змінитися, або ваш брандмауер чи проксі-сервер може блокувати з’єднання.\n\nПеревірте налаштування з’єднання та спробуйте ще раз.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ не зміг отримати доступ до запитуваної URL-адреси.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ не зміг з’єднатися з %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Будьте обережні. Тут щось не так.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Схоже, виникла проблема з цим сайтом";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Назад (рекомендовано)";

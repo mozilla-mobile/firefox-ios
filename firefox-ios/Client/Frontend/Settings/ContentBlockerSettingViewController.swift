@@ -36,8 +36,7 @@ final class ContentBlockerSettingViewController: SettingsTableViewController {
                 target: self,
                 action: #selector(done))
             if #available(iOS 26.0, *) {
-                let theme = themeManager.getCurrentTheme(for: windowUUID)
-                navigationItem.rightBarButtonItem?.tintColor = theme.colors.textPrimary
+                navigationItem.rightBarButtonItem?.tintColor = currentTheme().colors.textPrimary
             }
         }
     }
@@ -196,7 +195,11 @@ final class ContentBlockerSettingViewController: SettingsTableViewController {
 
     @objc
     func moreInfoTapped() {
-        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        let viewController = SettingsContentViewController(
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: true,
+            shouldBeInPrivateTheme: false
+        )
         viewController.url = SupportUtils.URLForTopic("tracking-protection-ios")
         navigationController?.pushViewController(viewController, animated: true)
     }

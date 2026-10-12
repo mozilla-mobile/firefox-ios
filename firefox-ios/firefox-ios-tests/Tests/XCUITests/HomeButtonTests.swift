@@ -20,6 +20,7 @@ class HomeButtonTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306925
+    // Regression
     func testGoHome() throws {
         browserScreen.navigateToURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
@@ -37,6 +38,7 @@ class HomeButtonTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306883
+    // Regression
     func testSwitchHomepageKeyboardRaisedUp() {
         // Open a new tab and load a web page
         browserScreen.navigateToURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")

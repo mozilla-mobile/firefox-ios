@@ -47,6 +47,7 @@ public final class WidgetKitThemeManager: ThemeManager {
     // MARK: - Unsupported settings
 
     public var isNewAppearanceMenuOn: Bool { true }
+    public var isPrivateThemeOverrideEnabled: Bool { false }
     public var systemThemeIsOn: Bool { true }
     public var automaticBrightnessIsOn: Bool { false }
     public var automaticBrightnessValue: Float { 0 }

@@ -15,7 +15,7 @@ final class FirefoxAccountSignInViewControllerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         deeplinkParams = FxALaunchParams(entrypoint: .browserMenu, query: ["test_key": "test_value"])
     }
 

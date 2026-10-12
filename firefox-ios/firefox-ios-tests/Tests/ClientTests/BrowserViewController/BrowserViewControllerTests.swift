@@ -698,6 +698,19 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, .navigationButtonDoubleTapped)
     }
 
+    // MARK: - Key commands
+
+    @MainActor
+    func testKeyCommands_includesControlF5ForReloadIgnoringCache() throws {
+        let subject = createSubject()
+
+        let command = try XCTUnwrap(subject.keyCommands?.first {
+            $0.input == UIKeyCommand.f5 && $0.modifierFlags == .control
+        })
+
+        XCTAssertEqual(command.action, #selector(BrowserViewController.reloadTabIgnoringCacheKeyCommand))
+    }
+
     // MARK: - Tab manager restore
 
     @MainActor
@@ -761,17 +774,9 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         }
     }
 
-    private func setupNimbusNativeErrorPageTesting(
-        isEnabled: Bool,
-        noInternetConnectionErrorIsEnabled: Bool,
-        badCertDomainErrorPageIsEnabled: Bool
-    ) {
+    private func setupNimbusNativeErrorPageTesting(isEnabled: Bool) {
         FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
-            return NativeErrorPageFeature(
-                badCertDomainErrorPage: badCertDomainErrorPageIsEnabled,
-                enabled: isEnabled,
-                noInternetConnectionError: noInternetConnectionErrorIsEnabled
-            )
+            return NativeErrorPageFeature(enabled: isEnabled)
         }
     }
 
