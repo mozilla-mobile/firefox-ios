@@ -77,6 +77,7 @@ class BackgroundAudioHelper: Notifiable {
     func startObserving() {
         guard !isObserving else { return }
         isObserving = true
+        Self.setPlaybackCategory()
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
@@ -111,14 +112,13 @@ class BackgroundAudioHelper: Notifiable {
     }
 
     private func handleWillResignActive() {
-        try? AVAudioSession.sharedInstance().setCategory(.playback)
+        Self.setPlaybackCategory()
         for webView in Self.selectedTabWebViews() {
             webView.evaluateJavaScript(Self.tagPlayingMediaJS)
         }
     }
 
     private func handleDidBecomeActive() {
-        try? AVAudioSession.sharedInstance().setCategory(.soloAmbient)
         for webView in Self.selectedTabWebViews() {
             webView.evaluateJavaScript(Self.removeVisibilityOverridesJS, in: nil, in: .page)
         }
@@ -130,6 +130,15 @@ class BackgroundAudioHelper: Notifiable {
             webView.setAllMediaPlaybackSuspended(false) {
                 webView.evaluateJavaScript(Self.resumeTaggedMediaJS)
             }
+        }
+    }
+
+    /// `AVAudioSession.setCategory` is a synchronous XPC call and can block for
+    /// a long time during app state transitions, so we avoid running it on main thread..
+    /// `AVAudioSession` is thread-safe, so a detached task is sufficient.
+    private static func setPlaybackCategory() {
+        Task.detached(priority: .utility) {
+            try? AVAudioSession.sharedInstance().setCategory(.playback)
         }
     }
 
