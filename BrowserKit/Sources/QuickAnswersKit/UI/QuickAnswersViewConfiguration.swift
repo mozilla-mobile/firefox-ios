@@ -32,13 +32,15 @@ public struct QuickAnswersViewConfiguration: Sendable {
         public let footerFormat: String
         public let sources: String
         public let aboutYourPrivacy: String
+        public let answerHeader: String
 
         public init(
             placeholder: String,
             answering: String,
             footerFormat: String,
             sources: String,
-            aboutYourPrivacy: String
+            aboutYourPrivacy: String,
+            answerHeader: String
         ) {
             self.placeholder = placeholder
             self.answering = answering
@@ -56,6 +58,7 @@ public struct QuickAnswersViewConfiguration: Sendable {
         public init(title: String, description: String) {
             self.title = title
             self.description = description
+            self.answerHeader = answerHeader
         }
     }
 

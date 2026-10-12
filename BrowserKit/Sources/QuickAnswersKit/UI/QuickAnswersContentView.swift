@@ -7,7 +7,6 @@ import Common
 
 final class QuickAnswersContentView: UIView, ThemeApplicable {
     private struct UX {
-        static let contentSpacing: CGFloat = 32.0
         static let footerSpacing: CGFloat = 2.0
         static let privacyIconSize = CGSize(width: 18.0, height: 18.0)
         static let privacyIconPadding: CGFloat = 2.0
@@ -17,6 +16,8 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             bottom: 8.0,
             trailing: 8.0
         )
+        static let contentSpacing: CGFloat = 24.0
+        static let searchLabelTopPadding: CGFloat = 24.0
         static let animationDuration: TimeInterval = 0.2
         static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)
         /// The vertical space the waveform and its spacing leave behind.
@@ -46,20 +47,18 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         $0.adjustsFontForContentSizeCategory = true
     }
     private let transcriptLabel: TranscriptLabel = .build {
-        $0.font = FXFontStyles.Regular.title2.scaledFont()
+        $0.font = FXFontStyles.Bold.title1.scaledFont()
         $0.numberOfLines = 0
         $0.adjustsFontForContentSizeCategory = true
     }
     private let searchingLabel: UILabel = .build {
-        $0.font = FXFontStyles.Bold.callout.scaledFont()
+        $0.font = FXFontStyles.Bold.subheadline.scaledFont()
         $0.alpha = 0.0
+        $0.textAlignment = .center
         $0.adjustsFontForContentSizeCategory = true
     }
-    private let answerLabel: UILabel = .build {
-        $0.font = FXFontStyles.Regular.body.scaledFont()
-        $0.numberOfLines = 0
+    private let answerCardView: QuickAnswersAnswerCardView = .build {
         $0.alpha = 0.0
-        $0.adjustsFontForContentSizeCategory = true
     }
     private let sourceView: QuickAnswersSourceView = .build {
         $0.alpha = 0.0
@@ -115,7 +114,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             placeholderLabel,
             transcriptLabel,
             searchingLabel,
-            answerLabel,
+            answerCardView,
             sourceView,
             footerStackView
         )
@@ -143,17 +142,17 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             transcriptLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             transcriptLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            searchingLabel.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: UX.contentSpacing),
+            searchingLabel.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: UX.searchLabelTopPadding),
             searchingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             searchingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            answerLabel.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: UX.contentSpacing),
-            answerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            answerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            answerCardView.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: 24.0),
+            answerCardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            answerCardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            sourceView.topAnchor.constraint(equalTo: answerLabel.bottomAnchor, constant: UX.contentSpacing),
-            sourceView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            sourceView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            sourceView.topAnchor.constraint(equalTo: answerCardView.bottomAnchor, constant: 16.0),
+            sourceView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20.0),
+            sourceView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20.0),
 
             footerStackView.topAnchor.constraint(equalTo: sourceView.bottomAnchor, constant: UX.contentSpacing),
             footerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -233,13 +232,19 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         audioWaveform.stopAnimating()
         if let theme {
             searchingLabel.startShimmering(
-                light: theme.colors.textDisabled,
+                light: theme.colors.textPrimary.withAlphaComponent(0.2),
                 dark: theme.colors.textPrimary
             )
+            applyColorToTranscript(theme.colors.textSecondary.withAlphaComponent(0.7))
         }
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             searchingLabel.alpha = 1.0
         }
+    }
+
+    private func applyColorToTranscript(_ color: UIColor) {
+        transcriptLabel.foregroundColor = color
+        transcriptLabel.setTranscript(transcriptLabel.attributedText?.string ?? "", animated: false)
     }
 
     func configureResult(
@@ -248,9 +253,12 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         sources: [SearchResult.Source],
         onSourceTapped: @escaping (URL) -> Void
     ) {
+        if let theme {
+            applyColorToTranscript(theme.colors.textPrimary)
+        }
         searchingLabel.stopShimmering()
         searchingLabel.alpha = 0.0
-        answerLabel.text = text
+        answerCardView.configure(header: strings?.answerHeader ?? "", body: text)
         footerLabel.text = String(format: strings?.footerFormat ?? "", modelName)
         sourceView.configure(with: sources, onSourceTapped: onSourceTapped)
         animateResultCascade()
@@ -297,7 +305,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         placeholderLabel.textColor = theme.colors.textSecondary
         transcriptLabel.foregroundColor = theme.colors.textPrimary
         searchingLabel.textColor = theme.colors.textSecondary
-        answerLabel.textColor = theme.colors.textPrimary
+        answerCardView.applyTheme(theme: theme)
         footerLabel.textColor = theme.colors.textSecondary
         privacyButton.configuration?.baseForegroundColor = theme.colors.textAccent
         sourceView.applyTheme(theme: theme)
