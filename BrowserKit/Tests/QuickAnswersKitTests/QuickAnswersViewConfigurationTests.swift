@@ -30,7 +30,8 @@ struct QuickAnswersViewConfigurationTests {
             answering: "loading",
             footerFormat: "Powered by %@",
             sources: "Sources",
-            aboutYourPrivacy: "About Your Privacy"
+            aboutYourPrivacy: "About Your Privacy",
+            answerHeader: "Quick Answer"
         )
 
         #expect(subject.placeholder == "ask")
