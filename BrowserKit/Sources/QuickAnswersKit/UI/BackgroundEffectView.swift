@@ -340,3 +340,11 @@ final class BackgroundEffectView: UIView, ThemeApplicable {
         )
     }
 }
+
+#Preview {
+    BackgroundEffectView(
+        state: BackgroundEffectState(),
+        windowUUID: .XCTestDefaultUUID,
+        themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
+    )
+}
