@@ -50,6 +50,7 @@ enum FeatureFlagID: String, CaseIterable {
     case recentSearches
     case relayIntegration
     case reportBrokenSite
+    case searchConfigV3
     case searchTermInAddressBar
     case sentFromFirefox
     case sentFromFirefoxTreatmentA

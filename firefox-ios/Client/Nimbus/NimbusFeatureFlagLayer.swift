@@ -154,6 +154,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .reportBrokenSite:
             return checkReportBrokenSiteFeature()
 
+        case .searchConfigV3:
+            return checkSearchConfigV3Feature()
+
         case .searchTermInAddressBar:
             return checkSearchTermInAddressBarFeature()
 
@@ -519,5 +522,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkMultiDayOnboardingFeature() -> Bool {
         return nimbus.features.multiDayOnboardingFeature.value().useMultiDayOnboarding
+    }
+
+    private func checkSearchConfigV3Feature() -> Bool {
+        return nimbus.features.searchConfigV3Feature.value().enabled
     }
 }

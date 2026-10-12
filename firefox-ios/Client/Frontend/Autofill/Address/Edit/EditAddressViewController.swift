@@ -47,6 +47,15 @@ class EditAddressViewController: UIViewController,
     var currentWindowUUID: WindowUUID? { model.windowUUID }
     var webView: WKWebView? { model.editAddressWebViewManager.webView }
 
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    private func currentTheme() -> Theme {
+        return themeManager.resolveTheme(for: currentWindowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+    }
+
     init(
         themeManager: ThemeManager,
         model: AddressListViewModel,
@@ -82,7 +91,7 @@ class EditAddressViewController: UIViewController,
         stackView.addArrangedSubview(removeButton)
         removeButton.isHidden = true
         removeButton.applyTheme(
-            theme: themeManager.getCurrentTheme(for: currentWindowUUID)
+            theme: currentTheme()
         )
         NSLayoutConstraint.activate([
             removeButton.heightAnchor.constraint(equalToConstant: UX.removeButtonHeight)
@@ -208,8 +217,8 @@ class EditAddressViewController: UIViewController,
     }
 
     func applyTheme() {
-        guard let currentWindowUUID else { return }
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        guard currentWindowUUID != nil else { return }
+        let theme = currentTheme()
         removeButton.applyTheme(theme: theme)
         let isDarkTheme = theme.type == .dark
         let caretColor = theme.colors.actionPrimary.hexString

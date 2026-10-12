@@ -441,7 +441,8 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is CredentialAutofillCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(mockRouter.presentedViewController is DevicePasscodeRequiredViewController)
+        let passcodeViewController = mockRouter.presentedViewController as? DevicePasscodeRequiredViewController
+        XCTAssertEqual(passcodeViewController?.shouldUsePrivateOverride, false)
     }
 
     func testShowQRCode_addsQRCodeCoordinator() {
