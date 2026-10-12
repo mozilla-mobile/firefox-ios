@@ -473,6 +473,7 @@ class Tab: NSObject,
 
     var onWebViewLoadingStateChanged: (@MainActor () -> Void)?
     private var webViewLoadingObserver: NSKeyValueObservation?
+    private var blankLoadDelegate: BlankPageNavigationDelegate?
 
     private var temporaryDocumentsSession: TemporaryDocumentSession = [:]
 
@@ -671,6 +672,28 @@ class Tab: NSObject,
     func offloadWebView() async {
         guard webView != nil else { return }
         await close()
+    }
+
+    /// Navigates to `about:blank` and waits for the navigation to finish.
+    /// Callers must persist any session data they need first, since this replaces the tab's
+    /// interaction state.
+    ///
+    /// ⚠️⚠️⚠️ Takes over `navigationDelegate` for the duration, so the usual delegate never sees the
+    /// blank navigation and doesn't update the address bar or history for it. That makes this
+    /// only safe on a webview which is about to be discarded.
+    func loadBlankPage() async {
+        guard let webView, let blankURL = URL(string: "about:blank") else { return }
+
+        let previousDelegate = webView.navigationDelegate
+        await withCheckedContinuation { continuation in
+            let delegate = BlankPageNavigationDelegate(continuation: continuation)
+            // `navigationDelegate` is weak, so the delegate needs an owner for the duration.
+            blankLoadDelegate = delegate
+            webView.navigationDelegate = delegate
+            delegate.beginAwaiting(webView.load(URLRequest(url: blankURL)))
+        }
+        webView.navigationDelegate = previousDelegate
+        blankLoadDelegate = nil
     }
 
     func goBack() {

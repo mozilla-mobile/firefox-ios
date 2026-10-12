@@ -1226,6 +1226,33 @@ final class TabManagerImplementation: NSObject,
         }
     }
 
+    func tearDownWebViewsForProxyChange() async {
+        let liveTabs = tabs.filter { $0.webView != nil }
+        logger.log("Tearing down \(liveTabs.count) webviews ahead of proxy change",
+                   level: .info,
+                   category: .tabs)
+
+        // Save selected tab session state before loading a blank page and offloading webviews
+        saveSessionData(forTab: selectedTab)
+
+        for tab in liveTabs {
+            await tab.loadBlankPage()
+            await tab.offloadWebView()
+        }
+    }
+
+    func restoreSelectedTabForProxyChange() {
+        guard let selectedTab,
+              let tabUUID = UUID(uuidString: selectedTab.tabUUID)
+        else { return }
+
+        selectTabWithSession(
+            tab: selectedTab,
+            sessionData: tabSessionStore.fetchTabSession(tabID: tabUUID),
+            updateLastExecutedTime: true
+        )
+    }
+
     func addPopupForParentTab(profile: any Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
         assert(Thread.isMainThread)
         let popup = Tab(profile: profile,

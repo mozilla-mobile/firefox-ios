@@ -575,6 +575,86 @@ class TabTests: XCTestCase {
         await subject.close()
     }
 
+    // MARK: - loadBlankPage
+    @MainActor
+    func testLoadBlankPage_whenWebViewIsNil_doesNotCrash() async {
+        let subject = createSubject()
+
+        await subject.loadBlankPage()
+
+        XCTAssertNil(subject.webView)
+    }
+
+    @MainActor
+    func testLoadBlankPage_loadsAboutBlank() async {
+        let subject = createSubject()
+        subject.webView = mockTabWebView
+
+        await subject.loadBlankPage()
+        subject.webView = nil
+
+        XCTAssertEqual(mockTabWebView.loadCalled, 1)
+        XCTAssertEqual(mockTabWebView.loadedRequest?.url, URL(string: "about:blank"))
+    }
+
+    @MainActor
+    func testLoadBlankPage_installsBlankPageDelegateDuringLoad() async {
+        let subject = createSubject()
+        let previousDelegate = MockNavigationDelegate()
+        mockTabWebView.navigationDelegate = previousDelegate
+        subject.webView = mockTabWebView
+
+        await subject.loadBlankPage()
+        subject.webView = nil
+
+        XCTAssertTrue(mockTabWebView.navigationDelegateAtLoad is BlankPageNavigationDelegate)
+    }
+
+    @MainActor
+    func testLoadBlankPage_restoresPreviousDelegate() async {
+        let subject = createSubject()
+        let previousDelegate = MockNavigationDelegate()
+        mockTabWebView.navigationDelegate = previousDelegate
+        subject.webView = mockTabWebView
+
+        await subject.loadBlankPage()
+        subject.webView = nil
+
+        XCTAssertTrue(mockTabWebView.navigationDelegate === previousDelegate)
+    }
+
+    @MainActor
+    func testLoadBlankPage_waitsForNavigationToFinish() async throws {
+        let subject = createSubject()
+        let previousDelegate = MockNavigationDelegate()
+        let navigationSourceWebView = WKWebView(frame: .zero)
+        let navigation = try XCTUnwrap(navigationSourceWebView.loadHTMLString("", baseURL: nil))
+        mockTabWebView.navigationDelegate = previousDelegate
+        mockTabWebView.mockNavigation = navigation
+        subject.webView = mockTabWebView
+        var didFinishLoading = false
+
+        let task = Task {
+            await subject.loadBlankPage()
+            didFinishLoading = true
+        }
+        while mockTabWebView.loadCalled == 0 {
+            await Task.yield()
+        }
+        await Task.yield()
+
+        XCTAssertFalse(didFinishLoading)
+        XCTAssertFalse(mockTabWebView.navigationDelegate === previousDelegate)
+
+        let blankPageDelegate = try XCTUnwrap(mockTabWebView.navigationDelegate as? BlankPageNavigationDelegate)
+        blankPageDelegate.webView(mockTabWebView, didFinish: navigation)
+        await task.value
+        subject.webView = nil
+
+        XCTAssertTrue(didFinishLoading)
+        XCTAssertTrue(mockTabWebView.navigationDelegate === previousDelegate)
+    }
+
     // MARK: - Helpers
     @MainActor
     private func createSubject() -> Tab {
