@@ -18,6 +18,8 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         )
         static let contentSpacing: CGFloat = 24.0
         static let searchLabelTopPadding: CGFloat = 24.0
+        static let sourceViewTopPadding: CGFloat = 16.0
+        static let sourceViewHorizontalPadding: CGFloat = 20.0
         static let animationDuration: TimeInterval = 0.2
         static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)
         /// The vertical space the waveform and its spacing leave behind.
@@ -146,13 +148,15 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             searchingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             searchingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            answerCardView.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: 24.0),
+            answerCardView.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: UX.contentSpacing),
             answerCardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             answerCardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            sourceView.topAnchor.constraint(equalTo: answerCardView.bottomAnchor, constant: 16.0),
-            sourceView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20.0),
-            sourceView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20.0),
+            sourceView.topAnchor.constraint(equalTo: answerCardView.bottomAnchor, constant: UX.sourceViewTopPadding),
+            sourceView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: UX.sourceViewHorizontalPadding),
+            sourceView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                 constant: -UX.sourceViewHorizontalPadding),
 
             footerStackView.topAnchor.constraint(equalTo: sourceView.bottomAnchor, constant: UX.contentSpacing),
             footerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -235,16 +239,11 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
                 light: theme.colors.textPrimary.withAlphaComponent(0.2),
                 dark: theme.colors.textPrimary
             )
-            applyColorToTranscript(theme.colors.textSecondary.withAlphaComponent(0.7))
+            transcriptLabel.applyForegroundColor(theme.colors.textSecondary.withAlphaComponent(0.7))
         }
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             searchingLabel.alpha = 1.0
         }
-    }
-
-    private func applyColorToTranscript(_ color: UIColor) {
-        transcriptLabel.foregroundColor = color
-        transcriptLabel.setTranscript(transcriptLabel.attributedText?.string ?? "", animated: false)
     }
 
     func configureResult(
@@ -254,7 +253,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         onSourceTapped: @escaping (URL) -> Void
     ) {
         if let theme {
-            applyColorToTranscript(theme.colors.textPrimary)
+            transcriptLabel.applyForegroundColor(theme.colors.textPrimary)
         }
         searchingLabel.stopShimmering()
         searchingLabel.alpha = 0.0

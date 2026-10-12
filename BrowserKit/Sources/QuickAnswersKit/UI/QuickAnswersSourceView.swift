@@ -6,7 +6,7 @@ import UIKit
 import Common
 import SiteImageView
 
-final class QuickAnswersSourceRow: UIControl, ThemeApplicable {
+final class QuickAnswersSourceRow: UIView, ThemeApplicable {
     private struct UX {
         static let faviconContainerSize: CGFloat = 32.0
         static let faviconContainerCornerRadius: CGFloat = 9.0
@@ -41,6 +41,7 @@ final class QuickAnswersSourceRow: UIControl, ThemeApplicable {
         $0.lineBreakMode = .byTruncatingTail
         $0.adjustsFontForContentSizeCategory = true
     }
+    /// TODO: Request the acorn image for the link icon and replace the SF Symbol.
     private let linkIconView: UIImageView = .build {
         $0.image = UIImage(systemName: "arrow.up.right.circle")
         $0.contentMode = .scaleAspectFit
@@ -62,7 +63,6 @@ final class QuickAnswersSourceRow: UIControl, ThemeApplicable {
     private func setupSubviews() {
         faviconContainerView.addSubview(faviconImageView)
         addSubviews(faviconContainerView, titleLabel, domainLabel, linkIconView, dividerView)
-        subviews.forEach { $0.isUserInteractionEnabled = false }
 
         isAccessibilityElement = true
         accessibilityTraits = .link
@@ -118,7 +118,6 @@ final class QuickAnswersSourceRow: UIControl, ThemeApplicable {
         titleLabel.text = source.title
         domainLabel.text = source.url?.normalizedHost
         accessibilityLabel = source.title
-        accessibilityValue = domainLabel.text
     }
 
     // MARK: - ThemeApplicable
@@ -185,7 +184,7 @@ final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, Th
         rowsStackView.removeAllArrangedViews()
         items.forEach { item in
             let row = QuickAnswersSourceRow(source: item)
-            row.addTarget(self, action: #selector(didTapRow), for: .touchUpInside)
+            row.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapRow)))
             row.addInteraction(UIContextMenuInteraction(delegate: self))
             if let theme {
                 row.applyTheme(theme: theme)
@@ -195,8 +194,8 @@ final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, Th
     }
 
     @objc
-    private func didTapRow(_ row: QuickAnswersSourceRow) {
-        guard let url = row.source.url else { return }
+    private func didTapRow(_ gesture: UITapGestureRecognizer) {
+        guard let url = (gesture.view as? QuickAnswersSourceRow)?.source.url else { return }
         onSourceTapped?(url)
     }
 

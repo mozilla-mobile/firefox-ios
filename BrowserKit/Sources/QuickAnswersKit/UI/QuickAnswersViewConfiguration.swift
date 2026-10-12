@@ -47,6 +47,7 @@ public struct QuickAnswersViewConfiguration: Sendable {
             self.footerFormat = footerFormat
             self.sources = sources
             self.aboutYourPrivacy = aboutYourPrivacy
+            self.answerHeader = answerHeader
         }
     }
 
@@ -58,7 +59,6 @@ public struct QuickAnswersViewConfiguration: Sendable {
         public init(title: String, description: String) {
             self.title = title
             self.description = description
-            self.answerHeader = answerHeader
         }
     }
 
