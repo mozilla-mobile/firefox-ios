@@ -32,7 +32,7 @@ final class TranscriptLabel: UILabel {
     private var blurStartTimestamp: CFTimeInterval = 0
     private var lastRenderedRadius: CGFloat = -1
     /// The last transcript reported by the transcriber.
-    private var transcript = ""
+    private(set) var transcript = ""
     /// The part of `transcript` that has already been animated in.
     private var revealedTranscript = ""
     private var isAnimatingAppendedText = false
