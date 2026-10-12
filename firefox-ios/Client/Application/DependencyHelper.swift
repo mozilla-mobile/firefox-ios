@@ -15,6 +15,8 @@ class DependencyHelper {
 
         let profile: Profile = appDelegate.profile
         AppContainer.shared.register(service: profile as Profile)
+        let groupDirectory = URL(fileURLWithPath: profile.files.rootPath).appendingPathComponent("tab-groups")
+        AppContainer.shared.register(service: TabGroupManager(storage: DefaultTabGroupStorage(directory: groupDirectory)))
 
         let featureFlagsProvider = FeatureFlagsProvider(prefs: profile.prefs)
         AppContainer.shared.register(service: featureFlagsProvider as FeatureFlagProviding)
