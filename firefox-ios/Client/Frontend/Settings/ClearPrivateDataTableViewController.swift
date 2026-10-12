@@ -8,6 +8,9 @@ import Common
 import ComponentLibrary
 
 class ClearPrivateDataTableViewController: ThemedTableViewController {
+    override var shouldUsePrivateOverride: Bool { return true }
+    override var shouldBeInPrivateTheme: Bool { return false }
+
     private var clearButton: UITableViewCell?
 
     private let sectionArrow = 0
@@ -90,7 +93,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueCellFor(indexPath: indexPath)
-        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        cell.applyTheme(theme: currentTheme())
         if indexPath.section == sectionArrow {
             cell.accessoryType = .disclosureIndicator
             cell.textLabel?.text = .SettingsWebsiteDataTitle
