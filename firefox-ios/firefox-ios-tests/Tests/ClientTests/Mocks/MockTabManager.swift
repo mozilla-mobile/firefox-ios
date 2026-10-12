@@ -11,6 +11,12 @@ import XCTest
 @testable import Client
 
 class MockTabManager: TabManager {
+    lazy var tabGroupManager = TabGroupManager(storage: MockTabGroupStorage())
+
+    func openTabGroup(_ groupID: TabGroupID) async throws -> WindowUUID { windowUUID }
+    func deleteTabGroup(_ groupID: TabGroupID) throws {}
+    func prepareForWindowClose() {}
+
     let windowUUID: WindowUUID
     var isRestoringTabs = false
     var tabRestoreHasFinished = false
