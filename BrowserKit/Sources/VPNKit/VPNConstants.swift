@@ -11,13 +11,11 @@ public enum VPNEnvironment: String, Sendable {
     case prod
 
     var baseURL: URL? {
-        // TODO: Replace with the real VPN IPN hosts once the backend endpoints are provisioned.
-        // See https://mozilla-hub.atlassian.net/browse/GS-198
         switch self {
         case .dev:
-            return URL(string: "https://dev.guardian.nonprod.cloudops.mozgcp.net")
+            return URL(string: "https://dev.vpn.nonprod.webservices.mozgcp.net")
         case .stage:
-            return URL(string: "https://stage.guardian.nonprod.cloudops.mozgcp.net")
+            return URL(string: "https://vpn.allizom.org")
         case .prod:
             return URL(string: "https://vpn.mozilla.org")
         }
@@ -34,7 +32,7 @@ public enum VPNConstants {
     static let GET = "GET"
 
     static func challengeEndpoint(with env: VPNEnvironment) -> URL? {
-        env.baseURL?.appendingPathComponent("api/v1/ipn/attest/challenge")
+        env.baseURL?.appendingPathComponent("api/v1/ipn/challenge")
     }
 
     static func enrollmentEndpoint(with env: VPNEnvironment) -> URL? {

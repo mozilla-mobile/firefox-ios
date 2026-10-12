@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import AppAttestKit
+import Common
 import DeviceCheck
 import Foundation
 import Shared
@@ -20,13 +21,15 @@ public struct VPNAuthCreator: VPNAuthCreating {
     private let keyStore: AppAttestKeyIDStore
     private let appAttestService: AppAttestServiceProtocol
     private let tokenStore: VPNTokenStore
+    private let bundleIdentifier: String
 
     /// `keyStore` is resolved in the body rather than defaulted inline, because a public default
     /// argument cannot reference the private constants above.
     public init(
         keyStore: AppAttestKeyIDStore? = nil,
         appAttestService: AppAttestServiceProtocol = DCAppAttestService.shared,
-        tokenStore: VPNTokenStore = KeychainVPNTokenStore()
+        tokenStore: VPNTokenStore = KeychainVPNTokenStore(),
+        bundleIdentifier: String = AppInfo.bundleIdentifier
     ) {
         self.keyStore = keyStore ?? KeychainAppAttestKeyIDStore(
             service: Self.keyIDKeychainService,
@@ -34,13 +37,18 @@ public struct VPNAuthCreator: VPNAuthCreating {
         )
         self.appAttestService = appAttestService
         self.tokenStore = tokenStore
+        self.bundleIdentifier = bundleIdentifier
     }
 
     public func makeAuthService(using prefs: Prefs) -> VPNAuthenticating? {
         let environment = resolveEnvironment(using: prefs)
 
         // One instance serves both the `AppAttestClient` transport and the refresh endpoint.
-        let server = VPNAppAttestServer(with: environment, tokenStore: tokenStore)
+        let server = VPNAppAttestServer(
+            with: environment,
+            tokenStore: tokenStore,
+            bundleIdentifier: bundleIdentifier
+        )
 
         guard let client = try? AppAttestClient(
             appAttestService: appAttestService,
