@@ -67,6 +67,10 @@ public final class QuickAnswersViewController: UIViewController,
         }
     )
     private var hasAppeared = false
+    private lazy var privacyTipPresenter = QuickAnswersPrivacyTipPresenter(
+        presenter: self,
+        strings: stringsConfiguration.privacyBanner
+    )
 
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
@@ -230,6 +234,19 @@ public final class QuickAnswersViewController: UIViewController,
             onLearnMore: { [weak self] url in
                 self?.dismiss(with: url)
             }
+        )
+        if #available(iOS 17.0, *) {
+            contentView.configurePrivacyLink { [weak self] in
+                self?.presentPrivacyTip()
+            }
+        }
+    }
+
+    @available(iOS 17.0, *)
+    private func presentPrivacyTip() {
+        privacyTipPresenter.present(
+            from: contentView.privacyTipSourceView,
+            iconColor: themeManager.getCurrentTheme(for: currentWindowUUID).colors.textSecondary
         )
     }
 
