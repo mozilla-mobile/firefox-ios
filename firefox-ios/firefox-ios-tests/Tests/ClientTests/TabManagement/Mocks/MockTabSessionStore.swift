@@ -10,6 +10,7 @@ final class MockTabSessionStore: TabSessionStore, @unchecked Sendable {
     var tabID: UUID?
     var sessionData: Data?
     var fetchTabSessionCalls: [UUID] = []
+    var onCleanup: (@Sendable ([UUID]) -> Void)?
 
     func saveTabSession(tabID: UUID, sessionData: Data) {
         saveTabSessionCallCount += 1
@@ -24,5 +25,7 @@ final class MockTabSessionStore: TabSessionStore, @unchecked Sendable {
 
     func clearAllData() {}
 
-    func deleteUnusedTabSessionData(keeping: [UUID]) {}
+    func deleteUnusedTabSessionData(keeping: [UUID]) {
+        onCleanup?(keeping)
+    }
 }

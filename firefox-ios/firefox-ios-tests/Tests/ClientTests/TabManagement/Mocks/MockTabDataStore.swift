@@ -9,10 +9,14 @@ import XCTest
 
 final class MockTabDataStore: TabDataStore, @unchecked Sendable {
     var fetchWindowDataCalledCount = 0
+    var suspendFetch = false
+    var onFetch: (@Sendable () -> Void)?
+    private var fetchContinuation: CheckedContinuation<WindowData?, Never>?
     var saveWindowDataCalledCount = 0
     var saveWindowDataForcedValue = false
     var fetchTabWindowData: WindowData?
     var saveWindowData: WindowData?
+    var onSave: (@Sendable (WindowData) -> Void)?
     var clearAllWindowsDataCalled = 0
     var removeWindowDataCalled = 0
     var removedWindowDataUUIDs: [WindowUUID] = []
@@ -24,13 +28,26 @@ final class MockTabDataStore: TabDataStore, @unchecked Sendable {
 
     func fetchWindowData(uuid: UUID) async -> WindowData? {
         fetchWindowDataCalledCount += 1
+        if suspendFetch {
+            return await withCheckedContinuation {
+                fetchContinuation = $0
+                onFetch?()
+            }
+        }
         return fetchTabWindowData
+    }
+
+    func resumeFetch() {
+        fetchContinuation?.resume(returning: fetchTabWindowData)
+        fetchContinuation = nil
+        suspendFetch = false
     }
 
     func saveWindowData(window: WindowData, forced: Bool) async {
         saveWindowDataCalledCount += 1
         saveWindowDataForcedValue = forced
         saveWindowData = window
+        onSave?(window)
     }
 
     func clearAllWindowsData() async {

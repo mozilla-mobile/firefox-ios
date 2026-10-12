@@ -166,6 +166,7 @@ final class WindowManagerImplementation: WindowManager {
     }
 
     func windowWillClose(uuid: WindowUUID) {
+        windows[uuid]?.tabManager?.prepareForWindowClose()
         postWindowEvent(event: .windowWillClose, windowUUID: uuid)
         updateWindow(nil, for: uuid)
         // Fix edge case in which a scene's UUID might still be reserved when the scene is disconnected
