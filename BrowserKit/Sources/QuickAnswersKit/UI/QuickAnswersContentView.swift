@@ -47,6 +47,8 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         $0.showsVerticalScrollIndicator = false
         $0.alwaysBounceVertical = false
         $0.clipsToBounds = false
+        $0.contentInset.top = UX.scrollContentTopInset
+        $0.contentInset.bottom = UX.scrollContentBottomInset
     }
     private let contentView: UIView = .build()
     private let audioWaveform: AudioWaveformView = .build()

@@ -57,6 +57,7 @@ public final class QuickAnswersViewController: UIViewController,
         presenter: self,
         strings: stringsConfiguration.privacyBanner
     )
+    private var transcript = ""
 
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
@@ -171,6 +172,7 @@ public final class QuickAnswersViewController: UIViewController,
                 if let error {
                     self?.errorHandler.handleSpeechError(error)
                 } else {
+                    self?.transcript = result.text
                     self?.contentView.configureTranscript(result.text)
                 }
             case .loadingSearchResult:
