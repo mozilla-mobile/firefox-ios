@@ -1068,7 +1068,8 @@ final class TabManagerImplementation: NSObject,
         selectedIndex = tabs.firstIndex(of: tab) ?? -1
         preserveTabs(immediate: immediatePreservation)
 
-        let sessionData = tabSessionStore.fetchTabSession(tabID: tabUUID)
+        let hasLiveSelectedTab = selectedTab === tab && tab.webView != nil
+        let sessionData = hasLiveSelectedTab ? nil : tabSessionStore.fetchTabSession(tabID: tabUUID)
         selectTabWithSession(
             tab: tab,
             sessionData: sessionData,

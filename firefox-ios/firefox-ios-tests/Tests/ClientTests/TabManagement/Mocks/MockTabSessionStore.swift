@@ -6,6 +6,8 @@ import Foundation
 import TabDataStore
 
 final class MockTabSessionStore: TabSessionStore, @unchecked Sendable {
+    var fetchedTabIDs: [UUID] = []
+    var fetchedSessionData: Data? = Data()
     var saveTabSessionCallCount = 0
     var tabID: UUID?
     var sessionData: Data?
@@ -17,7 +19,8 @@ final class MockTabSessionStore: TabSessionStore, @unchecked Sendable {
     }
 
     func fetchTabSession(tabID: UUID) -> Data? {
-        return Data()
+        fetchedTabIDs.append(tabID)
+        return fetchedSessionData
     }
 
     func clearAllData() {}
