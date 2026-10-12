@@ -9,6 +9,7 @@ const FONT_TYPES = {
   "sans-serif": "ui-sans-serif, sans-serif",
   "serif": "ui-serif, serif",
 };
+let currentStyle;
 const DEFAULT_DR_CONFIGS = {
   light: {
     mode: 0,
@@ -49,6 +50,7 @@ const applyFontConfig = (style) => {
 };
 
 export const setStyle = (style) => {
+  currentStyle = style;
   // Remove all theme classes
   THEME_CLASSES.forEach((theme) => {
     document.body.classList.toggle(theme, theme === style?.theme);
@@ -56,4 +58,10 @@ export const setStyle = (style) => {
   // Apply new dark reader config with font setup
   const config = applyFontConfig(style);
   enableDarkReader(config);
+};
+
+export const restoreStyle = () => {
+  if (currentStyle) {
+    setStyle(currentStyle);
+  }
 };

@@ -24,6 +24,22 @@ final class MockTabWebView: TabWebView {
     var mockCanGoBack = false
     var mockCanGoForward = false
     var mockInteractionState: Data?
+    var evaluatedScripts: [(script: String, world: WKContentWorld)] = []
+    var completesJavaScriptEvaluation = false
+
+    override func __evaluateJavaScript(
+        _ javaScriptString: String,
+        inFrame frame: WKFrameInfo?,
+        in contentWorld: WKContentWorld,
+        completionHandler: (@MainActor @Sendable (Any?, Error?) -> Void)? = nil
+    ) {
+        evaluatedScripts.append((javaScriptString, contentWorld))
+        if completesJavaScriptEvaluation {
+            completionHandler?(nil, nil)
+            return
+        }
+        super.__evaluateJavaScript(javaScriptString, inFrame: frame, in: contentWorld, completionHandler: completionHandler)
+    }
 
     override var title: String? {
         return mockTitle
