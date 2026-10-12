@@ -69,7 +69,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
                 footerFormat: .QuickAnswers.ContentView.FooterFormat,
                 sources: .QuickAnswers.ContentView.Sources,
                 aboutYourPrivacy: .QuickAnswers.ContentView.AboutYourPrivacy,
-                answerHeader: .QuickAnswers.ContentView.AnswerHeader
+                answerHeader: .QuickAnswers.ContentView.ResultHeader
             ),
             privacyBanner: .init(
                 title: .QuickAnswers.PrivacyBanner.Title,

@@ -278,7 +278,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
 
     // MARK: - Result animation
     private func animateResultCascade() {
-        let cascadingSections: [UIView] = [answerLabel, sourceView, footerStackView]
+        let cascadingSections: [UIView] = [answerCardView, sourceView, footerStackView]
         let finalTransform = CGAffineTransform(translationX: 0.0, y: -UX.resultTranslationOffset)
         let cascadeStartTransform = finalTransform.translatedBy(x: 0.0, y: UX.resultCascadeOffset)
 
