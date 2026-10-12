@@ -11,21 +11,7 @@ public final class QuickAnswersViewController: UIViewController,
                                                UIAdaptivePresentationControllerDelegate,
                                                Themeable {
     private struct UX {
-        static let closeButtonSidePadding: CGFloat = 16.0
-        static let closeButtonPadding: CGFloat = 13.0
-        static let closeButtonContentInset = NSDirectionalEdgeInsets(
-            top: UX.closeButtonPadding,
-            leading: UX.closeButtonPadding,
-            bottom: UX.closeButtonPadding,
-            trailing: UX.closeButtonPadding
-        )
-        static let contentViewTopPadding: CGFloat = 32.0
-        static let contentViewBottomPadding: CGFloat = 12.0
-        static let contentViewHorizontalPadding: CGFloat = 24.0
-        static let titleFadeDuration: TimeInterval = 0.2
-        static let resultBackgroundFadeDuration: TimeInterval = 0.3
-        static let resultBackgroundFadeDelay: TimeInterval = 0.2
-        static let presentationSlideOffset: CGFloat = 50.0
+        static let titleFadeDuration: TimeInterval = 0.1
         static let presentationNavigationBarOffset: CGFloat = -20.0
     }
 
