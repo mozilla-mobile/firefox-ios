@@ -262,11 +262,6 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         }
     }
 
-    private func applyColorToTranscript(_ color: UIColor) {
-        transcriptLabel.foregroundColor = color
-        transcriptLabel.setTranscript(transcriptLabel.attributedText?.string ?? "", animated: false)
-    }
-
     func configureResult(
         _ text: String,
         modelName: String,

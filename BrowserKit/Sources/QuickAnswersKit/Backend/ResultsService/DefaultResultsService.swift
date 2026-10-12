@@ -37,14 +37,9 @@ final class DefaultResultsService: ResultsService {
 
     private func makeMessages(for transcription: String, config: LLMConfig) -> [QuickAnswersMessage] {
         var messages: [QuickAnswersMessage] = []
-        messages.append(
-            LiteLLMMessage(
-                role: .system,
-                content: config.instructions.appending(
-                    "Respond in markdown highlighting what is important."
-                )
-            )
-        )
+        if !config.instructions.isEmpty {
+            messages.append(LiteLLMMessage(role: .system, content: config.instructions))
+        }
         messages.append(LiteLLMMessage(role: .user, content: transcription))
         return messages
     }

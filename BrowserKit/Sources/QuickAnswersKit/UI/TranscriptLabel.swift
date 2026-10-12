@@ -72,6 +72,7 @@ final class TranscriptLabel: UILabel {
     }
 
     func setTranscript(_ text: String, animated: Bool) {
+        guard text != transcript else { return }
         transcript = text
 
         guard animated, !UIAccessibility.isReduceMotionEnabled else {
