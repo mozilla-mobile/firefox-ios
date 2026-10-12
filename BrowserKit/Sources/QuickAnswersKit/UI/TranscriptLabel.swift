@@ -72,6 +72,7 @@ final class TranscriptLabel: UILabel {
     }
 
     func setTranscript(_ text: String, animated: Bool) {
+        guard text != transcript else { return }
         transcript = text
 
         guard animated, !UIAccessibility.isReduceMotionEnabled else {
@@ -83,6 +84,13 @@ final class TranscriptLabel: UILabel {
             return
         }
         animateAppendedText()
+    }
+
+    /// Recolors the displayed transcript. While text is animating in, the new color is applied once it settles.
+    func applyForegroundColor(_ color: UIColor) {
+        foregroundColor = color
+        guard !isAnimatingAppendedText else { return }
+        showFullTranscript()
     }
 
     private func animateAppendedText() {
