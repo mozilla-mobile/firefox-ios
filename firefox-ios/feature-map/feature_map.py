@@ -220,11 +220,14 @@ def cmd_coverage(ids, roots, rules, report_path):
                     totals[feature]["files_with_coverage_data"] += 1
     for path in in_scope - seen:
         rule, _ = resolve(path, rules)
-        totals[rule.feature if rule else "UNMAPPED"]["files_without_coverage_data"] += 1
+        feature = rule.feature if rule else "UNMAPPED"
+        totals[feature]["files_without_coverage_data"] += 1
+        totals[feature]["source_lines_without_coverage_data"] += count_lines(path)
     for t in totals.values():
         t["line_coverage_pct"] = round(100 * t["covered_lines"] / t["executable_lines"], 1) if t["executable_lines"] else ""
     write_totals(ids, totals, ["executable_lines", "covered_lines", "line_coverage_pct",
-                               "files_with_coverage_data", "files_without_coverage_data"])
+                               "files_with_coverage_data", "files_without_coverage_data",
+                               "source_lines_without_coverage_data"])
     return 0
 
 

@@ -19,7 +19,7 @@ uv run firefox-ios/feature-map/feature_map.py files      # CSV: the feature and 
 uv run firefox-ios/feature-map/feature_map.py lines      # CSV: files and source lines per feature
 
 xcrun xccov view --report --json Test.xcresult > coverage.json
-uv run firefox-ios/feature-map/feature_map.py coverage coverage.json   # CSV: covered/executable lines per feature
+uv run firefox-ios/feature-map/feature_map.py coverage coverage.json   # CSV: covered/executable lines per feature, plus code the run did not measure
 ```
 
 ## How rules resolve
