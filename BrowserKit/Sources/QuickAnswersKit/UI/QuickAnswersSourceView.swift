@@ -126,7 +126,7 @@ final class QuickAnswersSourceRow: UIView, ThemeApplicable {
         titleLabel.textColor = theme.colors.textPrimary
         domainLabel.textColor = theme.colors.textSecondary
         linkIconView.tintColor = theme.colors.iconSecondary
-        dividerView.backgroundColor = theme.colors.layer1
+        dividerView.backgroundColor = theme.colors.iconOnColor
     }
 }
 
