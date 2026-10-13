@@ -158,6 +158,9 @@ TrendingSearches:
 User:
   description: Corresponds to user properties and settings.
 
+VPN:
+  description: Corresponds to the built-in VPN, including App Attest device authentication.
+
 WaybackMachine:
   description: Corresponds to Wayback Machine error page interactions
 
