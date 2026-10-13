@@ -14,9 +14,8 @@ protocol StateLens: Equatable {
     init(appState: AppState, uuid: WindowUUID)
 }
 
-/// Feeds `AddressToolbarContainer`/`AddressToolbarContainerModel` derived values that today are
-/// computed and persisted on `AddressBarState` by the reducer. `leadingPageActions`, `trailingPageActions`,
-/// `navigationActions`, `browserActions` are all moved now.
+///  Computes the toolbar derived action lists (`leadingPageActions`, `trailingPageActions`,
+///  `navigationActions`, `browserActions`) from `ToolbarState`
 struct AddressToolbarContainerLens: StateLens {
     let toolbarState: ToolbarState
     let leadingPageActions: [ToolbarActionConfiguration]
