@@ -126,8 +126,8 @@ enum ToolbarModernAction: ModernAction {
     /// homepage mid-edit via `cancelEditOnHomepage`)
     case didKeyboardRequestChange(shouldShow: Bool)
 
-    /// The user scrolled the homepage or search view while the address bar was still in editing mode.
-    /// Cancels editing (or, if already on a website, just hides the keyboard).
+    /// The user scrolled while editing. Cancels editing only if there's no committed website (Homepage),
+    /// otherwise just hides the keyboard (visually still looks like homepage but is zero search state)
     case cancelEditOnHomepage
 
     /// The user pasted text into the address bar, entering editing mode with the pasted term.
