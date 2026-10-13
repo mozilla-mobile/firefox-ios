@@ -965,7 +965,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
 
     private func getSiteProtectionState(for selectedTab: Tab) -> SiteProtectionsState {
         let isContentBlockingConfigEnabled = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
-        guard let url = InternalURL(selectedTab.url)?.originalURLFromErrorPage ?? selectedTab.url,
+        guard let url = selectedTab.url?.siteURL,
               !ContentBlocker.shared.isSafelisted(url: url),
               isContentBlockingConfigEnabled else { return .off }
 
