@@ -180,7 +180,7 @@ class RustAutofillTests: XCTestCase {
 
         XCTAssertEqual(creditCard.guid, retrievedCreditCard.guid)
         XCTAssertEqual(creditCard.ccName, retrievedCreditCard.ccName)
-        XCTAssertEqual(creditCard.ccNumberEnc, retrievedCreditCard.ccNumberEnc)
+        XCTAssertEqual(creditCard.ccNumber, retrievedCreditCard.ccNumber)
         XCTAssertEqual(creditCard.ccNumberLast4, retrievedCreditCard.ccNumberLast4)
         XCTAssertEqual(creditCard.ccExpMonth, retrievedCreditCard.ccExpMonth)
         XCTAssertEqual(creditCard.ccExpYear, retrievedCreditCard.ccExpYear)
