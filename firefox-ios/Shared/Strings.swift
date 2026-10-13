@@ -329,6 +329,11 @@ extension String {
         }
 
         public struct Settings {
+            public static let SectionTitle = MZLocalizedString(
+                key: "BrowserDataTransfer.Settings.SectionTitle.v160",
+                tableName: "BrowserDataTransfer",
+                value: "Data Import and Export",
+                comment: "On the Data Management screen in Settings, the header of the section that contains the actions to import data from, or export data to, another browser installed on the device.")
             public static let ExportButton = MZLocalizedString(
                 key: "BrowserDataTransfer.Settings.ExportButton.v160",
                 tableName: "BrowserDataTransfer",
@@ -339,11 +344,6 @@ extension String {
                 tableName: "BrowserDataTransfer",
                 value: "Import from Another Browser",
                 comment: "On the Data Management screen in Settings, the button that starts importing bookmarks, history, and reading lists from another browser installed on the device into Firefox.")
-            public static let SectionTitle = MZLocalizedString(
-                key: "BrowserDataTransfer.Settings.SectionTitle.v160",
-                tableName: "BrowserDataTransfer",
-                value: "Data Import and Export",
-                comment: "On the Data Management screen in Settings, the header of the section that contains the actions to import data from, or export data to, another browser installed on the device.")
             public static let SupportedDataFooter = MZLocalizedString(
                 key: "BrowserDataTransfer.Settings.SupportedDataFooter.v160",
                 tableName: "BrowserDataTransfer",
