@@ -102,7 +102,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
     private var theme: Theme?
     private var strings: QuickAnswersViewConfiguration.ContentViewStrings?
     private var isTranscriptVisible = true
-    private var isShowingResult = false
+    private var hasDisplayedResults = false
     var onTranscriptVisibilityChange: ((_ isVisible: Bool, _ transcript: String) -> Void)?
 
     /// The view the privacy tip popover has to be anchored to.
@@ -276,7 +276,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         answerCardView.configure(header: strings?.answerHeader ?? "", body: text)
         footerLabel.text = String(format: strings?.footerFormat ?? "", modelName)
         sourceView.configure(with: sources, onSourceTapped: onSourceTapped)
-        isShowingResult = true
+        hasDisplayedResults = true
         animateResultCascade()
     }
 
@@ -321,7 +321,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
 
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard isShowingResult, let visibleFraction = transcriptVisibleFraction(in: scrollView) else { return }
+        guard hasDisplayedResults, let visibleFraction = transcriptVisibleFraction(in: scrollView) else { return }
         transcriptLabel.alpha = visibleFraction
         updateTranscriptVisibility(visibleFraction > UX.transcriptVisibilityThreshold)
     }
