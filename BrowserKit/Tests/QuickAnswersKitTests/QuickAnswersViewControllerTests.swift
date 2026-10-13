@@ -65,7 +65,8 @@ extension QuickAnswersViewConfiguration {
             answering: "Answering",
             footerFormat: "Powered by %@",
             sources: "Sources",
-            aboutYourPrivacy: "About Your Privacy"
+            aboutYourPrivacy: "About Your Privacy",
+            answerHeader: "Quick Answer"
         ),
         privacyBanner: .init(
             title: "Private by Design",
