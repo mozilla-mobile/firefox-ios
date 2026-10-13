@@ -166,6 +166,53 @@ final class DateGroupedTableDataTests: XCTestCase {
         XCTAssertEqual(subject.itemsForSection(0), ["Now1", "Now2"])
     }
 
+    func testItemForIndexPath_ReturnsItemsInSectionOrder() {
+        var subject = DateGroupedTableData<String>(timestamps: [200, 100])
+        subject.add("First", timestamp: 300)
+        subject.add("Second", timestamp: 250)
+        subject.add("Middle", timestamp: 150)
+        subject.add("Older", timestamp: 50)
+
+        XCTAssertEqual(subject.itemForIndexPath(IndexPath(row: 0, section: 0)), "First")
+        XCTAssertEqual(subject.itemForIndexPath(IndexPath(row: 1, section: 0)), "Second")
+        XCTAssertEqual(subject.itemForIndexPath(IndexPath(row: 0, section: 1)), "Middle")
+        XCTAssertEqual(subject.itemForIndexPath(IndexPath(row: 0, section: 2)), "Older")
+    }
+
+    func testItemForIndexPath_WithInvalidIndexReturnsNil() {
+        var subject = DateGroupedTableData<String>(timestamps: [100])
+        subject.add("Item", timestamp: 200)
+        let invalidIndexPaths = [
+            IndexPath(row: 0, section: -1),
+            IndexPath(row: 0, section: 2),
+            IndexPath(row: -1, section: 0),
+            IndexPath(row: 1, section: 0)
+        ]
+
+        for indexPath in invalidIndexPaths {
+            XCTAssertNil(subject.itemForIndexPath(indexPath), "Expected nil at \(indexPath)")
+        }
+    }
+
+    func testItemForIndexPath_WithEmptySectionReturnsNil() {
+        let subject = DateGroupedTableData<String>(timestamps: [100])
+
+        XCTAssertNil(subject.itemForIndexPath(IndexPath(row: 0, section: 0)))
+        XCTAssertNil(subject.itemForIndexPath(IndexPath(row: 0, section: 1)))
+    }
+
+    func testItemForIndexPath_AfterRemovingItemUsesCurrentOrder() {
+        var subject = DateGroupedTableData<String>(timestamps: [100])
+        subject.add("First", timestamp: 200)
+        subject.add("Second", timestamp: 200)
+
+        subject.remove("First")
+
+        XCTAssertEqual(subject.itemForIndexPath(IndexPath(row: 0, section: 0)), "Second")
+        XCTAssertNil(subject.itemForIndexPath(IndexPath(row: 1, section: 0)))
+        XCTAssertEqual(subject.itemsForSection(0), ["Second"])
+    }
+
     // MARK: - Test custom intervals
 
     func testCustomIntervalsCreation() {
