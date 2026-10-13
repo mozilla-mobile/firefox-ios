@@ -78,12 +78,17 @@ public struct DateGroupedTableData<T: Equatable> {
 
     public func itemForIndexPath(_ indexPath: IndexPath) -> T? {
         guard indexPath.section >= 0,
-              indexPath.section < timestampDataNumSections,
-              indexPath.row >= 0,
-              indexPath.row < timestampData[indexPath.section].count else {
+              indexPath.section < timestampDataNumSections else {
             return nil
         }
-        return timestampData[indexPath.section][indexPath.row].item
+
+        let section = timestampData[indexPath.section]
+        guard indexPath.row >= 0,
+              indexPath.row < section.count else {
+            return nil
+        }
+
+        return section[indexPath.row].item
     }
 
     /// Returns all currently fetched items in a single array: `[T.item]`.
