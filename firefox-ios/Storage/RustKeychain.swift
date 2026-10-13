@@ -43,6 +43,7 @@ public protocol KeychainProtocol: Sendable {
     var creditCardCanaryPhrase: String { get }
     var loginsCanaryPhrase: String { get }
     var loginsKeyIdentifier: String { get }
+    var creditCardKeyIdentifier: String { get }
     func removeObject(key: String)
     func removeLoginsKeysForDebugMenuItem()
     func removeAutofillKeysForDebugMenuItem()

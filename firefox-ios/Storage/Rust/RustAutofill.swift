@@ -6,7 +6,7 @@ import Foundation
 import Common
 import Glean
 
-import class MozillaAppServices.ManagedEncryptorDecryptor
+import func MozillaAppServices.createManagedEncdec
 import class MozillaAppServices.Store
 import enum MozillaAppServices.AutofillApiError
 import protocol MozillaAppServices.KeyManager
@@ -62,7 +62,7 @@ public class RustAutofill: KeyManager, @unchecked Sendable {
     /// - Returns: An optional NSError if an error occurs during the database opening process.
     internal func open() -> NSError? {
         do {
-            storage = try AutofillStore(dbpath: databasePath, encdec: ManagedEncryptorDecryptor(keyManager: self))
+            storage = try AutofillStore(dbpath: databasePath, encdec: createManagedEncdec(keyManager: self))
             isOpen = true
             return nil
         } catch let err as NSError {
