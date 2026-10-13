@@ -25,6 +25,15 @@ class TabsTests: BaseTestCase {
     var newTabsScreen: NewTabsScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
 
+    /// This test launches the app itself, with its first page already open in private mode through a deeplink.
+    override func setUpApp() {
+        if name.contains("testCloseAllTabsPrivateModeUndo") {
+            setUpLaunchArguments()
+        } else {
+            super.setUpApp()
+        }
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307042
     // Smoketest
     // (Steps 9-10 in testAddTabFromTabTray from IntegrationTests)
@@ -199,11 +208,7 @@ class TabsTests: BaseTestCase {
         toolBarScreen = ToolbarScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)
         // A different tab than home is open to do the proper checks
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
-        waitUntilPageLoad()
+        launchOpening(path(forTestPage: TestPages.mozillaOrg), isPrivate: true)
         toolBarScreen.assertTabsButtonExists()
 
         if iPad() {

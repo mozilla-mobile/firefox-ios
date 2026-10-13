@@ -348,13 +348,11 @@ class SearchTests: FeatureFlaggedTestBase {
     func testOpenTabsInSearchSuggestions() throws {
         let browserScreen = BrowserScreen(app: app)
         let toolbarScreen = ToolbarScreen(app: app)
-        app.launch()
         if #unavailable(iOS 16) {
             throw XCTSkip("Test fails intermittently for iOS 15")
         }
         // Go to localhost website and check the page displays correctly
-        navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
-        waitUntilPageLoad()
+        launchOpening("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
         // Open new tab
         validateSearchSuggestionText(typeText: "localhost")
         restartInBackground()
