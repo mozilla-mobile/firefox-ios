@@ -28,7 +28,7 @@ class TabsTests: BaseTestCase {
     /// This test launches the app itself, with its first page already open in private mode through a deeplink.
     override func setUpApp() {
         if name.contains("testCloseAllTabsPrivateModeUndo") {
-            setUpLaunchArguments()
+            setUpAppWithoutLaunching()
         } else {
             super.setUpApp()
         }

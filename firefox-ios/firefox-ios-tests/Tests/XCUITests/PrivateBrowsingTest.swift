@@ -42,7 +42,7 @@ class PrivateBrowsingTest: BaseTestCase {
     /// The force close tests launch the app themselves, straight into Settings through a deeplink.
     override func setUpApp() {
         if name.contains("testMultipleTabsPrivateBrowsingClose") {
-            setUpLaunchArguments()
+            setUpAppWithoutLaunching()
         } else {
             super.setUpApp()
         }
@@ -325,7 +325,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Step 1: a deeplink from outside Firefox opens its website in a new tab. Links tapped inside a
         // private tab never leave the web view, so the deeplink has to come from the system
-        springboardScreen.openDeeplinkFromOutsideApp(deeplink(opening: path(forTestPage: TestPages.exampleHTML)))
+        springboardScreen.openDeeplinkFromOutsideApp(openURLDeeplink(path(forTestPage: TestPages.exampleHTML)))
         navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
         browserScreen.assertExampleDomainPageDisplayed()
@@ -343,11 +343,6 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.nowAt(BrowserTab)
         browserScreen.assertBookOfMozillaPageDisplayed()
         toolbarScreen.assertTabsButtonValue(expectedCount: "2")
-    }
-
-    private func deeplink(opening target: String) -> URL {
-        let encodedTarget = target.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? target
-        return URL(string: "\(currentScheme.internalURLScheme)://open-url?url=\(encodedTarget)")!
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307012
@@ -508,7 +503,7 @@ class PrivateBrowsingTestIphone: BaseTestCase {
 
     /// The test launches the app itself, with its first page already open in private mode through a deeplink.
     override func setUpApp() {
-        setUpLaunchArguments()
+        setUpAppWithoutLaunching()
     }
 
     // This test is disabled for iPad because the toast menu is not shown there

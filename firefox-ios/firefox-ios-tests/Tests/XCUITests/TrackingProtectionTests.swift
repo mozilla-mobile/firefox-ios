@@ -25,7 +25,7 @@ class TrackingProtectionTests: BaseTestCase {
     /// Most tests start in Tracking Protection settings and launch the app themselves through a
     /// Settings deeplink, so the app is not launched here.
     override func setUpApp() {
-        setUpLaunchArguments()
+        setUpAppWithoutLaunching()
     }
 
     private func disableEnableTrackingProtectionForSite() {

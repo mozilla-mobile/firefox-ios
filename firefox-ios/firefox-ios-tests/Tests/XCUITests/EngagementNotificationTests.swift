@@ -23,7 +23,7 @@ class EngagementNotificationTests: BaseTestCase {
 
     /// Both tests start in Settings and launch the app themselves through a Settings deeplink.
     override func setUpApp() {
-        setUpLaunchArguments()
+        setUpAppWithoutLaunching()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307101

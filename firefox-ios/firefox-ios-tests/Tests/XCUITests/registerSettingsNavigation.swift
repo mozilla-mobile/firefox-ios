@@ -14,7 +14,6 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
     map.addScreenState(SettingsDeeplinkEntry) { screenState in
         screenState.noop(to: SettingsScreen)
         screenState.noop(to: NewTabScreen)
-        screenState.noop(to: BrowserTab)
     }
 
     map.addScreenState(SettingsScreen) { screenState in
