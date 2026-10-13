@@ -153,9 +153,9 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         self.profile = profile
         self.windowUUID = windowUUID
         switch parentType {
-        case .settings:
+        case .settings, .library:
             self.shouldUsePrivateOverride = true
-        case .appMenu, .onboarding, .upgrade, .tabTray, .library:
+        case .appMenu, .onboarding, .upgrade, .tabTray:
             self.shouldUsePrivateOverride = false
         }
         switch parentType {

@@ -1656,6 +1656,8 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is EditBookmarkViewController)
+        let editBookmarkViewController = mockRouter.presentedViewController?.children.first as? EditBookmarkViewController
+        XCTAssertEqual(editBookmarkViewController?.shouldUsePrivateOverride, false)
     }
 
     func testShowEditBookmarks_didDidDismiss_removesChild() {
