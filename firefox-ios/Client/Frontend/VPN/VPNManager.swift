@@ -129,6 +129,14 @@ final class VPNManager: VPNManaging {
                     category: .sync
                 )
             }
+            // The stream only finishes on its own when rotation fails; `stop()` cancels the task.
+            guard !Task.isCancelled else { return }
+            store.dispatch(
+                GeneralBrowserAction(
+                    windowUUID: .unavailable,
+                    actionType: GeneralBrowserActionType.showVPNFailureAlert
+                )
+            )
         }
     }
 

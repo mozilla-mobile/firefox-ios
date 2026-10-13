@@ -49,6 +49,7 @@ final class BrowserCoordinator: BaseCoordinator,
     var homepageViewController: HomepageViewController?
     private weak var nativeErrorPageViewController: NativeErrorPageViewController?
     private weak var privateHomepageViewController: PrivateHomepageViewController?
+    private weak var vpnFailureAlert: UIAlertController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -1342,6 +1343,33 @@ final class BrowserCoordinator: BaseCoordinator,
         store.dispatch(GeneralBrowserAction(showOverlay: false,
                                             windowUUID: self.windowUUID,
                                             actionType: GeneralBrowserActionType.leaveOverlay))
+    }
+
+    func showVPNFailureAlert() {
+        guard vpnFailureAlert == nil else { return }
+        let alert = UIAlertController(
+            title: .Alerts.VPNFailure.Title,
+            message: .Alerts.VPNFailure.Message,
+            preferredStyle: .alert
+        )
+        let actions: [(String, UIAlertAction.Style, VPNActionType)] = [
+            (.Alerts.VPNFailure.ContinueWithoutVPNButton, .destructive, .continueWithoutVPN),
+            (.Alerts.VPNFailure.CloseAllTabsButton, .default, .closeAllTabs),
+            (.Alerts.VPNFailure.CloseThisTabButton, .default, .closeThisTab)
+        ]
+        for (title, style, actionType) in actions {
+            alert.addAction(UIAlertAction(title: title, style: style) { [weak self] _ in
+                guard let self else { return }
+                store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: actionType))
+            })
+        }
+        vpnFailureAlert = alert
+        browserViewController.topmostPresentedViewController.present(alert, animated: true)
+    }
+
+    func dismissVPNFailureAlert() {
+        vpnFailureAlert?.dismiss(animated: true)
+        vpnFailureAlert = nil
     }
 
     func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source, searchTimerId: GleanTimerId? = nil) {

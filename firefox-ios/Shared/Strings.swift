@@ -85,6 +85,43 @@ extension String {
                 value: "Cancel",
                 comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the cancel action for the alert, cancelling the action to add the event to the calendar.")
         }
+
+        public struct VPNFailure {
+            public static let Title = MZLocalizedString(
+                key: "Alerts.VPNFailure.Title.v157",
+                tableName: "Alerts",
+                value: "Continue Without VPN?",
+                comment: "Title of the alert shown when the built-in VPN stops working while it is on."
+            )
+
+            public static let Message = MZLocalizedString(
+                key: "Alerts.VPNFailure.Message.v157",
+                tableName: "Alerts",
+                value: "VPN isn’t working right now. If you continue browsing, your location may be visible.",
+                comment: "Message of the alert shown when the built-in VPN stops working while it is on."
+            )
+
+            public static let ContinueWithoutVPNButton = MZLocalizedString(
+                key: "Alerts.VPNFailure.ContinueWithoutVPNButton.v157",
+                tableName: "Alerts",
+                value: "Continue Without VPN",
+                comment: "Button in the alert shown when the built-in VPN stops working. Turns the VPN off and keeps browsing."
+            )
+
+            public static let CloseAllTabsButton = MZLocalizedString(
+                key: "Alerts.VPNFailure.CloseAllTabsButton.v157",
+                tableName: "Alerts",
+                value: "Close All Tabs",
+                comment: "Button in the alert shown when the built-in VPN stops working. Closes all tabs in the window and turns the VPN off."
+            )
+
+            public static let CloseThisTabButton = MZLocalizedString(
+                key: "Alerts.VPNFailure.CloseThisTabButton.v157",
+                tableName: "Alerts",
+                value: "Close This Tab",
+                comment: "Button in the alert shown when the built-in VPN stops working. Closes the current tab and turns the VPN off."
+            )
+        }
     }
 }
 

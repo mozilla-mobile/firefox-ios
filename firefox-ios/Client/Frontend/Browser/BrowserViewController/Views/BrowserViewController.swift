@@ -2850,6 +2850,10 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showGoogleLensPhotoPicker()
         case .googleLensCamera:
             navigationHandler?.showGoogleLensCamera()
+        case .vpnFailureAlert:
+            navigationHandler?.showVPNFailureAlert()
+        case .dismissVPNFailureAlert:
+            navigationHandler?.dismissVPNFailureAlert()
         }
     }
 

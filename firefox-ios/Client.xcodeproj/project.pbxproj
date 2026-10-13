@@ -793,6 +793,8 @@
 		610216562FBFA7100091151F /* ConversionActivityLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610216502FBFA7100091151F /* ConversionActivityLogger.swift */; };
 		610216572FBFA7100091151F /* ConversionDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 610216522FBFA7100091151F /* ConversionDataManager.swift */; };
 		611806D3305989AA00ADFAA1 /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611806D2305989AA00ADFAA1 /* VPNManager.swift */; };
+		8FDD1ABB73B3F1E7321380C5 /* VPNMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD22E74E4B5E901D4B1BA21C /* VPNMiddleware.swift */; };
+		9DCDABBC614247C55B885D00 /* VPNAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6737455894172EE45C8B68E9 /* VPNAction.swift */; };
 		6118EBC83048BD8900ADFAA1 /* VPNServerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6118EBC73048BD8200ADFAA1 /* VPNServerList.swift */; };
 		612194E32CE507CF001664BB /* WallpaperBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */; };
 		612194E62CE50A93001664BB /* WallpaperAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E52CE50A93001664BB /* WallpaperAction.swift */; };
@@ -9664,6 +9666,8 @@
 		610216522FBFA7100091151F /* ConversionDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionDataManager.swift; sourceTree = "<group>"; };
 		610216532FBFA7100091151F /* ConversionEventTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionEventTracker.swift; sourceTree = "<group>"; };
 		611806D2305989AA00ADFAA1 /* VPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManager.swift; sourceTree = "<group>"; };
+		BD22E74E4B5E901D4B1BA21C /* VPNMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNMiddleware.swift; sourceTree = "<group>"; };
+		6737455894172EE45C8B68E9 /* VPNAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNAction.swift; sourceTree = "<group>"; };
 		6118EBC73048BD8200ADFAA1 /* VPNServerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNServerList.swift; sourceTree = "<group>"; };
 		612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperBackgroundView.swift; sourceTree = "<group>"; };
 		612194E52CE50A93001664BB /* WallpaperAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperAction.swift; sourceTree = "<group>"; };
@@ -14335,6 +14339,8 @@
 			isa = PBXGroup;
 			children = (
 				611806D2305989AA00ADFAA1 /* VPNManager.swift */,
+				BD22E74E4B5E901D4B1BA21C /* VPNMiddleware.swift */,
+				6737455894172EE45C8B68E9 /* VPNAction.swift */,
 				6118EBC73048BD8200ADFAA1 /* VPNServerList.swift */,
 				61E24E4F3012AD3900F27037 /* VPNGuardian.swift */,
 			);
@@ -20422,6 +20428,8 @@
 				C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */,
 				C209316E2F3CA52E00F0B05C /* QuickAnswersCoordinator.swift in Sources */,
 				611806D3305989AA00ADFAA1 /* VPNManager.swift in Sources */,
+				8FDD1ABB73B3F1E7321380C5 /* VPNMiddleware.swift in Sources */,
+				9DCDABBC614247C55B885D00 /* VPNAction.swift in Sources */,
 				FB16062100000000000000A2 /* PhotoPickerCoordinator.swift in Sources */,
 				FB16062200000000000000A2 /* CameraCoordinator.swift in Sources */,
 				FB16062100000000000000E2 /* GoogleLensImageProcessor.swift in Sources */,
