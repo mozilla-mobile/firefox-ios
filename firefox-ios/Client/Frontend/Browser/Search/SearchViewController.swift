@@ -839,10 +839,10 @@ class SearchViewController: SiteTableViewController,
         case .firefoxSuggestions:
             let firefoxSuggestion = viewModel.firefoxSuggestions[indexPath.row]
             configureFirefoxSuggestionsCell(
-                twoLineCell,
-                firefoxSuggestion.title,
-                firefoxSuggestion.isSponsored,
-                firefoxSuggestion.iconImage ?? UIImage()
+                cell: twoLineCell,
+                title: firefoxSuggestion.title,
+                isSponsored: firefoxSuggestion.isSponsored,
+                iconImage: firefoxSuggestion.iconImage ?? UIImage()
             )
             cell = twoLineCell
         }
@@ -924,10 +924,10 @@ class SearchViewController: SiteTableViewController,
     }
 
     private func configureFirefoxSuggestionsCell(
-        _ cell: TwoLineImageOverlayCell,
-        _ title: String,
-        _ isSponsored: Bool,
-        _ iconImage: UIImage
+        cell: TwoLineImageOverlayCell,
+        title: String,
+        isSponsored: Bool,
+        iconImage: UIImage
     ) {
         cell.titleLabel.text = title
         if isSponsored {
