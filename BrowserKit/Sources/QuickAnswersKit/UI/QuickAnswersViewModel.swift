@@ -80,6 +80,12 @@ final class QuickAnswersViewModel {
         startFlow()
     }
 
+    /// Starts a new recording so the user can ask a follow up question. The exchanges already made are
+    /// kept by the service and sent along with the new question.
+    func startFollowUp() {
+        startRecordingVoice()
+    }
+
     /// Tears down the flow when the view is being dismissed, recording the relevant telemetry.
     func dismiss() {
         // if the opt-in is not completed at time of dismissal stopRecording triggers permission request, thus
