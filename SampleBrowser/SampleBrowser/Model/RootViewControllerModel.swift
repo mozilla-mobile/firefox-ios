@@ -25,7 +25,7 @@ class RootViewControllerModel {
             a11yLabel: "Navigate Back",
             a11yHint: nil,
             a11yId: "backButton",
-            hasLongPressAction: false,
+            longPressBehavior: .none,
             onSelected: { _ in
                 self.navigationToolbarDelegate?.backButtonTapped()
             })
@@ -35,7 +35,7 @@ class RootViewControllerModel {
             a11yLabel: "Navigate Forward",
             a11yHint: nil,
             a11yId: "forwardButton",
-            hasLongPressAction: false,
+            longPressBehavior: .none,
             onSelected: { _ in
                 self.navigationToolbarDelegate?.forwardButtonTapped()
             })
@@ -45,7 +45,7 @@ class RootViewControllerModel {
             a11yLabel: isReloading ? "Stop loading website" : "Reload website",
             a11yHint: nil,
             a11yId: isReloading ? "stopButton" : "reloadButton",
-            hasLongPressAction: false,
+            longPressBehavior: .none,
             onSelected: { _ in
                 if self.isReloading {
                     self.navigationToolbarDelegate?.stopButtonTapped()
@@ -59,7 +59,7 @@ class RootViewControllerModel {
             a11yLabel: "Open Menu",
             a11yHint: nil,
             a11yId: "appMenuButton",
-            hasLongPressAction: false,
+            longPressBehavior: .none,
             onSelected: { _ in
                 self.navigationToolbarDelegate?.menuButtonTapped()
             })

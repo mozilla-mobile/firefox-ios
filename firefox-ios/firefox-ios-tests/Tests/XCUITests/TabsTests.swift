@@ -316,7 +316,7 @@ class TabsTests: BaseTestCase {
 
         toolBarScreen.assertTabsButtonExists()
         toolBarScreen.pressTabsButton(duration: 1)
-        mozWaitForElementToExist(app.tables.cells.buttons[StandardImageIdentifiers.Large.plus])
+        mozWaitForElementToExist(app.collectionViews.cells.buttons[StandardImageIdentifiers.Large.plus])
         newTabsScreen.tapCrossIconInTableCells()
         navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
@@ -490,7 +490,7 @@ class TabsTests: BaseTestCase {
 
         // Verify the URL was copied by pasting it into the URL bar of a new tab
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.goto(URLBarOpen)
+        // navigator.goto(URLBarOpen)
         browserScreen.pasteAndAssertAddressBarContains(urlValueLongExample)
 
         // Long press the tab again and tap "Close Tab", then verify the tab is closed

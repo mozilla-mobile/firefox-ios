@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 protocol ContextMenuSelectorsSet {
@@ -27,6 +28,7 @@ struct ContextMenuSelectors: ContextMenuSelectorsSet {
         static let shareLink = "Share Link"
         static let bookmarkLink = "Bookmark Link"
         static let switchButton = "Switch"
+        static let requestDesktopSite = StandardImageIdentifiers.Large.deviceDesktop
     }
 
     let CONTEXT_MENU_TABLE = Selector.tableIdOrLabel(
@@ -83,6 +85,12 @@ struct ContextMenuSelectors: ContextMenuSelectorsSet {
         groups: ["contextmenu"]
     )
 
+    let REQUEST_DESKTOP_SITE = Selector.buttonId(
+        IDs.requestDesktopSite,
+        description: "Request desktop site from the reload button",
+        groups: ["contextmenu"]
+    )
+
     var all: [Selector] { [OPEN_IN_PRIVATE_TAB, CONTEXT_MENU_TABLE, OPEN_IN_NEW_TAB, OPEN_IN_NEW_PRIVATE_TAB,
-                           COPY_LINK, DOWNLOAD_LINK, SHARE_LINK, BOOKMARK_LINK, SWITCH_BUTTON] }
+                           COPY_LINK, DOWNLOAD_LINK, SHARE_LINK, BOOKMARK_LINK, SWITCH_BUTTON, REQUEST_DESKTOP_SITE] }
 }

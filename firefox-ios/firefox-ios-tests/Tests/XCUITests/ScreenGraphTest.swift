@@ -162,7 +162,7 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
         screenState.gesture(forAction: TestActions.LoadURLByPasting, TestActions.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
             app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.0)
-            app.tables["Context Menu"].cells[AccessibilityIdentifiers.Photon.pasteAndGoAction].waitAndTap()
+            app.cells.buttons[AccessibilityIdentifiers.Photon.pasteAndGoAction].waitAndTap()
         }
     }
     map.addScreenState(BrowserTabMenuMore) { screenState in

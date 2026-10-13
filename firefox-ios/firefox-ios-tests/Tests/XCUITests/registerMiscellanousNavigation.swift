@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 import MappaMundi
 
@@ -28,12 +29,12 @@ func registerMiscellanousNavigation(in map: MMScreenGraph<FxUserState>, app: XCU
         screenState.backAction = cancelBackAction(for: app)
         screenState.dismissOnUse = true
 
-        let rdsButton = app.tables["Context Menu"].cells.element(boundBy: 0)
+        let rdsButton = app.cells.buttons[StandardImageIdentifiers.Large.deviceDesktop]
         screenState.tap(rdsButton, forAction: Action.ToggleRequestDesktopSite) { userState in
             userState.requestDesktopSite = !userState.requestDesktopSite
         }
 
-        let trackingProtectionButton = app.tables["Context Menu"].cells.element(boundBy: 1)
+        let trackingProtectionButton = app.cells.buttons[StandardImageIdentifiers.Large.shieldSlash]
 
         screenState.tap(
             trackingProtectionButton,

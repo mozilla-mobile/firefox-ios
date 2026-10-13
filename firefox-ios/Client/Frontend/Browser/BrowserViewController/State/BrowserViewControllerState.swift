@@ -32,13 +32,9 @@ struct BrowserViewControllerState: ScreenState {
     enum DisplayType: Equatable {
         case backForwardList
         case trackingProtectionDetails
-        case tabsLongPressActions
-        case locationViewLongPressAction
         case menu
-        case reloadLongPressAction
         case tabTray
         case share
-        case newTabLongPressActions
         case readerModeLongPressAction
         case passwordGenerator
         case translationLanguagePicker(TranslationLanguagePickerData)
@@ -348,12 +344,6 @@ struct BrowserViewControllerState: ScreenState {
             return handleShowTrackingProtectionDetailsAction(state: state, action: action)
         case GeneralBrowserActionType.showMenu:
             return handleShowMenuAction(state: state, action: action)
-        case GeneralBrowserActionType.showTabsLongPressActions:
-            return handleShowTabsLongPressAction(state: state, action: action)
-        case GeneralBrowserActionType.showReloadLongPressAction:
-            return handleShowReloadLongPressAction(state: state, action: action)
-        case GeneralBrowserActionType.showLocationViewLongPressActionSheet:
-            return handleShowLocationViewLongPressActionSheetAction(state: state, action: action)
         case GeneralBrowserActionType.navigateBack:
             return handleNavigateBackAction(state: state, action: action)
         case GeneralBrowserActionType.navigateForward:
@@ -370,8 +360,6 @@ struct BrowserViewControllerState: ScreenState {
             return handleStopLoadingWebsiteAction(state: state, action: action)
         case GeneralBrowserActionType.showShare:
             return handleShowShareAction(state: state, action: action)
-        case GeneralBrowserActionType.showNewTabLongPressActions:
-            return handleShowNewTabLongPressAction(state: state, action: action)
         case GeneralBrowserActionType.addToReadingListLongPressAction:
             return handleAddToReadingListLongPressAction(state: state, action: action)
         case GeneralBrowserActionType.showPasswordGenerator:
@@ -474,41 +462,6 @@ struct BrowserViewControllerState: ScreenState {
     }
 
     @MainActor
-    private static func handleShowTabsLongPressAction(state: BrowserViewControllerState,
-                                                      action: GeneralBrowserAction) -> BrowserViewControllerState {
-        return state
-            .resetTransientState()
-            .copy(displayView: .tabsLongPressActions)
-            .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
-            .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
-                .legacyReducer(state.autoTranslatePromptState, action))
-    }
-
-    @MainActor
-    private static func handleShowReloadLongPressAction(state: BrowserViewControllerState,
-                                                        action: GeneralBrowserAction) -> BrowserViewControllerState {
-        return state
-            .resetTransientState()
-            .copy(displayView: .reloadLongPressAction)
-            .copy(buttonTapped: action.buttonTapped)
-            .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
-            .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
-                .legacyReducer(state.autoTranslatePromptState, action))
-    }
-
-    @MainActor
-    private static func handleShowLocationViewLongPressActionSheetAction(
-        state: BrowserViewControllerState,
-        action: GeneralBrowserAction) -> BrowserViewControllerState {
-            return state
-                .resetTransientState()
-                .copy(displayView: .locationViewLongPressAction)
-                .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
-                .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
-                    .legacyReducer(state.autoTranslatePromptState, action))
-        }
-
-    @MainActor
     private static func handleNavigateBackAction(state: BrowserViewControllerState,
                                                  action: GeneralBrowserAction) -> BrowserViewControllerState {
         return state
@@ -595,17 +548,6 @@ struct BrowserViewControllerState: ScreenState {
             .resetTransientState()
             .copy(displayView: .share)
             .copy(buttonTapped: action.buttonTapped)
-            .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
-            .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
-                .legacyReducer(state.autoTranslatePromptState, action))
-    }
-
-    @MainActor
-    private static func handleShowNewTabLongPressAction(state: BrowserViewControllerState,
-                                                        action: GeneralBrowserAction) -> BrowserViewControllerState {
-        return state
-            .resetTransientState()
-            .copy(displayView: .newTabLongPressActions)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
                 .legacyReducer(state.autoTranslatePromptState, action))
