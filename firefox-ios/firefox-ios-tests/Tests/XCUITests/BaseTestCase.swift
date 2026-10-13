@@ -542,7 +542,7 @@ class BaseTestCase: XCTestCase {
             navigator.goto(section.screen)
             return
         }
-        app.open(URL(string: "\(currentScheme.internalURLScheme)://deep-link?url=/settings/\(section.rawValue)")!)
+        launchWithDeeplink("deep-link?url=/settings/\(section.rawValue)")
         let settingScreen = SettingScreen(app: app)
         switch section {
         case .general:
@@ -559,6 +559,54 @@ class BaseTestCase: XCTestCase {
     func settingsRootReachedByDeeplink() {
         navigator.nowAt(SettingsDeeplinkEntry)
         navigator.goto(SettingsScreen)
+    }
+
+    /// Launches the app with `url` already loaded through an `open-url` deeplink, instead of launching
+    /// and typing it. The URL opens in a new tab next to the start page, so there is one more regular
+    /// tab than when typing it. Below iOS 16.4 it opens a new tab and types the URL, keeping that count.
+    func launchOpening(_ url: String, isPrivate: Bool = false) {
+        guard #available(iOS 16.4, *) else {
+            app.launch()
+            waitForTabsButton()
+            navigator.nowAt(NewTabScreen)
+            if isPrivate {
+                navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+            }
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            navigator.openURL(url)
+            waitUntilPageLoad()
+            navigator.nowAt(BrowserTab)
+            return
+        }
+        let target = url.contains("://") ? url : "http://\(url)"
+        var allowed = CharacterSet.urlQueryAllowed
+        allowed.remove(charactersIn: "&=?+#")
+        let encodedTarget = target.addingPercentEncoding(withAllowedCharacters: allowed) ?? target
+        // The app appends every query item that follows `url` to the URL itself, so `private` goes first
+        launchWithDeeplink("open-url?private=\(isPrivate)&url=\(encodedTarget)")
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        userState.isPrivate = isPrivate
+    }
+
+    /// Launches the app straight into the Reading List panel through a deeplink, which skips the menu taps,
+    /// and waits for the empty panel that a cleared profile shows.
+    func launchIntoReadingList() {
+        guard #available(iOS 16.4, *) else {
+            app.launch()
+            waitForTabsButton()
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(LibraryPanel_ReadingList)
+            return
+        }
+        launchWithDeeplink("deep-link?url=/homepanel/reading-list")
+        ReadingListScreen(app: app).waitForReadingListsPanel()
+        navigator.nowAt(LibraryPanel_ReadingList)
+    }
+
+    @available(iOS 16.4, *)
+    private func launchWithDeeplink(_ hostAndQuery: String) {
+        app.open(URL(string: "\(currentScheme.internalURLScheme)://\(hostAndQuery)")!)
     }
 
     func waitForTabsButtonHittable(timeout: Double = TIMEOUT) {

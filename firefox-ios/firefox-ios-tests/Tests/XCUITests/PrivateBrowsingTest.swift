@@ -39,6 +39,15 @@ class PrivateBrowsingTest: BaseTestCase {
         springboardScreen = SpringboardScreen()
     }
 
+    /// The force close tests launch the app themselves, straight into Settings through a deeplink.
+    override func setUpApp() {
+        if name.contains("testMultipleTabsPrivateBrowsingClose") {
+            setUpLaunchArguments()
+        } else {
+            super.setUpApp()
+        }
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307004
     // Regression
     func testPrivateTabDoesNotTrackHistory() {
@@ -415,7 +424,7 @@ class PrivateBrowsingTest: BaseTestCase {
     }
 
     private func openMultipleTabsInPrivateModeAndForceRestart(isClosePrivateTabEnabled: Bool = true) {
-        navigator.goto(SettingsScreen)
+        launchIntoSettings()
         if isClosePrivateTabEnabled {
             settingScreen.enableClosePrivateTabs()
         } else {
@@ -497,6 +506,11 @@ class PrivateBrowsingTestIphone: BaseTestCase {
         }
     }
 
+    /// The test launches the app itself, with its first page already open in private mode through a deeplink.
+    override func setUpApp() {
+        setUpLaunchArguments()
+    }
+
     // This test is disabled for iPad because the toast menu is not shown there
     // https://mozilla.testrail.io/index.php?/cases/view/2307013
     // Smoketest
@@ -508,9 +522,7 @@ class PrivateBrowsingTestIphone: BaseTestCase {
         let toolbarScreen = ToolbarScreen(app: app)
 
         // Go to Private mode
-        enterPrivateBrowsingMode()
-        navigator.openURL(urlExample)
-        waitUntilPageLoad()
+        launchOpening(urlExample, isPrivate: true)
         browserScreen.longPressFirstLink()
         contextMenuScreen.openInNewPrivateTabAndSwitch()
 
