@@ -12,7 +12,7 @@ class NewTabSettingsTest: BaseTestCase {
 
     /// Every test starts in New Tab settings, so each launches the app itself through a Settings deeplink.
     override func setUpApp() {
-        setUpLaunchArguments()
+        setUpAppWithoutLaunching()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307026

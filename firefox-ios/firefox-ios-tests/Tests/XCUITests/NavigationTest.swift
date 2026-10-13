@@ -353,8 +353,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         settingsScreen.waitForBrowsingLinksSection()
         settingsScreen.assertBlockPopUpsSwitchIsOn()
         // Navigate back to the homepage
-        navigator.goto(BrowserTab)
-        navigator.nowAt(NewTabScreen)
+        navigator.goto(NewTabScreen)
 
         // Check that there are no pop ups
         navigator.openURL(popUpTestUrl)

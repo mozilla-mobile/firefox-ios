@@ -204,12 +204,22 @@ class BaseTestCase: XCTestCase {
     func setUpExperimentVariables() {}
 
     func setUpApp() {
-        setUpLaunchArguments()
-        if ProcessInfo.processInfo.environment["EXPERIMENT_NAME"] != nil {
-            app.activate()
-        }
+        setUpAppWithoutLaunching()
         app.launch()
         mozWaitForElementToExist(app.windows.otherElements.firstMatch)
+    }
+
+    /// `setUpApp()` without the launch, for test classes that launch the app themselves through a deeplink
+    /// (`launchIntoSettings`, `launchOpening`, `launchIntoReadingList`).
+    func setUpAppWithoutLaunching() {
+        setUpLaunchArguments()
+        if isExperimentRun {
+            app.activate()
+        }
+    }
+
+    private var isExperimentRun: Bool {
+        ProcessInfo.processInfo.environment["EXPERIMENT_NAME"] != nil
     }
 
     func setUpLaunchArguments() {
@@ -542,7 +552,7 @@ class BaseTestCase: XCTestCase {
             navigator.goto(section.screen)
             return
         }
-        launchWithDeeplink("deep-link?url=/settings/\(section.rawValue)")
+        launchWithDeeplink(deeplinkURL("deep-link?url=/settings/\(section.rawValue)"))
         let settingScreen = SettingScreen(app: app)
         switch section {
         case .general:
@@ -578,12 +588,7 @@ class BaseTestCase: XCTestCase {
             navigator.nowAt(BrowserTab)
             return
         }
-        let target = url.contains("://") ? url : "http://\(url)"
-        var allowed = CharacterSet.urlQueryAllowed
-        allowed.remove(charactersIn: "&=?+#")
-        let encodedTarget = target.addingPercentEncoding(withAllowedCharacters: allowed) ?? target
-        // The app appends every query item that follows `url` to the URL itself, so `private` goes first
-        launchWithDeeplink("open-url?private=\(isPrivate)&url=\(encodedTarget)")
+        launchWithDeeplink(openURLDeeplink(url, isPrivate: isPrivate))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         userState.isPrivate = isPrivate
@@ -599,14 +604,38 @@ class BaseTestCase: XCTestCase {
             navigator.goto(LibraryPanel_ReadingList)
             return
         }
-        launchWithDeeplink("deep-link?url=/homepanel/reading-list")
+        launchWithDeeplink(deeplinkURL("deep-link?url=/homepanel/reading-list"))
         ReadingListScreen(app: app).waitForReadingListsPanel()
         navigator.nowAt(LibraryPanel_ReadingList)
     }
 
+    /// `<scheme>://open-url` for `url`. The app appends every query item that follows `url` to the URL itself,
+    /// so the target is fully percent-encoded and `private` goes first. `isPrivate: nil` leaves the parameter
+    /// out, so the app reuses the last browsing mode.
+    func openURLDeeplink(_ url: String, isPrivate: Bool? = nil) -> URL {
+        let target = url.contains("://") ? url : "http://\(url)"
+        var allowed = CharacterSet.urlQueryAllowed
+        allowed.remove(charactersIn: "&=?+#")
+        let encodedTarget = target.addingPercentEncoding(withAllowedCharacters: allowed) ?? target
+        let privateItem = isPrivate.map { "private=\($0)&" } ?? ""
+        return deeplinkURL("open-url?\(privateItem)url=\(encodedTarget)")
+    }
+
+    private func deeplinkURL(_ hostAndQuery: String) -> URL {
+        URL(string: "\(currentScheme.internalURLScheme)://\(hostAndQuery)")!
+    }
+
     @available(iOS 16.4, *)
-    private func launchWithDeeplink(_ hostAndQuery: String) {
-        app.open(URL(string: "\(currentScheme.internalURLScheme)://\(hostAndQuery)")!)
+    private func launchWithDeeplink(_ url: URL) {
+        // An app already launched by setUp would be relaunched by `app.open`, silently losing the time saving.
+        // The experiment plan activates the app on purpose before relaunching it, as `setUpApp()` does.
+        let runningStates: [XCUIApplication.State] = [.runningForeground, .runningBackground,
+                                                      .runningBackgroundSuspended]
+        if !isExperimentRun && runningStates.contains(app.state) {
+            XCTFail("The app is already running, so this deeplink launch relaunches it. " +
+                    "Make setUp skip its launch for this test with setUpAppWithoutLaunching().")
+        }
+        app.open(url)
     }
 
     func waitForTabsButtonHittable(timeout: Double = TIMEOUT) {
