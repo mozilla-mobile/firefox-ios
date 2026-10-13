@@ -317,8 +317,8 @@ extension String {
             public static let Message = MZLocalizedString(
                 key: "BrowserDataTransfer.ImportSuccess.Message.v160",
                 tableName: "BrowserDataTransfer",
-                value: "Your imported data is ready to use in Firefox.",
-                comment: "Message of the alert shown after Firefox finishes importing data from another browser.")
+                value: "Your imported data is ready to use in %@.",
+                comment: "Message of the alert shown after Firefox finishes importing data from another browser. %@ is the app name (e.g. Firefox).")
             public static let Title = MZLocalizedString(
                 key: "BrowserDataTransfer.ImportSuccess.Title.v160",
                 tableName: "BrowserDataTransfer",
@@ -345,8 +345,8 @@ extension String {
             public static let SupportedDataFooter = MZLocalizedString(
                 key: "BrowserDataTransfer.Settings.SupportedDataFooter.v160",
                 tableName: "BrowserDataTransfer",
-                value: "Bring bookmarks, history, and reading lists into Firefox, or send your Firefox data to another browser.",
-                comment: "On the Data Management screen in Settings, the footer below the import and export buttons explaining which kinds of data can be moved between Firefox and another browser.")
+                value: "Bring bookmarks, history, and reading lists into %1$@, or send your %1$@ data to another browser.",
+                comment: "On the Data Management screen in Settings, the footer below the import and export buttons explaining which kinds of data can be moved between the app and another browser. %1$@ is the app name (e.g. Firefox), used in both places.")
         }
     }
 }
