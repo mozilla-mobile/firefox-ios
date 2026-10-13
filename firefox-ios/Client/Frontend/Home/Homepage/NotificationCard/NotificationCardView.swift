@@ -88,26 +88,18 @@ struct NotificationCardView: View, ThemeableView {
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
-    private var enableButtonColour: Color {
-        theme.isNova ? theme.colors.textAccent.color : theme.colors.gradientAIStrongStop1.color
-    }
-
-    // TODO: get rid of this once nova is the default
-    private var enableButtonOpacity: CGFloat {
-        theme.isNova ? UX.enableButtonBackgroundOpacity : 0.12
-    }
-
     private var enableNotificationsButton: some View {
+        let buttonColor = theme.colors.textAccent.color
         return Button(action: onEnable) {
             Text(String.Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableButtonText)
                 .font(FXFontStyles.Bold.body.scaledSwiftUIFont())
-                .foregroundColor(enableButtonColour)
+                .foregroundColor(buttonColor)
                 .padding(.vertical, UX.enableButtonVerticalPadding)
                 .padding(.horizontal, UX.enableButtonHorizontalPadding)
                 .frame(maxWidth: .infinity)
         }
         .frame(maxWidth: UX.enableButtonMaxWidth)
-        .background(enableButtonColour.opacity(enableButtonOpacity))
+        .background(buttonColor.opacity(UX.enableButtonBackgroundOpacity))
         .clipShape(Capsule())
     }
 

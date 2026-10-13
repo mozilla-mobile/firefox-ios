@@ -2373,6 +2373,7 @@
 		EDFEE3F42DE670B8005ADE03 /* gleanProbes.xcfilelist in Resources */ = {isa = PBXBuildFile; fileRef = EDFEE3F32DE670B8005ADE03 /* gleanProbes.xcfilelist */; };
 		EE046A75300A75D7004E3D80 /* SwipeUpTabWebViewPreviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE046A74300A75D7004E3D80 /* SwipeUpTabWebViewPreviewTests.swift */; };
 		EE046A77300A75F4004E3D80 /* SwipeUpTabPreviewGestureHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE046A76300A75F4004E3D80 /* SwipeUpTabPreviewGestureHandlerTests.swift */; };
+		EE816DED307E74A50044A8C7 /* NotificationCardCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE816DEC307E74A50044A8C7 /* NotificationCardCellTests.swift */; };
 		EE86E740304721AD003BB5BC /* OnboardingCardSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE86E73E304721AD003BB5BC /* OnboardingCardSchedule.swift */; };
 		EE86E741304721AD003BB5BC /* OnboardingCardScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE86E73F304721AD003BB5BC /* OnboardingCardScheduler.swift */; };
 		EE86E743304721BA003BB5BC /* OnboardingDripDebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE86E742304721BA003BB5BC /* OnboardingDripDebugSettings.swift */; };
@@ -12429,6 +12430,7 @@
 		EE294A97B40C4FDBD67AE536 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		EE4D49BBA90C11374B6718A4 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		EE7B44DB8DBE14987B22A82D /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/Search.strings; sourceTree = "<group>"; };
+		EE816DEC307E74A50044A8C7 /* NotificationCardCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCardCellTests.swift; sourceTree = "<group>"; };
 		EE86E73E304721AD003BB5BC /* OnboardingCardSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardSchedule.swift; sourceTree = "<group>"; };
 		EE86E73F304721AD003BB5BC /* OnboardingCardScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardScheduler.swift; sourceTree = "<group>"; };
 		EE86E742304721BA003BB5BC /* OnboardingDripDebugSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDripDebugSettings.swift; sourceTree = "<group>"; };
@@ -14525,6 +14527,7 @@
 		8A00BD852CAB3FC200680AF9 /* Homepage */ = {
 			isa = PBXGroup;
 			children = (
+				EE816DEC307E74A50044A8C7 /* NotificationCardCellTests.swift */,
 				638201083038D85F003C51C5 /* SectionHeaderConfigurationTests.swift */,
 				39CC6FD3301A792500164DCA /* TrackerBlockerModuleCellTests.swift */,
 				39D207CD305DCED200542B0A /* HomepageLayoutMeasurementCacheTests.swift */,
@@ -21758,6 +21761,7 @@
 				61497F3E2F68856600BC5ACA /* MockGeneralSettingsDelegate.swift in Sources */,
 				C283EED42E4E0F25008EB540 /* MockSummarizerConfigSource.swift in Sources */,
 				81AE06F62E3AA6A3002C3E58 /* MerinoProviderTests.swift in Sources */,
+				EE816DED307E74A50044A8C7 /* NotificationCardCellTests.swift in Sources */,
 				AA17157C2FB619C20090D2AE /* QuickAnswersSettingTests.swift in Sources */,
 				AA17157D2FB619C20090D2AE /* QuickAnswersSettingsViewControllerTests.swift in Sources */,
 				21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */,

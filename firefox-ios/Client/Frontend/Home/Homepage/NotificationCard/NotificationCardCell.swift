@@ -8,7 +8,7 @@ import UIKit
 
 /// Homepage cell that holds NotificationCardView.
 final class NotificationCardCell: UICollectionViewCell, ReusableCell {
-    private var host: UIHostingController<NotificationCardView>?
+    private(set) var host: UIHostingController<NotificationCardView>?
     private var enableButtonAction: (() -> Void)?
     private var closeButtonAction: (() -> Void)?
 
