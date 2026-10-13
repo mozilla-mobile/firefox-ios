@@ -73,7 +73,11 @@ class TrackingProtectionModel {
     let subtitleLabelA11yId = A11y.subtitleLabel
 
     var displayTitle: String {
-        return url.displayTitle ?? selectedTab?.displayTitle ?? ""
+        if InternalURL(url)?.isErrorPage == true {
+            return url.siteURL.shortDisplayString
+        } else {
+            return selectedTab?.displayTitle ?? ""
+        }
     }
 
     var originalURL: URL {
