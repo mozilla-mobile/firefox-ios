@@ -1440,6 +1440,32 @@ public func createKey()throws  -> String  {
     )
 })
 }
+/**
+ * Similar to create_static_key_manager above, create a
+ * ManagedEncryptorDecryptor by passing in a KeyManager
+ */
+public func createManagedEncdec(keyManager: KeyManager) -> EncryptorDecryptor  {
+    return try!  FfiConverterTypeEncryptorDecryptor_lift(try! rustCall() {
+        uniffiCallStatus in
+    uniffi_db_crypto_fn_func_create_managed_encdec(
+        FfiConverterTypeKeyManager_lower(keyManager),uniffiCallStatus
+    )
+})
+}
+/**
+ * Utility function to create a StaticKeyManager to be used for the time
+ * being until support lands for [trait implementation of an UniFFI
+ * interface](https://mozilla.github.io/uniffi-rs/next/proc_macro/index.html#structs-implementing-traits)
+ * in UniFFI.
+ */
+public func createStaticKeyManager(key: String) -> KeyManager  {
+    return try!  FfiConverterTypeKeyManager_lift(try! rustCall() {
+        uniffiCallStatus in
+    uniffi_db_crypto_fn_func_create_static_key_manager(
+        FfiConverterString.lower(key),uniffiCallStatus
+    )
+})
+}
 
 private enum InitializationResult {
     case ok
@@ -1463,6 +1489,12 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_db_crypto_checksum_func_create_key() != 1702) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_db_crypto_checksum_func_create_managed_encdec() != 29168) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_db_crypto_checksum_func_create_static_key_manager() != 21278) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_db_crypto_checksum_method_encryptordecryptor_decrypt() != 43414) {
