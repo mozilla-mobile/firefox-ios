@@ -291,7 +291,7 @@ extension String {
         }
 
         public struct ImportFailure {
-             public static let Title = MZLocalizedString(
+            public static let Title = MZLocalizedString(
                 key: "BrowserDataTransfer.ImportFailure.Title.v160",
                 tableName: "BrowserDataTransfer",
                 value: "Couldn’t Import from %@",
@@ -306,8 +306,6 @@ extension String {
                 tableName: "BrowserDataTransfer",
                 value: "Dismiss",
                 comment: "Button that dismisses the alert shown when Firefox could not finish importing data from another browser.")
-            
-           
         }
 
         public struct ImportSuccess {
@@ -325,7 +323,7 @@ extension String {
                 key: "BrowserDataTransfer.ImportSuccess.GotItButton.v160",
                 tableName: "BrowserDataTransfer",
                 value: "Got It",
-                comment: "Button that dismisses the alert shown after Firefox finishes importing data from another browser.")      
+                comment: "Button that dismisses the alert shown after Firefox finishes importing data from another browser.")
         }
 
         public struct Settings {
