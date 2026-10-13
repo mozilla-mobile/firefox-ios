@@ -595,7 +595,7 @@ final class SettingsCoordinator: BaseCoordinator,
         let viewModel = WallpaperSettingsViewModel(
             wallpaperManager: wallpaperManager,
             tabManager: tabManager,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
+            theme: themeManager.resolveTheme(for: windowUUID, privateOverride: false),
             windowUUID: windowUUID
         )
         let viewController = WallpaperSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
