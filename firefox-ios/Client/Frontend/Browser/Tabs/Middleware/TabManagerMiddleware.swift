@@ -949,18 +949,14 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             return
         }
 
-        let siteURL = InternalURL(selectedTab.url)?.originalURLFromErrorPage ?? selectedTab.url
-        let displayTitle = InternalURL(selectedTab.url)?.originalURLFromErrorPage?.shortDisplayString ??
-                           selectedTab.displayTitle
-
         store.dispatch(
             MainMenuAction(
                 windowUUID: windowUUID,
                 actionType: MainMenuActionType.updateSiteProtectionsHeader,
                 siteProtectionsData: SiteProtectionsData(
-                    title: displayTitle,
-                    subtitle: siteURL?.baseDomain,
-                    image: siteURL?.absoluteString,
+                    title: selectedTab.url?.displayTitle ?? selectedTab.displayTitle,
+                    subtitle: selectedTab.url?.siteURL.baseDomain,
+                    image: selectedTab.url?.siteURL.absoluteString,
                     state: getSiteProtectionState(for: selectedTab)
                 )
             )
