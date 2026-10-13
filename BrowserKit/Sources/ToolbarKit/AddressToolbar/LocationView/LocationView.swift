@@ -16,7 +16,7 @@ final class LocationView: UIView,
         static let gradientViewWidth: CGFloat = 40
         static let safeOffset: CGFloat = 40
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
-        static let searchIconImageViewSize = CGSize(width: 16, height: 16)
+        static let searchIconImageViewSize = CGSize(width: 20, height: 16)
         static let shieldImageViewSize = CGSize(width: 24, height: 24)
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
         static let iconAnimationTime: CGFloat = 0.1
@@ -620,6 +620,7 @@ final class LocationView: UIView,
         let attributedString = NSMutableAttributedString(
             string: normalizedHost,
             attributes: [.foregroundColor: primaryColor])
+        paragraphStyle.lineBreakMode = .byTruncatingHead
 
         if let subdomain {
             let range = NSRange(location: 0, length: subdomain.count)
