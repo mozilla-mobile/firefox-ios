@@ -79,6 +79,9 @@ class SceneDelegate: UIResponder,
         (AppContainer.shared.resolve() as WindowManager).windowWillClose(uuid: sceneCoordinator.windowUUID)
         self.sceneCoordinator?.removeAllChildren()
         self.sceneCoordinator = nil
+
+        // The set of open windows changed; only offer the "Combine Windows" Quick Action when 2+ remain.
+        MergeWindowsQuickActionController().update()
     }
 
     // MARK: - Transitioning to Foreground
@@ -99,6 +102,10 @@ class SceneDelegate: UIResponder,
                 self.tabErrorTelemetryHelper.validateTabCountForForegroundedScene(uuid)
             }
         }
+
+        // The set of open windows may have changed; only offer the "Combine Windows" Quick Action
+        // when 2+ windows are open.
+        MergeWindowsQuickActionController().update()
     }
 
     // MARK: - Transitioning to Background
