@@ -33,13 +33,14 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func test_start_presentsViewController() {
+    func test_start_presentsViewControllerInNavigationController() throws {
         let subject = createSubject()
 
         subject.start()
 
+        let navigationController = try XCTUnwrap(router.presentedViewController as? UINavigationController)
         XCTAssertEqual(router.presentCalled, 1)
-        XCTAssertTrue(router.presentedViewController is QuickAnswersViewController)
+        XCTAssertTrue(navigationController.viewControllers.first is QuickAnswersViewController)
     }
 
     func test_dismissQuickAnswers_dismissesControllerAndNotifiesParent() {
