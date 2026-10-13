@@ -806,10 +806,10 @@ class SearchViewController: SiteTableViewController,
                 let remoteClient = viewModel.filteredRemoteClientTabs[indexPath.row].client
                 let urlString = remoteTab.URL.absoluteString
                 configureRemoteTabsCell(
-                    twoLineCell,
-                    remoteTab.title,
-                    remoteClient.name,
-                    urlString
+                    cell: twoLineCell,
+                    title: remoteTab.title,
+                    description: remoteClient.name,
+                    urlString: urlString
                 )
                 cell = twoLineCell
             }
@@ -892,10 +892,10 @@ class SearchViewController: SiteTableViewController,
     }
 
     private func configureRemoteTabsCell(
-        _ cell: TwoLineImageOverlayCell,
-        _ title: String,
-        _ description: String,
-        _ urlString: String
+        cell: TwoLineImageOverlayCell,
+        title: String,
+        description: String,
+        urlString: String
     ) {
         cell.descriptionLabel.isHidden = false
         cell.titleLabel.text = title
