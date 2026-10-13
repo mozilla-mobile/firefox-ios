@@ -793,9 +793,9 @@ class SearchViewController: SiteTableViewController,
             if viewModel.filteredOpenedTabs.count > indexPath.row {
                 let openedTab = viewModel.filteredOpenedTabs[indexPath.row]
                 configureOpenedTabsCell(
-                    twoLineCell,
-                    openedTab.title ?? openedTab.lastTitle,
-                    openedTab.url?.absoluteString
+                    cell: twoLineCell,
+                    title: openedTab.title ?? openedTab.lastTitle,
+                    urlString: openedTab.url?.absoluteString
                 )
                 cell = twoLineCell
             }
@@ -875,9 +875,9 @@ class SearchViewController: SiteTableViewController,
     }
 
     private func configureOpenedTabsCell(
-        _ cell: TwoLineImageOverlayCell,
-        _ title: String?,
-        _ urlString: String?
+        cell: TwoLineImageOverlayCell,
+        title: String?,
+        urlString: String?
     ) {
         cell.descriptionLabel.isHidden = false
         cell.titleLabel.text = title
