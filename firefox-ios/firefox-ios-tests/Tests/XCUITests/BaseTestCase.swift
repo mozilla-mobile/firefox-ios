@@ -590,8 +590,25 @@ class BaseTestCase: XCTestCase {
         }
         launchWithDeeplink(openURLDeeplink(url, isPrivate: isPrivate))
         waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
         userState.isPrivate = isPrivate
+        let browserScreen = BrowserScreen(app: app)
+        let host = expectedAddressBarHost(for: url)
+        // A fresh profile's content blocker reload can cancel the first navigation (#35933), so retry once.
+        // The retry types into the same tab, so tab counts stay what the deeplink left.
+        if !browserScreen.addressBarContains(host) {
+            navigator.nowAt(NewTabScreen)
+            navigator.openURL(url)
+            waitUntilPageLoad()
+        }
+        browserScreen.assertAddressBarContains(value: host)
+        navigator.nowAt(BrowserTab)
+    }
+
+    /// The host the address bar shows for `url`, which leaves out the scheme, the path and a leading "www.".
+    private func expectedAddressBarHost(for url: String) -> String {
+        let target = url.contains("://") ? url : "http://\(url)"
+        let host = URL(string: target)?.host ?? url
+        return host.hasPrefix("www.") ? String(host.dropFirst(4)) : host
     }
 
     /// Launches the app straight into the Reading List panel through a deeplink, which skips the menu taps,
