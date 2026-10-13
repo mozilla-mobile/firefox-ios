@@ -35,7 +35,6 @@ final class LocationView: UIView,
     private var searchTerm: String?
     private var shouldDisplaySearchTerm = false
     private var onTapLockIcon: (@MainActor (UIButton) -> Void)?
-    private var onLongPress: (@MainActor () -> Void)?
     private weak var delegate: LocationViewDelegate?
     private var theme: any Theme = LightTheme()
     private var isUnifiedSearchEnabled = false
@@ -60,7 +59,6 @@ final class LocationView: UIView,
     }
 
     private var tapGestureRecognizer: UITapGestureRecognizer?
-    private var longPressGestureRecognizer: UILongPressGestureRecognizer?
 
     /// Determines if the URL text field's content is wider than the visible area, accounting for a safe offset.
     /// An additional offset (default is 0) used when reader mode is available,
@@ -149,7 +147,6 @@ final class LocationView: UIView,
         super.init(frame: .zero)
         setupLayout()
         setupGradientLayer()
-        addLongPressGestureRecognizer()
     }
 
     required init?(coder: NSCoder) {
@@ -160,6 +157,7 @@ final class LocationView: UIView,
         super.becomeFirstResponder()
         // Skip if urlTextField is already first responder to avoid triggering duplicate delegate callbacks
         guard !urlTextField.isFirstResponder else { return true }
+        urlTextField.isUserInteractionEnabled = true
         return urlTextField.becomeFirstResponder()
     }
 
@@ -221,14 +219,8 @@ final class LocationView: UIView,
         updateIconContainer(isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
         handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
-        handleGesture(
-            &longPressGestureRecognizer,
-            type: UILongPressGestureRecognizer.self,
-            action: #selector(handleLongPress)
-        )
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
-        onLongPress = config.onLongPress
 
         layoutContainerView(isEditing: config.isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
         applyTheme(theme: theme)
@@ -504,7 +496,7 @@ final class LocationView: UIView,
     }
 
     private func restoreLocationViewSize() {
-        urlTextField.isUserInteractionEnabled = true
+        urlTextField.isUserInteractionEnabled = isEditing
         isUserInteractionEnabled = true
         UIView.animate(
             withDuration: UX.identityResetAnimationDuration,
@@ -589,6 +581,7 @@ final class LocationView: UIView,
 
     private func configureURLPlaceholder(basedOn config: LocationViewConfiguration) {
         isEditing = config.isEditing
+        urlTextField.isUserInteractionEnabled = isEditing && !isAddressBarMinimized
         if !isEditing && config.url != nil {
             // allow proper centering of the urlTextField removing placeholder size.
             urlTextField.placeholder = nil
@@ -697,17 +690,12 @@ final class LocationView: UIView,
     }
 
     // MARK: - Gesture Recognizers
-    private func addLongPressGestureRecognizer() {
-        let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(LocationView.handleLongPress))
-        urlTextField.addGestureRecognizer(gestureRecognizer)
-    }
-
     private func handleGesture<T: UIGestureRecognizer>(
         _ gesture: inout T?,
         type: T.Type,
         action: Selector
     ) {
-        if isURLTextFieldCentered {
+        if !isEditing || isURLTextFieldCentered {
             if gesture == nil {
                 let newGesture = type.init(target: self, action: action)
                 addGestureRecognizer(newGesture)
@@ -723,13 +711,6 @@ final class LocationView: UIView,
     @objc
     private func didTapLockIcon() {
         onTapLockIcon?(lockIconButton)
-    }
-
-    @objc
-    private func handleLongPress(_ recognizer: UILongPressGestureRecognizer) {
-        if recognizer.state == .began {
-            onLongPress?()
-        }
     }
 
     // MARK: - MenuHelperURLBarInterface

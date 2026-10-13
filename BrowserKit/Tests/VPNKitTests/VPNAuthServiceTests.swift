@@ -285,7 +285,12 @@ final class VPNAuthServiceTests: XCTestCase {
     func test_authenticate_keepsStaleSession_whenEnrollmentFails() async throws {
         let tokenStore = MockVPNTokenStore(initial: expiredSession)
         let failingSession = MockURLSession(with: Data("boom".utf8), response: httpResponse(statusCode: 500))
-        let server = VPNAppAttestServer(with: .dev, urlSession: failingSession, tokenStore: tokenStore)
+        let server = VPNAppAttestServer(
+            with: .dev,
+            urlSession: failingSession,
+            tokenStore: tokenStore,
+            bundleIdentifier: "org.mozilla.ios.Test"
+        )
         let subject = try makeSubject(
             remoteServer: server,
             keyStore: MockAppAttestKeyIDStore(),   // no keyId, so refresh reports notEnrolled
@@ -327,7 +332,12 @@ final class VPNAuthServiceTests: XCTestCase {
     func test_authenticate_throws_whenEnrollmentFails() async throws {
         let tokenStore = MockVPNTokenStore()
         let failingSession = MockURLSession(with: Data("boom".utf8), response: httpResponse(statusCode: 500))
-        let server = VPNAppAttestServer(with: .dev, urlSession: failingSession, tokenStore: tokenStore)
+        let server = VPNAppAttestServer(
+            with: .dev,
+            urlSession: failingSession,
+            tokenStore: tokenStore,
+            bundleIdentifier: "org.mozilla.ios.Test"
+        )
         let subject = try makeSubject(remoteServer: server, refresher: server, tokenStore: tokenStore)
 
         do {
@@ -391,7 +401,12 @@ final class VPNAuthServiceTests: XCTestCase {
     private func enrollingServer(tokenStore: VPNTokenStore) -> VPNAppAttestServer {
         let json = #"{"challenge":"c","deviceSessionJwt":"new-dsj","expiresAt":32503680000000,"renewAfter":32503600000000}"#
         let urlSession = MockURLSession(with: Data(json.utf8), response: httpResponse(statusCode: 200))
-        return VPNAppAttestServer(with: .dev, urlSession: urlSession, tokenStore: tokenStore)
+        return VPNAppAttestServer(
+            with: .dev,
+            urlSession: urlSession,
+            tokenStore: tokenStore,
+            bundleIdentifier: "org.mozilla.ios.Test"
+        )
     }
 
     private func makeSubject(

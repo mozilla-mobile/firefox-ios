@@ -4,6 +4,24 @@
 
 import UIKit
 
+public enum ToolbarLongPressBehavior: Equatable {
+    case none
+    /// A custom action
+    case action((UIButton) -> Void)
+    /// A native UIMenu action
+    case menu(@MainActor () -> UIMenu?)
+
+    public static func == (lhs: ToolbarLongPressBehavior, rhs: ToolbarLongPressBehavior) -> Bool {
+        // Closures aren't Equatable, so compare behavior cases rather than their implementations.
+        switch (lhs, rhs) {
+        case (.none, .none), (.action, .action), (.menu, .menu):
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 public struct ToolbarElement: Equatable {
     /// Icon name of the toolbar element
     let iconName: String?
@@ -69,9 +87,8 @@ public struct ToolbarElement: Equatable {
     /// Action to be performed for custom accessibility action
     let a11yCustomAction: (() -> Void)?
 
-    /// Indicates whether the toolbar element has a long press action or not
-    /// this is only used to compare for equality as closures can't be compared
-    let hasLongPressAction: Bool
+    /// Defines how the toolbar element responds to a long press
+    let longPressBehavior: ToolbarLongPressBehavior
 
     /// Screenshot of the tab preceding the currently selected tab, used to render the stacked tab button.
     let previousTabScreenshot: UIImage?
@@ -81,9 +98,6 @@ public struct ToolbarElement: Equatable {
 
     /// Closure that is executed when the toolbar element is tapped
     let onSelected: ((UIButton) -> Void)?
-
-    /// Closure that is executed when the toolbar element is long pressed
-    let onLongPress: ((UIButton) -> Void)?
 
     /// Menu actions displayed when the toolbar element is pressed
     let menuElements: [ToolbarMenuElement]
@@ -111,11 +125,10 @@ public struct ToolbarElement: Equatable {
                 cacheId: String? = nil,
                 a11yCustomActionName: String? = nil,
                 a11yCustomAction: (() -> Void)? = nil,
-                hasLongPressAction: Bool,
+                longPressBehavior: ToolbarLongPressBehavior = .none,
                 previousTabScreenshot: UIImage? = nil,
                 nextTabScreenshot: UIImage? = nil,
                 onSelected: ((UIButton) -> Void)?,
-                onLongPress: ((UIButton) -> Void)? = nil,
                 menuElements: [ToolbarMenuElement] = []) {
         self.iconName = iconName
         self.title = title
@@ -135,14 +148,13 @@ public struct ToolbarElement: Equatable {
         self.previousTabScreenshot = previousTabScreenshot
         self.nextTabScreenshot = nextTabScreenshot
         self.onSelected = onSelected
-        self.onLongPress = onLongPress
+        self.longPressBehavior = longPressBehavior
         self.a11yLabel = a11yLabel
         self.a11yHint = a11yHint
         self.a11yId = a11yId
         self.cacheId = cacheId
         self.a11yCustomActionName = a11yCustomActionName
         self.a11yCustomAction = a11yCustomAction
-        self.hasLongPressAction = hasLongPressAction
         self.menuElements = menuElements
     }
 
@@ -164,7 +176,7 @@ public struct ToolbarElement: Equatable {
         lhs.contextualHintType == rhs.contextualHintType &&
         lhs.previousTabScreenshot == rhs.previousTabScreenshot &&
         lhs.nextTabScreenshot == rhs.nextTabScreenshot &&
-        lhs.hasLongPressAction == rhs.hasLongPressAction &&
+        lhs.longPressBehavior == rhs.longPressBehavior &&
         lhs.menuElements == rhs.menuElements &&
         lhs.a11yLabel == rhs.a11yLabel &&
         lhs.a11yHint == rhs.a11yHint &&

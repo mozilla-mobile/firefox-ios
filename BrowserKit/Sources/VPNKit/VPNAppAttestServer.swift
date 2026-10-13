@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import AppAttestKit
+import Common
 import Foundation
 import Shared
 
@@ -23,6 +24,7 @@ public struct VPNAppAttestServer: AppAttestRemoteServerProtocol, VPNSessionRefre
         let keyId: String
         let attestationObject: String
         let challenge: String
+        let bundleId: String
     }
 
     private struct AssertionRequest: Encodable {
@@ -34,15 +36,18 @@ public struct VPNAppAttestServer: AppAttestRemoteServerProtocol, VPNSessionRefre
     private let environmentType: VPNEnvironment
     private let urlSession: URLSessionProtocol
     private let tokenStore: VPNTokenStore
+    private let bundleIdentifier: String
 
     public init(
         with type: VPNEnvironment = .prod,
         urlSession: URLSessionProtocol = URLSession.shared,
-        tokenStore: VPNTokenStore
+        tokenStore: VPNTokenStore,
+        bundleIdentifier: String = AppInfo.bundleIdentifier
     ) {
         self.environmentType = type
         self.urlSession = urlSession
         self.tokenStore = tokenStore
+        self.bundleIdentifier = bundleIdentifier
     }
 
     /// Fetches a random, single-use server-generated challenge for the given `keyId`.
@@ -71,7 +76,8 @@ public struct VPNAppAttestServer: AppAttestRemoteServerProtocol, VPNSessionRefre
         let body = EnrollmentRequest(
             keyId: keyId,
             attestationObject: attestationObject.base64EncodedString(),
-            challenge: challenge
+            challenge: challenge,
+            bundleId: bundleIdentifier
         )
         let request = try Self.jsonRequest(url: endpoint, body: body)
         let (data, response) = try await urlSession.data(from: request)

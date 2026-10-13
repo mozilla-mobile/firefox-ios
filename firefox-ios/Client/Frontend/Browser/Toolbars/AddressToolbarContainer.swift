@@ -46,6 +46,8 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func addressToolbarDidBeginDragInteraction()
     @MainActor
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView)
+    @MainActor
+    func contextMenu(for actionType: ToolbarActionConfiguration.ActionType) -> UIMenu?
 }
 
 final class AddressToolbarContainer: UIView,
@@ -356,6 +358,9 @@ final class AddressToolbarContainer: UIView,
         let newModel = AddressToolbarContainerModel(state: toolbarState,
                                                     addressToolbarContainerLens: addressToolbarContainerLens,
                                                     profile: profile,
+                                                    longPressMenuProvider: { [weak self] actionType in
+                                                        self?.delegate?.contextMenu(for: actionType)
+                                                    },
                                                     windowUUID: windowUUID)
 
         shouldDisplayCompact = newModel.shouldDisplayCompact
@@ -641,6 +646,10 @@ final class AddressToolbarContainer: UIView,
     // MARK: - Autocompletable
     func setAutocompleteSuggestion(_ suggestion: String?) {
         toolbar.setAutocompleteSuggestion(suggestion)
+    }
+
+    func performAfterContextMenuDismissal(_ action: @escaping () -> Void) {
+        toolbar.performAfterContextMenuDismissal(action)
     }
 
     // MARK: - Overlay Mode

@@ -24,7 +24,7 @@ class SearchBarSetting: Setting {
          settingsDelegate: GeneralSettingsDelegate?) {
         self.viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
         self.settingsDelegate = settingsDelegate
-        let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
+        let theme = settings.currentTheme()
         super.init(
             title: NSAttributedString(
                 string: viewModel.title,

@@ -45,6 +45,13 @@ final class MainMenuScreen {
 		app.otherElements["PopoverDismissRegion"].firstMatch.tap()
 	}
 
+    /// Unlike dismissMenu(), never lands on a menu row: below iOS 26 the dismiss region's center
+    /// sits over the sheet.
+    func closeMenu() {
+        sel.CLOSE_BUTTON.element(in: app).waitAndTap()
+        assertMenuIsDismissed()
+    }
+
 	func assertMenuIsDismissed(timeout: TimeInterval = TIMEOUT) {
 		let settings = sel.SETTINGS_CELL.element(in: app)
 		BaseTestCase().mozWaitForElementToNotExist(settings, timeout: timeout)
@@ -81,6 +88,36 @@ final class MainMenuScreen {
         let history = sel.HISTORY_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(history)
         history.waitAndTap()
+    }
+
+    func assertReaderViewIsBelowPageZoom() {
+        assertMenuItem(sel.READER_VIEW, isBelow: sel.PAGE_ZOOM)
+    }
+
+    func assertSummarizePageIsBelowFindInPage(timeout: TimeInterval = TIMEOUT) {
+        assertMenuItem(sel.SUMMARIZE_PAGE, isBelow: sel.FIND_IN_PAGE, timeout: timeout)
+    }
+
+    private func assertMenuItem(_ item: Selector, isBelow reference: Selector, timeout: TimeInterval = TIMEOUT) {
+        let itemElement = item.element(in: app)
+        let referenceElement = reference.element(in: app)
+        BaseTestCase().waitForElementsToExist([referenceElement, itemElement], timeout: timeout)
+        XCTAssertGreaterThanOrEqual(
+            itemElement.frame.minY,
+            referenceElement.frame.maxY,
+            "\(item.description) should be displayed below \(reference.description)"
+        )
+    }
+
+    func assertReaderViewIs(on isOn: Bool, timeout: TimeInterval = TIMEOUT) {
+        let readerView = sel.READER_VIEW.element(in: app)
+        let status = isOn ? sel.READER_VIEW_STATUS_ON : sel.READER_VIEW_STATUS_OFF
+        BaseTestCase().mozWaitForElementToExist(readerView, timeout: timeout)
+        BaseTestCase().mozWaitForElementToExist(readerView.staticTexts[status.value], timeout: timeout)
+    }
+
+    func tapReaderView() {
+        sel.READER_VIEW.element(in: app).waitAndTap()
     }
 
     func assertTranslatePageItemDoesNotExist() {

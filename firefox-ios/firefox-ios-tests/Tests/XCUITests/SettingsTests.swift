@@ -255,6 +255,34 @@ class SettingsTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(summarizeContentMenuOption)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3135869
+    // Regression
+    func testSummarizePageMainMenuButton_hostedSummarizeExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
+        app.launch()
+        let mainMenuScreen = MainMenuScreen(app: app)
+        validateSummarizePageMainMenuButton(mainMenuScreen)
+
+        // Repeat in private browsing
+        navigator.nowAt(BrowserTab)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        BrowserScreen(app: app).assertPrivateModeMessageCardExists()
+        validateSummarizePageMainMenuButton(mainMenuScreen)
+    }
+
+    private func validateSummarizePageMainMenuButton(_ mainMenuScreen: MainMenuScreen) {
+        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenu)
+        // The item is added once the page has been checked for summarization
+        mainMenuScreen.assertSummarizePageIsBelowFindInPage(timeout: TIMEOUT_LONG)
+        mainMenuScreen.closeMenu()
+        navigator.nowAt(BrowserTab)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2951992
     // Regression
     func testAutofillPasswordSettingsOptionSubtitles() {
