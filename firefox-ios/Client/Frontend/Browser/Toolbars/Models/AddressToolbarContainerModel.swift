@@ -220,7 +220,7 @@ final class AddressToolbarContainerModel: Equatable {
                                                    isShowingTopTabs: state.isShowingTopTabs,
                                                    longPressMenuProvider: longPressMenuProvider,
                                                    windowUUID: windowUUID)
-        self.browserActions = Self.mapActions(state.addressToolbar.browserActions,
+        self.browserActions = Self.mapActions(addressToolbarContainerLens.browserActions,
                                               isShowingTopTabs: state.isShowingTopTabs,
                                               longPressMenuProvider: longPressMenuProvider,
                                               windowUUID: windowUUID)
