@@ -363,6 +363,89 @@ final class VPNAuthServiceTests: XCTestCase {
         XCTAssertNil(keyStore.loadKeyID())
     }
 
+    // MARK: - Telemetry
+
+    func test_authenticate_recordsAttestationSuccess_whenEnrolling() async throws {
+        let tokenStore = MockVPNTokenStore()
+        let telemetry = MockVPNTelemetry()
+        let subject = try makeSubject(
+            remoteServer: enrollingServer(tokenStore: tokenStore),
+            refresher: MockVPNSessionRefresher(tokenStore: tokenStore),
+            tokenStore: tokenStore,
+            telemetry: telemetry
+        )
+
+        _ = try await subject.authenticate()
+
+        XCTAssertEqual(telemetry.recordedEvents, [.attestationSucceeded])
+    }
+
+    func test_authenticate_recordsAttestationFailure_withTheServerReason() async throws {
+        let tokenStore = MockVPNTokenStore()
+        let telemetry = MockVPNTelemetry()
+        // A real rejection body, so this covers the reason being forwarded rather than the fallback.
+        let rejection = #"{"error":"Bad Request: request rejected","reason":"attestation-invalid"}"#
+        let failingSession = MockURLSession(with: Data(rejection.utf8), response: httpResponse(statusCode: 400))
+        let server = VPNAppAttestServer(
+            with: .dev,
+            urlSession: failingSession,
+            tokenStore: tokenStore,
+            bundleIdentifier: "org.mozilla.ios.Test"
+        )
+        let subject = try makeSubject(
+            remoteServer: server,
+            refresher: server,
+            tokenStore: tokenStore,
+            telemetry: telemetry
+        )
+
+        _ = try? await subject.authenticate()
+
+        XCTAssertEqual(
+            telemetry.recordedEvents,
+            [.attestationFailed(reason: VPNAttestationFailureReason(rawValue: "attestation_invalid"))]
+        )
+    }
+
+    /// Refreshing an existing session is not an attestation, so it must not report one.
+    func test_authenticate_recordsNothing_whenRefreshing() async throws {
+        let tokenStore = MockVPNTokenStore(initial: expiredSession)
+        let telemetry = MockVPNTelemetry()
+        let subject = try makeSubject(
+            remoteServer: MockAppAttestRemoteServer(),
+            keyStore: MockAppAttestKeyIDStore(initial: AppAttestTestData.keyID),
+            refresher: MockVPNSessionRefresher(tokenStore: tokenStore, sessionToReturn: refreshedSession),
+            tokenStore: tokenStore,
+            telemetry: telemetry
+        )
+
+        _ = try await subject.authenticate()
+
+        XCTAssertTrue(telemetry.recordedEvents.isEmpty)
+    }
+
+    func test_authenticate_recordsNothing_whenAttestationIsCancelled() async throws {
+        let cancellations: [Error] = [CancellationError(), URLError(.cancelled)]
+
+        for cancellation in cancellations {
+            let tokenStore = MockVPNTokenStore()
+            let telemetry = MockVPNTelemetry()
+            let remoteServer = MockAppAttestRemoteServer()
+            remoteServer.sendAttestationError = cancellation
+            let subject = try makeSubject(
+                remoteServer: remoteServer,
+                refresher: MockVPNSessionRefresher(tokenStore: tokenStore),
+                tokenStore: tokenStore,
+                telemetry: telemetry
+            )
+
+            _ = try? await subject.authenticate()
+
+            XCTAssertEqual(remoteServer.sendAttestationCallCount, 1)
+            XCTAssertTrue(telemetry.recordedEvents.isEmpty, "\(cancellation)")
+        }
+    }
+
     // MARK: - Fixtures
 
     /// Valid and well inside its renewal window: no network expected.
@@ -413,7 +496,8 @@ final class VPNAuthServiceTests: XCTestCase {
         keyStore: AppAttestKeyIDStore = MockAppAttestKeyIDStore(),
         refresher: VPNSessionRefreshing,
         tokenStore: VPNTokenStore,
-        appAttestService: AppAttestServiceProtocol = MockAppAttestService(isSupported: true)
+        appAttestService: AppAttestServiceProtocol = MockAppAttestService(isSupported: true),
+        telemetry: VPNTelemetry? = nil
     ) throws -> VPNAuthService {
         let client = try AppAttestClient(
             appAttestService: appAttestService,
@@ -423,7 +507,8 @@ final class VPNAuthServiceTests: XCTestCase {
         return VPNAuthService(
             appAttestClient: client,
             sessionRefresher: refresher,
-            tokenStore: tokenStore
+            tokenStore: tokenStore,
+            telemetry: telemetry
         )
     }
 

@@ -25,15 +25,18 @@ struct VPNAuthService: VPNAuthenticating {
     private let appAttestClient: AppAttestClient
     private let sessionRefresher: VPNSessionRefreshing
     private let tokenStore: VPNTokenStore
+    private let telemetry: VPNTelemetry?
 
     init(
         appAttestClient: AppAttestClient,
         sessionRefresher: VPNSessionRefreshing,
-        tokenStore: VPNTokenStore
+        tokenStore: VPNTokenStore,
+        telemetry: VPNTelemetry? = nil
     ) {
         self.appAttestClient = appAttestClient
         self.sessionRefresher = sessionRefresher
         self.tokenStore = tokenStore
+        self.telemetry = telemetry
     }
 
     func authenticate() async throws -> String {
@@ -90,13 +93,24 @@ struct VPNAuthService: VPNAuthenticating {
     /// Clears the key first because `performAttestation()` returns early if we have any stored `keyId`, which
     /// can outlive its Secure Enclave key. The session survives until enrollment replaces it.
     private func enroll() async throws -> String {
-        let staleSession = tokenStore.load()
-        try appAttestClient.resetKey()
-        _ = try await appAttestClient.performAttestation()
+        do {
+            let staleSession = tokenStore.load()
+            try appAttestClient.resetKey()
+            _ = try await appAttestClient.performAttestation()
 
-        guard let session = tokenStore.load(), session != staleSession else {
-            throw VPNAuthError.sessionNotPersisted
+            guard let session = tokenStore.load(), session != staleSession else {
+                throw VPNAuthError.sessionNotPersisted
+            }
+
+            telemetry?.record(.attestationSucceeded)
+            return session.deviceSessionJwt
+        } catch let error as CancellationError {
+            throw error
+        } catch let error as URLError where error.code == .cancelled {
+            throw error
+        } catch {
+            telemetry?.record(.attestationFailed(reason: VPNAttestationFailureReason(error)))
+            throw error
         }
-        return session.deviceSessionJwt
     }
 }
