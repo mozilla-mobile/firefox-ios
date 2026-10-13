@@ -74,7 +74,6 @@ extension QuickAnswersViewConfiguration {
         ),
         errors: .mock,
         closeAccessibilityLabel: "Close",
-        followUpAccessibilityLabel: "Follow up",
         appName: "Firefox"
     )
 }

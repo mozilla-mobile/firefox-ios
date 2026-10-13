@@ -10,7 +10,6 @@ public struct QuickAnswersViewConfiguration: Sendable {
     public let privacyBanner: PrivacyBannerStrings
     public let errors: ErrorStrings
     public let closeAccessibilityLabel: String
-    public let followUpAccessibilityLabel: String
     public let appName: String
 
     public struct OptInStrings: Sendable {
@@ -106,7 +105,6 @@ public struct QuickAnswersViewConfiguration: Sendable {
         privacyBanner: PrivacyBannerStrings,
         errors: ErrorStrings,
         closeAccessibilityLabel: String,
-        followUpAccessibilityLabel: String,
         appName: String
     ) {
         self.optIn = optIn
@@ -114,7 +112,6 @@ public struct QuickAnswersViewConfiguration: Sendable {
         self.privacyBanner = privacyBanner
         self.errors = errors
         self.closeAccessibilityLabel = closeAccessibilityLabel
-        self.followUpAccessibilityLabel = followUpAccessibilityLabel
         self.appName = appName
     }
 }

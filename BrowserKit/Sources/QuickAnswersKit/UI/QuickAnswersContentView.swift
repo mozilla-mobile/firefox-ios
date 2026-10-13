@@ -293,7 +293,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
     }
 
     func resetForFollowUp() {
-        isShowingResult = false
+        hasDisplayedResults = false
         isTranscriptVisible = true
         if let theme {
             transcriptLabel.foregroundColor = theme.colors.textPrimary

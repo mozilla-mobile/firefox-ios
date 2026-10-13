@@ -8,7 +8,7 @@ import Common
 import Shared
 import UIKit
 
-final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHandler {
+final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHandler, FeatureFlaggable {
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let prefs: Prefs
     private let windowUUID: WindowUUID
@@ -48,6 +48,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             themeManager: themeManager,
             telemetry: DefaultQuickAnswersTelemetry(),
             configFetcher: RemoteQuickAnswersConfigFetcher(model: resolvedModel()),
+            isFollowUpEnabled: featureFlagsProvider.isEnabled(.quickAnswersFollowUp),
             learnMoreURL: Self.learnMoreURL,
             stringsConfiguration: makeStringsConfiguration()
         )
@@ -94,7 +95,6 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
                 ok: .QuickAnswers.Errors.OK
             ),
             closeAccessibilityLabel: .QuickAnswers.AccessibilityLabels.Close,
-            followUpAccessibilityLabel: .QuickAnswers.AccessibilityLabels.FollowUp,
             appName: appName
         )
     }

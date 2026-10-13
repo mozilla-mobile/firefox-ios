@@ -9,6 +9,17 @@ public protocol QuickAnswersConfigFetcher: Sendable {
     func fetch() async throws -> QuickAnswersConfig
 }
 
+extension QuickAnswersConfigFetcher {
+    /// Whether the provider accepts `assistant` messages. Exa's answer endpoint doesn't: it answers the
+    /// last user message, so for it the conversation history is inlined into the question instead.
+    var supportsAssistantRole: Bool {
+        return switch model {
+        case .exa: false
+        case .liner: true
+        }
+    }
+}
+
 public struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
     private static let exaInstructions = """
     Answer in 1 sentence. Remove any superscript numbers from the response like [1], [2] and other citations numbers.
