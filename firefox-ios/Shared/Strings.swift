@@ -311,21 +311,21 @@ extension String {
         }
 
         public struct ImportSuccess {
-            public static let GotItButton = MZLocalizedString(
-                key: "BrowserDataTransfer.ImportSuccess.GotItButton.v160",
-                tableName: "BrowserDataTransfer",
-                value: "Got It",
-                comment: "Button that dismisses the alert shown after Firefox finishes importing data from another browser.")
-            public static let Message = MZLocalizedString(
-                key: "BrowserDataTransfer.ImportSuccess.Message.v160",
-                tableName: "BrowserDataTransfer",
-                value: "Your imported data is ready to use in %@.",
-                comment: "Message of the alert shown after Firefox finishes importing data from another browser. %@ is the app name (e.g. Firefox).")
             public static let Title = MZLocalizedString(
                 key: "BrowserDataTransfer.ImportSuccess.Title.v160",
                 tableName: "BrowserDataTransfer",
                 value: "%@ Import Complete",
                 comment: "Title of the alert shown after Firefox finishes importing data from another browser. %@ is the name of the other browser, for example Safari.")
+            public static let Message = MZLocalizedString(
+                key: "BrowserDataTransfer.ImportSuccess.Message.v160",
+                tableName: "BrowserDataTransfer",
+                value: "Your imported data is ready to use in %@.",
+                comment: "Message of the alert shown after Firefox finishes importing data from another browser. %@ is the app name (e.g. Firefox).")
+            public static let GotItButton = MZLocalizedString(
+                key: "BrowserDataTransfer.ImportSuccess.GotItButton.v160",
+                tableName: "BrowserDataTransfer",
+                value: "Got It",
+                comment: "Button that dismisses the alert shown after Firefox finishes importing data from another browser.")      
         }
 
         public struct Settings {
