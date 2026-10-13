@@ -171,13 +171,110 @@ struct DefaultResultsServiceTests {
         }
     }
 
+    @Test
+    func test_fetchResults_followUpEnabled_sendsMessagesFromConversation() async throws {
+        let client = MockLiteLLMClient()
+        let conversation = MockQuickAnswersConversation()
+        let historyMessages = [
+            QuickAnswersMessage(role: .user, content: "What is the weather?"),
+            QuickAnswersMessage(role: .assistant, content: "Sunny"),
+            QuickAnswersMessage(role: .user, content: "And tomorrow?")
+        ]
+        conversation.messagesToReturn = historyMessages
+        let subject = createSubject(
+            client: client,
+            config: QuickAnswersConfig(model: .exa, instructions: "Be concise"),
+            isFollowUpEnabled: true,
+            conversation: conversation
+        )
+
+        _ = try await subject.fetchResults(for: "And tomorrow?")
+
+        let sentMessages = client.lastMessages.compactMap { $0 as? QuickAnswersMessage }
+        #expect(conversation.applyHistoryCallCount == 1)
+        #expect(conversation.lastAppliedQuestion == "And tomorrow?")
+        #expect(conversation.lastAppliedMessages?.map(\.role) == [.system])
+        #expect(conversation.lastAppliedMessages?.map(\.content) == ["Be concise"])
+        #expect(sentMessages.map(\.role) == historyMessages.map(\.role))
+        #expect(sentMessages.map(\.content) == historyMessages.map(\.content))
+    }
+
+    @Test(arguments: [(QuickAnswersModel.liner, true), (QuickAnswersModel.exa, false)])
+    func test_fetchResults_followUpEnabled_passesModelAssistantRoleSupport(
+        model: QuickAnswersModel,
+        supportsAssistantRole: Bool
+    ) async throws {
+        let conversation = MockQuickAnswersConversation()
+        let subject = createSubject(
+            client: MockLiteLLMClient(),
+            model: model,
+            isFollowUpEnabled: true,
+            conversation: conversation
+        )
+
+        _ = try await subject.fetchResults(for: "Query")
+
+        #expect(conversation.lastSupportsAssistantRole == supportsAssistantRole)
+    }
+
+    @Test
+    func test_fetchResults_followUpEnabled_appendsTurnToConversation() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWith = ["Sunny"]
+        let conversation = MockQuickAnswersConversation()
+        let subject = createSubject(client: client, isFollowUpEnabled: true, conversation: conversation)
+
+        _ = try await subject.fetchResults(for: "What is the weather?")
+
+        #expect(conversation.appendCallCount == 1)
+        #expect(conversation.lastAppendedQuestion == "What is the weather?")
+        #expect(conversation.lastAppendedAnswer == "Sunny")
+    }
+
+    @Test
+    func test_fetchResults_followUpEnabledAndRequestFails_doesNotAppendTurn() async throws {
+        let client = MockLiteLLMClient()
+        client.respondWithError = LiteLLMClientError.noContent
+        let conversation = MockQuickAnswersConversation()
+        let subject = createSubject(client: client, isFollowUpEnabled: true, conversation: conversation)
+
+        await #expect(throws: ResultsServiceError.noMessage) {
+            try await subject.fetchResults(for: "Query")
+        }
+        #expect(conversation.appendCallCount == 0)
+    }
+
+    @Test
+    func test_fetchResults_followUpDisabled_doesNotUseConversation() async throws {
+        let client = MockLiteLLMClient()
+        let conversation = MockQuickAnswersConversation()
+        let subject = createSubject(client: client, isFollowUpEnabled: false, conversation: conversation)
+
+        _ = try await subject.fetchResults(for: "Query")
+
+        let sentMessages = client.lastMessages.compactMap { $0 as? QuickAnswersMessage }
+        #expect(conversation.applyHistoryCallCount == 0)
+        #expect(conversation.appendCallCount == 0)
+        #expect(sentMessages.map(\.role) == [.user])
+        #expect(sentMessages.map(\.content) == ["Query"])
+    }
+
     // MARK: - Helper
     private func createSubject(
         client: LiteLLMClientProtocol,
-        config: QuickAnswersConfig = QuickAnswersConfig()
+        config: QuickAnswersConfig = QuickAnswersConfig(),
+        model: QuickAnswersModel = .exa,
+        isFollowUpEnabled: Bool = false,
+        conversation: QuickAnswersConversation = MockQuickAnswersConversation()
     ) -> DefaultResultsService {
         let configFetcher = MockQuickAnswersConfigFetcher(configToReturn: config)
-        let subject = DefaultResultsService(client: client, configFetcher: configFetcher)
+        configFetcher.model = model
+        configFetcher.isFollowUpEnabled = isFollowUpEnabled
+        let subject = DefaultResultsService(
+            client: client,
+            configFetcher: configFetcher,
+            conversation: conversation
+        )
         testHelper.trackForMemoryLeaks(subject)
         return subject
     }

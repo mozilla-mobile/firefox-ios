@@ -62,6 +62,7 @@ final class RemoteQuickAnswersConfigFetcherTests: XCTestCase {
     ) -> RemoteQuickAnswersConfigFetcher {
         return RemoteQuickAnswersConfigFetcher(
             model: model,
+            isFollowUpEnabled: false,
             remoteConfig: ASAIRemoteConfig(rsClient: client),
             defaultFetcher: MockQuickAnswersConfigFetcher(model: model, instructions: defaultInstructions)
         )
@@ -78,6 +79,7 @@ final class RemoteQuickAnswersConfigFetcherTests: XCTestCase {
 private struct MockQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
     let model: QuickAnswersKit.QuickAnswersModel
     let instructions: String
+    let isFollowUpEnabled = false
 
     func fetch() async throws -> QuickAnswersConfig {
         return QuickAnswersConfig(model: model, instructions: instructions)

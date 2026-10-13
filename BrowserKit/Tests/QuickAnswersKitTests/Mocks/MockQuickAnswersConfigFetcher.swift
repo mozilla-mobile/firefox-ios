@@ -6,6 +6,7 @@
 
 final class MockQuickAnswersConfigFetcher: QuickAnswersConfigFetcher, @unchecked Sendable {
     var model: QuickAnswersModel = .exa
+    var isFollowUpEnabled = false
     var configToReturn: QuickAnswersConfig
     var errorToThrow: Error?
     var fetchCallCount = 0

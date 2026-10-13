@@ -9,13 +9,16 @@ import QuickAnswersKit
 /// falling back to `defaultFetcher` when Remote Settings has no instructions for the model.
 struct RemoteQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
     let model: QuickAnswersKit.QuickAnswersModel
+    let isFollowUpEnabled: Bool
     private let remoteConfig: ASAIRemoteConfig
     private let defaultFetcher: QuickAnswersConfigFetcher
 
     init(model: QuickAnswersKit.QuickAnswersModel,
+         isFollowUpEnabled: Bool,
          remoteConfig: ASAIRemoteConfig = ASAIRemoteConfig(),
          defaultFetcher: QuickAnswersConfigFetcher? = nil) {
         self.model = model
+        self.isFollowUpEnabled = isFollowUpEnabled
         self.remoteConfig = remoteConfig
         self.defaultFetcher = defaultFetcher ?? DefaultQuickAnswersConfigFetcher(model: model)
     }

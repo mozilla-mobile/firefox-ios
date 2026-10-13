@@ -6,7 +6,20 @@
 public protocol QuickAnswersConfigFetcher: Sendable {
     /// The provider model that backs the request, used to surface the model name in the UI.
     var model: QuickAnswersModel { get }
+    /// Whether follow up questions are enabled, so past exchanges are sent along with a new question.
+    var isFollowUpEnabled: Bool { get }
     func fetch() async throws -> QuickAnswersConfig
+}
+
+extension QuickAnswersConfigFetcher {
+    /// Whether the provider accepts `assistant` messages. Exa's answer endpoint doesn't: it answers the
+    /// last user message only.
+    var supportsAssistantRole: Bool {
+        return switch model {
+        case .exa: false
+        case .liner: true
+        }
+    }
 }
 
 public struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
@@ -15,9 +28,11 @@ public struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
     """.replacingOccurrences(of: "\n", with: " ")
 
     public let model: QuickAnswersModel
+    public let isFollowUpEnabled: Bool
 
-    public init(model: QuickAnswersModel) {
+    public init(model: QuickAnswersModel, isFollowUpEnabled: Bool = false) {
         self.model = model
+        self.isFollowUpEnabled = isFollowUpEnabled
     }
 
     public func fetch() async throws -> QuickAnswersConfig {

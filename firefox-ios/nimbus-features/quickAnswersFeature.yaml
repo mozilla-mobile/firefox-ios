@@ -14,15 +14,22 @@ features:
           Which provider model backs Quick Answers.
         type: QuickAnswersModel
         default: exa
+      follow-up-enabled:
+        description: >
+          Enables asking follow up questions after an answer is shown.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
           enabled: false
           model: exa
+          follow-up-enabled: false
       - channel: developer
         value:
           enabled: false
           model: exa
+          follow-up-enabled: false
 
 enums:
   QuickAnswersModel:
