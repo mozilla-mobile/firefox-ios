@@ -348,8 +348,11 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     // MARK: - Create web view
 
     @MainActor
-    func testWebViewCreateWebView_withMailtoScheme_showsMailAlertWithoutOpeningTab() {
-        let subject = createPresentSpySubject()
+    func testWebViewCreateWebView_withMailtoScheme_showsMailAlertWithoutOpeningTab() throws {
+        let subject = MockBrowserViewController(profile: profile,
+                                                tabManager: tabManager,
+                                                userInitiatedQueue: MockDispatchQueue())
+        trackForMemoryLeaks(subject)
         let tab = createTab()
         tabManager.tabs = [tab]
         let url = URL(string: "mailto:test@example.com")!
@@ -361,12 +364,18 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
         XCTAssertNil(newWebView)
         XCTAssertTrue(tabManager.lastSelectedTabs.isEmpty)
-        XCTAssertEqual(subject.presentedAlertMessage, .ExternalMailLinkConfirmation)
+        let alert = try XCTUnwrap(subject.presentedViewController as? UIAlertController)
+        XCTAssertEqual(alert.message, .ExternalMailLinkConfirmation)
+        // The alert's action captures the BVC, so drop it to avoid a leak since the mock never dismisses it
+        subject.viewControllerToPresent = nil
     }
 
     @MainActor
-    func testWebViewCreateWebView_withSmsScheme_showsSmsAlertWithoutOpeningTab() {
-        let subject = createPresentSpySubject()
+    func testWebViewCreateWebView_withSmsScheme_showsSmsAlertWithoutOpeningTab() throws {
+        let subject = MockBrowserViewController(profile: profile,
+                                                tabManager: tabManager,
+                                                userInitiatedQueue: MockDispatchQueue())
+        trackForMemoryLeaks(subject)
         let tab = createTab()
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
@@ -379,7 +388,8 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
         XCTAssertNil(newWebView)
         XCTAssertTrue(tabManager.lastSelectedTabs.isEmpty)
-        XCTAssertEqual(subject.presentedAlertMessage, .ExternalSmsLinkConfirmation)
+        let alert = try XCTUnwrap(subject.presentedViewController as? UIAlertController)
+        XCTAssertEqual(alert.message, .ExternalSmsLinkConfirmation)
     }
 
     // MARK: - Authentication
@@ -442,15 +452,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
                                             tabManager: tabManager,
                                             gleanWrapper: gleanWrapper,
                                             userInitiatedQueue: MockDispatchQueue())
-        trackForMemoryLeaks(subject)
-        return subject
-    }
-
-    @MainActor
-    private func createPresentSpySubject() -> PresentSpyBrowserViewController {
-        let subject = PresentSpyBrowserViewController(profile: profile,
-                                                      tabManager: tabManager,
-                                                      userInitiatedQueue: MockDispatchQueue())
         trackForMemoryLeaks(subject)
         return subject
     }
@@ -633,15 +634,5 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         subject.webView(tab.webView!, didFinish: nil)
 
         XCTAssertTrue(subject.googleLensSearches.isEmpty)
-    }
-}
-
-private final class PresentSpyBrowserViewController: BrowserViewController {
-    var presentedAlertMessage: String?
-
-    override func present(_ viewControllerToPresent: UIViewController,
-                          animated flag: Bool,
-                          completion: (() -> Void)? = nil) {
-        presentedAlertMessage = (viewControllerToPresent as? UIAlertController)?.message
     }
 }
