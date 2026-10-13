@@ -291,21 +291,23 @@ extension String {
         }
 
         public struct ImportFailure {
-            public static let DismissButton = MZLocalizedString(
-                key: "BrowserDataTransfer.ImportFailure.DismissButton.v160",
+             public static let Title = MZLocalizedString(
+                key: "BrowserDataTransfer.ImportFailure.Title.v160",
                 tableName: "BrowserDataTransfer",
-                value: "Dismiss",
-                comment: "Button that dismisses the alert shown when Firefox could not finish importing data from another browser.")
+                value: "Couldn’t Import from %@",
+                comment: "Title of the alert shown when Firefox could not finish importing data from another browser. %@ is the name of the other browser, for example Safari. Data imported before the error is kept.")
             public static let Message = MZLocalizedString(
                 key: "BrowserDataTransfer.ImportFailure.Message.v160",
                 tableName: "BrowserDataTransfer",
                 value: "Try again later.",
                 comment: "Message of the alert shown when Firefox could not finish importing data from another browser.")
-            public static let Title = MZLocalizedString(
-                key: "BrowserDataTransfer.ImportFailure.Title.v160",
+            public static let DismissButton = MZLocalizedString(
+                key: "BrowserDataTransfer.ImportFailure.DismissButton.v160",
                 tableName: "BrowserDataTransfer",
-                value: "Couldn’t Import from %@",
-                comment: "Title of the alert shown when Firefox could not finish importing data from another browser. %@ is the name of the other browser, for example Safari. Data imported before the error is kept.")
+                value: "Dismiss",
+                comment: "Button that dismisses the alert shown when Firefox could not finish importing data from another browser.")
+            
+           
         }
 
         public struct ImportSuccess {
