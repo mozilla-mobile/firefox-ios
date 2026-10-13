@@ -51,6 +51,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
                 model: resolvedModel(),
                 isFollowUpEnabled: featureFlagsProvider.isEnabled(.quickAnswersFollowUp)
             ),
+            isFollowUpEnabled: featureFlagsProvider.isEnabled(.quickAnswersFollowUp),
             learnMoreURL: Self.learnMoreURL,
             stringsConfiguration: makeStringsConfiguration()
         )

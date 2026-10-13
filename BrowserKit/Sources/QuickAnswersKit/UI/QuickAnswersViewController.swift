@@ -13,6 +13,19 @@ public final class QuickAnswersViewController: UIViewController,
     private struct UX {
         static let titleFadeDuration: TimeInterval = 0.1
         static let presentationNavigationBarOffset: CGFloat = -20.0
+        static let followUpButtonSize: CGFloat = 62.0
+        static let followUpButtonImagePadding: CGFloat = 8.0
+        static let followUpButtonContentInsets = NSDirectionalEdgeInsets(
+            top: 0.0,
+            leading: 19.0,
+            bottom: 0.0,
+            trailing: 19.0
+        )
+        static let followUpTitleRevealDelay: TimeInterval = 0.35
+        static let followUpTitleRevealDuration: TimeInterval = 0.5
+        static let followUpTitleRevealDamping: CGFloat = 0.8
+        static let followUpTitleVisibleDuration: TimeInterval = 1.0
+        static let followUpFadeOutDuration: TimeInterval = 0.3
     }
 
     // MARK: - Properties
@@ -34,6 +47,15 @@ public final class QuickAnswersViewController: UIViewController,
         $0.adjustsFontForContentSizeCategory = true
         $0.alpha = 0.0
     }
+    private lazy var followUpButton: QuickAnswersEntryPointButton = .build(nil) { [weak self] in
+        QuickAnswersEntryPointButton {
+            self?.startFollowUp()
+        }
+    }
+    /// Keeps the follow-up button collapsed to its icon while the title is hidden.
+    private lazy var followUpButtonCollapsedWidth = followUpButton.widthAnchor.constraint(
+        equalToConstant: UX.followUpButtonSize
+    )
     private let contentView: QuickAnswersContentView = .build()
     private let transitionAnimator: SourceRevealTransitionAnimator?
 
@@ -66,13 +88,19 @@ public final class QuickAnswersViewController: UIViewController,
         themeManager: any ThemeManager,
         telemetry: QuickAnswersTelemetry,
         configFetcher: QuickAnswersConfigFetcher,
+        isFollowUpEnabled: Bool,
         learnMoreURL: URL?,
         stringsConfiguration: QuickAnswersViewConfiguration,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
     ) {
         self.init(
             navigationHandler: navigationHandler,
-            viewModel: QuickAnswersViewModel(prefs: prefs, telemetry: telemetry, configFetcher: configFetcher),
+            viewModel: QuickAnswersViewModel(
+                prefs: prefs,
+                telemetry: telemetry,
+                configFetcher: configFetcher,
+                isFollowUpEnabled: isFollowUpEnabled
+            ),
             transitionType: transitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -156,6 +184,35 @@ public final class QuickAnswersViewController: UIViewController,
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+        if viewModel.isFollowUpEnabled {
+            setupFollowUpToolbar()
+        }
+    }
+
+    private func setupFollowUpToolbar() {
+        // TODO: localize the follow-up title.
+        let title = "Ask a follow-up"
+        followUpButton.accessibilityLabel = title
+        followUpButton.configuration?.title = title
+        followUpButton.configuration?.imagePadding = UX.followUpButtonImagePadding
+        followUpButton.configuration?.contentInsets = UX.followUpButtonContentInsets
+        followUpButton.contentHorizontalAlignment = .leading
+        followUpButton.clipsToBounds = true
+        followUpButton.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer {
+            var attributes = $0
+            attributes.font = FXFontStyles.Bold.body.scaledFont()
+            return attributes
+        }
+        NSLayoutConstraint.activate([
+            followUpButtonCollapsedWidth,
+            followUpButton.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.followUpButtonSize),
+            followUpButton.heightAnchor.constraint(equalToConstant: UX.followUpButtonSize),
+        ])
+        let followUpItem = UIBarButtonItem(customView: followUpButton)
+        if #available(iOS 26, *) {
+            followUpItem.hidesSharedBackground = true
+        }
+        toolbarItems = [.flexibleSpace(), followUpItem, .flexibleSpace()]
     }
 
     private func registerCallbacks() {
@@ -181,6 +238,7 @@ public final class QuickAnswersViewController: UIViewController,
                 } else {
                     self?.triggerHaptic()
                     self?.backgroundEffectView.showResult()
+                    self?.showFollowUpButton()
                     self?.contentView.configureResult(
                         result.resultText,
                         modelName: self?.viewModel.modelDisplayName ?? "",
@@ -249,6 +307,49 @@ public final class QuickAnswersViewController: UIViewController,
         navigationController?.navigationBar.transform = .identity
     }
 
+    private func showFollowUpButton() {
+        guard viewModel.isFollowUpEnabled else { return }
+        navigationController?.setToolbarHidden(false, animated: true)
+        guard followUpButton.configuration?.title != nil else { return }
+        animateFollowUpTitle(isVisible: true, delay: UX.followUpTitleRevealDelay) { [weak self] in
+            self?.animateFollowUpTitle(isVisible: false, delay: UX.followUpTitleVisibleDuration) {
+                self?.followUpButton.configuration?.title = nil
+            }
+        }
+    }
+
+    private func animateFollowUpTitle(isVisible: Bool, delay: TimeInterval, completion: @escaping () -> Void) {
+        UIView.animate(
+            withDuration: UX.followUpTitleRevealDuration,
+            delay: delay,
+            usingSpringWithDamping: UX.followUpTitleRevealDamping,
+            initialSpringVelocity: 0.0
+        ) { [self] in
+            followUpButtonCollapsedWidth.isActive = !isVisible
+            navigationController?.toolbar.layoutIfNeeded()
+        } completion: { _ in
+            completion()
+        }
+    }
+
+    private func startFollowUp() {
+        navigationController?.setToolbarHidden(true, animated: true)
+        backgroundEffectView.hideResult(duration: UX.followUpFadeOutDuration)
+        UIView.animate(withDuration: UX.followUpFadeOutDuration, delay: 0.0, options: .curveEaseIn) { [self] in
+            titleLabel.alpha = 0.0
+        }
+        contentView.hideForFollowUp(duration: UX.followUpFadeOutDuration) { [weak self] in
+            self?.restartFlow()
+        }
+    }
+
+    private func restartFlow() {
+        titleLabel.text = nil
+        contentView.resetForFollowUp()
+        followUpButton.configuration?.title = nil
+        viewModel.startFollowUp()
+    }
+
     private func dismiss(with url: URL?) {
         triggerHaptic()
         viewModel.dismiss()
@@ -272,6 +373,8 @@ public final class QuickAnswersViewController: UIViewController,
         view.backgroundColor = theme.colors.layer1
         closeButton.tintColor = theme.colors.iconPrimary
         titleLabel.textColor = theme.colors.textPrimary
+        followUpButton.configure(theme: theme, shouldStartGlowing: false)
+        followUpButton.configuration?.baseForegroundColor = theme.colors.textPrimary
         contentView.applyTheme(theme: theme)
         backgroundEffectView.applyTheme(theme: theme)
     }

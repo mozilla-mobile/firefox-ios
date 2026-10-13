@@ -22,6 +22,7 @@ final class QuickAnswersViewModel {
     private let model: QuickAnswersModel
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
+    let isFollowUpEnabled: Bool
     var onStateChange: ((State) -> Void)?
 
     /// The user-facing name of the model backing the request.
@@ -37,6 +38,7 @@ final class QuickAnswersViewModel {
         prefs: Prefs,
         telemetry: QuickAnswersTelemetry,
         configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa),
+        isFollowUpEnabled: Bool = false,
         makeService: (Prefs, QuickAnswersConfigFetcher) throws -> QuickAnswersService = { prefs, configFetcher in
             try DefaultQuickAnswersService(configFetcher: configFetcher, prefs: prefs)
         }
@@ -44,6 +46,7 @@ final class QuickAnswersViewModel {
         self.telemetry = telemetry
         self.store = Store(prefs: prefs)
         self.model = configFetcher.model
+        self.isFollowUpEnabled = isFollowUpEnabled
         do {
             self.service = try makeService(prefs, configFetcher)
         } catch {
@@ -67,6 +70,12 @@ final class QuickAnswersViewModel {
         telemetry.consentShown(agreed: true)
         store.setOptInCompleted()
         startFlow()
+    }
+
+    /// Starts a new recording so the user can ask a follow up question. The exchanges already made are
+    /// kept by the service and sent along with the new question.
+    func startFollowUp() {
+        startRecordingVoice()
     }
 
     /// Tears down the flow when the view is being dismissed, recording the relevant telemetry.
