@@ -338,12 +338,7 @@ class O_AddressesTests: BaseTestCase {
         if #unavailable(iOS 16) {
             throw XCTSkip("Addresses setting is not available for iOS 15")
         }
-        if [17, 18].contains(ProcessInfo.processInfo.operatingSystemVersion.majorVersion) {
-            XCTExpectFailure(
-                "Known failure: iOS 17, 18 - https://github.com/mozilla-mobile/firefox-ios/issues/35942",
-                strict: false
-            )
-        }
+        markKnownFailure(onIOS: [17, 18], issue: "https://github.com/mozilla-mobile/firefox-ios/issues/35942")
         addAddressAndReachAutofillForm(indexField: 7)
     }
 
