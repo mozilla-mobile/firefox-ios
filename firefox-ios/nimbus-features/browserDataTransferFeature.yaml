@@ -17,8 +17,8 @@ features:
     defaults:
       - channel: beta
         value:
-          import-enabled: true
-          export-enabled: true
+          import-enabled: false
+          export-enabled: false
       - channel: developer
         value:
           import-enabled: true
