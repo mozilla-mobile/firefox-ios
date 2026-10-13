@@ -86,8 +86,8 @@ class MockRustKeychain: @unchecked Sendable, KeychainProtocol {
     }
 
     func createCreditCardsKeyData() throws -> String {
-        return """
-        {\"kty\":\"oct\",\"k\":\"iHvskvsnDkECjFSD_mvD6Gnb_XMaxgV45tpj1KXIM28\"}
-        """
+        return try createAndStoreKey(canaryPhrase: creditCardCanaryPhrase,
+                                     canaryIdentifier: creditCardCanaryKeyIdentifier,
+                                     keyIdentifier: creditCardKeyIdentifier)
     }
 }
