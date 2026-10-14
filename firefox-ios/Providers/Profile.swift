@@ -244,6 +244,18 @@ open class BrowserProfile: Profile,
 
     var fxaCommandsDelegate: FxACommandsDelegate?
 
+    /// Resolves the maximum level for application-services' log forwarder. Defaults to `.info`; the
+    /// `SyncLogLevelPrefix` launch argument raises it so the sync integration tests can capture Rust
+    /// engine activity in the log file.
+    static func appServicesLogLevel(from launchArguments: [String]) -> Level {
+        let argument = launchArguments.first { $0.hasPrefix(LaunchArguments.SyncLogLevelPrefix) }
+        switch argument?.dropFirst(LaunchArguments.SyncLogLevelPrefix.count) {
+        case "debug": return .debug
+        case "trace": return .trace
+        default: return .info
+        }
+    }
+
     /**
      * N.B., BrowserProfile is used from our extensions, often via a pattern like
      *
@@ -314,7 +326,7 @@ open class BrowserProfile: Profile,
         }
 
         setLogger(logger: ForwardOnLog(logger: self.logger))
-        setMaxLevel(level: Level.info)
+        setMaxLevel(level: Self.appServicesLogLevel(from: ProcessInfo.processInfo.arguments))
 
         // Initiating the sync manager has to happen prior to the databases being opened,
         // because opening them can trigger events to which the SyncManager listens.

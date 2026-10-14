@@ -154,10 +154,17 @@ def xcodebuild_log(pytestconfig, tmpdir):
 
 
 @pytest.fixture
-def xcodebuild(fxa_account, monkeypatch, xcodebuild_log):
+def firefox_ios_log(pytestconfig, tmpdir):
+    firefox_ios_log = str(tmpdir.join('firefox-ios.log'))
+    pytestconfig._firefox_ios_log = firefox_ios_log
+    yield firefox_ios_log
+
+
+@pytest.fixture
+def xcodebuild(fxa_account, firefox_ios_log, monkeypatch, xcodebuild_log):
     monkeypatch.setenv('FXA_EMAIL', fxa_account.email)
     monkeypatch.setenv('FXA_PASSWORD', fxa_account.password)
-    yield XCodeBuild(xcodebuild_log)
+    yield XCodeBuild(xcodebuild_log, app_log=firefox_ios_log)
 
 
 def pytest_addoption(parser):
@@ -183,8 +190,10 @@ def pytest_runtest_makereport(item, call):
                     with io.open(path, 'r', encoding='utf8') as f:
                         extra.append(pytest_html.extras.text(f.read(), 'Sync'))
                 report.sections.append(('Sync', 'Log: {}'.format(path)))
-    for log in ('Firefox', 'TPS', 'XCodeBuild'):
-        attr = '_{}_log'.format(log.lower())
+    for log, attr in (('Firefox', '_firefox_log'),
+                      ('TPS', '_tps_log'),
+                      ('XCodeBuild', '_xcodebuild_log'),
+                      ('Firefox iOS', '_firefox_ios_log')):
         path = getattr(item.config, attr, None)
         if path is not None and os.path.exists(path):
             if pytest_html is not None:
