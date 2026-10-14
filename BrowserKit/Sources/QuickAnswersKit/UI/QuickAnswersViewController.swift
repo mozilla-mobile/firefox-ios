@@ -121,7 +121,7 @@ public final class QuickAnswersViewController: UIViewController,
     // MARK: - Lifecycle
     override public func viewDidLoad() {
         super.viewDidLoad()
-        presentationController?.delegate = self
+        navigationController?.presentationController?.delegate = self
         setupSubviews()
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
@@ -230,6 +230,7 @@ public final class QuickAnswersViewController: UIViewController,
         contentView.prepareForPresentationTransition(
             sourceRect: sourceRect,
             containerWidth: view.frame.width,
+            topInset: navigationController?.navigationBar.frame.maxY ?? 0.0,
             isOptInVisible: isOptInVisible
         )
         backgroundEffectView.alpha = 0.0

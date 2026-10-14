@@ -7,6 +7,7 @@ import Common
 
 final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
     private struct UX {
+        static let titleLabelTopPadding: CGFloat = 32.0
         static let contentSpacing: CGFloat = 16.0
         static let buttonContentInset = NSDirectionalEdgeInsets(
             top: 13.5,
@@ -59,7 +60,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
         addSubviews(titleLabel, descriptionTextView, continueButton)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: UX.titleLabelTopPadding),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 

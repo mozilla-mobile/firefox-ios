@@ -281,11 +281,23 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
     }
 
     // MARK: - Presentation transition
-    func prepareForPresentationTransition(sourceRect: CGRect, containerWidth: CGFloat, isOptInVisible: Bool) {
+    /// - Parameters:
+    ///   - sourceRect: In the window coordinate space.
+    ///   - topInset: The safe area inset between the top of the window and the top of the scroll view content.
+    func prepareForPresentationTransition(
+        sourceRect: CGRect,
+        containerWidth: CGFloat,
+        topInset: CGFloat,
+        isOptInVisible: Bool
+    ) {
+        let waveformCenterY = topInset
+            + scrollView.contentInset.top
+            + UX.audioWaveformTopPadding
+            + UX.audioWaveformSize.height / 2.0
         audioWaveform.alpha = isOptInVisible ? 0.0 : 1.0
         audioWaveform.transform = CGAffineTransform(
             translationX: sourceRect.midX - containerWidth / 2.0,
-            y: UX.audioWaveformSize.height - sourceRect.midY + UX.audioWaveformTopPadding
+            y: sourceRect.midY - waveformCenterY
         )
         placeholderLabel.alpha = 0.0
         placeholderLabel.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationSlideOffset)
