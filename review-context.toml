@@ -1,0 +1,11 @@
+version = 1
+
+[[rules]]
+name = "UI accessibility"
+when = { any_file = { ext = [".swift"] } }
+load = [{ type = "file", path = ".claude/review/accessibility.md" }]
+
+[[rules]]
+name = "Firefox coordinators"
+when = { any_file = { include = ["firefox-ios/Client/Coordinators/**"], ext = [".swift"] } }
+load = [{ type = "file", path = ".claude/skills/firefox-coordinators/SKILL.md" }]
