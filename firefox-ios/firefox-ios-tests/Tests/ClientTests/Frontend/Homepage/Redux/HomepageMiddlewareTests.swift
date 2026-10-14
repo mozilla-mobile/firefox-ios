@@ -311,6 +311,29 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
     }
 
+    func test_initializeAction_withBottomAddressBar_doesNotConfigureSearchBar() throws {
+        setupNimbusAnimatedCenterSearchBarTesting(isEnabled: true)
+        let subject = createSubject(searchBarPosition: .bottom)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let dispatchExpectation = XCTestExpectation(description: "Search bar configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider.legacyMiddleware(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredSearchBarAction, _) = try getActionInfo(for: .configuredSearchBar)
+
+        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
+    }
+
     func test_viewWillTransitionAction_configuresSearchBar() throws {
         let subject = createSubject()
         setupNimbusAnimatedCenterSearchBarTesting(isEnabled: true)
@@ -593,15 +616,19 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: - Helpers
     private func createSubject(
         privacyNoticeHelper: PrivacyNoticeHelperProtocol? = nil,
-        windowManager: WindowManager = AppContainer.shared.resolve()
+        windowManager: WindowManager = AppContainer.shared.resolve(),
+        searchBarPosition: SearchBarPosition = .top
     ) -> HomepageMiddleware {
+        let userPreferences = MockUserFeaturePreferences()
+        userPreferences.searchBarPosition = searchBarPosition
         return HomepageMiddleware(
             homepageTelemetry: HomepageTelemetry(
                 gleanWrapper: mockGleanWrapper
             ),
             privacyNoticeHelper: privacyNoticeHelper,
             notificationCenter: mockNotificationCenter,
-            windowManager: windowManager
+            windowManager: windowManager,
+            userPreferences: userPreferences
         )
     }
 
