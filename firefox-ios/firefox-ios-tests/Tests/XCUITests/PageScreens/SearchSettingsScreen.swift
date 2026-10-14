@@ -181,7 +181,28 @@ final class SearchSettingsScreen {
     private func tapOnSwitch(_ selector: Selector) {
         let toggle = selector.element(in: app)
         BaseTestCase().scrollToElement(toggle, isHittable: true)
+        // scrollToElement stops once any sliver is on screen; on short screens (iPhone 15, iOS 17) that leaves
+        // the row's centre below the bottom edge, so keep scrolling until the whole row fits.
+        var swipes = 0
+        while toggle.frame.maxY > app.frame.maxY && swipes < 3 {
+            app.partialSwipeUp()
+            swipes += 1
+        }
+        waitForScrollToSettle(toggle)
         toggle.waitAndTap()
+    }
+
+    /// A swipe keeps the table decelerating after XCTest reports the app idle, so a tap fired right away
+    /// can land on a moving row. Waits until the element's frame is the same on two consecutive reads.
+    private func waitForScrollToSettle(_ element: XCUIElement, timeout: TimeInterval = TIMEOUT) {
+        let deadline = Date().addingTimeInterval(timeout)
+        var previousFrame = element.frame
+        repeat {
+            usleep(200_000)
+            let currentFrame = element.frame
+            if currentFrame == previousFrame { return }
+            previousFrame = currentFrame
+        } while Date() < deadline
     }
 
     /// A row's title and description are set on its switch as one accessibility label, so that is
