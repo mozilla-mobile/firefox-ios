@@ -170,15 +170,17 @@ final class FetchVPNProxyTokenSetting: VPNDebugSetting {
             ?? String(proxyToken.token.split(separator: ".").last ?? "?")
 
         var lines = ["token id: \(identifier.prefix(12))…"]
-        lines.append("expiresIn: \(proxyToken.expiresIn)s")
-        if proxyToken.expiresIn <= 180 {
-            lines.append("(short TTL — DSJ is past renewAfter)")
+        if let exp = claims["exp"] as? TimeInterval {
+            // No TTL is sent; Guardian drops 600s to ~180s once the DSJ is past renewAfter.
+            let remaining = Int(exp - Date().timeIntervalSince1970)
+            lines.append("expires in: \(remaining)s")
+            if remaining <= 180 {
+                lines.append("(short TTL — DSJ is past renewAfter)")
+            }
+            lines.append("expires: \(format(msSinceEpoch: Int64(exp * 1000)))")
         }
         lines.append("subject: \(claims["sub"] as? String ?? "?")")
         lines.append("audience: \(claims["aud"] as? String ?? "?")")
-        if let exp = claims["exp"] as? TimeInterval {
-            lines.append("expires: \(format(msSinceEpoch: Int64(exp * 1000)))")
-        }
         return lines.joined(separator: "\n")
     }
 }
