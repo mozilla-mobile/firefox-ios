@@ -325,7 +325,8 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Step 1: a deeplink from outside Firefox opens its website in a new tab. Links tapped inside a
         // private tab never leave the web view, so the deeplink has to come from the system
-        springboardScreen.openDeeplinkFromOutsideApp(openURLDeeplink(path(forTestPage: TestPages.exampleHTML)))
+        let exampleDeeplink = Deeplink.openURL(path(forTestPage: TestPages.exampleHTML), isPrivate: nil)
+        springboardScreen.openDeeplinkFromOutsideApp(deeplinkURL(exampleDeeplink))
         navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
         browserScreen.assertExampleDomainPageDisplayed()
