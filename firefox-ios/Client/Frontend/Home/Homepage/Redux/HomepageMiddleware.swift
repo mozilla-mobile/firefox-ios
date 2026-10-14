@@ -18,6 +18,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     private let notificationCenter: NotificationProtocol
     private let userDefaults: UserDefaultsInterface
     private let windowManager: WindowManager
+    private let userPreferences: UserFeaturePreferring
 
     init(profile: Profile = AppContainer.shared.resolve(),
          homepageTelemetry: HomepageTelemetry = HomepageTelemetry(),
@@ -25,7 +26,8 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
          notificationManager: NotificationManagerProtocol = NotificationManager(),
          notificationCenter: NotificationProtocol,
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
-         windowManager: WindowManager = AppContainer.shared.resolve()) {
+         windowManager: WindowManager = AppContainer.shared.resolve(),
+         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()) {
         self.profile = profile
         self.homepageTelemetry = homepageTelemetry
         self.privacyNoticeHelper = privacyNoticeHelper ?? PrivacyNoticeHelper(prefs: profile.prefs)
@@ -33,6 +35,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         self.notificationCenter = notificationCenter
         self.userDefaults = userDefaults
         self.windowManager = windowManager
+        self.userPreferences = userPreferences
         observeNotifications()
     }
 
@@ -171,8 +174,9 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     ) -> Bool {
         let isHomepageSearchEnabled = featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar)
         let isCompact = device == .phone && !isLandscape
+        let isTopAddressBar = userPreferences.searchBarPosition == .top
 
-        guard isHomepageSearchEnabled, isCompact else {
+        guard isHomepageSearchEnabled, isCompact, isTopAddressBar else {
             return false
         }
         return true

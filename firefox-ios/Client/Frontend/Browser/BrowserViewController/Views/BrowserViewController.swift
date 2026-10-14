@@ -323,6 +323,10 @@ class BrowserViewController: UIViewController,
         return featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar)
     }
 
+    private var isHomepageSearchBarReplacingAddressBar: Bool {
+        return isHomepageSearchBarEnabled && !isBottomSearchBar
+    }
+
     var isSummarizerToolbarFeatureEnabled: Bool {
         return summarizerNimbusUtils.isToolbarButtonEnabled
     }
@@ -3169,11 +3173,11 @@ class BrowserViewController: UIViewController,
     private func getAvailableHomepageContentHeight() -> CGFloat {
         // We only have to worry about the bottom address bar when it is part of the homepage layout (can be presented
         // without the keyboard)
-        var addressBarHeight = isHomepageSearchBarEnabled ? 0 : overKeyboardContainer.frame.height
+        var addressBarHeight = isHomepageSearchBarReplacingAddressBar ? 0 : overKeyboardContainer.frame.height
 
         // The overKeyboardContainer typically just contains the bottom address bar, but when editing, also contains a
         // keyboard-sized spacer that we must ignore (since we don't want it to affect the homepage layouts height)
-        if isBottomSearchBar && !isHomepageSearchBarEnabled {
+        if isBottomSearchBar && !isHomepageSearchBarReplacingAddressBar {
             let keyboardHeight = keyboardState?.intersectionHeightForView(view) ?? 0
             let keyboardSpacerHeight = keyboardHeight > 0 ? getKeyboardSpacerHeight(keyboardHeight: keyboardHeight) : 0
             addressBarHeight -= keyboardSpacerHeight
