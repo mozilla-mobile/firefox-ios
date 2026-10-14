@@ -83,7 +83,6 @@ class Setting: NSObject {
     // Called when the cell is setup. Call if you need the default behaviour.
     func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         self.theme = theme
-        cell.accessibilityElements = nil
         cell.detailTextLabel?.assign(attributed: status, theme: theme)
         cell.detailTextLabel?.attributedText = status
         cell.detailTextLabel?.numberOfLines = 0
@@ -183,18 +182,6 @@ class SettingSection: Setting {
     }
 }
 
-final class RowAccessibilitySwitch: UISwitch {
-    weak var accessibilityRowView: UIView?
-
-    override var accessibilityFrame: CGRect {
-        get {
-            guard let rowView = accessibilityRowView else { return super.accessibilityFrame }
-            return UIAccessibility.convertToScreenCoordinates(rowView.bounds, in: rowView)
-        }
-        set { _ = newValue }
-    }
-}
-
 class PaddedSwitch: UIView {
     private struct UX {
         static let padding: CGFloat = 8
@@ -203,7 +190,7 @@ class PaddedSwitch: UIView {
     let switchView: UISwitch
 
     init() {
-        self.switchView = RowAccessibilitySwitch()
+        self.switchView = UISwitch()
         super.init(frame: .zero)
 
         addSubview(switchView)
@@ -337,23 +324,21 @@ class BoolSetting: Setting, UserFeaturePreferenceProvider {
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
 
-        cell.accessibilityLabel = nil
-
         control.configureSwitch(
             onTintColor: theme.colors.actionPrimary,
             isEnabled: enabled
         )
 
         displayBool(control.switchView)
-        configureSwitchAccessibility(for: cell)
-
-        if cell is ThemedLearnMoreTableViewCell {
-            configureLearnMoreAccessibilityAction(title: title?.string ?? "") { [weak cell] in
-                (cell as? ThemedLearnMoreTableViewCell)?.learnMoreDidTap?()
+        if let title = title {
+            if let status = status {
+                control.switchView.accessibilityLabel = "\(title.string), \(status.string)"
+            } else {
+                control.switchView.accessibilityLabel = title.string
             }
-        } else {
-            control.switchView.accessibilityCustomActions = nil
+            cell.accessibilityLabel = nil
         }
+
         cell.accessoryView = control
         cell.selectionStyle = .none
 
@@ -403,31 +388,6 @@ class BoolSetting: Setting, UserFeaturePreferenceProvider {
             guard let key = prefKey else { return }
             prefs?.setBool(control.isOn, forKey: key)
         }
-    }
-
-    func configureSwitchAccessibility(for cell: UITableViewCell) {
-        if let title = title {
-            if let status {
-                control.switchView.accessibilityLabel = "\(title.string), \(status.string)"
-            } else {
-                control.switchView.accessibilityLabel = title.string
-            }
-        }
-
-        if let rowSwitch = control.switchView as? RowAccessibilitySwitch {
-            rowSwitch.accessibilityRowView = cell
-        }
-        cell.accessibilityElements = [control.switchView]
-    }
-
-    func configureLearnMoreAccessibilityAction(title: String, onActivate: @escaping () -> Void) {
-        let actionName = String(format: .Settings.General.AccessibilityLabels.LearnMoreAction, title)
-        control.switchView.accessibilityCustomActions = [
-            UIAccessibilityCustomAction(name: actionName) { _ in
-                onActivate()
-                return true
-            }
-        ]
     }
 }
 
