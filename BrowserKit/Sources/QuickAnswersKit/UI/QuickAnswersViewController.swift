@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import SwiftUI
 import Common
 import Shared
 
@@ -20,18 +19,14 @@ public final class QuickAnswersViewController: UIViewController,
             bottom: UX.closeButtonPadding,
             trailing: UX.closeButtonPadding
         )
-        static let recordWaveEffectResultOpacity: CGFloat = 0.4
-        static let recordWaveEffectFadeDuration: TimeInterval = 0.3
-        static let recordWaveEffectFadeDelay: TimeInterval = 0.2
         static let contentViewTopPadding: CGFloat = 32.0
         static let contentViewBottomPadding: CGFloat = 12.0
         static let contentViewHorizontalPadding: CGFloat = 24.0
-        static let presentationSlideOffset: CGFloat = 50.0
         static let presentationCloseButtonOffset: CGFloat = -20.0
     }
 
     // MARK: - Properties
-    private let backgroundRecordEffect: UIHostingController<BackgroundEffectView>
+    private lazy var backgroundEffectView = BackgroundEffectView(parentController: self)
     private lazy var closeButton: UIButton = .build { [weak self] in
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
@@ -123,9 +118,6 @@ public final class QuickAnswersViewController: UIViewController,
         }
         self.viewModel = viewModel
         self.learnMoreURL = learnMoreURL
-        self.backgroundRecordEffect = UIHostingController(
-            rootView: BackgroundEffectView(windowUUID: windowUUID, themeManager: themeManager)
-        )
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = transitionType.modalPresentationStyle
         transitioningDelegate = transitionAnimator
@@ -157,11 +149,13 @@ public final class QuickAnswersViewController: UIViewController,
     private func setupSubviews() {
         closeButton.accessibilityLabel = stringsConfiguration.closeAccessibilityLabel
         contentView.configureStrings(stringsConfiguration.contentView)
-        setupBackgroundEffect()
         view.addSubviews(
+            backgroundEffectView,
             contentView,
             closeButton,
         )
+
+        backgroundEffectView.pinToSuperview()
 
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -178,15 +172,6 @@ public final class QuickAnswersViewController: UIViewController,
             contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
                                                 constant: -UX.contentViewBottomPadding),
         ])
-    }
-
-    private func setupBackgroundEffect() {
-        addChild(backgroundRecordEffect)
-        backgroundRecordEffect.view.translatesAutoresizingMaskIntoConstraints = false
-        backgroundRecordEffect.view.backgroundColor = .clear
-        view.addSubview(backgroundRecordEffect.view)
-        backgroundRecordEffect.view.pinToSuperview()
-        backgroundRecordEffect.didMove(toParent: self)
     }
 
     private func registerCallbacks() {
@@ -211,7 +196,7 @@ public final class QuickAnswersViewController: UIViewController,
                     self?.errorHandler.handleSearchError(error)
                 } else {
                     self?.triggerHaptic()
-                    self?.fadeBackgroundEffectForResult()
+                    self?.backgroundEffectView.showResult()
                     self?.contentView.configureResult(
                         result.resultText,
                         modelName: self?.viewModel.modelDisplayName ?? "",
@@ -253,26 +238,18 @@ public final class QuickAnswersViewController: UIViewController,
     // MARK: - Presentation transition
     func prepareForPresentationTransition() {
         contentView.prepareForPresentationTransition()
-        backgroundRecordEffect.view.alpha = 0.0
-        backgroundRecordEffect.view.transform = CGAffineTransform(translationX: 0.0,
-                                                                  y: UX.presentationSlideOffset)
+        backgroundEffectView.alpha = 0.0
+        backgroundEffectView.prepareForPresentationTransition()
         closeButton.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationCloseButtonOffset)
         closeButton.alpha = 0.0
     }
 
     func applyPresentationTransition(isOptInVisible: Bool) {
         contentView.applyPresentationTransition(isOptInVisible: isOptInVisible)
-        backgroundRecordEffect.view.alpha = 1.0
-        backgroundRecordEffect.view.transform = .identity
+        backgroundEffectView.alpha = 1.0
+        backgroundEffectView.applyPresentationTransition()
         closeButton.alpha = 1.0
         closeButton.transform = .identity
-    }
-
-    private func fadeBackgroundEffectForResult() {
-        UIView.animate(withDuration: UX.recordWaveEffectFadeDuration,
-                       delay: UX.recordWaveEffectFadeDelay) { [self] in
-            backgroundRecordEffect.view.alpha = UX.recordWaveEffectResultOpacity
-        }
     }
 
     private func dismiss(with url: URL?) {
@@ -299,5 +276,6 @@ public final class QuickAnswersViewController: UIViewController,
         closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
         contentView.applyTheme(theme: theme)
+        backgroundEffectView.applyTheme(theme: theme)
     }
 }
