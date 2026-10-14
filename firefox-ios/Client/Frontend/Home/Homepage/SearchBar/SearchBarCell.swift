@@ -57,6 +57,7 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     private func setupView() {
         container.isHidden = true
+        contentView.backgroundColor = .blue
         contentStackView.addArrangedSubview(searchImageView)
         contentStackView.addArrangedSubview(placeholderLabel)
         container.addSubview(contentStackView)
