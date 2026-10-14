@@ -104,14 +104,14 @@ final class VPNGuardian: Sendable {
     /// task to stop rotation — the stream will tear down its internal fetch loop via
     /// `onTermination`.
     ///
-    /// The stream finishes once a rotation fails terminally, mirroring desktop's
-    /// `rotateProxyPass`, which does not reschedule its timer after a failure. The consumer
-    /// therefore treats stream completion as "rotation is no longer running".
+    /// The stream throws once a rotation fails terminally, mirroring desktop's
+    /// `rotateProxyPass`, which does not reschedule its timer after a failure. Cancellation
+    /// finishes the stream without throwing.
     ///
     /// In-flight WebKit requests continue with the old bearer token thanks to the proxy's
     /// grace period; only new requests pick up the rotated header.
-    func passRotation(after initial: ProxyPass) -> AsyncStream<ProxyPass> {
-        AsyncStream { continuation in
+    func passRotation(after initial: ProxyPass) -> AsyncThrowingStream<ProxyPass, Error> {
+        return AsyncThrowingStream { continuation in
             let task = Task { [weak self] in
                 var current = initial
                 while !Task.isCancelled {
@@ -119,7 +119,6 @@ final class VPNGuardian: Sendable {
                     let sleepInterval = max(Self.minRotationInterval, refreshAt.timeIntervalSinceNow)
                     guard (try? await Self.sleep(seconds: sleepInterval)) != nil else { break }
                     guard let self, !Task.isCancelled else { break }
-
                     do {
                         let new = try await self.rotatePass()
                         current = new
@@ -130,12 +129,8 @@ final class VPNGuardian: Sendable {
                         // Desktop surfaces this as an error state on a still-active proxy. We
                         // stop rotating and let the consumer decide; the current pass stays
                         // valid until it expires.
-                        self.logger.log(
-                            "Pass rotation failed terminally, stopping rotation: \(error)",
-                            level: .warning,
-                            category: .sync
-                        )
-                        break
+                        continuation.finish(throwing: error)
+                        return
                     }
                 }
                 continuation.finish()

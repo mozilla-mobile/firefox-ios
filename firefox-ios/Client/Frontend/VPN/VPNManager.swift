@@ -114,29 +114,34 @@ final class VPNManager: VPNManaging {
     private func startPassRotation(after initial: VPNGuardian.ProxyPass) {
         rotationTask?.cancel()
         rotationTask = Task { [weak self] in
-            guard let stream = self?.guardian.passRotation(after: initial) else { return }
-            for await new in stream {
-                guard let self,
-                      let server = self.activeServer else { return }
-                let config = self.buildProxyConfig(server: server, pass: new)
-                DefaultWKEngineConfigurationProvider.applyProxyConfigurations(
-                    [config],
-                    forcingSessionReset: false
-                )
+            guard let self else { return }
+            do {
+                for try await new in self.guardian.passRotation(after: initial) {
+                    guard let server = self.activeServer else { return }
+                    let config = self.buildProxyConfig(server: server, pass: new)
+                    DefaultWKEngineConfigurationProvider.applyProxyConfigurations(
+                        [config],
+                        forcingSessionReset: false
+                    )
+                    self.logger.log(
+                        "Rotated VPN proxy pass — next expiry \(new.expiresAt)",
+                        level: .info,
+                        category: .sync
+                    )
+                }
+            } catch {
                 self.logger.log(
-                    "Rotated VPN proxy pass — next expiry \(new.expiresAt)",
-                    level: .info,
+                    "Pass rotation failed terminally, stopping rotation: \(error)",
+                    level: .warning,
                     category: .sync
                 )
-            }
-            // The stream only finishes on its own when rotation fails; `stop()` cancels the task.
-            guard !Task.isCancelled else { return }
-            store.dispatch(
-                GeneralBrowserAction(
-                    windowUUID: .unavailable,
-                    actionType: GeneralBrowserActionType.showVPNFailureAlert
+                store.dispatch(
+                    GeneralBrowserAction(
+                        windowUUID: .unavailable,
+                        actionType: GeneralBrowserActionType.showVPNFailureAlert
+                    )
                 )
-            )
+            }
         }
     }
 
