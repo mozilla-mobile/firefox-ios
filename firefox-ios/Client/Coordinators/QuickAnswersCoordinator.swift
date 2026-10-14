@@ -54,7 +54,17 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = controller.modalPresentationStyle
         navigationController.transitioningDelegate = controller.transitioningDelegate
+        guard !controller.isOptInRequired else {
+            presentWithOptIn(navigationController)
+            return
+        }
         router.present(navigationController, animated: shouldAnimateTransition)
+    }
+
+    /// Presents without the entrance animation, since the Quick Answers screen stays hidden until it
+    /// has slid the opt-in sheet up over the browser.
+    private func presentWithOptIn(_ navigationController: UINavigationController) {
+        router.present(navigationController, animated: false)
     }
 
     private func makeStringsConfiguration() -> QuickAnswersViewConfiguration {

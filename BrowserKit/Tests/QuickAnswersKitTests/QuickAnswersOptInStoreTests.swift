@@ -9,7 +9,7 @@ import TestKit
 @testable import QuickAnswersKit
 
 @MainActor
-struct StoreTests {
+struct QuickAnswersOptInStoreTests {
     let prefs = MockProfilePrefs()
 
     @Test
@@ -30,8 +30,8 @@ struct StoreTests {
     }
 
     // MARK: - Helper
-    private func createSubject() -> Store {
-        let subject = Store(prefs: prefs)
+    private func createSubject() -> QuickAnswersOptInStore {
+        let subject = QuickAnswersOptInStore(prefs: prefs)
         return subject
     }
 }

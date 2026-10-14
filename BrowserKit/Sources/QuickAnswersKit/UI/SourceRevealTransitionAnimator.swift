@@ -45,11 +45,9 @@ final class SourceRevealTransitionAnimator: NSObject,
 
     /// In the container view's coordinate space.
     private let sourceRect: CGRect
-    private let isOptInVisible: Bool
 
-    init(sourceRect: CGRect, isOptInVisible: Bool) {
+    init(sourceRect: CGRect) {
         self.sourceRect = sourceRect
-        self.isOptInVisible = isOptInVisible
     }
 
     // MARK: - UIViewControllerTransitioningDelegate
@@ -90,6 +88,11 @@ final class SourceRevealTransitionAnimator: NSObject,
         }
         let containerView = transitionContext.containerView
         presentedController.view.frame = containerView.frame
+        guard transitionContext.isAnimated else {
+            containerView.addSubview(presentedController.view)
+            transitionContext.completeTransition(true)
+            return
+        }
 
         // Sits behind the presented controller, so what the mask hasn't covered yet blurs out.
         let blurView = makeBlurView(frame: containerView.bounds)
@@ -100,13 +103,10 @@ final class SourceRevealTransitionAnimator: NSObject,
         let maskView = makeMaskView(for: containerView, diameterRatio: UX.presentationMaskDiameterRatio)
         maskView.transform = CGAffineTransform(scaleX: UX.collapsedMaskScale, y: UX.collapsedMaskScale)
         presentedController.view.mask = maskView
-        quickAnswersController.prepareForPresentationTransition(
-            sourceRect: sourceRect,
-            isOptInVisible: isOptInVisible
-        )
-        UIView.animate(withDuration: UX.presentationDuration, delay: 0.0, options: .curveEaseOut) { [self] in
+        quickAnswersController.prepareForPresentationTransition(sourceRect: sourceRect)
+        UIView.animate(withDuration: UX.presentationDuration, delay: 0.0, options: .curveEaseOut) {
             maskView.transform = CGAffineTransform(scaleX: UX.expandedMaskHorizontalScale, y: 1.0)
-            quickAnswersController.applyPresentationTransition(isOptInVisible: isOptInVisible)
+            quickAnswersController.applyPresentationTransition()
         } completion: { _ in
             presentedController.view.mask = nil
             transitionContext.completeTransition(true)

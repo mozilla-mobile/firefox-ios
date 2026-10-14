@@ -43,6 +43,26 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertTrue(navigationController.viewControllers.first is QuickAnswersViewController)
     }
 
+    func test_start_withOptInRequired_presentsWithoutAnimation() {
+        let subject = createSubject()
+
+        subject.start()
+
+        XCTAssertEqual(router.presentCalled, 1)
+        XCTAssertEqual(router.lastPresentAnimated, false)
+    }
+
+    func test_start_withOptInCompleted_presentsWithEntranceAnimation() {
+        let prefs = MockProfilePrefs()
+        prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
+        let subject = createSubject(prefs: prefs)
+
+        subject.start()
+
+        XCTAssertEqual(router.presentCalled, 1)
+        XCTAssertEqual(router.lastPresentAnimated, !UIAccessibility.isReduceMotionEnabled)
+    }
+
     func test_dismissQuickAnswers_dismissesControllerAndNotifiesParent() {
         let subject = createSubject()
 
