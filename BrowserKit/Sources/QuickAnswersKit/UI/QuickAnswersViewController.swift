@@ -280,7 +280,6 @@ public final class QuickAnswersViewController: UIViewController,
             strings: stringsConfiguration.optInRedesign,
             closeAccessibilityLabel: stringsConfiguration.closeAccessibilityLabel,
             learnMoreURL: learnMoreURL,
-            notificationCenter: notificationCenter,
             onContinue: { [weak self] in
                 self?.completeOptInSheet()
             },

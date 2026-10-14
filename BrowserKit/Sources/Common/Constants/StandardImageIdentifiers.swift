@@ -68,7 +68,6 @@ public struct StandardImageIdentifiers {
         public static let clipboard = "clipboardLarge"
         public static let cloud = "cloudLarge"
         public static let cookies = "cookiesLarge"
-        public static let cookiesSlash = "cookiesSlashLarge"
         public static let creditCard = "creditCardLarge"
         public static let cross = "crossLarge"
         public static let crossCircleFill = "crossCircleFillLarge"
@@ -93,7 +92,6 @@ public struct StandardImageIdentifiers {
         public static let lightning = "lightningLarge"
         public static let lightningFill = "lightningFillLarge"
         public static let link = "linkLarge"
-        public static let localNetwork = "localNetworkLarge"
         public static let location = "locationLarge"
         public static let lock = "lockLarge"
         public static let lockSlash = "lockSlashLarge"
@@ -141,6 +139,9 @@ public struct StandardImageIdentifiers {
     // Icon size 30x30
     public struct ExtraLarge {
         public static let crossCircleFill = "crossCircleFillExtraLarge"
+        public static let database = "databaseExtraLarge"
+        public static let personSpeaking = "personSpeakingExtraLarge"
+        public static let saveArrow = "saveArrowExtraLarge"
     }
 
     // Icon size 72x72

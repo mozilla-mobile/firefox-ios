@@ -4,68 +4,37 @@
 
 @testable import QuickAnswersKit
 import Common
+import SwiftUI
 import TestKit
 import UIKit
 import XCTest
 
 @MainActor
 final class OptInViewControllerTests: XCTestCase {
-    private let learnMoreURL = URL(string: "https://mozilla.org")!
-    private let strings = QuickAnswersViewConfiguration.OptInRedesignStrings.mock
-    private let closeAccessibilityLabel = "Close"
-    private var continueCallCount = 0
     private var dismissCallCount = 0
-    private var learnMoreURLs: [URL] = []
 
     override func setUp() {
         super.setUp()
-        continueCallCount = 0
         dismissCallCount = 0
-        learnMoreURLs = []
     }
 
-    // MARK: - continueButton
-    func test_continueButton_whenTapped_completesOptIn() {
+    // MARK: - init
+    func test_init_isPresentedAsNonDismissableSheet() {
         let subject = createSubject()
-        subject.loadViewIfNeeded()
 
-        tap(continueButton(in: subject.view))
-
-        XCTAssertEqual(continueCallCount, 1)
-        XCTAssertEqual(dismissCallCount, 0)
-        XCTAssertTrue(learnMoreURLs.isEmpty)
+        XCTAssertEqual(subject.modalPresentationStyle, .pageSheet)
+        XCTAssertTrue(subject.isModalInPresentation)
     }
 
-    // MARK: - learnMoreButton
-    func test_learnMoreButton_whenTapped_opensLearnMoreURL() {
+    // MARK: - viewDidLoad
+    func test_viewDidLoad_embedsOptInSheetView() {
         let subject = createSubject()
+
         subject.loadViewIfNeeded()
 
-        tap(learnMoreButton(in: subject.view))
-
-        XCTAssertEqual(learnMoreURLs, [learnMoreURL])
-        XCTAssertEqual(continueCallCount, 0)
-        XCTAssertEqual(dismissCallCount, 0)
-    }
-
-    func test_learnMoreButton_whenThereIsNoLearnMoreURL_isHidden() {
-        let subject = createSubject(hasLearnMoreURL: false)
-        subject.loadViewIfNeeded()
-
-        let button = learnMoreButton(in: subject.view)
-
-        XCTAssertEqual(button?.isHidden, true)
-    }
-
-    // MARK: - closeButton
-    func test_closeButton_whenTapped_reportsDismissal() {
-        let subject = createSubject()
-        subject.loadViewIfNeeded()
-
-        tap(closeButton(in: subject.view))
-
-        XCTAssertEqual(dismissCallCount, 1)
-        XCTAssertEqual(continueCallCount, 0)
+        let hostingController = subject.children.first as? UIHostingController<OptInSheetView>
+        XCTAssertNotNil(hostingController)
+        XCTAssertEqual(hostingController?.view.superview, subject.view)
     }
 
     // MARK: - presentationControllerDidDismiss
@@ -77,58 +46,24 @@ final class OptInViewControllerTests: XCTestCase {
         )
 
         XCTAssertEqual(dismissCallCount, 1)
-        XCTAssertEqual(continueCallCount, 0)
     }
 
     // MARK: - Helpers
     private func createSubject(
-        hasLearnMoreURL: Bool = true,
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> OptInViewController {
         let subject = OptInViewController(
             windowUUID: .XCTestDefaultUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            strings: strings,
-            closeAccessibilityLabel: closeAccessibilityLabel,
-            learnMoreURL: hasLearnMoreURL ? learnMoreURL : nil,
-            onContinue: { [weak self] in self?.continueCallCount += 1 },
-            onLearnMore: { [weak self] url in self?.learnMoreURLs.append(url) },
+            strings: .mock,
+            closeAccessibilityLabel: "Close",
+            learnMoreURL: URL(string: "https://mozilla.org"),
+            onContinue: {},
+            onLearnMore: { _ in },
             onDismiss: { [weak self] in self?.dismissCallCount += 1 }
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
-    }
-
-    private func continueButton(in view: UIView) -> UIButton? {
-        return findButton(in: view) { $0.configuration?.title == strings.continueButton }
-    }
-
-    private func learnMoreButton(in view: UIView) -> UIButton? {
-        return findButton(in: view) { $0.configuration?.title == strings.learnMore }
-    }
-
-    private func closeButton(in view: UIView) -> UIButton? {
-        return findButton(in: view) { $0.accessibilityLabel == closeAccessibilityLabel }
-    }
-
-    private func findButton(in view: UIView, matching predicate: (UIButton) -> Bool) -> UIButton? {
-        if let button = view as? UIButton, predicate(button) { return button }
-        for subview in view.subviews {
-            if let button = findButton(in: subview, matching: predicate) { return button }
-        }
-        return nil
-    }
-
-    private func tap(
-        _ button: UIButton?,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) {
-        guard let button else {
-            XCTFail("No button found to tap", file: file, line: line)
-            return
-        }
-        button.sendActions(for: .touchUpInside)
     }
 }
