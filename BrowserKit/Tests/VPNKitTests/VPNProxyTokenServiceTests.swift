@@ -18,7 +18,6 @@ final class VPNProxyTokenServiceTests: XCTestCase {
         let result = try await subject.fetchProxyToken()
 
         XCTAssertEqual(result.token, "vpn-jwt")
-        XCTAssertEqual(result.expiresIn, 600)
 
         let req = try XCTUnwrap(urlSession.lastURLRequest)
         XCTAssertEqual(req.url?.path, "/api/v1/ipn/token")
@@ -104,7 +103,7 @@ final class VPNProxyTokenServiceTests: XCTestCase {
     }
 
     private func tokenJSON() -> Data {
-        Data(#"{"token":"vpn-jwt","expiresIn":600}"#.utf8)
+        Data(#"{"token":"vpn-jwt"}"#.utf8)
     }
 
     private func httpResponse(statusCode: Int) -> HTTPURLResponse {
