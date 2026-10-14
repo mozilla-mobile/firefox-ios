@@ -93,6 +93,7 @@ final class SourceRevealTransitionAnimator: NSObject,
         let blurView = makeBlurView(frame: containerView.bounds)
         blurView.alpha = 0.0
         containerView.addSubview(blurView)
+        presentedController.view.frame = transitionContext.finalFrame(for: presentedController)
         containerView.addSubview(presentedController.view)
 
         let maskView = makeMaskView(for: containerView, diameterRatio: UX.presentationMaskDiameterRatio)

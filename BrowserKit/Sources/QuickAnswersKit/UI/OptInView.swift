@@ -71,7 +71,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
             continueButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             continueButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
             continueButton.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
-            continueButton.bottomAnchor.constraint(equalTo: bottomAnchor),
+            continueButton.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
         ])
     }
 
