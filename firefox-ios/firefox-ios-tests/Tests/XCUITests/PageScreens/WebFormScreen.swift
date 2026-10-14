@@ -80,6 +80,21 @@ final class WebFormScreen {
         BaseTestCase().mozWaitForElementToNotExist(closeButton)
     }
 
+    func getUsernameField() -> XCUIElement {
+        return app.webViews.textFields.element(boundBy: 0)
+    }
+
+    func assertUsernameFieldValue(_ expected: String, timeout: TimeInterval = TIMEOUT) {
+        let usernameField = getUsernameField()
+        BaseTestCase().mozWaitForElementToExist(usernameField, timeout: timeout)
+        let predicate = NSPredicate(format: "value == %@", expected)
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: usernameField)
+        guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else {
+            XCTFail("Expected the username field to show '\(expected)', found '\(usernameField.value as? String ?? "nil")'")
+            return
+        }
+    }
+
     func assertUsernameFieldIsEmpty() {
         let usernameField = app.webViews.textFields.element(boundBy: 0)
         BaseTestCase().mozWaitForElementToExist(usernameField)
