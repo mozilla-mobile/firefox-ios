@@ -21,7 +21,6 @@ private enum OptInPrivacyInfoRowUX {
     static let textLeadingInset = iconSize + iconSpacing
 }
 
-// TODO: - FXIOS-14720 Add Strings
 /// Consent screen shown before the first Quick Answers recording. It is presented as a bottom sheet
 /// and only reports the user's choice through its callbacks, the presenter owns the dismissal.
 public final class OptInViewController: UIViewController, Themeable, UIAdaptivePresentationControllerDelegate {
@@ -52,28 +51,6 @@ public final class OptInViewController: UIViewController, Themeable, UIAdaptiveP
         static let closeButtonSize: CGFloat = 30.0
         static let closeButtonPadding: CGFloat = 16.0
         static let heroImageSize: CGFloat = 80.0
-        static let title = "Welcome to Quick Answers"
-        static let subtitle = "Ask a question out loud, get a private answer in seconds."
-        static let learnMoreTitle = "Learn more..."
-        static let continueTitle = "Continue"
-        static let closeButtonA11yLabel = "Close"
-        static let privacyInfoItems = [
-            OptInPrivacyInfo(
-                imageName: StandardImageIdentifiers.Large.localNetwork,
-                title: "Nothing gets saved",
-                subtitle: "We don’t store your audio or questions."
-            ),
-            OptInPrivacyInfo(
-                imageName: StandardImageIdentifiers.Large.cookiesSlash,
-                title: "Private and anonymous",
-                subtitle: "We don’t use your voice to identify you."
-            ),
-            OptInPrivacyInfo(
-                imageName: StandardImageIdentifiers.Large.globe,
-                title: "No training with your data",
-                subtitle: "We don’t use your data to train AI models."
-            )
-        ]
     }
 
     // MARK: - Properties
@@ -82,6 +59,7 @@ public final class OptInViewController: UIViewController, Themeable, UIAdaptiveP
     public var currentWindowUUID: WindowUUID? { windowUUID }
 
     private let windowUUID: WindowUUID
+    private let strings: QuickAnswersViewConfiguration.OptInRedesignStrings
     private let notificationCenter: NotificationProtocol
     private let learnMoreURL: URL?
     private let onContinue: () -> Void
@@ -92,7 +70,6 @@ public final class OptInViewController: UIViewController, Themeable, UIAdaptiveP
     private lazy var closeButton: UIButton = .build {
         $0.setImage(UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill), for: .normal)
         $0.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        $0.accessibilityLabel = UX.closeButtonA11yLabel
         $0.addAction(UIAction { [weak self] _ in self?.onDismiss() }, for: .touchUpInside)
     }
     private let scrollView: UIScrollView = .build {
@@ -114,13 +91,11 @@ public final class OptInViewController: UIViewController, Themeable, UIAdaptiveP
     }
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.title2.scaledFont()
-        $0.text = UX.title
         $0.numberOfLines = 0
         $0.adjustsFontForContentSizeCategory = true
     }
     private let subtitleLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.title2.scaledFont()
-        $0.text = UX.subtitle
         $0.numberOfLines = 0
         $0.adjustsFontForContentSizeCategory = true
     }
@@ -132,7 +107,6 @@ public final class OptInViewController: UIViewController, Themeable, UIAdaptiveP
     }
     private lazy var learnMoreButton: UIButton = .build {
         $0.configuration = .plain()
-        $0.configuration?.title = UX.learnMoreTitle
         $0.configuration?.contentInsets = UX.learnMoreContentInsets
         $0.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
@@ -151,7 +125,6 @@ public final class OptInViewController: UIViewController, Themeable, UIAdaptiveP
             $0.configuration = .filled()
         }
         $0.configuration?.cornerStyle = .capsule
-        $0.configuration?.title = UX.continueTitle
         $0.configuration?.contentInsets = UX.continueButtonContentInsets
         $0.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
@@ -166,6 +139,8 @@ public final class OptInViewController: UIViewController, Themeable, UIAdaptiveP
     public init(
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
+        strings: QuickAnswersViewConfiguration.OptInRedesignStrings,
+        closeAccessibilityLabel: String,
         learnMoreURL: URL?,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         onContinue: @escaping () -> Void,
@@ -174,12 +149,14 @@ public final class OptInViewController: UIViewController, Themeable, UIAdaptiveP
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.strings = strings
         self.learnMoreURL = learnMoreURL
         self.notificationCenter = notificationCenter
         self.onContinue = onContinue
         self.onLearnMore = onLearnMore
         self.onDismiss = onDismiss
         super.init(nibName: nil, bundle: nil)
+        closeButton.accessibilityLabel = closeAccessibilityLabel
         modalPresentationStyle = .pageSheet
         // The choice has to be made through the buttons, so the sheet can't be dragged away.
         isModalInPresentation = true
@@ -200,9 +177,13 @@ public final class OptInViewController: UIViewController, Themeable, UIAdaptiveP
 
     // MARK: - Setup
     private func setupSubviews() {
+        titleLabel.text = strings.title
+        subtitleLabel.text = strings.description
+        learnMoreButton.configuration?.title = strings.learnMore
+        continueButton.configuration?.title = strings.continueButton
         headerStackView.addArrangedSubview(titleLabel)
         headerStackView.addArrangedSubview(subtitleLabel)
-        UX.privacyInfoItems.forEach { privacyInfoStackView.addArrangedSubview(OptInPrivacyInfoRowView(privacyInfo: $0)) }
+        privacyInfoItems.forEach { privacyInfoStackView.addArrangedSubview(OptInPrivacyInfoRowView(privacyInfo: $0)) }
         privacyInfoStackView.addArrangedSubview(learnMoreButton)
         contentStackView.addArrangedSubview(heroImageView)
         contentStackView.addArrangedSubview(headerStackView)
@@ -242,6 +223,26 @@ public final class OptInViewController: UIViewController, Themeable, UIAdaptiveP
             continueButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
                                                    constant: -UX.contentBottomPadding),
         ])
+    }
+
+    private var privacyInfoItems: [OptInPrivacyInfo] {
+        return [
+            OptInPrivacyInfo(
+                imageName: StandardImageIdentifiers.Large.localNetwork,
+                title: strings.nothingGetsSavedTitle,
+                subtitle: strings.nothingGetsSavedDescription
+            ),
+            OptInPrivacyInfo(
+                imageName: StandardImageIdentifiers.Large.cookiesSlash,
+                title: strings.privateByDesignTitle,
+                subtitle: strings.privateByDesignDescription
+            ),
+            OptInPrivacyInfo(
+                imageName: StandardImageIdentifiers.Large.globe,
+                title: strings.noTrainingTitle,
+                subtitle: strings.noTrainingDescription
+            )
+        ]
     }
 
     // MARK: - Actions
@@ -333,11 +334,25 @@ private final class OptInPrivacyInfoRowView: UIView, ThemeApplicable {
 
 @available(iOS 17, *)
 #Preview {
-    OptInViewController(windowUUID: .DefaultUITestingUUID, themeManager: DefaultThemeManager(sharedContainerIdentifier: ""), learnMoreURL: nil) {
-        
-    } onLearnMore: { URL in
-        
-    } onDismiss: {
-        
-    }
+    OptInViewController(
+        windowUUID: .DefaultUITestingUUID,
+        themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
+        strings: .init(
+            title: "Try Quick Answers",
+            description: "Ask a question with your voice. Get a short answer with sources in seconds.",
+            nothingGetsSavedTitle: "Nothing Gets Saved",
+            nothingGetsSavedDescription: "We don’t store your voice, questions, or answers.",
+            privateByDesignTitle: "Private By Design",
+            privateByDesignDescription: "We don’t use your voice to identify you.",
+            noTrainingTitle: "No Training With Your Data",
+            noTrainingDescription: "We don’t use your data to train our systems.",
+            learnMore: "Learn more…",
+            continueButton: "Continue"
+        ),
+        closeAccessibilityLabel: "Close",
+        learnMoreURL: nil,
+        onContinue: {},
+        onLearnMore: { _ in },
+        onDismiss: {}
+    )
 }

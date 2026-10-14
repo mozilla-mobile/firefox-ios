@@ -14,6 +14,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
     private var router: MockRouter!
     private var parentCoordinator: MockParentCoordinator!
     private var themeManager: MockThemeManager!
+    private var featureFlagsProvider: MockNimbusFeatureFlags!
     private let testURL = URL(string: "https://example.com")!
     private let testQuery = "test search query"
 
@@ -22,6 +23,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         router = MockRouter(navigationController: MockNavigationController())
         parentCoordinator = MockParentCoordinator()
         themeManager = MockThemeManager()
+        featureFlagsProvider = MockNimbusFeatureFlags()
         DependencyHelperMock().bootstrapDependencies()
     }
 
@@ -29,6 +31,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         router = nil
         parentCoordinator = nil
         themeManager = nil
+        featureFlagsProvider = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -43,7 +46,8 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertTrue(navigationController.viewControllers.first is QuickAnswersViewController)
     }
 
-    func test_start_withOptInRequired_presentsWithoutAnimation() {
+    func test_start_withOptInRedesignAndOptInRequired_presentsWithoutAnimation() {
+        featureFlagsProvider.enabledFlags = [.quickAnswersOptInRedesign]
         let subject = createSubject()
 
         subject.start()
@@ -52,10 +56,20 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.lastPresentAnimated, false)
     }
 
-    func test_start_withOptInCompleted_presentsWithEntranceAnimation() {
+    func test_start_withOptInRedesignAndOptInCompleted_presentsWithEntranceAnimation() {
+        featureFlagsProvider.enabledFlags = [.quickAnswersOptInRedesign]
         let prefs = MockProfilePrefs()
         prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
         let subject = createSubject(prefs: prefs)
+
+        subject.start()
+
+        XCTAssertEqual(router.presentCalled, 1)
+        XCTAssertEqual(router.lastPresentAnimated, !UIAccessibility.isReduceMotionEnabled)
+    }
+
+    func test_start_withoutOptInRedesignAndOptInRequired_presentsWithEntranceAnimation() {
+        let subject = createSubject()
 
         subject.start()
 
@@ -157,6 +171,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
             themeManager: themeManager,
             router: router,
             transitionType: .sourceReveal(sourceRect: .zero),
+            featureFlagsProvider: featureFlagsProvider,
             onNavigate: onNavigate
         )
         trackForMemoryLeaks(subject, file: file, line: line)

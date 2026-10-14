@@ -98,6 +98,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
             return outgoing
         }
     }
+    private let optInView: OptInView = .build()
     private var theme: Theme?
     private var strings: QuickAnswersViewConfiguration.ContentViewStrings?
     private var isTranscriptVisible = true
@@ -200,6 +201,40 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         audioWaveform.startAnimating()
     }
 
+    func configureOptIn(
+        strings: QuickAnswersViewConfiguration.OptInStrings,
+        learnMoreURL: URL?,
+        theme: Theme,
+        onContinue: @escaping () -> Void,
+        onLearnMore: @escaping (URL) -> Void
+    ) {
+        optInView.configure(
+            strings: strings,
+            learnMoreURL: learnMoreURL,
+            theme: theme,
+            onContinue: onContinue,
+            onLearnMore: onLearnMore
+        )
+    }
+
+    func showOptIn() {
+        contentView.addSubview(optInView)
+        optInView.pinToSuperview()
+        placeholderLabel.alpha = 0.0
+        audioWaveform.alpha = 0.0
+    }
+
+    func hideOptIn() {
+        UIView.animate(withDuration: UX.animationDuration) {
+            self.optInView.alpha = 0.0
+            self.placeholderLabel.alpha = 1.0
+            self.audioWaveform.alpha = 1.0
+        } completion: { [weak self] _ in
+            self?.optInView.removeFromSuperview()
+            self?.audioWaveform.startAnimating()
+        }
+    }
+
     func configureTranscript(_ text: String) {
         // if the placeholder is visible then hide it before adding text to the transcription label.
         // This is needed to don't overlap the show of the transcription with the placeholder label
@@ -253,12 +288,14 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
     func prepareForPresentationTransition(
         sourceRect: CGRect,
         containerWidth: CGFloat,
-        topInset: CGFloat
+        topInset: CGFloat,
+        isOptInVisible: Bool
     ) {
         let waveformCenterY = topInset
             + scrollView.contentInset.top
             + UX.audioWaveformTopPadding
             + UX.audioWaveformSize.height / 2.0
+        audioWaveform.alpha = isOptInVisible ? 0.0 : 1.0
         audioWaveform.transform = CGAffineTransform(
             translationX: sourceRect.midX - containerWidth / 2.0,
             y: sourceRect.midY - waveformCenterY
@@ -267,9 +304,10 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         placeholderLabel.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationSlideOffset)
     }
 
-    func applyPresentationTransition() {
+    func applyPresentationTransition(isOptInVisible: Bool) {
         audioWaveform.transform = .identity
-        placeholderLabel.alpha = 1.0
+        audioWaveform.alpha = isOptInVisible ? 0.0 : 1.0
+        placeholderLabel.alpha = isOptInVisible ? 0.0 : 1.0
         placeholderLabel.transform = .identity
     }
 
@@ -328,5 +366,6 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         footerLabel.textColor = theme.colors.textSecondary
         privacyButton.configuration?.baseForegroundColor = theme.colors.textAccent
         sourceView.applyTheme(theme: theme)
+        optInView.applyTheme(theme: theme)
     }
 }

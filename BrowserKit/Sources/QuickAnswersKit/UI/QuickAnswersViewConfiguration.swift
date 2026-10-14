@@ -6,6 +6,7 @@ import Foundation
 
 public struct QuickAnswersViewConfiguration: Sendable {
     public let optIn: OptInStrings
+    public let optInRedesign: OptInRedesignStrings
     public let contentView: ContentViewStrings
     public let privacyBanner: PrivacyBannerStrings
     public let errors: ErrorStrings
@@ -21,6 +22,43 @@ public struct QuickAnswersViewConfiguration: Sendable {
         public init(title: String, description: String, learnMore: String, continueButton: String) {
             self.title = title
             self.description = description
+            self.learnMore = learnMore
+            self.continueButton = continueButton
+        }
+    }
+
+    public struct OptInRedesignStrings: Sendable {
+        public let title: String
+        public let description: String
+        public let nothingGetsSavedTitle: String
+        public let nothingGetsSavedDescription: String
+        public let privateByDesignTitle: String
+        public let privateByDesignDescription: String
+        public let noTrainingTitle: String
+        public let noTrainingDescription: String
+        public let learnMore: String
+        public let continueButton: String
+
+        public init(
+            title: String,
+            description: String,
+            nothingGetsSavedTitle: String,
+            nothingGetsSavedDescription: String,
+            privateByDesignTitle: String,
+            privateByDesignDescription: String,
+            noTrainingTitle: String,
+            noTrainingDescription: String,
+            learnMore: String,
+            continueButton: String
+        ) {
+            self.title = title
+            self.description = description
+            self.nothingGetsSavedTitle = nothingGetsSavedTitle
+            self.nothingGetsSavedDescription = nothingGetsSavedDescription
+            self.privateByDesignTitle = privateByDesignTitle
+            self.privateByDesignDescription = privateByDesignDescription
+            self.noTrainingTitle = noTrainingTitle
+            self.noTrainingDescription = noTrainingDescription
             self.learnMore = learnMore
             self.continueButton = continueButton
         }
@@ -101,6 +139,7 @@ public struct QuickAnswersViewConfiguration: Sendable {
 
     public init(
         optIn: OptInStrings,
+        optInRedesign: OptInRedesignStrings,
         contentView: ContentViewStrings,
         privacyBanner: PrivacyBannerStrings,
         errors: ErrorStrings,
@@ -108,6 +147,7 @@ public struct QuickAnswersViewConfiguration: Sendable {
         appName: String
     ) {
         self.optIn = optIn
+        self.optInRedesign = optInRedesign
         self.contentView = contentView
         self.privacyBanner = privacyBanner
         self.errors = errors

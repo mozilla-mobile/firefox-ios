@@ -11,6 +11,8 @@ import XCTest
 @MainActor
 final class OptInViewControllerTests: XCTestCase {
     private let learnMoreURL = URL(string: "https://mozilla.org")!
+    private let strings = QuickAnswersViewConfiguration.OptInRedesignStrings.mock
+    private let closeAccessibilityLabel = "Close"
     private var continueCallCount = 0
     private var dismissCallCount = 0
     private var learnMoreURLs: [URL] = []
@@ -87,6 +89,8 @@ final class OptInViewControllerTests: XCTestCase {
         let subject = OptInViewController(
             windowUUID: .XCTestDefaultUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
+            strings: strings,
+            closeAccessibilityLabel: closeAccessibilityLabel,
             learnMoreURL: hasLearnMoreURL ? learnMoreURL : nil,
             onContinue: { [weak self] in self?.continueCallCount += 1 },
             onLearnMore: { [weak self] url in self?.learnMoreURLs.append(url) },
@@ -97,15 +101,15 @@ final class OptInViewControllerTests: XCTestCase {
     }
 
     private func continueButton(in view: UIView) -> UIButton? {
-        return findButton(in: view) { $0.configuration?.title == OptInViewController.UX.continueTitle }
+        return findButton(in: view) { $0.configuration?.title == strings.continueButton }
     }
 
     private func learnMoreButton(in view: UIView) -> UIButton? {
-        return findButton(in: view) { $0.configuration?.title == OptInViewController.UX.learnMoreTitle }
+        return findButton(in: view) { $0.configuration?.title == strings.learnMore }
     }
 
     private func closeButton(in view: UIView) -> UIButton? {
-        return findButton(in: view) { $0.accessibilityLabel == OptInViewController.UX.closeButtonA11yLabel }
+        return findButton(in: view) { $0.accessibilityLabel == closeAccessibilityLabel }
     }
 
     private func findButton(in view: UIView, matching predicate: (UIButton) -> Bool) -> UIButton? {

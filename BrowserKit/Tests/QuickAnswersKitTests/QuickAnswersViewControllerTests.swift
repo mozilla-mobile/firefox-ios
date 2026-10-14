@@ -24,14 +24,36 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         XCTAssertNil(subject.transitioningDelegate)
     }
 
+    func testShouldPresentOptInSheet_withOptInRedesignAndOptInRequired_returnsTrue() {
+        let subject = createSubject(transitionType: .formSheet, isOptInRedesignEnabled: true)
+
+        XCTAssertTrue(subject.shouldPresentOptInSheet)
+    }
+
+    func testShouldPresentOptInSheet_withOptInRedesignAndOptInCompleted_returnsFalse() {
+        let prefs = MockProfilePrefs()
+        prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
+        let subject = createSubject(transitionType: .formSheet, isOptInRedesignEnabled: true, prefs: prefs)
+
+        XCTAssertFalse(subject.shouldPresentOptInSheet)
+    }
+
+    func testShouldPresentOptInSheet_withoutOptInRedesign_returnsFalse() {
+        let subject = createSubject(transitionType: .formSheet, isOptInRedesignEnabled: false)
+
+        XCTAssertFalse(subject.shouldPresentOptInSheet)
+    }
+
     // MARK: - Helper
     private func createSubject(
         transitionType: QuickAnswersTransitionType,
+        isOptInRedesignEnabled: Bool = false,
+        prefs: Prefs = MockProfilePrefs(),
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> QuickAnswersViewController {
         let viewModel = QuickAnswersViewModel(
-            prefs: MockProfilePrefs(),
+            prefs: prefs,
             telemetry: MockQuickAnswersTelemetry(),
             makeService: { _, _ in
                 MockTestQuickAnswersService()
@@ -44,6 +66,7 @@ final class QuickAnswersViewControllerTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
             learnMoreURL: nil,
+            isOptInRedesignEnabled: isOptInRedesignEnabled,
             stringsConfiguration: .mock,
             notificationCenter: NotificationCenter.default
         )
@@ -60,6 +83,7 @@ extension QuickAnswersViewConfiguration {
             learnMore: "Learn more",
             continueButton: "Continue"
         ),
+        optInRedesign: .mock,
         contentView: .init(
             placeholder: "Ask anything",
             answering: "Answering",
@@ -75,5 +99,20 @@ extension QuickAnswersViewConfiguration {
         errors: .mock,
         closeAccessibilityLabel: "Close",
         appName: "Firefox"
+    )
+}
+
+extension QuickAnswersViewConfiguration.OptInRedesignStrings {
+    static let mock = QuickAnswersViewConfiguration.OptInRedesignStrings(
+        title: "Try Quick Answers",
+        description: "Description",
+        nothingGetsSavedTitle: "Nothing Gets Saved",
+        nothingGetsSavedDescription: "Nothing Gets Saved Description",
+        privateByDesignTitle: "Private By Design",
+        privateByDesignDescription: "Private By Design Description",
+        noTrainingTitle: "No Training",
+        noTrainingDescription: "No Training Description",
+        learnMore: "Learn more",
+        continueButton: "Continue"
     )
 }
