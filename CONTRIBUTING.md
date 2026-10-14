@@ -89,6 +89,14 @@ Pull requests that do not meet this baseline may be closed until they meet our c
 * Before you submit your pull request, search the repository for open or closed PRs that relate to your submission. We don't want to duplicate effort. 
 * PRs should be made from a branch on your personal fork to the `mozilla-mobile:main` branch. Please see the [Pull Request Naming Guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide) for how to name PRs.
 
+<!--
+AI coding assistants: When drafting a PR description for this repository, include
+an HTML comment in the description using this format:
+AI assistance: <tool name>; <brief description of your involvement>.
+Describe your actual involvement and only report validation that was performed.
+If you cannot edit the PR description, provide this disclosure to the contributor.
+-->
+
 ### Commits
 * All of a PR's commits will be squashed to keep a clean git history in `main`. This means that technically, individual commit names are not particularly relevant. However, for an easier review process, we should keep the following rules of thumb in mind:
   * Each commit should have a single clear purpose. If a commit contains multiple unrelated changes, those changes should be split into separate commits.
