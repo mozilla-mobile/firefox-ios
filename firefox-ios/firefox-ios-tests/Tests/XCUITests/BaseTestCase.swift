@@ -226,11 +226,31 @@ class BaseTestCase: XCTestCase {
         }
     }
 
+    /// Annotates every failure recorded in the current test, e.g. with a known bug link.
+    nonisolated(unsafe) private var knownFailureNote: String?
+
     override func setUp() async throws {
         try await super.setUp()
+        knownFailureNote = nil
         continueAfterFailure = false
         setUpApp()
         setUpScreenGraph()
+    }
+
+    /// Marks the current test as a known failure on the given iOS major versions without hiding it:
+    /// the test still fails, but each failure message names the iOS version and links `issue`.
+    func markKnownFailure(onIOS versions: [Int], issue: String) {
+        let major = ProcessInfo.processInfo.operatingSystemVersion.majorVersion
+        guard versions.contains(major) else { return }
+        knownFailureNote = "Known failure on iOS \(major): \(issue)"
+    }
+
+    override nonisolated func record(_ issue: XCTIssue) {
+        var issue = issue
+        if let note = knownFailureNote {
+            issue.compactDescription += " - \(note)"
+        }
+        super.record(issue)
     }
 
     override func tearDown() async throws {
