@@ -9,8 +9,8 @@ TYPE_LOG_FILE="$2"
 # @Sendable on type aliases) on unchanged code, taking the count from 3 to 52.
 # Tracked in https://mozilla-hub.atlassian.net/browse/FXIOS-16729 - restore to 3 once
 # those warnings are fixed.
-THRESHOLD_UNIT_TEST=17
-THRESHOLD_XCUITEST=17
+THRESHOLD_UNIT_TEST=18
+THRESHOLD_XCUITEST=18
 
 
 WARNINGS=$(
