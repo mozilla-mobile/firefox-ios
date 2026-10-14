@@ -552,7 +552,7 @@ class BaseTestCase: XCTestCase {
             navigator.goto(section.screen)
             return
         }
-        launchWithDeeplink(deeplinkURL("deep-link?url=/settings/\(section.rawValue)"))
+        launchWithDeeplink(.settings(section))
         let settingScreen = SettingScreen(app: app)
         switch section {
         case .general:
@@ -588,7 +588,7 @@ class BaseTestCase: XCTestCase {
             navigator.nowAt(BrowserTab)
             return
         }
-        launchWithDeeplink(openURLDeeplink(url, isPrivate: isPrivate))
+        launchWithDeeplink(.openURL(url, isPrivate: isPrivate))
         waitUntilPageLoad()
         userState.isPrivate = isPrivate
         let browserScreen = BrowserScreen(app: app)
@@ -606,8 +606,7 @@ class BaseTestCase: XCTestCase {
 
     /// The host the address bar shows for `url`, which leaves out the scheme, the path and a leading "www.".
     private func expectedAddressBarHost(for url: String) -> String {
-        let target = url.contains("://") ? url : "http://\(url)"
-        let host = URL(string: target)?.host ?? url
+        let host = URL(string: withHTTPScheme(url))?.host ?? url
         return host.hasPrefix("www.") ? String(host.dropFirst(4)) : host
     }
 
@@ -621,29 +620,18 @@ class BaseTestCase: XCTestCase {
             navigator.goto(LibraryPanel_ReadingList)
             return
         }
-        launchWithDeeplink(deeplinkURL("deep-link?url=/homepanel/reading-list"))
+        launchWithDeeplink(.homepanel(.readingList))
         ReadingListScreen(app: app).waitForReadingListsPanel()
         navigator.nowAt(LibraryPanel_ReadingList)
     }
 
-    /// `<scheme>://open-url` for `url`. The app appends every query item that follows `url` to the URL itself,
-    /// so the target is fully percent-encoded and `private` goes first. `isPrivate: nil` leaves the parameter
-    /// out, so the app reuses the last browsing mode.
-    func openURLDeeplink(_ url: String, isPrivate: Bool? = nil) -> URL {
-        let target = url.contains("://") ? url : "http://\(url)"
-        var allowed = CharacterSet.urlQueryAllowed
-        allowed.remove(charactersIn: "&=?+#")
-        let encodedTarget = target.addingPercentEncoding(withAllowedCharacters: allowed) ?? target
-        let privateItem = isPrivate.map { "private=\($0)&" } ?? ""
-        return deeplinkURL("open-url?\(privateItem)url=\(encodedTarget)")
-    }
-
-    private func deeplinkURL(_ hostAndQuery: String) -> URL {
-        URL(string: "\(currentScheme.internalURLScheme)://\(hostAndQuery)")!
+    /// `deeplink` with the internal scheme of the build under test.
+    func deeplinkURL(_ deeplink: Deeplink) -> URL {
+        deeplink.url(scheme: currentScheme.internalURLScheme)
     }
 
     @available(iOS 16.4, *)
-    private func launchWithDeeplink(_ url: URL) {
+    private func launchWithDeeplink(_ deeplink: Deeplink) {
         // An app already launched by setUp would be relaunched by `app.open`, silently losing the time saving.
         // The experiment plan activates the app on purpose before relaunching it, as `setUpApp()` does.
         let runningStates: [XCUIApplication.State] = [.runningForeground, .runningBackground,
@@ -652,7 +640,7 @@ class BaseTestCase: XCTestCase {
             XCTFail("The app is already running, so this deeplink launch relaunches it. " +
                     "Make setUp skip its launch for this test with setUpAppWithoutLaunching().")
         }
-        app.open(url)
+        app.open(deeplinkURL(deeplink))
     }
 
     func waitForTabsButtonHittable(timeout: Double = TIMEOUT) {
@@ -945,7 +933,42 @@ extension BaseTestCase {
     }
 }
 
-/// Settings sections reachable through `<scheme>://deep-link?url=/settings/<rawValue>`.
+/// Every deeplink the UI tests send to the app, as `<scheme>://<host>?<query>`. The hosts and paths mirror
+/// the app's `DeeplinkInput`, which the UI test target can't import.
+enum Deeplink {
+    /// `deep-link?url=/settings/<section>`
+    case settings(SettingsDeeplink)
+    /// `deep-link?url=/homepanel/<section>`
+    case homepanel(HomepanelDeeplink)
+    /// `open-url?private=<isPrivate>&url=<target>`. The app appends every query item that follows `url` to the
+    /// URL itself, so the target is fully percent-encoded and `private` goes first. `isPrivate: nil` leaves
+    /// `private` out, so the app reuses the last browsing mode.
+    case openURL(String, isPrivate: Bool?)
+
+    func url(scheme: String) -> URL {
+        URL(string: "\(scheme)://\(hostAndQuery)")!
+    }
+
+    private var hostAndQuery: String {
+        switch self {
+        case .settings(let section):
+            return "deep-link?url=/settings/\(section.rawValue)"
+        case .homepanel(let section):
+            return "deep-link?url=/homepanel/\(section.rawValue)"
+        case .openURL(let target, let isPrivate):
+            var allowed = CharacterSet.urlQueryAllowed
+            allowed.remove(charactersIn: "&=?+#")
+            let webURL = withHTTPScheme(target)
+            let encodedTarget = webURL.addingPercentEncoding(withAllowedCharacters: allowed) ?? webURL
+            let privateItem = isPrivate.map { "private=\($0)&" } ?? ""
+            return "open-url?\(privateItem)url=\(encodedTarget)"
+        }
+    }
+}
+
+/// Settings sections reachable through `deep-link?url=/settings/<rawValue>`. The app lowercases the path, so
+/// sections with a camelCase raw value in the app (`contentBlocker`, `creditCard`, `topSites`, `rateApp`)
+/// never match and must not be added here.
 enum SettingsDeeplink: String {
     case general
     case theme
@@ -956,6 +979,16 @@ enum SettingsDeeplink: String {
         case .theme: return DisplaySettings
         }
     }
+}
+
+/// Library panels reachable through `deep-link?url=/homepanel/<rawValue>`.
+enum HomepanelDeeplink: String {
+    case readingList = "reading-list"
+}
+
+/// `url` with `http://` in front when it has no scheme, as typed test page addresses often don't.
+private func withHTTPScheme(_ url: String) -> String {
+    url.contains("://") ? url : "http://\(url)"
 }
 
 enum AppScheme {
