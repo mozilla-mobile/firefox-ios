@@ -29,6 +29,7 @@ final class SettingScreen {
     private var translationCell: XCUIElement { sel.TRANSLATION_CELL_TITLE.element(in: app) }
     private var toolbarCell: XCUIElement { sel.TOOLBAR_CELL.element(in: app) }
     private var bottomToolbarButton: XCUIElement { sel.BOTTOM_TOOLBAR_BUTTON.element(in: app) }
+    private var topToolbarButton: XCUIElement { sel.TOP_TOOLBAR_BUTTON.element(in: app) }
 
     func closeSettingsWithDoneButton() {
         let doneButton = sel.DONE_BUTTON.element(in: app)
@@ -204,6 +205,11 @@ final class SettingScreen {
         bottomToolbarButton.waitAndTap()
     }
 
+    func selectTopToolbar() {
+        BaseTestCase().mozWaitForElementToExist(topToolbarButton)
+        topToolbarButton.waitAndTap()
+    }
+
     /// Picks which button sits in the middle of the navigation toolbar. The Home option is what makes
     /// the custom homepage URL reachable, as the default New Tab button ignores it.
     func selectNavigationToolbarMiddleButton(_ button: NavigationToolbarMiddleButton) {
@@ -315,6 +321,13 @@ final class SettingScreen {
         let cell = app.tables.cells[AccessibilityIdentifiers.Settings.AIControls.title]
         BaseTestCase().scrollToElement(cell)
         cell.waitAndTap()
+    }
+
+    func assertSummarizeSettingsIsInGeneralSection() {
+        let table = app.tables.element(boundBy: 0)
+        BaseTestCase().mozWaitForElementToExist(table)
+        let summarizeSettings = table.cells[AccessibilityIdentifiers.Settings.Summarize.title]
+        XCTAssertTrue(summarizeSettings.isBelow(element: table.staticTexts["GENERAL"]))
     }
 
     func openSummarizeSettings() {

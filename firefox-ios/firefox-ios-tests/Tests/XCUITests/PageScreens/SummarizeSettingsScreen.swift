@@ -18,6 +18,34 @@ final class SummarizeSettingsScreen {
         app.switches[AccessibilityIdentifiers.Settings.Summarize.summarizeContentSwitch]
     }
 
+    private var shakeGestureToggle: XCUIElement {
+        app.switches[AccessibilityIdentifiers.Settings.Summarize.shakeGestureSwitch]
+    }
+
+    private var languageCell: XCUIElement {
+        app.tables.cells[AccessibilityIdentifiers.Settings.Summarize.languageCell]
+    }
+
+    func assertSummarizeAndShakeTogglesAreOnByDefault() {
+        BaseTestCase().waitForElementsToExist([summarizeToggle, app.tables.staticTexts["GESTURES"], shakeGestureToggle])
+        XCTAssertEqual(summarizeToggle.value as? String, "1", "Summarize content - toggle is enabled by default")
+        XCTAssertEqual(shakeGestureToggle.value as? String, "1", "Shake gesture - toggle is enabled by default")
+    }
+
+    func assertLanguageSectionShowsWebsiteLanguage() {
+        BaseTestCase().waitForElementsToExist([app.tables.staticTexts["LANGUAGE"], languageCell])
+        BaseTestCase().mozWaitForElementToExist(languageCell.staticTexts["Website Language"])
+    }
+
+    /// iOS 17.4+ opens a menu and older versions an action sheet; both list the options as buttons.
+    func openLanguagePicker() {
+        languageCell.waitAndTap()
+    }
+
+    func assertLanguageOptionsExist(_ options: [String]) {
+        BaseTestCase().waitForElementsToExist(options.map { app.buttons[$0] })
+    }
+
     func assertSummarizeToggleIsOff() {
         BaseTestCase().mozWaitForElementToExist(summarizeToggle)
         let value = summarizeToggle.value as? String

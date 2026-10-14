@@ -43,6 +43,7 @@ protocol SettingsSelectorsSet {
     var BLOCK_POPUPS_SWITCH: Selector { get }
     var TOOLBAR_CELL: Selector { get }
     var BOTTOM_TOOLBAR_BUTTON: Selector { get }
+    var TOP_TOOLBAR_BUTTON: Selector { get }
     var NAVIGATION_TOOLBAR_HOME_BUTTON: Selector { get }
     var NAVIGATION_TOOLBAR_NEW_TAB_BUTTON: Selector { get }
     var DEFAULT_BROWSER_CELL: Selector { get }
@@ -83,6 +84,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let settingTitle = "Settings"
         static let toolbarCellSettings = AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting
         static let bottomToolbarButton = AccessibilityIdentifiers.Settings.SearchBar.bottomSetting
+        static let topToolbarButton = AccessibilityIdentifiers.Settings.SearchBar.topSetting
         static let navigationToolbarHomeButton = AccessibilityIdentifiers.Settings.NavigationToolbar.homeButton
         static let navigationToolbarNewTabButton = AccessibilityIdentifiers.Settings.NavigationToolbar.newTabButton
         static let defaultBrowserSettings = AccessibilityIdentifiers.Settings.DefaultBrowser.defaultBrowser
@@ -265,6 +267,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings"]
     )
 
+    let TOP_TOOLBAR_BUTTON = Selector.buttonId(
+        IDs.topToolbarButton,
+        description: "Top toolbar setting button",
+        groups: ["settings"]
+    )
+
     let NAVIGATION_TOOLBAR_HOME_BUTTON = Selector.buttonId(
         IDs.navigationToolbarHomeButton,
         description: "Home option of the navigation toolbar middle button setting",
@@ -414,7 +422,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
          CLOSE_PRIVATE_TABS_SWITCH, CONTENT_BLOCKER_CELL, NOTIFICATIONS_CELL,
          PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
          CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
-         NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, BOTTOM_TOOLBAR_BUTTON,
+         NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, BOTTOM_TOOLBAR_BUTTON, TOP_TOOLBAR_BUTTON,
          NAVIGATION_TOOLBAR_HOME_BUTTON, NAVIGATION_TOOLBAR_NEW_TAB_BUTTON, DEFAULT_BROWSER_CELL,
          SEARCH_CELL, BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH,
          TRANSLATION_CELL_TITLE, SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL, APPEARANCE_NAVIGATION_BAR]
