@@ -416,31 +416,10 @@ class SettingsTests: FeatureFlaggedTestBase {
     private func validateSummarizeContentUI() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        let table = app.tables.element(boundBy: 0)
-        mozWaitForElementToExist(table)
-        let generalSection = table.staticTexts["GENERAL"]
-        let summarizeSettings = table.cells[AccessibilityIdentifiers.Settings.Summarize.title]
-        XCTAssertTrue(summarizeSettings.isBelow(element: generalSection))
+        SettingScreen(app: app).assertSummarizeSettingsIsInGeneralSection()
 
-        // Navigate to the Browsing settings screen
         navigator.goto(SummarizeSettings)
-
-        let settingsQuery = AccessibilityIdentifiers.Settings.self
-        let summarizeContentSwitch = app.switches[settingsQuery.Summarize.summarizeContentSwitch]
-        let shakeGestureSwitch = app.switches[settingsQuery.Summarize.shakeGestureSwitch]
-        waitForElementsToExist(
-            [
-                summarizeContentSwitch,
-                app.tables.staticTexts["GESTURES"],
-                shakeGestureSwitch,
-            ]
-        )
-        XCTAssertEqual(summarizeContentSwitch.value as? String,
-                       "1",
-                       "Summarize content - toggle is enabled by default")
-        XCTAssertEqual(shakeGestureSwitch.value as? String,
-                       "1",
-                       "Shake gesture - toggle is enabled by default")
+        SummarizeSettingsScreen(app: app).assertSummarizeAndShakeTogglesAreOnByDefault()
         navigator.goto(SettingsScreen)
     }
 
