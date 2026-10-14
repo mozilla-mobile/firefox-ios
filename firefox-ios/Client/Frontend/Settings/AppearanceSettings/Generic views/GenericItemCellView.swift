@@ -30,32 +30,41 @@ struct GenericItemCellView: View {
     }
 
     var body: some View {
-        VStack {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(title)
-                        .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
-                        .foregroundColor(textColor)
-                }
-
-                Spacer()
-
-                if let image {
-                    Image(image)
-                        .renderingMode(.template)
-                        .foregroundColor(disclosureTintColor)
-                        .flipsForRightToLeftLayoutDirection(true)
-                }
+        Group {
+            if #available(iOS 26.0, *) {
+                // SectionStyle already provides the card padding and background on iOS 26
+                rowContent
+            } else {
+                rowContent
+                    .padding(.horizontal, UX.horizontalSpacing)
+                    .padding(.vertical, UX.verticalSpacing)
+                    .background(backgroundColor)
             }
-            .padding(.horizontal, UX.horizontalSpacing)
         }
-        .padding(.vertical, UX.verticalSpacing)
-        .background(backgroundColor)
         .accessibilityElement()
         .accessibilityLabel(title)
         .accessibilityAddTraits(.isButton)
         .onTapGesture {
             onTap()
+        }
+    }
+
+    private var rowContent: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(title)
+                    .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                    .foregroundColor(textColor)
+            }
+
+            Spacer()
+
+            if let image {
+                Image(image)
+                    .renderingMode(.template)
+                    .foregroundColor(disclosureTintColor)
+                    .flipsForRightToLeftLayoutDirection(true)
+            }
         }
     }
 }
