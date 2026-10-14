@@ -289,6 +289,14 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let shouldPinNewsHeader = featureFlagsProvider.isEnabled(.homepagePinnedHeader)
                                   && featureFlagsProvider.isEnabled(.homepageStoryCategories)
         header.pinToVisibleBounds = shouldPinNewsHeader
+        let isSearchBarShown = store.state.componentState(
+            HomepageState.self,
+            for: .homepage,
+            window: windowUUID
+        )?.searchBarState.shouldShowSearchBar ?? false
+        if shouldPinNewsHeader && isSearchBarShown {
+            header.contentInsets.top = -UX.embeddedAddressBarHeight
+        }
         section.boundarySupplementaryItems = [header]
 
         section.contentInsets = NSDirectionalEdgeInsets(
