@@ -32,19 +32,22 @@ public struct QuickAnswersViewConfiguration: Sendable {
         public let footerFormat: String
         public let sources: String
         public let aboutYourPrivacy: String
+        public let answerHeader: String
 
         public init(
             placeholder: String,
             answering: String,
             footerFormat: String,
             sources: String,
-            aboutYourPrivacy: String
+            aboutYourPrivacy: String,
+            answerHeader: String
         ) {
             self.placeholder = placeholder
             self.answering = answering
             self.footerFormat = footerFormat
             self.sources = sources
             self.aboutYourPrivacy = aboutYourPrivacy
+            self.answerHeader = answerHeader
         }
     }
 

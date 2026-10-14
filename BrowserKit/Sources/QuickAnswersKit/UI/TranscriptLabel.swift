@@ -86,6 +86,13 @@ final class TranscriptLabel: UILabel {
         animateAppendedText()
     }
 
+    /// Recolors the displayed transcript. While text is animating in, the new color is applied once it settles.
+    func applyForegroundColor(_ color: UIColor) {
+        foregroundColor = color
+        guard !isAnimatingAppendedText else { return }
+        showFullTranscript()
+    }
+
     private func animateAppendedText() {
         let appendedRange = appendedTextRange
         guard appendedRange.length > 0 else {
