@@ -162,9 +162,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
         summarizeSettingScreen.assertSummarizeAndShakeTogglesAreOnByDefault()
         summarizeSettingScreen.assertLanguageSectionShowsWebsiteLanguage()
         summarizeSettingScreen.openLanguagePicker()
-        summarizeSettingScreen.assertLanguageOptionsExist(
-            ["Website Language", "English", "Italian", "French", "Spanish", "German", "Portuguese"]
-        )
+        summarizeSettingScreen.assertLanguageOptionsExist()
     }
 
     // MARK: - Helpers

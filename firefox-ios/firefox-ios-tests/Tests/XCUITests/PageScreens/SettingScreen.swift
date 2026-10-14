@@ -30,6 +30,7 @@ final class SettingScreen {
     private var toolbarCell: XCUIElement { sel.TOOLBAR_CELL.element(in: app) }
     private var bottomToolbarButton: XCUIElement { sel.BOTTOM_TOOLBAR_BUTTON.element(in: app) }
     private var topToolbarButton: XCUIElement { sel.TOP_TOOLBAR_BUTTON.element(in: app) }
+    private var summarizeCell: XCUIElement { sel.SUMMARIZE_CELL.element(in: app) }
 
     func closeSettingsWithDoneButton() {
         let doneButton = sel.DONE_BUTTON.element(in: app)
@@ -324,16 +325,13 @@ final class SettingScreen {
     }
 
     func assertSummarizeSettingsIsInGeneralSection() {
-        let table = app.tables.element(boundBy: 0)
-        BaseTestCase().mozWaitForElementToExist(table)
-        let summarizeSettings = table.cells[AccessibilityIdentifiers.Settings.Summarize.title]
-        XCTAssertTrue(summarizeSettings.isBelow(element: table.staticTexts["GENERAL"]))
+        BaseTestCase().mozWaitForElementToExist(sel.SETTINGS_TABLE.element(in: app))
+        XCTAssertTrue(summarizeCell.isBelow(element: sel.GENERAL_SECTION_HEADER.element(in: app)))
     }
 
     func openSummarizeSettings() {
-        let cell = app.tables.cells[AccessibilityIdentifiers.Settings.Summarize.title]
-        BaseTestCase().scrollToElement(cell)
-        cell.waitAndTap()
+        BaseTestCase().scrollToElement(summarizeCell)
+        summarizeCell.waitAndTap()
     }
 
     func assertTranslationSettingsDoesNotExist() {

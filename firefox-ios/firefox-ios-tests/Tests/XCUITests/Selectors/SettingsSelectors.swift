@@ -58,6 +58,10 @@ protocol SettingsSelectorsSet {
     // Translation
     var TRANSLATION_CELL_TITLE: Selector { get }
 
+    // Page Summaries
+    var SUMMARIZE_CELL: Selector { get }
+    var GENERAL_SECTION_HEADER: Selector { get }
+
     var NO_IMAGE_MODE_STATUS_SWITCH: Selector { get }
 
     func ALL_CELLS() -> [Selector]
@@ -93,6 +97,8 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let blockImages = AccessibilityIdentifiers.Settings.BlockImages.title
         static let noImageModeStatus = "NoImageModeStatus"
         static let translationCellTitle = AccessibilityIdentifiers.Settings.Translation.title
+        static let summarizeCell = AccessibilityIdentifiers.Settings.Summarize.title
+        static let generalSectionHeader = "GENERAL"
         static let sendData = "settings.sendUsageData"
         static let sendCrashReports = "settings.sendCrashReports"
     }
@@ -321,6 +327,18 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings", "translation"]
     )
 
+    let SUMMARIZE_CELL = Selector.tableCellById(
+        IDs.summarizeCell,
+        description: "Page Summaries settings cell",
+        groups: ["settings", "summarizer"]
+    )
+
+    let GENERAL_SECTION_HEADER = Selector.staticTextInTablesByLabel(
+        IDs.generalSectionHeader,
+        description: "General section header in Settings",
+        groups: ["settings"]
+    )
+
     let SEND_DATA_CELL = Selector.switchById(
         IDs.sendData,
         description: "Send Technical Data settings cell",
@@ -425,6 +443,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
          NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, BOTTOM_TOOLBAR_BUTTON, TOP_TOOLBAR_BUTTON,
          NAVIGATION_TOOLBAR_HOME_BUTTON, NAVIGATION_TOOLBAR_NEW_TAB_BUTTON, DEFAULT_BROWSER_CELL,
          SEARCH_CELL, BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH,
-         TRANSLATION_CELL_TITLE, SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL, APPEARANCE_NAVIGATION_BAR]
+         TRANSLATION_CELL_TITLE, SUMMARIZE_CELL, GENERAL_SECTION_HEADER, SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL,
+         APPEARANCE_NAVIGATION_BAR]
     }
 }
