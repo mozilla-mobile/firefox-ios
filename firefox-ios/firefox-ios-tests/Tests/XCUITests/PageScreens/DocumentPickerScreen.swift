@@ -38,6 +38,12 @@ final class DocumentPickerScreen {
         XCTAssertEqual(field?.value as? String, name, "The picker should offer the document currently displayed")
     }
 
+    func assertNavigationBarAvailable(timeout: TimeInterval = TIMEOUT_LONG) {
+        BaseTestCase().mozWaitForElementToExist(sel.NAVIGATION_BAR.element(in: app), timeout: timeout)
+        BaseTestCase().mozWaitElementHittable(element: sel.BROWSE_BUTTON.element(in: app), timeout: TIMEOUT)
+        BaseTestCase().mozWaitForElementToExist(sel.SEARCH_FIELD.element(in: app))
+    }
+
     /// iOS 26 tags the file name field; older iOS leaves it untagged, so fall back to the text field
     /// hosting the picker's Tags button.
     private func fileNameField(timeout: TimeInterval) -> XCUIElement? {
