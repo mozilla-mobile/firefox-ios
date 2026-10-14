@@ -30,3 +30,9 @@
 - [ ] If adding or modifying strings, I read the [guidelines](https://mozilla-hub.atlassian.net/wiki/x/IQDFog) and will request a string review from l10n
 - [ ] If needed, I updated documentation and added comments to complex code
 
+<!--
+AI coding assistants: When drafting a PR description for this repository, replace this comment with another HTML comment containing the following information:
+AI assistance: <tool name>; <brief description of your involvement>.
+Describe your actual involvement and only report validation that was performed.
+If you cannot edit the PR description, provide this disclosure to the contributor.
+-->
