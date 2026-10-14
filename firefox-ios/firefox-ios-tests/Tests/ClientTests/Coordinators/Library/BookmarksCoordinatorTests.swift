@@ -89,6 +89,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         subject.showBookmarkDetail(for: folder, folder: folder)
 
         XCTAssertTrue(router.pushedViewController is EditFolderViewController)
+        XCTAssertEqual((router.pushedViewController as? EditFolderViewController)?.shouldUsePrivateOverride, true)
         XCTAssertEqual(router.pushCalled, 1)
     }
 
@@ -113,6 +114,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         subject.showBookmarkDetail(bookmarkType: .bookmark, parentBookmarkFolder: LocalDesktopFolder())
 
         XCTAssertTrue(router.pushedViewController is EditBookmarkViewController)
+        XCTAssertEqual((router.pushedViewController as? EditBookmarkViewController)?.shouldUsePrivateOverride, true)
         XCTAssertEqual(router.pushCalled, 1)
     }
 
@@ -122,6 +124,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         subject.showBookmarkDetail(bookmarkType: .folder, parentBookmarkFolder: LocalDesktopFolder())
 
         XCTAssertTrue(router.pushedViewController is EditFolderViewController)
+        XCTAssertEqual((router.pushedViewController as? EditFolderViewController)?.shouldUsePrivateOverride, true)
         XCTAssertEqual(router.pushCalled, 1)
     }
 
@@ -133,6 +136,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         subject.showSignIn()
         let presentedViewController = router.presentedViewController as? UINavigationController
         XCTAssertTrue(presentedViewController?.visibleViewController is FirefoxAccountSignInViewController)
+        XCTAssertTrue(router.presentedViewController is LibraryNavigationController)
         XCTAssertEqual(router.presentCalled, 1)
     }
 

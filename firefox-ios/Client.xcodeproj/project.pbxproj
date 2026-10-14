@@ -2412,6 +2412,7 @@
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
 		F84B22241A09122500AAB793 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22221A09122500AAB793 /* LibraryViewController.swift */; };
+		C2A0F1E22F9B000100A1B2C3 /* LibraryNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F1E12F9B000100A1B2C3 /* LibraryNavigationController.swift */; };
 		F84B22541A0920C600AAB793 /* ShareTo.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F84B22491A0920C600AAB793 /* ShareTo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F85C7EDD27109241004BDBA4 /* PasswordManagerOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85C7EDC27109241004BDBA4 /* PasswordManagerOnboardingViewController.swift */; };
 		F85C7EDF2710B4DD004BDBA4 /* LoginOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85C7EDE2710B4DD004BDBA4 /* LoginOnboarding.swift */; };
@@ -12527,6 +12528,7 @@
 		F84B21E51A0910F600AAB793 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		F84B21EF1A0910F600AAB793 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F84B22221A09122500AAB793 /* LibraryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
+		C2A0F1E12F9B000100A1B2C3 /* LibraryNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryNavigationController.swift; sourceTree = "<group>"; };
 		F84B22431A09165600AAB793 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F84B22491A0920C600AAB793 /* ShareTo.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareTo.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F85C7EDC27109241004BDBA4 /* PasswordManagerOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerOnboardingViewController.swift; sourceTree = "<group>"; };
@@ -13484,6 +13486,7 @@
 			children = (
 				C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */,
 				F84B22221A09122500AAB793 /* LibraryViewController.swift */,
+				C2A0F1E12F9B000100A1B2C3 /* LibraryNavigationController.swift */,
 				C8417D212657F0600010B877 /* LibraryViewModel.swift */,
 				274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */,
 				C8445A13264428DC00B83F53 /* LibraryPanelViewState.swift */,
@@ -20730,6 +20733,7 @@
 				3F1E468E9C1D6C2B235CECDE /* CoreBuildFlags.swift in Sources */,
 				5EBC19023A85C482AD197501 /* FeatureFlagsProvider.swift in Sources */,
 				F84B22241A09122500AAB793 /* LibraryViewController.swift in Sources */,
+				C2A0F1E22F9B000100A1B2C3 /* LibraryNavigationController.swift in Sources */,
 				E16941B82C5119A200FF5F4E /* Autocompletable.swift in Sources */,
 				39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */,
 				8A36BE2929EDBC6900AC1C5C /* ContentContainer.swift in Sources */,

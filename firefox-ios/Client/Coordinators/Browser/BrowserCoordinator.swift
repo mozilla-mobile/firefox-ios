@@ -233,7 +233,8 @@ final class BrowserCoordinator: BaseCoordinator,
             profile: profile,
             windowUUID: windowUUID,
             libraryCoordinator: self,
-            libraryNavigationHandler: nil
+            libraryNavigationHandler: nil,
+            shouldUsePrivateOverride: false
         )
         add(child: bookmarksCoordinator)
         bookmarksCoordinator.start(parentFolder: parentFolder, bookmark: bookmark)
