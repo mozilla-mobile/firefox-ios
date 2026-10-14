@@ -89,11 +89,12 @@ final class SourceRevealTransitionAnimator: NSObject,
             return
         }
         let containerView = transitionContext.containerView
+        presentedController.view.frame = containerView.frame
+
         // Sits behind the presented controller, so what the mask hasn't covered yet blurs out.
         let blurView = makeBlurView(frame: containerView.bounds)
         blurView.alpha = 0.0
         containerView.addSubview(blurView)
-        presentedController.view.frame = transitionContext.finalFrame(for: presentedController)
         containerView.addSubview(presentedController.view)
 
         let maskView = makeMaskView(for: containerView, diameterRatio: UX.presentationMaskDiameterRatio)
