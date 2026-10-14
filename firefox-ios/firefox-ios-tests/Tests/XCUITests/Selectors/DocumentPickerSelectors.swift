@@ -13,6 +13,7 @@ protocol DocumentPickerSelectorsSet {
     var NAVIGATION_BAR: Selector { get }
     var BROWSE_BUTTON: Selector { get }
     var SEARCH_FIELD: Selector { get }
+    var MORE_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -26,6 +27,7 @@ struct DocumentPickerSelectors: DocumentPickerSelectorsSet {
         static let navigationBar = "FullDocumentManagerViewControllerNavigationBar"
         static let browseButton = "Browse"
         static let searchField = "Search"
+        static let moreButton = "OverflowBarButtonItem"
     }
 
     let SAVE_BUTTON = Selector.buttonIdOrLabel(
@@ -81,6 +83,13 @@ struct DocumentPickerSelectors: DocumentPickerSelectorsSet {
         groups: ["documentPicker", "system"]
     )
 
+    // "More" (…) button in the picker's navigation bar, holding the view and sort options.
+    let MORE_BUTTON = Selector.buttonId(
+        IDs.moreButton,
+        description: "More button in the iOS document picker navigation bar",
+        groups: ["documentPicker", "system"]
+    )
+
     var all: [Selector] { [SAVE_BUTTON, FILE_NAME_FIELD, UNTAGGED_FILE_NAME_FIELD, BACK_BUTTON, ON_DEVICE_LOCATION,
-                           NAVIGATION_BAR, BROWSE_BUTTON, SEARCH_FIELD] }
+                           NAVIGATION_BAR, BROWSE_BUTTON, SEARCH_FIELD, MORE_BUTTON] }
 }
