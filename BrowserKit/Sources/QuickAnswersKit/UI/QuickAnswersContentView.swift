@@ -278,6 +278,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         sourceView.configure(with: sources, onSourceTapped: onSourceTapped)
         hasDisplayedResults = true
         animateResultCascade()
+        UIAccessibility.post(notification: .screenChanged, argument: self)
     }
 
     // MARK: - Presentation transition
