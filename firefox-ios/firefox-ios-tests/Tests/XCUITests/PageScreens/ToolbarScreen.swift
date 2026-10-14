@@ -25,6 +25,9 @@ final class ToolbarScreen {
     private var translateLoadingButton: XCUIElement { sel.TRANSLATE_LOADING_BUTTON.element(in: app) }
     private var translateActiveButton: XCUIElement { sel.TRANSLATE_ACTIVE_BUTTON.element(in: app) }
     private var translateLanguageEnglishOption: XCUIElement { sel.TRANSLATE_LANGUAGE_ENGLISH_OPTION.element(in: app) }
+    private var summarizeButton: XCUIElement { sel.SUMMARIZE_BUTTON.element(in: app) }
+    private var summarizeContextualHint: XCUIElement { sel.SUMMARIZE_CONTEXTUAL_HINT.element(in: app) }
+    private var googleLensTipTitle: XCUIElement { sel.GOOGLE_LENS_TIP_TITLE.element(in: app) }
 
     func assertSettingsButtonExists(timeout: TimeInterval = TIMEOUT) {
         let settingsButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
@@ -155,18 +158,11 @@ final class ToolbarScreen {
     /// Long-presses Reload and taps the first menu row (Request Desktop/Mobile Site), retrying once.
     /// Content blocker reloads swap Reload for Stop mid-press: https://github.com/mozilla-mobile/firefox-ios/issues/35933
     func toggleRequestDesktopSiteFromReloadMenu() {
-        let contextMenu = ContextMenuSelectors().CONTEXT_MENU_TABLE.element(in: app)
-        let firstMenuRow = contextMenu.cells.element(boundBy: 0)
-        for _ in 1...2 {
-            let reloadButton = sel.RELOAD_BUTTON.element(in: app)
-            BaseTestCase().mozWaitForElementToExist(reloadButton)
-            reloadButton.press(forDuration: 1)
-            if BaseTestCase().mozWaitForElementToExist(firstMenuRow, timeout: 5, failOnTimeout: false) {
-                firstMenuRow.waitAndTap()
-                return
-            }
-        }
-        XCTFail("The Reload long-press menu did not open")
+        let requestDesktopSiteMenuItem = ContextMenuSelectors().REQUEST_DESKTOP_SITE.element(in: app)
+        let reloadButton = sel.RELOAD_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(reloadButton)
+        reloadButton.press(forDuration: 1)
+        requestDesktopSiteMenuItem.waitAndTap()
     }
 
     func getToolbarSettingsMenuButtonElement() -> XCUIElement {
@@ -195,6 +191,65 @@ final class ToolbarScreen {
 
     func tapHomeButton() {
         homeButton.waitAndTap()
+    }
+
+    // MARK: - Summarize Button
+
+    /// The button appears only once the page has been checked for summarization, which happens
+    /// asynchronously after load, hence the long default timeout.
+    func assertSummarizeButtonExists(timeout: TimeInterval = TIMEOUT_LONG) {
+        BaseTestCase().mozWaitForElementToExist(summarizeButton, timeout: timeout)
+    }
+
+    func longPressSummarizeButton() {
+        BaseTestCase().mozWaitForElementToExist(summarizeButton)
+        summarizeButton.press(forDuration: 1.5)
+    }
+
+    func assertSummarizeContextualHintIsDisplayed(timeout: TimeInterval = TIMEOUT_LONG) {
+        BaseTestCase().mozWaitForElementToExist(summarizeContextualHint, timeout: timeout)
+        XCTAssertNotNil(closeButton(nextTo: summarizeContextualHint), "The contextual hint has no \"x\" button")
+    }
+
+    /// TipKit shows this tip once per simulator, the first time the address bar is focused, and it stays
+    /// up after the page loads, which keeps other contextual hints from being presented.
+    /// Returns whether the tip was dismissed.
+    @discardableResult
+    func dismissGoogleLensTipIfPresented() -> Bool {
+        guard googleLensTipTitle.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) else {
+            return false
+        }
+        // The iPad popover ignores taps on its "x", so fall back to tapping outside the tip
+        closeButton(nextTo: googleLensTipTitle)?.tap()
+        if !BaseTestCase().mozWaitForElementToNotExist(googleLensTipTitle,
+                                                       timeout: TIMEOUT_PICKER_PROBE,
+                                                       failOnTimeout: false) {
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.02, dy: 0.5)).tap()
+            BaseTestCase().mozWaitForElementToNotExist(googleLensTipTitle)
+        }
+        return true
+    }
+
+    /// Tapping the hint's text leaves it open, so it is closed with its "x" button.
+    func closeSummarizeContextualHint() {
+        BaseTestCase().mozWaitForElementToExist(summarizeContextualHint)
+        closeButton(nextTo: summarizeContextualHint)?.tap()
+    }
+
+    /// iPad tabs and the address bar also have "Close" buttons, so pick the nearest one on the
+    /// hint's text rows, to the right of the text.
+    private func closeButton(nextTo text: XCUIElement) -> XCUIElement? {
+        let textFrame = text.frame
+        return sel.CONTEXTUAL_HINT_CLOSE_BUTTON.query(in: app).allElementsBoundByIndex
+            .filter { button in
+                let center = CGPoint(x: button.frame.midX, y: button.frame.midY)
+                return center.x > textFrame.minX && (textFrame.minY...textFrame.maxY).contains(center.y)
+            }
+            .min { abs($0.frame.midX - textFrame.maxX) < abs($1.frame.midX - textFrame.maxX) }
+    }
+
+    func assertSummarizeContextualHintIsDismissed() {
+        BaseTestCase().mozWaitForElementToNotExist(summarizeContextualHint)
     }
 
     // MARK: - Translate Button

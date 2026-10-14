@@ -20,8 +20,13 @@ class EditBookmarkViewController: UIViewController,
     var themeManager: any ThemeManager
     var themeListenerCancellable: Any?
     var notificationCenter: any NotificationProtocol
+    let shouldUsePrivateOverride: Bool
+    var shouldBeInPrivateTheme: Bool { return false }
+
     private var theme: any Theme {
-        return themeManager.getCurrentTheme(for: currentWindowUUID)
+        return themeManager.resolveTheme(for: currentWindowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
     }
 
     private lazy var tableView: UITableView = .build({ view in
@@ -63,12 +68,14 @@ class EditBookmarkViewController: UIViewController,
 
     init(viewModel: EditBookmarkViewModel,
          windowUUID: WindowUUID,
+         shouldUsePrivateOverride: Bool = true,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.currentWindowUUID = windowUUID
+        self.shouldUsePrivateOverride = shouldUsePrivateOverride
         super.init(nibName: nil, bundle: nil)
     }
 

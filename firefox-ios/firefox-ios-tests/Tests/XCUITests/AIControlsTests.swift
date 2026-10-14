@@ -14,6 +14,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
     var aiControlsScreen: AIControlsScreen!
     var translationSettingScreen: TranslationSettingsScreen!
     var summarizeSettingScreen: SummarizeSettingsScreen!
+    var readingListScreen: ReadingListScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -25,16 +26,13 @@ final class AIControlsTests: FeatureFlaggedTestBase {
         aiControlsScreen = AIControlsScreen(app: app)
         translationSettingScreen = TranslationSettingsScreen(app: app)
         summarizeSettingScreen = SummarizeSettingsScreen(app: app)
+        readingListScreen = ReadingListScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3960880
     // Regression
     func testAIFeaturesSetToOffAreNotAvailable() throws {
-        try XCTSkipIf(
-            isFirefox || isFirefoxBeta,
-            "Skipping because on Firefox and FirefoxBeta addLaunchArgument cannot override the default " +
-            "experiment values, so the AI features cannot be forced on/off"
-        )
+        try skipIfAIFeaturesCannotBeForced()
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "ai-kill-switch-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
@@ -78,11 +76,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3965955
     // Regression
     func testTranslationSettingChangesReflectInAIControls() throws {
-        try XCTSkipIf(
-            isFirefox || isFirefoxBeta,
-            "Skipping because on Firefox and FirefoxBeta addLaunchArgument cannot override the default " +
-            "experiment values, so the AI features cannot be forced on/off"
-        )
+        try skipIfAIFeaturesCannotBeForced()
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "ai-kill-switch-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
@@ -99,11 +93,7 @@ final class AIControlsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3965956
     // Regression
     func testPageSummariesSettingChangesReflectInAIControls() throws {
-        try XCTSkipIf(
-            isFirefox || isFirefoxBeta,
-            "Skipping because on Firefox and FirefoxBeta addLaunchArgument cannot override the default " +
-            "experiment values, so the AI features cannot be forced on/off"
-        )
+        try skipIfAIFeaturesCannotBeForced()
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "ai-kill-switch-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
@@ -113,6 +103,66 @@ final class AIControlsTests: FeatureFlaggedTestBase {
 
         verifyStandalonePageSummariesMirrorsAIControls(blockAIEnhancementsFirst: false)
         verifyStandalonePageSummariesMirrorsAIControls(blockAIEnhancementsFirst: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3135865
+    // Regression
+    func testSummarizeButtonReplacesReaderViewWithTopToolbar() throws {
+        try launchWithToolbarSummarizer()
+        if !iPad() {
+            selectToolbarPosition(top: true)
+        }
+
+        navigateToBookOfMozillaPage()
+        assertSummarizeButtonReplacesReaderViewWithContextualHint()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3135866
+    // Regression
+    func testSummarizeButtonReplacesReaderViewWithBottomToolbar() throws {
+        try XCTSkipIf(iPad(), "The bottom toolbar is not available on iPad")
+        try launchWithToolbarSummarizer()
+        selectToolbarPosition(top: false)
+
+        navigateToBookOfMozillaPage()
+        assertSummarizeButtonReplacesReaderViewWithContextualHint()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3135867
+    // Regression
+    func testLongPressOnSummarizeButtonAppliesReaderView() throws {
+        try launchWithToolbarSummarizer()
+        if !iPad() {
+            selectToolbarPosition(top: false)
+        }
+
+        navigateToBookOfMozillaPage()
+        toolBarScreen.assertSummarizeContextualHintIsDisplayed()
+        toolBarScreen.closeSummarizeContextualHint()
+        toolBarScreen.assertSummarizeContextualHintIsDismissed()
+
+        toolBarScreen.longPressSummarizeButton()
+        readingListScreen.assertReaderListContentVisible()
+        readingListScreen.assertReaderButtonIsSelected()
+
+        readingListScreen.tapOnReaderView()
+        toolBarScreen.assertSummarizeButtonExists()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3409355
+    // Regression
+    func testPageSummariesSettingsSections() throws {
+        try skipIfAIFeaturesCannotBeForced()
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
+        app.launch()
+
+        openSettingsFromToolbarMenu()
+        settingsScreen.assertSummarizeSettingsIsInGeneralSection()
+        settingsScreen.openSummarizeSettings()
+        summarizeSettingScreen.assertSummarizeAndShakeTogglesAreOnByDefault()
+        summarizeSettingScreen.assertLanguageSectionShowsWebsiteLanguage()
+        summarizeSettingScreen.openLanguagePicker()
+        summarizeSettingScreen.assertLanguageOptionsExist()
     }
 
     // MARK: - Helpers
@@ -225,6 +275,43 @@ final class AIControlsTests: FeatureFlaggedTestBase {
         settingsScreen.closeSettingsWithDoneButton()
     }
 
+    private func skipIfAIFeaturesCannotBeForced() throws {
+        try XCTSkipIf(
+            isFirefox || isFirefoxBeta,
+            "Skipping because on Firefox and FirefoxBeta addLaunchArgument cannot override the default " +
+            "experiment values, so the AI features cannot be forced on/off"
+        )
+    }
+
+    /// Launches with the lightning summarize button in the address bar and its contextual hint enabled.
+    private func launchWithToolbarSummarizer() throws {
+        try skipIfAIFeaturesCannotBeForced()
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
+        // Language expansion replaces the summarize button with a combined Reader View one, which has no CFR
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "summarizer-language-expansion-feature")
+        // Skipping contextual hints marks every CFR as already shown, so the summarize CFR would never appear
+        app.launchArguments.removeAll { $0 == LaunchArguments.SkipContextualHints }
+        app.launch()
+    }
+
+    private func selectToolbarPosition(top: Bool) {
+        openSettingsFromToolbarMenu()
+        settingsScreen.navigateToToolbarSettings()
+        if top {
+            settingsScreen.selectTopToolbar()
+        } else {
+            settingsScreen.selectBottomToolbar()
+        }
+        settingsScreen.tapBackToSettings()
+        settingsScreen.closeSettingsWithDoneButton()
+    }
+
+    private func assertSummarizeButtonReplacesReaderViewWithContextualHint() {
+        toolBarScreen.assertSummarizeButtonExists()
+        readingListScreen.assertReaderButtonDoesNotExist()
+        toolBarScreen.assertSummarizeContextualHintIsDisplayed()
+    }
+
     private func openSettingsFromToolbarMenu() {
         toolBarScreen.tapSettingsMenuButton()
         mainMenuScreen.tapSettings()
@@ -240,6 +327,10 @@ final class AIControlsTests: FeatureFlaggedTestBase {
 
     private func loadTestPage(_ page: String) {
         browserScreen.tapOnAddressBar()
+        // Closing the Google Lens tip can end editing, so focus the address bar again
+        if toolBarScreen.dismissGoogleLensTipIfPresented() {
+            browserScreen.tapOnAddressBar()
+        }
         browserScreen.typeOnSearchBar(text: path(forTestPage: page))
         browserScreen.typeOnSearchBar(text: "\r")
         waitUntilPageLoad()

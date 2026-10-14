@@ -18,6 +18,8 @@ enum FeatureFlagID: String, CaseIterable {
     case aiKillSwitch
     case backgroundAudio
     case bookmarksSearchFeature
+    case browserDataExport
+    case browserDataImport
     case cellularDataRestrictedErrorPage
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
@@ -38,6 +40,7 @@ enum FeatureFlagID: String, CaseIterable {
     case hostedSummarizerToolbarEntrypoint
     case httpsUpgrade
     case improvedAppStoreReviewTriggerFeature
+    case mergeWindows
     case microsurvey
     case modernOnboardingUI
     case multiDayOnboarding
@@ -50,6 +53,7 @@ enum FeatureFlagID: String, CaseIterable {
     case recentSearches
     case relayIntegration
     case reportBrokenSite
+    case searchConfigV3
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case shouldUseBrandRefreshConfiguration
@@ -109,6 +113,8 @@ enum FeatureFlagID: String, CaseIterable {
                 .aiKillSwitch,
                 .backgroundAudio,
                 .bookmarksSearchFeature,
+                .browserDataExport,
+                .browserDataImport,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,
@@ -121,6 +127,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .hostedSummarizer,
                 .httpsUpgrade,
                 .improvedAppStoreReviewTriggerFeature,
+                .mergeWindows,
                 .microsurvey,
                 .multiDayOnboarding,
                 .nativeErrorPage,

@@ -80,7 +80,7 @@ final class TrackerBlockerSheetViewController: UIViewController, Themeable, Noti
 
     // The asset is already coloured, so it is drawn as-is rather than tinted from the theme.
     private let shieldImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: ImageIdentifiers.shieldCheckmarkColored)
+        imageView.image = UIImage(named: StandardIllustrationIdentifiers.Exports.picShieldCheckmark)
         imageView.contentMode = .scaleAspectFit
         imageView.isAccessibilityElement = false
         imageView.accessibilityIdentifier =

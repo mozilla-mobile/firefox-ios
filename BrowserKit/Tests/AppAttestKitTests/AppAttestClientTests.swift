@@ -95,6 +95,21 @@ final class AppAttestClientTests: XCTestCase {
         XCTAssertEqual(server.fetchChallengeCallCount, 1)
     }
 
+    // The server hashes the challenge string it issued, so the signed client data is the raw challenge.
+    func test_generateChallengeBoundAssertion_signsTheRawChallenge() async throws {
+        let keyStore = try createKeyStore(with: AppAttestTestData.keyID)
+        let server = makeServer(challenge: AppAttestTestData.assertionChallenge)
+        let service = makeService(assertionToReturn: AppAttestTestData.assertionBlob)
+        let subject = try createSubject(appAttestService: service, remoteServer: server, keyStore: keyStore)
+
+        let result = try await subject.generateChallengeBoundAssertion()
+
+        XCTAssertEqual(result.payload, Data(AppAttestTestData.assertionChallenge.utf8))
+        XCTAssertEqual(result.challenge, AppAttestTestData.assertionChallenge)
+        XCTAssertEqual(result.keyId, AppAttestTestData.keyID)
+        XCTAssertEqual(server.fetchChallengeCallCount, 1)
+    }
+
     func test_resetKey_clearsStoredKeyID() throws {
         let keyStore = try createKeyStore(with: AppAttestTestData.keyID)
         let subject = try createSubject(keyStore: keyStore)

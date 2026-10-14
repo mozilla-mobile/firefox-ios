@@ -44,7 +44,6 @@ protocol BrowserSelectorsSet {
     var CONTEXT_MENU_PASTE_AND_GO: Selector { get }
     var CONTEXT_MENU_PASTE: Selector { get }
     var CONTEXT_MENU_COPY_ADDRESS: Selector { get }
-    var CONTEXT_MENU_CLOSE_BUTTON: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
@@ -85,11 +84,9 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let firefoxSuggestHeader = "Firefox Suggest"
         // In-page button of the test-window-open-on-tap fixture
         static let openDesignatedURLButton = "Open designated URL"
-        static let addressBarContextMenu = AccessibilityIdentifiers.Photon.tableView
         static let contextMenuPasteAndGo = AccessibilityIdentifiers.Photon.pasteAndGoAction
         static let contextMenuPaste = AccessibilityIdentifiers.Photon.pasteAction
         static let contextMenuCopyAddress = AccessibilityIdentifiers.Photon.copyAddressAction
-        static let contextMenuCloseButton = AccessibilityIdentifiers.Photon.closeButton
     }
 
     let ADDRESS_BAR = Selector.textFieldId(
@@ -280,33 +277,33 @@ struct BrowserSelectors: BrowserSelectorsSet {
 
     // MARK: - Address bar long press menu
 
-    let ADDRESS_BAR_CONTEXT_MENU = Selector.tableIdOrLabel(
-        IDs.addressBarContextMenu,
+    // The UIMenu has no identifier of its own, so it counts as open once any of its options is shown.
+    let ADDRESS_BAR_CONTEXT_MENU = Selector(
+        strategy: .predicate(NSPredicate(
+            format: "elementType == %d AND identifier IN %@",
+            XCUIElement.ElementType.button.rawValue,
+            [IDs.contextMenuPasteAndGo, IDs.contextMenuPaste, IDs.contextMenuCopyAddress]
+        )),
+        value: IDs.contextMenuPaste,
         description: "Context menu presented by long pressing the address bar",
         groups: ["browser", "addressBarContextMenu"]
     )
 
-    let CONTEXT_MENU_PASTE_AND_GO = Selector.tableCellButtonById(
+    let CONTEXT_MENU_PASTE_AND_GO = Selector.cellButtonById(
         IDs.contextMenuPasteAndGo,
         description: "'Paste & Go' option in the address bar long press menu",
         groups: ["browser", "addressBarContextMenu"]
     )
 
-    let CONTEXT_MENU_PASTE = Selector.tableCellButtonById(
+    let CONTEXT_MENU_PASTE = Selector.cellButtonById(
         IDs.contextMenuPaste,
         description: "'Paste' option in the address bar long press menu",
         groups: ["browser", "addressBarContextMenu"]
     )
 
-    let CONTEXT_MENU_COPY_ADDRESS = Selector.tableCellButtonById(
+    let CONTEXT_MENU_COPY_ADDRESS = Selector.cellButtonById(
         IDs.contextMenuCopyAddress,
         description: "'Copy Address' option in the address bar long press menu",
-        groups: ["browser", "addressBarContextMenu"]
-    )
-
-    let CONTEXT_MENU_CLOSE_BUTTON = Selector.buttonId(
-        IDs.contextMenuCloseButton,
-        description: "Close button of the address bar long press menu",
         groups: ["browser", "addressBarContextMenu"]
     )
 
@@ -353,6 +350,6 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            PASTE_BUTTON, SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL, FIREFOX_SUGGEST_HEADER,
                            OPEN_DESIGNATED_URL_BUTTON, ADDRESS_BAR_CONTEXT_MENU,
                            CONTEXT_MENU_PASTE_AND_GO, CONTEXT_MENU_PASTE,
-                           CONTEXT_MENU_COPY_ADDRESS, CONTEXT_MENU_CLOSE_BUTTON]
+                           CONTEXT_MENU_COPY_ADDRESS]
     }
 }

@@ -63,6 +63,12 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
 
+        case .browserDataExport:
+            return nimbus.features.browserDataTransferFeature.value().exportEnabled
+
+        case .browserDataImport:
+            return nimbus.features.browserDataTransferFeature.value().importEnabled
+
         case .cellularDataRestrictedErrorPage:
             return checkCellularDataRestrictedErrorPageFeature()
 
@@ -119,6 +125,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .improvedAppStoreReviewTriggerFeature:
             return checkImprovedAppStoreReviewTriggerFeature()
 
+        case .mergeWindows:
+            return checkMergeWindowsFeature()
+
         case .microsurvey:
             return checkMicrosurveyFeature()
 
@@ -153,6 +162,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .reportBrokenSite:
             return checkReportBrokenSiteFeature()
+
+        case .searchConfigV3:
+            return checkSearchConfigV3Feature()
 
         case .sentFromFirefox:
             return checkSentFromFirefoxFeature()
@@ -498,6 +510,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.webViewDocumentFetchRefactorFeature.value().enabled
     }
 
+    private func checkMergeWindowsFeature() -> Bool {
+        return nimbus.features.mergeWindowsFeature.value().enabled
+    }
+
     private func checkVPNFeature() -> Bool {
         return nimbus.features.vpnFeature.value().enabled
     }
@@ -512,5 +528,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkMultiDayOnboardingFeature() -> Bool {
         return nimbus.features.multiDayOnboardingFeature.value().useMultiDayOnboarding
+    }
+
+    private func checkSearchConfigV3Feature() -> Bool {
+        return nimbus.features.searchConfigV3Feature.value().enabled
     }
 }

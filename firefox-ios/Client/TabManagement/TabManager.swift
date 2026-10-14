@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import WebKit
+import TabDataStore
 
 enum TabManagerConstants {
     static let tabScreenshotNamespace = "TabManagerScreenshots"
@@ -89,6 +90,29 @@ protocol TabManager: AnyObject {
     // MARK: Get Tab
     func getTabForUUID(uuid: TabUUID) -> Tab?
     func getTabForURL(_ url: URL) -> Tab?
+
+    // MARK: - Window merging
+
+    /// Persists the live session state (back/forward history) of every tab in this window and
+    /// returns the serialized tab data, used when merging this window's tabs into another window.
+    /// Private tabs are included only when the user's "close private tabs" setting is disabled,
+    /// matching the behaviour applied when the window would otherwise be closed.
+    /// - Returns: the tab data for every tab that should move to the destination window.
+    func tabDataForWindowMerge() -> [TabData]
+
+    /// Appends tabs from other windows' merged data into this window. The tabs are created as
+    /// zombies (no webview until selected) and keep their original UUIDs, so their history is
+    /// restored from the tab session store on selection. Tabs whose UUID already exists are skipped.
+    /// - Parameter tabDataList: the tab data collected from the other windows being merged.
+    func addTabs(fromWindowMergeData tabDataList: [TabData])
+
+    /// Empties this window's tab list after its tabs were copied into another window by
+    /// `tabDataForWindowMerge()`. The tabs' session data and screenshots are deliberately left on
+    /// disk because the destination window's tabs now reference them by the same UUIDs. Called
+    /// before the merged-away window is closed so that a save triggered on the way down writes an
+    /// empty tab list rather than resurrecting tabs that have already moved.
+    @MainActor
+    func discardTabsMovedToAnotherWindow()
 
     // MARK: Other Tab Actions
     func clearAllTabsHistory()

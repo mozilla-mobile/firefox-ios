@@ -27,6 +27,9 @@ struct CreditCardInputView: ThemeableView {
     var themeManager: ThemeManager
     @State var theme: Theme
 
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
     init(
         viewModel: CreditCardInputViewModel,
         windowUUID: WindowUUID,
@@ -35,7 +38,7 @@ struct CreditCardInputView: ThemeableView {
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        self.theme = themeManager.getCurrentTheme(for: windowUUID)
+        self.theme = themeManager.resolveTheme(for: windowUUID, privateOverride: false)
     }
 
     var body: some View {
@@ -43,12 +46,12 @@ struct CreditCardInputView: ThemeableView {
             NavigationStack {
                 bodyContent
             }
-            .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
+            .listenToThemeChanges(in: self, theme: $theme)
         } else {
             NavigationView {
                 bodyContent
             }
-            .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
+            .listenToThemeChanges(in: self, theme: $theme)
         }
     }
 
@@ -245,7 +248,7 @@ struct CreditCardEditView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleCreditCard = CreditCard(guid: "12345678",
                                           ccName: "Tim Apple",
-                                          ccNumberEnc: "12345678",
+                                          ccNumber: "12345678",
                                           ccNumberLast4: "4321",
                                           ccExpMonth: 1234,
                                           ccExpYear: 2026,

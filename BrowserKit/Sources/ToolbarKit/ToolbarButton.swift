@@ -227,8 +227,8 @@ class ToolbarButton: UIButton,
 
     private func configureLongPressGestureRecognizerIfNeeded(for element: ToolbarElement,
                                                              notificationCenter: NotificationProtocol) {
-        guard element.onLongPress != nil else { return }
-        onLongPress = element.onLongPress
+        guard case let .action(action) = element.longPressBehavior else { return }
+        onLongPress = action
         let longPressRecognizer = UILongPressGestureRecognizer(
             target: self,
             action: #selector(handleLongPress)
@@ -260,12 +260,22 @@ class ToolbarButton: UIButton,
     }
 
     private func configureMenuIfNeeded(for element: ToolbarElement) {
-        guard !element.menuElements.isEmpty else {
-            showsMenuAsPrimaryAction = false
+        // 1. Long press menu action handling
+        if case .menu = element.longPressBehavior {
             menu = nil
+            showsMenuAsPrimaryAction = false
+            isContextMenuInteractionEnabled = true
             return
         }
 
+        guard !element.menuElements.isEmpty else {
+            showsMenuAsPrimaryAction = false
+            menu = nil
+            isContextMenuInteractionEnabled = false
+            return
+        }
+
+        // 2. Primary action menu handling
         let actions: [UIMenuElement] = element.menuElements.map { menuElement in
             let action = UIAction(
                 title: menuElement.title,
@@ -283,6 +293,33 @@ class ToolbarButton: UIButton,
 
         menu = UIMenu(children: actions)
         showsMenuAsPrimaryAction = true
+    }
+
+    override func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        guard case let .menu(provider) = currentElement?.longPressBehavior else {
+            return super.contextMenuInteraction(interaction, configurationForMenuAtLocation: location)
+        }
+        guard let menu = provider(), !menu.children.isEmpty else { return nil }
+        let configuration = UIContextMenuConfiguration(actionProvider: { _ in
+            return menu
+        })
+        if #available(iOS 16.0, *) {
+            configuration.preferredMenuElementOrder = .fixed
+        }
+        return configuration
+    }
+
+    override func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        willDisplayMenuFor configuration: UIContextMenuConfiguration,
+        animator: (any UIContextMenuInteractionAnimating)?
+    ) {
+        super.contextMenuInteraction(interaction, willDisplayMenuFor: configuration, animator: animator)
+        guard case .menu = currentElement?.longPressBehavior else { return }
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
     }
 
     private func imageConfiguredForRTL(for element: ToolbarElement) -> UIImage? {

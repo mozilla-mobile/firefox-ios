@@ -49,8 +49,7 @@ final class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
 
     @MainActor
     func register(_ webServer: WKEngineWebServerProtocol, readerModeConfiguration: ReaderModeConfiguration) {
-        // Register our fonts and css, which we want to expose to web content that we present in the WebView
-        webServer.registerMainBundleResourcesOfType("otf", module: "reader-mode/fonts")
+        // Register our css to expose to web content that we present in the WebView
         webServer.registerMainBundleResource("Reader.css", module: "reader-mode/styles")
 
         // Initialize ReaderModeStyle here to ensure it is initialized on the main thread.

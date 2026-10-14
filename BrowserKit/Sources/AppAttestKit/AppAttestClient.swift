@@ -106,18 +106,14 @@ public struct AppAttestClient: Sendable {
     ///
     /// Unlike `generateAssertion(payload:)`, which passes the challenge alongside the signature in
     /// plaintext, this folds it into the signed bytes so a captured assertion can't be replayed.
-    /// The client data is JSON `{"challenge":"<challenge>"}` with sorted keys, so the
-    /// server can recompute identical bytes.
+    /// The client data is the challenge string itself, which is what the server hashes to rebuild the nonce.
     public func generateChallengeBoundAssertion() async throws -> AssertionResult {
         guard let keyId = keyStore.loadKeyID() else {
             throw AppAttestServiceError.missingKeyID
         }
 
         let challenge = try await remoteServer.fetchChallenge(for: keyId)
-        let clientData = try JSONSerialization.data(
-            withJSONObject: [Constants.challengeKey: challenge],
-            options: [.sortedKeys]
-        )
+        let clientData = Data(challenge.utf8)
         let clientDataHash = Data(SHA256.hash(data: clientData))
         let assertion = try await signAssertion(keyId: keyId, clientDataHash: clientDataHash)
 
@@ -142,9 +138,5 @@ public struct AppAttestClient: Sendable {
 
     public func resetKey() throws {
         try keyStore.clearKeyID()
-    }
-
-    private enum Constants {
-        static let challengeKey = "challenge"
     }
 }

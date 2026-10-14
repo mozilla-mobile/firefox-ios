@@ -220,8 +220,13 @@ class HistoryPanel: UIViewController,
 
     // MARK: - Private helpers
 
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
     private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
     }
 
     private func setupLayout() {
@@ -312,7 +317,7 @@ class HistoryPanel: UIViewController,
     func showClearRecentHistory() {
         clearHistoryHelper.showClearRecentHistory(
             onViewController: self,
-            theme: themeManager.getCurrentTheme(for: windowUUID)
+            theme: currentTheme()
         ) { [weak self] dateOption in
             // Delete groupings that belong to THAT section.
             switch dateOption {

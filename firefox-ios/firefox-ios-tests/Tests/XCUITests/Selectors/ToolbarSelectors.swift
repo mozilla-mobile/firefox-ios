@@ -18,6 +18,10 @@ protocol ToolbarSelectorsSet {
     var TRANSLATE_LOADING_BUTTON: Selector { get }
     var TRANSLATE_ACTIVE_BUTTON: Selector { get }
     var TRANSLATE_LANGUAGE_ENGLISH_OPTION: Selector { get }
+    var SUMMARIZE_BUTTON: Selector { get }
+    var CONTEXTUAL_HINT_CLOSE_BUTTON: Selector { get }
+    var GOOGLE_LENS_TIP_TITLE: Selector { get }
+    var SUMMARIZE_CONTEXTUAL_HINT: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -36,6 +40,10 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         static let translateLoadingButton = AccessibilityIdentifiers.Toolbar.translateLoadingButton
         static let translateActiveButton = AccessibilityIdentifiers.Toolbar.translateActiveButton
         static let translateLanguageEnglishOption = "English"
+        static let summarizeButton = AccessibilityIdentifiers.Toolbar.summarizeButton
+        static let summarizeContextualHint = "Tap to summarize this page. Touch and hold for Reader View."
+        static let contextualHintCloseButton = "Close"
+        static let googleLensTipTitle = "Search With Google Lens"
     }
 
     let SETTINGS_MENU_BUTTON = Selector.buttonId(
@@ -117,6 +125,31 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         groups: ["translation"]
     )
 
+    let SUMMARIZE_BUTTON = Selector.buttonId(
+        IDs.summarizeButton,
+        description: "Summarize (lightning) button in the address bar",
+        groups: ["browser", "toolbar", "summarizer"]
+    )
+
+    // The CFR has no identifier, so it is matched by its description.
+    let SUMMARIZE_CONTEXTUAL_HINT = Selector.staticTextByLabel(
+        IDs.summarizeContextualHint,
+        description: "Contextual hint pointing at the summarize button",
+        groups: ["toolbar", "summarizer"]
+    )
+
+    let CONTEXTUAL_HINT_CLOSE_BUTTON = Selector.buttonByLabel(
+        IDs.contextualHintCloseButton,
+        description: "The \"x\" button of the contextual hint or tip shown on the toolbar",
+        groups: ["toolbar"]
+    )
+
+    let GOOGLE_LENS_TIP_TITLE = Selector.staticTextByLabel(
+        IDs.googleLensTipTitle,
+        description: "Title of the one-time Google Lens tip shown when the address bar is focused",
+        groups: ["toolbar"]
+    )
+
     var all: [Selector] { [
         SETTINGS_MENU_BUTTON,
         TABS_BUTTON,
@@ -130,6 +163,10 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         TRANSLATE_BUTTON,
         TRANSLATE_LOADING_BUTTON,
         TRANSLATE_ACTIVE_BUTTON,
-        TRANSLATE_LANGUAGE_ENGLISH_OPTION
+        TRANSLATE_LANGUAGE_ENGLISH_OPTION,
+        SUMMARIZE_BUTTON,
+        SUMMARIZE_CONTEXTUAL_HINT,
+        CONTEXTUAL_HINT_CLOSE_BUTTON,
+        GOOGLE_LENS_TIP_TITLE
     ] }
 }

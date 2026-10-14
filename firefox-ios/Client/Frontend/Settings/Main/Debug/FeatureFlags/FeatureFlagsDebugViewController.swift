@@ -108,6 +108,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .browserDataExport,
+                titleText: format(string: "Browser Data Export"),
+                statusText: format(string: "Toggle to enable exporting bookmarks and history to another browser")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .browserDataImport,
+                titleText: format(string: "Browser Data Import"),
+                statusText: format(string: "Toggle to enable importing bookmarks and history from another browser")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .customReaderModeScheme,
                 titleText: format(string: "Custom Reader Mode Scheme"),
                 statusText: format(string: "Toggle to serve reader mode via the readermode:// scheme handler")
@@ -182,6 +196,14 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 titleText: format(string: "Improved App Store Review Trigger"),
                 statusText: format(string: "Toggle to enable App Store Review Trigger feature.")
             ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .mergeWindows,
+                titleText: format(string: "Combine Windows"),
+                statusText: format(string: "Toggle to show the Combine Windows home screen Quick Action on iPad")
+            ) { [weak self] _ in
+                MergeWindowsQuickActionController().update()
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(

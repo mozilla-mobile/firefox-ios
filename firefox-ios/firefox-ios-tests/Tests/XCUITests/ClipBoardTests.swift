@@ -81,10 +81,10 @@ class ClipBoardTests: BaseTestCase {
             } else {
                 urlBarAddress.press(forDuration: 1)
             }
-            if !app.otherElements.buttons["Paste"].exists {
+            if !app.collectionViews.menuItems["Paste"].exists {
                 urlBarAddress.press(forDuration: 1)
             }
-            app.otherElements.buttons["Paste"].waitAndTap()
+            app.collectionViews.menuItems["Paste"].waitAndTap()
             if #available(iOS 18, *) {
                 mozWaitForValueContains(urlBarAddress, value: "https://www.example.com/")
             } else {

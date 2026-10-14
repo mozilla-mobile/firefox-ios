@@ -32,7 +32,7 @@ final class TranscriptLabel: UILabel {
     private var blurStartTimestamp: CFTimeInterval = 0
     private var lastRenderedRadius: CGFloat = -1
     /// The last transcript reported by the transcriber.
-    private var transcript = ""
+    private(set) var transcript = ""
     /// The part of `transcript` that has already been animated in.
     private var revealedTranscript = ""
     private var isAnimatingAppendedText = false
@@ -84,6 +84,13 @@ final class TranscriptLabel: UILabel {
             return
         }
         animateAppendedText()
+    }
+
+    /// Recolors the displayed transcript. While text is animating in, the new color is applied once it settles.
+    func applyForegroundColor(_ color: UIColor) {
+        foregroundColor = color
+        guard !isAnimatingAppendedText else { return }
+        showFullTranscript()
     }
 
     private func animateAppendedText() {

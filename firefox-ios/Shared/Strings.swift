@@ -279,6 +279,78 @@ extension String {
     }
 }
 
+// MARK: - Browser Data Transfer
+extension String {
+    public struct BrowserDataTransfer {
+        public struct ImportedBookmarksFolder {
+            public static let Title = MZLocalizedString(
+                key: "BrowserDataTransfer.ImportedBookmarksFolder.Title.v160",
+                tableName: "BrowserDataTransfer",
+                value: "Imported %@",
+                comment: "Name of the bookmarks folder that holds bookmarks imported from another browser. %@ is the date when the import happens, formatted for the user’s locale without the time.")
+        }
+
+        public struct ImportFailure {
+            public static let Title = MZLocalizedString(
+                key: "BrowserDataTransfer.ImportFailure.Title.v160",
+                tableName: "BrowserDataTransfer",
+                value: "Couldn’t Import from %@",
+                comment: "Title of the alert shown when Firefox could not finish importing data from another browser. %@ is the name of the other browser, for example Safari. Data imported before the error is kept.")
+            public static let Message = MZLocalizedString(
+                key: "BrowserDataTransfer.ImportFailure.Message.v160",
+                tableName: "BrowserDataTransfer",
+                value: "Try again later.",
+                comment: "Message of the alert shown when Firefox could not finish importing data from another browser.")
+            public static let DismissButton = MZLocalizedString(
+                key: "BrowserDataTransfer.ImportFailure.DismissButton.v160",
+                tableName: "BrowserDataTransfer",
+                value: "Dismiss",
+                comment: "Button that dismisses the alert shown when Firefox could not finish importing data from another browser.")
+        }
+
+        public struct ImportSuccess {
+            public static let Title = MZLocalizedString(
+                key: "BrowserDataTransfer.ImportSuccess.Title.v160",
+                tableName: "BrowserDataTransfer",
+                value: "%@ Import Complete",
+                comment: "Title of the alert shown after Firefox finishes importing data from another browser. %@ is the name of the other browser, for example Safari.")
+            public static let Message = MZLocalizedString(
+                key: "BrowserDataTransfer.ImportSuccess.Message.v160",
+                tableName: "BrowserDataTransfer",
+                value: "Your imported data is ready to use in %@.",
+                comment: "Message of the alert shown after Firefox finishes importing data from another browser. %@ is the app name (e.g. Firefox).")
+            public static let GotItButton = MZLocalizedString(
+                key: "BrowserDataTransfer.ImportSuccess.GotItButton.v160",
+                tableName: "BrowserDataTransfer",
+                value: "Got It",
+                comment: "Button that dismisses the alert shown after Firefox finishes importing data from another browser.")
+        }
+
+        public struct Settings {
+            public static let SectionTitle = MZLocalizedString(
+                key: "BrowserDataTransfer.Settings.SectionTitle.v160",
+                tableName: "BrowserDataTransfer",
+                value: "Data Import and Export",
+                comment: "On the Data Management screen in Settings, the header of the section that contains the actions to import data from, or export data to, another browser installed on the device.")
+            public static let ExportButton = MZLocalizedString(
+                key: "BrowserDataTransfer.Settings.ExportButton.v160",
+                tableName: "BrowserDataTransfer",
+                value: "Export to Another Browser",
+                comment: "On the Data Management screen in Settings, the button that starts sending Firefox bookmarks, history, and reading lists to another browser installed on the device.")
+            public static let ImportButton = MZLocalizedString(
+                key: "BrowserDataTransfer.Settings.ImportButton.v160",
+                tableName: "BrowserDataTransfer",
+                value: "Import from Another Browser",
+                comment: "On the Data Management screen in Settings, the button that starts importing bookmarks, history, and reading lists from another browser installed on the device into Firefox.")
+            public static let SupportedDataFooter = MZLocalizedString(
+                key: "BrowserDataTransfer.Settings.SupportedDataFooter.v160",
+                tableName: "BrowserDataTransfer",
+                value: "Bring bookmarks, history, and reading lists into %1$@, or send your %1$@ data to another browser.",
+                comment: "On the Data Management screen in Settings, the footer below the import and export buttons explaining which kinds of data can be moved between the app and another browser. %1$@ is the app name (e.g. Firefox), used in both places.")
+        }
+    }
+}
+
 // MARK: - Contextual Hints
 extension String {
     public struct ContextualHints {
@@ -2947,6 +3019,27 @@ extension String {
                 tableName: "QuickAnswers",
                 value: "Listening, ask anything…",
                 comment: "Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak."
+            )
+
+            public static let ListeningFollowUp = MZLocalizedString(
+                key: "QuickAnswers.ContentView.ListeningFollowUp.v160",
+                tableName: "QuickAnswers",
+                value: "Listening, ask a follow-up…",
+                comment: "Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to ask a follow-up question about the previous answer."
+            )
+
+            public static let ResultHeader = MZLocalizedString(
+                key: "QuickAnswers.ContentView.ResultHeader.v160",
+                tableName: "QuickAnswers",
+                value: "QUICK ANSWER",
+                comment: "Header label shown above the body of a Quick Answers result, labeling the text below it as a short answer to the user's question."
+            )
+
+            public static let FollowUpButton = MZLocalizedString(
+                key: "QuickAnswers.ContentView.FollowUpButton.v160",
+                tableName: "QuickAnswers",
+                value: "Ask a Follow-Up",
+                comment: "Button shown below a Quick Answers result that the user taps to ask a follow-up question about the answer."
             )
 
             public static let Answering = MZLocalizedString(
@@ -8019,6 +8112,11 @@ extension String {
         tableName: "3DTouchActions",
         value: nil,
         comment: "String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch")
+    public static let QuickActionsCombineWindowsTitle = MZLocalizedString(
+        key: "QuickActions.CombineWindows.Title.v155",
+        tableName: "3DTouchActions",
+        value: "Combine Windows",
+        comment: "On iPad, label for the home screen Quick Action (long-press the app icon) that combines the tabs from all other open Firefox windows into the current window and closes those other windows.")
 }
 
 // MARK: - ClearPrivateDataAlert
@@ -9255,6 +9353,18 @@ extension String {
     /// https://github.com/mozilla-mobile/firefox-ios/wiki/How-to-add-and-modify-Strings#oldstrings-struct
     /// periphery:ignore - These strings are getting removed every couple of months
     struct OldStrings {
+        struct v158 {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.TitleLabel.v131",
+                tableName: "NativeErrorPage",
+                value: "Be careful. Something doesn’t look right.",
+                comment: "On error page, this is the title for generic error.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v134",
+                tableName: "NativeErrorPage",
+                value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
+                comment: "On error page, this is the description for a generic error. %@ is the site url.")
+        }
         struct v157 {
             public static let Title = MZLocalizedString(
                 key: "ContextualHints.Translations.Title.v145",
@@ -9266,574 +9376,6 @@ extension String {
                 tableName: "ContextualHints",
                 value: "Fast, private translations are ready when you are.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar.")
-        }
-        struct v153 {
-            public static let AppMenuReportSiteIssueTitleString = MZLocalizedString(
-                key: "Menu.ReportSiteIssueAction.Title",
-                tableName: "Menu",
-                value: "Report Site Issue",
-                comment: "Label for the button, displayed in the menu, used to report a compatibility issue with the current page.")
-            public static let ProtectionStatusSecure = MZLocalizedString(
-                key: "ProtectionStatus.Secure",
-                tableName: nil,
-                value: "Connection is secure",
-                comment: "This is the value for a label that indicates if a user is on a secure https connection.")
-            public static let ProtectionStatusNotSecure = MZLocalizedString(
-                key: "ProtectionStatus.NotSecure",
-                tableName: nil,
-                value: "Connection is not secure",
-                comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
-            public static let ETPOn = MZLocalizedString(
-                key: "Menu.EnhancedTrackingProtectionOn.Title",
-                tableName: nil,
-                value: "Protections are ON for this site",
-                comment: "A switch to enable enhanced tracking protection inside the menu.")
-            public static let ETPOff = MZLocalizedString(
-                key: "Menu.EnhancedTrackingProtectionOff.Title",
-                tableName: nil,
-                value: "Protections are OFF for this site",
-                comment: "A switch to disable enhanced tracking protection inside the menu.")
-            public static let UpgradeWelcomeTitle = MZLocalizedString(
-                key: "Upgrade.Welcome.Title.v114",
-                tableName: "Upgrade",
-                value: "Welcome to a more personal internet",
-                comment: "Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
-            public static let UpgradeWelcomeDescription = MZLocalizedString(
-                key: "Upgrade.Welcome.Description.v114",
-                tableName: "Upgrade",
-                value: "New colors. New convenience. Same commitment to people over profits.",
-                comment: "Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
-            public static let UpgradeWelcomeAction = MZLocalizedString(
-                key: "Upgrade.Welcome.Action.v114",
-                tableName: "Upgrade",
-                value: "Set as Default Browser",
-                comment: "Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade.")
-            public static let UpgradeSyncTitle = MZLocalizedString(
-                key: "Upgrade.SyncSign.Title.v114",
-                tableName: "Upgrade",
-                value: "Switching screens is easier than ever",
-                comment: "Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
-            public static let UpgradeSyncDescription = MZLocalizedString(
-                key: "Upgrade.SyncSign.Description.v114",
-                tableName: "Upgrade",
-                value: "Pick up where you left off with tabs from other devices now on your homepage.",
-                comment: "Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
-            public static let UpgradeSyncAction = MZLocalizedString(
-                key: "Upgrade.SyncSign.Action.v114",
-                tableName: "Upgrade",
-                value: "Sign In",
-                comment: "Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade.")
-            public static let Toolbar = MZLocalizedString(
-                key: "Settings.Toolbar.SettingsTitle",
-                tableName: nil,
-                value: "Toolbar",
-                comment: "In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance.")
-            public static let OnboardingCustomizationIntroTitle = MZLocalizedString(
-                key: "Onboarding.Customization.Intro.Title.v123",
-                tableName: "Onboarding",
-                value: "%@ puts you in control",
-                comment: "String used to describe the title of the customization onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox).")
-            public static let OnboardingCustomizationIntroDescription = MZLocalizedString(
-                key: "Onboarding.Customization.Intro.Description.v123",
-                tableName: "Onboarding",
-                value: "Set your theme and toolbar to match your unique browsing style.",
-                comment: "String used to describe the description label of the customization onboarding page in our Onboarding screens.")
-            public static let OnboardingCustomizationIntroSkipAction = MZLocalizedString(
-                key: "Onboarding.Customization.Intro.Skip.Action.v123",
-                tableName: "Onboarding",
-                value: "Start Browsing",
-                comment: "String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing.")
-            public static let OnboardingCustomizationThemeSkipAction = MZLocalizedString(
-                key: "Onboarding.Customization.Theme.Skip.Action.v123",
-                tableName: "Onboarding",
-                value: "Skip",
-                comment: "String used to describe the option to skip the theme customization in Firefox Onboarding screens.")
-            public static let OnboardingCustomizationToolbarSkipAction = MZLocalizedString(
-                key: "Onboarding.Customization.Toolbar.Skip.Action.v123",
-                tableName: "Onboarding",
-                value: "Skip",
-                comment: "String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app.")
-            public static let OnboardingBrandRefreshTermsOfUseTitle = MZLocalizedString(
-                key: "Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148",
-                tableName: "Onboarding",
-                value: "Get ready to run free",
-                comment: "Title for the Terms of Use card in the v148 brand refresh onboarding flow.")
-            public static let OnboardingBrandRefreshTermsOfUseManagePreferenceAgreement = MZLocalizedString(
-                key: "Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148",
-                tableName: "Onboarding",
-                value: "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@",
-                comment: "Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences.")
-            public static let OnboardingBrandRefreshTermsOfUseManageLink = MZLocalizedString(
-                key: "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148",
-                tableName: "Onboarding",
-                value: "Manage settings",
-                comment: "The text for the manage settings link button in the v148 brand refresh onboarding flow.")
-            public static let OnboardingBrandRefreshTermsOfUseAgreementButtonTitle = MZLocalizedString(
-                key: "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148",
-                tableName: "Onboarding",
-                value: "Agree and continue",
-                comment: "Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow.")
-            public static let OnboardingBrandRefreshWelcomeTitleV2 = MZLocalizedString(
-                key: "Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2",
-                tableName: "Onboarding",
-                value: "Open your links with built-in privacy",
-                comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
-            public static let OnboardingWelcomeCloseAccessibilityLabel = MZLocalizedString(
-                key: "Onboarding.Welcome.Close.AccessibilityLabel.v121",
-                tableName: "Onboarding",
-                value: "Close and exit %@ onboarding",
-                comment: "Accessibility label for close button that dismisses the welcome onboarding screen. %@ is the app name (e.g. Firefox).")
-            public static let OnboardingWelcomeTitle = MZLocalizedString(
-                key: "Onboarding.Welcome.Title.v114",
-                tableName: "Onboarding",
-                value: "Welcome to an independent internet",
-                comment: "String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens.")
-            public static let OnboardingWelcomeDescription = MZLocalizedString(
-                key: "Onboarding.Welcome.Description.v120",
-                tableName: "Onboarding",
-                value: "Our non-profit backed browser helps stop companies from secretly following you around the web.",
-                comment: "String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox).")
-            public static let OnboardingWelcomeActionTreatementA = MZLocalizedString(
-                key: "Onboarding.Welcome.ActionTreatementA.v114",
-                tableName: "Onboarding",
-                value: "Set as Default Browser",
-                comment: "Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox.")
-            public static let OnboardingWelcomeSkip = MZLocalizedString(
-                key: "Onboarding.Welcome.Skip.v114",
-                tableName: "Onboarding",
-                value: "Skip",
-                comment: "Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card.")
-            public static let OnboardingSyncTitle = MZLocalizedString(
-                key: "Onboarding.Sync.Title.v120",
-                tableName: "Onboarding",
-                value: "Stay encrypted when you hop between devices",
-                comment: "String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens.")
-            public static let OnboardingSyncDescription = MZLocalizedString(
-                key: "Onboarding.Sync.Description.v123",
-                tableName: "Onboarding",
-                value: "%@ encrypts your passwords, bookmarks, and more when you’re synced.",
-                comment: "String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox).")
-            public static let OnboardingSyncSignInAction = MZLocalizedString(
-                key: "Onboarding.Sync.SignIn.Action.v114",
-                tableName: "Onboarding",
-                value: "Sign In",
-                comment: "String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens.")
-            public static let OnboardingNotificationTitle = MZLocalizedString(
-                key: "Onboarding.Notification.Title.v120",
-                tableName: "Onboarding",
-                value: "Notifications help you stay safer with %@",
-                comment: "String used to describe the title of the notification onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox).")
-            public static let OnboardingNotificationDescription = MZLocalizedString(
-                key: "Onboarding.Notification.Description.v120",
-                tableName: "Onboarding",
-                value: "Securely send tabs between your devices and discover other privacy features in %@.",
-                comment: "String used to describe the description of the notification onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox).")
-            public static let OnboardingNotificationSkipAction = MZLocalizedString(
-                key: "Onboarding.Notification.Skip.Action.v115",
-                tableName: "Onboarding",
-                value: "Skip",
-                comment: "String used to describe the option to skip the notification permission in Firefox Onboarding screens.")
-            public static let OnboardingCustomizationThemeTitle = MZLocalizedString(
-                key: "Onboarding.Customization.Theme.Title.v123",
-                tableName: "Onboarding",
-                value: "Pick a theme",
-                comment: "String used to describe the title of the theme customization onboarding page in our Onboarding screens.")
-            public static let OnboardingCustomizationThemeDescription = MZLocalizedString(
-                key: "Onboarding.Customization.Theme.Description.v123",
-                tableName: "Onboarding",
-                value: "See the web in the best light.",
-                comment: "String used to describe the description label of the theme customization onboarding page in our Onboarding screens.")
-            public static let OnboardingCustomizationToolbarTitle = MZLocalizedString(
-                key: "Onboarding.Customization.Toolbar.Title.v123",
-                tableName: "Onboarding",
-                value: "Pick a toolbar placement",
-                comment: "String used to describe the title of the toolbar customization onboarding page in our Onboarding screens.")
-            public static let OnboardingCustomizationToolbarDescription = MZLocalizedString(
-                key: "Onboarding.Customization.Toolbar.Description.v123",
-                tableName: "Onboarding",
-                value: "Keep searches within reach.",
-                comment: "String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens.")
-        }
-        struct v154 {
-            public static let WorldCupCountryPickerTitle = MZLocalizedString(
-                key: "WorldCup.CountryPicker.Title.v151",
-                tableName: "WorldCup",
-                value: "Follow Your Team",
-                comment: "Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event.")
-            public static let WorldCupCountryPickerSkipButtonTitle = MZLocalizedString(
-                key: "WorldCup.CountryPicker.SkipButton.Title.v151",
-                tableName: "WorldCup",
-                value: "Skip",
-                comment: "Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow.")
-            public static let WorldCupCountryPickerCloseButtonAccessibilityLabel = MZLocalizedString(
-                key: "WorldCup.CountryPicker.Close.AccessibilityLabel.v151",
-                tableName: "WorldCup",
-                value: "Close World Cup country picker",
-                comment: "Accessibility label for the close button on the country picker for the World Cup widget. This allows users to close the country picker.")
-            // Note: "North America" and "CONCACAF" overlap in scope
-            // CONCACAF is the FIFA confederation covering North America, Central America, and the Caribbean.
-            // For completeness, we are including a all the geographic region headers as well as the CONCACAF confederation header
-            // in case the UI groups countries by geographic region rather than strictly by confederation.
-            public static let WorldCupCountryPickerConfederationNorthAmerica = MZLocalizedString(
-                key: "WorldCup.CountryPicker.Confederation.NorthAmerica.v151",
-                tableName: "WorldCup",
-                value: "North America",
-                comment: "Section header for the North America region in the World Cup country picker.")
-            public static let WorldCupCountryPickerConfederationCentralAmerica = MZLocalizedString(
-                key: "WorldCup.CountryPicker.Confederation.CentralAmerica.v151",
-                tableName: "WorldCup",
-                value: "Central America",
-                comment: "Section header for the Central America region in the World Cup country picker. Note: Central America falls under the CONCACAF confederation in FIFA. This string is included for completeness in case the UI groups countries by geographic region rather than confederation.")
-            public static let WorldCupCountryPickerConfederationAfrica = MZLocalizedString(
-                key: "WorldCup.CountryPicker.Confederation.Africa.v151",
-                tableName: "WorldCup",
-                value: "Africa",
-                comment: "Section header for the Africa region in the World Cup country picker.")
-            public static let WorldCupCountryPickerConfederationAsia = MZLocalizedString(
-                key: "WorldCup.CountryPicker.Confederation.Asia.v151",
-                tableName: "WorldCup",
-                value: "Asia",
-                comment: "Section header for the Asia region in the World Cup country picker.")
-            public static let WorldCupCountryPickerConfederationCONCACAF = MZLocalizedString(
-                key: "WorldCup.CountryPicker.Confederation.CONCACAF.v151",
-                tableName: "WorldCup",
-                value: "CONCACAF",
-                comment: "Section header for the CONCACAF confederation group in the World Cup country picker. CONCACAF is the abbreviation for Confederation of North, Central America and Caribbean Association Football. This covers North America, Central America, and the Caribbean.")
-            public static let WorldCupCountryPickerConfederationEurope = MZLocalizedString(
-                key: "WorldCup.CountryPicker.Confederation.Europe.v151",
-                tableName: "WorldCup",
-                value: "Europe",
-                comment: "Section header for the Europe region in the World Cup country picker.")
-            public static let WorldCupCountryPickerConfederationOceania = MZLocalizedString(
-                key: "WorldCup.CountryPicker.Confederation.Oceania.v151",
-                tableName: "WorldCup",
-                value: "Oceania",
-                comment: "Section header for the Oceania region in the World Cup country picker.")
-            public static let WorldCupCountryPickerConfederationSouthAmerica = MZLocalizedString(
-                key: "WorldCup.CountryPicker.Confederation.SouthAmerica.v151",
-                tableName: "WorldCup",
-                value: "South America",
-                comment: "Section header for the South America region in the World Cup country picker.")
-            public static let WorldCupCountryPickerCountryNameEngland = MZLocalizedString(
-                key: "WorldCup.CountryPicker.Country.England.v151",
-                tableName: "WorldCup",
-                value: "England",
-                comment: "Country name for England in the World Cup country picker. England cannot be resolved with standard locale APIs so it needs an explicit string.")
-            public static let WorldCupCountryPickerCountryNameScotland = MZLocalizedString(
-                key: "WorldCup.CountryPicker.Country.Scotland.v151",
-                tableName: "WorldCup",
-                value: "Scotland",
-                comment: "Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string.")
-            public static let WorldCupHomepageWidgetLiveLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.LiveLabel.v151",
-                tableName: "WorldCup",
-                value: "LIVE",
-                comment: "The label that appears for live World Cup matches.")
-            public static let WorldCupHomepageWidgetDisableNotificationButtonAccessibilityLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151",
-                tableName: "WorldCup",
-                value: "Disable notifications",
-                comment: "The accessibility labels for the button that allow to disable World Cup notifications.")
-            public static let WorldCupHomepageWidgetSettingsButtonAccessibilityLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151",
-                tableName: "WorldCup",
-                value: "More options",
-                comment: "The accessibility label for the button that allows to see more options related to World Cup widget.")
-            public static let WorldCupHomepageWidgetChangeTeamLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.ChangeTeamLabel.v151",
-                tableName: "WorldCup",
-                value: "Change team",
-                comment: "The label for the button that allows to change the team displayed in the World Cup widget more options panel.")
-            public static let WorldCupHomepageWidgetFollowTeamLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.FollowTeamLabel.v151",
-                tableName: "WorldCup",
-                value: "Follow team",
-                comment: "The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected.")
-            public static let WorldCupHomepageWidgetGetCustomWallpaperLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151",
-                tableName: "WorldCup",
-                value: "Get custom wallpaper",
-                comment: "The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel.")
-            public static let WorldCupHomepageWidgetShareLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.ShareLabel.v151",
-                tableName: "WorldCup",
-                value: "Share",
-                comment: "The label for the button that allows to share the selected match info in the World Cup widget more options panel.")
-            public static let WorldCupHomepageWidgetRemoveLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RemoveLabel.v151",
-                tableName: "WorldCup",
-                value: "Remove",
-                comment: "The label for the button that allows to remove the World Cup widget from the home screen in the more options panel.")
-            public static let WorldCupHomepageWidgetFirstHalfLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.FirstHalfLabel.v151",
-                tableName: "WorldCup",
-                value: "First half",
-                comment: "The label indicating that the displaying match is in the first half.")
-            public static let WorldCupHomepageWidgetHalfTimeLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.HalfTimeLabel.v151",
-                tableName: "WorldCup",
-                value: "Half time",
-                comment: "The label indicating that the displaying match is in the half time.")
-            public static let WorldCupHomepageWidgetSecondHalfLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.SecondHalfLabel.v151",
-                tableName: "WorldCup",
-                value: "Second half",
-                comment: "The label indicating that the displaying match is in the second half.")
-            public static let WorldCupHomepageWidgetExtraTimeLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.ExtraTimeLabel.v151",
-                tableName: "WorldCup",
-                value: "Extra time",
-                comment: "The label indicating that the displaying match is in the extra time part of the game.")
-            public static let WorldCupHomepageWidgetPenaltiesLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.PenaltiesLabel.v151",
-                tableName: "WorldCup",
-                value: "Penalties (%@)",
-                comment: "The label indicating that the displaying match is in the penalties part of the game. %@ will be replaced by the score of the penalties")
-            public static let WorldCupHomepageWidgetFullTimePenaltiesScoreLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151",
-                tableName: "WorldCup",
-                value: "Full time • Penalties (%@)",
-                comment: "The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties")
-            public static let WorldCupHomepageWidgetFullTimeLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.FTLabel.v151",
-                tableName: "WorldCup",
-                value: "(Full Time)",
-                comment: "The label indicating that the displaying match has ended.")
-            public static let WorldCupHomepageWidgetFullTimeNoParenthesisLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151",
-                tableName: "WorldCup",
-                value: "Full Time",
-                comment: "The label indicating that the displaying match has ended.")
-            public static let WorldCupHomepageWidgetErrorLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.ErrorLabel.v151",
-                tableName: "WorldCup",
-                value: "We couldn’t load match data. Please refresh.",
-                comment: "A generic error message used in the World Cup widget when the match data could not be loaded.")
-            public static let WorldCupHomepageWidgetRetryButtonLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RetryButtonLabel.v151",
-                tableName: "WorldCup",
-                value: "Refresh",
-                comment: "The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed.")
-            public static let WorldCupHomepageWidgetMatchUnavailableLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.MatchUnavailableLabel.v151",
-                tableName: "WorldCup",
-                value: "Match info is not available right now. Try refreshing in a few minutes.",
-                comment: "Message shown in the World Cup widget when match data is temporarily unavailable.")
-            public static let WorldCupHomepageWidgetMatchUnavailableRefreshButtonLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151",
-                tableName: "WorldCup",
-                value: "Refresh",
-                comment: "Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data.")
-            public static let WorldCupHomepageWidgetOfflineLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.OfflineLabel.v151",
-                tableName: "WorldCup",
-                value: "Looks like you’re offline. Check your internet connection and try again.",
-                comment: "Message shown in the World Cup widget when the device has no internet connection.")
-            public static let WorldCupHomepageWidgetCountDownTitle = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.CountDown.Title.v151",
-                tableName: "WorldCup",
-                value: "Countdown to the World Cup",
-                comment: "Title for the countdown section of the World Cup widget showing the time remaining until the World Cup event.")
-            public static let WorldCupHomepageWidgetCountDownDayLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.CountDown.DayLabel.v151",
-                tableName: "WorldCup",
-                value: "D",
-                comment: "D is short for Days. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. T for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
-            public static let WorldCupHomepageWidgetCountDownHourLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.CountDown.HourLabel.v151",
-                tableName: "WorldCup",
-                value: "H",
-                comment: "H is short for Hours. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. St for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
-            public static let WorldCupHomepageWidgetCountDownMinuteLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.CountDown.MinuteLabel.v151",
-                tableName: "WorldCup",
-                value: "M",
-                comment: "M is short for Minutes. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
-            public static let WorldCupHomepageWidgetCountDownViewScheduleButtonLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151",
-                tableName: "WorldCup",
-                value: "View Schedule",
-                comment: "Label for the button that takes users to the World Cup schedule website on the countdown section.")
-            public static let WorldCupHomepageWidgetFollowTeamCardTitle = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.FollowTeamCard.Title.v151",
-                tableName: "WorldCup",
-                value: "Keep Tabs on the World Cup",
-                comment: "Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. 'Keep Tabs On' is an informal expression meaning to stay updated on or regularly follow something (in this case, World Cup matches and updates). It’s playfully related to Firefox in that “tabs” are a browser feature. It suggests ongoing awareness rather than active monitoring or control. Not to be translated literally as physical 'tabs' or tracking in a technical sense. the meaning is about staying informed.")
-            public static let WorldCupHomepageWidgetFollowTeamCardDescription = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.FollowTeamCard.Description.v151",
-                tableName: "WorldCup",
-                value: "Get live match updates and more.",
-                comment: "Description for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event.")
-            public static let WorldCupHomepageWidgetFollowTeamCardCTA = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.FollowTeamCard.CTA.v151",
-                tableName: "WorldCup",
-                value: "Follow Your Team",
-                comment: "Call to action for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event.")
-            public static let WorldCupHomepageWidgetFollowTeamCardCloseButtonAccessibilityLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151",
-                tableName: "WorldCup",
-                value: "Hide World Cup updates",
-                comment: "Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event.")
-            public static let WorldCupHomepageWidgetTemporaryViewDescription = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.TemporaryView.Description.v151",
-                tableName: "WorldCup",
-                value: "We’ll keep you updated as the World Cup approaches",
-                comment: "The description for the temporary view in the World Cup widget showing the team that has been previously selected.")
-            public static let WorldCupHomepageWidgetGroupPhaseGroupStageLabel = MZLocalizedString(
-                key: "WorldCup.GroupPhase.GroupStageLabel.v151",
-                tableName: "WorldCup",
-                value: "Group Stage",
-                comment: "The generic label indicating the Group Stage phase in the World Cup widget.")
-            public static let WorldCupHomepageWidgetGroupPhaseGroupA = MZLocalizedString(
-                key: "WorldCup.GroupPhase.GroupA.Title.v151",
-                tableName: "WorldCup",
-                value: "Group A",
-                comment: "The title of the Group A group in the World Cup Group Stage.")
-            public static let WorldCupHomepageWidgetGroupPhaseGroupB = MZLocalizedString(
-                key: "WorldCup.GroupPhase.GroupB.Title.v151",
-                tableName: "WorldCup",
-                value: "Group B",
-                comment: "The title of the Group B group in the World Cup Group Stage.")
-            public static let WorldCupHomepageWidgetGroupPhaseGroupC = MZLocalizedString(
-                key: "WorldCup.GroupPhase.GroupC.Title.v151",
-                tableName: "WorldCup",
-                value: "Group C",
-                comment: "The title of the Group C group in the World Cup Group Stage.")
-            public static let WorldCupHomepageWidgetGroupPhaseGroupD = MZLocalizedString(
-                key: "WorldCup.GroupPhase.GroupD.Title.v151",
-                tableName: "WorldCup",
-                value: "Group D",
-                comment: "The title of the Group D group in the World Cup Group Stage.")
-            public static let WorldCupHomepageWidgetGroupPhaseGroupE = MZLocalizedString(
-                key: "WorldCup.GroupPhase.GroupE.Title.v151",
-                tableName: "WorldCup",
-                value: "Group E",
-                comment: "The title of the Group E group in the World Cup Group Stage.")
-            public static let WorldCupHomepageWidgetGroupPhaseGroupF = MZLocalizedString(
-                key: "WorldCup.GroupPhase.GroupF.Title.v151",
-                tableName: "WorldCup",
-                value: "Group F",
-                comment: "The title of the Group F group in the World Cup Group Stage.")
-            public static let WorldCupHomepageWidgetGroupPhaseGroupG = MZLocalizedString(
-                key: "WorldCup.GroupPhase.GroupG.Title.v151",
-                tableName: "WorldCup",
-                value: "Group G",
-                comment: "The title of the Group G group in the World Cup Group Stage.")
-            public static let WorldCupHomepageWidgetGroupPhaseGroupH = MZLocalizedString(
-                key: "WorldCup.GroupPhase.GroupH.Title.v151",
-                tableName: "WorldCup",
-                value: "Group H",
-                comment: "The title of the Group H group in the World Cup Group Stage.")
-            public static let WorldCupHomepageWidgetGroupPhaseGroupI = MZLocalizedString(
-                key: "WorldCup.GroupPhase.GroupI.Title.v151",
-                tableName: "WorldCup",
-                value: "Group I",
-                comment: "The title of the Group I group in the World Cup Group Stage.")
-            public static let WorldCupHomepageWidgetGroupPhaseGroupJ = MZLocalizedString(
-                key: "WorldCup.GroupPhase.GroupJ.Title.v151",
-                tableName: "WorldCup",
-                value: "Group J",
-                comment: "The title of the Group J group in the World Cup Group Stage.")
-            public static let WorldCupHomepageWidgetGroupPhaseGroupK = MZLocalizedString(
-                key: "WorldCup.GroupPhase.GroupK.Title.v151",
-                tableName: "WorldCup",
-                value: "Group K",
-                comment: "The title of the Group K group in the World Cup Group Stage.")
-            public static let WorldCupHomepageWidgetGroupPhaseGroupL = MZLocalizedString(
-                key: "WorldCup.GroupPhase.GroupL.Title.v151",
-                tableName: "WorldCup",
-                value: "Group L",
-                comment: "The title of the Group L group in the World Cup Group Stage.")
-            public static let WorldCupHomepageWidgetGroupPhaseRelatedMatchesLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151",
-                tableName: "WorldCup",
-                value: "Related matches",
-                comment: "The label for the section in the World Cup widget showing the related matches of a team for the group phase.")
-            public static let WorldCupHomepageWidgetRoundPhaseScrollIndicatorAccessibilityLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151",
-                tableName: "WorldCup",
-                value: "Scroll to see previous or next matches",
-                comment: "The accessibility label for the scroll indicator that lets users navigate through the matches in the World Cup widget.")
-            public static let WorldCupHomepageWidgetRoundPhaseRound32Label = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RoundPhase.Round32Label.v151",
-                tableName: "WorldCup",
-                value: "ROUND OF 32",
-                comment: "The label for the 'Round of 32' phase in the World Cup widget.")
-            public static let WorldCupHomepageWidgetRoundPhaseRound16Label = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RoundPhase.Round16Label.v151",
-                tableName: "WorldCup",
-                value: "ROUND OF 16",
-                comment: "The label for the 'Round of 16' phase in the World Cup widget.")
-            public static let WorldCupHomepageWidgetRoundPhaseQuarterFinalsLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151",
-                tableName: "WorldCup",
-                value: "QUARTER-FINALS",
-                comment: "The label for the 'Quarter-finals' phase in the World Cup widget.")
-            public static let WorldCupHomepageWidgetRoundPhaseSemiFinalsLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151",
-                tableName: "WorldCup",
-                value: "SEMI-FINALS",
-                comment: "The label for the 'Semi-finals' phase in the World Cup widget.")
-            public static let WorldCupHomepageWidgetRoundPhaseBronzeFinalLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel.v151",
-                tableName: "WorldCup",
-                value: "BRONZE FINAL",
-                comment: "The label for the 'Bronze final' match in the World Cup widget.")
-            public static let WorldCupHomepageWidgetRoundPhaseFinalLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151",
-                tableName: "WorldCup",
-                value: "FINAL",
-                comment: "The label for the 'Final' match in the World Cup widget.")
-            public static let WorldCupHomepageWidgetRoundPhaseUpcomingLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151",
-                tableName: "WorldCup",
-                value: "Upcoming",
-                comment: "The label for an upcoming match in the World Cup widget round phase.")
-            public static let WorldCupHomepageWidgetRoundPhaseThirdPlaceLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151",
-                tableName: "WorldCup",
-                value: "THIRD PLACE",
-                comment: "The label for the 'Third place' winner in the World Cup widget.")
-            public static let WorldCupHomepageWidgetRoundPhaseWinWorldCupLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151",
-                tableName: "WorldCup",
-                value: "2026 WORLD CUP CHAMPIONS",
-                comment: "The label for the World Cup championship winner in the World Cup widget.")
-            public static let WorldCupHomepageWidgetEliminatedTeamSectionTitle = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151",
-                tableName: "WorldCup",
-                value: "Still want to Follow Along?",
-                comment: "The title of the section in the World Cup widget that shows when the selected team was eliminated.")
-            public static let WorldCupHomepageWidgetEliminatedTeamSectionDescription = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151",
-                tableName: "WorldCup",
-                value: "Choose another team to keep up with the World Cup.",
-                comment: "The description of the section in the World Cup widget that shows when the selected team was eliminated.")
-            public static let WorldCupHomepageWidgetEliminatedTeamSectionRemoveButtonLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151",
-                tableName: "WorldCup",
-                value: "Remove",
-                comment: "The label for the button in the eliminated section that removes the World Cup widget from the homepage.")
-            public static let WorldCupHomepageWidgetEliminatedTeamSectionRemoveButtonAccessibilityLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonAccessibilityLabel.v151",
-                tableName: "WorldCup",
-                value: "Remove the World Cup widget",
-                comment: "The accessibility label for the button in the eliminated section that removes the World Cup widget from the homepage.")
-            public static let WorldCupHomepageWidgetEliminatedTeamSectionChooseTeamButtonLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151",
-                tableName: "WorldCup",
-                value: "Choose Team",
-                comment: "The label for the button in the eliminated section that takes the user back to the team selection screen.")
-            public static let SettingsHomepageCustomizeFirefoxHomeWorldCup = MZLocalizedString(
-                key: "Settings.Home.Option.WorldCup.v151",
-                tableName: "CustomizeFirefoxHome",
-                value: "World Cup",
-                comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the World Cup Widget on the Firefox homepage on or off")
-            public static let SettingsDisplayThemeTitle = MZLocalizedString(
-                key: "Settings.DisplayTheme.Title.v2",
-                tableName: nil,
-                value: "Theme",
-                comment: "Title in main app settings for Theme settings")
         }
         struct v156 {
             public static let WebCompatReporterFieldsURLPlaceholder = MZLocalizedString(
@@ -9878,18 +9420,6 @@ extension String {
                     value: "Limited Edition Wallpaper",
                     comment: "Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing.")
             }
-        }
-        struct v158 {
-            public static let TitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.TitleLabel.v131",
-                tableName: "NativeErrorPage",
-                value: "Be careful. Something doesn’t look right.",
-                comment: "On error page, this is the title for generic error.")
-            public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v134",
-                tableName: "NativeErrorPage",
-                value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
-                comment: "On error page, this is the description for a generic error. %@ is the site url.")
         }
     }
 }

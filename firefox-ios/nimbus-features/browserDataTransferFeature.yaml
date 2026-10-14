@@ -1,0 +1,25 @@
+# The configuration for the browser data transfer feature
+features:
+  browser-data-transfer-feature:
+    description: >
+      Controls importing browsing data from, and exporting it to, another browser on the device.
+    variables:
+      import-enabled:
+        description: >
+          Enables importing bookmarks and history from another browser.
+        type: Boolean
+        default: false
+      export-enabled:
+        description: >
+          Enables exporting bookmarks and history to another browser.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          import-enabled: false
+          export-enabled: false
+      - channel: developer
+        value:
+          import-enabled: true
+          export-enabled: true

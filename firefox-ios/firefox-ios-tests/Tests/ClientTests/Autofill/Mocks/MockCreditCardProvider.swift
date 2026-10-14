@@ -17,7 +17,7 @@ final class MockCreditCardProvider: CreditCardProvider, @unchecked Sendable {
     var exampleCreditCard = CreditCard(
         guid: "1",
         ccName: "Allen Burges",
-        ccNumberEnc: "4111111111111111",
+        ccNumber: "4111111111111111",
         ccNumberLast4: "1111",
         ccExpMonth: 3,
         ccExpYear: 2043,
@@ -43,7 +43,6 @@ final class MockCreditCardProvider: CreditCardProvider, @unchecked Sendable {
         addCreditCardCalledCount += 1
         completion(exampleCreditCard, nil)
     }
-    func decryptCreditCardNumber(encryptedCCNum: String?) -> String? { return "testCCNum" }
     func deleteCreditCard(id: String, completion: @escaping @Sendable (Bool, (any Error)?) -> Void) {
         deleteCreditCardsCalledCount += 1
         lastDeletedID = id
@@ -66,7 +65,7 @@ final class MockCreditCardProvider: CreditCardProvider, @unchecked Sendable {
         completion(updateResult.status, updateResult.error)
     }
 
-    func verifyCreditCards(key: String, completionHandler: @escaping @Sendable (Bool) -> Void) {
+    func verifyCreditCards(completionHandler: @escaping @Sendable (Bool) -> Void) {
         verifyCreditCardsCalled += 1
         completionHandler(creditCardsVerified)
     }

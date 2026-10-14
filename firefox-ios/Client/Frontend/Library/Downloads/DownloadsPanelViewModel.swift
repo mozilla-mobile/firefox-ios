@@ -30,8 +30,7 @@ class DownloadsPanelViewModel {
     }
 
     func downloadedFileForIndexPath(_ indexPath: IndexPath) -> DownloadedFile? {
-        let downloadedFilesInSection = groupedDownloadedFiles.itemsForSection(indexPath.section)
-        return downloadedFilesInSection[safe: indexPath.row]
+        return groupedDownloadedFiles.itemForIndexPath(indexPath)
     }
 
     func isFirstSection(_ section: Int) -> Bool {

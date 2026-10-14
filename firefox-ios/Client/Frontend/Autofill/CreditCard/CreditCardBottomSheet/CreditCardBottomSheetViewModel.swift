@@ -185,13 +185,11 @@ final class CreditCardBottomSheetViewModel {
             guard let plainCard = decryptedCreditCard else { return nil }
             return plainCard
         case .update:
-            guard let creditCard = creditCard,
-                  let ccNumberDecrypted = autofill.decryptCreditCardNumber(encryptedCCNum: creditCard.ccNumberEnc)
-            else {
+            guard let creditCard = creditCard else {
                 return nil
             }
             let updatedDecryptedCreditCard = updateDecryptedCreditCard(from: creditCard,
-                                                                       with: ccNumberDecrypted,
+                                                                       with: creditCard.ccNumber,
                                                                        fieldValues: decryptedCreditCard)
             return updatedDecryptedCreditCard
         case .selectSavedCard:
@@ -201,7 +199,7 @@ final class CreditCardBottomSheetViewModel {
                 return nil
             }
 
-            let decryptedCreditCardNum = decryptCreditCardNumber(card: selectedCreditCard)
+            let decryptedCreditCardNum = selectedCreditCard.ccNumber
 
             guard !decryptedCreditCardNum.isEmpty else {
                 return nil
@@ -221,17 +219,16 @@ final class CreditCardBottomSheetViewModel {
     }
 
     func getConvertedCreditCardValues(bottomSheetState: CreditCardBottomSheetState,
-                                      ccNumberDecrypted: String,
                                       row: Int? = nil) -> CreditCard? {
         switch bottomSheetState {
         case .save:
             guard let plainCard = decryptedCreditCard else { return nil }
             return plainCard.convertToTempCreditCard()
         case .update:
-            guard let creditCard = creditCard, !ccNumberDecrypted.isEmpty,
+            guard let creditCard = creditCard, !creditCard.ccNumber.isEmpty,
                   let updatedDecryptedCreditCard = updateDecryptedCreditCard(
                     from: creditCard,
-                    with: ccNumberDecrypted,
+                    with: creditCard.ccNumber,
                     fieldValues: decryptedCreditCard)
             else {
                 return nil
@@ -292,12 +289,6 @@ final class CreditCardBottomSheetViewModel {
         decryptedCreditCardVal.ccExpYear = isValidYear ? decryptedYearVal : originalYearVal
 
         return decryptedCreditCardVal
-    }
-
-    func decryptCreditCardNumber(card: CreditCard?) -> String {
-        guard let card = card else { return "" }
-        let decryptedCardNum = autofill.decryptCreditCardNumber(encryptedCCNum: card.ccNumberEnc)
-        return decryptedCardNum ?? ""
     }
 
     private func listStoredCreditCards(completionHandler: @Sendable @escaping ([CreditCard]?) -> Void) {

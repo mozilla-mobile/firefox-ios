@@ -89,9 +89,8 @@ final class VPNAuthServiceTests: XCTestCase {
 
         let assertion = try XCTUnwrap(refresher.lastAssertion)
         XCTAssertEqual(assertion.challenge, AppAttestTestData.assertionChallenge)
-        // The signed payload must contain the challenge, so the server can rebuild identical bytes.
-        let payload = try XCTUnwrap(JSONSerialization.jsonObject(with: assertion.payload) as? [String: Any])
-        XCTAssertEqual(payload["challenge"] as? String, AppAttestTestData.assertionChallenge)
+        // Guardian hashes the challenge string it issued, so the signed client data is the raw challenge.
+        XCTAssertEqual(assertion.payload, Data(AppAttestTestData.assertionChallenge.utf8))
     }
 
     func test_refresh_throws_whenNoKeyEnrolled() async throws {
@@ -285,7 +284,12 @@ final class VPNAuthServiceTests: XCTestCase {
     func test_authenticate_keepsStaleSession_whenEnrollmentFails() async throws {
         let tokenStore = MockVPNTokenStore(initial: expiredSession)
         let failingSession = MockURLSession(with: Data("boom".utf8), response: httpResponse(statusCode: 500))
-        let server = VPNAppAttestServer(with: .dev, urlSession: failingSession, tokenStore: tokenStore)
+        let server = VPNAppAttestServer(
+            with: .dev,
+            urlSession: failingSession,
+            tokenStore: tokenStore,
+            bundleIdentifier: "org.mozilla.ios.Test"
+        )
         let subject = try makeSubject(
             remoteServer: server,
             keyStore: MockAppAttestKeyIDStore(),   // no keyId, so refresh reports notEnrolled
@@ -327,7 +331,12 @@ final class VPNAuthServiceTests: XCTestCase {
     func test_authenticate_throws_whenEnrollmentFails() async throws {
         let tokenStore = MockVPNTokenStore()
         let failingSession = MockURLSession(with: Data("boom".utf8), response: httpResponse(statusCode: 500))
-        let server = VPNAppAttestServer(with: .dev, urlSession: failingSession, tokenStore: tokenStore)
+        let server = VPNAppAttestServer(
+            with: .dev,
+            urlSession: failingSession,
+            tokenStore: tokenStore,
+            bundleIdentifier: "org.mozilla.ios.Test"
+        )
         let subject = try makeSubject(remoteServer: server, refresher: server, tokenStore: tokenStore)
 
         do {
@@ -391,7 +400,12 @@ final class VPNAuthServiceTests: XCTestCase {
     private func enrollingServer(tokenStore: VPNTokenStore) -> VPNAppAttestServer {
         let json = #"{"challenge":"c","deviceSessionJwt":"new-dsj","expiresAt":32503680000000,"renewAfter":32503600000000}"#
         let urlSession = MockURLSession(with: Data(json.utf8), response: httpResponse(statusCode: 200))
-        return VPNAppAttestServer(with: .dev, urlSession: urlSession, tokenStore: tokenStore)
+        return VPNAppAttestServer(
+            with: .dev,
+            urlSession: urlSession,
+            tokenStore: tokenStore,
+            bundleIdentifier: "org.mozilla.ios.Test"
+        )
     }
 
     private func makeSubject(

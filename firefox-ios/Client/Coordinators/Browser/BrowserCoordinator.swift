@@ -54,6 +54,7 @@ final class BrowserCoordinator: BaseCoordinator,
     private let tabManager: TabManager
     private let themeManager: ThemeManager
     private let windowManager: WindowManager
+    private let windowMerger: WindowMerging
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
@@ -81,6 +82,7 @@ final class BrowserCoordinator: BaseCoordinator,
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+         windowMerger: WindowMerging = MergeWindowsManager(),
          googleLensService: GoogleLensServicing = GoogleLensService(),
          isCameraAvailable: @escaping @MainActor () -> Bool = {
              UIImagePickerController.isSourceTypeAvailable(.camera)
@@ -91,6 +93,7 @@ final class BrowserCoordinator: BaseCoordinator,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.windowManager = windowManager
+        self.windowMerger = windowMerger
         self.touExperimentsTracking = ToUExperimentsTracking(prefs: profile.prefs)
         self.homepageTabStateStore = homepageTabStateStore
         self.browserViewController = BrowserViewController(profile: profile,
@@ -230,7 +233,8 @@ final class BrowserCoordinator: BaseCoordinator,
             profile: profile,
             windowUUID: windowUUID,
             libraryCoordinator: self,
-            libraryNavigationHandler: nil
+            libraryNavigationHandler: nil,
+            shouldUsePrivateOverride: false
         )
         add(child: bookmarksCoordinator)
         bookmarksCoordinator.start(parentFolder: parentFolder, bookmark: bookmark)
@@ -369,6 +373,10 @@ final class BrowserCoordinator: BaseCoordinator,
                 handleClosePrivateTabsWidgetAction()
             case .showIntroOnboarding:
                 showIntroOnboarding()
+            case .mergeWindows:
+                // A home screen shortcut can outlive the feature being turned off remotely.
+                guard featureFlagsProvider.isEnabled(.mergeWindows) else { break }
+                windowMerger.mergeAllWindows(into: windowUUID)
             }
 
         case let .fxaSignIn(params):
@@ -1140,7 +1148,21 @@ final class BrowserCoordinator: BaseCoordinator,
         if featureFlagsProvider.isEnabled(.tabTrayUIExperiments) &&
             UIDevice.current.userInterfaceIdiom != .pad && selectedPanel != .syncedTabs {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
-            present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
+            // Present on the next runloop turn so setup and tap feedback render first,
+            // keeping each main-thread turn short and reducing the risk of a hang during presentation.
+            DispatchQueue.main.async { [weak self, weak tabTrayCoordinator] in
+                guard let self, let tabTrayCoordinator, childCoordinators.contains(where: { $0 === tabTrayCoordinator })
+                else { return }
+
+                // Defense in case something else was presented while we waited a runloop turn,
+                // presenting now would fail silently and leave a stale coordinator
+                // that blocks the next tab tray open, so remove it instead.
+                guard !router.isPresenting else {
+                    remove(child: tabTrayCoordinator)
+                    return
+                }
+                present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
+            }
         } else {
             present(navigationController)
         }
@@ -1542,6 +1564,10 @@ final class BrowserCoordinator: BaseCoordinator,
     func coordinatorHandleWindowEvent(event: WindowEvent, uuid: WindowUUID) {
         switch event {
         case .windowWillClose:
+            // Runs before the guard below: a merge is driven from the surviving window, so it is
+            // this coordinator that needs to hear about the *other* windows finishing closing.
+            windowMerger.windowDidClose(uuid: uuid)
+
             guard uuid == windowUUID else { return }
             // Additional cleanup performed when the current iPad window is closed.
             // This is necessary in order to ensure the BVC and other memory is freed correctly.

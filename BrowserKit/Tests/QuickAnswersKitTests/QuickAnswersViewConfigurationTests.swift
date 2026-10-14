@@ -29,13 +29,28 @@ struct QuickAnswersViewConfigurationTests {
             placeholder: "ask",
             answering: "loading",
             footerFormat: "Powered by %@",
-            sources: "Sources"
+            sources: "Sources",
+            aboutYourPrivacy: "About Your Privacy",
+            answerHeader: "Quick Answer"
         )
 
         #expect(subject.placeholder == "ask")
         #expect(subject.answering == "loading")
         #expect(subject.footerFormat == "Powered by %@")
         #expect(subject.sources == "Sources")
+        #expect(subject.aboutYourPrivacy == "About Your Privacy")
+        #expect(subject.answerHeader == "Quick Answer")
+    }
+
+    @Test
+    func testPrivacyBannerStrings_storesValues() {
+        let subject = QuickAnswersViewConfiguration.PrivacyBannerStrings(
+            title: "Private by Design",
+            description: "Firefox doesn’t store your audio"
+        )
+
+        #expect(subject.title == "Private by Design")
+        #expect(subject.description == "Firefox doesn’t store your audio")
     }
 
     @Test
@@ -69,7 +84,15 @@ struct QuickAnswersViewConfigurationTests {
     func testConfiguration_storesAllSections() {
         let subject = QuickAnswersViewConfiguration(
             optIn: .init(title: "t", description: "d", learnMore: "l", continueButton: "c"),
-            contentView: .init(placeholder: "p", answering: "a", footerFormat: "f", sources: "s"),
+            contentView: .init(
+                placeholder: "p",
+                answering: "a",
+                footerFormat: "f",
+                sources: "s",
+                aboutYourPrivacy: "ap",
+                answerHeader: "ah"
+            ),
+            privacyBanner: .init(title: "pt", description: "pd"),
             errors: .init(
                 permissionAlertTitle: "",
                 microphonePermissionMessage: "",
@@ -88,6 +111,7 @@ struct QuickAnswersViewConfigurationTests {
 
         #expect(subject.optIn.title == "t")
         #expect(subject.contentView.placeholder == "p")
+        #expect(subject.privacyBanner.title == "pt")
         #expect(subject.closeAccessibilityLabel == "close")
         #expect(subject.appName == "Firefox")
     }
