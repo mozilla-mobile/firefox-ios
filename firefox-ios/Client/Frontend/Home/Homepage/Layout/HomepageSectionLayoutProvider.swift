@@ -289,14 +289,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let shouldPinNewsHeader = featureFlagsProvider.isEnabled(.homepagePinnedHeader)
                                   && featureFlagsProvider.isEnabled(.homepageStoryCategories)
         header.pinToVisibleBounds = shouldPinNewsHeader
-        header.contentInsets = NSDirectionalEdgeInsets(
-            top: shouldPinNewsHeader ? -UX.embeddedAddressBarHeight : 0,
-            leading: horizontalInset,
-            bottom: UX.standardInset,
-            trailing: horizontalInset
-        )
-
         section.boundarySupplementaryItems = [header]
+
         section.contentInsets = NSDirectionalEdgeInsets(
             top: UX.headerSectionSpacing,
             leading: horizontalInset,
