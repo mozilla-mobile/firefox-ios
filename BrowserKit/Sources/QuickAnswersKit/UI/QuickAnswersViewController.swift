@@ -11,37 +11,28 @@ public final class QuickAnswersViewController: UIViewController,
                                                UIAdaptivePresentationControllerDelegate,
                                                Themeable {
     private struct UX {
-        static let closeButtonSidePadding: CGFloat = 16.0
-        static let closeButtonPadding: CGFloat = 13.0
-        static let closeButtonContentInset = NSDirectionalEdgeInsets(
-            top: UX.closeButtonPadding,
-            leading: UX.closeButtonPadding,
-            bottom: UX.closeButtonPadding,
-            trailing: UX.closeButtonPadding
-        )
-        static let contentViewTopPadding: CGFloat = 32.0
-        static let contentViewBottomPadding: CGFloat = 12.0
-        static let contentViewHorizontalPadding: CGFloat = 24.0
-        static let presentationCloseButtonOffset: CGFloat = -20.0
+        static let titleFadeDuration: TimeInterval = 0.1
+        static let presentationNavigationBarOffset: CGFloat = -20.0
     }
 
     // MARK: - Properties
     private lazy var backgroundEffectView = BackgroundEffectView(parentController: self)
     private lazy var closeButton: UIButton = .build { [weak self] in
-        if #available(iOS 26, *) {
-            $0.configuration = .prominentGlass()
-        } else {
-            $0.configuration = .filled()
-        }
-        $0.configuration?.cornerStyle = .capsule
-        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
-        $0.configuration?.contentInsets = UX.closeButtonContentInset
+        $0.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
         $0.addAction(
             UIAction(handler: { _ in
                 self?.dismiss(with: nil)
             }),
             for: .touchUpInside
         )
+    }
+    private let titleLabel: UILabel = .build {
+        $0.font = FXFontStyles.Bold.body.scaledFont()
+        $0.adjustsFontForContentSizeCategory = true
+        $0.alpha = 0.0
     }
     private let contentView: QuickAnswersContentView = .build()
     private let transitionAnimator: SourceRevealTransitionAnimator?
@@ -130,7 +121,7 @@ public final class QuickAnswersViewController: UIViewController,
     // MARK: - Lifecycle
     override public func viewDidLoad() {
         super.viewDidLoad()
-        presentationController?.delegate = self
+        navigationController?.presentationController?.delegate = self
         setupSubviews()
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
@@ -152,25 +143,18 @@ public final class QuickAnswersViewController: UIViewController,
         view.addSubviews(
             backgroundEffectView,
             contentView,
-            closeButton,
         )
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: closeButton)
+        navigationItem.titleView = titleLabel
+        setContentScrollView(contentView.scrollView, for: .top)
 
         backgroundEffectView.pinToSuperview()
 
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
-                                             constant: UX.closeButtonSidePadding),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                  constant: -UX.closeButtonSidePadding),
-
-            contentView.topAnchor.constraint(equalTo: closeButton.bottomAnchor,
-                                             constant: UX.contentViewTopPadding),
-            contentView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                                                 constant: UX.contentViewHorizontalPadding),
-            contentView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                                                  constant: -UX.contentViewHorizontalPadding),
-            contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                                                constant: -UX.contentViewBottomPadding),
+            contentView.topAnchor.constraint(equalTo: view.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
 
@@ -208,6 +192,12 @@ public final class QuickAnswersViewController: UIViewController,
                 }
             }
         }
+        contentView.onTranscriptVisibilityChange = { [weak self] isTranscriptVisible, transcript in
+            UIView.animate(withDuration: UX.titleFadeDuration) {
+                self?.titleLabel.alpha = isTranscriptVisible ? 0.0 : 1.0
+                self?.titleLabel.text = isTranscriptVisible ? nil : transcript
+            }
+        }
         contentView.configureOptIn(
             strings: stringsConfiguration.optIn,
             learnMoreURL: learnMoreURL,
@@ -236,20 +226,28 @@ public final class QuickAnswersViewController: UIViewController,
     }
 
     // MARK: - Presentation transition
-    func prepareForPresentationTransition() {
-        contentView.prepareForPresentationTransition()
+    func prepareForPresentationTransition(sourceRect: CGRect, isOptInVisible: Bool) {
+        contentView.prepareForPresentationTransition(
+            sourceRect: sourceRect,
+            containerWidth: view.frame.width,
+            topInset: navigationController?.navigationBar.frame.maxY ?? 0.0,
+            isOptInVisible: isOptInVisible
+        )
         backgroundEffectView.alpha = 0.0
         backgroundEffectView.prepareForPresentationTransition()
-        closeButton.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationCloseButtonOffset)
-        closeButton.alpha = 0.0
+        navigationController?.navigationBar.transform = CGAffineTransform(
+            translationX: 0.0,
+            y: UX.presentationNavigationBarOffset
+        )
+        navigationController?.navigationBar.alpha = 0.0
     }
 
     func applyPresentationTransition(isOptInVisible: Bool) {
         contentView.applyPresentationTransition(isOptInVisible: isOptInVisible)
         backgroundEffectView.alpha = 1.0
         backgroundEffectView.applyPresentationTransition()
-        closeButton.alpha = 1.0
-        closeButton.transform = .identity
+        navigationController?.navigationBar.alpha = 1.0
+        navigationController?.navigationBar.transform = .identity
     }
 
     private func dismiss(with url: URL?) {
@@ -273,8 +271,8 @@ public final class QuickAnswersViewController: UIViewController,
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         view.backgroundColor = theme.colors.layer1
-        closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
-        closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
+        closeButton.tintColor = theme.colors.iconPrimary
+        titleLabel.textColor = theme.colors.textPrimary
         contentView.applyTheme(theme: theme)
         backgroundEffectView.applyTheme(theme: theme)
     }
