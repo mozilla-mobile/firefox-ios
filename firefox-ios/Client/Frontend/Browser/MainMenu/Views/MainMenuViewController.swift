@@ -61,6 +61,12 @@ class MainMenuViewController: UIViewController,
 
     private var hasBeenExpanded = false
     private var currentCustomMenuHeight = 0.0
+    private var menuContentHeight: CGFloat = 0
+    private var navigationCloseItem: UIBarButtonItem?
+
+    private var menuSheetPresentationController: UISheetPresentationController? {
+        navigationController?.sheetPresentationController ?? sheetPresentationController
+    }
     private var isBrowserDefault = false
     private var isPhoneLandscape = false
 
@@ -114,8 +120,9 @@ class MainMenuViewController: UIViewController,
     // MARK: - View lifecycle & setup
     override func viewDidLoad() {
         super.viewDidLoad()
-        presentationController?.delegate = self
-        sheetPresentationController?.delegate = self
+        (navigationController?.presentationController ?? presentationController)?.delegate = self
+        menuSheetPresentationController?.delegate = self
+        setupNavigationCloseButton()
 
         subscribeToRedux()
 
@@ -139,27 +146,9 @@ class MainMenuViewController: UIViewController,
         }
 
         menuContent.onCalculatedHeight = { [weak self] height in
-            let customHeight: CGFloat = self?.currentCustomMenuHeight ?? 0
-            if (height > customHeight + UX.menuHeightTolerance) || (height < customHeight - UX.menuHeightTolerance) {
-                self?.currentCustomMenuHeight = height
-                if #available(iOS 16.0, *) {
-                    let customDetent = UISheetPresentationController.Detent.custom { context in
-                        return height
-                    }
-                    // The detents are large or medium only on the first presentation. We can avoid animating the new
-                    // detent in such case cause the animation is already running.
-                    let shouldAnimateDetentChange = self?.sheetPresentationController?.detents.contains { detent in
-                        return detent.identifier != .medium && detent.identifier != .large
-                    } ?? true
-                    guard shouldAnimateDetentChange else {
-                        self?.sheetPresentationController?.detents = [customDetent]
-                        return
-                    }
-                    self?.sheetPresentationController?.animateChanges({
-                        self?.sheetPresentationController?.detents = [customDetent]
-                    })
-                }
-            }
+            guard let self, menuContentHeight != height else { return }
+            menuContentHeight = height
+            view.setNeedsLayout()
         }
 
         menuContent.bannerButtonCallback = { [weak self] in
@@ -192,6 +181,80 @@ class MainMenuViewController: UIViewController,
         // An extra reload for menu content is necessary only on iOS 15
         if #unavailable(iOS 16) {
             reloadTableView(with: menuState.menuElements)
+        }
+    }
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        updateCloseButtonPlacement()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateMenuDetent()
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        view.setNeedsLayout()
+    }
+
+    private func updateMenuDetent() {
+        guard #available(iOS 16.0, *), menuContentHeight > 0,
+              let sheet = menuSheetPresentationController else { return }
+        let height = menuContentHeight + view.safeAreaInsets.top
+        guard abs(height - currentCustomMenuHeight) > UX.menuHeightTolerance else { return }
+        currentCustomMenuHeight = height
+        let customDetent = UISheetPresentationController.Detent.custom { context in
+            min(height, context.maximumDetentValue)
+        }
+        // Keep the initial presentation animation; animate subsequent content or bar-size changes.
+        let shouldAnimate = sheet.detents.contains { $0.identifier != .medium && $0.identifier != .large }
+        if shouldAnimate {
+            sheet.animateChanges { sheet.detents = [customDetent] }
+        } else {
+            sheet.detents = [customDetent]
+        }
+    }
+
+    private func setupNavigationCloseButton() {
+        guard navigationController != nil else { return }
+        let closeItem = UIBarButtonItem(barButtonSystemItem: .close,
+                                        target: self,
+                                        action: #selector(dispatchCloseMenuAction))
+        closeItem.accessibilityIdentifier = AccessibilityIdentifiers.MainMenu.HeaderView.closeButton
+        closeItem.accessibilityLabel = .MainMenu.AccessibilityLabels.CloseButton
+        closeItem.accessibilityTraits = .button
+        navigationCloseItem = closeItem
+        #if XCODE_2710 || XCODE_2720
+        if #available(iOS 27.1, *) {
+            registerForTraitChanges(UITraitCollection.systemTraitsAffectingVerticalBarEdge) { (self: Self, _) in
+                self.view.setNeedsLayout()
+            }
+        }
+        #endif
+    }
+
+    private func updateCloseButtonPlacement() {
+        guard let navigationController else { return }
+        var usesVerticalBar = false
+        #if XCODE_2710 || XCODE_2720
+        if #available(iOS 27.1, *) {
+            switch traitCollection.verticalBarEdge {
+            case .leading, .trailing:
+                usesVerticalBar = true
+            default:
+                break
+            }
+        }
+        #endif
+        let closeItem = usesVerticalBar ? navigationCloseItem : nil
+        if navigationItem.leftBarButtonItem !== closeItem {
+            navigationItem.leftBarButtonItem = closeItem
+        }
+        menuContent.siteProtectionHeader.setCloseButtonHidden(usesVerticalBar)
+        if navigationController.isNavigationBarHidden == usesVerticalBar {
+            navigationController.setNavigationBarHidden(!usesVerticalBar, animated: false)
         }
     }
 
@@ -425,7 +488,7 @@ class MainMenuViewController: UIViewController,
         }
     }
 
-    private func dispatchCloseMenuAction() {
+    @objc private func dispatchCloseMenuAction() {
         store.dispatch(
             MainMenuAction(
                 windowUUID: self.windowUUID,
@@ -475,6 +538,7 @@ class MainMenuViewController: UIViewController,
         let shouldUseNovaAlpha = theme.isNova && !mainMenuHelper.isReduceTransparencyEnabled
         let alpha = shouldUseNovaAlpha ? UX.novaBackgroundAlpha : mainMenuHelper.backgroundAlpha()
         view.backgroundColor = menuBackground.withAlphaComponent(alpha)
+        navigationCloseItem?.tintColor = theme.colors.iconPrimary
         menuContent.applyTheme(theme: theme)
     }
 
@@ -540,11 +604,11 @@ class MainMenuViewController: UIViewController,
     // in voice over. To prevent this we manually turn this off.
     private func updateModalA11y() {
         var currentDetent: UISheetPresentationController.Detent.Identifier? = getCurrentDetent(
-            for: sheetPresentationController
+            for: menuSheetPresentationController
         )
 
         if currentDetent == nil,
-           let sheetPresentationController,
+           let sheetPresentationController = menuSheetPresentationController,
            let firstDetent = sheetPresentationController.detents.first {
             if firstDetent == .medium() {
                 currentDetent = .medium
@@ -553,7 +617,8 @@ class MainMenuViewController: UIViewController,
             }
         }
 
-        view.accessibilityViewIsModal = currentDetent == .large ? true : false
+        let accessibilityContainer = navigationController?.view ?? view
+        accessibilityContainer?.accessibilityViewIsModal = currentDetent == .large
     }
 
     private func getCurrentDetent(
@@ -615,7 +680,7 @@ class MainMenuViewController: UIViewController,
         // For iOS 16 or above we are using custom detents
         if #unavailable(iOS 16) {
             if isExpanded {
-                if let sheet = self.sheetPresentationController, !hasBeenExpanded {
+                if let sheet = self.menuSheetPresentationController, !hasBeenExpanded {
                     sheet.selectedDetentIdentifier = .large
                     hasBeenExpanded = true
                 }
