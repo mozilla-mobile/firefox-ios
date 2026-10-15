@@ -374,6 +374,7 @@
         "NavigationTest\/testDownloadLink()",
         "NavigationTest\/testLongPressOnAddressBar()",
         "NavigationTest\/testLongTapFirefoxIconAppIcon()",
+        "NavigationTest\/testLongTapFirefoxIconNewPrivateTab()",
         "NavigationTest\/testLongTapFirefoxIconNewTab()",
         "NavigationTest\/testLongTapFirefoxIconOpenLastBookmark()",
         "NavigationTest\/testNavigation()",
