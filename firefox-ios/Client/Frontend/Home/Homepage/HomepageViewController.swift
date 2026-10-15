@@ -60,7 +60,7 @@ final class HomepageViewController: UIViewController,
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
     private lazy var embeddedAddressBarView: UIView = .build { view in
-        view.backgroundColor = .clear
+        view.backgroundColor = .red
         view.isUserInteractionEnabled = false
         view.layer.zPosition = 1
         view.accessibilityIdentifier = a11y.EmbeddedAddressBar.view
