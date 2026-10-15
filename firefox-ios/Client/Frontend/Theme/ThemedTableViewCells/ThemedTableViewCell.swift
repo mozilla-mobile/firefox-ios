@@ -51,6 +51,7 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     override func prepareForReuse() {
         super.prepareForReuse()
         accessibilityElements = nil
+        accessibilityLabel = nil
         contentConfiguration = nil
         textLabel?.text = nil
         textLabel?.textAlignment = .natural
