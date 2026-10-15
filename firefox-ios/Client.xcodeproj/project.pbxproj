@@ -281,6 +281,7 @@
 		210972702DCBA50F001162A2 /* GenericItemCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2109726F2DCBA4CF001162A2 /* GenericItemCellView.swift */; };
 		210E0EB8298D9D4500BB4F33 /* SearchEngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5F72F298D8BEE00234E5F /* SearchEngineProvider.swift */; };
 		210E0EBA298D9D6400BB4F33 /* OpenSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1E3BE528CBBF44003388C4 /* OpenSearchEngine.swift */; };
+		581770325E6A53FB58C504B0 /* SearchAccessPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C978C8CE248C55BE10B98D /* SearchAccessPoint.swift */; };
 		211046C92A7ADE9000A7309F /* BlockPopupSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211046C82A7ADE9000A7309F /* BlockPopupSetting.swift */; };
 		211046CD2A7D842A00A7309F /* TPAccessoryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211046CC2A7D842A00A7309F /* TPAccessoryInfo.swift */; };
 		211F00AC27F4D918001D9189 /* HistoryPanel+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211F00AB27F4D918001D9189 /* HistoryPanel+Search.swift */; };
@@ -10084,6 +10085,7 @@
 		8A1E3BDE28CBA81E003388C4 /* SponsoredContentFilterUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredContentFilterUtility.swift; sourceTree = "<group>"; };
 		8A1E3BE128CBACD7003388C4 /* SponsoredContentFilterUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredContentFilterUtilityTests.swift; sourceTree = "<group>"; };
 		8A1E3BE528CBBF44003388C4 /* OpenSearchEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSearchEngine.swift; sourceTree = "<group>"; };
+		A6C978C8CE248C55BE10B98D /* SearchAccessPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAccessPoint.swift; sourceTree = "<group>"; };
 		8A1E93E92A3CDC6100DD540A /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
 		8A2068362D6D52830063A77B /* ExperimentTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentTabCell.swift; sourceTree = "<group>"; };
 		8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandler.swift; sourceTree = "<group>"; };
@@ -14644,6 +14646,7 @@
 				ED371A692CB885B20099F3C8 /* Views */,
 				EDC3C2552CCAC9CB005A047F /* SearchEnginesManager.swift */,
 				8A1E3BE528CBBF44003388C4 /* OpenSearchEngine.swift */,
+				A6C978C8CE248C55BE10B98D /* SearchAccessPoint.swift */,
 				EDD2A7F92CDBD1D000ED464C /* SearchEngineElement+initFromSearchEngine.swift */,
 				96A5F72F298D8BEE00234E5F /* SearchEngineProvider.swift */,
 				ED371A672CB881EF0099F3C8 /* SearchEngineSelectionCoordinator.swift */,
@@ -20442,6 +20445,7 @@
 				C4E3983D1D21F1E7004E89BA /* TopTabCell.swift in Sources */,
 				814B60F52C90C0A0000997BE /* MainMenuConfigurationUtility.swift in Sources */,
 				210E0EBA298D9D6400BB4F33 /* OpenSearchEngine.swift in Sources */,
+				581770325E6A53FB58C504B0 /* SearchAccessPoint.swift in Sources */,
 				354F8F612E098214007DFFEB /* SearchBarState.swift in Sources */,
 				EDF2C0562D693A7300723609 /* AppIconSetting.swift in Sources */,
 				FA9293D41D6580E100AC8D33 /* QRCodeViewController.swift in Sources */,
