@@ -2412,6 +2412,7 @@
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
 		F84B22241A09122500AAB793 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22221A09122500AAB793 /* LibraryViewController.swift */; };
+		C2A0F1E22F9B000100A1B2C3 /* LibraryNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A0F1E12F9B000100A1B2C3 /* LibraryNavigationController.swift */; };
 		F84B22541A0920C600AAB793 /* ShareTo.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F84B22491A0920C600AAB793 /* ShareTo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F85C7EDD27109241004BDBA4 /* PasswordManagerOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85C7EDC27109241004BDBA4 /* PasswordManagerOnboardingViewController.swift */; };
 		F85C7EDF2710B4DD004BDBA4 /* LoginOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85C7EDE2710B4DD004BDBA4 /* LoginOnboarding.swift */; };
@@ -12527,6 +12528,7 @@
 		F84B21E51A0910F600AAB793 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		F84B21EF1A0910F600AAB793 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F84B22221A09122500AAB793 /* LibraryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
+		C2A0F1E12F9B000100A1B2C3 /* LibraryNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryNavigationController.swift; sourceTree = "<group>"; };
 		F84B22431A09165600AAB793 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F84B22491A0920C600AAB793 /* ShareTo.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareTo.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F85C7EDC27109241004BDBA4 /* PasswordManagerOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerOnboardingViewController.swift; sourceTree = "<group>"; };
@@ -12634,6 +12636,7 @@
 		5FE7F18C2E78224100B0AFEC /* PageScreens */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PageScreens; sourceTree = "<group>"; };
 		8CF609282EA8D46E00F069B6 /* ActionExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8CF609442EA8D61F00F069B6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ActionExtension; sourceTree = "<group>"; };
 		BCBE04E22E3A52D4004B6039 /* Summarize */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Summarize; sourceTree = "<group>"; };
+		BD7A00000000000000000002 /* BrowserDataTransfer */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = BrowserDataTransfer; sourceTree = "<group>"; };
 		ED85DD2C2DE669FF00487807 /* probes */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = probes; sourceTree = "<group>"; };
 		FC16179A00000000000000A1 /* WebCompat */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WebCompat; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -13484,6 +13487,7 @@
 			children = (
 				C2C6FF8D2ED9A78700B833D4 /* TestableUIToolbar.swift */,
 				F84B22221A09122500AAB793 /* LibraryViewController.swift */,
+				C2A0F1E12F9B000100A1B2C3 /* LibraryNavigationController.swift */,
 				C8417D212657F0600010B877 /* LibraryViewModel.swift */,
 				274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */,
 				C8445A13264428DC00B83F53 /* LibraryPanelViewState.swift */,
@@ -17886,6 +17890,7 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				BD7A00000000000000000002 /* BrowserDataTransfer */,
 				EC405C123007DC820003DE07 /* WaybackTests */,
 				EECF6B623006864D006FD44E /* SwipeGestureFeatureFlagProviderTests.swift */,
 				C2F2C19A30044C8700F9B916 /* MockAdBlockerListFetcher.swift */,
@@ -18715,6 +18720,9 @@
 			dependencies = (
 				7B9BF92F1E435DE400CB24F4 /* PBXTargetDependency */,
 				F84B21D51A090F8100AAB793 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				BD7A00000000000000000002 /* BrowserDataTransfer */,
 			);
 			name = ClientTests;
 			packageProductDependencies = (
@@ -20730,6 +20738,7 @@
 				3F1E468E9C1D6C2B235CECDE /* CoreBuildFlags.swift in Sources */,
 				5EBC19023A85C482AD197501 /* FeatureFlagsProvider.swift in Sources */,
 				F84B22241A09122500AAB793 /* LibraryViewController.swift in Sources */,
+				C2A0F1E22F9B000100A1B2C3 /* LibraryNavigationController.swift in Sources */,
 				E16941B82C5119A200FF5F4E /* Autocompletable.swift in Sources */,
 				39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */,
 				8A36BE2929EDBC6900AC1C5C /* ContentContainer.swift in Sources */,

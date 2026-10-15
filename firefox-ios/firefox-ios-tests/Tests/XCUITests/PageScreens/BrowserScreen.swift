@@ -493,7 +493,7 @@ final class BrowserScreen {
     }
 
     func dismissAddressBarContextMenu() {
-        app.otherElements["Preview"].waitAndTap()
+        app.webViews["contentView"].waitAndTap()
         BaseTestCase().mozWaitForElementToNotExist(sel.ADDRESS_BAR_CONTEXT_MENU.element(in: app))
     }
 

@@ -288,7 +288,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2417438
+    // https://mozilla.testrail.io/index.php?/cases/view/3275914
     // This test drags the address bar and since it is not possible to drop it on another app,
     // lets do it in a search box
     // Regression

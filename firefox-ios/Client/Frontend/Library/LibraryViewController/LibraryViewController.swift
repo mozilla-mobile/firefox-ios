@@ -26,6 +26,9 @@ class LibraryViewController: UIViewController, Themeable {
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
     // Views
     private var controllerContainerView: UIView = .build { view in }
 
@@ -393,7 +396,9 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
     }
 
     func applyTheme() {
@@ -404,6 +409,7 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.shadowImage = UIImage()
 
         let theme = currentTheme()
+        navigationController?.overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor = theme.colors.layer1
         navigationController?.navigationBar.barTintColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary

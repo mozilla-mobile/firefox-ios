@@ -26,6 +26,9 @@ class SiteTableViewController: UIViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
+    var shouldUsePrivateOverride: Bool { return false }
+    var shouldBeInPrivateTheme: Bool { return false }
+
     var data = Cursor<Site>(status: .success, msg: "No data set")
     lazy var tableView: UITableView = .build { [weak self] table in
         guard let self = self else { return }
@@ -136,7 +139,7 @@ class SiteTableViewController: UIViewController,
         if self.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath) {
             cell.separatorInset = .zero
         }
-        cell.textLabel?.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+        cell.textLabel?.textColor = currentTheme().colors.textPrimary
         return cell
     }
 
@@ -150,8 +153,8 @@ class SiteTableViewController: UIViewController,
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
-            header.textLabel?.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
-            header.contentView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
+            header.textLabel?.textColor = currentTheme().colors.textPrimary
+            header.contentView.backgroundColor = currentTheme().colors.layer1
         }
     }
 
@@ -176,8 +179,14 @@ class SiteTableViewController: UIViewController,
         return false
     }
 
+    func currentTheme() -> Theme {
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+    }
+
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         navigationController?.navigationBar.barTintColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.iconAccent
         navigationController?.navigationBar.titleTextAttributes = [

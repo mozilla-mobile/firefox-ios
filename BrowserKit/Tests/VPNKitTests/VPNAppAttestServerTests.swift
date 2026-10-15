@@ -118,7 +118,7 @@ final class VPNAppAttestServerTests: XCTestCase {
             keyId: AppAttestTestData.keyID,
             assertion: AppAttestTestData.assertionBlob,
             challenge: AppAttestTestData.assertionChallenge,
-            payload: Data(#"{"challenge":"\#(AppAttestTestData.assertionChallenge)"}"#.utf8)
+            payload: Data(AppAttestTestData.assertionChallenge.utf8)
         ))
 
         let req = try XCTUnwrap(session.lastURLRequest, "Expected a request to be made")

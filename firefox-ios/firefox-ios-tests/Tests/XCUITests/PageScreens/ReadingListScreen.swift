@@ -117,6 +117,10 @@ final class ReadingListScreen {
         BaseTestCase().mozWaitForElementToExist(readerViewButton)
     }
 
+    func assertReaderButtonDoesNotExist() {
+        BaseTestCase().mozWaitForElementToNotExist(readerViewButton)
+    }
+
     func assertReaderButtonIsSelected() {
         XCTAssertTrue(readerViewButton.isSelected)
     }

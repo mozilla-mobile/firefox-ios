@@ -30,7 +30,8 @@ struct QuickAnswersViewConfigurationTests {
             answering: "loading",
             footerFormat: "Powered by %@",
             sources: "Sources",
-            aboutYourPrivacy: "About Your Privacy"
+            aboutYourPrivacy: "About Your Privacy",
+            answerHeader: "Quick Answer"
         )
 
         #expect(subject.placeholder == "ask")
@@ -38,6 +39,7 @@ struct QuickAnswersViewConfigurationTests {
         #expect(subject.footerFormat == "Powered by %@")
         #expect(subject.sources == "Sources")
         #expect(subject.aboutYourPrivacy == "About Your Privacy")
+        #expect(subject.answerHeader == "Quick Answer")
     }
 
     @Test
@@ -82,7 +84,14 @@ struct QuickAnswersViewConfigurationTests {
     func testConfiguration_storesAllSections() {
         let subject = QuickAnswersViewConfiguration(
             optIn: .init(title: "t", description: "d", learnMore: "l", continueButton: "c"),
-            contentView: .init(placeholder: "p", answering: "a", footerFormat: "f", sources: "s", aboutYourPrivacy: "ap"),
+            contentView: .init(
+                placeholder: "p",
+                answering: "a",
+                footerFormat: "f",
+                sources: "s",
+                aboutYourPrivacy: "ap",
+                answerHeader: "ah"
+            ),
             privacyBanner: .init(title: "pt", description: "pd"),
             errors: .init(
                 permissionAlertTitle: "",

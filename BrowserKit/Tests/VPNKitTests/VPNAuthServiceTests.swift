@@ -89,9 +89,8 @@ final class VPNAuthServiceTests: XCTestCase {
 
         let assertion = try XCTUnwrap(refresher.lastAssertion)
         XCTAssertEqual(assertion.challenge, AppAttestTestData.assertionChallenge)
-        // The signed payload must contain the challenge, so the server can rebuild identical bytes.
-        let payload = try XCTUnwrap(JSONSerialization.jsonObject(with: assertion.payload) as? [String: Any])
-        XCTAssertEqual(payload["challenge"] as? String, AppAttestTestData.assertionChallenge)
+        // Guardian hashes the challenge string it issued, so the signed client data is the raw challenge.
+        XCTAssertEqual(assertion.payload, Data(AppAttestTestData.assertionChallenge.utf8))
     }
 
     func test_refresh_throws_whenNoKeyEnrolled() async throws {

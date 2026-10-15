@@ -254,8 +254,13 @@ class ReadingListPanel: UITableViewController,
         applyTheme()
     }
 
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
     private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
     }
 
     // MARK: Notifiable

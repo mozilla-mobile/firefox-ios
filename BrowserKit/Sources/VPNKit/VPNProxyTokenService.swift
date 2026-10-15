@@ -8,7 +8,6 @@ import Shared
 
 public struct VPNProxyToken: Decodable, Equatable, Sendable {
     public let token: String
-    public let expiresIn: Int
 }
 
 public protocol VPNProxyTokenFetching: Sendable {

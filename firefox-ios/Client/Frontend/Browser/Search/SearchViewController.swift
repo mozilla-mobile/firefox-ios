@@ -542,10 +542,6 @@ class SearchViewController: SiteTableViewController,
         return UITableView.automaticDimension
     }
 
-    private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
-    }
-
     override func tableView(
         _ tableView: UITableView,
         viewForHeaderInSection section: Int

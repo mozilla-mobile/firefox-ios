@@ -125,7 +125,6 @@ class UrlBarTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3279353
-    // https://mozilla.testrail.io/index.php?/cases/view/3279354
     // Regression
     func testEditURLInAddressBar() {
         // Open a website

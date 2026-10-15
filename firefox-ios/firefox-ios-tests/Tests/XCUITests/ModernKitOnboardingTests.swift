@@ -537,6 +537,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
     // https://mozilla.testrail.io/index.php?/cases/view/4038425
     // Regression
     func testModernKitOnboardingSetAsDefaultBrowser() {
+        markKnownFailure(onIOS: [18], issue: "https://github.com/mozilla-mobile/firefox-ios/issues/35946")
         launchApp()
 
         onboardingScreen.handleTermsOfService()

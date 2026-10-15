@@ -34,6 +34,7 @@ final class BookmarksViewController: SiteTableViewController,
     private var logger: Logger
     private let bookmarksTelemetry = BookmarksTelemetry()
     private weak var previousInteractivePopGestureDelegate: (any UIGestureRecognizerDelegate)?
+    override var shouldUsePrivateOverride: Bool { return true }
 
     // MARK: - Search Properties
     var keyboardState: KeyboardState?
@@ -696,10 +697,6 @@ final class BookmarksViewController: SiteTableViewController,
         return 0
     }
 
-    private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
-    }
-
     private func applyThemeToSearchBar() {
         bottomStackView.applyTheme(theme: currentTheme())
     }
@@ -828,7 +825,9 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                                                    bookmarkFolderTitle: folder.title,
                                                    modalStyle: .overFullScreen)
 
-        let contextMenu = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
+        let contextMenu = PhotonActionSheet(viewModel: viewModel,
+                                            windowUUID: windowUUID,
+                                            shouldUsePrivateOverride: shouldUsePrivateOverride)
         contextMenu.modalTransitionStyle = .crossDissolve
 
         let generator = UIImpactFeedbackGenerator(style: .heavy)
