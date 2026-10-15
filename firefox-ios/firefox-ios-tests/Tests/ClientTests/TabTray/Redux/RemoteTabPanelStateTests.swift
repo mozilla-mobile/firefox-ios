@@ -67,6 +67,36 @@ final class RemoteTabPanelStateTests: XCTestCase {
         XCTAssertEqual(newState.clientAndTabs.first!.tabs.count, 2)
         XCTAssertEqual(newState.devices.count, 1)
         XCTAssertEqual(newState.devices[0].id, deviceId)
+        XCTAssertEqual(newState.contentState, RemoteTabsPanelContentState.tabs)
+    }
+
+    @MainActor
+    func testTabsRefreshSuccessWithNoClientsShowsNoClientsEmptyState() {
+        let initialState = createSubject()
+        let reducer = remoteTabsPanelReducer()
+
+        let action = RemoteTabsPanelAction(clientAndTabs: [],
+                                           windowUUID: WindowUUID.XCTestDefaultUUID,
+                                           actionType: RemoteTabsPanelActionType.refreshDidSucceed)
+        let newState = reducer.legacyReducer(initialState, action)
+
+        XCTAssertEqual(newState.contentState, RemoteTabsPanelContentState.empty(.noClients))
+        XCTAssertEqual(newState.refreshState, RemoteTabsPanelRefreshState.idle)
+        XCTAssertTrue(newState.allowsRefresh)
+    }
+
+    @MainActor
+    func testTabsRefreshSuccessWithClientsButNoTabsShowsNoTabsEmptyState() {
+        let initialState = createSubject()
+        let reducer = remoteTabsPanelReducer()
+        let clientAndTabs = generateOneClientNoTabs()
+
+        let action = RemoteTabsPanelAction(clientAndTabs: clientAndTabs,
+                                           windowUUID: WindowUUID.XCTestDefaultUUID,
+                                           actionType: RemoteTabsPanelActionType.refreshDidSucceed)
+        let newState = reducer.legacyReducer(initialState, action)
+
+        XCTAssertEqual(newState.contentState, RemoteTabsPanelContentState.empty(.noTabs))
     }
 
     @MainActor
@@ -92,7 +122,7 @@ final class RemoteTabPanelStateTests: XCTestCase {
         let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.refreshState, RemoteTabsPanelRefreshState.idle)
-        XCTAssertNotNil(newState.showingEmptyState)
+        XCTAssertEqual(newState.contentState, RemoteTabsPanelContentState.empty(.failedToSync))
     }
 
     @MainActor
@@ -153,6 +183,18 @@ final class RemoteTabPanelStateTests: XCTestCase {
                                   fxaDeviceId: "12345")
         let fakeData = [ClientAndTabs(client: client, tabs: fakeTabs)]
         return fakeData
+    }
+
+    private func generateOneClientNoTabs() -> [ClientAndTabs] {
+        let client = RemoteClient(guid: "123",
+                                  name: "Client",
+                                  modified: 0,
+                                  type: "Type (Test)",
+                                  formfactor: "Test",
+                                  os: "macOS",
+                                  version: "v1.0",
+                                  fxaDeviceId: "12345")
+        return [ClientAndTabs(client: client, tabs: [])]
     }
 
     private func createSubject() -> RemoteTabsPanelState {
