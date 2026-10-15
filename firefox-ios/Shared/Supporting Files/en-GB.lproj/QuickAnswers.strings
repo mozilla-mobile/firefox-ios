@@ -10,14 +10,23 @@
 /* Loading label shown in the Quick Answers view while an answer is being fetched. */
 "QuickAnswers.ContentView.Answering.v158" = "Answering…";
 
+/* Button shown below a Quick Answers result that the user taps to ask a follow-up question about the answer. */
+"QuickAnswers.ContentView.FollowUpButton.v160" = "Ask a Follow-Up";
+
 /* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
 "QuickAnswers.ContentView.Footer.v158" = "Powered by %@ · Answers can contain mistakes.";
 
 /* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak. */
 "QuickAnswers.ContentView.Listening.v158" = "Listening, ask anything…";
 
+/* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to ask a follow-up question about the previous answer. */
+"QuickAnswers.ContentView.ListeningFollowUp.v160" = "Listening, ask a follow-up…";
+
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "Ask anything…";
+
+/* Header label shown above the body of a Quick Answers result, labeling the text below it as a short answer to the user's question. */
+"QuickAnswers.ContentView.ResultHeader.v160" = "QUICK ANSWER";
 
 /* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
 "QuickAnswers.ContentView.SearchingSources.v158" = "Searching sources…";

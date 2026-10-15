@@ -173,13 +173,13 @@
 "Settings.AutofillCreditCard.Title.v122" = "Płaćenske metody";
 
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will allow audio and video content to autoplay. */
-"Settings.Autoplay.AllowAudioAndVideo.v137" = "Awdio a widejo dowolić";
+"Settings.Autoplay.AllowAudioAndVideo.v137" = "Awdijo a widejo dowolić";
 
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio from autoplaying. */
-"Settings.Autoplay.BlockAudio.v137" = "Awdio blokować";
+"Settings.Autoplay.BlockAudio.v137" = "Awdijo blokować";
 
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
-"Settings.Autoplay.BlockAudioAndVideo.v137" = "Awdio a widejo blokować";
+"Settings.Autoplay.BlockAudioAndVideo.v137" = "Awdijo a widejo blokować";
 
 /* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
 "Settings.Autoplay.Footer.v137" = "Nastajenja awtomatiskeho wothraća so jenož na nowo wočinjene rajtarki nałožuja. Změny njedadźa so na eksistowace rajtarki nałožić, chibazo nałoženje so znowa startuje.";
@@ -200,7 +200,7 @@
 "Settings.Browsing.AdBlocker.Title.v155" = "Blokowak wabjenja";
 
 /* Title for the Background Audio toggle in the Browsing settings page. When enabled, audio from web pages continues playing after the app is backgrounded. */
-"Settings.Browsing.BackgroundAudio.Title.v156" = "Pozadkowe awdio";
+"Settings.Browsing.BackgroundAudio.Title.v156" = "Pozadkowe awdijo";
 
 /* Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements. */
 "Settings.Browsing.BlockAds.Title.v153" = "Wabjenje blokować";

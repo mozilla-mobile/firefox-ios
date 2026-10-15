@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Strani %@ lastnik ni pravilno nastavil, zato ni mogoče vzpostaviti varne povezave.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Spletno mesto je morda začasno nedosegljivo, morda se je preselilo na drug naslov ali pa povezavo blokira požarni zid ali posredniški strežnik.\n\nPreverite nastavitve povezave in poskusite znova.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ ni mogel vzpostaviti povezave z zahtevanim spletnim naslovom.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ ni mogel vzpostaviti povezave z %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Previdno. Nekaj ni videti v redu.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Na tem spletnem mestu se je pojavila težava";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Pojdi nazaj (priporočeno)";

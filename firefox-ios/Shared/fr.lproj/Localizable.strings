@@ -1742,7 +1742,7 @@
 "Toolbar.Menu.CloseAllTabs" = "Fermer tous les onglets";
 
 /* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
-"TopSites.RemovePage.Button" = "Supprimer la page - %@";
+"TopSites.RemovePage.Button" = "Supprimer la page — %@";
 
 /* Button to disallow the page to be translated to the user locale language */
 "TranslationToastHandler.PromptTranslate.Cancel" = "Non";

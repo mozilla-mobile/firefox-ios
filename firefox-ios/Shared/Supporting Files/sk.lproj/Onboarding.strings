@@ -155,7 +155,7 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Spravovať nastavenia";
 
 /* Agreement text for sending diagnostic and interaction data in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the company name (e.g. Mozilla), %3$@ is the manage settings link button that redirects the user to manage data collection preferences. */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "Aby bolo možné prehliadač vylepšovať, %1$@ odosiela diagnostické údaje a údaje o interakciách spoločnosti %2$@. %3$@";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManagePreferenceAgreement.v148" = "Aby bolo možné prehliadač vylepšovať, %1$@ odosiela diagnostické údaje a údaje o používaní spoločnosti %2$@. %3$@";
 
 /* Agreement text for Privacy Notice in the v148 brand refresh onboarding flow. %1$@ is the app name (e.g. Firefox), %2$@ is the Privacy Notice link button that redirects the user to the Privacy Notice page. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148" = "%1$@ sa stará o vaše súkromie. Podrobnosti nájdete v dokumente %2$@";
@@ -275,10 +275,10 @@
 "Onboarding.Modern.TermsOfService.ManageLink.v145" = "Spravovať nastavenia";
 
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
-"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "Aby bolo možné prehliadač vylepšovať, %1$@ odosiela diagnostické údaje a údaje o interakciách spoločnosti %2$@. %3$@";
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "Aby bolo možné prehliadač vylepšovať, %1$@ odosiela diagnostické údaje a údaje o používaní spoločnosti %2$@. %3$@";
 
 /* Agreement text for sending data. %1$@ is the app name, %2$@ is the company name, %3$@ is the placeholder for the Manage settings link. */
-"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145" = "Aby bolo možné prehliadač vylepšovať, %1$@ odosiela diagnostické údaje a údaje o interakciách spoločnosti %2$@. %3$@";
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145" = "Aby bolo možné prehliadač vylepšovať, %1$@ odosiela diagnostické údaje a údaje o používaní spoločnosti %2$@. %3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "%1$@ sa stará o vaše súkromie. Podrobnosti nájdete v dokumente %2$@";
@@ -305,7 +305,7 @@
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Údaje o vašom zariadení, hardvérovej konfigurácii a spôsobe používania %1$@u pomáhajú zlepšovať funkcie, výkon a stabilitu pre každého. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
-"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Odosielať technické údaje a údaje o interakciách spoločnosti %@";
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Odosielať technické údaje a údaje o používaní spoločnosti %@";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "Pomôžte nám zlepšiť %@";
@@ -355,6 +355,40 @@
 /* Title for the welcome card in the v2 onboarding flow. */
 "Onboarding.Modern.Welcome.Title.v145" = "Rozlúčte sa so strašidelnými sledovačmi";
 
+/* Body of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on news. %@ is a placeholder for the app name (e.g., Firefox). */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.BodyText.v159" = "Majte vždy prehľad o najnovších správach z aplikácie %@.";
+
+/* Button on the home screen popup requesting notification permissions. Tapping this button accepts the permission request. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableButtonText.v158" = "Povoliť upozornenia";
+
+/* Voiceover text for the close button on the home screen popup requesting notification permissions. Tapping this button dismisses the popup. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableCloseButtonText.v159" = "Zavrieť";
+
+/* Title of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on privacy features. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.Title.v159" = "Majte prehľad o novinkách v ochrane súkromia";
+
+/* Primary button on the onboarding card requesting permission to send notifications. Tapping this button accepts the permission request. */
+"Onboarding.MultiDay.NotificationCard.AcceptButtonText.v159" = "Povoliť upozornenia";
+
+/* Body of the onboarding card requesting permissions to send notifications, with examples of notifications the user will receive. %@ is the name of the app (e.g., Firefox). */
+"Onboarding.MultiDay.NotificationCard.BodyText.v159" = "Získajte aktualizácie, tipy a správu o ochrane súkromia vo %@e.";
+
+/* Secondary button on the onboarding card requesting permission to send notifications. Tapping this button declines the permission request.
+Secondary button on the onboarding card that prompts users to enable syncing for their account data. Tapping this button dismisses the prompt and closes the card. */
+"Onboarding.MultiDay.NotificationCard.DeclineButtonText.v159" = "Teraz nie";
+
+/* Title for the onboarding card requesting permissions to send notifications.  “Stay in the loop” means “Remain informed”. */
+"Onboarding.MultiDay.NotificationCard.Title.v159" = "Zostaňte v obraze";
+
+/* Primary button on the onboarding card that prompts users to enable syncing for their account data. Tapping it directs the user sign into to their Mozilla account to access the feature. */
+"Onboarding.MultiDay.SyncCard.AcceptButtonText.v159" = "Prihlásiť sa a synchronizovať";
+
+/* Body of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information). */
+"Onboarding.MultiDay.SyncCard.BodyText.v159" = "Majte heslá, históriu a ďalšie údaje okamžite k dispozícii na každom zariadení.";
+
+/* Title of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information). */
+"Onboarding.MultiDay.SyncCard.Title.v159" = "Synchronizujte svoje údaje";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Pokračovať";
 
@@ -389,7 +423,7 @@
 "Onboarding.TermsOfService.ManageLink.v135" = "Spravovať";
 
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
-"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "Aby bolo možné prehliadač vylepšovať, %1$@ odosiela diagnostické údaje a údaje o interakciách spoločnosti %2$@. %3$@";
+"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "Aby bolo možné prehliadač vylepšovať, %1$@ odosiela diagnostické údaje a údaje o používaní spoločnosti %2$@. %3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
 "Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ sa stará o vaše súkromie. Podrobnosti nájdete v dokumente %2$@";
@@ -410,7 +444,7 @@
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Údaje o vašom zariadení, hardvérovej konfigurácii a spôsobe používania %1$@u pomáhajú zlepšovať funkcie, výkon a stabilitu pre každého. %2$@";
 
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
-"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Odosielať technické údaje a údaje o interakciách spoločnosti %@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135" = "Odosielať technické údaje a údaje o používaní spoločnosti %@";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "Pomôžte nám zlepšiť %@";

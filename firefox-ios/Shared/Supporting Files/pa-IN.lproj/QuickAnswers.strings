@@ -10,14 +10,23 @@
 /* Loading label shown in the Quick Answers view while an answer is being fetched. */
 "QuickAnswers.ContentView.Answering.v158" = "ਜਵਾਬ ਦਿੱਤਾ ਜਾ ਰਿਹਾ ਹੈ…";
 
+/* Button shown below a Quick Answers result that the user taps to ask a follow-up question about the answer. */
+"QuickAnswers.ContentView.FollowUpButton.v160" = "ਜਵਾਬ ਲਈ ਪੁੱਛੋ";
+
 /* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
 "QuickAnswers.ContentView.Footer.v158" = "%@ ਦੀ ਸਹਾਇਤਾ ਨਾਲ · ਜਵਾਬਾਂ ਵਿੱਚ ਗਲਤੀਆਂ ਹੋ ਸਕਦੀਆਂ ਹਨ।";
 
 /* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak. */
 "QuickAnswers.ContentView.Listening.v158" = "ਸੁਣਿਆ ਜਾ ਰਿਹਾ ਹੈ, ਕੁਝ ਵੀ ਪੁੱਛੋ…";
 
+/* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to ask a follow-up question about the previous answer. */
+"QuickAnswers.ContentView.ListeningFollowUp.v160" = "ਸੁਣ ਰਿਹਾ ਹੈ, ਜਵਾਬ ਲਈ ਪੁੱਛੋ…";
+
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "…ਕੁਝ ਵੀ ਪੁੱਛੋ";
+
+/* Header label shown above the body of a Quick Answers result, labeling the text below it as a short answer to the user's question. */
+"QuickAnswers.ContentView.ResultHeader.v160" = "ਫ਼ੌਰੀ ਜਵਾਬ";
 
 /* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
 "QuickAnswers.ContentView.SearchingSources.v158" = "…ਸਰੋਤ ਲੱਭੇ ਜਾ ਰਹੇ ਹਨ";

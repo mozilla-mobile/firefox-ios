@@ -370,6 +370,9 @@
 /* Primary button on the onboarding card requesting permission to send notifications. Tapping this button accepts the permission request. */
 "Onboarding.MultiDay.NotificationCard.AcceptButtonText.v159" = "Virkja tilkynningar";
 
+/* Body of the onboarding card requesting permissions to send notifications, with examples of notifications the user will receive. %@ is the name of the app (e.g., Firefox). */
+"Onboarding.MultiDay.NotificationCard.BodyText.v159" = "Fáðu uppfærslur á verndareiginleikum %@, ábendingar og skýrslu um persónuvernd þína.";
+
 /* Secondary button on the onboarding card requesting permission to send notifications. Tapping this button declines the permission request.
 Secondary button on the onboarding card that prompts users to enable syncing for their account data. Tapping this button dismisses the prompt and closes the card. */
 "Onboarding.MultiDay.NotificationCard.DeclineButtonText.v159" = "Ekki núna";

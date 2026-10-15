@@ -398,7 +398,7 @@
 "Settings.TechnicalData.Message.v136" = "Údaje o vašom zariadení, konfigurácii hardvéru a používaní nám pomáhajú zlepšovať funkcie, výkon a stabilitu %@u.";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v136" = "Odosielať technické údaje a údaje o interakciách";
+"Settings.TechnicalData.Title.v136" = "Odosielať technické údaje a údaje o používaní";
 
 /* Terms of Use settings section title */
 "Settings.TermsOfUse.Title.v137" = "Podmienky používania";

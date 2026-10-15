@@ -67,6 +67,12 @@
 /* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
 "QuickAnswers.OptIn.Title.v158" = "Бо овози худ савол диҳед";
 
+/* Title of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
+"QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158" = "Хусусӣ аз рӯи тарҳ";
+
+/* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
+"QuickAnswers.OptInRedesign.Title.v158" = "«Ҷавобҳои фаврӣ»-ро озмоед";
+
 /* Title of the privacy banner shown on the Quick Answers screen. */
 "QuickAnswers.PrivacyBanner.Title.v158" = "Хусусӣ аз рӯи тарҳ";
 
