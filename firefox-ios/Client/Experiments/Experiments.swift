@@ -116,15 +116,9 @@ enum Experiments {
             let dir = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
             profilePath = dir.path
         } else {
-            // Mirrors `ProfileFileAccessor`: the shared container is unavailable when the
-            // app group entitlement is missing, so fall back to the same directory the
-            // profile files land in. Without this, `dbPath` is nil, Nimbus silently
-            // becomes `NimbusDisabled`, and every onboarding card is filtered out.
-            let rootPath = FileManager.default.containerURL(
+            profilePath = FileManager.default.containerURL(
                 forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier
-            )?.path ?? NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[safe: 0]
-            profilePath = rootPath.map {
-                URL(fileURLWithPath: $0)
+            )?
                 .appendingPathComponent("profile.profile")
                 .path
         }
@@ -176,8 +170,9 @@ enum Experiments {
 
         guard let dbPath = Experiments.dbPath else {
             DefaultLogger.shared.log("Nimbus didn't get to create, because of a nil dbPath",
-                                     level: .warning,
+                                     level: .fatal,
                                      category: .experiments)
+            assertionFailure("Nil dbPath found during Nimbus creation")
             return NimbusDisabled.shared
         }
 
