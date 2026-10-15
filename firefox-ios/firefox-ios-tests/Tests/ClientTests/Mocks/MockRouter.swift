@@ -17,7 +17,6 @@ class MockRouter: NSObject, Router {
     var presentedViewController: UIViewController?
     var presentCalled = 0
     var presentCalledWithAnimation = 0
-    var lastPresentAnimated: Bool?
     var dismissCalled = 0
     var pushedViewController: UIViewController?
     var pushCalled = 0
@@ -38,7 +37,6 @@ class MockRouter: NSObject, Router {
         savedCompletion = completion
         presentedViewController = viewController
         presentCalled += 1
-        lastPresentAnimated = animated
         onPresent?()
     }
 

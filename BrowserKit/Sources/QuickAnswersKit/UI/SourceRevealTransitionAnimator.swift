@@ -45,11 +45,17 @@ final class SourceRevealTransitionAnimator: NSObject,
 
     /// In the container view's coordinate space.
     private let sourceRect: CGRect
-    private let isOptInVisible: Bool
+    private let isOptInVisible: () -> Bool
+    private let feature: QuickAnswersFeature
 
-    init(sourceRect: CGRect, isOptInVisible: Bool) {
+    init(
+        sourceRect: CGRect,
+        isOptInVisible: @escaping () -> Bool,
+        feature: QuickAnswersFeature
+    ) {
         self.sourceRect = sourceRect
         self.isOptInVisible = isOptInVisible
+        self.feature = feature
     }
 
     // MARK: - UIViewControllerTransitioningDelegate
@@ -90,7 +96,10 @@ final class SourceRevealTransitionAnimator: NSObject,
         }
         let containerView = transitionContext.containerView
         presentedController.view.frame = containerView.frame
-        guard transitionContext.isAnimated else {
+        if isOptInVisible(), feature.isOptInRedesignEnabled {
+            // set the view alpha to 0.0 so the opt in slides in and only reveals the view later
+            // also in this path there is no animation so the opt in reveals suddenly
+            presentedController.view.alpha = 0.0
             containerView.addSubview(presentedController.view)
             transitionContext.completeTransition(true)
             return
@@ -107,11 +116,11 @@ final class SourceRevealTransitionAnimator: NSObject,
         presentedController.view.mask = maskView
         quickAnswersController.prepareForPresentationTransition(
             sourceRect: sourceRect,
-            isOptInVisible: isOptInVisible
+            isOptInVisible: isOptInVisible()
         )
         UIView.animate(withDuration: UX.presentationDuration, delay: 0.0, options: .curveEaseOut) { [self] in
             maskView.transform = CGAffineTransform(scaleX: UX.expandedMaskHorizontalScale, y: 1.0)
-            quickAnswersController.applyPresentationTransition(isOptInVisible: isOptInVisible)
+            quickAnswersController.applyPresentationTransition(isOptInVisible: isOptInVisible())
         } completion: { _ in
             presentedController.view.mask = nil
             transitionContext.completeTransition(true)
@@ -128,6 +137,12 @@ final class SourceRevealTransitionAnimator: NSObject,
             transitionContext.completeTransition(false)
             return
         }
+        
+        if isOptInVisible(), feature.isOptInRedesignEnabled {
+            transitionContext.completeTransition(true)
+            return
+        }
+        
         let containerView = transitionContext.containerView
         let maskView = makeMaskView(for: containerView, diameterRatio: UX.dismissalMaskDiameterRatio)
         containerView.mask = maskView

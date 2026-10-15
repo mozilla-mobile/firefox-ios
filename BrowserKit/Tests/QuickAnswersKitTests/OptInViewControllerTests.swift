@@ -58,9 +58,8 @@ final class OptInViewControllerTests: XCTestCase {
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
             strings: .mock,
             closeAccessibilityLabel: "Close",
-            learnMoreURL: URL(string: "https://mozilla.org"),
             onContinue: {},
-            onLearnMore: { _ in },
+            onLearnMore: {},
             onDismiss: { [weak self] in self?.dismissCallCount += 1 }
         )
         trackForMemoryLeaks(subject, file: file, line: line)

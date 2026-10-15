@@ -46,37 +46,6 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertTrue(navigationController.viewControllers.first is QuickAnswersViewController)
     }
 
-    func test_start_withOptInRedesignAndOptInRequired_presentsWithoutAnimation() {
-        featureFlagsProvider.enabledFlags = [.quickAnswersOptInRedesign]
-        let subject = createSubject()
-
-        subject.start()
-
-        XCTAssertEqual(router.presentCalled, 1)
-        XCTAssertEqual(router.lastPresentAnimated, false)
-    }
-
-    func test_start_withOptInRedesignAndOptInCompleted_presentsWithEntranceAnimation() {
-        featureFlagsProvider.enabledFlags = [.quickAnswersOptInRedesign]
-        let prefs = MockProfilePrefs()
-        prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
-        let subject = createSubject(prefs: prefs)
-
-        subject.start()
-
-        XCTAssertEqual(router.presentCalled, 1)
-        XCTAssertEqual(router.lastPresentAnimated, !UIAccessibility.isReduceMotionEnabled)
-    }
-
-    func test_start_withoutOptInRedesignAndOptInRequired_presentsWithEntranceAnimation() {
-        let subject = createSubject()
-
-        subject.start()
-
-        XCTAssertEqual(router.presentCalled, 1)
-        XCTAssertEqual(router.lastPresentAnimated, !UIAccessibility.isReduceMotionEnabled)
-    }
-
     func test_dismissQuickAnswers_dismissesControllerAndNotifiesParent() {
         let subject = createSubject()
 
@@ -151,10 +120,31 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertEqual(subject.resolvedModel(), QuickAnswersKit.QuickAnswersModel.liner)
     }
 
+    func test_resolvedFeature_withOptInRedesignEnabled_returnsFeatureWithResolvedModelAndRedesign() {
+        setupNimbus(model: .liner)
+        featureFlagsProvider.enabledFlags = [.quickAnswersOptInRedesign]
+        let subject = createSubject()
+
+        XCTAssertEqual(
+            subject.resolvedFeature(),
+            QuickAnswersKit.QuickAnswersFeature(model: .liner, isOptInRedesignEnabled: true)
+        )
+    }
+
+    func test_resolvedFeature_withOptInRedesignDisabled_returnsFeatureWithoutRedesign() {
+        setupNimbus(model: .exa)
+        let subject = createSubject()
+
+        XCTAssertEqual(
+            subject.resolvedFeature(),
+            QuickAnswersKit.QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false)
+        )
+    }
+
     // MARK: - Helper Methods
     private func setupNimbus(model: Client.QuickAnswersModel) {
         FxNimbus.shared.features.quickAnswersFeature.with { _, _ in
-            QuickAnswersFeature(enabled: true, model: model)
+            Client.QuickAnswersFeature(enabled: true, model: model)
         }
     }
 

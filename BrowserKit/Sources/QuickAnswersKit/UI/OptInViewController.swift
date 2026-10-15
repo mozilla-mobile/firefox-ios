@@ -18,9 +18,8 @@ public final class OptInViewController: UIViewController, UIAdaptivePresentation
         themeManager: any ThemeManager,
         strings: QuickAnswersViewConfiguration.OptInRedesignStrings,
         closeAccessibilityLabel: String,
-        learnMoreURL: URL?,
         onContinue: @escaping () -> Void,
-        onLearnMore: @escaping (URL) -> Void,
+        onLearnMore: @escaping () -> Void,
         onDismiss: @escaping () -> Void
     ) {
         self.onDismiss = onDismiss
@@ -29,7 +28,6 @@ public final class OptInViewController: UIViewController, UIAdaptivePresentation
             themeManager: themeManager,
             strings: strings,
             closeAccessibilityLabel: closeAccessibilityLabel,
-            learnMoreURL: learnMoreURL,
             onContinue: onContinue,
             onLearnMore: onLearnMore,
             onDismiss: onDismiss
@@ -101,9 +99,8 @@ struct OptInSheetView: ThemeableView {
     let themeManager: ThemeManager
     private let strings: QuickAnswersViewConfiguration.OptInRedesignStrings
     private let closeAccessibilityLabel: String
-    private let learnMoreURL: URL?
     private let onContinue: () -> Void
-    private let onLearnMore: (URL) -> Void
+    private let onLearnMore: () -> Void
     private let onDismiss: () -> Void
 
     private var isCompact: Bool {
@@ -113,7 +110,7 @@ struct OptInSheetView: ThemeableView {
     private var privacyInfoSpacing: CGFloat {
         return isCompact ? UX.Compact.privacyInfoSpacing : UX.privacyInfoSpacing
     }
-    
+
     private var privacyInfoItems: [PrivacyInfo] {
         return [
             PrivacyInfo(
@@ -139,16 +136,14 @@ struct OptInSheetView: ThemeableView {
         themeManager: ThemeManager,
         strings: QuickAnswersViewConfiguration.OptInRedesignStrings,
         closeAccessibilityLabel: String,
-        learnMoreURL: URL?,
         onContinue: @escaping () -> Void,
-        onLearnMore: @escaping (URL) -> Void,
+        onLearnMore: @escaping () -> Void,
         onDismiss: @escaping () -> Void
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.strings = strings
         self.closeAccessibilityLabel = closeAccessibilityLabel
-        self.learnMoreURL = learnMoreURL
         self.onContinue = onContinue
         self.onLearnMore = onLearnMore
         self.onDismiss = onDismiss
@@ -278,16 +273,12 @@ struct OptInSheetView: ThemeableView {
             .accessibilityLabel(
                 privacyInfoItems.map { "\($0.title), \($0.subtitle)" }.joined(separator: ", ")
             )
-            if let learnMoreURL {
-                Button(strings.learnMore) {
-                    onLearnMore(learnMoreURL)
-                }
+            Button(strings.learnMore, action: onLearnMore)
                 .buttonStyle(.plain)
                 .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                 .foregroundStyle(theme.colors.iconAccent.color)
                 .padding(.leading, UX.learnMoreLeadingPadding)
                 .accessibilityAddTraits(.isLink)
-            }
         }
         .padding(.leading, isCompact ? 0.0 : UX.privacyInfoLeadingPadding)
         .frame(maxWidth: .infinity, alignment: .leading)

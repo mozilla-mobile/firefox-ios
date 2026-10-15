@@ -38,20 +38,14 @@ public final class QuickAnswersViewController: UIViewController,
     private let contentView: QuickAnswersContentView = .build()
     private let transitionAnimator: SourceRevealTransitionAnimator?
 
-    /// Whether the opt-in sheet will be shown on appearance. The presenter skips its entrance animation
-    /// in that case, since this screen is only revealed once the sheet is up.
-    public var shouldPresentOptInSheet: Bool {
-        return isOptInRedesignEnabled && viewModel.isOptInRequired
-    }
-
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
     public var themeListenerCancellable: Any?
+    private let windowUUID: WindowUUID
     private let notificationCenter: NotificationProtocol
     private weak var navigationHandler: QuickAnswersNavigationHandler?
     private let viewModel: QuickAnswersViewModel
     private let learnMoreURL: URL?
-    private let isOptInRedesignEnabled: Bool
     private let stringsConfiguration: QuickAnswersViewConfiguration
     private lazy var errorHandler = ErrorHandler(
         presenter: self,
@@ -65,12 +59,6 @@ public final class QuickAnswersViewController: UIViewController,
         presenter: self,
         strings: stringsConfiguration.privacyBanner
     )
-    private var isOptInPending = false
-    private var hasCompletedOptIn = false
-    /// The navigation controller's view when embedded, so the navigation bar is hidden along with the content.
-    private var backdropView: UIView {
-        return navigationController?.view ?? view
-    }
 
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
@@ -81,7 +69,6 @@ public final class QuickAnswersViewController: UIViewController,
         telemetry: QuickAnswersTelemetry,
         configFetcher: QuickAnswersConfigFetcher,
         learnMoreURL: URL?,
-        isOptInRedesignEnabled: Bool,
         stringsConfiguration: QuickAnswersViewConfiguration,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
     ) {
@@ -92,7 +79,6 @@ public final class QuickAnswersViewController: UIViewController,
             windowUUID: windowUUID,
             themeManager: themeManager,
             learnMoreURL: learnMoreURL,
-            isOptInRedesignEnabled: isOptInRedesignEnabled,
             stringsConfiguration: stringsConfiguration,
             notificationCenter: notificationCenter
         )
@@ -105,12 +91,12 @@ public final class QuickAnswersViewController: UIViewController,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         learnMoreURL: URL?,
-        isOptInRedesignEnabled: Bool,
         stringsConfiguration: QuickAnswersViewConfiguration,
         notificationCenter: NotificationProtocol
     ) {
         self.navigationHandler = navigationHandler
         self.currentWindowUUID = windowUUID
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.stringsConfiguration = stringsConfiguration
@@ -119,14 +105,16 @@ public final class QuickAnswersViewController: UIViewController,
         if case let .sourceReveal(sourceRect) = transitionType {
             self.transitionAnimator = SourceRevealTransitionAnimator(
                 sourceRect: sourceRect,
-                isOptInVisible: viewModel.isOptInRequired && !isOptInRedesignEnabled
+                isOptInVisible: { [weak viewModel] in
+                    viewModel?.isOptInRequired ?? false
+                },
+                feature: viewModel.feature
             )
         } else {
             self.transitionAnimator = nil
         }
         self.viewModel = viewModel
         self.learnMoreURL = learnMoreURL
-        self.isOptInRedesignEnabled = isOptInRedesignEnabled
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = transitionType.modalPresentationStyle
         transitioningDelegate = transitionAnimator
@@ -153,12 +141,6 @@ public final class QuickAnswersViewController: UIViewController,
         guard !hasAppeared else { return }
         hasAppeared = true
         viewModel.startFlow()
-        presentOptInIfNeeded()
-    }
-
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        presentOptInIfNeeded()
     }
 
     private func setupSubviews() {
@@ -222,20 +204,18 @@ public final class QuickAnswersViewController: UIViewController,
                 self?.titleLabel.text = isTranscriptVisible ? nil : transcript
             }
         }
-        if !isOptInRedesignEnabled {
-            contentView.configureOptIn(
-                strings: stringsConfiguration.optIn,
-                learnMoreURL: learnMoreURL,
-                theme: themeManager.getCurrentTheme(for: currentWindowUUID),
-                onContinue: { [weak self] in
-                    self?.contentView.hideOptIn()
-                    self?.viewModel.completeOptIn()
-                },
-                onLearnMore: { [weak self] url in
-                    self?.dismiss(with: url)
-                }
-            )
-        }
+        contentView.configureOptIn(
+            strings: stringsConfiguration.optIn,
+            learnMoreURL: learnMoreURL,
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            onContinue: { [weak self] in
+                self?.contentView.hideOptIn()
+                self?.viewModel.completeOptIn()
+            },
+            onLearnMore: { [weak self] url in
+                self?.dismiss(with: url)
+            }
+        )
         if #available(iOS 17.0, *) {
             contentView.configurePrivacyLink { [weak self] in
                 self?.presentPrivacyTip()
@@ -253,38 +233,21 @@ public final class QuickAnswersViewController: UIViewController,
 
     // MARK: - Opt-in
     private func showOptIn() {
-        guard isOptInRedesignEnabled else {
+        guard viewModel.feature.isOptInRedesignEnabled else {
             contentView.showOptIn()
             return
         }
-        prepareForOptInSheet()
-    }
-
-    /// Hides this screen entirely, so that the opt-in sheet slides up over the browser rather than
-    /// over a screen that appeared underneath it.
-    private func prepareForOptInSheet() {
-        isOptInPending = true
-        // Hidden rather than transparent, so that the entrance animator can't fade it back in.
-        backdropView.isHidden = true
-    }
-
-    /// Presents the opt-in sheet with its regular slide up, then fades the backdrop in behind it.
-    /// Presenting needs the view to be in the window, which isn't guaranteed by `viewWillAppear`, so
-    /// `viewDidAppear` covers that case. The flag is cleared up front so this can only ever run once.
-    private func presentOptInIfNeeded() {
-        guard isOptInPending, view.window != nil, let windowUUID = currentWindowUUID else { return }
-        isOptInPending = false
         let controller = OptInViewController(
             windowUUID: windowUUID,
             themeManager: themeManager,
             strings: stringsConfiguration.optInRedesign,
             closeAccessibilityLabel: stringsConfiguration.closeAccessibilityLabel,
-            learnMoreURL: learnMoreURL,
             onContinue: { [weak self] in
-                self?.completeOptInSheet()
+                self?.presentedViewController?.dismiss(animated: true)
+                self?.viewModel.completeOptIn()
             },
-            onLearnMore: { [weak self] url in
-                self?.dismiss(with: url)
+            onLearnMore: { [weak self] in
+                self?.dismiss(with: self?.learnMoreURL)
             },
             onDismiss: { [weak self] in
                 self?.dismiss(with: nil)
@@ -295,23 +258,12 @@ public final class QuickAnswersViewController: UIViewController,
         }
     }
 
+    /// Fades in this screen, which the presentation transition keeps hidden while the opt-in sheet slides up.
     private func revealBackdrop() {
-        guard backdropView.isHidden else { return }
-        backdropView.alpha = 0.0
-        backdropView.isHidden = false
+        let backdropView = navigationController?.view ?? view
         UIView.animate(withDuration: UX.backdropFadeDuration) {
-            self.backdropView.alpha = 1.0
+            backdropView?.alpha = 1.0
         }
-    }
-
-    /// Slides the opt-in sheet away and starts the recording as the dismissal begins. The backdrop is
-    /// revealed here too, in case the sheet was dismissed before its presentation completed.
-    private func completeOptInSheet() {
-        guard !hasCompletedOptIn else { return }
-        hasCompletedOptIn = true
-        revealBackdrop()
-        dismiss(animated: true)
-        viewModel.completeOptIn()
     }
 
     // MARK: - Presentation transition
@@ -358,7 +310,7 @@ public final class QuickAnswersViewController: UIViewController,
 
     // MARK: - Themeable
     public func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
         closeButton.tintColor = theme.colors.iconPrimary
         titleLabel.textColor = theme.colors.textPrimary

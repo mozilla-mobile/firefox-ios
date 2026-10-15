@@ -5,8 +5,8 @@
 import Foundation
 import Shared
 
-/// Persists the user's consent for the Quick Answers feature.
-struct QuickAnswersOptInStore {
+/// Persists user preferences related to the Quick Answers feature.
+struct Store {
     private let prefs: Prefs
 
     init(prefs: Prefs) {

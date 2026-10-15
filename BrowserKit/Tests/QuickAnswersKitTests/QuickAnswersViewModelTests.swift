@@ -272,19 +272,19 @@ final class QuickAnswersViewModelTests: XCTestCase {
     // MARK: - Model Display Name Tests
 
     func testModelDisplayName_withExaModel_returnsExa() {
-        let subject = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .exa))
+        let subject = createSubject(model: .exa)
 
         XCTAssertEqual(subject.modelDisplayName, QuickAnswersModel.exa.displayName)
     }
 
     func testModelDisplayName_withLinerModel_returnsLiner() {
-        let subject = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .liner))
+        let subject = createSubject(model: .liner)
 
         XCTAssertEqual(subject.modelDisplayName, QuickAnswersModel.liner.displayName)
     }
 
     func testInit_withLinerModel_recordsRequestedWithModel() {
-        _ = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .liner))
+        _ = createSubject(model: .liner)
 
         XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastRequestedModel, .liner)
@@ -293,18 +293,20 @@ final class QuickAnswersViewModelTests: XCTestCase {
     // MARK: - Helper
     private func createSubject(
         prefs: Prefs = MockProfilePrefs(),
-        configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa)
+        model: QuickAnswersModel = .exa
     ) -> QuickAnswersViewModel {
-        let model = QuickAnswersViewModel(
+        let subject = QuickAnswersViewModel(
             prefs: prefs,
             telemetry: mockTelemetry,
-            configFetcher: configFetcher,
+            configFetcher: DefaultQuickAnswersConfigFetcher(
+                feature: QuickAnswersFeature(model: model, isOptInRedesignEnabled: false)
+            ),
             makeService: { _, _ in
                 return self.mockService
             }
         )
-        trackForMemoryLeaks(model)
-        return model
+        trackForMemoryLeaks(subject)
+        return subject
     }
 
     private func createSubjectWithFailingService(prefs: Prefs = MockProfilePrefs()) -> QuickAnswersViewModel {
@@ -312,6 +314,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         let model = QuickAnswersViewModel(
             prefs: prefs,
             telemetry: mockTelemetry,
+            configFetcher: nil,
             makeService: { _, _ in throw ServiceInitError() }
         )
         trackForMemoryLeaks(model)
