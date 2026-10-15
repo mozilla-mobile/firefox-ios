@@ -55,7 +55,10 @@ final class SafeAreaDebugGuides {
         unsafeArea.path = unsafePath.cgPath
 
         let reservedPath = UIBezierPath()
-        #if compiler(>=6.4)
+        // Temporary api gate until we are able to build with Xcode 27.1 in Bitrise
+        // This api does not exist in Xcode 27.0, and both SDKs use the same
+        // Swift compiler which makes it hard to distinguish.
+        #if XCODE_2710 || XCODE_2720
         if #available(iOS 27.1, *) {
             let regions = view.reservedRegions(kind: .occlusion) + view.reservedRegions(kind: .division)
             for region in regions where region.isActive {
@@ -66,6 +69,9 @@ final class SafeAreaDebugGuides {
                 }
             }
         }
+        // This error will remind us to remove those checks once new Xcode versions show up.
+        #elseif !XCODE_MAJOR_2600 && !XCODE_2700
+        #error("Update the Xcode version checks for reservedRegions in SafeAreaGuidesSetting.swift.")
         #endif
         reservedArea.path = reservedPath.cgPath
     }
