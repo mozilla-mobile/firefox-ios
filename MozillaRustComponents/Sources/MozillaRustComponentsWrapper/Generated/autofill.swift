@@ -568,8 +568,9 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 /**
- * The bridged sync engine for addresses. The canonical docs are in
- * services/interfaces/mozIBridgedSyncEngine.idl.
+ * The bridged sync engine for addresses, which wraps the
+ * `sync15::engine::SyncEngine` implemented by this component (see
+ * `sync15::engine::BridgedEngineWrapper`).
  * NOTE: all timestamps here are milliseconds.
  */
 public protocol AddressesBridgedEngineProtocol: AnyObject, Sendable {
@@ -598,8 +599,9 @@ public protocol AddressesBridgedEngineProtocol: AnyObject, Sendable {
     
 }
 /**
- * The bridged sync engine for addresses. The canonical docs are in
- * services/interfaces/mozIBridgedSyncEngine.idl.
+ * The bridged sync engine for addresses, which wraps the
+ * `sync15::engine::SyncEngine` implemented by this component (see
+ * `sync15::engine::BridgedEngineWrapper`).
  * NOTE: all timestamps here are milliseconds.
  */
 open class AddressesBridgedEngine: AddressesBridgedEngineProtocol, @unchecked Sendable {
@@ -803,6 +805,244 @@ public func FfiConverterTypeAddressesBridgedEngine_lower(_ value: AddressesBridg
 
 
 
+/**
+ * The bridged sync engine for credit cards, which wraps the
+ * `sync15::engine::SyncEngine` implemented by this component (see
+ * `sync15::engine::BridgedEngineWrapper`).
+ * NOTE: all timestamps here are milliseconds.
+ */
+public protocol CreditCardsBridgedEngineProtocol: AnyObject, Sendable {
+    
+    func apply(serverModifiedMillis: Int64) throws  -> [String]
+    
+    func ensureCurrentSyncId(newSyncId: String) throws  -> String
+    
+    func lastSync() throws  -> Int64
+    
+    func reset() throws 
+    
+    func resetSyncId() throws  -> String
+    
+    func setUploaded(newTimestamp: Int64, uploadedIds: [String]) throws 
+    
+    func storeIncoming(incomingEnvelopesAsJson: [String]) throws 
+    
+    func syncFinished() throws 
+    
+    func syncId() throws  -> String?
+    
+    func syncStarted() throws 
+    
+    func wipe() throws 
+    
+}
+/**
+ * The bridged sync engine for credit cards, which wraps the
+ * `sync15::engine::SyncEngine` implemented by this component (see
+ * `sync15::engine::BridgedEngineWrapper`).
+ * NOTE: all timestamps here are milliseconds.
+ */
+open class CreditCardsBridgedEngine: CreditCardsBridgedEngineProtocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_autofill_fn_clone_creditcardsbridgedengine(self.handle, $0) }
+    }
+    // No primary constructor declared for this class.
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_autofill_fn_free_creditcardsbridgedengine(handle, $0) }
+    }
+
+    
+
+    
+open func apply(serverModifiedMillis: Int64)throws  -> [String]  {
+    return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_creditcardsbridgedengine_apply(
+            self.uniffiCloneHandle(),
+        FfiConverterInt64.lower(serverModifiedMillis),uniffiCallStatus
+    )
+})
+}
+    
+open func ensureCurrentSyncId(newSyncId: String)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_creditcardsbridgedengine_ensure_current_sync_id(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(newSyncId),uniffiCallStatus
+    )
+})
+}
+    
+open func lastSync()throws  -> Int64  {
+    return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_creditcardsbridgedengine_last_sync(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+    
+open func reset()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_creditcardsbridgedengine_reset(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+}
+}
+    
+open func resetSyncId()throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_creditcardsbridgedengine_reset_sync_id(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+    
+open func setUploaded(newTimestamp: Int64, uploadedIds: [String])throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_creditcardsbridgedengine_set_uploaded(
+            self.uniffiCloneHandle(),
+        FfiConverterInt64.lower(newTimestamp),
+        FfiConverterSequenceString.lower(uploadedIds),uniffiCallStatus
+    )
+}
+}
+    
+open func storeIncoming(incomingEnvelopesAsJson: [String])throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_creditcardsbridgedengine_store_incoming(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceString.lower(incomingEnvelopesAsJson),uniffiCallStatus
+    )
+}
+}
+    
+open func syncFinished()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_creditcardsbridgedengine_sync_finished(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+}
+}
+    
+open func syncId()throws  -> String?  {
+    return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_creditcardsbridgedengine_sync_id(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+    
+open func syncStarted()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_creditcardsbridgedengine_sync_started(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+}
+}
+    
+open func wipe()throws   {try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_creditcardsbridgedengine_wipe(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+}
+}
+    
+
+    
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeCreditCardsBridgedEngine: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = CreditCardsBridgedEngine
+
+    public static func lift(_ handle: UInt64) throws -> CreditCardsBridgedEngine {
+        return CreditCardsBridgedEngine(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: CreditCardsBridgedEngine) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CreditCardsBridgedEngine {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: CreditCardsBridgedEngine, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardsBridgedEngine_lift(_ handle: UInt64) throws -> CreditCardsBridgedEngine {
+    return try FfiConverterTypeCreditCardsBridgedEngine.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardsBridgedEngine_lower(_ value: CreditCardsBridgedEngine) -> UInt64 {
+    return FfiConverterTypeCreditCardsBridgedEngine.lower(value)
+}
+
+
+
+
+
+
 public protocol StoreProtocol: AnyObject, Sendable {
     
     func addAddress(a: UpdatableAddressFields) throws  -> Address
@@ -835,6 +1075,13 @@ public protocol StoreProtocol: AnyObject, Sendable {
     func countAllCreditCards() throws  -> Int64
     
     func countAllPassports() throws  -> Int64
+    
+    /**
+     * Returns a bridged sync engine for credit cards, for use by Desktop's
+     * Sync framework. Constructing it only assembles structs and never touches
+     * the DB, so it cannot fail.
+     */
+    func creditCardsBridgedEngine()  -> CreditCardsBridgedEngine
     
     func deleteAddress(guid: String) throws  -> Bool
     
@@ -1104,6 +1351,20 @@ open func countAllPassports()throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
         uniffiCallStatus in
     uniffi_autofill_fn_method_store_count_all_passports(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+})
+}
+    
+    /**
+     * Returns a bridged sync engine for credit cards, for use by Desktop's
+     * Sync framework. Constructing it only assembles structs and never touches
+     * the DB, so it cannot fail.
+     */
+open func creditCardsBridgedEngine() -> CreditCardsBridgedEngine  {
+    return try!  FfiConverterTypeCreditCardsBridgedEngine_lift(try! rustCall() {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_store_credit_cards_bridged_engine(
             self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
@@ -1659,6 +1920,7 @@ public struct CreditCard: Equatable, Hashable {
     public var guid: String
     public var ccName: String
     public var ccNumber: String
+    public var ccCvv: String?
     public var ccNumberLast4: String
     public var ccExpMonth: Int64
     public var ccExpYear: Int64
@@ -1670,10 +1932,11 @@ public struct CreditCard: Equatable, Hashable {
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(guid: String, ccName: String, ccNumber: String, ccNumberLast4: String, ccExpMonth: Int64, ccExpYear: Int64, ccType: String, timeCreated: Int64, timeLastUsed: Int64?, timeLastModified: Int64, timesUsed: Int64) {
+    public init(guid: String, ccName: String, ccNumber: String, ccCvv: String? = nil, ccNumberLast4: String, ccExpMonth: Int64, ccExpYear: Int64, ccType: String, timeCreated: Int64, timeLastUsed: Int64?, timeLastModified: Int64, timesUsed: Int64) {
         self.guid = guid
         self.ccName = ccName
         self.ccNumber = ccNumber
+        self.ccCvv = ccCvv
         self.ccNumberLast4 = ccNumberLast4
         self.ccExpMonth = ccExpMonth
         self.ccExpYear = ccExpYear
@@ -1703,6 +1966,7 @@ public struct FfiConverterTypeCreditCard: FfiConverterRustBuffer {
                 guid: FfiConverterString.read(from: &buf), 
                 ccName: FfiConverterString.read(from: &buf), 
                 ccNumber: FfiConverterString.read(from: &buf), 
+                ccCvv: FfiConverterOptionString.read(from: &buf), 
                 ccNumberLast4: FfiConverterString.read(from: &buf), 
                 ccExpMonth: FfiConverterInt64.read(from: &buf), 
                 ccExpYear: FfiConverterInt64.read(from: &buf), 
@@ -1718,6 +1982,7 @@ public struct FfiConverterTypeCreditCard: FfiConverterRustBuffer {
         FfiConverterString.write(value.guid, into: &buf)
         FfiConverterString.write(value.ccName, into: &buf)
         FfiConverterString.write(value.ccNumber, into: &buf)
+        FfiConverterOptionString.write(value.ccCvv, into: &buf)
         FfiConverterString.write(value.ccNumberLast4, into: &buf)
         FfiConverterInt64.write(value.ccExpMonth, into: &buf)
         FfiConverterInt64.write(value.ccExpYear, into: &buf)
@@ -2192,15 +2457,17 @@ public func FfiConverterTypeUpdatableAddressFieldsWithMeta_lower(_ value: Updata
 public struct UpdatableCreditCardFields: Equatable, Hashable {
     public var ccName: String
     public var ccNumber: String
+    public var ccCvv: String?
     public var ccExpMonth: Int64
     public var ccExpYear: Int64
     public var ccType: String
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(ccName: String, ccNumber: String, ccExpMonth: Int64, ccExpYear: Int64, ccType: String) {
+    public init(ccName: String, ccNumber: String, ccCvv: String? = nil, ccExpMonth: Int64, ccExpYear: Int64, ccType: String) {
         self.ccName = ccName
         self.ccNumber = ccNumber
+        self.ccCvv = ccCvv
         self.ccExpMonth = ccExpMonth
         self.ccExpYear = ccExpYear
         self.ccType = ccType
@@ -2224,6 +2491,7 @@ public struct FfiConverterTypeUpdatableCreditCardFields: FfiConverterRustBuffer 
             try UpdatableCreditCardFields(
                 ccName: FfiConverterString.read(from: &buf), 
                 ccNumber: FfiConverterString.read(from: &buf), 
+                ccCvv: FfiConverterOptionString.read(from: &buf), 
                 ccExpMonth: FfiConverterInt64.read(from: &buf), 
                 ccExpYear: FfiConverterInt64.read(from: &buf), 
                 ccType: FfiConverterString.read(from: &buf)
@@ -2233,6 +2501,7 @@ public struct FfiConverterTypeUpdatableCreditCardFields: FfiConverterRustBuffer 
     public static func write(_ value: UpdatableCreditCardFields, into buf: inout [UInt8]) {
         FfiConverterString.write(value.ccName, into: &buf)
         FfiConverterString.write(value.ccNumber, into: &buf)
+        FfiConverterOptionString.write(value.ccCvv, into: &buf)
         FfiConverterInt64.write(value.ccExpMonth, into: &buf)
         FfiConverterInt64.write(value.ccExpYear, into: &buf)
         FfiConverterString.write(value.ccType, into: &buf)
@@ -3233,6 +3502,39 @@ private let initializationResult: InitializationResult = {
     if (uniffi_autofill_checksum_method_addressesbridgedengine_wipe() != 15663) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_autofill_checksum_method_creditcardsbridgedengine_apply() != 65106) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_creditcardsbridgedengine_ensure_current_sync_id() != 17118) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_creditcardsbridgedengine_last_sync() != 25901) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_creditcardsbridgedengine_reset() != 15504) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_creditcardsbridgedengine_reset_sync_id() != 14075) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_creditcardsbridgedengine_set_uploaded() != 65209) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_creditcardsbridgedengine_store_incoming() != 59724) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_creditcardsbridgedengine_sync_finished() != 9079) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_creditcardsbridgedengine_sync_id() != 58554) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_creditcardsbridgedengine_sync_started() != 42536) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_creditcardsbridgedengine_wipe() != 37047) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_autofill_checksum_method_store_add_address() != 29340) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -3270,6 +3572,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_count_all_passports() != 5277) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_credit_cards_bridged_engine() != 37935) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_delete_address() != 63199) {

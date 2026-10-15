@@ -1477,14 +1477,16 @@ public struct MozAdsRequestOptions: Equatable, Hashable {
     public var cachePolicy: MozAdsCachePolicy?
     public var flags: [String: Bool]
     public var ohttp: Bool
+    public var relevance: [String: Double]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(blocks: [String] = [], cachePolicy: MozAdsCachePolicy?, flags: [String: Bool] = [:], ohttp: Bool = false) {
+    public init(blocks: [String] = [], cachePolicy: MozAdsCachePolicy?, flags: [String: Bool] = [:], ohttp: Bool = false, relevance: [String: Double] = [:]) {
         self.blocks = blocks
         self.cachePolicy = cachePolicy
         self.flags = flags
         self.ohttp = ohttp
+        self.relevance = relevance
     }
 
     
@@ -1506,7 +1508,8 @@ public struct FfiConverterTypeMozAdsRequestOptions: FfiConverterRustBuffer {
                 blocks: FfiConverterSequenceString.read(from: &buf), 
                 cachePolicy: FfiConverterOptionTypeMozAdsCachePolicy.read(from: &buf), 
                 flags: FfiConverterDictionaryStringBool.read(from: &buf), 
-                ohttp: FfiConverterBool.read(from: &buf)
+                ohttp: FfiConverterBool.read(from: &buf), 
+                relevance: FfiConverterDictionaryStringDouble.read(from: &buf)
         )
     }
 
@@ -1515,6 +1518,7 @@ public struct FfiConverterTypeMozAdsRequestOptions: FfiConverterRustBuffer {
         FfiConverterOptionTypeMozAdsCachePolicy.write(value.cachePolicy, into: &buf)
         FfiConverterDictionaryStringBool.write(value.flags, into: &buf)
         FfiConverterBool.write(value.ohttp, into: &buf)
+        FfiConverterDictionaryStringDouble.write(value.relevance, into: &buf)
     }
 }
 
@@ -2239,6 +2243,9 @@ public func FfiConverterTypeMozAdsReportReason_lower(_ value: MozAdsReportReason
 
 
 
+/**
+ * Receives the ads client's metrics, for the app to record in Glean.
+ */
 public protocol MozAdsTelemetry: AnyObject, Sendable {
     
     func recordBuildCacheError(label: String, value: String) 
@@ -2771,6 +2778,32 @@ fileprivate struct FfiConverterDictionaryStringUInt32: FfiConverterRustBuffer {
         for _ in 0..<len {
             let key = try FfiConverterString.read(from: &buf)
             let value = try FfiConverterUInt32.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterDictionaryStringDouble: FfiConverterRustBuffer {
+    public static func write(_ value: [String: Double], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterDouble.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: Double] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: Double]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterDouble.read(from: &buf)
             dict[key] = value
         }
         return dict
