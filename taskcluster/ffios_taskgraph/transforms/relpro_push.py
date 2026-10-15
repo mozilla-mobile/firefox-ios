@@ -8,6 +8,13 @@ transforms = TransformSequence()
 @transforms.add
 def resolve_keyed_by_build_type(config, tasks):
     for task in tasks:
+        for field in ("routes", "scopes"):
+            resolve_keyed_by(
+                task,
+                field,
+                item_name=task["name"],
+                level=config.params["level"],
+            )
         resolve_keyed_by(
             task,
             "treeherder.symbol",
