@@ -68,7 +68,7 @@ final class AccessoryViewProvider: UIView,
         if isiPad {
             return [.flexibleSpace(), autofillAccessoryView].compactMap { $0 }
         } else if let autofillAccessoryView {
-            return [navigationButtonsBarItem, autofillAccessoryView, doneButton]
+            return [navigationButtonsBarItem, .flexibleSpace(), autofillAccessoryView, .flexibleSpace(), doneButton]
         } else {
             return [navigationButtonsBarItem, .flexibleSpace(), doneButton]
         }
