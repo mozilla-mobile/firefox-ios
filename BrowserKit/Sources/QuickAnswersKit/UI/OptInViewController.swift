@@ -33,7 +33,7 @@ public final class OptInViewController: UIViewController, UIAdaptivePresentation
             onDismiss: onDismiss
         ))
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = .pageSheet
+        modalPresentationStyle = .formSheet
         // The choice has to be made through the buttons, so the sheet can't be dragged away.
         isModalInPresentation = true
     }

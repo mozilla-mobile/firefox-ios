@@ -36,7 +36,7 @@ public final class QuickAnswersViewController: UIViewController,
         $0.alpha = 0.0
     }
     private let contentView: QuickAnswersContentView = .build()
-    private let transitionAnimator: SourceRevealTransitionAnimator?
+    private let transitionDelegate: OptInSheetTransition
 
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
@@ -102,22 +102,26 @@ public final class QuickAnswersViewController: UIViewController,
         self.stringsConfiguration = stringsConfiguration
         // The custom transition animator is only used for the source reveal transition; the form sheet
         // relies on the system presentation.
+        var sourceRevealAnimator: SourceRevealTransitionAnimator?
         if case let .sourceReveal(sourceRect) = transitionType {
-            self.transitionAnimator = SourceRevealTransitionAnimator(
+            sourceRevealAnimator = SourceRevealTransitionAnimator(
                 sourceRect: sourceRect,
                 isOptInVisible: { [weak viewModel] in
                     viewModel?.isOptInRequired ?? false
-                },
-                feature: viewModel.feature
+                }
             )
-        } else {
-            self.transitionAnimator = nil
         }
+        self.transitionDelegate = OptInSheetTransition(
+            isOptInSheetPending: { [weak viewModel] in
+                viewModel?.isOptInSheetRequired ?? false
+            },
+            fallback: sourceRevealAnimator
+        )
         self.viewModel = viewModel
         self.learnMoreURL = learnMoreURL
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = transitionType.modalPresentationStyle
-        transitioningDelegate = transitionAnimator
+        transitioningDelegate = transitionDelegate
     }
 
     required init?(coder: NSCoder) {
@@ -260,9 +264,11 @@ public final class QuickAnswersViewController: UIViewController,
 
     /// Fades in this screen, which the presentation transition keeps hidden while the opt-in sheet slides up.
     private func revealBackdrop() {
-        let backdropView = navigationController?.view ?? view
-        UIView.animate(withDuration: UX.backdropFadeDuration) {
-            backdropView?.alpha = 1.0
+        guard let backdropView = transitionDelegate.hiddenContainerView,
+              let superview = backdropView.superview else { return }
+        // Cross-dissolved rather than faded in, since the form sheet materials flash while an ancestor's alpha animates.
+        UIView.transition(with: superview, duration: UX.backdropFadeDuration, options: .transitionCrossDissolve) {
+            backdropView.isHidden = false
         }
     }
 

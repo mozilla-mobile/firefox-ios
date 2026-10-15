@@ -36,6 +36,11 @@ final class QuickAnswersViewModel {
         return !store.isOptInCompleted
     }
 
+    /// Whether the opt-in is required and shown as a sheet over the browser rather than inline.
+    var isOptInSheetRequired: Bool {
+        return isOptInRequired && feature.isOptInRedesignEnabled
+    }
+
     init(
         prefs: Prefs,
         telemetry: QuickAnswersTelemetry,

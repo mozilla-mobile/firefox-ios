@@ -46,16 +46,13 @@ final class SourceRevealTransitionAnimator: NSObject,
     /// In the container view's coordinate space.
     private let sourceRect: CGRect
     private let isOptInVisible: () -> Bool
-    private let feature: QuickAnswersFeature
 
     init(
         sourceRect: CGRect,
-        isOptInVisible: @escaping () -> Bool,
-        feature: QuickAnswersFeature
+        isOptInVisible: @escaping () -> Bool
     ) {
         self.sourceRect = sourceRect
         self.isOptInVisible = isOptInVisible
-        self.feature = feature
     }
 
     // MARK: - UIViewControllerTransitioningDelegate
@@ -96,14 +93,6 @@ final class SourceRevealTransitionAnimator: NSObject,
         }
         let containerView = transitionContext.containerView
         presentedController.view.frame = containerView.frame
-        if isOptInVisible(), feature.isOptInRedesignEnabled {
-            // set the view alpha to 0.0 so the opt in slides in and only reveals the view later
-            // also in this path there is no animation so the opt in reveals suddenly
-            presentedController.view.alpha = 0.0
-            containerView.addSubview(presentedController.view)
-            transitionContext.completeTransition(true)
-            return
-        }
 
         // Sits behind the presented controller, so what the mask hasn't covered yet blurs out.
         let blurView = makeBlurView(frame: containerView.bounds)
@@ -137,12 +126,6 @@ final class SourceRevealTransitionAnimator: NSObject,
             transitionContext.completeTransition(false)
             return
         }
-        
-        if isOptInVisible(), feature.isOptInRedesignEnabled {
-            transitionContext.completeTransition(true)
-            return
-        }
-        
         let containerView = transitionContext.containerView
         let maskView = makeMaskView(for: containerView, diameterRatio: UX.dismissalMaskDiameterRatio)
         containerView.mask = maskView

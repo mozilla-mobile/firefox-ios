@@ -216,6 +216,24 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertFalse(subject.isOptInRequired)
     }
 
+    func testIsOptInSheetRequired_withRedesignAndOptInNotCompleted_isTrue() {
+        let subject = createSubject(isOptInRedesignEnabled: true)
+
+        XCTAssertTrue(subject.isOptInSheetRequired)
+    }
+
+    func testIsOptInSheetRequired_withRedesignAndOptInCompleted_isFalse() {
+        let subject = createSubject(prefs: optInCompletedPrefs(), isOptInRedesignEnabled: true)
+
+        XCTAssertFalse(subject.isOptInSheetRequired)
+    }
+
+    func testIsOptInSheetRequired_withoutRedesign_isFalse() {
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.isOptInSheetRequired)
+    }
+
     func testCompleteOptIn_persistsConsentAndStartsRecording() {
         let prefs = MockProfilePrefs()
         let finalResult = SpeechResult(text: "Hello", isFinal: true)
@@ -293,13 +311,14 @@ final class QuickAnswersViewModelTests: XCTestCase {
     // MARK: - Helper
     private func createSubject(
         prefs: Prefs = MockProfilePrefs(),
-        model: QuickAnswersModel = .exa
+        model: QuickAnswersModel = .exa,
+        isOptInRedesignEnabled: Bool = false
     ) -> QuickAnswersViewModel {
         let subject = QuickAnswersViewModel(
             prefs: prefs,
             telemetry: mockTelemetry,
             configFetcher: DefaultQuickAnswersConfigFetcher(
-                feature: QuickAnswersFeature(model: model, isOptInRedesignEnabled: false)
+                feature: QuickAnswersFeature(model: model, isOptInRedesignEnabled: isOptInRedesignEnabled)
             ),
             makeService: { _, _ in
                 return self.mockService
