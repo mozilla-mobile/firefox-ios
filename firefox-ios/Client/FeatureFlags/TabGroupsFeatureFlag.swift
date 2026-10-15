@@ -3,5 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 enum TabGroupsFeatureFlag {
+    #if MOZ_CHANNEL_developer
+    static let isEnabled = true
+    #else
     static let isEnabled = false
+    #endif
 }

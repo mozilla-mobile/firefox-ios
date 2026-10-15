@@ -37,6 +37,16 @@ final class TabTrayCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
     }
 
+    func testTabGroupsUIIsReadyWhenViewLoadsDuringInitialization() {
+        guard TabGroupsFeatureFlag.isEnabled else { return }
+
+        let subject = createSubject()
+
+        XCTAssertNotNil(subject.tabTrayViewController?.tabGroupsController)
+        XCTAssertNotNil(subject.tabTrayViewController?.tabGroupsTopHost)
+        XCTAssertNotNil(subject.tabTrayViewController?.tabGroupsBottomHost)
+    }
+
     func testStart_RegularTabsPanel() {
         let subject = createSubject()
         subject.start(panelType: .tabs, navigationController: UINavigationController())
@@ -91,6 +101,14 @@ final class TabTrayCoordinatorTests: XCTestCase {
         subject.didFinish()
 
         XCTAssertEqual(parentCoordinator.didDismissWasCalled, 1)
+    }
+
+    func testTabSettingsDelegatesToParent() {
+        let subject = createSubject()
+
+        subject.showTabSettings()
+
+        XCTAssertEqual(parentCoordinator.didRequestTabSettingsWasCalled, 1)
     }
 
     // MARK: - Preloading before presentation
