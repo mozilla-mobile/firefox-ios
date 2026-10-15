@@ -186,10 +186,10 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/4381151
     // Smoketest
     func testSavePdfToFilesOffersTheDocumentAndKeepsBothCopies() {
+        app.launch()
         guard #available(iOS 17, *) else { return }
 
-        launchOpening(pdfUrl)
-        toolbar.tapShareButton()
+        openShareSheetFromToolbar(url: pdfUrl)
         shareSheet.assertShareSheetDocumentName(loremIpsumPdfBaseName)
         shareSheet.assertShareSheetOffersPdfDocument()
         saveCurrentDocumentToFiles(named: loremIpsumPdfBaseName)
