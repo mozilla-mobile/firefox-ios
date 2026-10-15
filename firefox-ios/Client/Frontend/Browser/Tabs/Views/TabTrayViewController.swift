@@ -664,15 +664,16 @@ final class TabTrayViewController: UIViewController,
                 containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
                 containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-                segmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                segmentedControl.leadingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.leadingAnchor,
                                                           constant: UX.segmentedControlHorizontalSpacing),
                 segmentedControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
-                segmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                segmentedControl.trailingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.trailingAnchor,
                                                            constant: -UX.segmentedControlHorizontalSpacing),
 
                 experimentSegmentControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
-                experimentSegmentControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-                experimentSegmentControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                experimentSegmentControl.leadingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.leadingAnchor),
+                experimentSegmentControl.trailingAnchor.constraint(
+                    equalTo: containerView.safeAreaLayoutGuide.trailingAnchor),
                 experimentSegmentControl.heightAnchor.constraint(equalToConstant: segmentControlHeight)
             ])
 
