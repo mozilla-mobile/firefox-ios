@@ -60,8 +60,6 @@ final class SendDataSetting: BoolSetting {
         guard let title = title?.string, let subtitle = status?.string else { return }
         self.cell = cell
 
-        cell.accessibilityElements = nil
-
         cell.configure(
             title: title,
             subtitle: subtitle,
@@ -75,15 +73,9 @@ final class SendDataSetting: BoolSetting {
         )
 
         displayBool(control.switchView)
-
         configureSwitchAccessibility(for: cell)
-
         if let accessibilityIdentifier {
             cell.setAccessibilities(traits: .none, identifier: accessibilityIdentifier)
-        }
-
-        configureLearnMoreAccessibilityAction(title: title) { [weak cell] in
-            cell?.learnMoreDidTap?()
         }
 
         cell.accessoryView = control
