@@ -6,6 +6,7 @@
 class MockGeneralSettingsDelegate: GeneralSettingsDelegate {
     var pressedAIControlsCalled = false
     var pressedQuickAnswersCalled = false
+    var pressedVPNCalled = false
 
     func pressedCustomizeAppIcon() {}
 
@@ -19,6 +20,10 @@ class MockGeneralSettingsDelegate: GeneralSettingsDelegate {
 
     func pressedAIControls() {
         pressedAIControlsCalled = true
+    }
+
+    func pressedVPN() {
+        pressedVPNCalled = true
     }
 
     func pressedToolbar() {}

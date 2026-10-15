@@ -48,8 +48,8 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
     // Some features might have a different default value than what's provided by
     // the backend. Here, we can set our own default values.
     private func checkDefaultValue(for flag: FeatureFlagID) -> Bool {
-        // Even when this feature is on in Nimbus, the user preference default value should be false
-        if flag == .aiKillSwitch {
+        // Even when these features are on in Nimbus, the user preference default value should be false
+        if flag == .aiKillSwitch || flag == .vpnFeature {
             return false
         // This feature has no nimbus configuration anymore, the default value should be false
         } else if flag == .hntSponsoredShortcuts {

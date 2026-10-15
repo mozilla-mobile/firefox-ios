@@ -80,6 +80,11 @@ final class DependencyHelperMock {
         )
         AppContainer.shared.register(service: userFeatureProvider as UserFeaturePreferring)
 
+        // Mirrors `DependencyHelper`, which only registers the manager where the proxy API exists.
+        if #available(iOS 17.0, *) {
+            AppContainer.shared.register(service: MockVPNManager() as VPNManaging)
+        }
+
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }
