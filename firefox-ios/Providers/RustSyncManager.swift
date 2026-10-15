@@ -9,6 +9,7 @@ import AuthenticationServices
 import Common
 
 import class Account.RustFirefoxAccounts
+import enum MozillaAppServices.EngineChoicesModel
 import enum MozillaAppServices.OAuthScope
 import enum MozillaAppServices.ServiceStatus
 import enum MozillaAppServices.SyncEngineSelection
@@ -308,7 +309,7 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
         return false
     }
 
-    public func getEngineEnablementChangesForAccount(withStateChange: Bool = true) -> [String: Bool] {
+    public func getEngineEnablementChangesForAccount() -> [String: Bool] {
         var engineEnablements: [String: Bool] = [:]
 
         let engines = syncManagerAPI.rustTogglableEngines
@@ -317,9 +318,6 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
         // screen on FxA.
         if let declined = UserDefaults.standard.stringArray(forKey: fxaDeclinedEngines) {
             engines.forEach { engineEnablements[$0.rawValue] = !declined.contains($0.rawValue) }
-            if withStateChange {
-                UserDefaults.standard.removeObject(forKey: fxaDeclinedEngines)
-            }
         } else {
             // Bundle in authState the engines the user activated/disabled since the
             // last sync.
@@ -345,6 +343,12 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
                        category: .sync)
         }
         return engineEnablements
+    }
+
+    func getEngineChoices(perDeviceSyncEnabled: Bool) -> EngineChoicesModel {
+        return perDeviceSyncEnabled
+        ? .device
+        : .account(enabledChanges: getEngineEnablementChangesForAccount())
     }
 
     public struct ScopedKeyError: MaybeErrorType {
@@ -528,7 +532,10 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
        return enginesToSync
     }
 
-    private func doSync(params: SyncParams, completion: @escaping @Sendable (SyncResult) -> Void) {
+    private func doSync(
+        params: SyncParams,
+        perDeviceSyncEnabled: Bool,
+        completion: @escaping @Sendable (SyncResult) -> Void) {
         beginSyncing()
         syncManagerAPI.sync(params: params) { syncResult in
             // Save the persisted state
@@ -548,13 +555,48 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
                             category: .sync,
                             extra: ["telemetry": telemetryMessage])
 
-            if let declined = syncResult.declined {
+            if perDeviceSyncEnabled {
+                if syncResult.status == .ok {
+                    self.updateEngineStateChangePrefsPostSync()
+                }
+            } else if let declined = syncResult.declined {
                 self.updateEnginePrefs(declined: declined)
             }
 
             self.endSyncing(syncResult)
             completion(syncResult)
         }
+    }
+
+    func applyDeclinedEnginesIfNeeded() {
+        // This function is for per-device sync only. It takes the declined engines data collected when the user
+        // makes CWTS selections and sets the engine prefs accordingly. For legacy sync this is handled by the
+        // `getEngineEnablementChangesForAccount` function which collects the declined engines and the `updateEnginePrefs`
+        // function which sets the prefs with engine enablement data returned from the sync server.
+
+        let engines = syncManagerAPI.rustTogglableEngines
+
+        if let declined = UserDefaults.standard.stringArray(forKey: fxaDeclinedEngines) {
+            engines.forEach {
+                prefsForSync.setBool(!declined.contains($0.rawValue), forKey: "engine.\($0.rawValue).enabled")
+            }
+        }
+    }
+
+    func updateEngineStateChangePrefsPostSync() {
+        // This function is for per-device sync only. In order to support the `syncPostSyncSettingsChange`
+        // function, which relies on determining which engines have changed since the last sync, we reset
+        // the engine state change prefs after a sync. For legacy syncs, this logic is performed in the
+        // `updateEnginePrefs` function.
+
+        syncManagerAPI.rustTogglableEngines.forEach({
+            let stateChangedPref = "engine.\($0.rawValue).enabledStateChanged"
+            self.prefsForSync.setObject(nil, forKey: stateChangedPref)
+        })
+
+        self.logger.log("Finished resetting state changed prefs",
+                        level: .info,
+                        category: .sync)
     }
 
     func updateEnginePrefs(declined: [String]) {
@@ -623,10 +665,15 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
                     self.getEnginesAndKeys(engines: engines.compactMap {
                         RustSyncManagerAPI.TogglableEngine(rawValue: $0)
                     }) { (rustEngines, localEncryptionKeys) in
+                        let perDeviceSyncEnabled = self.profile?.prefs.boolForKey(PrefsKeys.PerDeviceSyncEnabled) ?? false
+                        if perDeviceSyncEnabled {
+                            self.applyDeclinedEnginesIfNeeded()
+                        }
+
                         let params = SyncParams(
                             reason: why,
                             engines: SyncEngineSelection.some(engines: rustEngines),
-                            enabledChanges: self.getEngineEnablementChangesForAccount(),
+                            engineChoicesModel: self.getEngineChoices(perDeviceSyncEnabled: perDeviceSyncEnabled),
                             localEncryptionKeys: localEncryptionKeys,
                             authInfo: self.createSyncAuthInfo(key: key,
                                                               accessTokenInfo: accessTokenInfo,
@@ -636,9 +683,12 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
                                     .stringForKey(PrefsKeys.RustSyncManagerPersistedState),
                             deviceSettings: self.createDeviceSettings(
                                 deviceId: deviceId,
-                                accountManager: accountManager))
+                                accountManager: accountManager,
+                                perDeviceSyncEnabled: perDeviceSyncEnabled))
 
-                        self.doSync(params: params) { syncResult in
+                        UserDefaults.standard.removeObject(forKey: self.fxaDeclinedEngines)
+
+                        self.doSync(params: params, perDeviceSyncEnabled: perDeviceSyncEnabled) { syncResult in
                             deferred.fill(Maybe(success: syncResult))
                         }
                     }
@@ -659,11 +709,29 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
             tokenserverUrl: tokenServerEndpointURL.absoluteString)
     }
 
-    private func createDeviceSettings(deviceId: String, accountManager: FxAccountManager) -> DeviceSettings {
+    private func getEngineEnablements(perDeviceSyncEnabled: Bool) -> [String: Bool] {
+        let engines = syncManagerAPI.rustTogglableEngines
+
+        if !perDeviceSyncEnabled, let declined = UserDefaults.standard.stringArray(forKey: fxaDeclinedEngines) {
+            return engines.reduce(into: [:]) { $0[$1.rawValue] = !declined.contains($1.rawValue) }
+        }
+
+        // For per-device sync, the declined engines list is handled in the `applyDeclinedEnginesIfNeeded` function
+        // prior to this function being called.
+        return engines.reduce(into: [:]) { result, engine in
+            result[engine.rawValue] = prefsForSync.boolForKey("engine.\(engine.rawValue).enabled") ?? true
+        }
+    }
+
+    func createDeviceSettings(deviceId: String,
+                              accountManager: FxAccountManager,
+                              perDeviceSyncEnabled: Bool) -> DeviceSettings {
         return DeviceSettings(
             fxaDeviceId: deviceId,
             name: accountManager.deviceConfig.name,
-            kind: accountManager.deviceConfig.deviceType)
+            kind: accountManager.deviceConfig.deviceType,
+            enabledEngines: getEngineEnablements(perDeviceSyncEnabled: perDeviceSyncEnabled)
+                .compactMap { $0.value ? $0.key : nil })
     }
 
     @discardableResult
@@ -699,7 +767,7 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
      * sync of different collections and retries the sync if the initial call is backed off.
      */
     public func syncPostSyncSettingsChange(why: SyncReason, names: [String]) {
-        let enablements = getEngineEnablementChangesForAccount(withStateChange: false)
+        let enablements = getEngineEnablementChangesForAccount()
         let enabledEngines = Array(enablements.filter({ $0.value }).keys)
         let disabledEngines = Array(enablements.filter({ !$0.value }).keys)
 

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import Client
+import MozillaAppServices
 import Shared
 import Sync
 import TestKit
@@ -194,6 +195,237 @@ class RustSyncManagerTests: XCTestCase {
         XCTAssertFalse(changes["creditcards"]!)
     }
 
+    func testGetEngineChoices_withPerDeviceSyncEnabled_returnsDeviceModel() {
+        let model = rustSyncManager.getEngineChoices(perDeviceSyncEnabled: true)
+
+        XCTAssertEqual(model, .device)
+    }
+
+    func testGetEngineChoices_withPerDeviceSyncEnabledAndRecentChanges_returnsDeviceModel() {
+        profile.prefs.setBool(true, forKey: Keys.bookmarksStateChangedPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.bookmarksEnabledPrefKey)
+
+        let model = rustSyncManager.getEngineChoices(perDeviceSyncEnabled: true)
+
+        XCTAssertEqual(model, .device)
+    }
+
+    func testGetEngineChoices_withPerDeviceSyncEnabledAndNewAccount_returnsDeviceModel() {
+        UserDefaults.standard.set(["tabs", "creditcards"], forKey: "fxa.cwts.declinedSyncEngines")
+
+        let model = rustSyncManager.getEngineChoices(perDeviceSyncEnabled: true)
+
+        XCTAssertEqual(model, .device)
+    }
+
+    func testGetEngineChoices_withPerDeviceSyncDisabledAndNoChanges_returnsEmptyAccountModel() {
+        let model = rustSyncManager.getEngineChoices(perDeviceSyncEnabled: false)
+
+        XCTAssertEqual(model, .account(enabledChanges: [:]))
+    }
+
+    func testGetEngineChoices_withPerDeviceSyncDisabledAndNoRecentChanges_returnsEmptyAccountModel() {
+        profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.tabsEnabledPrefKey)
+
+        let model = rustSyncManager.getEngineChoices(perDeviceSyncEnabled: false)
+
+        XCTAssertEqual(model, .account(enabledChanges: [:]))
+    }
+
+    func testGetEngineChoices_withPerDeviceSyncDisabledAndRecentChanges_returnsAccountModelWithChanges() {
+        profile.prefs.setBool(true, forKey: Keys.bookmarksStateChangedPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.tabsStateChangedPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.tabsEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.historyEnabledPrefKey)
+
+        let model = rustSyncManager.getEngineChoices(perDeviceSyncEnabled: false)
+
+        XCTAssertEqual(model, .account(enabledChanges: ["bookmarks": true, "tabs": false]))
+    }
+
+    func testGetEngineChoices_withPerDeviceSyncDisabledAndNewAccount_returnsAccountModelWithAllEngines() {
+        UserDefaults.standard.set(["tabs", "creditcards"], forKey: "fxa.cwts.declinedSyncEngines")
+
+        let model = rustSyncManager.getEngineChoices(perDeviceSyncEnabled: false)
+
+        let expectedChanges = [
+            "bookmarks": true,
+            "creditcards": false,
+            "history": true,
+            "passwords": true,
+            "tabs": false,
+            "addresses": true
+        ]
+        XCTAssertEqual(model, .account(enabledChanges: expectedChanges))
+    }
+
+    func testGetEngineChoices_withPerDeviceSyncDisabledAndNewAccount_ignoresRecentChanges() {
+        UserDefaults.standard.set(["tabs"], forKey: "fxa.cwts.declinedSyncEngines")
+        profile.prefs.setBool(true, forKey: Keys.tabsStateChangedPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.tabsEnabledPrefKey)
+
+        let model = rustSyncManager.getEngineChoices(perDeviceSyncEnabled: false)
+
+        guard case .account(let enabledChanges) = model else {
+            XCTFail("Expected account model")
+            return
+        }
+        XCTAssertEqual(enabledChanges["tabs"], false)
+        XCTAssertEqual(enabledChanges.count, 6)
+    }
+
+    func testGetEngineChoices_withNewAccount_doesNotClearDeclinedEngines() {
+        UserDefaults.standard.set(["tabs"], forKey: "fxa.cwts.declinedSyncEngines")
+
+        _ = rustSyncManager.getEngineChoices(perDeviceSyncEnabled: false)
+        _ = rustSyncManager.getEngineChoices(perDeviceSyncEnabled: true)
+
+        XCTAssertEqual(UserDefaults.standard.stringArray(forKey: "fxa.cwts.declinedSyncEngines"), ["tabs"])
+    }
+
+    func testApplyDeclinedEnginesIfNeeded_withDeclinedEngines_setsEnginePrefs() {
+        UserDefaults.standard.set(["tabs", "creditcards"], forKey: "fxa.cwts.declinedSyncEngines")
+
+        rustSyncManager.applyDeclinedEnginesIfNeeded()
+
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.tabsEnabledPrefKey), false)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.creditcardsEnabledPrefKey), false)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.bookmarksEnabledPrefKey), true)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.historyEnabledPrefKey), true)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.passwordsEnabledPrefKey), true)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.addressesEnabledPrefKey), true)
+    }
+
+    func testApplyDeclinedEnginesIfNeeded_withEmptyDeclinedEngines_enablesAllEngines() {
+        UserDefaults.standard.set([String](), forKey: "fxa.cwts.declinedSyncEngines")
+
+        rustSyncManager.applyDeclinedEnginesIfNeeded()
+
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.tabsEnabledPrefKey), true)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.creditcardsEnabledPrefKey), true)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.bookmarksEnabledPrefKey), true)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.historyEnabledPrefKey), true)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.passwordsEnabledPrefKey), true)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.addressesEnabledPrefKey), true)
+    }
+
+    func testApplyDeclinedEnginesIfNeeded_withoutDeclinedEngines_doesNotChangeEnginePrefs() {
+        profile.prefs.setBool(false, forKey: Keys.bookmarksEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.tabsEnabledPrefKey)
+
+        rustSyncManager.applyDeclinedEnginesIfNeeded()
+
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.bookmarksEnabledPrefKey), false)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.tabsEnabledPrefKey), true)
+        XCTAssertNil(profile.prefs.boolForKey(Keys.historyEnabledPrefKey))
+        XCTAssertNil(profile.prefs.boolForKey(Keys.passwordsEnabledPrefKey))
+        XCTAssertNil(profile.prefs.boolForKey(Keys.creditcardsEnabledPrefKey))
+        XCTAssertNil(profile.prefs.boolForKey(Keys.addressesEnabledPrefKey))
+    }
+
+    func testApplyDeclinedEnginesIfNeeded_withDeclinedEngines_overwritesExistingEnginePrefs() {
+        profile.prefs.setBool(true, forKey: Keys.tabsEnabledPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.bookmarksEnabledPrefKey)
+        UserDefaults.standard.set(["tabs"], forKey: "fxa.cwts.declinedSyncEngines")
+
+        rustSyncManager.applyDeclinedEnginesIfNeeded()
+
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.tabsEnabledPrefKey), false)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.bookmarksEnabledPrefKey), true)
+    }
+
+    func testApplyDeclinedEnginesIfNeeded_withUnknownDeclinedEngine_ignoresIt() {
+        UserDefaults.standard.set(["tabs", "unknownEngine"], forKey: "fxa.cwts.declinedSyncEngines")
+
+        rustSyncManager.applyDeclinedEnginesIfNeeded()
+
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.tabsEnabledPrefKey), false)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.bookmarksEnabledPrefKey), true)
+        XCTAssertNil(profile.prefs.boolForKey("sync.engine.unknownEngine.enabled"))
+    }
+
+    func testApplyDeclinedEnginesIfNeeded_doesNotClearDeclinedEngines() {
+        UserDefaults.standard.set(["tabs"], forKey: "fxa.cwts.declinedSyncEngines")
+
+        rustSyncManager.applyDeclinedEnginesIfNeeded()
+
+        XCTAssertEqual(UserDefaults.standard.stringArray(forKey: "fxa.cwts.declinedSyncEngines"), ["tabs"])
+    }
+
+    func testApplyDeclinedEnginesIfNeeded_doesNotChangeStateChangedPrefs() {
+        profile.prefs.setBool(true, forKey: Keys.bookmarksStateChangedPrefKey)
+        UserDefaults.standard.set(["tabs"], forKey: "fxa.cwts.declinedSyncEngines")
+
+        rustSyncManager.applyDeclinedEnginesIfNeeded()
+
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.bookmarksStateChangedPrefKey), true)
+        XCTAssertNil(profile.prefs.boolForKey(Keys.tabsStateChangedPrefKey))
+    }
+
+    func testUpdateEngineStateChangePrefsPostSync_clearsAllStateChangedPrefs() {
+        profile.prefs.setBool(true, forKey: Keys.bookmarksStateChangedPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.historyStateChangedPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.tabsStateChangedPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.passwordsStateChangedPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.creditcardsStateChangedPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.addressesStateChangedPrefKey)
+
+        rustSyncManager.updateEngineStateChangePrefsPostSync()
+
+        XCTAssertNil(profile.prefs.boolForKey(Keys.bookmarksStateChangedPrefKey))
+        XCTAssertNil(profile.prefs.boolForKey(Keys.historyStateChangedPrefKey))
+        XCTAssertNil(profile.prefs.boolForKey(Keys.tabsStateChangedPrefKey))
+        XCTAssertNil(profile.prefs.boolForKey(Keys.passwordsStateChangedPrefKey))
+        XCTAssertNil(profile.prefs.boolForKey(Keys.creditcardsStateChangedPrefKey))
+        XCTAssertNil(profile.prefs.boolForKey(Keys.addressesStateChangedPrefKey))
+    }
+
+    func testUpdateEngineStateChangePrefsPostSync_doesNotChangeEnabledPrefs() {
+        profile.prefs.setBool(true, forKey: Keys.bookmarksStateChangedPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.tabsStateChangedPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.tabsEnabledPrefKey)
+
+        rustSyncManager.updateEngineStateChangePrefsPostSync()
+
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.bookmarksEnabledPrefKey), true)
+        XCTAssertEqual(profile.prefs.boolForKey(Keys.tabsEnabledPrefKey), false)
+        XCTAssertNil(profile.prefs.boolForKey(Keys.historyEnabledPrefKey))
+    }
+
+    func testUpdateEngineStateChangePrefsPostSync_withNoStateChangedPrefs_leavesPrefsUnset() {
+        rustSyncManager.updateEngineStateChangePrefsPostSync()
+
+        XCTAssertNil(profile.prefs.boolForKey(Keys.bookmarksStateChangedPrefKey))
+        XCTAssertNil(profile.prefs.boolForKey(Keys.historyStateChangedPrefKey))
+        XCTAssertNil(profile.prefs.boolForKey(Keys.tabsStateChangedPrefKey))
+        XCTAssertNil(profile.prefs.boolForKey(Keys.passwordsStateChangedPrefKey))
+        XCTAssertNil(profile.prefs.boolForKey(Keys.creditcardsStateChangedPrefKey))
+        XCTAssertNil(profile.prefs.boolForKey(Keys.addressesStateChangedPrefKey))
+    }
+
+    func testUpdateEngineStateChangePrefsPostSync_resetsEngineEnablementChanges() {
+        profile.prefs.setBool(true, forKey: Keys.bookmarksStateChangedPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
+        profile.prefs.setBool(true, forKey: Keys.tabsStateChangedPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.tabsEnabledPrefKey)
+        XCTAssertEqual(rustSyncManager.getEngineEnablementChangesForAccount(), ["bookmarks": true, "tabs": false])
+
+        rustSyncManager.updateEngineStateChangePrefsPostSync()
+
+        XCTAssertTrue(rustSyncManager.getEngineEnablementChangesForAccount().isEmpty)
+    }
+
+    func testUpdateEngineStateChangePrefsPostSync_doesNotClearDeclinedEngines() {
+        UserDefaults.standard.set(["tabs"], forKey: "fxa.cwts.declinedSyncEngines")
+
+        rustSyncManager.updateEngineStateChangePrefsPostSync()
+
+        XCTAssertEqual(UserDefaults.standard.stringArray(forKey: "fxa.cwts.declinedSyncEngines"), ["tabs"])
+    }
+
     // Temp. Disabled: https://mozilla-hub.atlassian.net/browse/FXIOS-7505
     func testUpdateEnginePrefs_bookmarksEnabled() throws {
         profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
@@ -295,5 +527,75 @@ class RustSyncManagerTests: XCTestCase {
         let syncedDevicesCount = try XCTUnwrap(profile.prefs.intForKey(PrefsKeys.Sync.numberOfSyncedDevices))
         XCTAssertFalse(signedInStatus)
         XCTAssertEqual(syncedDevicesCount, 0)
+    }
+
+    func testCreateDeviceSettings_setsDeviceDetails() {
+        let settings = rustSyncManager.createDeviceSettings(deviceId: "deviceId",
+                                                            accountManager: makeAccountManager(),
+                                                            perDeviceSyncEnabled: true)
+
+        XCTAssertEqual(settings.fxaDeviceId, "deviceId")
+        XCTAssertEqual(settings.name, "Test Device")
+        XCTAssertEqual(settings.kind, .mobile)
+    }
+
+    func testCreateDeviceSettings_withPerDeviceSyncEnabledAndNoEnginePrefs_enablesAllEngines() {
+        let settings = rustSyncManager.createDeviceSettings(deviceId: "deviceId",
+                                                            accountManager: makeAccountManager(),
+                                                            perDeviceSyncEnabled: true)
+
+        XCTAssertEqual(Set(settings.enabledEngines), allEngines)
+    }
+
+    func testCreateDeviceSettings_withPerDeviceSyncEnabled_excludesDisabledEngines() {
+        profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.tabsEnabledPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.passwordsEnabledPrefKey)
+
+        let settings = rustSyncManager.createDeviceSettings(deviceId: "deviceId",
+                                                            accountManager: makeAccountManager(),
+                                                            perDeviceSyncEnabled: true)
+
+        XCTAssertEqual(Set(settings.enabledEngines), ["bookmarks", "history", "creditcards", "addresses"])
+    }
+
+    func testCreateDeviceSettings_withPerDeviceSyncEnabledAfterApplyingDeclinedEngines_excludesDeclinedEngines() {
+        UserDefaults.standard.set(["tabs", "creditcards"], forKey: "fxa.cwts.declinedSyncEngines")
+        rustSyncManager.applyDeclinedEnginesIfNeeded()
+
+        let settings = rustSyncManager.createDeviceSettings(deviceId: "deviceId",
+                                                            accountManager: makeAccountManager(),
+                                                            perDeviceSyncEnabled: true)
+
+        XCTAssertEqual(Set(settings.enabledEngines), ["bookmarks", "history", "passwords", "addresses"])
+    }
+
+    func testCreateDeviceSettings_withPerDeviceSyncDisabledAndNoDeclinedEngines_usesEnginePrefs() {
+        profile.prefs.setBool(true, forKey: Keys.bookmarksEnabledPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.tabsEnabledPrefKey)
+        profile.prefs.setBool(false, forKey: Keys.historyEnabledPrefKey)
+
+        let settings = rustSyncManager.createDeviceSettings(deviceId: "deviceId",
+                                                            accountManager: makeAccountManager(),
+                                                            perDeviceSyncEnabled: false)
+
+        XCTAssertEqual(Set(settings.enabledEngines), ["bookmarks", "passwords", "creditcards", "addresses"])
+    }
+
+    func testCreateDeviceSettings_withPerDeviceSyncDisabledAndNoEnginePrefs_enablesAllEngines() {
+        let settings = rustSyncManager.createDeviceSettings(deviceId: "deviceId",
+                                                            accountManager: makeAccountManager(),
+                                                            perDeviceSyncEnabled: false)
+
+        XCTAssertEqual(Set(settings.enabledEngines), allEngines)
+    }
+
+    private let allEngines: Set<String> = ["bookmarks", "history", "tabs", "passwords", "creditcards", "addresses"]
+
+    private func makeAccountManager() -> FxAccountManager {
+        return FxAccountManager(
+            config: FxAConfig(server: .release, clientId: "clientId", redirectUri: "redirectUri"),
+            deviceConfig: DeviceConfig(name: "Test Device", deviceType: .mobile, capabilities: [])
+        )
     }
 }
