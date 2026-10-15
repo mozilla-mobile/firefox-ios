@@ -310,6 +310,9 @@ final class BrowserCoordinator: BaseCoordinator,
             cards: cards,
             windowUUID: windowUUID,
             themeManager: themeManager,
+            onAction: { [weak self] action in
+                self?.handleOnboardingCardAction(action)
+            },
             onComplete: { [weak self] in
                 self?.browserViewController.dismiss(animated: true)
             }
@@ -319,6 +322,15 @@ final class BrowserCoordinator: BaseCoordinator,
         hostingController.modalPresentationStyle = .fullScreen
         hostingController.modalTransitionStyle = .crossDissolve
         browserViewController.present(hostingController, animated: true)
+    }
+
+    private func handleOnboardingCardAction(_ action: OnboardingCardButtonAction) {
+        switch action {
+        case .declineNotifications:
+            profile.prefs.setBool(true, forKey: PrefsKeys.onboardingNotificationsDeclined)
+        case .enableNotifications, .none:
+            break
+        }
     }
 
     // MARK: - ETPCoordinatorSSLStatusDelegate
