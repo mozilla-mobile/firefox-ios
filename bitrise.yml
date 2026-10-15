@@ -2134,7 +2134,7 @@ workflows:
             Xcode Version | ${XCODE_VERSION_INFO}
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
 
-  Firefox_Sync_Integration_Tests:
+  Firefox_Sync_Integration_Tests_Smoketest_Regression:
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -2153,10 +2153,7 @@ workflows:
             cd firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests
             if [ -n "${CI_WAF_TOKEN:-}" ]; then echo "CI_WAF_TOKEN is set"; else echo "CI_WAF_TOKEN is NOT set"; exit 1; fi
             pipenv install --python 3.12
-            pipenv run pytest \
-                test_integration.py::test_modern_kit_onboarding_start_syncing_use_email_instead \
-                test_integration.py::test_sync_tabs_firefox_suggest \
-                test_integration.py::test_add_tab_from_tab_tray
+            pipenv run pytest -m "smoketest or regression"
     - script@1:
         title: "Name Sync Integration Test Results With Date"
         is_always_run: true
@@ -2165,7 +2162,7 @@ workflows:
             #!/usr/bin/env bash
             set -e
 
-            RESULTS_DIR="$BITRISE_SOURCE_DIR/sync-integration-tests-result-$(date +%Y-%m-%d)"
+            RESULTS_DIR="$BITRISE_SOURCE_DIR/sync-integration-smoketests-regressions-result-$(date +%Y-%m-%d)"
             cp -R firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests/results "$RESULTS_DIR"
             envman add --key SYNC_INTEGRATION_RESULTS_DIR --value "$RESULTS_DIR"
     - deploy-to-bitrise-io@2:
@@ -2181,8 +2178,8 @@ workflows:
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
         - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
         - footer: Created by Mobile Test Engineering
-        - pretext_on_error: "*Firefox-iOS* :firefox: *Sync Integration Tests* :x:"
-        - pretext: "*Firefox-iOS* :firefox: *Sync Integration Tests* :white_check_mark:"
+        - pretext_on_error: "*Firefox-iOS* :firefox: *Sync Integration Tests Smoketest & Regression* :x:"
+        - pretext: "*Firefox-iOS* :firefox: *Sync Integration Tests Smoketest & Regression* :white_check_mark:"
         - timestamp: 'no'
         - fields: ''
         - buttons: |
