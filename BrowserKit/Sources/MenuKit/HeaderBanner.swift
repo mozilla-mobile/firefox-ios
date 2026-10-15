@@ -85,10 +85,12 @@ public final class HeaderBanner: UIView, ThemeApplicable {
         headerLabelsContainer.addArrangedSubview(subtitleLabel)
 
         NSLayoutConstraint.activate([
-            headerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalMargin),
+            headerView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
+                                                constant: UX.horizontalMargin),
             headerView.topAnchor.constraint(equalTo: topAnchor),
             headerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            headerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalMargin),
+            headerView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
+                                                 constant: -UX.horizontalMargin),
 
             headerLabelsContainer.leadingAnchor.constraint(
                 equalTo: headerView.leadingAnchor,
