@@ -2154,6 +2154,25 @@ workflows:
             if [ -n "${CI_WAF_TOKEN:-}" ]; then echo "CI_WAF_TOKEN is set"; else echo "CI_WAF_TOKEN is NOT set"; exit 1; fi
             pipenv install --python 3.12
             pipenv run pytest test_integration.py::test_modern_kit_onboarding_start_syncing_use_email_instead
+    - deploy-to-bitrise-io@2:
+        is_always_run: true
+        inputs:
+        - deploy_path: firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests/results
+        - is_compress: "true"
+    - slack@4:
+        is_always_run: true
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer: Created by Mobile Test Engineering
+        - pretext_on_error: "*Firefox-iOS* :firefox: *Sync Integration Tests* :x:"
+        - pretext: "*Firefox-iOS* :firefox: *Sync Integration Tests* :white_check_mark:"
+        - timestamp: 'no'
+        - fields: |
+            Task | ${BITRISE_BUILD_URL}
+            Test Report | ${BITRISE_BUILD_URL}?tab=artifacts
 
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
