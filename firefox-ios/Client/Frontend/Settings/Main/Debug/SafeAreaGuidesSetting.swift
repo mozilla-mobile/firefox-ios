@@ -55,6 +55,7 @@ final class SafeAreaDebugGuides {
         unsafeArea.path = unsafePath.cgPath
 
         let reservedPath = UIBezierPath()
+        #if compiler(>=6.4)
         if #available(iOS 27.1, *) {
             let regions = view.reservedRegions(kind: .occlusion) + view.reservedRegions(kind: .division)
             for region in regions where region.isActive {
@@ -65,6 +66,7 @@ final class SafeAreaDebugGuides {
                 }
             }
         }
+        #endif
         reservedArea.path = reservedPath.cgPath
     }
 }
