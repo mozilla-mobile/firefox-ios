@@ -2480,6 +2480,9 @@
 		9E215E5FDA2D4E13AF65691A /* TabGroupsTrayBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ED6CA127640B0BCE23F99 /* TabGroupsTrayBarView.swift */; };
 		5BD223A469704526975D563D /* TabGroupsTrayBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C19206DB930423C8595D66C /* TabGroupsTrayBarViewModel.swift */; };
 		F81030D895E54226B944783A /* TabGroupsTrayBarPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A54EA7015F4D4E9414B291 /* TabGroupsTrayBarPreview.swift */; };
+		A4E7FFB2CEDA430BBE1DBE72 /* TabGroupsContextMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968AAD477776464B81B4E109 /* TabGroupsContextMenuView.swift */; };
+		387C4224FD39487B96575230 /* TabGroupsContextMenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FCA5CEA3442DB3EC23D3 /* TabGroupsContextMenuViewModel.swift */; };
+		486D128DE36B48B28BDCF92D /* TabGroupsContextMenuPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB825FB243D4BF98C576BAF /* TabGroupsContextMenuPreview.swift */; };
 		C38C7F7C1F1A42D8937CCF21 /* TabGroupsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38C7F7C1F1A42D8937CCF22 /* TabGroupsController.swift */; };
 		C38C7F7C1F1A42D8937CCF23 /* TabGroupsControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38C7F7C1F1A42D8937CCF24 /* TabGroupsControllerTests.swift */; };
 		147C691A14F1B859273B1B22 /* TabGroupsSessionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D4991B0446EC87F006A9C8 /* TabGroupsSessionStoreTests.swift */; };
@@ -12662,6 +12665,9 @@
 		B71ED6CA127640B0BCE23F99 /* TabGroupsTrayBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsTrayBarView.swift; sourceTree = "<group>"; };
 		6C19206DB930423C8595D66C /* TabGroupsTrayBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsTrayBarViewModel.swift; sourceTree = "<group>"; };
 		50A54EA7015F4D4E9414B291 /* TabGroupsTrayBarPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsTrayBarPreview.swift; sourceTree = "<group>"; };
+		968AAD477776464B81B4E109 /* TabGroupsContextMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsContextMenuView.swift; sourceTree = "<group>"; };
+		C061FCA5CEA3442DB3EC23D3 /* TabGroupsContextMenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsContextMenuViewModel.swift; sourceTree = "<group>"; };
+		6EB825FB243D4BF98C576BAF /* TabGroupsContextMenuPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsContextMenuPreview.swift; sourceTree = "<group>"; };
 		C38C7F7C1F1A42D8937CCF22 /* TabGroupsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsController.swift; sourceTree = "<group>"; };
 		C38C7F7C1F1A42D8937CCF24 /* TabGroupsControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsControllerTests.swift; sourceTree = "<group>"; };
 		39D4991B0446EC87F006A9C8 /* TabGroupsSessionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsSessionStoreTests.swift; sourceTree = "<group>"; };
@@ -13454,6 +13460,7 @@
 				8A06DF5E2DE0C0EB007B7E9D /* TabTitleSupplementaryView.swift */,
 				21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */,
 				713F55C5012E4CE9B0DF22B7 /* TabGroupsTrayBars */,
+				C3CF0E0029664A6B8354B7DE /* TabGroupsContextMenu */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -18311,6 +18318,16 @@
 			path = TabGroupsTrayBars;
 			sourceTree = "<group>";
 		};
+		C3CF0E0029664A6B8354B7DE /* TabGroupsContextMenu */ = {
+			isa = PBXGroup;
+			children = (
+				968AAD477776464B81B4E109 /* TabGroupsContextMenuView.swift */,
+				C061FCA5CEA3442DB3EC23D3 /* TabGroupsContextMenuViewModel.swift */,
+				6EB825FB243D4BF98C576BAF /* TabGroupsContextMenuPreview.swift */,
+			);
+			path = TabGroupsContextMenu;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -20254,6 +20271,9 @@
 				F1E1A9C90EED44D28BBEE901 /* TabGroupEditorView.swift in Sources */,
 				69D292EF051E4389AF6ECF3C /* TabGroupsPickerViewModel.swift in Sources */,
 				580705F9591F4835A43EA1A4 /* TabGroupsPickerPreview.swift in Sources */,
+				A4E7FFB2CEDA430BBE1DBE72 /* TabGroupsContextMenuView.swift in Sources */,
+				387C4224FD39487B96575230 /* TabGroupsContextMenuViewModel.swift in Sources */,
+				486D128DE36B48B28BDCF92D /* TabGroupsContextMenuPreview.swift in Sources */,
 				9E215E5FDA2D4E13AF65691A /* TabGroupsTrayBarView.swift in Sources */,
 				5BD223A469704526975D563D /* TabGroupsTrayBarViewModel.swift in Sources */,
 				F81030D895E54226B944783A /* TabGroupsTrayBarPreview.swift in Sources */,
