@@ -116,8 +116,8 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         buttonStackView.addArrangedSubview(listStatusButton)
         addSubview(buttonStackView)
         NSLayoutConstraint.activate([
-            buttonStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            buttonStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            buttonStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            buttonStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             buttonStackView.topAnchor.constraint(equalTo: topAnchor),
             buttonStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
