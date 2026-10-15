@@ -6,10 +6,12 @@ import WebKit
 import Common
 import Shared
 import Storage
+import XCTest
 @testable import Client
 
 final class MockTabWebView: TabWebView {
     var loadCalled = 0
+    var loadCalledExpectation: XCTestExpectation?
     var loadedRequest: URLRequest?
     var loadFileURLCalled = 0
     var goBackCalled = 0
@@ -106,6 +108,7 @@ final class MockTabWebView: TabWebView {
 
     override func load(_ request: URLRequest) -> WKNavigation? {
         loadCalled += 1
+        loadCalledExpectation?.fulfill()
         loadedRequest = request
         loadedURL = request.url
         navigationDelegateAtLoad = navigationDelegate

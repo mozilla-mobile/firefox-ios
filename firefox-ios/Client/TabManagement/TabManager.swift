@@ -146,9 +146,8 @@ protocol TabManager: AnyObject {
 
     /// Stops in-flight loads and discards every webview, the selected tab's included, ahead of
     /// a `proxyConfigurations` change (e.g. on VPN toggle). Webviews hold the pre-change
-    /// connection pool, so they have to go for the new proxy to take effect — and they have to
-    /// go *before* the change, since a load cancelled afterwards is processed against a session
-    /// WebKit has already torn down, which crashes the network process.
+    /// connection pool, so they have to bee closed and have inflight requests cancelled
+    /// for the new proxy to take effect.
     func tearDownWebViewsForProxyChange() async
 
     /// Rebuilds the selected tab's webview against a fresh `WKWebViewConfiguration` once the new

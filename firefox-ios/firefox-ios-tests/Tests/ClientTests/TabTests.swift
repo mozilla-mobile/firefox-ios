@@ -689,6 +689,8 @@ class TabTests: XCTestCase {
         let navigation = try XCTUnwrap(navigationSourceWebView.loadHTMLString("", baseURL: nil))
         mockTabWebView.navigationDelegate = previousDelegate
         mockTabWebView.mockNavigation = navigation
+        let loadCalledExpectation = XCTestExpectation(description: "wait for load to be called")
+        mockTabWebView.loadCalledExpectation = loadCalledExpectation
         subject.webView = mockTabWebView
         var didFinishLoading = false
 
@@ -696,11 +698,8 @@ class TabTests: XCTestCase {
             await subject.loadBlankPage()
             didFinishLoading = true
         }
-        while mockTabWebView.loadCalled == 0 {
-            await Task.yield()
-        }
-        await Task.yield()
 
+        await fulfillment(of: [loadCalledExpectation])
         XCTAssertFalse(didFinishLoading)
         XCTAssertFalse(mockTabWebView.navigationDelegate === previousDelegate)
 
