@@ -108,6 +108,36 @@ final class BlankPageNavigationDelegateTests: XCTestCase {
         XCTAssertEqual(resumeCount, 1)
     }
 
+    /// Reproduces the case the timeout guards against: the old page starts a navigation while
+    /// about:blank's policy check is in flight, so WebKit drops about:blank with no callback.
+    /// The check is held open until the old page's navigation reaches its own policy check.
+    func testOldPageNavigationDuringPolicyCheck_dropsAwaitedNavigation_resumesOnTimeout() async throws {
+        let oldPageURL = try XCTUnwrap(URL(string: "blankpagetest://old"))
+        let nextURL = try XCTUnwrap(URL(string: "blankpagetest://next"))
+        let blankURL = try XCTUnwrap(URL(string: "about:blank"))
+        let configuration = WKWebViewConfiguration()
+        configuration.setURLSchemeHandler(MockSchemeHandler(), forURLScheme: "blankpagetest")
+        let webView = WKWebView(frame: .zero, configuration: configuration)
+        self.webView = webView
+        let interceptor = PolicyHoldingNavigationDelegate(oldPageNavigationURL: nextURL)
+        webView.navigationDelegate = interceptor
+
+        await withCheckedContinuation { continuation in
+            interceptor.onFinish = { continuation.resume() }
+            webView.load(URLRequest(url: oldPageURL))
+        }
+        interceptor.onFinish = nil
+
+        webView.stopLoading()
+        let navigation = try XCTUnwrap(webView.load(URLRequest(url: blankURL)))
+        let task = await startAwaiting(navigation)
+        await task.value
+
+        XCTAssertEqual(resumeCount, 1)
+        XCTAssertFalse(interceptor.terminatedNavigations.contains { $0 === navigation })
+        XCTAssertEqual(webView.url, nextURL)
+    }
+
     // MARK: - Helpers
 
     /// `WKNavigation()` crashes on dealloc since its backing storage is only set up by WebKit,
@@ -131,5 +161,58 @@ final class BlankPageNavigationDelegateTests: XCTestCase {
             await Task.yield()
         }
         return task
+    }
+}
+
+/// Records which navigations reached a terminal callback. Holds about:blank's policy check
+/// open while the old page starts a navigation to `oldPageNavigationURL`, then releases it
+/// once that navigation reaches its own check.
+@MainActor
+private final class PolicyHoldingNavigationDelegate: NSObject, WKNavigationDelegate {
+    var onFinish: (() -> Void)?
+    private(set) var terminatedNavigations: [WKNavigation] = []
+    private let oldPageNavigationURL: URL
+    private var heldBlankDecision: (@MainActor (WKNavigationActionPolicy) -> Void)?
+
+    init(oldPageNavigationURL: URL) {
+        self.oldPageNavigationURL = oldPageNavigationURL
+        super.init()
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction,
+        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
+    ) {
+        if navigationAction.request.url?.absoluteString == "about:blank" {
+            heldBlankDecision = decisionHandler
+            webView.evaluateJavaScript("location.href = '\(oldPageNavigationURL.absoluteString)'")
+            return
+        }
+        decisionHandler(.allow)
+        heldBlankDecision?(.allow)
+        heldBlankDecision = nil
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
+        record(navigation)
+        onFinish?()
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation?, withError error: Error) {
+        record(navigation)
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        didFailProvisionalNavigation navigation: WKNavigation?,
+        withError error: Error
+    ) {
+        record(navigation)
+    }
+
+    private func record(_ navigation: WKNavigation?) {
+        guard let navigation else { return }
+        terminatedNavigations.append(navigation)
     }
 }

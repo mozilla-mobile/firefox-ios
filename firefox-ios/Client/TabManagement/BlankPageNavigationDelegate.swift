@@ -9,12 +9,15 @@ import WebKit
 /// Resumes a continuation once the navigation it is given reaches a terminal state. For
 /// awaiting a single navigation on a webview whose usual delegate should not see it.
 ///
-/// Every navigation ends in `didFinish`, one of the two failure callbacks, or the loss of its
-/// content process, so there is always exactly one resume and no need for a timeout.
+/// A navigation started by the old page before ours passes its policy check makes WebKit drop
+/// ours with no callback, so a timeout guarantees the continuation is resumed.
 @MainActor
 final class BlankPageNavigationDelegate: NSObject, WKNavigationDelegate {
+    private static let timeoutInNanoseconds = 3 * NSEC_PER_SEC
+
     private var continuation: CheckedContinuation<Void, Never>?
     private var awaitedNavigation: WKNavigation?
+    private var timeoutTask: Task<Void, Never>?
 
     init(continuation: CheckedContinuation<Void, Never>) {
         self.continuation = continuation
@@ -30,6 +33,11 @@ final class BlankPageNavigationDelegate: NSObject, WKNavigationDelegate {
             return
         }
         awaitedNavigation = navigation
+        timeoutTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: Self.timeoutInNanoseconds)
+            guard !Task.isCancelled else { return }
+            self?.finish()
+        }
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
@@ -57,11 +65,13 @@ final class BlankPageNavigationDelegate: NSObject, WKNavigationDelegate {
     /// Ignores callbacks for any other navigation, so a late failure from the load being
     /// replaced cannot resume us before the awaited one has finished.
     private func finish(for navigation: WKNavigation?) {
-        guard navigation === awaitedNavigation else { return }
+        guard let awaitedNavigation, navigation === awaitedNavigation else { return }
         finish()
     }
 
     private func finish() {
+        timeoutTask?.cancel()
+        timeoutTask = nil
         continuation?.resume()
         continuation = nil
     }

@@ -685,6 +685,8 @@ class Tab: NSObject,
             // `navigationDelegate` is weak, so the delegate needs an owner for the duration.
             blankLoadDelegate = delegate
             webView.navigationDelegate = delegate
+            // Cancels any provisional load in another web process, which `load` alone does not.
+            webView.stopLoading()
             delegate.beginAwaiting(webView.load(URLRequest(url: blankURL)))
         }
         webView.navigationDelegate = previousDelegate
