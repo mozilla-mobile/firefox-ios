@@ -1335,7 +1335,11 @@ final class TabManagerImplementation: NSObject,
               let tabUUID = UUID(uuidString: selectedTab.tabUUID)
         else { return }
 
-        selectTabWithSession(tab: selectedTab, sessionData: tabSessionStore.fetchTabSession(tabID: tabUUID))
+        selectTabWithSession(
+            tab: selectedTab,
+            sessionData: tabSessionStore.fetchTabSession(tabID: tabUUID),
+            updateLastExecutedTime: false
+        )
     }
 
     func addPopupForParentTab(profile: any Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {

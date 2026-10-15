@@ -7,6 +7,7 @@ import Common
 import Shared
 import MozillaAppServices
 import Network
+import VPNKit
 import WebEngine
 
 @MainActor
@@ -19,14 +20,21 @@ protocol VPNManaging {
 enum VPNError: Error {
     case notSignedIn
     case noServerFound
+    case tokenProviderUnavailable
 }
 
 @available(iOS 17.0, *)
 final class VPNManager: VPNManaging {
-    private static let secretKey = "VPNGuardianSecret"
+    static let stagingServer = VPNGuardian.Server(
+        hostname: "stage.m1.fastly-masque.net",
+        port: 2499,
+        city: "Staging",
+        countryCode: "STAGE"
+    )
 
     private let logger: Logger
-    private let guardian: VPNGuardian
+    private let environment: VPNEnvironment
+    private let guardian: VPNGuardian?
     private let serverlist: VPNServerlist
     private let prefs: Prefs
     private let windowManager: WindowManager
@@ -41,45 +49,37 @@ final class VPNManager: VPNManaging {
 
     init(
         logger: Logger = DefaultLogger.shared,
-        clientConfig: VPNGuardian.Configuration = .prod,
         profile: Profile = AppContainer.shared.resolve(),
         windowManager: WindowManager = AppContainer.shared.resolve(),
-        userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
+        userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
+        tokenProvider: VPNTokenProviding? = nil
     ) {
         self.logger = logger
-        self.guardian = VPNGuardian(
-            authHeaders: Self.guardianAuthHeaders(logger: logger),
-            configuration: clientConfig,
-            logger: logger
-        )
+        let environmentKey = profile.prefs.stringForKey(PrefsKeys.VPNSettings.endpointEnvironment) ?? ""
+        self.environment = VPNEnvironment(rawValue: environmentKey) ?? .prod
+        let tokenProvider = tokenProvider ?? VPNAuthCreator().makeTokenProvider(using: profile.prefs)
+        if tokenProvider == nil {
+            logger.log(
+                "VPN token provider unavailable (App Attest unsupported?)",
+                level: .warning,
+                category: .settings
+            )
+        }
+        self.guardian = tokenProvider.map { VPNGuardian(tokenProvider: $0, logger: logger) }
         self.serverlist = VPNServerlist(rsService: profile.remoteSettingsService, logger: logger)
         self.prefs = profile.prefs
         self.windowManager = windowManager
         self.userPreferences = userPreferences
     }
 
-    /// Guardian's shared auth secret, supplied at runtime via the `VPN_GUARDIAN_SECRET` environment
-    /// variable so it never lands in source control. Set it on the Run action of a local, unshared
-    /// copy of the Fennec scheme — the shared schemes are tracked in git, `xcuserdata` is not.
-    private static func guardianAuthHeaders(logger: Logger) -> [String: String] {
-        let secret = Bundle.main.object(forInfoDictionaryKey: secretKey) as? String
-        guard let secret, !secret.isEmpty else {
-            logger.log(
-                "\(secretKey) is unset — Guardian pass requests will fail to authenticate",
-                level: .warning,
-                category: .settings
-            )
-            return [:]
-        }
-        return ["secret": secret]
-    }
-
     func start() async {
         do {
-            let pass = try await self.guardian.getPass()
+            guard let guardian = self.guardian else {
+                throw VPNError.tokenProviderUnavailable
+            }
+            let pass = try await guardian.getPass()
 
-            let countryCode = self.prefs.stringForKey(PrefsKeys.Settings.vpnLocation)
-            guard let server = await self.serverlist.selectServer(countryCode: countryCode) else {
+            guard let server = await self.selectServer() else {
                 throw VPNError.noServerFound
             }
 
@@ -98,6 +98,14 @@ final class VPNManager: VPNManaging {
         }
     }
 
+    private func selectServer() async -> VPNGuardian.Server? {
+        if environment == .stage {
+            return Self.stagingServer
+        }
+        let countryCode = self.prefs.stringForKey(PrefsKeys.Settings.vpnLocation)
+        return await self.serverlist.selectServer(countryCode: countryCode)
+    }
+
     func stop() async {
         self.rotationTask?.cancel()
         self.rotationTask = nil
@@ -114,7 +122,7 @@ final class VPNManager: VPNManaging {
     private func startPassRotation(after initial: VPNGuardian.ProxyPass) {
         rotationTask?.cancel()
         rotationTask = Task { [weak self] in
-            guard let stream = self?.guardian.passRotation(after: initial) else { return }
+            guard let stream = self?.guardian?.passRotation(after: initial) else { return }
             for await new in stream {
                 guard let self,
                       let server = self.activeServer else { return }
@@ -165,7 +173,6 @@ final class VPNManager: VPNManaging {
         components.port = Int(server.port)
         let endpoint = NWEndpoint.url(components.url!)
         let hop = ProxyConfiguration.RelayHop(
-            http3RelayEndpoint: endpoint,
             http2RelayEndpoint: endpoint,
             tlsOptions: NWProtocolTLS.Options(),
             additionalHTTPHeaderFields: [

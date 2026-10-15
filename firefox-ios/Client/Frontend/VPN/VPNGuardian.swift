@@ -2,24 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import AppAttestKit
 import Common
 import Foundation
+import VPNKit
 
 final class VPNGuardian: Sendable {
-    enum Configuration {
-        case prod
-        case staging
-
-        var baseURL: URL {
-            switch self {
-            case .prod:
-                return URL(string: "https://vpn.mozilla.org")!
-            case .staging:
-                return URL(string: "https://vpn-mozilla-nonprod-stage.global.ssl.fastly.net")!
-            }
-        }
-    }
-
    /// A Proxy Pass contains the Token to Authenticate to the Proxy Servers
     struct ProxyPass {
         let bearerToken: String
@@ -75,29 +63,24 @@ final class VPNGuardian: Sendable {
     /// First backoff delay after a retryable failure, doubled on each subsequent attempt.
     /// Matches `browser.ipProtection.guardian.retryAfter`.
     static let rotationRetryDelay: TimeInterval = 0.5
-    /// Ceiling on a single fetch attempt. Matches
-    /// `browser.ipProtection.guardian.attemptTimeout`.
-    static let rotationAttemptTimeout: TimeInterval = 10
     /// Ceiling on a whole rotation including retries, after which we give up rather than
     /// retry forever. Matches `browser.ipProtection.guardian.timeout`.
     static let rotationTimeout: TimeInterval = 30
+    static let unchangedPassRetryInterval: TimeInterval = 30
 
-    private let authHeaders: [String: String]
-    private let configuration: Configuration
+    private let tokenProvider: VPNTokenProviding
     private let logger: Logger
 
     init(
-        authHeaders: [String: String],
-        configuration: Configuration,
+        tokenProvider: VPNTokenProviding,
         logger: Logger
     ) {
-        self.authHeaders = authHeaders
-        self.configuration = configuration
+        self.tokenProvider = tokenProvider
         self.logger = logger
     }
 
     func getPass() async throws -> ProxyPass {
-        return try await fetchProxyPass(authHeaders: authHeaders)
+        return try await fetchProxyPass()
     }
 
     /// Emits a fresh `ProxyPass` shortly before the previous one expires. Cancel the consuming
@@ -114,14 +97,20 @@ final class VPNGuardian: Sendable {
         AsyncStream { continuation in
             let task = Task { [weak self] in
                 var current = initial
+                var unchangedPassRetry: TimeInterval?
                 while !Task.isCancelled {
                     let refreshAt = current.expiresAt.addingTimeInterval(-Self.rotateBeforeExpiry)
-                    let sleepInterval = max(Self.minRotationInterval, refreshAt.timeIntervalSinceNow)
+                    let sleepInterval = unchangedPassRetry
+                        ?? max(Self.minRotationInterval, refreshAt.timeIntervalSinceNow)
                     guard (try? await Self.sleep(seconds: sleepInterval)) != nil else { break }
                     guard let self, !Task.isCancelled else { break }
 
                     do {
-                        let new = try await self.rotatePass()
+                        guard let new = try await self.rotatedPass(replacing: current) else {
+                            unchangedPassRetry = Self.unchangedPassRetryInterval
+                            continue
+                        }
+                        unchangedPassRetry = nil
                         current = new
                         continuation.yield(new)
                     } catch is CancellationError {
@@ -142,6 +131,20 @@ final class VPNGuardian: Sendable {
             }
             continuation.onTermination = { @Sendable _ in task.cancel() }
         }
+    }
+
+    private func rotatedPass(replacing current: ProxyPass) async throws -> ProxyPass? {
+        let new = try await rotatePass()
+        guard new.expiresAt > current.expiresAt else {
+            logger.log(
+                "Pass rotation returned an unchanged pass (expires \(new.expiresAt)), "
+                + "retrying in \(Self.unchangedPassRetryInterval)s",
+                level: .info,
+                category: .sync
+            )
+            return nil
+        }
+        return new
     }
 
     /// Fetches a replacement pass, retrying retryable failures with exponential backoff until
@@ -179,6 +182,8 @@ final class VPNGuardian: Sendable {
         switch error {
         case GuardianError.http(let status) where (500...599).contains(status):
             return true
+        case AppAttestServiceError.serverError(let status, _) where (500...599).contains(status):
+            return true
         case let urlError as URLError:
             return retryableURLErrorCodes.contains(urlError.code)
         default:
@@ -199,45 +204,15 @@ final class VPNGuardian: Sendable {
         try await Task.sleep(nanoseconds: UInt64(seconds * Double(NSEC_PER_SEC)))
     }
 
-    private func fetchProxyPass(authHeaders: [String: String]) async throws -> ProxyPass {
-        let url = configuration.baseURL.appendingPathComponent("api/v1/foxfooding/token")
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        for (name, value) in authHeaders {
-            request.setValue(value, forHTTPHeaderField: name)
-        }
-        request.cachePolicy = .reloadIgnoringLocalCacheData
-        // Bounds a single attempt so the retry loop in `rotatePass` keeps making progress
-        // against its overall budget, as desktop's per-attempt AbortController does.
-        request.timeoutInterval = Self.rotationAttemptTimeout
-
-        let (data, response) = try await URLSession.shared.data(for: request)
-        guard let http = response as? HTTPURLResponse else {
-            throw GuardianError.bodyInvalid
-        }
-        guard http.statusCode == 200 else {
-            throw GuardianError.http(status: http.statusCode)
-        }
-
-        struct TokenResponse: Decodable {
-            let token: String
-        }
-
-        let parsed: TokenResponse
-        do {
-            parsed = try JSONDecoder().decode(TokenResponse.self, from: data)
-        } catch {
-            throw GuardianError.bodyInvalid
-        }
-
-        let claims = try Self.decodeJWTClaims(parsed.token)
-        let nbf = Date(timeIntervalSince1970: claims.nbf)
+    private func fetchProxyPass() async throws -> ProxyPass {
+        let token = try await tokenProvider.proxyToken().token
+        let claims = try Self.decodeJWTClaims(token)
         let exp = Date(timeIntervalSince1970: claims.exp)
+        let nbf = claims.nbf.map { Date(timeIntervalSince1970: $0) } ?? Date()
 //        let usage = try parseUsage(response: http)
 
         return ProxyPass(
-            bearerToken: parsed.token,
+            bearerToken: token,
             notBefore: nbf,
             expiresAt: exp,
             usage: nil
@@ -245,7 +220,7 @@ final class VPNGuardian: Sendable {
     }
 
     private struct JWTClaims: Decodable {
-        let nbf: TimeInterval
+        let nbf: TimeInterval?
         let exp: TimeInterval
     }
 

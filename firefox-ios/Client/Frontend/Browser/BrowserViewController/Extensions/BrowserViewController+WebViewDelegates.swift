@@ -1190,6 +1190,17 @@ extension BrowserViewController: WKNavigationDelegate {
         logger.log("Error occurred during the early navigation process.",
                    level: .warning,
                    category: .webview)
+        let debugError = error as NSError
+        let debugUnderlying = debugError.userInfo[NSUnderlyingErrorKey] as? NSError
+        logger.log(
+            "VPN_DEBUG provisional failure: \(debugError.domain) \(debugError.code) "
+            + "\"\(debugError.localizedDescription)\"; "
+            + "underlying: \(debugUnderlying.map { "\($0.domain) \($0.code)" } ?? "none"); "
+            + "cfStream: \(debugError.userInfo["_kCFStreamErrorDomainKey"] ?? "-")/"
+            + "\(debugError.userInfo["_kCFStreamErrorCodeKey"] ?? "-")",
+            level: .warning,
+            category: .webview
+        )
 
         TelemetryWrapper.shared.recordEvent(category: .information,
                                             method: .error,

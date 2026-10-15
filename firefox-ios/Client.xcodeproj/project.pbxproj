@@ -2465,6 +2465,7 @@
 		FEEDFACE000000000000FB01 /* ChangeVPNEndpointSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEDFACE000000000000FA01 /* ChangeVPNEndpointSetting.swift */; };
 		FEEDFACE000000000000FB02 /* TriggerVPNAttestationSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEDFACE000000000000FA02 /* TriggerVPNAttestationSetting.swift */; };
 		FEEDFACE000000000000FB03 /* KeychainVPNTokenStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEDFACE000000000000FA03 /* KeychainVPNTokenStoreTests.swift */; };
+		FEEDFACE000000000000FB11 /* MockVPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E4F4C72F62F959002A8600 /* MockVPNManager.swift */; };
 		FEEDFACE000000000000FC01 /* VPNKit in Frameworks */ = {isa = PBXBuildFile; productRef = FEEDFACE000000000000FC02 /* VPNKit */; };
 		FF0002AA2F000002000BBBBB /* ClearablesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0002AA2F000001000BBBBB /* ClearablesTests.swift */; };
 		FF0005AD2F000004000BBBBB /* MockQuickAnswersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0005AC2F000003000BBBBB /* MockQuickAnswersStore.swift */; };
@@ -21817,6 +21818,7 @@
 				8AEF41622D15EDBC0013925D /* TopSitesMiddlewareTests.swift in Sources */,
 				C24A0D2F2F3A7E7E00BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift in Sources */,
 				FEEDFACE000000000000FB03 /* KeychainVPNTokenStoreTests.swift in Sources */,
+				FEEDFACE000000000000FB11 /* MockVPNManager.swift in Sources */,
 				ABEF80D92A2F283E003F52C4 /* CreditCardBottomSheetViewModelTests.swift in Sources */,
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
 				C20931722F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift in Sources */,
