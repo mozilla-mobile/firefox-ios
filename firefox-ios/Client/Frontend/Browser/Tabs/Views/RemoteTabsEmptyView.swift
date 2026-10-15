@@ -9,6 +9,9 @@ import Shared
 
 protocol RemoteTabsEmptyViewDelegate: AnyObject {
     @MainActor
+    func remotePanelDidRequestToRefreshTabs()
+
+    @MainActor
     func remotePanelDidRequestToSignIn()
 
     @MainActor
@@ -93,17 +96,19 @@ class RemoteTabsEmptyView: UIView,
         titleLabel.text =  .EmptySyncedTabsPanelStateTitle
         instructionsLabel.text = config.localizedString()
 
-        if config == .notLoggedIn || config == .failedToSync {
+        signInButton.removeTarget(nil, action: nil, for: .touchUpInside)
+
+        switch config {
+        case .noClients, .noTabs:
+            signInButton.addTarget(self, action: #selector(refreshTabs), for: .touchUpInside)
+        case .notLoggedIn, .failedToSync:
             signInButton.addTarget(self, action: #selector(presentSignIn), for: .touchUpInside)
-        } else if config == .syncDisabledByUser {
+        case .syncDisabledByUser:
             signInButton.addTarget(self, action: #selector(openAccountSettings), for: .touchUpInside)
         }
 
-        signInButton.isHidden = shouldHideButton(config)
-    }
-
-    private func shouldHideButton(_ state: RemoteTabsPanelEmptyStateReason) -> Bool {
-        return state == .noClients && state == .noTabs
+        signInButton.isHidden = false
+        signInButton.isEnabled = !isSyncing
     }
 
     private func setupLayout() {
@@ -149,6 +154,11 @@ class RemoteTabsEmptyView: UIView,
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncSignIn)
             delegate.remotePanelDidRequestToSignIn()
         }
+    }
+
+    @objc
+    private func refreshTabs() {
+        delegate?.remotePanelDidRequestToRefreshTabs()
     }
 
     @objc
