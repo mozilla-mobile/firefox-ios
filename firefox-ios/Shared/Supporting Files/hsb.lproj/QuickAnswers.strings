@@ -10,14 +10,23 @@
 /* Loading label shown in the Quick Answers view while an answer is being fetched. */
 "QuickAnswers.ContentView.Answering.v158" = "Wočinja so…";
 
+/* Button shown below a Quick Answers result that the user taps to ask a follow-up question about the answer. */
+"QuickAnswers.ContentView.FollowUpButton.v160" = "Dalše prašenje stajić";
+
 /* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
 "QuickAnswers.ContentView.Footer.v158" = "Spěchowany přez %@ · Wotmołwy móža zmylki wobsahować.";
 
 /* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak. */
 "QuickAnswers.ContentView.Listening.v158" = "Słucham, stajće prašenje…";
 
+/* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to ask a follow-up question about the previous answer. */
+"QuickAnswers.ContentView.ListeningFollowUp.v160" = "Słucham, stajće dalše prašenje…";
+
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "Prašejće so něčeho…";
+
+/* Header label shown above the body of a Quick Answers result, labeling the text below it as a short answer to the user's question. */
+"QuickAnswers.ContentView.ResultHeader.v160" = "SPĚŠNA WOTMOŁWA";
 
 /* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
 "QuickAnswers.ContentView.SearchingSources.v158" = "Žórła so pytaja…";
@@ -98,7 +107,7 @@
 "QuickAnswers.OptInRedesign.Title.v158" = "Spěšne wotmołwy testować";
 
 /* Body text of the privacy banner shown on the Quick Answers screen, explaining how the feature handles user data. %@ is the name of the app (e.g. Firefox). */
-"QuickAnswers.PrivacyBanner.Description.v158" = "%@ waše awdio abo prašenja njeskładuje, wužiwajće swoje daty, zo byšće modele KI trenował abo wužiwajće swój hłós, zo byšće so identifikował.";
+"QuickAnswers.PrivacyBanner.Description.v158" = "%@ waše awdijo abo prašenja njeskładuje, wužiwajće swoje daty, zo byšće modele KI trenował abo wužiwajće swój hłós, zo byšće so identifikował.";
 
 /* Title of the privacy banner shown on the Quick Answers screen. */
 "QuickAnswers.PrivacyBanner.Title.v158" = "Priwatny po designje";

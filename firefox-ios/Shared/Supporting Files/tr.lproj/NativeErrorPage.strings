@@ -49,6 +49,9 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "%@ sitesinin sahibi siteyi düzgün kurmadığı için güvenli bir bağlantı oluşturulamıyor.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Site geçici olarak kullanılamıyor olabilir, başka bir adrese taşınmış olabilir, güvenlik duvarınız veya vekil sunucunuz bağlantıyı engelliyor olabilir.\n\nBağlantı ayarlarınızı kontrol edip yeniden deneyin.";
+
 /* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
 "NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ istenen adrese ulaşamadı.";
 

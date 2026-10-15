@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "A(z) %@ tulajdonosa nem állította be megfelelően, és nem hozható létre biztonságos kapcsolat.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Előfordulhat, hogy a webhely ideiglenesen nem érhető el, más címre költözött, illetve a tűzfal vagy a proxy blokkolja a kapcsolatot.\n\nEllenőrizze a kapcsolat beállításait, és próbálja újra.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "A %1$@ nem tudta elérni a kért webcímet.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "A %1$@ nem tudott kapcsolódni ehhez: %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Legyen óvatos. Úgy tűnik, hogy valami nincs rendben.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Úgy néz ki, hogy probléma van ezzel a webhellyel";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Visszalépés (ajánlott)";

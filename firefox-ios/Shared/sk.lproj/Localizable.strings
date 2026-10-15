@@ -839,7 +839,7 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Ťažba kryptomien používa výpočtový výkon vášho zariadenia na získavanie digitálnych mien. Bežiace skripty vybíjajú vašu batériu, spomaľujú zariadenie a zvyšujú váš účet za elektrinu.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "Každý používateľ môže mať odlišné nastavenie prehliadača a počítača. Zberom údajov o nastaveniach možno vytvoriť unikátny odtlačok, ktorý potom môže slúžiť na vaše sledovanie.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Nastavenia vo vašom prehliadači a počítači sú jedinečné. Odtlačky prehliadača zhromažďujú rôzne tieto jedinečné nastavenia, aby vytvorili váš profil, ktorý možno použiť na sledovanie vášho prehliadania.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Sociálne siete umiestňujú na iné webové stránky prvky, pomocou ktorých o vás môžu získavať údaje. Blokovanie týchto prvkov obmedzuje množstvo informácií, ktoré o vás sociálne siete na internete získavajú.";

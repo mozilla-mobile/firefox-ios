@@ -371,6 +371,9 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 /* Primary button on the onboarding card that prompts users to enable syncing for their account data. Tapping it directs the user sign into to their Mozilla account to access the feature. */
 "Onboarding.MultiDay.SyncCard.AcceptButtonText.v159" = "Барои ҳамоҳангсозӣ ворид шавед";
 
+/* Title of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information). */
+"Onboarding.MultiDay.SyncCard.Title.v159" = "Маводи худро ҳамоҳанг созед";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Давом додан";
 
