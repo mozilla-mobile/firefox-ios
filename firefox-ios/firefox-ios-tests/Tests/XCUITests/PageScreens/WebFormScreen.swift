@@ -9,6 +9,10 @@ final class WebFormScreen {
     private let app: XCUIApplication
     private let webForm: WebFormSelectorsSet
 
+    private var usernameField: XCUIElement {
+        app.webViews.textFields.element(boundBy: 0)
+    }
+
     init(app: XCUIApplication, webForm: WebFormSelectorsSet = WebFormSelectors()) {
         self.app = app
         self.webForm = webForm
@@ -20,7 +24,6 @@ final class WebFormScreen {
     }
 
     func fillLoginForm(username: String, password: String) {
-        let usernameField = app.webViews.textFields.element(boundBy: 0)
         let passwordField = app.webViews.secureTextFields.element(boundBy: 0)
 
         BaseTestCase().mozWaitForElementToExist(usernameField)
@@ -31,12 +34,11 @@ final class WebFormScreen {
     }
 
     func waitForUsernameField() {
-        let usernameField = app.webViews.textFields.element(boundBy: 0)
         BaseTestCase().mozWaitForElementToExist(usernameField)
     }
 
     func tapUsernameField() {
-        app.webViews.textFields.element(boundBy: 0).waitAndTap()
+        usernameField.waitAndTap()
     }
 
     /// The "Use saved password" pill is missing from the accessibility tree on iOS 26, so when it can't be
@@ -81,11 +83,10 @@ final class WebFormScreen {
     }
 
     func getUsernameField() -> XCUIElement {
-        return app.webViews.textFields.element(boundBy: 0)
+        return usernameField
     }
 
     func assertUsernameFieldValue(_ expected: String, timeout: TimeInterval = TIMEOUT) {
-        let usernameField = getUsernameField()
         BaseTestCase().mozWaitForElementToExist(usernameField, timeout: timeout)
         let predicate = NSPredicate(format: "value == %@", expected)
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: usernameField)
@@ -96,7 +97,6 @@ final class WebFormScreen {
     }
 
     func assertUsernameFieldIsEmpty() {
-        let usernameField = app.webViews.textFields.element(boundBy: 0)
         BaseTestCase().mozWaitForElementToExist(usernameField)
         let value = usernameField.value as? String ?? ""
         XCTAssertTrue(value.isEmpty, "The username should not be autofilled, found: \(value)")
