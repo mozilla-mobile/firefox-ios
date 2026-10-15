@@ -2153,11 +2153,25 @@ workflows:
             cd firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests
             if [ -n "${CI_WAF_TOKEN:-}" ]; then echo "CI_WAF_TOKEN is set"; else echo "CI_WAF_TOKEN is NOT set"; exit 1; fi
             pipenv install --python 3.12
-            pipenv run pytest test_integration.py::test_modern_kit_onboarding_start_syncing_use_email_instead
+            pipenv run pytest \
+                test_integration.py::test_modern_kit_onboarding_start_syncing_use_email_instead \
+                test_integration.py::test_sync_tabs_firefox_suggest \
+                test_integration.py::test_add_tab_from_tab_tray
+    - script@1:
+        title: "Name Sync Integration Test Results With Date"
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+
+            RESULTS_DIR="$BITRISE_SOURCE_DIR/sync-integration-tests-result-$(date +%Y-%m-%d)"
+            cp -R firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests/results "$RESULTS_DIR"
+            envman add --key SYNC_INTEGRATION_RESULTS_DIR --value "$RESULTS_DIR"
     - deploy-to-bitrise-io@2:
         is_always_run: true
         inputs:
-        - deploy_path: firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests/results
+        - deploy_path: $SYNC_INTEGRATION_RESULTS_DIR
         - is_compress: "true"
     - slack@4:
         is_always_run: true
@@ -2170,9 +2184,10 @@ workflows:
         - pretext_on_error: "*Firefox-iOS* :firefox: *Sync Integration Tests* :x:"
         - pretext: "*Firefox-iOS* :firefox: *Sync Integration Tests* :white_check_mark:"
         - timestamp: 'no'
-        - fields: |
-            Task | ${BITRISE_BUILD_URL}
-            Test Report | ${BITRISE_BUILD_URL}?tab=artifacts
+        - fields: ''
+        - buttons: |
+            Build Log|${BITRISE_BUILD_URL}
+            Test Report|${BITRISE_BUILD_URL}?tab=artifacts
 
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
