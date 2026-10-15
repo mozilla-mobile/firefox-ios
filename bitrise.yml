@@ -2148,9 +2148,10 @@ workflows:
             #!/usr/bin/env bash
             set -e
 
+            HOMEBREW_NO_AUTO_UPDATE=1 brew install python@3.12 pipenv
+
             cd firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests
-            echo ${CI_WAF_TOKEN:+token is set}
-            export CI_WAF_TOKEN=${CI_WAF_TOKEN}
+            if [ -n "${CI_WAF_TOKEN:-}" ]; then echo "CI_WAF_TOKEN is set"; else echo "CI_WAF_TOKEN is NOT set"; exit 1; fi
             pipenv install --python 3.12
             pipenv run pytest test_integration.py::test_modern_kit_onboarding_start_syncing_use_email_instead
 
