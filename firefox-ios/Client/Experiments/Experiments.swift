@@ -116,11 +116,24 @@ enum Experiments {
             let dir = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
             profilePath = dir.path
         } else {
-            profilePath = FileManager.default.containerURL(
+            // Mirrors `ProfileFileAccessor`: the shared container is unavailable when the
+            // app group entitlement is missing, so fall back to the Documents directory.
+            // Without this, Nimbus silently becomes `NimbusDisabled` and every onboarding
+            // card is filtered out.
+            var rootPath = FileManager.default.containerURL(
                 forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier
-            )?
-                .appendingPathComponent("profile.profile")
-                .path
+            )?.path
+            if rootPath == nil {
+                DefaultLogger.shared.log("App group container unavailable, using Documents for the Nimbus db",
+                                         level: .fatal,
+                                         category: .experiments)
+                rootPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[safe: 0]
+            }
+            profilePath = rootPath.map {
+                URL(fileURLWithPath: $0)
+                    .appendingPathComponent("profile.profile")
+                    .path
+            }
         }
         let dbPath = profilePath.flatMap {
             URL(fileURLWithPath: $0).appendingPathComponent("nimbus.db").path
