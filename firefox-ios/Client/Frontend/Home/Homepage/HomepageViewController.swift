@@ -60,7 +60,7 @@ final class HomepageViewController: UIViewController,
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
     private lazy var embeddedAddressBarView: UIView = .build { view in
-        view.backgroundColor = .red
+        view.backgroundColor = .clear
         view.isUserInteractionEnabled = false
     }
     private var embeddedAddressBarViewTopCellConstraint: NSLayoutConstraint?
@@ -919,6 +919,17 @@ final class HomepageViewController: UIViewController,
         guard let headerView = getNewsTransitionHeader()  else { return }
         headerView.setTransitionEnabled(transitionEnabled)
         headerView.setTransitionProgress(transitionProgress)
+        headerView.setEmbeddedAddressBarOffset(embeddedAddressBarOverlap(with: headerView))
+    }
+
+    private func embeddedAddressBarOverlap(with headerView: UIView) -> CGFloat {
+        guard homepageState.searchBarState.shouldShowSearchBar,
+              embeddedAddressBarView.superview != nil
+        else { return 0 }
+
+        let barBottom = embeddedAddressBarView.convert(embeddedAddressBarView.bounds, to: view).maxY
+        let headerTop = headerView.convert(headerView.bounds, to: view).minY
+        return min(max(barBottom - headerTop, 0), embeddedAddressBarView.bounds.height)
     }
 
     /// Returns whether there is enough room at the bottom of the unscrolled homepage for the header to transition.
