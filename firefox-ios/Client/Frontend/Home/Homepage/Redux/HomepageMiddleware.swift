@@ -16,6 +16,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     private let privacyNoticeHelper: PrivacyNoticeHelperProtocol
     private let notificationManager: NotificationManagerProtocol
     private let notificationCenter: NotificationProtocol
+    private let userDefaults: UserDefaultsInterface
     private let windowManager: WindowManager
 
     init(profile: Profile = AppContainer.shared.resolve(),
@@ -23,12 +24,14 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
          privacyNoticeHelper: PrivacyNoticeHelperProtocol? = nil,
          notificationManager: NotificationManagerProtocol = NotificationManager(),
          notificationCenter: NotificationProtocol,
+         userDefaults: UserDefaultsInterface = UserDefaults.standard,
          windowManager: WindowManager = AppContainer.shared.resolve()) {
         self.profile = profile
         self.homepageTelemetry = homepageTelemetry
         self.privacyNoticeHelper = privacyNoticeHelper ?? PrivacyNoticeHelper(prefs: profile.prefs)
         self.notificationManager = notificationManager
         self.notificationCenter = notificationCenter
+        self.userDefaults = userDefaults
         self.windowManager = windowManager
         observeNotifications()
     }
@@ -145,6 +148,10 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
 
     // Handles dismissal of the homepage notification card
     private func handleNotificationCardDismissed(action: Action) {
+        if let actionType = action.actionType as? HomepageActionType,
+           actionType == .notificationCardEnableButtonTapped {
+            notificationManager.enableNotifications(userDefaults: userDefaults, notificationCenter: notificationCenter)
+        }
         profile.prefs.setBool(true, forKey: PrefsKeys.onboardingNotificationCardDismissed)
     }
 
