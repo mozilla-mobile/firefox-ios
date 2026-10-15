@@ -2134,6 +2134,26 @@ workflows:
             Xcode Version | ${XCODE_VERSION_INFO}
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
 
+  Firefox_Sync_Integration_Tests:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    - skip_macro_validation
+    steps:
+    - script@1:
+        title: "Run Firefox Sync Integration Tests"
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+
+            cd firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests
+            echo ${CI_WAF_TOKEN:+token is set}
+            export CI_WAF_TOKEN=${CI_WAF_TOKEN}
+            pipenv install --python 3.12
+            pipenv run pytest test_integration.py::test_modern_kit_onboarding_start_syncing_use_email_instead
+
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   #
