@@ -656,17 +656,22 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let subject = createSubject(gleanWrapper: gleanWrapper)
         let menu = try XCTUnwrap(subject.contextMenu(for: .tabs))
         let sections = try menu.children.map { try XCTUnwrap($0 as? UIMenu) }
-        let tabActions = try sections[0].children.map { try XCTUnwrap($0 as? UIAction) }
-        let closeAction = try XCTUnwrap(sections[1].children.first as? UIAction)
+        let actionsSection = TabGroupsFeatureFlag.isEnabled ? sections[1] : sections[0]
+        let tabActions = try actionsSection.children.prefix(2).map { try XCTUnwrap($0 as? UIAction) }
+        let closeAction = try XCTUnwrap(sections[1].children.last as? UIAction)
         let savedMetric = try XCTUnwrap(
             gleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.TabTrayLongPressExtra>
         )
 
-        XCTAssertEqual(sections.map(\.children.count), [2, 1])
+        XCTAssertEqual(sections.map(\.children.count), TabGroupsFeatureFlag.isEnabled ? [2, 3] : [2, 1])
         XCTAssertEqual(
             tabActions.map(\.title),
             [String.KeyboardShortcuts.NewTab, String.KeyboardShortcuts.NewPrivateTab]
         )
+        if TabGroupsFeatureFlag.isEnabled {
+            XCTAssertEqual(sections[0].children.compactMap { ($0 as? UIAction)?.title },
+                           [String.TabGroups.Mobile, String.TabsTray.TabsSelectorPrivateTabsTitle])
+        }
         XCTAssertEqual(closeAction.title, String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton)
         XCTAssertEqual(closeAction.attributes, .destructive)
         XCTAssert(savedMetric === GleanMetrics.Toolbar.tabTrayLongPress)
@@ -700,6 +705,129 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let subject = createSubject()
 
         XCTAssertNil(subject.contextMenu(for: .locationView))
+    }
+
+    func testNativeToolbarTabsMenuShowsGroupsAndMoveDestinations() async throws {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: subject.windowUUID)
+        tabManager.selectedTab = tab
+        tabManager.normalTabs = [tab]
+        try await tabManager.tabGroupManager.restore()
+        tabManager.normalTabs.forEach { tabManager.tabGroupManager.bind($0) }
+        let controller = TabGroupsSessionStore.controller(for: subject.windowUUID, tabManager: tabManager)
+        defer { TabGroupsSessionStore.removeController(for: subject.windowUUID) }
+        controller.createGroup(name: "Work", emoji: "💼", tabIDs: [tab.tabUUID], normalTabIDs: [tab.tabUUID])
+
+        let menu = try XCTUnwrap(subject.contextMenu(for: .tabs))
+        let sections = menu.children.compactMap { $0 as? UIMenu }
+        XCTAssertEqual(sections.count, 2)
+        XCTAssertEqual(sections[0].title, "")
+        if TabGroupsFeatureFlag.isEnabled {
+            XCTAssertEqual(sections[0].children.compactMap { ($0 as? UIAction)?.title },
+                           [String.TabGroups.Mobile, "Work", String.TabsTray.TabsSelectorPrivateTabsTitle])
+            let groupAction = try XCTUnwrap(sections[0].children[1] as? UIAction)
+            XCTAssertNotNil(groupAction.image)
+            XCTAssertEqual(groupAction.image?.renderingMode, .alwaysOriginal)
+            let actions = try XCTUnwrap(sections[1].children.first { $0 is UIMenu } as? UIMenu)
+            XCTAssertEqual(actions.title, String.TabGroups.MoveToTabGroup)
+            XCTAssertEqual(actions.children.compactMap { ($0 as? UIAction)?.title },
+                           [String.TabGroups.Mobile, "Work"])
+            XCTAssertNotNil((actions.children[1] as? UIAction)?.image)
+        } else {
+            XCTAssertEqual(sections[0].children.compactMap { ($0 as? UIAction)?.title },
+                           [String.KeyboardShortcuts.NewTab, String.KeyboardShortcuts.NewPrivateTab])
+        }
+    }
+
+    func testNativeToolbarMenuProviderIncludesDestructiveCloseAction() throws {
+        let subject = createSubject()
+        let menu = try XCTUnwrap(subject.contextMenu(for: .tabs))
+        let actions = menu.children.last as? UIMenu
+        let closeTab = actions?.children.last as? UIAction
+        XCTAssertTrue(closeTab?.attributes.contains(.destructive) == true)
+    }
+
+    @available(iOS 16.0, *)
+    func testNativeToolbarTabsMenuSwitchesAndMovesActiveTab() async throws {
+        guard TabGroupsFeatureFlag.isEnabled else { return }
+        let subject = createSubject()
+        let mobileTab = MockTab(profile: profile, windowUUID: subject.windowUUID)
+        let groupTab = MockTab(profile: profile, windowUUID: subject.windowUUID)
+        tabManager.normalTabs = [mobileTab, groupTab]
+        tabManager.selectedTab = mobileTab
+        tabManager.tabsByUUID[groupTab.tabUUID] = groupTab
+        try await tabManager.tabGroupManager.restore()
+        tabManager.normalTabs.forEach { tabManager.tabGroupManager.bind($0) }
+        let controller = TabGroupsSessionStore.controller(for: subject.windowUUID, tabManager: tabManager)
+        defer { TabGroupsSessionStore.removeController(for: subject.windowUUID) }
+        let groupID = try XCTUnwrap(controller.createGroup(name: "Work",
+                                                           tabIDs: [groupTab.tabUUID],
+                                                           normalTabIDs: [mobileTab.tabUUID, groupTab.tabUUID]))
+        controller.selectGroup(id: nil)
+
+        let menu = try XCTUnwrap(subject.contextMenu(for: .tabs))
+        let groupSection = try XCTUnwrap(menu.children.first as? UIMenu)
+        let groupAction = try XCTUnwrap(groupSection.children[1] as? UIAction)
+        let selection = expectation(description: "Group selected after opening")
+        controller.onChange = { _ in selection.fulfill() }
+        groupAction.performWithSender(nil, target: nil)
+        await fulfillment(of: [selection], timeout: 5)
+        controller.onChange = nil
+
+        XCTAssertEqual(controller.state.selectedGroupID, groupID)
+        XCTAssertEqual(tabManager.selectedTab?.tabUUID, groupTab.tabUUID)
+
+        let updatedMenu = try XCTUnwrap(subject.contextMenu(for: .tabs))
+        let actionsSection = try XCTUnwrap(updatedMenu.children.last as? UIMenu)
+        let moveMenu = try XCTUnwrap(actionsSection.children.first { $0 is UIMenu } as? UIMenu)
+        let moveToMobile = try XCTUnwrap(moveMenu.children.first as? UIAction)
+        moveToMobile.performWithSender(nil, target: nil)
+
+        XCTAssertNil(controller.state.selectedGroupID)
+        XCTAssertEqual(controller.visibleTabIDs(normalTabIDs: tabManager.normalTabs.map(\.tabUUID)),
+                       [mobileTab.tabUUID, groupTab.tabUUID])
+        XCTAssertEqual(tabManager.selectedTab?.tabUUID, groupTab.tabUUID)
+    }
+
+    func testActivatingGroupSelectsItInHostingWindow() async throws {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: subject.windowUUID)
+        tabManager.normalTabs = [tab]
+        tabManager.tabsByUUID[tab.tabUUID] = tab
+        try await tabManager.tabGroupManager.restore()
+        tabManager.tabGroupManager.bind(tab)
+        let controller = TabGroupsSessionStore.controller(for: subject.windowUUID, tabManager: tabManager)
+        let windows: WindowManager = AppContainer.shared.resolve()
+        windows.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager, sceneCoordinator: nil),
+                                           uuid: subject.windowUUID)
+        defer {
+            windows.windowWillClose(uuid: subject.windowUUID)
+            TabGroupsSessionStore.removeController(for: subject.windowUUID)
+        }
+        let work = try XCTUnwrap(controller.createGroup(name: "Work",
+                                                        tabIDs: [tab.tabUUID],
+                                                        normalTabIDs: [tab.tabUUID]))
+        let personal = try XCTUnwrap(controller.createGroup(name: "Personal", normalTabIDs: [tab.tabUUID]))
+        XCTAssertEqual(controller.state.selectedGroupID, personal)
+        try await activateTabGroupWindow(subject.windowUUID, groupID: work)
+        XCTAssertEqual(controller.state.selectedGroupID, work)
+        XCTAssertEqual(tabManager.selectedTab?.tabUUID, tab.tabUUID)
+    }
+
+    func testNativeToolbarTabsMenuHidesMoveForPrivateTab() async throws {
+        let subject = createSubject()
+        tabManager.selectedTab = MockTab(profile: profile, isPrivate: true, windowUUID: subject.windowUUID)
+        try await tabManager.tabGroupManager.restore()
+        tabManager.normalTabs.forEach { tabManager.tabGroupManager.bind($0) }
+        let controller = TabGroupsSessionStore.controller(for: subject.windowUUID, tabManager: tabManager)
+        defer { TabGroupsSessionStore.removeController(for: subject.windowUUID) }
+        controller.createGroup(name: "Work", normalTabIDs: [])
+
+        let sections = subject.makeTabsLongPressMenu().children.compactMap { $0 as? UIMenu }
+        let actions = try XCTUnwrap(sections.last)
+        XCTAssertEqual(actions.children.count, 3)
+        let destinations = try XCTUnwrap(sections[0].children.last as? UIAction)
+        XCTAssertEqual(destinations.state, .on)
     }
 
     @MainActor
