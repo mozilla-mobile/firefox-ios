@@ -130,10 +130,10 @@ final class AddressToolbarContainer: UIView,
         if shouldDisplayCompact {
             return UX.toolbarHorizontalPadding
         }
-        if traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular {
+        if traitCollection.verticalSizeClass == .regular && traitCollection.horizontalSizeClass == .regular {
             return UX.toolbarHorizontalPadding
         }
-        // Provide 0 padding in iPhone landscape due to safe area insets
+        // Use no extra padding in compact height, safe area insets provide spacing.
         return 0
     }
 
@@ -142,8 +142,8 @@ final class AddressToolbarContainer: UIView,
             return UX.toolbarHorizontalPadding
         }
 
-        // Provide 0 padding in iPhone landscape due to safe area insets
-        if traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular {
+        // Use no extra padding in compact height, safe area insets provide spacing.
+        if traitCollection.verticalSizeClass == .regular && traitCollection.horizontalSizeClass == .regular {
             return UX.toolbarHorizontalPadding
         }
         return 0
