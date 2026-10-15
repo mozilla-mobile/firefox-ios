@@ -993,6 +993,7 @@
 		8A395552299AF83400B2AFBB /* UIControl+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A395551299AF83300B2AFBB /* UIControl+Extension.swift */; };
 		8A3EAFE52D5F9AA40060AB87 /* TabManagerMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EAFE42D5F9AA40060AB87 /* TabManagerMiddlewareTests.swift */; };
 		8A3EF7F02A2FCF3100796E3A /* HiddenSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF7EF2A2FCF3100796E3A /* HiddenSettings.swift */; };
+		D37E47AF10294508B6160001 /* SafeAreaGuidesSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37E47AF10294508B6160002 /* SafeAreaGuidesSetting.swift */; };
 		8A3EF7F22A2FCF4000796E3A /* DeleteExportedDataSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF7F12A2FCF4000796E3A /* DeleteExportedDataSetting.swift */; };
 		8A3EF7F42A2FCF5700796E3A /* ExportBrowserDataSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF7F32A2FCF5700796E3A /* ExportBrowserDataSetting.swift */; };
 		8A3EF7F72A2FCF6D00796E3A /* ExportLogDataSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF7F62A2FCF6D00796E3A /* ExportLogDataSetting.swift */; };
@@ -10113,6 +10114,7 @@
 		8A395551299AF83300B2AFBB /* UIControl+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Extension.swift"; sourceTree = "<group>"; };
 		8A3EAFE42D5F9AA40060AB87 /* TabManagerMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerMiddlewareTests.swift; sourceTree = "<group>"; };
 		8A3EF7EF2A2FCF3100796E3A /* HiddenSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenSettings.swift; sourceTree = "<group>"; };
+		D37E47AF10294508B6160002 /* SafeAreaGuidesSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeAreaGuidesSetting.swift; sourceTree = "<group>"; };
 		8A3EF7F12A2FCF4000796E3A /* DeleteExportedDataSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteExportedDataSetting.swift; sourceTree = "<group>"; };
 		8A3EF7F32A2FCF5700796E3A /* ExportBrowserDataSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportBrowserDataSetting.swift; sourceTree = "<group>"; };
 		8A3EF7F62A2FCF6D00796E3A /* ExportLogDataSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportLogDataSetting.swift; sourceTree = "<group>"; };
@@ -14741,6 +14743,7 @@
 				8A3EF7FA2A2FCF9D00796E3A /* ForceCrashSetting.swift */,
 				1DC598B32DC52E360037D263 /* ForceRSSyncSetting.swift */,
 				8A3EF7EF2A2FCF3100796E3A /* HiddenSettings.swift */,
+				D37E47AF10294508B6160002 /* SafeAreaGuidesSetting.swift */,
 				C72748232ECE1809003B394D /* MerinoTestDataSetting.swift */,
 				A2F1199F8901F3ED51F49C92 /* MockBreachAlertsSetting.swift */,
 				8A5A24C02FA3F85B00D11F8A /* OffloadBackgroundWebViewsSetting.swift */,
@@ -20905,6 +20908,7 @@
 				2137785F297F3B1B00D01309 /* DownloadsPanelViewModel.swift in Sources */,
 				EBE26B57220C959D00D1D99A /* BrowserViewController+ToolBarActionMenuDelegate.swift in Sources */,
 				8A3EF7F02A2FCF3100796E3A /* HiddenSettings.swift in Sources */,
+				D37E47AF10294508B6160001 /* SafeAreaGuidesSetting.swift in Sources */,
 				C27EF61A2EBA364E00BED719 /* LanguageSampleSource.swift in Sources */,
 				1D3822E92BAB99250046BC5E /* UIView+ThemeUUIDIdentifiable.swift in Sources */,
 				B2FEA6912B4661BE0058E616 /* AddressAutofillToggle.swift in Sources */,

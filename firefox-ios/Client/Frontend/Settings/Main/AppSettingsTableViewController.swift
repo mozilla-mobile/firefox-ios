@@ -572,6 +572,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
         hiddenDebugOptions.append(MockBreachAlertsSetting(settings: self, settingsDelegate: self))
         #endif
 
+        hiddenDebugOptions.append(SafeAreaGuidesSetting(settings: self))
+
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
 
