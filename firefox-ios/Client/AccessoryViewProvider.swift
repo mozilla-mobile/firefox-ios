@@ -27,7 +27,7 @@ final class AccessoryViewProvider: UIView,
         static let cornerRadius: CGFloat = 24.0
         static let buttonsWidth: CGFloat = 40
         // Toolbar spacing around the autofill pill (insets + inter-item gaps).
-        static let autofillHorizontalPadding: CGFloat = 80
+        static let autofillHorizontalPadding: CGFloat = 100
     }
 
     // MARK: - Properties
@@ -105,6 +105,18 @@ final class AccessoryViewProvider: UIView,
     /// we can control the spacing between them, then add the stack view as a single `UIBarButtonItem`.
     private lazy var navigationButtonsBarItem: UIBarButtonItem = {
         let barButton = UIBarButtonItem(customView: navigationButtonsStackView)
+        if #available(iOS 16.0, *) {
+            barButton.menuRepresentation = UIMenu(options: .displayInline, children: [
+                UIAction(title: .KeyboardAccessory.PreviousButtonA11yLabel,
+                         image: UIImage(named: StandardImageIdentifiers.Large.chevronUp)) { [weak self] _ in
+                    self?.tappedPreviousButton()
+                },
+                UIAction(title: .KeyboardAccessory.NextButtonA11yLabel,
+                         image: UIImage(named: StandardImageIdentifiers.Large.chevronDown)) { [weak self] _ in
+                    self?.tappedNextButton()
+                }
+            ])
+        }
         return barButton
     }()
 
@@ -116,6 +128,14 @@ final class AccessoryViewProvider: UIView,
         let barButton = UIBarButtonItem(customView: button)
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
         barButton.accessibilityLabel = .CreditCard.Settings.Done
+        if #available(iOS 16.0, *) {
+            barButton.menuRepresentation = UIAction(
+                title: .CreditCard.Settings.Done,
+                image: UIImage(named: StandardImageIdentifiers.Large.checkmark)
+            ) { [weak self] _ in
+                self?.tappedDoneButton()
+            }
+        }
         return barButton
     }()
 

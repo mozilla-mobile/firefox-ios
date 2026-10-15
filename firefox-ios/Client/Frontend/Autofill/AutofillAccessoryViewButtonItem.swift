@@ -105,6 +105,7 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         self.tappedAccessoryButtonAction = tappedAction
         super.init()
         setup()
+        configureOverflowBehavior(image: image, labelText: labelText)
     }
 
     required init?(coder: NSCoder) {
@@ -178,6 +179,14 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
     private func updateBackgroundColor() {
         if let backgroundColor {
             customView?.backgroundColor = backgroundColor
+        }
+    }
+
+    private func configureOverflowBehavior(image: UIImage?, labelText: String) {
+        if #available(iOS 16.0, *) {
+            menuRepresentation = UIAction(title: labelText, image: image) { [weak self] _ in
+                self?.tappedAccessoryButton()
+            }
         }
     }
 
