@@ -9,6 +9,8 @@ import TabDataStore
 
 @MainActor
 final class TabGroupManager: TabGroupMembershipLookup {
+    static let didChange = Notification.Name("TabGroupManager.didChange")
+
     enum GroupError: Error {
         case notLoaded
         case closedWindow
@@ -49,6 +51,7 @@ final class TabGroupManager: TabGroupMembershipLookup {
             isLoaded = true
             self.loadTask = nil
             lastPersistenceError = nil
+            NotificationCenter.default.post(name: Self.didChange, object: self)
         } catch {
             loadTask = nil
             lastPersistenceError = error
@@ -111,19 +114,21 @@ final class TabGroupManager: TabGroupMembershipLookup {
     }
 
     @discardableResult
-    func createGroup(title: String, color: TabGroupColor = .blue) throws -> TabGroupID {
+    func createGroup(title: String, color: TabGroupColor = .blue, emoji: String? = nil) throws -> TabGroupID {
         guard isLoaded else { throw GroupError.notLoaded }
-        let group = TabGroup(title: title, color: color)
+        var group = TabGroup(title: title, color: color)
+        group.emoji = emoji
         groups.append(group)
         saveChanges()
         return group.id
     }
 
-    func updateGroup(_ groupID: TabGroupID, title: String, color: TabGroupColor) throws {
+    func updateGroup(_ groupID: TabGroupID, title: String, color: TabGroupColor, emoji: String? = nil) throws {
         try requireGroup(groupID)
         guard let index = groups.firstIndex(where: { $0.id == groupID }) else { return }
         groups[index].title = title
         groups[index].color = color
+        groups[index].emoji = emoji
         saveChanges()
     }
 
@@ -161,7 +166,45 @@ final class TabGroupManager: TabGroupMembershipLookup {
         saveChanges()
     }
 
+    func reorderGroups(_ groupIDs: [TabGroupID]) throws {
+        guard isLoaded else { throw GroupError.notLoaded }
+        guard groupIDs.count == groups.count, Set(groupIDs) == Set(groups.map(\.id)) else { return }
+        let byID = Dictionary(uniqueKeysWithValues: groups.map { ($0.id, $0) })
+        groups = groupIDs.compactMap { byID[$0] }
+        saveChanges()
+    }
+
     func moveTab(_ tab: Tab, to groupID: TabGroupID?) throws {
+        try moveTabs([tab], to: groupID)
+    }
+
+    func moveTabs(_ tabs: [Tab], to groupID: TabGroupID?) throws {
+        guard Set(tabs.map(\.windowUUID)).count <= 1 else { throw GroupError.invalidTab }
+        for tab in tabs { try validateMove(tab, to: groupID) }
+        var seenIDs = Set<TabUUID>()
+        var moving: [Tab] = []
+        for tab in tabs {
+            if seenIDs.contains(tab.tabUUID) || membership[tab.tabUUID] == groupID { continue }
+            seenIDs.insert(tab.tabUUID)
+            moving.append(tab)
+        }
+        guard !moving.isEmpty else { return }
+        let movingIDs = Set(moving.map(\.tabUUID))
+        for index in groups.indices { groups[index].tabIDs.removeAll { movingIDs.contains($0) } }
+        if let groupID, let index = groups.firstIndex(where: { $0.id == groupID }) {
+            activeWindows[groupID] = moving[0].windowUUID
+            for tab in moving {
+                groups[index].tabIDs.append(tab.tabUUID)
+                savedTabs[tab.tabUUID] = tab.dataForSaving()
+            }
+        } else {
+            for tab in moving { savedTabs[tab.tabUUID] = nil }
+        }
+        rebuildMembership()
+        saveChanges()
+    }
+
+    private func validateMove(_ tab: Tab, to groupID: TabGroupID?) throws {
         guard isLoaded else { throw GroupError.notLoaded }
         guard !tab.isPrivate, tab.isBound(to: self), UUID(uuidString: tab.tabUUID) != nil else {
             throw GroupError.invalidTab
@@ -176,17 +219,6 @@ final class TabGroupManager: TabGroupMembershipLookup {
                 throw GroupError.groupOpenInAnotherWindow
             }
         }
-        guard membership[tab.tabUUID] != groupID else { return }
-        for index in groups.indices { groups[index].tabIDs.removeAll { $0 == tab.tabUUID } }
-        if let groupID, let index = groups.firstIndex(where: { $0.id == groupID }) {
-            activeWindows[groupID] = tab.windowUUID
-            groups[index].tabIDs.append(tab.tabUUID)
-            savedTabs[tab.tabUUID] = tab.dataForSaving()
-        } else {
-            savedTabs[tab.tabUUID] = nil
-        }
-        rebuildMembership()
-        saveChanges()
     }
 
     func bind(_ tab: Tab) {
@@ -261,6 +293,7 @@ final class TabGroupManager: TabGroupMembershipLookup {
     }
 
     private func saveChanges() {
+        NotificationCenter.default.post(name: Self.didChange, object: self)
         pendingSave = TabGroupSnapshot(groups: groups, tabs: savedTabs.values.sorted { $0.id.uuidString < $1.id.uuidString })
         if saveTask == nil { startSaveTask() }
     }
