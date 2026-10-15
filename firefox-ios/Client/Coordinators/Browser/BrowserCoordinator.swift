@@ -1352,17 +1352,25 @@ final class BrowserCoordinator: BaseCoordinator,
             message: .Alerts.VPNFailure.Message,
             preferredStyle: .alert
         )
-        let actions: [(String, UIAlertAction.Style, VPNActionType)] = [
-            (.Alerts.VPNFailure.ContinueWithoutVPNButton, .destructive, .continueWithoutVPN),
-            (.Alerts.VPNFailure.CloseAllTabsButton, .default, .closeAllTabs),
-            (.Alerts.VPNFailure.CloseThisTabButton, .default, .closeThisTab)
-        ]
-        for (title, style, actionType) in actions {
-            alert.addAction(UIAlertAction(title: title, style: style) { [weak self] _ in
-                guard let self else { return }
-                store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: actionType))
-            })
-        }
+
+        alert.addAction(UIAlertAction(
+            title: .Alerts.VPNFailure.ContinueWithoutVPNButton,
+            style: .destructive
+        ) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: .continueWithoutVPN))
+        })
+
+        alert.addAction(UIAlertAction(title: .Alerts.VPNFailure.CloseAllTabsButton, style: .default) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: .closeAllTabs))
+        })
+
+        alert.addAction(UIAlertAction(title: .Alerts.VPNFailure.CloseThisTabButton, style: .default) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: .closeThisTab))
+        })
+
         vpnFailureAlert = alert
         browserViewController.topmostPresentedViewController.present(alert, animated: true)
     }
