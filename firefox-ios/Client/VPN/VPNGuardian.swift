@@ -25,7 +25,7 @@ final class VPNGuardian: VPNGuardianProviding {
         }
     }
 
-   /// A Proxy Pass contains the Token to Authenticate to the Proxy Servers
+    /// A Proxy Pass contains the Token to Authenticate to the Proxy Servers
     struct ProxyPass {
         let bearerToken: String
         let notBefore: Date
@@ -79,6 +79,15 @@ final class VPNGuardian: VPNGuardianProviding {
     private let configuration: Configuration
     private let session: URLSession
     private let logger: Logger
+
+    private static let retryableURLErrorCodes: Set<URLError.Code> = [
+        .timedOut,
+        .cannotFindHost,
+        .cannotConnectToHost,
+        .dnsLookupFailed,
+        .networkConnectionLost,
+        .notConnectedToInternet
+    ]
 
     init(
         authHeaders: [String: String],
@@ -179,21 +188,36 @@ final class VPNGuardian: VPNGuardianProviding {
         }
     }
 
-    private static let retryableURLErrorCodes: Set<URLError.Code> = [
-        .timedOut,
-        .cannotFindHost,
-        .cannotConnectToHost,
-        .dnsLookupFailed,
-        .networkConnectionLost,
-        .notConnectedToInternet
-    ]
-
     private static func sleep(seconds: TimeInterval) async throws {
         try await Task.sleep(nanoseconds: UInt64(seconds * Double(NSEC_PER_SEC)))
     }
 
+    // TODO: FXIOS-16874 All this logic will change once we do real authentication
     private func fetchProxyPass(authHeaders: [String: String]) async throws -> ProxyPass {
-        // TODO: FXIOS-16874 This is only here for testing while we integrate app attest
+        struct JWTClaims: Decodable {
+            let nbf: TimeInterval
+            let exp: TimeInterval
+        }
+
+        func decodeJWTClaims(_ jwt: String) throws -> JWTClaims {
+            let parts = jwt.split(separator: ".")
+            guard parts.count == 3 else {
+                throw GuardianError.bodyInvalid
+            }
+            var payload = String(parts[1])
+                .replacingOccurrences(of: "-", with: "+")
+                .replacingOccurrences(of: "_", with: "/")
+            while payload.count % 4 != 0 { payload += "=" }
+            guard let data = Data(base64Encoded: payload) else {
+                throw GuardianError.bodyInvalid
+            }
+            do {
+                return try JSONDecoder().decode(JWTClaims.self, from: data)
+            } catch {
+                throw GuardianError.bodyInvalid
+            }
+        }
+
         let url = configuration.baseURL.appendingPathComponent("api/v1/foxfooding/token")
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -226,7 +250,7 @@ final class VPNGuardian: VPNGuardianProviding {
             throw GuardianError.bodyInvalid
         }
 
-        let claims = try Self.decodeJWTClaims(parsed.token)
+        let claims = try decodeJWTClaims(parsed.token)
         let nbf = Date(timeIntervalSince1970: claims.nbf)
         let exp = Date(timeIntervalSince1970: claims.exp)
         // TODO: FXIOS-16874 Add back usage when we add in app attest
@@ -238,30 +262,6 @@ final class VPNGuardian: VPNGuardianProviding {
             expiresAt: exp,
             usage: nil
         )
-    }
-
-    private struct JWTClaims: Decodable {
-        let nbf: TimeInterval
-        let exp: TimeInterval
-    }
-
-    private static func decodeJWTClaims(_ jwt: String) throws -> JWTClaims {
-        let parts = jwt.split(separator: ".")
-        guard parts.count == 3 else {
-            throw GuardianError.bodyInvalid
-        }
-        var payload = String(parts[1])
-            .replacingOccurrences(of: "-", with: "+")
-            .replacingOccurrences(of: "_", with: "/")
-        while payload.count % 4 != 0 { payload += "=" }
-        guard let data = Data(base64Encoded: payload) else {
-            throw GuardianError.bodyInvalid
-        }
-        do {
-            return try JSONDecoder().decode(JWTClaims.self, from: data)
-        } catch {
-            throw GuardianError.bodyInvalid
-        }
     }
 
     private func parseUsage(response: HTTPURLResponse) throws -> ProxyUsage {
