@@ -75,7 +75,6 @@ enum ConversionEvent {
     case appOpenDay2Plus
     case uriLoadDay2Plus
     case firstAdClick
-    // Delete
     case thirdActivityFirstWeek
     case activeLastThreeWeek1
     case dailyActiveFirstWeek
@@ -94,16 +93,15 @@ enum ConversionEvent {
             return .init(fine: 25, coarse: .high, lockWindow: false)
         case .firstAdClick:
             return .init(fine: 35, coarse: .medium, lockWindow: false)
-        // Delete
         case .activeTwoOfFourAndThreeWeek1:
             // We don't want a coarse conversion value here
-            return .init(fine: 30, coarse: .medium, lockWindow: false)
+            return .init(fine: 30, coarse: .low, lockWindow: false)
         case .activated:
             // We don't want a coarse conversion value here
-            return .init(fine: 45, coarse: .high, lockWindow: false)
+            return .init(fine: 45, coarse: .low, lockWindow: false)
         case .dailyActiveFirstWeek:
             // We don't want a coarse conversion value here
-            return .init(fine: 55, coarse: .high, lockWindow: false)
+            return .init(fine: 55, coarse: .low, lockWindow: false)
         case .activeLastThreeWeek1:
             // We don't want a coarse conversion value here
             return .init(fine: 20, coarse: .low, lockWindow: false)
