@@ -6,7 +6,6 @@ import Foundation
 import TabDataStore
 import WebKit
 import XCTest
-import WebKit
 @testable import Client
 
 final class TabManagerTests: TabManagerTestsBase {

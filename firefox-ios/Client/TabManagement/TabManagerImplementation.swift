@@ -1076,8 +1076,7 @@ final class TabManagerImplementation: NSObject,
         selectedIndex = tabs.firstIndex(of: tab) ?? -1
         preserveTabs(immediate: immediatePreservation)
 
-        let hasLiveSelectedTab = selectedTab === tab && tab.webView != nil
-        let sessionData = hasLiveSelectedTab ? nil : tabSessionStore.fetchTabSession(tabID: tabUUID)
+        let sessionData = fetchTabSession(for: tab, tabID: tabUUID)
         selectTabWithSession(
             tab: tab,
             sessionData: sessionData,
@@ -1160,6 +1159,11 @@ final class TabManagerImplementation: NSObject,
                                           windowUUID: windowUUID,
                                           actionType: GeneralBrowserActionType.updateSelectedTab)
         store.dispatch(action)
+    }
+
+    private func fetchTabSession(for tab: Tab, tabID: UUID) -> Data? {
+        let hasLiveSelectedTab = selectedTab === tab && tab.webView != nil
+        return hasLiveSelectedTab ? nil : tabSessionStore.fetchTabSession(tabID: tabID)
     }
 
     private func selectTabWithSession(
