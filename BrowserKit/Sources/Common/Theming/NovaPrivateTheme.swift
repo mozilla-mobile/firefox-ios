@@ -14,6 +14,8 @@ public struct NovaPrivateTheme: Theme {
 }
 
 private struct NovaPrivateColourPalette: ThemeColourPalette {
+    private let fallbackPalette: ThemeColourPalette = PrivateModeTheme().colors
+
     // MARK: - Layer
 
     var layer1: UIColor = NovaColors.VioletDesaturated90
@@ -127,36 +129,36 @@ private struct NovaPrivateColourPalette: ThemeColourPalette {
     var gradientAIStrongStop3: UIColor = NovaColors.Orange30
 
     // Default values from PrivateModeTheme
-    var layerGradient: Gradient = PrivateModeTheme().colors.layerGradient
-    var layerGradientURL: Gradient = PrivateModeTheme().colors.layerGradientURL
-    var layerGradientSummary: Gradient = PrivateModeTheme().colors.layerGradientSummary
-    var layerScrim: UIColor = PrivateModeTheme().colors.layerScrim
-    var layerCriticalSubdued: UIColor = PrivateModeTheme().colors.layerCriticalSubdued
-    var layerEmphasis: UIColor = PrivateModeTheme().colors.layerEmphasis
-    var indicatorActive: UIColor = PrivateModeTheme().colors.indicatorActive
-    var indicatorInactive: UIColor = PrivateModeTheme().colors.indicatorInactive
-    var iconAccentViolet: UIColor = PrivateModeTheme().colors.iconAccentViolet
-    var iconAccentBlue: UIColor = PrivateModeTheme().colors.iconAccentBlue
-    var iconAccentPink: UIColor = PrivateModeTheme().colors.iconAccentPink
-    var iconAccentGreen: UIColor = PrivateModeTheme().colors.iconAccentGreen
-    var iconAccentYellow: UIColor = PrivateModeTheme().colors.iconAccentYellow
+    var layerGradient: Gradient { fallbackPalette.layerGradient }
+    var layerGradientURL: Gradient { fallbackPalette.layerGradientURL }
+    var layerGradientSummary: Gradient { fallbackPalette.layerGradientSummary }
+    var layerScrim: UIColor { fallbackPalette.layerScrim }
+    var layerCriticalSubdued: UIColor { fallbackPalette.layerCriticalSubdued }
+    var layerEmphasis: UIColor { fallbackPalette.layerEmphasis }
+    var indicatorActive: UIColor { fallbackPalette.indicatorActive }
+    var indicatorInactive: UIColor { fallbackPalette.indicatorInactive }
+    var iconAccentViolet: UIColor { fallbackPalette.iconAccentViolet }
+    var iconAccentBlue: UIColor { fallbackPalette.iconAccentBlue }
+    var iconAccentPink: UIColor { fallbackPalette.iconAccentPink }
+    var iconAccentGreen: UIColor { fallbackPalette.iconAccentGreen }
+    var iconAccentYellow: UIColor { fallbackPalette.iconAccentYellow }
 
     // MARK: - Deprecated
     var layer5: UIColor { layerSurfaceMedium }
-    var layerGradientOverlay: Gradient = PrivateModeTheme().colors.layerGradientOverlay
-    var layerHomepage: Gradient = PrivateModeTheme().colors.layerHomepage
-    var layerAccentNonOpaque: UIColor = PrivateModeTheme().colors.layerAccentNonOpaque
-    var layerAccentPrivate: UIColor = PrivateModeTheme().colors.layerAccentPrivate
-    var gradientOnboardingStop1: UIColor = PrivateModeTheme().colors.gradientOnboardingStop1
-    var gradientOnboardingStop2: UIColor = PrivateModeTheme().colors.gradientOnboardingStop2
-    var gradientOnboardingStop3: UIColor = PrivateModeTheme().colors.gradientOnboardingStop3
-    var gradientOnboardingStop4: UIColor = PrivateModeTheme().colors.gradientOnboardingStop4
-    var iconRatingNeutral: UIColor = PrivateModeTheme().colors.iconRatingNeutral
-    var borderSecondary: UIColor = PrivateModeTheme().colors.borderSecondary
-    var borderAccent: UIColor = PrivateModeTheme().colors.borderAccent
-    var borderAccentNonOpaque: UIColor = PrivateModeTheme().colors.borderAccentNonOpaque
-    var borderAccentPrivate: UIColor = PrivateModeTheme().colors.borderAccentPrivate
-    var borderToolbarDivider: UIColor = PrivateModeTheme().colors.borderToolbarDivider
+    var layerGradientOverlay: Gradient { fallbackPalette.layerGradientOverlay }
+    var layerHomepage: Gradient { fallbackPalette.layerHomepage }
+    var layerAccentNonOpaque: UIColor { fallbackPalette.layerAccentNonOpaque }
+    var layerAccentPrivate: UIColor { fallbackPalette.layerAccentPrivate }
+    var gradientOnboardingStop1: UIColor { fallbackPalette.gradientOnboardingStop1 }
+    var gradientOnboardingStop2: UIColor { fallbackPalette.gradientOnboardingStop2 }
+    var gradientOnboardingStop3: UIColor { fallbackPalette.gradientOnboardingStop3 }
+    var gradientOnboardingStop4: UIColor { fallbackPalette.gradientOnboardingStop4 }
+    var iconRatingNeutral: UIColor { fallbackPalette.iconRatingNeutral }
+    var borderSecondary: UIColor { fallbackPalette.borderSecondary }
+    var borderAccent: UIColor { fallbackPalette.borderAccent }
+    var borderAccentNonOpaque: UIColor { fallbackPalette.borderAccentNonOpaque }
+    var borderAccentPrivate: UIColor { fallbackPalette.borderAccentPrivate }
+    var borderToolbarDivider: UIColor { fallbackPalette.borderToolbarDivider }
 
     var faviconLetterColorSet: FaviconLetterColorSet = NovaFaviconColorSet()
 }
