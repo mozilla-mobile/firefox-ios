@@ -96,3 +96,20 @@ extension RefinedSearchConfig {
         engines.insert(engine, at: 0)
     }
 }
+
+extension RefinedSearchConfigV3 {
+    @discardableResult
+    mutating func removeDeprecatedEngines() -> [String] {
+        let deprecatedIDs = engines.filter { $0.deprecated }.map { $0.identifier }
+        guard !deprecatedIDs.isEmpty else { return [] }
+
+        engines.removeAll { $0.deprecated }
+        if let defaultEngineID = appDefaultEngineId, deprecatedIDs.contains(defaultEngineID) {
+            appDefaultEngineId = nil
+        }
+        if let privateDefaultEngineID = appPrivateDefaultEngineId, deprecatedIDs.contains(privateDefaultEngineID) {
+            appPrivateDefaultEngineId = nil
+        }
+        return deprecatedIDs
+    }
+}
