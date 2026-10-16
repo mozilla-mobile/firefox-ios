@@ -1,0 +1,20 @@
+# The configuration for the per-device sync feature
+features:
+  per-device-sync:
+    description: >
+      Feature that enables per-device sync engine enablement.
+    variables:
+      per-device-sync-enabled:
+        description: >
+          Whether per-device sync is enabled. When enabled, sync engine
+          enablement choices are stored per device. Otherwise, the
+          pre-existing account-wide engine enablement logic is used.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          per-device-sync-enabled: false
+      - channel: developer
+        value:
+          per-device-sync-enabled: true
