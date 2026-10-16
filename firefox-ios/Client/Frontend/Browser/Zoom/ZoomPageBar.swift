@@ -155,26 +155,29 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable, FeatureFlaggabl
     }
 
     private func setupLayout() {
-        stepperCompactConstraints.append(stepperContainer.leadingAnchor.constraint(equalTo: leadingAnchor,
-                                                                                   constant: UX.padding))
-        stepperDefaultConstraints.append(stepperContainer.centerXAnchor.constraint(equalTo: centerXAnchor))
-        stepperDefaultConstraints.append(stepperContainer.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor,
-                                                                                   constant: UX.padding))
+        stepperCompactConstraints.append(
+            stepperContainer.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
+                                                      constant: UX.padding))
+        stepperDefaultConstraints.append(
+            stepperContainer.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor))
+        stepperDefaultConstraints.append(
+            stepperContainer.leadingAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
+                                                      constant: UX.padding))
         setupSeparator(leftSeparator)
         setupSeparator(rightSeparator)
 
         NSLayoutConstraint.activate([
-            stepperContainer.topAnchor.constraint(equalTo: topAnchor,
+            stepperContainer.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor,
                                                   constant: UX.stepperTopBottomPadding),
-            stepperContainer.bottomAnchor.constraint(equalTo: bottomAnchor,
+            stepperContainer.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor,
                                                      constant: -UX.stepperTopBottomPadding),
             stepperContainer.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
                                                        constant: -UX.stepperMinTrailing),
             stepperContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.stepperHeight),
-            stepperContainer.centerYAnchor.constraint(equalTo: centerYAnchor),
+            stepperContainer.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
 
-            closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            closeButton.trailingAnchor.constraint(equalTo: trailingAnchor,
+            closeButton.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
                                                   constant: -UX.padding),
         ])
         setupCloseButtonConstraints()
@@ -183,8 +186,8 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable, FeatureFlaggabl
     func setupCloseButtonConstraints() {
         let isAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
         let closeButtonSizes = isAccessibilityCategory ? UX.closButtonLargeSize : UX.closButtonSize
-        closeButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        closeButton.trailingAnchor.constraint(equalTo: trailingAnchor,
+        closeButton.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
+        closeButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
                                               constant: -UX.padding).isActive = true
         closeButton.heightAnchor.constraint(equalToConstant: closeButtonSizes).isActive = true
         closeButton.widthAnchor.constraint(equalToConstant: closeButtonSizes).isActive = true
@@ -198,7 +201,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable, FeatureFlaggabl
     }
 
     private func setupShadow() {
-        if traitCollection.userInterfaceIdiom == .pad {
+        if traitCollection.horizontalSizeClass == .regular {
             layer.shadowOffset = CGSize(width: 0, height: UX.shadowHeightOffset)
         } else {
             layer.shadowOffset = CGSize(width: 0, height: -UX.shadowHeightOffset)
@@ -212,6 +215,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable, FeatureFlaggabl
     override func layoutSubviews() {
         super.layoutSubviews()
         updateStepperConstraintsBasedOnSizeClass()
+        setupShadow()
         setupCloseButtonConstraints()
         layoutIfNeeded()
     }
@@ -248,7 +252,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable, FeatureFlaggabl
 
     private func updateStepperConstraintsBasedOnSizeClass() {
         if traitCollection.horizontalSizeClass == .regular ||
-            (UIWindow.isLandscape && traitCollection.verticalSizeClass == .compact) {
+            traitCollection.verticalSizeClass == .compact {
             stepperDefaultConstraints.forEach { $0.isActive = true }
             stepperCompactConstraints.forEach { $0.isActive = false }
         } else {
