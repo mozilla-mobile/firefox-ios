@@ -204,9 +204,10 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
         // a valid URL, otherwise we cannot do the conversion to NSURLComponents
         // and have to do flaky pattern matching instead.
         let placeholder = "PLACEHOLDER"
+        let partnerCodePlaceholder = "PARTNERCODE"
         let template = searchTemplate
             .replacingOccurrences(of: searchTermComponent, with: placeholder)
-            .replacingOccurrences(of: partnerCodeComponent, with: "PARTNERCODE")
+            .replacingOccurrences(of: partnerCodeComponent, with: partnerCodePlaceholder)
         var components = URLComponents(string: template)
 
         if let retVal = extractQueryArg(in: components?.queryItems, for: placeholder) {
