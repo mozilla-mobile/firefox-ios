@@ -2413,7 +2413,7 @@ workflows:
     - activate-build-cache-for-xcode@0: {}
     - xcode-build-for-test@3:
         title: "Build Firefox iOS"
-        timeout: 600
+        timeout: 360
         inputs:
         - scheme: Fennec
         - configuration: Debug
@@ -2423,7 +2423,7 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
     - xcode-test-without-building@0:
         title: "Run all smoke tests"
-        timeout: 3600
+        timeout: 3000
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
         - xctestrun: "$BITRISE_XCTESTRUN_FILE_PATH"
