@@ -100,6 +100,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     private func compactLayout(geometry: GeometryProxy) -> some View {
         VStack {
             skipButton
+                .padding(.top, UX.Onboarding.Spacing.standard)
                 .padding(.trailing, UX.Onboarding.Spacing.standard)
                 .frame(maxWidth: .infinity, alignment: .trailing)
 
