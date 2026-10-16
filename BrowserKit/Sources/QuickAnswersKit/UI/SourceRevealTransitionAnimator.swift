@@ -45,12 +45,9 @@ final class SourceRevealTransitionAnimator: NSObject,
 
     /// In the container view's coordinate space.
     private let sourceRect: CGRect
-    private let isOptInVisible: () -> Bool
+    private let isOptInVisible: Bool
 
-    init(
-        sourceRect: CGRect,
-        isOptInVisible: @escaping () -> Bool
-    ) {
+    init(sourceRect: CGRect, isOptInVisible: Bool) {
         self.sourceRect = sourceRect
         self.isOptInVisible = isOptInVisible
     }
@@ -105,11 +102,11 @@ final class SourceRevealTransitionAnimator: NSObject,
         presentedController.view.mask = maskView
         quickAnswersController.prepareForPresentationTransition(
             sourceRect: sourceRect,
-            isOptInVisible: isOptInVisible()
+            isOptInVisible: isOptInVisible
         )
         UIView.animate(withDuration: UX.presentationDuration, delay: 0.0, options: .curveEaseOut) { [self] in
             maskView.transform = CGAffineTransform(scaleX: UX.expandedMaskHorizontalScale, y: 1.0)
-            quickAnswersController.applyPresentationTransition(isOptInVisible: isOptInVisible())
+            quickAnswersController.applyPresentationTransition(isOptInVisible: isOptInVisible)
         } completion: { _ in
             presentedController.view.mask = nil
             transitionContext.completeTransition(true)

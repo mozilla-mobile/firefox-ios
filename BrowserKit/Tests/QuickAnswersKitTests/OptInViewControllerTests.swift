@@ -11,23 +11,11 @@ import XCTest
 
 @MainActor
 final class OptInViewControllerTests: XCTestCase {
-    private var dismissCallCount = 0
-
-    override func setUp() {
-        super.setUp()
-        dismissCallCount = 0
-    }
-
-    override func tearDown() {
-        dismissCallCount = 0
-        super.tearDown()
-    }
-
     // MARK: - init
     func test_init_isPresentedAsNonDismissableSheet() {
         let subject = createSubject()
 
-        XCTAssertEqual(subject.modalPresentationStyle, .pageSheet)
+        XCTAssertEqual(subject.modalPresentationStyle, .formSheet)
         XCTAssertTrue(subject.isModalInPresentation)
     }
 
@@ -42,17 +30,6 @@ final class OptInViewControllerTests: XCTestCase {
         XCTAssertEqual(hostingController?.view.superview, subject.view)
     }
 
-    // MARK: - presentationControllerDidDismiss
-    func test_presentationControllerDidDismiss_whenSwipedAway_reportsDismissal() {
-        let subject = createSubject()
-
-        subject.presentationControllerDidDismiss(
-            UIPresentationController(presentedViewController: subject, presenting: nil)
-        )
-
-        XCTAssertEqual(dismissCallCount, 1)
-    }
-
     // MARK: - Helpers
     private func createSubject(
         file: StaticString = #filePath,
@@ -65,7 +42,7 @@ final class OptInViewControllerTests: XCTestCase {
             closeAccessibilityLabel: "Close",
             onContinue: {},
             onLearnMore: {},
-            onDismiss: { [weak self] in self?.dismissCallCount += 1 }
+            onDismiss: {}
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

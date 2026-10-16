@@ -17,11 +17,26 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         XCTAssertTrue(subject.transitioningDelegate is OptInTransitionAnimator)
     }
 
+    func testInit_withSourceRevealTransition_fallsBackToSourceRevealTransitionAnimator() {
+        let subject = createSubject(transitionType: .sourceReveal(sourceRect: .zero))
+
+        let transitionAnimator = subject.transitioningDelegate as? OptInTransitionAnimator
+        XCTAssertTrue(transitionAnimator?.fallback is SourceRevealTransitionAnimator)
+    }
+
     func testInit_withFormSheetTransition_usesFormSheetPresentationAndOptInTransitionAnimator() {
         let subject = createSubject(transitionType: .formSheet)
 
         XCTAssertEqual(subject.modalPresentationStyle, .formSheet)
         XCTAssertTrue(subject.transitioningDelegate is OptInTransitionAnimator)
+    }
+
+    func testInit_withFormSheetTransition_fallsBackToSystemTransition() {
+        let subject = createSubject(transitionType: .formSheet)
+
+        let transitionAnimator = subject.transitioningDelegate as? OptInTransitionAnimator
+        XCTAssertNotNil(transitionAnimator)
+        XCTAssertNil(transitionAnimator?.fallback)
     }
 
     // MARK: - Helper

@@ -11,7 +11,7 @@ final class OptInTransitionAnimator: NSObject,
                                      UIViewControllerTransitioningDelegate,
                                      UIViewControllerAnimatedTransitioning {
     private let isOptInSheetPending: () -> Bool
-    private let fallback: UIViewControllerTransitioningDelegate?
+    let fallback: UIViewControllerTransitioningDelegate?
     /// The presentation container hidden while presenting, to be revealed once the opt-in sheet is up.
     private(set) weak var hiddenContainerView: UIView?
 
