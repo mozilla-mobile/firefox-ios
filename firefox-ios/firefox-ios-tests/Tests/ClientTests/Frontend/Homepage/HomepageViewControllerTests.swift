@@ -151,12 +151,11 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         homepageVC.scrollViewWillBeginDragging(scrollView)
 
         let actionCalled = try XCTUnwrap(
-            mockStore.dispatchedActions.first(where: {
-                $0 is ToolbarAction
-            }) as? ToolbarAction
+            mockStore.dispatchedModernActions.first(where: {
+                $0 is ToolbarModernAction
+            }) as? ToolbarModernAction
         )
-        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
-        XCTAssertEqual(actionType, ToolbarActionType.cancelEditOnHomepage)
+        XCTAssertEqual(actionCalled.description, ToolbarModernAction.cancelEditOnHomepage.description)
     }
 
     func test_traitCollectionDidChange_triggersHomepageAction() throws {
