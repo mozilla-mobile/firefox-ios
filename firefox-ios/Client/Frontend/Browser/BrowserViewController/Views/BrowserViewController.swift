@@ -1608,6 +1608,7 @@ class BrowserViewController: UIViewController,
                 traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
                 updateHeaderConstraints()
                 updateAddressToolbarContainerPosition(for: traitCollection)
+                updateZoomPageBarPlacement()
             }
             updateToolbarStateForTraitCollection(traitCollection)
         }
@@ -1772,8 +1773,9 @@ class BrowserViewController: UIViewController,
     }
 
     func updateOverKeyboardContainerConstraints() {
-        browserLayoutManager.updateOverKeyboardContainerConstraints(isBottomSearchBar: isBottomSearchBar,
-                                                                    hasZoomPageBar: zoomPageBar != nil)
+        browserLayoutManager.updateOverKeyboardContainerConstraints(
+            isBottomSearchBar: isBottomSearchBar,
+            hasZoomPageBar: zoomPageBar?.superview === overKeyboardContainer)
     }
 
     func updateConstraintsForKeyboard() {
