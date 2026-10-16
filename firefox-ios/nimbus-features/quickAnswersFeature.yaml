@@ -22,7 +22,7 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: true
+          enabled: false
           model: exa
           optInRedesign: false
       - channel: developer
