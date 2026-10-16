@@ -19,9 +19,9 @@ final class QuickAnswersViewModel {
     private let service: QuickAnswersService?
     private let telemetry: QuickAnswersTelemetry
     private let store: Store
-    private let feature: QuickAnswersFeature
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
+    let feature: QuickAnswersFeature
     var onStateChange: ((State) -> Void)?
 
     /// The user-facing name of the model backing the request.
