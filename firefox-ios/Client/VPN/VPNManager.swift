@@ -169,7 +169,7 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
         }
     }
 
-    private func buildProxyConfig(server: VPNGuardian.Server, pass: VPNGuardian.ProxyPass) -> ProxyConfiguration {
+    private func buildProxyConfig(server: VPNGuardian.Server, pass: VPNGuardian.ProxyPass) -> ProxyConfiguration? {
         var components = URLComponents()
         components.scheme = "https"
         components.host = server.hostname
