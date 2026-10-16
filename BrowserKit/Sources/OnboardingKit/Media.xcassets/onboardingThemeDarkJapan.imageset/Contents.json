@@ -2,7 +2,8 @@
   "images" : [
     {
       "filename" : "onboardingThemeDarkJapan.pdf",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "language-direction" : "left-to-right"
     }
   ],
   "info" : {
