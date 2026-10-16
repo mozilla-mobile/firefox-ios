@@ -27,6 +27,14 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForValueContains(addressBar, value: value, timeout: timeout)
     }
 
+    /// Non-failing variant of `assertAddressBarContains`, for callers that retry when the page did not load.
+    func addressBarContains(_ value: String, timeout: TimeInterval = TIMEOUT) -> Bool {
+        let addressBar = sel.ADDRESS_BAR.element(in: app)
+        let predicate = NSPredicate(format: "value CONTAINS %@", value)
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: addressBar)
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
+
     /// Exact-match variant of `assertAddressBarContains`. Needed when the point of the assertion is
     /// that the toolbar shows *only* the domain: a substring check on the domain also passes when
     /// the full URL is displayed, so it could never catch the difference.

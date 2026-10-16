@@ -30,9 +30,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2334757
     func testHelpOpensSUMOInTab() {
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+        launchIntoSettings()
         let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
 
         while settingsTableView.staticTexts["Help"].exists == false {
@@ -63,9 +61,7 @@ class SettingsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307041
     // Regression
     func testOpenMailAppSettings() {
-        app.launch()
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(MailAppSettings)
 
         // Check that the list is shown
@@ -99,13 +95,9 @@ class SettingsTests: FeatureFlaggedTestBase {
     func testImageOnOff() {
         let settingsScreen = SettingScreen(app: app)
         // Select no images or hide images, check it's hidden or not
-        app.launch()
-        waitUntilPageLoad()
+        launchIntoSettings()
 
         // Select hide images under Browsing Settings page
-
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
         settingsScreen.openBrowsingSettings()
         settingsScreen.waitForBrowsingLinksSection()
 
@@ -138,31 +130,27 @@ class SettingsTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2989418
     func testSettingsOptionSubtitlesLandspace() {
-        app.launch()
         XCUIDevice.shared.orientation = .landscapeLeft
+        launchIntoSettings()
         validateSettingsUIOptions()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2989420
     func testSettingsOptionSubtitlesDarkMode() {
-        app.launch()
-        switchThemeToDarkOrLight(theme: "Dark")
+        launchIntoSettingsWithDarkTheme()
         validateSettingsUIOptions()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2986986
     func testSettingsOptionSubtitlesDarkModeLandscape() {
-        app.launch()
-        switchThemeToDarkOrLight(theme: "Dark")
         XCUIDevice.shared.orientation = .landscapeLeft
+        launchIntoSettingsWithDarkTheme()
         validateSettingsUIOptions()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2875583
     func testSettingsCrashReportsOption() {
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+        launchIntoSettings()
         let crashReportToggle = app.switches["settings.sendCrashReports"]
         scrollToElement(crashReportToggle)
         XCTAssertEqual(crashReportToggle.value as? String, "1", "Crash report toggle in not enabled by default")
@@ -172,8 +160,8 @@ class SettingsTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2951438
     func testBrowsingSettingsOptionSubtitles() {
-        app.launch()
-        validateBrowsingUI()
+        launchIntoSettings()
+        validateBrowsingUI(navigateToSettings: false)
         // Repeat steps for dark mode
         navigator.nowAt(SettingsScreen)
         navigator.goto(NewTabScreen)
@@ -190,8 +178,8 @@ class SettingsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3135841
     func testSummarizeContentSettingsShouldShow_hostedSummarizeExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
-        app.launch()
-        validateSummarizeContentUI()
+        launchIntoSettings()
+        validateSummarizeContentUI(navigateToSettings: false)
         // Repeat steps for dark mode
         navigator.nowAt(SettingsScreen)
         navigator.goto(NewTabScreen)
@@ -209,9 +197,7 @@ class SettingsTests: FeatureFlaggedTestBase {
     func testSummarizeContentSettingsDoesNotAppear_hostedSummarizeExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+        launchIntoSettings()
         let table = app.tables.element(boundBy: 0)
         mozWaitForElementToExist(table)
         let summarizeSettings = table.cells[AccessibilityIdentifiers.Settings.Summarize.title]
@@ -286,8 +272,8 @@ class SettingsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2951992
     // Regression
     func testAutofillPasswordSettingsOptionSubtitles() {
-        app.launch()
-        validateAutofillAndPasswordsUI()
+        launchIntoSettings()
+        validateAutofillAndPasswordsUI(navigateToSettings: false)
         // Repeat steps for dark mode
         navigator.nowAt(SettingsScreen)
         navigator.goto(NewTabScreen)
@@ -303,9 +289,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2951439
     func testAutoplayOptionUI() {
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+        launchIntoSettings()
         // Navigate to the Autoplay settings screen
         navigator.goto(AutoplaySettings)
         // Validate UI elements
@@ -337,9 +321,19 @@ class SettingsTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.staticTexts["Browsing"])
     }
 
-    private func validateAutofillAndPasswordsUI() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+    private func launchIntoSettingsWithDarkTheme() {
+        let settingsScreen = SettingScreen(app: app)
+        launchIntoSettings(.theme)
+        settingsScreen.selectDarkTheme()
+        settingsScreen.tapBackToSettings()
+        settingsRootReachedByDeeplink()
+    }
+
+    private func validateAutofillAndPasswordsUI(navigateToSettings: Bool = true) {
+        if navigateToSettings {
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(SettingsScreen)
+        }
         let table = app.tables.element(boundBy: 0)
         mozWaitForElementToExist(table)
         // "Autofills and passwords" sub-menu is displayed in the "Privacy" section
@@ -370,9 +364,11 @@ class SettingsTests: FeatureFlaggedTestBase {
         navigator.goto(SettingsScreen)
     }
 
-    private func validateBrowsingUI() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+    private func validateBrowsingUI(navigateToSettings: Bool = true) {
+        if navigateToSettings {
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(SettingsScreen)
+        }
         let table = app.tables.element(boundBy: 0)
         mozWaitForElementToExist(table)
         let generalSection = table.staticTexts["GENERAL"]
@@ -413,9 +409,11 @@ class SettingsTests: FeatureFlaggedTestBase {
         navigator.goto(SettingsScreen)
     }
 
-    private func validateSummarizeContentUI() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+    private func validateSummarizeContentUI(navigateToSettings: Bool = true) {
+        if navigateToSettings {
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(SettingsScreen)
+        }
         SettingScreen(app: app).assertSummarizeSettingsIsInGeneralSection()
 
         navigator.goto(SummarizeSettings)
@@ -424,8 +422,6 @@ class SettingsTests: FeatureFlaggedTestBase {
     }
 
     private func validateSettingsUIOptions() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
         let table = app.tables.element(boundBy: 0)
         let settingsQuery = AccessibilityIdentifiers.Settings.self
         let settingsTitle = app.staticTexts["Settings"]
