@@ -7,9 +7,9 @@ import UIKit
 /// While the opt-in sheet is pending, transitions instantly. When presenting, the whole presentation is
 /// hidden so the sheet slides up over the browser and the presented controller reveals itself afterwards.
 /// Every other transition is handed to `fallback`, or to the system one when `fallback` is nil.
-final class OptInSheetTransition: NSObject,
-                                  UIViewControllerTransitioningDelegate,
-                                  UIViewControllerAnimatedTransitioning {
+final class OptInTransitionAnimator: NSObject,
+                                     UIViewControllerTransitioningDelegate,
+                                     UIViewControllerAnimatedTransitioning {
     private let isOptInSheetPending: () -> Bool
     private let fallback: UIViewControllerTransitioningDelegate?
     /// The presentation container hidden while presenting, to be revealed once the opt-in sheet is up.

@@ -10,18 +10,18 @@ import TestKit
 
 @MainActor
 final class QuickAnswersViewControllerTests: XCTestCase {
-    func testInit_withSourceRevealTransition_usesCustomPresentationAndOptInSheetTransition() {
+    func testInit_withSourceRevealTransition_usesCustomPresentationAndOptInTransitionAnimator() {
         let subject = createSubject(transitionType: .sourceReveal(sourceRect: .zero))
 
         XCTAssertEqual(subject.modalPresentationStyle, .custom)
-        XCTAssertTrue(subject.transitioningDelegate is OptInSheetTransition)
+        XCTAssertTrue(subject.transitioningDelegate is OptInTransitionAnimator)
     }
 
-    func testInit_withFormSheetTransition_usesFormSheetPresentationAndOptInSheetTransition() {
+    func testInit_withFormSheetTransition_usesFormSheetPresentationAndOptInTransitionAnimator() {
         let subject = createSubject(transitionType: .formSheet)
 
         XCTAssertEqual(subject.modalPresentationStyle, .formSheet)
-        XCTAssertTrue(subject.transitioningDelegate is OptInSheetTransition)
+        XCTAssertTrue(subject.transitioningDelegate is OptInTransitionAnimator)
     }
 
     // MARK: - Helper

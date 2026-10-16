@@ -7,7 +7,7 @@ import UIKit
 import XCTest
 
 @MainActor
-final class OptInSheetTransitionTests: XCTestCase {
+final class OptInTransitionAnimatorTests: XCTestCase {
     private var controller: UIViewController!
     private var fallback: SourceRevealTransitionAnimator!
 
@@ -62,8 +62,8 @@ final class OptInSheetTransitionTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func createSubject(isOptInSheetPending: Bool, hasFallback: Bool = true) -> OptInSheetTransition {
-        return OptInSheetTransition(
+    private func createSubject(isOptInSheetPending: Bool, hasFallback: Bool = true) -> OptInTransitionAnimator {
+        return OptInTransitionAnimator(
             isOptInSheetPending: { isOptInSheetPending },
             fallback: hasFallback ? fallback : nil
         )

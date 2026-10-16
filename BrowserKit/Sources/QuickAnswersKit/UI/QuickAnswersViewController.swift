@@ -36,7 +36,7 @@ public final class QuickAnswersViewController: UIViewController,
         $0.alpha = 0.0
     }
     private let contentView: QuickAnswersContentView = .build()
-    private let transitionDelegate: OptInSheetTransition
+    private let transitionDelegate: OptInTransitionAnimator
 
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
@@ -111,7 +111,7 @@ public final class QuickAnswersViewController: UIViewController,
                 }
             )
         }
-        self.transitionDelegate = OptInSheetTransition(
+        self.transitionDelegate = OptInTransitionAnimator(
             isOptInSheetPending: { [weak viewModel] in
                 viewModel?.isOptInSheetRequired ?? false
             },

@@ -9,7 +9,7 @@ import UIKit
 
 /// Consent screen shown before the first Quick Answers recording. It is presented as a bottom sheet
 /// and only reports the user's choice through its callbacks, the presenter owns the dismissal.
-public final class OptInViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
+public final class OptInViewController: UIViewController {
     private let onDismiss: () -> Void
     private let hostingController: UIHostingController<OptInSheetView>
 
@@ -44,16 +44,10 @@ public final class OptInViewController: UIViewController, UIAdaptivePresentation
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        presentationController?.delegate = self
         addChild(hostingController)
         view.addSubview(hostingController.view)
         hostingController.view.pinToSuperview()
         hostingController.didMove(toParent: self)
-    }
-
-    // MARK: - UIAdaptivePresentationControllerDelegate
-    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        onDismiss()
     }
 }
 
@@ -152,21 +146,23 @@ struct OptInSheetView: ThemeableView {
 
     var body: some View {
         NavigationView {
-            Group {
-                if isCompact {
-                    compactLayout
-                } else {
-                    regularLayout
+            ZStack {
+                theme.colors.layer1.color.ignoresSafeArea()
+                Group {
+                    if isCompact {
+                        compactLayout
+                    } else {
+                        regularLayout
+                    }
                 }
             }
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     closeButton
                 }
             }
         }
-        .background(theme.colors.layer1.color.ignoresSafeArea())
+        .scrollEdgeSoftBehavior()
         .navigationViewStyle(.stack)
         .listenToThemeChanges(in: self, theme: $theme)
     }
@@ -180,8 +176,8 @@ struct OptInSheetView: ThemeableView {
                     privacyInfo
                 }
                 .padding(.top, UX.contentTopPadding)
+                .padding(.horizontal, UX.contentHorizontalPadding)
             }
-            .padding(.horizontal, UX.contentHorizontalPadding)
             .bounceBasedOnSize()
             .bottomBar {
                 continueButton
@@ -200,6 +196,7 @@ struct OptInSheetView: ThemeableView {
                     ScrollView(showsIndicators: false) {
                         intro
                             .frame(minHeight: proxy.size.height)
+                            .padding(.leading, UX.Compact.horizontalPadding)
                     }
                     .bounceBasedOnSize()
                 }
@@ -207,6 +204,7 @@ struct OptInSheetView: ThemeableView {
 
                 ScrollView(showsIndicators: false) {
                     privacyInfo
+                        .padding(.trailing, UX.Compact.horizontalPadding)
                 }
                 .bounceBasedOnSize()
                 .bottomBar {
@@ -221,7 +219,6 @@ struct OptInSheetView: ThemeableView {
                 }
                 .frame(maxWidth: .infinity)
             }
-            .padding(.horizontal, UX.Compact.horizontalPadding)
         }
     }
 
@@ -334,6 +331,15 @@ private extension View {
     func bounceBasedOnSize() -> some View {
         if #available(iOS 16.4, *) {
             self.scrollBounceBehavior(.basedOnSize)
+        } else {
+            self
+        }
+    }
+    
+    @ViewBuilder
+    func scrollEdgeSoftBehavior() -> some View {
+        if #available(iOS 26.0, *) {
+            self.scrollEdgeEffectStyle(.soft, for: .all)
         } else {
             self
         }
