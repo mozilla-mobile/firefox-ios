@@ -24,6 +24,33 @@ struct QuickAnswersViewConfigurationTests {
     }
 
     @Test
+    func testOptInRedesignStrings_storesValues() {
+        let subject = QuickAnswersViewConfiguration.OptInRedesignStrings(
+            title: "title",
+            description: "desc",
+            nothingGetsSavedTitle: "savedTitle",
+            nothingGetsSavedDescription: "savedDesc",
+            privateByDesignTitle: "privateTitle",
+            privateByDesignDescription: "privateDesc",
+            noTrainingTitle: "trainingTitle",
+            noTrainingDescription: "trainingDesc",
+            learnMore: "learn",
+            continueButton: "go"
+        )
+
+        #expect(subject.title == "title")
+        #expect(subject.description == "desc")
+        #expect(subject.nothingGetsSavedTitle == "savedTitle")
+        #expect(subject.nothingGetsSavedDescription == "savedDesc")
+        #expect(subject.privateByDesignTitle == "privateTitle")
+        #expect(subject.privateByDesignDescription == "privateDesc")
+        #expect(subject.noTrainingTitle == "trainingTitle")
+        #expect(subject.noTrainingDescription == "trainingDesc")
+        #expect(subject.learnMore == "learn")
+        #expect(subject.continueButton == "go")
+    }
+
+    @Test
     func testContentViewStrings_storesValues() {
         let subject = QuickAnswersViewConfiguration.ContentViewStrings(
             placeholder: "ask",
@@ -84,6 +111,18 @@ struct QuickAnswersViewConfigurationTests {
     func testConfiguration_storesAllSections() {
         let subject = QuickAnswersViewConfiguration(
             optIn: .init(title: "t", description: "d", learnMore: "l", continueButton: "c"),
+            optInRedesign: .init(
+                title: "rt",
+                description: "rd",
+                nothingGetsSavedTitle: "",
+                nothingGetsSavedDescription: "",
+                privateByDesignTitle: "",
+                privateByDesignDescription: "",
+                noTrainingTitle: "",
+                noTrainingDescription: "",
+                learnMore: "",
+                continueButton: ""
+            ),
             contentView: .init(
                 placeholder: "p",
                 answering: "a",
@@ -110,6 +149,7 @@ struct QuickAnswersViewConfigurationTests {
         )
 
         #expect(subject.optIn.title == "t")
+        #expect(subject.optInRedesign.title == "rt")
         #expect(subject.contentView.placeholder == "p")
         #expect(subject.privacyBanner.title == "pt")
         #expect(subject.closeAccessibilityLabel == "close")

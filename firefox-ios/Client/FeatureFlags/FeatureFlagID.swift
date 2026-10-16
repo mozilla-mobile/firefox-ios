@@ -50,6 +50,7 @@ enum FeatureFlagID: String, CaseIterable {
     case novaPrivateThemeOverride
     case privacyDashboard
     case quickAnswers
+    case quickAnswersOptInRedesign
     case recentSearches
     case relayIntegration
     case reportBrokenSite
@@ -136,6 +137,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .novaPrivateThemeOverride,
                 .privacyDashboard,
                 .quickAnswers,
+                .quickAnswersOptInRedesign,
                 .recentSearches,
                 .relayIntegration,
                 .reportBrokenSite,

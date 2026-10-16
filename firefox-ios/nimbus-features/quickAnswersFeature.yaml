@@ -14,15 +14,22 @@ features:
           Which provider model backs Quick Answers.
         type: QuickAnswersModel
         default: exa
+      optInRedesign:
+        description: >
+          Shows the redesigned opt-in as a sheet over the browser.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
           enabled: false
           model: exa
+          optInRedesign: false
       - channel: developer
         value:
-          enabled: false
+          enabled: true
           model: exa
+          optInRedesign: true
 
 enums:
   QuickAnswersModel:

@@ -14,6 +14,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
     private let transitionType: QuickAnswersTransitionType
+    private let featureFlagsProvider: FeatureFlagProviding
     private let onNavigate: (QuickAnswersNavigationType) -> Void
     private var shouldAnimateTransition: Bool {
         return !UIAccessibility.isReduceMotionEnabled
@@ -28,6 +29,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         themeManager: ThemeManager,
         router: Router,
         transitionType: QuickAnswersTransitionType,
+        featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         onNavigate: @escaping (QuickAnswersNavigationType) -> Void,
     ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
@@ -35,6 +37,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.transitionType = transitionType
+        self.featureFlagsProvider = featureFlagsProvider
         self.onNavigate = onNavigate
         super.init(router: router)
     }
@@ -47,7 +50,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             windowUUID: windowUUID,
             themeManager: themeManager,
             telemetry: DefaultQuickAnswersTelemetry(),
-            configFetcher: RemoteQuickAnswersConfigFetcher(model: resolvedModel()),
+            configFetcher: RemoteQuickAnswersConfigFetcher(feature: resolvedFeature()),
             learnMoreURL: Self.learnMoreURL,
             stringsConfiguration: makeStringsConfiguration()
         )
@@ -64,6 +67,18 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
                 title: .QuickAnswers.OptIn.Title,
                 description: .QuickAnswers.OptIn.Description,
                 learnMore: .QuickAnswers.OptIn.LearnMore,
+                continueButton: .QuickAnswers.OptIn.ContinueButton
+            ),
+            optInRedesign: .init(
+                title: .QuickAnswers.OptInRedesign.Title,
+                description: .QuickAnswers.OptInRedesign.Description,
+                nothingGetsSavedTitle: .QuickAnswers.OptInRedesign.NothingGetsSavedTitle,
+                nothingGetsSavedDescription: .QuickAnswers.OptInRedesign.NothingGetsSavedDescription,
+                privateByDesignTitle: .QuickAnswers.OptInRedesign.PrivateByDesignTitle,
+                privateByDesignDescription: .QuickAnswers.OptInRedesign.PrivateByDesignDescription,
+                noTrainingTitle: .QuickAnswers.OptInRedesign.NoTrainingTitle,
+                noTrainingDescription: .QuickAnswers.OptInRedesign.NoTrainingDescription,
+                learnMore: .QuickAnswers.LearnMore,
                 continueButton: .QuickAnswers.OptIn.ContinueButton
             ),
             contentView: .init(
@@ -95,6 +110,13 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             ),
             closeAccessibilityLabel: .QuickAnswers.AccessibilityLabels.Close,
             appName: appName
+        )
+    }
+
+    func resolvedFeature() -> QuickAnswersKit.QuickAnswersFeature {
+        return QuickAnswersKit.QuickAnswersFeature(
+            model: resolvedModel(),
+            isOptInRedesignEnabled: featureFlagsProvider.isEnabled(.quickAnswersOptInRedesign)
         )
     }
 

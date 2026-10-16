@@ -60,10 +60,11 @@ final class RemoteQuickAnswersConfigFetcherTests: XCTestCase {
         model: QuickAnswersKit.QuickAnswersModel,
         client: MockRemoteSettingsClient
     ) -> RemoteQuickAnswersConfigFetcher {
+        let feature = QuickAnswersKit.QuickAnswersFeature(model: model, isOptInRedesignEnabled: false)
         return RemoteQuickAnswersConfigFetcher(
-            model: model,
+            feature: feature,
             remoteConfig: ASAIRemoteConfig(rsClient: client),
-            defaultFetcher: MockQuickAnswersConfigFetcher(model: model, instructions: defaultInstructions)
+            defaultFetcher: MockQuickAnswersConfigFetcher(feature: feature, instructions: defaultInstructions)
         )
     }
 
@@ -76,10 +77,10 @@ final class RemoteQuickAnswersConfigFetcherTests: XCTestCase {
 }
 
 private struct MockQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
-    let model: QuickAnswersKit.QuickAnswersModel
+    let feature: QuickAnswersKit.QuickAnswersFeature
     let instructions: String
 
     func fetch() async throws -> QuickAnswersConfig {
-        return QuickAnswersConfig(model: model, instructions: instructions)
+        return QuickAnswersConfig(model: feature.model, instructions: instructions)
     }
 }
