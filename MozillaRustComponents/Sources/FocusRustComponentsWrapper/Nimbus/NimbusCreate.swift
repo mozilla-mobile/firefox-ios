@@ -108,7 +108,6 @@ public extension Nimbus {
         dbPath: String,
         resourceBundles: [Bundle] = [Bundle.main],
         enabled: Bool = true,
-        userDefaults: UserDefaults? = nil,
         errorReporter: @escaping NimbusErrorReporter = defaultErrorReporter,
         recordedContext: RecordedContext? = nil,
         remoteSettingsService: RemoteSettingsService? = nil,
@@ -133,7 +132,6 @@ public extension Nimbus {
         return Nimbus(
             nimbusClient: nimbusClient,
             resourceBundles: resourceBundles,
-            userDefaults: userDefaults,
             errorReporter: errorReporter
         )
     }
