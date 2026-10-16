@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import QuickAnswersKit
+import TestKit
 import UIKit
 import XCTest
 
@@ -17,7 +18,7 @@ final class OptInTransitionAnimatorTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         controller = UIViewController()
-        fallback = SourceRevealTransitionAnimator(sourceRect: .zero, isOptInVisible: { false })
+        fallback = SourceRevealTransitionAnimator(sourceRect: .zero, isOptInVisible: false)
         transitionContext = MockTransitionContext()
         transitionContext.finalFrame = finalFrame
         isOptInSheetPending = false
@@ -139,10 +140,16 @@ final class OptInTransitionAnimatorTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    private func createSubject(hasFallback: Bool = true) -> OptInTransitionAnimator {
-        return OptInTransitionAnimator(
+    private func createSubject(
+        hasFallback: Bool = true,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> OptInTransitionAnimator {
+        let subject = OptInTransitionAnimator(
             isOptInSheetPending: { [weak self] in self?.isOptInSheetPending ?? false },
             fallback: hasFallback ? fallback : nil
         )
+        trackForMemoryLeaks(subject, file: file, line: line)
+        return subject
     }
 }

@@ -106,9 +106,7 @@ public final class QuickAnswersViewController: UIViewController,
         if case let .sourceReveal(sourceRect) = transitionType {
             sourceRevealAnimator = SourceRevealTransitionAnimator(
                 sourceRect: sourceRect,
-                isOptInVisible: { [weak viewModel] in
-                    viewModel?.isOptInRequired ?? false
-                }
+                isOptInVisible: viewModel.isOptInRequired
             )
         }
         self.transitionDelegate = OptInTransitionAnimator(

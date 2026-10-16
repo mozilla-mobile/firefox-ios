@@ -9,11 +9,10 @@ import UIKit
 
 /// Consent screen shown before the first Quick Answers recording. It is presented as a bottom sheet
 /// and only reports the user's choice through its callbacks, the presenter owns the dismissal.
-public final class OptInViewController: UIViewController {
-    private let onDismiss: () -> Void
+final class OptInViewController: UIViewController {
     private let hostingController: UIHostingController<OptInSheetView>
 
-    public init(
+    init(
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         strings: QuickAnswersViewConfiguration.OptInRedesignStrings,
@@ -22,7 +21,6 @@ public final class OptInViewController: UIViewController {
         onLearnMore: @escaping () -> Void,
         onDismiss: @escaping () -> Void
     ) {
-        self.onDismiss = onDismiss
         hostingController = UIHostingController(rootView: OptInSheetView(
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -42,7 +40,7 @@ public final class OptInViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override public func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         addChild(hostingController)
         view.addSubview(hostingController.view)
