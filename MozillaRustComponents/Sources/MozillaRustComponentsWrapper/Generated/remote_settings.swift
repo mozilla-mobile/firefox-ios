@@ -1559,6 +1559,7 @@ public struct RemoteSettingsContext: Equatable, Hashable {
      * for example `Region` on Desktop and `RegionMiddleware` on Android.
      */
     public var country: String?
+    public var distribution: String?
     /**
      * Extra attributes to add to the env for JEXL filtering.
      *
@@ -1599,7 +1600,7 @@ public struct RemoteSettingsContext: Equatable, Hashable {
          * - By using a geolocation service, which determines country via the user's IP.
          * Firefox apps usually have a module that integrates with these services,
          * for example `Region` on Desktop and `RegionMiddleware` on Android.
-         */country: String? = nil, 
+         */country: String? = nil, distribution: String? = nil, 
         /**
          * Extra attributes to add to the env for JEXL filtering.
          *
@@ -1614,6 +1615,7 @@ public struct RemoteSettingsContext: Equatable, Hashable {
         self.osVersion = osVersion
         self.formFactor = formFactor
         self.country = country
+        self.distribution = distribution
         self.customTargettingAttributes = customTargettingAttributes
     }
 
@@ -1641,6 +1643,7 @@ public struct FfiConverterTypeRemoteSettingsContext: FfiConverterRustBuffer {
                 osVersion: FfiConverterOptionString.read(from: &buf), 
                 formFactor: FfiConverterOptionString.read(from: &buf), 
                 country: FfiConverterOptionString.read(from: &buf), 
+                distribution: FfiConverterOptionString.read(from: &buf), 
                 customTargettingAttributes: FfiConverterOptionDictionaryStringString.read(from: &buf)
         )
     }
@@ -1654,6 +1657,7 @@ public struct FfiConverterTypeRemoteSettingsContext: FfiConverterRustBuffer {
         FfiConverterOptionString.write(value.osVersion, into: &buf)
         FfiConverterOptionString.write(value.formFactor, into: &buf)
         FfiConverterOptionString.write(value.country, into: &buf)
+        FfiConverterOptionString.write(value.distribution, into: &buf)
         FfiConverterOptionDictionaryStringString.write(value.customTargettingAttributes, into: &buf)
     }
 }
