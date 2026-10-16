@@ -75,34 +75,41 @@ enum ConversionEvent {
     case appOpenDay2Plus
     case uriLoadDay2Plus
     case firstAdClick
+    // Delete
     case thirdActivityFirstWeek
     case activeLastThreeWeek1
-    case activeTwoOfFourAndThreeWeek1
-    case activated
     case dailyActiveFirstWeek
+    case activated
+    case activeTwoOfFourAndThreeWeek1
 
     var conversionValue: ConversionValue {
         switch self {
         case .activeFirstDay:
-            return .init(fine: 5, coarse: .low, lockWindow: false)
+            return .init(fine: 5, coarse: .medium, lockWindow: false)
         case .setAsDefault:
             return .init(fine: 10, coarse: .low, lockWindow: false)
         case .appOpenDay2Plus:
-            return .init(fine: 15, coarse: .medium, lockWindow: false)
-        case .activeLastThreeWeek1:
-            return .init(fine: 20, coarse: .medium, lockWindow: false)
-        case .thirdActivityFirstWeek:
-            return .init(fine: 22, coarse: .medium, lockWindow: false)
+            return .init(fine: 15, coarse: .high, lockWindow: false)
         case .uriLoadDay2Plus:
-            return .init(fine: 25, coarse: .medium, lockWindow: false)
+            return .init(fine: 25, coarse: .high, lockWindow: false)
         case .firstAdClick:
             return .init(fine: 35, coarse: .medium, lockWindow: false)
+        // Delete
         case .activeTwoOfFourAndThreeWeek1:
+            // We don't want a coarse conversion value here
             return .init(fine: 30, coarse: .medium, lockWindow: false)
         case .activated:
+            // We don't want a coarse conversion value here
             return .init(fine: 45, coarse: .high, lockWindow: false)
         case .dailyActiveFirstWeek:
+            // We don't want a coarse conversion value here
             return .init(fine: 55, coarse: .high, lockWindow: false)
+        case .activeLastThreeWeek1:
+            // We don't want a coarse conversion value here
+            return .init(fine: 20, coarse: .low, lockWindow: false)
+        case .thirdActivityFirstWeek:
+            // We don't want a coarse conversion value here
+            return .init(fine: 22, coarse: .low, lockWindow: false)
         }
     }
 }
