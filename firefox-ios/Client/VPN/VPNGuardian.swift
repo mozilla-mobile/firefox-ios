@@ -7,7 +7,7 @@ import Foundation
 
 protocol VPNGuardianProviding: Sendable {
     func getPass() async throws -> VPNGuardian.ProxyPass
-    func passRotation(after initial: VPNGuardian.ProxyPass) -> AsyncStream<VPNGuardian.ProxyPass>
+    func passRotation(after initial: VPNGuardian.ProxyPass) -> AsyncThrowingStream<VPNGuardian.ProxyPass, Error>
 }
 
 final class VPNGuardian: VPNGuardianProviding {
@@ -109,13 +109,14 @@ final class VPNGuardian: VPNGuardianProviding {
     /// task to stop rotation — the stream will tear down its internal fetch loop via
     /// `onTermination`.
     ///
-    /// The stream finishes once a rotation fails terminally, mirroring desktop's
-    /// `rotateProxyPass`, which does not reschedule its timer after a failure.
+    /// The stream throws once a rotation fails terminally, mirroring desktop's
+    /// `rotateProxyPass`, which does not reschedule its timer after a failure. Cancellation
+    /// finishes the stream without throwing.
     ///
     /// In-flight WebKit requests continue with the old bearer token thanks to the proxy's
     /// grace period. Only new requests pick up the rotated header.
-    func passRotation(after initial: ProxyPass) -> AsyncStream<ProxyPass> {
-        AsyncStream { continuation in
+    func passRotation(after initial: ProxyPass) -> AsyncThrowingStream<ProxyPass, Error> {
+        AsyncThrowingStream { continuation in
             let task = Task { [weak self] in
                 var current = initial
                 while !Task.isCancelled {
@@ -131,13 +132,8 @@ final class VPNGuardian: VPNGuardianProviding {
                     } catch is CancellationError {
                         break
                     } catch {
-                        // TODO: surface error to the user here
-                        self.logger.log(
-                            "Pass rotation failed terminally, stopping rotation: \(error)",
-                            level: .warning,
-                            category: .sync
-                        )
-                        break
+                        continuation.finish(throwing: error)
+                        return
                     }
                 }
                 continuation.finish()
@@ -165,7 +161,7 @@ final class VPNGuardian: VPNGuardianProviding {
                 logger.log(
                     "Pass rotation attempt failed: \(error). Retrying in \(delay)s.",
                     level: .warning,
-                    category: .sync
+                    category: .vpn
                 )
                 try await Self.sleep(seconds: min(delay, remaining))
                 delay *= 2

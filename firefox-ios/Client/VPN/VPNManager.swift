@@ -19,6 +19,7 @@ protocol VPNRunnable {
 enum VPNError: Error {
     case notSignedIn
     case noServerFound
+    case proxyURLCannotBeGenerated
 }
 
 @available(iOS 17.0, *)
@@ -85,15 +86,15 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
             self.logger.log(
                 "Got Guardian proxy pass — expires \(pass.expiresAt), usage \(String(describing: pass.usage)); server \(server.hostname):\(server.port) (\(server.city), \(server.countryCode))",
                 level: .info,
-                category: .sync
+                category: .vpn
             )
-            let config = self.buildProxyConfig(server: server, pass: pass)
+            let config = try self.buildProxyConfig(server: server, pass: pass)
             await self.applyProxyAndRebuildWebViews(configs: [config])
             self.activeServer = server
             self.userPreferences.setPreferenceFor(.vpnFeature, to: true)
             self.startPassRotation(after: pass)
         } catch {
-            self.logger.log("VPN start failed: \(error)", level: .warning, category: .sync)
+            self.logger.log("VPN start failed: \(error)", level: .warning, category: .vpn)
         }
     }
 
@@ -113,7 +114,7 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
             logger.log(
                 "\(secretKey) is unset — Guardian pass requests will fail to authenticate",
                 level: .warning,
-                category: .settings
+                category: .vpn
             )
             return [:]
         }
@@ -129,15 +130,24 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
         rotationTask?.cancel()
         rotationTask = Task { [weak self] in
             guard let stream = self?.guardian.passRotation(after: initial) else { return }
-            for await new in stream {
-                guard let self,
-                      let server = self.activeServer else { return }
-                let config = self.buildProxyConfig(server: server, pass: new)
-                self.proxyApplier.applyProxyConfigurations([config], forcingSessionReset: false)
-                self.logger.log(
-                    "Rotated VPN proxy pass — next expiry \(new.expiresAt)",
-                    level: .info,
-                    category: .sync
+            do {
+                for try await new in stream {
+                    guard let self,
+                          let server = self.activeServer else { return }
+                    let config = try self.buildProxyConfig(server: server, pass: new)
+                    self.proxyApplier.applyProxyConfigurations([config], forcingSessionReset: false)
+                    self.logger.log(
+                        "Rotated VPN proxy pass — next expiry \(new.expiresAt)",
+                        level: .info,
+                        category: .vpn
+                    )
+                }
+            } catch {
+                // TODO: surface error to the user here
+                self?.logger.log(
+                    "Pass rotation failed terminally, stopping rotation: \(error)",
+                    level: .warning,
+                    category: .vpn
                 )
             }
         }
@@ -169,11 +179,14 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
         }
     }
 
-    private func buildProxyConfig(server: VPNGuardian.Server, pass: VPNGuardian.ProxyPass) -> ProxyConfiguration? {
+    private func buildProxyConfig(server: VPNGuardian.Server, pass: VPNGuardian.ProxyPass) throws -> ProxyConfiguration {
         var components = URLComponents()
         components.scheme = "https"
         components.host = server.hostname
         components.port = Int(server.port)
+        guard let url = components.url else {
+            throw VPNError.proxyURLCannotBeGenerated
+        }
         let endpoint = NWEndpoint.url(components.url!)
         let hop = ProxyConfiguration.RelayHop(
             http3RelayEndpoint: endpoint,

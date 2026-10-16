@@ -15,13 +15,13 @@ final class MockVPNGuardian: VPNGuardianProviding, @unchecked Sendable {
     )
     var passRotationInitialPasses: [VPNGuardian.ProxyPass] = []
     var onPassRotation: (() -> Void)?
-    let rotation = AsyncStream<VPNGuardian.ProxyPass>.makeStream()
+    let rotation = AsyncThrowingStream<VPNGuardian.ProxyPass, Error>.makeStream()
 
     func getPass() async throws -> VPNGuardian.ProxyPass {
         return try passResult.get()
     }
 
-    func passRotation(after initial: VPNGuardian.ProxyPass) -> AsyncStream<VPNGuardian.ProxyPass> {
+    func passRotation(after initial: VPNGuardian.ProxyPass) -> AsyncThrowingStream<VPNGuardian.ProxyPass, Error> {
         passRotationInitialPasses.append(initial)
         onPassRotation?()
         return rotation.stream

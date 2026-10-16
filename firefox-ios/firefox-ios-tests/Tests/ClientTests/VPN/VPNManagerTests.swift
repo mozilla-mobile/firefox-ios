@@ -22,7 +22,7 @@ final class VPNManagerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         mockLogger = MockLogger()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockTabManager = MockTabManager()
         mockWindowManager = MockWindowManager(
             wrappedManager: WindowManagerImplementation(),
