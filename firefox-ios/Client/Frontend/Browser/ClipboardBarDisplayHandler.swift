@@ -81,7 +81,7 @@ final class DefaultClipboardBarDisplayHandler: ClipboardBarDisplayHandler, Notif
         switch notification.name {
         case UIApplication.willEnterForegroundNotification:
             ensureMainThread {
-                self.appWillEnterForegroundNotification
+                self.appWillEnterForegroundNotification()
             }
         default:
             return
