@@ -626,7 +626,8 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
                         let params = SyncParams(
                             reason: why,
                             engines: SyncEngineSelection.some(engines: rustEngines),
-                            enabledChanges: self.getEngineEnablementChangesForAccount(),
+                            engineChoicesModel:
+                                    .account(enabledChanges: self.getEngineEnablementChangesForAccount()),
                             localEncryptionKeys: localEncryptionKeys,
                             authInfo: self.createSyncAuthInfo(key: key,
                                                               accessTokenInfo: accessTokenInfo,
