@@ -39,6 +39,7 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
     private var hasCategories = false
     private var progress: CGFloat = 0
     private var transitionEnabled = true
+    private var embeddedAddressBarOffset: CGFloat = 0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -55,6 +56,7 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         super.prepareForReuse()
         progress = 0
         transitionEnabled = true
+        embeddedAddressBarOffset = 0
         hasCategories = false
         sectionTitleHeaderView.prepareForReuse()
         updateViewState()
@@ -130,6 +132,12 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         updateViewState()
     }
 
+    func setEmbeddedAddressBarOffset(_ offset: CGFloat) {
+        guard embeddedAddressBarOffset != offset else { return }
+        embeddedAddressBarOffset = offset
+        updateViewState()
+    }
+
     func updatePickerState(
         selectedNewsfeedCategoryID: String?,
         newsfeedCategoryPickerOffsetX: CGFloat?
@@ -193,12 +201,12 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
             let pickerProgress = pickerProgress(for: progress)
             headerContainerView.transform = CGAffineTransform(
                 translationX: 0,
-                y: -pickerTranslationOffset() * pickerProgress
+                y: -pickerTranslationOffset() * pickerProgress + embeddedAddressBarOffset
             )
             storyCategoryPickerView.alpha = pickerProgress
             storyCategoryPickerView.transform = CGAffineTransform(
                 translationX: 0,
-                y: pickerTranslationOffset() * (1 - pickerProgress)
+                y: pickerTranslationOffset() * (1 - pickerProgress) + embeddedAddressBarOffset
             )
 
         // Static section title header + category picker
@@ -207,10 +215,10 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
             sectionTitleHeaderView.alpha = 1
             headerContainerView.transform = CGAffineTransform(
                 translationX: 0,
-                y: -pickerTranslationOffset()
+                y: -pickerTranslationOffset() + embeddedAddressBarOffset
             )
             storyCategoryPickerView.alpha = hasCategories ? 1 : 0
-            storyCategoryPickerView.transform = .identity
+            storyCategoryPickerView.transform = CGAffineTransform(translationX: 0, y: embeddedAddressBarOffset)
         }
 
         headerContainerView.accessibilityLabel = transitionEnabled && progress < 0.5

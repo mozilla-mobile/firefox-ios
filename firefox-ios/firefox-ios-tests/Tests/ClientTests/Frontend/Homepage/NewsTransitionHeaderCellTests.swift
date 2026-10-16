@@ -87,6 +87,37 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
                              in: view)?.isSelected == true)
     }
 
+    func test_setEmbeddedAddressBarOffset_offsetsCategoryPicker() {
+        let view = createSubject()
+
+        view.configure(
+            sectionHeaderConfiguration: sectionHeaderConfiguration,
+            textColor: nil,
+            theme: theme,
+            transitionEnabled: false,
+            categories: testCategories
+        )
+        view.setEmbeddedAddressBarOffset(50)
+
+        XCTAssertEqual(categoryPickerView(in: view)?.transform.ty, 50)
+    }
+
+    func test_prepareForReuse_resetsEmbeddedAddressBarOffset() {
+        let view = createSubject()
+
+        view.configure(
+            sectionHeaderConfiguration: sectionHeaderConfiguration,
+            textColor: nil,
+            theme: theme,
+            transitionEnabled: false,
+            categories: testCategories
+        )
+        view.setEmbeddedAddressBarOffset(50)
+        view.prepareForReuse()
+
+        XCTAssertEqual(categoryPickerView(in: view)?.transform.ty, 0)
+    }
+
     private var testCategories: [MerinoCategoryConfiguration] {
         [
             MerinoCategoryConfiguration(
@@ -126,6 +157,10 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
 
     private func labelHeaderView(in view: UIView) -> LabelButtonHeaderView? {
         return allSubviews(in: view).compactMap { $0 as? LabelButtonHeaderView }.first
+    }
+
+    private func categoryPickerView(in view: UIView) -> StoryCategoryPickerView? {
+        return allSubviews(in: view).compactMap { $0 as? StoryCategoryPickerView }.first
     }
 
     private func button(withA11yID a11yID: String, in view: UIView) -> UIButton? {
