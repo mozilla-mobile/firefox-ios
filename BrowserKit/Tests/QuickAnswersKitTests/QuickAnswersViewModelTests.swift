@@ -234,6 +234,21 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertFalse(subject.isOptInSheetRequired)
     }
 
+    func testIsOptInSheetRequired_withRedesignAfterCompleteOptIn_isFalse() {
+        mockService.speechResults = [SpeechResult(text: "Hello", isFinal: true)]
+        mockService.searchResult = .success(SearchResult(resultText: "Test", sources: []))
+        let subject = createSubject(isOptInRedesignEnabled: true)
+        let expectation = XCTestExpectation()
+
+        subject.onStateChange = { state in
+            if case .showSearchResult = state { expectation.fulfill() }
+        }
+        subject.completeOptIn()
+
+        wait(for: [expectation])
+        XCTAssertFalse(subject.isOptInSheetRequired)
+    }
+
     func testCompleteOptIn_persistsConsentAndStartsRecording() {
         let prefs = MockProfilePrefs()
         let finalResult = SpeechResult(text: "Hello", isFinal: true)
