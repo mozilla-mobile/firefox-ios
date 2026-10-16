@@ -30,7 +30,7 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-DEVICE="iPhone 17"
+DEVICE="iPhone 18 Pro"
 
 # ...existing code...
 for lang in $LOCALES; do
@@ -44,7 +44,7 @@ for lang in $LOCALES; do
       --skip_open_summary \
       --xcargs "-maximum-parallel-testing-workers 1" \
       --erase_simulator --localize_simulator \
-      --ios_version "26.1" \
+      --ios_version "27.0" \
       --devices "$DEVICE" \
       --languages "$lang" \
       --output_directory "l10n-screenshots/$lang" \

@@ -19,7 +19,6 @@ struct SSLWarningSelectors: SSLWarningSelectorsSet {
         static let goBack = "Go Back"
         static let advanced = "Advanced"
         static let visitSiteAnyway = "Visit site anyway"
-        static let domain = "expired.badssl.com"
     }
 
     let WARNING_MESSAGE = Selector.webViewOtherByLabel(
@@ -46,9 +45,9 @@ struct SSLWarningSelectors: SSLWarningSelectorsSet {
         groups: ["browser", "ssl"]
     )
 
-    let PAGE_DOMAIN = Selector.anyId(
-        IDs.domain,
-        description: "Domain element after bypassing SSL warning",
+    let PAGE_DOMAIN = Selector.textFieldId(
+        AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
+        description: "Address toolbar URL field; its value holds the loaded domain",
         groups: ["browser", "ssl"]
     )
 

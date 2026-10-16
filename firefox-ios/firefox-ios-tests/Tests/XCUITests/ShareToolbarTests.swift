@@ -280,6 +280,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     private func saveCurrentDocumentToFiles(named baseName: String) {
         openSaveToFilesPicker()
         documentPicker.assertFileNameIsPrefilled(baseName)
+        documentPicker.assertNavigationBarAvailable()
         documentPicker.save()
         documentPicker.assertDismissed()
         shareSheet.dismissShareSheetIfPresented()
