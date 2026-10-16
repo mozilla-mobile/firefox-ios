@@ -2408,6 +2408,9 @@ workflows:
     - 3_provisioning_and_npm_installation
     - skip_macro_validation
     steps:
+    - restore-spm-cache@3:
+        is_always_run: true
+    - activate-build-cache-for-xcode@0: {}
     - xcode-build-for-test@3:
         title: "Build Firefox iOS"
         timeout: 600
