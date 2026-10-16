@@ -37,6 +37,29 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
     public var adBlockerButtonCallback: (() -> Void)?
     public var mainMenuHelper: MainMenuInterface = MainMenuHelper()
 
+    private var trailingContentConstraints: [NSLayoutConstraint] = []
+
+    public func setCloseButtonHidden(_ hidden: Bool) {
+        guard closeButton.isHidden != hidden else { return }
+        closeButton.isHidden = hidden
+        NSLayoutConstraint.deactivate(trailingContentConstraints)
+        if hidden {
+            trailingContentConstraints = [
+                contentLabels.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
+                                                        constant: -UX.horizontalContentMargin),
+                badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
+                                                      constant: -UX.horizontalContentMargin)
+            ]
+        } else {
+            trailingContentConstraints = [
+                contentLabels.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
+                                                        constant: -UX.horizontalContentMargin),
+                badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor)
+            ]
+        }
+        NSLayoutConstraint.activate(trailingContentConstraints)
+    }
+
     private var theme: Theme?
 
     private var contentLabels: UIStackView = .build { stack in
@@ -129,24 +152,28 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
             constant: UX.badgesTopMargin
         )
         badgesTopFromLabels.priority = .defaultHigh
-        NSLayoutConstraint.activate([
-            contentLabels.topAnchor.constraint(equalTo: self.topAnchor),
+        trailingContentConstraints = [
             contentLabels.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
                                                     constant: -UX.horizontalContentMargin),
-
-            favicon.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: UX.horizontalContentMargin),
+            badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor)
+        ]
+        NSLayoutConstraint.activate(trailingContentConstraints)
+        NSLayoutConstraint.activate([
+            contentLabels.topAnchor.constraint(equalTo: self.topAnchor),
+            favicon.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
+                                             constant: UX.horizontalContentMargin),
             favicon.topAnchor.constraint(equalTo: self.topAnchor),
             favicon.trailingAnchor.constraint(equalTo: contentLabels.leadingAnchor, constant: -UX.horizontalContentMargin),
             favicon.widthAnchor.constraint(equalToConstant: UX.favIconSize),
             favicon.heightAnchor.constraint(equalToConstant: UX.favIconSize),
 
-            closeButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -UX.horizontalContentMargin),
+            closeButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
+                                                  constant: -UX.horizontalContentMargin),
             closeButton.topAnchor.constraint(equalTo: self.topAnchor),
 
             badgesTopFromLabels,
             badgesTopFromFavicon,
             badgesStack.leadingAnchor.constraint(equalTo: favicon.leadingAnchor),
-            badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor),
             badgesStack.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
 
