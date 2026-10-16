@@ -2,7 +2,13 @@
   "images" : [
     {
       "filename" : "onboardingTrackersBrandRefresh.pdf",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "language-direction" : "left-to-right"
+    },
+    {
+      "filename" : "onboardingTrackersBrandRefresh-rtl.pdf",
+      "idiom" : "universal",
+      "language-direction" : "right-to-left"
     }
   ],
   "info" : {
