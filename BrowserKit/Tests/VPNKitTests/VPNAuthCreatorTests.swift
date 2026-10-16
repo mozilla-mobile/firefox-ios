@@ -116,6 +116,7 @@ final class VPNAuthCreatorTests: XCTestCase {
         appAttestService: AppAttestServiceProtocol = MockAppAttestService(isSupported: true)
     ) -> VPNAuthCreator {
         return VPNAuthCreator(
+            telemetry: MockVPNTelemetry(),
             keyStore: keyStore,
             appAttestService: appAttestService,
             tokenStore: tokenStore,
