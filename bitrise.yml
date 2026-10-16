@@ -34,6 +34,17 @@ pipelines:
         depends_on:
         - focus_configure_build
         parallel: 1
+  pipeline_nightly_fullfunctional_iphone:
+    workflows:
+      Firefox_Nightly_FullFunctional_Build_Iphone: {}
+      Firefox_Nightly_FullFunctional_Iphone:
+        depends_on:
+        - Firefox_Nightly_FullFunctional_Build_Iphone
+        parallel: 5
+      Firefox_Nightly_FullFunctional_Report_Iphone:
+        depends_on:
+        - Firefox_Nightly_FullFunctional_Iphone
+        should_always_run: workflow
   pipeline_build_and_test_focus:
     workflows:
       focus_configure_build: {}
@@ -2462,6 +2473,124 @@ workflows:
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=tests
+
+  Firefox_Nightly_FullFunctional_Build_Iphone:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    - skip_macro_validation
+    steps:
+    - restore-spm-cache@3:
+        is_always_run: true
+    - activate-build-cache-for-xcode@0: {}
+    - xcode-build-for-test@3:
+        title: "Build Firefox iOS"
+        timeout: 600
+        inputs:
+        - scheme: Fennec
+        - configuration: Debug
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - test_plan: FullFunctionalTestPlan
+        - xcodebuild_options: ONLY_ACTIVE_ARCH=YES COMPILER_INDEX_STORE_ENABLE=NO
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+    - xcode-test-shard-calculation@0:
+        inputs:
+        - product_path: $BITRISE_XCTESTRUN_FILE_PATH
+        - shard_count: 5
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        outputs:
+        - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FULL_FUNCTIONAL
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - pipeline_intermediate_files: |-
+            BITRISE_TEST_SHARDS_PATH_FULL_FUNCTIONAL
+            BITRISE_TEST_BUNDLE_PATH
+
+  Firefox_Nightly_FullFunctional_Iphone:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    steps:
+    - pull-intermediate-files@1: {}
+    - xcode-test-without-building@0:
+        title: "Run full functional tests shard"
+        timeout: 3600
+        inputs:
+        - only_testing: $BITRISE_TEST_SHARDS_PATH_FULL_FUNCTIONAL/$BITRISE_IO_PARALLEL_INDEX
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - xctestrun: "$BITRISE_TEST_BUNDLE_PATH/Fennec_FullFunctionalTestPlan_iphonesimulator26.5-arm64.xctestrun"
+        - xcodebuild_options: -collect-test-diagnostics never
+    - deploy-to-bitrise-io@2:
+        is_always_run: true
+        inputs:
+        - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:FULL_FUNCTIONAL_XCRESULT_$BITRISE_IO_PARALLEL_INDEX"
+
+  Firefox_Nightly_FullFunctional_Report_Iphone:
+    steps:
+    - pull-intermediate-files@1: {}
+    - script@1:
+        title: Merge shard results and count failed tests
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -euo pipefail
+
+            RESULTS=()
+            for i in 0 1 2 3 4; do
+              RESULT_PATH=$(printenv "FULL_FUNCTIONAL_XCRESULT_$i" || true)
+              if [ -n "$RESULT_PATH" ] && [ -d "$RESULT_PATH" ]; then
+                RESULTS+=("$RESULT_PATH")
+              else
+                echo "No result found for shard $i"
+              fi
+            done
+
+            if [ ${#RESULTS[@]} -eq 0 ]; then
+              echo "No shard results to merge"
+              envman add --key FULL_FUNCTIONAL_FAILED_TEST_COUNT --value "unknown (no results)"
+              exit 1
+            fi
+
+            MERGED="$BITRISE_DEPLOY_DIR/FullFunctionalTestPlan.xcresult"
+            if [ ${#RESULTS[@]} -eq 1 ]; then
+              cp -R "${RESULTS[0]}" "$MERGED"
+            else
+              xcrun xcresulttool merge "${RESULTS[@]}" --output-path "$MERGED"
+            fi
+
+            xcrun xcresulttool get --path "$MERGED" --format json --legacy > result.json
+            FAILED_COUNT=$(jq -r '.metrics.testsFailedCount._value // 0' result.json)
+            echo "Total number of failures: $FAILED_COUNT"
+            envman add --key FULL_FUNCTIONAL_FAILED_TEST_COUNT --value "$FAILED_COUNT"
+
+            if [ ${#RESULTS[@]} -lt 5 ] || [ "$FAILED_COUNT" != "0" ]; then
+              exit 1
+            fi
+    - deploy-to-bitrise-io@2:
+        is_always_run: true
+        inputs:
+        - is_compress: "true"
+    - slack@4:
+        is_always_run: true
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer: Created by Mobile Test Engineering
+        - footer_icon_on_error: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer_on_error: Created by Mobile Test Engineering
+        - pretext_on_error: "*Firefox-iOS* :firefox: *Nightly Full Functional iPhone* :x:"
+        - message_on_error: "Number of failed tests: ${FULL_FUNCTIONAL_FAILED_TEST_COUNT}"
+        - color_on_error: danger
+        - pretext: "*Firefox-iOS* :firefox: *Nightly Full Functional iPhone* :white_check_mark:"
+        - message: ''
+        - timestamp: 'no'
+        - fields: ''
+        - buttons: |
+            Build Log|${BITRISE_BUILD_URL}
+            Merged Test Results|${BITRISE_BUILD_URL}?tab=artifacts
 
   focus-configure-nimbus:
     steps:
