@@ -1121,6 +1121,14 @@ public protocol StoreProtocol: AnyObject, Sendable {
     
     func getPassport(guid: String) throws  -> Passport
     
+    /**
+     * Every stored credit card without its encrypted fields. Unlike
+     * `get_all_credit_cards` this never touches the key, so listing cannot
+     * prompt for a primary password; read the one card that needs its
+     * secrets with `get_credit_card`.
+     */
+    func listCreditCardCandidates() throws  -> [CreditCardCandidate]
+    
     func registerWithSyncManager() 
     
     /**
@@ -1485,6 +1493,21 @@ open func getPassport(guid: String)throws  -> Passport  {
     uniffi_autofill_fn_method_store_get_passport(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(guid),uniffiCallStatus
+    )
+})
+}
+    
+    /**
+     * Every stored credit card without its encrypted fields. Unlike
+     * `get_all_credit_cards` this never touches the key, so listing cannot
+     * prompt for a primary password; read the one card that needs its
+     * secrets with `get_credit_card`.
+     */
+open func listCreditCardCandidates()throws  -> [CreditCardCandidate]  {
+    return try  FfiConverterSequenceTypeCreditCardCandidate.lift(try rustCallWithError(FfiConverterTypeAutofillApiError_lift) {
+        uniffiCallStatus in
+    uniffi_autofill_fn_method_store_list_credit_card_candidates(
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
@@ -2007,6 +2030,103 @@ public func FfiConverterTypeCreditCard_lift(_ buf: RustBuffer) throws -> CreditC
 #endif
 public func FfiConverterTypeCreditCard_lower(_ value: CreditCard) -> RustBuffer {
     return FfiConverterTypeCreditCard.lower(value)
+}
+
+
+/**
+ * A credit card stored in the database, minus the encrypted fields.
+ *
+ * Reading these never needs the encryption key, so consumers listing cards by name,
+ * last four digits and expiry can do so without forcing the user to authenticate.
+ * See `list_credit_card_candidates()`.
+ */
+public struct CreditCardCandidate: Equatable, Hashable {
+    public var guid: String
+    public var ccName: String
+    public var ccNumberLast4: String
+    public var hasCvv: Bool
+    public var ccExpMonth: Int64
+    public var ccExpYear: Int64
+    public var ccType: String
+    public var timeCreated: Int64
+    public var timeLastUsed: Int64?
+    public var timeLastModified: Int64
+    public var timesUsed: Int64
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(guid: String, ccName: String, ccNumberLast4: String, hasCvv: Bool, ccExpMonth: Int64, ccExpYear: Int64, ccType: String, timeCreated: Int64, timeLastUsed: Int64?, timeLastModified: Int64, timesUsed: Int64) {
+        self.guid = guid
+        self.ccName = ccName
+        self.ccNumberLast4 = ccNumberLast4
+        self.hasCvv = hasCvv
+        self.ccExpMonth = ccExpMonth
+        self.ccExpYear = ccExpYear
+        self.ccType = ccType
+        self.timeCreated = timeCreated
+        self.timeLastUsed = timeLastUsed
+        self.timeLastModified = timeLastModified
+        self.timesUsed = timesUsed
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension CreditCardCandidate: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeCreditCardCandidate: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CreditCardCandidate {
+        return
+            try CreditCardCandidate(
+                guid: FfiConverterString.read(from: &buf), 
+                ccName: FfiConverterString.read(from: &buf), 
+                ccNumberLast4: FfiConverterString.read(from: &buf), 
+                hasCvv: FfiConverterBool.read(from: &buf), 
+                ccExpMonth: FfiConverterInt64.read(from: &buf), 
+                ccExpYear: FfiConverterInt64.read(from: &buf), 
+                ccType: FfiConverterString.read(from: &buf), 
+                timeCreated: FfiConverterInt64.read(from: &buf), 
+                timeLastUsed: FfiConverterOptionInt64.read(from: &buf), 
+                timeLastModified: FfiConverterInt64.read(from: &buf), 
+                timesUsed: FfiConverterInt64.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: CreditCardCandidate, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.guid, into: &buf)
+        FfiConverterString.write(value.ccName, into: &buf)
+        FfiConverterString.write(value.ccNumberLast4, into: &buf)
+        FfiConverterBool.write(value.hasCvv, into: &buf)
+        FfiConverterInt64.write(value.ccExpMonth, into: &buf)
+        FfiConverterInt64.write(value.ccExpYear, into: &buf)
+        FfiConverterString.write(value.ccType, into: &buf)
+        FfiConverterInt64.write(value.timeCreated, into: &buf)
+        FfiConverterOptionInt64.write(value.timeLastUsed, into: &buf)
+        FfiConverterInt64.write(value.timeLastModified, into: &buf)
+        FfiConverterInt64.write(value.timesUsed, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardCandidate_lift(_ buf: RustBuffer) throws -> CreditCardCandidate {
+    return try FfiConverterTypeCreditCardCandidate.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeCreditCardCandidate_lower(_ value: CreditCardCandidate) -> RustBuffer {
+    return FfiConverterTypeCreditCardCandidate.lower(value)
 }
 
 
@@ -3228,6 +3348,31 @@ fileprivate struct FfiConverterSequenceTypeCreditCard: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterSequenceTypeCreditCardCandidate: FfiConverterRustBuffer {
+    typealias SwiftType = [CreditCardCandidate]
+
+    public static func write(_ value: [CreditCardCandidate], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeCreditCardCandidate.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [CreditCardCandidate] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [CreditCardCandidate]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeCreditCardCandidate.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceTypeCreditCardTombstone: FfiConverterRustBuffer {
     typealias SwiftType = [CreditCardTombstone]
 
@@ -3608,6 +3753,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_get_passport() != 57057) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_autofill_checksum_method_store_list_credit_card_candidates() != 44672) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_autofill_checksum_method_store_register_with_sync_manager() != 50761) {
