@@ -2203,6 +2203,7 @@ workflows:
         - message_on_error: "*Failed tests:*\n${SYNC_FAILED_TESTS}"
         - color_on_error: danger
         - pretext: "*Firefox-iOS* :firefox: *${SYNC_SLACK_TITLE}* :white_check_mark:"
+        - message: ''
         - timestamp: 'no'
         - fields: ''
         - buttons: |
