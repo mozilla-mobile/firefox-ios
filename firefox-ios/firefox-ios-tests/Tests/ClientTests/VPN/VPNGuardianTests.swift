@@ -112,19 +112,26 @@ final class VPNGuardianTests: XCTestCase {
         let initial = makePass(expiresAt: Date())
 
         var iterator = subject.passRotation(after: initial).makeAsyncIterator()
-        let rotated = await iterator.next()
+        let rotated = try await iterator.next()
 
         XCTAssertEqual(rotated?.bearerToken, rotatedToken)
     }
 
-    func testPassRotation_onTerminalFailure_finishesStream() async {
+    func testPassRotation_onTerminalFailure_throws() async {
         stubResponse(statusCode: 401, body: Data())
         let subject = createSubject()
         let initial = makePass(expiresAt: Date())
 
         var emitted: [VPNGuardian.ProxyPass] = []
-        for await pass in subject.passRotation(after: initial) {
-            emitted.append(pass)
+        do {
+            for try await pass in subject.passRotation(after: initial) {
+                emitted.append(pass)
+            }
+            XCTFail("Expected rotation to throw")
+        } catch VPNGuardian.GuardianError.http(let status) {
+            XCTAssertEqual(status, 401)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
         }
 
         XCTAssertTrue(emitted.isEmpty)
