@@ -13,6 +13,7 @@ public final class QuickAnswersViewController: UIViewController,
     private struct UX {
         static let titleFadeDuration: TimeInterval = 0.1
         static let presentationNavigationBarOffset: CGFloat = -20.0
+        static let backdropFadeDuration: TimeInterval = 0.2
     }
 
     // MARK: - Properties
@@ -35,11 +36,12 @@ public final class QuickAnswersViewController: UIViewController,
         $0.alpha = 0.0
     }
     private let contentView: QuickAnswersContentView = .build()
-    private let transitionAnimator: SourceRevealTransitionAnimator?
+    private let transitionDelegate: OptInTransitionAnimator
 
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
     public var themeListenerCancellable: Any?
+    private let windowUUID: WindowUUID
     private let notificationCenter: NotificationProtocol
     private weak var navigationHandler: QuickAnswersNavigationHandler?
     private let viewModel: QuickAnswersViewModel
@@ -94,24 +96,32 @@ public final class QuickAnswersViewController: UIViewController,
     ) {
         self.navigationHandler = navigationHandler
         self.currentWindowUUID = windowUUID
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.stringsConfiguration = stringsConfiguration
         // The custom transition animator is only used for the source reveal transition; the form sheet
         // relies on the system presentation.
+        var sourceRevealAnimator: SourceRevealTransitionAnimator?
         if case let .sourceReveal(sourceRect) = transitionType {
-            self.transitionAnimator = SourceRevealTransitionAnimator(
+            sourceRevealAnimator = SourceRevealTransitionAnimator(
                 sourceRect: sourceRect,
-                isOptInVisible: viewModel.isOptInRequired
+                isOptInVisible: { [weak viewModel] in
+                    viewModel?.isOptInRequired ?? false
+                }
             )
-        } else {
-            self.transitionAnimator = nil
         }
+        self.transitionDelegate = OptInTransitionAnimator(
+            isOptInSheetPending: { [weak viewModel] in
+                viewModel?.isOptInSheetRequired ?? false
+            },
+            fallback: sourceRevealAnimator
+        )
         self.viewModel = viewModel
         self.learnMoreURL = learnMoreURL
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = transitionType.modalPresentationStyle
-        transitioningDelegate = transitionAnimator
+        transitioningDelegate = transitionDelegate
     }
 
     required init?(coder: NSCoder) {
@@ -162,7 +172,7 @@ public final class QuickAnswersViewController: UIViewController,
         viewModel.onStateChange = { [weak self] state in
             switch state {
             case .showOptIn:
-                self?.contentView.showOptIn()
+                self?.showOptIn()
             case .recordingStarted:
                 self?.contentView.startAudioWaveformAnimation()
             case .speechResult(let result, let error):
@@ -201,7 +211,7 @@ public final class QuickAnswersViewController: UIViewController,
         contentView.configureOptIn(
             strings: stringsConfiguration.optIn,
             learnMoreURL: learnMoreURL,
-            theme: themeManager.getCurrentTheme(for: currentWindowUUID),
+            theme: themeManager.getCurrentTheme(for: windowUUID),
             onContinue: { [weak self] in
                 self?.contentView.hideOptIn()
                 self?.viewModel.completeOptIn()
@@ -223,6 +233,43 @@ public final class QuickAnswersViewController: UIViewController,
             from: contentView.privacyTipSourceView,
             iconColor: themeManager.getCurrentTheme(for: currentWindowUUID).colors.textSecondary
         )
+    }
+
+    // MARK: - Opt-in
+    private func showOptIn() {
+        guard viewModel.feature.isOptInRedesignEnabled else {
+            contentView.showOptIn()
+            return
+        }
+        let controller = OptInViewController(
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            strings: stringsConfiguration.optInRedesign,
+            closeAccessibilityLabel: stringsConfiguration.closeAccessibilityLabel,
+            onContinue: { [weak self] in
+                self?.presentedViewController?.dismiss(animated: true)
+                self?.viewModel.completeOptIn()
+            },
+            onLearnMore: { [weak self] in
+                self?.dismiss(with: self?.learnMoreURL)
+            },
+            onDismiss: { [weak self] in
+                self?.dismiss(with: nil)
+            }
+        )
+        present(controller, animated: true) { [weak self] in
+            self?.revealBackdrop()
+        }
+    }
+
+    /// Fades in this screen, which the presentation transition keeps hidden while the opt-in sheet slides up.
+    private func revealBackdrop() {
+        guard let backdropView = transitionDelegate.hiddenContainerView,
+              let superview = backdropView.superview else { return }
+        // Cross-dissolved rather than faded in, since the form sheet materials flash while an ancestor's alpha animates.
+        UIView.transition(with: superview, duration: UX.backdropFadeDuration, options: .transitionCrossDissolve) {
+            backdropView.isHidden = false
+        }
     }
 
     // MARK: - Presentation transition
@@ -269,7 +316,7 @@ public final class QuickAnswersViewController: UIViewController,
 
     // MARK: - Themeable
     public func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
         closeButton.tintColor = theme.colors.iconPrimary
         titleLabel.textColor = theme.colors.textPrimary
