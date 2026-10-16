@@ -97,6 +97,8 @@ struct MainMenuState: ScreenState, Sendable {
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
 
+    let isVPNOn: Bool
+
     private var menuConfigurator: MainMenuConfigurationUtility {
         MainMenuConfigurationUtility()
     }
@@ -122,7 +124,8 @@ struct MainMenuState: ScreenState, Sendable {
             moreCellTapped: mainMenuState.moreCellTapped,
             siteProtectionsData: mainMenuState.siteProtectionsData,
             navigationDestination: mainMenuState.navigationDestination,
-            currentTabInfo: mainMenuState.currentTabInfo
+            currentTabInfo: mainMenuState.currentTabInfo,
+            isVPNOn: mainMenuState.isVPNOn
         )
     }
 
@@ -138,7 +141,8 @@ struct MainMenuState: ScreenState, Sendable {
             moreCellTapped: false,
             siteProtectionsData: nil,
             navigationDestination: nil,
-            currentTabInfo: nil
+            currentTabInfo: nil,
+            isVPNOn: false
         )
     }
 
@@ -153,7 +157,8 @@ struct MainMenuState: ScreenState, Sendable {
         moreCellTapped: Bool,
         siteProtectionsData: SiteProtectionsData?,
         navigationDestination: MenuNavigationDestination?,
-        currentTabInfo: MainMenuTabInfo?
+        currentTabInfo: MainMenuTabInfo?,
+        isVPNOn: Bool
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
@@ -166,6 +171,7 @@ struct MainMenuState: ScreenState, Sendable {
         self.siteProtectionsData = siteProtectionsData
         self.navigationDestination = navigationDestination
         self.currentTabInfo = currentTabInfo
+        self.isVPNOn = isVPNOn
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -215,6 +221,12 @@ struct MainMenuState: ScreenState, Sendable {
             return handleTapZoomAction(state: state)
         case MainMenuActionType.tapToggleNightMode:
             return handleDismissMenuAction(state: state)
+        case MainMenuActionType.tapToggleVPN:
+            return handleVPNStateAction(state: state, isVPNOn: !state.isVPNOn)
+        case MainMenuMiddlewareActionType.updateVPNState:
+            guard let action = action as? MainMenuAction, let isVPNOn = action.isVPNOn
+            else { return defaultState(from: state) }
+            return handleVPNStateAction(state: state, isVPNOn: isVPNOn)
         case MainMenuActionType.tapAddToShortcuts, MainMenuActionType.tapRemoveFromShortcuts:
             return handleDismissMenuAction(state: state)
         default:
@@ -234,7 +246,8 @@ struct MainMenuState: ScreenState, Sendable {
             moreCellTapped: state.moreCellTapped,
             siteProtectionsData: state.siteProtectionsData,
             navigationDestination: nil,
-            currentTabInfo: state.currentTabInfo
+            currentTabInfo: state.currentTabInfo,
+            isVPNOn: state.isVPNOn
         )
     }
 
@@ -286,7 +299,8 @@ struct MainMenuState: ScreenState, Sendable {
             .copy(menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
                 and: state.windowUUID,
-                isExpanded: state.moreCellTapped
+                isExpanded: state.moreCellTapped,
+                isVPNOn: state.isVPNOn
             ))
             .copy(currentTabInfo: currentTabInfo)
     }
@@ -304,9 +318,32 @@ struct MainMenuState: ScreenState, Sendable {
                 with: currentTabInfo,
                 and: state.windowUUID,
                 isExpanded: state.moreCellTapped,
+                isVPNOn: state.isVPNOn,
                 profileImage: accountProfileImage
             ))
             .copy(accountProfileImage: accountProfileImage)
+    }
+
+    /// Rebuilds the menu so the VPN row reflects `isVPNOn`. On tap this is an optimistic flip; the
+    /// middleware follows up with the value the `VPNManager` actually settled on.
+    @MainActor
+    private static func handleVPNStateAction(state: MainMenuState, isVPNOn: Bool) -> MainMenuState {
+        guard let currentTabInfo = state.currentTabInfo else {
+            return state
+                .resetTransientState()
+                .copy(isVPNOn: isVPNOn)
+        }
+
+        return state
+            .resetTransientState()
+            .copy(menuElements: state.menuConfigurator.generateMenuElements(
+                with: currentTabInfo,
+                and: state.windowUUID,
+                isExpanded: state.moreCellTapped,
+                isVPNOn: isVPNOn,
+                profileImage: state.accountProfileImage
+            ))
+            .copy(isVPNOn: isVPNOn)
     }
 
     @MainActor
@@ -322,6 +359,7 @@ struct MainMenuState: ScreenState, Sendable {
                 with: currentTabInfo,
                 and: state.windowUUID,
                 isExpanded: !isExpanded,
+                isVPNOn: state.isVPNOn,
                 profileImage: state.accountProfileImage
             ))
             .copy(moreCellTapped: true)

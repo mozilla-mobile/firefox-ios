@@ -131,6 +131,7 @@ struct AccessibilityIdentifiers {
         static let signIn = "MainMenu.SignIn"
         static let summarizePage = "MainMenu.SummarizePage"
         static let translatePage = "MainMenu.TranslatePage"
+        static let vpn = "MainMenu.VPN"
         static let trackigProtection = "shieldCheckmarkLarge"
     }
 
@@ -533,6 +534,14 @@ struct AccessibilityIdentifiers {
 
         struct AIControls {
             static let title = "AIControlsSettings"
+        }
+
+        struct VPN {
+            static let title = "VPNSettings"
+            static let toggle = "VPNSettings.Toggle"
+            static let locationRow = "VPNSettings.LocationRow"
+            static let locationSelection = "VPNSettings.LocationSelection"
+            static let recommendedLocationRow = "VPNSettings.LocationSelection.Recommended"
         }
 
         struct Appearance {

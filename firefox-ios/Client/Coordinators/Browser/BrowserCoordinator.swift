@@ -49,6 +49,7 @@ final class BrowserCoordinator: BaseCoordinator,
     var homepageViewController: HomepageViewController?
     private weak var nativeErrorPageViewController: NativeErrorPageViewController?
     private weak var privateHomepageViewController: PrivateHomepageViewController?
+    private weak var vpnFailureAlert: UIAlertController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -1342,6 +1343,41 @@ final class BrowserCoordinator: BaseCoordinator,
         store.dispatch(GeneralBrowserAction(showOverlay: false,
                                             windowUUID: self.windowUUID,
                                             actionType: GeneralBrowserActionType.leaveOverlay))
+    }
+
+    func showVPNFailureAlert() {
+        guard vpnFailureAlert == nil else { return }
+        let alert = UIAlertController(
+            title: .Alerts.VPNFailure.Title,
+            message: .Alerts.VPNFailure.Message,
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(
+            title: .Alerts.VPNFailure.ContinueWithoutVPNButton,
+            style: .destructive
+        ) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: .continueWithoutVPN))
+        })
+
+        alert.addAction(UIAlertAction(title: .Alerts.VPNFailure.CloseAllTabsButton, style: .default) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: .closeAllTabs))
+        })
+
+        alert.addAction(UIAlertAction(title: .Alerts.VPNFailure.CloseThisTabButton, style: .default) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: .closeThisTab))
+        })
+
+        vpnFailureAlert = alert
+        browserViewController.topmostPresentedViewController.present(alert, animated: true)
+    }
+
+    func dismissVPNFailureAlert() {
+        vpnFailureAlert?.dismiss(animated: true)
+        vpnFailureAlert = nil
     }
 
     func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source, searchTimerId: GleanTimerId? = nil) {
