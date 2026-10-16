@@ -19,37 +19,48 @@ final class QuickAnswersViewModel {
     private let service: QuickAnswersService?
     private let telemetry: QuickAnswersTelemetry
     private let store: Store
-    private let model: QuickAnswersModel
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
+    let feature: QuickAnswersFeature
     var onStateChange: ((State) -> Void)?
 
     /// The user-facing name of the model backing the request.
     var modelDisplayName: String {
-        return model.displayName
+        return feature.model.displayName
+    }
+    private var model: QuickAnswersModel {
+        return feature.model
     }
 
     var isOptInRequired: Bool {
         return !store.isOptInCompleted
     }
 
+    /// Whether the opt-in is required and shown as a sheet over the browser rather than inline.
+    var isOptInSheetRequired: Bool {
+        return isOptInRequired && feature.isOptInRedesignEnabled
+    }
+
     init(
         prefs: Prefs,
         telemetry: QuickAnswersTelemetry,
-        configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa),
+        configFetcher: QuickAnswersConfigFetcher?,
         makeService: (Prefs, QuickAnswersConfigFetcher) throws -> QuickAnswersService = { prefs, configFetcher in
             try DefaultQuickAnswersService(configFetcher: configFetcher, prefs: prefs)
         }
     ) {
+        let configFetcher = configFetcher ?? DefaultQuickAnswersConfigFetcher(
+            feature: QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false)
+        )
         self.telemetry = telemetry
         self.store = Store(prefs: prefs)
-        self.model = configFetcher.model
+        self.feature = configFetcher.feature
         do {
             self.service = try makeService(prefs, configFetcher)
         } catch {
             self.service = nil
         }
-        telemetry.quickAnswersRequested(model: self.model)
+        telemetry.quickAnswersRequested(model: model)
     }
 
     /// Entry point for the flow: shows the opt-in screen until the user has consented,
