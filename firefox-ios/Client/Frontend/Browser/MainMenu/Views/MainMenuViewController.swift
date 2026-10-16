@@ -237,17 +237,19 @@ class MainMenuViewController: UIViewController,
 
     private func updateCloseButtonPlacement() {
         guard let navigationController else { return }
-        var usesVerticalBar = false
-        #if XCODE_2710 || XCODE_2720
-        if #available(iOS 27.1, *) {
-            switch traitCollection.verticalBarEdge {
-            case .leading, .trailing:
-                usesVerticalBar = true
-            default:
-                break
+        let usesVerticalBar: Bool = {
+            #if XCODE_2710 || XCODE_2720
+            if #available(iOS 27.1, *) {
+                switch traitCollection.verticalBarEdge {
+                case .leading, .trailing:
+                    return true
+                default:
+                    break
+                }
             }
-        }
-        #endif
+            #endif
+            return false
+        }()
         let closeItem = usesVerticalBar ? navigationCloseItem : nil
         if navigationItem.leftBarButtonItem !== closeItem {
             navigationItem.leftBarButtonItem = closeItem
