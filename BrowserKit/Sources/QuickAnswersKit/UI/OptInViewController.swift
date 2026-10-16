@@ -335,7 +335,7 @@ private extension View {
             self
         }
     }
-    
+
     @ViewBuilder
     func scrollEdgeSoftBehavior() -> some View {
         if #available(iOS 26.0, *) {

@@ -18,6 +18,11 @@ final class OptInViewControllerTests: XCTestCase {
         dismissCallCount = 0
     }
 
+    override func tearDown() {
+        dismissCallCount = 0
+        super.tearDown()
+    }
+
     // MARK: - init
     func test_init_isPresentedAsNonDismissableSheet() {
         let subject = createSubject()

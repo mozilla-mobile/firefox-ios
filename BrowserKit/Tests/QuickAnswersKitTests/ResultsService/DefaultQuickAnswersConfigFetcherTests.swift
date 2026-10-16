@@ -9,7 +9,9 @@ import Testing
 struct DefaultQuickAnswersConfigFetcherTests {
     @Test
     func test_fetch_withExaModel_syncsModelOptionAndInjectsInstructions() async throws {
-        let fetcher = DefaultQuickAnswersConfigFetcher(feature: QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false))
+        let fetcher = DefaultQuickAnswersConfigFetcher(
+            feature: QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false)
+        )
 
         let config = try await fetcher.fetch()
 
@@ -19,7 +21,9 @@ struct DefaultQuickAnswersConfigFetcherTests {
 
     @Test
     func test_fetch_withLinerModel_syncsModelOptionAndOmitsInstructions() async throws {
-        let fetcher = DefaultQuickAnswersConfigFetcher(feature: QuickAnswersFeature(model: .liner, isOptInRedesignEnabled: false))
+        let fetcher = DefaultQuickAnswersConfigFetcher(
+            feature: QuickAnswersFeature(model: .liner, isOptInRedesignEnabled: false)
+        )
 
         let config = try await fetcher.fetch()
 
