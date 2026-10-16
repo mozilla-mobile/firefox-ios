@@ -20,6 +20,11 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
     let isCustomEngine: Bool
     let searchTemplate: String
 
+    /// Partner details per SAP from search-config-v3.
+    /// For v2 search config and custom engines partners is `nil`. When set, `searchTemplate` keeps the
+    /// `{partnerCode}` placeholder so it can be resolved for the access point for each search.
+    let partners: [String: SearchEnginePartner]?
+
     /// The telemetry ID to send for `search.default_engine` and `search.counts`
     /// Prior to Search Consolidation, we sent the engineID from our engine XML
     /// documents. Post-consolidation we send the engineID + suffix (if available)
@@ -35,6 +40,7 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
     private let suggestTemplate: String?
     private let trendingTemplate: String?
     private let searchTermComponent = "{searchTerms}"
+    static let partnerCodeComponent = "{partnerCode}"
     private let searchQueryComponentKey: String?
     static let googleEngineID = "google"
 
@@ -59,6 +65,7 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
         case image
         case engineID
         case telemetrySuffix
+        case partners
     }
 
     override var debugDescription: String {
@@ -74,7 +81,8 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
          searchTemplate: String,
          suggestTemplate: String?,
          trendingTemplate: String? = nil,
-         isCustomEngine: Bool) {
+         isCustomEngine: Bool,
+         partners: [String: SearchEnginePartner]? = nil) {
         self.shortName = shortName
         self.image = image
         self.searchTemplate = searchTemplate
@@ -83,6 +91,7 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
         self.telemetrySuffix = telemetrySuffix
         self.isCustomEngine = isCustomEngine
         self.engineID = engineID
+        self.partners = partners
         self.searchQueryComponentKey = OpenSearchEngine.getQueryArgFromTemplate(
             searchTemplate: searchTemplate,
             searchTermComponent: searchTermComponent
@@ -116,6 +125,12 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
             return customID
         }()
         self.telemetrySuffix = aDecoder.decodeObject(forKey: CodingKeys.telemetrySuffix.rawValue) as? String
+        // Engines archived prior to v3 have no partners (`nil`)
+        if let partnersData = aDecoder.decodeObject(of: NSData.self, forKey: CodingKeys.partners.rawValue) as Data? {
+            self.partners = try? JSONDecoder().decode([String: SearchEnginePartner].self, from: partnersData)
+        } else {
+            self.partners = nil
+        }
         self.suggestTemplate = nil
         self.trendingTemplate = nil
 
@@ -131,6 +146,9 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
         aCoder.encode(isCustomEngine, forKey: CodingKeys.isCustomEngine.rawValue)
         aCoder.encode(engineID, forKey: CodingKeys.engineID.rawValue)
         aCoder.encode(telemetrySuffix, forKey: CodingKeys.telemetrySuffix.rawValue)
+        if let partners, let partnersData = try? JSONEncoder().encode(partners) {
+            aCoder.encode(partnersData as NSData, forKey: CodingKeys.partners.rawValue)
+        }
 
         // Images loaded from the BrowserKit bundle will not directly contain image data to encode. Here we force the UIImage
         // to contain PNG data prior to encoding (especially for when writing to a file). [FXIOS-10216]
@@ -186,7 +204,9 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
         // a valid URL, otherwise we cannot do the conversion to NSURLComponents
         // and have to do flaky pattern matching instead.
         let placeholder = "PLACEHOLDER"
-        let template = searchTemplate.replacingOccurrences(of: searchTermComponent, with: placeholder)
+        let template = searchTemplate
+            .replacingOccurrences(of: searchTermComponent, with: placeholder)
+            .replacingOccurrences(of: partnerCodeComponent, with: "PARTNERCODE")
         var components = URLComponents(string: template)
 
         if let retVal = extractQueryArg(in: components?.queryItems, for: placeholder) {

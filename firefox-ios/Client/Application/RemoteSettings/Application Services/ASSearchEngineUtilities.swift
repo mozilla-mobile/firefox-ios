@@ -7,6 +7,16 @@ import MozillaAppServices
 /// General purpose utilities for translating between Remote Settings models and our
 /// existing OpenSearch model objects.
 struct ASSearchEngineUtilities {
+    /// How `{partnerCode}` param is handled when converting a URL template.
+    enum PartnerCodeInsertion {
+        /// Insert the value as-is (v2 behavior, no change).
+        case value(String)
+        /// Insert the value or omit param entirely when `nil`.
+        case valueOrOmit(String?)
+        /// Keep `{partnerCode}` placeholder so it can be resolved later for a search access point.
+        case keepPlaceholder
+    }
+
     static func convertASToOpenSearch(_ engine: SearchEngineDefinition, image: UIImage) -> OpenSearchEngine {
         let engineID = engine.identifier
         let name = engine.name
@@ -25,9 +35,48 @@ struct ASSearchEngineUtilities {
         return converted
     }
 
+    /// Converts a v3 search config engine. The search template keeps the `{partnerCode}` placeholder, which is
+    /// resolved per SAP when a search is performed. Suggestion & trending are not tied to an access point, so they use
+    /// the `default` access point's partner code.
+    static func convertASToOpenSearch(_ engine: SearchEngineDefinitionV3, image: UIImage) -> OpenSearchEngine {
+        let partners = convertPartners(engine.partner)
+        let defaultPartnerCode = SearchPartnerResolver.resolve(engineIdentifier: engine.identifier,
+                                                               partners: partners,
+                                                               accessPoint: .default).partnerCode
+        let searchTemplate = convertASSearchURLToOpenSearchURL(engine.urls.search,
+                                                               partnerCode: .keepPlaceholder) ?? ""
+        let suggestTemplate = convertASSearchURLToOpenSearchURL(engine.urls.suggestions,
+                                                                partnerCode: .valueOrOmit(defaultPartnerCode)) ?? ""
+        let trendingTemplate = convertASSearchURLToOpenSearchURL(engine.urls.trending,
+                                                                 partnerCode: .valueOrOmit(defaultPartnerCode)) ?? ""
+        return OpenSearchEngine(engineID: engine.identifier,
+                                shortName: engine.name,
+                                telemetrySuffix: partners?[SearchAccessPoint.default.rawValue]?.telemetrySuffix,
+                                image: image,
+                                searchTemplate: searchTemplate,
+                                suggestTemplate: suggestTemplate,
+                                trendingTemplate: trendingTemplate,
+                                isCustomEngine: false,
+                                partners: partners)
+    }
+
+    static func convertPartners(_ partners: [String: SearchEnginePartnerDetails]?) -> [String: SearchEnginePartner]? {
+        return partners?.mapValues { SearchEnginePartner(code: $0.code, telemetrySuffix: $0.telemetrySuffix) }
+    }
+
     static func convertASSearchURLToOpenSearchURL(
         _ searchURL: SearchEngineUrl?,
         for engine: SearchEngineDefinition,
+        with localeProvider: LocaleProvider = SystemLocaleProvider()
+    ) -> String? {
+        return convertASSearchURLToOpenSearchURL(searchURL,
+                                                 partnerCode: .value(engine.partnerCode),
+                                                 with: localeProvider)
+    }
+
+    static func convertASSearchURLToOpenSearchURL(
+        _ searchURL: SearchEngineUrl?,
+        partnerCode: PartnerCodeInsertion,
         with localeProvider: LocaleProvider = SystemLocaleProvider()
     ) -> String? {
         guard let searchURL else { return nil }
@@ -43,8 +92,16 @@ struct ASSearchEngineUtilities {
             if $0.experimentConfig != nil { return nil }
 
             let value: String
-            if $0.value == "{partnerCode}" {
-                value = engine.partnerCode
+            if $0.value == OpenSearchEngine.partnerCodeComponent {
+                switch partnerCode {
+                case .value(let code):
+                    value = code
+                case .valueOrOmit(let code):
+                    guard let code, !code.isEmpty else { return nil }
+                    value = code
+                case .keepPlaceholder:
+                    value = OpenSearchEngine.partnerCodeComponent
+                }
             } else if $0.value == "{acceptLanguages}" {
                 value = localeCode(from: localeProvider)
             } else {
