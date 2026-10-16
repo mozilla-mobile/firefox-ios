@@ -54,6 +54,7 @@ enum FeatureFlagID: String, CaseIterable {
     case relayIntegration
     case reportBrokenSite
     case searchConfigV3
+    case searchTermInAddressBar
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case shouldUseBrandRefreshConfiguration
@@ -139,6 +140,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .recentSearches,
                 .relayIntegration,
                 .reportBrokenSite,
+                .searchTermInAddressBar,
                 .sentFromFirefox,
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,
