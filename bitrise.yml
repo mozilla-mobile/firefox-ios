@@ -2171,16 +2171,19 @@ workflows:
             pipenv install --python 3.12
 
             # Run the tests
-            eval pipenv run pytest --junitxml=results/junit.xml $SYNC_PYTEST_ARGS
+            PYTEST_EXIT=0
+            eval pipenv run pytest --junitxml=results/junit.xml $SYNC_PYTEST_ARGS || PYTEST_EXIT=$?
 
             # Collect failed tests from the JUnit XML results
-            FAILED=$(python3 test-fixtures/ci/list_failed_junit_tests.py firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests/results/junit.xml)
+            FAILED=$(python3 "$BITRISE_SOURCE_DIR/test-fixtures/ci/list_failed_junit_tests.py" results/junit.xml)
             envman add --key SYNC_FAILED_TESTS --value "$FAILED"
 
             # Prepare for upload
             RESULTS_DIR="$BITRISE_SOURCE_DIR/$SYNC_RESULTS_NAME-$(date +%Y-%m-%d)"
-            cp -R firefox-ios/firefox-ios-tests/Tests/SyncIntegrationTests/results "$RESULTS_DIR"
+            cp -R results "$RESULTS_DIR"
             envman add --key SYNC_INTEGRATION_RESULTS_DIR --value "$RESULTS_DIR"
+
+            exit $PYTEST_EXIT
     - deploy-to-bitrise-io@2:
         is_always_run: true
         inputs:
