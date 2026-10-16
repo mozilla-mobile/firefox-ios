@@ -216,6 +216,39 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertFalse(subject.isOptInRequired)
     }
 
+    func testIsOptInSheetRequired_withRedesignAndOptInNotCompleted_isTrue() {
+        let subject = createSubject(isOptInRedesignEnabled: true)
+
+        XCTAssertTrue(subject.isOptInSheetRequired)
+    }
+
+    func testIsOptInSheetRequired_withRedesignAndOptInCompleted_isFalse() {
+        let subject = createSubject(prefs: optInCompletedPrefs(), isOptInRedesignEnabled: true)
+
+        XCTAssertFalse(subject.isOptInSheetRequired)
+    }
+
+    func testIsOptInSheetRequired_withoutRedesign_isFalse() {
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.isOptInSheetRequired)
+    }
+
+    func testIsOptInSheetRequired_withRedesignAfterCompleteOptIn_isFalse() {
+        mockService.speechResults = [SpeechResult(text: "Hello", isFinal: true)]
+        mockService.searchResult = .success(SearchResult(resultText: "Test", sources: []))
+        let subject = createSubject(isOptInRedesignEnabled: true)
+        let expectation = XCTestExpectation()
+
+        subject.onStateChange = { state in
+            if case .showSearchResult = state { expectation.fulfill() }
+        }
+        subject.completeOptIn()
+
+        wait(for: [expectation])
+        XCTAssertFalse(subject.isOptInSheetRequired)
+    }
+
     func testCompleteOptIn_persistsConsentAndStartsRecording() {
         let prefs = MockProfilePrefs()
         let finalResult = SpeechResult(text: "Hello", isFinal: true)
@@ -272,19 +305,19 @@ final class QuickAnswersViewModelTests: XCTestCase {
     // MARK: - Model Display Name Tests
 
     func testModelDisplayName_withExaModel_returnsExa() {
-        let subject = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .exa))
+        let subject = createSubject(model: .exa)
 
         XCTAssertEqual(subject.modelDisplayName, QuickAnswersModel.exa.displayName)
     }
 
     func testModelDisplayName_withLinerModel_returnsLiner() {
-        let subject = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .liner))
+        let subject = createSubject(model: .liner)
 
         XCTAssertEqual(subject.modelDisplayName, QuickAnswersModel.liner.displayName)
     }
 
     func testInit_withLinerModel_recordsRequestedWithModel() {
-        _ = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .liner))
+        _ = createSubject(model: .liner)
 
         XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastRequestedModel, .liner)
@@ -293,18 +326,21 @@ final class QuickAnswersViewModelTests: XCTestCase {
     // MARK: - Helper
     private func createSubject(
         prefs: Prefs = MockProfilePrefs(),
-        configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa)
+        model: QuickAnswersModel = .exa,
+        isOptInRedesignEnabled: Bool = false
     ) -> QuickAnswersViewModel {
-        let model = QuickAnswersViewModel(
+        let subject = QuickAnswersViewModel(
             prefs: prefs,
             telemetry: mockTelemetry,
-            configFetcher: configFetcher,
+            configFetcher: DefaultQuickAnswersConfigFetcher(
+                feature: QuickAnswersFeature(model: model, isOptInRedesignEnabled: isOptInRedesignEnabled)
+            ),
             makeService: { _, _ in
                 return self.mockService
             }
         )
-        trackForMemoryLeaks(model)
-        return model
+        trackForMemoryLeaks(subject)
+        return subject
     }
 
     private func createSubjectWithFailingService(prefs: Prefs = MockProfilePrefs()) -> QuickAnswersViewModel {
@@ -312,6 +348,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         let model = QuickAnswersViewModel(
             prefs: prefs,
             telemetry: mockTelemetry,
+            configFetcher: nil,
             makeService: { _, _ in throw ServiceInitError() }
         )
         trackForMemoryLeaks(model)
