@@ -16,22 +16,30 @@ final class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol,
                                                    @unchecked Sendable {
     static let taskIdentifier = "org.mozilla.ios.firefox.suggest.ingest"
 
-    let firefoxSuggest: RustFirefoxSuggestProtocol
+    let firefoxSuggest: RustFirefoxSuggestProtocol?
     let logger: Logger
     private var didRegisterTaskHandler = false
 
-    init(firefoxSuggest: RustFirefoxSuggestProtocol, logger: Logger = DefaultLogger.shared) {
+    init(firefoxSuggest: RustFirefoxSuggestProtocol?, logger: Logger = DefaultLogger.shared) {
         self.firefoxSuggest = firefoxSuggest
         self.logger = logger
 
         setUp()
     }
 
-    /// Schedules the ingestion task to run when the app is backgrounded.
+    private var isIngestEnabled: Bool {
+        firefoxSuggest != nil
+            && featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
+            && userPreferences.getPreferenceFor(.firefoxSuggestFeature)
+    }
+
+    /// Schedules the ingestion task to run when the app is backgrounded, or
+    /// cancels any pending request when the feature is disabled.
     func scheduleTaskOnAppBackground() {
-        guard featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
-                && userPreferences.getPreferenceFor(.firefoxSuggestFeature)
-        else { return }
+        guard isIngestEnabled else {
+            cancelPendingTaskRequest()
+            return
+        }
 
         logger.log("Scheduling background ingestion",
                    level: .debug,
@@ -54,9 +62,13 @@ final class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol,
         try BGTaskScheduler.shared.submit(request)
     }
 
+    private func cancelPendingTaskRequest() {
+        BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: Self.taskIdentifier)
+    }
+
     /// Downloads and stores new Firefox Suggest suggestions. Returns `true` on
     /// success or `false` on failure.
-    private func ingest() async -> Bool {
+    private func ingest(using firefoxSuggest: RustFirefoxSuggestProtocol) async -> Bool {
         logger.log("Ingesting new suggestions",
                    level: .debug,
                    category: .storage)
@@ -76,18 +88,24 @@ final class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol,
 
     /// Registers a launch handler for the background ingestion task.
     private func setUp() {
-        guard featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
-                && userPreferences.getPreferenceFor(.firefoxSuggestFeature)
-        else { return }
         BGTaskScheduler.shared.register(forTaskWithIdentifier: Self.taskIdentifier, using: nil) { task in
+            guard self.isIngestEnabled, let firefoxSuggest = self.firefoxSuggest else {
+                self.logger.log("Firefox Suggest is disabled, completing background ingestion without work.",
+                                level: .debug,
+                                category: .storage)
+                self.cancelPendingTaskRequest()
+                task.setTaskCompleted(success: true)
+                return
+            }
+
             task.expirationHandler = {
                 // Interrupt all ongoing storage operations if our
                 // background time is about to expire.
-                self.firefoxSuggest.interruptEverything()
+                firefoxSuggest.interruptEverything()
                 task.setTaskCompleted(success: false)
             }
             Task {
-                let success = await self.ingest()
+                let success = await self.ingest(using: firefoxSuggest)
                 if !success {
                     // If ingestion failed, schedule a follow-up task to retry.
                     self.logger.log("Scheduling retry ingestion",
