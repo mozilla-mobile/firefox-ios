@@ -35,7 +35,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
         XCTAssertEqual(mockUpdater.receivedConversionValues.count, 1)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.fine, 5)
-        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .low)
+        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .medium)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.lockWindow, false)
     }
 
@@ -57,7 +57,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
         XCTAssertEqual(mockUpdater.receivedConversionValues.count, 1)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.fine, 15)
-        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .medium)
+        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .high)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.lockWindow, false)
     }
 
@@ -68,7 +68,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
         XCTAssertEqual(mockUpdater.receivedConversionValues.count, 1)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.fine, 25)
-        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .medium)
+        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .high)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.lockWindow, false)
     }
 
@@ -90,7 +90,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
         XCTAssertEqual(mockUpdater.receivedConversionValues.count, 1)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.fine, 22)
-        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .medium)
+        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .low)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.lockWindow, false)
     }
 
@@ -101,7 +101,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
         XCTAssertEqual(mockUpdater.receivedConversionValues.count, 1)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.fine, 20)
-        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .medium)
+        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .low)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.lockWindow, false)
     }
 
@@ -112,7 +112,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
         XCTAssertEqual(mockUpdater.receivedConversionValues.count, 1)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.fine, 30)
-        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .medium)
+        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .low)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.lockWindow, false)
     }
 
@@ -123,7 +123,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
         XCTAssertEqual(mockUpdater.receivedConversionValues.count, 1)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.fine, 45)
-        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .high)
+        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .low)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.lockWindow, false)
     }
 
@@ -134,7 +134,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
         XCTAssertEqual(mockUpdater.receivedConversionValues.count, 1)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.fine, 55)
-        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .high)
+        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .low)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.lockWindow, false)
     }
 
@@ -172,7 +172,7 @@ final class ConversionEventTrackerTests: XCTestCase {
 
         XCTAssertEqual(mockUpdater.receivedConversionValues.count, 1)
         XCTAssertEqual(mockUpdater.receivedConversionValues.first?.fine, 25)
-        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .medium)
+        XCTAssertEqual(mockUpdater.receivedConversionValues.first?.coarse, .high)
     }
 
     func testRecordActivityEvents_isNoOpWhenInstallTimestampMissing() {
