@@ -20,7 +20,6 @@ let secondWebsiteUnselected = (
     tabName: "The Book of Mozilla"
 )
 let homeTabName = "Homepage"
-let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 let tabTrayCollectionView = AccessibilityIdentifiers.TabTray.collectionView
 
 class DragAndDropTests: BaseTestCase {
@@ -290,24 +289,20 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3275914
     // This test drags the address bar and since it is not possible to drop it on another app,
-    // lets do it in a search box
+    // lets do it in a text field of a local page
     // Regression
     func testDragAddressBarIntoSearchBox() {
         if skipPlatform { return }
 
-        navigator.openURL("developer.mozilla.org/en-US")
+        let browserScreen = BrowserScreen(app: app)
+        let webFormScreen = WebFormScreen(app: app)
+        navigator.openURL(urlLogin)
         waitUntilPageLoad()
-        let searchField = app.webViews["Web content"].textFields.firstMatch
-        app.webViews["Web content"].buttons["Search"].waitAndTap()
+        webFormScreen.waitForLoginForm()
 
-        // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
-        let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
-        mozWaitForElementToExist(searchField)
-        let centerSearchField = searchField.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        let addressBarLocation = app.textFields[searchTextField].coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
-        addressBarLocation.press(forDuration: 1, thenDragTo: centerSearchField)
+        browserScreen.dragAddressBar(onto: webFormScreen.getUsernameField())
 
-        // Verify that the text in the search field is the same as the text in the url text field
-        XCTAssertEqual(searchField.value as? String, websiteWithSearchField, "The url has not been dropped correctly")
+        // The dropped text is the page URL, not the shortened host the address bar displays
+        webFormScreen.assertUsernameFieldValue(urlLogin)
     }
 }
