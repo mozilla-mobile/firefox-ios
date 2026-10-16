@@ -27,8 +27,7 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         static let accessoryImageViewSize: CGFloat = 24
         static let accessoryButtonStackViewSpacing: CGFloat = 2
         static let cornerRadius: CGFloat = 4
-        // Horizontal padding around the content used to cap the pill's fill width
-        static let contentHorizontalPadding: CGFloat = 64
+        static let contentHorizontalInset: CGFloat = 16
     }
 
     // MARK: - Properties
@@ -37,22 +36,11 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
     private let useAccessoryTextLabel: UILabel
     private let tappedAccessoryButtonAction: (@MainActor () -> Void)?
 
-    private lazy var fillWidthConstraint: NSLayoutConstraint = {
-        let constraint = containerView.widthAnchor.constraint(equalToConstant: 0)
-        constraint.priority = .defaultHigh
-        return constraint
-    }()
-
     private lazy var contentStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [accessoryImageView, useAccessoryTextLabel])
         stackView.spacing = UX.accessoryButtonStackViewSpacing
         return stackView
     }()
-
-    /// Natural width of the icon + label, independent of the pill's fill width.
-    private var contentWidth: CGFloat {
-        contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).width
-    }
 
     /// Tint color for the accessory image view.
     var accessoryImageViewTintColor: UIColor? {
@@ -98,7 +86,7 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
             label.adjustsFontSizeToFitWidth = true
             label.minimumScaleFactor = 0.65
             label.text = labelText
-            label.numberOfLines = 0
+            label.numberOfLines = 1
             label.accessibilityTraits = .button
         }
 
@@ -122,23 +110,15 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         containerView.addSubview(contentStackView)
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
 
-        let leadingConstraint: NSLayoutConstraint
-        let trailingConstraint: NSLayoutConstraint
         if #available(iOS 26.0, *) {
             sharesBackground = false
-            // Content is centered and clamped inside a container whose width is set externally in `applyFillWidth`
-            contentStackView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-            leadingConstraint = contentStackView.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor)
-            trailingConstraint = contentStackView.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor)
-        } else {
-            // Pre-iOS 26: content fills the container (centered by the toolbar's flexible spaces).
-            leadingConstraint = contentStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
-            trailingConstraint = contentStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         }
 
         NSLayoutConstraint.activate([
-            leadingConstraint,
-            trailingConstraint,
+            contentStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                                      constant: UX.contentHorizontalInset),
+            contentStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                       constant: -UX.contentHorizontalInset),
             contentStackView.topAnchor.constraint(equalTo: containerView.topAnchor),
             contentStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
@@ -148,21 +128,6 @@ final class AutofillAccessoryViewButtonItem: UIBarButtonItem {
 
         // Set the custom view as the container view
         self.customView = containerView
-    }
-
-    /// Sizes the pill to the toolbar space reported by `AccessoryViewProvider`, capped so it stays a comfortable
-    /// width around its content. Passing `nil` (pre-26) sizes the pill to content via the setup constraints.
-    func applyFillWidth(_ availableWidth: CGFloat?) {
-        guard let availableWidth, availableWidth > 0 else {
-            fillWidthConstraint.isActive = false
-            return
-        }
-
-        let width = min(availableWidth, contentWidth + UX.contentHorizontalPadding * 2)
-        if fillWidthConstraint.constant != width {
-            fillWidthConstraint.constant = width
-        }
-        fillWidthConstraint.isActive = true
     }
 
     private func configureAccessibility() {
