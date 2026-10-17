@@ -7,8 +7,11 @@ import Common
 import Shared
 
 final class TopSitesSettingsViewController: SettingsTableViewController, UserFeaturePreferenceProvider {
+    private let logger: Logger
+
     // MARK: - Initializers
-    init(windowUUID: WindowUUID) {
+    init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
         super.init(style: .grouped, windowUUID: windowUUID)
 
         self.title = .Settings.Homepage.Shortcuts.ShortcutsPageTitle
@@ -85,7 +88,11 @@ final class TopSitesSettingsViewController: SettingsTableViewController, UserFea
     private func deleteUserRequest(contextId: String) {
         Task {
             let remover = UnifiedAdsUserDataRemover()
-            try await remover.deleteUserData(contextID: contextId)
+            do {
+                try await remover.deleteUserData(contextID: contextId)
+            } catch {
+                logger.log("Failed to delete unified ads user data: \(error)", level: .warning, category: .homepage)
+            }
         }
     }
 }
