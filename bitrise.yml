@@ -2420,12 +2420,12 @@ workflows:
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
         - test_plan: Smoketest
         - xcodebuild_options: ONLY_ACTIVE_ARCH=YES COMPILER_INDEX_STORE_ENABLE=NO
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - xcode-test-without-building@0:
         title: "Run all smoke tests"
         timeout: 3000
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
         - xctestrun: "$BITRISE_XCTESTRUN_FILE_PATH"
         - xcodebuild_options: -collect-test-diagnostics never
     - script@1:
