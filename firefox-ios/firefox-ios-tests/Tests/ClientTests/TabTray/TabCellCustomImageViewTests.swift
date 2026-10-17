@@ -29,6 +29,14 @@ final class TabCellCustomImageTests: XCTestCase {
         XCTAssertEqual(subject.layer.contentsRect.origin.y, 0, "Image should be alligned from top")
     }
 
+    @MainActor
+    func testInit_appliesAspectFillAndClippingBeforeLayout() {
+        let subject = createSubject()
+
+        XCTAssertEqual(subject.contentMode, .scaleAspectFill)
+        XCTAssertTrue(subject.clipsToBounds)
+    }
+
     // MARK: - Helper
     private func createTestImage(size: CGSize) -> UIImage {
         UIGraphicsBeginImageContext(size)

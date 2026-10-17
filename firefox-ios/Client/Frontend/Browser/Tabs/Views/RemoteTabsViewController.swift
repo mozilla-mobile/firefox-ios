@@ -111,6 +111,10 @@ class RemoteTabsViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         (navigationController as? ThemedNavigationController)?.applyTheme()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         updateInsets()
     }
 
@@ -122,8 +126,8 @@ class RemoteTabsViewController: UIViewController,
     }
 
     override func viewSafeAreaInsetsDidChange() {
-        super.view.safeAreaInsetsDidChange()
-        updateInsets()
+        super.viewSafeAreaInsetsDidChange()
+        view.setNeedsLayout()
     }
 
     // MARK: - UI

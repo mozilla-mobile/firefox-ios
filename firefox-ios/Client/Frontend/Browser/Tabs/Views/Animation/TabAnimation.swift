@@ -497,9 +497,10 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         context.containerView.addSubview(toView)
 
-        let isIpad = browserVC.traitCollection.userInterfaceIdiom == .pad &&
-                     browserVC.traitCollection.horizontalSizeClass == .regular
-        let shouldCropUsingContentContainerFrame = UIWindow.isPortrait && !isIpad
+        let usesRegularLayout = browserVC.traitCollection.horizontalSizeClass == .regular &&
+            browserVC.traitCollection.verticalSizeClass == .regular
+        let isPortrait = browserVC.view.bounds.height >= browserVC.view.bounds.width
+        let shouldCropUsingContentContainerFrame = isPortrait && !usesRegularLayout
 
         // Trigger animation async to be non blocking and allow UI to render
         DispatchQueue.main.async {

@@ -131,7 +131,6 @@ final class TabDisplayPanelViewController: UIViewController,
                                               actionType: TabPanelViewActionType.tabPanelWillAppear))
             viewHasAppeared = true
         }
-        updateInsets()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -142,13 +141,14 @@ final class TabDisplayPanelViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        updateInsets()
         gradientLayer.frame = fadeView.bounds
         adjustStatusBarFrameIfNeeded()
     }
 
     override func viewSafeAreaInsetsDidChange() {
-        super.view.safeAreaInsetsDidChange()
-        updateInsets()
+        super.viewSafeAreaInsetsDidChange()
+        view.setNeedsLayout()
     }
 
     // MARK: - Setup
@@ -278,13 +278,15 @@ final class TabDisplayPanelViewController: UIViewController,
     private func adjustStatusBarFrameIfNeeded() {
         guard isTabTrayUIExperimentsEnabled, UIAccessibility.isReduceTransparencyEnabled else { return }
 
-        let isLandscape = UIDevice.current.orientation.isLandscape
-        statusBarView.isHidden = isLandscape
-        guard !isLandscape else { return }
+        // Compact height means landscape on iPhone, where the system hides the status bar.
+        // iPad and unfolded foldables keep a regular height and the status bar in landscape.
+        let isStatusBarHiddenBySystem = traitCollection.verticalSizeClass == .compact
+        statusBarView.isHidden = isStatusBarHiddenBySystem
+        guard !isStatusBarHiddenBySystem else { return }
 
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+        if let windowScene = view.window?.windowScene,
            let statusBarHeight = windowScene.statusBarManager?.statusBarFrame.height {
-            statusBarView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: statusBarHeight)
+            statusBarView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: statusBarHeight)
         }
     }
 
