@@ -603,6 +603,8 @@ public protocol MozAdsClientProtocol: AnyObject, Sendable {
     
     func requestSpocAds(mozAdRequests: [MozAdsPlacementRequestWithCount], options: MozAdsRequestOptions?) throws  -> [String: [MozAdsSpoc]]
     
+    func requestSpocOrImageAds(mozAdRequests: [MozAdsPlacementRequestWithCount], options: MozAdsRequestOptions?) throws  -> [String: [MozAdsImageOrSpoc]]
+    
     func requestTileAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAdsRequestOptions?) throws  -> [String: MozAdsTile]
     
     func shutdown() throws 
@@ -715,6 +717,17 @@ open func requestSpocAds(mozAdRequests: [MozAdsPlacementRequestWithCount], optio
     return try  FfiConverterDictionaryStringSequenceTypeMozAdsSpoc.lift(try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
         uniffiCallStatus in
     uniffi_ads_client_fn_method_mozadsclient_request_spoc_ads(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceTypeMozAdsPlacementRequestWithCount.lower(mozAdRequests),
+        FfiConverterOptionTypeMozAdsRequestOptions.lower(options),uniffiCallStatus
+    )
+})
+}
+    
+open func requestSpocOrImageAds(mozAdRequests: [MozAdsPlacementRequestWithCount], options: MozAdsRequestOptions? = nil)throws  -> [String: [MozAdsImageOrSpoc]]  {
+    return try  FfiConverterDictionaryStringSequenceTypeMozAdsImageOrSpoc.lift(try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
+        uniffiCallStatus in
+    uniffi_ads_client_fn_method_mozadsclient_request_spoc_or_image_ads(
             self.uniffiCloneHandle(),
         FfiConverterSequenceTypeMozAdsPlacementRequestWithCount.lower(mozAdRequests),
         FfiConverterOptionTypeMozAdsRequestOptions.lower(options),uniffiCallStatus
@@ -2169,6 +2182,78 @@ public func FfiConverterTypeMozAdsIABContentTaxonomy_lower(_ value: MozAdsIabCon
 
 
 
+public enum MozAdsImageOrSpoc: Equatable, Hashable {
+    
+    case image(MozAdsImage
+    )
+    case spoc(MozAdsSpoc
+    )
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension MozAdsImageOrSpoc: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMozAdsImageOrSpoc: FfiConverterRustBuffer {
+    typealias SwiftType = MozAdsImageOrSpoc
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsImageOrSpoc {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .image(try FfiConverterTypeMozAdsImage.read(from: &buf)
+        )
+        
+        case 2: return .spoc(try FfiConverterTypeMozAdsSpoc.read(from: &buf)
+        )
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: MozAdsImageOrSpoc, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case let .image(v1):
+            writeInt(&buf, Int32(1))
+            FfiConverterTypeMozAdsImage.write(v1, into: &buf)
+            
+        
+        case let .spoc(v1):
+            writeInt(&buf, Int32(2))
+            FfiConverterTypeMozAdsSpoc.write(v1, into: &buf)
+            
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsImageOrSpoc_lift(_ buf: RustBuffer) throws -> MozAdsImageOrSpoc {
+    return try FfiConverterTypeMozAdsImageOrSpoc.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsImageOrSpoc_lower(_ value: MozAdsImageOrSpoc) -> RustBuffer {
+    return FfiConverterTypeMozAdsImageOrSpoc.lower(value)
+}
+
+
+
+
 public enum MozAdsReportReason: Equatable, Hashable {
     
     case inappropriate
@@ -2761,6 +2846,31 @@ fileprivate struct FfiConverterSequenceTypeMozAdsSpoc: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterSequenceTypeMozAdsImageOrSpoc: FfiConverterRustBuffer {
+    typealias SwiftType = [MozAdsImageOrSpoc]
+
+    public static func write(_ value: [MozAdsImageOrSpoc], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeMozAdsImageOrSpoc.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [MozAdsImageOrSpoc] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [MozAdsImageOrSpoc]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeMozAdsImageOrSpoc.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterDictionaryStringUInt32: FfiConverterRustBuffer {
     public static func write(_ value: [String: UInt32], into buf: inout [UInt8]) {
         let len = Int32(value.count)
@@ -2914,6 +3024,32 @@ fileprivate struct FfiConverterDictionaryStringSequenceTypeMozAdsSpoc: FfiConver
     }
 }
 
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterDictionaryStringSequenceTypeMozAdsImageOrSpoc: FfiConverterRustBuffer {
+    public static func write(_ value: [String: [MozAdsImageOrSpoc]], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterSequenceTypeMozAdsImageOrSpoc.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: [MozAdsImageOrSpoc]] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: [MozAdsImageOrSpoc]]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterSequenceTypeMozAdsImageOrSpoc.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
 
 public typealias AdsClientUrl = String
 
@@ -2985,6 +3121,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclient_request_spoc_ads() != 17011) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadsclient_request_spoc_or_image_ads() != 17558) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclient_request_tile_ads() != 25898) {
