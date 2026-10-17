@@ -48,7 +48,7 @@ final class TabCellCustomImageTests: XCTestCase {
     // MARK: - Subject
     @MainActor
     private func createSubject() -> TabCellCustomImage {
-        let subject = TabCellCustomImage()
+        let subject = TabCellCustomImage(frame: .zero)
         trackForMemoryLeaks(subject)
         return subject
     }
