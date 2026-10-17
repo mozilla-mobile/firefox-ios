@@ -25,7 +25,7 @@ protocol ToolbarHelperInterface {
     var novaToolbarGlassEffectAlpha: CGFloat { get }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool
-    func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool
+    func shouldShowTabStrip(for traitCollection: UITraitCollection) -> Bool
 
     @MainActor
     func shouldBlur() -> Bool
@@ -71,7 +71,7 @@ final class ToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
                && traitCollection.horizontalSizeClass != .regular
     }
 
-    func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool {
+    func shouldShowTabStrip(for traitCollection: UITraitCollection) -> Bool {
         return traitCollection.verticalSizeClass == .regular
                && traitCollection.horizontalSizeClass == .regular
     }

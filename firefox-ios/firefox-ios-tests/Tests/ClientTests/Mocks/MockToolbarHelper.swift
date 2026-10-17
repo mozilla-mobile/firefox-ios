@@ -18,7 +18,7 @@ class MockToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
     var isSwipingTabsEnabled = true
     var userInterfaceIdiom: UIUserInterfaceIdiom = .phone
     var shouldShowNavigationToolbar = true
-    var shouldShowTopTabs = false
+    var shouldShowTabStrip = false
 
     @MainActor
     var isReduceTransparencyEnabled: Bool { reduceTransparencyEnabled }
@@ -42,8 +42,8 @@ class MockToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
         return shouldShowNavigationToolbar
     }
 
-    func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool {
-        return shouldShowTopTabs
+    func shouldShowTabStrip(for traitCollection: UITraitCollection) -> Bool {
+        return shouldShowTabStrip
     }
 
     @MainActor
