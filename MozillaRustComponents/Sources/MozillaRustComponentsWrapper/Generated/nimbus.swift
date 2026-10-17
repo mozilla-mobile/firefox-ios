@@ -889,6 +889,10 @@ public protocol MetricsHandler: AnyObject, Sendable {
     
     func recordMalformedFeatureConfig(event: MalformedFeatureConfigExtraDef) 
     
+    func recordRolloutsOptOut() 
+    
+    func recordStudiesOptOut() 
+    
     func submitTargetingContext() 
     
 }
@@ -999,6 +1003,22 @@ open func recordMalformedFeatureConfig(event: MalformedFeatureConfigExtraDef)  {
     uniffi_nimbus_fn_method_metricshandler_record_malformed_feature_config(
             self.uniffiCloneHandle(),
         FfiConverterTypeMalformedFeatureConfigExtraDef_lower(event),uniffiCallStatus
+    )
+}
+}
+    
+open func recordRolloutsOptOut()  {try! rustCall() {
+        uniffiCallStatus in
+    uniffi_nimbus_fn_method_metricshandler_record_rollouts_opt_out(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+}
+}
+    
+open func recordStudiesOptOut()  {try! rustCall() {
+        uniffiCallStatus in
+    uniffi_nimbus_fn_method_metricshandler_record_studies_opt_out(
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 }
 }
@@ -1172,6 +1192,50 @@ fileprivate struct UniffiCallbackInterfaceMetricsHandler {
                 }
                 return uniffiObj.recordMalformedFeatureConfig(
                      event: try FfiConverterTypeMalformedFeatureConfigExtraDef_lift(event)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        recordRolloutsOptOut: { (
+            uniffiHandle: UInt64,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMetricsHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.recordRolloutsOptOut(
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        recordStudiesOptOut: { (
+            uniffiHandle: UInt64,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMetricsHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.recordStudiesOptOut(
                 )
             }
 
@@ -5483,6 +5547,12 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_metricshandler_record_malformed_feature_config() != 28930) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_metricshandler_record_rollouts_opt_out() != 61690) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_metricshandler_record_studies_opt_out() != 57758) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_metricshandler_submit_targeting_context() != 53590) {

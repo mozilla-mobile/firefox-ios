@@ -23,7 +23,7 @@ extension GleanMetrics {
             // Intentionally left private, no external user can instantiate a new global object.
         }
 
-        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 10, day: 15, hour: 23, minute: 18, second: 20))
+        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 10, day: 17, hour: 5, minute: 31, second: 37))
     }
 
     enum NimbusEvents {
@@ -412,6 +412,30 @@ extension GleanMetrics {
                 disabled: false
             )
             , ["branch", "experiment", "feature_id", "part_id"]
+        )
+
+        /// Emitted when a user opts out of rollouts (remote improvements).
+        static let rolloutsOptOut = EventMetricType<NoExtras>( // generated from nimbus_events.rollouts_opt_out
+            CommonMetricData(
+                category: "nimbus_events",
+                name: "rollouts_opt_out",
+                sendInPings: ["events"],
+                lifetime: .ping,
+                disabled: false
+            )
+            , []
+        )
+
+        /// Emitted when a user opts out of studies (experiments).
+        static let studiesOptOut = EventMetricType<NoExtras>( // generated from nimbus_events.studies_opt_out
+            CommonMetricData(
+                category: "nimbus_events",
+                name: "studies_opt_out",
+                sendInPings: ["events"],
+                lifetime: .ping,
+                disabled: false
+            )
+            , []
         )
 
         /// Recorded when an unenrollment fails, including the reason for the failure.
