@@ -361,7 +361,7 @@ private extension PasswordManagerListViewController {
             .uponQueue(.main) { yes in
                 // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                 MainActor.assumeIsolated {
-                    self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
+                    self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self = self] _ in
                         // Delete here
                         let guidsToDelete = self.tableView.allLoginIndexPaths.compactMap { index in
                             if let loginRecord = self.viewModel.loginAtIndexPath(index),
