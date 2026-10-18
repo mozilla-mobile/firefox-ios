@@ -50,7 +50,7 @@ class ScreenshotHelper {
         }
         // Handle home page snapshots, can not use Apple API snapshot function for this
         guard controller != nil else { return }
-        let availableSize = controller?.view.bounds.size ?? .zero
+        let availableSize = controller?.viewIfLoaded?.bounds.size ?? .zero
         let shouldCropScreenshot = availableSize.height >= availableSize.width && !usesRegularLayout
 
         // Added check for native error pages.
