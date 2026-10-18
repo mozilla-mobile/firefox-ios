@@ -122,11 +122,15 @@ final class AddressToolbarContainer: UIView,
 
     private var toolbarLeadingConstraint: NSLayoutConstraint?
     private var toolbarTrailingConstraint: NSLayoutConstraint?
+    private var systemTopBarLayoutGuide: UILayoutGuide?
 
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
     private func calculateToolbarTrailingSpace() -> CGFloat {
+        if systemTopBarLayoutGuide != nil {
+            return 0
+        }
         if shouldDisplayCompact {
             return UX.toolbarHorizontalPadding
         }
@@ -138,6 +142,9 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func calculateToolbarLeadingSpace(isEditing: Bool, toolbarLayoutStyle: ToolbarLayoutStyle) -> CGFloat {
+        if systemTopBarLayoutGuide != nil {
+            return 0
+        }
         if shouldDisplayCompact {
             return UX.toolbarHorizontalPadding
         }
@@ -281,6 +288,30 @@ final class AddressToolbarContainer: UIView,
         toolbarTrailingConstraint?.isActive = true
     }
 
+    func updateSystemTopBarLayoutGuide(_ guide: UILayoutGuide?, isBottomSearchBar: Bool) {
+        guard systemTopBarLayoutGuide !== guide
+                || toolbarLeadingConstraint?.isActive != true
+                || toolbarTrailingConstraint?.isActive != true else { return }
+        systemTopBarLayoutGuide = guide
+        if let model {
+            toolbar.updateSpacing(
+                leading: calculateToolbarLeadingSpace(isEditing: model.isEditing,
+                                                      toolbarLayoutStyle: model.toolbarLayoutStyle),
+                trailing: calculateToolbarTrailingSpace()
+            )
+        }
+
+        if isBottomSearchBar, toolbarHelper.isSwipingTabsEnabled {
+            let needsSkeletonLayout = leftSkeletonAddressBar.superview == nil
+            applyBottomLayoutConstraints()
+            if needsSkeletonLayout {
+                setupSkeletonAddressBarsLayout(isBottomSearchBar: true)
+            }
+        } else {
+            applyTopLayoutConstraints()
+        }
+    }
+
     private func applyTopLayoutConstraints() {
         leftSkeletonAddressBar.removeFromSuperview()
         rightSkeletonAddressBar.removeFromSuperview()
@@ -288,8 +319,12 @@ final class AddressToolbarContainer: UIView,
         toolbarLeadingConstraint?.isActive = false
         toolbarTrailingConstraint?.isActive = false
 
-        toolbarLeadingConstraint = toolbar.leadingAnchor.constraint(equalTo: leadingAnchor)
-        toolbarTrailingConstraint = toolbar.trailingAnchor.constraint(equalTo: trailingAnchor)
+        toolbarLeadingConstraint = toolbar.leadingAnchor.constraint(
+            equalTo: systemTopBarLayoutGuide?.leadingAnchor ?? leadingAnchor
+        )
+        toolbarTrailingConstraint = toolbar.trailingAnchor.constraint(
+            equalTo: systemTopBarLayoutGuide?.trailingAnchor ?? trailingAnchor
+        )
 
         toolbarLeadingConstraint?.isActive = true
         toolbarTrailingConstraint?.isActive = true
@@ -473,15 +508,16 @@ final class AddressToolbarContainer: UIView,
     private func setupSkeletonAddressBarsLayout(isBottomSearchBar: Bool) {
         guard toolbarHelper.isSwipingTabsEnabled, isBottomSearchBar else { return }
 
+        // The active toolbar determines height before the placeholders are configured.
         NSLayoutConstraint.activate([
             leftSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
             leftSkeletonAddressBar.trailingAnchor.constraint(equalTo: leadingAnchor),
-            leftSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
+            leftSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor).priority(.defaultHigh),
             leftSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset),
 
             rightSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
             rightSkeletonAddressBar.leadingAnchor.constraint(equalTo: trailingAnchor),
-            rightSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
+            rightSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor).priority(.defaultHigh),
             rightSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset)
         ])
     }

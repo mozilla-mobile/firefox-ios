@@ -347,7 +347,56 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
         XCTAssertGreaterThan(requiredConstraints.count, 0)
     }
 
+    // MARK: - Search Bar Position Tests
+
+    func test_searchBarPositionDidChange_toBottom_whenDuoExpanded_keepsAddressBarInHeader() throws {
+        guard #available(iOS 17.0, *) else {
+            throw XCTSkip("traitOverrides requires iOS 17+")
+        }
+        let subject = createSubject(isBottomSearchBar: false)
+        setDuoExpandedTraits(on: subject)
+
+        subject.searchBarPositionDidChange(newSearchBarPosition: .bottom)
+
+        XCTAssertFalse(subject.isBottomSearchBar)
+        XCTAssertTrue(subject.addressToolbarContainer.superview === subject.header)
+        drainMainQueue()
+    }
+
+    func test_searchBarPositionDidChange_toBottom_whenNotDuoExpanded_movesAddressBarToBottom() throws {
+        guard #available(iOS 17.0, *) else {
+            throw XCTSkip("traitOverrides requires iOS 17+")
+        }
+        let subject = createSubject(isBottomSearchBar: false)
+        subject.traitOverrides.userInterfaceIdiom = .phone
+        subject.traitOverrides.horizontalSizeClass = .compact
+        subject.traitOverrides.verticalSizeClass = .regular
+        subject.updateTraitsIfNeeded()
+
+        subject.searchBarPositionDidChange(newSearchBarPosition: .bottom)
+
+        XCTAssertTrue(subject.isBottomSearchBar)
+        XCTAssertTrue(subject.addressToolbarContainer.superview === subject.overKeyboardContainer)
+        drainMainQueue()
+    }
+
     // MARK: - Helper Methods
+
+    @available(iOS 17.0, *)
+    private func setDuoExpandedTraits(on subject: BrowserViewController) {
+        subject.traitOverrides.userInterfaceIdiom = .phone
+        subject.traitOverrides.horizontalSizeClass = .regular
+        subject.traitOverrides.verticalSizeClass = .regular
+        subject.updateTraitsIfNeeded()
+    }
+
+    /// Lets trait change work that `BrowserViewController` queues on the main queue finish,
+    /// so it releases the subject before the memory leak check runs.
+    private func drainMainQueue() {
+        let drained = expectation(description: "Main queue drained")
+        DispatchQueue.main.async { drained.fulfill() }
+        wait(for: [drained], timeout: 1)
+    }
 
     private func isKeyboardSpacer(_ view: UIView) -> Bool {
         view.accessibilityIdentifier == AccessibilityIdentifiers.Browser.keyboardSpacer

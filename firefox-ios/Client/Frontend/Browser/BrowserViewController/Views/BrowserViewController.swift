@@ -518,7 +518,21 @@ class BrowserViewController: UIViewController,
         return false
     }
 
+    #if XCODE_2710 || XCODE_2720
+    @available(iOS 27.1, *)
+    override var preferredVerticalBarBehavior: UIVerticalBarBehavior {
+        // `disabled` state forces the Duo's status bar to be laid out horizontally.
+        return traitCollection.duoExpanded ? .disabled : .automatic
+    }
+    #endif
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
+        #if XCODE_2710 || XCODE_2720
+        // For iPhone Duo we let the system style the status bar based on the content beneath.
+        if #available(iOS 27.1, *), traitCollection.verticalBarEdge != .unspecified {
+            return .default
+        }
+        #endif
         return switch currentTheme().type {
         case .dark, .nightMode, .privateMode:
                 .lightContent
@@ -580,8 +594,11 @@ class BrowserViewController: UIViewController,
 
     func searchBarPositionDidChange(newSearchBarPosition: SearchBarPosition?) {
         guard let newSearchBarPosition else { return }
+        // iPhone Duo edge case: Changing top bar mode to bottom from the app settings should not
+        // update the UI to bottom bar when in expanded mode.
+        let effectiveSearchBarPosition: SearchBarPosition = traitCollection.duoExpanded ? .top : newSearchBarPosition
 
-        isBottomSearchBar = newSearchBarPosition == .bottom
+        isBottomSearchBar = effectiveSearchBarPosition == .bottom
         let newParent = isBottomSearchBar ? overKeyboardContainer : header
 
         addressToolbarContainer.removeFromParent()
@@ -607,7 +624,7 @@ class BrowserViewController: UIViewController,
 
         let action = GeneralBrowserMiddlewareAction(
             scrollOffset: scrollController.contentOffset,
-            toolbarPosition: newSearchBarPosition,
+            toolbarPosition: effectiveSearchBarPosition,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
         store.dispatch(action)
@@ -656,7 +673,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let isKeyboardShowing = keyboardState != nil
+        let isKeyboardShowing = (keyboardState?.intersectionHeightForView(view) ?? 0) > 0
         let isScrollAlphaZero = if #available(iOS 26.0, *) { isToolbarCollapsed } else { false }
 
         // Prevent homepage from showing behind the keyboard when content isn't scrollable.
@@ -750,7 +767,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
-        guard searchBarPosition == .bottom else { return }
+        guard searchBarPosition == .bottom || traitCollection.duoExpanded else { return }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let newPosition: SearchBarPosition = isNavToolbar ? .bottom : .top
@@ -1139,7 +1156,12 @@ class BrowserViewController: UIViewController,
         let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
         topTabsViewController.delegate = self
         addChild(topTabsViewController)
-        header.insertArrangedSubview(topTabsViewController.view, at: 0)
+        if traitCollection.userInterfaceIdiom == .phone,
+           let addressIndex = header.arrangedSubviews.firstIndex(of: addressToolbarContainer) {
+            header.insertArrangedView(topTabsViewController.view, position: addressIndex + 1)
+        } else {
+            header.insertArrangedSubview(topTabsViewController.view, at: 0)
+        }
         topTabsViewController.didMove(toParent: self)
         self.topTabsViewController = topTabsViewController
     }
@@ -1506,6 +1528,11 @@ class BrowserViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        let systemTopBarLayoutGuide = browserLayoutManager.updateHeaderBarLayout(
+            isBottomSearchBar: isBottomSearchBar,
+            toolbarHeight: addressToolbarContainer.bounds.height
+        )
+        addressToolbarContainer.updateSystemTopBarLayoutGuide(systemTopBarLayoutGuide, isBottomSearchBar: isBottomSearchBar)
 
         // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
         checkForJSAlerts()
@@ -1589,6 +1616,7 @@ class BrowserViewController: UIViewController,
         }, completion: { [weak self] _ in
             legacyScrollController?.traitCollectionDidChange()
             legacyScrollController?.setMinimumZoom()
+            self?.setNeedsStatusBarAppearanceUpdate()
             guard let self, let popover else { return }
             self.displayedPopoverController = popover
             self.updateDisplayedPopoverProperties?()
@@ -1606,6 +1634,11 @@ class BrowserViewController: UIViewController,
             // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
             if traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
                 traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+                #if XCODE_2710 || XCODE_2720
+                if #available(iOS 27.1, *) {
+                    setNeedsUpdateOfVerticalBarConfiguration()
+                }
+                #endif
                 updateHeaderConstraints()
                 updateAddressToolbarContainerPosition(for: traitCollection)
                 updateZoomPageBarPlacement()

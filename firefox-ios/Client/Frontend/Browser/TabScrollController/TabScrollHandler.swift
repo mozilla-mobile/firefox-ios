@@ -111,9 +111,15 @@ final class TabScrollHandler: NSObject,
         return windowUUID
     }
 
-    /// Returns true when the scrollview contentSize height is bigger than viewport height plus delta
-    /// and voice over is turned off
+    /// Collapsing is disabled while the iPhone Duo is expanded, so the address bar stays fully visible.
+    private var canCollapseToolbar: Bool {
+        return scrollView?.traitCollection.duoExpanded != true
+    }
+
+    /// Returns true when the scrollview contentSize height is bigger than viewport height plus delta,
+    /// voice over is turned off and the toolbar can collapse
     var shouldUpdateUIWhenScrolling: Bool {
+        guard canCollapseToolbar else { return false }
         let voiceOverOff = !UIAccessibility.isVoiceOverRunning
         return hasScrollableContent && voiceOverOff
     }
@@ -146,6 +152,7 @@ final class TabScrollHandler: NSObject,
 
     // TODO: FXIOS-13340 Update to private in the future for now we need to keep support for Legacy protocol
     func hideToolbars(animated: Bool) {
+        guard canCollapseToolbar else { return }
         toolbarDisplayState.update(displayState: .collapsed)
         delegate?.hideToolbar()
     }
