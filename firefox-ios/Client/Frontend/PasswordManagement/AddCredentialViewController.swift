@@ -18,7 +18,7 @@ enum AddCredentialField: Int {
     }
 }
 
-class AddCredentialViewController: UIViewController, Themeable {
+final class AddCredentialViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
@@ -29,8 +29,8 @@ class AddCredentialViewController: UIViewController, Themeable {
         UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft
     }
 
-    lazy var tableView: UITableView = .build { [weak self] tableView in
-        guard let self = self else { return }
+    private lazy var tableView: UITableView = .build({ [weak self] tableView in
+        guard let self else { return }
         tableView.accessibilityIdentifier = "Add Credential"
         tableView.delegate = self
         tableView.dataSource = self
@@ -38,7 +38,14 @@ class AddCredentialViewController: UIViewController, Themeable {
         // Add empty footer view to prevent separators from being drawn past the last item.
         tableView.tableFooterView = UIView()
         tableView.separatorInset = .zero
-    }
+    },
+    {
+        if #available(iOS 26.0, *) {
+            return UITableView(frame: .zero, style: .insetGrouped)
+        } else {
+            return UITableView(frame: .zero, style: .grouped)
+        }
+    })
     fileprivate weak var websiteField: UITextField?
     fileprivate weak var usernameField: UITextField?
     fileprivate weak var passwordField: UITextField?

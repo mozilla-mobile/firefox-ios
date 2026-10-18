@@ -107,22 +107,30 @@ struct AddressListView: View {
 
     private var addAddressView: some View {
         return EditAddressViewControllerRepresentable(model: viewModel)
-            .navigationBarTitle(String.Addresses.Settings.Edit.AutofillAddAddressTitle, displayMode: .inline)
-            .navigationBarItems(
-                leading: Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
-                    viewModel.cancelAddButtonTap()
-                },
-                trailing: Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
-                    viewModel.saveAddressButtonTap()
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
+                        viewModel.cancelAddButtonTap()
+                    }
                 }
-            )
+
+                ToolbarItem(placement: .principal) {
+                    Text(String.Addresses.Settings.Edit.AutofillAddAddressTitle)
+                        .font(.headline)
+                }
+
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
+                        viewModel.saveAddressButtonTap()
+                    }
+                }
+            }
     }
 
     private var editAddressView: some View {
         return EditAddressViewControllerRepresentable(model: viewModel)
-            .navigationBarTitle(viewModel.editNavigationbarTitle, displayMode: .inline)
             .toolbar {
-                ToolbarItemGroup(placement: .cancellationAction) {
+                ToolbarItem(placement: .navigationBarLeading) {
                     Button(viewModel.cancelButtonLabel) {
                         if viewModel.isEditMode {
                             viewModel.cancelEditButtonTap()
@@ -132,7 +140,12 @@ struct AddressListView: View {
                     }
                 }
 
-                ToolbarItemGroup(placement: .primaryAction) {
+                ToolbarItem(placement: .principal) {
+                    Text(viewModel.editNavigationbarTitle)
+                        .font(.headline)
+                }
+
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button(viewModel.primaryButtonLabel) {
                         if viewModel.isEditMode {
                             viewModel.saveEditButtonTap()
