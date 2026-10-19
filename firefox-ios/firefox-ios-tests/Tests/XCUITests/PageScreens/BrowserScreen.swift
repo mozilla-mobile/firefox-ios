@@ -262,6 +262,15 @@ final class BrowserScreen {
         addressBar.waitAndTap()
     }
 
+    /// Drags the address bar onto `target`, holding it only one second so the tracking protection
+    /// menu does not open and cover the drop target.
+    func dragAddressBar(onto target: XCUIElement) {
+        BaseTestCase().waitForElementsToExist([addressBar, target])
+        let start = addressBar.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+        let end = target.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        start.press(forDuration: 1, thenDragTo: end)
+    }
+
     /// Taps the "<" chevron shown next to the address bar while it is being edited.
     func tapCancelEditButton() {
         cancelButton.waitAndTap()
