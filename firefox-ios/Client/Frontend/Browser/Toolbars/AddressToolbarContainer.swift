@@ -129,7 +129,8 @@ final class AddressToolbarContainer: UIView,
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
     private func calculateToolbarTrailingSpace() -> CGFloat {
-        if systemTopBarLayoutGuide != nil {
+        // Expanded iPhone Duo gives plenty of space.
+        if traitCollection.duoExpanded, systemTopBarLayoutGuide != nil {
             return 0
         }
         if shouldDisplayCompact {
@@ -143,7 +144,8 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func calculateToolbarLeadingSpace(isEditing: Bool, toolbarLayoutStyle: ToolbarLayoutStyle) -> CGFloat {
-        if systemTopBarLayoutGuide != nil {
+        // Expanded iPhone Duo gives plenty of space.
+        if traitCollection.duoExpanded, systemTopBarLayoutGuide != nil {
             return 0
         }
         if shouldDisplayCompact {
