@@ -75,11 +75,8 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
 
         setMenuItems()
 
-        // Logs conversion activity and records any conversion events
-        let conversionActivityLogger = ConversionActivityLogger()
-        conversionActivityLogger.recordFirstDayAfterInstallTimestampIfNeeded()
-        conversionActivityLogger.recordActiveToday()
-        ConversionEventTracker().recordActivityEvents()
+        // Active days and conversion events are recorded when the app becomes active
+        ConversionActivityLogger().recordFirstDayAfterInstallTimestampIfNeeded()
 
         // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
         MozillaAppServices.initialize()
