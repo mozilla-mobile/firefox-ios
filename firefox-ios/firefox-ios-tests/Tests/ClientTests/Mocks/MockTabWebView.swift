@@ -25,6 +25,10 @@ final class MockTabWebView: TabWebView {
     var mockHasOnlySecureContent = false
     var mockCanGoBack = false
     var mockCanGoForward = false
+    var mockIsLoading = false {
+        willSet { willChangeValue(forKey: #keyPath(WKWebView.isLoading)) }
+        didSet { didChangeValue(forKey: #keyPath(WKWebView.isLoading)) }
+    }
     var mockInteractionState: Data?
     var evaluatedScripts: [(script: String, world: WKContentWorld)] = []
     var completesJavaScriptEvaluation = false
@@ -63,6 +67,10 @@ final class MockTabWebView: TabWebView {
 
     override var canGoForward: Bool {
         return mockCanGoForward
+    }
+
+    override var isLoading: Bool {
+        return mockIsLoading
     }
 
     override var interactionState: Any? {

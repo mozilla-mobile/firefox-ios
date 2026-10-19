@@ -532,6 +532,98 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertNotNil(search.searchTimerId)
     }
 
+    func testSearchGoogleLens_interstitialDisabled_loadsImmediatelyWithoutOverlay() {
+        let (subject, webView) = makeGoogleLensSearchSubject(interstitialEnabled: false)
+
+        subject.searchGoogleLens(with: UIImage(), source: .camera)
+
+        XCTAssertEqual(webView.loadCalled, 1)
+        XCTAssertFalse(subject.childCoordinators.contains { $0 is GoogleLensInterstitialCoordinator })
+        XCTAssertEqual(glean.startTimingCalled, 1)
+    }
+
+    func testSearchGoogleLens_interstitialEnabled_showsBackdropAndLoadsImmediately() {
+        let (subject, webView) = makeGoogleLensSearchSubject(interstitialEnabled: true)
+
+        subject.searchGoogleLens(with: UIImage(), source: .photoPicker)
+
+        XCTAssertEqual(webView.loadCalled, 1)
+        XCTAssertEqual(webView.loadedRequest?.url?.absoluteString, "https://lens.google.com/upload")
+        XCTAssertTrue(subject.childCoordinators.contains { $0 is GoogleLensInterstitialCoordinator })
+        XCTAssertTrue(mockRouter.presentedViewController is GoogleLensInterstitialViewController)
+        XCTAssertEqual(glean.startTimingCalled, 1)
+        webView.mockIsLoading = true
+        webView.mockIsLoading = false
+    }
+
+    func testSearchGoogleLens_interstitialEnabled_preservesContextMenuTimer() throws {
+        let (subject, webView) = makeGoogleLensSearchSubject(interstitialEnabled: true)
+
+        subject.searchGoogleLens(with: UIImage(), source: .contextMenu, searchTimerId: glean.savedTimerId)
+
+        let tab = try XCTUnwrap(tabManager.selectedTab)
+        let search = try XCTUnwrap(subject.browserViewController.googleLensSearches[tab.tabUUID])
+        XCTAssertEqual(webView.loadCalled, 1)
+        XCTAssertEqual(glean.startTimingCalled, 0)
+        XCTAssertEqual(search.source, .contextMenu)
+        XCTAssertNotNil(search.searchTimerId)
+        webView.mockIsLoading = true
+        webView.mockIsLoading = false
+    }
+
+    func testSearchGoogleLens_navigationFinished_removesBackdropAndRecordsCompletion() {
+        let (subject, webView) = makeGoogleLensSearchSubject(interstitialEnabled: true)
+        let browser = subject.browserViewController
+        subject.searchGoogleLens(with: UIImage(), source: .camera)
+
+        webView.mockIsLoading = true
+        browser.webView(webView, didFinish: nil)
+        webView.mockIsLoading = false
+
+        XCTAssertFalse(subject.childCoordinators.contains { $0 is GoogleLensInterstitialCoordinator })
+        XCTAssertTrue(browser.googleLensSearches.isEmpty)
+        XCTAssertEqual(glean.stopAndAccumulateCalled, 1)
+        XCTAssertEqual(glean.recordEventCalled, 1)
+    }
+
+    func testSearchGoogleLens_navigationFailure_removesBackdropAndRecordsCompletion() {
+        let (subject, webView) = makeGoogleLensSearchSubject(interstitialEnabled: true)
+        let browser = subject.browserViewController
+        subject.searchGoogleLens(with: UIImage(), source: .camera)
+
+        webView.mockIsLoading = true
+        browser.webView(webView,
+                        didFail: nil,
+                        withError: NSError(domain: NSURLErrorDomain, code: NSURLErrorTimedOut))
+        webView.mockIsLoading = false
+
+        XCTAssertFalse(subject.childCoordinators.contains { $0 is GoogleLensInterstitialCoordinator })
+        XCTAssertTrue(browser.googleLensSearches.isEmpty)
+        XCTAssertEqual(glean.stopAndAccumulateCalled, 1)
+        XCTAssertEqual(glean.recordEventCalled, 1)
+    }
+
+    func testSearchGoogleLens_otherTabFailure_doesNotRemoveBackdrop() {
+        let (subject, webView) = makeGoogleLensSearchSubject(interstitialEnabled: true)
+        let browser = subject.browserViewController
+        subject.searchGoogleLens(with: UIImage(), source: .camera)
+        let otherTab = MockTab(profile: profile, windowUUID: windowUUID)
+        let otherWebView = MockTabWebView(tab: otherTab)
+        otherTab.webView = otherWebView
+        tabManager.tabs.append(otherTab)
+
+        browser.webView(otherWebView,
+                        didFail: nil,
+                        withError: NSError(domain: NSURLErrorDomain, code: NSURLErrorTimedOut))
+
+        otherWebView.mockIsLoading = true
+        otherWebView.mockIsLoading = false
+        XCTAssertTrue(subject.childCoordinators.contains { $0 is GoogleLensInterstitialCoordinator })
+        XCTAssertEqual(glean.stopAndAccumulateCalled, 0)
+        webView.mockIsLoading = true
+        webView.mockIsLoading = false
+    }
+
     func testShowQRCode_presentsQRCodeNavigationController() {
         let subject = createSubject()
         let delegate = MockQRCodeViewControllerDelegate()
@@ -1927,6 +2019,23 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     // MARK: - Helpers
+    private func makeGoogleLensSearchSubject(interstitialEnabled: Bool) -> (BrowserCoordinator, MockTabWebView) {
+        let flags = MockNimbusFeatureFlags()
+        flags.enabledFlags = interstitialEnabled ? [.googleLensSearchInterstitial] : []
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: profile,
+                                                     injectedTabManager: tabManager,
+                                                     injectedFeatureFlagProvider: flags)
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        let webView = MockTabWebView(tab: tab)
+        tab.webView = webView
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(googleLensService: MockGoogleLensService())
+        subject.browserViewController.view = UIView()
+        subject.browserViewController.screenshotHelper = MockScreenshotHelper(controller: subject.browserViewController)
+        return (subject, webView)
+    }
+
     private func createSubject(googleLensService: GoogleLensServicing = GoogleLensService(),
                                isCameraAvailable: @escaping @MainActor () -> Bool = { true },
                                file: StaticString = #filePath,
