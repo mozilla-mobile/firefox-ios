@@ -107,6 +107,11 @@ struct AddressListView: View {
 
     private var addAddressView: some View {
         return EditAddressViewControllerRepresentable(model: viewModel)
+            // Keep the navigation item title populated even though the visible title is rendered
+            // by the `.principal` toolbar item below. XCUITest derives the navigation bar's
+            // accessibility identifier from this title, and the UI tests look the bar up by it.
+            .navigationTitle(String.Addresses.Settings.Edit.AutofillAddAddressTitle)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
@@ -129,6 +134,8 @@ struct AddressListView: View {
 
     private var editAddressView: some View {
         return EditAddressViewControllerRepresentable(model: viewModel)
+            .navigationTitle(viewModel.editNavigationbarTitle)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(viewModel.cancelButtonLabel) {
