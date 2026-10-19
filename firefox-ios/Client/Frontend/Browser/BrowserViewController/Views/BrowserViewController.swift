@@ -1139,7 +1139,7 @@ class BrowserViewController: UIViewController,
         let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
         topTabsViewController.delegate = self
         addChild(topTabsViewController)
-        header.addArrangedViewToTop(topTabsViewController.view)
+        header.insertArrangedSubview(topTabsViewController.view, at: 0)
         topTabsViewController.didMove(toParent: self)
         self.topTabsViewController = topTabsViewController
     }
