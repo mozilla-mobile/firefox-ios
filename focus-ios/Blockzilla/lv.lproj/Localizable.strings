@@ -148,6 +148,9 @@
 /* Label for button to bring deleted default engines back */
 "Settings.Search.RestoreEngine" = "Atjaunot noklusējuma meklētājus";
 
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Meklētājs";
+
 /* Label title for set as default browser row */
 "Settings.setAsDefaultBrowser" = "Iestatīt kā noklusējuma pārlūku";
 
@@ -184,6 +187,15 @@
 /* Text for a label that indicates the description for request desktop tip. */
 "Tip.RequestDesktop.Description" = "Lapas darbības > Pieprasīt vietni darbvirsmai";
 
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Jādodas uz iestatījumiem, lai pārvaldītu noteiktas privātuma un drošības iespējas.";
+
 /* Text for tracking protection screen showing the connection is not secure */
 "trackingProtection.connectionNotSecureLabel" = "Savienojums nav drošs";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Meklē vai ievadi adresi";
+
+/* Label displayed for search button when typing in the URL bar. %@ is the text type by the user. */
+"URL.searchLabel" = "Meklēt %@";
 
