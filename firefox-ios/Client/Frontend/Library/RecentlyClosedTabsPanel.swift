@@ -94,6 +94,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     var recentlyClosedTabs: [ClosedTab] = []
     weak var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
     override var shouldUsePrivateOverride: Bool { return true }
+    override var tableViewStyle: UITableView.Style { return .libraryPanel }
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(
@@ -130,7 +131,9 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         twoLineCell.descriptionLabel.text = displayURL.absoluteDisplayString
         twoLineCell.leftImageView.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth
         twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: displayURL.absoluteString))
-        twoLineCell.applyTheme(theme: currentTheme())
+        let theme = currentTheme()
+        twoLineCell.applyTheme(theme: theme)
+        twoLineCell.applyGroupedBackground(theme: theme, in: tableView)
         return twoLineCell
     }
 

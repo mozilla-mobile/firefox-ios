@@ -29,8 +29,10 @@ class SiteTableViewController: UIViewController,
     var shouldUsePrivateOverride: Bool { return false }
     var shouldBeInPrivateTheme: Bool { return false }
 
+    var tableViewStyle: UITableView.Style { return .plain }
+
     var data = Cursor<Site>(status: .success, msg: "No data set")
-    lazy var tableView: UITableView = .build { [weak self] table in
+    lazy var tableView: UITableView = .build({ [weak self] table in
         guard let self = self else { return }
         table.delegate = self
         table.dataSource = self
@@ -46,7 +48,9 @@ class SiteTableViewController: UIViewController,
             SiteTableViewHeader.self,
             forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier
         )
-        table.layoutMargins = .zero
+        if self.tableViewStyle == .plain {
+            table.layoutMargins = .zero
+        }
         table.keyboardDismissMode = .onDrag
         table.accessibilityIdentifier = "SiteTable"
         table.cellLayoutMarginsFollowReadableWidth = false
@@ -60,7 +64,9 @@ class SiteTableViewController: UIViewController,
         // Set an empty footer to prevent empty cells from appearing in the list.
         table.tableFooterView = UIView()
         table.sectionHeaderTopPadding = 0
-    }
+    }, {
+        UITableView(frame: .zero, style: self.tableViewStyle)
+    })
 
     override private init(nibName: String?, bundle: Bundle?) {
         fatalError("init(coder:) has not been implemented")
@@ -113,10 +119,15 @@ class SiteTableViewController: UIViewController,
     private func setupView() {
         view.addSubview(tableView)
 
+        // Inset grouped tables apply horizontal safe area insets through their own layout margins.
+        // Pinning them to the safe area zeroes the margin on the inset side, which removes the rounded corners.
+        let isInsetGrouped = tableViewStyle == .insetGrouped
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.leadingAnchor.constraint(
+                equalTo: isInsetGrouped ? view.leadingAnchor : view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(
+                equalTo: isInsetGrouped ? view.trailingAnchor : view.safeAreaLayoutGuide.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }

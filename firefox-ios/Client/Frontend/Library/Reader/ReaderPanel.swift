@@ -201,7 +201,7 @@ class ReadingListPanel: UITableViewController,
         self.notificationCenter = notificationCenter
         self.logger = logger
         self.state = .readingList
-        super.init(nibName: nil, bundle: nil)
+        super.init(style: .libraryPanel)
 
         startObservingNotifications(
             withNotificationCenter: NotificationCenter.default,
@@ -226,15 +226,6 @@ class ReadingListPanel: UITableViewController,
         tableView.accessibilityIdentifier = "ReadingTable"
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        // Set reading list accessibility content size as needed
-        let size = CGSize(width: self.emptyStateViewA11YScroll.frame.size.width,
-                          height: self.emptyStateView.frame.size.height)
-        self.emptyStateViewA11YScroll.contentSize = size
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -243,7 +234,9 @@ class ReadingListPanel: UITableViewController,
         tableView.rowHeight = UITableView.automaticDimension
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.separatorInset = .zero
-        tableView.layoutMargins = .zero
+        if tableView.style == .plain {
+            tableView.layoutMargins = .zero
+        }
         tableView.register(ReadingListTableViewCell.self, forCellReuseIdentifier: "ReadingListTableViewCell")
 
         // Set an empty footer to prevent empty cells from appearing in the list.
@@ -308,18 +301,23 @@ class ReadingListPanel: UITableViewController,
             let emptyView = self.emptyStateView
 
             if visible {
-                guard scrollView.superview == nil else { return }
+                guard scrollView.superview == nil, let containerView = self.tableView.superview else { return }
                 scrollView.addSubview(emptyView)
                 NSLayoutConstraint.activate([
-                    emptyView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-                    emptyView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-                    emptyView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-                    emptyView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.heightAnchor)
+                    emptyView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+                    emptyView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+                    emptyView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+                    emptyView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+                    emptyView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+                    emptyView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.frameLayoutGuide.heightAnchor)
                 ])
-                self.tableView.superview?.insertSubview(scrollView, aboveSubview: self.tableView)
-                scrollView.frame = self.tableView.bounds
-                scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                scrollView.translatesAutoresizingMaskIntoConstraints = true
+                containerView.insertSubview(scrollView, aboveSubview: self.tableView)
+                NSLayoutConstraint.activate([
+                    scrollView.leadingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.leadingAnchor),
+                    scrollView.trailingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.trailingAnchor),
+                    scrollView.topAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.topAnchor),
+                    scrollView.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor)
+                ])
                 scrollView.isScrollEnabled = true
             } else {
                 scrollView.subviews.forEach { $0.removeFromSuperview() }
@@ -374,7 +372,9 @@ class ReadingListPanel: UITableViewController,
             cell.title = record.title
             cell.url = URL(string: record.url)!
             cell.unread = record.unread
-            cell.applyTheme(theme: currentTheme())
+            let theme = currentTheme()
+            cell.applyTheme(theme: theme)
+            cell.applyGroupedBackground(theme: theme, in: tableView)
         }
         return cell
     }
