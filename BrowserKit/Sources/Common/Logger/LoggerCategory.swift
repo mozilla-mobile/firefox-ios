@@ -93,6 +93,9 @@ public enum LoggerCategory: String {
     /// Related to translations feature
     case translations
 
+    /// Related to the vpn feature
+    case vpn
+
     /// Webview scripts, webview delegate, webserver like GCDWebserver, showing webview alerts, webview navigation
     case webview
 
