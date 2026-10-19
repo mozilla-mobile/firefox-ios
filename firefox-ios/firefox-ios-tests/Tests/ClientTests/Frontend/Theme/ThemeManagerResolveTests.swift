@@ -72,4 +72,15 @@ final class ThemeManagerResolveTests: XCTestCase {
         XCTAssertEqual(mockThemeManager.getCurrentThemeCallCount, 0)
         XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 1)
     }
+
+    // MARK: - Feature disabled
+
+    func testResolveTheme_whenFeatureDisabled_forcingRegularTheme_usesWindowTheme() {
+        mockThemeManager.isPrivateThemeOverrideEnabled = false
+
+        _ = mockThemeManager.resolveTheme(for: .XCTestDefaultUUID, privateOverride: false)
+
+        XCTAssertEqual(mockThemeManager.getCurrentThemeCallCount, 1)
+        XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 0)
+    }
 }

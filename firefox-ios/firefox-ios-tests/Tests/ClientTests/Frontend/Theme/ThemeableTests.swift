@@ -112,6 +112,17 @@ class ThemeableTests: XCTestCaseRootViewController {
         XCTAssertEqual(mockThemeManager.getCurrentThemeCallCount, 1)
         XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 0)
     }
+
+    func test_updateThemeApplicableSubviews_whenNotSubjectToNovaOverride_andFeatureDisabled_keepsPrivateThemeOverride() {
+        mockThemeManager.isPrivateThemeOverrideEnabled = false
+        testThemeable.isSubjectToNovaPrivateOverride = false
+        testThemeable.shouldUsePrivateOverride = true
+        testThemeable.shouldBeInPrivateTheme = false
+        testThemeable.updateThemeApplicableSubviews(UIView(), for: .XCTestDefaultUUID)
+
+        XCTAssertEqual(mockThemeManager.getCurrentThemeCallCount, 0)
+        XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 1)
+    }
 }
 
 // MARK: - TestsTableViewDataSource
@@ -172,4 +183,5 @@ final class TestsThemeable: UIViewController, @MainActor Themeable {
     var currentWindowUUID: UUID? { return .XCTestDefaultUUID }
     var shouldUsePrivateOverride = false
     var shouldBeInPrivateTheme = false
+    var isSubjectToNovaPrivateOverride = true
 }

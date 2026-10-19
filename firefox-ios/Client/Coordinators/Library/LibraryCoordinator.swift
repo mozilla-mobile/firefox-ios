@@ -114,7 +114,8 @@ class LibraryCoordinator: BaseCoordinator,
             profile: profile,
             tabManager: tabManager,
             parentCoordinator: self,
-            delegate: self
+            delegate: self,
+            shouldUsePrivateOverride: true
         )
         add(child: coordinator)
 
