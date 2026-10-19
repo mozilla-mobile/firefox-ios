@@ -3410,8 +3410,8 @@ extension String {
             public static let LimitSubheading = MZLocalizedString(
                 key: "VPN.Onboarding.LimitSubheading.v160",
                 tableName: "Onboarding",
-                value: "5 GB, Free Every Month",
-                comment: "Subheading on the VPN onboarding card. Explains that the user gets 5 gigabytes of VPN data every month at no cost. “GB” stands for gigabytes."
+                value: "%1$@ GB, Free Every Month",
+                comment: "Subheading on the VPN onboarding card. Explains how much VPN data the user gets every month at no cost. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes."
             )
 
             public static let LimitBody = MZLocalizedString(
@@ -3530,8 +3530,8 @@ extension String {
             public static let Body = MZLocalizedString(
                 key: "VPN.ReachedDataLimitPopup.Body.v160",
                 tableName: "VPN",
-                value: "You’ve used all 5 GB of VPN data. VPN is off, so your location may be visible if you keep browsing.",
-                comment: "Body text of the popup shown when the user has used all of their free monthly VPN data. Explains that the VPN has turned off, so websites may be able to see their location if they keep browsing. “GB” stands for gigabytes."
+                value: "You’ve used all %1$@ GB of VPN data. VPN is off, so your location may be visible if you keep browsing.",
+                comment: "Body text of the popup shown when the user has used all of their free monthly VPN data. Explains that the VPN has turned off, so websites may be able to see their location if they keep browsing. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes."
             )
 
             public static let CloseAllTabs = MZLocalizedString(
@@ -3565,8 +3565,8 @@ extension String {
             public static let AltPopupBody = MZLocalizedString(
                 key: "VPN.ReachedDataLimitPopup.AltPopupBody.v160",
                 tableName: "VPN",
-                value: "All 5 GB of VPN data used. Access resets next month.",
-                comment: "Alternative body text for the popup shown when the user has used all of their free monthly VPN data. Explains that their VPN data resets at the start of next month. “GB” stands for gigabytes."
+                value: "All %1$@ GB of VPN data used. Access resets next month.",
+                comment: "Alternative body text for the popup shown when the user has used all of their free monthly VPN data. Explains that their VPN data resets at the start of next month. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes."
             )
         }
 
@@ -3574,8 +3574,8 @@ extension String {
             public static let Title = MZLocalizedString(
                 key: "VPN.DataLimitRefreshNotification.Title.v160",
                 tableName: "VPN",
-                value: "5 GB of VPN data is ready",
-                comment: "Title of a system notification telling the user their free monthly VPN data has reset and is ready to use again. “GB” stands for gigabytes."
+                value: "%1$@ GB of VPN data is ready",
+                comment: "Title of a system notification telling the user their free monthly VPN data has reset and is ready to use again. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes."
             )
 
             public static let Body = MZLocalizedString(
