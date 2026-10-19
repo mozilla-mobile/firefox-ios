@@ -74,6 +74,8 @@ struct CreditCardInputView: ThemeableView {
         return ZStack {
             Color(theme.colors.layer1).ignoresSafeArea()
             form
+                .navigationTitle(viewModel.state.title)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         leftBarButton()
