@@ -90,7 +90,7 @@ final class TabsSectionManager {
             return experimentLayoutSectionIpad(layoutEnvironment)
         }
 
-        let numberOfCellsPerRow = self.numberOfCellsPerRow(for: layoutEnvironment)
+        let numberOfCellsPerRow = numberOfCellsPerRow(for: layoutEnvironment)
 
         let cellHeight = UX.cellAbsoluteHeight
         let itemWidth: CGFloat = 1.0 / CGFloat(numberOfCellsPerRow)
@@ -145,7 +145,7 @@ final class TabsSectionManager {
     ) -> NSCollectionLayoutSection {
         let availableWidth = layoutEnvironment.container.effectiveContentSize.width
         let availableHeight = layoutEnvironment.container.effectiveContentSize.height
-        let numberOfCellsPerRow = self.numberOfCellsPerRow(for: layoutEnvironment)
+        let numberOfCellsPerRow = numberOfCellsPerRow(for: layoutEnvironment)
 
         let horizontalInset = TabsSectionManager.leadingInset(traitCollection: layoutEnvironment.traitCollection)
         let totalSpacing = CGFloat(numberOfCellsPerRow - 1) * UX.cardSpacing
