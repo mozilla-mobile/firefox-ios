@@ -886,6 +886,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         )
         XCTAssertEqual(contentViewController.url, url)
         XCTAssertEqual(contentViewController.settingsTitle, title)
+        XCTAssertFalse(contentViewController.shouldUsePrivateOverride)
     }
 
     func testPopToBVC_popsViewControllers() {

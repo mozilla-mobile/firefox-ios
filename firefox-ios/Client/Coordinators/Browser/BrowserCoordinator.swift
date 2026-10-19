@@ -787,8 +787,7 @@ final class BrowserCoordinator: BaseCoordinator,
               let nav = router.navigationController.presentedViewController as? UINavigationController else { return }
         let viewController = SettingsContentViewController(
             windowUUID: windowUUID,
-            shouldUsePrivateOverride: true,
-            shouldBeInPrivateTheme: false
+            shouldUsePrivateOverride: false
         )
         viewController.settingsTitle = title
         viewController.url = url

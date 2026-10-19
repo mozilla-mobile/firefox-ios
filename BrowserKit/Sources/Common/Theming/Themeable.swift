@@ -16,7 +16,6 @@ public protocol Themeable: ThemeUUIDIdentifiable {
 
     /// Whether `shouldUsePrivateOverride` is gated behind the Nova private theme override feature. Set to
     /// `false` only on overrides that predate the Nova implementation like SyncedTabs.
-    /// Must be redeclared per subclass.
     nonisolated var isSubjectToNovaPrivateOverride: Bool { get }
 
     @MainActor
