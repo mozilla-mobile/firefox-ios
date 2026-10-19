@@ -368,10 +368,7 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
             throw XCTSkip("traitOverrides requires iOS 17+")
         }
         let subject = createSubject(isBottomSearchBar: false)
-        subject.traitOverrides.userInterfaceIdiom = .phone
-        subject.traitOverrides.horizontalSizeClass = .compact
-        subject.traitOverrides.verticalSizeClass = .regular
-        subject.updateTraitsIfNeeded()
+        setDuoClosedTraits(on: subject)
 
         subject.searchBarPositionDidChange(newSearchBarPosition: .bottom)
 
@@ -386,6 +383,14 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
     private func setDuoExpandedTraits(on subject: BrowserViewController) {
         subject.traitOverrides.userInterfaceIdiom = .phone
         subject.traitOverrides.horizontalSizeClass = .regular
+        subject.traitOverrides.verticalSizeClass = .regular
+        subject.updateTraitsIfNeeded()
+    }
+
+    @available(iOS 17.0, *)
+    private func setDuoClosedTraits(on subject: BrowserViewController) {
+        subject.traitOverrides.userInterfaceIdiom = .phone
+        subject.traitOverrides.horizontalSizeClass = .compact
         subject.traitOverrides.verticalSizeClass = .regular
         subject.updateTraitsIfNeeded()
     }

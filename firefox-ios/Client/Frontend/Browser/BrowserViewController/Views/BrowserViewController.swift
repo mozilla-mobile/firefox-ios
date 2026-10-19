@@ -673,7 +673,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let isKeyboardShowing = (keyboardState?.intersectionHeightForView(view) ?? 0) > 0
+        let isKeyboardShowing = keyboardState != nil
         let isScrollAlphaZero = if #available(iOS 26.0, *) { isToolbarCollapsed } else { false }
 
         // Prevent homepage from showing behind the keyboard when content isn't scrollable.
@@ -1156,10 +1156,12 @@ class BrowserViewController: UIViewController,
         let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
         topTabsViewController.delegate = self
         addChild(topTabsViewController)
-        if traitCollection.userInterfaceIdiom == .phone,
+        if traitCollection.duoExpanded,
+           // Address bar at the top, tab strip below.
            let addressIndex = header.arrangedSubviews.firstIndex(of: addressToolbarContainer) {
             header.insertArrangedView(topTabsViewController.view, position: addressIndex + 1)
         } else {
+            // Tab strip at the top, address bar below.
             header.insertArrangedSubview(topTabsViewController.view, at: 0)
         }
         topTabsViewController.didMove(toParent: self)

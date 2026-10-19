@@ -122,6 +122,7 @@ final class AddressToolbarContainer: UIView,
 
     private var toolbarLeadingConstraint: NSLayoutConstraint?
     private var toolbarTrailingConstraint: NSLayoutConstraint?
+    /// Provided by the iOS 27.1 API `UIView.layoutGuide(for: .bar(onEdge:extent:))`.
     private var systemTopBarLayoutGuide: UILayoutGuide?
 
     private var progressBarTopConstraint: NSLayoutConstraint?
@@ -288,6 +289,8 @@ final class AddressToolbarContainer: UIView,
         toolbarTrailingConstraint?.isActive = true
     }
 
+    /// Keeps the top address toolbar clear of Duo's status area using the system bar layout guide.
+    /// Removes extra horizontal padding when the guide already provides the required spacing.
     func updateSystemTopBarLayoutGuide(_ guide: UILayoutGuide?, isBottomSearchBar: Bool) {
         guard systemTopBarLayoutGuide !== guide
                 || toolbarLeadingConstraint?.isActive != true
