@@ -5009,12 +5009,21 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
-        keyboardState = state
+        let wasKeyboardShowing = keyboardState != nil
+        // Frame changes are also posted for a hidden keyboard (e.g. on rotation), so only keep
+        // the state while the keyboard is actually on screen.
+        keyboardState = state.intersectionHeightForView(view) > 0 ? state : nil
         // Keep the keyboard spacer and bottom constraints in sync as the keyboard frame changes
         // (e.g. accessory-view height changes, interactive scroll-to-dismiss). Without this the
         // spacer holds its previous height and leaves a gap below the address bar.
         updateConstraintsForKeyboard()
         updateBottomContentStackViewConstraints()
+        let isKeyboardShowing = keyboardState != nil
+        if isKeyboardShowing != wasKeyboardShowing {
+            UIView.performWithoutAnimation {
+                updateBlurViews()
+            }
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
