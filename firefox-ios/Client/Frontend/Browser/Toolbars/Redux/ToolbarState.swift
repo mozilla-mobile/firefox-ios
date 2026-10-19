@@ -162,7 +162,7 @@ struct ToolbarState: ScreenState, Sendable {
                 .copy(isAddressBarMinimized: false)
                 .copy(isAccessoryViewVisible: false)
 
-        case .didKeyboardRequestChange:
+        case .didKeyboardRequestChange, .cancelEditOnHomepage, .didPasteSearchTerm:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
             return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
                                                                                     action,
@@ -188,9 +188,9 @@ struct ToolbarState: ScreenState, Sendable {
 
         case ToolbarActionType.borderPositionChanged, ToolbarActionType.urlDidChange,
             ToolbarActionType.lockIconChanged,
-            ToolbarActionType.didSetTextInLocationView, ToolbarActionType.didPasteSearchTerm,
+            ToolbarActionType.didSetTextInLocationView,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
-            ToolbarActionType.cancelEditOnHomepage, ToolbarActionType.websiteLoadingStateDidChange,
+            ToolbarActionType.websiteLoadingStateDidChange,
             ToolbarMiddlewareActionType.googleLensAvailabilityDidChange, ToolbarActionType.clearSearch,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
