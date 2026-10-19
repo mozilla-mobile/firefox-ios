@@ -4,28 +4,24 @@
 
 import Foundation
 
-/// The search access points for iOS that search-config-v3 can assign a partner code and
-/// telemetry suffix to. Raw values match the keys of the configuration's `partner`.
+/// SAP for iOS that search-config-v3 can assign a partner code and telemetry suffix to.
+/// Raw values match the keys of the configuration's `partner`.
 enum SearchAccessPoint: String, CaseIterable, Sendable {
-    /// Address bar searches, and the default fallback.
+    /// Address bar searches, also the default fallback.
     case `default`
-    /// Searches from context (long-press) menu.
+    /// Context (long-press) menu.
     case context
-    /// Searches from home screen widget.
+    /// Home screen widget.
     case widget
-    /// Searches from Google top site shortcut.
+    /// Google top site shortcut.
     case topsite
 }
 
-/// The partner code and telemetry suffix that search-config-v3 provides for a single SAP. This mirrors
-/// Rust `SearchEnginePartnerDetails` so the client doesn't depend on generated types and
-/// can persist it via Codable.
 struct SearchEnginePartner: Codable, Equatable, Sendable {
     let code: String?
     let telemetrySuffix: String?
 }
 
-/// Partner code and telemetry ID to use for a search started from a given access point.
 struct SearchPartnerResolution: Equatable, Sendable {
     /// The value to insert for `{partnerCode}`, or `nil` if partner code param must be omitted.
     let partnerCode: String?
@@ -35,14 +31,9 @@ struct SearchPartnerResolution: Equatable, Sendable {
 
 enum SearchPartnerResolver {
     /// Selects partner code and telemetry ID for a search, following the search-config-v3 rules:
-    /// - The entry for the access point is used if present, otherwise the `default` entry.
+    /// - Entry for the access point if present, otherwise `default`.
     /// - A missing or empty code means the partner code parameter is omitted.
     /// - A missing or empty telemetry suffix means the telemetry ID is just the engine identifier.
-    ///
-    /// - Parameters:
-    ///   - engineIdentifier: The configuration identifier of the engine, e.g. `google`.
-    ///   - partners: The engine's partner map, keyed by access point name. `nil` if the engine has no partner details.
-    ///   - accessPoint: The access point the search was started from.
     static func resolve(engineIdentifier: String,
                         partners: [String: SearchEnginePartner]?,
                         accessPoint: SearchAccessPoint) -> SearchPartnerResolution {
