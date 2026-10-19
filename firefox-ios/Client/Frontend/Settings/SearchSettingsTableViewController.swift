@@ -587,7 +587,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
             guard indexPath.item == FirefoxSuggestItem.suggestionLearnMore.rawValue else { return nil }
             let viewController = SettingsContentViewController(
                 windowUUID: windowUUID,
-                shouldUsePrivateOverride: true,
+                shouldUsePrivateOverride: shouldUsePrivateOverride,
                 shouldBeInPrivateTheme: false
             )
             viewController.url = SupportUtils.URLForTopic("search-suggestions-firefox")

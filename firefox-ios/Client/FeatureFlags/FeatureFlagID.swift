@@ -132,7 +132,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .multiDayOnboarding,
                 .nativeErrorPage,
                 .newBookmarkFolderTree,
-                .novaDesign,
                 .novaPrivateThemeOverride,
                 .privacyDashboard,
                 .quickAnswers,
