@@ -79,6 +79,12 @@ class MockBrowserViewController: BrowserViewController {
         return viewControllerToPresent
     }
 
+    override func present(_ viewControllerToPresent: UIViewController,
+                          animated flag: Bool,
+                          completion: (() -> Void)? = nil) {
+        self.viewControllerToPresent = viewControllerToPresent
+    }
+
     override var contentContainer: ContentContainer {
         return mockContentContainer
     }

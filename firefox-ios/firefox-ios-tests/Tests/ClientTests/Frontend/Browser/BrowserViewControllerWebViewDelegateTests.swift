@@ -345,6 +345,53 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    // MARK: - Create web view
+
+    @MainActor
+    func testWebViewCreateWebView_withMailtoScheme_showsMailAlertWithoutOpeningTab() throws {
+        let subject = MockBrowserViewController(profile: profile,
+                                                tabManager: tabManager,
+                                                userInitiatedQueue: MockDispatchQueue())
+        trackForMemoryLeaks(subject)
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let url = URL(string: "mailto:test@example.com")!
+
+        let newWebView = subject.webView(tab.webView!,
+                                         createWebViewWith: WKWebViewConfiguration(),
+                                         for: MockNavigationAction(url: url, type: .linkActivated),
+                                         windowFeatures: WKWindowFeatures())
+
+        XCTAssertNil(newWebView)
+        XCTAssertTrue(tabManager.lastSelectedTabs.isEmpty)
+        let alert = try XCTUnwrap(subject.presentedViewController as? UIAlertController)
+        XCTAssertEqual(alert.message, .ExternalMailLinkConfirmation)
+        // The alert's action captures the BVC, so drop it to avoid a leak since the mock never dismisses it
+        subject.viewControllerToPresent = nil
+    }
+
+    @MainActor
+    func testWebViewCreateWebView_withSmsScheme_showsSmsAlertWithoutOpeningTab() throws {
+        let subject = MockBrowserViewController(profile: profile,
+                                                tabManager: tabManager,
+                                                userInitiatedQueue: MockDispatchQueue())
+        trackForMemoryLeaks(subject)
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let url = URL(string: "sms:+15555555555")!
+
+        let newWebView = subject.webView(tab.webView!,
+                                         createWebViewWith: WKWebViewConfiguration(),
+                                         for: MockNavigationAction(url: url, type: .linkActivated),
+                                         windowFeatures: WKWindowFeatures())
+
+        XCTAssertNil(newWebView)
+        XCTAssertTrue(tabManager.lastSelectedTabs.isEmpty)
+        let alert = try XCTUnwrap(subject.presentedViewController as? UIAlertController)
+        XCTAssertEqual(alert.message, .ExternalSmsLinkConfirmation)
+    }
+
     // MARK: - Authentication
 
     @MainActor
