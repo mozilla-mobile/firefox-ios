@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import WebKit
 
@@ -18,9 +19,11 @@ final class BlankPageNavigationDelegate: NSObject, WKNavigationDelegate {
     private var continuation: CheckedContinuation<Void, Never>?
     private var awaitedNavigation: WKNavigation?
     private var timeoutTask: Task<Void, Never>?
+    private let logger: Logger
 
-    init(continuation: CheckedContinuation<Void, Never>) {
+    init(continuation: CheckedContinuation<Void, Never>, logger: Logger = DefaultLogger.shared) {
         self.continuation = continuation
+        self.logger = logger
         super.init()
     }
 
@@ -29,6 +32,7 @@ final class BlankPageNavigationDelegate: NSObject, WKNavigationDelegate {
     /// can deliver a callback for the navigation.
     func beginAwaiting(_ navigation: WKNavigation?) {
         guard let navigation else {
+            logger.log("Blank page load returned no navigation", level: .warning, category: .vpn)
             finish()
             return
         }
@@ -36,6 +40,7 @@ final class BlankPageNavigationDelegate: NSObject, WKNavigationDelegate {
         timeoutTask = Task { [weak self] in
             try? await Task.sleep(nanoseconds: Self.timeoutInNanoseconds)
             guard !Task.isCancelled else { return }
+            self?.logger.log("Timed out waiting for blank page load", level: .warning, category: .vpn)
             self?.finish()
         }
     }
@@ -45,7 +50,7 @@ final class BlankPageNavigationDelegate: NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation?, withError error: Error) {
-        finish(for: navigation)
+        finish(for: navigation, error: error)
     }
 
     func webView(
@@ -53,7 +58,7 @@ final class BlankPageNavigationDelegate: NSObject, WKNavigationDelegate {
         didFailProvisionalNavigation navigation: WKNavigation?,
         withError error: Error
     ) {
-        finish(for: navigation)
+        finish(for: navigation, error: error)
     }
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
@@ -64,8 +69,11 @@ final class BlankPageNavigationDelegate: NSObject, WKNavigationDelegate {
 
     /// Ignores callbacks for any other navigation, so a late failure from the load being
     /// replaced cannot resume us before the awaited one has finished.
-    private func finish(for navigation: WKNavigation?) {
+    private func finish(for navigation: WKNavigation?, error: Error? = nil) {
         guard let awaitedNavigation, navigation === awaitedNavigation else { return }
+        if let error {
+            logger.log("Blank page load failed: \(error.localizedDescription)", level: .warning, category: .vpn)
+        }
         finish()
     }
 
