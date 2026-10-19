@@ -1110,12 +1110,32 @@ workflows:
             gcloud auth activate-service-account -q --key-file /tmp/gcs-key.json
             rm -f /tmp/gcs-key.json
 
-            DEST="gs://mobile-reports/public/l10n-screenshots/$(date +%F)-${BITRISE_BUILD_NUMBER}"
-            gcloud storage cp -r l10n-screenshots/en-US/en-US/* "$DEST/en-US/"
+            ZIP="Firefox-iOS-L10n-en-US-$(date +%Y%m%d).zip"
+            (cd l10n-screenshots/en-US/en-US && zip -q -9 "$OLDPWD/$ZIP" ./*.png)
 
-            URL="https://storage.googleapis.com/${DEST#gs://}/en-US/"
+            DEST="gs://mobile-reports/public/l10n-screenshots/$(date +%F)-${BITRISE_BUILD_NUMBER}/$ZIP"
+            gcloud storage cp "$ZIP" "$DEST"
+
+            URL="https://storage.googleapis.com/${DEST#gs://}"
             echo "Screenshots uploaded to $URL"
             envman add --key L10N_SCREENSHOTS_URL --value "$URL"
+    - slack@4:
+        title: Notify Slack that screenshots are ready
+        run_if: '{{getenv "L10N_SCREENSHOTS_URL" | ne ""}}'
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer: Created by Mobile Test Engineering
+        - pretext: "*Firefox-iOS* :firefox: *L10n screenshots (en-US) are ready* :camera_with_flash:"
+        - message: ''
+        - timestamp: 'no'
+        - fields: |
+            Branch | ${BITRISE_GIT_BRANCH}
+        - buttons: |
+            Download screenshots (zip)|${L10N_SCREENSHOTS_URL}
+            Build Log|${BITRISE_BUILD_URL}
     envs:
     - opts:
         is_expand: false
