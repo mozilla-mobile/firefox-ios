@@ -450,6 +450,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
+        if featureFlagsProvider.isEnabled(.vpnFeature) {
+            privacySettings.append(VPNSetting(settings: self, settingsDelegate: parentCoordinator))
+        }
+
         if let profile {
             privacySettings.append(NotificationsSetting(theme: currentTheme(),
                                                         profile: profile,
@@ -573,6 +577,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
         #endif
 
         hiddenDebugOptions.append(SafeAreaGuidesSetting(settings: self))
+
+        if #available(iOS 26.0, *), featureFlagsProvider.isEnabled(.vpnFeature) {
+            hiddenDebugOptions.append(ToggleVPNProxySetting(settings: self,
+                                                            vpnManager: AppContainer.shared.resolve()))
+        }
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
