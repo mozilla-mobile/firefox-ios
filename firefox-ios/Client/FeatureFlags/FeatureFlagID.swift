@@ -27,6 +27,7 @@ enum FeatureFlagID: String, CaseIterable {
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case googleLens
+    case googleLensSearchInterstitial
     case hntSponsoredShortcuts
     case homepageAddShortcutTile
     case homepageBookmarksSectionDefault
@@ -119,6 +120,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,
                 .googleLens,
+                .googleLensSearchInterstitial,
                 .homepageAddShortcutTile,
                 .homepagePinnedHeader,
                 .homepageAnimatedCenterSearchBar,
