@@ -2402,6 +2402,9 @@ workflows:
         title: Set OpenInFocus version numbers
 
   Firefox_Nightly_SmokeTest_Iphone:
+    envs:
+    - TEST_DEVICE: iPhone Duo
+    - TEST_OS: "27.1"
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -2420,12 +2423,12 @@ workflows:
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
         - test_plan: Smoketest
         - xcodebuild_options: ONLY_ACTIVE_ARCH=YES COMPILER_INDEX_STORE_ENABLE=NO
-        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+        - destination: platform=iOS Simulator,name=$TEST_DEVICE,OS=$TEST_OS
     - xcode-test-without-building@0:
         title: "Run all smoke tests"
         timeout: 3000
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+        - destination: platform=iOS Simulator,name=$TEST_DEVICE,OS=$TEST_OS
         - xctestrun: "$BITRISE_XCTESTRUN_FILE_PATH"
         - xcodebuild_options: -collect-test-diagnostics never
     - script@1:
@@ -2440,6 +2443,7 @@ workflows:
             echo "Total number of failures: $FAILED_COUNT"
 
             envman add --key SMOKETEST_FAILED_TEST_COUNT --value "$FAILED_COUNT"
+            envman add --key XCODE_VERSION_INFO --value "$(xcodebuild -version | tr '\n' ' ')"
     - deploy-to-bitrise-io@2:
         is_always_run: true
     - slack@4:
@@ -2458,7 +2462,11 @@ workflows:
         - pretext: "*Firefox-iOS* :firefox: *Nightly Smoketest iPhone* :white_check_mark:"
         - message: ''
         - timestamp: 'no'
-        - fields: ''
+        - fields: |
+            Branch | ${BITRISE_GIT_BRANCH}
+            Device | ${TEST_DEVICE}
+            iOS Version | ${TEST_OS}
+            Xcode Version | ${XCODE_VERSION_INFO}
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=tests
