@@ -142,7 +142,7 @@ final class VPNGuardian: Sendable {
     /// Fetches a replacement pass, retrying retryable failures with exponential backoff until
     /// `rotationTimeout` is spent. Mirrors desktop's `#attemptPassRotation`: server errors,
     /// timeouts and offline errors are retried; anything else fails the rotation immediately.
-    private func rotatePass() async throws -> ProxyPass {
+    func rotatePass() async throws -> ProxyPass {
         let deadline = Date().addingTimeInterval(Self.rotationTimeout)
         var delay = Self.rotationRetryDelay
 
