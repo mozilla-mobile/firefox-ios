@@ -1098,6 +1098,24 @@ workflows:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
+    - script@1:
+        title: Upload screenshots to Google Cloud Storage
+        run_if: '{{getenv "BITRISEIO_GCP_L10N_SCREENSHOTS_KEY_URL" | ne ""}}'
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euo pipefail
+
+            curl -sfo /tmp/gcs-key.json "$BITRISEIO_GCP_L10N_SCREENSHOTS_KEY_URL"
+            gcloud auth activate-service-account -q --key-file /tmp/gcs-key.json
+            rm -f /tmp/gcs-key.json
+
+            DEST="gs://mobile-reports/public/l10n-screenshots/$(date +%F)-${BITRISE_BUILD_NUMBER}"
+            gcloud storage cp -r l10n-screenshots/en-US/en-US/* "$DEST/en-US/"
+
+            URL="https://storage.googleapis.com/${DEST#gs://}/en-US/"
+            echo "Screenshots uploaded to $URL"
+            envman add --key L10N_SCREENSHOTS_URL --value "$URL"
     envs:
     - opts:
         is_expand: false
