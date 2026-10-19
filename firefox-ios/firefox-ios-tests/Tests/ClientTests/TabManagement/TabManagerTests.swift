@@ -247,6 +247,112 @@ final class TabManagerTests: TabManagerTestsBase {
         XCTAssertTrue(subject.privateTabs.isEmpty)
     }
 
+    // MARK: - Session reads on selection
+
+    @MainActor
+    func testSelectTab_withLiveWebView_skipsFetchAndSavesPreviousSession() {
+        let tabs = generateTabs(count: 2)
+        let previousWebView = MockTabWebView(tab: tabs[0])
+        let previousSession = Data([1, 2, 3])
+        previousWebView.mockInteractionState = previousSession
+        tabs[0].webView = previousWebView
+        let selectedWebView = MockTabWebView(tab: tabs[1])
+        tabs[1].webView = selectedWebView
+        let subject = createSubject(tabs: tabs)
+        subject.selectTab(tabs[0])
+        mockSessionStore.fetchedTabIDs = []
+        mockSessionStore.saveTabSessionCallCount = 0
+        tabs[1].lastExecutedTime = 0
+
+        subject.selectTab(tabs[1])
+
+        XCTAssertTrue(mockSessionStore.fetchedTabIDs.isEmpty)
+        XCTAssertTrue(subject.selectedTab === tabs[1])
+        XCTAssertTrue(tabs[1].webView === selectedWebView)
+        XCTAssertNotEqual(tabs[1].lastExecutedTime, 0)
+        XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 1)
+        XCTAssertEqual(mockSessionStore.tabID, UUID(uuidString: tabs[0].tabUUID))
+        XCTAssertEqual(mockSessionStore.sessionData, previousSession)
+    }
+
+    @MainActor
+    func testSelectTab_withLivePrivateWebView_skipsFetch() {
+        let tabs = generateTabs(ofType: .privateAny, count: 1)
+        let webView = MockTabWebView(tab: tabs[0])
+        tabs[0].webView = webView
+        let subject = createSubject(tabs: tabs)
+
+        subject.selectTab(tabs[0])
+
+        XCTAssertTrue(mockSessionStore.fetchedTabIDs.isEmpty)
+        XCTAssertTrue(subject.selectedTab === tabs[0])
+        XCTAssertTrue(tabs[0].webView === webView)
+    }
+
+    @MainActor
+    func testSelectTab_reselectingLiveTab_skipsFetch() {
+        let tabs = generateTabs(count: 1)
+        let webView = MockTabWebView(tab: tabs[0])
+        tabs[0].webView = webView
+        let subject = createSubject(tabs: tabs)
+        subject.selectTab(tabs[0])
+        mockSessionStore.fetchedTabIDs = []
+
+        subject.selectTab(tabs[0])
+
+        XCTAssertTrue(mockSessionStore.fetchedTabIDs.isEmpty)
+        XCTAssertTrue(tabs[0].webView === webView)
+    }
+
+    @MainActor
+    func testSelectTab_withZombieTab_passesFetchedSessionToRestore() throws {
+        let tab = SessionRestoringTab(profile: mockProfile, windowUUID: tabWindowUUID)
+        let subject = createSubject(tabs: [tab])
+        let session = Data([4, 5, 6])
+        mockSessionStore.fetchedSessionData = session
+        XCTAssertNil(tab.webView)
+
+        subject.selectTab(tab)
+
+        XCTAssertEqual(mockSessionStore.fetchedTabIDs, [try XCTUnwrap(UUID(uuidString: tab.tabUUID))])
+        XCTAssertEqual(tab.restoredSessionData, session)
+        XCTAssertTrue(subject.selectedTab === tab)
+        XCTAssertNotNil(tab.webView)
+    }
+
+    @MainActor
+    func testSelectTab_afterOffloadingWebView_fetchesSessionAgain() async throws {
+        let tab = SessionRestoringTab(profile: mockProfile, windowUUID: tabWindowUUID)
+        let otherTab = generateTabs(count: 1)[0]
+        let subject = createSubject(tabs: [tab, otherTab])
+        subject.selectTab(tab)
+        subject.selectTab(otherTab)
+        await subject.offloadBackgroundWebViews()
+        XCTAssertNil(tab.webView)
+        mockSessionStore.fetchedTabIDs = []
+        let session = Data([7, 8, 9])
+        mockSessionStore.fetchedSessionData = session
+
+        subject.selectTab(tab)
+
+        XCTAssertEqual(mockSessionStore.fetchedTabIDs, [try XCTUnwrap(UUID(uuidString: tab.tabUUID))])
+        XCTAssertEqual(tab.restoredSessionData, session)
+        XCTAssertTrue(subject.selectedTab === tab)
+        XCTAssertNotNil(tab.webView)
+    }
+
+    @MainActor
+    func testSelectTab_withLiveTabOutsideManager_keepsFetchFallback() throws {
+        let tab = generateTabs(count: 1)[0]
+        tab.webView = MockTabWebView(tab: tab)
+        let subject = createSubject()
+
+        subject.selectTab(tab)
+
+        XCTAssertEqual(mockSessionStore.fetchedTabIDs, [try XCTUnwrap(UUID(uuidString: tab.tabUUID))])
+        XCTAssertNil(subject.selectedTab)
+    }
+
     // MARK: - Document pause - restore
 
     @MainActor
@@ -698,5 +804,14 @@ private final class MergeTabStateObserver: TabManagerDelegate {
         observedStates.append(State(url: tab.url?.absoluteString,
                                     title: tab.getTabTrayTitle(),
                                     faviconURL: tab.faviconURL))
+    }
+}
+
+@MainActor
+private final class SessionRestoringTab: Tab {
+    var restoredSessionData: Data?
+
+    override func restore(_ webView: WKWebView, interactionState: Data? = nil) {
+        restoredSessionData = interactionState
     }
 }
