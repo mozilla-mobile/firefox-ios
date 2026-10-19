@@ -405,8 +405,8 @@ extension PasswordDetailViewController {
         viewModel.profile.hasSyncedLogins()
             .uponQueue(.main) { yes in
                 // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-                MainActor.assumeIsolated {
-                    self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self = self] _ in
+                MainActor.assumeIsolated { [unowned self] in
+                    self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ _ in
                         self.sendLoginsDeletedTelemetry()
                         self.viewModel.profile.logins.deleteLogin(id: self.viewModel.login.id) { _ in
                             DispatchQueue.main.async { [weak self] in
