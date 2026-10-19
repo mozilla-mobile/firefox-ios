@@ -1126,9 +1126,8 @@ workflows:
         - title: ''
         - author_name: ''
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
-        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
-        - footer: Created by Mobile Test Engineering
-        - pretext: "*Firefox-iOS* :firefox: *L10n screenshots (en-US) are ready* :camera_with_flash:"
+        - footer: ":testops-notify: Created by Mobile Test Engineering"
+        - pretext: "*Firefox-iOS* :firefox: *L10n screenshots (en-US)* :camera_with_flash: :translation_icon:"
         - message: ''
         - timestamp: 'no'
         - fields: |
