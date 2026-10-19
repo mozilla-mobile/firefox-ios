@@ -2221,7 +2221,8 @@ workflows:
         - pretext: "*Firefox-iOS* :firefox: *${SYNC_SLACK_TITLE}* :white_check_mark:"
         - message: ''
         - timestamp: 'no'
-        - fields: ''
+        - fields: |
+            Branch | ${BITRISE_GIT_BRANCH}
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=artifacts
