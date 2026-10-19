@@ -2401,7 +2401,21 @@ workflows:
         - plist_path: focus-ios/OpenInFocus/Info.plist
         title: Set OpenInFocus version numbers
 
-  Firefox_Nightly_SmokeTest_Iphone:
+  Firefox_Nightly_SmokeTest_Iphone_Fennec_Scheme:
+    envs:
+    - NIGHTLY_SCHEME: Fennec
+    - NIGHTLY_SLACK_TITLE: Nightly Smoketest iPhone (Debug config)
+    after_run:
+    - _nightly_smoketest_iphone
+
+  Firefox_Nightly_SmokeTest_Iphone_Firefox_Scheme:
+    envs:
+    - NIGHTLY_SCHEME: Firefox
+    - NIGHTLY_SLACK_TITLE: Nightly Smoketest iPhone (Firefox scheme)
+    after_run:
+    - _nightly_smoketest_iphone
+
+  _nightly_smoketest_iphone:
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -2415,7 +2429,7 @@ workflows:
         title: "Build Firefox iOS"
         timeout: 360
         inputs:
-        - scheme: Fennec
+        - scheme: "$NIGHTLY_SCHEME"
         - configuration: Debug
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
         - test_plan: Smoketest
@@ -2452,13 +2466,14 @@ workflows:
         - footer: Created by Mobile Test Engineering
         - footer_icon_on_error: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
         - footer_on_error: Created by Mobile Test Engineering
-        - pretext_on_error: "*Firefox-iOS* :firefox: *Nightly Smoketest iPhone* :x:"
+        - pretext_on_error: "*Firefox-iOS* :firefox: *${NIGHTLY_SLACK_TITLE}* :x:"
         - message_on_error: "Number of failed tests: ${SMOKETEST_FAILED_TEST_COUNT}"
         - color_on_error: danger
-        - pretext: "*Firefox-iOS* :firefox: *Nightly Smoketest iPhone* :white_check_mark:"
+        - pretext: "*Firefox-iOS* :firefox: *${NIGHTLY_SLACK_TITLE}* :white_check_mark:"
         - message: ''
         - timestamp: 'no'
-        - fields: ''
+        - fields: |
+            Branch | ${BITRISE_GIT_BRANCH}
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=tests
