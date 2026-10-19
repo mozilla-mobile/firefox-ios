@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>VPNGuardianSecret</key>
-	<string>$(VPN_GUARDIAN_SECRET)</string>
+	<string>oGGVc778TkKMVuAfHk6FFMrL26rHkmCPUis</string>
 	<key>AttributionCopyEndpoint</key>
 	<string>https://adjust-skadnetwork.com</string>
 	<key>NSAdvertisingAttributionReportEndpoint</key>
@@ -180,7 +180,7 @@
 		</dict>
 	</dict>
 	<key>UIApplicationShortcutItems</key>
-	<array>		
+	<array>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>plusLarge</string>

@@ -1358,17 +1358,17 @@ final class BrowserCoordinator: BaseCoordinator,
             style: .destructive
         ) { [weak self] _ in
             guard let self else { return }
-            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: .continueWithoutVPN))
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: VPNActionType.continueWithoutVPN))
         })
 
         alert.addAction(UIAlertAction(title: .Alerts.VPNFailure.CloseAllTabsButton, style: .default) { [weak self] _ in
             guard let self else { return }
-            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: .closeAllTabs))
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: VPNActionType.closeAllTabs))
         })
 
         alert.addAction(UIAlertAction(title: .Alerts.VPNFailure.CloseThisTabButton, style: .default) { [weak self] _ in
             guard let self else { return }
-            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: .closeThisTab))
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: VPNActionType.closeThisTab))
         })
 
         vpnFailureAlert = alert

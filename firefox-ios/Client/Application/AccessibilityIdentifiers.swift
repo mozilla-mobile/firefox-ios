@@ -890,6 +890,7 @@ struct AccessibilityIdentifiers {
 
         struct Debug {
             static let offloadBackgroundWebViews = "Settings.Debug.OffloadBackgroundWebViews"
+            static let toggleVPNProxy = "Settings.Debug.ToggleVPNProxy"
         }
     }
 
