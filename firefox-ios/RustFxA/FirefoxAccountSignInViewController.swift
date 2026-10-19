@@ -67,6 +67,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     // UI
     private lazy var scrollView: UIScrollView = .build { view in
         view.backgroundColor = .clear
+        view.contentInsetAdjustmentBehavior = .always
     }
 
     private lazy var containerView: UIView = .build { view in
@@ -226,7 +227,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
-            scrollView.frameLayoutGuide.widthAnchor.constraint(equalTo: containerView.widthAnchor),
+            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
 
             scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
@@ -242,6 +243,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
             pairImageView.topAnchor.constraint(equalTo: qrSignInLabel.bottomAnchor,
                                                constant: UX.horizontalPadding),
             pairImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            pairImageView.widthAnchor.constraint(lessThanOrEqualTo: containerView.widthAnchor,
+                                                 constant: -2 * UX.horizontalPadding),
 
             instructionsLabel.topAnchor.constraint(equalTo: pairImageView.bottomAnchor,
                                                    constant: UX.horizontalPadding),
@@ -263,6 +266,10 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
                                                   constant: -UX.horizontalPadding),
             emailButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
         ])
+        if let imageSize = pairImageView.image?.size, imageSize.width > 0 {
+            pairImageView.heightAnchor.constraint(equalTo: pairImageView.widthAnchor,
+                                                  multiplier: imageSize.height / imageSize.width).isActive = true
+        }
         containerView.setNeedsLayout()
         containerView.layoutIfNeeded()
     }
