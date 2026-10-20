@@ -226,13 +226,6 @@ class MainMenuViewController: UIViewController,
         closeItem.accessibilityLabel = .MainMenu.AccessibilityLabels.CloseButton
         closeItem.accessibilityTraits = .button
         navigationCloseItem = closeItem
-        #if XCODE_2710 || XCODE_2720
-        if #available(iOS 27.1, *) {
-            registerForTraitChanges(UITraitCollection.systemTraitsAffectingVerticalBarEdge) { (self: Self, _) in
-                self.view.setNeedsLayout()
-            }
-        }
-        #endif
     }
 
     private func updateCloseButtonPlacement() {

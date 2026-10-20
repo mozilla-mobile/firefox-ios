@@ -426,7 +426,7 @@ public class BrowserAddressToolbar: UIView,
         }
     }
 
-    private func updateSpacing(leading: CGFloat, trailing: CGFloat) {
+    public func updateSpacing(leading: CGFloat, trailing: CGFloat) {
         leadingNavigationActionStackConstraint?.constant = leading
         trailingBrowserActionStackConstraint?.constant = -trailing
     }
