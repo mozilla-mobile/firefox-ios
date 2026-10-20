@@ -85,6 +85,34 @@ extension String {
                 value: "Cancel",
                 comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the cancel action for the alert, cancelling the action to add the event to the calendar.")
         }
+
+        public struct ConfigurationProfile {
+            public static let Title = MZLocalizedString(
+                key: "Alerts.ConfigurationProfile.Title.v160",
+                tableName: "Alerts",
+                value: "Download configuration profile?",
+                comment: "When tapping on a link, on a website in order to download a file and that file is an iOS configuration profile, an alert comes up asking to confirm if you want to download the profile so it can be installed from the device Settings. This is the title for the alert.")
+            public static let Body = MZLocalizedString(
+                key: "Alerts.ConfigurationProfile.Body.v160",
+                tableName: "Alerts",
+                value: "%@ is asking to download a configuration profile. You can review and install it in Settings.",
+                comment: "When tapping on a link, on a website in order to download a file and that file is an iOS configuration profile, an alert comes up asking to confirm if you want to download the profile so it can be installed from the device Settings. This is the body message for the alert. %@ is the name/domain of the website, for example 'google.com'")
+            public static let BodyDefault = MZLocalizedString(
+                key: "Alerts.ConfigurationProfile.BodyDefault.v160",
+                tableName: "Alerts",
+                value: "This site is asking to download a configuration profile. You can review and install it in Settings.",
+                comment: "When tapping on a link, on a website in order to download a file and that file is an iOS configuration profile, an alert comes up asking to confirm if you want to download the profile so it can be installed from the device Settings. This is the body message for the alert in case the website doesn't have a base domain.")
+            public static let ContinueButton = MZLocalizedString(
+                key: "Alerts.ConfigurationProfile.Button.Continue.v160",
+                tableName: "Alerts",
+                value: "Continue",
+                comment: "When tapping on a link, on a website in order to download a file and that file is an iOS configuration profile, an alert comes up asking to confirm if you want to download the profile so it can be installed from the device Settings. This is the affirmative action for the alert, confirming that you do want to download the profile.")
+            public static let CancelButton = MZLocalizedString(
+                key: "Alerts.ConfigurationProfile.Button.Cancel.v160",
+                tableName: "Alerts",
+                value: "Cancel",
+                comment: "When tapping on a link, on a website in order to download a file and that file is an iOS configuration profile, an alert comes up asking to confirm if you want to download the profile so it can be installed from the device Settings. This is the cancel action for the alert, cancelling the profile download.")
+        }
     }
 }
 
