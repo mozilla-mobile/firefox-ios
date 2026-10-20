@@ -72,6 +72,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .cellularDataRestrictedErrorPage:
             return checkCellularDataRestrictedErrorPageFeature()
 
+        case .checkForReinstalls:
+            return checkForReinstallsFeature()
+
         case .configurationProfile:
             return checkConfigurationProfileFeature()
 
@@ -130,9 +133,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .improvedAppStoreReviewTriggerFeature:
             return checkImprovedAppStoreReviewTriggerFeature()
-
-        case .installationTelemetry:
-            return checkInstallationTelemetryFeature()
 
         case .mergeWindows:
             return checkMergeWindowsFeature()
@@ -426,8 +426,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.improvedAppStoreReviewTriggerFeature.value().enabled
     }
 
-    private func checkInstallationTelemetryFeature() -> Bool {
-        return nimbus.features.installationTelemetryFeature.value().enabled
+    private func checkForReinstallsFeature() -> Bool {
+        return nimbus.features.checkForReinstallsFeature.value().enabled
     }
 
     // MARK: - Summarizer Feature

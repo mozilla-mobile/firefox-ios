@@ -21,6 +21,7 @@ enum FeatureFlagID: String, CaseIterable {
     case browserDataExport
     case browserDataImport
     case cellularDataRestrictedErrorPage
+    case checkForReinstalls
     case configurationProfile
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
@@ -42,7 +43,6 @@ enum FeatureFlagID: String, CaseIterable {
     case hostedSummarizerToolbarEntrypoint
     case httpsUpgrade
     case improvedAppStoreReviewTriggerFeature
-    case installationTelemetry
     case mergeWindows
     case microsurvey
     case modernOnboardingUI
@@ -122,6 +122,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .bookmarksSearchFeature,
                 .browserDataExport,
                 .browserDataImport,
+                .checkForReinstalls,
                 .configurationProfile,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
@@ -136,7 +137,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .hostedSummarizer,
                 .httpsUpgrade,
                 .improvedAppStoreReviewTriggerFeature,
-                .installationTelemetry,
                 .mergeWindows,
                 .microsurvey,
                 .multiDayOnboarding,

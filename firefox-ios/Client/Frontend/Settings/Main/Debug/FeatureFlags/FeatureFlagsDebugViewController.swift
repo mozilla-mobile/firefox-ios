@@ -122,6 +122,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .checkForReinstalls,
+                titleText: format(string: "Check for Reinstalls"),
+                statusText: format(string: "Toggle to enable app reinstallation checks")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .configurationProfile,
                 titleText: format(string: "Configuration Profile"),
                 statusText: format(string: "Toggle to offer opening .mobileconfig profiles in Safari")
@@ -209,13 +216,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .improvedAppStoreReviewTriggerFeature,
                 titleText: format(string: "Improved App Store Review Trigger"),
                 statusText: format(string: "Toggle to enable App Store Review Trigger feature.")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .installationTelemetry,
-                titleText: format(string: "Installation Telemetry"),
-                statusText: format(string: "Toggle to enable installation telemetry for app redownloads.")
             ) { [weak self] _ in
                 self?.reloadView()
             },

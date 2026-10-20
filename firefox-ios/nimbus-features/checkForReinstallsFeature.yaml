@@ -1,12 +1,12 @@
-# The configuration for the installationTelemetryFeature feature
+# The configuration for the checkForReinstallsFeature feature
 features:
-  installation-telemetry-feature:
+  check-for-reinstalls-feature:
     description: >
-      Controls installation telemetry for measuring app redownloads.
+      Controls app reinstallation checks.
     variables:
       enabled:
         description: >
-          Whether installation telemetry is enabled.
+          Whether app reinstallation checks are enabled.
         type: Boolean
         default: false
     defaults:
