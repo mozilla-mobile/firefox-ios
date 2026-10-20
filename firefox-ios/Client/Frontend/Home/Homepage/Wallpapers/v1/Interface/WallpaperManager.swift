@@ -108,20 +108,11 @@ final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
 
         Task(priority: .userInitiated) {
             do {
-                // Download both images at the same time for efficiency
-                async let portraitFetchRequest = dataService.getImage(
-                    named: wallpaper.portraitID,
-                    withFolderName: wallpaper.id)
-                async let landscapeFetchRequest = dataService.getImage(
-                    named: wallpaper.landscapeID,
-                    withFolderName: wallpaper.id)
-
-                let (portrait, landscape) = await (try portraitFetchRequest,
-                                                   try landscapeFetchRequest)
-
-                try storageUtility.store(portrait, withName: wallpaper.portraitID)
-                try storageUtility.store(landscape, withName: wallpaper.landscapeID)
-
+                for type in WallpaperImageType.allCases {
+                    let fileName = wallpaper.fileName(for: type)
+                    let image = try await dataService.getImage(named: fileName, withFolderName: wallpaper.id)
+                    try storageUtility.store(image, withName: fileName)
+                }
                 completion(.success(()))
             } catch {
                 logger.log("Error fetching wallpaper resources: \(error.localizedDescription)",
