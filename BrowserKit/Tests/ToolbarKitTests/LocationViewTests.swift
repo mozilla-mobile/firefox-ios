@@ -210,6 +210,34 @@ final class LocationViewTests: XCTestCase {
         XCTAssertEqual(subject.lockIconButton.alpha, 1)
     }
 
+    // MARK: - Centered Layout
+    func testConfigure_whenCenteredAndLockIconRemoved_keepsURLTextPosition() {
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 320, height: 640))
+        let viewController = UIViewController()
+        window.rootViewController = viewController
+        let container: UIView = viewController.view
+        let subject = createSubject()
+        subject.frame = CGRect(x: 0, y: 0, width: 320, height: 44)
+        container.addSubview(subject)
+        window.makeKeyAndVisible()
+        defer { window.isHidden = true }
+
+        subject.configure(makeConfig(url: testURL), delegate: delegate, uxConfig: .experiment())
+        subject.layoutIfNeeded()
+        let textFieldMinXWithLockIcon = subject.urlTextField.convert(subject.urlTextField.bounds, to: container).minX
+
+        subject.configure(makeConfig(url: testURL, lockIconImageName: nil), delegate: delegate, uxConfig: .experiment())
+        subject.layoutIfNeeded()
+        let textFieldMinXWithoutLockIcon = subject.urlTextField.convert(subject.urlTextField.bounds, to: container).minX
+
+        XCTAssertEqual(
+            textFieldMinXWithoutLockIcon,
+            textFieldMinXWithLockIcon,
+            accuracy: 0.5,
+            "The centered URL text should not shift when the lock icon is removed, e.g. in reader mode."
+        )
+    }
+
     // MARK: - Helpers
     /// Puts all icons at an alpha no expected value matches, so the assertions fail unless the
     /// code under test actually writes them.
@@ -236,7 +264,8 @@ final class LocationViewTests: XCTestCase {
     private func makeConfig(url: URL?,
                             isEditing: Bool = false,
                             searchTerm: String? = nil,
-                            shouldDisplaySearchTerm: Bool = false) -> LocationViewConfiguration {
+                            shouldDisplaySearchTerm: Bool = false,
+                            lockIconImageName: String? = "lockIcon") -> LocationViewConfiguration {
         return LocationViewConfiguration(
             searchEngineImageViewA11yId: "searchEngineA11yId",
             searchEngineImageViewA11yLabel: "searchEngineA11yLabel",
@@ -245,7 +274,7 @@ final class LocationViewTests: XCTestCase {
             urlTextFieldPlaceholder: "placeholder",
             urlTextFieldA11yId: "urlTextFieldA11yId",
             searchEngineImage: UIImage(),
-            lockIconImageName: "lockIcon",
+            lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: false,
             safeListedURLImageName: nil,
             url: url,
@@ -261,11 +290,13 @@ final class LocationViewTests: XCTestCase {
 }
 
 private extension LocationView {
-    func configure(_ config: LocationViewConfiguration, delegate: LocationViewDelegate) {
+    func configure(_ config: LocationViewConfiguration,
+                   delegate: LocationViewDelegate,
+                   uxConfig: AddressToolbarUXConfiguration = .default()) {
         configure(config,
                   delegate: delegate,
                   isUnifiedSearchEnabled: false,
-                  uxConfig: .default(),
+                  uxConfig: uxConfig,
                   addressBarPosition: .top)
     }
 }
