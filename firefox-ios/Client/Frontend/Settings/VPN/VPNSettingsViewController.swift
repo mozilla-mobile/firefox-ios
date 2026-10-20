@@ -7,7 +7,7 @@ import Common
 final class VPNSettingsViewController: SettingsTableViewController {
     init(windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
-        self.title = .VPN.Settings.Title
+        self.title = "Built-In VPN"
     }
 
     required init?(coder: NSCoder) {

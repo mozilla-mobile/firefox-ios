@@ -20,7 +20,7 @@ final class VPNSetting: Setting {
 
     override var status: NSAttributedString? {
         // TODO: - Figure out how we tell if the VPN is on, for now default to off
-        let statusString: String = .VPN.Settings.StatusOff
+        let statusString = "Not Connected"
         return NSAttributedString(string: statusString)
     }
 
@@ -32,7 +32,7 @@ final class VPNSetting: Setting {
         let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(
-                string: .VPN.Settings.Title,
+                string: "Built-In VPN",
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]
