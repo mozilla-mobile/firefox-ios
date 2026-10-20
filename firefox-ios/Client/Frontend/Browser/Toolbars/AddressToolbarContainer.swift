@@ -236,11 +236,6 @@ final class AddressToolbarContainer: UIView,
         store.dispatch(ToolbarModernAction.accessoryViewVisibilityChanged(isVisible: hasAccessoryView),
                        forWindowUUID: windowUUID)
 
-        if shouldAdjustForAccessory {
-            let height = frame.height + UX.accessoryViewGradientOffset
-            accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
-            accessoryViewGradient.opacity = 1
-        }
         return accessoryViewOffset
     }
 
@@ -336,8 +331,31 @@ final class AddressToolbarContainer: UIView,
     }
 
     func newState(state: AddressToolbarContainerLens) {
+        let wasShowingAccessoryGradient = shouldShowAccessoryGradient(for: self.state)
         self.state = state.toolbarState
         updateModel(addressToolbarContainerLens: state)
+        if shouldShowAccessoryGradient(for: self.state) != wasShowingAccessoryGradient {
+            setNeedsLayout()
+        }
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard #available(iOS 26.0, *) else { return }
+
+        // Synchronize accessory gradient during rotation or resizing.
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        accessoryViewGradient.frame = CGRect(width: bounds.width,
+                                             height: bounds.height + UX.accessoryViewGradientOffset)
+        accessoryViewGradient.opacity = shouldShowAccessoryGradient(for: state) ? 1 : 0
+        CATransaction.commit()
+    }
+
+    private func shouldShowAccessoryGradient(for state: ToolbarState?) -> Bool {
+        return state?.toolbarPosition == .bottom
+            && state?.isAccessoryViewVisible == true
+            && state?.addressToolbar.isEditing == false
     }
 
     // MARK: - AlphaDimmable
@@ -367,9 +385,6 @@ final class AddressToolbarContainer: UIView,
 
         guard self.model != newModel else { return }
         updateSkeletonAddressBarsAlpha(forMinimizedAddressBar: newModel.isAddressBarMinimized)
-        if #available(iOS 26.0, *), !newModel.isAccessoryViewVisible, !newModel.isAddressBarMinimized {
-            accessoryViewGradient.opacity = 0
-        }
         // in case we are in edit mode but overlay is not active yet we have to activate it
         // so that `inOverlayMode` is set to true so we avoid getting stuck in overlay mode
         // Redux already has isEditing == true here, so we only sync the local flag/UI to avoid
@@ -502,6 +517,7 @@ final class AddressToolbarContainer: UIView,
 
     private func setupAccessoryViewGradient() {
         guard #available(iOS 26.0, *) else { return }
+        accessoryViewGradient.opacity = 0
         accessoryViewGradient.startPoint = CGPoint(x: 0.5, y: 0)
         accessoryViewGradient.endPoint = CGPoint(x: 0.5, y: 1)
         layer.insertSublayer(accessoryViewGradient, at: 0)

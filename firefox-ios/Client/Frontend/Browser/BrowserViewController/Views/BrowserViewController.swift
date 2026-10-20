@@ -4967,13 +4967,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        // Restores the address bar from its minimized "pill" shape back to its full toolbar.
-        // This undoes the minimization applied for the keyboard accessory view
-        // Only dispatch the action if the toolbar isn't currently collapsed by scrolling, if the
-        // user has scrolled previously, restore the address back here would leave the
-        // address bar full while the bottom containers stay collapsed (inconsistent state).
-        if #available(iOS 26.0, *), isBottomSearchBar, scrollController.isToolbarFullyExpanded {
-            store.dispatch(ToolbarModernAction.keyboardDidHide, forWindowUUID: windowUUID)
+        // Clear accessory state at either toolbar position while preserving scroll-based collapse.
+        if #available(iOS 26.0, *) {
+            let action: ToolbarModernAction = scrollController.isToolbarFullyExpanded
+                ? .keyboardDidHide
+                : .accessoryViewVisibilityChanged(isVisible: false)
+            store.dispatch(action, forWindowUUID: windowUUID)
         }
         keyboardState = nil
         updateConstraintsForKeyboard()
