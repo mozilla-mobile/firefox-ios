@@ -90,6 +90,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .googleLens:
             return checkGoogleLensFeature()
 
+        case .googleLensSearchInterstitial:
+            return checkGoogleLensSearchInterstitialFeature()
+
         case .homepageAddShortcutTile:
             return checkHomepageAddShortcutTile()
 
@@ -383,6 +386,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkGoogleLensFeature() -> Bool {
         return nimbus.features.googleLensFeature.value().enabled
+    }
+
+    private func checkGoogleLensSearchInterstitialFeature() -> Bool {
+        return nimbus.features.googleLensFeature.value().searchInterstitialEnabled
     }
 
     private func checkMicrosurveyFeature() -> Bool {
