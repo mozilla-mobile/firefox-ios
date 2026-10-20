@@ -161,8 +161,12 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
     // MARK: - Public
 
     /// Returns the search URL for the given query.
-    func searchURLForQuery(_ query: String) -> URL? {
-        return getURLFromTemplate(searchTemplate, query: query)
+    /// - Parameters:
+    ///   - query: The search terms.
+    ///   - accessPoint: Where the search was started from. Only used by search-config-v3 engines, to select the
+    ///     partner code for that access point.
+    func searchURLForQuery(_ query: String, accessPoint: SearchAccessPoint = .default) -> URL? {
+        return getURLFromTemplate(resolvedSearchTemplate(for: accessPoint), query: query)
     }
 
     /// Returns the search suggestion URL for the given query.
@@ -234,6 +238,39 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
               let templateURL = URL(string: String(searchTemplate[..<queryEndIndex]))
         else { return false }
         return urlHost == templateURL.shortDisplayString
+    }
+
+    /// Resolves the `{partnerCode}` placeholder for the given access point. Templates without the placeholder, such
+    /// as those of search-config-v2 and custom engines, are returned unchanged.
+    private func resolvedSearchTemplate(for accessPoint: SearchAccessPoint) -> String {
+        guard searchTemplate.contains(Self.partnerCodeComponent) else { return searchTemplate }
+
+        let partnerCode = SearchPartnerResolver.resolve(engineIdentifier: engineID,
+                                                        partners: partners,
+                                                        accessPoint: accessPoint).partnerCode
+        guard let partnerCode else {
+            return Self.removingPartnerCodeParameter(from: searchTemplate)
+        }
+        // The template, including the inserted partner code, is percent-encoded by `getURLFromTemplate`.
+        return searchTemplate.replacingOccurrences(of: Self.partnerCodeComponent, with: partnerCode)
+    }
+
+    /// Removes any query param whose value is `{partnerCode}` placeholder (ex: `client={partnerCode}`).
+    /// Modifies the template string since templates contain placeholders URLComponents can't always parse.
+    static func removingPartnerCodeParameter(from template: String) -> String {
+        guard let queryStart = template.firstIndex(of: "?") else { return template }
+
+        let base = template[..<queryStart]
+        let afterBase = template[template.index(after: queryStart)...]
+        let fragmentStart = afterBase.firstIndex(of: "#")
+        let query = fragmentStart.map { afterBase[..<$0] } ?? afterBase
+        let fragment = fragmentStart.map { afterBase[$0...] } ?? ""
+
+        let keptItems = query.split(separator: "&", omittingEmptySubsequences: false).filter { item in
+            !item.hasSuffix("=\(partnerCodeComponent)")
+        }
+        let keptQuery = keptItems.joined(separator: "&")
+        return keptQuery.isEmpty ? "\(base)\(fragment)" : "\(base)?\(keptQuery)\(fragment)"
     }
 
     private func getURLFromTemplate(_ searchTemplate: String, query: String) -> URL? {
