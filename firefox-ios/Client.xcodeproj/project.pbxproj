@@ -405,6 +405,7 @@
 		250706C6454E0543B605F235 /* BreachAlertsTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CFB7B4CA3F5B1DDAB9CE94 /* BreachAlertsTestData.swift */; };
 		253648E12B2111C100D5C2C5 /* SearchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253648E02B2111C100D5C2C5 /* SearchViewControllerTests.swift */; };
 		254B760A2B7B44EE00AB8526 /* NimbusFirefoxSuggestFeatureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254B76092B7B44EE00AB8526 /* NimbusFirefoxSuggestFeatureLayer.swift */; };
+		2731333C3087B0BA00C904B2 /* WallpaperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2731333B3087B0AF00C904B2 /* WallpaperTests.swift */; };
 		274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */; };
 		274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */; };
 		27BD010C30645F330015306B /* WallpaperSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BD010730645F330015306B /* WallpaperSettingsViewController.swift */; };
@@ -706,7 +707,6 @@
 		5A3A2A0D287F742C00B79EAC /* BackgroundSyncUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A2A0C287F742C00B79EAC /* BackgroundSyncUtility.swift */; };
 		5A3A7DDC2889EC5D0065F81A /* MockBookmarksHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A7DDB2889EC5D0065F81A /* MockBookmarksHandler.swift */; };
 		5A475E8E29DB89C7009C13FD /* TabManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A475E8929DB87F2009C13FD /* TabManagerTests.swift */; };
-		B1A9E0022FA0000000C0FFEE /* BlankPageNavigationDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A9E0012FA0000000C0FFEE /* BlankPageNavigationDelegateTests.swift */; };
 		5A475E8F29DB89CE009C13FD /* MockTabDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A475E8C29DB888E009C13FD /* MockTabDataStore.swift */; };
 		5A475E9129DB8AA7009C13FD /* MockDiskImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A475E9029DB8AA7009C13FD /* MockDiskImageStore.swift */; };
 		5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */; };
@@ -1563,6 +1563,7 @@
 		B1383C532F34BD2F00AA374F /* SecurityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1383C522F34BD2F00AA374F /* SecurityTests.swift */; };
 		B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15058802AA0A878008B7382 /* OpeningScreenTests.swift */; };
 		B1664E9E2B163B7A005D4C71 /* CreditCardsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1664E9D2B163B7A005D4C71 /* CreditCardsTests.swift */; };
+		B1A9E0022FA0000000C0FFEE /* BlankPageNavigationDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A9E0012FA0000000C0FFEE /* BlankPageNavigationDelegateTests.swift */; };
 		B1B95C622D3680DB00FD1337 /* ShareToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B95C612D3680DB00FD1337 /* ShareToolbarTests.swift */; };
 		B1CA62822C0DB43600D31625 /* MultiWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CA62812C0DB43600D31625 /* MultiWindowTests.swift */; };
 		B1E156A62CD5080E009DF9E5 /* C_AddressesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E156A52CD5080E009DF9E5 /* C_AddressesTests.swift */; };
@@ -3389,6 +3390,7 @@
 		26E54FFEAC16F93DEDBBE166 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		26F9438EAC1F1D7449D42BB2 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		272F476F88D45C79446A586A /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		2731333B3087B0AF00C904B2 /* WallpaperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperTests.swift; sourceTree = "<group>"; };
 		274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelContextMenu.swift; sourceTree = "<group>"; };
 		274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryViewController+LibraryPanelDelegate.swift"; sourceTree = "<group>"; };
 		27A946B38B52715F82C426C0 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Today.strings; sourceTree = "<group>"; };
@@ -9544,7 +9546,6 @@
 		5A3A2A0C287F742C00B79EAC /* BackgroundSyncUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundSyncUtility.swift; sourceTree = "<group>"; };
 		5A3A7DDB2889EC5D0065F81A /* MockBookmarksHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBookmarksHandler.swift; sourceTree = "<group>"; };
 		5A475E8929DB87F2009C13FD /* TabManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerTests.swift; sourceTree = "<group>"; };
-		B1A9E0012FA0000000C0FFEE /* BlankPageNavigationDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlankPageNavigationDelegateTests.swift; sourceTree = "<group>"; };
 		5A475E8C29DB888E009C13FD /* MockTabDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabDataStore.swift; sourceTree = "<group>"; };
 		5A475E9029DB8AA7009C13FD /* MockDiskImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDiskImageStore.swift; sourceTree = "<group>"; };
 		5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
@@ -10961,6 +10962,7 @@
 		B1864C62B7F68815AA1FE0C2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		B18D4F2291BA5459431EDCA9 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Shared.strings"; sourceTree = "<group>"; };
 		B19648D5B3667FE0CB25D069 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = my.lproj/Menu.strings; sourceTree = "<group>"; };
+		B1A9E0012FA0000000C0FFEE /* BlankPageNavigationDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlankPageNavigationDelegateTests.swift; sourceTree = "<group>"; };
 		B1B95C612D3680DB00FD1337 /* ShareToolbarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareToolbarTests.swift; sourceTree = "<group>"; };
 		B1C044CA95EB3F5258D2EC51 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B1CA62812C0DB43600D31625 /* MultiWindowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiWindowTests.swift; sourceTree = "<group>"; };
@@ -14302,6 +14304,7 @@
 		61A164442CE7BDEF001D6058 /* Wallpaper */ = {
 			isa = PBXGroup;
 			children = (
+				2731333B3087B0AF00C904B2 /* WallpaperTests.swift */,
 				61A164452CE7BE1A001D6058 /* WallpaperStateTests.swift */,
 				61A164472CE7BE3D001D6058 /* WallpaperMiddlewareTests.swift */,
 			);
@@ -21784,6 +21787,7 @@
 				A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */,
 				213046BD2F819C9C007ECEDA /* UIAlertControllerExtensionTests.swift in Sources */,
 				8A01FE402DF0CE4E002C483B /* MockDateProvider.swift in Sources */,
+				2731333C3087B0BA00C904B2 /* WallpaperTests.swift in Sources */,
 				213046BB2F212BCC007ECEDA /* CGRectExtensionsTests.swift in Sources */,
 				8A9BA6BF2F7C4D6000D892C4 /* RemoteTabCreatorTests.swift in Sources */,
 				C27EF61F2EBA395A00BED719 /* MockLanguageSampleSource.swift in Sources */,
