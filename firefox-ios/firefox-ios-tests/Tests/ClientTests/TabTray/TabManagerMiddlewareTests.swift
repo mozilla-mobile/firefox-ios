@@ -987,8 +987,12 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
     func testAddNewTab_dispatchesDismissTabTrayAction() throws {
         let addNewTabAction = TabPanelViewModernAction.addNewTab(ofType: .private)
         let subject = createSubject()
-        let expectation = XCTestExpectation(description: "General browser action is dispatched")
-        mockStore.dispatchCalled = {
+        let expectation = XCTestExpectation(description: "Dismiss tab tray action is dispatched")
+        expectation.assertForOverFulfill = false
+        mockStore.dispatchCalled = { [weak self] in
+            guard self?.mockStore.dispatchedActions.contains(where: {
+                ($0.actionType as? TabTrayActionType) == .dismissTabTray
+            }) == true else { return }
             expectation.fulfill()
         }
 
@@ -1032,7 +1036,11 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility, FeatureFlag
         let addNewTabAction = TabPanelViewModernAction.addNewTab(ofType: .private)
         let subject = createSubject()
         let expectation = XCTestExpectation(description: "showOverlay action dispatched")
-        mockStore.dispatchCalled = {
+        expectation.assertForOverFulfill = false
+        mockStore.dispatchCalled = { [weak self] in
+            guard self?.mockStore.dispatchedActions.contains(where: {
+                ($0.actionType as? GeneralBrowserActionType) == .showOverlay
+            }) == true else { return }
             expectation.fulfill()
         }
 

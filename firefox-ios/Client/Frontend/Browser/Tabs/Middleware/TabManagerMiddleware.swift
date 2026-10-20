@@ -397,13 +397,17 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
 
         let dismissAction = TabTrayAction(windowUUID: uuid,
                                           actionType: TabTrayActionType.dismissTabTray)
-        store.dispatch(dismissAction)
+        DispatchQueue.main.async {
+            store.dispatch(dismissAction)
+        }
 
         if !isTabTrayUIExperimentsEnabled {
             let overlayAction = GeneralBrowserAction(showOverlay: showOverlay,
                                                      windowUUID: uuid,
                                                      actionType: GeneralBrowserActionType.showOverlay)
-            store.dispatch(overlayAction)
+            DispatchQueue.main.async {
+                store.dispatch(overlayAction)
+            }
         }
     }
 
@@ -511,7 +515,9 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
             addNewNormalTabIfSelectedIsPrivate(uuid: uuid)
             let dismissAction = TabTrayAction(windowUUID: uuid,
                                               actionType: TabTrayActionType.dismissTabTray)
-            store.dispatch(dismissAction)
+            DispatchQueue.main.async {
+                store.dispatch(dismissAction)
+            }
         }
     }
 
