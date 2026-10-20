@@ -313,10 +313,10 @@ class ReadingListPanel: UITableViewController,
                 ])
                 containerView.insertSubview(scrollView, aboveSubview: self.tableView)
                 NSLayoutConstraint.activate([
-                    scrollView.leadingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.leadingAnchor),
-                    scrollView.trailingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.trailingAnchor),
-                    scrollView.topAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.topAnchor),
-                    scrollView.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor)
+                    scrollView.leadingAnchor.constraint(equalTo: self.tableView.safeAreaLayoutGuide.leadingAnchor),
+                    scrollView.trailingAnchor.constraint(equalTo: self.tableView.safeAreaLayoutGuide.trailingAnchor),
+                    scrollView.topAnchor.constraint(equalTo: self.tableView.safeAreaLayoutGuide.topAnchor),
+                    scrollView.bottomAnchor.constraint(equalTo: self.tableView.safeAreaLayoutGuide.bottomAnchor)
                 ])
                 scrollView.isScrollEnabled = true
             } else {
