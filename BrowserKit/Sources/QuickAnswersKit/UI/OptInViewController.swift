@@ -55,9 +55,11 @@ struct OptInSheetView: ThemeableView {
     private struct UX {
         static let contentSpacing: CGFloat = 32.0
         static let contentHorizontalPadding: CGFloat = 40.0
+        static let contentMaxWidth: CGFloat = 420.0
         static let contentTopPadding: CGFloat = 24.0
         static let continueButtonTopPadding: CGFloat = 40.0
-        static let continueButtonBottomPadding: CGFloat = 20.0
+        static let continueButtonBottomPadding: CGFloat = 40.0
+        static let continueButtonMaxWidth: CGFloat = 367.0
         static let privacyInfoSpacing: CGFloat = 24.0
         static let privacyInfoLeadingPadding: CGFloat = 8.0
         static let rowIconSpacing: CGFloat = 16.0
@@ -173,8 +175,10 @@ struct OptInSheetView: ThemeableView {
                     intro
                     privacyInfo
                 }
+                .frame(maxWidth: UX.contentMaxWidth)
                 .padding(.top, UX.contentTopPadding)
                 .padding(.horizontal, UX.contentHorizontalPadding)
+                .frame(maxWidth: .infinity)
             }
             .bounceBasedOnSize()
             .bottomBar {
@@ -228,6 +232,7 @@ struct OptInSheetView: ThemeableView {
                 Text(strings.title)
                     .font(FXFontStyles.Bold.title2.scaledSwiftUIFont())
                     .foregroundStyle(theme.colors.textPrimary.color)
+                    .accessibilityAddTraits(.isHeader)
                 Text(strings.description)
                     .font(FXFontStyles.Regular.title2.scaledSwiftUIFont())
                     .foregroundStyle(theme.colors.textSecondary.color)
@@ -310,6 +315,7 @@ struct OptInSheetView: ThemeableView {
     private var continueButton: some View {
         Button(strings.continueButton, action: onContinue)
             .primaryButtonStyle(theme: theme)
+            .frame(maxWidth: UX.continueButtonMaxWidth)
     }
 }
 
