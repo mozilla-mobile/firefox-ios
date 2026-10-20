@@ -7,9 +7,7 @@ import Common
 import Shared
 
 // TODO: - FXIOS-16295 improve VoiceOver by adding notification announcement before and after recording.
-public final class QuickAnswersViewController: UIViewController,
-                                               UIAdaptivePresentationControllerDelegate,
-                                               Themeable {
+public final class QuickAnswersViewController: UIViewController, Themeable {
     private struct UX {
         static let titleFadeDuration: TimeInterval = 0.1
         static let presentationNavigationBarOffset: CGFloat = -20.0
@@ -54,7 +52,6 @@ public final class QuickAnswersViewController: UIViewController,
             self?.dismiss(with: nil)
         }
     )
-    private var hasAppeared = false
     private lazy var privacyTipPresenter = QuickAnswersPrivacyTipPresenter(
         presenter: self,
         strings: stringsConfiguration.privacyBanner
@@ -100,14 +97,9 @@ public final class QuickAnswersViewController: UIViewController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.stringsConfiguration = stringsConfiguration
-        // The custom transition animator is only used for the source reveal transition; the form sheet
-        // relies on the system presentation.
-        var sourceRevealAnimator: SourceRevealTransitionAnimator?
-        if case let .sourceReveal(sourceRect) = transitionType {
-            sourceRevealAnimator = SourceRevealTransitionAnimator(
-                sourceRect: sourceRect,
-                isOptInVisible: viewModel.isOptInRequired
-            )
+        let sourceRevealAnimator: SourceRevealTransitionAnimator = switch transitionType {
+        case let .sourceReveal(sourceRect):
+            SourceRevealTransitionAnimator(sourceRect: sourceRect, isOptInVisible: viewModel.isOptInRequired)
         }
         self.transitionDelegate = OptInTransitionAnimator(
             isOptInSheetPending: { [weak viewModel] in
@@ -118,7 +110,7 @@ public final class QuickAnswersViewController: UIViewController,
         self.viewModel = viewModel
         self.learnMoreURL = learnMoreURL
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = transitionType.modalPresentationStyle
+        modalPresentationStyle = .custom
         transitioningDelegate = transitionDelegate
     }
 
@@ -129,7 +121,6 @@ public final class QuickAnswersViewController: UIViewController,
     // MARK: - Lifecycle
     override public func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.presentationController?.delegate = self
         setupSubviews()
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
@@ -138,10 +129,6 @@ public final class QuickAnswersViewController: UIViewController,
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Workaround for iPad: with formSheet presentation, viewWillAppear can fire twice when the
-        // user attempts to dismiss the sheet but the dismissal fails, so guard the one-time flow start.
-        guard !hasAppeared else { return }
-        hasAppeared = true
         viewModel.startFlow()
     }
 
@@ -307,11 +294,6 @@ public final class QuickAnswersViewController: UIViewController,
         generator.impactOccurred()
     }
 
-    // MARK: - UIAdaptivePresentationControllerDelegate
-    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        dismiss(with: nil)
-    }
-
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -321,4 +303,3 @@ public final class QuickAnswersViewController: UIViewController,
         contentView.applyTheme(theme: theme)
         backgroundEffectView.applyTheme(theme: theme)
     }
-}
