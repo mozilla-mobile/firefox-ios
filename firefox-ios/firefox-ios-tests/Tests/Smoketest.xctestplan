@@ -489,6 +489,7 @@
         "ScreenGraphTest",
         "SearchSettingsSuggestUITests",
         "SearchSettingsUITests",
+        "SearchTests\/testBottomViewURLBar_trendingRecentSearchesExperimentOn()",
         "SearchTests\/testCopyPasteComplete()",
         "SearchTests\/testDefaultSearchEngine()",
         "SearchTests\/testDefaultSearchEngines()",

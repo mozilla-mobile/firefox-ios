@@ -163,6 +163,7 @@
         "ScreenGraphTest",
         "SearchSettingsSuggestUITests",
         "SearchSettingsUITests",
+        "SearchTests\/testBottomViewURLBar_trendingRecentSearchesExperimentOn()",
         "SearchTests\/testDefaultSearchEngines()",
         "SearchTests\/testFirefoxSuggestNonSponsoredUI()",
         "SearchTests\/testRecentSearchesSettingsToggleOff_recentSearchesExperimentOn()",
