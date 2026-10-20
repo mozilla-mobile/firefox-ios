@@ -58,7 +58,7 @@ final class VPNGuardianTests: XCTestCase {
         _ = try await subject.getPass()
 
         let request = try XCTUnwrap(capturedRequest)
-        XCTAssertEqual(request.url, URL(string: "https://vpn.mozilla.com/api/v1/foxfooding/token"))
+        XCTAssertEqual(request.url, URL(string: "https://vpn.mozilla.org/api/v1/foxfooding/token"))
         XCTAssertEqual(request.httpMethod, "GET")
         XCTAssertEqual(request.value(forHTTPHeaderField: "secret"), "shh")
         XCTAssertEqual(request.value(forHTTPHeaderField: "Content-Type"), "application/json")
