@@ -1159,7 +1159,7 @@ class BrowserViewController: UIViewController,
         if traitCollection.duoExpanded,
            // Address bar at the top, tab strip below.
            let addressIndex = header.arrangedSubviews.firstIndex(of: addressToolbarContainer) {
-            header.insertArrangedView(topTabsViewController.view, position: addressIndex + 1)
+            header.insertArrangedView(topTabsViewController.view, position: addressIndex + 1, animated: false)
         } else {
             // Tab strip at the top, address bar below.
             header.insertArrangedSubview(topTabsViewController.view, at: 0)

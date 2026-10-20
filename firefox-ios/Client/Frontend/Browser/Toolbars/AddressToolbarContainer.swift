@@ -294,9 +294,9 @@ final class AddressToolbarContainer: UIView,
     /// Keeps the top address toolbar clear of Duo's status area using the system bar layout guide.
     /// Removes extra horizontal padding when the guide already provides the required spacing.
     func updateSystemTopBarLayoutGuide(_ guide: UILayoutGuide?, isBottomSearchBar: Bool) {
-        guard systemTopBarLayoutGuide !== guide
-                || toolbarLeadingConstraint?.isActive != true
-                || toolbarTrailingConstraint?.isActive != true else { return }
+        let shouldUpdateConstraints = systemTopBarLayoutGuide !== guide
+            || toolbarLeadingConstraint?.isActive != true
+            || toolbarTrailingConstraint?.isActive != true
         systemTopBarLayoutGuide = guide
         if let model {
             toolbar.updateSpacing(
@@ -305,6 +305,8 @@ final class AddressToolbarContainer: UIView,
                 trailing: calculateToolbarTrailingSpace()
             )
         }
+
+        guard shouldUpdateConstraints else { return }
 
         if isBottomSearchBar, toolbarHelper.isSwipingTabsEnabled {
             let needsSkeletonLayout = leftSkeletonAddressBar.superview == nil
