@@ -3290,14 +3290,21 @@ extension String {
                 key: "VPN.Settings.StatusOn.v160",
                 tableName: "Settings",
                 value: "On",
-                comment: "Status shown on the right side of the VPN row in the Privacy section of Settings when the VPN is connected."
+                comment: "VPN status shown when the VPN is connected. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator."
             )
 
             public static let StatusOff = MZLocalizedString(
                 key: "VPN.Settings.StatusOff.v160",
                 tableName: "Settings",
                 value: "Off",
-                comment: "Status shown on the right side of the VPN row in the Privacy section of Settings when the VPN is not connected."
+                comment: "VPN status shown when the VPN is not connected. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator."
+            )
+
+            public static let StatusPaused = MZLocalizedString(
+                key: "VPN.Settings.StatusPaused.v160",
+                tableName: "Settings",
+                value: "Paused",
+                comment: "VPN status shown when the VPN is temporarily paused. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator."
             )
 
             public static let Description = MZLocalizedString(
@@ -3318,7 +3325,7 @@ extension String {
                 key: "VPN.Settings.LocationTitle.v160",
                 tableName: "Settings",
                 value: "Location",
-                comment: "Name of a row on the VPN settings screen. Tapping it opens a list of VPN server locations the user can choose from."
+                comment: "Used in two places: as the name of a row on the VPN settings screen, and as the title of the screen that row opens. On that screen, the user picks which VPN server location (country or region) to connect through. “Location” means the VPN server’s location, not the user’s own location."
             )
 
             public static let LocationRecommended = MZLocalizedString(
@@ -3332,7 +3339,7 @@ extension String {
                 key: "VPN.Settings.ToggleTitle.v160",
                 tableName: "Settings",
                 value: "VPN",
-                comment: "Label for the switch on the VPN settings screen that turns the VPN on or off."
+                comment: "Used in two places: as the label for the toggle switch on the VPN settings screen that turns the VPN on or off, and as the label on the small capsule-shaped VPN status indicator, where it appears together with the current status (On, Off or Paused)."
             )
 
             public static let Connecting = MZLocalizedString(
@@ -3586,44 +3593,7 @@ extension String {
             )
         }
 
-        public struct StatusCapsule {
-            public static let Title = MZLocalizedString(
-                key: "VPN.StatusCapsule.Title.v160",
-                tableName: "VPN",
-                value: "VPN",
-                comment: "Label on a small capsule-shaped indicator that shows the VPN status. Shown together with the current status: On, Off or Paused."
-            )
-
-            public static let Off = MZLocalizedString(
-                key: "VPN.StatusCapsule.Off.v160",
-                tableName: "VPN",
-                value: "Off",
-                comment: "Status shown on the small capsule-shaped VPN indicator when the VPN is off."
-            )
-
-            public static let On = MZLocalizedString(
-                key: "VPN.StatusCapsule.On.v160",
-                tableName: "VPN",
-                value: "On",
-                comment: "Status shown on a small capsule-shaped VPN indicator when the VPN is on."
-            )
-
-            public static let Paused = MZLocalizedString(
-                key: "VPN.StatusCapsule.Paused.v160",
-                tableName: "VPN",
-                value: "Paused",
-                comment: "Status shown on a small capsule-shaped VPN indicator when the VPN is paused."
-            )
-        }
-
         public struct LocationPicker {
-            public static let Title = MZLocalizedString(
-                key: "VPN.LocationPicker.Title.v160",
-                tableName: "Settings",
-                value: "Server Location",
-                comment: "Title of the settings screen where the user picks which VPN server location to connect through."
-            )
-
             public static let RecommendedMainText = MZLocalizedString(
                 key: "VPN.LocationPicker.RecommendedMainText.v160",
                 tableName: "Settings",
@@ -3636,6 +3606,13 @@ extension String {
                 tableName: "Settings",
                 value: "%1$@ finds the fastest location.",
                 comment: "Description below the Recommended option in the VPN server location list. %1$@ is the app name (for example, Firefox)."
+            )
+
+            public static let FindingLocationsText = MZLocalizedString(
+                key: "VPN.LocationPicker.FindingLocationsText.v160",
+                tableName: "Settings",
+                value: "Finding Locations…",
+                comment: "Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to."
             )
         }
     }
