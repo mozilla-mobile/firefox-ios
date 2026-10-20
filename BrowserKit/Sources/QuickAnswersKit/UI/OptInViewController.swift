@@ -88,6 +88,7 @@ struct OptInSheetView: ThemeableView {
     }
 
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @AccessibilityFocusState private var isTitleFocused: Bool
     @State var theme: Theme
     let windowUUID: WindowUUID
     let themeManager: ThemeManager
@@ -165,6 +166,9 @@ struct OptInSheetView: ThemeableView {
         .scrollEdgeSoftBehavior()
         .navigationViewStyle(.stack)
         .listenToThemeChanges(in: self, theme: $theme)
+        .onAppear {
+            isTitleFocused = true
+        }
     }
 
     // MARK: - Layouts
@@ -233,6 +237,7 @@ struct OptInSheetView: ThemeableView {
                     .font(FXFontStyles.Bold.title2.scaledSwiftUIFont())
                     .foregroundStyle(theme.colors.textPrimary.color)
                     .accessibilityAddTraits(.isHeader)
+                    .accessibilityFocused($isTitleFocused)
                 Text(strings.description)
                     .font(FXFontStyles.Regular.title2.scaledSwiftUIFont())
                     .foregroundStyle(theme.colors.textSecondary.color)

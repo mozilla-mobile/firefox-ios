@@ -13,7 +13,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         static let presentationNavigationBarOffset: CGFloat = -20.0
         static let backdropFadeDuration: TimeInterval = 0.2
     }
-
+    
     // MARK: - Properties
     private lazy var backgroundEffectView = BackgroundEffectView(parentController: self)
     private lazy var closeButton: UIButton = .build { [weak self] in
@@ -35,7 +35,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     }
     private let contentView: QuickAnswersContentView = .build()
     private let transitionDelegate: OptInTransitionAnimator
-
+    
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
     public var themeListenerCancellable: Any?
@@ -56,7 +56,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         presenter: self,
         strings: stringsConfiguration.privacyBanner
     )
-
+    
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
         transitionType: QuickAnswersTransitionType,
@@ -80,7 +80,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             notificationCenter: notificationCenter
         )
     }
-
+    
     init(
         navigationHandler: QuickAnswersNavigationHandler?,
         viewModel: QuickAnswersViewModel,
@@ -113,11 +113,11 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         modalPresentationStyle = .custom
         transitioningDelegate = transitionDelegate
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - Lifecycle
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -126,12 +126,12 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         registerCallbacks()
     }
-
+    
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.startFlow()
     }
-
+    
     private func setupSubviews() {
         closeButton.accessibilityLabel = stringsConfiguration.closeAccessibilityLabel
         contentView.configureStrings(stringsConfiguration.contentView)
@@ -142,9 +142,9 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: closeButton)
         navigationItem.titleView = titleLabel
         setContentScrollView(contentView.scrollView, for: .top)
-
+        
         backgroundEffectView.pinToSuperview()
-
+        
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: view.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -152,7 +152,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
-
+    
     private func registerCallbacks() {
         viewModel.onStateChange = { [weak self] state in
             switch state {
@@ -211,7 +211,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             }
         }
     }
-
+    
     @available(iOS 17.0, *)
     private func presentPrivacyTip() {
         privacyTipPresenter.present(
@@ -219,7 +219,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             iconColor: themeManager.getCurrentTheme(for: currentWindowUUID).colors.textSecondary
         )
     }
-
+    
     // MARK: - Opt-in
     private func showOptIn() {
         guard viewModel.feature.isOptInRedesignEnabled else {
@@ -246,7 +246,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             self?.revealBackdrop()
         }
     }
-
+    
     /// Fades in this screen, which the presentation transition keeps hidden while the opt-in sheet slides up.
     private func revealBackdrop() {
         guard let backdropView = transitionDelegate.hiddenContainerView,
@@ -256,7 +256,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             backdropView.isHidden = false
         }
     }
-
+    
     // MARK: - Presentation transition
     func prepareForPresentationTransition(sourceRect: CGRect, isOptInVisible: Bool) {
         contentView.prepareForPresentationTransition(
@@ -273,7 +273,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         )
         navigationController?.navigationBar.alpha = 0.0
     }
-
+    
     func applyPresentationTransition(isOptInVisible: Bool) {
         contentView.applyPresentationTransition(isOptInVisible: isOptInVisible)
         backgroundEffectView.alpha = 1.0
@@ -281,19 +281,19 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         navigationController?.navigationBar.alpha = 1.0
         navigationController?.navigationBar.transform = .identity
     }
-
+    
     private func dismiss(with url: URL?) {
         triggerHaptic()
         viewModel.dismiss()
         navigationHandler?.dismissQuickAnswers(with: url.flatMap(QuickAnswersNavigationType.url))
     }
-
+    
     private func triggerHaptic() {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.prepare()
         generator.impactOccurred()
     }
-
+    
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -303,3 +303,4 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         contentView.applyTheme(theme: theme)
         backgroundEffectView.applyTheme(theme: theme)
     }
+}
