@@ -3332,7 +3332,7 @@ extension String {
                 key: "VPN.Settings.LocationRecommended.v160",
                 tableName: "Settings",
                 value: "Recommended",
-                comment: "Shown on the right side of the Location row on the VPN settings screen when the recommended server location is selected. The recommended location is the one with the fastest connection."
+                comment: "Shown on the right side of the Location row on the VPN settings screen when the user lets Firefox select the location in their stead. The recommended location is the one with the fastest connection."
             )
 
             public static let ToggleTitle = MZLocalizedString(
@@ -3397,7 +3397,7 @@ extension String {
                 key: "VPN.Onboarding.WifiBody.v160",
                 tableName: "Onboarding",
                 value: "Add extra protection in %1$@ when you browse on the go.",
-                comment: "Body text below the “More Privacy On Public Wi-Fi” subheading on the VPN onboarding card. %1$@ is the app name (for example, Firefox)."
+                comment: "Body text below the “More Privacy On Public Wi-Fi” (VPN.Onboarding.WifiSubheading.v160) subheading on the VPN onboarding card. %1$@ is the app name (for example, Firefox)."
             )
 
             public static let LocationsSubheading = MZLocalizedString(
@@ -3411,7 +3411,7 @@ extension String {
                 key: "VPN.Onboarding.LocationsBody.v160",
                 tableName: "Onboarding",
                 value: "Choose a VPN location to help make yours harder to trace.",
-                comment: "Body text below the “Browse From Multiple Locations” subheading on the VPN onboarding card. Explains that choosing a VPN location makes it harder to tell where the user really is. “yours” refers to the user’s location."
+                comment: "Body text below the “Browse From Multiple Locations” (VPN.Onboarding.LocationsSubheading.v160) subheading on the VPN onboarding card. Explains that choosing a VPN location makes it harder to tell where the user really is. “yours” refers to the user’s location."
             )
 
             public static let LimitSubheading = MZLocalizedString(
@@ -3425,7 +3425,7 @@ extension String {
                 key: "VPN.Onboarding.LimitBody.v160",
                 tableName: "Onboarding",
                 value: "Start using it without signing in",
-                comment: "Body text below the “5 GB, Free Every Month” subheading on the VPN onboarding card. Explains that the user can start using the VPN without signing in to an account. “it” refers to the VPN."
+                comment: "Body text below the “5 GB, Free Every Month” (VPN.Onboarding.LimitSubheading.v160) subheading on the VPN onboarding card. Explains that the user can start using the VPN without signing in to an account. “it” refers to the VPN."
             )
         }
 
