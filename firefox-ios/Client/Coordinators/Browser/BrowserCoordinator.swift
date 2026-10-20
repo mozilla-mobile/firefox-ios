@@ -1370,8 +1370,22 @@ final class BrowserCoordinator: BaseCoordinator,
         let timerId = searchTimerId ?? googleLensTelemetry.startSearchTimer(source: source)
         browserViewController.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: source,
                                                                                       searchTimerId: timerId)
+        if featureFlagsProvider.isEnabled(.googleLensSearchInterstitial) {
+            showGoogleLensInterstitial(for: tab)
+        }
         _ = tab.loadRequest(request)
     }
+
+    private func showGoogleLensInterstitial(for tab: Tab) {
+        guard !childCoordinators.contains(where: { $0 is GoogleLensInterstitialCoordinator }) else { return }
+        let coordinator = GoogleLensInterstitialCoordinator(parentCoordinatorDelegate: self,
+                                                            router: router,
+                                                            tab: tab,
+                                                            themeManager: themeManager)
+        add(child: coordinator)
+        coordinator.start()
+    }
+
     private func handleGoogleLensPhotoPick(_ results: [PHPickerResult]) {
         guard let provider = results.first?.itemProvider else { return }
         guard provider.canLoadObject(ofClass: UIImage.self) else {
@@ -1652,6 +1666,7 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - Private helpers
 
     private func releaseBrowserViewController() {
+        childCoordinators.compactMap { $0 as? GoogleLensInterstitialCoordinator }.forEach { $0.stop() }
         // Clean up views and ensure BVC and its adjacent views for the window are freed.
         browserViewController.view.endEditing(true)
         browserViewController.dismissUrlBar()
