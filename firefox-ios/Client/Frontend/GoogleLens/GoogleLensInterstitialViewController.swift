@@ -6,6 +6,8 @@ import Common
 import UIKit
 
 final class GoogleLensInterstitialViewController: UIViewController, Themeable {
+    private let interstitialView: GoogleLensInterstitialView = .build()
+
     let themeManager: ThemeManager
     var themeListenerCancellable: Any?
     var currentWindowUUID: UUID? { windowUUID }
@@ -24,18 +26,16 @@ final class GoogleLensInterstitialViewController: UIViewController, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func loadView() {
-        view = GoogleLensInterstitialView()
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(interstitialView)
+        interstitialView.pinToSuperview()
         listenForThemeChanges(withNotificationCenter: NotificationCenter.default)
         applyTheme()
     }
 
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        (viewIfLoaded as? GoogleLensInterstitialView)?.applyTheme(theme: theme)
+        interstitialView.applyTheme(theme: theme)
     }
 }

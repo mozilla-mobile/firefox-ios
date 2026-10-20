@@ -9,27 +9,24 @@ final class GoogleLensInterstitialView: UIView, ThemeApplicable {
     private let materialView: UIVisualEffectView = .build { view in
         view.effect = UIBlurEffect(style: .systemUltraThinMaterialDark)
     }
-    private let reduceTransparencyProvider: () -> Bool
 
-    init(reduceTransparencyProvider: @escaping () -> Bool = { UIAccessibility.isReduceTransparencyEnabled }) {
-        self.reduceTransparencyProvider = reduceTransparencyProvider
-        super.init(frame: .zero)
-        accessibilityViewIsModal = true
-        addSubview(materialView)
-        NSLayoutConstraint.activate([
-            materialView.topAnchor.constraint(equalTo: topAnchor),
-            materialView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            materialView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            materialView.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    private func setupView() {
+        accessibilityViewIsModal = true
+        addSubview(materialView)
+        materialView.pinToSuperview()
+    }
+
     func applyTheme(theme: Theme) {
-        let reduceTransparency = reduceTransparencyProvider()
+        let reduceTransparency = UIAccessibility.isReduceTransparencyEnabled
         materialView.isHidden = reduceTransparency
         backgroundColor = reduceTransparency ? theme.colors.layerScrim.withAlphaComponent(1) : .clear
     }

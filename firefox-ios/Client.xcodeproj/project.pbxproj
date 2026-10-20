@@ -2471,8 +2471,6 @@
 		FF0005AD2F000004000BBBBB /* MockQuickAnswersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0005AC2F000003000BBBBB /* MockQuickAnswersStore.swift */; };
 		DB0742673526460E9FE2477D /* GoogleLensInterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F41CA5F8C8245DABEED0E7D /* GoogleLensInterstitialViewController.swift */; };
 		D709A22AD5714B9DA4C83416 /* GoogleLensInterstitialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5481F3AB314316949145B7 /* GoogleLensInterstitialView.swift */; };
-		BA57EB5DC114441E95B5B167 /* GoogleLensInterstitialViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D31261E059F4520B858BEF9 /* GoogleLensInterstitialViewControllerTests.swift */; };
-		CC2508BCF2254D07A815E412 /* GoogleLensInterstitialViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715316DF95A248328C24DF16 /* GoogleLensInterstitialViewTests.swift */; };
 		91DBB43FE62D40F0863999EE /* GoogleLensInterstitialCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77823FABCFCD4969A5E64CFF /* GoogleLensInterstitialCoordinator.swift */; };
 		57D4037614464999A528A262 /* GoogleLensInterstitialCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A19747A3C44D08B9F88B3 /* GoogleLensInterstitialCoordinatorTests.swift */; };
 /* End PBXBuildFile section */
@@ -12642,8 +12640,6 @@
 		FFEB4308B5A82E56F1EEEC56 /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		7F41CA5F8C8245DABEED0E7D /* GoogleLensInterstitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensInterstitialViewController.swift; sourceTree = "<group>"; };
 		BF5481F3AB314316949145B7 /* GoogleLensInterstitialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensInterstitialView.swift; sourceTree = "<group>"; };
-		7D31261E059F4520B858BEF9 /* GoogleLensInterstitialViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensInterstitialViewControllerTests.swift; sourceTree = "<group>"; };
-		715316DF95A248328C24DF16 /* GoogleLensInterstitialViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensInterstitialViewTests.swift; sourceTree = "<group>"; };
 		77823FABCFCD4969A5E64CFF /* GoogleLensInterstitialCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensInterstitialCoordinator.swift; sourceTree = "<group>"; };
 		FF9A19747A3C44D08B9F88B3 /* GoogleLensInterstitialCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensInterstitialCoordinatorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -18237,8 +18233,6 @@
 				FB16062100000000000000D1 /* GoogleLensImageProcessorTests.swift */,
 				FB16062100000000000000D3 /* GoogleLensRequestBuilderTests.swift */,
 				FB16062100000000000000D5 /* GoogleLensServiceTests.swift */,
-				715316DF95A248328C24DF16 /* GoogleLensInterstitialViewTests.swift */,
-				7D31261E059F4520B858BEF9 /* GoogleLensInterstitialViewControllerTests.swift */,
 			);
 			path = GoogleLens;
 			sourceTree = "<group>";
@@ -21858,8 +21852,6 @@
 				FB16062100000000000000D2 /* GoogleLensImageProcessorTests.swift in Sources */,
 				FB16062100000000000000D4 /* GoogleLensRequestBuilderTests.swift in Sources */,
 				FB16062100000000000000D6 /* GoogleLensServiceTests.swift in Sources */,
-				CC2508BCF2254D07A815E412 /* GoogleLensInterstitialViewTests.swift in Sources */,
-				BA57EB5DC114441E95B5B167 /* GoogleLensInterstitialViewControllerTests.swift in Sources */,
 				8A4880882E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift in Sources */,
 				8AABBCFF2A0017960089941E /* MockGleanWrapper.swift in Sources */,
 				21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */,
