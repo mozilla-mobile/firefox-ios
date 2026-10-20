@@ -206,6 +206,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .installationTelemetry,
+                titleText: format(string: "Installation Telemetry"),
+                statusText: format(string: "Toggle to enable installation telemetry for app redownloads.")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .mergeWindows,
                 titleText: format(string: "Combine Windows"),
                 statusText: format(string: "Toggle to show the Combine Windows home screen Quick Action on iPad")
