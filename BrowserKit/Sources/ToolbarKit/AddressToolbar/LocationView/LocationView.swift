@@ -461,7 +461,8 @@ final class LocationView: UIView,
 
         updateURLTextFieldLeadingConstraintBasedOnState()
 
-        let leadingConstraint = lockIconImageName == nil ? UX.iconContainerNoLockLeadingSpace : 0.0
+        let noLockLeadingSpace = isURLTextFieldCentered ? UX.shieldImageViewSize.width : UX.iconContainerNoLockLeadingSpace
+        let leadingConstraint = lockIconImageName == nil ? noLockLeadingSpace : 0.0
         iconContainerStackViewLeadingConstraint?.constant = leadingConstraint
         updateGradient()
     }
