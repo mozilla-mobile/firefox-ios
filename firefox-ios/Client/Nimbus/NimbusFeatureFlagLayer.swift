@@ -131,6 +131,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .improvedAppStoreReviewTriggerFeature:
             return checkImprovedAppStoreReviewTriggerFeature()
 
+        case .installationTelemetry:
+            return checkInstallationTelemetryFeature()
+
         case .mergeWindows:
             return checkMergeWindowsFeature()
 
@@ -421,6 +424,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkImprovedAppStoreReviewTriggerFeature() -> Bool {
         return nimbus.features.improvedAppStoreReviewTriggerFeature.value().enabled
+    }
+
+    private func checkInstallationTelemetryFeature() -> Bool {
+        return nimbus.features.installationTelemetryFeature.value().enabled
     }
 
     // MARK: - Summarizer Feature
