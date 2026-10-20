@@ -31,7 +31,9 @@ struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     }
 
     var body: some View {
-        Group {
+        // Fills the page without asking the card for its size, otherwise the paging
+        // TabView snaps between cards instead of sliding.
+        GeometryReader { _ in
             switch viewModel.cardType {
             case .basic:
                 OnboardingBasicCardView(
