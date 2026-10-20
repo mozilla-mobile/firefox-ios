@@ -2473,6 +2473,7 @@
 		D709A22AD5714B9DA4C83416 /* GoogleLensInterstitialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5481F3AB314316949145B7 /* GoogleLensInterstitialView.swift */; };
 		91DBB43FE62D40F0863999EE /* GoogleLensInterstitialCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77823FABCFCD4969A5E64CFF /* GoogleLensInterstitialCoordinator.swift */; };
 		57D4037614464999A528A262 /* GoogleLensInterstitialCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9A19747A3C44D08B9F88B3 /* GoogleLensInterstitialCoordinatorTests.swift */; };
+		BA57EB5DC114441E95B5B167 /* GoogleLensInterstitialViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D31261E059F4520B858BEF9 /* GoogleLensInterstitialViewControllerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -12642,6 +12643,7 @@
 		BF5481F3AB314316949145B7 /* GoogleLensInterstitialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensInterstitialView.swift; sourceTree = "<group>"; };
 		77823FABCFCD4969A5E64CFF /* GoogleLensInterstitialCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensInterstitialCoordinator.swift; sourceTree = "<group>"; };
 		FF9A19747A3C44D08B9F88B3 /* GoogleLensInterstitialCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensInterstitialCoordinatorTests.swift; sourceTree = "<group>"; };
+		7D31261E059F4520B858BEF9 /* GoogleLensInterstitialViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensInterstitialViewControllerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -18230,6 +18232,7 @@
 		FB16062100000000000000D0 /* GoogleLens */ = {
 			isa = PBXGroup;
 			children = (
+				7D31261E059F4520B858BEF9 /* GoogleLensInterstitialViewControllerTests.swift */,
 				FB16062100000000000000D1 /* GoogleLensImageProcessorTests.swift */,
 				FB16062100000000000000D3 /* GoogleLensRequestBuilderTests.swift */,
 				FB16062100000000000000D5 /* GoogleLensServiceTests.swift */,
@@ -21849,6 +21852,7 @@
 				FB16062100000000000000B2 /* PhotoPickerCoordinatorTests.swift in Sources */,
 				57D4037614464999A528A262 /* GoogleLensInterstitialCoordinatorTests.swift in Sources */,
 				FB16062200000000000000B2 /* CameraCoordinatorTests.swift in Sources */,
+				BA57EB5DC114441E95B5B167 /* GoogleLensInterstitialViewControllerTests.swift in Sources */,
 				FB16062100000000000000D2 /* GoogleLensImageProcessorTests.swift in Sources */,
 				FB16062100000000000000D4 /* GoogleLensRequestBuilderTests.swift in Sources */,
 				FB16062100000000000000D6 /* GoogleLensServiceTests.swift in Sources */,
