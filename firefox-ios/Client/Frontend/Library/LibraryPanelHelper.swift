@@ -134,3 +134,36 @@ class LibraryPanelHelper {
         ]
     }()
 }
+
+extension UITableView.Style {
+    @MainActor
+    static var libraryPanel: UITableView.Style {
+        let isNovaDesignEnabled = (AppContainer.shared.resolve() as FeatureFlagProviding).isEnabled(.novaDesign)
+        if #available(iOS 26.0, *), isNovaDesignEnabled {
+            return .insetGrouped
+        }
+        return .plain
+    }
+}
+
+extension UITableViewCell {
+    func applyGroupedBackground(theme: Theme, in tableView: UITableView) {
+        guard tableView.style == .insetGrouped else { return }
+
+        backgroundColor = .clear
+        selectedBackgroundView = nil
+        configurationUpdateHandler = { cell, state in
+            var background: UIBackgroundConfiguration
+            if #available(iOS 16.0, *) {
+                background = cell.defaultBackgroundConfiguration().updated(for: state)
+            } else {
+                background = UIBackgroundConfiguration.listGroupedCell().updated(for: state)
+            }
+            background.backgroundColor = state.isSelected || state.isHighlighted
+                ? theme.colors.layer5Hover
+                : theme.colors.layer5
+            cell.backgroundConfiguration = background
+        }
+        setNeedsUpdateConfiguration()
+    }
+}
