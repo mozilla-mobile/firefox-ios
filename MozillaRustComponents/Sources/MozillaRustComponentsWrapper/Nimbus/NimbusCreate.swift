@@ -86,6 +86,14 @@ final class GleanMetricsHandler: MetricsHandler {
     func submitTargetingContext() {
         GleanMetrics.Pings.shared.nimbusTargetingContext.submit()
     }
+
+    func recordRolloutsOptOut() {
+        GleanMetrics.NimbusEvents.rolloutsOptOut.record()
+    }
+
+    func recordStudiesOptOut() {
+        GleanMetrics.NimbusEvents.studiesOptOut.record()
+    }
 }
 
 public extension Nimbus {
