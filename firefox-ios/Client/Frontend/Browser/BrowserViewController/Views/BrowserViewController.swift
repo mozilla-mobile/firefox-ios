@@ -761,7 +761,7 @@ class BrowserViewController: UIViewController,
 
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, shouldUpdateBlurViews: Bool = true) {
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: newCollection)
-        let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
+        let showTopTabs = toolbarHelper.shouldShowTabStrip(for: newCollection)
 
         if showNavToolbar {
             navigationToolbarContainer.isHidden = false
@@ -1086,7 +1086,7 @@ class BrowserViewController: UIViewController,
 
         overlayManager.setURLBar(urlBarView: addressToolbarContainer)
 
-        if toolbarHelper.shouldShowTopTabs(for: traitCollection) {
+        if toolbarHelper.shouldShowTabStrip(for: traitCollection) {
             setupTopTabsViewController()
         }
 
@@ -1098,7 +1098,7 @@ class BrowserViewController: UIViewController,
         bottomContainer.applyTheme(theme: theme)
         bottomContentStackView.applyTheme(theme: theme)
         statusBarOverlay.scrollDelegate = self
-        statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
+        statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTabStrip(for: traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
         topTabsViewController?.applyTheme()
         webPagePreview.applyTheme(theme: theme)
@@ -2074,7 +2074,7 @@ class BrowserViewController: UIViewController,
             }
         }
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if toolbarHelper.shouldShowTabStrip(for: traitCollection) {
             topTabsViewController?.refreshTabs()
         }
         setupMicrosurvey()
@@ -2093,7 +2093,7 @@ class BrowserViewController: UIViewController,
             showEmbeddedWebview()
         }
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if toolbarHelper.shouldShowTabStrip(for: traitCollection) {
             topTabsViewController?.refreshTabs()
         }
         setupMicrosurvey()
@@ -3118,7 +3118,7 @@ class BrowserViewController: UIViewController,
     /// When the trait collection changes the top taps display might have to change
     /// This requires an update of the toolbars.
     private func updateToolbarStateTraitCollectionIfNecessary(_ newCollection: UITraitCollection) {
-        let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
+        let showTopTabs = toolbarHelper.shouldShowTabStrip(for: newCollection)
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: newCollection)
 
         // Only dispatch action when the value of top tabs being shown is different from what is saved in the state
@@ -3867,7 +3867,7 @@ class BrowserViewController: UIViewController,
 
     func applyTheme() {
         let currentTheme = currentTheme()
-        statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
+        statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTabStrip(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
 
         // to make sure on homepage with bottom search bar the status bar is hidden

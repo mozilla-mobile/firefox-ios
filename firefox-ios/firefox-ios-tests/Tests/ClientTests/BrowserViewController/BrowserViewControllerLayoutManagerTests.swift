@@ -149,7 +149,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
     func test_setupHeaderConstraints_topToolbarWithoutNavToolbar_usesViewTop() {
         let subject = createSubject()
         toolbarHelper.shouldShowNavigationToolbar = false
-        toolbarHelper.shouldShowTopTabs = false
+        toolbarHelper.shouldShowTabStrip = false
         subject.setupHeaderConstraints(isBottomSearchBar: false)
 
         let topConstraint = parentView.constraints.first {
@@ -163,7 +163,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
     func test_setupHeaderConstraints_bottomSearchBar_alwaysUsesSafeArea() {
         let subject = createSubject()
         toolbarHelper.shouldShowNavigationToolbar = false
-        toolbarHelper.shouldShowTopTabs = false
+        toolbarHelper.shouldShowTabStrip = false
         subject.setupHeaderConstraints(isBottomSearchBar: true)
 
         let topConstraint = parentView.constraints.first {

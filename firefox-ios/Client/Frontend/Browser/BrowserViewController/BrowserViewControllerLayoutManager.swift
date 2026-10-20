@@ -248,7 +248,7 @@ final class BrowserViewControllerLayoutManager {
 
         // Top toolbar depends on nav toolbar visibility
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: parentView.traitCollection)
-        let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: parentView.traitCollection)
+        let shouldShowTabStrip = toolbarHelper.shouldShowTabStrip(for: parentView.traitCollection)
 
         // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
         // Bug: Safe area top inset doesn't update correctly on landscape rotation (remains 20pt)
@@ -257,7 +257,7 @@ final class BrowserViewControllerLayoutManager {
         // Workaround: Manually adjust constraints based on orientation.
         // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
         // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
-        return (isNavToolbar || shouldShowTopTabs) ? parentView.safeAreaLayoutGuide.topAnchor : parentView.topAnchor
+        return (isNavToolbar || shouldShowTabStrip) ? parentView.safeAreaLayoutGuide.topAnchor : parentView.topAnchor
     }
 
     private func updateScrollControllerHeaderConstraint() {
