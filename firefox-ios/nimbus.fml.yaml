@@ -22,6 +22,7 @@ include:
   - nimbus-features/bookmarksSearchFeature.yaml
   - nimbus-features/browserDataTransferFeature.yaml
   - nimbus-features/cellularDataRestrictedErrorPageFeature.yaml
+  - nimbus-features/checkForReinstallsFeature.yaml
   - nimbus-features/customReaderModeSchemeFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
@@ -34,7 +35,6 @@ include:
   - nimbus-features/hostedSummarizerFeature.yaml
   - nimbus-features/httpsUpgradeFeature.yaml
   - nimbus-features/improvedAppStoreReviewTriggerFeature.yaml
-  - nimbus-features/installationTelemetryFeature.yaml
   - nimbus-features/mergeWindowsFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
