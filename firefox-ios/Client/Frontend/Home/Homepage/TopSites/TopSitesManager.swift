@@ -95,13 +95,28 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
     }
 
     // MARK: Google tile
+    @MainActor
     private func addGoogleTopSite(with availableSpaceCount: Int) -> [TopSiteConfiguration] {
         guard googleTopSiteManager.shouldAddGoogleTopSite(hasSpace: availableSpaceCount > 0),
               let googleSite = googleTopSiteManager.pinnedSiteData
         else {
             return []
         }
-        return [TopSiteConfiguration(site: googleSite)]
+        return [TopSiteConfiguration(site: searchConfigV3GoogleTopSite() ?? googleSite)]
+    }
+
+    /// With search-config-v3, the Google top site uses the Google engine's `topsite` partner code. Returns `nil` when
+    /// the engines are not from search-config-v3, so the existing Google top site is used unchanged.
+    @MainActor
+    private func searchConfigV3GoogleTopSite() -> Site? {
+        guard let googleEngine = searchEnginesManager.orderedEngines.first(where: {
+            $0.isGoogleEngine && $0.partners != nil
+        }) else { return nil }
+
+        let partnerCode = SearchPartnerResolver.resolve(engineIdentifier: googleEngine.engineID,
+                                                        partners: googleEngine.partners,
+                                                        accessPoint: .topsite).partnerCode
+        return GoogleTopSiteManager.makePinnedSite(url: GoogleTopSiteManager.searchConfigV3URL(partnerCode: partnerCode))
     }
 
     // MARK: Sponsored tiles (Unified Tiles)

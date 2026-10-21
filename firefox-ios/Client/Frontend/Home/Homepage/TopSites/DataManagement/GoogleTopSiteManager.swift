@@ -73,15 +73,38 @@ final class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
 
     var pinnedSiteData: Site? {
         guard let url = self.url else { return nil }
+        return Self.makePinnedSite(url: url)
+    }
 
-        let pinnedSite = Site.createPinnedSite(
+    static func makePinnedSite(url: String) -> Site {
+        return Site.createPinnedSite(
             url: url,
             title: "Google",
             isGooglePinnedTile: true,
             faviconResource: Constants.faviconResource
         )
+    }
 
-        return pinnedSite
+    /// The Google top site URL for search-config-v3, using Google's `topsite` partner code. The `client`
+    /// parameter is omitted when there is no partner code.
+    static func searchConfigV3URL(partnerCode: String?) -> String {
+        var components = URLComponents(string: "https://www.google.com/webhp")
+        var queryItems: [URLQueryItem] = []
+        if let partnerCode, !partnerCode.isEmpty {
+            queryItems.append(URLQueryItem(name: "client", value: partnerCode))
+        }
+        queryItems.append(URLQueryItem(name: "channel", value: "ts"))
+        components?.queryItems = queryItems
+        return components?.string ?? Constants.rowUrl
+    }
+
+    /// Whether the URL is a Google top site URL, regardless of its partner code. This matches both the
+    /// search-config-v2 constants and search-config-v3 URLs, which only differ by their `client` value.
+    static func isGoogleTopSiteURL(_ urlString: String) -> Bool {
+        guard let components = URLComponents(string: urlString) else { return false }
+        return components.host == "www.google.com"
+            && components.path == "/webhp"
+            && components.queryItems?.contains(URLQueryItem(name: "channel", value: "ts")) == true
     }
 
     // Once Google top site is added, we don't remove unless it's explicitly unpinned

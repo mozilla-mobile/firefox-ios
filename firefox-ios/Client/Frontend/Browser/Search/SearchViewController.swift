@@ -63,6 +63,8 @@ class SearchViewController: SiteTableViewController,
     }
 
     var searchDelegate: SearchViewControllerDelegate?
+    /// The search access point used to select search-config-v3 partner codes for searches started from this view.
+    var searchAccessPoint: SearchAccessPoint = .default
     let viewModel: SearchViewModel
     private var tabManager: TabManager
     private let logger: Logger
@@ -384,7 +386,7 @@ class SearchViewController: SiteTableViewController,
 
         let engine = viewModel.quickSearchEngines[index - 1]
 
-        guard let url = engine.searchURLForQuery(viewModel.searchQuery) else {
+        guard let url = engine.searchURLForQuery(viewModel.searchQuery, accessPoint: searchAccessPoint) else {
             assertionFailure()
             return
         }
@@ -463,7 +465,7 @@ class SearchViewController: SiteTableViewController,
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
 
             guard let recentSearch = viewModel.recentSearches[safe: indexPath.row],
-                  let url = defaultEngine.searchURLForQuery(recentSearch)
+                  let url = defaultEngine.searchURLForQuery(recentSearch, accessPoint: searchAccessPoint)
             else { return }
             searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: recentSearch)
             searchTelemetry?.recentSearchesTapped(at: indexPath.row)
@@ -472,7 +474,7 @@ class SearchViewController: SiteTableViewController,
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
 
             guard let trendingSearch = viewModel.trendingSearches[safe: indexPath.row],
-                  let url = defaultEngine.searchURLForQuery(trendingSearch)
+                  let url = defaultEngine.searchURLForQuery(trendingSearch, accessPoint: searchAccessPoint)
             else { return }
             searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: trendingSearch)
             searchTelemetry?.trendingSearchesTapped(at: indexPath.row)
@@ -484,7 +486,7 @@ class SearchViewController: SiteTableViewController,
             // Assume that only the default search engine can provide search suggestions.
             guard let suggestions = viewModel.suggestions,
                   let suggestion = suggestions[safe: indexPath.row],
-                  let url = defaultEngine.searchURLForQuery(suggestion)
+                  let url = defaultEngine.searchURLForQuery(suggestion, accessPoint: searchAccessPoint)
             else { return }
 
             let extras = [
