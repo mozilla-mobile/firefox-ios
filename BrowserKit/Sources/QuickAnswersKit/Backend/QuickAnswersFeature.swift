@@ -16,4 +16,9 @@ public struct QuickAnswersFeature: Equatable, Sendable {
         self.isOptInRedesignEnabled = isOptInRedesignEnabled
         self.isFollowUpEnabled = isFollowUpEnabled
     }
+
+    /// Whether a new question is sent along with the previous exchanges, so it can follow up on them.
+    var supportsFollowUpQuestions: Bool {
+        return isFollowUpEnabled && model.supportsAssistantRole
+    }
 }

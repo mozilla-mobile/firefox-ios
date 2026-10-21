@@ -323,17 +323,75 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.lastRequestedModel, .liner)
     }
 
+    // MARK: - Follow Up Tests
+
+    func testStartFollowUp_receivesSearchResult_recordsResultsAsFollowUp() {
+        mockService.speechResults = [SpeechResult(text: "Hello", isFinal: true)]
+        mockService.searchResult = .success(SearchResult(resultText: "Test", sources: []))
+        let expectation = XCTestExpectation()
+        let subject = createSubject(prefs: optInCompletedPrefs())
+        subject.onStateChange = { state in
+            guard case .showSearchResult = state else { return }
+            expectation.fulfill()
+        }
+
+        subject.startFollowUp()
+
+        wait(for: [expectation])
+        XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastResultsIsFollowUp, true)
+    }
+
+    func testStartFlow_receivesSearchResult_recordsResultsAsNotFollowUp() {
+        mockService.speechResults = [SpeechResult(text: "Hello", isFinal: true)]
+        mockService.searchResult = .success(SearchResult(resultText: "Test", sources: []))
+        let expectation = XCTestExpectation()
+        let subject = createSubject(prefs: optInCompletedPrefs())
+        subject.onStateChange = { state in
+            guard case .showSearchResult = state else { return }
+            expectation.fulfill()
+        }
+
+        subject.startFlow()
+
+        wait(for: [expectation])
+        XCTAssertEqual(mockTelemetry.lastResultsIsFollowUp, false)
+    }
+
+    func testSupportsFollowUpQuestions_withLinerAndFollowUpEnabled_isTrue() {
+        let subject = createSubject(model: .liner, isFollowUpEnabled: true)
+
+        XCTAssertTrue(subject.supportsFollowUpQuestions)
+    }
+
+    func testSupportsFollowUpQuestions_withExaAndFollowUpEnabled_isFalse() {
+        let subject = createSubject(model: .exa, isFollowUpEnabled: true)
+
+        XCTAssertFalse(subject.supportsFollowUpQuestions)
+    }
+
+    func testSupportsFollowUpQuestions_withLinerAndFollowUpDisabled_isFalse() {
+        let subject = createSubject(model: .liner, isFollowUpEnabled: false)
+
+        XCTAssertFalse(subject.supportsFollowUpQuestions)
+    }
+
     // MARK: - Helper
     private func createSubject(
         prefs: Prefs = MockProfilePrefs(),
         model: QuickAnswersModel = .exa,
-        isOptInRedesignEnabled: Bool = false
+        isOptInRedesignEnabled: Bool = false,
+        isFollowUpEnabled: Bool = false
     ) -> QuickAnswersViewModel {
         let subject = QuickAnswersViewModel(
             prefs: prefs,
             telemetry: mockTelemetry,
             configFetcher: DefaultQuickAnswersConfigFetcher(
-                feature: QuickAnswersFeature(model: model, isOptInRedesignEnabled: isOptInRedesignEnabled)
+                feature: QuickAnswersFeature(
+                    model: model,
+                    isOptInRedesignEnabled: isOptInRedesignEnabled,
+                    isFollowUpEnabled: isFollowUpEnabled
+                )
             ),
             makeService: { _, _ in
                 return self.mockService

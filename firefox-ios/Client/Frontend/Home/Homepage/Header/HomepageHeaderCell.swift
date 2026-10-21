@@ -61,7 +61,9 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         }
         button.translatesAutoresizingMaskIntoConstraints = false
         button.accessibilityLabel = .QuickAnswers.AccessibilityLabels.OpenQuickAnswers
+        button.largeContentTitle = .QuickAnswers.AccessibilityLabels.OpenQuickAnswers
         button.accessibilityIdentifier = a11y.quickAnswersButton
+        button.addInteraction(UILargeContentViewerInteraction())
         return button
     }()
     private lazy var logoCenterConstraint = logoContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
@@ -224,7 +226,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     private func quickAnswerButtonTapped() {
         guard let headerState else { return }
-        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
         // convert the button frame to the parent window frame to have correct transition.
         let transitionType: QuickAnswersTransitionType = .sourceReveal(
             sourceRect: quickAnswersButton.convert(quickAnswersButton.bounds, to: nil)
