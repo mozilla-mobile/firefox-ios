@@ -98,7 +98,7 @@ final class InstallationHistoryStoreTests: XCTestCase {
     func testInvalidHistoryIsNotSaved() {
         XCTAssertThrowsError(try subject.save(InstallationHistory(installCounter: 0, lastSeenDate: Date())))
         XCTAssertThrowsError(try subject.save(InstallationHistory(installCounter: 1,
-                                                                lastSeenDate: Date(timeIntervalSince1970: .nan))))
+                                                                  lastSeenDate: Date(timeIntervalSince1970: .nan))))
         XCTAssertTrue(keychain.updatedQueries.isEmpty)
         XCTAssertTrue(keychain.addedItems.isEmpty)
     }
