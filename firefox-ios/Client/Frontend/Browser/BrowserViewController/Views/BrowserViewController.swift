@@ -1908,6 +1908,11 @@ class BrowserViewController: UIViewController,
         addChild(viewController)
         viewController.willMove(toParent: self)
         contentContainer.add(content: viewController)
+        // Forces a layout pass for the homepage to fix a Duo bug where a stale layout
+        // animates when the homepage is selected after folding/unfolding the device
+        if viewController is HomepageViewController {
+            contentContainer.layoutIfNeeded()
+        }
         viewController.didMove(toParent: self)
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
         updateContentContainerTopConstraint()
