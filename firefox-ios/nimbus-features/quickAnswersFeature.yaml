@@ -27,7 +27,7 @@ features:
           optInRedesign: false
       - channel: developer
         value:
-          enabled: true
+          enabled: false
           model: exa
           optInRedesign: true
 
