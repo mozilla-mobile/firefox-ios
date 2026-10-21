@@ -252,6 +252,19 @@ final class TabTrayScreen {
             XCTAssertEqual(secondTabLabel, secondTab, "Second tab \(context) is not correct", file: file, line: line)
         }
 
+    /// Waits for each cell to carry its title, since a tab's label can lag behind its page load.
+    func assertTabTitles(inOrder titles: [String], file: StaticString = #filePath, line: UInt = #line) {
+        for (index, title) in titles.enumerated() {
+            let tabCell = collectionView.cells.element(boundBy: index)
+            let predicate = NSPredicate(format: "label == %@ OR label BEGINSWITH %@", title, "\(title).")
+            let expectation = XCTNSPredicateExpectation(predicate: predicate, object: tabCell)
+            let matched = XCTWaiter().wait(for: [expectation], timeout: TIMEOUT) == .completed
+            let found = tabCell.exists ? tabCell.label : "no tab"
+            XCTAssertTrue(matched, "Tab \(index) should be '\(title)', found '\(found)'", file: file, line: line)
+        }
+        XCTAssertEqual(collectionView.cells.count, titles.count, "Unexpected number of tabs", file: file, line: line)
+    }
+
     func dragTab(from fromTabName: String, to toTabName: String) {
         let fromCell = collectionView.cells[fromTabName].firstMatch
         let toCell = collectionView.cells[toTabName].firstMatch
