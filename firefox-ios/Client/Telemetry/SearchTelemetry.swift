@@ -253,9 +253,9 @@ class SearchTelemetry: @unchecked Sendable {
         }
     }
 
-    /// For V3 search config, Google uses a different partner code per SAP, so the code is read from the page URL's `client` parameter
-    /// when it is one of Google's configured codes, or `none` otherwise. Returns `nil` when Google is not a V3 engine, so the pre-V3
-    /// partner code table is used.
+    /// For V3 search config, Google uses a different partner code per SAP, so the code is read from the page
+    /// URL's `client` parameter when it is one of Google's codes, otherwise `none`. Returns `nil` when
+    /// Google is not a V3 engine, so the pre-V3 partner code table is used.
     @MainActor
     private func searchConfigV3PartnerCode(for provider: SearchEngine, url: URL?) -> String? {
         guard provider == .google,
