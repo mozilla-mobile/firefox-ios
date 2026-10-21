@@ -18,6 +18,7 @@ class TabManagerTestsBase: XCTestCase {
     var mockSessionStore: MockTabSessionStore!
     var mockProfile: MockProfile!
     var mockDiskImageStore: MockDiskImageStore!
+    var mockThemeManager: MockThemeManager!
     let sleepTime: UInt64 = 1 * NSEC_PER_SEC
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     /// 9 Sep 2001 8:00 pm GMT + 0
@@ -35,6 +36,7 @@ class TabManagerTestsBase: XCTestCase {
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
         mockSessionStore = MockTabSessionStore()
+        mockThemeManager = await MockThemeManager()
         setIsDeeplinkOptimizationRefactorEnabled(false)
     }
 
@@ -43,6 +45,7 @@ class TabManagerTestsBase: XCTestCase {
         mockDiskImageStore = nil
         mockTabStore = nil
         mockSessionStore = nil
+        mockThemeManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -60,6 +63,7 @@ class TabManagerTestsBase: XCTestCase {
             uuid: ReservedWindowUUID(uuid: windowUUID ?? tabWindowUUID, isNew: false),
             tabDataStore: mockTabStore,
             tabSessionStore: mockSessionStore,
+            themeManager: mockThemeManager,
             tabs: tabs
         )
         trackForMemoryLeaks(subject, file: file, line: line)

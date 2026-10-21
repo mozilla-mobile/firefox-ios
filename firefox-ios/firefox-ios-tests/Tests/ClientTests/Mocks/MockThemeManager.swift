@@ -63,7 +63,10 @@ class MockThemeManager: ThemeManager {
         systemThemeIsOn = isOn
     }
 
-    func setPrivateTheme(isOn: Bool, for window: UUID) {}
+    var setPrivateThemeCalls = [Bool]()
+    func setPrivateTheme(isOn: Bool, for window: UUID) {
+        setPrivateThemeCalls.append(isOn)
+    }
 
     func getPrivateThemeIsOn(for window: UUID) -> Bool { return false }
 

@@ -124,6 +124,31 @@ final class TabManagerPrivacyModeTests: TabManagerTestsBase {
         XCTAssertEqual(subject.normalTabs.count, 3, "Normal tabs should be untouched when no private tabs exist")
         XCTAssertEqual(subject.privateTabs.count, 0)
     }
+
+    // MARK: - Private theme (triggered via selectTab)
+
+    @MainActor
+    func testSelectTab_setsPrivateTheme_beforeNotifyingDelegates() {
+        let normalTabs = generateTabs(ofType: .normal, count: 1)
+        let privateTabs = generateTabs(ofType: .privateAny, count: 1)
+        let subject = createSubject(tabs: normalTabs + privateTabs)
+        let delegate = MockTabManagerDelegatePrivacyTests()
+        delegate.themeManager = mockThemeManager
+        subject.addDelegate(delegate)
+
+        guard let privateTab = subject.privateTabs.first,
+              let normalTab = subject.normalTabs.first else {
+            XCTFail("Test did not meet preconditions")
+            return
+        }
+
+        subject.selectTab(privateTab)
+        XCTAssertEqual(delegate.privateThemeStatesOnSelect, [true])
+
+        subject.selectTab(normalTab)
+        XCTAssertEqual(delegate.privateThemeStatesOnSelect, [true, false])
+        XCTAssertEqual(mockThemeManager.setPrivateThemeCalls, [true, false])
+    }
 }
 
 // MARK: - MockTabManagerDelegatePrivacyTests
@@ -131,6 +156,8 @@ final class TabManagerPrivacyModeTests: TabManagerTestsBase {
 private class MockTabManagerDelegatePrivacyTests: TabManagerDelegate {
     var didRemoveTabCallCount = 0
     var removedTabs = [Tab]()
+    var themeManager: MockThemeManager?
+    var privateThemeStatesOnSelect = [Bool?]()
 
     func reset() {
         didRemoveTabCallCount = 0
@@ -140,5 +167,9 @@ private class MockTabManagerDelegatePrivacyTests: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
         didRemoveTabCallCount += 1
         removedTabs.append(tab)
+    }
+
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {
+        privateThemeStatesOnSelect.append(themeManager?.setPrivateThemeCalls.last)
     }
 }

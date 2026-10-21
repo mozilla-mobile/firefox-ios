@@ -78,6 +78,7 @@ final class TabManagerImplementation: NSObject,
     private let tabSessionStore: TabSessionStore
     nonisolated private let imageStore: DiskImageStore?
     private let windowManager: WindowManager
+    private let themeManager: ThemeManager
     private let windowIsNew: Bool
     private let profile: Profile
     private weak var navigationDelegate: WKNavigationDelegate?
@@ -112,6 +113,7 @@ final class TabManagerImplementation: NSObject,
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          windowManager: WindowManager = AppContainer.shared.resolve(),
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
          tabs: [Tab] = []
     ) {
         let dataStore =  tabDataStore ?? DefaultTabDataStore(logger: logger, fileManager: DefaultTabFileManager())
@@ -120,6 +122,7 @@ final class TabManagerImplementation: NSObject,
         self.imageStore = imageStore
         self.notificationCenter = notificationCenter
         self.windowManager = windowManager
+        self.themeManager = themeManager
         self.windowIsNew = uuid.isNew
         self.windowUUID = uuid.uuid
         self.profile = profile
@@ -1082,6 +1085,8 @@ final class TabManagerImplementation: NSObject,
             sessionData: sessionData,
             updateLastExecutedTime: updateLastExecutedTime
         )
+
+        themeManager.setPrivateTheme(isOn: tab.isPrivate, for: windowUUID)
 
         let action = PrivateModeAction(isPrivate: tab.isPrivate,
                                        windowUUID: windowUUID,
