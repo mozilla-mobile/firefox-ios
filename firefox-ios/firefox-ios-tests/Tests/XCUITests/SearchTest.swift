@@ -348,13 +348,11 @@ class SearchTests: FeatureFlaggedTestBase {
     func testOpenTabsInSearchSuggestions() throws {
         let browserScreen = BrowserScreen(app: app)
         let toolbarScreen = ToolbarScreen(app: app)
-        app.launch()
         if #unavailable(iOS 16) {
             throw XCTSkip("Test fails intermittently for iOS 15")
         }
         // Go to localhost website and check the page displays correctly
-        navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
-        waitUntilPageLoad()
+        launchOpening("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
         // Open new tab
         validateSearchSuggestionText(typeText: "localhost")
         restartInBackground()
@@ -374,12 +372,11 @@ class SearchTests: FeatureFlaggedTestBase {
 
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "trending-searches-feature")
-        app.launch()
         if iPad() {
             throw XCTSkip("Toolbar option not available for iPad")
         } else {
             // Tap on toolbar bottom setting
-            navigator.nowAt(NewTabScreen)
+            launchIntoSettings()
             navigator.goto(ToolbarSettings)
             navigator.performAction(Action.SelectToolbarBottom)
             navigator.goto(HomePanelsScreen)
@@ -436,12 +433,11 @@ class SearchTests: FeatureFlaggedTestBase {
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
-        app.launch()
         if iPad() {
             throw XCTSkip("Toolbar option not available for iPad")
         } else {
             // Tap on toolbar bottom setting
-            navigator.nowAt(NewTabScreen)
+            launchIntoSettings()
             navigator.goto(ToolbarSettings)
             navigator.performAction(Action.SelectToolbarBottom)
             navigator.goto(HomePanelsScreen)
@@ -690,7 +686,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3209706
     // Regression
     func testDefaultSearchEngines() {
-        app.launch()
+        launchIntoSettings()
         navigator.goto(SearchSettings)
         searchSettingsScreen.assertDefaultSearchEngineSectionExists()
         searchSettingsScreen.assertAlternativeSearchEnginesSectionExists()
@@ -777,7 +773,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2753105
     // Regression
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {
-        app.launch()
+        launchIntoSettings()
         navigator.goto(SearchSettings)
         navigator.nowAt(SearchSettings)
 
@@ -820,7 +816,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3374353
     // Regression
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff() {
-        app.launch()
+        launchIntoSettings()
         // Disable general search suggests
         navigator.goto(SearchSettings)
         navigator.nowAt(SearchSettings)
@@ -906,7 +902,7 @@ class SearchTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
 
-        app.launch()
+        launchIntoSettings()
         navigator.goto(SearchSettings)
         navigator.nowAt(SearchSettings)
 
@@ -936,7 +932,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
-        app.launch()
+        launchIntoSettings()
 
         navigator.goto(SearchSettings)
         navigator.nowAt(SearchSettings)

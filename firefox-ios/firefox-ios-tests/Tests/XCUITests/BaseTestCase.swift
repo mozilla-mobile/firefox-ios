@@ -204,12 +204,22 @@ class BaseTestCase: XCTestCase {
     func setUpExperimentVariables() {}
 
     func setUpApp() {
-        setUpLaunchArguments()
-        if ProcessInfo.processInfo.environment["EXPERIMENT_NAME"] != nil {
-            app.activate()
-        }
+        setUpAppWithoutLaunching()
         app.launch()
         mozWaitForElementToExist(app.windows.otherElements.firstMatch)
+    }
+
+    /// `setUpApp()` without the launch, for test classes that launch the app themselves through a deeplink
+    /// (`launchIntoSettings`, `launchOpening`, `launchIntoReadingList`).
+    func setUpAppWithoutLaunching() {
+        setUpLaunchArguments()
+        if isExperimentRun {
+            app.activate()
+        }
+    }
+
+    private var isExperimentRun: Bool {
+        ProcessInfo.processInfo.environment["EXPERIMENT_NAME"] != nil
     }
 
     func setUpLaunchArguments() {
@@ -528,6 +538,111 @@ class BaseTestCase: XCTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
     }
 
+    /// Launches the app straight into a Settings screen by using a deeplink as the launch, which skips
+    /// the menu taps. A deeplink sent to an already running app costs more than the taps it replaces,
+    /// so this only pays off as the launch. Falls back to `app.launch()` and the menu below iOS 16.4.
+    /// With `.general` the navigator ends at `SettingsScreen` and can route anywhere from there.
+    /// With `.theme` it ends at `DisplaySettings` with no route out: go back with
+    /// `SettingScreen.tapBackToSettings()`, then call `settingsRootReachedByDeeplink()`.
+    func launchIntoSettings(_ section: SettingsDeeplink = .general) {
+        guard #available(iOS 16.4, *) else {
+            app.launch()
+            waitForTabsButton()
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(section.screen)
+            return
+        }
+        launchWithDeeplink(.settings(section))
+        let settingScreen = SettingScreen(app: app)
+        switch section {
+        case .general:
+            settingScreen.waitForSettingsRoot(timeout: TIMEOUT_LONG)
+            settingsRootReachedByDeeplink()
+        case .theme:
+            settingScreen.waitForThemeOptions(timeout: TIMEOUT_LONG)
+            navigator.nowAt(DisplaySettings)
+        }
+    }
+
+    /// Tells the navigator that the Settings root on screen was opened by a deeplink, so that it
+    /// enters `SettingsScreen` with a back edge to the browser instead of being forced there with `nowAt`.
+    func settingsRootReachedByDeeplink() {
+        navigator.nowAt(SettingsDeeplinkEntry)
+        navigator.goto(SettingsScreen)
+    }
+
+    /// Launches the app with `url` already loaded through an `open-url` deeplink, instead of launching
+    /// and typing it. The URL opens in a new tab next to the start page, so there is one more regular
+    /// tab than when typing it. Below iOS 16.4 it opens a new tab and types the URL, keeping that count.
+    func launchOpening(_ url: String, isPrivate: Bool = false) {
+        guard #available(iOS 16.4, *) else {
+            app.launch()
+            waitForTabsButton()
+            navigator.nowAt(NewTabScreen)
+            if isPrivate {
+                navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+            }
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            navigator.openURL(url)
+            waitUntilPageLoad()
+            navigator.nowAt(BrowserTab)
+            return
+        }
+        launchWithDeeplink(.openURL(url, isPrivate: isPrivate))
+        waitUntilPageLoad()
+        userState.isPrivate = isPrivate
+        let browserScreen = BrowserScreen(app: app)
+        let host = expectedAddressBarHost(for: url)
+        // A fresh profile's content blocker reload can cancel the first navigation (#35933), so retry once.
+        // The retry types into the same tab, so tab counts stay what the deeplink left.
+        if !browserScreen.addressBarContains(host) {
+            navigator.nowAt(NewTabScreen)
+            navigator.openURL(url)
+            waitUntilPageLoad()
+        }
+        browserScreen.assertAddressBarContains(value: host)
+        navigator.nowAt(BrowserTab)
+    }
+
+    /// The host the address bar shows for `url`, which leaves out the scheme, the path and a leading "www.".
+    private func expectedAddressBarHost(for url: String) -> String {
+        let host = URL(string: withHTTPScheme(url))?.host ?? url
+        return host.hasPrefix("www.") ? String(host.dropFirst(4)) : host
+    }
+
+    /// Launches the app straight into the Reading List panel through a deeplink, which skips the menu taps,
+    /// and waits for the empty panel that a cleared profile shows.
+    func launchIntoReadingList() {
+        guard #available(iOS 16.4, *) else {
+            app.launch()
+            waitForTabsButton()
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(LibraryPanel_ReadingList)
+            return
+        }
+        launchWithDeeplink(.homepanel(.readingList))
+        ReadingListScreen(app: app).waitForReadingListsPanel()
+        navigator.nowAt(LibraryPanel_ReadingList)
+    }
+
+    /// `deeplink` with the internal scheme of the build under test.
+    func deeplinkURL(_ deeplink: Deeplink) -> URL {
+        deeplink.url(scheme: currentScheme.internalURLScheme)
+    }
+
+    @available(iOS 16.4, *)
+    private func launchWithDeeplink(_ deeplink: Deeplink) {
+        // An app already launched by setUp would be relaunched by `app.open`, silently losing the time saving.
+        // The experiment plan activates the app on purpose before relaunching it, as `setUpApp()` does.
+        let runningStates: [XCUIApplication.State] = [.runningForeground, .runningBackground,
+                                                      .runningBackgroundSuspended]
+        if !isExperimentRun && runningStates.contains(app.state) {
+            XCTFail("The app is already running, so this deeplink launch relaunches it. " +
+                    "Make setUp skip its launch for this test with setUpAppWithoutLaunching().")
+        }
+        app.open(deeplinkURL(deeplink))
+    }
+
     func waitForTabsButtonHittable(timeout: Double = TIMEOUT) {
         mozWaitElementHittable(element: app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: timeout)
     }
@@ -816,6 +931,64 @@ extension BaseTestCase {
     var isFennec: Bool {
         return currentScheme == .fennec
     }
+}
+
+/// Every deeplink the UI tests send to the app, as `<scheme>://<host>?<query>`. The hosts and paths mirror
+/// the app's `DeeplinkInput`, which the UI test target can't import.
+enum Deeplink {
+    /// `deep-link?url=/settings/<section>`
+    case settings(SettingsDeeplink)
+    /// `deep-link?url=/homepanel/<section>`
+    case homepanel(HomepanelDeeplink)
+    /// `open-url?private=<isPrivate>&url=<target>`. The app appends every query item that follows `url` to the
+    /// URL itself, so the target is fully percent-encoded and `private` goes first. `isPrivate: nil` leaves
+    /// `private` out, so the app reuses the last browsing mode.
+    case openURL(String, isPrivate: Bool?)
+
+    func url(scheme: String) -> URL {
+        URL(string: "\(scheme)://\(hostAndQuery)")!
+    }
+
+    private var hostAndQuery: String {
+        switch self {
+        case .settings(let section):
+            return "deep-link?url=/settings/\(section.rawValue)"
+        case .homepanel(let section):
+            return "deep-link?url=/homepanel/\(section.rawValue)"
+        case .openURL(let target, let isPrivate):
+            var allowed = CharacterSet.urlQueryAllowed
+            allowed.remove(charactersIn: "&=?+#")
+            let webURL = withHTTPScheme(target)
+            let encodedTarget = webURL.addingPercentEncoding(withAllowedCharacters: allowed) ?? webURL
+            let privateItem = isPrivate.map { "private=\($0)&" } ?? ""
+            return "open-url?\(privateItem)url=\(encodedTarget)"
+        }
+    }
+}
+
+/// Settings sections reachable through `deep-link?url=/settings/<rawValue>`. The app lowercases the path, so
+/// sections with a camelCase raw value in the app (`contentBlocker`, `creditCard`, `topSites`, `rateApp`)
+/// never match and must not be added here.
+enum SettingsDeeplink: String {
+    case general
+    case theme
+
+    var screen: String {
+        switch self {
+        case .general: return SettingsScreen
+        case .theme: return DisplaySettings
+        }
+    }
+}
+
+/// Library panels reachable through `deep-link?url=/homepanel/<rawValue>`.
+enum HomepanelDeeplink: String {
+    case readingList = "reading-list"
+}
+
+/// `url` with `http://` in front when it has no scheme, as typed test page addresses often don't.
+private func withHTTPScheme(_ url: String) -> String {
+    url.contains("://") ? url : "http://\(url)"
 }
 
 enum AppScheme {
