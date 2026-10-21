@@ -91,7 +91,7 @@ final class TopSitesSettingsViewController: SettingsTableViewController, UserFea
             do {
                 try await remover.deleteUserData(contextID: contextId)
             } catch {
-                logger.log("Failed to delete unified ads user data: \(error)", level: .warning, category: .homepage)
+                logger.log("Failed to delete unified ads user data: \(error)", level: .fatal, category: .homepage)
             }
         }
     }
