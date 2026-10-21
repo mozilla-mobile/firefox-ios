@@ -7,8 +7,13 @@ import Foundation
 
 class MockTabTrayCoordinatorDelegate: TabTrayCoordinatorDelegate {
     var didDismissWasCalled = 0
+    var didRequestTabSettingsWasCalled = 0
 
     func didDismissTabTray(from coordinator: TabTrayCoordinator) {
         didDismissWasCalled += 1
+    }
+
+    func didRequestTabSettings(from coordinator: TabTrayCoordinator) {
+        didRequestTabSettingsWasCalled += 1
     }
 }
