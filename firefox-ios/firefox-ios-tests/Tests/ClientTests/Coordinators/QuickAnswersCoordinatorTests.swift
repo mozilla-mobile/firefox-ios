@@ -14,6 +14,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
     private var router: MockRouter!
     private var parentCoordinator: MockParentCoordinator!
     private var themeManager: MockThemeManager!
+    private var featureFlagsProvider: MockNimbusFeatureFlags!
     private let testURL = URL(string: "https://example.com")!
     private let testQuery = "test search query"
 
@@ -22,6 +23,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         router = MockRouter(navigationController: MockNavigationController())
         parentCoordinator = MockParentCoordinator()
         themeManager = MockThemeManager()
+        featureFlagsProvider = MockNimbusFeatureFlags()
         DependencyHelperMock().bootstrapDependencies()
     }
 
@@ -29,6 +31,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         router = nil
         parentCoordinator = nil
         themeManager = nil
+        featureFlagsProvider = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -117,10 +120,31 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertEqual(subject.resolvedModel(), QuickAnswersKit.QuickAnswersModel.liner)
     }
 
+    func test_resolvedFeature_withOptInRedesignEnabled_returnsFeatureWithResolvedModelAndRedesign() {
+        setupNimbus(model: .liner)
+        featureFlagsProvider.enabledFlags = [.quickAnswersOptInRedesign]
+        let subject = createSubject()
+
+        XCTAssertEqual(
+            subject.resolvedFeature(),
+            QuickAnswersKit.QuickAnswersFeature(model: .liner, isOptInRedesignEnabled: true)
+        )
+    }
+
+    func test_resolvedFeature_withOptInRedesignDisabled_returnsFeatureWithoutRedesign() {
+        setupNimbus(model: .exa)
+        let subject = createSubject()
+
+        XCTAssertEqual(
+            subject.resolvedFeature(),
+            QuickAnswersKit.QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false)
+        )
+    }
+
     // MARK: - Helper Methods
     private func setupNimbus(model: Client.QuickAnswersModel) {
         FxNimbus.shared.features.quickAnswersFeature.with { _, _ in
-            QuickAnswersFeature(enabled: true, model: model)
+            Client.QuickAnswersFeature(enabled: true, model: model)
         }
     }
 
@@ -137,6 +161,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
             themeManager: themeManager,
             router: router,
             transitionType: .sourceReveal(sourceRect: .zero),
+            featureFlagsProvider: featureFlagsProvider,
             onNavigate: onNavigate
         )
         trackForMemoryLeaks(subject, file: file, line: line)

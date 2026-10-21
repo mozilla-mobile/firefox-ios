@@ -264,6 +264,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .quickAnswersOptInRedesign,
+                titleText: format(string: "Quick Answers Opt-in Redesign"),
+                statusText: format(string: "Toggle to show the redesigned Quick Answers opt-in sheet")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .relayIntegration,
                 titleText: format(string: "Relay Email Masks"),
                 statusText: format(string: "Toggle to enable Relay mask feature")

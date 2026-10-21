@@ -157,6 +157,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .quickAnswers:
             return checkQuickAnswersFeature()
 
+        case .quickAnswersOptInRedesign:
+            return checkQuickAnswersOptInRedesignFeature()
+
         case .recentSearches:
             return checkRecentSearchesFeature()
 
@@ -342,6 +345,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkQuickAnswersFeature() -> Bool {
         return nimbus.features.quickAnswersFeature.value().enabled
+    }
+
+    private func checkQuickAnswersOptInRedesignFeature() -> Bool {
+        return nimbus.features.quickAnswersFeature.value().optInRedesign
     }
 
     private func checkStartAtHomeFeature(for featureID: FeatureFlagID) -> StartAtHome {
