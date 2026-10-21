@@ -102,11 +102,12 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
         else {
             return []
         }
+        // For pre-V3, we use the existing `googleSite` (same V2 behavior as before)
         return [TopSiteConfiguration(site: searchConfigV3GoogleTopSite() ?? googleSite)]
     }
 
-    /// With search-config-v3, the Google top site uses the Google engine's `topsite` partner code. Returns `nil` when
-    /// the engines are not from search-config-v3, so the existing Google top site is used unchanged.
+    /// For search-config-v3, the Google top site uses the Google engine's `topsite` partner code.
+    /// Returns `nil` for pre-V3 engines, so the previous Google top site is used as before (no changes for V2).
     @MainActor
     private func searchConfigV3GoogleTopSite() -> Site? {
         guard let googleEngine = searchEnginesManager.orderedEngines.first(where: {
