@@ -45,6 +45,37 @@ final class RustKeychainCleanupTests: XCTestCase {
         }
     }
 
+    func testMalformedEnumerationResultDoesNotDeleteItems() {
+        let keychain = MockCleanupKeychainClient()
+        keychain.loadResult = Data("invalid result".utf8) as NSData
+
+        let status = deleteKeychainSecClass(kSecClassGenericPassword, keychain: keychain)
+
+        XCTAssertEqual(status, errSecDecode)
+        XCTAssertEqual(keychain.loadedQueries.count, 1)
+        XCTAssertTrue(keychain.deletedQueries.isEmpty)
+    }
+
+    func testMissingPersistentReferenceDoesNotPreventDeletingOtherItems() throws {
+        let keychain = MockCleanupKeychainClient()
+        var missingReference = item(service: "unknown", account: "first", reference: "first")
+        missingReference.removeValue(forKey: kSecValuePersistentRef as String)
+        keychain.items = [
+            missingReference,
+            item(service: "unknown", account: "second", reference: "second")
+        ]
+
+        let status = deleteKeychainSecClass(kSecClassGenericPassword, keychain: keychain)
+
+        XCTAssertEqual(status, errSecDecode)
+        XCTAssertEqual(keychain.deletedQueries.count, 1)
+        let expected: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecValuePersistentRef as String: Data("second".utf8)
+        ]
+        XCTAssertEqual(try XCTUnwrap(keychain.deletedQueries.first) as NSDictionary, expected as NSDictionary)
+    }
+
     func testFailedDeletionDoesNotPreventAttemptingOtherUnprotectedItems() {
         let keychain = MockCleanupKeychainClient()
         keychain.items = [
@@ -108,6 +139,7 @@ final class RustKeychainCleanupTests: XCTestCase {
 private final class MockCleanupKeychainClient: KeychainClient, @unchecked Sendable {
     var items: [[String: Any]]?
     var loadStatus: OSStatus?
+    var loadResult: CFTypeRef?
     var deleteStatus = errSecSuccess
     private(set) var loadedQueries: [[String: Any]] = []
     private(set) var deletedQueries: [[String: Any]] = []
@@ -116,6 +148,9 @@ private final class MockCleanupKeychainClient: KeychainClient, @unchecked Sendab
         loadedQueries.append(query)
         if let loadStatus {
             return (loadStatus, nil)
+        }
+        if let loadResult {
+            return (errSecSuccess, loadResult)
         }
         guard let items else {
             return (errSecItemNotFound, nil)
