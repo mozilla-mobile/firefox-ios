@@ -10,7 +10,9 @@ let pdfUrl = "https://storage.googleapis.com/mobile_test_assets/public/lorem_ips
 
 class ShareMenuTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2863631
-    func testShareNormalWebsiteTabViaReminders() {
+    func testShareNormalWebsiteTabViaReminders() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         app.launch()
         // Couldn't find a way to tap on reminders on iOS 16
         if #available(iOS 17, *) {
@@ -24,6 +26,7 @@ class ShareMenuTests: FeatureFlaggedTestBase {
                 timeout: TIMEOUT_LONG
             )
         }
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864049
@@ -50,10 +53,13 @@ class ShareMenuTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864048
-    func testShareNormalWebsiteMarkup() {
+    func testShareNormalWebsiteMarkup() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         app.launch()
         reachShareMenuLayoutAndSelectOption(option: "Markup")
         validateMarkupTool()
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864046
@@ -65,7 +71,9 @@ class ShareMenuTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864073
-    func testShareWebsiteReaderModeReminders() {
+    func testShareWebsiteReaderModeReminders() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
@@ -81,30 +89,39 @@ class ShareMenuTests: FeatureFlaggedTestBase {
                 timeout: TIMEOUT_LONG
             )
         }
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864082
-    func testShareWebsiteReaderModePrint() {
+    func testShareWebsiteReaderModePrint() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Print")
         validatePrintLayout()
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864079
-    func testShareWebsiteReaderModeCopy() {
+    func testShareWebsiteReaderModeCopy() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Copy")
         openNewTabAndValidateURLisPaste(url: TestPages.mozillaBook)
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864080
-    func testShareWebsiteReaderModeSendLink() {
+    func testShareWebsiteReaderModeSendLink() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
@@ -118,16 +135,20 @@ class ShareMenuTests: FeatureFlaggedTestBase {
             ],
             timeout: TIMEOUT_LONG
         )
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864081
-    func testShareWebsiteReaderModeMarkup() {
+    func testShareWebsiteReaderModeMarkup() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
         app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Markup")
         validateMarkupTool()
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864065
@@ -139,10 +160,13 @@ class ShareMenuTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864064
-    func testSharePdfFileMarkup() {
+    func testSharePdfFileMarkup() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         app.launch()
         reachShareMenuLayoutAndSelectOption(option: "Markup", url: pdfUrl)
         validateMarkupTool()
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864066
