@@ -39,10 +39,11 @@ class NavigationTest: FeatureFlaggedTestSuite {
         try await super.setUp()
 
         browserScreen = BrowserScreen(app: app)
-        // These tests launch the app themselves, straight into Settings through a deeplink
-        let settingsDeeplinkTests = ["testTapSigninShowsFxAFromSettings", "testPopUpBlocker",
-                                     "testValidatePopUpWindows", "testOpenExternalLink"]
-        if !settingsDeeplinkTests.contains(where: name.contains) {
+        // These tests launch the app themselves through a deeplink
+        let deeplinkLaunchTests = ["testTapSigninShowsFxAFromSettings", "testPopUpBlocker",
+                                   "testValidatePopUpWindows", "testOpenExternalLink",
+                                   "testLongTapOnTextSelection"]
+        if !deeplinkLaunchTests.contains(where: name.contains) {
             launchApp()
         }
     }
@@ -210,6 +211,32 @@ class NavigationTest: FeatureFlaggedTestSuite {
 
         openContextMenuForArticleLink()
         contextMenuScreen.waitForContextMenuOptions()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306835
+    // Regression
+    func testLongTapOnTextSelection() {
+        let tabTrayScreen = TabTrayScreen(app: app)
+        let photonActionSheetScreen = PhotonActionSheetScreen(app: app)
+        launchOpening(path(forTestPage: TestPages.mozillaBook))
+
+        // Long tap a word, copy it and paste it into the URL bar of a new tab
+        browserScreen.longPressWebPageWord("from")
+        browserScreen.assertTextSelectionMenuShown()
+        browserScreen.tapTextSelectionMenuCopy()
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        browserScreen.pasteAndAssertAddressBarContains("from")
+
+        // Go back to the website, long tap another word and share it
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.tapOnCell(named: TestLabels.mozillaBook)
+        navigator.nowAt(BrowserTab)
+        browserScreen.longPressWebPageWord("cloud")
+        browserScreen.assertTextSelectionMenuShown()
+        browserScreen.tapTextSelectionMenuShare()
+        photonActionSheetScreen.assertShareSheetExists()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441496

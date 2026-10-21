@@ -520,6 +520,17 @@ extension Selector {
         Selector(strategy: .otherElementsButtonByLabel(label), value: label, description: description, groups: groups)
     }
 
+    /// Edit menu items surface as menu items on older iOS and as buttons on newer versions.
+    static func menuItemOrButtonByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(
+            format: "(elementType == %d OR elementType == %d) AND label == %@",
+            XCUIElement.ElementType.menuItem.rawValue,
+            XCUIElement.ElementType.button.rawValue,
+            label
+        )
+        return Selector(strategy: .predicate(p), value: label, description: description, groups: groups)
+    }
+
     static func otherElementByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
           Selector(strategy: .predicate(
               NSPredicate(

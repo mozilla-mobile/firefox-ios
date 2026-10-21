@@ -44,6 +44,9 @@ protocol BrowserSelectorsSet {
     var CONTEXT_MENU_PASTE_AND_GO: Selector { get }
     var CONTEXT_MENU_PASTE: Selector { get }
     var CONTEXT_MENU_COPY_ADDRESS: Selector { get }
+    var TEXT_SELECTION_MENU_COPY: Selector { get }
+    var TEXT_SELECTION_MENU_SHARE: Selector { get }
+    var TEXT_SELECTION_MENU_MORE: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
@@ -307,6 +310,32 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "addressBarContextMenu"]
     )
 
+    let TEXT_SELECTION_MENU_COPY = Selector.menuItemOrButtonByLabel(
+        "Copy",
+        description: "'Copy' option in the web page text selection menu",
+        groups: ["browser", "textSelectionMenu"]
+    )
+
+    let TEXT_SELECTION_MENU_SHARE = Selector.menuItemOrButtonByLabel(
+        "Share…",
+        description: "'Share…' option in the web page text selection menu",
+        groups: ["browser", "textSelectionMenu"]
+    )
+
+    // iOS 15 pages the menu with a menu item; later versions use a "Forward" arrow button.
+    let TEXT_SELECTION_MENU_MORE = Selector(
+        strategy: .predicate(NSPredicate(
+            format: "(elementType == %d AND label == %@) OR (elementType == %d AND identifier == %@)",
+            XCUIElement.ElementType.button.rawValue,
+            "Forward",
+            XCUIElement.ElementType.menuItem.rawValue,
+            "show.next.items.menu.button"
+        )),
+        value: "Forward",
+        description: "Arrow showing the next page of the web page text selection menu",
+        groups: ["browser", "textSelectionMenu"]
+    )
+
     func linkElement(named name: String) -> Selector {
         Selector.linkById(
             name,
@@ -350,6 +379,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            PASTE_BUTTON, SEARCH_SETTINGS_BUTTON, SPONSORED_LABEL, FIREFOX_SUGGEST_HEADER,
                            OPEN_DESIGNATED_URL_BUTTON, ADDRESS_BAR_CONTEXT_MENU,
                            CONTEXT_MENU_PASTE_AND_GO, CONTEXT_MENU_PASTE,
-                           CONTEXT_MENU_COPY_ADDRESS]
+                           CONTEXT_MENU_COPY_ADDRESS, TEXT_SELECTION_MENU_COPY, TEXT_SELECTION_MENU_SHARE,
+                           TEXT_SELECTION_MENU_MORE]
     }
 }
