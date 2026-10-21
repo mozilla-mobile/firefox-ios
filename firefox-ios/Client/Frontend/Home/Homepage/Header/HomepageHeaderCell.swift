@@ -225,12 +225,10 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     private func quickAnswerButtonTapped() {
         guard let headerState else { return }
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-        let transitionType: QuickAnswersTransitionType = if showiPadSetup {
-            .formSheet
-        } else {
-            // convert the button frame to the parent window frame to have correct transition.
-            .sourceReveal(sourceRect: quickAnswersButton.convert(quickAnswersButton.bounds, to: nil))
-        }
+        // convert the button frame to the parent window frame to have correct transition.
+        let transitionType: QuickAnswersTransitionType = .sourceReveal(
+            sourceRect: quickAnswersButton.convert(quickAnswersButton.bounds, to: nil)
+        )
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.quickAnswers(transitionType: transitionType)),

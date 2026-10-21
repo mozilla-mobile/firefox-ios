@@ -7,17 +7,6 @@ import ComponentLibrary
 
 public enum QuickAnswersTransitionType: Equatable, Sendable {
     case sourceReveal(sourceRect: CGRect)
-    /// A system form sheet presentation, used on iPad.
-    case formSheet
-
-    var modalPresentationStyle: UIModalPresentationStyle {
-        switch self {
-        case .sourceReveal:
-            return .custom
-        case .formSheet:
-            return .formSheet
-        }
-    }
 }
 
 /// Both directions animate the scale of a soft edged circular mask centered on the source rect, so the
