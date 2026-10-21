@@ -12,6 +12,7 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.cellStyle = style
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setFontSize()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -55,8 +56,6 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         contentConfiguration = nil
         textLabel?.text = nil
         textLabel?.textAlignment = .natural
-        textLabel?.font = FXFontStyles.Regular.body.scaledFont()
-        detailTextLabel?.font = FXFontStyles.Regular.caption1.scaledFont()
         detailTextLabel?.text = nil
         accessoryView = nil
         accessoryType = .none
@@ -85,5 +84,10 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     func configure(viewModel: ThemedTableViewCellViewModel) {
         self.viewModel = viewModel
+    }
+
+    private func setFontSize() {
+        textLabel?.font = FXFontStyles.Regular.body.scaledFont()
+        detailTextLabel?.font = FXFontStyles.Regular.caption1.scaledFont()
     }
 }
