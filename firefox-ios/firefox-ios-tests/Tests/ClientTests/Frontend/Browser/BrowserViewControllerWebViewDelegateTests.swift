@@ -396,6 +396,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
     @MainActor
     func testPresentConfigurationProfileAlertIfNeeded_withHTTPSProfile_showsAlert() throws {
+        setConfigurationProfileFlag(enabled: true)
         let subject = MockBrowserViewController(profile: profile,
                                                 tabManager: tabManager,
                                                 userInitiatedQueue: MockDispatchQueue())
@@ -416,7 +417,24 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     @MainActor
+    func testPresentConfigurationProfileAlertIfNeeded_withFlagDisabled_doesNotShowAlert() {
+        setConfigurationProfileFlag(enabled: false)
+        let subject = MockBrowserViewController(profile: profile,
+                                                tabManager: tabManager,
+                                                userInitiatedQueue: MockDispatchQueue())
+        trackForMemoryLeaks(subject)
+        let response = anyURLResponse(url: "https://www.example.com/profile.mobileconfig",
+                                      mimeType: MIMEType.ConfigurationProfile)
+
+        let didPresent = subject.presentConfigurationProfileAlertIfNeeded(for: response)
+
+        XCTAssertFalse(didPresent)
+        XCTAssertNil(subject.presentedViewController)
+    }
+
+    @MainActor
     func testPresentConfigurationProfileAlertIfNeeded_withBlobProfile_doesNotShowAlert() {
+        setConfigurationProfileFlag(enabled: true)
         let subject = MockBrowserViewController(profile: profile,
                                                 tabManager: tabManager,
                                                 userInitiatedQueue: MockDispatchQueue())
@@ -432,6 +450,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
 
     @MainActor
     func testPresentConfigurationProfileAlertIfNeeded_withOtherMIMEType_doesNotShowAlert() {
+        setConfigurationProfileFlag(enabled: true)
         let subject = MockBrowserViewController(profile: profile,
                                                 tabManager: tabManager,
                                                 userInitiatedQueue: MockDispatchQueue())
@@ -529,6 +548,13 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let webView = MockTabWebView(tab: tab)
         tab.webView = webView
         return tab
+    }
+
+    @MainActor
+    private func setConfigurationProfileFlag(enabled: Bool) {
+        let featureFlags = MockNimbusFeatureFlags()
+        featureFlags.enabledFlags = enabled ? [.configurationProfile] : []
+        DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: featureFlags)
     }
 
     private func anyURLResponse(url: String, mimeType: String) -> URLResponse {

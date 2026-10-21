@@ -1050,7 +1050,8 @@ extension BrowserViewController: WKNavigationDelegate {
     /// an alert offering to open the profile URL in `SFSafariViewController`, which hands the profile to the system.
     /// Returns `true` if the response is a configuration profile and the alert was shown.
     func presentConfigurationProfileAlertIfNeeded(for response: URLResponse) -> Bool {
-        guard response.mimeType == MIMEType.ConfigurationProfile,
+        guard featureFlagsProvider.isEnabled(.configurationProfile),
+              response.mimeType == MIMEType.ConfigurationProfile,
               let url = response.url,
               url.isWebPage(includeDataURIs: false)
         else { return false }
