@@ -4,8 +4,8 @@
 
 /// Fetches the `QuickAnswersConfig` used to drive a Quick Answers request.
 public protocol QuickAnswersConfigFetcher: Sendable {
-    /// The provider model that backs the request, used to surface the model name in the UI.
-    var model: QuickAnswersModel { get }
+    /// The feature configuration that backs the request.
+    var feature: QuickAnswersFeature { get }
     func fetch() async throws -> QuickAnswersConfig
 }
 
@@ -14,14 +14,14 @@ public struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
     Answer in 1 sentence. Remove any superscript numbers from the response like [1], [2] and other citations numbers.
     """.replacingOccurrences(of: "\n", with: " ")
 
-    public let model: QuickAnswersModel
+    public let feature: QuickAnswersFeature
 
-    public init(model: QuickAnswersModel) {
-        self.model = model
+    public init(feature: QuickAnswersFeature) {
+        self.feature = feature
     }
 
     public func fetch() async throws -> QuickAnswersConfig {
-        return QuickAnswersConfig(model: model, instructions: instructions(for: model))
+        return QuickAnswersConfig(model: feature.model, instructions: instructions(for: feature.model))
     }
 
     private func instructions(for model: QuickAnswersModel) -> String {

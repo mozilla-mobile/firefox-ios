@@ -51,6 +51,8 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2575178
     func testLegacyOnboardingFirstRunTour() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         guard #available(iOS 17.0, *), !skipPlatform else {
             throw XCTSkip("Skipping first run tour")
         }
@@ -59,11 +61,14 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
 
         firefoxHomePageScreen.assertTopSitesItemCellExist()
         firefoxHomePageScreen.dismissNewChangesPopupIfNeeded()
+        */
     }
 
     // MARK: Testing Dark Mode
     // https://mozilla.testrail.io/index.php?/cases/view/2793818
     func testLegacyOnboardingFirstRunTourDarkMode() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         onboardingScreen.handleTermsOfService()
         onboardingScreen.closeTour()
         firefoxHomePageScreen.dismissNewChangesPopupIfNeeded()
@@ -144,12 +149,15 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
 
         firefoxHomePageScreen.assertTopSitesItemCellExist()
         firefoxHomePageScreen.dismissNewChangesPopupIfNeeded()
+        */
     }
 
     // MARK: Testing Sign In
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306814
     func testLegacyOnboardingOnboardingSignIn() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         onboardingScreen.handleTermsOfService()
         onboardingScreen.goToNextScreenViaSecondary()
 
@@ -158,6 +166,7 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
 
         onboardingScreen.assertSignInScreen()
         onboardingScreen.exitSignInFlow()
+        */
     }
 
     // Smoketest
@@ -172,7 +181,9 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: Toolbar Position
     // https://mozilla.testrail.io/index.php?/cases/view/2575175
-    func testLegacyOnboardingSelectAddressBarTopPlacement() {
+    func testLegacyOnboardingSelectAddressBarTopPlacement() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         onboardingScreen.handleTermsOfService()
 
         // Wait for the initial onboarding screen title label to appear
@@ -208,10 +219,13 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
 
         let screenHeight = app.windows.element(boundBy: 0).frame.height
         XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2575176
     func testLegacyOnboardingSelectAddressBarBottomPlacement() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         onboardingScreen.handleTermsOfService()
 
         // Wait for the initial onboarding screen title label to appear
@@ -251,6 +265,7 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
         } else {
             XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
         }
+        */
     }
 
     // MARK: Skipping Onboarding with Close Button
@@ -288,7 +303,9 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
     // MARK: ToS Acceptance Settings
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/3193571
-    func testLegacyOnboardingValidateContinueButtonAndSettings() {
+    func testLegacyOnboardingValidateContinueButtonAndSettings() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         onboardingScreen.assertContinueButtonIsOnTheBottom()
         onboardingScreen.handleTermsOfService()
 
@@ -302,5 +319,6 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
         navigator.nowAt(SettingsScreen)
         settingsScreen.assertSendTechicalDataIsOn()
         settingsScreen.assertSendCrashReportsIsOn()
+        */
     }
 }

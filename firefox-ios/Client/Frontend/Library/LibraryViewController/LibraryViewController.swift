@@ -239,6 +239,7 @@ class LibraryViewController: UIViewController, Themeable {
             )
         }
         librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
+        updateViewWithState()
     }
 
     private func hideCurrentPanel() {

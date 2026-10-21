@@ -58,8 +58,11 @@ final class TabNumberButton: ToolbarButton, TabCountable {
     }
 
     override func updateConfiguration() {
-        super.updateConfiguration()
-        countLabel.textColor = configuration?.baseForegroundColor
+        UIView.performWithoutAnimation {
+                   super.updateConfiguration()
+                   countLabel.textColor = configuration?.baseForegroundColor
+                   imageView?.tintColor = configuration?.baseForegroundColor
+        }
     }
 
     // MARK: - Layout

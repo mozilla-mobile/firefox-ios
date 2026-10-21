@@ -38,6 +38,8 @@ class QRCodeViewController: UIViewController {
         static let isLightingNavigationItemColor = UIColor(red: 0.45, green: 0.67, blue: 0.84, alpha: 1)
         static let viewBackgroundDeniedColor = UIColor.black
         static let scanLineHeight: CGFloat = 6
+        static let contentPadding: CGFloat = 16
+        static let scanBorderSizeRatio: CGFloat = 2 / 3
     }
 
     weak var qrCodeDelegate: QRCodeViewControllerDelegate?
@@ -70,6 +72,9 @@ class QRCodeViewController: UIViewController {
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
+        label.setContentCompressionResistancePriority(.defaultHigh + 1, for: .vertical)
     }
 
     private var maskView: UIView = .build { view in
@@ -80,17 +85,6 @@ class QRCodeViewController: UIViewController {
     private var shapeLayer = CAShapeLayer()
 
     private var scanLineTopConstraint: NSLayoutConstraint?
-    private var scanBorderWidthConstraint: NSLayoutConstraint?
-
-    private var scanBorderSize: CGFloat {
-        let minSize = min(view.frame.width, view.frame.height)
-        var scanBorderSize = minSize / 3 * 2
-
-        if UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.orientation.isLandscape {
-            scanBorderSize = minSize / 2
-        }
-        return scanBorderSize
-    }
 
     private let logger: Logger
 
@@ -148,16 +142,15 @@ class QRCodeViewController: UIViewController {
         }
 
         setupVideoPreviewLayer()
+
+        setupConstraints()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        setupConstraints()
         isAnimationing = true
         startScanLineAnimation()
-
-        applyShapeLayer()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -166,8 +159,9 @@ class QRCodeViewController: UIViewController {
         stopScanLineAnimation()
     }
 
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        videoPreviewLayer?.frame = view.bounds
         applyShapeLayer()
     }
 
@@ -200,7 +194,6 @@ class QRCodeViewController: UIViewController {
     }
 
     private func applyShapeLayer() {
-        view.layoutIfNeeded()
         shapeLayer.removeFromSuperlayer()
         let rectPath = UIBezierPath(rect: view.bounds)
         rectPath.append(UIBezierPath(rect: scanBorder.frame).reversing())
@@ -218,8 +211,13 @@ class QRCodeViewController: UIViewController {
                                                               constant: UX.scanLineHeight)
         scanLineTopConstraint?.isActive = true
 
-        scanBorderWidthConstraint = scanBorder.widthAnchor.constraint(equalToConstant: scanBorderSize)
-        scanBorderWidthConstraint?.isActive = true
+        let safeArea = view.safeAreaLayoutGuide
+        // Scan border takes 2/3 of the shorter safe area side, shrinking further when the label needs the space.
+        let preferredWidth = scanBorder.widthAnchor.constraint(equalTo: safeArea.widthAnchor,
+                                                               multiplier: UX.scanBorderSizeRatio)
+        preferredWidth.priority = .defaultHigh
+        let preferredCenterY = scanBorder.centerYAnchor.constraint(equalTo: safeArea.centerYAnchor)
+        preferredCenterY.priority = .defaultLow
 
         NSLayoutConstraint.activate([
             maskView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -227,8 +225,12 @@ class QRCodeViewController: UIViewController {
             maskView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             maskView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
-            scanBorder.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            scanBorder.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            scanBorder.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
+            preferredCenterY,
+            preferredWidth,
+            scanBorder.widthAnchor.constraint(lessThanOrEqualTo: safeArea.heightAnchor,
+                                              multiplier: UX.scanBorderSizeRatio),
+            scanBorder.topAnchor.constraint(greaterThanOrEqualTo: safeArea.topAnchor, constant: UX.contentPadding),
             scanBorder.heightAnchor.constraint(equalTo: scanBorder.widthAnchor),
 
             scanLine.leadingAnchor.constraint(equalTo: scanBorder.leadingAnchor),
@@ -236,18 +238,15 @@ class QRCodeViewController: UIViewController {
             scanLine.heightAnchor.constraint(equalToConstant: UX.scanLineHeight),
 
             instructionsLabel.topAnchor.constraint(equalTo: scanBorder.bottomAnchor, constant: 30),
-            instructionsLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
-            instructionsLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+            instructionsLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: UX.contentPadding),
+            instructionsLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -UX.contentPadding),
+            instructionsLabel.bottomAnchor.constraint(lessThanOrEqualTo: safeArea.bottomAnchor,
+                                                      constant: -UX.contentPadding),
         ])
-    }
-
-    private func updateContraintsAfterTransition() {
-        scanBorderWidthConstraint?.constant = scanBorderSize
     }
 
     private func setupVideoPreviewLayer() {
         guard let videoPreviewLayer = self.videoPreviewLayer else { return }
-        videoPreviewLayer.frame = UIScreen.main.bounds
         switch UIDevice.current.orientation {
         case .portrait:
             videoPreviewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
@@ -332,7 +331,7 @@ class QRCodeViewController: UIViewController {
         }
         let videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         videoPreviewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-        videoPreviewLayer.frame = UIScreen.main.bounds
+        videoPreviewLayer.frame = view.bounds
         view.layer.addSublayer(videoPreviewLayer)
         self.videoPreviewLayer = videoPreviewLayer
         DispatchQueue.global().async {
@@ -343,7 +342,6 @@ class QRCodeViewController: UIViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: { _ in
-            self.updateContraintsAfterTransition()
             self.setupVideoPreviewLayer()
         }, completion: nil)
     }

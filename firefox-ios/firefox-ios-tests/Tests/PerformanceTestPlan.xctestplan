@@ -109,7 +109,6 @@
         "LibraryTests",
         "LibraryTestsIpad",
         "LoginTest",
-        "MicrosurveyTests",
         "ModernKitOnboardingTests",
         "ModernOnboardingTests",
         "MultiWindowTests",

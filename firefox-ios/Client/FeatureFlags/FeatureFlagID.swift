@@ -27,6 +27,7 @@ enum FeatureFlagID: String, CaseIterable {
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case googleLens
+    case googleLensSearchInterstitial
     case hntSponsoredShortcuts
     case homepageAddShortcutTile
     case homepageBookmarksSectionDefault
@@ -50,10 +51,12 @@ enum FeatureFlagID: String, CaseIterable {
     case novaPrivateThemeOverride
     case privacyDashboard
     case quickAnswers
+    case quickAnswersOptInRedesign
     case recentSearches
     case relayIntegration
     case reportBrokenSite
     case searchConfigV3
+    case searchTermInAddressBar
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case shouldUseBrandRefreshConfiguration
@@ -119,6 +122,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,
                 .googleLens,
+                .googleLensSearchInterstitial,
                 .homepageAddShortcutTile,
                 .homepagePinnedHeader,
                 .homepageAnimatedCenterSearchBar,
@@ -132,13 +136,14 @@ enum FeatureFlagID: String, CaseIterable {
                 .multiDayOnboarding,
                 .nativeErrorPage,
                 .newBookmarkFolderTree,
-                .novaDesign,
                 .novaPrivateThemeOverride,
                 .privacyDashboard,
                 .quickAnswers,
+                .quickAnswersOptInRedesign,
                 .recentSearches,
                 .relayIntegration,
                 .reportBrokenSite,
+                .searchTermInAddressBar,
                 .sentFromFirefox,
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,

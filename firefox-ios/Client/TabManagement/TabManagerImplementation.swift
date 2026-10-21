@@ -1076,7 +1076,7 @@ final class TabManagerImplementation: NSObject,
         selectedIndex = tabs.firstIndex(of: tab) ?? -1
         preserveTabs(immediate: immediatePreservation)
 
-        let sessionData = tabSessionStore.fetchTabSession(tabID: tabUUID)
+        let sessionData = fetchTabSession(for: tab, tabID: tabUUID)
         selectTabWithSession(
             tab: tab,
             sessionData: sessionData,
@@ -1159,6 +1159,11 @@ final class TabManagerImplementation: NSObject,
                                           windowUUID: windowUUID,
                                           actionType: GeneralBrowserActionType.updateSelectedTab)
         store.dispatch(action)
+    }
+
+    private func fetchTabSession(for tab: Tab, tabID: UUID) -> Data? {
+        let hasLiveSelectedTab = selectedTab === tab && tab.webView != nil
+        return hasLiveSelectedTab ? nil : tabSessionStore.fetchTabSession(tabID: tabID)
     }
 
     private func selectTabWithSession(
@@ -1319,6 +1324,33 @@ final class TabManagerImplementation: NSObject,
         for tab in backgroundTabsWithWebViews {
             await tab.offloadWebView()
         }
+    }
+
+    func tearDownWebViewsForProxyChange() async {
+        let liveTabs = tabs.filter { $0.webView != nil }
+        logger.log("Tearing down \(liveTabs.count) webviews ahead of proxy change",
+                   level: .info,
+                   category: .tabs)
+
+        // Save selected tab session state before loading a blank page and offloading webviews
+        saveSessionData(forTab: selectedTab)
+
+        for tab in liveTabs {
+            await tab.loadBlankPage()
+            await tab.offloadWebView()
+        }
+    }
+
+    func restoreSelectedTabForProxyChange() {
+        guard let selectedTab,
+              let tabUUID = UUID(uuidString: selectedTab.tabUUID)
+        else { return }
+
+        selectTabWithSession(
+            tab: selectedTab,
+            sessionData: tabSessionStore.fetchTabSession(tabID: tabUUID),
+            updateLastExecutedTime: true
+        )
     }
 
     func addPopupForParentTab(profile: any Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {

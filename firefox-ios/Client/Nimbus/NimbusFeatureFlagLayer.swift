@@ -90,6 +90,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .googleLens:
             return checkGoogleLensFeature()
 
+        case .googleLensSearchInterstitial:
+            return checkGoogleLensSearchInterstitialFeature()
+
         case .homepageAddShortcutTile:
             return checkHomepageAddShortcutTile()
 
@@ -154,6 +157,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .quickAnswers:
             return checkQuickAnswersFeature()
 
+        case .quickAnswersOptInRedesign:
+            return checkQuickAnswersOptInRedesignFeature()
+
         case .recentSearches:
             return checkRecentSearchesFeature()
 
@@ -165,6 +171,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .searchConfigV3:
             return checkSearchConfigV3Feature()
+
+        case .searchTermInAddressBar:
+            return checkSearchTermInAddressBarFeature()
 
         case .sentFromFirefox:
             return checkSentFromFirefoxFeature()
@@ -305,6 +314,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return config.unifiedSearch
     }
 
+    private func checkSearchTermInAddressBarFeature() -> Bool {
+        return nimbus.features.toolbarRefactorFeature.value().searchTermInAddressBar
+    }
+
     private func checkRelayIntegration() -> Bool {
         return nimbus.features.relayIntegrationFeature.value().enabled
     }
@@ -332,6 +345,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkQuickAnswersFeature() -> Bool {
         return nimbus.features.quickAnswersFeature.value().enabled
+    }
+
+    private func checkQuickAnswersOptInRedesignFeature() -> Bool {
+        return nimbus.features.quickAnswersFeature.value().optInRedesign
     }
 
     private func checkStartAtHomeFeature(for featureID: FeatureFlagID) -> StartAtHome {
@@ -376,6 +393,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkGoogleLensFeature() -> Bool {
         return nimbus.features.googleLensFeature.value().enabled
+    }
+
+    private func checkGoogleLensSearchInterstitialFeature() -> Bool {
+        return nimbus.features.googleLensFeature.value().searchInterstitialEnabled
     }
 
     private func checkMicrosurveyFeature() -> Bool {

@@ -10,6 +10,8 @@ import XCTest
 final class LocationViewTests: XCTestCase {
     private var delegate: MockLocationViewDelegate!
     private let testURL = URL(string: "https://mozilla.org")!
+    private let testSearchURL = URL(string: "https://example.com/search?q=hello+world")!
+    private let testSearchTerm = "hello world"
 
     override func setUp() async throws {
         try await super.setUp()
@@ -137,12 +139,112 @@ final class LocationViewTests: XCTestCase {
         XCTAssertEqual(delegate.didBeginEditingCallCount, 1)
     }
 
+    // MARK: - Displayed Search Term
+    func testConfigure_whenNotEditingWithDisplayedSearchTerm_showsSearchIcon() {
+        let subject = createSubject()
+        invalidateIconAlphas(on: subject)
+
+        subject.configure(makeSearchTermConfig(), delegate: delegate)
+
+        XCTAssertEqual(subject.iconContainerStackView.arrangedSubviews.count, 1)
+        XCTAssertTrue(subject.iconContainerStackView.arrangedSubviews.first === subject.searchIconImageView,
+                      "A search results page should show the search icon in the container.")
+        XCTAssertEqual(subject.searchIconImageView.alpha, 1, "The search icon should be visible.")
+        XCTAssertEqual(subject.lockIconButton.alpha, 0, "The lock icon should be hidden.")
+        XCTAssertEqual(subject.searchEngineContentView.alpha, 0, "The search engine view should be hidden.")
+    }
+
+    func testConfigure_whenNotEditingWithDisplayedSearchTerm_showsSearchTermText() {
+        let subject = createSubject()
+
+        subject.configure(makeSearchTermConfig(), delegate: delegate)
+
+        XCTAssertEqual(subject.urlTextField.text, testSearchTerm)
+    }
+
+    func testConfigure_whenNotEditingWithSearchTermButDisplayDisabled_showsHostAndLockIcon() {
+        let subject = createSubject()
+
+        subject.configure(makeSearchTermConfig(shouldDisplaySearchTerm: false), delegate: delegate)
+
+        XCTAssertEqual(subject.urlTextField.text, "example.com")
+        XCTAssertTrue(subject.iconContainerStackView.arrangedSubviews.first === subject.lockIconButton,
+                      "When display is disabled the search term must only be used for editing, not shown.")
+    }
+
+    func testConfigure_whenDisplayEnabledWithoutSearchTerm_showsHostAndLockIcon() {
+        let subject = createSubject()
+
+        subject.configure(makeConfig(url: testURL, shouldDisplaySearchTerm: true), delegate: delegate)
+
+        XCTAssertEqual(subject.urlTextField.text, "mozilla.org")
+        XCTAssertTrue(subject.iconContainerStackView.arrangedSubviews.first === subject.lockIconButton,
+                      "Without a search term there is nothing to display, so the host and lock icon stay.")
+    }
+
+    func testConfigure_whenEditingWithDisplayedSearchTerm_showsSearchEngineView() {
+        let subject = createSubject()
+        invalidateIconAlphas(on: subject)
+
+        subject.configure(makeSearchTermConfig(isEditing: true), delegate: delegate)
+
+        XCTAssertTrue(subject.iconContainerStackView.arrangedSubviews.first === subject.searchEngineContentView,
+                      "Editing should show the search engine view even when a search term is displayed.")
+        XCTAssertEqual(subject.searchIconImageView.alpha, 0, "The search icon should be hidden while editing.")
+        XCTAssertEqual(subject.searchEngineContentView.alpha, 1, "The search engine view should be visible.")
+    }
+
+    func testConfigure_whenDisplayedSearchTermIsRemoved_showsLockIconAndHostAgain() {
+        let subject = createSubject()
+        invalidateIconAlphas(on: subject)
+
+        subject.configure(makeSearchTermConfig(), delegate: delegate)
+        XCTAssertTrue(subject.iconContainerStackView.arrangedSubviews.first === subject.searchIconImageView)
+
+        subject.configure(makeConfig(url: testURL), delegate: delegate)
+
+        XCTAssertTrue(subject.iconContainerStackView.arrangedSubviews.first === subject.lockIconButton,
+                      "Navigating to a non-search page must restore the lock icon.")
+        XCTAssertEqual(subject.urlTextField.text, "mozilla.org")
+        XCTAssertEqual(subject.searchIconImageView.alpha, 0)
+        XCTAssertEqual(subject.lockIconButton.alpha, 1)
+    }
+
+    // MARK: - Centered Layout
+    func testConfigure_whenCenteredAndLockIconRemoved_keepsURLTextPosition() {
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 320, height: 640))
+        let viewController = UIViewController()
+        window.rootViewController = viewController
+        let container: UIView = viewController.view
+        let subject = createSubject()
+        subject.frame = CGRect(x: 0, y: 0, width: 320, height: 44)
+        container.addSubview(subject)
+        window.makeKeyAndVisible()
+        defer { window.isHidden = true }
+
+        subject.configure(makeConfig(url: testURL), delegate: delegate, uxConfig: .experiment())
+        subject.layoutIfNeeded()
+        let textFieldMinXWithLockIcon = subject.urlTextField.convert(subject.urlTextField.bounds, to: container).minX
+
+        subject.configure(makeConfig(url: testURL, lockIconImageName: nil), delegate: delegate, uxConfig: .experiment())
+        subject.layoutIfNeeded()
+        let textFieldMinXWithoutLockIcon = subject.urlTextField.convert(subject.urlTextField.bounds, to: container).minX
+
+        XCTAssertEqual(
+            textFieldMinXWithoutLockIcon,
+            textFieldMinXWithLockIcon,
+            accuracy: 0.5,
+            "The centered URL text should not shift when the lock icon is removed, e.g. in reader mode."
+        )
+    }
+
     // MARK: - Helpers
-    /// Puts both icons at an alpha no expected value matches, so the assertions fail unless the
+    /// Puts all icons at an alpha no expected value matches, so the assertions fail unless the
     /// code under test actually writes them.
     private func invalidateIconAlphas(on subject: LocationView) {
         subject.lockIconButton.alpha = 0.42
         subject.searchEngineContentView.alpha = 0.42
+        subject.searchIconImageView.alpha = 0.42
     }
 
     private func createSubject(file: StaticString = #filePath, line: UInt = #line) -> LocationView {
@@ -151,7 +253,19 @@ final class LocationViewTests: XCTestCase {
         return subject
     }
 
-    private func makeConfig(url: URL?, isEditing: Bool = false) -> LocationViewConfiguration {
+    private func makeSearchTermConfig(isEditing: Bool = false,
+                                      shouldDisplaySearchTerm: Bool = true) -> LocationViewConfiguration {
+        return makeConfig(url: testSearchURL,
+                          isEditing: isEditing,
+                          searchTerm: testSearchTerm,
+                          shouldDisplaySearchTerm: shouldDisplaySearchTerm)
+    }
+
+    private func makeConfig(url: URL?,
+                            isEditing: Bool = false,
+                            searchTerm: String? = nil,
+                            shouldDisplaySearchTerm: Bool = false,
+                            lockIconImageName: String? = "lockIcon") -> LocationViewConfiguration {
         return LocationViewConfiguration(
             searchEngineImageViewA11yId: "searchEngineA11yId",
             searchEngineImageViewA11yLabel: "searchEngineA11yLabel",
@@ -160,12 +274,13 @@ final class LocationViewTests: XCTestCase {
             urlTextFieldPlaceholder: "placeholder",
             urlTextFieldA11yId: "urlTextFieldA11yId",
             searchEngineImage: UIImage(),
-            lockIconImageName: "lockIcon",
+            lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: false,
             safeListedURLImageName: nil,
             url: url,
             droppableUrl: nil,
-            searchTerm: nil,
+            searchTerm: searchTerm,
+            shouldDisplaySearchTerm: shouldDisplaySearchTerm,
             isEditing: isEditing,
             didStartTyping: false,
             shouldShowKeyboard: false,
@@ -175,11 +290,13 @@ final class LocationViewTests: XCTestCase {
 }
 
 private extension LocationView {
-    func configure(_ config: LocationViewConfiguration, delegate: LocationViewDelegate) {
+    func configure(_ config: LocationViewConfiguration,
+                   delegate: LocationViewDelegate,
+                   uxConfig: AddressToolbarUXConfiguration = .default()) {
         configure(config,
                   delegate: delegate,
                   isUnifiedSearchEnabled: false,
-                  uxConfig: .default(),
+                  uxConfig: uxConfig,
                   addressBarPosition: .top)
     }
 }

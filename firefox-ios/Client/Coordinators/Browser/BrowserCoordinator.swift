@@ -537,7 +537,7 @@ final class BrowserCoordinator: BaseCoordinator,
         }
         windowManager.postWindowEvent(event: .settingsOpened, windowUUID: windowUUID)
         let navigationController = SettingsNavigationController(windowUUID: windowUUID)
-        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isPad = browserViewController.traitCollection.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
         navigationController.modalPresentationStyle = modalPresentationStyle
         let settingsRouter = DefaultRouter(navigationController: navigationController)
@@ -1148,7 +1148,7 @@ final class BrowserCoordinator: BaseCoordinator,
             return // flow is already handled
         }
         let navigationController = DismissableNavigationViewController()
-        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isPad = browserViewController.traitCollection.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle
         if featureFlagsProvider.isEnabled(.tabTrayUIExperiments) {
             modalPresentationStyle = .fullScreen
@@ -1182,7 +1182,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
         // FXIOS-13305: We don't handle animations properly for synced tabs, so we will use default presentation
         if featureFlagsProvider.isEnabled(.tabTrayUIExperiments) &&
-            UIDevice.current.userInterfaceIdiom != .pad && selectedPanel != .syncedTabs {
+            browserViewController.traitCollection.userInterfaceIdiom != .pad && selectedPanel != .syncedTabs {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
             // Present on the next runloop turn so setup and tap feedback render first,
             // keeping each main-thread turn short and reducing the risk of a hang during presentation.
@@ -1262,7 +1262,7 @@ final class BrowserCoordinator: BaseCoordinator,
                 width: contentContainer.frame.width * browserScreenshot.scale,
                 height: (browserFrame.height - abs(contentContainer.frame.origin.y)) * browserScreenshot.scale
             )) {
-            browserScreenshot = UIImage(cgImage: croppedImage, scale: UIScreen.main.scale, orientation: .up)
+            browserScreenshot = UIImage(cgImage: croppedImage, scale: browserScreenshot.scale, orientation: .up)
         }
 
         guard !childCoordinators.contains(where: { $0 is SummarizeCoordinator }) else { return }
@@ -1370,8 +1370,22 @@ final class BrowserCoordinator: BaseCoordinator,
         let timerId = searchTimerId ?? googleLensTelemetry.startSearchTimer(source: source)
         browserViewController.googleLensSearches[tab.tabUUID] = GoogleLensSearchState(source: source,
                                                                                       searchTimerId: timerId)
+        if featureFlagsProvider.isEnabled(.googleLensSearchInterstitial) {
+            showGoogleLensInterstitial(for: tab)
+        }
         _ = tab.loadRequest(request)
     }
+
+    private func showGoogleLensInterstitial(for tab: Tab) {
+        guard !childCoordinators.contains(where: { $0 is GoogleLensInterstitialCoordinator }) else { return }
+        let coordinator = GoogleLensInterstitialCoordinator(parentCoordinatorDelegate: self,
+                                                            router: router,
+                                                            tab: tab,
+                                                            themeManager: themeManager)
+        add(child: coordinator)
+        coordinator.start()
+    }
+
     private func handleGoogleLensPhotoPick(_ results: [PHPickerResult]) {
         guard let provider = results.first?.itemProvider else { return }
         guard provider.canLoadObject(ofClass: UIImage.self) else {
@@ -1652,6 +1666,7 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - Private helpers
 
     private func releaseBrowserViewController() {
+        childCoordinators.compactMap { $0 as? GoogleLensInterstitialCoordinator }.forEach { $0.stop() }
         // Clean up views and ensure BVC and its adjacent views for the window are freed.
         browserViewController.view.endEditing(true)
         browserViewController.dismissUrlBar()

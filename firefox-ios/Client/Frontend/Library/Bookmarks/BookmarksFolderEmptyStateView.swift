@@ -107,9 +107,11 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
             bodyLabel.trailingAnchor.constraint(
                 equalTo: stackViewWrapper.trailingAnchor, constant: -UX.contentLeftRightMargins),
 
-            signInButton.widthAnchor.constraint(equalToConstant: UX.signInButtonMaxWidth),
+            signInButton.widthAnchor.constraint(equalToConstant: UX.signInButtonMaxWidth).priority(.defaultHigh),
+            signInButton.widthAnchor.constraint(lessThanOrEqualTo: stackViewWrapper.widthAnchor),
 
-            logoImage.widthAnchor.constraint(equalToConstant: UX.imageWidth),
+            logoImage.widthAnchor.constraint(equalToConstant: UX.imageWidth).priority(UILayoutPriority(999)),
+            logoImage.widthAnchor.constraint(lessThanOrEqualTo: stackViewWrapper.widthAnchor),
             logoImage.heightAnchor.constraint(equalTo: logoImage.widthAnchor, multiplier: aspectRatio)
         ])
     }

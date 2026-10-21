@@ -74,17 +74,23 @@ struct CreditCardInputView: ThemeableView {
         return ZStack {
             Color(theme.colors.layer1).ignoresSafeArea()
             form
-                .navigationBarTitle(viewModel.state.title,
-                                    displayMode: .inline)
+                .navigationTitle(viewModel.state.title)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        leftBarButton()
+                            .foregroundColor(Color(theme.isNova ? theme.colors.iconPrimary : theme.colors.actionPrimary))
+                    }
+
+                    ToolbarItem(placement: .principal) {
+                        Text(viewModel.state.title)
+                            .font(.headline)
+                    }
+
                     ToolbarItem(placement: .navigationBarTrailing) {
                         rightBarButton()
                             .disabled(!viewModel.isRightBarButtonEnabled)
                             .foregroundColor(Color(theme.colors.actionPrimary))
-                    }
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        leftBarButton()
-                            .foregroundColor(Color(theme.isNova ? theme.colors.iconPrimary : theme.colors.actionPrimary))
                     }
                 }
                 .padding(.top, 0)

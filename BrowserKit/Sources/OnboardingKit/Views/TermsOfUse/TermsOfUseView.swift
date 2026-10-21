@@ -63,28 +63,22 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     }
 
     private var regularContent: some View {
-        GeometryReader { geometry in
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: UX.CardView.tosSpacing) {
-                    VStack(spacing: UX.CardView.spacing) {
-                        regularImageView
-                        titleView
-                    }
-                    bodyView
-                    VStack(spacing: UX.CardView.spacing) {
-                        links
-                        primaryButton
-                            .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
-                    }
+        OnboardingCardLayout(horizontalPadding: UX.CardView.horizontalPadding) { _ in
+            VStack(spacing: UX.CardView.tosSpacing) {
+                VStack(spacing: UX.CardView.spacing) {
+                    regularImageView
+                    titleView
                 }
-                .padding(.vertical, UX.CardView.verticalPadding)
-                .frame(width: UX.CardView.primaryButtonWidthiPad)
-                .frame(width: geometry.size.width)
-                .frame(minHeight: geometry.size.height)
+                bodyView
+                links
             }
-            .scrollBounceBehavior(basedOnSize: true)
+            .padding(.vertical, UX.CardView.verticalPadding)
+            .frame(width: UX.CardView.primaryButtonWidthiPad)
+        } buttons: {
+            primaryButton
+                .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
+                .padding(.bottom, UX.CardView.verticalPadding)
         }
-        .padding(.horizontal, UX.CardView.horizontalPadding)
         .accessibilityElement(children: .contain)
     }
 

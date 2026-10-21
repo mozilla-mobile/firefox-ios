@@ -150,6 +150,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .googleLensSearchInterstitial,
+                titleText: format(string: "Google Lens Search Interstitial"),
+                statusText: format(string: "Toggle to enable the Google Lens search interstitial")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .homepageAddShortcutTile,
                 titleText: format(string: "Homepage Add Shortcut"),
                 statusText: format(string: "Toggle to enable the homepage add shortcut tile")
@@ -236,13 +243,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .novaDesign,
-                titleText: format(string: "Nova Design"),
-                statusText: format(string: "Toggle to enable Nova design")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .novaPrivateThemeOverride,
                 titleText: format(string: "Nova Private Theme Override"),
                 statusText: format(string: "Toggle to disable purple theme for private mode")
@@ -260,6 +260,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .quickAnswers,
                 titleText: format(string: "Quick Answers"),
                 statusText: format(string: "Toggle to enable the Quick Answers feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .quickAnswersOptInRedesign,
+                titleText: format(string: "Quick Answers Opt-in Redesign"),
+                statusText: format(string: "Toggle to show the redesigned Quick Answers opt-in sheet")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -288,6 +295,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .trendingSearches,
                 titleText: format(string: "Search - Trending"),
                 statusText: format(string: "Toggle to enable the trending searches feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .searchTermInAddressBar,
+                titleText: format(string: "Search Term in Address Bar"),
+                statusText: format(string: "Toggle to show the search term instead of the URL for default engine searches")
             ) { [weak self] _ in
                 self?.reloadView()
             },

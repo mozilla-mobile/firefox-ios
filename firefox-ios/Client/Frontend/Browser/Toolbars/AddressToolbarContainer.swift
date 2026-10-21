@@ -122,11 +122,17 @@ final class AddressToolbarContainer: UIView,
 
     private var toolbarLeadingConstraint: NSLayoutConstraint?
     private var toolbarTrailingConstraint: NSLayoutConstraint?
+    /// Provided by the iOS 27.1 API `UIView.layoutGuide(for: .bar(onEdge:extent:))`.
+    private var systemTopBarLayoutGuide: UILayoutGuide?
 
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
     private func calculateToolbarTrailingSpace() -> CGFloat {
+        // Expanded iPhone Duo gives plenty of space.
+        if traitCollection.duoExpanded, systemTopBarLayoutGuide != nil {
+            return 0
+        }
         if shouldDisplayCompact {
             return UX.toolbarHorizontalPadding
         }
@@ -138,6 +144,10 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func calculateToolbarLeadingSpace(isEditing: Bool, toolbarLayoutStyle: ToolbarLayoutStyle) -> CGFloat {
+        // Expanded iPhone Duo gives plenty of space.
+        if traitCollection.duoExpanded, systemTopBarLayoutGuide != nil {
+            return 0
+        }
         if shouldDisplayCompact {
             return UX.toolbarHorizontalPadding
         }
@@ -236,11 +246,6 @@ final class AddressToolbarContainer: UIView,
         store.dispatch(ToolbarModernAction.accessoryViewVisibilityChanged(isVisible: hasAccessoryView),
                        forWindowUUID: windowUUID)
 
-        if shouldAdjustForAccessory {
-            let height = frame.height + UX.accessoryViewGradientOffset
-            accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
-            accessoryViewGradient.opacity = 1
-        }
         return accessoryViewOffset
     }
 
@@ -281,6 +286,34 @@ final class AddressToolbarContainer: UIView,
         toolbarTrailingConstraint?.isActive = true
     }
 
+    /// Keeps the top address toolbar clear of Duo's status area using the system bar layout guide.
+    /// Removes extra horizontal padding when the guide already provides the required spacing.
+    func updateSystemTopBarLayoutGuide(_ guide: UILayoutGuide?, isBottomSearchBar: Bool) {
+        let shouldUpdateConstraints = systemTopBarLayoutGuide !== guide
+            || toolbarLeadingConstraint?.isActive != true
+            || toolbarTrailingConstraint?.isActive != true
+        systemTopBarLayoutGuide = guide
+        if let model {
+            toolbar.updateSpacing(
+                leading: calculateToolbarLeadingSpace(isEditing: model.isEditing,
+                                                      toolbarLayoutStyle: model.toolbarLayoutStyle),
+                trailing: calculateToolbarTrailingSpace()
+            )
+        }
+
+        guard shouldUpdateConstraints else { return }
+
+        if isBottomSearchBar, toolbarHelper.isSwipingTabsEnabled {
+            let needsSkeletonLayout = leftSkeletonAddressBar.superview == nil
+            applyBottomLayoutConstraints()
+            if needsSkeletonLayout {
+                setupSkeletonAddressBarsLayout(isBottomSearchBar: true)
+            }
+        } else {
+            applyTopLayoutConstraints()
+        }
+    }
+
     private func applyTopLayoutConstraints() {
         leftSkeletonAddressBar.removeFromSuperview()
         rightSkeletonAddressBar.removeFromSuperview()
@@ -288,8 +321,12 @@ final class AddressToolbarContainer: UIView,
         toolbarLeadingConstraint?.isActive = false
         toolbarTrailingConstraint?.isActive = false
 
-        toolbarLeadingConstraint = toolbar.leadingAnchor.constraint(equalTo: leadingAnchor)
-        toolbarTrailingConstraint = toolbar.trailingAnchor.constraint(equalTo: trailingAnchor)
+        toolbarLeadingConstraint = toolbar.leadingAnchor.constraint(
+            equalTo: systemTopBarLayoutGuide?.leadingAnchor ?? leadingAnchor
+        )
+        toolbarTrailingConstraint = toolbar.trailingAnchor.constraint(
+            equalTo: systemTopBarLayoutGuide?.trailingAnchor ?? trailingAnchor
+        )
 
         toolbarLeadingConstraint?.isActive = true
         toolbarTrailingConstraint?.isActive = true
@@ -336,8 +373,31 @@ final class AddressToolbarContainer: UIView,
     }
 
     func newState(state: AddressToolbarContainerLens) {
+        let wasShowingAccessoryGradient = shouldShowAccessoryGradient(for: self.state)
         self.state = state.toolbarState
         updateModel(addressToolbarContainerLens: state)
+        if shouldShowAccessoryGradient(for: self.state) != wasShowingAccessoryGradient {
+            setNeedsLayout()
+        }
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard #available(iOS 26.0, *) else { return }
+
+        // Synchronize accessory gradient during rotation or resizing.
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        accessoryViewGradient.frame = CGRect(width: bounds.width,
+                                             height: bounds.height + UX.accessoryViewGradientOffset)
+        accessoryViewGradient.opacity = shouldShowAccessoryGradient(for: state) ? 1 : 0
+        CATransaction.commit()
+    }
+
+    private func shouldShowAccessoryGradient(for state: ToolbarState?) -> Bool {
+        return state?.toolbarPosition == .bottom
+            && state?.isAccessoryViewVisible == true
+            && state?.addressToolbar.isEditing == false
     }
 
     // MARK: - AlphaDimmable
@@ -367,9 +427,6 @@ final class AddressToolbarContainer: UIView,
 
         guard self.model != newModel else { return }
         updateSkeletonAddressBarsAlpha(forMinimizedAddressBar: newModel.isAddressBarMinimized)
-        if #available(iOS 26.0, *), !newModel.isAccessoryViewVisible, !newModel.isAddressBarMinimized {
-            accessoryViewGradient.opacity = 0
-        }
         // in case we are in edit mode but overlay is not active yet we have to activate it
         // so that `inOverlayMode` is set to true so we avoid getting stuck in overlay mode
         // Redux already has isEditing == true here, so we only sync the local flag/UI to avoid
@@ -473,15 +530,16 @@ final class AddressToolbarContainer: UIView,
     private func setupSkeletonAddressBarsLayout(isBottomSearchBar: Bool) {
         guard toolbarHelper.isSwipingTabsEnabled, isBottomSearchBar else { return }
 
+        // The active toolbar determines height before the placeholders are configured.
         NSLayoutConstraint.activate([
             leftSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
             leftSkeletonAddressBar.trailingAnchor.constraint(equalTo: leadingAnchor),
-            leftSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
+            leftSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor).priority(.defaultHigh),
             leftSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset),
 
             rightSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
             rightSkeletonAddressBar.leadingAnchor.constraint(equalTo: trailingAnchor),
-            rightSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
+            rightSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor).priority(.defaultHigh),
             rightSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset)
         ])
     }
@@ -502,6 +560,7 @@ final class AddressToolbarContainer: UIView,
 
     private func setupAccessoryViewGradient() {
         guard #available(iOS 26.0, *) else { return }
+        accessoryViewGradient.opacity = 0
         accessoryViewGradient.startPoint = CGPoint(x: 0.5, y: 0)
         accessoryViewGradient.endPoint = CGPoint(x: 0.5, y: 1)
         layer.insertSublayer(accessoryViewGradient, at: 0)
@@ -660,12 +719,7 @@ final class AddressToolbarContainer: UIView,
         delegate?.addressToolbarDidEnterOverlayMode(self)
 
         if pasted {
-            let action = ToolbarAction(
-                searchTerm: locationText,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didPasteSearchTerm
-            )
-            store.dispatch(action)
+            store.dispatch(ToolbarModernAction.didPasteSearchTerm(searchTerm: locationText), forWindowUUID: windowUUID)
 
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         } else {

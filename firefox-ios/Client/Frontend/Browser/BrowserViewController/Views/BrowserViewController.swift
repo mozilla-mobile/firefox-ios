@@ -518,7 +518,21 @@ class BrowserViewController: UIViewController,
         return false
     }
 
+    #if XCODE_2710 || XCODE_2720
+    @available(iOS 27.1, *)
+    override var preferredVerticalBarBehavior: UIVerticalBarBehavior {
+        // `disabled` state forces the Duo's status bar to be laid out horizontally.
+        return traitCollection.duoExpanded ? .disabled : .automatic
+    }
+    #endif
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
+        #if XCODE_2710 || XCODE_2720
+        // For iPhone Duo we let the system style the status bar based on the content beneath.
+        if #available(iOS 27.1, *), traitCollection.verticalBarEdge != .unspecified {
+            return .default
+        }
+        #endif
         return switch currentTheme().type {
         case .dark, .nightMode, .privateMode:
                 .lightContent
@@ -580,8 +594,11 @@ class BrowserViewController: UIViewController,
 
     func searchBarPositionDidChange(newSearchBarPosition: SearchBarPosition?) {
         guard let newSearchBarPosition else { return }
+        // iPhone Duo edge case: Changing top bar mode to bottom from the app settings should not
+        // update the UI to bottom bar when in expanded mode.
+        let effectiveSearchBarPosition: SearchBarPosition = traitCollection.duoExpanded ? .top : newSearchBarPosition
 
-        isBottomSearchBar = newSearchBarPosition == .bottom
+        isBottomSearchBar = effectiveSearchBarPosition == .bottom
         let newParent = isBottomSearchBar ? overKeyboardContainer : header
 
         addressToolbarContainer.removeFromParent()
@@ -607,7 +624,7 @@ class BrowserViewController: UIViewController,
 
         let action = GeneralBrowserMiddlewareAction(
             scrollOffset: scrollController.contentOffset,
-            toolbarPosition: newSearchBarPosition,
+            toolbarPosition: effectiveSearchBarPosition,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
         store.dispatch(action)
@@ -750,7 +767,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
-        guard searchBarPosition == .bottom else { return }
+        guard searchBarPosition == .bottom || traitCollection.duoExpanded else { return }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let newPosition: SearchBarPosition = isNavToolbar ? .bottom : .top
@@ -761,7 +778,7 @@ class BrowserViewController: UIViewController,
 
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, shouldUpdateBlurViews: Bool = true) {
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: newCollection)
-        let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
+        let showTopTabs = toolbarHelper.shouldShowTabStrip(for: newCollection)
 
         if showNavToolbar {
             navigationToolbarContainer.isHidden = false
@@ -1086,7 +1103,7 @@ class BrowserViewController: UIViewController,
 
         overlayManager.setURLBar(urlBarView: addressToolbarContainer)
 
-        if toolbarHelper.shouldShowTopTabs(for: traitCollection) {
+        if toolbarHelper.shouldShowTabStrip(for: traitCollection) {
             setupTopTabsViewController()
         }
 
@@ -1098,7 +1115,7 @@ class BrowserViewController: UIViewController,
         bottomContainer.applyTheme(theme: theme)
         bottomContentStackView.applyTheme(theme: theme)
         statusBarOverlay.scrollDelegate = self
-        statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
+        statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTabStrip(for: traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
         topTabsViewController?.applyTheme()
         webPagePreview.applyTheme(theme: theme)
@@ -1139,7 +1156,14 @@ class BrowserViewController: UIViewController,
         let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
         topTabsViewController.delegate = self
         addChild(topTabsViewController)
-        header.addArrangedViewToTop(topTabsViewController.view)
+        if traitCollection.duoExpanded,
+           // Address bar at the top, tab strip below.
+           let addressIndex = header.arrangedSubviews.firstIndex(of: addressToolbarContainer) {
+            header.insertArrangedView(topTabsViewController.view, position: addressIndex + 1, animated: false)
+        } else {
+            // Tab strip at the top, address bar below.
+            header.insertArrangedSubview(topTabsViewController.view, at: 0)
+        }
         topTabsViewController.didMove(toParent: self)
         self.topTabsViewController = topTabsViewController
     }
@@ -1506,6 +1530,11 @@ class BrowserViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        let systemTopBarLayoutGuide = browserLayoutManager.updateHeaderBarLayout(
+            isBottomSearchBar: isBottomSearchBar,
+            toolbarHeight: addressToolbarContainer.bounds.height
+        )
+        addressToolbarContainer.updateSystemTopBarLayoutGuide(systemTopBarLayoutGuide, isBottomSearchBar: isBottomSearchBar)
 
         // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
         checkForJSAlerts()
@@ -1589,6 +1618,7 @@ class BrowserViewController: UIViewController,
         }, completion: { [weak self] _ in
             legacyScrollController?.traitCollectionDidChange()
             legacyScrollController?.setMinimumZoom()
+            self?.setNeedsStatusBarAppearanceUpdate()
             guard let self, let popover else { return }
             self.displayedPopoverController = popover
             self.updateDisplayedPopoverProperties?()
@@ -1606,6 +1636,11 @@ class BrowserViewController: UIViewController,
             // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
             if traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
                 traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+                #if XCODE_2710 || XCODE_2720
+                if #available(iOS 27.1, *) {
+                    setNeedsUpdateOfVerticalBarConfiguration()
+                }
+                #endif
                 updateHeaderConstraints()
                 updateAddressToolbarContainerPosition(for: traitCollection)
                 updateZoomPageBarPlacement()
@@ -2074,7 +2109,7 @@ class BrowserViewController: UIViewController,
             }
         }
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if toolbarHelper.shouldShowTabStrip(for: traitCollection) {
             topTabsViewController?.refreshTabs()
         }
         setupMicrosurvey()
@@ -2093,7 +2128,7 @@ class BrowserViewController: UIViewController,
             showEmbeddedWebview()
         }
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if toolbarHelper.shouldShowTabStrip(for: traitCollection) {
             topTabsViewController?.refreshTabs()
         }
         setupMicrosurvey()
@@ -3118,7 +3153,7 @@ class BrowserViewController: UIViewController,
     /// When the trait collection changes the top taps display might have to change
     /// This requires an update of the toolbars.
     private func updateToolbarStateTraitCollectionIfNecessary(_ newCollection: UITraitCollection) {
-        let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
+        let showTopTabs = toolbarHelper.shouldShowTabStrip(for: newCollection)
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: newCollection)
 
         // Only dispatch action when the value of top tabs being shown is different from what is saved in the state
@@ -3867,7 +3902,7 @@ class BrowserViewController: UIViewController,
 
     func applyTheme() {
         let currentTheme = currentTheme()
-        statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
+        statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTabStrip(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
 
         // to make sure on homepage with bottom search bar the status bar is hidden
@@ -4967,13 +5002,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        // Restores the address bar from its minimized "pill" shape back to its full toolbar.
-        // This undoes the minimization applied for the keyboard accessory view
-        // Only dispatch the action if the toolbar isn't currently collapsed by scrolling, if the
-        // user has scrolled previously, restore the address back here would leave the
-        // address bar full while the bottom containers stay collapsed (inconsistent state).
-        if #available(iOS 26.0, *), isBottomSearchBar, scrollController.isToolbarFullyExpanded {
-            store.dispatch(ToolbarModernAction.keyboardDidHide, forWindowUUID: windowUUID)
+        // Clear accessory state at either toolbar position while preserving scroll-based collapse.
+        if #available(iOS 26.0, *) {
+            let action: ToolbarModernAction = scrollController.isToolbarFullyExpanded
+                ? .keyboardDidHide
+                : .accessoryViewVisibilityChanged(isVisible: false)
+            store.dispatch(action, forWindowUUID: windowUUID)
         }
         keyboardState = nil
         updateConstraintsForKeyboard()

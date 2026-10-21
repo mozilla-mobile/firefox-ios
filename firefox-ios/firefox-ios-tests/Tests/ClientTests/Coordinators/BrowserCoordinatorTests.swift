@@ -23,6 +23,7 @@ final class BrowserCoordinatorTests: XCTestCase,
                                      StoreTestUtility {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
+    private var featureFlags: MockNimbusFeatureFlags!
     private var overlayModeManager: MockOverlayModeManager!
     private var screenshotService: ScreenshotService!
     private var tabManager: MockTabManager!
@@ -39,7 +40,9 @@ final class BrowserCoordinatorTests: XCTestCase,
         let mockTabManager = MockTabManager()
         self.tabManager = mockTabManager
         profile = makeProfile()
-        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
+        featureFlags = MockNimbusFeatureFlags()
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager,
+                                                     injectedFeatureFlagProvider: featureFlags)
         setIsAppleSummarizerEnabled(false)
         setIsDeeplinkOptimizationRefactorEnabled(false)
         mockRouter = MockRouter(navigationController: MockNavigationController())
@@ -56,6 +59,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     override func tearDown() async throws {
         mockRouter = nil
         profile = nil
+        featureFlags = nil
         overlayModeManager = nil
         screenshotService = nil
         tabManager = nil
@@ -530,6 +534,32 @@ final class BrowserCoordinatorTests: XCTestCase,
         let search = try XCTUnwrap(subject.browserViewController.googleLensSearches[tab.tabUUID])
         XCTAssertEqual(glean.startTimingCalled, 0)
         XCTAssertNotNil(search.searchTimerId)
+    }
+
+    func testSearchGoogleLens_interstitialDisabled_doesNotAddInterstitialCoordinator() {
+        featureFlags.enabledFlags = []
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(googleLensService: MockGoogleLensService())
+
+        subject.searchGoogleLens(with: UIImage(), source: .camera)
+
+        XCTAssertFalse(subject.childCoordinators.contains { $0 is GoogleLensInterstitialCoordinator })
+    }
+
+    func testSearchGoogleLens_interstitialEnabled_addsInterstitialCoordinator() {
+        featureFlags.enabledFlags = [.googleLensSearchInterstitial]
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let subject = createSubject(googleLensService: MockGoogleLensService())
+
+        subject.searchGoogleLens(with: UIImage(), source: .photoPicker)
+
+        XCTAssertTrue(subject.childCoordinators.contains { $0 is GoogleLensInterstitialCoordinator })
     }
 
     func testShowQRCode_presentsQRCodeNavigationController() {
@@ -1969,6 +1999,11 @@ final class BrowserCoordinatorTests: XCTestCase,
     }
 
     private func setupNimbusTabTrayUIExperimentTesting(isEnabled: Bool) {
+        if isEnabled {
+            featureFlags.enabledFlags.insert(.tabTrayUIExperiments)
+        } else {
+            featureFlags.enabledFlags.remove(.tabTrayUIExperiments)
+        }
         FxNimbus.shared.features.tabTrayUiExperiments.with { _, _ in
             return TabTrayUiExperiments(
                 enabled: isEnabled

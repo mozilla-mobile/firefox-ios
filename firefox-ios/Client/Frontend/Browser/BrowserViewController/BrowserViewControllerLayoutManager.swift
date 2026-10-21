@@ -25,6 +25,7 @@ final class BrowserViewControllerLayoutManager {
     // Constraints to store - header
     private var headerTopConstraint: NSLayoutConstraint?
     private var headerHeightConstraint: NSLayoutConstraint?
+    private var systemTopBarLayoutGuide: UILayoutGuide?
 
     // Constraints to store - bottom container
     var overKeyboardContainerConstraint: NSLayoutConstraint?
@@ -91,6 +92,26 @@ final class BrowserViewControllerLayoutManager {
         headerTopConstraint?.isActive = true
 
         updateScrollControllerHeaderConstraint()
+    }
+
+    func updateHeaderBarLayout(isBottomSearchBar: Bool, toolbarHeight: CGFloat) -> UILayoutGuide? {
+        var guide: UILayoutGuide?
+        #if XCODE_2710 || XCODE_2720
+        if #available(iOS 27.1, *),
+           !isBottomSearchBar,
+           toolbarHeight > 0,
+           parentView.traitCollection.userInterfaceIdiom == .phone {
+            // Use the iOS 27.1 bar layout API to keep address controls clear of iPhone Duo's status area.
+            // Ask UIKit for the available region for a top toolbar with this height.
+            guide = parentView.layoutGuide(for: .bar(onEdge: UIRectEdge.top, extent: toolbarHeight))
+        }
+        #endif
+
+        if systemTopBarLayoutGuide !== guide {
+            systemTopBarLayoutGuide = guide
+            updateHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
+        }
+        return guide
     }
 
     func addReaderModeBarHeight(_ readerModeBar: ReaderModeBarView) {
@@ -246,18 +267,24 @@ final class BrowserViewControllerLayoutManager {
             return parentView.safeAreaLayoutGuide.topAnchor
         }
 
-        // Top toolbar depends on nav toolbar visibility
+        if let systemTopBarLayoutGuide {
+            return systemTopBarLayoutGuide.topAnchor
+        }
+
+        // Regular-height layouts need the safe area even when the top tabs bar is hidden.
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: parentView.traitCollection)
-        let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: parentView.traitCollection)
+        let shouldShowTabStrip = toolbarHelper.shouldShowTabStrip(for: parentView.traitCollection)
+        let isRegularHeight = parentView.traitCollection.verticalSizeClass == .regular
 
         // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
         // Bug: Safe area top inset doesn't update correctly on landscape rotation (remains 20pt)
         // on iOS 26. Prior to iOS 26, safe area inset was updating correctly on rotation.
         // Impact: Header remains partially visible when scrolling.
-        // Workaround: Manually adjust constraints based on orientation.
+        // Workaround: Use the view's top edge in compact-height layouts.
         // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
         // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
-        return (isNavToolbar || shouldShowTopTabs) ? parentView.safeAreaLayoutGuide.topAnchor : parentView.topAnchor
+        let usesSafeArea = isNavToolbar || shouldShowTabStrip || isRegularHeight
+        return usesSafeArea ? parentView.safeAreaLayoutGuide.topAnchor : parentView.topAnchor
     }
 
     private func updateScrollControllerHeaderConstraint() {

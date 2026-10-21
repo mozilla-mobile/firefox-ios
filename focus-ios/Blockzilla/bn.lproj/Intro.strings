@@ -1,5 +1,5 @@
 /* Description for the 'History' panel in the First Run tour. */
-"Intro.Slides.History.Description" = "আপনার সম্পূর্ণ ব্রাউজিং সেশনের ইতিহাস, পাসওয়ার্ডগুলি, কুকিকে একবার ট্যাপ করে যে কোনো সময় সাফ করুন।";
+"Intro.Slides.History.Description" = "আপনার সম্পূর্ণ ব্রাউজিং সেশনের ইতিহাস, পাসওয়ার্ড, কুকিজকে একবার ট্যাপ করে যেকোনো সময় ক্লিয়ার করুন।";
 
 /* Title for the third  panel 'History' in the First Run tour. */
 "Intro.Slides.History.Title" = "আপনার ইতিহাস হল ইতিহাস";
@@ -8,7 +8,7 @@
 "Intro.Slides.Next.Button" = "পরবর্তী";
 
 /* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "ভিন্ন কিছু খোঁজ করছেন? একটি নতুন সার্চইঞ্জিন ব্যবহার করে দেখুন।";
+"Intro.Slides.Search.Description" = "ভিন্ন কিছু খোঁজ করছেন? নতুন সার্চ ইঞ্জিন বাছাই করে দেখুন।";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
 "Intro.Slides.Search.Title" = "আপনার খোঁজ, আপনার পথ";

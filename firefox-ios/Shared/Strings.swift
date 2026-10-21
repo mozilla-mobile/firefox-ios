@@ -3275,6 +3275,349 @@ extension String {
     }
 }
 
+// MARK: - VPN
+extension String {
+    public struct VPN {
+        public struct Settings {
+            public static let Title = MZLocalizedString(
+                key: "VPN.Settings.Title.v160",
+                tableName: "Settings",
+                value: "Built-In VPN",
+                comment: "Name of the VPN row in the Privacy section of Settings. Also used as the title of the VPN settings screen."
+            )
+
+            public static let StatusOn = MZLocalizedString(
+                key: "VPN.Settings.StatusOn.v160",
+                tableName: "Settings",
+                value: "On",
+                comment: "VPN status shown when the VPN is connected. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator."
+            )
+
+            public static let StatusOff = MZLocalizedString(
+                key: "VPN.Settings.StatusOff.v160",
+                tableName: "Settings",
+                value: "Off",
+                comment: "VPN status shown when the VPN is not connected. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator."
+            )
+
+            public static let StatusPaused = MZLocalizedString(
+                key: "VPN.Settings.StatusPaused.v160",
+                tableName: "Settings",
+                value: "Paused",
+                comment: "VPN status shown when the VPN is temporarily paused. Used in two places: on the right side of the VPN row in the Privacy section of Settings, and on the small capsule-shaped VPN status indicator."
+            )
+
+            public static let Description = MZLocalizedString(
+                key: "VPN.Settings.Description.v160",
+                tableName: "Settings",
+                value: "Browse with extra protection by hiding your location, even on public Wi-Fi.",
+                comment: "Short description below the title at the top of the VPN settings screen. Explains what the VPN does."
+            )
+
+            public static let LearnMore = MZLocalizedString(
+                key: "VPN.Settings.LearnMore.v160",
+                tableName: "Settings",
+                value: "Learn more…",
+                comment: "Link below the description at the top of the VPN settings screen. Tapping it opens a support article about the VPN."
+            )
+
+            public static let LocationTitle = MZLocalizedString(
+                key: "VPN.Settings.LocationTitle.v160",
+                tableName: "Settings",
+                value: "Location",
+                comment: "Used in two places: as the name of a row on the VPN settings screen, and as the title of the screen that row opens. On that screen, the user picks which VPN server location (country or region) to connect through. “Location” means the VPN server’s location, not the user’s own location."
+            )
+
+            public static let LocationRecommended = MZLocalizedString(
+                key: "VPN.Settings.LocationRecommended.v160",
+                tableName: "Settings",
+                value: "Recommended",
+                comment: "Shown on the right side of the Location row on the VPN settings screen when the user lets Firefox select the location in their stead. The recommended location is the one with the fastest connection."
+            )
+
+            public static let ToggleTitle = MZLocalizedString(
+                key: "VPN.Settings.ToggleTitle.v160",
+                tableName: "Settings",
+                value: "VPN",
+                comment: "Used in two places: as the label for the toggle switch on the VPN settings screen that turns the VPN on or off, and as the label on the small capsule-shaped VPN status indicator, where it appears together with the current status (On, Off or Paused)."
+            )
+
+            public static let Connecting = MZLocalizedString(
+                key: "VPN.Settings.Connecting.v160",
+                tableName: "Settings",
+                value: "Connecting…",
+                comment: "Shown next to the VPN switch on the VPN settings screen while the VPN is connecting, right after the user turns it on."
+            )
+
+            public static let DataLimitTitle = MZLocalizedString(
+                key: "VPN.Settings.DataLimitTitle.v160",
+                tableName: "Settings",
+                value: "Data Limit",
+                comment: "Title of the section on the VPN settings screen that shows how much of the user's free monthly VPN data they have used."
+            )
+
+            public static let DataUsage = MZLocalizedString(
+                key: "VPN.Settings.DataUsage.v160",
+                tableName: "Settings",
+                value: "%1$@ of %2$@ GB used",
+                comment: "Shown next to the Data Limit title on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 GB used”). “GB” stands for gigabytes."
+            )
+
+            public static let DataUsageAccessibilityLabel = MZLocalizedString(
+                key: "VPN.Settings.DataUsage.AccessibilityLabel.v160",
+                tableName: "Settings",
+                value: "%1$@ of %2$@ gigabytes used",
+                comment: "Read aloud by VoiceOver for the data usage on the VPN settings screen. Same as the visible text, but with “gigabytes” written out instead of “GB”. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit (for example, “1.0 of 5.0 gigabytes used”)."
+            )
+
+            public static let DataLimitResetFooter = MZLocalizedString(
+                key: "VPN.Settings.DataLimitResetFooter.v160",
+                tableName: "Settings",
+                value: "Resets to %1$@ GB on the first of every month",
+                comment: "Footer below the Data Limit section on the VPN settings screen. Explains when the user's free VPN data resets. %1$@ is the monthly limit in gigabytes (for example, 5.0). “GB” stands for gigabytes."
+            )
+        }
+
+        public struct Onboarding {
+            public static let Title = MZLocalizedString(
+                key: "VPN.Onboarding.Title.v160",
+                tableName: "Onboarding",
+                value: "Try %1$@’s Built-In VPN",
+                comment: "Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox)."
+            )
+
+            public static let WifiSubheading = MZLocalizedString(
+                key: "VPN.Onboarding.WifiSubheading.v160",
+                tableName: "Onboarding",
+                value: "More Privacy On Public Wi-Fi",
+                comment: "Subheading on the VPN onboarding card. Explains that the VPN gives the user more privacy when they use public Wi-Fi networks."
+            )
+
+            public static let WifiBody = MZLocalizedString(
+                key: "VPN.Onboarding.WifiBody.v160",
+                tableName: "Onboarding",
+                value: "Add extra protection in %1$@ when you browse on the go.",
+                comment: "Body text below the “More Privacy On Public Wi-Fi” (VPN.Onboarding.WifiSubheading.v160) subheading on the VPN onboarding card. %1$@ is the app name (for example, Firefox)."
+            )
+
+            public static let LocationsSubheading = MZLocalizedString(
+                key: "VPN.Onboarding.LocationsSubheading.v160",
+                tableName: "Onboarding",
+                value: "Browse From Multiple Locations",
+                comment: "Subheading on the VPN onboarding card. Explains that the user can choose which country their browsing appears to come from."
+            )
+
+            public static let LocationsBody = MZLocalizedString(
+                key: "VPN.Onboarding.LocationsBody.v160",
+                tableName: "Onboarding",
+                value: "Choose a VPN location to help make yours harder to trace.",
+                comment: "Body text below the “Browse From Multiple Locations” (VPN.Onboarding.LocationsSubheading.v160) subheading on the VPN onboarding card. Explains that choosing a VPN location makes it harder to tell where the user really is. “yours” refers to the user’s location."
+            )
+
+            public static let LimitSubheading = MZLocalizedString(
+                key: "VPN.Onboarding.LimitSubheading.v160",
+                tableName: "Onboarding",
+                value: "%1$@ GB, Free Every Month",
+                comment: "Subheading on the VPN onboarding card. Explains how much VPN data the user gets every month at no cost. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes."
+            )
+
+            public static let LimitBody = MZLocalizedString(
+                key: "VPN.Onboarding.LimitBody.v160",
+                tableName: "Onboarding",
+                value: "Start using it without signing in",
+                comment: "Body text below the “5 GB, Free Every Month” (VPN.Onboarding.LimitSubheading.v160) subheading on the VPN onboarding card. Explains that the user can start using the VPN without signing in to an account. “it” refers to the VPN."
+            )
+        }
+
+        public struct ErrorConnectingPopup {
+            public static let Title = MZLocalizedString(
+                key: "VPN.ErrorConnectingPopup.Title.v160",
+                tableName: "VPN",
+                value: "Couldn’t Connect to VPN",
+                comment: "Title of a popup shown when the app fails to connect to the VPN."
+            )
+
+            public static let Body = MZLocalizedString(
+                key: "VPN.ErrorConnectingPopup.Body.v160",
+                tableName: "VPN",
+                value: "Try again in a few minutes.",
+                comment: "Body text of the popup shown when the app fails to connect to the VPN. “Try again” means try connecting to the VPN again."
+            )
+
+            public static let CloseButtonText = MZLocalizedString(
+                key: "VPN.ErrorConnectingPopup.CloseButtonText.v160",
+                tableName: "VPN",
+                value: "Close",
+                comment: "Button on the popup shown when the app fails to connect to the VPN. Tapping it closes the popup."
+            )
+
+            public static let RetryButtonText = MZLocalizedString(
+                key: "VPN.ErrorConnectingPopup.RetryButtonText.v160",
+                tableName: "VPN",
+                value: "Retry",
+                comment: "Button on the popup shown when the app fails to connect to the VPN. Tapping it tries to connect to the VPN again."
+            )
+        }
+
+        public struct ErrorPage {
+            public static let Title = MZLocalizedString(
+                key: "VPN.ErrorPage.Title.v160",
+                tableName: "NativeErrorPage",
+                value: "This site can’t be reached.",
+                comment: "Title of an error page shown when a website fails to load while the VPN is on and the exact cause is unknown. “Can't be reached” means the website couldn't be loaded."
+            )
+
+            public static let Body = MZLocalizedString(
+                key: "VPN.ErrorPage.Body.v160",
+                tableName: "NativeErrorPage",
+                value: "Try turning off VPN. If the site still won’t load, refresh the page or check your internet connection.",
+                comment: "Body text of the error page shown when a website fails to load while the VPN is on. Suggests turning off the VPN first, then refreshing the page or checking the internet connection if that doesn't help."
+            )
+        }
+
+        public struct ErrorBrowsingPopup {
+            public static let Title = MZLocalizedString(
+                key: "VPN.ErrorBrowsingPopup.Title.v160",
+                tableName: "VPN",
+                value: "Continue Without VPN?",
+                comment: "Title of a popup shown when the VPN stops working while the user is browsing with it on. Asks if the user wants to keep browsing without the VPN."
+            )
+
+            public static let Body = MZLocalizedString(
+                key: "VPN.ErrorBrowsingPopup.Body.v160",
+                tableName: "VPN",
+                value: "VPN isn’t working right now. If you continue browsing, your location may be visible.",
+                comment: "Body text of the popup shown when the VPN stops working while the user is browsing. Warns that if they keep browsing, websites and other third parties may be able to see their location."
+            )
+
+            public static let Continue = MZLocalizedString(
+                key: "VPN.ErrorBrowsingPopup.Continue.v160",
+                tableName: "VPN",
+                value: "Continue Without VPN",
+                comment: "Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes the popup so the user can keep browsing without the VPN."
+            )
+
+            public static let CloseAllTabs = MZLocalizedString(
+                key: "VPN.ErrorBrowsingPopup.CloseAllTabs.v160",
+                tableName: "VPN",
+                value: "Close All Tabs",
+                comment: "Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes all of the user's open tabs."
+            )
+
+            public static let CloseThisTab = MZLocalizedString(
+                key: "VPN.ErrorBrowsingPopup.CloseThisTab.v160",
+                tableName: "VPN",
+                value: "Close This Tab",
+                comment: "Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes only the tab the user is currently viewing."
+            )
+
+            public static let ClosedXTabs = MZLocalizedString(
+                key: "VPN.ErrorBrowsingPopup.ClosedXTabs.v160",
+                tableName: "VPN",
+                value: "Closed %1$@ Tabs",
+                comment: "Confirmation shown after the user closes more than one tab from the popup that appears when the VPN stops working while browsing. %1$@ is the number of tabs that were closed (for example, 3)."
+            )
+
+            public static let ClosedOneTab = MZLocalizedString(
+                key: "VPN.ErrorBrowsingPopup.ClosedOneTab.v160",
+                tableName: "VPN",
+                value: "Closed 1 Tab",
+                comment: "Confirmation shown after the user closes a single tab from the popup that appears when the VPN stops working while browsing."
+            )
+        }
+
+        public struct ReachedDataLimitPopup {
+            public static let Title = MZLocalizedString(
+                key: "VPN.ReachedDataLimitPopup.Title.v160",
+                tableName: "VPN",
+                value: "VPN Data Limit Reached",
+                comment: "Title of a popup shown when the user has used all of their free monthly VPN data."
+            )
+
+            public static let Body = MZLocalizedString(
+                key: "VPN.ReachedDataLimitPopup.Body.v160",
+                tableName: "VPN",
+                value: "You’ve used all %1$@ GB of VPN data. VPN is off, so your location may be visible if you keep browsing.",
+                comment: "Body text of the popup shown when the user has used all of their free monthly VPN data. Explains that the VPN has turned off, so websites may be able to see their location if they keep browsing. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes."
+            )
+
+            public static let CloseAllTabs = MZLocalizedString(
+                key: "VPN.ReachedDataLimitPopup.CloseAllTabs.v160",
+                tableName: "VPN",
+                value: "Close All Tabs",
+                comment: "Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes all of the user's open tabs."
+            )
+
+            public static let CloseThisTab = MZLocalizedString(
+                key: "VPN.ReachedDataLimitPopup.CloseThisTab.v160",
+                tableName: "VPN",
+                value: "Close This Tab",
+                comment: "Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes only the tab the user is currently viewing."
+            )
+
+            public static let ClosedXTabs = MZLocalizedString(
+                key: "VPN.ReachedDataLimitPopup.ClosedXTabs.v160",
+                tableName: "VPN",
+                value: "Closed %1$@ Tabs",
+                comment: "Confirmation shown after the user closes more than one tab from the popup that appears when they run out of free monthly VPN data. %1$@ is the number of tabs that were closed (for example, 3)."
+            )
+
+            public static let ClosedOneTab = MZLocalizedString(
+                key: "VPN.ReachedDataLimitPopup.ClosedOneTab.v160",
+                tableName: "VPN",
+                value: "Closed 1 Tab",
+                comment: "Confirmation shown after the user closes a single tab from the popup that appears when they run out of free monthly VPN data."
+            )
+
+            public static let AltPopupBody = MZLocalizedString(
+                key: "VPN.ReachedDataLimitPopup.AltPopupBody.v160",
+                tableName: "VPN",
+                value: "All %1$@ GB of VPN data used. Access resets next month.",
+                comment: "Alternative body text for the popup shown when the user has used all of their free monthly VPN data. Explains that their VPN data resets at the start of next month. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes."
+            )
+        }
+
+        public struct DataLimitRefreshNotification {
+            public static let Title = MZLocalizedString(
+                key: "VPN.DataLimitRefreshNotification.Title.v160",
+                tableName: "VPN",
+                value: "%1$@ GB of VPN data is ready",
+                comment: "Title of a system notification telling the user their free monthly VPN data has reset and is ready to use again. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes."
+            )
+
+            public static let Body = MZLocalizedString(
+                key: "VPN.DataLimitRefreshNotification.Body.v160",
+                tableName: "VPN",
+                value: "Your free monthly VPN data has refreshed.",
+                comment: "Body text of the system notification telling the user their free monthly VPN data has reset."
+            )
+        }
+
+        public struct LocationPicker {
+            public static let RecommendedMainText = MZLocalizedString(
+                key: "VPN.LocationPicker.RecommendedMainText.v160",
+                tableName: "Settings",
+                value: "Recommended",
+                comment: "Option in the VPN server location list. Choosing it lets the app pick the server with the fastest connection."
+            )
+
+            public static let RecommendedSubText = MZLocalizedString(
+                key: "VPN.LocationPicker.RecommendedSubText.v160",
+                tableName: "Settings",
+                value: "%1$@ finds the fastest location.",
+                comment: "Description below the Recommended option in the VPN server location list. %1$@ is the app name (for example, Firefox)."
+            )
+
+            public static let FindingLocationsText = MZLocalizedString(
+                key: "VPN.LocationPicker.FindingLocationsText.v160",
+                tableName: "Settings",
+                value: "Finding Locations…",
+                comment: "Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to."
+            )
+        }
+    }
+}
+
 // MARK: - Settings screen
 extension String {
     public struct Settings {
