@@ -248,7 +248,9 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307034
-    func testRecentlySaved() {
+    func testRecentlySaved() throws {
+        throw XCTSkip("Moved out of the full functional test suite")
+        /*
         addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
@@ -292,6 +294,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
             navigator.performAction(Action.OpenNewTabFromTabTray)
             checkBookmarksUpdated()
         }
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307032
