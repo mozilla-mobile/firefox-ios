@@ -37,6 +37,15 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
         }
     }
 
+    /// The telemetry ID for a search started from the given access point. search-config-v3 engines may use a different
+    /// telemetry suffix per access point. For other engines this is the same as `telemetryID`.
+    func telemetryID(for accessPoint: SearchAccessPoint) -> String {
+        guard !isCustomEngine, partners != nil else { return telemetryID }
+        return SearchPartnerResolver.resolve(engineIdentifier: engineID,
+                                             partners: partners,
+                                             accessPoint: accessPoint).telemetryID
+    }
+
     private let suggestTemplate: String?
     private let trendingTemplate: String?
     private let searchTermComponent = "{searchTerms}"

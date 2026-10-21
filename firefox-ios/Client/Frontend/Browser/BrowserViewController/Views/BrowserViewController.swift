@@ -290,7 +290,8 @@ class BrowserViewController: UIViewController,
 
     // MARK: Telemetry Variables
 
-    private(set) lazy var searchTelemetry = SearchTelemetry(tabManager: tabManager)
+    private(set) lazy var searchTelemetry = SearchTelemetry(tabManager: tabManager,
+                                                            searchEnginesManager: searchEnginesManager)
     private(set) lazy var webviewTelemetry = WebViewLoadMeasurementTelemetry()
     private(set) lazy var tabsTelemetry = TabsTelemetry()
 
@@ -3254,8 +3255,9 @@ class BrowserViewController: UIViewController,
     }
 
     func submitSearchText(_ text: String, forTab tab: Tab) {
+        let accessPoint = pendingSearchAccessPoint ?? .default
         guard let engine = searchEnginesManager.defaultEngine,
-              let searchURL = engine.searchURLForQuery(text, accessPoint: pendingSearchAccessPoint ?? .default)
+              let searchURL = engine.searchURLForQuery(text, accessPoint: accessPoint)
         else {
             DefaultLogger.shared.log("Error handling URL entry: \"\(text)\".", level: .warning, category: .tabs)
             return
@@ -3265,7 +3267,7 @@ class BrowserViewController: UIViewController,
 
         Experiments.events.recordEvent(BehavioralTargetingEvent.performedSearch)
 
-        let engineTelemetryID: String = engine.telemetryID
+        let engineTelemetryID: String = engine.telemetryID(for: accessPoint)
         GleanMetrics.Search
             .counts["\(engineTelemetryID).\(SearchLocation.actionBar.rawValue)"]
             .add()

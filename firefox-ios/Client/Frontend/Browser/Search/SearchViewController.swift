@@ -393,7 +393,7 @@ class SearchViewController: SiteTableViewController,
 
         let extras = [
             ExtraKey.recordSearchLocation.rawValue: SearchLocation.quickSearch,
-            ExtraKey.recordSearchEngineID.rawValue: engine.telemetryID as Any
+            ExtraKey.recordSearchEngineID.rawValue: engine.telemetryID(for: searchAccessPoint) as Any
         ] as [String: Any]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
@@ -491,7 +491,7 @@ class SearchViewController: SiteTableViewController,
 
             let extras = [
                 ExtraKey.recordSearchLocation.rawValue: SearchLocation.suggestion,
-                ExtraKey.recordSearchEngineID.rawValue: defaultEngine.telemetryID as Any
+                ExtraKey.recordSearchEngineID.rawValue: defaultEngine.telemetryID(for: searchAccessPoint) as Any
             ] as [String: Any]
             TelemetryWrapper.gleanRecordEvent(category: .action,
                                               method: .tap,
