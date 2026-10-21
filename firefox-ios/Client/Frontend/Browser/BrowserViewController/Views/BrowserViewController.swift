@@ -518,7 +518,7 @@ class BrowserViewController: UIViewController,
         return false
     }
 
-    #if XCODE_2710 || XCODE_2720
+    #if compiler(>=6.4)
     @available(iOS 27.1, *)
     override var preferredVerticalBarBehavior: UIVerticalBarBehavior {
         // `disabled` state forces the Duo's status bar to be laid out horizontally.
@@ -527,7 +527,7 @@ class BrowserViewController: UIViewController,
     #endif
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        #if XCODE_2710 || XCODE_2720
+        #if compiler(>=6.4)
         // For iPhone Duo we let the system style the status bar based on the content beneath.
         if #available(iOS 27.1, *), traitCollection.verticalBarEdge != .unspecified {
             return .default
@@ -1636,7 +1636,7 @@ class BrowserViewController: UIViewController,
             // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
             if traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
                 traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
-                #if XCODE_2710 || XCODE_2720
+                #if compiler(>=6.4)
                 if #available(iOS 27.1, *) {
                     setNeedsUpdateOfVerticalBarConfiguration()
                 }

@@ -231,7 +231,7 @@ class MainMenuViewController: UIViewController,
     private func updateCloseButtonPlacement() {
         guard let navigationController else { return }
         let usesVerticalBar: Bool = {
-            #if XCODE_2710 || XCODE_2720
+            #if compiler(>=6.4)
             if #available(iOS 27.1, *) {
                 switch traitCollection.verticalBarEdge {
                 case .leading, .trailing:
