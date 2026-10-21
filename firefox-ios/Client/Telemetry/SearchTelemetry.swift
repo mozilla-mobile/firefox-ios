@@ -257,7 +257,7 @@ class SearchTelemetry: @unchecked Sendable {
     /// URL's `client` parameter when it is one of Google's codes, otherwise `none`. Returns `nil` when
     /// Google is not a V3 engine, so the pre-V3 partner code table is used.
     @MainActor
-    private func searchConfigV3PartnerCode(for provider: SearchEngine, url: URL?) -> String? {
+    func searchConfigV3PartnerCode(for provider: SearchEngine, url: URL?) -> String? {
         guard provider == .google,
               let partners = searchEnginesManager?.orderedEngines.first(where: {
                   $0.isGoogleEngine && $0.partners != nil
