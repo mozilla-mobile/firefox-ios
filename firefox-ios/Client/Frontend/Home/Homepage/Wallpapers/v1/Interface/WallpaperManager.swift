@@ -105,14 +105,28 @@ final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
     ) {
         let dataService = WallpaperDataService(with: networkingModule)
         let storageUtility = WallpaperStorageUtility()
+        let folderName = wallpaper.id
+        let iPhonePortraitName = wallpaper.fileName(for: .iPhonePortrait)
+        let iPhoneLandscapeName = wallpaper.fileName(for: .iPhoneLandscape)
+        let iPadPortraitName = wallpaper.fileName(for: .iPadPortrait)
+        let iPadLandscapeName = wallpaper.fileName(for: .iPadLandscape)
 
         Task(priority: .userInitiated) {
             do {
-                for type in WallpaperImageType.allCases {
-                    let fileName = wallpaper.fileName(for: type)
-                    let image = try await dataService.getImage(named: fileName, withFolderName: wallpaper.id)
-                    try storageUtility.store(image, withName: fileName)
-                }
+                async let iPhonePortrait = dataService.getImage(named: iPhonePortraitName, withFolderName: folderName)
+                async let iPhoneLandscape = dataService.getImage(named: iPhoneLandscapeName, withFolderName: folderName)
+                async let iPadPortrait = dataService.getImage(named: iPadPortraitName, withFolderName: folderName)
+                async let iPadLandscape = dataService.getImage(named: iPadLandscapeName, withFolderName: folderName)
+
+                let (iPhonePortraitImage, iPhoneLandscapeImage, iPadPortraitImage, iPadLandscapeImage) = try await (
+                    iPhonePortrait, iPhoneLandscape, iPadPortrait, iPadLandscape
+                )
+
+                try storageUtility.store(iPhonePortraitImage, withName: iPhonePortraitName)
+                try storageUtility.store(iPhoneLandscapeImage, withName: iPhoneLandscapeName)
+                try storageUtility.store(iPadPortraitImage, withName: iPadPortraitName)
+                try storageUtility.store(iPadLandscapeImage, withName: iPadLandscapeName)
+
                 completion(.success(()))
             } catch {
                 logger.log("Error fetching wallpaper resources: \(error.localizedDescription)",
