@@ -13,18 +13,8 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         static let presentationNavigationBarOffset: CGFloat = -20.0
         static let backdropFadeDuration: TimeInterval = 0.2
         static let followUpButtonSize: CGFloat = 62.0
-        static let followUpButtonImagePadding: CGFloat = 8.0
-        static let followUpButtonContentInsets = NSDirectionalEdgeInsets(
-            top: 0.0,
-            leading: 19.0,
-            bottom: 0.0,
-            trailing: 19.0
-        )
-        static let followUpTitleRevealDelay: TimeInterval = 0.35
-        static let followUpTitleRevealDuration: TimeInterval = 0.5
-        static let followUpTitleRevealDamping: CGFloat = 0.8
-        static let followUpTitleVisibleDuration: TimeInterval = 1.0
         static let followUpFadeOutDuration: TimeInterval = 0.3
+        static let followUpFadeInDuration: TimeInterval = 0.2
     }
 
     // MARK: - Properties
@@ -51,10 +41,13 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             self?.startFollowUp()
         }
     }
-    // TODO: localize the follow-up title.
-    private let followUpTitle = "Ask a follow-up"
-    private var hasRevealedFollowUpTitle = false
-    private let contentView: QuickAnswersContentView = .build()
+    private var followUpButtonTitle: String {
+        return viewModel.supportsFollowUpQuestions
+            ? stringsConfiguration.contentView.followUpButton
+            : stringsConfiguration.contentView.newQuestionButton
+    }
+    /// Replaced by a new instance for each question asked after an answer, so no state from the previous one leaks.
+    private lazy var contentView = makeContentView(isFollowUpQuestion: false)
     private let transitionDelegate: OptInTransitionAnimator
 
     public let themeManager: any ThemeManager
@@ -155,37 +148,44 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
 
     private func setupSubviews() {
         closeButton.accessibilityLabel = stringsConfiguration.closeAccessibilityLabel
-        contentView.configureStrings(stringsConfiguration.contentView)
-        view.addSubviews(
-            backgroundEffectView,
-            contentView,
-        )
+        closeButton.showsLargeContentViewer = true
+        closeButton.largeContentTitle = stringsConfiguration.closeAccessibilityLabel
+        view.addSubview(backgroundEffectView)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: closeButton)
         navigationItem.titleView = titleLabel
-        setContentScrollView(contentView.scrollView, for: .all)
-
         backgroundEffectView.pinToSuperview()
-
-        NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: view.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
+        installContentView(contentView)
         if viewModel.feature.isFollowUpEnabled {
             setupFollowUpToolbar()
         }
     }
 
-    private func setupFollowUpToolbar() {
-        followUpButton.accessibilityLabel = followUpTitle
-        followUpButton.configuration?.imagePadding = UX.followUpButtonImagePadding
-        followUpButton.configuration?.contentInsets = UX.followUpButtonContentInsets
-        followUpButton.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer {
-            var attributes = $0
-            attributes.font = FXFontStyles.Bold.body.scaledFont()
-            return attributes
+    private func makeContentView(isFollowUpQuestion: Bool) -> QuickAnswersContentView {
+        let contentView: QuickAnswersContentView = .build()
+        contentView.configureStrings(stringsConfiguration.contentView, isFollowUpQuestion: isFollowUpQuestion)
+        contentView.onTranscriptVisibilityChange = { [weak self] isTranscriptVisible, transcript in
+            UIView.animate(withDuration: UX.titleFadeDuration) {
+                self?.titleLabel.alpha = isTranscriptVisible ? 0.0 : 1.0
+                self?.titleLabel.text = isTranscriptVisible ? nil : transcript
+            }
         }
+        if #available(iOS 17.0, *) {
+            contentView.configurePrivacyLink { [weak self] in
+                self?.presentPrivacyTip()
+            }
+        }
+        contentView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        return contentView
+    }
+
+    private func installContentView(_ contentView: QuickAnswersContentView) {
+        view.insertSubview(contentView, aboveSubview: backgroundEffectView)
+        setContentScrollView(contentView.scrollView, for: .all)
+        contentView.pinToSuperview()
+    }
+
+    private func setupFollowUpToolbar() {
+        followUpButton.accessibilityLabel = followUpButtonTitle
         NSLayoutConstraint.activate([
             followUpButton.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.followUpButtonSize),
             followUpButton.heightAnchor.constraint(equalToConstant: UX.followUpButtonSize),
@@ -203,6 +203,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             case .showOptIn:
                 self?.showOptIn()
             case .recordingStarted:
+                self?.triggerHaptic()
                 self?.contentView.startAudioWaveformAnimation()
             case .speechResult(let result, let error):
                 if let error {
@@ -232,12 +233,6 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                 }
             }
         }
-        contentView.onTranscriptVisibilityChange = { [weak self] isTranscriptVisible, transcript in
-            UIView.animate(withDuration: UX.titleFadeDuration) {
-                self?.titleLabel.alpha = isTranscriptVisible ? 0.0 : 1.0
-                self?.titleLabel.text = isTranscriptVisible ? nil : transcript
-            }
-        }
         contentView.configureOptIn(
             strings: stringsConfiguration.optIn,
             learnMoreURL: learnMoreURL,
@@ -250,11 +245,6 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                 self?.dismiss(with: url)
             }
         )
-        if #available(iOS 17.0, *) {
-            contentView.configurePrivacyLink { [weak self] in
-                self?.presentPrivacyTip()
-            }
-        }
     }
 
     @available(iOS 17.0, *)
@@ -329,24 +319,8 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
 
     private func showFollowUpButton() {
         guard viewModel.feature.isFollowUpEnabled else { return }
-        navigationController?.setToolbarHidden(false, animated: true)
-        guard !hasRevealedFollowUpTitle else { return }
-        hasRevealedFollowUpTitle = true
-        animateFollowUpTitle(followUpTitle, delay: UX.followUpTitleRevealDelay) { [weak self] in
-            self?.animateFollowUpTitle(nil, delay: 1.0)
-        }
-    }
-
-    private func animateFollowUpTitle(_ title: String?, delay: TimeInterval, completion: (() -> Void)? = nil) {
-        UIView.animate(
-            withDuration: UX.followUpTitleRevealDuration,
-            delay: delay,
-        ) { [self] in
-            followUpButton.configuration?.title = title
-            navigationController?.toolbar.layoutIfNeeded()
-        } completion: { _ in
-            completion?()
-        }
+        navigationController?.setToolbarHidden(false, animated: false)
+        followUpButton.revealTitle(followUpButtonTitle)
     }
 
     private func startFollowUp() {
@@ -355,14 +329,21 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         UIView.animate(withDuration: UX.followUpFadeOutDuration, delay: 0.0, options: .curveEaseIn) { [self] in
             titleLabel.alpha = 0.0
         }
-        contentView.hideForFollowUp(duration: UX.followUpFadeOutDuration) { [weak self] in
-            self?.restartFlow()
+        contentView.animateOut(duration: UX.followUpFadeOutDuration) { [weak self] in
+            self?.replaceContentViewForFollowUp()
         }
     }
 
-    private func restartFlow() {
+    private func replaceContentViewForFollowUp() {
+        contentView.removeFromSuperview()
         titleLabel.text = nil
-        contentView.resetForFollowUp()
+        contentView = makeContentView(isFollowUpQuestion: viewModel.supportsFollowUpQuestions)
+        contentView.alpha = 0.0
+        installContentView(contentView)
+        UIView.animate(withDuration: UX.followUpFadeInDuration) { [self] in
+            contentView.alpha = 1.0
+        }
+        UIAccessibility.post(notification: .screenChanged, argument: contentView)
         viewModel.startFollowUp()
     }
 
@@ -385,7 +366,6 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         closeButton.tintColor = theme.colors.iconPrimary
         titleLabel.textColor = theme.colors.textPrimary
         followUpButton.configure(theme: theme, shouldStartGlowing: false)
-        followUpButton.configuration?.baseForegroundColor = theme.colors.textPrimary
         contentView.applyTheme(theme: theme)
         backgroundEffectView.applyTheme(theme: theme)
     }

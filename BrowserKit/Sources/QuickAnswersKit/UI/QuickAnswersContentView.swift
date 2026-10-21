@@ -40,8 +40,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         static let resultCascadeStartDelay: TimeInterval = 0.1
         static let resultCascadeStagger: TimeInterval = 0.1
         static let presentationSlideOffset: CGFloat = 15.0
-        static let followUpSlideOffset: CGFloat = 100.0
-        static let followUpFadeInDuration: TimeInterval = 0.2
+        static let dismissSlideOffset: CGFloat = 100.0
     }
 
     // MARK: - Subviews
@@ -184,9 +183,9 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
     }
 
     // MARK: - Configuration
-    func configureStrings(_ strings: QuickAnswersViewConfiguration.ContentViewStrings) {
+    func configureStrings(_ strings: QuickAnswersViewConfiguration.ContentViewStrings, isFollowUpQuestion: Bool) {
         self.strings = strings
-        placeholderLabel.text = strings.placeholder
+        placeholderLabel.text = isFollowUpQuestion ? strings.followUpPlaceholder : strings.placeholder
         searchingLabel.text = strings.answering
         sourceView.configureStrings(sourcesHeader: strings.sources)
         privacyButton.configuration?.title = strings.aboutYourPrivacy
@@ -284,33 +283,12 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
     }
 
     /// Fades and slides down the content inside the scroll view, so the scroll view safe area doesn't change.
-    func hideForFollowUp(duration: TimeInterval, completion: @escaping () -> Void) {
+    func animateOut(duration: TimeInterval, completion: @escaping () -> Void) {
         UIView.animate(withDuration: duration, delay: 0.0, options: .curveEaseIn) { [self] in
             contentView.alpha = 0.0
-            contentView.transform = CGAffineTransform(translationX: 0.0, y: UX.followUpSlideOffset)
+            contentView.transform = CGAffineTransform(translationX: 0.0, y: UX.dismissSlideOffset)
         } completion: { _ in
             completion()
-        }
-    }
-
-    func resetForFollowUp() {
-        hasDisplayedResults = false
-        isTranscriptVisible = true
-        if let theme {
-            transcriptLabel.foregroundColor = theme.colors.textPrimary
-        }
-        transcriptLabel.setTranscript("", animated: false)
-        transcriptLabel.alpha = 1.0
-        transcriptLabel.transform = .identity
-        [answerCardView, sourceView, footerLabel].forEach {
-            $0.alpha = 0.0
-            $0.transform = .identity
-        }
-        placeholderLabel.alpha = 1.0
-        audioWaveform.alpha = 1.0
-        contentView.transform = .identity
-        UIView.animate(withDuration: UX.followUpFadeInDuration) { [self] in
-            contentView.alpha = 1.0
         }
     }
 

@@ -15,6 +15,11 @@ public final class QuickAnswersEntryPointButton: UIButton {
         static let flowAnimationKey = "gradientFlow"
         static let fadeOutDuration: CFTimeInterval = 0.5
         static let fadeOutAnimationKey = "gradientFadeOut"
+        static let titleImagePadding: CGFloat = 8.0
+        static let titleContentInsets = NSDirectionalEdgeInsets(top: 0.0, leading: 19.0, bottom: 0.0, trailing: 19.0)
+        static let titleVisibleDuration: TimeInterval = 2.0
+        static let titleHideDuration: TimeInterval = 0.3
+        static let titleHideDamping: CGFloat = 0.85
     }
 
     private let icon = UIImage(named: StandardImageIdentifiers.Large.audioWave)
@@ -23,6 +28,7 @@ public final class QuickAnswersEntryPointButton: UIButton {
     private var restingBackgroundColor: UIColor = .clear
     private var glowTask: Task<Void, Never>?
     private var hasGlowed = false
+    private var hasRevealedTitle = false
 
     private let borderView = UIView()
     private let borderMask = CAShapeLayer()
@@ -69,7 +75,16 @@ public final class QuickAnswersEntryPointButton: UIButton {
         }
         configuration?.image = icon?.withRenderingMode(.alwaysTemplate)
         configuration?.cornerStyle = .capsule
+        configuration?.imagePadding = UX.titleImagePadding
+        // Not scaled with the content size category: the large content viewer shows the title at larger sizes.
+        configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer {
+            var attributes = $0
+            attributes.font = FXFontStyles.Bold.body.systemFont()
+            return attributes
+        }
         adjustsImageSizeForAccessibilityContentSizeCategory = false
+        showsLargeContentViewer = true
+        largeContentImage = icon
         addAction(UIAction(handler: { [weak self] _ in
             self?.onTap()
         }), for: .touchUpInside)
@@ -111,6 +126,7 @@ public final class QuickAnswersEntryPointButton: UIButton {
         borderGradientLayer.colors = closedStops(shiftedBy: 0)
         backgroundGradientLayer.colors = closedStops(shiftedBy: 0)
         configuration?.image = gradientTintedIcon() ?? icon?.withRenderingMode(.alwaysTemplate)
+        configuration?.baseForegroundColor = theme.colors.textPrimary
 
         if isGlowing {
             addFlowAnimation()
@@ -121,6 +137,29 @@ public final class QuickAnswersEntryPointButton: UIButton {
         guard shouldStartGlowing, !hasGlowed else { return false }
         startGlow()
         return true
+    }
+
+    // MARK: - Title
+
+    /// Shows `title` next to the icon, then collapses the button back to the icon only. Happens at most once per
+    /// instance, later calls only update the title shown in the large content viewer.
+    func revealTitle(_ title: String) {
+        largeContentTitle = title
+        guard !hasRevealedTitle else { return }
+        hasRevealedTitle = true
+        configuration?.contentInsets = UX.titleContentInsets
+        configuration?.title = title
+        DispatchQueue.main.asyncAfter(deadline: .now() + UX.titleVisibleDuration) { [weak self] in
+            UIView.animate(
+                withDuration: UX.titleHideDuration,
+                delay: 0.0,
+                usingSpringWithDamping: UX.titleHideDamping,
+                initialSpringVelocity: 0.0
+            ) {
+                self?.configuration?.title = nil
+                self?.layoutIfNeeded()
+            }
+        }
     }
 
     // MARK: - Glow
