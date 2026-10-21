@@ -203,6 +203,10 @@ extension URL {
     public var isFxHomeUrl: Bool {
         return absoluteString.hasPrefix("internal://local/about/home")
     }
+
+    public var siteURL: URL {
+        InternalURL(self)?.originalURLFromErrorPage ?? self
+    }
 }
 
 // MARK: - Exported URL Schemes
