@@ -125,6 +125,7 @@ final class AddressToolbarContainer: UIView,
     /// Provided by the iOS 27.1 API `UIView.layoutGuide(for: .bar(onEdge:extent:))`.
     private var systemTopBarLayoutGuide: UILayoutGuide?
 
+    private var progressBarTrailingConstraint: NSLayoutConstraint?
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
@@ -382,6 +383,9 @@ final class AddressToolbarContainer: UIView,
     }
 
     override func layoutSubviews() {
+        let trailingInset = traitCollection.verticalSizeClass == .regular ? safeAreaInsets.right : 0
+        progressBarTrailingConstraint?.constant = -trailingInset
+        progressBar.clipsToBounds = trailingInset > 0
         super.layoutSubviews()
         guard #available(iOS 26.0, *) else { return }
 
@@ -495,8 +499,9 @@ final class AddressToolbarContainer: UIView,
 
         NSLayoutConstraint.activate([
             progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
-            progressBar.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
+        progressBarTrailingConstraint = progressBar.trailingAnchor.constraint(equalTo: trailingAnchor)
+        progressBarTrailingConstraint?.isActive = true
 
         setupToolbarConstraints(isBottomSearchBar: isBottomSearchBar)
         setupSkeletonAddressBarsLayout(isBottomSearchBar: isBottomSearchBar)
