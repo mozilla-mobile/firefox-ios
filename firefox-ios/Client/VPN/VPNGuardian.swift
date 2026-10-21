@@ -249,8 +249,6 @@ final class VPNGuardian: VPNGuardianProviding {
         let claims = try decodeJWTClaims(parsed.token)
         let nbf = Date(timeIntervalSince1970: claims.nbf)
         let exp = Date(timeIntervalSince1970: claims.exp)
-        // TODO: FXIOS-16874 Add back usage when we add in app attest
-//        let usage = try parseUsage(response: http)
 
         return ProxyPass(
             bearerToken: parsed.token,
@@ -258,23 +256,5 @@ final class VPNGuardian: VPNGuardianProviding {
             expiresAt: exp,
             usage: nil
         )
-    }
-
-    private func parseUsage(response: HTTPURLResponse) throws -> ProxyUsage {
-        guard let limitStr = response.value(forHTTPHeaderField: "X-Quota-Limit"),
-              let limit = Int64(limitStr),
-              let remainingStr = response.value(forHTTPHeaderField: "X-Quota-Remaining"),
-              let remaining = Int64(remainingStr),
-              let resetStr = response.value(forHTTPHeaderField: "X-Quota-Reset")
-        else {
-            throw GuardianError.bodyInvalid
-        }
-
-        do {
-            let reset = try Date.ISO8601FormatStyle(includingFractionalSeconds: true).parse(resetStr)
-            return ProxyUsage(max: limit, remaining: remaining, reset: reset)
-        } catch {
-            throw GuardianError.bodyInvalid
-        }
     }
 }

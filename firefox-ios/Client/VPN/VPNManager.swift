@@ -187,7 +187,7 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
         guard let url = components.url else {
             throw VPNError.proxyURLCannotBeGenerated
         }
-        let endpoint = NWEndpoint.url(components.url!)
+        let endpoint = NWEndpoint.url(url)
         let hop = ProxyConfiguration.RelayHop(
             http3RelayEndpoint: endpoint,
             http2RelayEndpoint: endpoint,

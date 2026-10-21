@@ -70,9 +70,9 @@ final class VPNServerManagerTests: XCTestCase {
 
     func testSelectServer_skipsQuarantinedServersAcrossCities() async throws {
         let subject = createSubject(countries: [
-            Country(code: "REC", cities: [
-                City(code: "A", servers: [server(hostname: "a.example", quarantined: true)]),
-                City(code: "B", servers: [
+            VPNServerManager.Country(name: "Country", code: "REC", cities: [
+                city(code: "A", servers: [server(hostname: "a.example", quarantined: true)]),
+                city(code: "B", servers: [
                     server(hostname: "b1.example", quarantined: true),
                     server(hostname: "b2.example", quarantined: false)
                 ])
@@ -102,8 +102,8 @@ final class VPNServerManagerTests: XCTestCase {
                     hostname: "rec.example",
                     port: 443,
                     protocols: [
-                        ProtocolRecord(name: "wireguard", host: "wg.example", port: 51820),
-                        ProtocolRecord(name: "masque", host: "masque.example", port: 2499)
+                        protocolRecord(name: "wireguard", host: "wg.example", port: 51820),
+                        protocolRecord(name: "masque", host: "masque.example", port: 2499)
                     ]
                 )
             ])
@@ -118,7 +118,7 @@ final class VPNServerManagerTests: XCTestCase {
     func testSelectServer_masqueWithoutHostOrPort_fallsBackToServerHostnameAndPort() async throws {
         let subject = createSubject(countries: [
             country(code: "REC", servers: [
-                server(hostname: "rec.example", port: 8443, protocols: [ProtocolRecord(name: "masque")])
+                server(hostname: "rec.example", port: 8443, protocols: [protocolRecord(name: "masque")])
             ])
         ])
 
@@ -176,7 +176,7 @@ final class VPNServerManagerTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func createSubject(countries: [Country]) -> VPNServerManager {
+    private func createSubject(countries: [VPNServerManager.Country]) -> VPNServerManager {
         let records = countries.enumerated().map { index, country in
             record(id: "\(index)", fields: (try? encode(country)) ?? "")
         }
@@ -191,45 +191,32 @@ final class VPNServerManagerTests: XCTestCase {
         return subject
     }
 
-    private struct Country: Encodable {
-        let name = "Country"
-        let code: String
-        let cities: [City]
+    private func country(
+        code: String,
+        cityCode: String = "CITY",
+        servers: [VPNServerManager.ServerRecord]
+    ) -> VPNServerManager.Country {
+        return VPNServerManager.Country(name: "Country", code: code, cities: [city(code: cityCode, servers: servers)])
     }
 
-    private struct City: Encodable {
-        let name = "City"
-        let code: String
-        let servers: [Server]
-    }
-
-    private struct Server: Encodable {
-        let hostname: String
-        let port: Int?
-        let quarantined: Bool?
-        let protocols: [ProtocolRecord]?
-    }
-
-    private struct ProtocolRecord: Encodable {
-        let name: String
-        var host: String?
-        var port: Int?
-    }
-
-    private func country(code: String, cityCode: String = "CITY", servers: [Server]) -> Country {
-        return Country(code: code, cities: [City(code: cityCode, servers: servers)])
+    private func city(code: String, servers: [VPNServerManager.ServerRecord]) -> VPNServerManager.City {
+        return VPNServerManager.City(name: "City", code: code, servers: servers)
     }
 
     private func server(
         hostname: String,
         port: Int? = nil,
         quarantined: Bool? = nil,
-        protocols: [ProtocolRecord]? = nil
-    ) -> Server {
-        return Server(hostname: hostname, port: port, quarantined: quarantined, protocols: protocols)
+        protocols: [VPNServerManager.ProtocolRecord]? = nil
+    ) -> VPNServerManager.ServerRecord {
+        return VPNServerManager.ServerRecord(hostname: hostname, port: port, quarantined: quarantined, protocols: protocols)
     }
 
-    private func encode(_ country: Country) throws -> String {
+    private func protocolRecord(name: String, host: String? = nil, port: Int? = nil) -> VPNServerManager.ProtocolRecord {
+        return VPNServerManager.ProtocolRecord(name: name, host: host, port: port, scheme: nil, templateString: nil)
+    }
+
+    private func encode(_ country: VPNServerManager.Country) throws -> String {
         return try XCTUnwrap(String(data: JSONEncoder().encode(country), encoding: .utf8))
     }
 

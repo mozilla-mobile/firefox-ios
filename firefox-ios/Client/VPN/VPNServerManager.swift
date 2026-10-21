@@ -17,26 +17,26 @@ final class VPNServerManager: VPNServerManaging {
     static let collectionName = "vpn-serverlist"
     static let recommendedCountryCode = "REC"
 
-    struct Country: Decodable {
+    struct Country: Codable {
         let name: String
         let code: String
         let cities: [City]
     }
 
-    struct City: Decodable {
+    struct City: Codable {
         let name: String
         let code: String
         let servers: [ServerRecord]
     }
 
-    struct ServerRecord: Decodable {
+    struct ServerRecord: Codable {
         let hostname: String
         let port: Int?
         let quarantined: Bool?
         let protocols: [ProtocolRecord]?
     }
 
-    struct ProtocolRecord: Decodable {
+    struct ProtocolRecord: Codable {
         let name: String
         let host: String?
         let port: Int?
