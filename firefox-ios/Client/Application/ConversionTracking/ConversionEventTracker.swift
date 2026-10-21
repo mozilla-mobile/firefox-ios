@@ -57,11 +57,19 @@ struct ConversionEventTracker {
     }
 
     /// Sends the event's conversion value if the event is mapped in the current window
+    /// and its coarse value isn't lower than the last one sent in that window
     func record(_ event: ConversionEvent, now: Timestamp = Date.now()) {
         guard let dayIndex = currentDayIndex(from: now),
               let window = ConversionWindow(dayIndex: dayIndex),
               let coarse = event.coarseValue(in: window) else { return }
 
+        let windowKey = String(window.rawValue)
+        let lastRawValue = dataManager.lastCoarseValueByWindow[
+            windowKey
+        ] ?? ConversionValue.CoarseConversionValue.low.rawValue
+        guard coarse.rawValue >= lastRawValue else { return }
+
+        dataManager.lastCoarseValueByWindow[windowKey] = coarse.rawValue
         conversionValueUpdater.update(conversionValue: ConversionValue(fine: event.fineValue, coarse: coarse))
     }
 

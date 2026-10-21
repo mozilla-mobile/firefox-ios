@@ -18,7 +18,7 @@ struct ConversionValue: Equatable {
     var coarse: CoarseConversionValue
     var lockWindow = false
 
-    enum CoarseConversionValue {
+    enum CoarseConversionValue: Int {
         case low
         case medium
         case high
