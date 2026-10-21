@@ -599,6 +599,8 @@ class BrowserViewController: UIViewController,
         let effectiveSearchBarPosition: SearchBarPosition = traitCollection.duoExpanded ? .top : newSearchBarPosition
 
         isBottomSearchBar = effectiveSearchBarPosition == .bottom
+        tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
+                                              doesFindInPageBarExist: iOS15FindInPageBar != nil)
         let newParent = isBottomSearchBar ? overKeyboardContainer : header
 
         addressToolbarContainer.removeFromParent()
