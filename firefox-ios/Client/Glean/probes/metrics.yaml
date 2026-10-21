@@ -2837,3 +2837,74 @@ remote_settings:
     data_sensitivity:
       - technical
     expires: never
+
+installation:
+  original_purchase_date:
+    type: string
+    description: |
+      Original app acquisition date in UTC YYYY-MM-DD.
+    lifetime: ping
+    send_in_pings:
+      - baseline
+    no_lint:
+      - BASELINE_PING
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXMO-1028
+    data_reviews: []
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  original_app_version:
+    type: string
+    description: |
+      App version associated with the original acquisition.
+    lifetime: ping
+    send_in_pings:
+      - baseline
+    no_lint:
+      - BASELINE_PING
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXMO-1028
+    data_reviews: []
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  install_counter:
+    type: quantity
+    unit: installations
+    description: |
+      Number of app installations observed on this device.
+    lifetime: ping
+    send_in_pings:
+      - baseline
+    no_lint:
+      - BASELINE_PING
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXMO-1028
+    data_reviews: []
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  last_seen_date:
+    type: string
+    description: |
+      Last recorded activity date from the previous installation in UTC YYYY-MM-DD.
+    lifetime: ping
+    send_in_pings:
+      - baseline
+    no_lint:
+      - BASELINE_PING
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXMO-1028
+    data_reviews: []
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
