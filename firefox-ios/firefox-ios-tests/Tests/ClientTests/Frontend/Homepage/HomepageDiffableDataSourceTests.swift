@@ -64,8 +64,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
     func test_updateSnapshot_withColorValueOnState() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
         let wallpaperConfig = WallpaperConfiguration(
-            landscapeImage: nil,
-            portraitImage: nil,
             textColor: .systemCyan,
             cardColor: .black,
             logoTextColor: .blue
