@@ -162,7 +162,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         )
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: closeButton)
         navigationItem.titleView = titleLabel
-        setContentScrollView(contentView.scrollView, for: .top)
+        setContentScrollView(contentView.scrollView, for: .all)
 
         backgroundEffectView.pinToSuperview()
 
@@ -333,7 +333,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         guard !hasRevealedFollowUpTitle else { return }
         hasRevealedFollowUpTitle = true
         animateFollowUpTitle(followUpTitle, delay: UX.followUpTitleRevealDelay) { [weak self] in
-            self?.animateFollowUpTitle(nil, delay: UX.followUpTitleVisibleDuration)
+            self?.animateFollowUpTitle(nil, delay: 1.0)
         }
     }
 
@@ -341,8 +341,6 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         UIView.animate(
             withDuration: UX.followUpTitleRevealDuration,
             delay: delay,
-            usingSpringWithDamping: UX.followUpTitleRevealDamping,
-            initialSpringVelocity: 0.0
         ) { [self] in
             followUpButton.configuration?.title = title
             navigationController?.toolbar.layoutIfNeeded()
