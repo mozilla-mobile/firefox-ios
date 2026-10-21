@@ -587,6 +587,7 @@
         "TabsTestsIpad",
         "ThirdPartySearchTest",
         "TodayWidgetTests",
+        "ToolbarMenuTests\/testMainMenuPasswordsOption()",
         "ToolbarTests\/testClearURLTextUsingBackspace()",
         "ToolbarTests\/testLandscapeNavigationWithTabSwitch()",
         "ToolbarTests\/testOpenNewTabButtonOnToolbar()",

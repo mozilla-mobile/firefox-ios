@@ -90,6 +90,10 @@ final class MainMenuScreen {
         history.waitAndTap()
     }
 
+    func tapPasswords() {
+        sel.PASSWORDS_BUTTON.element(in: app).waitAndTap()
+    }
+
     func assertReaderViewIsBelowPageZoom() {
         assertMenuItem(sel.READER_VIEW, isBelow: sel.PAGE_ZOOM)
     }

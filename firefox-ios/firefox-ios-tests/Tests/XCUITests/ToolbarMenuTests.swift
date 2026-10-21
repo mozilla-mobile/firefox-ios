@@ -67,6 +67,25 @@ class ToolbarMenuTests: BaseTestCase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3167601
+    // Regression
+    func testMainMenuPasswordsOption() {
+        let loginSettingsScreen = LoginSettingsScreen(app: app)
+        openMainMenu()
+        mainMenuScreen.tapPasswords()
+        loginSettingsScreen.unlockLoginsView()
+        loginSettingsScreen.waitForInitialState()
+    }
+
+    private func openMainMenu() {
+        toolbarScreen.tapSettingsMenuButton()
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            app.swipeUp()
+        }
+        mainMenuScreen.assertMenuOptionsExist()
+    }
+
 	private func assertToolbarMenusAndAddressBarExist() {
 		toolbarScreen.assertSettingsButtonExists()
 		toolbarScreen.assertTabsButtonExists()
