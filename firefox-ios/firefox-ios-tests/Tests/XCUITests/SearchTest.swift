@@ -226,6 +226,9 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306940
     // Smoketest
     func testSearchEngine() {
+        // The engine is verified through the host shown in the address bar, so keep the search term
+        // from replacing the URL there regardless of the channel default for this flag.
+        addLaunchArgument(jsonFileName: "searchTermInAddressBarOff", featureName: "toolbar-refactor-feature")
         app.launch()
         navigator.nowAt(NewTabScreen)
         // Change to the each search engine and verify the search uses it
@@ -296,11 +299,14 @@ class SearchTests: FeatureFlaggedTestBase {
     func testSearchAfterTypingTwoWords() {
         let browserScreen = BrowserScreen(app: app)
         let fooText = "foo bar"
+        // With the flag on, the address bar shows the search term instead of the URL once the
+        // results page of the search engine has loaded.
+        addLaunchArgument(jsonFileName: "searchTermInAddressBarOn", featureName: "toolbar-refactor-feature")
         app.launch()
         navigator.goto(URLBarOpen)
         app.typeText(fooText)
         app.typeText(XCUIKeyboardKey.return.rawValue)
-        browserScreen.assertAddressBarContains(value: "google", timeout: TIMEOUT)
+        browserScreen.assertAddressBarContains(value: fooText, timeout: TIMEOUT)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306943

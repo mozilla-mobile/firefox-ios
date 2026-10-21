@@ -10804,6 +10804,8 @@
 		A5724A80AF359D2F273F343E /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A5B742BFB5D86708C670E5F0 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Menu.strings; sourceTree = "<group>"; };
 		A5C6EA06305958FA0062B3A8 /* RustFirefoxAccountsProfileCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFirefoxAccountsProfileCacheTests.swift; sourceTree = "<group>"; };
+		A5DBCAC630893D1200379FCB /* searchTermInAddressBarOff.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = searchTermInAddressBarOff.json; sourceTree = "<group>"; };
+		A5DBCAC830893D1300379FCB /* searchTermInAddressBarOn.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = searchTermInAddressBarOn.json; sourceTree = "<group>"; };
 		A5EC80FE3054178C005A540F /* AutoplaySettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoplaySettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		A5EC810030541792005A540F /* NewTabContentSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTabContentSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		A5EC81023054179B005A540F /* ContentBlockerSettingViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockerSettingViewControllerTests.swift; sourceTree = "<group>"; };
@@ -17280,6 +17282,8 @@
 				EDDC4F6C2F68637000E0B8FA /* legacyOnboardingOn.json */,
 				EDDC4F6D2F68637000E0B8FA /* modernKitOnboardingOn.json */,
 				EDDC4F6E2F68637000E0B8FA /* modernOrangeAndBlueOnboardingOn.json */,
+				A5DBCAC630893D1200379FCB /* searchTermInAddressBarOff.json */,
+				A5DBCAC830893D1300379FCB /* searchTermInAddressBarOn.json */,
 			);
 			path = TestData;
 			sourceTree = "<group>";
@@ -19323,12 +19327,14 @@
 				8A94DB972E0F16E80005FE69 /* homepageSearchBarOn.json in Resources */,
 				9A6A6D06E2CA4A33943C7881 /* homepageStoryCategoriesOn.json in Resources */,
 				8A3709E42DC16531004B9350 /* defaultEnabledOn.json in Resources */,
+				A5DBCAC730893D1200379FCB /* searchTermInAddressBarOff.json in Resources */,
 				EDFEE3F42DE670B8005ADE03 /* gleanProbes.xcfilelist in Resources */,
 				BA1237BA2DAE55EA00BB6333 /* NightModeAllFramesAtDocumentStart.js in Resources */,
 				BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */,
 				ED9DB4202DC57DF80072FF5F /* pings.yaml in Resources */,
 				ED9DB4212DC57DF80072FF5F /* tags.yaml in Resources */,
 				C2F335342ECE33720071588A /* translations-engine.worker.js in Resources */,
+				A5DBCAC930893D1300379FCB /* searchTermInAddressBarOn.json in Resources */,
 				C2F335352ECE33720071588A /* TranslationsEngine.js in Resources */,
 				D4AFAB0E2AFA8F9A000BFEAA /* SyncIntegrationTests in Resources */,
 				EDF2C05C2D6CDB6F00723609 /* AppIcons.xcassets in Resources */,
