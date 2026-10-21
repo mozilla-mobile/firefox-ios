@@ -877,10 +877,10 @@ class Tab: NSObject,
     func applyTheme(theme: Theme) {
         UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
         webView?.applyTheme(theme: theme)
-        /// Configures the web view's background to prevent a white flash during initial load in night mode.
-        /// Note: Background colors are only visible when `isOpaque` is false — setting them while it's true has no effect.
+        // Keep the themed backing color for transparent web content in night mode.
         webView?.backgroundColor =  theme.colors.layer1
-        webView?.scrollView.backgroundColor = theme.colors.layer1
+        // Let WebKit manage the scroll background as the page and opacity change.
+        webView?.scrollView.backgroundColor = nil
         webView?.isOpaque = !nightMode
         webView?.underPageBackgroundColor = nightMode ? .black : nil
     }

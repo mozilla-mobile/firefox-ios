@@ -261,6 +261,22 @@ class BrowserViewController: UIViewController,
     // background view is placed behind content view so view scrolled to top or bottom shows
     // correct background for translucent toolbars
     private let backgroundView: UIView = .build()
+    // Match the page beneath the vertical status area without changing the themed browser background.
+    private let verticalBarBackgroundView: UIView = .build { view in
+        view.isUserInteractionEnabled = false
+        view.isHidden = true
+    }
+    private var verticalBarBackgroundObservation: NSKeyValueObservation?
+    private weak var observedVerticalBarWebView: WKWebView?
+
+    private var shouldUseVerticalBarBackground: Bool {
+        #if compiler(>=6.4)
+        if #available(iOS 27.1, *) {
+            return traitCollection.verticalBarEdge != .unspecified
+        }
+        #endif
+        return false
+    }
 
     // MARK: Contextual Hints
 
@@ -1081,6 +1097,14 @@ class BrowserViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        #if compiler(>=6.4)
+        if #available(iOS 27.1, *) {
+            registerForTraitChanges(UITraitCollection.systemTraitsAffectingVerticalBarEdge) { (self: Self, _) in
+                self.updateVerticalBarBackground()
+            }
+        }
+        #endif
+
         setupEssentialUI()
         subscribeToRedux()
         tabManager.restoreTabs()
@@ -1719,6 +1743,7 @@ class BrowserViewController: UIViewController,
 
         view.insertSubview(backgroundView,
                            belowSubview: isSwipingTabsEnabled ? webPagePreview : contentContainer)
+        view.insertSubview(verticalBarBackgroundView, aboveSubview: backgroundView)
 
         NSLayoutConstraint.activate([
             topBlurView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -1735,6 +1760,11 @@ class BrowserViewController: UIViewController,
             backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            verticalBarBackgroundView.topAnchor.constraint(equalTo: view.topAnchor),
+            verticalBarBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            verticalBarBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            verticalBarBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
 
@@ -1893,6 +1923,7 @@ class BrowserViewController: UIViewController,
 
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
+        updateVerticalBarBackground()
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
         updateContentContainerTopConstraint()
 
@@ -1911,6 +1942,7 @@ class BrowserViewController: UIViewController,
         viewController.willMove(toParent: self)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
+        updateVerticalBarBackground()
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
         updateContentContainerTopConstraint()
 
@@ -3912,6 +3944,7 @@ class BrowserViewController: UIViewController,
         let isBottomSearchHomepage = isBottomSearchBar && tabManager.selectedTab?.isFxHomeTab ?? false
         let colors = currentTheme.colors
         backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layerSurfaceLow
+        updateVerticalBarBackground()
         if #available(iOS 26, *), let glassEffect = effect as? UIGlassEffect {
             glassEffect.tintColor = currentTheme.colors.layerToolbarGlass.withAlphaComponent(0.5)
             bottomBlurView.effect = glassEffect
@@ -3928,6 +3961,41 @@ class BrowserViewController: UIViewController,
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
+    }
+
+    private func updateVerticalBarBackground() {
+        let useVerticalBarBackground = shouldUseVerticalBarBackground
+        verticalBarBackgroundView.isHidden = !useVerticalBarBackground
+
+        guard useVerticalBarBackground,
+              contentContainer.hasWebView,
+              let webView = tabManager.selectedTab?.webView else {
+            verticalBarBackgroundObservation?.invalidate()
+            verticalBarBackgroundObservation = nil
+            observedVerticalBarWebView = nil
+            if verticalBarBackgroundView.backgroundColor != nil {
+                verticalBarBackgroundView.backgroundColor = nil
+            }
+            return
+        }
+
+        guard observedVerticalBarWebView !== webView else { return }
+        verticalBarBackgroundObservation?.invalidate()
+        observedVerticalBarWebView = webView
+        verticalBarBackgroundObservation = webView.observe(
+            \.underPageBackgroundColor, options: [.initial, .new]
+        ) { [weak self] webView, _ in
+            ensureMainThread {
+                // A queued color update may arrive after switching tabs or showing native content.
+                guard let self,
+                      self.observedVerticalBarWebView === webView,
+                      self.contentContainer.hasWebView,
+                      self.tabManager.selectedTab?.webView === webView else { return }
+                let color = webView.underPageBackgroundColor
+                guard self.verticalBarBackgroundView.backgroundColor != color else { return }
+                self.verticalBarBackgroundView.backgroundColor = color
+            }
+        }
     }
 
     // MARK: - Telemetry

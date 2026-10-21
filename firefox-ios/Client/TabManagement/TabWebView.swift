@@ -119,6 +119,48 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
         fatalError("init(coder:) has not been implemented")
     }
 
+    #if compiler(>=6.4)
+    // One-way opt-in: WebKit exposes no reset to automatic obscured insets after an explicit value.
+    // Keep updating insets after the vertical bar disappears.
+    private var usesVerticalBarInsets = false
+
+    override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        // Recalculate WebKit's obscured region during layout after the safe area changes.
+        setNeedsLayout()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if #available(iOS 27.1, *) {
+            updateVerticalBarInsets()
+        }
+    }
+
+    @available(iOS 27.1, *)
+    private func updateVerticalBarInsets() {
+        if !usesVerticalBarInsets {
+            guard !traitCollection.duoExpanded,
+                  traitCollection.verticalBarEdge != .unspecified else { return }
+            usesVerticalBarInsets = true
+            scrollView.contentInsetAdjustmentBehavior = .always
+        }
+
+        var obscuredInsets = safeAreaInsets
+        if traitCollection.duoExpanded {
+            // Expanded mode handles the bottom safe area outside the web view's obscured region.
+            obscuredInsets.bottom = 0
+        }
+        guard obscuredContentInsets != obscuredInsets else { return }
+        // iOS 26+: these insets mark edges covered by native UI in the web view's coordinates.
+        // WebKit shrinks the layout viewport and adjusts fixed/sticky elements around that UI.
+        //
+        // dev note: CSS 100vw can still include the vertical bar's width and overflow the unobscured viewport.
+        // Most likely a WKWebView viewport-sizing issue specifically on Duo.
+        obscuredContentInsets = obscuredInsets
+    }
+    #endif
+
     func removeAllUserScripts() {
         configuration.userContentController.removeAllUserScripts()
         configuration.userContentController.removeAllScriptMessageHandlers()
