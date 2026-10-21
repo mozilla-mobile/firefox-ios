@@ -364,7 +364,6 @@
         "SearchSettingsUITests\/testNavigateToSearchPickerTurnsOffEditing()",
         "SearchTests",
         "SearchTests\/testBottomViewURLBar_trendingRecentSearchesExperimentOff()",
-        "SearchTests\/testBottomViewURLBar_trendingRecentSearchesExperimentOn()",
         "SearchTests\/testCopyPasteComplete()",
         "SearchTests\/testDefaultSearchEngine()",
         "SearchTests\/testDoNotShowSuggestionsWhenEnteringURL()",

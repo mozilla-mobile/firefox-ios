@@ -428,6 +428,8 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/4367103
     // SmokeTest
     func testBottomViewURLBar_trendingRecentSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         let toolbarScreen = ToolbarScreen(app: app)
         let browserScreen = BrowserScreen(app: app)
         let searchScreen = SearchScreen(app: app)
@@ -483,6 +485,7 @@ class SearchTests: FeatureFlaggedTestBase {
             // The focused is dismissed from the URL bar
             browserScreen.assertKeyboardFocusState(isFocusedOniPad: false)
         }
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306942
@@ -864,6 +867,8 @@ class SearchTests: FeatureFlaggedTestBase {
     // MARK: - Pre Search (Trending Searches + Recent Searches)
     // https://mozilla.testrail.io/index.php?/cases/view/3296489
     func testTrendingSearches_trendingSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because trending search is off on Firefox")
         }
@@ -887,10 +892,13 @@ class SearchTests: FeatureFlaggedTestBase {
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForElementToExist(url)
         browserScreen.assertAddressBarContains(value: "google")
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296488
     func testTrendingSearchesSettingsToggleOn_trendingSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because trending search is off on Firefox")
         }
@@ -915,10 +923,13 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.assertAddressBarExists()
         browserScreen.tapOnAddressBar()
         searchScreen.assertTrendingSearchesSectionTitle(with: "Google")
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296487
     func testTrendingSearchesSettingsToggleOff_trendingSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because trending search is off on Firefox")
         }
@@ -943,10 +954,13 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.assertAddressBarExists()
         browserScreen.tapOnAddressBar()
         searchScreen.assertTrendingSearchesSectionTitleDoesNotExist(with: "Google")
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296486
     func testTrendingSearches_afterClearingURL_trendingSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because trending search is off on Firefox")
         }
@@ -972,10 +986,13 @@ class SearchTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
 
         browserScreen.assertAddressBarContains(value: "google")
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296485
     func testRecentSearches_recentSearchesExperimentOn()  throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because recent search is off on Firefox")
         }
@@ -998,10 +1015,13 @@ class SearchTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
 
         browserScreen.assertAddressBarContains(value: "google")
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296482
     func testRecentSearchesWithNoRecentSearches_recentSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because recent search is off on Firefox")
         }
@@ -1016,10 +1036,13 @@ class SearchTests: FeatureFlaggedTestBase {
 
         searchScreen.assertSearchTableVisible()
         searchScreen.assertRecentSearchesSectionTitleDoesNotExist()
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296480
     func testRecentSearchesSettingsToggleOn_recentSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because recent search is off on Firefox")
         }
@@ -1046,10 +1069,13 @@ class SearchTests: FeatureFlaggedTestBase {
 
         browserScreen.tapOnAddressBar()
         searchScreen.assertRecentSearchesSectionTitle()
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296479
     func testRecentSearchesSettingsToggleOff_recentSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because recent search is off on Firefox")
         }
@@ -1075,10 +1101,13 @@ class SearchTests: FeatureFlaggedTestBase {
 
         browserScreen.tapOnAddressBar()
         searchScreen.assertRecentSearchesSectionTitleDoesNotExist()
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296478
     func testTrendingSearchesAndRecentSearchesSettingsToggleOn_trendingSearchesAndRecentSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because trending search is off on Firefox")
         }
@@ -1104,6 +1133,7 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.tapOnAddressBar()
         searchScreen.assertTrendingSearchesSectionTitle(with: "Google")
         searchScreen.assertRecentSearchesSectionTitle()
+        */
     }
 
     private func dismissSearchSettingsScreen() {
