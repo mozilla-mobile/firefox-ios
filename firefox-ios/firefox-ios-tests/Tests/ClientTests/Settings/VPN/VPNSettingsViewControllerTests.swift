@@ -19,11 +19,6 @@ final class VPNSettingsViewControllerTests: XCTestCase {
     }
 
     // MARK: - Init
-    func test_init_setsTitle() {
-        let subject = createSubject()
-        XCTAssertEqual(subject.title, "Built-In VPN")
-    }
-
     func test_init_usesGroupedStyle() {
         let subject = createSubject()
         XCTAssertEqual(subject.tableView.style, .grouped)

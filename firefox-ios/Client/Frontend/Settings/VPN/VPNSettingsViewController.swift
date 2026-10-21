@@ -3,11 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Shared
 
 final class VPNSettingsViewController: SettingsTableViewController {
     init(windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
-        self.title = "Built-In VPN"
+        self.title = .VPN.Settings.Title
     }
 
     required init?(coder: NSCoder) {

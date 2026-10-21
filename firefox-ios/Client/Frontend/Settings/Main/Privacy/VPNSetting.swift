@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Shared
 
 final class VPNSetting: Setting {
     private weak var settingsDelegate: PrivacySettingsDelegate?
@@ -20,7 +21,7 @@ final class VPNSetting: Setting {
 
     override var status: NSAttributedString? {
         // TODO: - Figure out how we tell if the VPN is on, for now default to off
-        let statusString = "Not Connected"
+        let statusString = String.VPN.Settings.StatusOff
         return NSAttributedString(string: statusString)
     }
 
@@ -32,7 +33,7 @@ final class VPNSetting: Setting {
         let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(
-                string: "Built-In VPN",
+                string: .VPN.Settings.Title,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]

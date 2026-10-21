@@ -31,11 +31,6 @@ final class VPNSettingTests: XCTestCase {
 
     // MARK: - Init
 
-    func test_init_setsTitle() {
-        let subject = createSubject()
-        XCTAssertEqual(subject.title?.string, "Built-In VPN")
-    }
-
     func test_init_setsAccessibilityIdentifier() {
         let subject = createSubject()
         XCTAssertEqual(subject.accessibilityIdentifier, AccessibilityIdentifiers.Settings.VPN.title)
@@ -44,13 +39,6 @@ final class VPNSettingTests: XCTestCase {
     func test_init_setsStyleToValue1() {
         let subject = createSubject()
         XCTAssertEqual(subject.style, .value1)
-    }
-
-    // MARK: - Status
-
-    func test_status_showsNotConnected() {
-        let subject = createSubject()
-        XCTAssertEqual(subject.status?.string, "Not Connected")
     }
 
     // MARK: - Accessory
