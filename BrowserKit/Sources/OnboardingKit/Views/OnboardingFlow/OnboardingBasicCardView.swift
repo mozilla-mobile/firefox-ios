@@ -36,35 +36,30 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: Them
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            cardContent(geometry: geometry)
-        }
-        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
+        cardContent
+            .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
-    @ViewBuilder
-    private func cardContent(geometry: GeometryProxy) -> some View {
-        ScrollView(showsIndicators: false) {
+    private var cardContent: some View {
+        OnboardingCardLayout { availableHeight in
             VStack {
                 titleView
                     .padding(.top, UX.CardView.titleCompactTopPadding)
 
                 Spacer(minLength: UX.CardView.minContentSpacing)
                 VStack(spacing: UX.CardView.contentSpacing) {
-                    imageView(geometry: geometry)
+                    imageView(availableHeight: availableHeight)
                     bodyView
                 }
                 Spacer(minLength: UX.CardView.minContentSpacing)
-                VStack(spacing: UX.CardView.buttonsSpacing) {
-                    primaryButton
-                    secondaryButton
-                }
-                .padding(.bottom, UX.CardView.buttonsBottomPadding)
             }
-            .padding(.horizontal, UX.CardView.cardHorizontalPadding)
-            .frame(minHeight: geometry.size.height, maxHeight: .infinity, alignment: .center)
+        } buttons: {
+            VStack(spacing: UX.CardView.buttonsSpacing) {
+                primaryButton
+                secondaryButton
+            }
+            .padding(.bottom, UX.CardView.buttonsBottomPadding)
         }
-        .scrollBounceBehavior(basedOnSize: true)
         .if(horizontalSizeClass != .regular) { view in
             view.cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius, variant: variant)
         }
@@ -84,9 +79,9 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: Them
     }
 
     @ViewBuilder
-    func imageView(geometry: GeometryProxy) -> some View {
+    func imageView(availableHeight: CGFloat) -> some View {
         if let img = viewModel.image {
-            let imgHeight = min(img.size.height, geometry.size.height * 0.4)
+            let imgHeight = min(img.size.height, availableHeight * 0.4)
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
