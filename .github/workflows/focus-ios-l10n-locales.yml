@@ -17,7 +17,7 @@ on:
 jobs:
   get-screenshots:
     name: Generate screenshots
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 80
     steps:
       - name: Clone firefox-ios repo
@@ -28,7 +28,7 @@ jobs:
       - name: Setup Xcode
         run: |
           sudo rm -rf /Applications/Xcode.app
-          sudo xcode-select -s /Applications/Xcode_26.5.app/Contents/Developer
+          sudo xcode-select -s /Applications/Xcode_27.1.app/Contents/Developer
           xcodebuild -version
       - name: Run setup scripts for Focus
         timeout-minutes: 10
