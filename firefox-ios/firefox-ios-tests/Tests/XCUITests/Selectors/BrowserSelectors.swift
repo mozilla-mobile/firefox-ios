@@ -323,11 +323,14 @@ struct BrowserSelectors: BrowserSelectorsSet {
     )
 
     // iOS 15 pages the menu with a menu item; later versions use a "Forward" arrow button.
+    // The toolbar's Forward button shares that label, so it is excluded by identifier.
     let TEXT_SELECTION_MENU_MORE = Selector(
         strategy: .predicate(NSPredicate(
-            format: "(elementType == %d AND label == %@) OR (elementType == %d AND identifier == %@)",
+            format: "(elementType == %d AND label == %@ AND identifier != %@) " +
+                    "OR (elementType == %d AND identifier == %@)",
             XCUIElement.ElementType.button.rawValue,
             "Forward",
+            AccessibilityIdentifiers.Toolbar.forwardButton,
             XCUIElement.ElementType.menuItem.rawValue,
             "show.next.items.menu.button"
         )),
