@@ -27,8 +27,9 @@ final class RustKeychainCleanupTests: XCTestCase {
         }
         XCTAssertEqual(Set(deleted), Set(["other-account", "unknown-service"].map { Data($0.utf8) }))
         let bulkDeletes = keychain.deletedQueries.filter { $0[kSecValuePersistentRef as String] == nil }
+        let expectedClasses = [kSecClassInternetPassword, kSecClassCertificate, kSecClassKey, kSecClassIdentity]
         XCTAssertEqual(Set(bulkDeletes.compactMap { $0[kSecClass as String] as? String }),
-                       Set([kSecClassInternetPassword, kSecClassCertificate, kSecClassKey, kSecClassIdentity].map { $0 as String }))
+                       Set(expectedClasses.map { $0 as String }))
     }
 
     func testFailedEnumerationDoesNotDeleteItems() {
