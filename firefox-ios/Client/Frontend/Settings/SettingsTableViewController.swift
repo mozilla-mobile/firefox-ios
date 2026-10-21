@@ -334,7 +334,6 @@ class BoolSetting: Setting, UserFeaturePreferenceProvider {
 
         cell.accessoryView = control
         cell.selectionStyle = .none
-        cell.detailTextLabel?.font = FXFontStyles.Regular.footnote.scaledFont()
 
         if !enabled {
             cell.subviews.forEach { $0.alpha = 0.5 }

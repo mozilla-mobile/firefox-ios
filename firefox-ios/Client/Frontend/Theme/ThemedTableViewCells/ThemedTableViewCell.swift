@@ -56,6 +56,7 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         textLabel?.text = nil
         textLabel?.textAlignment = .natural
         textLabel?.font = FXFontStyles.Regular.body.scaledFont()
+        detailTextLabel?.font = FXFontStyles.Regular.caption1.scaledFont()
         detailTextLabel?.text = nil
         accessoryView = nil
         accessoryType = .none
