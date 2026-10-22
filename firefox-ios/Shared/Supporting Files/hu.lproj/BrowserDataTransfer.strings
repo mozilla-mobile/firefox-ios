@@ -1,0 +1,18 @@
+/* Message of the alert shown when Firefox could not finish importing data from another browser. */
+"BrowserDataTransfer.ImportFailure.Message.v160" = "Próbálja újra később.";
+
+/* Title of the alert shown when Firefox could not finish importing data from another browser. %@ is the name of the other browser, for example Safari. Data imported before the error is kept. */
+"BrowserDataTransfer.ImportFailure.Title.v160" = "Nem sikerült az importálás innen: %@";
+
+/* Button that dismisses the alert shown after Firefox finishes importing data from another browser. */
+"BrowserDataTransfer.ImportSuccess.GotItButton.v160" = "Megértettem";
+
+/* Message of the alert shown after Firefox finishes importing data from another browser. %@ is the app name (e.g. Firefox). */
+"BrowserDataTransfer.ImportSuccess.Message.v160" = "Az importált adatai készen állnak a használatra a %@ban.";
+
+/* On the Data Management screen in Settings, the button that starts sending Firefox bookmarks, history, and reading lists to another browser installed on the device. */
+"BrowserDataTransfer.Settings.ExportButton.v160" = "Exportálás egy másik böngészőbe";
+
+/* On the Data Management screen in Settings, the button that starts importing bookmarks, history, and reading lists from another browser installed on the device into Firefox. */
+"BrowserDataTransfer.Settings.ImportButton.v160" = "Importálás egy másik böngészőből";
+

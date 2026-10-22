@@ -32,7 +32,7 @@
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Schede: %d";
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
-"ActivityStream.Library.Title" = "Aggiunti di recente";
+"ActivityStream.Library.Title" = "Salvati di recente";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Visitati di recente";
@@ -824,7 +824,7 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "Traccianti social";
 
 /* The title that shows the number of cross-site URLs blocked */
-"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Contenuti traccianti intersito";
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Traccianti intersito";
 
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Cryptominer";
@@ -839,7 +839,7 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "I cryptominer utilizzano di nascosto le risorse del sistema per effettuare il “mining” di valute digitali. Questi script consumano la batteria, rallentano il dispositivo e possono aumentare il costo della bolletta elettrica.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "Le impostazioni del tuo browser e del tuo dispositivo sono uniche. I fingerprinter memorizzano vari tipi di impostazioni distintive al fine di creare un tuo profilo, che può essere utilizzato per tracciarti durante la navigazione.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Le impostazioni del tuo browser e del tuo dispositivo sono uniche. I fingerprinter raccolgono vari tipi di impostazioni distintive al fine di creare un tuo profilo, che può essere utilizzato per tracciarti durante la navigazione.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "I social network posizionano elementi traccianti in altri siti web per creare un tuo profilo più completo e mirato. Il blocco di questi elementi traccianti limita la quantità di informazioni che le aziende di social media possono raccogliere sulle tue attività online.";
@@ -905,7 +905,7 @@
 "Password" = "Password";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Permette di salvare le immagini nel Rullino.";
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Permette di salvare l’immagine nel Rullino.";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox vorrebbe accedere alle foto del dispositivo";
@@ -1481,7 +1481,7 @@
 "Settings.Siri.OpenTabShortcut" = "Apri nuova scheda";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "Utilizza Siri per aprire velocemente Firefox";
+"Settings.Siri.SectionDescription" = "Utilizza le scorciatoie di Siri per aprire velocemente Firefox";
 
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Comandi di Siri";

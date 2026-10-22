@@ -58,17 +58,38 @@
 /* Title for a link that explains what Mozilla means by Rollouts */
 "Settings.Rollouts.Link.v148" = "Uzzināt vairāk";
 
+/* Accessibility label for default search engine setting. */
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Noklusējuma meklētājs";
+
 /* Accessibility label for Learn more about Firefox Suggest. */
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Uzzināt vairāk par Firefox Suggest";
+
+/* Title for alternate search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Citi meklētāji";
+
+/* Title for the `default search engine` settings section in the Search page in the Settings menu. */
+"Settings.Search.DefaultSearchEngine.Title.v121" = "Noklusējuma meklētājs";
 
 /* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
 "Settings.Search.EnginesSuggestions.Title.v124" = "Ieteikumi no meklētājiem";
 
+/* Navigation title for search page in the Settings menu. */
+"Settings.Search.PageTitle.v121" = "Meklēt";
+
 /* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Description.v125" = "Rādīt meklētāju ieteikumus privātajās sesijās";
 
+/* Label for the `show search suggestions` setting, in the Search Settings page. */
+"Settings.Search.ShowSuggestions.v121" = "Rādīt meklēšanas ieteikumus";
+
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Uzzināt vairāk par Firefox Suggest";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Meklēt pārlūkošanas vēsturē";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Meklēt grāmatzīmes";
 
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
 "Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Meklēt vienādotajās cilnēs";
@@ -81,6 +102,9 @@
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Uzzināt vairāk";
+
+/* Placeholder text for the search bar in the translation language picker. */
+"Settings.Translation.LanguagePicker.SearchPlaceholder.v151" = "Meklēt";
 
 /* Row label in the preferred languages list that opens the language picker to add a new preferred language for translation. */
 "Settings.Translation.PreferredLanguages.AddLanguage.v151" = "Pievienot valodu…";

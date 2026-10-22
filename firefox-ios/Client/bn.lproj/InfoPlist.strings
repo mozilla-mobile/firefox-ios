@@ -1,3 +1,6 @@
+/* iOS Home screen shortcut menu: Option to launch the app to the app icon customization screen */
+"App Icon" = "অ্যাপ আইকন";
+
 /* (No Comment) */
 "New Private Tab" = "নতুন ব্যাক্তিগত ট্যাব";
 
@@ -5,7 +8,7 @@
 "New Tab" = "নতুন ট্যাব";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox can use your camera to scan QR codes or take photos and video.";
+"NSCameraUsageDescription" = "ফায়ারফক্স আপনার ক্যামেরা ব্যবহার করে কিউআর কোড স্ক্যান করতে অথবা ছবি ও ভিডিও তুলতে পারে।";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "আপনার সংরক্ষিত পাসওয়ার্ড ও পেমেন্টের মাধ্যম অ্যাক্সেস করতে Firefox এর ফেস আইডি প্রয়োজন।";
@@ -18,6 +21,9 @@
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "এটা আপনাকে ছবি সংরক্ষণ করতে দিবে।";
+
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "এর মাধ্যমে ফায়ারফক্স আপনার অডিও প্রতিলিপি করতে পারে।";
 
 /* (No Comment) */
 "Scan QR Code" = "QR কোড স্ক্যান করুন";

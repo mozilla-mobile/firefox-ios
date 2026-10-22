@@ -10,14 +10,23 @@
 /* Loading label shown in the Quick Answers view while an answer is being fetched. */
 "QuickAnswers.ContentView.Answering.v158" = "답변중…";
 
+/* Button shown below a Quick Answers result that the user taps to ask a follow-up question about the answer. */
+"QuickAnswers.ContentView.FollowUpButton.v160" = "추가 질문하기";
+
 /* Footer text displayed below the Quick Answers result. %@ is the name of the AI model providing the answer, for example Liner or Exa. */
 "QuickAnswers.ContentView.Footer.v158" = "%@에서 제공 · 답변에 오류가 있을 수 있습니다.";
 
 /* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to speak. */
 "QuickAnswers.ContentView.Listening.v158" = "무엇이든 물어보세요…";
 
+/* Placeholder text shown in the Quick Answers view while the microphone is active and waiting for the user to ask a follow-up question about the previous answer. */
+"QuickAnswers.ContentView.ListeningFollowUp.v160" = "듣는 중, 추가로 질문하세요…";
+
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "무엇이든 물어보세요…";
+
+/* Header label shown above the body of a Quick Answers result, labeling the text below it as a short answer to the user's question. */
+"QuickAnswers.ContentView.ResultHeader.v160" = "빠른 답변";
 
 /* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
 "QuickAnswers.ContentView.SearchingSources.v158" = "소스 검색중…";
