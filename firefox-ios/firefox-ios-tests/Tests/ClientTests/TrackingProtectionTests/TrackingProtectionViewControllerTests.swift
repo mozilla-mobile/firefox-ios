@@ -60,7 +60,6 @@ final class TrackingProtectionViewControllerTests: XCTestCase {
         let model = TrackingProtectionModel(
             userDefaults: nil,
             url: URL(string: "https://example.com")!,
-            displayTitle: "example.com",
             connectionSecure: true,
             globalETPIsEnabled: true,
             contentBlockerStatus: .noBlockedURLs,

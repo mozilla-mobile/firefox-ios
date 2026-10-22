@@ -206,7 +206,8 @@ final class AddressToolbarContainer: UIView,
     }
 
     func updateProgressBar(progress: Double) {
-        DispatchQueue.main.async { [unowned self] in
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
             progressBar.alpha = 1
             progressBar.isHidden = false
             progressBar.setProgress(Float(progress), animated: !isTransitioning)

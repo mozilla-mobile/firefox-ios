@@ -105,22 +105,27 @@ final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
     ) {
         let dataService = WallpaperDataService(with: networkingModule)
         let storageUtility = WallpaperStorageUtility()
+        let folderName = wallpaper.id
+        let iPhonePortraitName = wallpaper.fileName(for: .iPhonePortrait)
+        let iPhoneLandscapeName = wallpaper.fileName(for: .iPhoneLandscape)
+        let iPadPortraitName = wallpaper.fileName(for: .iPadPortrait)
+        let iPadLandscapeName = wallpaper.fileName(for: .iPadLandscape)
 
         Task(priority: .userInitiated) {
             do {
-                // Download both images at the same time for efficiency
-                async let portraitFetchRequest = dataService.getImage(
-                    named: wallpaper.portraitID,
-                    withFolderName: wallpaper.id)
-                async let landscapeFetchRequest = dataService.getImage(
-                    named: wallpaper.landscapeID,
-                    withFolderName: wallpaper.id)
+                async let iPhonePortrait = dataService.getImage(named: iPhonePortraitName, withFolderName: folderName)
+                async let iPhoneLandscape = dataService.getImage(named: iPhoneLandscapeName, withFolderName: folderName)
+                async let iPadPortrait = dataService.getImage(named: iPadPortraitName, withFolderName: folderName)
+                async let iPadLandscape = dataService.getImage(named: iPadLandscapeName, withFolderName: folderName)
 
-                let (portrait, landscape) = await (try portraitFetchRequest,
-                                                   try landscapeFetchRequest)
+                let (iPhonePortraitImage, iPhoneLandscapeImage, iPadPortraitImage, iPadLandscapeImage) = try await (
+                    iPhonePortrait, iPhoneLandscape, iPadPortrait, iPadLandscape
+                )
 
-                try storageUtility.store(portrait, withName: wallpaper.portraitID)
-                try storageUtility.store(landscape, withName: wallpaper.landscapeID)
+                try storageUtility.store(iPhonePortraitImage, withName: iPhonePortraitName)
+                try storageUtility.store(iPhoneLandscapeImage, withName: iPhoneLandscapeName)
+                try storageUtility.store(iPadPortraitImage, withName: iPadPortraitName)
+                try storageUtility.store(iPadLandscapeImage, withName: iPadLandscapeName)
 
                 completion(.success(()))
             } catch {
