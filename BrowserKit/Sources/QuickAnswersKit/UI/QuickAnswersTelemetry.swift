@@ -42,7 +42,7 @@ public protocol QuickAnswersTelemetry {
 
     /// Fires when the user denies one of the permissions the voice flow needs.
     /// - Parameter permission: The permission that was denied.
-    func permissionDenied(permission: QuickAnswersPermission, isFollowUp: Bool)
+    func permissionDenied(permission: QuickAnswersPermission)
 
     /// Fires when the user taps a citation source in the results.
     func citationTapped()

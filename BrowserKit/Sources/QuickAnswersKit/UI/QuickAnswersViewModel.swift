@@ -148,9 +148,9 @@ final class QuickAnswersViewModel {
     private func recordRecordingFailure(_ error: SpeechError, isFollowUp: Bool) {
         switch error {
         case .microphonePermissionDenied:
-            telemetry.permissionDenied(permission: .microphone, isFollowUp: isFollowUp)
+            telemetry.permissionDenied(permission: .microphone)
         case .speechRecognitionPermissionDenied:
-            telemetry.permissionDenied(permission: .speechRecognition, isFollowUp: isFollowUp)
+            telemetry.permissionDenied(permission: .speechRecognition)
         default:
             telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel, isFollowUp: isFollowUp)
         }

@@ -54,7 +54,7 @@ final class MockQuickAnswersTelemetry: QuickAnswersTelemetry, @unchecked Sendabl
         lastResultsModel = model
     }
 
-    func permissionDenied(permission: QuickAnswersPermission, isFollowUp: Bool) {
+    func permissionDenied(permission: QuickAnswersPermission) {
         permissionDeniedCalledCount += 1
         lastPermissionDenied = permission
     }

@@ -132,7 +132,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         let event = GleanMetrics.AiQuickAnswers.permissionDenied
         typealias EventExtrasType = GleanMetrics.AiQuickAnswers.PermissionDeniedExtra
 
-        subject.permissionDenied(permission: .microphone, isFollowUp: false)
+        subject.permissionDenied(permission: .microphone)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(
@@ -149,7 +149,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         let event = GleanMetrics.AiQuickAnswers.permissionDenied
         typealias EventExtrasType = GleanMetrics.AiQuickAnswers.PermissionDeniedExtra
 
-        subject.permissionDenied(permission: .speechRecognition, isFollowUp: false)
+        subject.permissionDenied(permission: .speechRecognition)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(
