@@ -180,7 +180,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
 
     private func installContentView(_ contentView: QuickAnswersContentView) {
         view.insertSubview(contentView, aboveSubview: backgroundEffectView)
-        setContentScrollView(contentView.scrollView, for: .all)
+        setContentScrollView(contentView.scrollView, for: .top)
         contentView.pinToSuperview()
     }
 
