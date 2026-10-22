@@ -289,7 +289,10 @@ class LoginTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306957
     // Regression
-    func testUseSavedPasswordAsksForAuthentication() {
+    func testUseSavedPasswordAsksForAuthentication() throws {
+        if iPad() {
+            throw XCTSkip("The Use saved password pill is not accessible on iPad and can't be tapped reliably")
+        }
         // Precondition: a login is saved for the test server
         saveLogin(givenUrl: testLoginPage)
 

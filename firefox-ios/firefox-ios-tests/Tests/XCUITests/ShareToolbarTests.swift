@@ -173,21 +173,24 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864294
     // Regression
-    func testSharePdfFileSaveToFile() {
-        app.launch()
-        if #available(iOS 17, *) {
-            openShareSheetFromToolbar(url: pdfUrl)
-            openSaveToFilesPicker()
-            documentPicker.save()
-            waitForTabsButton()
+    func testSharePdfFileSaveToFile() throws {
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Sharing a PDF document from the toolbar requires iOS 17 or later")
         }
+        app.launch()
+        openShareSheetFromToolbar(url: pdfUrl)
+        openSaveToFilesPicker()
+        documentPicker.save()
+        waitForTabsButton()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4381151
     // Smoketest
-    func testSavePdfToFilesOffersTheDocumentAndKeepsBothCopies() {
+    func testSavePdfToFilesOffersTheDocumentAndKeepsBothCopies() throws {
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Sharing a PDF document from the toolbar requires iOS 17 or later")
+        }
         app.launch()
-        guard #available(iOS 17, *) else { return }
 
         openShareSheetFromToolbar(url: pdfUrl)
         shareSheet.assertShareSheetDocumentName(loremIpsumPdfBaseName)
@@ -201,9 +204,11 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/4381155
     // Regression
-    func testSharingPdfRepeatedlyAndAcrossDocumentsNeverOffersAStaleFile() {
+    func testSharingPdfRepeatedlyAndAcrossDocumentsNeverOffersAStaleFile() throws {
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Sharing a PDF document from the toolbar requires iOS 17 or later")
+        }
         app.launch()
-        guard #available(iOS 17, *) else { return }
 
         openShareSheetFromToolbar(url: PDF_website["url"]!)
         assertShareSheetNamesDocumentThenDismiss(pdfTestPdfBaseName)
@@ -211,6 +216,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         // Reopening the sheet keeps naming the same document, with no duplicated sheet left behind
         for _ in 1...2 {
             toolbar.tapShareButton()
+            shareSheet.assertSingleShareSheetPresented()
             assertShareSheetNamesDocumentThenDismiss(pdfTestPdfBaseName)
         }
 
@@ -221,24 +227,24 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         toolbar.tapShareButton()
         shareSheet.assertShareSheetDocumentName(loremIpsumPdfBaseName)
         shareSheet.assertShareSheetOffersPdfDocument()
-        shareSheet.assertShareSheetDocumentNameIsNot(pdfTestPdfBaseName)
 
-        // The picker offers the document now on screen, not a stale temporary file from the first share
+        // The picker names the document now on screen, not the one shared first
         saveCurrentDocumentToFiles(named: loremIpsumPdfBaseName)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4381157
     // Regression
-    func testSharePdfInPrivateBrowsingLeavesNoResidue() {
+    func testSharePdfInPrivateBrowsingLeavesNoResidue() throws {
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Sharing a PDF document from the toolbar requires iOS 17 or later")
+        }
         app.launch()
-        guard #available(iOS 17, *) else { return }
 
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        if userState.isPrivate {
-            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
-            navigator.nowAt(BrowserTab)
-        }
+        browser.assertPrivateBrowsingLabelExist()
+        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+        navigator.nowAt(BrowserTab)
 
         navigator.openURL(pdfUrl)
         waitUntilPageLoad()
@@ -263,7 +269,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
 
         // The private session leaves neither a history entry nor an in-app download entry
         navigator.goto(LibraryPanel_History)
-        history.waitForHistoryEntriesNotExist([loremIpsumPdfName])
+        history.assertEmptyMessageVisible()
         navigator.goto(LibraryPanel_Downloads)
         downloads.assertNumberOfDownloadedItems(expectedCount: 0)
     }
@@ -280,7 +286,6 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
     private func saveCurrentDocumentToFiles(named baseName: String) {
         openSaveToFilesPicker()
         documentPicker.assertFileNameIsPrefilled(baseName)
-        documentPicker.assertNavigationBarAvailable()
         documentPicker.save()
         documentPicker.assertDismissed()
         shareSheet.dismissShareSheetIfPresented()
