@@ -1,0 +1,9 @@
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Bookmarks section on the Firefox homepage on or off */
+"Settings.Home.Option.Bookmarks.v128" = "বুকমার্কসমূহ";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Stories recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Stories.v140" = "গল্প";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.ThoughtProvokingStories.v116" = "ভাবনা উদ্রেককারী গল্প";
+

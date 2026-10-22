@@ -355,6 +355,9 @@
 /* Title for the welcome card in the v2 onboarding flow. */
 "Onboarding.Modern.Welcome.Title.v145" = "Πείτε αντίο στους παρεμβατικούς ιχνηλάτες";
 
+/* Body of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on news. %@ is a placeholder for the app name (e.g., Firefox). */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.BodyText.v159" = "Λάβετε τις τελευταίες ειδήσεις του %@.";
+
 /* Button on the home screen popup requesting notification permissions. Tapping this button accepts the permission request. */
 "Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableButtonText.v158" = "Ενεργοποίηση ειδοποιήσεων";
 
