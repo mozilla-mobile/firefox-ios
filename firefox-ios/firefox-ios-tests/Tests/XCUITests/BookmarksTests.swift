@@ -213,6 +213,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         toolbarScreen.tapSettingsMenuButton()
         mainMenu.tapBookmarks()
         libraryScreen.assertBookmarkEmptyStateTextExists()
+        libraryScreen.assertEditButtonExists()
         libraryScreen.assertBottomSearchButtonExists(shouldExist: false)
 
         // Step 2: Create a new folder — search icon is displayed
@@ -230,6 +231,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         bookmark()
         toolbarScreen.tapSettingsMenuButton()
         mainMenu.tapBookmarks()
+        libraryScreen.assertEditButtonExists()
         libraryScreen.assertBottomSearchButtonExists(shouldExist: true)
     }
 
