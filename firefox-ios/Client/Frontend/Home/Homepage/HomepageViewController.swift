@@ -534,11 +534,18 @@ final class HomepageViewController: UIViewController,
 
         view.addSubview(embeddedAddressBarView)
 
-        NSLayoutConstraint.activate([
-            embeddedAddressBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            embeddedAddressBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            embeddedAddressBarView.heightAnchor.constraint(equalToConstant: 50)
-        ])
+        NSLayoutConstraint.activate(
+            [
+                embeddedAddressBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                embeddedAddressBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                embeddedAddressBarView.heightAnchor.constraint(
+                    equalToConstant: HomepageSectionLayoutProvider.UX.embeddedAddressBarHeight
+                ),
+                embeddedAddressBarView.topAnchor.constraint(
+                    greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor
+                )
+            ]
+        )
     }
 
     private func constrainEmbeddedAddressBar(toSearchBarCell cell: SearchBarCell) {
@@ -911,6 +918,17 @@ final class HomepageViewController: UIViewController,
         guard let headerView = getNewsTransitionHeader()  else { return }
         headerView.setTransitionEnabled(transitionEnabled)
         headerView.setTransitionProgress(transitionProgress)
+        headerView.setEmbeddedAddressBarOffset(embeddedAddressBarOverlap(with: headerView))
+    }
+
+    private func embeddedAddressBarOverlap(with headerView: UIView) -> CGFloat {
+        guard homepageState.searchBarState.shouldShowSearchBar,
+              embeddedAddressBarView.superview != nil
+        else { return 0 }
+
+        let barBottom = embeddedAddressBarView.convert(embeddedAddressBarView.bounds, to: view).maxY
+        let headerTop = headerView.convert(headerView.bounds, to: view).minY
+        return min(max(barBottom - headerTop, 0), embeddedAddressBarView.bounds.height)
     }
 
     /// Returns whether there is enough room at the bottom of the unscrolled homepage for the header to transition.

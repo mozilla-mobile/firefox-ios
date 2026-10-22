@@ -19,6 +19,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         static let spacingBetweenSections: CGFloat = 44
         static let standardSingleItemHeight: CGFloat = 100
         static let sectionHeaderHeight: CGFloat = 75
+        static let embeddedAddressBarHeight: CGFloat = 50
 
         @MainActor
         static func leadingInset(
