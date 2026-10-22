@@ -141,12 +141,11 @@ public final class QuickAnswersEntryPointButton: UIButton {
 
     // MARK: - Title
 
-    /// Shows `title` next to the icon, then collapses the button back to the icon only. Happens at most once per
-    /// instance, later calls only update the title shown in the large content viewer.
+    /// Shows `title` next to the icon, then collapses the button back to the icon only. Happens at most once per instance.
     func revealTitle(_ title: String) {
-        largeContentTitle = title
         guard !hasRevealedTitle else { return }
         hasRevealedTitle = true
+        largeContentTitle = title
         configuration?.contentInsets = UX.titleContentInsets
         configuration?.title = title
         DispatchQueue.main.asyncAfter(deadline: .now() + UX.titleVisibleDuration) { [weak self] in
