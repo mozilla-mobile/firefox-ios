@@ -194,7 +194,7 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
         var paddingConstant: NSDirectionalEdgeInsets = UX.padding
 
         if traitCollection.horizontalSizeClass == .regular {
-            let availableBounds = superview?.bounds ?? bounds
+            let availableBounds = window?.bounds ?? bounds
             paddingConstant = availableBounds.width > availableBounds.height ? UX.largePadding : UX.mediumPadding
         } else if traitCollection.verticalSizeClass == .compact {
             paddingConstant = UX.mediumPadding
