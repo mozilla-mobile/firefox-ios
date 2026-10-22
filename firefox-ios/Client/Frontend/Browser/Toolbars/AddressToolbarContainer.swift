@@ -110,7 +110,7 @@ final class AddressToolbarContainer: UIView,
     private lazy var leftSkeletonAddressBar: RegularBrowserAddressToolbar = .build()
     private lazy var rightSkeletonAddressBar: RegularBrowserAddressToolbar = .build()
     private lazy var progressBar: GradientProgressBar = .build { bar in
-        bar.clipsToBounds = false
+        bar.clipsToBounds = true
     }
     private lazy var addNewTabView: AddressToolbarAddTabView = .build()
     private lazy var accessoryViewGradient = CAGradientLayer()
@@ -506,8 +506,8 @@ final class AddressToolbarContainer: UIView,
         setupAccessoryViewGradient()
 
         NSLayoutConstraint.activate([
-            progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
-            progressBar.trailingAnchor.constraint(equalTo: trailingAnchor),
+            progressBar.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            progressBar.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
         ])
 
         setupToolbarConstraints(isBottomSearchBar: isBottomSearchBar)
