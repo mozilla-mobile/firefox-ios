@@ -73,6 +73,8 @@ class ToolbarMenuTests: BaseTestCase {
         let loginSettingsScreen = LoginSettingsScreen(app: app)
         openMainMenu()
         mainMenuScreen.tapPasswords()
+        loginSettingsScreen.tapOnboardingContinueIfShown()
+        loginSettingsScreen.assertPasscodePromptShown()
         loginSettingsScreen.unlockLoginsView()
         loginSettingsScreen.waitForInitialState()
     }
