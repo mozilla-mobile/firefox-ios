@@ -374,7 +374,7 @@
 "Settings.Summarize.GesturesSection.FooterTitle.v142" = "Pro zobrazení souhrnu stránky zatřeste zařízením ze strany na stranu.";
 
 /* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Zatřeste pro shrnutí";
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Zatřesení pro shrnutí";
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "Gesta";

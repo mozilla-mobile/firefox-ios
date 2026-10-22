@@ -19,6 +19,9 @@
 /* Placeholder text shown in the Quick Answers view before the user starts speaking. */
 "QuickAnswers.ContentView.Placeholder.v158" = "Pregunta lo que quieras…";
 
+/* Header label shown above the body of a Quick Answers result, labeling the text below it as a short answer to the user's question. */
+"QuickAnswers.ContentView.ResultHeader.v160" = "RESPUESTA RÁPIDA";
+
 /* Loading label shown in the Quick Answers view while the feature searches for sources to construct an answer. */
 "QuickAnswers.ContentView.SearchingSources.v158" = "Buscando fuentes…";
 

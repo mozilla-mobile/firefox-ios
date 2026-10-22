@@ -22,6 +22,9 @@
 /* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "Turpināt";
 
+/* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Pārvaldīt iestatījumus";
+
 /* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "Iestatīt kā noklusējuma pārlūku";
 
@@ -36,6 +39,9 @@
 
 /* Title for the confirmation button on the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "Turpināt";
+
+/* The text for the Manage settings link button. */
+"Onboarding.Modern.TermsOfService.ManageLink.v145" = "Pārvaldīt iestatījumus";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "Uzzināt vairāk";
