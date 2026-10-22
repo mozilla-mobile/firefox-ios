@@ -198,6 +198,24 @@ final class BrowserScreen {
         return BaseTestCase().mozWaitForElementToExist(webViewText, timeout: timeout, failOnTimeout: false)
     }
 
+    func assertWebViewShowsText(containing text: String, timeout: TimeInterval = TIMEOUT) {
+        XCTAssertTrue(webViewShowsText(containing: text, timeout: timeout), "The web page should show '\(text)'")
+    }
+
+    /// The previous/next tab address bars only exist with a bottom toolbar. They sit off-screen
+    /// and are never hittable, so only their existence can be checked.
+    func assertTabSwipeIndicators(previous: Bool, next: Bool, timeout: TimeInterval = TIMEOUT) {
+        let indicators = [(sel.ADDRESS_BAR_LEADING_SKELETON, previous), (sel.ADDRESS_BAR_TRAILING_SKELETON, next)]
+        for (selector, shouldExist) in indicators {
+            let indicator = selector.element(in: app)
+            if shouldExist {
+                BaseTestCase().mozWaitForElementToExist(indicator, timeout: timeout)
+            } else {
+                BaseTestCase().mozWaitForElementToNotExist(indicator, timeout: timeout)
+            }
+        }
+    }
+
     func assertExampleDomainTextExists(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(sel.STATIC_TEXT_EXAMPLE_DOMAIN.element(in: app), timeout: timeout)
     }

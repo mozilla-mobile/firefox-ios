@@ -47,6 +47,8 @@ protocol BrowserSelectorsSet {
     var TEXT_SELECTION_MENU_COPY: Selector { get }
     var TEXT_SELECTION_MENU_SHARE: Selector { get }
     var TEXT_SELECTION_MENU_MORE: Selector { get }
+    var ADDRESS_BAR_LEADING_SKELETON: Selector { get }
+    var ADDRESS_BAR_TRAILING_SKELETON: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
@@ -332,6 +334,18 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "textSelectionMenu"]
     )
 
+    let ADDRESS_BAR_LEADING_SKELETON = Selector.anyElementById(
+        AccessibilityIdentifiers.Browser.AddressToolbar.leadingSkeleton,
+        description: "Previous tab's address bar peeking beside the bottom address bar",
+        groups: ["browser", "swipingTabs"]
+    )
+
+    let ADDRESS_BAR_TRAILING_SKELETON = Selector.anyElementById(
+        AccessibilityIdentifiers.Browser.AddressToolbar.trailingSkeleton,
+        description: "Next tab's address bar peeking beside the bottom address bar",
+        groups: ["browser", "swipingTabs"]
+    )
+
     func linkElement(named name: String) -> Selector {
         Selector.linkById(
             name,
@@ -376,6 +390,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            OPEN_DESIGNATED_URL_BUTTON, ADDRESS_BAR_CONTEXT_MENU,
                            CONTEXT_MENU_PASTE_AND_GO, CONTEXT_MENU_PASTE,
                            CONTEXT_MENU_COPY_ADDRESS, TEXT_SELECTION_MENU_COPY, TEXT_SELECTION_MENU_SHARE,
-                           TEXT_SELECTION_MENU_MORE]
+                           TEXT_SELECTION_MENU_MORE, ADDRESS_BAR_LEADING_SKELETON,
+                           ADDRESS_BAR_TRAILING_SKELETON]
     }
 }
