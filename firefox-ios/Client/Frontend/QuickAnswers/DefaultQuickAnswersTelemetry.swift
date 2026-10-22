@@ -57,11 +57,8 @@ final class DefaultQuickAnswersTelemetry: QuickAnswersTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.resultsCompleted, extras: extras)
     }
 
-    func permissionDenied(permission: QuickAnswersPermission, isFollowUp: Bool) {
-        let extras = GleanMetrics.AiQuickAnswers.PermissionDeniedExtra(
-            isFollowUp: isFollowUp,
-            permission: permission.rawValue
-        )
+    func permissionDenied(permission: QuickAnswersPermission) {
+        let extras = GleanMetrics.AiQuickAnswers.PermissionDeniedExtra(permission: permission.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.permissionDenied, extras: extras)
     }
 

@@ -157,11 +157,6 @@ ai.quick_answers:
       to capture the user's audio and for speech recognition to turn that audio into a transcription,
       so the user can be prompted for, and deny, either of them.
     extra_keys:
-      is_follow_up:
-        type: boolean
-        description: |
-          True when the event belongs to a question asked after a previous answer in the same
-          Quick Answers session, false for the first question.
       permission:
         type: string
         description: |
