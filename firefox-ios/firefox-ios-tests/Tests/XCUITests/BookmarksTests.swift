@@ -702,9 +702,11 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168584
+    // Regression
     func testCheckDonebutton() {
         app.launch()
         toolbarScreen.tapSettingsMenuButton()
+        mainMenu.assertMenuOptionsExist()
         mainMenu.tapBookmarks()
         libraryScreen.assertBookmarkEmptyStateTextExists()
         libraryScreen.tapDoneButton()

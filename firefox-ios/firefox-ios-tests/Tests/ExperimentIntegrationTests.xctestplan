@@ -193,6 +193,7 @@
         "TabsTests",
         "ThirdPartySearchTest",
         "TodayWidgetTests",
+        "ToolbarMenuTests\/testMainMenuPasswordsOption()",
         "TopTabsTestIpad",
         "TrackingProtectionTests",
         "TranslationsTests",

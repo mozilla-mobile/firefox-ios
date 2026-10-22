@@ -185,6 +185,14 @@ final class LoginSettingsScreen {
         } while passcode.exists && attempts > 0
     }
 
+    /// The Passwords intro shows only on the first visit, since its seen flag lives in UserDefaults.
+    func tapOnboardingContinueIfShown() {
+        let continueButton = sel.ONBOARDING_CONTINUE_BUTTON.element(in: app)
+        if BaseTestCase().mozWaitForElementToExist(continueButton, timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) {
+            continueButton.waitAndTap()
+        }
+    }
+
     /// The simulator has no Face ID enrolled, so device owner authentication always asks for the passcode.
     func assertPasscodePromptShown(timeout: TimeInterval = TIMEOUT_LONG) {
         BaseTestCase().mozWaitForElementToExist(sel.PASSCODE_FIELD.element(in: springboard), timeout: timeout)
