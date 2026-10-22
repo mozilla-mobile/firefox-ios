@@ -221,7 +221,7 @@
 "CoverSheet.v24.ETP.Description" = "Встроенная улучшенная защита от отслеживания помогает запретить рекламе отслеживать вас. Включите Строгую защиту, чтобы заблокировать ещё больше трекеров, рекламы и всплывающих окон.";
 
 /* Text for the new ETP settings button */
-"CoverSheet.v24.ETP.Settings.Button" = "Перейти в параметры";
+"CoverSheet.v24.ETP.Settings.Button" = "Перейти в настройки";
 
 /* Title for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Title" = "Защита от рекламного отслеживания";

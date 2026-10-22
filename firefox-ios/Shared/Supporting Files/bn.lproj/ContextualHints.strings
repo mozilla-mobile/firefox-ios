@@ -1,0 +1,6 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the title of the one that explains how to search with Google Lens from the address toolbar. */
+"ContextualHints.Toolbar.GoogleLens.Title.v154" = "গুগল লেন্স দিয়ে সার্চ করুন";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar. */
+"ContextualHints.Translations.Body.v145" = "আপনার প্রয়োজন অনুযায়ী দ্রুত ও প্রাইভেট অনুবাদ প্রস্তুত আছে।";
+

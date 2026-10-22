@@ -112,6 +112,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func test3ReloadButtonContextMenu() {
         navigator.openURL(loremIpsumURL)
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
         navigator.toggleOff(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)

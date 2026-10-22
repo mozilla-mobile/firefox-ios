@@ -16,6 +16,9 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "মুছে ফেলুন";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "বাতিল";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "সবগুলো অনির্বাচিত করুন";
 
@@ -51,6 +54,9 @@
 
 /* Accessibility label for the search input field in the Logins list */
 "Search Input Field" = "ইনপুট ফিল্ডে অনুসন্ধান করুন";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "অনুসন্ধান করুন";
 
 /* Label for the button used to select all logins. */
 "Select All" = "সবগুলো নির্বাচন করুন";

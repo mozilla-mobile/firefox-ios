@@ -49,6 +49,9 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "%@ ਦੇ ਮਾਲਕ ਨੇ ਇਸ ਨੂੰ ਠੀਕ ਢੰਗ ਨਾਲ ਸੈੱਟਅੱਪ ਨਹੀਂ ਕੀਤਾ ਹੈ ਅਤੇ ਸੁਰੱਖਿਅਤ ਕਨੈਕਸ਼ਨ ਬਣਾਇਆ ਨਹੀਂ ਜਾ ਸਕਦਾ ਹੈ।";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "ਸਾਈਟ ਆਰਜ਼ੀ ਰੂਪ ਵਿੱਚ ਮੌਜੂਦ ਨਹੀਂ ਹੈ, ਇਹ ਵੱਖਰੇ ਸਿਰਨਾਵੇਂ ਉੱਤੇ ਬਦਲ ਗਈ ਹੋ ਸਕਦੀ ਹੈ, ਜਾਂ ਤੁਹਾਡੀ ਫਾਇਰਵਾਲ ਜਾਂ ਪਰਾਕਸੀ ਕਨੈਕਸ਼ਨ ਉੱਤੇ ਰੋਕ ਲਾਉਂਦੇ ਹੋ ਸਕਦੇ ਹਨ।\n\nਆਪਣੀਆਂ ਕਨੈਕਸ਼ਨ ਸੈਟਿੰਗਾਂ ਦੀ ਜਾਂਚ ਕਰਕੇ ਫੇਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ।";
+
 /* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
 "NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ ਮੰਗ ਕੀਤੇ URL ਨੂੰ ਖੋਲ੍ਹ ਨਹੀਂ ਸਕਿਆ ਸੀ।";
 

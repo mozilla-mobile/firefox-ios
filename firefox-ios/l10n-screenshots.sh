@@ -37,7 +37,7 @@ for lang in $LOCALES; do
         --testPlan L10nSnapshotTests \
         --number_of_retries 0 \
         --skip_open_summary \
-        --xcargs "-maximum-parallel-testing-workers 2 -skipMacroValidation" \
+        --xcargs "-maximum-parallel-testing-workers 2 -skipMacroValidation -collect-test-diagnostics never" \
         --derived_data_path l10n-screenshots-dd \
         --ios_version "27.0" \
         --erase_simulator --localize_simulator \
