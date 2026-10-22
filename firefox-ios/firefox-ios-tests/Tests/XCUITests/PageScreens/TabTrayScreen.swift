@@ -262,7 +262,7 @@ final class TabTrayScreen {
             let found = tabCell.exists ? tabCell.label : "no tab"
             XCTAssertTrue(matched, "Tab \(index) should be '\(title)', found '\(found)'", file: file, line: line)
         }
-        XCTAssertEqual(collectionView.cells.count, titles.count, "Unexpected number of tabs", file: file, line: line)
+        assertTabCount(titles.count, file: file, line: line)
     }
 
     func dragTab(from fromTabName: String, to toTabName: String) {
