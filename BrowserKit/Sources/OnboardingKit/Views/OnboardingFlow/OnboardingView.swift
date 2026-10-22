@@ -43,7 +43,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                         height: geo.size.height
                     )
                 if horizontalSizeClass == .regular {
-                    regularLayout
+                    regularLayout(geometry: geo)
                 } else {
                     compactLayout(geometry: geo)
                 }
@@ -64,11 +64,11 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         }
     }
 
-    private var regularLayout: some View {
+    private func regularLayout(geometry: GeometryProxy) -> some View {
         ZStack(alignment: .topTrailing) {
             SheetSizedCard {
                 VStack {
-                    tabView
+                    tabView(containerWidth: geometry.size.width)
                     CustomPageControl(
                         currentPage: $viewModel.pageCount,
                         numberOfPages: viewModel.onboardingCards.count,
@@ -104,7 +104,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 .padding(.trailing, UX.Onboarding.Spacing.standard)
                 .frame(maxWidth: .infinity, alignment: .trailing)
 
-            tabView
+            tabView(containerWidth: geometry.size.width)
 
             Spacer()
 
@@ -148,7 +148,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         .accessibilityIdentifier(closeButtonAccessibilityId)
     }
 
-    private var tabView: some View {
+    private func tabView(containerWidth: CGFloat) -> some View {
         TabView(selection: $viewModel.pageCount) {
             ForEach(Array(viewModel.onboardingCards.enumerated()), id: \.element.name) { index, card in
                 cardView(for: card)
@@ -156,6 +156,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             }
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .id(containerWidth)
     }
 
     private func cardView(for card: ViewModel) -> some View {
@@ -164,6 +165,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             windowUUID: windowUUID,
             themeManager: themeManager,
             variant: viewModel.variant,
+            selectedAction: viewModel.multipleChoiceSelections[card.name],
             onBottomButtonAction: handleBottomButtonAction,
             onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
         )

@@ -26,6 +26,7 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         variant: OnboardingVariant,
+        selectedAction: ViewModel.OnboardingMultipleChoiceActionType?,
         onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
         onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     ) {
@@ -36,10 +37,10 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
         self.onBottomButtonAction = onBottomButtonAction
         self.onMultipleChoiceAction = onMultipleChoiceAction
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
-        guard let defaultAction = viewModel.defaultSelectedButton?.action else {
+        guard let initialAction = selectedAction ?? viewModel.defaultSelectedButton?.action else {
             return nil
         }
-        _selectedAction = State(initialValue: defaultAction)
+        _selectedAction = State(initialValue: initialAction)
     }
 
     var body: some View {
