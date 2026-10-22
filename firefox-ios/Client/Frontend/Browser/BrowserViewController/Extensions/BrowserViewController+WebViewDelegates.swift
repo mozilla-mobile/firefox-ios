@@ -197,7 +197,7 @@ extension BrowserViewController: WKUIDelegate {
         Task { @MainActor in
             if let tab = tabManager[webView] {
                 // Need to wait here in case we're waiting for a pending `window.open()`.
-                try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
+                try? await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
                 tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
                 tabManager.removeTab(tab.tabUUID)
             }

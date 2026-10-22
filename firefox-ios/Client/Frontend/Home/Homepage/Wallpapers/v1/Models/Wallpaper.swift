@@ -18,21 +18,30 @@ struct WallpaperFilenameIdentifiers {
     static let iPhone = "_iPhone"
 }
 
+enum WallpaperImageType: CaseIterable {
+    case iPhonePortrait
+    case iPhoneLandscape
+    case iPadPortrait
+    case iPadLandscape
+
+    var fileSuffix: String {
+        typealias fileId = WallpaperFilenameIdentifiers
+        switch self {
+        case .iPhonePortrait: return "\(fileId.iPhone)\(fileId.portrait)"
+        case .iPhoneLandscape: return "\(fileId.iPhone)\(fileId.landscape)"
+        case .iPadPortrait: return "\(fileId.iPad)\(fileId.portrait)"
+        case .iPadLandscape: return "\(fileId.iPad)\(fileId.landscape)"
+        }
+    }
+}
+
 /// A single wallpaper instance.
 struct Wallpaper: Equatable {
-    typealias fileId = WallpaperFilenameIdentifiers
-
     static func == (lhs: Wallpaper, rhs: Wallpaper) -> Bool {
         return lhs.id == rhs.id
                 && lhs.textColor == rhs.textColor
                 && lhs.cardColor == rhs.cardColor
                 && lhs.logoTextColor == rhs.logoTextColor
-    }
-
-    enum ImageTypeID {
-        case thumbnail
-        case portrait
-        case landscape
     }
 
     enum CodingKeys: String, CodingKey {
@@ -47,12 +56,8 @@ struct Wallpaper: Equatable {
     let cardColor: UIColor?
     let logoTextColor: UIColor?
 
-    var thumbnailID: String { return "\(id)\(fileId.thumbnail)" }
-    var portraitID: String { return "\(id)\(deviceVersionID)\(fileId.portrait)" }
-    var landscapeID: String { return "\(id)\(deviceVersionID)\(fileId.landscape)" }
+    private static let noAssetID = "fxDefault"
 
-    /// "Default" wallpaper object. This basically acts as a wrapper to our `noAssetID` so that
-    /// we can identify that no wallpaper is selected.
     static var baseWallpaper: Wallpaper {
         return Wallpaper(
             id: Wallpaper.noAssetID,
@@ -70,49 +75,33 @@ struct Wallpaper: Equatable {
         type != .none
     }
 
+    // MARK: - Images
+
+    var thumbnailID: String { return "\(id)\(WallpaperFilenameIdentifiers.thumbnail)" }
+    var thumbnail: UIImage? { return loadImage(named: thumbnailID) }
+
+    var iPhonePortrait: UIImage? { return image(for: .iPhonePortrait) }
+    var iPhoneLandscape: UIImage? { return image(for: .iPhoneLandscape) }
+    var iPadPortrait: UIImage? { return image(for: .iPadPortrait) }
+    var iPadLandscape: UIImage? { return image(for: .iPadLandscape) }
+
     var needsToFetchResources: Bool {
         guard hasImage else { return false }
-        return portrait == nil || landscape == nil
+        return WallpaperImageType.allCases.contains { image(for: $0) == nil }
     }
 
-    var thumbnail: UIImage? {
-        return fetchResourceFor(imageType: .thumbnail)
+    func fileName(for type: WallpaperImageType) -> String {
+        return "\(id)\(type.fileSuffix)"
     }
 
-    var portrait: UIImage? {
-        return fetchResourceFor(imageType: .portrait)
+    func image(for type: WallpaperImageType) -> UIImage? {
+        return loadImage(named: fileName(for: type))
     }
 
-    var landscape: UIImage? {
-        return fetchResourceFor(imageType: .landscape)
-    }
-
-    /// ID for the "default" wallpaper object. This is not actually an image file name, this just helps us
-    /// identify that no image is selected.
-    private static let noAssetID = "fxDefault"
-    private var deviceVersionID: String {
-        return UIDeviceDetails.userInterfaceIdiom == .pad ? fileId.iPad : fileId.iPhone
-    }
-
-    // MARK: - Helper functions
-    private func fetchResourceFor(imageType: ImageTypeID) -> UIImage? {
+    private func loadImage(named name: String) -> UIImage? {
         // If it's a default (empty) wallpaper
         guard type == .other else { return nil }
-
-        do {
-            let storageUtility = WallpaperStorageUtility()
-
-            switch imageType {
-            case .thumbnail:
-                return try storageUtility.fetchImageNamed(thumbnailID)
-            case .portrait:
-                return try storageUtility.fetchImageNamed(portraitID)
-            case .landscape:
-                return try storageUtility.fetchImageNamed(landscapeID)
-            }
-        } catch {
-            return nil
-        }
+        return try? WallpaperStorageUtility().fetchImageNamed(name)
     }
 }
 

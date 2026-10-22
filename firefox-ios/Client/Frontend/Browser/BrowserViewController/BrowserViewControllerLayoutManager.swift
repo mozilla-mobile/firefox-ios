@@ -96,7 +96,7 @@ final class BrowserViewControllerLayoutManager {
 
     func updateHeaderBarLayout(isBottomSearchBar: Bool, toolbarHeight: CGFloat) -> UILayoutGuide? {
         var guide: UILayoutGuide?
-        #if XCODE_2710 || XCODE_2720
+        #if compiler(>=6.4)
         if #available(iOS 27.1, *),
            !isBottomSearchBar,
            toolbarHeight > 0,

@@ -20,6 +20,8 @@ class WallpaperBackgroundView: UIView {
         }
     }
 
+    private var lastLayoutSize: CGSize = .zero
+
     // MARK: - Initializers & Setup
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,6 +45,13 @@ class WallpaperBackgroundView: UIView {
         ])
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard bounds.size != lastLayoutSize else { return }
+        lastLayoutSize = bounds.size
+        updateImageToCurrentWallpaper()
+    }
+
     // MARK: - Methods
     public func updateImageForOrientationChange() {
         updateImageToCurrentWallpaper()
@@ -59,9 +68,15 @@ class WallpaperBackgroundView: UIView {
     }
 
     private func currentWallpaperImage(from wallpaperState: WallpaperState) -> UIImage? {
+        let configuration = wallpaperState.wallpaperConfiguration
         let isLandscape = UIDevice.current.orientation.isLandscape
-        return isLandscape ?
-        wallpaperState.wallpaperConfiguration.landscapeImage :
-         wallpaperState.wallpaperConfiguration.portraitImage
+
+        let iPadImage = isLandscape ? configuration.iPadLandscapeImage : configuration.iPadPortraitImage
+        let iPhoneImage = isLandscape ? configuration.iPhoneLandscapeImage : configuration.iPhonePortraitImage
+
+        if traitCollection.horizontalSizeClass == .regular {
+            return iPadImage ?? iPhoneImage
+        }
+        return iPhoneImage ?? iPadImage
     }
 }
