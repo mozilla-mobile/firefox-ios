@@ -202,6 +202,9 @@ class AppDelegate: UIResponder,
 
         TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
 
+        ConversionActivityLogger().recordActiveToday()
+        ConversionEventTracker().recordActivityEvents()
+
         // update top sites widget
         updateTopSitesWidget()
 

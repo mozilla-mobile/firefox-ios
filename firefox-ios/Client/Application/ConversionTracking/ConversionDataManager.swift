@@ -12,6 +12,7 @@ struct ConversionDataManager: Sendable {
         static let firstDayAfterInstallTimestamp = "com.moz.conversion.firstDayAfterInstallTimestamp"
         static let activeDayIndices = "com.moz.conversion.activeDayIndices"
         static let searchedDayIndices = "com.moz.conversion.searchedDayIndices"
+        static let lastCoarseValueByWindow = "com.moz.conversion.lastCoarseValueByWindow"
     }
 
     private let defaults: UserDefaultsInterface
@@ -39,5 +40,11 @@ struct ConversionDataManager: Sendable {
     var searchedDayIndices: Set<Int> {
         get { Set(defaults.array(forKey: Keys.searchedDayIndices) as? [Int] ?? []) }
         set { defaults.set(Array(newValue), forKey: Keys.searchedDayIndices) }
+    }
+
+    /// Last coarse value raw value sent, keyed by conversion window raw value
+    var lastCoarseValueByWindow: [String: Int] {
+        get { defaults.object(forKey: Keys.lastCoarseValueByWindow) as? [String: Int] ?? [:] }
+        nonmutating set { defaults.set(newValue, forKey: Keys.lastCoarseValueByWindow) }
     }
 }
