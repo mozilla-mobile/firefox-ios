@@ -10,13 +10,8 @@ public protocol QuickAnswersConfigFetcher: Sendable {
 }
 
 extension QuickAnswersConfigFetcher {
-    /// Whether the provider accepts `assistant` messages. Exa's answer endpoint doesn't: it answers the
-    /// last user message only.
     var supportsAssistantRole: Bool {
-        return switch model {
-        case .exa: false
-        case .liner: true
-        }
+        return feature.model.supportsAssistantRole
     }
 }
 
