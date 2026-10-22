@@ -110,7 +110,7 @@ final class AddressToolbarContainer: UIView,
     private lazy var leftSkeletonAddressBar: RegularBrowserAddressToolbar = .build()
     private lazy var rightSkeletonAddressBar: RegularBrowserAddressToolbar = .build()
     private lazy var progressBar: GradientProgressBar = .build { bar in
-        bar.clipsToBounds = false
+        bar.clipsToBounds = true
     }
     private lazy var addNewTabView: AddressToolbarAddTabView = .build()
     private lazy var accessoryViewGradient = CAGradientLayer()
@@ -125,7 +125,6 @@ final class AddressToolbarContainer: UIView,
     /// Provided by the iOS 27.1 API `UIView.layoutGuide(for: .bar(onEdge:extent:))`.
     private var systemTopBarLayoutGuide: UILayoutGuide?
 
-    private var progressBarTrailingConstraint: NSLayoutConstraint?
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
@@ -383,9 +382,6 @@ final class AddressToolbarContainer: UIView,
     }
 
     override func layoutSubviews() {
-        let trailingInset = traitCollection.verticalSizeClass == .regular ? safeAreaInsets.right : 0
-        progressBarTrailingConstraint?.constant = -trailingInset
-        progressBar.clipsToBounds = trailingInset > 0
         super.layoutSubviews()
         guard #available(iOS 26.0, *) else { return }
 
@@ -498,10 +494,9 @@ final class AddressToolbarContainer: UIView,
         setupAccessoryViewGradient()
 
         NSLayoutConstraint.activate([
-            progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
+            progressBar.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            progressBar.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
         ])
-        progressBarTrailingConstraint = progressBar.trailingAnchor.constraint(equalTo: trailingAnchor)
-        progressBarTrailingConstraint?.isActive = true
 
         setupToolbarConstraints(isBottomSearchBar: isBottomSearchBar)
         setupSkeletonAddressBarsLayout(isBottomSearchBar: isBottomSearchBar)
