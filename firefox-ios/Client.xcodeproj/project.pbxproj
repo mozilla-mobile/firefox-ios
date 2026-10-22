@@ -1470,6 +1470,8 @@
 		A5163EFB4448DCBC295F4B00 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 3802E29A8D8E43B4A359EBC5 /* GCDWebServers */; };
 		A54F6A37304B02780040449A /* TabModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54F6A36304B02780040449A /* TabModelTests.swift */; };
 		A5C6EA07305958FA0062B3A8 /* RustFirefoxAccountsProfileCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C6EA06305958FA0062B3A8 /* RustFirefoxAccountsProfileCacheTests.swift */; };
+		A5C9C98F308A99320016CA78 /* searchTermInAddressBarOff.json in Resources */ = {isa = PBXBuildFile; fileRef = A5C9C98E308A99320016CA78 /* searchTermInAddressBarOff.json */; };
+		A5C9C991308A99330016CA78 /* searchTermInAddressBarOn.json in Resources */ = {isa = PBXBuildFile; fileRef = A5C9C990308A99330016CA78 /* searchTermInAddressBarOn.json */; };
 		A5EC80FF3054178C005A540F /* AutoplaySettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EC80FE3054178C005A540F /* AutoplaySettingsViewControllerTests.swift */; };
 		A5EC810130541792005A540F /* NewTabContentSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EC810030541792005A540F /* NewTabContentSettingsViewControllerTests.swift */; };
 		A5EC81033054179B005A540F /* ContentBlockerSettingViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EC81023054179B005A540F /* ContentBlockerSettingViewControllerTests.swift */; };
@@ -10868,6 +10870,8 @@
 		A5724A80AF359D2F273F343E /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		A5B742BFB5D86708C670E5F0 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Menu.strings; sourceTree = "<group>"; };
 		A5C6EA06305958FA0062B3A8 /* RustFirefoxAccountsProfileCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFirefoxAccountsProfileCacheTests.swift; sourceTree = "<group>"; };
+		A5C9C98E308A99320016CA78 /* searchTermInAddressBarOff.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = searchTermInAddressBarOff.json; sourceTree = "<group>"; };
+		A5C9C990308A99330016CA78 /* searchTermInAddressBarOn.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = searchTermInAddressBarOn.json; sourceTree = "<group>"; };
 		A5EC80FE3054178C005A540F /* AutoplaySettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoplaySettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		A5EC810030541792005A540F /* NewTabContentSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTabContentSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		A5EC81023054179B005A540F /* ContentBlockerSettingViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockerSettingViewControllerTests.swift; sourceTree = "<group>"; };
@@ -17344,6 +17348,8 @@
 				EDDC4F6C2F68637000E0B8FA /* legacyOnboardingOn.json */,
 				EDDC4F6D2F68637000E0B8FA /* modernKitOnboardingOn.json */,
 				EDDC4F6E2F68637000E0B8FA /* modernOrangeAndBlueOnboardingOn.json */,
+				A5C9C98E308A99320016CA78 /* searchTermInAddressBarOff.json */,
+				A5C9C990308A99330016CA78 /* searchTermInAddressBarOn.json */,
 			);
 			path = TestData;
 			sourceTree = "<group>";
@@ -19388,12 +19394,14 @@
 				8A94DB972E0F16E80005FE69 /* homepageSearchBarOn.json in Resources */,
 				9A6A6D06E2CA4A33943C7881 /* homepageStoryCategoriesOn.json in Resources */,
 				8A3709E42DC16531004B9350 /* defaultEnabledOn.json in Resources */,
+				A5C9C98F308A99320016CA78 /* searchTermInAddressBarOff.json in Resources */,
 				EDFEE3F42DE670B8005ADE03 /* gleanProbes.xcfilelist in Resources */,
 				BA1237BA2DAE55EA00BB6333 /* NightModeAllFramesAtDocumentStart.js in Resources */,
 				BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */,
 				ED9DB4202DC57DF80072FF5F /* pings.yaml in Resources */,
 				ED9DB4212DC57DF80072FF5F /* tags.yaml in Resources */,
 				C2F335342ECE33720071588A /* translations-engine.worker.js in Resources */,
+				A5C9C991308A99330016CA78 /* searchTermInAddressBarOn.json in Resources */,
 				C2F335352ECE33720071588A /* TranslationsEngine.js in Resources */,
 				D4AFAB0E2AFA8F9A000BFEAA /* SyncIntegrationTests in Resources */,
 				EDF2C05C2D6CDB6F00723609 /* AppIcons.xcassets in Resources */,
