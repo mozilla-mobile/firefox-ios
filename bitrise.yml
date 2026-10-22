@@ -1121,7 +1121,7 @@ workflows:
             envman add --key L10N_SCREENSHOTS_URL --value "$URL"
     - slack@4:
         title: Notify Slack that screenshots are ready
-        run_if: '{{and (not .IsBuildFailed) (getenv "L10N_SCREENSHOTS_URL" | ne "")}}'
+        run_if: '{{and (not .IsBuildFailed) (getenv "L10N_SCREENSHOTS_URL" | ne "") (getenv "NOTIFY_L10N_SLACK" | eq "true")}}'
         inputs:
         - title: ''
         - author_name: ''
@@ -1143,6 +1143,13 @@ workflows:
     description: >-
       This Workflow is to run L10n tests in one locale and then share the bundle with
       the rest of the builds
+  L10nBuild_Scheduled:
+    envs:
+    - NOTIFY_L10N_SLACK: "true"
+    after_run:
+    - L10nBuild
+    description: >-
+      Weekly scheduled run of L10nBuild that also posts the en-US screenshots link to Slack
   L10nScreenshotsTests:
     steps:
     - activate-ssh-key@4:
