@@ -676,7 +676,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     func addressToolbarDidHideEditingAccessoryButton(_ addressToolbar: BrowserAddressToolbar) {
-        guard addressToolbar == toolbar else { return }
+        guard addressToolbar === toolbar else { return }
         delegate?.addressToolbarDidHideEditingAccessoryButton()
     }
 
