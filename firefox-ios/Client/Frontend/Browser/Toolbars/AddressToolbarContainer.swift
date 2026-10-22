@@ -128,6 +128,17 @@ final class AddressToolbarContainer: UIView,
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
+    /// View the progress bar is pinned below when the toolbar is at the top. `nil` pins it to the container itself.
+    weak var progressBarAnchorView: UIView? {
+        didSet {
+            let position = state?.toolbarPosition ?? .top
+            let activeConstraint = position == .top ? progressBarTopConstraint : progressBarBottomConstraint
+            guard oldValue !== progressBarAnchorView || activeConstraint?.isActive != true else { return }
+
+            updateProgressBarPosition(position)
+        }
+    }
+
     private func calculateToolbarTrailingSpace() -> CGFloat {
         // Expanded iPhone Duo gives plenty of space.
         if traitCollection.duoExpanded, systemTopBarLayoutGuide != nil {
@@ -551,7 +562,11 @@ final class AddressToolbarContainer: UIView,
 
         switch position {
         case .top:
-            progressBarTopConstraint = progressBar.topAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
+            if let progressBarAnchorView {
+                progressBarTopConstraint = progressBar.topAnchor.constraint(equalTo: progressBarAnchorView.bottomAnchor)
+            } else {
+                progressBarTopConstraint = progressBar.topAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
+            }
             progressBarTopConstraint?.isActive = true
         case .bottom:
             progressBarBottomConstraint = progressBar.bottomAnchor.constraint(lessThanOrEqualTo: topAnchor)
