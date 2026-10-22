@@ -10,4 +10,14 @@ extension UITraitCollection {
             && horizontalSizeClass == .regular
             && verticalSizeClass == .regular
     }
+
+    /// True when the system lays its status bar out vertically on a side of the screen ( folded iPhone Duo).
+    var hasVerticalSystemBar: Bool {
+        #if XCODE_2710 || XCODE_2720
+        if #available(iOS 27.1, *) {
+            return verticalBarEdge != .unspecified
+        }
+        #endif
+        return false
+    }
 }
