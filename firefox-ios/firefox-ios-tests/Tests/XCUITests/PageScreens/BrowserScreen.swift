@@ -514,6 +514,37 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForElementToNotExist(sel.ADDRESS_BAR_CONTEXT_MENU.element(in: app))
     }
 
+    // MARK: - Web page text selection menu
+
+    /// Long presses a word on the web page, which selects it and shows the system edit menu.
+    func longPressWebPageWord(_ word: String, duration: TimeInterval = 3.0) {
+        let wordElement = sel.webPageElement(with: word).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(wordElement)
+        wordElement.press(forDuration: duration)
+    }
+
+    func assertTextSelectionMenuShown(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.TEXT_SELECTION_MENU_COPY.element(in: app), timeout: timeout)
+    }
+
+    func tapTextSelectionMenuCopy() {
+        tapTextSelectionMenuItem(sel.TEXT_SELECTION_MENU_COPY)
+    }
+
+    func tapTextSelectionMenuShare() {
+        tapTextSelectionMenuItem(sel.TEXT_SELECTION_MENU_SHARE)
+    }
+
+    /// The edit menu only fits a few items, so page forward until the item is shown.
+    private func tapTextSelectionMenuItem(_ selector: Selector, maxPages: Int = 4) {
+        let item = selector.element(in: app)
+        let more = sel.TEXT_SELECTION_MENU_MORE.element(in: app)
+        for _ in 0..<maxPages where !item.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) {
+            more.waitAndTap()
+        }
+        item.waitAndTap()
+    }
+
     func longPressLink(named linkName: String, duration: TimeInterval = 2.0) {
         let link = sel.linkElement(named: linkName).element(in: app)
         BaseTestCase().mozWaitForElementToExist(link)

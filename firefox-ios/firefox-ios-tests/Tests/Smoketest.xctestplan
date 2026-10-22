@@ -375,6 +375,7 @@
         "NavigationTest\/testLongTapFirefoxIconNewPrivateTab()",
         "NavigationTest\/testLongTapFirefoxIconNewTab()",
         "NavigationTest\/testLongTapFirefoxIconOpenLastBookmark()",
+        "NavigationTest\/testLongTapOnTextSelection()",
         "NavigationTest\/testNavigation()",
         "NavigationTest\/testOpenExternalLink()",
         "NavigationTest\/testOpenExternalLink_tabTrayExperimentOff()",
