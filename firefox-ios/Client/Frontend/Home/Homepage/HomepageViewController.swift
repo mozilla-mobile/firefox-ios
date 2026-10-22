@@ -60,7 +60,6 @@ final class HomepageViewController: UIViewController,
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
     private lazy var embeddedAddressBarView: UIView = .build { view in
-        view.backgroundColor = .red
         view.isUserInteractionEnabled = false
         view.layer.zPosition = 1
         view.accessibilityIdentifier = a11y.EmbeddedAddressBar.view
@@ -484,6 +483,7 @@ final class HomepageViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
+        embeddedAddressBarView.backgroundColor = theme.colors.actionCritical
     }
 
     // MARK: - Layout
