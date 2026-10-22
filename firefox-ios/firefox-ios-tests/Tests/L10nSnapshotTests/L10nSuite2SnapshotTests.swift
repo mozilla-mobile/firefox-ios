@@ -83,6 +83,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         navigator.goto(BrowserTabMenu)
         snapshot("MenuOnWebPage-01")
 
+        navigator.goto(SettingsScreen)
         navigator.toggleOn(userState.nightMode, withAction: Action.ToggleNightMode)
 
         navigator.nowAt(BrowserTab)
