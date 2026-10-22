@@ -1121,11 +1121,11 @@ workflows:
             envman add --key L10N_SCREENSHOTS_URL --value "$URL"
     - slack@4:
         title: Notify Slack that screenshots are ready
-        run_if: '{{getenv "L10N_SCREENSHOTS_URL" | ne ""}}'
+        run_if: '{{and (not .IsBuildFailed) (getenv "L10N_SCREENSHOTS_URL" | ne "")}}'
         inputs:
         - title: ''
         - author_name: ''
-        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - webhook_url: "$WEBHOOK_L10N_TEST_ENG"
         - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
         - footer: Created by Mobile Test Engineering
         - pretext: "*Firefox-iOS* :firefox: *L10n screenshots (en-US)* :camera_with_flash: :translation_icon:"
