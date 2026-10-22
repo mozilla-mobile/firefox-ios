@@ -12,7 +12,6 @@ protocol WebFormSelectorsSet {
     var KEYBOARD_NEXT_BUTTON: Selector { get }
     var KEYBOARD_DONE_BUTTON: Selector { get }
     var SAVED_LOGINS_SHEET_CLOSE_BUTTON: Selector { get }
-    var IPAD_ASSISTANT_PREVIOUS_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -25,7 +24,6 @@ struct WebFormSelectors: WebFormSelectorsSet {
         static let keyboardNextButton = AccessibilityIdentifiers.Browser.KeyboardAccessory.nextButton
         static let keyboardDoneButton = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
         static let savedLoginsSheetCloseButton = AccessibilityIdentifiers.Autofill.loginCloseButton
-        static let iPadAssistantPreviousButton = "_previousTapped"
     }
 
     let USERNAME_LABEL = Selector.staticTextByLabel(
@@ -71,14 +69,7 @@ struct WebFormSelectors: WebFormSelectorsSet {
         groups: ["browser", "webform"]
     )
 
-    // iPad's system shortcut bar above the keyboard, which replaces Firefox's own Next and Done buttons.
-    let IPAD_ASSISTANT_PREVIOUS_BUTTON = Selector.buttonId(
-        IDs.iPadAssistantPreviousButton,
-        description: "Previous field button on the iPad keyboard shortcut bar",
-        groups: ["browser", "webform", "keyboard"]
-    )
-
     var all: [Selector] { [USERNAME_LABEL, USERNAME_FIELD, PASSWORD_FIELD,
                            USE_SAVED_PASSWORD_BUTTON, KEYBOARD_NEXT_BUTTON, KEYBOARD_DONE_BUTTON,
-                           SAVED_LOGINS_SHEET_CLOSE_BUTTON, IPAD_ASSISTANT_PREVIOUS_BUTTON] }
+                           SAVED_LOGINS_SHEET_CLOSE_BUTTON] }
 }

@@ -49,10 +49,6 @@ final class WebFormScreen {
             savedPasswordButton.waitAndTap()
             return
         }
-        if BaseTestCase().iPad() {
-            tapUseSavedPasswordPillOnIPad()
-            return
-        }
         let nextButton = webForm.KEYBOARD_NEXT_BUTTON.element(in: app)
         let doneButton = webForm.KEYBOARD_DONE_BUTTON.element(in: app)
         BaseTestCase().waitForElementsToExist([nextButton, doneButton])
@@ -61,19 +57,6 @@ final class WebFormScreen {
             dy: nextButton.frame.midY
         )
         app.coordinate(withNormalizedOffset: .zero).withOffset(pillCenter).tap()
-    }
-
-    /// iPad has no Next and Done on the accessory bar, so the pill is trailing-aligned and sits right above
-    /// the system shortcut bar; its Previous button lies horizontally within the pill.
-    private func tapUseSavedPasswordPillOnIPad() {
-        let pillOffsetAboveShortcutBar: CGFloat = 32
-        let previousButton = webForm.IPAD_ASSISTANT_PREVIOUS_BUTTON.element(in: app)
-        BaseTestCase().mozWaitForElementToExist(previousButton)
-        let pillPoint = CGVector(
-            dx: previousButton.frame.midX,
-            dy: previousButton.frame.minY - pillOffsetAboveShortcutBar
-        )
-        app.coordinate(withNormalizedOffset: .zero).withOffset(pillPoint).tap()
     }
 
     func closeSavedLoginsSheet() {
