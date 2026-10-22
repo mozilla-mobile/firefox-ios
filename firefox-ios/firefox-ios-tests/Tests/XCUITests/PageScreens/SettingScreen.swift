@@ -288,7 +288,8 @@ final class SettingScreen {
 
     func tapBackToSettings() {
         guard !app.navigationBars["Settings"].exists else { return }
-        let backButton = app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
+        // Query by identifier: on iPhone Duo the back button lives in a toolbar, not the navigation bar.
+        let backButton = app.buttons["BackButton"].firstMatch
         BaseTestCase().mozWaitElementHittable(element: backButton, timeout: TIMEOUT)
         backButton.tap()
         BaseTestCase().mozWaitForElementToExist(app.navigationBars["Settings"])
