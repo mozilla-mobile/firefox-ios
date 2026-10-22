@@ -651,6 +651,39 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Toolbar
 
+    @MainActor
+    func testAddressToolbarDidHideEditingAccessoryButton_dismissesGoogleLensTipAndCancelsObservation() {
+        let subject = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let tipViewController = UIViewController()
+        let observationTask = Task<Void, Never> { }
+        subject.googleLensTipViewController = tipViewController
+        subject.viewControllerToPresent = tipViewController
+        subject.googleLensTipObservationTask = observationTask
+
+        subject.addressToolbarDidHideEditingAccessoryButton()
+
+        XCTAssertEqual(subject.dismissCalled, 1)
+        XCTAssertNil(subject.googleLensTipViewController)
+        XCTAssertTrue(observationTask.isCancelled)
+        XCTAssertNil(subject.googleLensTipObservationTask)
+    }
+
+    @MainActor
+    func testAddressToolbarDidHideEditingAccessoryButton_cancelsPendingTipWithoutDismissingAnotherModal() {
+        let subject = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let otherViewController = UIViewController()
+        let observationTask = Task<Void, Never> { }
+        subject.viewControllerToPresent = otherViewController
+        subject.googleLensTipObservationTask = observationTask
+
+        subject.addressToolbarDidHideEditingAccessoryButton()
+
+        XCTAssertEqual(subject.dismissCalled, 0)
+        XCTAssertTrue(subject.presentedViewController === otherViewController)
+        XCTAssertTrue(observationTask.isCancelled)
+        XCTAssertNil(subject.googleLensTipObservationTask)
+    }
+
     func testToolbarLongPressMenu_hasExpectedSectionsAndActions() throws {
         let gleanWrapper = MockGleanWrapper()
         let subject = createSubject(gleanWrapper: gleanWrapper)

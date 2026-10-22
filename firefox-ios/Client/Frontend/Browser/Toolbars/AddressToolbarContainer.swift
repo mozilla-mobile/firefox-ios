@@ -35,6 +35,8 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     @MainActor
     func configureContextualHint(for button: UIButton, with contextualHintType: String)
     @MainActor
+    func addressToolbarDidHideEditingAccessoryButton()
+    @MainActor
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool)
     @MainActor
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
@@ -671,6 +673,11 @@ final class AddressToolbarContainer: UIView,
 
     func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         delegate?.addressToolbarContainerAccessibilityActions()
+    }
+
+    func addressToolbarDidHideEditingAccessoryButton(_ addressToolbar: BrowserAddressToolbar) {
+        guard addressToolbar == toolbar else { return }
+        delegate?.addressToolbarDidHideEditingAccessoryButton()
     }
 
     func configureContextualHint(
