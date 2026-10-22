@@ -1760,12 +1760,9 @@ class BrowserViewController: UIViewController,
             backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
-            verticalBarBackgroundView.topAnchor.constraint(equalTo: view.topAnchor),
-            verticalBarBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            verticalBarBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            verticalBarBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+
+        verticalBarBackgroundView.pinToSuperview()
     }
 
     func updateContentContainerTopConstraint() {
