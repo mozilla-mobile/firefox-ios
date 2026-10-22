@@ -60,8 +60,9 @@ final class HomepageViewController: UIViewController,
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
     private lazy var embeddedAddressBarView: UIView = .build { view in
-        view.backgroundColor = .clear
         view.isUserInteractionEnabled = false
+        view.layer.zPosition = 1
+        view.accessibilityIdentifier = a11y.EmbeddedAddressBar.view
     }
     private var embeddedAddressBarViewTopCellConstraint: NSLayoutConstraint?
     private var collectionViewTopContentInset: CGFloat = 0
@@ -69,6 +70,11 @@ final class HomepageViewController: UIViewController,
     private var currentHomepageTabState: HomepageTabState {
         guard let activeTabUUID else { return HomepageTabState() }
         return homepageTabStateStore.state(for: activeTabUUID)
+    }
+
+    private var shouldShowEmbeddedAddressBar: Bool {
+        featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar)
+        && userPreferences.searchBarPosition == .top
     }
 
     private var currentTheme: Theme {
@@ -85,6 +91,7 @@ final class HomepageViewController: UIViewController,
     private let homepageTabStateStore: HomepageTabStateStoring
     private let overlayManager: OverlayModeManager
     private let logger: Logger
+    private let userPreferences: UserFeaturePreferring
     private let toastContainer: UIView
 
     // Telemetry related
@@ -103,6 +110,7 @@ final class HomepageViewController: UIViewController,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
+         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
          throttler: MainThreadThrottlerProtocol = MainThreadThrottler(seconds: 0.5)
     ) {
         self.windowUUID = windowUUID
@@ -115,6 +123,7 @@ final class HomepageViewController: UIViewController,
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
         self.logger = logger
+        self.userPreferences = userPreferences
         self.trackingImpressionsThrottler = throttler
 
         // FXIOS-11490: This should be refactored when we refactor CFR to adhere to Redux
@@ -474,6 +483,7 @@ final class HomepageViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
+        embeddedAddressBarView.backgroundColor = theme.colors.actionCritical
     }
 
     // MARK: - Layout
@@ -532,6 +542,8 @@ final class HomepageViewController: UIViewController,
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
 
+        guard shouldShowEmbeddedAddressBar else { return }
+
         view.addSubview(embeddedAddressBarView)
 
         NSLayoutConstraint.activate(
@@ -549,6 +561,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func constrainEmbeddedAddressBar(toSearchBarCell cell: SearchBarCell) {
+        guard embeddedAddressBarView.superview != nil else { return }
         embeddedAddressBarViewTopCellConstraint?.isActive = false
 
         let constraint = embeddedAddressBarView.topAnchor.constraint(equalTo: cell.topAnchor)
