@@ -65,9 +65,10 @@ final class RemoteSettingsServiceSyncCoordinator: @unchecked Sendable, Notifiabl
         // some time to allow any other work or threads to take priority
         syncTimer?.invalidate()
         syncTimer = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false) { [weak self] _ in
+            guard let self else { return }
             // Sync needs to be scheduled on a background thread, otherwise it will block ui
             DispatchQueue.global().async {
-                self?.syncIfNeeded()
+                self.syncIfNeeded()
             }
         }
     }
