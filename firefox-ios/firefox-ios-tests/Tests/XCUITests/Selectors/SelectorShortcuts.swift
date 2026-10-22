@@ -531,6 +531,25 @@ extension Selector {
         return Selector(strategy: .predicate(p), value: label, description: description, groups: groups)
     }
 
+    /// Matches a button by label, skipping the button with `excludedButtonId`,
+    /// or the menu item with `menuItemId` (older iOS surfaces the same control as a menu item).
+    static func buttonByLabelOrMenuItemId(_ label: String,
+                                          excludingButtonId excludedButtonId: String,
+                                          menuItemId: String,
+                                          description: String,
+                                          groups: [String] = []) -> Selector {
+        let p = NSPredicate(
+            format: "(elementType == %d AND label == %@ AND identifier != %@) " +
+                    "OR (elementType == %d AND identifier == %@)",
+            XCUIElement.ElementType.button.rawValue,
+            label,
+            excludedButtonId,
+            XCUIElement.ElementType.menuItem.rawValue,
+            menuItemId
+        )
+        return Selector(strategy: .predicate(p), value: label, description: description, groups: groups)
+    }
+
     static func otherElementByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
           Selector(strategy: .predicate(
               NSPredicate(
