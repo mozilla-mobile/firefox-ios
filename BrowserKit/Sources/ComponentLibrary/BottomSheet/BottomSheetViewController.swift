@@ -276,8 +276,8 @@ public class BottomSheetViewController: UIViewController,
 
             scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
             scrollViewHeightConstraint
         ])
 
