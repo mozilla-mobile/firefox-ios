@@ -603,6 +603,7 @@ class BrowserViewController: UIViewController,
                                               doesFindInPageBarExist: iOS15FindInPageBar != nil)
         let newParent = isBottomSearchBar ? overKeyboardContainer : header
 
+        addressToolbarContainer.progressBarAnchorView = nil
         addressToolbarContainer.removeFromParent()
         addressToolbarContainer.addToParent(parent: newParent, addToTop: !isBottomSearchBar)
 
@@ -823,11 +824,21 @@ class BrowserViewController: UIViewController,
             topTabsViewController?.applyTheme()
         } else {
             if let topTabsView = topTabsViewController?.view {
+                addressToolbarContainer.progressBarAnchorView = nil
                 header.removeArrangedView(topTabsView)
             }
             topTabsViewController?.removeFromParent()
             topTabsViewController = nil
         }
+    }
+
+    private var tabStripBelowAddressBar: UIView? {
+        guard let tabStrip = topTabsViewController?.view,
+              let addressIndex = header.arrangedSubviews.firstIndex(of: addressToolbarContainer),
+              let stripIndex = header.arrangedSubviews.firstIndex(of: tabStrip),
+              stripIndex > addressIndex
+        else { return nil }
+        return tabStrip
     }
 
     func dismissVisibleMenus() {
@@ -1537,6 +1548,7 @@ class BrowserViewController: UIViewController,
             toolbarHeight: addressToolbarContainer.bounds.height
         )
         addressToolbarContainer.updateSystemTopBarLayoutGuide(systemTopBarLayoutGuide, isBottomSearchBar: isBottomSearchBar)
+        addressToolbarContainer.progressBarAnchorView = tabStripBelowAddressBar
 
         // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
         checkForJSAlerts()

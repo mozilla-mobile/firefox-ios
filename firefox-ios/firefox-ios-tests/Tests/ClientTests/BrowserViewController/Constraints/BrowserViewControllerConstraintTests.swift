@@ -377,6 +377,28 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
         drainMainQueue()
     }
 
+    // MARK: - Progress Bar Placement Tests
+
+    func test_viewDidLayoutSubviews_withTabStripBelowAddressBar_anchorsProgressBarBelowTabStrip() throws {
+        let subject = createSubject(isBottomSearchBar: false)
+        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+        let addressIndex = try XCTUnwrap(subject.header.arrangedSubviews.firstIndex(of: subject.addressToolbarContainer))
+        subject.header.insertArrangedSubview(topTabsViewController.view, at: addressIndex + 1)
+        subject.topTabsViewController = topTabsViewController
+
+        subject.view.setNeedsLayout()
+        subject.view.layoutIfNeeded()
+
+        let isAnchoredBelowTabStrip = subject.header.constraints.contains {
+            $0.isActive &&
+            $0.firstItem is GradientProgressBar &&
+            $0.firstAttribute == .top &&
+            $0.secondItem === topTabsViewController.view &&
+            $0.secondAttribute == .bottom
+        }
+        XCTAssertTrue(isAnchoredBelowTabStrip)
+    }
+
     // MARK: - Helper Methods
 
     @available(iOS 17.0, *)
