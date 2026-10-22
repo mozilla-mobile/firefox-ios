@@ -42,6 +42,13 @@ final class RustKeychainCleanupTests: XCTestCase {
             XCTAssertEqual(result, status)
             XCTAssertEqual(keychain.loadedQueries.count, 1)
             XCTAssertTrue(keychain.deletedQueries.isEmpty)
+
+            let subject = RustKeychain(serviceName: KeychainProtectedItem.installationHistory.service,
+                                       keychain: keychain)
+            subject.removeAllKeys()
+
+            XCTAssertEqual(keychain.loadedQueries.count, 2)
+            XCTAssertTrue(keychain.deletedQueries.isEmpty)
         }
     }
 
