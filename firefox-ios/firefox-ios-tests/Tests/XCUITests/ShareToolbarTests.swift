@@ -173,21 +173,24 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864294
     // Regression
-    func testSharePdfFileSaveToFile() {
-        app.launch()
-        if #available(iOS 17, *) {
-            openShareSheetFromToolbar(url: pdfUrl)
-            openSaveToFilesPicker()
-            documentPicker.save()
-            waitForTabsButton()
+    func testSharePdfFileSaveToFile() throws {
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Sharing a PDF document from the toolbar requires iOS 17 or later")
         }
+        app.launch()
+        openShareSheetFromToolbar(url: pdfUrl)
+        openSaveToFilesPicker()
+        documentPicker.save()
+        waitForTabsButton()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4381151
     // Smoketest
-    func testSavePdfToFilesOffersTheDocumentAndKeepsBothCopies() {
+    func testSavePdfToFilesOffersTheDocumentAndKeepsBothCopies() throws {
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Sharing a PDF document from the toolbar requires iOS 17 or later")
+        }
         app.launch()
-        guard #available(iOS 17, *) else { return }
 
         openShareSheetFromToolbar(url: pdfUrl)
         shareSheet.assertShareSheetDocumentName(loremIpsumPdfBaseName)
