@@ -1,31 +1,13 @@
 ---
 name: bootstrap
 description: Setup both Firefox and Focus for iOS after fetching from git.
-allowed-tools: Bash(brew *) Bash(which *)
+allowed-tools: Bash(./.claude/skills/bootstrap/scripts/fxios-bootstrap.sh)
 ---
 
-First, check if `fxios` is installed:
+From the root of the firefox-ios repository, run:
 
 ```
-which fxios
+./.claude/skills/bootstrap/scripts/fxios-bootstrap.sh
 ```
 
-If it is not installed, run:
-
-```
-brew tap mozilla-mobile/fxios
-brew install fxios
-```
-
-If it is installed, upgrade to the latest version:
-
-```
-brew upgrade fxios
-```
-
-Then run these steps in sequence from the root of the firefox-ios repository:
-
-1. `fxios --version`
-2. `fxios bootstrap --all`
-
-Stop and report if any step fails.
+Stop and report if it fails, including the failing step and its output.
