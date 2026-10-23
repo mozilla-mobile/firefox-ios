@@ -559,6 +559,10 @@ public class BrowserAddressToolbar: UIView,
         toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
     }
 
+    func locationViewDidHideEditingAccessoryButton() {
+        toolbarDelegate?.addressToolbarDidHideEditingAccessoryButton(self)
+    }
+
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         let colors = theme.colors

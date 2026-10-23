@@ -784,6 +784,10 @@ final class LocationView: UIView,
         delegate?.locationViewDidDisplayEditingAccessoryButton(button, contextualHintType: contextualHintType)
     }
 
+    func locationTextFieldDidHideEditingAccessoryButton() {
+        delegate?.locationViewDidHideEditingAccessoryButton()
+    }
+
     // MARK: - Accessibility
     private func configureA11y(_ config: LocationViewConfiguration) {
         lockIconButton.accessibilityIdentifier = config.lockIconButtonA11yId

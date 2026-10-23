@@ -58,6 +58,7 @@ class MockBrowserViewController: BrowserViewController {
     var mockContentContainer = MockContentContainer()
 
     var viewControllerToPresent: UIViewController?
+    var dismissCalled = 0
 
     // Mock control for frame navigation
     var mockIsMainFrameNavigation = true
@@ -83,6 +84,12 @@ class MockBrowserViewController: BrowserViewController {
                           animated flag: Bool,
                           completion: (() -> Void)? = nil) {
         self.viewControllerToPresent = viewControllerToPresent
+    }
+
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        dismissCalled += 1
+        viewControllerToPresent = nil
+        completion?()
     }
 
     override var contentContainer: ContentContainer {

@@ -331,4 +331,5 @@ private final class MockAddressToolbarDelegate: AddressToolbarDelegate {
     func addressToolbarDidProvideItemsForDragInteraction() {}
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) {}
     func addressToolbarNeedsSearchReset() {}
+    func addressToolbarDidHideEditingAccessoryButton(_ addressToolbar: BrowserAddressToolbar) {}
 }
