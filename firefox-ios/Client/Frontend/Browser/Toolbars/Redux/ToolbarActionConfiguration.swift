@@ -62,13 +62,11 @@ struct ToolbarActionConfiguration: Equatable {
     var a11yCustomActionName: String?
     var menuElements: [ToolbarMenuElementConfiguration] = []
 
-    func canPerformLongPressAction(isShowingTopTabs: Bool) -> Bool {
+    var canPerformLongPressAction: Bool {
         switch actionType {
-        case .back, .forward, .reload, .newTab, .readerMode,
+        case .back, .forward, .reload, .newTab, .tabs, .readerMode,
              .readerModeWithSummarizer, .summarizer, .translate:
             return true
-        case .tabs:
-            return !isShowingTopTabs
         case .home, .search, .menu, .share, .stopLoading, .trackingProtection,
              .locationView, .googleLens, .googleLensPhotoLibrary, .googleLensTakePhoto,
              .cancelEdit:
