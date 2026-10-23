@@ -32,8 +32,8 @@ extension BrowserViewController {
             presentedUsing: { [weak self] in
                 self?.presentContextualHint(for: .navigation)
             },
-            actionOnDismiss: {
-                let action = ToolbarAction(windowUUID: self.windowUUID,
+            actionOnDismiss: { [windowUUID] in
+                let action = ToolbarAction(windowUUID: windowUUID,
                                            actionType: ToolbarActionType.navigationHintFinishedPresenting)
                 store.dispatch(action)
             },
