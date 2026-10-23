@@ -20,6 +20,7 @@ protocol MainMenuSelectorSet {
     var READER_VIEW_STATUS_OFF: Selector { get }
     var FIND_IN_PAGE: Selector { get }
     var SUMMARIZE_PAGE: Selector { get }
+    var REPORT_BROKEN_SITE: Selector { get }
     var CLOSE_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
@@ -42,6 +43,7 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         static let readerViewStatusOff = "Off"
         static let findInPage = AccessibilityIdentifiers.MainMenu.findInPage
         static let summarizePage = AccessibilityIdentifiers.MainMenu.summarizePage
+        static let reportBrokenSite = AccessibilityIdentifiers.MainMenu.reportBrokenSite
         static let closeButton = AccessibilityIdentifiers.MainMenu.HeaderView.closeButton
     }
 
@@ -134,6 +136,12 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         groups: ["MainMenu"]
     )
 
+    let REPORT_BROKEN_SITE = Selector.tableCellById(
+        IDs.reportBrokenSite,
+        description: "Report Broken Site cell in the expanded Main Menu",
+        groups: ["MainMenu"]
+    )
+
     let CLOSE_BUTTON = Selector.buttonId(
         IDs.closeButton,
         description: "Close button in the Main Menu header",
@@ -143,5 +151,6 @@ struct MainMenuSelectors: MainMenuSelectorSet {
     var all: [Selector] { [DESKTOP_SITE, BOOKMARKS_BUTTON, HISTORY_BUTTON, DOWNLOADS_BUTTON,
                            PASSWORDS_BUTTON, SIGN_IN_CELL, SETTINGS_CELL, BOOKMARK_PAGE,
                            SITE_PROTECTIONS, PAGE_ZOOM, READER_VIEW, READER_VIEW_STATUS_ON,
-                           READER_VIEW_STATUS_OFF, FIND_IN_PAGE, SUMMARIZE_PAGE, CLOSE_BUTTON] }
+                           READER_VIEW_STATUS_OFF, FIND_IN_PAGE, SUMMARIZE_PAGE, REPORT_BROKEN_SITE,
+                           CLOSE_BUTTON] }
 }
