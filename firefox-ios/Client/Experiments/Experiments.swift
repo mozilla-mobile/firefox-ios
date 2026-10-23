@@ -4,12 +4,12 @@
 
 import Common
 import Foundation
-import Shared
 import Localizations
+import Shared
 
+import struct MozillaAppServices.EnrolledExperiment
 import struct MozillaAppServices.NimbusAppSettings
 import class MozillaAppServices.NimbusBuilder
-import struct MozillaAppServices.EnrolledExperiment
 import class MozillaAppServices.NimbusDisabled
 import typealias MozillaAppServices.NimbusErrorReporter
 import protocol MozillaAppServices.NimbusEventStore
