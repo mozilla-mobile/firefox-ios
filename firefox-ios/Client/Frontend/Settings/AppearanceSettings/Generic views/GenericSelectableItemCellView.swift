@@ -30,6 +30,27 @@ struct GenericSelectableItemCellView: View {
     }
 
     var body: some View {
+        Group {
+            if #available(iOS 26.0, *) {
+                // SectionStyle already provides the card padding and background on iOS 26
+                rowContent
+            } else {
+                rowContent
+                    .padding(.horizontal, UX.horizontalSpacing)
+                    .background(backgroundColor)
+            }
+        }
+        .accessibilityElement()
+        .accessibilityIdentifier(a11yIdentifier)
+        .accessibilityLabel(title)
+        .accessibilityValue(isSelected ? "1" : "0")
+        .accessibilityAddTraits(.isButton)
+        .onTapGesture {
+            onTap()
+        }
+    }
+
+    private var rowContent: some View {
         HStack {
             Text(title)
                 .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
@@ -44,15 +65,5 @@ struct GenericSelectableItemCellView: View {
             }
         }
         .frame(minHeight: UX.minHeight)
-        .padding(.horizontal, UX.horizontalSpacing)
-        .background(backgroundColor)
-        .accessibilityElement()
-        .accessibilityIdentifier(a11yIdentifier)
-        .accessibilityLabel(title)
-        .accessibilityValue(isSelected ? "1" : "0")
-        .accessibilityAddTraits(.isButton)
-        .onTapGesture {
-            onTap()
-        }
     }
 }
