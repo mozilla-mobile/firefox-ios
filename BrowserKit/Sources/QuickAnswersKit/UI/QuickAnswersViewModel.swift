@@ -36,6 +36,11 @@ final class QuickAnswersViewModel {
         return !store.isOptInCompleted
     }
 
+    /// Whether a question asked after an answer follows up on it, rather than being a new one.
+    var supportsFollowUpQuestions: Bool {
+        return feature.supportsFollowUpQuestions
+    }
+
     /// Whether the opt-in is required and shown as a sheet over the browser rather than inline.
     var isOptInSheetRequired: Bool {
         return isOptInRequired && feature.isOptInRedesignEnabled
@@ -70,7 +75,7 @@ final class QuickAnswersViewModel {
             onStateChange?(.showOptIn)
             return
         }
-        startRecordingVoice()
+        startRecordingVoice(isFollowUp: false)
     }
 
     /// Records the user's consent, persists the completed opt-in and starts the recording flow.
@@ -78,6 +83,11 @@ final class QuickAnswersViewModel {
         telemetry.consentShown(agreed: true)
         store.setOptInCompleted()
         startFlow()
+    }
+
+    /// Starts recording a question asked after a previous answer, tagging its telemetry as a follow up.
+    func startFollowUp() {
+        startRecordingVoice(isFollowUp: true)
     }
 
     /// Tears down the flow when the view is being dismissed, recording the relevant telemetry.
@@ -96,53 +106,53 @@ final class QuickAnswersViewModel {
         telemetry.closed()
     }
 
-    private func startRecordingVoice() {
+    private func startRecordingVoice(isFollowUp: Bool) {
         guard let service else {
             let error = SpeechError.serviceNotInitialized
-            recordRecordingFailure(error)
+            recordRecordingFailure(error, isFollowUp: isFollowUp)
             onStateChange?(.speechResult(.empty(), error))
             return
         }
         searchResultTask?.cancel()
         searchResultTask = nil
         recordVoiceTask = Task { [weak self] in
-            try? await self?.recordVoiceTask(service: service)
+            try? await self?.recordVoiceTask(service: service, isFollowUp: isFollowUp)
         }
     }
 
-    private func recordVoiceTask(service: QuickAnswersService) async throws {
-        onStateChange?(.recordingStarted)
-        telemetry.recordingStarted()
+    private func recordVoiceTask(service: QuickAnswersService, isFollowUp: Bool) async throws {
         do {
             let stream = try await service.record()
+            onStateChange?(.recordingStarted)
+            telemetry.recordingStarted(isFollowUp: isFollowUp)
             for try await result in stream {
                 try Task.checkCancellation()
                 onStateChange?(.speechResult(result, nil))
 
                 guard result.isFinal else { continue }
 
-                telemetry.recordingCompleted(outcome: true, errorType: nil)
+                telemetry.recordingCompleted(outcome: true, errorType: nil, isFollowUp: isFollowUp)
                 try? await service.stopRecording()
-                await searchVoiceResult(result, service: service)
+                await searchVoiceResult(result, service: service, isFollowUp: isFollowUp)
 
                 break
             }
         } catch {
             try? await service.stopRecording()
             let error = (error as? SpeechError) ?? SpeechError.unknown(error.telemetryDescription)
-            recordRecordingFailure(error)
+            recordRecordingFailure(error, isFollowUp: isFollowUp)
             onStateChange?(.speechResult(.empty(), error))
         }
     }
 
-    private func recordRecordingFailure(_ error: SpeechError) {
+    private func recordRecordingFailure(_ error: SpeechError, isFollowUp: Bool) {
         switch error {
         case .microphonePermissionDenied:
             telemetry.permissionDenied(permission: .microphone)
         case .speechRecognitionPermissionDenied:
             telemetry.permissionDenied(permission: .speechRecognition)
         default:
-            telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel)
+            telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel, isFollowUp: isFollowUp)
         }
     }
 
@@ -152,16 +162,21 @@ final class QuickAnswersViewModel {
         try await service?.stopRecording()
     }
 
-    private func searchVoiceResult(_ result: SpeechResult, service: QuickAnswersService) async {
+    private func searchVoiceResult(_ result: SpeechResult, service: QuickAnswersService, isFollowUp: Bool) async {
         onStateChange?(.loadingSearchResult)
-        telemetry.resultsStarted()
+        telemetry.resultsStarted(isFollowUp: isFollowUp)
         let searchResult = await service.search(text: result.text)
         switch searchResult {
         case .success(let result):
-            telemetry.resultsCompleted(outcome: true, errorType: nil, model: model)
+            telemetry.resultsCompleted(outcome: true, errorType: nil, model: model, isFollowUp: isFollowUp)
             onStateChange?(.showSearchResult(result, nil))
         case .failure(let error):
-            telemetry.resultsCompleted(outcome: false, errorType: error.telemetryLabel, model: model)
+            telemetry.resultsCompleted(
+                outcome: false,
+                errorType: error.telemetryLabel,
+                model: model,
+                isFollowUp: isFollowUp
+            )
             onStateChange?(.showSearchResult(.empty(), error))
         }
     }

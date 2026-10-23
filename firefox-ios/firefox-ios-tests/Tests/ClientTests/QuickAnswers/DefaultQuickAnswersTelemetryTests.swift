@@ -44,15 +44,18 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
     func test_recordEvent_whenRecordingStarted_thenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.AiQuickAnswers.recordingStarted
+        typealias EventExtrasType = GleanMetrics.AiQuickAnswers.RecordingStartedExtra
 
-        subject.recordingStarted()
+        subject.recordingStarted(isFollowUp: true)
 
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
+            mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>
         )
 
-        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 0)
+        XCTAssertEqual(savedExtras.isFollowUp, true)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
@@ -64,7 +67,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         let expectedOutcome = true
         let expectedErrorType = "some_error"
 
-        subject.recordingCompleted(outcome: expectedOutcome, errorType: expectedErrorType)
+        subject.recordingCompleted(outcome: expectedOutcome, errorType: expectedErrorType, isFollowUp: false)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(
@@ -74,21 +77,25 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.outcome, expectedOutcome)
         XCTAssertEqual(savedExtras.errorType, expectedErrorType)
+        XCTAssertEqual(savedExtras.isFollowUp, false)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func test_recordEvent_whenResultsStarted_thenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.AiQuickAnswers.resultsStarted
+        typealias EventExtrasType = GleanMetrics.AiQuickAnswers.ResultsStartedExtra
 
-        subject.resultsStarted()
+        subject.resultsStarted(isFollowUp: true)
 
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.compactMap { $0 as? EventMetricType<NoExtras> }.first
+            mockGleanWrapper.savedEvents.compactMap { $0 as? EventMetricType<EventExtrasType> }.first
         )
 
-        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 0)
+        XCTAssertEqual(savedExtras.isFollowUp, true)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
@@ -101,7 +108,12 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         let expectedErrorType = "some_error"
         let expectedModel = QuickAnswersKit.QuickAnswersModel.liner
 
-        subject.resultsCompleted(outcome: expectedOutcome, errorType: expectedErrorType, model: expectedModel)
+        subject.resultsCompleted(
+            outcome: expectedOutcome,
+            errorType: expectedErrorType,
+            model: expectedModel,
+            isFollowUp: true
+        )
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(
@@ -111,6 +123,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         XCTAssertEqual(savedExtras.outcome, expectedOutcome)
         XCTAssertEqual(savedExtras.errorType, expectedErrorType)
         XCTAssertEqual(savedExtras.model, expectedModel.rawValue)
+        XCTAssertEqual(savedExtras.isFollowUp, true)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
@@ -181,8 +194,8 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
     func test_resultsTime_whenResultsStartedThenCompleted_thenTimingIsAccumulated() {
         let subject = createSubject()
 
-        subject.resultsStarted()
-        subject.resultsCompleted(outcome: true, errorType: nil, model: .exa)
+        subject.resultsStarted(isFollowUp: false)
+        subject.resultsCompleted(outcome: true, errorType: nil, model: .exa, isFollowUp: false)
 
         XCTAssertEqual(mockGleanWrapper.startTimingCalled, 1)
         XCTAssertEqual(mockGleanWrapper.stopAndAccumulateCalled, 1)
@@ -191,7 +204,7 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
     func test_resultsTime_whenResultsStartedThenClosed_thenTimingIsCancelled() {
         let subject = createSubject()
 
-        subject.resultsStarted()
+        subject.resultsStarted(isFollowUp: false)
         subject.closed()
 
         XCTAssertEqual(mockGleanWrapper.startTimingCalled, 1)

@@ -63,7 +63,10 @@ extension QuickAnswersViewConfiguration {
         ),
         optInRedesign: .mock,
         contentView: .init(
-            placeholder: "Ask anything",
+            placeholder: "Listening, ask anything",
+            followUpPlaceholder: "Listening, ask a follow-up",
+            followUpButton: "Ask a Follow-Up",
+            newQuestionButton: "Ask a New Question",
             answering: "Answering",
             footerFormat: "Powered by %@",
             sources: "Sources",
