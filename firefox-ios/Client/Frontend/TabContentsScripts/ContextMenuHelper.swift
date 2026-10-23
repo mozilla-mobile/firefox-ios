@@ -16,11 +16,17 @@ class ContextMenuHelper: NSObject {
 
     private weak var tab: Tab?
 
-    private(set) var elements: Elements?
+    var elements: Elements?
 
     required init(tab: Tab) {
         super.init()
         self.tab = tab
+    }
+
+    /// Discards any element data collected from the page. Called once a context menu gesture has been
+    /// handled so a stale touch's data can't be attributed to a later, unrelated long press.
+    func reset() {
+        elements = nil
     }
 }
 
