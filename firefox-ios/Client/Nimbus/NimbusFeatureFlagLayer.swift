@@ -72,6 +72,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .cellularDataRestrictedErrorPage:
             return checkCellularDataRestrictedErrorPageFeature()
 
+        case .checkForReinstalls:
+            return checkForReinstallsFeature()
+
         case .customReaderModeScheme:
             return checkCustomReaderModeSchemeFeature()
 
@@ -411,6 +414,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkImprovedAppStoreReviewTriggerFeature() -> Bool {
         return nimbus.features.improvedAppStoreReviewTriggerFeature.value().enabled
+    }
+
+    private func checkForReinstallsFeature() -> Bool {
+        return nimbus.features.checkForReinstallsFeature.value().enabled
     }
 
     // MARK: - Summarizer Feature
