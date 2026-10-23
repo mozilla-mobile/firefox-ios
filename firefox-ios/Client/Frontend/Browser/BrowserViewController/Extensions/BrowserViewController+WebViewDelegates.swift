@@ -995,6 +995,10 @@ extension BrowserViewController: WKNavigationDelegate {
             return .cancel
         }
 
+        if presentConfigurationProfileAlertIfNeeded(for: response) {
+            return .cancel
+        }
+
         // Check if this response should be downloaded
         if let downloadHelper = DownloadHelper(request: request, response: response, cookieStore: cookieStore),
             downloadHelper.shouldDownloadFile(canShowInWebView: canShowInWebView,
@@ -1040,6 +1044,38 @@ extension BrowserViewController: WKNavigationDelegate {
         // If none of our helpers are responsible for handling this response,
         // just let the webview handle it as normal.
         return .allow
+    }
+
+    /// iOS can only install configuration profiles downloaded by Safari, so for http(s) profile responses this shows
+    /// an alert offering to open the profile URL in `SFSafariViewController`, which hands the profile to the system.
+    /// Returns `true` if the response is a configuration profile and the alert was shown.
+    func presentConfigurationProfileAlertIfNeeded(for response: URLResponse) -> Bool {
+        guard featureFlagsProvider.isEnabled(.configurationProfile),
+              response.mimeType == MIMEType.ConfigurationProfile,
+              let url = response.url,
+              url.isWebPage(includeDataURIs: false)
+        else { return false }
+
+        let alertMessage: String
+        if let baseDomain = url.baseDomain {
+            alertMessage = String(format: .Alerts.ConfigurationProfile.Body, baseDomain)
+        } else {
+            alertMessage = .Alerts.ConfigurationProfile.BodyDefault
+        }
+
+        let alert = UIAlertController(title: .Alerts.ConfigurationProfile.Title,
+                                      message: alertMessage,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: .Alerts.ConfigurationProfile.CancelButton, style: .default))
+        alert.addAction(UIAlertAction(title: .Alerts.ConfigurationProfile.ContinueButton,
+                                      style: .default,
+                                      handler: { _ in
+            let safariVC = SFSafariViewController(url: url)
+            safariVC.modalPresentationStyle = .fullScreen
+            self.present(safariVC, animated: true, completion: nil)
+        }))
+        present(alert, animated: true)
+        return true
     }
 
     /// Handle a PDF download request by forwarding it to the provided `Tab`.

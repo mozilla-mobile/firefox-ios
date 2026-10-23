@@ -392,6 +392,77 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         XCTAssertEqual(alert.message, .ExternalSmsLinkConfirmation)
     }
 
+    // MARK: - Configuration profile
+
+    @MainActor
+    func testPresentConfigurationProfileAlertIfNeeded_withHTTPSProfile_showsAlert() throws {
+        setConfigurationProfileFlag(enabled: true)
+        let subject = MockBrowserViewController(profile: profile,
+                                                tabManager: tabManager,
+                                                userInitiatedQueue: MockDispatchQueue())
+        trackForMemoryLeaks(subject)
+        let response = anyURLResponse(url: "https://www.example.com/profile.mobileconfig",
+                                      mimeType: MIMEType.ConfigurationProfile)
+
+        let didPresent = subject.presentConfigurationProfileAlertIfNeeded(for: response)
+
+        XCTAssertTrue(didPresent)
+        let alert = try XCTUnwrap(subject.presentedViewController as? UIAlertController)
+        XCTAssertEqual(alert.title, .Alerts.ConfigurationProfile.Title)
+        XCTAssertEqual(alert.message, String(format: .Alerts.ConfigurationProfile.Body, "example.com"))
+        XCTAssertEqual(alert.actions.map(\.title), [.Alerts.ConfigurationProfile.CancelButton,
+                                                    .Alerts.ConfigurationProfile.ContinueButton])
+        // The alert's action captures the BVC, so drop it to avoid a leak since the mock never dismisses it
+        subject.viewControllerToPresent = nil
+    }
+
+    @MainActor
+    func testPresentConfigurationProfileAlertIfNeeded_withFlagDisabled_doesNotShowAlert() {
+        setConfigurationProfileFlag(enabled: false)
+        let subject = MockBrowserViewController(profile: profile,
+                                                tabManager: tabManager,
+                                                userInitiatedQueue: MockDispatchQueue())
+        trackForMemoryLeaks(subject)
+        let response = anyURLResponse(url: "https://www.example.com/profile.mobileconfig",
+                                      mimeType: MIMEType.ConfigurationProfile)
+
+        let didPresent = subject.presentConfigurationProfileAlertIfNeeded(for: response)
+
+        XCTAssertFalse(didPresent)
+        XCTAssertNil(subject.presentedViewController)
+    }
+
+    @MainActor
+    func testPresentConfigurationProfileAlertIfNeeded_withBlobProfile_doesNotShowAlert() {
+        setConfigurationProfileFlag(enabled: true)
+        let subject = MockBrowserViewController(profile: profile,
+                                                tabManager: tabManager,
+                                                userInitiatedQueue: MockDispatchQueue())
+        trackForMemoryLeaks(subject)
+        let response = anyURLResponse(url: "blob:https://www.example.com/4c1b3a52-7e7d-4a6f-9b55-1f0f3f1d2e6a",
+                                      mimeType: MIMEType.ConfigurationProfile)
+
+        let didPresent = subject.presentConfigurationProfileAlertIfNeeded(for: response)
+
+        XCTAssertFalse(didPresent)
+        XCTAssertNil(subject.presentedViewController)
+    }
+
+    @MainActor
+    func testPresentConfigurationProfileAlertIfNeeded_withOtherMIMEType_doesNotShowAlert() {
+        setConfigurationProfileFlag(enabled: true)
+        let subject = MockBrowserViewController(profile: profile,
+                                                tabManager: tabManager,
+                                                userInitiatedQueue: MockDispatchQueue())
+        trackForMemoryLeaks(subject)
+        let response = anyURLResponse(url: "https://www.example.com/file.pdf", mimeType: MIMEType.PDF)
+
+        let didPresent = subject.presentConfigurationProfileAlertIfNeeded(for: response)
+
+        XCTAssertFalse(didPresent)
+        XCTAssertNil(subject.presentedViewController)
+    }
+
     // MARK: - Authentication
 
     @MainActor
@@ -477,6 +548,17 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let webView = MockTabWebView(tab: tab)
         tab.webView = webView
         return tab
+    }
+
+    @MainActor
+    private func setConfigurationProfileFlag(enabled: Bool) {
+        let featureFlags = MockNimbusFeatureFlags()
+        featureFlags.enabledFlags = enabled ? [.configurationProfile] : []
+        DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: featureFlags)
+    }
+
+    private func anyURLResponse(url: String, mimeType: String) -> URLResponse {
+        return URLResponse(url: URL(string: url)!, mimeType: mimeType, expectedContentLength: 0, textEncodingName: nil)
     }
 
     private func anyAuthenticationChallenge(for authenticationMethod: String) -> URLAuthenticationChallenge {
