@@ -148,8 +148,8 @@ final class AddressToolbarContainerModel: Equatable {
 
         let url = tab?.url?.displayURL
         if url != nil {
-            leadingPageElements = Self.mapActions([shareAction], isShowingTopTabs: false, windowUUID: windowUUID)
-            trailingPageElements = Self.mapActions([reloadAction], isShowingTopTabs: false, windowUUID: windowUUID)
+            leadingPageElements = Self.mapActions([shareAction], windowUUID: windowUUID)
+            trailingPageElements = Self.mapActions([reloadAction], windowUUID: windowUUID)
         }
 
         var lockIconImageName: String?
@@ -216,25 +216,20 @@ final class AddressToolbarContainerModel: Equatable {
         self.longPressMenuProvider = longPressMenuProvider
         self.borderPosition = state.addressToolbar.borderPosition
         self.navigationActions = Self.mapActions(addressToolbarContainerLens.navigationActions,
-                                                 isShowingTopTabs: state.isShowingTopTabs,
                                                  longPressMenuProvider: longPressMenuProvider,
                                                  windowUUID: windowUUID)
         self.leadingPageActions = Self.mapActions(addressToolbarContainerLens.leadingPageActions,
-                                                  isShowingTopTabs: state.isShowingTopTabs,
                                                   longPressMenuProvider: longPressMenuProvider,
                                                   windowUUID: windowUUID)
         self.trailingPageActions = Self.mapActions(addressToolbarContainerLens.trailingPageActions,
-                                                   isShowingTopTabs: state.isShowingTopTabs,
                                                    longPressMenuProvider: longPressMenuProvider,
                                                    windowUUID: windowUUID)
         self.browserActions = Self.mapActions(addressToolbarContainerLens.browserActions,
-                                              isShowingTopTabs: state.isShowingTopTabs,
                                               longPressMenuProvider: longPressMenuProvider,
                                               windowUUID: windowUUID)
         self.editingAccessoryAction = state.addressToolbar.editingAccessoryAction.map {
             Self.mapAction(
                 $0,
-                isShowingTopTabs: state.isShowingTopTabs,
                 longPressMenuProvider: longPressMenuProvider,
                 windowUUID: windowUUID
             )
@@ -293,13 +288,11 @@ final class AddressToolbarContainerModel: Equatable {
 
     @MainActor
     private static func mapActions(_ actions: [ToolbarActionConfiguration],
-                                   isShowingTopTabs: Bool,
                                    longPressMenuProvider: @escaping LongPressMenuProvider = { _ in nil },
                                    windowUUID: UUID) -> [ToolbarElement] {
         return actions.map { action in
             mapAction(
                 action,
-                isShowingTopTabs: isShowingTopTabs,
                 longPressMenuProvider: longPressMenuProvider,
                 windowUUID: windowUUID
             )
@@ -308,7 +301,6 @@ final class AddressToolbarContainerModel: Equatable {
 
     @MainActor
     private static func mapAction(_ action: ToolbarActionConfiguration,
-                                  isShowingTopTabs: Bool,
                                   longPressMenuProvider: @escaping LongPressMenuProvider = { _ in nil },
                                   windowUUID: UUID) -> ToolbarElement {
         return ToolbarElement(
@@ -335,7 +327,6 @@ final class AddressToolbarContainerModel: Equatable {
             a11yCustomAction: getA11yCustomAction(action: action, windowUUID: windowUUID),
             longPressBehavior: makeLongPressBehavior(
                 action: action,
-                isShowingTopTabs: isShowingTopTabs,
                 longPressMenuProvider: longPressMenuProvider,
                 windowUUID: windowUUID
             ),
@@ -372,11 +363,10 @@ final class AddressToolbarContainerModel: Equatable {
     @MainActor
     private static func makeLongPressBehavior(
         action: ToolbarActionConfiguration,
-        isShowingTopTabs: Bool,
         longPressMenuProvider: @escaping LongPressMenuProvider,
         windowUUID: UUID
     ) -> ToolbarLongPressBehavior {
-        guard action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs) else {
+        guard action.canPerformLongPressAction else {
             return .none
         }
 
