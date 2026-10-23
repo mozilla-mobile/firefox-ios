@@ -600,9 +600,13 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        let shouldBlockExternalApps = profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false
+
         if isStoreURL(url) {
             decisionHandler(.cancel)
-            handleStoreURLNavigation(url: url)
+            if !shouldBlockExternalApps {
+                handleStoreURLNavigation(url: url)
+            }
             return
         }
 
@@ -637,8 +641,6 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
-
-        let shouldBlockExternalApps = profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false
 
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView.
         // We always allow this. Additionally, data URIs are also handled just like normal web pages.
