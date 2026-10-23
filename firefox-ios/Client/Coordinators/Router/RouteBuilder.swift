@@ -280,7 +280,12 @@ final class RouteBuilder {
 
     private func getWidgetRoute(urlQuery: URL?, isPrivate: Bool) -> Route? {
         let isCustomLink = prefs?.stringForKey(NewTabAccessors.NewTabPrefKey) == NewTabPage.homePage.rawValue
-        return .search(url: urlQuery, isPrivate: isPrivate, options: isCustomLink ? [] : [.focusLocationField])
+        guard !isCustomLink else { return .search(url: urlQuery, isPrivate: isPrivate, options: []) }
+        // Without a URL, this is a widget search button that opens a focused address bar.
+        let options: Set<Route.SearchOptions> = urlQuery == nil
+            ? [.focusLocationField, .widgetSearch]
+            : [.focusLocationField]
+        return .search(url: urlQuery, isPrivate: isPrivate, options: options)
     }
 
     private func makeDeepLinkRoute(urlScanner: URLScanner) -> Route? {

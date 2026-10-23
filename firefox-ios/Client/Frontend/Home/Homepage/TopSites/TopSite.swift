@@ -51,7 +51,7 @@ struct TopSite {
     }
 
     var isGoogleURL: Bool {
-        site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
+        GoogleTopSiteManager.isGoogleTopSiteURL(site.url)
     }
 
     var identifier = UUID().uuidString

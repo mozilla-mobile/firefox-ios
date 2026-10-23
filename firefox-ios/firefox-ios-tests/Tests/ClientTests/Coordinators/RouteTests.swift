@@ -833,3 +833,32 @@ class RouteTests: XCTestCase {
         return components.url!
     }
 }
+
+// MARK: - Widget search access point
+
+extension RouteTests {
+    func testWidgetSmallQuicklinkSearch_withoutURL_addsWidgetSearchOption() {
+        let subject = createSubject()
+
+        let route = subject.makeRoute(url: URL(string: "firefox://widget-small-quicklink-open-url?private=false")!)
+
+        guard case .search(let url, _, let options) = route else {
+            return XCTFail("The route should be a search route")
+        }
+        XCTAssertNil(url)
+        XCTAssertEqual(options, [.focusLocationField, .widgetSearch])
+    }
+
+    func testWidgetMediumQuicklinkSearch_withoutURL_addsWidgetSearchOption() {
+        let subject = createSubject()
+
+        let route = subject.makeRoute(url: URL(string: "firefox://widget-medium-quicklink-open-url?private=true")!)
+
+        guard case .search(let url, let isPrivate, let options) = route else {
+            return XCTFail("The route should be a search route")
+        }
+        XCTAssertNil(url)
+        XCTAssertTrue(isPrivate)
+        XCTAssertEqual(options, [.focusLocationField, .widgetSearch])
+    }
+}

@@ -152,5 +152,8 @@ enum Route {
         case focusLocationField
         /// An option to force open a new tab even when on homepage
         case forceNewTab
+        /// An option indicating the search was started from a home screen widget search button, so the next
+        /// search from the address bar is attributed to the widget search access point.
+        case widgetSearch
     }
 }

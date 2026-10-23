@@ -154,6 +154,8 @@ class SearchTelemetry: @unchecked Sendable {
     var shouldSetUrlTypeSearch = false
     private var tabManager: TabManager
     private let gleanWrapper: GleanWrapper
+    /// Used to read search-config-v3 partner codes. Only needed by the instance that tracks SAP page loads.
+    private let searchEnginesManager: SearchEnginesManagerProvider?
 
     var interactionType: SearchTelemetryValues.Interaction = .typed
     var selectedResult: SearchTelemetryValues.SelectedResult = .unknown
@@ -172,9 +174,12 @@ class SearchTelemetry: @unchecked Sendable {
     var searchQuery = ""
     var savedQuery = ""
 
-    init(tabManager: TabManager, gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+    init(tabManager: TabManager,
+         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+         searchEnginesManager: SearchEnginesManagerProvider? = nil) {
         self.tabManager = tabManager
         self.gleanWrapper = gleanWrapper
+        self.searchEnginesManager = searchEnginesManager
     }
 
     // MARK: Searchbar SAP
@@ -212,7 +217,7 @@ class SearchTelemetry: @unchecked Sendable {
     @MainActor
     func trackTabAndTopSiteSAP(_ tab: Tab, webView: WKWebView) {
         let provider = SearchEngine.providerFrom(url: tab.webView?.url)
-        let code = SearchPartner.getCode(
+        let code = searchConfigV3PartnerCode(for: provider, url: webView.url) ?? SearchPartner.getCode(
             searchEngine: provider,
             region: SystemLocaleProvider().regionCode() == "US" ? "US" : "ROW"
         )
@@ -246,6 +251,25 @@ class SearchTelemetry: @unchecked Sendable {
                 tab.urlType = .regular
             }
         }
+    }
+
+    /// For V3 search config, Google uses a different partner code per SAP, so the code is read from the page
+    /// URL's `client` parameter when it is one of Google's codes, otherwise `none`. Returns `nil` when
+    /// Google is not a V3 engine, so the pre-V3 partner code table is used.
+    @MainActor
+    func searchConfigV3PartnerCode(for provider: SearchEngine, url: URL?) -> String? {
+        guard provider == .google,
+              let partners = searchEnginesManager?.orderedEngines.first(where: {
+                  $0.isGoogleEngine && $0.partners != nil
+              })?.partners
+        else { return nil }
+
+        let configuredCodes = Set(partners.values.compactMap(\.code).filter { !$0.isEmpty })
+        guard let url,
+              let clientValue = URLComponents(url: url, resolvingAgainstBaseURL: false)?.valueForQuery("client"),
+              configuredCodes.contains(clientValue)
+        else { return "none" }
+        return clientValue
     }
 
     // MARK: Impression Telemetry

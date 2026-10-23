@@ -4,6 +4,7 @@
 
 import Shared
 import Storage
+import UIKit
 import XCTest
 import Common
 
@@ -464,5 +465,61 @@ final class TopSitesManagerTests: XCTestCase {
             )
         }
         return sponsoredSites
+    }
+}
+
+// MARK: - search-config-v3 Google top site
+
+extension TopSitesManagerTests {
+    func test_recalculateTopSites_withV3GoogleEngine_usesTopSitePartnerCode() throws {
+        let engines = MockSearchEnginesManager(searchEngines: [try makeGoogleEngine(partners: [
+            "default": SearchEnginePartner(code: "ios-firefox-o-re", telemetrySuffix: "ios-main"),
+            "topsite": SearchEnginePartner(code: "ios-firefox-b-re", telemetrySuffix: "ios-topsite")
+        ])])
+        let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager(), searchEngineManager: engines)
+
+        let topSites = subject.recalculateTopSites(otherSites: [], sponsoredSites: [])
+
+        XCTAssertEqual(topSites.first?.site.url, "https://www.google.com/webhp?client=ios-firefox-b-re&channel=ts")
+        XCTAssertEqual(topSites.first?.isGoogleURL, true)
+        XCTAssertEqual(topSites.first?.isGooglePinnedTile, true)
+    }
+
+    func test_recalculateTopSites_withV2GoogleEngine_usesExistingGoogleTopSite() throws {
+        let engines = MockSearchEnginesManager(searchEngines: [try makeGoogleEngine(partners: nil)])
+        let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager(), searchEngineManager: engines)
+
+        let topSites = subject.recalculateTopSites(otherSites: [], sponsoredSites: [])
+
+        XCTAssertEqual(topSites.first?.site.url, GoogleTopSiteManager.Constants.usUrl)
+    }
+
+    func test_searchConfigV3URL_withoutPartnerCode_omitsClient() {
+        XCTAssertEqual(GoogleTopSiteManager.searchConfigV3URL(partnerCode: nil),
+                       "https://www.google.com/webhp?channel=ts")
+        XCTAssertEqual(GoogleTopSiteManager.searchConfigV3URL(partnerCode: ""),
+                       "https://www.google.com/webhp?channel=ts")
+    }
+
+    func test_isGoogleTopSiteURL() {
+        XCTAssertTrue(GoogleTopSiteManager.isGoogleTopSiteURL(GoogleTopSiteManager.Constants.usUrl))
+        XCTAssertTrue(GoogleTopSiteManager.isGoogleTopSiteURL(GoogleTopSiteManager.Constants.rowUrl))
+        XCTAssertTrue(GoogleTopSiteManager.isGoogleTopSiteURL("https://www.google.com/webhp?client=ios-firefox-b-re&channel=ts"))
+        XCTAssertTrue(GoogleTopSiteManager.isGoogleTopSiteURL("https://www.google.com/webhp?channel=ts"))
+        XCTAssertFalse(GoogleTopSiteManager.isGoogleTopSiteURL("https://www.google.com/webhp?client=firefox-b-m"))
+        XCTAssertFalse(GoogleTopSiteManager.isGoogleTopSiteURL("https://www.google.com/search?channel=ts"))
+        XCTAssertFalse(GoogleTopSiteManager.isGoogleTopSiteURL("https://example.com/webhp?channel=ts"))
+    }
+
+    private func makeGoogleEngine(partners: [String: SearchEnginePartner]?) throws -> OpenSearchEngine {
+        let image = try XCTUnwrap(UIImage(named: "wikipedia", in: Bundle(for: TopSitesManagerTests.self), with: nil))
+        return OpenSearchEngine(engineID: "google",
+                                shortName: "Google",
+                                telemetrySuffix: nil,
+                                image: image,
+                                searchTemplate: "https://www.google.com/search?client={partnerCode}&q={searchTerms}",
+                                suggestTemplate: nil,
+                                isCustomEngine: false,
+                                partners: partners)
     }
 }

@@ -161,6 +161,7 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
                 completion(engines)
                 return
             }
+            // TODO [FXIOS-17178]: Should we fallback to v2, or just fail? Needs investigation.
             logger.log("[SEC][v3] Falling back to search-config-v2 for this session.",
                        level: .warning,
                        category: .remoteSettings)

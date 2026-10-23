@@ -58,7 +58,7 @@ struct TopSiteConfiguration: Hashable, Equatable, CustomStringConvertible, Custo
     }
 
     var isGoogleURL: Bool {
-        return site.url == GoogleTopSiteManager.Constants.usUrl || site.url == GoogleTopSiteManager.Constants.rowUrl
+        return GoogleTopSiteManager.isGoogleTopSiteURL(site.url)
     }
 
     public var debugDescription: String {
