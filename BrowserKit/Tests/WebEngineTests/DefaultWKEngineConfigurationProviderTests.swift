@@ -7,7 +7,7 @@ import WebKit
 @testable import WebEngine
 
 @MainActor
-final class WKEngineConfigurationProviderTests: XCTestCase {
+final class DefaultWKEngineConfigurationProviderTests: XCTestCase {
     func testPrivateStore_isSharedWithinSession() {
         let subject = createSubject()
 

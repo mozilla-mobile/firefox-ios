@@ -35,20 +35,6 @@ final class MockTabWebView: TabWebView {
     var mockNavigation: WKNavigation?
     var navigationDelegateAtLoad: WKNavigationDelegate?
 
-    override func __evaluateJavaScript(
-        _ javaScriptString: String,
-        inFrame frame: WKFrameInfo?,
-        in contentWorld: WKContentWorld,
-        completionHandler: (@MainActor @Sendable (Any?, Error?) -> Void)? = nil
-    ) {
-        evaluatedScripts.append((javaScriptString, contentWorld))
-        if completesJavaScriptEvaluation {
-            completionHandler?(nil, nil)
-            return
-        }
-        super.__evaluateJavaScript(javaScriptString, inFrame: frame, in: contentWorld, completionHandler: completionHandler)
-    }
-
     override var title: String? {
         return mockTitle
     }
@@ -112,6 +98,20 @@ final class MockTabWebView: TabWebView {
         addObserver(target, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
         addObserver(target, forKeyPath: KVOConstants.title.rawValue, options: .new, context: nil)
         addObserver(target, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue, context: nil)
+    }
+
+    override func __evaluateJavaScript(
+        _ javaScriptString: String,
+        inFrame frame: WKFrameInfo?,
+        in contentWorld: WKContentWorld,
+        completionHandler: (@MainActor @Sendable (Any?, Error?) -> Void)? = nil
+    ) {
+        evaluatedScripts.append((javaScriptString, contentWorld))
+        if completesJavaScriptEvaluation {
+            completionHandler?(nil, nil)
+            return
+        }
+        super.__evaluateJavaScript(javaScriptString, inFrame: frame, in: contentWorld, completionHandler: completionHandler)
     }
 
     override func load(_ request: URLRequest) -> WKNavigation? {
