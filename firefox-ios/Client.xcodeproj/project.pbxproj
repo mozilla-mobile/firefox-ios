@@ -1470,7 +1470,10 @@
 		A1B2C3D12F0000010000AA01 /* TabDisplayViewGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D02F0000010000AA01 /* TabDisplayViewGeometryTests.swift */; };
 		A1B2C3D32F0000010000AA02 /* MockTabTrayUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D22F0000010000AA02 /* MockTabTrayUtils.swift */; };
 		A1B2C3D40000000000000002 /* GoogleLensTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000001 /* GoogleLensTelemetry.swift */; };
+		85E4D6B482984752928C87A3 /* AppAcquisitionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D99A1EBA034A54803AB9FC /* AppAcquisitionProvider.swift */; };
 		A1B2C3D40000000000000004 /* GoogleLensTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000003 /* GoogleLensTelemetryTests.swift */; };
+		239774B3B3A54133934A305B /* AppAcquisitionProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F48D96CFF6348249C49E602 /* AppAcquisitionProviderTests.swift */; };
+		E78C6FCFE6D345ECA6C5C523 /* AppAcquisition.storekit in Resources */ = {isa = PBXBuildFile; fileRef = F4550A4022C4422288225951 /* AppAcquisition.storekit */; };
 		A1D8E7F93010234500C0DA7A /* SystemCellularDataStateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D8E7F83010234500C0DA7A /* SystemCellularDataStateProvider.swift */; };
 		A1F0D0012F70000100ABC001 /* NewsTransitionHeaderCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F0D0002F70000100ABC001 /* NewsTransitionHeaderCellTests.swift */; };
 		A5163EFB4448DCBC295F4B00 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 3802E29A8D8E43B4A359EBC5 /* GCDWebServers */; };
@@ -10847,7 +10850,10 @@
 		A1B2C3D02F0000010000AA01 /* TabDisplayViewGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayViewGeometryTests.swift; sourceTree = "<group>"; };
 		A1B2C3D22F0000010000AA02 /* MockTabTrayUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabTrayUtils.swift; sourceTree = "<group>"; };
 		A1B2C3D40000000000000001 /* GoogleLensTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensTelemetry.swift; sourceTree = "<group>"; };
+		63D99A1EBA034A54803AB9FC /* AppAcquisitionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAcquisitionProvider.swift; sourceTree = "<group>"; };
 		A1B2C3D40000000000000003 /* GoogleLensTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensTelemetryTests.swift; sourceTree = "<group>"; };
+		1F48D96CFF6348249C49E602 /* AppAcquisitionProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAcquisitionProviderTests.swift; sourceTree = "<group>"; };
+		F4550A4022C4422288225951 /* AppAcquisition.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = AppAcquisition.storekit; sourceTree = "<group>"; };
 		A1B2C3D4E5F6789012345678 /* FeatureFlagsProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsProviderTests.swift; sourceTree = "<group>"; };
 		A1BF498F8BBB5DC36E678327 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		A1C4E7B92F1046D8A3E5C0B7 /* SceneSessionInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSessionInterface.swift; sourceTree = "<group>"; };
@@ -18046,6 +18052,7 @@
 				C87D8B7E2818331900A6307D /* Nimbus */,
 				DFACDFAD274D4D4B00A94EEC /* Protocols */,
 				216A0D6F2A40D0E4008077BA /* Redux */,
+				534CBF2B114244B6A7A81ABB /* Redownloads */,
 				8A590C6228C13E1D0032F1AA /* TabManagement */,
 				E69DB0B91E97E301008A67E6 /* Telemetry */,
 				E65075551E37F714006961AC /* Utils */,
@@ -18152,6 +18159,7 @@
 				FC065E04C2B04DF289153794 /* Widgets */,
 				8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */,
 				1D8956202FFD58E40041B982 /* TabErrorTelemetryHelperTests.swift */,
+				F9A00E160DED43EEBBB22664 /* Redownloads */,
 				8AC225632B6D3F9600CDA7FD /* Telemetry */,
 				8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */,
 				8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */,
@@ -18383,6 +18391,23 @@
 				2D44C1561FC142F59A89E890 /* OneLineTableViewCellTests.swift */,
 			);
 			path = Widgets;
+			sourceTree = "<group>";
+		};
+		534CBF2B114244B6A7A81ABB /* Redownloads */ = {
+			isa = PBXGroup;
+			children = (
+				63D99A1EBA034A54803AB9FC /* AppAcquisitionProvider.swift */,
+			);
+			path = Redownloads;
+			sourceTree = "<group>";
+		};
+		F9A00E160DED43EEBBB22664 /* Redownloads */ = {
+			isa = PBXGroup;
+			children = (
+				1F48D96CFF6348249C49E602 /* AppAcquisitionProviderTests.swift */,
+				F4550A4022C4422288225951 /* AppAcquisition.storekit */,
+			);
+			path = Redownloads;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -19526,6 +19551,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E78C6FCFE6D345ECA6C5C523 /* AppAcquisition.storekit in Resources */,
 				8A11C80F2731916E00AC7318 /* defaultOnlyTestList.json in Resources */,
 				C869915828917811007ACC5C /* wallpaperNoAvailabilityRange.json in Resources */,
 				EDC3D34F2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets in Resources */,
@@ -20506,6 +20532,7 @@
 				8A48807E2E68923200AD43D5 /* GleanHttpUploader.swift in Sources */,
 				C7F051562D9EF87D00EC52C0 /* ContextMenuTelemetry.swift in Sources */,
 				A1B2C3D40000000000000002 /* GoogleLensTelemetry.swift in Sources */,
+				85E4D6B482984752928C87A3 /* AppAcquisitionProvider.swift in Sources */,
 				C0D3CA000000000000000002 /* SystemCameraTelemetry.swift in Sources */,
 				C0D3F1000000000000000002 /* SystemPhotoPickerTelemetry.swift in Sources */,
 				0E4AF8652D764046002E4238 /* DownloadProgressManager.swift in Sources */,
@@ -21476,6 +21503,7 @@
 				C25018E72ECC88440071506F /* BridgeTests.swift in Sources */,
 				C7F051582D9F098200EC52C0 /* ContextMenuTelemetryTests.swift in Sources */,
 				A1B2C3D40000000000000004 /* GoogleLensTelemetryTests.swift in Sources */,
+				239774B3B3A54133934A305B /* AppAcquisitionProviderTests.swift in Sources */,
 				C0D3CA000000000000000004 /* SystemCameraTelemetryTests.swift in Sources */,
 				C0D3F1000000000000000004 /* SystemPhotoPickerTelemetryTests.swift in Sources */,
 				219935F12B07DFA200E5966F /* TabDisplayPanelTests.swift in Sources */,
