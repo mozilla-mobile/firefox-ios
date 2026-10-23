@@ -1098,6 +1098,44 @@ workflows:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
+    - script@1:
+        title: Upload screenshots to Google Cloud Storage
+        run_if: '{{getenv "BITRISEIO_GCP_L10N_SCREENSHOTS_KEY_URL" | ne ""}}'
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euo pipefail
+
+            curl -sfo /tmp/gcs-key.json "$BITRISEIO_GCP_L10N_SCREENSHOTS_KEY_URL"
+            gcloud auth activate-service-account -q --key-file /tmp/gcs-key.json
+            rm -f /tmp/gcs-key.json
+
+            ZIP="Firefox-iOS-L10n-en-US-$(date +%Y%m%d).zip"
+            (cd l10n-screenshots/en-US/en-US && zip -q -9 "$OLDPWD/$ZIP" ./*.png)
+
+            DEST="gs://mobile-reports/public/l10n-screenshots/$(date +%F)-${BITRISE_BUILD_NUMBER}/$ZIP"
+            gcloud storage cp "$ZIP" "$DEST"
+
+            URL="https://storage.googleapis.com/${DEST#gs://}"
+            echo "Screenshots uploaded to $URL"
+            envman add --key L10N_SCREENSHOTS_URL --value "$URL"
+    - slack@4:
+        title: Notify Slack that screenshots are ready
+        run_if: '{{and (not .IsBuildFailed) (getenv "L10N_SCREENSHOTS_URL" | ne "") (getenv "NOTIFY_L10N_SLACK" | eq "true")}}'
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_L10N_TEST_ENG"
+        - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
+        - footer: Created by Mobile Test Engineering
+        - pretext: "*Firefox-iOS* :firefox: *L10n screenshots (en-US)* :camera_with_flash: :translation_icon:"
+        - message: ''
+        - timestamp: 'no'
+        - fields: |
+            Branch | ${BITRISE_GIT_BRANCH}
+        - buttons: |
+            Download screenshots (zip)|${L10N_SCREENSHOTS_URL}
+            Build Log|${BITRISE_BUILD_URL}
     envs:
     - opts:
         is_expand: false
@@ -1105,6 +1143,13 @@ workflows:
     description: >-
       This Workflow is to run L10n tests in one locale and then share the bundle with
       the rest of the builds
+  L10nBuild_Scheduled:
+    envs:
+    - NOTIFY_L10N_SLACK: "true"
+    after_run:
+    - L10nBuild
+    description: >-
+      Weekly scheduled run of L10nBuild that also posts the en-US screenshots link to Slack
   L10nScreenshotsTests:
     steps:
     - activate-ssh-key@4:
