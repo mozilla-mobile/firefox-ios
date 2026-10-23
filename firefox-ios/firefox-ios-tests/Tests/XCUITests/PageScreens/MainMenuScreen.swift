@@ -94,6 +94,11 @@ final class MainMenuScreen {
         sel.PASSWORDS_BUTTON.element(in: app).waitAndTap()
     }
 
+    func tapReportBrokenSite() {
+        expandTabMenuIfNeeded(in: app)
+        sel.REPORT_BROKEN_SITE.element(in: app).waitAndTap()
+    }
+
     func assertReaderViewIsBelowPageZoom() {
         assertMenuItem(sel.READER_VIEW, isBelow: sel.PAGE_ZOOM)
     }
