@@ -58,7 +58,11 @@ extension FxAPushMessageHandler {
                     completion(.success(PushMessage.deviceDisconnected))
                 default:
                     // There are other events, but we ignore them at this level.
-                    break
+                    self.logger.log("Unhandled FxA push event",
+                                    level: .info,
+                                    category: .sync,
+                                    description: "\(event)")
+                    completion(.failure(.messageIncomplete("Unhandled event: \(event)")))
                 }
             }
         }
