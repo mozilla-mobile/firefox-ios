@@ -152,7 +152,9 @@ public final class HeaderView: UIView, ThemeApplicable {
 
         let closeButtonSizes = isAccessibilityCategory ? UX.largeFaviconImageSize : UX.closeButtonSize
         viewConstraints.append(closeButton.heightAnchor.constraint(equalToConstant: closeButtonSizes))
-        viewConstraints.append(closeButton.widthAnchor.constraint(equalToConstant: closeButtonSizes))
+        let closeButtonWidth = closeButton.widthAnchor.constraint(equalToConstant: closeButtonSizes)
+        closeButtonWidth.priority = .defaultHigh
+        viewConstraints.append(closeButtonWidth)
         closeButton.layer.cornerRadius = 0.5 * closeButtonSizes
 
         headerIconsContainerHeight = headerIconsContainer.heightAnchor.constraint(equalToConstant: closeButtonSizes)

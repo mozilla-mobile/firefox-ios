@@ -115,8 +115,8 @@ class CertificatesViewController: UIViewController,
     private func setupHeaderView() {
         view.addSubview(headerView)
         NSLayoutConstraint.activate([
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             headerView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor,
                 constant: TPMenuUX.UX.popoverTopDistance
@@ -147,11 +147,11 @@ class CertificatesViewController: UIViewController,
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                 constant: UX.titleLabelMargin
             ),
             titleLabel.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                 constant: -UX.titleLabelMargin
             ),
             titleLabel.topAnchor.constraint(
@@ -171,11 +171,11 @@ class CertificatesViewController: UIViewController,
                 equalTo: titleLabel.bottomAnchor
             ),
             certificatesTableView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                 constant: UX.headerStackViewMargin
             ),
             certificatesTableView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                 constant: -UX.headerStackViewMargin
             ),
             certificatesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
