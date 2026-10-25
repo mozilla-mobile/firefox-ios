@@ -70,18 +70,18 @@ class DownloadHelper: NSObject {
 
         guard let host = requestUrl?.host else { return nil }
 
-        guard let download = HTTPDownload(originWindow: windowUUID,
-                                          cookieStore: cookieStore,
-                                          preflightResponse: preflightResponse,
-                                          request: request)
-        else { return nil }
+        // Don't create the HTTPDownload here: its init starts a URLSession that strongly
+        // retains its delegate until invalidated, so a download that is never confirmed
+        // (user cancels the sheet) would leak. Create it only when the user taps Download.
+        guard let scheme = requestUrl?.scheme, scheme == "http" || scheme == "https" else { return nil }
 
-        let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(
-            fromByteCount: download.totalBytesExpected!,
+        let filename = preflightResponse.suggestedFilename.map(Download.stripUnicode(fromFilename:)) ?? "unknown"
+        let expectedContentLength = preflightResponse.expectedContentLength
+        let expectedSize = expectedContentLength > 0 ? ByteCountFormatter.string(
+            fromByteCount: expectedContentLength,
             countStyle: .file
         ) : nil
 
-        var filenameItem: SingleActionViewModel
         var modelText = host
 
         // This size reflects the (possibly compressed) download size of the file, not necessarily its true size.
@@ -90,12 +90,12 @@ class DownloadHelper: NSObject {
             modelText = "\(expectedSize) — \(host)"
         }
 
-        filenameItem = SingleActionViewModel(title: download.filename,
-                                             text: modelText,
-                                             iconString: "file",
-                                             iconAlignment: .right,
-                                             bold: true,
-                                             customRender: { label, contentView in
+        let filenameItem = SingleActionViewModel(title: filename,
+                                                 text: modelText,
+                                                 iconString: "file",
+                                                 iconAlignment: .right,
+                                                 bold: true,
+                                                 customRender: { label, contentView in
             label.numberOfLines = 2
             label.font = FXFontStyles.Bold.body.scaledFont()
             label.lineBreakMode = .byCharWrapping
@@ -105,6 +105,11 @@ class DownloadHelper: NSObject {
 
         let downloadFileItem = SingleActionViewModel(title: .OpenInDownloadHelperAlertDownloadNow,
                                                      iconString: StandardImageIdentifiers.Large.download) { _ in
+            guard let download = HTTPDownload(originWindow: windowUUID,
+                                              cookieStore: self.cookieStore,
+                                              preflightResponse: self.preflightResponse,
+                                              request: self.request)
+            else { return }
             okAction(download)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }
@@ -112,7 +117,7 @@ class DownloadHelper: NSObject {
         let actions = [[filenameItem.items], [downloadFileItem.items]]
         let viewModel = PhotonActionSheetViewModel(actions: actions,
                                                    closeButtonTitle: .CancelString,
-                                                   title: download.filename,
+                                                   title: filename,
                                                    modalStyle: .overCurrentContext)
 
         return viewModel
