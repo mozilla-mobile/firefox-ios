@@ -154,17 +154,17 @@ final class LocationView: UIView,
     }
 
     override func becomeFirstResponder() -> Bool {
-        super.becomeFirstResponder()
         // Skip if urlTextField is already first responder to avoid triggering duplicate delegate callbacks
         guard !urlTextField.isFirstResponder else { return true }
         urlTextField.isUserInteractionEnabled = true
+        super.becomeFirstResponder()
         return urlTextField.becomeFirstResponder()
     }
 
     override func resignFirstResponder() -> Bool {
-        super.resignFirstResponder()
         // Skip if urlTextField has already resigned to avoid redundant state changes
         guard urlTextField.isFirstResponder else { return true }
+        super.resignFirstResponder()
         return urlTextField.resignFirstResponder()
     }
 
@@ -546,7 +546,14 @@ final class LocationView: UIView,
         urlTextField.editingAccessoryAction = configurationIsEditing ?
             config.editingAccessoryAction :
             nil
-        _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
+        // Only touch the responder chain when the state actually changes.
+        if shouldShowKeyboard {
+            if !urlTextField.isFirstResponder {
+                _ = becomeFirstResponder()
+            }
+        } else if urlTextField.isFirstResponder {
+            _ = resignFirstResponder()
+        }
 
         // Remove the default drop interaction from the URL text field so that our
         // custom drop interaction on the BVC can accept dropped URLs.

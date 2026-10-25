@@ -680,7 +680,12 @@ final class AddressToolbarContainer: UIView,
         let isZeroSearchEnabled = isRecentOrTrendingSearchEnabled && !isPrivateMode
 
         if shouldShowSuggestions || isZeroSearchEnabled {
-            delegate?.openSuggestions(searchTerm: locationText ?? "")
+            // This runs inside the text field's `becomeFirstResponder` frame, during the keyboard bring-up.
+            // Presenting the suggestions (which may build the search controller) is deferred by one runloop.
+            DispatchQueue.main.async { [weak self] in
+                guard let self, inOverlayMode, state?.addressToolbar.didStartTyping != true else { return }
+                delegate?.openSuggestions(searchTerm: locationText ?? "")
+            }
         }
     }
 
