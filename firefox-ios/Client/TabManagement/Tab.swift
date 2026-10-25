@@ -388,7 +388,7 @@ class Tab: NSObject,
     var nightMode: Bool {
         didSet {
             guard nightMode != oldValue else { return }
-            webView?.isOpaque = !nightMode
+            webView?.updateBackgroundForNightMode(nightMode)
             webView?.evaluateJavascriptInCustomContentWorld(
                 NightModeHelper.jsCallbackBuilder(nightMode),
                 in: .world(name: NightModeHelper.name())
@@ -881,8 +881,7 @@ class Tab: NSObject,
         webView?.backgroundColor =  theme.colors.layer1
         // Let WebKit manage the scroll background as the page and opacity change.
         webView?.scrollView.backgroundColor = nil
-        webView?.isOpaque = !nightMode
-        webView?.underPageBackgroundColor = nightMode ? .black : nil
+        webView?.updateBackgroundForNightMode(nightMode)
     }
 
     // MARK: - Static Helpers
