@@ -520,6 +520,31 @@ extension Selector {
         Selector(strategy: .otherElementsButtonByLabel(label), value: label, description: description, groups: groups)
     }
 
+    /// Matches a button only inside `container`, for labels that other buttons in the app share.
+    static func buttonByLabel(_ label: String,
+                              in container: Selector,
+                              description: String,
+                              groups: [String] = []) -> Selector {
+        Selector(
+            strategy: .buttonInContainerByLabel(container: container, label: label),
+            value: label,
+            description: description,
+            groups: groups
+        )
+    }
+
+    /// Matches the collection view holding an element whose identifier starts with `prefix`.
+    static func collectionViewContainingIdPrefix(_ prefix: String,
+                                                 description: String,
+                                                 groups: [String] = []) -> Selector {
+        Selector(
+            strategy: .collectionViewContainingIdPrefix(prefix),
+            value: prefix,
+            description: description,
+            groups: groups
+        )
+    }
+
     /// Edit menu items surface as menu items on older iOS and as buttons on newer versions.
     static func menuItemOrButtonByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
         let p = NSPredicate(

@@ -31,6 +31,8 @@ enum SelectorStrategy {
     case navigationBarButtonById(String)
     case collectionViewButtonByLabel(String)
     case otherElementsButtonByLabel(String)
+    indirect case buttonInContainerByLabel(container: Selector, label: String) // button scoped to a container
+    case collectionViewContainingIdPrefix(String) // collection view holding an element whose id has this prefix
 }
 
 // Selector model (with metadata)
@@ -112,11 +114,19 @@ extension Selector {
             return app.collectionViews.buttons[value]
         case .otherElementsButtonByLabel:
             return app.otherElements.buttons[value]
+        case .buttonInContainerByLabel(let container, let label):
+            return container.element(in: app).buttons.matching(Self.labelOrIdentifier(label)).firstMatch
+        case .collectionViewContainingIdPrefix(let prefix):
+            return app.collectionViews.containing(NSPredicate(format: "identifier BEGINSWITH %@", prefix)).firstMatch
         }
     }
 
     private static func buttonLabeled(_ label: String) -> NSPredicate {
         NSPredicate(format: "elementType == %d AND label == %@", XCUIElement.ElementType.button.rawValue, label)
+    }
+
+    private static func labelOrIdentifier(_ value: String) -> NSPredicate {
+        NSPredicate(format: "label == %@ OR identifier == %@", value, value)
     }
 
     @MainActor
@@ -177,6 +187,10 @@ extension Selector {
             return app.collectionViews.buttons.matching(NSPredicate(format: "label == %@", value))
         case .otherElementsButtonByLabel:
             return app.otherElements.buttons.matching(NSPredicate(format: "label == %@", value))
+        case .buttonInContainerByLabel(let container, let label):
+            return container.element(in: app).buttons.matching(Self.labelOrIdentifier(label))
+        case .collectionViewContainingIdPrefix(let prefix):
+            return app.collectionViews.containing(NSPredicate(format: "identifier BEGINSWITH %@", prefix))
         }
     }
 
