@@ -387,6 +387,11 @@ class SearchTests: FeatureFlaggedTestBase {
             navigator.performAction(Action.SelectToolbarBottom)
             navigator.goto(HomePanelsScreen)
             navigator.goto(URLBarOpen)
+            // Workaround: closing the Google Lens tip leaves edit mode on without the keyboard, so refocus.
+            // Remove once https://github.com/mozilla-mobile/firefox-ios/issues/36249 is fixed.
+            if toolbarScreen.dismissGoogleLensTipIfPresented() {
+                browserScreen.tapOnAddressBar()
+            }
 
             // URL bar is moved to the bottom of the screen
             let menuSettingsButton = toolbarScreen.getToolbarSettingsMenuButtonElement()
