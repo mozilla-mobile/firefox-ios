@@ -299,6 +299,7 @@ final class SettingScreen {
         BaseTestCase().mozWaitElementHittable(element: backButton, timeout: TIMEOUT)
         backButton.tap()
         BaseTestCase().mozWaitForElementToExist(app.navigationBars["Settings"])
+        BaseTestCase().mozWaitForElementToExist(app.buttons["Done"])
     }
 
     func navigateToAutofillPasswordSettings() {
