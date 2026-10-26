@@ -1000,27 +1000,27 @@ final class HomepageViewController: UIViewController,
         return renderer.image { context in
             themeManager.getCurrentTheme(for: windowUUID).colors.layer1.setFill()
             context.fill(CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
-            // Draw the wallpaper separately, so the potential safe area coordinates is filled with the
-            // wallpaper
-            wallpaperView.drawHierarchy(
-                in: CGRect(
-                    x: 0,
-                    y: 0,
-                    width: bounds.width,
-                    height: bounds.height
-                ),
-                afterScreenUpdates: false
+            let viewOrigin = CGPoint(x: bounds.origin.x, y: -bounds.origin.y)
+            let wallpaperFrame = wallpaperView.frame.offsetBy(dx: viewOrigin.x, dy: viewOrigin.y)
+            // Draw the wallpaper separately with the same geometry as on screen, so it matches the live homepage
+            // during tab transitions. The image keeps going below its frame to fill the space under the homepage.
+            wallpaperView.drawWallpaper(
+                aspectFilling: wallpaperFrame,
+                clippedTo: CGRect(
+                    x: wallpaperFrame.minX,
+                    y: wallpaperFrame.minY,
+                    width: wallpaperFrame.width,
+                    height: max(wallpaperFrame.height, bounds.height - wallpaperFrame.minY)
+                )
             )
 
-            view.drawHierarchy(
-                in: CGRect(
-                    x: bounds.origin.x,
-                    y: -bounds.origin.y,
-                    width: bounds.width,
-                    height: collectionView?.frame.height ?? 0.0
-                ),
-                afterScreenUpdates: false
-            )
+            // Skip the wallpaper view so it isn't drawn a second time with different geometry
+            for subview in view.subviews where subview !== wallpaperView && !subview.isHidden && subview.alpha > 0 {
+                subview.drawHierarchy(
+                    in: subview.frame.offsetBy(dx: viewOrigin.x, dy: viewOrigin.y),
+                    afterScreenUpdates: false
+                )
+            }
         }
     }
 
