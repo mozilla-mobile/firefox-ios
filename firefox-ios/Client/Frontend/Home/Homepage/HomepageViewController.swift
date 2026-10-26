@@ -571,7 +571,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func configureCollectionView() {
-        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        let collectionView = HomepageCollectionView(frame: view.bounds, collectionViewLayout: createLayout())
 
         HomepageItem.cellTypes.forEach {
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
@@ -1607,5 +1607,17 @@ final class HomepageViewController: UIViewController,
 
         let location = touch.location(in: collectionView)
         return collectionView.indexPathForItem(at: location) == nil
+    }
+}
+
+/// Uses the window's horizontal safe area insets so the layout doesn't change while the homepage is
+/// translated horizontally (FXIOS-17138).
+private final class HomepageCollectionView: UICollectionView {
+    override var safeAreaInsets: UIEdgeInsets {
+        var insets = super.safeAreaInsets
+        guard let window else { return insets }
+        insets.left = window.safeAreaInsets.left
+        insets.right = window.safeAreaInsets.right
+        return insets
     }
 }
