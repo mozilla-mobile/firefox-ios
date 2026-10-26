@@ -143,6 +143,17 @@ extension BrowserViewController {
         }
     }
 
+    func dismissGoogleLensTip() {
+        googleLensTipObservationTask?.cancel()
+        googleLensTipObservationTask = nil
+
+        if let tipViewController = googleLensTipViewController,
+           presentedViewController === tipViewController {
+            dismiss(animated: true)
+        }
+        googleLensTipViewController = nil
+    }
+
     private func presentContextualHint(for hintType: ContextualHintType) {
         scrollController.showToolbars(animated: true)
         switch hintType {

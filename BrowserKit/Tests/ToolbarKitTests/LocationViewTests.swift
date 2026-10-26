@@ -315,4 +315,5 @@ private final class MockLocationViewDelegate: LocationViewDelegate {
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]? { return nil }
     func locationTextFieldNeedsSearchReset() {}
     func locationViewDidDisplayEditingAccessoryButton(_ button: UIButton, contextualHintType: String) {}
+    func locationViewDidHideEditingAccessoryButton() {}
 }
