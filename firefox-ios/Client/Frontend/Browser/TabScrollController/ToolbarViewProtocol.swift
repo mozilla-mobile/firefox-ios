@@ -163,6 +163,7 @@ final class ToolbarAnimator {
                 view.header.transform = .identity
                 view.topBlurView.transform = .identity
             }
+            view.header.updateScrollCollapsibleView(isCollapsed: !isShowing)
         }
         delegate?.dispatchScrollAlphaChange(alpha: alpha)
    }
