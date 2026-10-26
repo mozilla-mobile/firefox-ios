@@ -16,9 +16,12 @@ final class VPNSettingsViewModel {
 
     private(set) var isVPNEnabled: Bool
     private(set) var isVPNConnecting = false
+    private(set) var selectedRegionCode: String
     private let dataUsage: VPNDataUsage
 
+    @ObservationIgnored private let prefs: Prefs
     @ObservationIgnored private let userPreferences: UserFeaturePreferring
+    @ObservationIgnored private let localeProvider: LocaleProvider
 
     var usedDataInGB: Double { dataUsage.clampedUsedDataInGB }
     var dataLimitInGB: Double { dataUsage.dataLimitInGB }
@@ -29,13 +32,30 @@ final class VPNSettingsViewModel {
         return isVPNEnabled ? .VPN.Settings.StatusOn : .VPN.Settings.StatusOff
     }
 
+    var locationName: String {
+        selectedRegionCode == VPNServerManager.recommendedCountryCode
+            ? .VPN.Settings.LocationRecommended
+            : localeProvider.localizedRegionName(for: selectedRegionCode)
+    }
+
     init(
+        prefs: Prefs,
         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
+        localeProvider: LocaleProvider = SystemLocaleProvider(),
         dataUsage: VPNDataUsage = .placeholder
     ) {
+        self.prefs = prefs
         self.userPreferences = userPreferences
+        self.localeProvider = localeProvider
         self.isVPNEnabled = userPreferences.getPreferenceFor(.vpnFeature)
+        self.selectedRegionCode = prefs.stringForKey(PrefsKeys.VPNSettings.selectedRegionCode)
+            ?? VPNServerManager.recommendedCountryCode
         self.dataUsage = dataUsage
+    }
+
+    func selectLocation(_ regionCode: String) {
+        selectedRegionCode = regionCode
+        prefs.setString(regionCode, forKey: PrefsKeys.VPNSettings.selectedRegionCode)
     }
 
     // TODO: FXIOS-16876 Replace this with real VPN connection stuff

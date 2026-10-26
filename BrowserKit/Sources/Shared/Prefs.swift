@@ -177,6 +177,7 @@ public enum PrefsKeys {
     public enum VPNSettings {
         public static let endpointEnvironment = "vpnEndpointEnvironment"
         public static let lastUsedEnvironment = "vpnLastUsedEnvironment"
+        public static let selectedRegionCode = "vpnSelectedRegionCode"
     }
 
     public enum UserFeatureFlagPrefs {
