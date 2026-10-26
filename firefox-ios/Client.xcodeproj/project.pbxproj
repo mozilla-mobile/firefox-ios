@@ -2422,6 +2422,7 @@
 		EEF4D5C23077D961001DEC12 /* VPNSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF4D5C13077D958001DEC12 /* VPNSettingsViewController.swift */; };
 		EEF4D8BD30781B26001DEC12 /* VPNSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF4D8BA30781B26001DEC12 /* VPNSettingTests.swift */; };
 		EEF4DD323078286F001DEC12 /* VPNSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF4DD313078286F001DEC12 /* VPNSettingsView.swift */; };
+		EEFBE6DA3091115100522F96 /* VPNSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFBE6D93091115100522F96 /* VPNSettingsViewControllerTests.swift */; };
 		F0A27D00FEE047EEB0A00001 /* UITraitCollection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A27D00FEE047EEB0A00002 /* UITraitCollection+Extension.swift */; };
 		F18859502A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F188594F2A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift */; };
 		F1BC457E2A40F6D2005541D5 /* EnhancedTrackingProtectionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18859512A3E46020004AA7B /* EnhancedTrackingProtectionCoordinatorTests.swift */; };
@@ -12627,6 +12628,7 @@
 		EEF4D5C13077D958001DEC12 /* VPNSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSettingsViewController.swift; sourceTree = "<group>"; };
 		EEF4D8BA30781B26001DEC12 /* VPNSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSettingTests.swift; sourceTree = "<group>"; };
 		EEF4DD313078286F001DEC12 /* VPNSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSettingsView.swift; sourceTree = "<group>"; };
+		EEFBE6D93091115100522F96 /* VPNSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		EF0444EEBEA6A45A3E0F654C /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		EF56430D950BC270FDA83402 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		EF8146889CABAB0DCE7C5EB7 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
@@ -18030,6 +18032,7 @@
 		EEF4D8BB30781B26001DEC12 /* VPN */ = {
 			isa = PBXGroup;
 			children = (
+				EEFBE6D93091115100522F96 /* VPNSettingsViewControllerTests.swift */,
 				EEF4D8BA30781B26001DEC12 /* VPNSettingTests.swift */,
 			);
 			path = VPN;
@@ -21795,6 +21798,7 @@
 				BGA100010000000100000001 /* BackgroundAudioHelperTests.swift in Sources */,
 				BGA100010000000100000003 /* BackgroundAudioSettingTests.swift in Sources */,
 				BEEF00012F00000200000001 /* SearchSettingsTableViewControllerTests.swift in Sources */,
+				EEFBE6DA3091115100522F96 /* VPNSettingsViewControllerTests.swift in Sources */,
 				FF0002AA2F000002000BBBBB /* ClearablesTests.swift in Sources */,
 				8AFC1B792FAAAA3D0070CA11 /* TabManagerPrivacyModeTests.swift in Sources */,
 				C2B808B12A77FA3F00A65487 /* DownloadsCoordinatorTests.swift in Sources */,
