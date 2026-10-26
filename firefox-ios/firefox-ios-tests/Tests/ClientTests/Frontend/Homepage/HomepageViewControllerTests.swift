@@ -549,6 +549,34 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(wallpaperHeightConstraint.constant, 300)
     }
 
+    /// Regression test for a memory leak.
+    func test_newsTransitionHeader_whenRendered_doesNotRetainViewController() async throws {
+        let subject = createSubject()
+        let populatedState = await getPopulatedCollectionViewState(from: HomepageState(windowUUID: .XCTestDefaultUUID))
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
+        subject.loadViewIfNeeded()
+        subject.newState(state: populatedState)
+        subject.view.layoutIfNeeded()
+
+        let collectionView = try getCollectionView(from: subject)
+        let pocketSectionIndex = try getPocketSectionIndex(from: collectionView)
+        let headerIndexPath = IndexPath(item: 0, section: pocketSectionIndex)
+        let headerAttributes = try XCTUnwrap(collectionView.layoutAttributesForSupplementaryElement(
+            ofKind: UICollectionView.elementKindSectionHeader,
+            at: headerIndexPath
+        ))
+        // The news section starts below the fold, so scroll it on screen to make the header render.
+        collectionView.contentOffset.y = headerAttributes.frame.minY
+        collectionView.layoutIfNeeded()
+
+        let header = collectionView.supplementaryView(
+            forElementKind: UICollectionView.elementKindSectionHeader,
+            at: headerIndexPath
+        )
+
+        XCTAssertTrue(header is NewsTransitionHeaderCell)
+    }
+
     /// Shows `tab` as the only Jump Back In item on `subject`'s homepage and taps it. Only the actions the tap
     /// dispatches are left in `mockStore`.
     private func selectJumpBackInItem(for tab: Tab, in subject: HomepageViewController) throws {
