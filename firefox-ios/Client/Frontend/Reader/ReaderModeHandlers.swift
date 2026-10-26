@@ -139,17 +139,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
             initialStyle: readerModeStyle
         ),
               let response = GCDWebServerDataResponse(html: html) else { return nil }
-        // Apply a Content Security Policy that disallows everything except:
-        // - images from anywhere
-        // - styles including inline styles from our internal server
-        // - scripts including inline scripts from our internal server
-        // - fonts our internal server
-        let csp = """
-            default-src 'none';
-            img-src *;
-            style-src 'unsafe-inline' http://localhost:*;
-            font-src http://localhost:*;
-        """
+        let csp = ReaderModeUtils.contentSecurityPolicy(origin: "http://localhost:*")
         response.setValue(csp, forAdditionalHeader: "Content-Security-Policy")
         return response
     }
