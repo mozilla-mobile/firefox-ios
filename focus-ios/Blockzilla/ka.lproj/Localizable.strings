@@ -467,7 +467,7 @@
 "Settings.useSystemTheme" = "სისტემის ნათელი/მუქი რეჟიმი";
 
 /* Title for settings section to enable different Siri Shortcuts. */
-"Settinsg.siriShortcutsTitle" = "SIRI-ს მალსახმობები";
+"Settinsg.siriShortcutsTitle" = "SIRI - ᲛᲐᲚᲡᲐᲮᲛᲝᲑᲔᲑᲘ";
 
 /* Text for a share button */
 "share" = "გაზიარება";
