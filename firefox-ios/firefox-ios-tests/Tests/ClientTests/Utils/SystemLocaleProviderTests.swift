@@ -170,6 +170,18 @@ final class SystemLocaleProviderTests: XCTestCase {
         XCTAssertEqual(subject.nativeLanguageName(for: "zz"), "zz")
     }
 
+    // MARK: - localizedRegionName
+
+    func test_localizedRegionName_knownCode_returnsNameInCurrentLocale() {
+        let subject = createSubject(with: Locale(identifier: "en_US"))
+        XCTAssertEqual(subject.localizedRegionName(for: "DE"), "Germany")
+    }
+
+    func test_localizedRegionName_unknownCode_returnsFallbackCode() {
+        let subject = createSubject(with: Locale(identifier: "en_US"))
+        XCTAssertEqual(subject.localizedRegionName(for: "AA"), "AA")
+    }
+
     private func createSubject(with locale: Locale) -> SystemLocaleProvider {
         return SystemLocaleProvider(
             logger: logger,

@@ -44,11 +44,45 @@ final class VPNSettingsViewControllerTests: XCTestCase {
         XCTAssertEqual(pushedController.url, VPNSettingsViewController.learnMoreURL)
     }
 
+    // MARK: - Locations
+    func test_onLocationsTapped_pushesVPNLocationsViewController() throws {
+        let subject = createSubject()
+        let navigationController = UINavigationController(rootViewController: subject)
+        subject.loadViewIfNeeded()
+
+        let hostingController = try XCTUnwrap(
+            subject.children.first as? UIHostingController<VPNSettingsViewContainer>
+        )
+        hostingController.rootView.onLocationsTapped()
+
+        XCTAssertTrue(navigationController.topViewController is VPNLocationsViewController)
+    }
+
+    func test_onLocationSelected_savesSelection() throws {
+        let prefs = MockProfilePrefs()
+        let subject = createSubject(prefs: prefs)
+        let navigationController = UINavigationController(rootViewController: subject)
+        subject.loadViewIfNeeded()
+
+        let hostingController = try XCTUnwrap(
+            subject.children.first as? UIHostingController<VPNSettingsViewContainer>
+        )
+        hostingController.rootView.onLocationsTapped()
+        let locationsController = try XCTUnwrap(navigationController.topViewController as? VPNLocationsViewController)
+        locationsController.loadViewIfNeeded()
+        let locationsHostingController = try XCTUnwrap(
+            locationsController.children.first as? UIHostingController<VPNLocationsView>
+        )
+        locationsHostingController.rootView.onLocationSelected("DE")
+
+        XCTAssertEqual(prefs.stringForKey(PrefsKeys.VPNSettings.selectedRegionCode), "DE")
+    }
+
     // MARK: - Helpers
-    private func createSubject() -> VPNSettingsViewController {
+    private func createSubject(prefs: Prefs = MockProfilePrefs()) -> VPNSettingsViewController {
         let subject = VPNSettingsViewController(
             windowUUID: .XCTestDefaultUUID,
-            prefs: MockProfilePrefs(),
+            prefs: prefs,
             themeManager: MockThemeManager()
         )
         trackForMemoryLeaks(subject)
