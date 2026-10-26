@@ -243,6 +243,8 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2436091
     // Regression
     func testSearchWithFirefoxOption() {
+        // The engine is verified through the host shown in the address bar
+        addLaunchArgument(jsonFileName: "searchTermInAddressBarOff", featureName: "toolbar-refactor-feature")
         app.launch()
         navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         waitUntilPageLoad()
@@ -500,6 +502,8 @@ class SearchTests: FeatureFlaggedTestBase {
     func testSearchSuggestions() throws {
         guard #available(iOS 17.0, *) else { return }
 
+        // The engine is verified through the host shown in the address bar
+        addLaunchArgument(jsonFileName: "searchTermInAddressBarOff", featureName: "toolbar-refactor-feature")
         // Tap on URL Bar and type "g"
         app.launch()
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)

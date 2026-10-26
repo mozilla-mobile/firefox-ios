@@ -2,11 +2,21 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 let mozDeveloperWebsite = "https://developer.mozilla.org/en-US"
 let searchFieldPlaceholder = "Search MDN"
 class ThirdPartySearchTest: BaseTestCase {
+    override func setUp() async throws {
+        // The engine is verified through the host shown in the address bar
+        launchArguments += [
+            "\(LaunchArguments.LoadExperiment)searchTermInAddressBarOff",
+            "\(LaunchArguments.ExperimentFeatureName)toolbar-refactor-feature"
+        ]
+        try await super.setUp()
+    }
+
     fileprivate func dismissKeyboardAssistant(forApp app: XCUIApplication) {
         app.buttons["Done"].waitAndTap()
     }

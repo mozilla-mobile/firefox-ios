@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import XCTest
 
@@ -13,6 +14,13 @@ class UrlBarTests: BaseTestCase {
     private var settingScreen: SettingScreen!
 
     override func setUp() async throws {
+        if name.contains("testSearchEngineLogo") {
+            // The engine is verified through the host shown in the address bar
+            launchArguments += [
+                "\(LaunchArguments.LoadExperiment)searchTermInAddressBarOff",
+                "\(LaunchArguments.ExperimentFeatureName)toolbar-refactor-feature"
+            ]
+        }
         try await super.setUp()
         browserScreen = BrowserScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)

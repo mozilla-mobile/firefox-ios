@@ -147,8 +147,10 @@ class BrowsingTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/4104980
-    func testXssAccountTakeover() {
-        loadWebPage("https://firefoxuxss.v12.sh")
+    func testXssAccountTakeover() throws {
+        let pocURL = "https://firefoxuxss.v12.sh"
+        try skipIfSiteIsDown(pocURL)
+        loadWebPage(pocURL)
         waitForWebPageLoad()
 
         waitForExistence(app.otherElements["Firefox Focus UXSS POC"])
