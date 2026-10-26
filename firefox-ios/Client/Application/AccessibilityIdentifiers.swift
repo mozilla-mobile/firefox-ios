@@ -847,6 +847,12 @@ struct AccessibilityIdentifiers {
 
         struct VPN {
             static let title = "Settings.VPN.Title"
+            static let heading = "Settings.VPN.Heading"
+            static let description = "Settings.VPN.Description"
+            static let learnMoreButton = "Settings.VPN.LearnMoreButton"
+            static let locationSetting = "Settings.VPN.LocationSetting"
+            static let vpnToggle = "Settings.VPN.VPNToggle"
+            static let dataUsage = "Settings.VPN.DataUsage"
         }
 
         struct BlockImages {
