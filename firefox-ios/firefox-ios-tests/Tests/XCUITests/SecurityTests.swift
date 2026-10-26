@@ -9,6 +9,10 @@ class SecurityTests: BaseTestCase {
     private var browserScreen: BrowserScreen!
 
     override func setUp() async throws {
+        // Checked here because the test itself has to stay synchronous for RunLoop.run(until:)
+        if name.contains("testXssAccountTakeover") {
+            try await skipIfSiteIsDown(WebStrings.uxssPocURL)
+        }
         try await super.setUp()
         browserScreen = BrowserScreen(app: app)
     }

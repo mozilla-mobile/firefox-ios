@@ -247,6 +247,18 @@ class BaseTestCase: XCTestCase {
         setUpScreenGraph()
     }
 
+    /// Skips the current test when a third-party page it depends on is unreachable or answers with a
+    /// server error (5xx), so an outage of a site outside our control does not fail the run.
+    func skipIfSiteIsDown(_ urlString: String) async throws {
+        guard let url = URL(string: urlString) else { return }
+        var request = URLRequest(url: url, timeoutInterval: 15)
+        request.httpMethod = "HEAD"
+        let statusCode = try? await (URLSession.shared.data(for: request).1 as? HTTPURLResponse)?.statusCode
+        guard let statusCode, statusCode < 500 else {
+            throw XCTSkip("\(urlString) is down (\(statusCode.map { "HTTP \($0)" } ?? "unreachable"))")
+        }
+    }
+
     /// Marks the current test as a known failure on the given iOS major versions without hiding it:
     /// the test still fails, but each failure message names the iOS version and links `issue`.
     func markKnownFailure(onIOS versions: [Int], issue: String) {
