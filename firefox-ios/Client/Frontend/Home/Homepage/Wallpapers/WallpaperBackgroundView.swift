@@ -57,6 +57,28 @@ class WallpaperBackgroundView: UIView {
         updateImageToCurrentWallpaper()
     }
 
+    /// Draws the current wallpaper image into the current graphics context, scaled to aspect fill `rect`
+    /// the same way it is displayed on screen, and clipped to `clipRect`.
+    func drawWallpaper(aspectFilling rect: CGRect, clippedTo clipRect: CGRect) {
+        guard let image = pictureView.image, let context = UIGraphicsGetCurrentContext() else { return }
+        context.saveGState()
+        context.clip(to: clipRect)
+        image.draw(in: WallpaperBackgroundView.aspectFillRect(for: image.size, in: rect))
+        context.restoreGState()
+    }
+
+    static func aspectFillRect(for imageSize: CGSize, in rect: CGRect) -> CGRect {
+        guard imageSize.width > 0, imageSize.height > 0 else { return rect }
+        let scale = max(rect.width / imageSize.width, rect.height / imageSize.height)
+        let size = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
+        return CGRect(
+            x: rect.midX - size.width / 2,
+            y: rect.midY - size.height / 2,
+            width: size.width,
+            height: size.height
+        )
+    }
+
     private func updateImageToCurrentWallpaper() {
         guard let state = wallpaperState else { return }
         ensureMainThread {
