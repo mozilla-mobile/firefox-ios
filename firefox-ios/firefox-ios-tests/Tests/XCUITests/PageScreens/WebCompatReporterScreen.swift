@@ -61,10 +61,11 @@ final class WebCompatReporterScreen {
     }
 
     private var navigationBar: XCUIElement { sel.NAVIGATION_BAR.element(in: app) }
-    private var closeButton: XCUIElement { navigationBar.buttons[sel.CLOSE_BUTTON.value] }
+    private var closeButton: XCUIElement { sel.CLOSE_BUTTON.element(in: app) }
     private var urlField: XCUIElement { sel.URL_FIELD.element(in: app) }
-    private var urlClearButton: XCUIElement { urlField.buttons[sel.URL_CLEAR_BUTTON.value] }
+    private var urlClearButton: XCUIElement { sel.URL_CLEAR_BUTTON.element(in: app) }
     private var urlError: XCUIElement { sel.URL_ERROR.element(in: app) }
+    private var form: XCUIElement { sel.FORM.element(in: app) }
     private var categoryMenu: XCUIElement { sel.CATEGORY_MENU.element(in: app) }
     private var sendButton: XCUIElement { sel.SEND_BUTTON.element(in: app) }
 
@@ -90,12 +91,12 @@ final class WebCompatReporterScreen {
 
     func assertURLFieldValue(_ expected: String, timeout: TimeInterval = TIMEOUT) {
         let predicate = NSPredicate(format: "value == %@", expected)
-        waitFor(urlField, predicate, timeout: timeout, message: "URL field value should be '\(expected)'")
+        XCTAssertTrue(urlField.waitFor(predicate, timeout: timeout), "URL field value should be '\(expected)'")
     }
 
     func assertURLFieldIsEmpty(timeout: TimeInterval = TIMEOUT) {
         let predicate = NSPredicate(format: "value == nil OR value == ''")
-        waitFor(urlField, predicate, timeout: timeout, message: "URL field should be empty")
+        XCTAssertTrue(urlField.waitFor(predicate, timeout: timeout), "URL field should be empty")
     }
 
     func tapURLField() {
@@ -103,8 +104,7 @@ final class WebCompatReporterScreen {
     }
 
     func assertURLFieldIsEditing(timeout: TimeInterval = TIMEOUT) {
-        let predicate = NSPredicate(format: "hasKeyboardFocus == true")
-        waitFor(urlField, predicate, timeout: timeout, message: "URL field should have keyboard focus")
+        XCTAssertTrue(urlField.waitForKeyboardFocus(timeout: timeout), "URL field should have keyboard focus")
         BaseTestCase().mozWaitForElementToExist(urlClearButton, timeout: timeout)
     }
 
@@ -133,15 +133,14 @@ final class WebCompatReporterScreen {
     /// The form only stores the URL once editing ends, so tap Done before asserting the Send button.
     func commitURLEditing() {
         urlField.typeText("\n")
-        let predicate = NSPredicate(format: "hasKeyboardFocus == false")
-        waitFor(urlField, predicate, timeout: TIMEOUT, message: "URL field should lose keyboard focus")
+        XCTAssertTrue(urlField.waitUntilKeyboardFocusLost(), "URL field should lose keyboard focus")
     }
 
     func selectIssueType(_ issueType: WebCompatIssueType) {
         categoryMenu.waitAndTap()
         sel.issueType(issueType.title).element(in: app).waitAndTap()
         let predicate = NSPredicate(format: "label == %@", issueType.title)
-        waitFor(categoryMenu, predicate, timeout: TIMEOUT, message: "Issue type menu should show \(issueType.title)")
+        XCTAssertTrue(categoryMenu.waitFor(predicate), "Issue type menu should show \(issueType.title)")
     }
 
     private func subOptionCells(of issueType: WebCompatIssueType) -> [XCUIElement] {
@@ -182,7 +181,7 @@ final class WebCompatReporterScreen {
         for (index, subOption) in issueType.subOptions.enumerated() {
             cells[index].waitAndTap()
             let predicate = NSPredicate(format: "selected == true")
-            waitFor(cells[index], predicate, timeout: TIMEOUT, message: "'\(subOption.title)' should be selected")
+            XCTAssertTrue(cells[index].waitFor(predicate), "'\(subOption.title)' should be selected")
             for (otherIndex, other) in issueType.subOptions.enumerated() where otherIndex != index {
                 XCTAssertFalse(cells[otherIndex].isSelected, "'\(other.title)' should not be selected")
             }
@@ -193,20 +192,15 @@ final class WebCompatReporterScreen {
         scrollToSendButtonIfNeeded()
         let predicate = NSPredicate(format: "enabled == %@", NSNumber(value: enabled))
         let state = enabled ? "enabled" : "disabled"
-        waitFor(sendButton, predicate, timeout: timeout, message: "Send Report button should be \(state)")
+        XCTAssertTrue(sendButton.waitFor(predicate, timeout: timeout), "Send Report button should be \(state)")
     }
 
     private func scrollToSendButtonIfNeeded() {
         var swipes = 0
         while !sendButton.exists && swipes < 3 {
-            app.collectionViews.firstMatch.swipeUp()
+            form.swipeUp()
             swipes += 1
         }
         BaseTestCase().mozWaitForElementToExist(sendButton)
-    }
-
-    private func waitFor(_ element: XCUIElement, _ predicate: NSPredicate, timeout: TimeInterval, message: String) {
-        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: timeout), .completed, message)
     }
 }

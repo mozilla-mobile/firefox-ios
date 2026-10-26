@@ -10,6 +10,7 @@ protocol WebCompatReporterSelectorSet {
     var URL_FIELD: Selector { get }
     var URL_CLEAR_BUTTON: Selector { get }
     var URL_ERROR: Selector { get }
+    var FORM: Selector { get }
     var CATEGORY_MENU: Selector { get }
     var SITE_ISSUE_HEADER: Selector { get }
     var SEND_BUTTON: Selector { get }
@@ -24,6 +25,7 @@ struct WebCompatReporterSelectors: WebCompatReporterSelectorSet {
         // The close button has no accessibility identifier, it is matched on its label
         static let closeButton = String.WebCompatReporter.Sheet.CloseButtonAccessibilityLabel
         static let urlField = AccessibilityIdentifiers.WebCompatReporter.urlField
+        static let formElementPrefix = "WebCompatReporter."
         static let urlClearButton = "Clear text"
         // The error row has no accessibility identifier, it is matched on its label
         static let urlError = String.WebCompatReporter.Fields.URLError
@@ -41,11 +43,14 @@ struct WebCompatReporterSelectors: WebCompatReporterSelectorSet {
         groups: ["WebCompatReporter"]
     )
 
-    let CLOSE_BUTTON = Selector.buttonInNavigationBarByLabel(
-        IDs.closeButton,
-        description: "Close button in the Report Broken Site sheet navigation bar",
-        groups: ["WebCompatReporter"]
-    )
+    var CLOSE_BUTTON: Selector {
+        Selector.buttonByLabel(
+            IDs.closeButton,
+            in: NAVIGATION_BAR,
+            description: "Close button in the Report Broken Site sheet navigation bar",
+            groups: ["WebCompatReporter"]
+        )
+    }
 
     let URL_FIELD = Selector.textFieldId(
         IDs.urlField,
@@ -53,15 +58,27 @@ struct WebCompatReporterSelectors: WebCompatReporterSelectorSet {
         groups: ["WebCompatReporter"]
     )
 
-    let URL_CLEAR_BUTTON = Selector.buttonByLabel(
-        IDs.urlClearButton,
-        description: "System clear button of the URL field, shown while editing",
-        groups: ["WebCompatReporter"]
-    )
+    // Scoped to the URL field, as the address bar clear button has the same label
+    var URL_CLEAR_BUTTON: Selector {
+        Selector.buttonByLabel(
+            IDs.urlClearButton,
+            in: URL_FIELD,
+            description: "System clear button of the URL field, shown while editing",
+            groups: ["WebCompatReporter"]
+        )
+    }
 
     let URL_ERROR = Selector.staticTextByLabel(
         IDs.urlError,
         description: "Error shown under the URL field when the URL is not reportable",
+        groups: ["WebCompatReporter"]
+    )
+
+    // The form has no accessibility identifier, so it is matched as the list holding its rows,
+    // whichever of them are on screen
+    let FORM = Selector.collectionViewContainingIdPrefix(
+        IDs.formElementPrefix,
+        description: "Scrollable form of the Report Broken Site sheet",
         groups: ["WebCompatReporter"]
     )
 
@@ -83,7 +100,7 @@ struct WebCompatReporterSelectors: WebCompatReporterSelectorSet {
         groups: ["WebCompatReporter"]
     )
 
-    var all: [Selector] { [NAVIGATION_BAR, CLOSE_BUTTON, URL_FIELD, URL_CLEAR_BUTTON, URL_ERROR,
+    var all: [Selector] { [NAVIGATION_BAR, CLOSE_BUTTON, URL_FIELD, URL_CLEAR_BUTTON, URL_ERROR, FORM,
                            CATEGORY_MENU, SITE_ISSUE_HEADER, SEND_BUTTON] }
 
     /// An option of the issue type menu, matched on its title.

@@ -203,6 +203,14 @@ extension XCUIElement {
         return (self.value(forKey: "hasKeyboardFocus") as? Bool) ?? false
     }
 
+    /// Waits until the element matches `predicate`, e.g. `value == 'x'` or `enabled == true`.
+    /// Returns false on timeout instead of failing.
+    @discardableResult
+    func waitFor(_ predicate: NSPredicate, timeout: TimeInterval = TIMEOUT) -> Bool {
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: self)
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
+
     /// Waits until the element reports keyboard focus. Returns false on timeout instead of failing.
     @discardableResult
     func waitForKeyboardFocus(timeout: TimeInterval = TIMEOUT) -> Bool {
