@@ -606,6 +606,36 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isAddressBarMinimized)
     }
 
+    func test_userDidScrollAction_fromAnotherWindow_doesNotMinimizeAddressBar() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
+            WindowUUID()
+        )
+
+        XCTAssertFalse(newState.isAddressBarMinimized)
+    }
+
+    func test_keyboardDidHideAction_fromAnotherWindow_doesNotRestoreAddressBar() {
+        let reducer = toolbarReducer()
+        let minimizedState = reducer.modernReducer(
+            createSubject(),
+            ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
+            windowUUID
+        )
+
+        let newState = reducer.modernReducer(
+            minimizedState,
+            ToolbarModernAction.keyboardDidHide,
+            WindowUUID()
+        )
+
+        XCTAssertTrue(newState.isAddressBarMinimized)
+    }
+
     // MARK: - Private
     private func createSubject() -> ToolbarState {
         return ToolbarState(windowUUID: windowUUID)

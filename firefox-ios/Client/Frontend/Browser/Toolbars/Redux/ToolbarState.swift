@@ -142,7 +142,9 @@ struct ToolbarState: ScreenState, Sendable {
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
 
     static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
-        guard let action = action as? ToolbarModernAction else { return defaultState(from: state) }
+        guard let action = action as? ToolbarModernAction,
+              actionWindowUUID == .unavailable || actionWindowUUID == state.windowUUID
+        else { return defaultState(from: state) }
 
         switch action {
         case .userDidScroll(let minimizeAddressBar):
