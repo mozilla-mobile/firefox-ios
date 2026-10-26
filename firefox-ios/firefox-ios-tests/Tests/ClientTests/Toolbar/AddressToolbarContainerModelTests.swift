@@ -382,11 +382,69 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         XCTAssertFalse(viewModel.hasAlternativeLocationColor)
     }
 
+    @MainActor
+    func testTabsLongPress_inAddressToolbar_providesMenuWithAndWithoutTopTabs() throws {
+        for isShowingTopTabs in [true, false] {
+            let menu = UIMenu(children: [UIAction(title: "New Tab") { _ in }])
+            var requestedAction: ToolbarActionConfiguration.ActionType?
+            let model = createSubject(
+                withState: createToolbarState(isShowingNavigationToolbar: false,
+                                              isShowingTopTabs: isShowingTopTabs),
+                longPressMenuProvider: { actionType in
+                    requestedAction = actionType
+                    return menu
+                }
+            )
+            let tabs = try XCTUnwrap(model.browserActions.first {
+                $0.a11yId == AccessibilityIdentifiers.Toolbar.tabsButton
+            })
+
+            guard case let .menu(provider) = tabs.longPressBehavior else {
+                return XCTFail("Expected a tabs long-press menu, isShowingTopTabs: \(isShowingTopTabs)")
+            }
+            XCTAssertTrue(provider() === menu)
+            XCTAssertEqual(requestedAction, .tabs)
+        }
+    }
+
+    @MainActor
+    func testTabsLongPress_inNavigationToolbar_providesMenuWithAndWithoutTopTabs() throws {
+        for isShowingTopTabs in [true, false] {
+            var state = createToolbarState(isShowingTopTabs: isShowingTopTabs)
+            state.navigationToolbar.actions = [ToolbarActionConfiguration(
+                actionType: .tabs,
+                isEnabled: true,
+                a11yLabel: "Tabs",
+                a11yId: AccessibilityIdentifiers.Toolbar.tabsButton
+            )]
+            let menu = UIMenu(children: [UIAction(title: "New Tab") { _ in }])
+            var requestedAction: ToolbarActionConfiguration.ActionType?
+            let model = NavigationToolbarContainerModel(
+                state: state,
+                longPressMenuProvider: { actionType in
+                    requestedAction = actionType
+                    return menu
+                },
+                windowUUID: windowUUID
+            )
+            let tabs = try XCTUnwrap(model.actions.first)
+
+            guard case let .menu(provider) = tabs.longPressBehavior else {
+                return XCTFail("Expected a tabs long-press menu, isShowingTopTabs: \(isShowingTopTabs)")
+            }
+            XCTAssertTrue(provider() === menu)
+            XCTAssertEqual(requestedAction, .tabs)
+        }
+    }
+
     // MARK: - Private helpers
 
     @MainActor
-    private func createSubject(withState state: ToolbarState,
-                               isSearchTermInAddressBarEnabled: Bool = false) -> AddressToolbarContainerModel {
+    private func createSubject(
+        withState state: ToolbarState,
+        isSearchTermInAddressBarEnabled: Bool = false,
+        longPressMenuProvider: @escaping AddressToolbarContainerModel.LongPressMenuProvider = { _ in nil }
+    ) -> AddressToolbarContainerModel {
         let appState = AppState(presentedComponents: PresentedComponentsState(components: [.toolbar(state)]))
         let lens = AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
         let featureFlagsProvider = MockNimbusFeatureFlags()
@@ -398,6 +456,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                             profile: mockProfile,
                                             searchEnginesManager: searchEnginesManager,
                                             featureFlagsProvider: featureFlagsProvider,
+                                            longPressMenuProvider: longPressMenuProvider,
                                             windowUUID: windowUUID)
     }
 

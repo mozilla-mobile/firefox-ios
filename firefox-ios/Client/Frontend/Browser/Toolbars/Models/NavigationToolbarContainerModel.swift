@@ -48,7 +48,6 @@ struct NavigationToolbarContainerModel: Equatable {
                                                                                       windowUUID: windowUUID),
                 longPressBehavior: NavigationToolbarContainerModel.makeLongPressBehavior(
                     action: action,
-                    isShowingTopTabs: state.isShowingTopTabs,
                     longPressMenuProvider: longPressMenuProvider,
                     windowUUID: windowUUID
                 ),
@@ -85,11 +84,10 @@ struct NavigationToolbarContainerModel: Equatable {
     @MainActor
     private static func makeLongPressBehavior(
         action: ToolbarActionConfiguration,
-        isShowingTopTabs: Bool,
         longPressMenuProvider: @escaping @MainActor (ToolbarActionConfiguration.ActionType) -> UIMenu?,
         windowUUID: WindowUUID
     ) -> ToolbarLongPressBehavior {
-        guard action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs) else {
+        guard action.canPerformLongPressAction else {
             return .none
         }
 
