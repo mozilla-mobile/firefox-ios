@@ -208,10 +208,16 @@ final class WindowManagerImplementation: WindowManager {
                    level: .debug,
                    category: .window)
 
-        // On iPhone devices, we expect there only to ever be a single window. If there
-        // are >1 windows we've encountered some type of unexpected state.
+        let availableUUIDs = onDiskUUIDs.filter {
+            !openWindowUUIDs.contains($0) && !reservedUUIDs.contains($0)
+        }
+        let hasOtherWindows = !openWindowUUIDs.isEmpty || !reservedUUIDs.isEmpty
+
+        // On iPhone devices we usually expect a single window, but phone idiom devices like
+        // iPhone Duo can open a second window in Split View. Once another window is open or
+        // reserved, we use the same logic as iPad so each window gets its own UUID.
         let result: ReservedWindowUUID
-        if !isIpad {
+        if !isIpad && !hasOtherWindows {
             // We should always have either a single UUID on disk or no UUIDs because this is a brand new app install
             if onDiskUUIDs.isEmpty {
                 result = ReservedWindowUUID(uuid: WindowUUID(), isNew: true)
@@ -220,27 +226,16 @@ final class WindowManagerImplementation: WindowManager {
 
                 let uuidCount = onDiskUUIDs.count
                 if uuidCount > 1 {
-                    // This is unexpected. Potentially related to incident in v128 (see: FXIOS-9516).
-                    // On iPhone, we should never have more than 1 window tab file. Log an error and
-                    // clean up the UUID(s) that we know won't be used. We expect a certain number of
-                    // these fatal errors to be logged for users previously impacted by the above, and
-                    // then it should fall to zero.
+                    // Multiple tab files on iPhone used to be unexpected (see the v128 incident, FXIOS-9516),
+                    // but iPhone Duo can have one per window, so we only log and keep the files.
                     logger.log("Detected multiple window tab files on iPhone",
-                               level: .fatal,
+                               level: .warning,
                                category: .window,
                                extra: ["uuidCount": "\(uuidCount)"])
-                    let uuidsToDelete = Array(onDiskUUIDs.dropFirst())
-                    Task { [tabDataStore] in
-                        await tabDataStore.removeWindowData(forUUIDs: uuidsToDelete)
-                    }
                 }
             }
         } else {
-            let filteredUUIDs = onDiskUUIDs.filter {
-                !openWindowUUIDs.contains($0) && !reservedUUIDs.contains($0)
-            }
-
-            result = nextWindowUUIDToOpen(filteredUUIDs)
+            result = nextWindowUUIDToOpen(availableUUIDs)
         }
 
         logger.log("WindowManager: reserve next UUID result = \(result.uuid.uuidString) Is new?: \(result.isNew)",
