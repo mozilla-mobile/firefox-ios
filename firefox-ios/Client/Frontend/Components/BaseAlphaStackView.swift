@@ -15,6 +15,21 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     var isSpacerClearBackground = false
     lazy var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
 
+    /// Arranged subview that collapses while the toolbars are minimized on scroll.
+    weak var scrollCollapsibleView: UIView? {
+        didSet {
+            guard oldValue !== scrollCollapsibleView else { return }
+            oldValue?.isHidden = false
+            oldValue?.alpha = 1
+        }
+    }
+
+    /// Height `scrollCollapsibleView` currently takes up in the stack.
+    var scrollCollapsibleHeight: CGFloat {
+        guard let scrollCollapsibleView, !scrollCollapsibleView.isHidden else { return 0 }
+        return scrollCollapsibleView.frame.height
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -30,6 +45,15 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
             guard let alphaView = subview as? AlphaDimmable else { continue }
             alphaView.updateAlphaForSubviews(alpha)
         }
+        updateScrollCollapsibleView(isCollapsed: alpha.isZero)
+    }
+
+    /// Hides or shows `scrollCollapsibleView`. Call it inside an animation block to animate the collapse.
+    func updateScrollCollapsibleView(isCollapsed: Bool) {
+        guard let scrollCollapsibleView, scrollCollapsibleView.isHidden != isCollapsed else { return }
+        scrollCollapsibleView.isHidden = isCollapsed
+        scrollCollapsibleView.alpha = isCollapsed ? 0 : 1
+        superview?.layoutIfNeeded()
     }
 
     private func setupStyle() {

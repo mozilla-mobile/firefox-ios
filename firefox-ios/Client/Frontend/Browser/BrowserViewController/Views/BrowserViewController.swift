@@ -535,7 +535,9 @@ class BrowserViewController: UIViewController,
     }
 
     override var prefersStatusBarHidden: Bool {
-        return false
+        // Hiding status bar in unfolded Duo lets have the minimized address bar smaller.
+        // This UX behavior matches Safari
+        return traitCollection.duoExpanded && !scrollController.isToolbarFullyExpanded
     }
 
     #if compiler(>=6.4)
@@ -757,6 +759,13 @@ class BrowserViewController: UIViewController,
 
     func toolbarDisplayStateDidChange() {
         updateToolbarTranslucency()
+        updateStatusBarVisibility()
+    }
+
+    func updateStatusBarVisibility() {
+        UIView.animate(withDuration: 0.2) {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
     }
 
     /// Updates the toolbar's translucency effects.
@@ -1577,6 +1586,7 @@ class BrowserViewController: UIViewController,
         )
         addressToolbarContainer.updateSystemTopBarLayoutGuide(systemTopBarLayoutGuide, isBottomSearchBar: isBottomSearchBar)
         addressToolbarContainer.progressBarAnchorView = tabStripBelowAddressBar
+        header.scrollCollapsibleView = tabStripBelowAddressBar
 
         // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
         checkForJSAlerts()

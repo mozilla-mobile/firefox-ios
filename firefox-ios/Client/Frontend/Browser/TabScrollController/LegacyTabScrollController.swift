@@ -133,6 +133,7 @@ final class LegacyTabScrollController: NSObject,
     /// - On iPad devices (all orientations).
     /// - On iPhone when the navigation toolbar is visible (portrait mode).
     /// - When the system status bar is on the side of the screen (e.g. folded iPhone Duo).
+    /// - On an expanded iPhone Duo, where the tab strip below the address bar collapses as well.
     ///
     /// When minimal mode is active, an additional height offset is applied to provide
     /// space for displaying the minimized address bar with the domain/subdomain URL.
@@ -141,7 +142,7 @@ final class LegacyTabScrollController: NSObject,
         // We're using the height instead of `isBottomSearchBar` for edge case when the user rotates the device
         guard headerHeight > 0 else { return 0 }
 
-        let baseOffset = -headerHeight
+        let baseOffset = -(headerHeight - (headerContainer?.scrollCollapsibleHeight ?? 0))
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let isNavToolbarVisible = if let scrollView {
             ToolbarHelper().shouldShowNavigationToolbar(for: scrollView.traitCollection)
@@ -149,8 +150,9 @@ final class LegacyTabScrollController: NSObject,
 
         // On a folded Duo the status bar sits on the side, so there is no status bar at the top.
         let hasVerticalSystemBar = scrollView?.traitCollection.hasVerticalSystemBar == true
+        let isDuoExpanded = scrollView?.traitCollection.duoExpanded == true
 
-        guard isiPad || isNavToolbarVisible || hasVerticalSystemBar else {
+        guard isiPad || isNavToolbarVisible || hasVerticalSystemBar || isDuoExpanded else {
             return baseOffset
         }
 
@@ -200,7 +202,7 @@ final class LegacyTabScrollController: NSObject,
     private var overKeyboardScrollHeight: CGFloat {
         return calculateOverKeyboardScrollHeight(
             with: UIWindow.keyWindow?.safeAreaInsets,
-            isBottomSearchBar: isBottomSearchBar
+            isBottomSearchBar: isBottomAddressBar
         )
     }
 
@@ -227,20 +229,19 @@ final class LegacyTabScrollController: NSObject,
     private var isAnimatingToolbar = false
     private var shouldRespondToScroll = false
 
+    /// The expanded iPhone Duo keeps the address bar at the top regardless of the user's search bar position preference.
+    private var isBottomAddressBar: Bool {
+        return isBottomSearchBar && scrollView?.traitCollection.duoExpanded != true
+    }
+
     var notificationCenter: any NotificationProtocol
     var currentWindowUUID: WindowUUID? {
         return windowUUID
     }
 
-    /// Collapsing is disabled while the iPhone Duo is expanded, so the address bar stays fully visible.
-    private var canCollapseToolbar: Bool {
-        return scrollView?.traitCollection.duoExpanded != true
-    }
-
-    /// Returns true when the scrollview contentSize height is bigger than viewport height plus delta,
-    /// voice over is turned off and the toolbar can collapse
+    /// Returns true when the scrollview contentSize height is bigger than viewport height plus delta
+    /// and voice over is turned off
     var shouldUpdateUIWhenScrolling: Bool {
-        guard canCollapseToolbar else { return false }
         let voiceOverOff = !UIAccessibility.isVoiceOverRunning
         return hasScrollableContent && voiceOverOff
     }
@@ -391,7 +392,6 @@ final class LegacyTabScrollController: NSObject,
     }
 
     func hideToolbars(animated: Bool) {
-        guard canCollapseToolbar else { return }
         guard toolbarState != .collapsed else { return }
 
         toolbarState = .collapsed
@@ -510,7 +510,7 @@ private extension LegacyTabScrollController {
     // That way we ensure animation has proper timing
     var showDurationRatio: CGFloat {
         var durationRatio: CGFloat
-        if isBottomSearchBar {
+        if isBottomAddressBar {
             durationRatio = UX.minimalAddressBarAnimationDuration
         } else {
             durationRatio = abs(headerTopOffset / headerHeight)
@@ -520,7 +520,7 @@ private extension LegacyTabScrollController {
 
     var hideDurationRation: CGFloat {
         var durationRatio: CGFloat
-        if isBottomSearchBar {
+        if isBottomAddressBar {
             durationRatio = abs((overKeyboardScrollHeight + overKeyboardContainerOffset) / overKeyboardScrollHeight)
         } else {
             durationRatio = abs((headerHeight + headerTopOffset) / headerHeight)
@@ -598,7 +598,7 @@ private extension LegacyTabScrollController {
     /// - `headerTopOffset` compared to `-topScrollHeight`
     /// - Returns: `true` if the toolbar is collapsed checks if isBottomSearchBar, `false`.
     func isToolbarCollapsed() -> Bool {
-        guard !isBottomSearchBar else {
+        guard !isBottomAddressBar else {
             // Checks if bottom containers are fully collapsed based on their offsets
             let bottomContainerCollapsed = bottomContainerOffset == bottomContainerScrollHeight
             let overKeyboardContainerCollapsed = overKeyboardContainerOffset == overKeyboardScrollHeight
@@ -688,7 +688,7 @@ private extension LegacyTabScrollController {
             zoomPageBar?.updateAlphaForSubviews(alpha)
             zoomPageBar?.superview?.layoutIfNeeded()
 
-            if isBottomSearchBar && overKeyboardOffset == 0 {
+            if isBottomAddressBar && overKeyboardOffset == 0 {
                 overKeyboardContainer?.updateAlphaForSubviews(alpha)
             }
         }

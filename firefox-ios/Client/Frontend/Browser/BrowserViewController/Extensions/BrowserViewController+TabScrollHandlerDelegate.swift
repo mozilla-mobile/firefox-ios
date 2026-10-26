@@ -15,12 +15,14 @@ extension BrowserViewController: TabScrollHandler.Delegate,
         updateToolbarContext()
         toolbarAnimator?.showToolbar()
         updateToolbarTranslucency()
+        updateStatusBarVisibility()
     }
 
     func hideToolbar() {
         updateToolbarContext()
         toolbarAnimator?.hideToolbar()
         updateToolbarTranslucency()
+        updateStatusBarVisibility()
     }
 
     func dispatchScrollAlphaChange(alpha: CGFloat) {
@@ -71,10 +73,12 @@ extension BrowserViewController: TabScrollHandler.Delegate,
 
         // Minimal address bar: keep a small strip visible so the domain remains readable
         // while scrolled. Applies only when the nav toolbar (iPhone portrait), iPad layout or, for a folded
-        // Duo, the system status bar is on the side of the screen.
+        // Duo, the system status bar is on the side of the screen. On an expanded Duo the tab strip
+        // below the address bar collapses, so its height is left out.
         let isNavToolbarVisible = ToolbarHelper().shouldShowNavigationToolbar(for: view.traitCollection)
-        if isiPad || isNavToolbarVisible || view.traitCollection.hasVerticalSystemBar {
-            return -headerHeight + UX.minimalHeaderOffset
+        let traits = view.traitCollection
+        if isiPad || isNavToolbarVisible || traits.hasVerticalSystemBar || traits.duoExpanded {
+            return -(headerHeight - header.scrollCollapsibleHeight) + UX.minimalHeaderOffset
         }
 
         // scroll the given the header height
