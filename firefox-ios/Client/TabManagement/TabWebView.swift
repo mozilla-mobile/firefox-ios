@@ -144,6 +144,9 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
                   traitCollection.verticalBarEdge != .unspecified else { return }
             usesVerticalBarInsets = true
             scrollView.contentInsetAdjustmentBehavior = .always
+            // WebKit needs an opaque web view to paint the page background into the vertical bar.
+            isOpaque = true
+            underPageBackgroundColor = nil
         }
 
         var obscuredInsets = safeAreaInsets
@@ -265,6 +268,16 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
     }
 
     // MARK: - ThemeApplicable
+
+    func updateBackgroundForNightMode(_ enabled: Bool) {
+        #if compiler(>=6.4)
+        let useAutomaticBackground = !enabled || usesVerticalBarInsets
+        #else
+        let useAutomaticBackground = !enabled
+        #endif
+        isOpaque = useAutomaticBackground
+        underPageBackgroundColor = useAutomaticBackground ? nil : .black
+    }
 
     /// Updates the `background-color` of the webview to match
     /// the theme if the webview is showing "about:blank" (nil).
