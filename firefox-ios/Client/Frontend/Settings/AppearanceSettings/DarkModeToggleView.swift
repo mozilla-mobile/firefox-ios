@@ -33,17 +33,28 @@ struct DarkModeToggleView: View {
     }
 
     var body: some View {
-        Group {
-            if #available(iOS 26.0, *) {
-                // SectionStyle already provides the card padding and background on iOS 26
-                rowContent
-            } else {
-                rowContent
-                    .padding(.horizontal, UX.horizontalSpacing)
-                    .padding(.vertical, UX.verticalSpacing)
-                    .background(backgroundColor)
+        VStack {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(String.WebsiteDarkModeToggleTitle)
+                        .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                        .foregroundColor(textColor)
+                }
+                Spacer()
+                Toggle(isOn: $isEnabled) {
+                    EmptyView()
+                }
+                .labelsHidden()
+                .toggleStyle(SwitchToggleStyle(tint: toggleTintColor))
+                .frame(alignment: .trailing)
+                .onChange(of: isEnabled) { newValue in
+                    onChange?(newValue)
+                }
             }
+            .padding(.horizontal, UX.horizontalSpacing)
         }
+        .padding(.vertical, UX.verticalSpacing)
+        .background(backgroundColor)
         .accessibilityElement()
         .accessibilityIdentifier(AccessibilityIdentifiers.Settings.Appearance.darkModeToggle)
         .accessibilityLabel("\(String.WebsiteDarkModeToggleTitle)")
@@ -51,26 +62,6 @@ struct DarkModeToggleView: View {
         .accessibilityAddTraits(traits)
         .accessibilityAction {
             isEnabled.toggle()
-        }
-    }
-
-    private var rowContent: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(String.WebsiteDarkModeToggleTitle)
-                    .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
-                    .foregroundColor(textColor)
-            }
-            Spacer()
-            Toggle(isOn: $isEnabled) {
-                EmptyView()
-            }
-            .labelsHidden()
-            .toggleStyle(SwitchToggleStyle(tint: toggleTintColor))
-            .frame(alignment: .trailing)
-            .onChange(of: isEnabled) { newValue in
-                onChange?(newValue)
-            }
         }
     }
 
