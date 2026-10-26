@@ -150,6 +150,12 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
         }
 
         var obscuredInsets = safeAreaInsets
+        if let window, window.traitCollection.verticalBarEdge != .unspecified {
+            // Translating the web view (e.g. during the tab swipe) changes its own horizontal safe area insets,
+            // so use the window's, which match at rest, to keep the layout viewport from resizing.
+            obscuredInsets.left = window.safeAreaInsets.left
+            obscuredInsets.right = window.safeAreaInsets.right
+        }
         if traitCollection.duoExpanded {
             // Expanded mode handles the bottom safe area outside the web view's obscured region.
             obscuredInsets.bottom = 0
