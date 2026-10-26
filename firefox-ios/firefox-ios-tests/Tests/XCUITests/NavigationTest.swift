@@ -736,6 +736,9 @@ class NavigationTest: FeatureFlaggedTestSuite {
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
+        // Workaround: the Google Lens tip stays over the loaded page and swallows the long press.
+        // Remove once https://github.com/mozilla-mobile/firefox-ios/issues/36249 is fixed.
+        ToolbarScreen(app: app).dismissGoogleLensTipIfPresented()
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0))
     }
