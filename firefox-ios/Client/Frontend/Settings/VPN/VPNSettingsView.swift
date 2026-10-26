@@ -84,6 +84,14 @@ struct VPNSettingsViewContainer: ThemeableView {
                 .foregroundStyle(theme.colors.textSecondary.color)
                 .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(.isStaticText)
+        .accessibilityLabel(Text(String.VPN.Settings.DataLimitTitle))
+        .accessibilityValue(VPNHelpers.usageAccessibilityText(
+            usedDataInGB: min(dataUsage.usedDataInGB, dataUsage.dataLimitInGB),
+            dataLimitInGB: dataUsage.dataLimitInGB
+        ))
+        .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.dataUsage)
     }
 
     // MARK: - Actions
@@ -102,6 +110,7 @@ struct VPNSettingsViewContainer: ThemeableView {
             isVPNConnecting = false
             isVPNEnabled = true
             onVPNToggled(true)
+            UIAccessibility.post(notification: .announcement, argument: String.VPN.Settings.Connected)
         }
     }
 }
@@ -119,6 +128,7 @@ struct VPNSettingsContentView: View {
 
     let theme: Theme
     let onLearnMoreTapped: () -> Void
+    @AccessibilityFocusState private var isTitleFocused: Bool
 
     private var descriptionLineSpacing: CGFloat {
         max(0, UX.descriptionLineHeight - FXFontStyles.Regular.callout.scaledFont().lineHeight)
@@ -132,11 +142,15 @@ struct VPNSettingsContentView: View {
             Text(String.VPN.Settings.Title)
                 .font(FXFontStyles.Bold.title3.scaledSwiftUIFont())
                 .foregroundStyle(theme.colors.textPrimary.color)
+                .accessibilityAddTraits(.isHeader)
+                .accessibilityFocused($isTitleFocused)
+                .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.heading)
                 .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
                 .padding(.vertical, UX.titleVerticalPadding)
             Text(String.VPN.Settings.Description)
                 .font(FXFontStyles.Regular.callout.scaledSwiftUIFont())
                 .foregroundStyle(theme.colors.textSecondary.color)
+                .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.description)
                 .lineSpacing(descriptionLineSpacing)
                 .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
             Button(action: onLearnMoreTapped) {
@@ -146,8 +160,12 @@ struct VPNSettingsContentView: View {
                     .padding(.bottom, UX.learnMoreBottomPadding)
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.learnMoreButton)
+            .accessibilityRemoveTraits(.isButton)
+            .accessibilityAddTraits(.isLink)
             .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
         }
+        .onAppear { isTitleFocused = true }
     }
 }
 
@@ -169,7 +187,7 @@ struct VPNGlobeView: View {
                 .background(.ultraThinMaterial,
                             in: RoundedRectangle(cornerRadius: UX.containerCornerRadius))
 
-            Image(StandardImageIdentifiers.Large.globe)
+            Image(decorative: StandardImageIdentifiers.Large.globe)
                 .renderingMode(.template)
                 .resizable()
                 .scaledToFit()
@@ -177,6 +195,7 @@ struct VPNGlobeView: View {
                 .foregroundStyle(linearGradient(theme.colors.gradientAccent))
         }
         .frame(width: UX.containerSize, height: UX.containerSize)
+        .accessibilityHidden(true)
     }
 
     private func linearGradient(_ gradient: Common.Gradient) -> LinearGradient {
@@ -204,12 +223,16 @@ struct VPNLocationsRow: View {
                     .renderingMode(.template)
                     .foregroundStyle(theme.colors.iconSecondary.color)
                     .flipsForRightToLeftLayoutDirection(true)
+                    .accessibilityHidden(true)
             }
             .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
             .padding(.vertical, VPNHelpers.UX.rowVerticalPadding)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(String.VPN.Settings.LocationTitle)
+        .accessibilityValue(String.VPN.Settings.LocationRecommended)
+        .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.locationSetting)
     }
 }
 
@@ -221,6 +244,11 @@ struct VPNToggleRow: View {
     let theme: Theme
     let onChange: (Bool) -> Void
 
+    private var accessibilityValue: String {
+        if isConnecting { return .VPN.Settings.Connecting }
+        return isOn ? .VPN.Settings.StatusOn : .VPN.Settings.StatusOff
+    }
+
     var body: some View {
         Toggle(isOn: Binding(get: { isOn }, set: { onChange($0) })) {
             HStack {
@@ -230,13 +258,17 @@ struct VPNToggleRow: View {
                 Spacer()
                 if isConnecting {
                     ProgressView()
+                        .accessibilityHidden(true)
                     Text(String.VPN.Settings.Connecting)
                         .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                         .foregroundStyle(theme.colors.textSecondary.color)
+                        .accessibilityHidden(true)
                 }
             }
         }
         .toggleStyle(SwitchToggleStyle(tint: theme.colors.actionPrimary.color))
+        .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.vpnToggle)
+        .accessibilityValue(accessibilityValue)
         .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
         .padding(.vertical, VPNHelpers.UX.rowVerticalPadding)
     }
@@ -329,6 +361,14 @@ struct VPNHelpers {
     static func usageText(usedDataInGB: Double, dataLimitInGB: Double) -> String {
         String(
             format: .VPN.Settings.DataUsage,
+            formatted(gigabytes: usedDataInGB),
+            formatted(gigabytes: dataLimitInGB)
+        )
+    }
+
+    static func usageAccessibilityText(usedDataInGB: Double, dataLimitInGB: Double) -> String {
+        String(
+            format: .VPN.Settings.DataLimitAccessibilityValue,
             formatted(gigabytes: usedDataInGB),
             formatted(gigabytes: dataLimitInGB)
         )
