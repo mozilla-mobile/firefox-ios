@@ -2,7 +2,7 @@
 "TodayWidget.QuickActionGalleryDescription" = "Pridajte si na plochu skratku pre %@. Po pridaní miniaplikácie ju upravte ťuknutím a podržaním a vyberte inú skratku.";
 
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescriptionV2" = "Začnite súkromné vyhľadávanie v prehliadači %@ pomocou vášho predvoleného vyhľadávacieho modulu.";
+"TodayWidget.QuickActionGalleryDescriptionV2" = "Spustite súkromné vyhľadávanie v prehliadači %@ pomocou vášho predvoleného vyhľadávača.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Rýchle akcie";

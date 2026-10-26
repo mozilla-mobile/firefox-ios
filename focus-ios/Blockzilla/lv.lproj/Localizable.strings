@@ -89,7 +89,7 @@
 "ExternalLink.cancelButton" = "Atcelt";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.emailButton" = "Epasts";
+"ExternalLink.emailButton" = "E-pasta adrese";
 
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "Labi, sapratu.";
