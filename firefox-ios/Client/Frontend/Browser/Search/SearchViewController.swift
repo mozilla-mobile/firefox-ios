@@ -34,12 +34,12 @@ protocol SearchViewControllerDelegate: AnyObject {
     func searchViewControllerWillHide(_ searchViewController: SearchViewController)
 }
 
-class SearchViewController: SiteTableViewController,
-                            KeyboardHelperDelegate,
-                            SearchViewDelegate,
-                            FeatureFlaggable,
-                            UserFeaturePreferenceProvider,
-                            Notifiable {
+final class SearchViewController: SiteTableViewController,
+                                  KeyboardHelperDelegate,
+                                  SearchViewDelegate,
+                                  FeatureFlaggable,
+                                  UserFeaturePreferenceProvider,
+                                  Notifiable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
     private struct UX {
@@ -60,6 +60,9 @@ class SearchViewController: SiteTableViewController,
         static let AppendButtonSize: CGFloat = 44
 
         static let resultsAnnouncementDelay: TimeInterval = 2
+
+        static let appearanceAnimationDuration: TimeInterval = 0.2
+        static let appearanceVerticalOffset: CGFloat = 12
     }
 
     var searchDelegate: SearchViewControllerDelegate?
@@ -328,6 +331,9 @@ class SearchViewController: SiteTableViewController,
 
     func reloadSearchEngines() {
         searchEngineStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        // Settle the rebuilt bar's layout right away, and without animation, so the new buttons don't get
+        // their first frames from a later, possibly animated, layout pass.
+        defer { settleSearchEngineBarLayout() }
 
         // Add search button first
         searchEngineStackView.addArrangedSubview(searchButton)
@@ -362,6 +368,26 @@ class SearchViewController: SiteTableViewController,
             engineButton.heightAnchor.constraint(equalToConstant: UX.buttonsHeight).isActive = true
 
             searchEngineStackView.addArrangedSubview(engineButton)
+        }
+    }
+
+    private func settleSearchEngineBarLayout() {
+        guard isViewLoaded, view.window != nil else { return }
+        UIView.performWithoutAnimation {
+            searchEngineContainerView.layoutIfNeeded()
+        }
+    }
+
+    func animateAppearance() {
+        view.alpha = 0
+        if !UIAccessibility.isReduceMotionEnabled {
+            view.transform = CGAffineTransform(translationX: 0, y: UX.appearanceVerticalOffset)
+        }
+        UIView.animate(withDuration: UX.appearanceAnimationDuration,
+                       delay: 0,
+                       options: [.curveEaseOut, .allowUserInteraction, .beginFromCurrentState]) {
+            self.view.alpha = 1
+            self.view.transform = .identity
         }
     }
 

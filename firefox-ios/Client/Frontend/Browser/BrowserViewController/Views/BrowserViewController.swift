@@ -2256,6 +2256,9 @@ class BrowserViewController: UIViewController,
 
         searchController.didMove(toParent: self)
 
+        UIView.performWithoutAnimation { view.layoutIfNeeded() }
+        searchController.animateAppearance()
+
         // We need to hide the Homepage content
         // from accessibility, otherwise it will
         // be read by VoiceOver when reading in the
@@ -2304,6 +2307,16 @@ class BrowserViewController: UIViewController,
         searchLoader = nil
 
         contentContainer.accessibilityElementsHidden = false
+    }
+
+    private func deferOverlayContentPresentation(_ present: @escaping (BrowserViewController) -> Void) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, overlayManager.inOverlayMode else { return }
+            present(self)
+            // The keyboard and toolbar animations are in flight at this point. Lay the new content out
+            // immediately, outside any animation block, so its first frame isn't animated in from the origin.
+            UIView.performWithoutAnimation { view.layoutIfNeeded() }
+        }
     }
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
@@ -2865,7 +2878,7 @@ class BrowserViewController: UIViewController,
             )
             overlayManager.openNewTab(url: nil, newTabSettings: .topSites)
         case .zeroSearch:
-            showZeroSearchView()
+            deferOverlayContentPresentation { $0.showZeroSearchView() }
         case .shortcutsLibrary:
             navigationHandler?.showShortcutsLibrary()
         case .quickAnswers(let transitionType):
@@ -4176,7 +4189,7 @@ class BrowserViewController: UIViewController,
             // we handle that in `showZeroSearchView()` and avoid embedding homepage here.
             let isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
             if !isRecentOrTrendingSearchEnabled || isPrivateMode {
-                showEmbeddedHomepage(inline: false, isPrivate: isPrivateMode)
+                deferOverlayContentPresentation { $0.showEmbeddedHomepage(inline: false, isPrivate: isPrivateMode) }
             }
         }
 
