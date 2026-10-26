@@ -4,10 +4,38 @@
 
 import Common
 import Shared
+import SwiftUI
 
-final class VPNSettingsViewController: SettingsTableViewController {
-    init(windowUUID: WindowUUID) {
-        super.init(style: .grouped, windowUUID: windowUUID)
+final class VPNSettingsViewController: UIViewController {
+    // TODO: replace this with the actual URL eventually
+    static let learnMoreURL = SupportUtils.URLForTopic("vpn")
+
+    private let windowUUID: WindowUUID
+    private let themeManager: ThemeManager
+    private let prefs: Prefs
+    private lazy var hostingController = UIHostingController(
+        rootView: VPNSettingsViewContainer(
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            isVPNEnabled: prefs.boolForKey(PrefsKeys.VPNSettings.isEnabled) ?? false,
+            onVPNToggled: { [prefs = self.prefs] isEnabled in
+                prefs.setBool(isEnabled, forKey: PrefsKeys.VPNSettings.isEnabled)
+            },
+            onLearnMoreTapped: { [weak self] in
+                self?.learnMoreTapped()
+            }
+        )
+    )
+
+    init(
+        windowUUID: WindowUUID,
+        prefs: Prefs,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
+    ) {
+        self.windowUUID = windowUUID
+        self.prefs = prefs
+        self.themeManager = themeManager
+        super.init(nibName: nil, bundle: nil)
         self.title = .VPN.Settings.Title
     }
 
@@ -15,7 +43,31 @@ final class VPNSettingsViewController: SettingsTableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private var theme: Theme {
-        themeManager.getCurrentTheme(for: windowUUID)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupHostingController()
+    }
+
+    private func setupHostingController() {
+        guard let hostingView = hostingController.view else { return }
+        hostingView.translatesAutoresizingMaskIntoConstraints = false
+
+        addChild(hostingController)
+        view.addSubview(hostingView)
+
+        NSLayoutConstraint.activate([
+            hostingView.topAnchor.constraint(equalTo: view.topAnchor),
+            hostingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            hostingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            hostingView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+
+        hostingController.didMove(toParent: self)
+    }
+
+    private func learnMoreTapped() {
+        let controller = SettingsContentViewController(windowUUID: windowUUID)
+        controller.url = Self.learnMoreURL
+        navigationController?.pushViewController(controller, animated: true)
     }
 }
