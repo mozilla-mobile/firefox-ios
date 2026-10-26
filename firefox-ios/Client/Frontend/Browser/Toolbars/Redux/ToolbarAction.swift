@@ -13,7 +13,6 @@ struct ToolbarAction: Action {
     let toolbarLayout: ToolbarLayoutStyle?
     let tabTrayButtonStyle: TabTrayButtonStyle?
     let isTranslucent: Bool?
-    let numberOfTabs: Int?
     let url: URL?
     let searchTerm: String?
     let isPrivate: Bool?
@@ -43,7 +42,6 @@ struct ToolbarAction: Action {
          toolbarLayout: ToolbarLayoutStyle? = nil,
          tabTrayButtonStyle: TabTrayButtonStyle? = nil,
          isTranslucent: Bool? = nil,
-         numberOfTabs: Int? = nil,
          url: URL? = nil,
          searchTerm: String? = nil,
          isPrivate: Bool? = nil,
@@ -77,7 +75,6 @@ struct ToolbarAction: Action {
         self.toolbarLayout = toolbarLayout
         self.tabTrayButtonStyle = tabTrayButtonStyle
         self.isTranslucent = isTranslucent
-        self.numberOfTabs = numberOfTabs
         self.url = url
         self.searchTerm = searchTerm
         self.isPrivate = isPrivate
@@ -132,11 +129,13 @@ enum ToolbarModernAction: ModernAction {
 
     /// The user pasted text into the address bar, entering editing mode with the pasted term.
     case didPasteSearchTerm(searchTerm: String?)
+
+    /// The number of tabs in the window changed.
+    case numberOfTabsChanged(count: Int)
 }
 
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
-    case numberOfTabsChanged
     case urlDidChange
     case lockIconChanged
     case didSetTextInLocationView

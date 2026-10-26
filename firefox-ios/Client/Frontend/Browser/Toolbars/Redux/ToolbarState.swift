@@ -169,6 +169,8 @@ struct ToolbarState: ScreenState, Sendable {
             return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
                                                                                     action,
                                                                                     actionWindowUUID))
+        case .numberOfTabsChanged(let count):
+            return state.copy(numberOfTabs: count)
         }
     }
 
@@ -212,9 +214,6 @@ struct ToolbarState: ScreenState, Sendable {
 
         case ToolbarActionType.showMenuWarningBadge:
             return handleShowMenuWarningBadge(state: state, action: action)
-
-        case ToolbarActionType.numberOfTabsChanged:
-            return handleNumberOfTabsChanged(state: state, action: action)
 
         case ToolbarActionType.didSetTabScreenshot:
             return handleDidSetTabScreenshot(state: state, action: action)
@@ -303,15 +302,6 @@ struct ToolbarState: ScreenState, Sendable {
             .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
             .copy(showMenuWarningBadge: toolbarAction.showMenuWarningBadge ?? state.showMenuWarningBadge)
-    }
-
-    @MainActor
-    private static func handleNumberOfTabsChanged(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return state
-            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
-            .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
-            .copy(numberOfTabs: toolbarAction.numberOfTabs ?? state.numberOfTabs)
     }
 
     @MainActor
