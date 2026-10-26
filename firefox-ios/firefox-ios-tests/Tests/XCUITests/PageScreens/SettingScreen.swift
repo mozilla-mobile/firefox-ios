@@ -34,6 +34,7 @@ final class SettingScreen {
 
     func closeSettingsWithDoneButton() {
         let doneButton = sel.DONE_BUTTON.element(in: app)
+        BaseTestCase().scrollToElement(doneButton, swipe: "down")
         BaseTestCase().mozWaitElementHittable(element: doneButton, timeout: TIMEOUT)
         doneButton.waitAndTap()
     }
@@ -187,8 +188,13 @@ final class SettingScreen {
         // Toolbar check only on iPhone
         if !BaseTestCase().iPad() {
             let toolbar = sel.TOOLBAR_CELL.element(in: app)
+            let doneButton = sel.DONE_BUTTON.element(in: app)
             BaseTestCase().mozWaitForElementToExist(toolbar)
+            BaseTestCase().scrollToElement(toolbar)
             XCTAssertTrue(toolbar.isVisible())
+
+            // Ensure we start from the very top
+            BaseTestCase().scrollToElement(doneButton, swipe: "down")
         }
 
         // Iterate over all expected cells
