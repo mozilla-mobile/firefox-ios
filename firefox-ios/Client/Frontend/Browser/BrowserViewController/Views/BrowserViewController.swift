@@ -4115,6 +4115,10 @@ class BrowserViewController: UIViewController,
         didSubmitSearchText(searchTerm)
     }
 
+    func addressToolbarDidHideEditingAccessoryButton() {
+        dismissGoogleLensTip()
+    }
+
     func openSuggestions(searchTerm: String) {
         if searchTerm.isEmpty {
             showZeroSearchView()

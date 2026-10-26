@@ -28,4 +28,6 @@ public protocol AddressToolbarDelegate: AnyObject {
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView)
     @MainActor
     func addressToolbarNeedsSearchReset()
+    @MainActor
+    func addressToolbarDidHideEditingAccessoryButton(_ addressToolbar: BrowserAddressToolbar)
 }

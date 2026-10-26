@@ -176,6 +176,9 @@ class BookmarksTests: FeatureFlaggedTestBase {
 
         // Enter new url
         toolbarScreen.openNewTabFromTabTray()
+        // Workaround: the microsurvey prompt on the second homepage view clears the address bar mid-typing.
+        // Remove once https://github.com/mozilla-mobile/firefox-ios/issues/36300 is fixed.
+        browserScreen.dismissMicrosurveyIfExists()
         browserScreen.tapOnAddressBar()
         browserScreen.typeOnSearchBar(text: "https://mozilla.org")
 
