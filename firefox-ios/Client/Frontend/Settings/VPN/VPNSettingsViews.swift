@@ -13,6 +13,7 @@ struct VPNSettingsViewContainer: ThemeableView {
         static let cardOuterPadding: CGFloat = 16
         static let cardSpacing: CGFloat = 16
         static let footerTopSpacing: CGFloat = 8
+
         static let simulatedConnectingDuration: TimeInterval = 2
     }
 
@@ -22,7 +23,8 @@ struct VPNSettingsViewContainer: ThemeableView {
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     let dataUsage: VPNDataUsage
-    let onSubSettingTapped: () -> Void
+    let locationName: String
+    let onLocationsTapped: () -> Void
     let onVPNToggled: (Bool) -> Void
     let onLearnMoreTapped: () -> Void
 
@@ -33,7 +35,8 @@ struct VPNSettingsViewContainer: ThemeableView {
         themeManager: ThemeManager,
         isVPNEnabled: Bool = false,
         dataUsage: VPNDataUsage = .placeholder,
-        onSubSettingTapped: @escaping () -> Void = {},
+        locationName: String = .VPN.Settings.LocationRecommended,
+        onLocationsTapped: @escaping () -> Void = {},
         onVPNToggled: @escaping (Bool) -> Void = { _ in },
         onLearnMoreTapped: @escaping () -> Void = {}
     ) {
@@ -41,7 +44,8 @@ struct VPNSettingsViewContainer: ThemeableView {
         self.themeManager = themeManager
         self._isVPNEnabled = State(initialValue: isVPNEnabled)
         self.dataUsage = dataUsage
-        self.onSubSettingTapped = onSubSettingTapped
+        self.locationName = locationName
+        self.onLocationsTapped = onLocationsTapped
         self.onVPNToggled = onVPNToggled
         self.onLearnMoreTapped = onLearnMoreTapped
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -66,7 +70,7 @@ struct VPNSettingsViewContainer: ThemeableView {
         VPNHelpers.card(theme: theme) {
             VPNSettingsContentView(theme: theme, onLearnMoreTapped: onLearnMoreTapped)
             VPNHelpers.divider()
-            VPNLocationsRow(theme: theme, action: onSubSettingTapped)
+            VPNLocationsRow(theme: theme, action: onLocationsTapped)
             VPNHelpers.divider()
             VPNToggleRow(isOn: isVPNEnabled, isConnecting: isVPNConnecting, theme: theme, onChange: handleVPNToggle)
         }
@@ -334,8 +338,8 @@ struct VPNDataUsage: Equatable {
 
 struct VPNHelpers {
     struct UX {
-        static let horizontalPadding: CGFloat = 16
-        static let rowVerticalPadding: CGFloat = 12
+        static let horizontalPadding: CGFloat = 20
+        static let rowVerticalPadding: CGFloat = 16
         static let cardCornerRadius: CGFloat = 26
         static let warningUsageThreshold = 0.75
         static let fullUsageOpacity: CGFloat = 0.75

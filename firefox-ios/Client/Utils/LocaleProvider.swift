@@ -28,6 +28,11 @@ extension LocaleProvider {
     func nativeLanguageName(for code: String) -> String {
         return Locale(identifier: code).localizedString(forIdentifier: code)?.localizedCapitalized ?? code
     }
+
+    /// Returns the region name localized in the current locale (e.g. "Germany" for "DE" when current locale is "en").
+    func localizedRegionName(for code: String) -> String {
+        return current.localizedString(forRegionCode: code) ?? code
+    }
 }
 
 struct SystemLocaleProvider: LocaleProvider {
