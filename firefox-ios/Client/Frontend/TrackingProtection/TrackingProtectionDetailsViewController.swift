@@ -128,8 +128,8 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
             scrollView.bottomAnchor.constraint(
                 greaterThanOrEqualTo: view.bottomAnchor
             ),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             baseView.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
                 constant: UX.baseDistance
@@ -149,8 +149,8 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private func setupHeaderView() {
         view.addSubview(headerView)
         let headerConstraints = [
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             headerView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor,
                 constant: TPMenuUX.UX.popoverTopDistance

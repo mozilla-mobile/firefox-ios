@@ -105,10 +105,10 @@ final class BlockedTrackersTableViewController: UIViewController,
                 constant: TPMenuUX.UX.popoverTopDistance
             ),
             navigationView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
             ),
             navigationView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
             )
         ]
         constraints.append(contentsOf: navigationViewContraints)
