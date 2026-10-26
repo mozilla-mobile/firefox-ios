@@ -10,6 +10,10 @@ import UIKit
 final class StoryCategoryPickerView: UIView, ThemeApplicable {
     struct UX {
         static let topSpacing: CGFloat = 16
+        static var bottomSpacing: CGFloat {
+            if #available(iOS 27, *) { return 8 }
+            return 0
+        }
     }
 
     static let allCategoryID = "__all__"
@@ -64,7 +68,7 @@ final class StoryCategoryPickerView: UIView, ThemeApplicable {
             chipPickerView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topSpacing),
             chipPickerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             chipPickerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            chipPickerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            chipPickerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpacing),
         ])
     }
 
