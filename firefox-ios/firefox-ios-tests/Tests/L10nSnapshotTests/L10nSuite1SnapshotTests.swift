@@ -367,4 +367,20 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         sleep(2)
         snapshot("01SearchResults")
     }
+
+    @MainActor
+    func testTakeMarketingSummarizeArticleScreenshot() {
+        navigator.openURL("https://blog.mozilla.org/en/firefox/shake-to-summarize-time-best-inventions/")
+        waitUntilPageLoad()
+        snapshot("04SummarizeArticle")
+    }
+
+    @MainActor
+    func testTakeMarketingReaderModeScreenshot() {
+        navigator.openURL("https://blog.mozilla.org/en/firefox/fast-company-recognition/")
+        waitUntilPageLoad()
+        app.buttons[AccessibilityIdentifiers.Toolbar.readerModeWithSummarizerButton].waitAndTap()
+        waitUntilPageLoad()
+        snapshot("05ReaderMode")
+    }
 }
