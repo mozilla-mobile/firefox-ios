@@ -336,6 +336,14 @@ workflows:
         - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" -collect-test-diagnostics never'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator27.1-arm64.xctestrun
     - deploy-to-bitrise-io@2: {}
+    - xcode-test-without-building@0:
+        timeout: 1200
+        inputs:
+        - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
+        - destination: platform=iOS Simulator,name=iPhone Duo,OS=27.1
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" -collect-test-diagnostics never'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator27.1-arm64.xctestrun
+    - deploy-to-bitrise-io@2: {}
   firefox_scheme_build_for_test:
     description: Build Firefox scheme and shard XCUITests for parallel execution
     before_run:
