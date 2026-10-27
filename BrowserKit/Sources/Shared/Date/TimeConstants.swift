@@ -17,6 +17,15 @@ public let OneHourInMilliseconds = 60 * OneMinuteInMilliseconds
 public let OneMinuteInMilliseconds = 60 * OneSecondInMilliseconds
 public let OneSecondInMilliseconds: UInt64 = 1000
 
+private let iso8601DateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.calendar = Calendar(identifier: .gregorian)
+    formatter.timeZone = TimeZone(secondsFromGMT: 0)
+    formatter.dateFormat = "yyyy-MM-dd"
+    return formatter
+}()
+
 private let rfc822DateFormatter: DateFormatter = {
     let dateFormatter = DateFormatter()
     dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
@@ -90,6 +99,11 @@ extension Date {
     public static func getCurrentPeriod() -> Int {
         let currentYear = Calendar.current.component(.year, from: Date())
         return Int((currentYear / 1000) * 1000)
+    }
+
+    /// Returns the UTC date in yyyy-MM-dd format.
+    public func toISO8601DateString() -> String {
+        return iso8601DateFormatter.string(from: self)
     }
 
     public func toRFC822String() -> String {
