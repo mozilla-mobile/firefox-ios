@@ -11,6 +11,8 @@ public enum VPNAuthError: Error, Equatable {
     case noStoredSession
     case notEnrolled
     case sessionNotPersisted
+    /// The proxy token isn't a JWT with readable `exp` / `nbf` claims
+    case invalidToken
 }
 
 extension VPNAuthError {

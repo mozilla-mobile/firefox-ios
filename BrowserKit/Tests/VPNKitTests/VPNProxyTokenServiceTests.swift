@@ -17,11 +17,15 @@ final class VPNProxyTokenServiceTests: XCTestCase {
 
         let result = try await subject.fetchProxyToken()
 
-        XCTAssertEqual(result.token, "vpn-jwt")
+        XCTAssertEqual(result.bearerToken, validJWT)
+        XCTAssertEqual(result.notBefore, Date(timeIntervalSince1970: 1_700_000_000))
+        XCTAssertEqual(result.expiresAt, Date(timeIntervalSince1970: 1_700_003_600))
+        XCTAssertNil(result.usage)
 
         let req = try XCTUnwrap(urlSession.lastURLRequest)
         XCTAssertEqual(req.url?.path, "/api/v1/ipn/token")
         XCTAssertEqual(req.httpMethod, "GET")
+        XCTAssertEqual(req.cachePolicy, .reloadIgnoringLocalCacheData)
         XCTAssertEqual(req.value(forHTTPHeaderField: "Authorization"), "Bearer stored-dsj")
         XCTAssertEqual(auth.authenticateCallCount, 0, "Must never escalate to enrollment")
     }
@@ -53,7 +57,7 @@ final class VPNProxyTokenServiceTests: XCTestCase {
 
         let result = try await subject.fetchProxyToken()
 
-        XCTAssertEqual(result.token, "vpn-jwt")
+        XCTAssertEqual(result.bearerToken, validJWT)
         XCTAssertEqual(auth.refreshCallCount, 1, "Should refresh the session once before retrying")
         XCTAssertEqual(urlSession.callCount, 2)
     }
@@ -92,7 +96,67 @@ final class VPNProxyTokenServiceTests: XCTestCase {
         }
     }
 
+    // MARK: - JWT decoding
+
+    func test_fetchProxyToken_withTokenMissingNbf_usesCurrentDateForNotBefore() async throws {
+        let jwt = makeJWT(payload: #"{"exp":1700003600}"#)
+        let subject = createSubject(responseToken: jwt)
+        let before = Date()
+
+        let result = try await subject.fetchProxyToken()
+
+        XCTAssertGreaterThanOrEqual(result.notBefore, before)
+        XCTAssertEqual(result.expiresAt, Date(timeIntervalSince1970: 1_700_003_600))
+    }
+
+    func test_fetchProxyToken_withTokenMissingSegments_throwsInvalidToken() async {
+        await assertThrowsInvalidToken(responseToken: "header.payload")
+    }
+
+    func test_fetchProxyToken_withPayloadMissingExp_throwsInvalidToken() async {
+        await assertThrowsInvalidToken(responseToken: makeJWT(payload: #"{"sub":"user"}"#))
+    }
+
+    func test_fetchProxyToken_withPayloadNotBase64_throwsInvalidToken() async {
+        await assertThrowsInvalidToken(responseToken: "header.!!!.signature")
+    }
+
     // MARK: - Helpers
+
+    private var validJWT: String {
+        makeJWT(payload: #"{"nbf":1700000000,"exp":1700003600}"#)
+    }
+
+    private func createSubject(responseToken: String) -> VPNProxyTokenService {
+        let auth = MockVPNAuthenticating(session: session(jwt: "stored-dsj"))
+        let urlSession = MockURLSession(with: tokenJSON(token: responseToken), response: httpResponse(statusCode: 200))
+        return VPNProxyTokenService(with: .dev, urlSession: urlSession, authService: auth)
+    }
+
+    private func assertThrowsInvalidToken(
+        responseToken: String,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async {
+        let subject = createSubject(responseToken: responseToken)
+        do {
+            _ = try await subject.fetchProxyToken()
+            XCTFail("Expected fetchProxyToken to throw", file: file, line: line)
+        } catch let error as VPNAuthError {
+            XCTAssertEqual(error, .invalidToken, file: file, line: line)
+        } catch {
+            XCTFail("Unexpected error: \(error)", file: file, line: line)
+        }
+    }
+
+    /// Builds an unsigned JWT whose payload is base64url-encoded without padding, as Guardian returns it.
+    private func makeJWT(payload: String) -> String {
+        let encoded = Data(payload.utf8).base64EncodedString()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
+        return "header.\(encoded).signature"
+    }
 
     private func session(jwt: String) -> VPNDeviceSession {
         VPNDeviceSession(
@@ -102,8 +166,8 @@ final class VPNProxyTokenServiceTests: XCTestCase {
         )
     }
 
-    private func tokenJSON() -> Data {
-        Data(#"{"token":"vpn-jwt"}"#.utf8)
+    private func tokenJSON(token: String? = nil) -> Data {
+        Data(#"{"token":"\#(token ?? validJWT)"}"#.utf8)
     }
 
     private func httpResponse(statusCode: Int) -> HTTPURLResponse {

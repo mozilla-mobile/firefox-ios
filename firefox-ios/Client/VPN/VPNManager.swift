@@ -7,6 +7,7 @@ import Common
 import Shared
 import MozillaAppServices
 import Network
+import VPNKit
 import WebEngine
 
 @MainActor
@@ -20,6 +21,7 @@ enum VPNError: Error {
     case notSignedIn
     case noServerFound
     case proxyURLCannotBeGenerated
+    case tokenProviderUnavailable
 }
 
 @available(iOS 17.0, *)
@@ -37,9 +39,9 @@ struct DefaultProxyConfigurator: ProxyConfigurator {
 
 @available(iOS 17.0, *)
 final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
-    private static let secretKey = "VPNGuardianSecret"
     private let logger: Logger
-    private let guardian: VPNGuardianProviding
+    private let environment: VPNEnvironment
+    private let guardian: VPNGuardianProviding?
     private let serverManager: VPNServerManaging
     private let windowManager: WindowManager
     private let proxyApplier: ProxyConfigurator
@@ -54,19 +56,17 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
 
     init(
         logger: Logger = DefaultLogger.shared,
-        clientConfig: VPNGuardian.Configuration = .staging,
         profile: Profile = AppContainer.shared.resolve(),
         windowManager: WindowManager = AppContainer.shared.resolve(),
         guardian: VPNGuardianProviding? = nil,
+        authCreator: VPNAuthCreating = VPNAuthCreator(),
         serverManager: VPNServerManaging? = nil,
         proxyApplier: ProxyConfigurator = DefaultProxyConfigurator()
     ) {
         self.logger = logger
-        self.guardian = guardian ?? VPNGuardian(
-            authHeaders: Self.guardianAuthHeaders(logger: logger),
-            configuration: clientConfig,
-            logger: logger
-        )
+        let environmentKey = profile.prefs.stringForKey(PrefsKeys.VPNSettings.endpointEnvironment) ?? ""
+        self.environment = VPNEnvironment(rawValue: environmentKey) ?? .prod
+        self.guardian = guardian ?? VPNGuardian(authCreator: authCreator, prefs: profile.prefs, logger: logger)
         self.serverManager = serverManager ?? VPNServerManager(
             client: profile.remoteSettingsService.makeClient(collectionName: VPNServerManager.collectionName),
             logger: logger
@@ -77,9 +77,14 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
 
     func start() async {
         do {
-            let pass = try await self.guardian.getPass()
+            guard let guardian = self.guardian else {
+                throw VPNError.tokenProviderUnavailable
+            }
 
-            guard let server = await self.serverManager.selectServer(countryCode: nil) else {
+            let pass = try await guardian.getPass()
+
+            // TODO: FXIOS-16873 When we implement location selection it will be passed in here
+            guard let server = await serverManager.selectServer(countryCode: nil, environment: environment) else {
                 throw VPNError.noServerFound
             }
 
@@ -106,30 +111,15 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
         self.userPreferences.setPreferenceFor(.vpnFeature, to: false)
     }
 
-    // TODO: FXIOS-16874 This will go away with VPNKit integration.
-    // Guardian's shared auth secret, supplied at runtime via the `VPN_GUARDIAN_SECRET` environment
-    private static func guardianAuthHeaders(logger: Logger) -> [String: String] {
-        let secret = Bundle.main.object(forInfoDictionaryKey: secretKey) as? String
-        guard let secret, !secret.isEmpty else {
-            logger.log(
-                "\(secretKey) is unset — Guardian pass requests will fail to authenticate",
-                level: .warning,
-                category: .vpn
-            )
-            return [:]
-        }
-        return ["secret": secret]
-    }
-
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the new
     /// bearer token. The endpoint is unchanged, so this rotates without forcing a session
     /// reset: WebKit keeps its existing connection pool, in-flight requests finish under the
     /// proxy's grace period, and new requests pick up the rotated header. Forcing the reset
     /// here would tear down sessions out from under webviews that are still loading.
-    private func startPassRotation(after initial: VPNGuardian.ProxyPass) {
+    private func startPassRotation(after initial: VPNProxyPass) {
         rotationTask?.cancel()
         rotationTask = Task { [weak self] in
-            guard let stream = self?.guardian.passRotation(after: initial) else { return }
+            guard let stream = self?.guardian?.passRotation(after: initial) else { return }
             do {
                 for try await new in stream {
                     guard let self,
@@ -179,7 +169,7 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
         }
     }
 
-    private func buildProxyConfig(server: VPNGuardian.Server, pass: VPNGuardian.ProxyPass) throws -> ProxyConfiguration {
+    private func buildProxyConfig(server: VPNGuardian.Server, pass: VPNProxyPass) throws -> ProxyConfiguration {
         var components = URLComponents()
         components.scheme = "https"
         components.host = server.hostname

@@ -5,8 +5,8 @@
 import Foundation
 
 public protocol VPNTokenProviding: Sendable {
-    /// A valid proxy token, will re-attest as needed.
-    func proxyToken() async throws -> VPNProxyToken
+    /// A valid proxy pass, will re-attest as needed.
+    func proxyToken() async throws -> VPNProxyPass
 }
 
 /// The single entry point for callers that just need a proxy credential.
@@ -19,7 +19,7 @@ public struct VPNTokenProvider: VPNTokenProviding {
         self.tokenService = tokenService
     }
 
-    public func proxyToken() async throws -> VPNProxyToken {
+    public func proxyToken() async throws -> VPNProxyPass {
         // Establishing the session first is what makes this work on a fresh install, where there is
         // nothing to exchange yet.
         _ = try await authService.authenticate()
