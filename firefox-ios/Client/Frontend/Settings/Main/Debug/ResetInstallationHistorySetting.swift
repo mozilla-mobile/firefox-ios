@@ -6,6 +6,14 @@ import UIKit
 
 #if DEBUG || MOCKABLE_STORE
 final class ResetInstallationHistorySetting: HiddenSetting {
+    private let historyStore: InstallationHistoryStoring
+
+    init(settings: SettingsTableViewController,
+         historyStore: InstallationHistoryStoring = InstallationHistoryStore()) {
+        self.historyStore = historyStore
+        super.init(settings: settings)
+    }
+
     override var title: NSAttributedString? {
         guard let theme else { return nil }
         return NSAttributedString(string: "Reset installation history",
@@ -15,8 +23,7 @@ final class ResetInstallationHistorySetting: HiddenSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         let message: String
         do {
-            let store = InstallationHistoryStore()
-            try store.resetForTesting()
+            try historyStore.resetForTesting()
             message = "Installation history deleted. The processing flag and telemetry are unchanged."
         } catch {
             message = "Could not reset installation history: \(error.localizedDescription)"
