@@ -560,6 +560,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         hiddenDebugOptions.append(ClearVPNSessionSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         #if DEBUG || MOCKABLE_STORE
+        hiddenDebugOptions.append(InstallationDetailsSetting(settings: self))
         hiddenDebugOptions.append(ResetInstallationHistorySetting(settings: self))
         #endif
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
