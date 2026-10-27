@@ -165,21 +165,27 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         pasteText("https://mozilla.org", intoCellAt: 0)
         pasteText("firefox", intoCellAt: 1)
         pasteText("challenge-the-default", intoCellAt: 2)
-        app.navigationBars["Client.AddCredentialView"].buttons.element(boundBy: 1).waitAndTap(timeout: 5)
+        // Save is the last navigation bar button. On iPhone Duo, Cancel moves out of the navigation bar,
+        // leaving Save as its only button.
+        let addCredentialButtons = app.navigationBars["Client.AddCredentialView"].buttons
+        mozWaitForElementToExist(addCredentialButtons.firstMatch, timeout: 5)
+        addCredentialButtons.element(boundBy: addCredentialButtons.count - 1).waitAndTap(timeout: 5)
 
         mozWaitForElementToExist(app.tables["Login List"], timeout: 15)
         // The "Save password?" sheet ([Not Now / Save]) can be tapped before it finishes animating
         // in, so the tap is ignored and the sheet lingers, timing out the test. Wait until the
         // dismiss button is actually hittable before tapping it.
+        // iPhone Duo saves the login without showing the sheet.
         let saveSheet = app.sheets.firstMatch
-        mozWaitForElementToExist(saveSheet)
-        let dismissButton = saveSheet.buttons.firstMatch
-        mozWaitForElementToExist(dismissButton)
-        let hittable = XCTNSPredicateExpectation(predicate: NSPredicate(format: "hittable == true"),
-                                                 object: dismissButton)
-        _ = XCTWaiter().wait(for: [hittable], timeout: TIMEOUT)
-        dismissButton.tap()
-        mozWaitForElementToNotExist(saveSheet)
+        if saveSheet.waitForExistence(timeout: TIMEOUT) {
+            let dismissButton = saveSheet.buttons.firstMatch
+            mozWaitForElementToExist(dismissButton)
+            let hittable = XCTNSPredicateExpectation(predicate: NSPredicate(format: "hittable == true"),
+                                                     object: dismissButton)
+            _ = XCTWaiter().wait(for: [hittable], timeout: TIMEOUT)
+            dismissButton.tap()
+            mozWaitForElementToNotExist(saveSheet)
+        }
         snapshot("CreatedLoginView")
 
         // Tap the saved login (row 0 is the "Save passwords" toggle; the entry is the next row).
