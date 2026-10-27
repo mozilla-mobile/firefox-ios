@@ -46,6 +46,19 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(coordinator.didFinishCallCount, 1)
     }
 
+    func testPresentationControllerDidDismiss_dispatchesCancelAndNotifiesCoordinator() {
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+        let presentationController = UIPresentationController(presentedViewController: subject, presenting: nil)
+
+        subject.presentationControllerDidDismiss(presentationController)
+
+        XCTAssertEqual(lastViewAction()?.actionType as? WebCompatReporterViewActionType, .cancel)
+        XCTAssertEqual(coordinator.didFinishCallCount, 1)
+    }
+
     // MARK: - Delegate intents → Redux actions
 
     func testDidTapLearnMore_forwardsURLToCoordinator() throws {
