@@ -537,9 +537,8 @@ class BaseTestCase: XCTestCase {
         return false
     }
 
-    /// iPhone Duo reports `.phone` as its idiom, so it is identified by its simulator model identifier.
     func iPhoneDuo() -> Bool {
-        return ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] == "iPhone19,4"
+        return isIPhoneDuo()
     }
 
     /// - Parameter timeout: how long the loading indicator may stay up. Raise it for slow resources.
