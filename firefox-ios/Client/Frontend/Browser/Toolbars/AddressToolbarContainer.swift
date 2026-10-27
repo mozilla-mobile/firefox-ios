@@ -179,6 +179,14 @@ final class AddressToolbarContainer: UIView,
     init(toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) {
         self.toolbarHelper = toolbarHelper
         super.init(frame: .zero)
+
+        #if compiler(>=6.4)
+        if #available(iOS 27.1, *) {
+            registerForTraitChanges(UITraitCollection.systemTraitsAffectingVerticalBarEdge) { (self: Self, _) in
+                self.updateSkeletonAddressBarsFixedHorizontalSafeAreaInsets()
+            }
+        }
+        #endif
     }
 
     required init?(coder: NSCoder) {
@@ -392,6 +400,20 @@ final class AddressToolbarContainer: UIView,
         updateModel(addressToolbarContainerLens: state)
         if shouldShowAccessoryGradient(for: self.state) != wasShowingAccessoryGradient {
             setNeedsLayout()
+        }
+    }
+
+    override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        updateSkeletonAddressBarsFixedHorizontalSafeAreaInsets()
+    }
+
+    /// The skeleton bars sit off screen, where next to a vertical system bar (folded iPhone Duo) their own safe area
+    /// insets differ from the ones they get once on screen, so in that case they use the container's insets instead.
+    private func updateSkeletonAddressBarsFixedHorizontalSafeAreaInsets() {
+        let insets = traitCollection.hasVerticalSystemBar ? safeAreaInsets : nil
+        [leftSkeletonAddressBar, rightSkeletonAddressBar].forEach {
+            $0.fixedHorizontalSafeAreaInsets = insets
         }
     }
 

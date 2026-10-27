@@ -89,6 +89,17 @@ public class BrowserAddressToolbar: UIView,
     private var toolbarContainerSafeAreaTrailingConstraint: NSLayoutConstraint?
     private var toolbarContainerWindowControlLeadingConstraint: NSLayoutConstraint?
     private var toolbarContainerWindowControlTrailingConstraint: NSLayoutConstraint?
+    private var toolbarContainerFixedInsetsLeftConstraint: NSLayoutConstraint?
+    private var toolbarContainerFixedInsetsRightConstraint: NSLayoutConstraint?
+
+    /// Horizontal insets used instead of the toolbar's own safe area insets when the toolbar is at the bottom.
+    /// Translating the toolbar changes its safe area insets, setting stable insets keeps its layout stable(FXIOS-17137)
+    public var fixedHorizontalSafeAreaInsets: UIEdgeInsets? {
+        didSet {
+            guard fixedHorizontalSafeAreaInsets != oldValue else { return }
+            updateToolbarContainerHorizontalConstraints(for: addressBarPosition)
+        }
+    }
 
     // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
     private var previousConfiguration: AddressToolbarConfiguration? {
@@ -294,6 +305,8 @@ public class BrowserAddressToolbar: UIView,
         )
         toolbarContainerSafeAreaLeadingConstraint?.isActive = true
         toolbarContainerSafeAreaTrailingConstraint?.isActive = true
+        toolbarContainerFixedInsetsLeftConstraint = toolbarContainerView.leftAnchor.constraint(equalTo: leftAnchor)
+        toolbarContainerFixedInsetsRightConstraint = toolbarContainerView.rightAnchor.constraint(equalTo: rightAnchor)
 
         if #available(iOS 26.0, *) {
             let windowControlLayoutGuide = layoutGuide(for: .margins(cornerAdaptation: .horizontal))
@@ -347,14 +360,35 @@ public class BrowserAddressToolbar: UIView,
     }
 
     private func updateToolbarContainerHorizontalConstraints(for toolbarPosition: AddressToolbarPosition) {
+        let useWindowControlGuide: Bool
         if #available(iOS 26.0, *), toolbarPosition == .top {
-            toolbarContainerSafeAreaLeadingConstraint?.isActive = false
-            toolbarContainerSafeAreaTrailingConstraint?.isActive = false
+            useWindowControlGuide = true
+        } else {
+            useWindowControlGuide = false
+        }
+        let fixedInsets = toolbarPosition == .bottom ? fixedHorizontalSafeAreaInsets : nil
+
+        // Deactivate all sets first, only one of them can be active at a time.
+        toolbarContainerWindowControlLeadingConstraint?.isActive = false
+        toolbarContainerWindowControlTrailingConstraint?.isActive = false
+        toolbarContainerSafeAreaLeadingConstraint?.isActive = false
+        toolbarContainerSafeAreaTrailingConstraint?.isActive = false
+        toolbarContainerFixedInsetsLeftConstraint?.isActive = false
+        toolbarContainerFixedInsetsRightConstraint?.isActive = false
+
+        if useWindowControlGuide {
+            // Top toolbar on iOS 26+: keep clear of the window controls (e.g. iPad windowing).
             toolbarContainerWindowControlLeadingConstraint?.isActive = true
             toolbarContainerWindowControlTrailingConstraint?.isActive = true
+        } else if let fixedInsets {
+            // Bottom toolbar with `fixedHorizontalSafeAreaInsets` set, used instead of its own safe area
+            // (e.g. tab swipe next to a vertical system bar on the folded iPhone Duo).
+            toolbarContainerFixedInsetsLeftConstraint?.constant = fixedInsets.left
+            toolbarContainerFixedInsetsRightConstraint?.constant = -fixedInsets.right
+            toolbarContainerFixedInsetsLeftConstraint?.isActive = true
+            toolbarContainerFixedInsetsRightConstraint?.isActive = true
         } else {
-            toolbarContainerWindowControlLeadingConstraint?.isActive = false
-            toolbarContainerWindowControlTrailingConstraint?.isActive = false
+            // Every other case: keep clear of the toolbar's own safe area.
             toolbarContainerSafeAreaLeadingConstraint?.isActive = true
             toolbarContainerSafeAreaTrailingConstraint?.isActive = true
         }
