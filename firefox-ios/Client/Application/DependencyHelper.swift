@@ -54,6 +54,8 @@ class DependencyHelper {
         appDelegate.gleanUsageReportingMetricsService
         AppContainer.shared.register(service: gleanUsageReportingMetricsService)
 
+        AppContainer.shared.register(service: appDelegate.installationTelemetryService)
+
         AppContainer.shared.register(service: appDelegate.shareTelemetry)
 
         let userFeaturePreferenceManager = UserFeaturePreferenceManager(prefs: profile.prefs)
