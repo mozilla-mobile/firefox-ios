@@ -2827,9 +2827,7 @@ installation:
       Original app acquisition date in UTC YYYY-MM-DD.
     lifetime: ping
     send_in_pings:
-      - baseline
-    no_lint:
-      - BASELINE_PING
+      - installation
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXMO-1028
     data_reviews: []
@@ -2844,9 +2842,7 @@ installation:
       App version associated with the original acquisition.
     lifetime: ping
     send_in_pings:
-      - baseline
-    no_lint:
-      - BASELINE_PING
+      - installation
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXMO-1028
     data_reviews: []
@@ -2862,9 +2858,7 @@ installation:
       Number of app installations observed on this device.
     lifetime: ping
     send_in_pings:
-      - baseline
-    no_lint:
-      - BASELINE_PING
+      - installation
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXMO-1028
     data_reviews: []
@@ -2879,9 +2873,7 @@ installation:
       Last recorded activity date from the previous installation in UTC YYYY-MM-DD.
     lifetime: ping
     send_in_pings:
-      - baseline
-    no_lint:
-      - BASELINE_PING
+      - installation
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXMO-1028
     data_reviews: []
