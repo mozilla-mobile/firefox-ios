@@ -53,8 +53,9 @@ protocol WindowManager {
     /// is then "reserved" in order to ensure that during app launch if multiple
     /// windows are being restored concurrently, we never supply the same UUID
     /// to more than one window.
+    /// - Parameter supportsMultipleWindows: whether the environment allows multiple windows (like iPad or iPhone Duo).
     /// - Returns: a UUID for the next window to be opened.
-    func reserveNextAvailableWindowUUID(isIpad: Bool) -> ReservedWindowUUID
+    func reserveNextAvailableWindowUUID(supportsMultipleWindows: Bool) -> ReservedWindowUUID
 
     /// Signals the WindowManager that a window event has occurred. Window events
     /// are communicated to any interested Coordinators for _all_ windows, but
@@ -180,7 +181,7 @@ final class WindowManagerImplementation: WindowManager {
         windowOrderingPriority = prefs
     }
 
-    func reserveNextAvailableWindowUUID(isIpad: Bool) -> ReservedWindowUUID {
+    func reserveNextAvailableWindowUUID(supportsMultipleWindows: Bool) -> ReservedWindowUUID {
         // Continue to provide the expected hardcoded UUID for UI tests.
         guard !AppConstants.isRunningUITests else {
             return ReservedWindowUUID(uuid: WindowUUID.DefaultUITestingUUID, isNew: false)
@@ -208,16 +209,10 @@ final class WindowManagerImplementation: WindowManager {
                    level: .debug,
                    category: .window)
 
-        let availableUUIDs = onDiskUUIDs.filter {
-            !openWindowUUIDs.contains($0) && !reservedUUIDs.contains($0)
-        }
-        let hasOtherWindows = !openWindowUUIDs.isEmpty || !reservedUUIDs.isEmpty
-
-        // On iPhone devices we usually expect a single window, but phone idiom devices like
-        // iPhone Duo can open a second window in Split View. Once another window is open or
-        // reserved, we use the same logic as iPad so each window gets its own UUID.
+        // On devices that don't support multiple windows (like iPhone), we expect there only to ever be
+        // a single window. If there are >1 windows we've encountered some type of unexpected state.
         let result: ReservedWindowUUID
-        if !isIpad && !hasOtherWindows {
+        if !supportsMultipleWindows {
             // We should always have either a single UUID on disk or no UUIDs because this is a brand new app install
             if onDiskUUIDs.isEmpty {
                 result = ReservedWindowUUID(uuid: WindowUUID(), isNew: true)
@@ -226,16 +221,27 @@ final class WindowManagerImplementation: WindowManager {
 
                 let uuidCount = onDiskUUIDs.count
                 if uuidCount > 1 {
-                    // Multiple tab files on iPhone used to be unexpected (see the v128 incident, FXIOS-9516),
-                    // but iPhone Duo can have one per window, so we only log and keep the files.
+                    // This is unexpected. Potentially related to incident in v128 (see: FXIOS-9516).
+                    // On iPhone, we should never have more than 1 window tab file. Log an error and
+                    // clean up the UUID(s) that we know won't be used. We expect a certain number of
+                    // these fatal errors to be logged for users previously impacted by the above, and
+                    // then it should fall to zero.
                     logger.log("Detected multiple window tab files on iPhone",
-                               level: .warning,
+                               level: .fatal,
                                category: .window,
                                extra: ["uuidCount": "\(uuidCount)"])
+                    let uuidsToDelete = Array(onDiskUUIDs.dropFirst())
+                    Task { [tabDataStore] in
+                        await tabDataStore.removeWindowData(forUUIDs: uuidsToDelete)
+                    }
                 }
             }
         } else {
-            result = nextWindowUUIDToOpen(availableUUIDs)
+            let filteredUUIDs = onDiskUUIDs.filter {
+                !openWindowUUIDs.contains($0) && !reservedUUIDs.contains($0)
+            }
+
+            result = nextWindowUUIDToOpen(filteredUUIDs)
         }
 
         logger.log("WindowManager: reserve next UUID result = \(result.uuid.uuidString) Is new?: \(result.isNew)",
@@ -302,7 +308,7 @@ final class WindowManagerImplementation: WindowManager {
     /// - Parameter onDiskUUIDs: on-disk UUIDs representing windows that are not
     /// already open or reserved (this is important - these UUIDs should be pre-
     /// filtered).
-    /// - Returns: the UUID for the next window that will be opened on iPad.
+    /// - Returns: the UUID for the next window that will be opened on devices that support multiple windows.
     private func nextWindowUUIDToOpen(_ onDiskUUIDs: [WindowUUID]) -> ReservedWindowUUID {
         func nextUUIDUsingFallbackSorting() -> ReservedWindowUUID {
             let sortedUUIDs = onDiskUUIDs.sorted(by: { return $0.uuidString > $1.uuidString })
