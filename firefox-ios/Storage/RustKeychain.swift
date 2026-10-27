@@ -394,7 +394,14 @@ func deleteKeychainSecClass(_ secClass: CFString,
     query[kSecReturnAttributes as String] = true
     query[kSecReturnPersistentRef as String] = true
     let (status, result) = keychain.load(query: query)
-    guard status == errSecSuccess else { return status }
+    guard status == errSecSuccess else {
+        if status != errSecItemNotFound {
+            DefaultLogger.shared.log("Failed to enumerate Keychain items: \(status)",
+                                     level: .warning,
+                                     category: .storage)
+        }
+        return status
+    }
     guard let items = result as? [[String: Any]] else { return errSecDecode }
 
     var deletionStatus = errSecSuccess
