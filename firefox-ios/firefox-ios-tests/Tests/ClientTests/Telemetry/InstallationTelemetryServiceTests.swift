@@ -89,6 +89,8 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
         XCTAssertEqual(mockGleanWrapper.savedValues as? [String], ["2025-10-09", "12345"])
         XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 1)
+        XCTAssertTrue(mockGleanWrapper.savedPing as? Ping<NoReasonCodes> === GleanMetrics.Pings.shared.installation)
     }
 
     func testOnForeground_onReinstall_recordsPreviousDateAndUpdatesHistory() async throws {
@@ -100,6 +102,7 @@ final class InstallationTelemetryServiceTests: XCTestCase {
                        InstallationHistory(installCounter: 4, lastSeenDate: mockDateProvider.fixedDate))
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [4])
         XCTAssertEqual(mockGleanWrapper.savedValues as? [String], ["1970-01-01"])
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 1)
     }
 
     func testOnForeground_onExistingInstallation_initializesHistoryWithoutMetrics() async throws {
@@ -108,6 +111,7 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         XCTAssertEqual(mockHistoryStore.value?.installCounter, 1)
         XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
         XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 0)
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
     }
 
     func testOnForeground_onExistingInstallation_preservesCounter() async throws {
@@ -180,6 +184,7 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         try await subject.onForeground()
         XCTAssertEqual(mockHistoryStore.value, previous)
         XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
 
         mockAcquisitionProvider.onFetch = nil
         profilePrefs.setBool(true, forKey: AppConstants.prefSendUsageData)
@@ -197,6 +202,7 @@ final class InstallationTelemetryServiceTests: XCTestCase {
             XCTFail("Unexpected error: \(error)")
         }
         XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
 
         mockHistoryStore.saveError = nil
         try await createSubject(hasSeenIntro: true).onForeground()
@@ -230,6 +236,7 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [1, 1, 1])
         XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 3)
         XCTAssertEqual(mockGleanWrapper.recordStringCalled, 0)
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 3)
     }
 
     func testOnForeground_whenHistoryIsCorrupt_recordsAcquisitionWithoutOverwritingHistory() async throws {
@@ -248,6 +255,7 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         XCTAssertEqual(mockGleanWrapper.recordQuantityCalled, 0)
         XCTAssertEqual(mockGleanWrapper.savedValues as? [String], ["2025-10-09", "42"])
         XCTAssertEqual(installationPrefs.boolForKey(PrefsKeys.installationProcessedKey), true)
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 1)
     }
 
     func testOnForeground_whenHistoryIsCorruptAndAcquisitionIsUnavailable_recordsNoMetrics() async throws {
@@ -313,10 +321,11 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
     }
 
-    func testOnForeground_afterBaselineSubmission_doesNotRecordInstallationMetricsAgain() async throws {
+    func testOnForeground_submitsInstallationPingOnce() async throws {
         let path = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let configuration = Configuration(dataPath: path.path, httpClient: MockInstallationPingUploader())
         Glean.shared.enableTestingMode()
+        Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.initialize(uploadEnabled: true,
                                 configuration: configuration,
                                 buildInfo: GleanMetrics.GleanBuild.info)
@@ -340,22 +349,29 @@ final class InstallationTelemetryServiceTests: XCTestCase {
                                                    featureFlagsProvider: mockFeatureFlags,
                                                    dateProvider: mockDateProvider)
         try await subject.onForeground()
-        XCTAssertEqual(GleanMetrics.Installation.installCounter.testGetValue("baseline"), 2)
-        XCTAssertEqual(GleanMetrics.Installation.lastSeenDate.testGetValue("baseline"), "1970-01-01")
-        XCTAssertEqual(GleanMetrics.Installation.originalPurchaseDate.testGetValue("baseline"), "2025-10-09")
-        XCTAssertEqual(GleanMetrics.Installation.originalAppVersion.testGetValue("baseline"), "42")
+        XCTAssertNil(GleanMetrics.Installation.installCounter.testGetValue("installation"))
+        XCTAssertNil(GleanMetrics.Installation.lastSeenDate.testGetValue("installation"))
+        XCTAssertNil(GleanMetrics.Installation.originalPurchaseDate.testGetValue("installation"))
+        XCTAssertNil(GleanMetrics.Installation.originalAppVersion.testGetValue("installation"))
 
-        XCTAssertTrue(gleanSubmitPingByNameSync("baseline", nil))
-        XCTAssertNil(GleanMetrics.Installation.installCounter.testGetValue("baseline"))
-        XCTAssertNil(GleanMetrics.Installation.lastSeenDate.testGetValue("baseline"))
-        XCTAssertNil(GleanMetrics.Installation.originalPurchaseDate.testGetValue("baseline"))
-        XCTAssertNil(GleanMetrics.Installation.originalAppVersion.testGetValue("baseline"))
+        let pings = gleanGetStoredSubmittedPingsByName("installation")
+        XCTAssertEqual(pings.count, 1)
+        let payload = try XCTUnwrap(pings.first?.payload)
+        let json = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(payload.utf8)) as? [String: Any])
+        let metrics = try XCTUnwrap(json["metrics"] as? [String: Any])
+        let quantities = try XCTUnwrap(metrics["quantity"] as? [String: Any])
+        XCTAssertEqual(quantities["installation.install_counter"] as? Int, 2)
+        let strings = try XCTUnwrap(metrics["string"] as? [String: Any])
+        XCTAssertEqual(strings["installation.last_seen_date"] as? String, "1970-01-01")
+        XCTAssertEqual(strings["installation.original_purchase_date"] as? String, "2025-10-09")
+        XCTAssertEqual(strings["installation.original_app_version"] as? String, "42")
+
         try await subject.onForeground()
+        XCTAssertFalse(gleanSubmitPingByNameSync("installation", nil))
+        XCTAssertEqual(gleanGetStoredSubmittedPingsByName("installation").count, 1)
         XCTAssertTrue(gleanSubmitPingByNameSync("baseline", nil))
-
-        let pings = gleanGetStoredSubmittedPingsByName("baseline")
-        XCTAssertEqual(pings.count, 2)
-        XCTAssertEqual(pings.filter { $0.payload?.contains("installation.install_counter") == true }.count, 1)
+        let baselinePings = gleanGetStoredSubmittedPingsByName("baseline")
+        XCTAssertFalse(baselinePings.contains { $0.payload?.contains("installation.install_counter") == true })
     }
 
     private func createSubject(hasSeenIntro: Bool = false) -> InstallationTelemetryService {

@@ -77,6 +77,7 @@ final class InstallationTelemetryService {
         try Task.checkCancellation()
         guard canCollect else { return }
         recordAcquisition(result)
+        gleanWrapper.submit(ping: GleanMetrics.Pings.shared.installation)
         installationPrefs.setBool(true, forKey: PrefsKeys.installationProcessedKey)
     }
 
@@ -123,6 +124,7 @@ final class InstallationTelemetryService {
         }
 
         recordAcquisition(acquisitionResult)
+        gleanWrapper.submit(ping: GleanMetrics.Pings.shared.installation)
         installationPrefs.setBool(true, forKey: PrefsKeys.installationProcessedKey)
     }
 
