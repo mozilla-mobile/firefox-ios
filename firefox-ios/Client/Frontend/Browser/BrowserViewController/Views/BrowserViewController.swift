@@ -4590,6 +4590,18 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
     func searchEnginesDidUpdate() {
         updateForDefaultSearchEngineDidChange()
+
+        // Engines load async, so refresh top sites to rebuild the
+        // Google top site with the loaded engine partner codes.
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        for windowUUID in windowManager.windows.keys {
+            store.dispatch(
+                HomepageAction(
+                    windowUUID: windowUUID,
+                    actionType: HomepageMiddlewareActionType.topSitesUpdated
+                )
+            )
+        }
     }
 
     func setLocationView(text: String, search: Bool) {
