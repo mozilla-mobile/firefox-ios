@@ -57,6 +57,7 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         textLabel?.text = nil
         textLabel?.textAlignment = .natural
         detailTextLabel?.text = nil
+        setFontSize()
         accessoryView = nil
         accessoryType = .none
         editingAccessoryView = nil
