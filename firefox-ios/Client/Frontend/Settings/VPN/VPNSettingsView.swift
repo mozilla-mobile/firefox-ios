@@ -183,7 +183,11 @@ struct VPNGlobeView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: UX.containerCornerRadius)
-                .fill(linearGradient(theme.colors.gradientAccentSubtle))
+                .fill(
+                    LinearGradient(gradient: theme.colors.gradientAccentSubtle.swiftUI,
+                                   startPoint: .leading,
+                                   endPoint: .trailing)
+                )
                 .background(.ultraThinMaterial,
                             in: RoundedRectangle(cornerRadius: UX.containerCornerRadius))
 
@@ -192,14 +196,14 @@ struct VPNGlobeView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: UX.iconSize, height: UX.iconSize)
-                .foregroundStyle(linearGradient(theme.colors.gradientAccent))
+                .foregroundStyle(
+                    LinearGradient(gradient: theme.colors.gradientAccent.swiftUI,
+                                   startPoint: .leading,
+                                   endPoint: .trailing)
+                )
         }
         .frame(width: UX.containerSize, height: UX.containerSize)
         .accessibilityHidden(true)
-    }
-
-    private func linearGradient(_ gradient: Common.Gradient) -> LinearGradient {
-        LinearGradient(gradient: gradient.swiftUI, startPoint: .leading, endPoint: .trailing)
     }
 }
 
@@ -331,7 +335,7 @@ struct VPNHelpers {
         static let horizontalPadding: CGFloat = 16
         static let rowVerticalPadding: CGFloat = 12
         static let cardCornerRadius: CGFloat = 26
-        static let warningUsageThreshold: Double = 0.75
+        static let warningUsageThreshold = 0.75
         static let fullUsageOpacity: CGFloat = 0.75
     }
 
