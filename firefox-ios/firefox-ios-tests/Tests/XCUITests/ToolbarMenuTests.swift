@@ -95,8 +95,7 @@ class ToolbarMenuTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/4153018
     // Regression
-    func testReportBrokenSiteURLFieldEditMode() throws {
-        try XCTSkipIf(iPad(), "The URL field clear button does not clear on iPad, see issue #36258")
+    func testReportBrokenSiteURLFieldEditMode() {
         openReportBrokenSite()
         webCompatReporterScreen.assertURLFieldValue(path(forTestPage: TestPages.mozillaBook))
 
@@ -118,8 +117,7 @@ class ToolbarMenuTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/4153019
     // Regression
-    func testReportBrokenSiteInvalidURL() throws {
-        try XCTSkipIf(iPad(), "The URL field clear button does not clear on iPad, see issue #36258")
+    func testReportBrokenSiteInvalidURL() {
         openReportBrokenSite()
 
         // Positive control: with a valid URL and an issue type, Send Report is enabled

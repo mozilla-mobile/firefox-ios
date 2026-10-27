@@ -155,14 +155,33 @@ final class ToolbarScreen {
         sel.RELOAD_BUTTON.element(in: app).waitAndTap()
     }
 
-    /// Long-presses Reload and taps the first menu row (Request Desktop/Mobile Site), retrying once.
+    /// Long-presses Reload and taps Request Desktop/Mobile Site, retrying the press once.
     /// Content blocker reloads swap Reload for Stop mid-press: https://github.com/mozilla-mobile/firefox-ios/issues/35933
     func toggleRequestDesktopSiteFromReloadMenu() {
         let requestDesktopSiteMenuItem = ContextMenuSelectors().REQUEST_DESKTOP_SITE.element(in: app)
+        longPressReloadUntilMenuItemExists(requestDesktopSiteMenuItem)
+        requestDesktopSiteMenuItem.waitAndTap()
+    }
+
+    /// Long-presses Reload and taps Reload With/Without Tracking Protection, retrying the press once.
+    /// The safelist toggle reloads the tab seconds later, mid-press: https://github.com/mozilla-mobile/firefox-ios/issues/35933
+    func reloadTrackingProtectionFromReloadMenu(expectedLabel: String) {
+        let menuItem = ContextMenuSelectors().RELOAD_TRACKING_PROTECTION.element(in: app)
+        longPressReloadUntilMenuItemExists(menuItem)
+        XCTAssertEqual(menuItem.label, expectedLabel)
+        menuItem.waitAndTap()
+    }
+
+    /// Long-presses Reload until `menuItem` shows, pressing a second time if the first press opened no menu.
+    private func longPressReloadUntilMenuItemExists(_ menuItem: XCUIElement) {
         let reloadButton = sel.RELOAD_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(reloadButton)
         reloadButton.press(forDuration: 1)
-        requestDesktopSiteMenuItem.waitAndTap()
+        if !BaseTestCase().mozWaitForElementToExist(menuItem, timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) {
+            BaseTestCase().mozWaitForElementToExist(reloadButton)
+            reloadButton.press(forDuration: 1)
+        }
+        BaseTestCase().mozWaitForElementToExist(menuItem)
     }
 
     func getToolbarSettingsMenuButtonElement() -> XCUIElement {

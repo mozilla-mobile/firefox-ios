@@ -15,6 +15,7 @@ protocol ContextMenuSelectorsSet {
     var SHARE_LINK: Selector { get }
     var BOOKMARK_LINK: Selector { get }
     var SWITCH_BUTTON: Selector { get }
+    var RELOAD_TRACKING_PROTECTION: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -29,6 +30,7 @@ struct ContextMenuSelectors: ContextMenuSelectorsSet {
         static let bookmarkLink = "Bookmark Link"
         static let switchButton = "Switch"
         static let requestDesktopSite = StandardImageIdentifiers.Large.deviceDesktop
+        static let reloadTrackingProtection = StandardImageIdentifiers.Large.shieldSlash
     }
 
     let CONTEXT_MENU_TABLE = Selector.tableIdOrLabel(
@@ -91,6 +93,13 @@ struct ContextMenuSelectors: ContextMenuSelectorsSet {
         groups: ["contextmenu"]
     )
 
+    let RELOAD_TRACKING_PROTECTION = Selector.buttonId(
+        IDs.reloadTrackingProtection,
+        description: "Reload With/Without Tracking Protection from the reload button",
+        groups: ["contextmenu"]
+    )
+
     var all: [Selector] { [OPEN_IN_PRIVATE_TAB, CONTEXT_MENU_TABLE, OPEN_IN_NEW_TAB, OPEN_IN_NEW_PRIVATE_TAB,
-                           COPY_LINK, DOWNLOAD_LINK, SHARE_LINK, BOOKMARK_LINK, SWITCH_BUTTON, REQUEST_DESKTOP_SITE] }
+                           COPY_LINK, DOWNLOAD_LINK, SHARE_LINK, BOOKMARK_LINK, SWITCH_BUTTON, REQUEST_DESKTOP_SITE,
+                           RELOAD_TRACKING_PROTECTION] }
 }
