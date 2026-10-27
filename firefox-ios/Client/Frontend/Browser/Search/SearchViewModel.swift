@@ -451,14 +451,18 @@ class SearchViewModel: FeatureFlaggable,
         && searchTerms.contains(where: { $0.count >= config.minSearchTerm })
 
         filteredOpenedTabs = currentTabs.filter { tab in
-            guard let url = tab.url,
-                  !InternalURL.isValid(url: url) else {
+            guard let url = tab.url else {
+                return false
+            }
+            // Match reader mode tabs against the original page instead of the internal reader URL
+            let displayURL = url.decodeReaderModeURL ?? url
+            guard !InternalURL.isValid(url: displayURL) else {
                 return false
             }
             let lines = [
                     tab.title ?? tab.lastTitle,
                     searchInContent ? tab.readabilityResult?.textContent : nil,
-                    url.absoluteString
+                    displayURL.absoluteString
                 ]
                 .compactMap { $0 }
 
@@ -477,13 +481,14 @@ class SearchViewModel: FeatureFlaggable,
         let currentTabs = self.remoteClientTabs
         self.filteredRemoteClientTabs = currentTabs.filter { value in
             let tab = value.tab
+            let displayURL = tab.URL.decodeReaderModeURL ?? tab.URL
 
-            if InternalURL.isValid(url: tab.URL) {
+            if InternalURL.isValid(url: displayURL) {
                 return false
             }
 
             if shouldShowSponsoredSuggestions &&
-                SponsoredContentFilterUtility().containsSearchParam(url: tab.URL) {
+                SponsoredContentFilterUtility().containsSearchParam(url: displayURL) {
                 return false
             }
 
@@ -491,7 +496,7 @@ class SearchViewModel: FeatureFlaggable,
                 return true
             }
 
-            if tab.URL.absoluteString.lowercased().contains(searchString.lowercased()) {
+            if displayURL.absoluteString.lowercased().contains(searchString.lowercased()) {
                 return true
             }
 

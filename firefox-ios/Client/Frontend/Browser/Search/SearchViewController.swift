@@ -814,10 +814,11 @@ final class SearchViewController: SiteTableViewController,
         case .openedTabs:
             if viewModel.filteredOpenedTabs.count > indexPath.row {
                 let openedTab = viewModel.filteredOpenedTabs[indexPath.row]
+                let openedTabURL = openedTab.url?.decodeReaderModeURL ?? openedTab.url
                 configureOpenedTabsCell(
                     cell: twoLineCell,
                     title: openedTab.title ?? openedTab.lastTitle,
-                    urlString: openedTab.url?.absoluteString
+                    urlString: openedTabURL?.absoluteString
                 )
                 cell = twoLineCell
             }
@@ -826,7 +827,7 @@ final class SearchViewController: SiteTableViewController,
                viewModel.filteredRemoteClientTabs.count > indexPath.row {
                 let remoteTab = viewModel.filteredRemoteClientTabs[indexPath.row].tab
                 let remoteClient = viewModel.filteredRemoteClientTabs[indexPath.row].client
-                let urlString = remoteTab.URL.absoluteString
+                let urlString = (remoteTab.URL.decodeReaderModeURL ?? remoteTab.URL).absoluteString
                 configureRemoteTabsCell(
                     cell: twoLineCell,
                     title: remoteTab.title,
