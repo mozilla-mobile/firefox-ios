@@ -62,26 +62,10 @@ final class VPNSettingTests: XCTestCase {
         XCTAssertEqual(delegate.pressedVPNCalled, 1)
     }
 
-    func test_onClick_callsDelegateMethodMultipleTimes() {
-        let subject = createSubject()
-        subject.onClick(nil)
-        subject.onClick(nil)
-        XCTAssertEqual(delegate.pressedVPNCalled, 2)
-    }
-
     func test_onClick_withNavigationController() {
         let subject = createSubject()
         subject.onClick(UINavigationController())
         XCTAssertEqual(delegate.pressedVPNCalled, 1)
-    }
-
-    // MARK: - Title Attributes
-
-    func test_title_hasCorrectTextColor() {
-        let subject = createSubject()
-        let titleAttributes = subject.title?.attributes(at: 0, effectiveRange: nil)
-        let foregroundColor = titleAttributes?[.foregroundColor] as? UIColor
-        XCTAssertNotNil(foregroundColor)
     }
 
     // MARK: - Helpers

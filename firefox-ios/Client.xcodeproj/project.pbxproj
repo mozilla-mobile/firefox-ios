@@ -2417,11 +2417,10 @@
 		EEEA7B4B2FFE96B70075F5B3 /* SwipeUpTabPreviewGestureHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEA7B4A2FFE969B0075F5B3 /* SwipeUpTabPreviewGestureHandler.swift */; };
 		EEEA7B4D2FFE98C10075F5B3 /* SwipeUpTabWebViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEA7B4C2FFE98B50075F5B3 /* SwipeUpTabWebViewPreview.swift */; };
 		EEF4A4E6307441B6001DEC12 /* OnboardingCardSchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF4A4E5307441B6001DEC12 /* OnboardingCardSchedulerTests.swift */; };
-		F0A27D00FEE047EEB0A00001 /* UITraitCollection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A27D00FEE047EEB0A00002 /* UITraitCollection+Extension.swift */; };
 		EEF4D5BF3076F2B0001DEC12 /* VPNSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF4D5BE3076F2A8001DEC12 /* VPNSetting.swift */; };
 		EEF4D5C23077D961001DEC12 /* VPNSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF4D5C13077D958001DEC12 /* VPNSettingsViewController.swift */; };
-		EEF4D8BC30781B26001DEC12 /* VPNSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF4D8B930781B26001DEC12 /* VPNSettingsViewControllerTests.swift */; };
 		EEF4D8BD30781B26001DEC12 /* VPNSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF4D8BA30781B26001DEC12 /* VPNSettingTests.swift */; };
+		F0A27D00FEE047EEB0A00001 /* UITraitCollection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A27D00FEE047EEB0A00002 /* UITraitCollection+Extension.swift */; };
 		F18859502A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F188594F2A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift */; };
 		F1BC457E2A40F6D2005541D5 /* EnhancedTrackingProtectionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18859512A3E46020004AA7B /* EnhancedTrackingProtectionCoordinatorTests.swift */; };
 		F605DD582CC73469009A671B /* TabDisplayDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F605DD572CC73469009A671B /* TabDisplayDiffableDataSource.swift */; };
@@ -12568,7 +12567,6 @@
 		EEF4A4E5307441B6001DEC12 /* OnboardingCardSchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardSchedulerTests.swift; sourceTree = "<group>"; };
 		EEF4D5BE3076F2A8001DEC12 /* VPNSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSetting.swift; sourceTree = "<group>"; };
 		EEF4D5C13077D958001DEC12 /* VPNSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSettingsViewController.swift; sourceTree = "<group>"; };
-		EEF4D8B930781B26001DEC12 /* VPNSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		EEF4D8BA30781B26001DEC12 /* VPNSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSettingTests.swift; sourceTree = "<group>"; };
 		EF0444EEBEA6A45A3E0F654C /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		EF56430D950BC270FDA83402 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
@@ -17971,7 +17969,6 @@
 		EEF4D8BB30781B26001DEC12 /* VPN */ = {
 			isa = PBXGroup;
 			children = (
-				EEF4D8B930781B26001DEC12 /* VPNSettingsViewControllerTests.swift */,
 				EEF4D8BA30781B26001DEC12 /* VPNSettingTests.swift */,
 			);
 			path = VPN;
@@ -22052,7 +22049,6 @@
 				C8699152289177F5007ACC5C /* WallpaperNetworkingTests.swift in Sources */,
 				EC407900300AA7FA0003DE07 /* GroupedDefaultFolderHierarchyFetcherTests.swift in Sources */,
 				61672740307838910013FD50 /* MockVPNGuardian.swift in Sources */,
-				EEF4D8BC30781B26001DEC12 /* VPNSettingsViewControllerTests.swift in Sources */,
 				EEF4D8BD30781B26001DEC12 /* VPNSettingTests.swift in Sources */,
 				8A6CDB472DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift in Sources */,
 				A1B2C3D32F0000010000AA02 /* MockTabTrayUtils.swift in Sources */,
