@@ -594,8 +594,6 @@ class NavigationTest: FeatureFlaggedTestSuite {
         mozWaitForElementToExist(app.navigationBars["Browsing"])
         // sleep(2)
         // let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        // print(app.debugDescription)
-        // print(springboard.debugDescription)
         navigator.goto(NewTabScreen)
         navigator.openURL("https://www.firefox.com")
         waitUntilPageLoad()
