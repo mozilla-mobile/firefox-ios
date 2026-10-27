@@ -9,7 +9,7 @@ public struct VPNProxyPass: Equatable, Sendable {
     public let bearerToken: String
     public let notBefore: Date
     public let expiresAt: Date
-    public let usage: VPNProxyUsage? // This shouldn't be nil in the real world case
+    public let usage: VPNProxyUsage? // TODO: FXIOS-17238 This shouldn't be nil in the real world case
 
     public init(bearerToken: String, notBefore: Date, expiresAt: Date, usage: VPNProxyUsage?) {
         self.bearerToken = bearerToken
@@ -26,10 +26,13 @@ public struct VPNProxyUsage: Equatable, Sendable {
     public let remaining: Int64
     // Date when the next Period begins
     public let reset: Date
+    // For people in a promotion or that have a subscription
+    public let unlimited: Bool
 
-    public init(max: Int64, remaining: Int64, reset: Date) {
+    public init(max: Int64, remaining: Int64, reset: Date, unlimited: Bool) {
         self.max = max
         self.remaining = remaining
         self.reset = reset
+        self.unlimited = unlimited
     }
 }
