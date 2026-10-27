@@ -36,14 +36,13 @@ final class VPNGuardianTests: XCTestCase {
     }
 
     func testGetPass_whenTokenProviderFails_throwsProviderError() async {
-        mockTokenProvider.results = [.failure(AppAttestServiceError.serverError(statusCode: 401, description: ""))]
+        mockTokenProvider.results = [.failure(VPNAuthError.sessionRejected)]
         let subject = createSubject()
 
         do {
             _ = try await subject.getPass()
             XCTFail("Expected getPass to throw")
-        } catch AppAttestServiceError.serverError(let status, _) {
-            XCTAssertEqual(status, 401)
+        } catch VPNAuthError.sessionRejected {
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
@@ -80,7 +79,7 @@ final class VPNGuardianTests: XCTestCase {
     }
 
     func testPassRotation_onTerminalFailure_throws() async {
-        mockTokenProvider.results = [.failure(AppAttestServiceError.serverError(statusCode: 401, description: ""))]
+        mockTokenProvider.results = [.failure(VPNAuthError.sessionRejected)]
         let subject = createSubject()
         let initial = makePass(expiresAt: Date())
 
@@ -90,8 +89,7 @@ final class VPNGuardianTests: XCTestCase {
                 emitted.append(pass)
             }
             XCTFail("Expected rotation to throw")
-        } catch AppAttestServiceError.serverError(let status, _) {
-            XCTAssertEqual(status, 401)
+        } catch VPNAuthError.sessionRejected {
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
@@ -113,14 +111,15 @@ final class VPNGuardianTests: XCTestCase {
     }
 }
 
-/// Returns `results` in order, repeating the last one once exhausted.
+/// Returns `results` in order, repeating the last one once exhausted. Throws if `results` is empty.
 private final class MockVPNTokenProvider: VPNTokenProviding, @unchecked Sendable {
     var results: [Result<VPNProxyPass, Error>] = []
     var proxyTokenCalled = 0
 
     func proxyToken() async throws -> VPNProxyPass {
-        let index = min(proxyTokenCalled, results.count - 1)
         proxyTokenCalled += 1
-        return try results[index].get()
+        guard let last = results.last else { throw VPNAuthError.invalidToken }
+        let index = proxyTokenCalled - 1
+        return try (index < results.count ? results[index] : last).get()
     }
 }

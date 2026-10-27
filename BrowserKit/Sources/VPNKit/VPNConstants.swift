@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 /// The backend environment the VPN App Attest (IPN)
 public enum VPNEnvironment: String, Sendable {
@@ -19,6 +20,11 @@ public enum VPNEnvironment: String, Sendable {
         case .prod:
             return URL(string: "https://vpn.mozilla.org")
         }
+    }
+
+    public init(prefs: Prefs) {
+        let environmentKey = prefs.stringForKey(PrefsKeys.VPNSettings.endpointEnvironment) ?? ""
+        self = VPNEnvironment(rawValue: environmentKey) ?? .prod
     }
 }
 

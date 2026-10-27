@@ -64,8 +64,7 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
         proxyApplier: ProxyConfigurator = DefaultProxyConfigurator()
     ) {
         self.logger = logger
-        let environmentKey = profile.prefs.stringForKey(PrefsKeys.VPNSettings.endpointEnvironment) ?? ""
-        self.environment = VPNEnvironment(rawValue: environmentKey) ?? .prod
+        self.environment = VPNEnvironment(prefs: profile.prefs)
         self.guardian = guardian ?? VPNGuardian(authCreator: authCreator, prefs: profile.prefs, logger: logger)
         self.serverManager = serverManager ?? VPNServerManager(
             client: profile.remoteSettingsService.makeClient(collectionName: VPNServerManager.collectionName),
