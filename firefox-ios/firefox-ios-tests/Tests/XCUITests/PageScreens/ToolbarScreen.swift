@@ -28,6 +28,9 @@ final class ToolbarScreen {
     private var summarizeButton: XCUIElement { sel.SUMMARIZE_BUTTON.element(in: app) }
     private var summarizeContextualHint: XCUIElement { sel.SUMMARIZE_CONTEXTUAL_HINT.element(in: app) }
     private var googleLensTipTitle: XCUIElement { sel.GOOGLE_LENS_TIP_TITLE.element(in: app) }
+    private var googleLensButton: XCUIElement { sel.GOOGLE_LENS_BUTTON.element(in: app) }
+    private var googleLensTakePhotoAction: XCUIElement { sel.GOOGLE_LENS_TAKE_PHOTO_ACTION.element(in: app) }
+    private var googleLensPhotoLibraryAction: XCUIElement { sel.GOOGLE_LENS_PHOTO_LIBRARY_ACTION.element(in: app) }
 
     func assertSettingsButtonExists(timeout: TimeInterval = TIMEOUT) {
         let settingsButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
@@ -209,6 +212,31 @@ final class ToolbarScreen {
     func assertSummarizeContextualHintIsDisplayed(timeout: TimeInterval = TIMEOUT_LONG) {
         BaseTestCase().mozWaitForElementToExist(summarizeContextualHint, timeout: timeout)
         XCTAssertNotNil(closeButton(nextTo: summarizeContextualHint), "The contextual hint has no \"x\" button")
+    }
+
+    func assertGoogleLensButtonExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(googleLensButton, timeout: timeout)
+    }
+
+    func assertGoogleLensButtonDoesNotExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(googleLensButton, timeout: timeout)
+    }
+
+    func tapGoogleLensButton() {
+        googleLensButton.waitAndTap()
+    }
+
+    /// The rows are counted through the identifier prefix they share, so an extra Lens action fails the count.
+    func assertGoogleLensMenuShowsOnlyPhotoOptions() {
+        let titles = String.AddressToolbar.GoogleLens.ContextMenu.self
+        BaseTestCase().waitForElementsToExist([googleLensPhotoLibraryAction, googleLensTakePhotoAction])
+        XCTAssertEqual(googleLensPhotoLibraryAction.label, titles.PhotoLibraryActionTitle)
+        XCTAssertEqual(googleLensTakePhotoAction.label, titles.TakePhotoActionTitle)
+        XCTAssertEqual(
+            sel.GOOGLE_LENS_MENU_ACTIONS.query(in: app).count,
+            2,
+            "The Google Lens menu should have exactly two rows"
+        )
     }
 
     /// TipKit shows this tip once per simulator, the first time the address bar is focused, and it stays
