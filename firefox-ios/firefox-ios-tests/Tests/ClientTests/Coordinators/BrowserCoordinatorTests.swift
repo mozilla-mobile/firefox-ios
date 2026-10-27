@@ -1012,6 +1012,20 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     // MARK: - Search route
 
+    func testHandleSearchQuery_withWidgetSearchOption_passesOptionToBrowser() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+
+        let result = testCanHandleAndHandle(
+            subject,
+            route: .searchQuery(query: "test query", isPrivate: false, options: [.widgetSearch])
+        )
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(browserViewController.handleQueryOptions, [.widgetSearch])
+    }
+
     func testHandleSearchQuery_returnsTrue() {
         let query = "test query"
         let subject = createSubject()

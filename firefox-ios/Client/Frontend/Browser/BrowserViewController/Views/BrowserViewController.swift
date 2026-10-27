@@ -105,6 +105,9 @@ class BrowserViewController: UIViewController,
     /// position (`overKeyboardContainer.top` for bottom bar, `view.bottom` for top bar)
     private var searchControllerBottomConstraint: NSLayoutConstraint?
     var searchSessionState: SearchSessionState?
+    /// The SAP to associate with the next address bar search, for search-config-v3.
+    /// Set when a widget search opens the address bar (cleared when editing session ends)
+    private var pendingSearchAccessPoint: SearchAccessPoint?
     var searchLoader: SearchLoader?
     var iOS15FindInPageBar: FindInPageBar? /* TODO: Remove once we drop iOS 15 support */
     var zoomPageBar: ZoomPageBar?
@@ -303,7 +306,8 @@ class BrowserViewController: UIViewController,
 
     // MARK: Telemetry Variables
 
-    private(set) lazy var searchTelemetry = SearchTelemetry(tabManager: tabManager)
+    private(set) lazy var searchTelemetry = SearchTelemetry(tabManager: tabManager,
+                                                            searchEnginesManager: searchEnginesManager)
     private(set) lazy var webviewTelemetry = WebViewLoadMeasurementTelemetry()
     private(set) lazy var tabsTelemetry = TabsTelemetry()
 
@@ -2243,6 +2247,7 @@ class BrowserViewController: UIViewController,
         createSearchControllerIfNeeded()
 
         guard let searchController = self.searchController else { return }
+        searchController.searchAccessPoint = pendingSearchAccessPoint ?? .default
 
         // If searchController is already presented only update the bottom anchor
         // based in `bottomSearchBar` position
@@ -3325,8 +3330,9 @@ class BrowserViewController: UIViewController,
     }
 
     func submitSearchText(_ text: String, forTab tab: Tab) {
+        let accessPoint = pendingSearchAccessPoint ?? .default
         guard let engine = searchEnginesManager.defaultEngine,
-              let searchURL = engine.searchURLForQuery(text)
+              let searchURL = engine.searchURLForQuery(text, accessPoint: accessPoint)
         else {
             DefaultLogger.shared.log("Error handling URL entry: \"\(text)\".", level: .warning, category: .tabs)
             return
@@ -3336,7 +3342,7 @@ class BrowserViewController: UIViewController,
 
         Experiments.events.recordEvent(BehavioralTargetingEvent.performedSearch)
 
-        let engineTelemetryID: String = engine.telemetryID
+        let engineTelemetryID: String = engine.telemetryID(for: accessPoint)
         GleanMetrics.Search
             .counts["\(engineTelemetryID).\(SearchLocation.actionBar.rawValue)"]
             .add()
@@ -3441,17 +3447,27 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Handle Deeplink open URL / query
 
-    func handle(query: String, isPrivate: Bool, shouldOpenNewTab: Bool = true) {
+    func handle(query: String,
+                isPrivate: Bool,
+                shouldOpenNewTab: Bool = true,
+                options: Set<Route.SearchOptions>? = nil) {
         cancelEditMode()
         if shouldOpenNewTab {
             openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
         }
+        if options?.contains(.widgetSearch) == true {
+            pendingSearchAccessPoint = .widget
+        }
         openBrowser(searchTerm: query)
+        pendingSearchAccessPoint = nil
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
         navigationHandler?.popToBVC()
         cancelEditMode()
+        if url == nil, options?.contains(.widgetSearch) == true {
+            pendingSearchAccessPoint = .widget
+        }
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
@@ -3605,11 +3621,11 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func openSearchNewTab(isPrivate: Bool = false, _ text: String) {
+    func openSearchNewTab(isPrivate: Bool = false, _ text: String, accessPoint: SearchAccessPoint = .default) {
         navigationHandler?.popToBVC()
 
         guard let engine = searchEnginesManager.defaultEngine,
-              let searchURL = engine.searchURLForQuery(text)
+              let searchURL = engine.searchURLForQuery(text, accessPoint: accessPoint)
         else {
             DefaultLogger.shared.log("Error handling URL entry: \"\(text)\".", level: .warning, category: .tabs)
             return
@@ -4227,6 +4243,7 @@ class BrowserViewController: UIViewController,
             }
         }
         destroySearchController()
+        pendingSearchAccessPoint = nil
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
 
         (view as? ThemeApplicable)?.applyTheme(theme: currentTheme())
@@ -4542,7 +4559,7 @@ extension BrowserViewController: LegacyTabDelegate {
     }
 
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {
-        openSearchNewTab(isPrivate: tab.isPrivate, selection)
+        openSearchNewTab(isPrivate: tab.isPrivate, selection, accessPoint: .context)
     }
 
     // MARK: - KVO Observation
@@ -4695,6 +4712,18 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
     func searchEnginesDidUpdate() {
         updateForDefaultSearchEngineDidChange()
+
+        // Engines load async, so refresh top sites to rebuild the
+        // Google top site with the loaded engine partner codes.
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        for windowUUID in windowManager.windows.keys {
+            store.dispatch(
+                HomepageAction(
+                    windowUUID: windowUUID,
+                    actionType: HomepageMiddlewareActionType.topSitesUpdated
+                )
+            )
+        }
     }
 
     func setLocationView(text: String, search: Bool) {

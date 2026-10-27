@@ -383,8 +383,8 @@ final class BrowserCoordinator: BaseCoordinator,
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
-        case let .searchQuery(query, isPrivate):
-            handle(query: query, isPrivate: isPrivate)
+        case let .searchQuery(query, isPrivate, options):
+            handle(query: query, isPrivate: isPrivate, options: options)
 
         case let .search(url, isPrivate, options):
             handle(url: url, isPrivate: isPrivate, options: options)
@@ -492,8 +492,8 @@ final class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Handle Deeplink Open URL / text
 
-    private func handle(query: String, isPrivate: Bool) {
-        browserViewController.handle(query: query, isPrivate: isPrivate)
+    private func handle(query: String, isPrivate: Bool, options: Set<Route.SearchOptions>?) {
+        browserViewController.handle(query: query, isPrivate: isPrivate, options: options)
     }
 
     private func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {

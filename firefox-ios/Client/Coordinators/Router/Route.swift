@@ -41,7 +41,8 @@ enum Route {
     /// - Parameters:
     ///   - query: A string representing the query to be searched and.
     ///   - isPrivate: A boolean value indicating whether the search is private or not.
-    case searchQuery(query: String, isPrivate: Bool)
+    ///   - options: An optional set of `SearchOptions` values that can be used to customize the search behavior.
+    case searchQuery(query: String, isPrivate: Bool, options: Set<SearchOptions>? = nil)
 
     /// Represents a route for sending Glean data.
     ///
@@ -152,5 +153,8 @@ enum Route {
         case focusLocationField
         /// An option to force open a new tab even when on homepage
         case forceNewTab
+        /// An option indicating the search was started from a home screen widget search button, so the next
+        /// search from the address bar is attributed to the widget search access point.
+        case widgetSearch
     }
 }

@@ -529,9 +529,10 @@ class RouteTests: XCTestCase {
         let route = subject.makeRoute(url: url)
 
         switch route {
-        case .searchQuery(let query, let isPrivate):
+        case .searchQuery(let query, let isPrivate, let options):
             XCTAssertEqual(query, "test search text")
             XCTAssertFalse(isPrivate)
+            XCTAssertEqual(options, [.widgetSearch])
         default:
             XCTFail("The route should be a search route")
         }
@@ -672,9 +673,10 @@ class RouteTests: XCTestCase {
         let route = subject.makeRoute(url: url)
 
         switch route {
-        case .searchQuery(let query, let isPrivate):
+        case .searchQuery(let query, let isPrivate, let options):
             XCTAssertEqual(query, "google")
             XCTAssertFalse(isPrivate)
+            XCTAssertNil(options)
         default:
             XCTFail("The route should be a search route")
         }
@@ -831,5 +833,47 @@ class RouteTests: XCTestCase {
         var components = URLComponents(string: "firefox://open-url")!
         components.queryItems = [URLQueryItem(name: "url", value: url.absoluteString)]
         return components.url!
+    }
+}
+
+// MARK: - Widget search access point
+
+extension RouteTests {
+    func testWidgetMediumQuicklinkOpenCopied_withText_addsWidgetSearchOption() {
+        let subject = createSubject()
+        UIPasteboard.general.string = "copied search text"
+
+        let route = subject.makeRoute(url: URL(string: "firefox://widget-medium-quicklink-open-copied")!)
+
+        guard case .searchQuery(let query, _, let options) = route else {
+            return XCTFail("The route should be a search query route")
+        }
+        XCTAssertEqual(query, "copied search text")
+        XCTAssertEqual(options, [.widgetSearch])
+    }
+
+    func testWidgetSmallQuicklinkSearch_withoutURL_addsWidgetSearchOption() {
+        let subject = createSubject()
+
+        let route = subject.makeRoute(url: URL(string: "firefox://widget-small-quicklink-open-url?private=false")!)
+
+        guard case .search(let url, _, let options) = route else {
+            return XCTFail("The route should be a search route")
+        }
+        XCTAssertNil(url)
+        XCTAssertEqual(options, [.focusLocationField, .widgetSearch])
+    }
+
+    func testWidgetMediumQuicklinkSearch_withoutURL_addsWidgetSearchOption() {
+        let subject = createSubject()
+
+        let route = subject.makeRoute(url: URL(string: "firefox://widget-medium-quicklink-open-url?private=true")!)
+
+        guard case .search(let url, let isPrivate, let options) = route else {
+            return XCTFail("The route should be a search route")
+        }
+        XCTAssertNil(url)
+        XCTAssertTrue(isPrivate)
+        XCTAssertEqual(options, [.focusLocationField, .widgetSearch])
     }
 }
