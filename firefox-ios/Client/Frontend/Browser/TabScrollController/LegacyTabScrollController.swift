@@ -132,7 +132,6 @@ final class LegacyTabScrollController: NSObject,
     /// The minimal address bar is enabled under these circumstances:
     /// - On iPad devices (all orientations).
     /// - On iPhone when the navigation toolbar is visible (portrait mode).
-    /// - When the system status bar is on the side of the screen (e.g. folded iPhone Duo).
     ///
     /// When minimal mode is active, an additional height offset is applied to provide
     /// space for displaying the minimized address bar with the domain/subdomain URL.
@@ -147,10 +146,7 @@ final class LegacyTabScrollController: NSObject,
             ToolbarHelper().shouldShowNavigationToolbar(for: scrollView.traitCollection)
         } else { false }
 
-        // On a folded Duo the status bar sits on the side, so there is no status bar at the top.
-        let hasVerticalSystemBar = scrollView?.traitCollection.hasVerticalSystemBar == true
-
-        guard isiPad || isNavToolbarVisible || hasVerticalSystemBar else {
+        guard isiPad || isNavToolbarVisible else {
             return baseOffset
         }
 

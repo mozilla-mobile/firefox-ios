@@ -70,10 +70,9 @@ extension BrowserViewController: TabScrollHandler.Delegate,
         }
 
         // Minimal address bar: keep a small strip visible so the domain remains readable
-        // while scrolled. Applies only when the nav toolbar (iPhone portrait), iPad layout or, for a folded
-        // Duo, the system status bar is on the side of the screen.
+        // while scrolled. Applies only when the nav toolbar (iPhone portrait) or iPad layout is visible
         let isNavToolbarVisible = ToolbarHelper().shouldShowNavigationToolbar(for: view.traitCollection)
-        if isiPad || isNavToolbarVisible || view.traitCollection.hasVerticalSystemBar {
+        if isiPad || isNavToolbarVisible {
             return -headerHeight + UX.minimalHeaderOffset
         }
 
