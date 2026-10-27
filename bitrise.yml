@@ -2423,6 +2423,102 @@ workflows:
             fxios bootstrap -p focus
         title: ContentBlockerGen
 
+  Focus_Nightly_Tests_iOS18:
+    envs:
+    - FOCUS_IOS_VERSION: "18.6"
+    - FOCUS_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.6
+    after_run:
+    - _focus_nightly_uitests
+
+  Focus_Nightly_Tests_iOS26:
+    envs:
+    - FOCUS_IOS_VERSION: "26.5"
+    - FOCUS_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
+    after_run:
+    - _focus_nightly_uitests
+
+  Focus_Nightly_Tests_iOS27:
+    envs:
+    - FOCUS_IOS_VERSION: "27.0"
+    - FOCUS_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    after_run:
+    - _focus_nightly_uitests
+
+  _focus_nightly_uitests:
+    description: >-
+      Shared steps for the Focus_Nightly_Tests_iOS* workflows: build Focus once and run the SmokeTest and
+      FullFunctionalTests plans on FOCUS_TEST_DESTINATION. FOCUS_IOS_VERSION is used in the Slack message.
+    before_run:
+    - focus-clone-and-build-dependencies
+    - focus-set-default-browser-entitlement
+    steps:
+    - xcode-build-for-test@3:
+        title: "Build Focus iOS"
+        timeout: 360
+        inputs:
+        - scheme: Focus
+        - configuration: FocusDebug
+        - project_path: focus-ios/Blockzilla.xcodeproj
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -skipMacroValidation'
+        - destination: $FOCUS_TEST_DESTINATION
+    - xcode-test-without-building@0:
+        title: "Focus Smoketest"
+        timeout: 1800
+        is_always_run: true
+        inputs:
+        - destination: $FOCUS_TEST_DESTINATION
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+    - script@1:
+        title: "Count failed tests - Smoketest"
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            echo "Smoketest failures: ${FAILED_COUNT:-n/a}"
+            envman add --key FOCUS_FAILED_SMOKETEST --value "${FAILED_COUNT:-n/a}"
+    - xcode-test-without-building@0:
+        title: "Focus Full Functional Tests"
+        timeout: 3600
+        is_always_run: true
+        inputs:
+        - destination: $FOCUS_TEST_DESTINATION
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_FullFunctionalTests_iphonesimulator27.1-arm64.xctestrun
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+    - script@1:
+        title: "Count failed tests - Full Functional Tests"
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            echo "Full Functional Tests failures: ${FAILED_COUNT:-n/a}"
+            envman add --key FOCUS_FAILED_FULL_FUNCTIONAL --value "${FAILED_COUNT:-n/a}"
+    - deploy-to-bitrise-io@2:
+        is_always_run: true
+    - slack@4:
+        is_always_run: true
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer: Created by Mobile Test Engineering
+        - footer_icon_on_error: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer_on_error: Created by Mobile Test Engineering
+        - pretext_on_error: "*Focus-iOS* *Nightly Smoketest and Full Functional Tests (iOS ${FOCUS_IOS_VERSION})* :x:"
+        - message_on_error: "Failed tests - Smoketest: ${FOCUS_FAILED_SMOKETEST}, Full Functional Tests: ${FOCUS_FAILED_FULL_FUNCTIONAL}"
+        - color_on_error: danger
+        - pretext: "*Focus-iOS* *Nightly Smoketest and Full Functional Tests (iOS ${FOCUS_IOS_VERSION})* :white_check_mark:"
+        - message: ''
+        - timestamp: 'no'
+        - fields: |
+            Branch | ${BITRISE_GIT_BRANCH}
+        - buttons: |
+            Build Log|${BITRISE_BUILD_URL}
+            Test Report|${BITRISE_BUILD_URL}?tab=tests
+
   focus-set-project-version:
     steps:
     - set-xcode-build-number@1:
