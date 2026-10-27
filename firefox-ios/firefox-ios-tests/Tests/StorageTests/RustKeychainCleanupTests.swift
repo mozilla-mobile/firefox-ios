@@ -49,6 +49,11 @@ final class RustKeychainCleanupTests: XCTestCase {
 
             XCTAssertEqual(keychain.loadedQueries.count, 2)
             XCTAssertTrue(keychain.deletedQueries.isEmpty)
+
+            RustKeychain.wipeKeychain(keychain: keychain)
+
+            XCTAssertEqual(keychain.loadedQueries.count, 3)
+            XCTAssertEqual(keychain.deletedQueries.count, 4)
         }
     }
 
