@@ -19,6 +19,12 @@ final class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
         static let usUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
         static let rowUrl = "https://www.google.com/webhp?client=firefox-b-m&channel=ts"
 
+        // URL components shared by the Google top site URLs
+        static let host = "www.google.com"
+        static let path = "/webhp"
+        static let clientQueryName = "client"
+        static let channelQueryItem = URLQueryItem(name: "channel", value: "ts")
+
         // Google favicon
         private static let faviconUrl = URL(string: "https://www.google.com/images/branding/product_ios/3x/gsa_ios_60dp.png")!
         static let faviconResource: SiteResource = .bundleAsset(name: "google", forRemoteResource: faviconUrl)
@@ -88,23 +94,26 @@ final class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
     /// The Google top site URL for search-config-v3, using Google's `topsite` partner code. The `client`
     /// parameter is omitted when there is no partner code.
     static func searchConfigV3URL(partnerCode: String?) -> String {
-        var components = URLComponents(string: "https://www.google.com/webhp")
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = Constants.host
+        components.path = Constants.path
         var queryItems: [URLQueryItem] = []
         if let partnerCode, !partnerCode.isEmpty {
-            queryItems.append(URLQueryItem(name: "client", value: partnerCode))
+            queryItems.append(URLQueryItem(name: Constants.clientQueryName, value: partnerCode))
         }
-        queryItems.append(URLQueryItem(name: "channel", value: "ts"))
-        components?.queryItems = queryItems
-        return components?.string ?? Constants.rowUrl
+        queryItems.append(Constants.channelQueryItem)
+        components.queryItems = queryItems
+        return components.string ?? Constants.rowUrl
     }
 
     /// Whether the URL is a Google top site URL, regardless of its partner code. This matches both the
     /// search-config-v2 constants and search-config-v3 URLs, which only differ by their `client` value.
     static func isGoogleTopSiteURL(_ urlString: String) -> Bool {
         guard let components = URLComponents(string: urlString) else { return false }
-        return components.host == "www.google.com"
-            && components.path == "/webhp"
-            && components.queryItems?.contains(URLQueryItem(name: "channel", value: "ts")) == true
+        return components.host == Constants.host
+            && components.path == Constants.path
+            && components.queryItems?.contains(Constants.channelQueryItem) == true
     }
 
     // Once Google top site is added, we don't remove unless it's explicitly unpinned
