@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>VPNGuardianSecret</key>
-	<string>oGGVc778TkKMVuAfHk6FFMrL26rHkmCPUis</string>
+	<string>$(VPN_GUARDIAN_SECRET)</string>
 	<key>AttributionCopyEndpoint</key>
 	<string>https://adjust-skadnetwork.com</string>
 	<key>NSAdvertisingAttributionReportEndpoint</key>
