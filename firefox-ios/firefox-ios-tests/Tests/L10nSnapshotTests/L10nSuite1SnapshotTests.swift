@@ -212,8 +212,11 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons.firstMatch.waitAndTap()
         snapshot("TrackingProtectionBasicMoreInfo-01")
 
-        // Go back to TP settings
-        app.navigationBars["Client.TPAccessoryInfo"].buttons.firstMatch.waitAndTap()
+        // Go back to TP settings. On iPhone Duo the back button lives in a toolbar, not the navigation bar.
+        let backButton = isIPhoneDuo()
+            ? app.buttons["BackButton"].firstMatch
+            : app.navigationBars["Client.TPAccessoryInfo"].buttons.firstMatch
+        backButton.waitAndTap()
 
         // See Strict mode info
         app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons.firstMatch.waitAndTap()
