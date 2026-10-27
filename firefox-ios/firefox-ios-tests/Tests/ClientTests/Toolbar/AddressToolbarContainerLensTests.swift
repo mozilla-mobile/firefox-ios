@@ -141,6 +141,47 @@ final class AddressToolbarContainerLensTests: XCTestCase {
         XCTAssertEqual(subject.browserActions[2].numberOfTabs, 2)
     }
 
+    // MARK: - navigationToolbarActions, derived straight from ToolbarState (no action involved)
+
+    func testInit_navigationToolbarActions_onHomepage_returnsSearchMiddleAction() {
+        let subject = createSubject(url: nil, middleButton: .home)
+
+        XCTAssertEqual(subject.navigationToolbarActions.map(\.actionType), [.back, .forward, .search, .menu, .tabs])
+    }
+
+    func testInit_navigationToolbarActions_onWebsite_returnsConfiguredMiddleAction() {
+        XCTAssertEqual(createSubject(url: url, middleButton: .home).navigationToolbarActions[2].actionType, .home)
+        XCTAssertEqual(createSubject(url: url, middleButton: .newTab).navigationToolbarActions[2].actionType, .newTab)
+    }
+
+    func testInit_navigationToolbarActions_returnsBackAndForwardEnabledState() {
+        let subject = createSubject(canGoBack: true, canGoForward: false)
+
+        XCTAssertEqual(subject.navigationToolbarActions[0].isEnabled, true)
+        XCTAssertEqual(subject.navigationToolbarActions[1].isEnabled, false)
+    }
+
+    func testInit_navigationToolbarActions_returnsNumberOfTabs() {
+        let subject = createSubject(numberOfTabs: 2)
+
+        XCTAssertEqual(subject.navigationToolbarActions[4].actionType, .tabs)
+        XCTAssertEqual(subject.navigationToolbarActions[4].numberOfTabs, 2)
+    }
+
+    func testInit_navigationToolbarActions_withMenuWarningBadge_returnsBadgedMenuAction() {
+        let subject = createSubject(showMenuWarningBadge: true)
+
+        XCTAssertEqual(subject.navigationToolbarActions[3].actionType, .menu)
+        XCTAssertNotNil(subject.navigationToolbarActions[3].badgeImageName)
+        XCTAssertNotNil(subject.navigationToolbarActions[3].maskImageName)
+    }
+
+    func testInit_navigationToolbarActions_versionTwoLayout_returnsTabsBeforeMenu() {
+        let subject = createSubject(toolbarLayout: .version2)
+
+        XCTAssertEqual(subject.navigationToolbarActions.map(\.actionType), [.back, .forward, .search, .tabs, .menu])
+    }
+
     // MARK: - Helpers
 
     private func createSubject(
@@ -153,7 +194,10 @@ final class AddressToolbarContainerLensTests: XCTestCase {
         isEmptySearch: Bool = true,
         isLoading: Bool = false,
         numberOfTabs: Int = 1,
-        url: URL? = nil
+        url: URL? = nil,
+        middleButton: NavigationBarMiddleButtonType = .newTab,
+        showMenuWarningBadge: Bool = false,
+        toolbarLayout: ToolbarLayoutStyle = .version1
     ) -> AddressToolbarContainerLens {
         let addressToolbar = AddressBarState(windowUUID: windowUUID)
             .copy(url: url)
@@ -169,6 +213,9 @@ final class AddressToolbarContainerLensTests: XCTestCase {
             .copy(canGoBack: canGoBack)
             .copy(canGoForward: canGoForward)
             .copy(numberOfTabs: numberOfTabs)
+            .copy(showMenuWarningBadge: showMenuWarningBadge)
+            .copy(toolbarLayout: toolbarLayout)
+            .copy(navigationToolbar: NavigationBarState(windowUUID: windowUUID).copy(middleButton: middleButton))
 
         let appState = AppState(presentedComponents: PresentedComponentsState(components: [.toolbar(toolbarState)]))
         return AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
