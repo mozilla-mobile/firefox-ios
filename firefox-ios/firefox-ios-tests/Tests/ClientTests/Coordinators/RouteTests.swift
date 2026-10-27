@@ -529,9 +529,10 @@ class RouteTests: XCTestCase {
         let route = subject.makeRoute(url: url)
 
         switch route {
-        case .searchQuery(let query, let isPrivate):
+        case .searchQuery(let query, let isPrivate, let options):
             XCTAssertEqual(query, "test search text")
             XCTAssertFalse(isPrivate)
+            XCTAssertEqual(options, [.widgetSearch])
         default:
             XCTFail("The route should be a search route")
         }
@@ -672,9 +673,10 @@ class RouteTests: XCTestCase {
         let route = subject.makeRoute(url: url)
 
         switch route {
-        case .searchQuery(let query, let isPrivate):
+        case .searchQuery(let query, let isPrivate, let options):
             XCTAssertEqual(query, "google")
             XCTAssertFalse(isPrivate)
+            XCTAssertNil(options)
         default:
             XCTFail("The route should be a search route")
         }
@@ -837,6 +839,19 @@ class RouteTests: XCTestCase {
 // MARK: - Widget search access point
 
 extension RouteTests {
+    func testWidgetMediumQuicklinkOpenCopied_withText_addsWidgetSearchOption() {
+        let subject = createSubject()
+        UIPasteboard.general.string = "copied search text"
+
+        let route = subject.makeRoute(url: URL(string: "firefox://widget-medium-quicklink-open-copied")!)
+
+        guard case .searchQuery(let query, _, let options) = route else {
+            return XCTFail("The route should be a search query route")
+        }
+        XCTAssertEqual(query, "copied search text")
+        XCTAssertEqual(options, [.widgetSearch])
+    }
+
     func testWidgetSmallQuicklinkSearch_withoutURL_addsWidgetSearchOption() {
         let subject = createSubject()
 

@@ -165,7 +165,7 @@ final class RouteBuilder {
 
     private func makeWidgetQuickLinkOpenCopiedRoute(isPrivate: Bool, host: DeeplinkInput.Host) -> Route? {
         if !UIPasteboard.general.hasURLs, let searchText = UIPasteboard.general.string {
-            return .searchQuery(query: searchText, isPrivate: isPrivate)
+            return .searchQuery(query: searchText, isPrivate: isPrivate, options: [.widgetSearch])
         } else {
             let url = UIPasteboard.general.url
             guard host.isValidURL(urlQuery: url) else { return nil }

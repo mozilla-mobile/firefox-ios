@@ -3372,12 +3372,19 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Handle Deeplink open URL / query
 
-    func handle(query: String, isPrivate: Bool, shouldOpenNewTab: Bool = true) {
+    func handle(query: String,
+                isPrivate: Bool,
+                shouldOpenNewTab: Bool = true,
+                options: Set<Route.SearchOptions>? = nil) {
         cancelEditMode()
         if shouldOpenNewTab {
             openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
         }
+        if options?.contains(.widgetSearch) == true {
+            pendingSearchAccessPoint = .widget
+        }
         openBrowser(searchTerm: query)
+        pendingSearchAccessPoint = nil
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
