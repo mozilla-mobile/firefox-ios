@@ -84,7 +84,8 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         try await subject.onForeground()
         try await createSubject().onForeground()
 
-        XCTAssertEqual(mockHistoryStore.value, InstallationHistory(installCounter: 1, lastSeenDate: mockDateProvider.fixedDate))
+        XCTAssertEqual(mockHistoryStore.value,
+                       InstallationHistory(installCounter: 1, lastSeenDate: mockDateProvider.fixedDate))
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
         XCTAssertEqual(mockGleanWrapper.savedValues as? [String], ["2025-10-09", "12345"])
         XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 1)
@@ -95,7 +96,8 @@ final class InstallationTelemetryServiceTests: XCTestCase {
 
         try await createSubject().onForeground()
 
-        XCTAssertEqual(mockHistoryStore.value, InstallationHistory(installCounter: 4, lastSeenDate: mockDateProvider.fixedDate))
+        XCTAssertEqual(mockHistoryStore.value,
+                       InstallationHistory(installCounter: 4, lastSeenDate: mockDateProvider.fixedDate))
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [4])
         XCTAssertEqual(mockGleanWrapper.savedValues as? [String], ["1970-01-01"])
     }
@@ -113,7 +115,8 @@ final class InstallationTelemetryServiceTests: XCTestCase {
 
         try await createSubject(hasSeenIntro: true).onForeground()
 
-        XCTAssertEqual(mockHistoryStore.value, InstallationHistory(installCounter: 5, lastSeenDate: mockDateProvider.fixedDate))
+        XCTAssertEqual(mockHistoryStore.value,
+                       InstallationHistory(installCounter: 5, lastSeenDate: mockDateProvider.fixedDate))
         XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
     }
 
@@ -330,12 +333,12 @@ final class InstallationTelemetryServiceTests: XCTestCase {
             AppAcquisition(originalPurchaseDate: mockDateProvider.fixedDate, originalAppVersion: "42")
         )
         let subject = InstallationTelemetryService(profilePrefs: profilePrefs,
-                                                 installationPrefs: installationPrefs,
-                                                 history: mockHistoryStore,
-                                                 acquisition: mockAcquisitionProvider,
-                                                 gleanWrapper: DefaultGleanWrapper(),
-                                                 featureFlagsProvider: mockFeatureFlags,
-                                                 dateProvider: mockDateProvider)
+                                                   installationPrefs: installationPrefs,
+                                                   history: mockHistoryStore,
+                                                   acquisition: mockAcquisitionProvider,
+                                                   gleanWrapper: DefaultGleanWrapper(),
+                                                   featureFlagsProvider: mockFeatureFlags,
+                                                   dateProvider: mockDateProvider)
         try await subject.onForeground()
         XCTAssertEqual(GleanMetrics.Installation.installCounter.testGetValue("baseline"), 2)
         XCTAssertEqual(GleanMetrics.Installation.lastSeenDate.testGetValue("baseline"), "1970-01-01")
@@ -362,12 +365,12 @@ final class InstallationTelemetryServiceTests: XCTestCase {
             profilePrefs.removeObjectForKey(PrefsKeys.IntroSeen)
         }
         return InstallationTelemetryService(profilePrefs: profilePrefs,
-                                           installationPrefs: installationPrefs,
-                                           history: mockHistoryStore,
-                                           acquisition: mockAcquisitionProvider,
-                                           gleanWrapper: mockGleanWrapper,
-                                           featureFlagsProvider: mockFeatureFlags,
-                                           dateProvider: mockDateProvider)
+                                            installationPrefs: installationPrefs,
+                                            history: mockHistoryStore,
+                                            acquisition: mockAcquisitionProvider,
+                                            gleanWrapper: mockGleanWrapper,
+                                            featureFlagsProvider: mockFeatureFlags,
+                                            dateProvider: mockDateProvider)
     }
 }
 
