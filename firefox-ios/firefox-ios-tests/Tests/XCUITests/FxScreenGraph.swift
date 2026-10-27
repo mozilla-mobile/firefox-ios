@@ -144,11 +144,11 @@ let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 @MainActor
 func navigationControllerBackAction(for app: XCUIApplication) -> () -> Void {
     return {
-        // The root Settings screen has no back button; its first navigation bar button is Done.
-        // Elsewhere, query by identifier: on iPhone Duo the back button lives in a toolbar, not the navigation bar.
-        let backButton = app.navigationBars["Settings"].exists
-            ? app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
-            : app.buttons["BackButton"].firstMatch
+        // On iPhone Duo the back button lives in a toolbar, not the navigation bar. The root Settings
+        // screen has no back button; its first navigation bar button is Done.
+        let backButton = BaseTestCase().iPhoneDuo() && !app.navigationBars["Settings"].exists
+            ? app.buttons["BackButton"].firstMatch
+            : app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
         backButton.mozWaitElementHittable(timeout: TIMEOUT)
         backButton.waitAndTap()
     }
