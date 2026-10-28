@@ -211,6 +211,72 @@ class FxAccountManagerTests: XCTestCase {
                        "beginAuthentication must succeed after logout — onDisconnected must re-initialize the account")
     }
 
+    func testPairingFromAuthIssuesDisconnectsFirst() {
+        // Regression test: the Rust state machine rejects .beginPairingFlow from .authIssues,
+        // so the manager must disconnect first and pair from the fresh .disconnected account.
+        let mgr = mockFxAManager()
+        let pausedAccount = MockFxAccount()
+        pausedAccount.initializeResult = .authIssues
+        mgr.storedAccount = pausedAccount
+
+        let initDone = expectation(description: "initDone")
+        mgr.initialize { _ in initDone.fulfill() }
+        waitForExpectations(timeout: 5, handler: nil)
+        XCTAssertEqual(mgr.state, .authIssues)
+
+        expectation(forNotification: .accountLoggedOut, object: nil, handler: nil)
+        let beginPairingDone = expectation(description: "beginPairingDone")
+        nonisolated(unsafe) var pairingResult: Result<URL, Error>?
+        mgr.beginPairingAuthentication(pairingUrl: "https://foo.bar/pair#channel_id=abc&channel_key=def",
+                                       entrypoint: "test_pairing_from_auth_issues") { result in
+            pairingResult = result
+            beginPairingDone.fulfill()
+        }
+        waitForExpectations(timeout: 5, handler: nil)
+
+        XCTAssertEqual(try pairingResult?.get().absoluteString, "https://foo.bar/oauth?state=bobo")
+        guard case .authenticating = mgr.state else {
+            return XCTFail("Expected .authenticating, got \(mgr.state).")
+        }
+
+        var pausedEvents = [FxaEvent]()
+        var freshEvents = [FxaEvent]()
+        let freshAccount = mgr.account as! MockFxAccount
+        queue.sync {
+            pausedEvents = pausedAccount.processedEvents
+            freshEvents = freshAccount.processedEvents
+        }
+        XCTAssertTrue(freshAccount !== pausedAccount, "`onDisconnected` must replace the paused account.")
+        XCTAssertEqual(pausedEvents.last, .disconnect)
+        XCTAssertFalse(pausedEvents.contains { if case .beginPairingFlow = $0 { return true } else { return false } },
+                       "Pairing must not be attempted on the paused account.")
+        XCTAssertEqual(freshEvents.count, 2)
+        if case .initialize = freshEvents[0] {} else { XCTFail("Fresh account must be initialized first.") }
+        if case .beginPairingFlow = freshEvents[1] {} else { XCTFail("Pairing must run on the fresh account.") }
+    }
+
+    func testPairingFromDisconnectedDoesNotDisconnect() {
+        let mgr = mockFxAManager()
+        let initDone = expectation(description: "initDone")
+        mgr.initialize { _ in initDone.fulfill() }
+        waitForExpectations(timeout: 5, handler: nil)
+
+        let beginPairingDone = expectation(description: "beginPairingDone")
+        mgr.beginPairingAuthentication(pairingUrl: "https://foo.bar/pair#channel_id=abc&channel_key=def",
+                                       entrypoint: "test_pairing_from_disconnected") { _ in
+            beginPairingDone.fulfill()
+        }
+        waitForExpectations(timeout: 5, handler: nil)
+
+        let account = mgr.account as! MockFxAccount
+        var events = [FxaEvent]()
+        queue.sync { events = account.processedEvents }
+        XCTAssertFalse(events.contains(.disconnect))
+        guard case .authenticating = mgr.state else {
+            return XCTFail("Expected .authenticating, got \(mgr.state).")
+        }
+    }
+
     func testGetTokenServerEndpointURL() {
         class MockAccount: MockFxAccount {
             override func getTokenServerEndpointURL() throws -> URL {
