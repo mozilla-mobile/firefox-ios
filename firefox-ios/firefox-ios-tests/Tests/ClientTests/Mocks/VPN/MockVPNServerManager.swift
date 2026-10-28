@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @testable import Client
+import VPNKit
 
 final class MockVPNServerManager: VPNServerManaging, @unchecked Sendable {
     var server: VPNGuardian.Server? = VPNGuardian.Server(
@@ -13,7 +14,7 @@ final class MockVPNServerManager: VPNServerManaging, @unchecked Sendable {
     )
     var selectServerCalled = 0
 
-    func selectServer(countryCode: String?) async -> VPNGuardian.Server? {
+    func selectServer(countryCode: String?, environment: VPNEnvironment) async -> VPNGuardian.Server? {
         selectServerCalled += 1
         return server
     }

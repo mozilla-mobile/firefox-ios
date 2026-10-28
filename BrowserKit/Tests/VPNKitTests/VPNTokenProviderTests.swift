@@ -14,12 +14,12 @@ final class VPNTokenProviderTests: XCTestCase {
 
     func test_proxyToken_authenticates_whenNoSessionStored() async throws {
         let auth = MockVPNAuthenticating(session: nil)
-        let fetcher = MockVPNProxyTokenFetching(tokenToReturn: token())
+        let fetcher = MockVPNProxyTokenFetching(passToReturn: pass())
         let subject = VPNTokenProvider(authService: auth, tokenService: fetcher)
 
         let result = try await subject.proxyToken()
 
-        XCTAssertEqual(result.token, "proxy-token")
+        XCTAssertEqual(result.bearerToken, "proxy-token")
         XCTAssertEqual(auth.authenticateCallCount, 1, "Must establish a session before exchanging it")
         XCTAssertEqual(fetcher.fetchCallCount, 1)
     }
@@ -27,7 +27,7 @@ final class VPNTokenProviderTests: XCTestCase {
     func test_proxyToken_propagatesAuthenticationFailure_withoutFetching() async throws {
         let auth = MockVPNAuthenticating()
         auth.authenticateError = VPNAuthError.notEnrolled
-        let fetcher = MockVPNProxyTokenFetching(tokenToReturn: token())
+        let fetcher = MockVPNProxyTokenFetching(passToReturn: pass())
         let subject = VPNTokenProvider(authService: auth, tokenService: fetcher)
 
         do {
@@ -42,7 +42,7 @@ final class VPNTokenProviderTests: XCTestCase {
 
     func test_proxyToken_propagatesFetchFailure() async throws {
         let auth = MockVPNAuthenticating()
-        let fetcher = MockVPNProxyTokenFetching(tokenToReturn: token())
+        let fetcher = MockVPNProxyTokenFetching(passToReturn: pass())
         fetcher.fetchError = URLError(.notConnectedToInternet)
         let subject = VPNTokenProvider(authService: auth, tokenService: fetcher)
 
@@ -56,7 +56,7 @@ final class VPNTokenProviderTests: XCTestCase {
 
     func test_proxyToken_fetchesEveryTime() async throws {
         let auth = MockVPNAuthenticating()
-        let fetcher = MockVPNProxyTokenFetching(tokenToReturn: token())
+        let fetcher = MockVPNProxyTokenFetching(passToReturn: pass())
         let subject = VPNTokenProvider(authService: auth, tokenService: fetcher)
 
         _ = try await subject.proxyToken()
@@ -115,8 +115,8 @@ final class VPNTokenProviderTests: XCTestCase {
         )
     }
 
-    private func token(value: String = "proxy-token") -> VPNProxyToken {
-        return VPNProxyToken(token: value)
+    private func pass(token: String = "proxy-token") -> VPNProxyPass {
+        return VPNProxyPass(bearerToken: token, notBefore: Date(), expiresAt: Date().addingTimeInterval(3600), usage: nil)
     }
 }
 
