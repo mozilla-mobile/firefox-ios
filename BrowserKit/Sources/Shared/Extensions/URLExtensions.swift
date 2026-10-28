@@ -205,7 +205,7 @@ extension URL {
     }
 
     public var siteURL: URL {
-        InternalURL(self)?.originalURLFromErrorPage ?? self
+        InternalURL(self)?.originalURLFromErrorPage ?? decodeReaderModeURL ?? self
     }
 }
 
