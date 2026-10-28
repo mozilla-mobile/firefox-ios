@@ -70,7 +70,7 @@ struct VPNSettingsViewContainer: ThemeableView {
         VPNHelpers.card(theme: theme) {
             VPNSettingsContentView(theme: theme, onLearnMoreTapped: onLearnMoreTapped)
             VPNHelpers.divider()
-            VPNLocationsRow(theme: theme, action: onLocationsTapped)
+            VPNLocationsRow(theme: theme, locationName: locationName, action: onLocationsTapped)
             VPNHelpers.divider()
             VPNToggleRow(isOn: isVPNEnabled, isConnecting: isVPNConnecting, theme: theme, onChange: handleVPNToggle)
         }
@@ -216,6 +216,7 @@ struct VPNGlobeView: View {
 
 struct VPNLocationsRow: View {
     let theme: Theme
+    let locationName: String
     let action: () -> Void
 
     var body: some View {
@@ -225,7 +226,7 @@ struct VPNLocationsRow: View {
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                     .foregroundStyle(theme.colors.textPrimary.color)
                 Spacer()
-                Text(String.VPN.Settings.LocationRecommended)
+                Text(locationName)
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                     .foregroundStyle(theme.colors.textSecondary.color)
                 Image(StandardImageIdentifiers.Large.chevronRight)
@@ -240,7 +241,7 @@ struct VPNLocationsRow: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(String.VPN.Settings.LocationTitle)
-        .accessibilityValue(String.VPN.Settings.LocationRecommended)
+        .accessibilityValue(locationName)
         .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.locationSetting)
     }
 }
