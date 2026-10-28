@@ -38,7 +38,7 @@ final class VPNSetting: Setting {
     init(
         settings: SettingsTableViewController,
         settingsDelegate: PrivacySettingsDelegate?,
-        dataUsage: VPNDataUsage = VPNDataUsage(usedDataInGB: 2.3, dataLimitInGB: 5)
+        dataUsage: VPNDataUsage = .placeholder
     ) {
         self.settingsDelegate = settingsDelegate
         self.profile = settings.profile

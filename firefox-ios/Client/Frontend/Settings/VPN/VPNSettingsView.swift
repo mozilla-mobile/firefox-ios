@@ -32,7 +32,7 @@ struct VPNSettingsViewContainer: ThemeableView {
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         isVPNEnabled: Bool = false,
-        dataUsage: VPNDataUsage = VPNDataUsage(usedDataInGB: 2.3, dataLimitInGB: 5.0),
+        dataUsage: VPNDataUsage = .placeholder,
         onSubSettingTapped: @escaping () -> Void = {},
         onVPNToggled: @escaping (Bool) -> Void = { _ in },
         onLearnMoreTapped: @escaping () -> Void = {}
@@ -48,13 +48,14 @@ struct VPNSettingsViewContainer: ThemeableView {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: UX.cardSpacing) {
-            settingsCard
-            dataUsageSection
+        ScrollView {
+            VStack(alignment: .leading, spacing: UX.cardSpacing) {
+                settingsCard
+                dataUsageSection
+            }
+            .padding(UX.cardOuterPadding)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(UX.cardOuterPadding)
-        .ignoresSafeArea(edges: [.bottom, .leading, .trailing])
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(theme.colors.layer1.color)
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
@@ -88,7 +89,7 @@ struct VPNSettingsViewContainer: ThemeableView {
         .accessibilityAddTraits(.isStaticText)
         .accessibilityLabel(Text(String.VPN.Settings.DataLimitTitle))
         .accessibilityValue(VPNHelpers.usageAccessibilityText(
-            usedDataInGB: min(dataUsage.usedDataInGB, dataUsage.dataLimitInGB),
+            usedDataInGB: dataUsage.clampedUsedDataInGB,
             dataLimitInGB: dataUsage.dataLimitInGB
         ))
         .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.dataUsage)
@@ -284,14 +285,6 @@ struct VPNUsageBar: View {
     let dataUsage: VPNDataUsage
     let theme: Theme
 
-    init(dataUsage: VPNDataUsage, theme: Theme) {
-        self.dataUsage = VPNDataUsage(
-            usedDataInGB: min(dataUsage.usedDataInGB, dataUsage.dataLimitInGB),
-            dataLimitInGB: dataUsage.dataLimitInGB
-        )
-        self.theme = theme
-    }
-
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -299,7 +292,10 @@ struct VPNUsageBar: View {
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                     .foregroundStyle(theme.colors.textPrimary.color)
                 Spacer()
-                Text(VPNHelpers.usageText(usedDataInGB: dataUsage.usedDataInGB, dataLimitInGB: dataUsage.dataLimitInGB))
+                Text(VPNHelpers.usageText(
+                    usedDataInGB: dataUsage.clampedUsedDataInGB,
+                    dataLimitInGB: dataUsage.dataLimitInGB
+                ))
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                     .foregroundStyle(theme.colors.textSecondary.color)
             }
@@ -315,8 +311,14 @@ struct VPNUsageBar: View {
 
 // TODO: Replace the sample values with real usage data once the VPN backend provides it
 struct VPNDataUsage: Equatable {
+    static let placeholder = VPNDataUsage(usedDataInGB: 2.3, dataLimitInGB: 5)
+
     let usedDataInGB: Double
     let dataLimitInGB: Double
+
+    var clampedUsedDataInGB: Double {
+        min(usedDataInGB, dataLimitInGB)
+    }
 
     var usageFraction: Double {
         guard dataLimitInGB > 0 else { return 0 }
