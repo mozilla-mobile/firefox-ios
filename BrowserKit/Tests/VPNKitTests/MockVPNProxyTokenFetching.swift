@@ -16,7 +16,7 @@ final class MockVPNProxyTokenFetching: VPNProxyTokenFetching, @unchecked Sendabl
         self.passToReturn = passToReturn
     }
 
-    func fetchProxyToken() async throws -> VPNProxyPass {
+    func fetchProxyPass() async throws -> VPNProxyPass {
         fetchCallCount += 1
         if let fetchError { throw fetchError }
         return passToReturn

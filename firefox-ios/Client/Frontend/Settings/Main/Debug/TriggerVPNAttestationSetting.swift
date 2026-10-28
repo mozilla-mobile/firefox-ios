@@ -151,7 +151,7 @@ final class FetchVPNProxyTokenSetting: VPNDebugSetting {
 
         Task { @MainActor in
             do {
-                let pass = try await service.fetchProxyToken()
+                let pass = try await service.fetchProxyPass()
                 present(title: "\(alertTitle) ✅", message: Self.describe(pass))
             } catch VPNAuthError.noStoredSession {
                 present(title: "\(alertTitle) ❌",

@@ -7,7 +7,7 @@ import Foundation
 import Shared
 
 public protocol VPNProxyTokenFetching: Sendable {
-    func fetchProxyToken() async throws -> VPNProxyPass
+    func fetchProxyPass() async throws -> VPNProxyPass
 }
 
 /// Exchanges a Device Session JWT for a short-lived proxy token.
@@ -37,7 +37,7 @@ public struct VPNProxyTokenService: VPNProxyTokenFetching {
         self.requestAuth = VPNSessionRequestAuth(authService: authService)
     }
 
-    public func fetchProxyToken() async throws -> VPNProxyPass {
+    public func fetchProxyPass() async throws -> VPNProxyPass {
         do {
             return try await requestToken()
         } catch VPNAuthError.sessionRejected {

@@ -24,8 +24,8 @@ public struct VPNTokenProvider: VPNTokenProviding {
         // nothing to exchange yet.
         _ = try await authService.authenticate()
 
-        // `fetchProxyToken()` already refreshes and retries once on a rejected session; retrying
+        // `fetchProxyPass()` already refreshes and retries once on a rejected session; retrying
         // here as well would square that.
-        return try await tokenService.fetchProxyToken()
+        return try await tokenService.fetchProxyPass()
     }
 }
