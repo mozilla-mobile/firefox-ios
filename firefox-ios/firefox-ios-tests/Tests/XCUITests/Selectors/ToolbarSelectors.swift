@@ -178,14 +178,9 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
     )
 
     // Every row of the Google Lens menu, matched by the identifier prefix the rows share with the button.
-    let GOOGLE_LENS_MENU_ACTIONS = Selector(
-        strategy: .predicate(NSPredicate(
-            format: "elementType == %d AND identifier BEGINSWITH %@ AND identifier != %@",
-            XCUIElement.ElementType.button.rawValue,
-            IDs.googleLensIdentifierPrefix,
-            IDs.googleLensButton
-        )),
-        value: IDs.googleLensIdentifierPrefix,
+    let GOOGLE_LENS_MENU_ACTIONS = Selector.buttonIdBeginsWith(
+        IDs.googleLensIdentifierPrefix,
+        excluding: IDs.googleLensButton,
         description: "All rows of the menu opened by the Google Lens button",
         groups: ["toolbar"]
     )

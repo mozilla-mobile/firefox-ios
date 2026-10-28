@@ -99,7 +99,7 @@ final class SearchSettingsScreen {
     }
 
     func assertAlternativeSearchEngineIsEnabled(named engineName: String) {
-        let engineRow = app.tables.cells.containing(sel.alternativeSearchEngineName(engineName)).firstMatch
+        let engineRow = sel.alternativeSearchEngineRow(named: engineName).element(in: app)
         assertSwitch(engineRow.switches.firstMatch, named: "\(engineName) alternative engine", isOn: true)
     }
 

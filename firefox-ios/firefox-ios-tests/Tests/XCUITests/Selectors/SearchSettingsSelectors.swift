@@ -34,7 +34,7 @@ protocol SearchSettingsSelectorsSet {
     /// The 'Search Browsing History' row has no description, so its accessibility label is the title alone.
     var SEARCH_BROWSING_HISTORY_DISPLAYED_TEXT: String { get }
     func searchEngineRow(named engineName: String) -> Selector
-    func alternativeSearchEngineName(_ engineName: String) -> NSPredicate
+    func alternativeSearchEngineRow(named engineName: String) -> Selector
     var all: [Selector] { get }
 }
 
@@ -127,13 +127,8 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
     )
 
     // The toggle has no identifier, and the row's label is the title followed by its description.
-    let GOOGLE_LENS_ROW = Selector(
-        strategy: .predicate(NSPredicate(
-            format: "elementType == %d AND label BEGINSWITH %@",
-            XCUIElement.ElementType.cell.rawValue,
-            IDs.googleLensRow
-        )),
-        value: IDs.googleLensRow,
+    let GOOGLE_LENS_ROW = Selector.cellLabelBeginsWith(
+        IDs.googleLensRow,
         description: "Google Lens toggle row on Settings → Search, shown only while Google is the default engine",
         groups: ["settings", "search"]
     )
@@ -220,9 +215,14 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
         )
     }
 
-    /// Alternative engine rows have no label, so a row is found through the name text it contains.
-    func alternativeSearchEngineName(_ engineName: String) -> NSPredicate {
-        NSPredicate(format: "elementType == %d AND label == %@", XCUIElement.ElementType.staticText.rawValue, engineName)
+    /// Alternative engine rows have no label, so a row is found through the name text it contains. Only rows
+    /// with a switch match, which leaves out the default engine row that also shows the engine name.
+    func alternativeSearchEngineRow(named engineName: String) -> Selector {
+        Selector.switchCellContainingStaticText(
+            engineName,
+            description: "Alternative search engine row for '\(engineName)' on Settings → Search",
+            groups: ["settings", "search"]
+        )
     }
 
     var all: [Selector] {

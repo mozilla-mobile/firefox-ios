@@ -110,6 +110,20 @@ extension Selector {
         return Selector(strategy: .predicate(p), value: prefix, description: description, groups: groups)
     }
 
+    static func cellLabelBeginsWith(_ prefix: String, description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND label BEGINSWITH %@",
+                            XCUIElement.ElementType.cell.rawValue,
+                            prefix)
+        return Selector(strategy: .predicate(p), value: prefix, description: description, groups: groups)
+    }
+
+    /// Matches a toggle row by the text it shows, for rows whose cell has neither an identifier nor a label.
+    static func switchCellContainingStaticText(_ label: String,
+                                               description: String,
+                                               groups: [String] = []) -> Selector {
+        Selector(strategy: .switchCellContainingStaticText(label), value: label, description: description, groups: groups)
+    }
+
     static func cellByLabel(_ label: String, description: String, groups: [String]) -> Selector {
         let p = NSPredicate(format: "elementType == %d AND label == %@",
                             XCUIElement.ElementType.cell.rawValue,
@@ -329,6 +343,18 @@ extension Selector {
                         value: value,
                         description: description,
                         groups: groups)
+    }
+
+    /// Matches buttons whose identifier starts with `prefix`, leaving out the one with identifier `excludedId`.
+    static func buttonIdBeginsWith(_ prefix: String,
+                                   excluding excludedId: String,
+                                   description: String,
+                                   groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND identifier BEGINSWITH %@ AND identifier != %@",
+                            XCUIElement.ElementType.button.rawValue,
+                            prefix,
+                            excludedId)
+        return Selector(strategy: .predicate(p), value: prefix, description: description, groups: groups)
     }
 
     static func buttonLabelContains(_ text: String,
