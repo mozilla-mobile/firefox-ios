@@ -315,6 +315,7 @@ final class AddressToolbarContainer: UIView,
             || toolbarLeadingConstraint?.isActive != true
             || toolbarTrailingConstraint?.isActive != true
         systemTopBarLayoutGuide = guide
+        toolbar.alignsTrailingContentToEdge = guide != nil && traitCollection.duoExpanded
         if let model {
             toolbar.updateSpacing(
                 leading: calculateToolbarLeadingSpace(isEditing: model.isEditing,

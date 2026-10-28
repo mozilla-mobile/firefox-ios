@@ -1582,7 +1582,7 @@ class BrowserViewController: UIViewController,
         super.viewDidLayoutSubviews()
         let systemTopBarLayoutGuide = browserLayoutManager.updateHeaderBarLayout(
             isBottomSearchBar: isBottomSearchBar,
-            toolbarHeight: addressToolbarContainer.bounds.height
+            addressToolbar: addressToolbarContainer
         )
         addressToolbarContainer.updateSystemTopBarLayoutGuide(systemTopBarLayoutGuide, isBottomSearchBar: isBottomSearchBar)
         addressToolbarContainer.progressBarAnchorView = tabStripBelowAddressBar

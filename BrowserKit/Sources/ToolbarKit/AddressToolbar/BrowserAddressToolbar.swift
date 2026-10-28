@@ -48,6 +48,14 @@ public class BrowserAddressToolbar: UIView,
     }
 
     public var notificationCenter: any NotificationProtocol = NotificationCenter.default
+    /// Removes the trailing margin and button inset of a top toolbar whose trailing edge
+    /// is already kept clear of system UI, such as iPhone Duo's status bar.
+    public var alignsTrailingContentToEdge = false {
+        didSet {
+            guard oldValue != alignsTrailingContentToEdge else { return }
+            updateToolbarContainerHorizontalConstraints(for: addressBarPosition)
+        }
+    }
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
     private var droppableUrl: URL?
@@ -375,11 +383,22 @@ public class BrowserAddressToolbar: UIView,
         toolbarContainerSafeAreaTrailingConstraint?.isActive = false
         toolbarContainerFixedInsetsLeftConstraint?.isActive = false
         toolbarContainerFixedInsetsRightConstraint?.isActive = false
+        toolbarContainerSafeAreaTrailingConstraint?.constant = 0
 
         if useWindowControlGuide {
             // Top toolbar on iOS 26+: keep clear of the window controls (e.g. iPad windowing).
             toolbarContainerWindowControlLeadingConstraint?.isActive = true
-            toolbarContainerWindowControlTrailingConstraint?.isActive = true
+            if alignsTrailingContentToEdge {
+                // Extends past the safe area by the last button's inset so its icon sits on the edge.
+                // The stack view has no trailing padding of its own; the gap is the button's content inset,
+                // which differs between icon and text buttons, so it is read from the button itself.
+                let lastButton = browserActionStack.arrangedSubviews.last as? UIButton
+                let trailingInset = lastButton?.configuration?.contentInsets.trailing ?? 0
+                toolbarContainerSafeAreaTrailingConstraint?.constant = trailingInset
+                toolbarContainerSafeAreaTrailingConstraint?.isActive = true
+            } else {
+                toolbarContainerWindowControlTrailingConstraint?.isActive = true
+            }
         } else if let fixedInsets {
             // Bottom toolbar with `fixedHorizontalSafeAreaInsets` set, used instead of its own safe area
             // (e.g. tab swipe next to a vertical system bar on the folded iPhone Duo).
@@ -422,6 +441,7 @@ public class BrowserAddressToolbar: UIView,
     internal func updateActions(config: AddressToolbarConfiguration, animated: Bool) {
         // Browser actions
         updateActionStack(stackView: browserActionStack, toolbarElements: config.browserActions)
+        updateToolbarContainerHorizontalConstraints(for: addressBarPosition)
 
         // Navigation actions
         updateActionStack(stackView: navigationActionStack, toolbarElements: config.navigationActions)
