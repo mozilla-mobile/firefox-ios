@@ -30,7 +30,6 @@ class MockUserNotificationCenter: UserNotificationCenterProtocol, @unchecked Sen
              withCompletionHandler completionHandler: ((Error?) -> Void)?) {
         addWasCalled = true
         addedRequest = request
-        completionHandler?(addError)
     }
 
     var getDeliveredWasCalled = false
