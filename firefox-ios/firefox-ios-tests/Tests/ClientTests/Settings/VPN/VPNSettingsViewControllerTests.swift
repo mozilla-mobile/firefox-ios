@@ -42,15 +42,11 @@ final class VPNSettingsViewControllerTests: XCTestCase {
     }
 
     // MARK: - Locations
-    func test_onLocationsTapped_pushesVPNLocationsViewController() throws {
+    func test_locationsTapped_pushesVPNLocationsViewController() {
         let subject = createSubject()
         let navigationController = UINavigationController(rootViewController: subject)
-        subject.loadViewIfNeeded()
 
-        let hostingController = try XCTUnwrap(
-            subject.children.first as? UIHostingController<VPNSettingsViewContainer>
-        )
-        hostingController.rootView.onLocationsTapped()
+        subject.locationsTapped()
 
         XCTAssertTrue(navigationController.topViewController is VPNLocationsViewController)
     }
@@ -59,12 +55,8 @@ final class VPNSettingsViewControllerTests: XCTestCase {
         let prefs = MockProfilePrefs()
         let subject = createSubject(prefs: prefs)
         let navigationController = UINavigationController(rootViewController: subject)
-        subject.loadViewIfNeeded()
 
-        let hostingController = try XCTUnwrap(
-            subject.children.first as? UIHostingController<VPNSettingsViewContainer>
-        )
-        hostingController.rootView.onLocationsTapped()
+        subject.locationsTapped()
         let locationsController = try XCTUnwrap(navigationController.topViewController as? VPNLocationsViewController)
         locationsController.loadViewIfNeeded()
         let locationsHostingController = try XCTUnwrap(

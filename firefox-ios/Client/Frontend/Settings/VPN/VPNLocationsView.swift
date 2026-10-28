@@ -41,25 +41,26 @@ struct VPNLocationsView: ThemeableView {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: UX.sectionSpacing) {
-            VPNHelpers.card(theme: theme) {
-                locationButton(
-                    regionCode: VPNServerManager.recommendedCountryCode,
-                    title: .VPN.LocationPicker.RecommendedMainText,
-                    subtitle: String(format: .VPN.LocationPicker.RecommendedSubText, AppName.shortName.rawValue)
-                )
-                ForEach(regionCodes, id: \.self) { regionCode in
-                    VPNHelpers.divider()
-                    locationButton(regionCode: regionCode, title: localeProvider.localizedRegionName(for: regionCode))
+        ScrollView {
+            VStack(alignment: .leading, spacing: UX.sectionSpacing) {
+                VPNHelpers.card(theme: theme) {
+                    locationButton(
+                        regionCode: VPNServerManager.recommendedCountryCode,
+                        title: .VPN.LocationPicker.RecommendedMainText,
+                        subtitle: String(format: .VPN.LocationPicker.RecommendedSubText, AppName.shortName.rawValue)
+                    )
+                    ForEach(regionCodes, id: \.self) { regionCode in
+                        VPNHelpers.divider()
+                        locationButton(regionCode: regionCode, title: localeProvider.localizedRegionName(for: regionCode))
+                    }
+                }
+                if isLoadingLocations {
+                    loadingIndicator
                 }
             }
-            if isLoadingLocations {
-                loadingIndicator
-            }
+            .padding(UX.outerPadding)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(UX.outerPadding)
-        .ignoresSafeArea(edges: [.bottom, .leading, .trailing])
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(theme.colors.layer1.color)
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
         .task { await loadLocations() }
@@ -72,31 +73,33 @@ struct VPNLocationsView: ThemeableView {
         let a11yIdentifier = regionCode == VPNServerManager.recommendedCountryCode
             ? AccessibilityIdentifiers.Settings.VPN.Locations.recommendedLocation
             : "\(AccessibilityIdentifiers.Settings.VPN.Locations.location).\(regionCode)"
-        return HStack {
-            VStack(alignment: .leading, spacing: UX.rowTextSpacing) {
-                Text(title)
-                    .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
-                    .foregroundStyle(theme.colors.textPrimary.color)
-                if let subtitle {
-                    Text(subtitle)
-                        .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
-                        .foregroundStyle(theme.colors.textSecondary.color)
+        return Button {
+            selectLocation(regionCode)
+        } label: {
+            HStack {
+                VStack(alignment: .leading, spacing: UX.rowTextSpacing) {
+                    Text(title)
+                        .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                        .foregroundStyle(theme.colors.textPrimary.color)
+                    if let subtitle {
+                        Text(subtitle)
+                            .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
+                            .foregroundStyle(theme.colors.textSecondary.color)
+                    }
                 }
+                Spacer()
+                Image(StandardImageIdentifiers.Large.checkmark)
+                    .renderingMode(.template)
+                    .foregroundStyle(theme.colors.iconAccent.color)
+                    .opacity(isSelected ? 1 : 0)
+                    .accessibilityHidden(true)
             }
-            Spacer()
-            Image(StandardImageIdentifiers.Large.checkmark)
-                .renderingMode(.template)
-                .foregroundStyle(theme.colors.iconAccent.color)
-                .opacity(isSelected ? 1 : 0)
-                .accessibilityHidden(true)
+            .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
+            .padding(.vertical, VPNHelpers.UX.rowVerticalPadding)
+            .contentShape(Rectangle())
         }
-        .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
-        .padding(.vertical, VPNHelpers.UX.rowVerticalPadding)
-        .contentShape(Rectangle())
-        .onTapGesture { selectLocation(regionCode) }
-        .accessibilityElement(children: .combine)
-        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
-        .accessibilityAction { selectLocation(regionCode) }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
         .accessibilityIdentifier(a11yIdentifier)
     }
 
