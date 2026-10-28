@@ -14,6 +14,10 @@ final class TabManagerImplementation: NSObject,
                                       TabManager,
                                       FeatureFlaggable,
                                       TabRestorerDelegate {
+    let tabGroupManager: TabGroupManager
+    private var isClosingTabGroup = false
+    private var isWindowClosed = false
+    private var excludedTabIDsDuringRestore = Set<TabUUID>()
     let windowUUID: WindowUUID
 
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
@@ -23,6 +27,7 @@ final class TabManagerImplementation: NSObject,
         didSet {
             // Invalidate cache on every mutation to keep it always updated.
             tabsInternalCache = nil
+            if !isWindowClosed, !isClosingTabGroup { tabs.forEach { tabGroupManager.bind($0) } }
         }
     }
 
@@ -109,6 +114,7 @@ final class TabManagerImplementation: NSObject,
          logger: Logger = DefaultLogger.shared,
          uuid: ReservedWindowUUID,
          tabDataStore: TabDataStore? = nil,
+         tabGroupManager: TabGroupManager? = nil,
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          windowManager: WindowManager = AppContainer.shared.resolve(),
@@ -116,6 +122,7 @@ final class TabManagerImplementation: NSObject,
     ) {
         let dataStore =  tabDataStore ?? DefaultTabDataStore(logger: logger, fileManager: DefaultTabFileManager())
         self.tabDataStore = dataStore
+        self.tabGroupManager = tabGroupManager ?? AppContainer.shared.resolve()
         self.tabSessionStore = tabSessionStore
         self.imageStore = imageStore
         self.notificationCenter = notificationCenter
@@ -127,6 +134,7 @@ final class TabManagerImplementation: NSObject,
         self.tabs = tabs
 
         super.init()
+        tabs.forEach { self.tabGroupManager.bind($0) }
 
         GlobalTabEventHandlers.configure(with: profile)
 
@@ -200,7 +208,101 @@ final class TabManagerImplementation: NSObject,
     }
 
     // MARK: - Remove Tab
+    @discardableResult
+    func openTabGroup(_ groupID: TabGroupID) async throws -> WindowUUID {
+        try await tabGroupManager.restore()
+        guard !isWindowClosed else { throw TabGroupManager.GroupError.closedWindow }
+        let hostWindow = try tabGroupManager.openGroup(groupID, in: windowUUID)
+        guard hostWindow == windowUUID else { return hostWindow }
+        let existingIDs = Set(tabs.map(\.tabUUID))
+        for data in try tabGroupManager.tabs(in: groupID) where !existingIDs.contains(data.id.uuidString) {
+            let tab = createTab(with: data)
+            tabs.append(tab)
+            notifyAddedTab(tab, placeNextToParentTab: false)
+        }
+        if let tab = tabs.first(where: { $0.groupID == groupID }) { selectTab(tab) }
+        commitChanges()
+        return hostWindow
+    }
+
+    func closeTabGroup(_ groupID: TabGroupID) {
+        guard tabGroupManager.activeWindow(for: groupID) == windowUUID else { return }
+        let memberIDs = Set(tabGroupManager.tabIDs(in: groupID))
+        let members = normalTabs.filter { memberIDs.contains($0.tabUUID) }
+        if isRestoringTabs { excludedTabIDsDuringRestore.formUnion(memberIDs) }
+        tabGroupManager.preserveTabs(members.map { $0.dataForSaving() }, in: windowUUID)
+        members.forEach { saveSessionData(forTab: $0) }
+        tabGroupManager.closeGroup(groupID, in: windowUUID)
+        isClosingTabGroup = true
+        removeTabs(members)
+        isClosingTabGroup = false
+    }
+
+    func deleteTabGroup(_ groupID: TabGroupID) throws {
+        let memberIDs = Set(tabGroupManager.tabIDs(in: groupID))
+        try tabGroupManager.deleteGroup(groupID)
+        if isRestoringTabs { excludedTabIDsDuringRestore.formUnion(memberIDs) }
+        let managers = windowManager.allWindowTabManagers()
+        for manager in managers {
+            if let concrete = manager as? TabManagerImplementation, concrete.isRestoringTabs {
+                concrete.excludedTabIDsDuringRestore.formUnion(memberIDs)
+            }
+            manager.removeTabs(manager.normalTabs.filter { memberIDs.contains($0.tabUUID) })
+        }
+        if !managers.contains(where: { $0 === self }) {
+            removeTabs(normalTabs.filter { memberIDs.contains($0.tabUUID) })
+        }
+    }
+
+    func prepareForWindowClose() {
+        isWindowClosed = true
+        tabGroupManager.preserveTabs(normalTabs.map { $0.dataForSaving() }, in: windowUUID)
+        normalTabs.forEach { saveSessionData(forTab: $0) }
+        tabGroupManager.closeWindow(windowUUID)
+        if isRestoringTabs {
+            isRestoringTabs = false
+            excludedTabIDsDuringRestore.removeAll()
+            tabRestoreHasFinished = true
+            AppEventQueue.completed(.tabRestoration(windowUUID))
+        }
+    }
+
+    private func restoreMissingGroupTabs() {
+        let activeGroups = tabGroupManager.groups.filter { tabGroupManager.activeWindow(for: $0.id) == windowUUID }
+        guard !activeGroups.isEmpty else { return }
+        var restoredTabs = tabs
+        var existingIDs = Set(tabs.map(\.tabUUID))
+        var addedTabs: [Tab] = []
+        for group in activeGroups {
+            for data in (try? tabGroupManager.tabs(in: group.id)) ?? [] {
+                let tabID = data.id.uuidString
+                guard !excludedTabIDsDuringRestore.contains(tabID), existingIDs.insert(tabID).inserted else { continue }
+                let tab = createTab(with: data)
+                restoredTabs.append(tab)
+                addedTabs.append(tab)
+            }
+            let memberIDs = Set(group.tabIDs)
+            let positions = restoredTabs.indices.filter { memberIDs.contains(restoredTabs[$0].tabUUID) }
+            let members = Dictionary(uniqueKeysWithValues: positions.map { (restoredTabs[$0].tabUUID, restoredTabs[$0]) })
+            let orderedTabs = group.tabIDs.compactMap { members[$0] }
+            for (position, tab) in zip(positions, orderedTabs) { restoredTabs[position] = tab }
+        }
+        tabs = restoredTabs
+        addedTabs.forEach { notifyAddedTab($0, placeNextToParentTab: false) }
+    }
+
+    private func restoreTabGroups() async {
+        do {
+            try await tabGroupManager.restore()
+            guard !isWindowClosed else { return }
+            tabs.forEach { tabGroupManager.bind($0) }
+        } catch {
+            logger.log("Could not restore tab groups: \(error)", level: .warning, category: .tabs)
+        }
+    }
+
     func removeTab(_ tabUUID: TabUUID) {
+        if isRestoringTabs { excludedTabIDsDuringRestore.insert(tabUUID) }
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
@@ -270,6 +372,8 @@ final class TabManagerImplementation: NSObject,
 
         tab.cancelDocumentDownload()
         let prevCount = count
+        if isRestoringTabs { excludedTabIDsDuringRestore.insert(tab.tabUUID) }
+        if !isClosingTabGroup { tabGroupManager.removeTab(tab.tabUUID) }
         tabs.remove(at: removalIndex)
         assert(count == prevCount - 1, "Make sure the tab count was actually removed")
         if count != prevCount - 1 {
@@ -280,8 +384,9 @@ final class TabManagerImplementation: NSObject,
 
         // We're closing the tab in the UI, and remove the tabs from the tabmanager.tabs array right away
         // so everything is kept in sync. But the actual closure of the Tab object is asynchronous [FXIOS-15339].
+        let preservingDocuments = isClosingTabGroup
         Task {
-            await tab.close()
+            await tab.close(preservingDocuments: preservingDocuments)
         }
 
         // Notify of tab removal
@@ -406,13 +511,19 @@ final class TabManagerImplementation: NSObject,
                         flushToDisk: Bool,
                         zombie: Bool,
                         isPrivate: Bool = false,
-                        groupID: TabGroupID? = nil
+                        groupID: TabGroupID? = nil,
+                        notifyDelegates: Bool = true
     ) -> Tab {
         let tab = Tab(profile: profile,
                       isPrivate: isPrivate,
                       groupID: groupID,
                       windowUUID: windowUUID)
-        configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
+        configureTab(tab,
+                     request: request,
+                     afterTab: afterTab,
+                     flushToDisk: flushToDisk,
+                     zombie: zombie,
+                     notifyDelegates: notifyDelegates)
         return tab
     }
 
@@ -494,7 +605,6 @@ final class TabManagerImplementation: NSObject,
         isRestoringTabs = true
         AppEventQueue.started(.tabRestoration(windowUUID))
 
-        let preRestoreTabs = tabs
         let restorer = DefaultTabRestorer(
             delegate: self,
             tabDataStore: tabDataStore,
@@ -504,8 +614,11 @@ final class TabManagerImplementation: NSObject,
         )
 
         Task { @MainActor in
+            await restoreTabGroups()
+            guard !isWindowClosed else { return }
             let result = await restorer.restoreTabs(for: windowUUID)
-            applyRestorationResult(result, preRestoreTabs: preRestoreTabs)
+            guard !isWindowClosed else { return }
+            applyRestorationResult(result, preRestoreTabs: tabs)
             TabErrorTelemetryHelper.shared.validateTabCountAfterRestoringTabs(windowUUID)
             logger.log("Tabs restore ended using TabRestorer", level: .debug, category: .tabs)
             logger.log("Normal tabs count; \(normalTabs.count), Private tabs count; \(privateTabs.count)",
@@ -581,8 +694,11 @@ final class TabManagerImplementation: NSObject,
 
     private func startLegacyRestoreTabsTask() {
         Task { @MainActor in
+            await restoreTabGroups()
+            guard !isWindowClosed else { return }
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
             let windowData: WindowData? = windowIsNew ? nil : await tabDataStore.fetchWindowData(uuid: windowUUID)
+            guard !isWindowClosed else { return }
             legacyBuildTabRestore(window: windowData)
             TabErrorTelemetryHelper.shared.validateTabCountAfterRestoringTabs(windowUUID)
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
@@ -591,11 +707,7 @@ final class TabManagerImplementation: NSObject,
     }
 
     private func legacyBuildTabRestore(window: WindowData?) {
-        defer {
-            isRestoringTabs = false
-            tabRestoreHasFinished = true
-            AppEventQueue.completed(.tabRestoration(windowUUID))
-        }
+        defer { finishTabRestoration() }
 
         let nonPrivateTabs = window?.tabData.filter { !$0.isPrivate }
 
@@ -632,10 +744,13 @@ final class TabManagerImplementation: NSObject,
     /// Creates the webview so needs to live on the main thread
     private func legacyGenerateTabs(from windowData: WindowData) {
         // Clear in memory tabs for tab restore
+        let liveTabs = tabs
+        let liveIDs = Set(liveTabs.map(\.tabUUID))
         tabs = [Tab]()
         let filteredTabs = legacyFilterPrivateTabs(from: windowData,
                                                    clearPrivateTabs: shouldClearPrivateTabs)
-        var tabToSelect: Tab?
+            .filter { !liveIDs.contains($0.id.uuidString) }
+        var tabToSelect = liveTabs.first { $0.tabUUID == windowData.activeTabId.uuidString }
 
         for tabData in filteredTabs {
             let newTab = legacyConfigureNewTab(with: tabData)
@@ -644,6 +759,8 @@ final class TabManagerImplementation: NSObject,
             }
         }
 
+        tabs.append(contentsOf: liveTabs)
+        restoreMissingGroupTabs()
         logger.log("There was \(filteredTabs.count) tabs restored",
                    level: .debug,
                    category: .tabs)
@@ -655,13 +772,15 @@ final class TabManagerImplementation: NSObject,
     /// always land last. Picks a selected tab from the restoration result when available, falling
     /// back to the most recent normal tab or a freshly created one.
     private func applyRestorationResult(_ result: TabRestorationResult, preRestoreTabs: [Tab]) {
-        defer {
-            isRestoringTabs = false
-            tabRestoreHasFinished = true
-            AppEventQueue.completed(.tabRestoration(windowUUID))
-        }
+        defer { finishTabRestoration() }
 
-        tabs = result.restoredTabs + preRestoreTabs
+        let liveIDs = Set(preRestoreTabs.map(\.tabUUID))
+        let restoredTabs = result.restoredTabs.filter {
+            !liveIDs.contains($0.tabUUID) && !excludedTabIDsDuringRestore.contains($0.tabUUID)
+                && tabGroupManager.canRestoreTab($0.tabUUID, in: windowUUID)
+        }
+        tabs = restoredTabs + preRestoreTabs
+        restoreMissingGroupTabs()
 
         // Notify delegates of tabs restore before selecting a tab due to tab.tabDelegate assignment
         for delegate in delegates {
@@ -669,7 +788,7 @@ final class TabManagerImplementation: NSObject,
         }
 
         let tabToSelect: Tab? = result.selectedTabUUID.flatMap { uuid in
-            result.restoredTabs.first(where: { $0.tabUUID == uuid })
+            tabs.first(where: { $0.tabUUID == uuid })
         }
         handleTabSelectionAfterRestore(tabToSelect: tabToSelect)
 
@@ -677,9 +796,20 @@ final class TabManagerImplementation: NSObject,
         cleanUpTabSessionData()
     }
 
+    private func finishTabRestoration() {
+        let tabsWereClosed = !excludedTabIDsDuringRestore.isEmpty
+        isRestoringTabs = false
+        excludedTabIDsDuringRestore.removeAll()
+        tabRestoreHasFinished = true
+        if tabsWereClosed { preserveTabs(immediate: true) }
+        AppEventQueue.completed(.tabRestoration(windowUUID))
+    }
+
     private func legacyConfigureNewTab(with tabData: TabData) -> Tab? {
-        let newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
-        populateTab(newTab, from: tabData)
+        let newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate, notifyDelegates: false)
+        populateTab(newTab, from: tabGroupManager.savedTab(for: tabData.id.uuidString) ?? tabData)
+        tabGroupManager.bind(newTab)
+        notifyAddedTab(newTab, placeNextToParentTab: false)
         restoreScreenshot(for: newTab)
         return newTab
     }
@@ -732,7 +862,8 @@ final class TabManagerImplementation: NSObject,
     /// the returned tabs are collected into a `TabRestorationResult` and applied via `applyRestorationResult`.
     func createTab(with tabData: TabData) -> Tab {
         let tab = Tab(profile: profile, isPrivate: tabData.isPrivate, windowUUID: windowUUID)
-        populateTab(tab, from: tabData)
+        populateTab(tab, from: tabGroupManager.savedTab(for: tabData.id.uuidString) ?? tabData)
+        if !isWindowClosed, !excludedTabIDsDuringRestore.contains(tab.tabUUID) { tabGroupManager.bind(tab) }
         // Setting those here since `configureTab` applies those on the legacy path. Inlined here because the
         // deeplink-optimization path intentionally bypasses `addTab` / `configureTab`.
         tab.navigationDelegate = navigationDelegate
@@ -742,9 +873,12 @@ final class TabManagerImplementation: NSObject,
     }
 
     private func legacyFilterPrivateTabs(from windowData: WindowData, clearPrivateTabs: Bool) -> [TabData] {
-        var savedTabs = windowData.tabData
+        var savedTabs = windowData.tabData.filter {
+            !excludedTabIDsDuringRestore.contains($0.id.uuidString)
+                && tabGroupManager.canRestoreTab($0.id.uuidString, in: windowUUID)
+        }
         if clearPrivateTabs {
-            savedTabs = windowData.tabData.filter { !$0.isPrivate }
+            savedTabs = savedTabs.filter { !$0.isPrivate }
         }
         return savedTabs
     }
@@ -877,12 +1011,19 @@ final class TabManagerImplementation: NSObject,
     }
 
     private func preserveTabs(forced: Bool) {
+        let tabData = generateTabDataForSaving()
+        tabGroupManager.preserveTabs(tabData, in: windowUUID)
         Task { @MainActor in
             // FIXME FXIOS-10059 TabManagerImplementation's preserveTabs is called with a nil selectedTab
             let windowData = WindowData(id: windowUUID,
                                         activeTabId: self.selectedTabUUID ?? UUID(),
                                         tabData: self.generateTabDataForSaving())
             await tabDataStore.saveWindowData(window: windowData, forced: forced)
+            do {
+                try await tabGroupManager.flush()
+            } catch {
+                logger.log("Could not save tab groups: \(error)", level: .warning, category: .tabs)
+            }
 
             // Save simple tabs, used by widget extension
             windowManager.performMultiWindowAction(.saveSimpleTabs)
@@ -906,23 +1047,7 @@ final class TabManagerImplementation: NSObject,
                            category: .tabs)
             }
 
-            // Never persist a raw internal error-page URL as a tab's restorable siteUrl,
-            // substitute the original failing URL so restoration points at the real site.
-            let persistedUrl: URL?
-            if let tabUrl = tab.url, let internalUrl = InternalURL(tabUrl), internalUrl.isErrorPage {
-                persistedUrl = internalUrl.originalURLFromErrorPage
-            } else {
-                persistedUrl = tab.url
-            }
-
-            return TabData(id: tabId,
-                           title: tab.lastTitle,
-                           siteUrl: persistedUrl?.absoluteString ?? tab.lastKnownUrl?.absoluteString ?? "",
-                           faviconURL: tab.faviconURL,
-                           isPrivate: tab.isPrivate,
-                           lastUsedTime: Date.fromTimestamp(tab.lastExecutedTime),
-                           createdAtTime: Date.fromTimestamp(tab.firstCreatedTime),
-                           temporaryDocumentSession: tab.getTemporaryDocumentsSession())
+            return tab.dataForSaving()
         }
 
         let logInfo: String
@@ -968,10 +1093,14 @@ final class TabManagerImplementation: NSObject,
             else { continue }
             tabSessionStore.saveTabSession(tabID: tabID, sessionData: sessionData)
         }
-        return generateTabDataForSaving()
+        let tabData = generateTabDataForSaving()
+        tabGroupManager.preserveTabs(tabData, in: windowUUID)
+        return tabData
     }
 
     func addTabs(fromWindowMergeData tabDataList: [TabData]) {
+        let movedIDs = Set(tabDataList.map { $0.id.uuidString })
+        tabGroupManager.moveGroupsForWindowMerge(movedIDs, to: windowUUID)
         var existingUUIDs = Set(tabs.map { $0.tabUUID })
         var didAddTab = false
         for tabData in tabDataList where !existingUUIDs.contains(tabData.id.uuidString) {
@@ -1208,6 +1337,7 @@ final class TabManagerImplementation: NSObject,
     }
 
     private func cleanUpUnusedScreenshots() {
+        guard tabGroupManager.isLoaded else { return }
         // Clean up any screenshots that are no longer associated with a tab. The image store is
         // shared by every window, so it must be pruned against all of them (see liveTabUUIDs).
         let openWindowsTabUUIDs = openWindowsTabUUIDs()
@@ -1220,6 +1350,7 @@ final class TabManagerImplementation: NSObject,
     }
 
     private func cleanUpTabSessionData() {
+        guard tabGroupManager.isLoaded else { return }
         // The tab session store is shared by every window, so it must be pruned against all of
         // them (see liveTabUUIDs).
         let openWindowsTabUUIDs = openWindowsTabUUIDs()
@@ -1233,6 +1364,7 @@ final class TabManagerImplementation: NSObject,
 
     private func openWindowsTabUUIDs() -> Set<String> {
         var uuids = Set(tabs.map { $0.tabUUID })
+        uuids.formUnion(tabGroupManager.persistedTabIDs.map { $0.uuidString })
         // This window may not be registered with the WindowManager yet during its own restore.
         for tabManager in windowManager.allWindowTabManagers() {
             uuids.formUnion(tabManager.tabs.map { $0.tabUUID })
@@ -1297,6 +1429,7 @@ final class TabManagerImplementation: NSObject,
             selectedIndex = previousSelectedIndex
         }
 
+        tabGroupManager.reorderTabs(normalTabs.map(\.tabUUID), in: windowUUID)
         commitChanges()
     }
 
@@ -1375,7 +1508,8 @@ final class TabManagerImplementation: NSObject,
         afterTab parent: Tab? = nil,
         flushToDisk: Bool,
         zombie: Bool,
-        isPopup: Bool = false
+        isPopup: Bool = false,
+        notifyDelegates: Bool = true
     ) {
         assert(Thread.isMainThread)
         // If network is not available webView(_:didCommit:) is not going to be called
@@ -1392,12 +1526,7 @@ final class TabManagerImplementation: NSObject,
             tabs.insert(tab, at: insertIndex)
         }
 
-        delegates.forEach {
-            $0.get()?.tabManager(self,
-                                 didAddTab: tab,
-                                 placeNextToParentTab: placeNextToParentTab,
-                                 isRestoring: !tabRestoreHasFinished)
-        }
+        if notifyDelegates { notifyAddedTab(tab, placeNextToParentTab: placeNextToParentTab) }
 
         // Create the webview right away for tabs that are not zombies
         if !zombie {
@@ -1431,9 +1560,21 @@ final class TabManagerImplementation: NSObject,
 
         tab.nightMode = NightModeHelper.isActivated()
         tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
+        if tab.groupID != nil {
+            tabGroupManager.preserveTabs(normalTabs.map { $0.dataForSaving() }, in: windowUUID)
+        }
 
         if flushToDisk {
             commitChanges()
+        }
+    }
+
+    private func notifyAddedTab(_ tab: Tab, placeNextToParentTab: Bool) {
+        delegates.forEach {
+            $0.get()?.tabManager(self,
+                                 didAddTab: tab,
+                                 placeNextToParentTab: placeNextToParentTab,
+                                 isRestoring: !tabRestoreHasFinished)
         }
     }
 
