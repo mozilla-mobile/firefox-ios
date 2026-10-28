@@ -137,7 +137,7 @@ final class DefaultTemporaryDocument: NSObject,
         self.request = Self.applyCookiesToRequest(request, cookies: cookies)
         self.cookies = cookies
         self.credential = credential
-        self.filename = filename ?? "unknown"
+        self.filename = Self.sanitizedFilename(filename)
         self.mimeType = mimeType
         self.session = session
         self.logger = logger
@@ -155,7 +155,7 @@ final class DefaultTemporaryDocument: NSObject,
         self.request = request
         self.cookies = []
         self.credential = nil
-        self.filename = preflightResponse.suggestedFilename ?? "unknown"
+        self.filename = Self.sanitizedFilename(preflightResponse.suggestedFilename)
         self.mimeType = mimeType
         self.session = session
         self.logger = logger
@@ -233,11 +233,36 @@ final class DefaultTemporaryDocument: NSObject,
         currentDownloadTask?.resume()
     }
 
+    // MARK: - Filename Safety
+
+    /// Reduces an untrusted filename to a single path component that cannot escape
+    /// the directory it is appended to.
+    static func sanitizedFilename(_ candidate: String?) -> String {
+        let fallbackFilename = "unknown"
+        guard let candidate else { return fallbackFilename }
+        let name = (candidate as NSString).lastPathComponent.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty, name != ".", name != "..", !name.contains("/"), !name.contains("\0") else {
+            return fallbackFilename
+        }
+        return name
+    }
+
+    /// Defence in depth for the two places that join `filename` onto a directory.
+    static func isContained(_ fileURL: URL, in directory: URL) -> Bool {
+        // Compare components rather than path strings.
+        let directoryComponents = directory.standardizedFileURL.pathComponents
+        let fileComponents = fileURL.standardizedFileURL.pathComponents
+        return fileComponents.count > directoryComponents.count
+            && Array(fileComponents.prefix(directoryComponents.count)) == directoryComponents
+    }
+
     private func queryTempFile() -> URL? {
         if let localFileURL {
             return localFileURL
         }
-        let tempFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
+        let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
+        let tempFileURL = tempDirectory.appendingPathComponent(filename)
+        guard Self.isContained(tempFileURL, in: tempDirectory) else { return nil }
         if FileManager.default.fileExists(atPath: tempFileURL.path) {
             localFileURL = tempFileURL
             return tempFileURL
@@ -264,6 +289,14 @@ final class DefaultTemporaryDocument: NSObject,
         // By default the downloaded file is stored in the temp directory
         let tempDirectory = url.deletingPathExtension().deletingLastPathComponent()
         let tempFileURL = tempDirectory.appendingPathComponent(filename)
+        // `filename` is sanitized at init, but never remove or move onto a path outside
+        // the staging directory even if that invariant is broken by a future caller.
+        guard Self.isContained(tempFileURL, in: tempDirectory) else {
+            logger.log("Refusing to store download outside staging directory",
+                       level: .warning,
+                       category: .webview)
+            return nil
+        }
 
         try? FileManager.default.createDirectory(
             at: tempDirectory,
