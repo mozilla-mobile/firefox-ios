@@ -18,10 +18,12 @@ extension UIDevice {
         return UIDevice().type == .iPhoneSE || UIDevice().type == .iPodTouch
     }
 
+    // swiftlint:disable no_is_duo
     /// True on the foldable iPhone Duo
     var isDuo: Bool {
         return UIDevice().type == .iPhoneDuo
     }
+    // swiftlint:enable no_is_duo
 
     var isIphoneLandscape: Bool {
         return UIDevice().userInterfaceIdiom == .phone && UIWindow.isLandscape
