@@ -1088,29 +1088,16 @@ workflows:
             fastlane -version
             xcodebuild -version
 
-            ./firefox-ios/l10n-screenshots.sh en-US fr de
+            ./firefox-ios/l10n-screenshots.sh en-US
         title: Generate screenshots
     - save-cache@1:
         inputs:
         - key: l10n-screenshots-dd-$GIT_CLONE_COMMIT_HASH
         - paths: l10n-screenshots-dd
-    - script@1:
-        title: Zip screenshots for each locale
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -euo pipefail
-
-            mkdir -p l10n-screenshots-artifacts
-            for dir in l10n-screenshots/*/; do
-                locale=$(basename "$dir")
-                (cd "$dir$locale" && zip -q -9 "$OLDPWD/l10n-screenshots-artifacts/Firefox-iOS-L10n-$locale.zip" ./*.png)
-            done
-            ls -l l10n-screenshots-artifacts
     - deploy-to-bitrise-io@2:
         inputs:
-        - deploy_path: l10n-screenshots-artifacts
-        - is_compress: 'false'
+        - deploy_path: l10n-screenshots/en-US/en-US
+        - is_compress: 'true'
     - script@1:
         title: Upload screenshots to Google Cloud Storage
         run_if: '{{getenv "BITRISEIO_GCP_L10N_SCREENSHOTS_KEY_URL" | ne ""}}'
