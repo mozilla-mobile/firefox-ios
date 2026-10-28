@@ -91,7 +91,7 @@ final class VPNSettingTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func createSubject(dataUsage: VPNDataUsage = VPNDataUsage(usedDataInGB: 2.3, dataLimitInGB: 5.0)) -> VPNSetting {
+    private func createSubject(dataUsage: VPNDataUsage = .placeholder) -> VPNSetting {
         let subject = VPNSetting(
             settings: settings,
             settingsDelegate: delegate,
