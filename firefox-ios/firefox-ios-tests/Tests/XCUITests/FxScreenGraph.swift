@@ -149,12 +149,8 @@ func isIPhoneDuo() -> Bool {
 @MainActor
 func navigationControllerBackAction(for app: XCUIApplication) -> () -> Void {
     return {
-        // On iPhone Duo the back button lives in a toolbar, not the navigation bar. The root Settings
-        // screen has no back button (a hidden one can linger in the hierarchy); its first navigation bar
-        // button is Done. Detect the root by Done's identifier rather than the "Settings" title, so this also
-        // works in the L10n tests' localized UI.
-        let isRootSettings = app.buttons[AccessibilityIdentifiers.Settings.navigationBarItem].exists
-        let backButton = isIPhoneDuo() && !isRootSettings
+        // On iPhone Duo the back button lives in a toolbar, not the navigation bar.
+        let backButton = isIPhoneDuo()
             ? app.buttons["BackButton"].firstMatch
             : app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
         backButton.mozWaitElementHittable(timeout: TIMEOUT)
