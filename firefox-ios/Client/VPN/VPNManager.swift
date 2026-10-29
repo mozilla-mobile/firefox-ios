@@ -132,14 +132,30 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
                     )
                 }
             } catch {
-                // TODO: surface error to the user here
                 self?.logger.log(
                     "Pass rotation failed terminally, stopping rotation: \(error)",
                     level: .warning,
                     category: .vpn
                 )
+                self?.showFailureAlert()
             }
         }
+    }
+
+    /// Shows the failure alert in the foreground window only, falling back to any open window.
+    private func showFailureAlert() {
+        let windows = windowManager.windows
+        let activeWindowUUID = windows.first {
+            $0.value.sceneCoordinator?.window?.windowScene?.activationState == .foregroundActive
+        }?.key
+        guard let windowUUID = activeWindowUUID ?? windows.keys.first else { return }
+
+        store.dispatch(
+            GeneralBrowserAction(
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showVPNFailureAlert
+            )
+        )
     }
 
     /// Tear down every webview, wait for WebKit to process the resulting load cancellations,

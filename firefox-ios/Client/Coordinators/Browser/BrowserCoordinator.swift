@@ -49,6 +49,7 @@ final class BrowserCoordinator: BaseCoordinator,
     var homepageViewController: HomepageViewController?
     private weak var nativeErrorPageViewController: NativeErrorPageViewController?
     private weak var privateHomepageViewController: PrivateHomepageViewController?
+    private weak var vpnFailureAlert: UIAlertController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -1341,6 +1342,46 @@ final class BrowserCoordinator: BaseCoordinator,
         store.dispatch(GeneralBrowserAction(showOverlay: false,
                                             windowUUID: self.windowUUID,
                                             actionType: GeneralBrowserActionType.leaveOverlay))
+    }
+
+    func showVPNFailureAlert() {
+        guard vpnFailureAlert == nil else { return }
+        let alert = UIAlertController(
+            title: .VPN.ErrorBrowsingPopup.Title,
+            message: .VPN.ErrorBrowsingPopup.Body,
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(
+            title: .VPN.ErrorBrowsingPopup.Continue,
+            style: .destructive
+        ) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: VPNActionType.continueWithoutVPN))
+        })
+
+        alert.addAction(UIAlertAction(title: .VPN.ErrorBrowsingPopup.CloseAllTabs, style: .default) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: VPNActionType.closeAllTabs))
+        })
+
+        if windowManager.windows.count > 1 {
+            alert.addAction(UIAlertAction(
+                title: .VPN.ErrorBrowsingPopup.CloseTabsInAllWindows,
+                style: .default
+            ) { [weak self] _ in
+                guard let self else { return }
+                store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: VPNActionType.closeTabsInAllWindows))
+            })
+        }
+
+        alert.addAction(UIAlertAction(title: .VPN.ErrorBrowsingPopup.CloseThisTab, style: .default) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: VPNActionType.closeThisTab))
+        })
+
+        vpnFailureAlert = alert
+        browserViewController.topmostPresentedViewController.present(alert, animated: true)
     }
 
     func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source, searchTimerId: GleanTimerId? = nil) {

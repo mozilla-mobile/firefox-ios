@@ -40,6 +40,7 @@ struct BrowserViewControllerState: ScreenState {
         case translationLanguagePicker(TranslationLanguagePickerData)
         case googleLensPhotoPicker
         case googleLensCamera
+        case vpnFailureAlert
     }
 
     let windowUUID: WindowUUID
@@ -372,6 +373,8 @@ struct BrowserViewControllerState: ScreenState {
             return handleShowGoogleLensPhotoPickerAction(state: state, action: action)
         case GeneralBrowserActionType.showGoogleLensCamera:
             return handleShowGoogleLensCameraAction(state: state, action: action)
+        case GeneralBrowserActionType.showVPNFailureAlert:
+            return handleDisplayViewAction(.vpnFailureAlert, state: state, action: action)
         default:
             return passthroughState(from: state, action: action)
         }
@@ -634,6 +637,20 @@ struct BrowserViewControllerState: ScreenState {
         return state
             .resetTransientState()
             .copy(displayView: .googleLensCamera)
+            .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
+            .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
+                .legacyReducer(state.autoTranslatePromptState, action))
+    }
+
+    @MainActor
+    private static func handleDisplayViewAction(
+        _ displayView: DisplayType,
+        state: BrowserViewControllerState,
+        action: GeneralBrowserAction
+    ) -> BrowserViewControllerState {
+        return state
+            .resetTransientState()
+            .copy(displayView: displayView)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
                 .legacyReducer(state.autoTranslatePromptState, action))

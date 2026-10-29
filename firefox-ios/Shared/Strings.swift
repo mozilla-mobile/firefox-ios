@@ -3525,6 +3525,13 @@ extension String {
                 comment: "Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes only the tab the user is currently viewing."
             )
 
+            public static let CloseTabsInAllWindows = MZLocalizedString(
+                key: "VPN.ErrorBrowsingPopup.CloseTabsInAllWindows.v160",
+                tableName: "VPN",
+                value: "Close Tabs in All Windows",
+                comment: "Button on the popup shown when the VPN stops working while the user is browsing. Only shown when more than one window is open. Tapping it closes all of the user's open tabs in every window."
+            )
+
             public static let ClosedXTabs = MZLocalizedString(
                 key: "VPN.ErrorBrowsingPopup.ClosedXTabs.v160",
                 tableName: "VPN",

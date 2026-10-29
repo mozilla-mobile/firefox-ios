@@ -134,6 +134,10 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     @MainActor
     func showGoogleLensCamera()
 
+    /// Shows the alert for a VPN failure over whatever is currently presented in this window.
+    @MainActor
+    func showVPNFailureAlert()
+
     @MainActor
     func searchGoogleLens(with image: UIImage,
                           source: GoogleLensTelemetry.Source,
