@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import Shared
 import UIKit
 
 /// Keeps the "Combine Windows" home screen Quick Action in sync with the number of open iPad
@@ -16,21 +17,24 @@ struct MergeWindowsQuickActionController {
     private let windowManager: WindowManager
     private let application: UIApplication
     private let featureFlags: FeatureFlagProviding
+    private let isIpad: Bool
 
     init(quickActions: QuickActions = QuickActionsImplementation(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          application: UIApplication = .shared,
-         featureFlags: FeatureFlagProviding = AppContainer.shared.resolve()) {
+         featureFlags: FeatureFlagProviding = AppContainer.shared.resolve(),
+         isIpad: Bool = UIDeviceDetails.userInterfaceIdiom == .pad) {
         self.quickActions = quickActions
         self.windowManager = windowManager
         self.application = application
         self.featureFlags = featureFlags
+        self.isIpad = isIpad
     }
 
     /// Adds the merge Quick Action when the feature is enabled and 2+ windows are open,
     /// otherwise removes it.
     func update() {
-        if featureFlags.isEnabled(.mergeWindows), windowManager.windows.count >= 2 {
+        if isIpad, featureFlags.isEnabled(.mergeWindows), windowManager.windows.count >= 2 {
             quickActions.addDynamicApplicationShortcutItemOfType(.mergeWindows, toApplication: application)
         } else {
             quickActions.removeDynamicApplicationShortcutItemOfType(.mergeWindows, fromApplication: application)

@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import Shared
 import TabDataStore
 
 /// Merges the tabs from every other open iPad window into a single destination window and closes the
@@ -29,20 +30,25 @@ final class MergeWindowsManager: WindowMerging {
     private let tabDataStore: TabDataStore
     private let sceneDestroyer: SceneDestroying
     private let logger: Logger
+    private let isIpad: Bool
     @MainActor private var windowUUIDsAwaitingClose: Set<WindowUUID> = []
 
     init(windowManager: WindowManager = AppContainer.shared.resolve(),
          tabDataStore: TabDataStore = DefaultTabDataStore(),
          sceneDestroyer: SceneDestroying = DefaultSceneDestroyer(),
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         isIpad: Bool = UIDeviceDetails.userInterfaceIdiom == .pad) {
         self.windowManager = windowManager
         self.tabDataStore = tabDataStore
         self.sceneDestroyer = sceneDestroyer
         self.logger = logger
+        self.isIpad = isIpad
     }
 
     @MainActor
     func mergeAllWindows(into targetWindowUUID: WindowUUID) {
+        guard isIpad else { return }
+
         guard let targetTabManager = windowManager.tabManager(for: targetWindowUUID) else {
             logger.log("Merge windows aborted: no tab manager for the target window.",
                        level: .warning,
