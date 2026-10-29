@@ -2470,12 +2470,12 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            # Older runtimes such as iOS 17 aren't preinstalled on the Xcode 27.1 stack:
-            # https://support.bitrise.io/en/articles/9676578-installing-additional-simulators-for-xcode-ui-tests
+            # Older runtimes such as iOS 17 aren't preinstalled on the Xcode 27.1 stack
             set -euxo pipefail
-            brew tap robotsandpencils/made
-            brew install robotsandpencils/made/xcodes
-            sudo xcodes runtimes install "$FOCUS_RUNTIME_TO_INSTALL"
+            # e.g. "iOS 17.5" -> platform "iOS", version "17.5"
+            platform="${FOCUS_RUNTIME_TO_INSTALL%% *}"
+            version="${FOCUS_RUNTIME_TO_INSTALL#* }"
+            xcodebuild -downloadPlatform "$platform" -buildVersion "$version"
 
             # Create the simulators named in the destinations, picking the runtime by its identifier
             runtime_id="com.apple.CoreSimulator.SimRuntime.$(echo "$FOCUS_RUNTIME_TO_INSTALL" | tr ' .' '--')"
