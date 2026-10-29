@@ -16,6 +16,9 @@ protocol PrivacySettingsDelegate: AnyObject {
     func pressedClearPrivateData()
 
     @MainActor
+    func pressedVPN()
+
+    @MainActor
     func pressedContentBlocker()
 
     @MainActor
