@@ -2969,6 +2969,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showGoogleLensCamera()
         case .vpnFailureAlert:
             navigationHandler?.showVPNFailureAlert()
+        case .vpnDataLimitAlert(let dataLimitBytes):
+            navigationHandler?.showVPNDataLimitAlert(dataLimitBytes: dataLimitBytes)
         }
     }
 

@@ -3562,6 +3562,13 @@ extension String {
                 comment: "Body text of the popup shown when the user has used all of their free monthly VPN data. Explains that the VPN has turned off, so websites may be able to see their location if they keep browsing. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes."
             )
 
+            public static let Continue = MZLocalizedString(
+                key: "VPN.ReachedDataLimitPopup.Continue.v160",
+                tableName: "VPN",
+                value: "Continue Without VPN",
+                comment: "Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes the popup so the user can keep browsing without the VPN."
+            )
+
             public static let CloseAllTabs = MZLocalizedString(
                 key: "VPN.ReachedDataLimitPopup.CloseAllTabs.v160",
                 tableName: "VPN",

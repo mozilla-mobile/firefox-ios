@@ -59,6 +59,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showGoogleLensPhotoPickerCalled = 0
     var showGoogleLensCameraCalled = 0
     var showVPNFailureAlertCalled = 0
+    var showVPNDataLimitAlertCalled = 0
     var searchGoogleLensCalled = 0
     var searchGoogleLensSource: GoogleLensTelemetry.Source?
     var searchGoogleLensTimerId: GleanTimerId?
@@ -203,6 +204,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showVPNFailureAlert() {
         showVPNFailureAlertCalled += 1
+    }
+
+    func showVPNDataLimitAlert(dataLimitBytes: Int64) {
+        showVPNDataLimitAlertCalled += 1
     }
 
     func searchGoogleLens(with image: UIImage,

@@ -49,7 +49,7 @@ final class BrowserCoordinator: BaseCoordinator,
     var homepageViewController: HomepageViewController?
     private weak var nativeErrorPageViewController: NativeErrorPageViewController?
     private weak var privateHomepageViewController: PrivateHomepageViewController?
-    private weak var vpnFailureAlert: UIAlertController?
+    private weak var vpnAlert: UIAlertController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -1345,42 +1345,67 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showVPNFailureAlert() {
-        guard vpnFailureAlert == nil else { return }
+        guard vpnAlert == nil else { return }
         let alert = UIAlertController(
             title: .VPN.ErrorBrowsingPopup.Title,
             message: .VPN.ErrorBrowsingPopup.Body,
             preferredStyle: .alert
         )
-
-        alert.addAction(UIAlertAction(
+        addVPNAlertAction(
+            to: alert,
             title: .VPN.ErrorBrowsingPopup.Continue,
-            style: .destructive
-        ) { [weak self] _ in
-            guard let self else { return }
-            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: VPNActionType.continueWithoutVPN))
-        })
-
-        alert.addAction(UIAlertAction(title: .VPN.ErrorBrowsingPopup.CloseAllTabs, style: .default) { [weak self] _ in
-            guard let self else { return }
-            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: VPNActionType.closeAllTabs))
-        })
-
+            style: .destructive,
+            actionType: .continueWithoutVPN
+        )
+        addVPNAlertAction(to: alert, title: .VPN.ErrorBrowsingPopup.CloseAllTabs, actionType: .closeAllTabs)
         if windowManager.windows.count > 1 {
-            alert.addAction(UIAlertAction(
+            addVPNAlertAction(
+                to: alert,
                 title: .VPN.ErrorBrowsingPopup.CloseTabsInAllWindows,
-                style: .default
-            ) { [weak self] _ in
-                guard let self else { return }
-                store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: VPNActionType.closeTabsInAllWindows))
-            })
+                actionType: .closeTabsInAllWindows
+            )
         }
+        addVPNAlertAction(to: alert, title: .VPN.ErrorBrowsingPopup.CloseThisTab, actionType: .closeThisTab)
+        presentVPNAlert(alert)
+    }
 
-        alert.addAction(UIAlertAction(title: .VPN.ErrorBrowsingPopup.CloseThisTab, style: .default) { [weak self] _ in
+    func showVPNDataLimitAlert(dataLimitBytes: Int64) {
+        guard vpnAlert == nil else { return }
+        let dataLimitGB = Measurement(value: Double(dataLimitBytes), unit: UnitInformationStorage.bytes)
+            .converted(to: .gigabytes).value
+        let alert = UIAlertController(
+            title: .VPN.ReachedDataLimitPopup.Title,
+            message: String(
+                format: .VPN.ReachedDataLimitPopup.Body,
+                dataLimitGB.formatted(.number.precision(.fractionLength(0...1)))
+            ),
+            preferredStyle: .alert
+        )
+        addVPNAlertAction(
+            to: alert,
+            title: .VPN.ReachedDataLimitPopup.Continue,
+            style: .destructive,
+            actionType: .continueWithoutVPN
+        )
+        addVPNAlertAction(to: alert, title: .VPN.ReachedDataLimitPopup.CloseAllTabs, actionType: .closeAllTabs)
+        addVPNAlertAction(to: alert, title: .VPN.ReachedDataLimitPopup.CloseThisTab, actionType: .closeThisTab)
+        presentVPNAlert(alert)
+    }
+
+    private func addVPNAlertAction(
+        to alert: UIAlertController,
+        title: String,
+        style: UIAlertAction.Style = .default,
+        actionType: VPNActionType
+    ) {
+        alert.addAction(UIAlertAction(title: title, style: style) { [weak self] _ in
             guard let self else { return }
-            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: VPNActionType.closeThisTab))
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: actionType))
         })
+    }
 
-        vpnFailureAlert = alert
+    private func presentVPNAlert(_ alert: UIAlertController) {
+        vpnAlert = alert
         browserViewController.topmostPresentedViewController.present(alert, animated: true)
     }
 

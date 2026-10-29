@@ -138,6 +138,10 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     @MainActor
     func showVPNFailureAlert()
 
+    /// Shows the alert for reaching the monthly VPN data limit in this window.
+    @MainActor
+    func showVPNDataLimitAlert(dataLimitBytes: Int64)
+
     @MainActor
     func searchGoogleLens(with image: UIImage,
                           source: GoogleLensTelemetry.Source,

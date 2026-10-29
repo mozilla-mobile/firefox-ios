@@ -41,6 +41,7 @@ struct BrowserViewControllerState: ScreenState {
         case googleLensPhotoPicker
         case googleLensCamera
         case vpnFailureAlert
+        case vpnDataLimitAlert(dataLimitBytes: Int64)
     }
 
     let windowUUID: WindowUUID
@@ -375,6 +376,11 @@ struct BrowserViewControllerState: ScreenState {
             return handleShowGoogleLensCameraAction(state: state, action: action)
         case GeneralBrowserActionType.showVPNFailureAlert:
             return handleDisplayViewAction(.vpnFailureAlert, state: state, action: action)
+        case GeneralBrowserActionType.showVPNDataLimitAlert:
+            guard let dataLimitBytes = action.vpnDataLimitBytes else {
+                return passthroughState(from: state, action: action)
+            }
+            return handleDisplayViewAction(.vpnDataLimitAlert(dataLimitBytes: dataLimitBytes), state: state, action: action)
         default:
             return passthroughState(from: state, action: action)
         }
