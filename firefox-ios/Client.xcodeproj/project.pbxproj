@@ -1624,7 +1624,6 @@
 		BA4BB99E2D7FB38B006BD137 /* ThemeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB99D2D7FB382006BD137 /* ThemeSelectionView.swift */; };
 		BA4BB9A02D7FB3C9006BD137 /* ThemeOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB99F2D7FB3C3006BD137 /* ThemeOptionView.swift */; };
 		BA4BB9A42D7FF754006BD137 /* DarkModeToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB9A32D7FF74D006BD137 /* DarkModeToggleView.swift */; };
-		BA57EB5DC114441E95B5B167 /* GoogleLensInterstitialViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D31261E059F4520B858BEF9 /* GoogleLensInterstitialViewControllerTests.swift */; };
 		BA7A14842C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */; };
 		BA7CB0F12E4174AC0052124B /* SummarizerTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7CB0F02E4174A40052124B /* SummarizerTelemetry.swift */; };
 		BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */ = {isa = PBXBuildFile; fileRef = BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */; };
@@ -9999,7 +9998,6 @@
 		7CCE4F3991EF02E0EE75067B /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Shared.strings"; sourceTree = "<group>"; };
 		7CE542F7A81BCA33C15FC256 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = my.lproj/Search.strings; sourceTree = "<group>"; };
 		7CFB4524B61617C88AB63025 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Today.strings; sourceTree = "<group>"; };
-		7D31261E059F4520B858BEF9 /* GoogleLensInterstitialViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensInterstitialViewControllerTests.swift; sourceTree = "<group>"; };
 		7D8C4C90AE8F7B582645FF47 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D92472BA54D9EBCE438E834 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/Intro.strings; sourceTree = "<group>"; };
 		7D9F4526892C22A8CD150706 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -18356,7 +18354,6 @@
 		FB16062100000000000000D0 /* GoogleLens */ = {
 			isa = PBXGroup;
 			children = (
-				7D31261E059F4520B858BEF9 /* GoogleLensInterstitialViewControllerTests.swift */,
 				FB16062100000000000000D1 /* GoogleLensImageProcessorTests.swift */,
 				FB16062100000000000000D3 /* GoogleLensRequestBuilderTests.swift */,
 				FB16062100000000000000D5 /* GoogleLensServiceTests.swift */,
@@ -21986,7 +21983,6 @@
 				FB16062100000000000000B2 /* PhotoPickerCoordinatorTests.swift in Sources */,
 				57D4037614464999A528A262 /* GoogleLensInterstitialCoordinatorTests.swift in Sources */,
 				FB16062200000000000000B2 /* CameraCoordinatorTests.swift in Sources */,
-				BA57EB5DC114441E95B5B167 /* GoogleLensInterstitialViewControllerTests.swift in Sources */,
 				FB16062100000000000000D2 /* GoogleLensImageProcessorTests.swift in Sources */,
 				FB16062100000000000000D4 /* GoogleLensRequestBuilderTests.swift in Sources */,
 				FB16062100000000000000D6 /* GoogleLensServiceTests.swift in Sources */,

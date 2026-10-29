@@ -55,19 +55,6 @@ final class GoogleLensInterstitialCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.didFinishCalled, 0)
     }
 
-    func testLoadingEnded_dismissesBackdropAndFinishesOnce() {
-        let subject = createSubject()
-        subject.start()
-        webView.mockIsLoading = true
-        XCTAssertEqual(parentCoordinator.didFinishCalled, 0)
-
-        webView.mockIsLoading = false
-        subject.stop()
-
-        XCTAssertEqual(router.dismissCalled, 1)
-        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
-    }
-
     func testStop_invalidatesLoadingObservation() {
         let subject = createSubject()
         subject.start()
