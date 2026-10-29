@@ -2423,15 +2423,6 @@ workflows:
             fxios bootstrap -p focus
         title: ContentBlockerGen
 
-  Focus_Nightly_Tests_iOS17:
-    envs:
-    - FOCUS_IOS_VERSION: "17.5"
-    - FOCUS_RUNTIME_TO_INSTALL: iOS 17.5
-    - FOCUS_IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 15,OS=17.5
-    - FOCUS_IPAD_DESTINATION: platform=iOS Simulator,name=iPad (10th generation),OS=17.5
-    after_run:
-    - _focus_nightly_uitests
-
   Focus_Nightly_Tests_iOS18:
     envs:
     - FOCUS_IOS_VERSION: "18.6"
@@ -2464,29 +2455,6 @@ workflows:
     - focus-clone-and-build-dependencies
     - focus-set-default-browser-entitlement
     steps:
-    - script@1:
-        title: "Install simulator runtime"
-        run_if: '{{getenv "FOCUS_RUNTIME_TO_INSTALL" | ne ""}}'
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # Older runtimes such as iOS 17 aren't preinstalled on the Xcode 27.1 stack
-            set -euxo pipefail
-            # e.g. "iOS 17.5" -> platform "iOS", version "17.5"
-            platform="${FOCUS_RUNTIME_TO_INSTALL%% *}"
-            version="${FOCUS_RUNTIME_TO_INSTALL#* }"
-            xcodebuild -downloadPlatform "$platform" -buildVersion "$version"
-
-            # Create the simulators named in the destinations, picking the runtime by its identifier
-            runtime_id="com.apple.CoreSimulator.SimRuntime.$(echo "$FOCUS_RUNTIME_TO_INSTALL" | tr ' .' '--')"
-            for destination in "$FOCUS_IPHONE_DESTINATION" "$FOCUS_IPAD_DESTINATION"; do
-                device_name=$(echo "$destination" | sed -E 's/.*name=([^,]+),.*/\1/')
-                device_type=$(xcrun simctl list devicetypes | grep -F "$device_name (" | sed -E 's/.*\((com\.apple[^)]+)\).*/\1/' | head -1)
-                if ! xcrun simctl list devices "$FOCUS_RUNTIME_TO_INSTALL" | grep -qF "    $device_name ("; then
-                    xcrun simctl create "$device_name" "$device_type" "$runtime_id"
-                fi
-            done
-            xcrun simctl list devices "$FOCUS_RUNTIME_TO_INSTALL"
     - xcode-build-for-test@3:
         title: "Build Focus iOS"
         inputs:
