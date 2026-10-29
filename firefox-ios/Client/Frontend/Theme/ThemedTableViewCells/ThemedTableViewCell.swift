@@ -12,6 +12,7 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.cellStyle = style
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        textLabel?.font = FXFontStyles.Regular.body.scaledFont()
     }
 
     required init?(coder aDecoder: NSCoder) {
