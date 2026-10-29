@@ -506,3 +506,24 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "ਆਜ਼ਾਦ ਇੰਟਰਨੈੱਟ ਲਈ ਜੀ ਆਇਆਂ ਨੂੰ";
 
+/* Body text below the “5 GB, Free Every Month” (VPN.Onboarding.LimitSubheading.v160) subheading on the VPN onboarding card. Explains that the user can start using the VPN without signing in to an account. “it” refers to the VPN. */
+"VPN.Onboarding.LimitBody.v160" = "ਬਿਨਾਂ ਸਾਈਨ-ਇਨ ਕੀਤੇ ਇਸ ਨੂੰ ਵਰਤਣਾ ਸ਼ੁਰੂ ਕਰੋ";
+
+/* Subheading on the VPN onboarding card. Explains how much VPN data the user gets every month at no cost. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.Onboarding.LimitSubheading.v160" = "%1$@ GB, ਹਰ ਮਹੀਨੇ ਮੁਫ਼ਤ";
+
+/* Body text below the “Browse From Multiple Locations” (VPN.Onboarding.LocationsSubheading.v160) subheading on the VPN onboarding card. Explains that choosing a VPN location makes it harder to tell where the user really is. “yours” refers to the user’s location. */
+"VPN.Onboarding.LocationsBody.v160" = "ਅਜਿਹਾ VPN ਟਿਕਾਣਾ ਚੁਣੋ, ਜੋ ਤੁਹਾਡੀ ਟੋਹ ਲੈਣਾ ਔਖਾ ਬਣਾਏ।";
+
+/* Subheading on the VPN onboarding card. Explains that the user can choose which country their browsing appears to come from. */
+"VPN.Onboarding.LocationsSubheading.v160" = "ਕਈ ਟਿਕਾਣਿਆਂ ਵਿੱਚੋਂ ਕੋਈ ਚੁਣੋ";
+
+/* Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox). */
+"VPN.Onboarding.Title.v160" = "%1$@ ਦੇ ਵਿੱਚ ਮੌਜੂਦ VPN ਨੂੰ ਅਜ਼ਮਾਓ";
+
+/* Body text below the “More Privacy On Public Wi-Fi” (VPN.Onboarding.WifiSubheading.v160) subheading on the VPN onboarding card. %1$@ is the app name (for example, Firefox). */
+"VPN.Onboarding.WifiBody.v160" = "ਜਦੋਂ ਤੁਸੀਂ ਜਾਣ ਆਉਣ ਦੌਰਾਨ ਬਰਾਊਜ਼ ਕਰਦੇ ਹੋ ਤਾਂ %1$@ ਵਿੱਚ ਵਧੀਕ ਸੁਰੱਖਿਆ ਜੋੜੋ।";
+
+/* Subheading on the VPN onboarding card. Explains that the VPN gives the user more privacy when they use public Wi-Fi networks. */
+"VPN.Onboarding.WifiSubheading.v160" = "ਜਨਤਕ ਵਾਈ-ਫਾਈ ਉੱਤੇ ਵੱਧ ਪਰਦੇਦਾਰੀ";
+
