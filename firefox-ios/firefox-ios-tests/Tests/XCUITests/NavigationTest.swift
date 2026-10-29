@@ -590,13 +590,22 @@ class NavigationTest: FeatureFlaggedTestSuite {
     func testOpenExternalLink() {
         // Go to Settings -> Browsing and disable "Block external links" toggle
         launchIntoSettings()
-        navigator.goto(BrowsingSettings)   // or the tap you used
-        mozWaitForElementToExist(app.navigationBars["Browsing"])
-        // sleep(2)
-        // let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        navigator.goto(BrowsingSettings)
+        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.links])
+        let switchBlockLinks = app.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockExternal.title]
+        scrollToElement(switchBlockLinks)
+        if let switchValue = switchBlockLinks.value as? String, switchValue == "0" {
+            switchBlockLinks.waitAndTap()
+        }
+        // Open website and tap on one of the external article links
+        navigator.nowAt(BrowsingSettings)
         navigator.goto(NewTabScreen)
-        navigator.openURL("https://www.firefox.com")
-        waitUntilPageLoad()
+        validateExternalLink()
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+        validateExternalLink()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306833
