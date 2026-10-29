@@ -2446,8 +2446,7 @@ workflows:
 
   _focus_nightly_uitests:
     description: >-
-      Shared steps for the Focus_Nightly_Tests_iOS* workflows: build Focus once and run the SmokeTest and
-      FullFunctionalTests plans on FOCUS_TEST_DESTINATION. FOCUS_IOS_VERSION is used in the Slack message.
+      Compile Focus and run both smoke tests and full functional tests.
     before_run:
     - focus-clone-and-build-dependencies
     - focus-set-default-browser-entitlement
