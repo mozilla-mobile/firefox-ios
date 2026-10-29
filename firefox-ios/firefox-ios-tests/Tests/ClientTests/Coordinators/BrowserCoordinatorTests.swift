@@ -406,6 +406,32 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(mockTemporaryDocument.downloadAsyncCalled, 1)
     }
 
+    // MARK: - shareableFilename
+
+    func testShareableFilename_urlWithExtension_usesLastPathComponent() {
+        let url = URL(string: "https://example.com/docs/report.pdf")!
+
+        XCTAssertEqual(BrowserCoordinator.shareableFilename(for: url, mimeType: nil), "report.pdf")
+    }
+
+    func testShareableFilename_percentEncodedTraversal_keepsOnlyLastComponent() {
+        let url = URL(string: "https://example.com/docs/..%2F..%2Fescaped.pdf")!
+
+        XCTAssertEqual(BrowserCoordinator.shareableFilename(for: url, mimeType: nil), "escaped.pdf")
+    }
+
+    func testShareableFilename_traversalWithoutExtension_fallsBackToMimeType() {
+        let url = URL(string: "https://example.com/docs/..%2F..")!
+
+        XCTAssertEqual(BrowserCoordinator.shareableFilename(for: url, mimeType: "application/pdf"), "document.pdf")
+    }
+
+    func testShareableFilename_noExtensionAndNoMimeType_fallsBackToDocument() {
+        let url = URL(string: "https://example.com/docs/view")!
+
+        XCTAssertEqual(BrowserCoordinator.shareableFilename(for: url, mimeType: nil), "document")
+    }
+
     func testShowCreditCardAutofill_addsCredentialAutofillCoordinator() {
         let subject = createSubject()
 

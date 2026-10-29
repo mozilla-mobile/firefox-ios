@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 @testable import Client
 
@@ -154,71 +155,6 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
 
     // MARK: - Filename Sanitization Tests
 
-    func testSanitizedFilename_nil_returnsFallback() {
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename(nil), "unknown")
-    }
-
-    func testSanitizedFilename_plainName_isUnchanged() {
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename("report.pdf"), "report.pdf")
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename(".hidden"), ".hidden")
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename("a..b.pdf"), "a..b.pdf")
-    }
-
-    func testSanitizedFilename_traversal_keepsOnlyLastComponent() {
-        XCTAssertEqual(
-            DefaultTemporaryDocument.sanitizedFilename("../../Library/Preferences/org.mozilla.ios.Firefox.plist"),
-            "org.mozilla.ios.Firefox.plist"
-        )
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename("/etc/passwd"), "passwd")
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename("dir/file.pdf/"), "file.pdf")
-    }
-
-    func testSanitizedFilename_dotSegments_returnFallback() {
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename(".."), "unknown")
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename("."), "unknown")
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename("../.."), "unknown")
-    }
-
-    func testSanitizedFilename_emptyOrSeparatorOnly_returnsFallback() {
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename(""), "unknown")
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename("   "), "unknown")
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename("/"), "unknown")
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename("//"), "unknown")
-    }
-
-    func testSanitizedFilename_nullByte_returnsFallback() {
-        XCTAssertEqual(DefaultTemporaryDocument.sanitizedFilename("safe.pdf\0.plist"), "unknown")
-    }
-
-    func testInit_withTraversalFilename_isSanitized() async {
-        subject = await createSubject(filename: "../../escaped.plist", request: request, session: mockURLSession)
-
-        XCTAssertEqual(subject.filename, "escaped.plist")
-        subject = nil
-    }
-
-    func testInit_fromResponseWithTraversalFilename_isSanitized() async {
-        let response = MockURLResponse(filename: "../../escaped.plist", url: request.url!)
-        subject = await createSubject(response: response, request: request, session: mockURLSession)
-
-        XCTAssertEqual(subject.filename, "escaped.plist")
-        subject = nil
-    }
-
-    func testInit_percentEncodedTraversalInURL_isSanitized() async {
-        let traversalURL = URL(string: "https://example.com/docs/..%2F..%2Fescaped.plist")!
-        XCTAssertEqual(traversalURL.lastPathComponent, "../../escaped.plist")
-
-        subject = await createSubject(
-            filename: traversalURL.lastPathComponent,
-            request: URLRequest(url: traversalURL),
-            session: mockURLSession
-        )
-
-        XCTAssertEqual(subject.filename, "escaped.plist")
-        subject = nil
-    }
-
     func testDownload_withTraversalFilename_writesInsideTemporaryDirectory() async throws {
         mockURLProtocol.data = Data()
         subject = await createSubject(filename: "../../escaped.plist", request: request, session: mockURLSession)
@@ -228,32 +164,9 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
 
         let tempRoot = URL(fileURLWithPath: NSTemporaryDirectory())
         XCTAssertEqual(url.lastPathComponent, "escaped.plist")
-        XCTAssertTrue(DefaultTemporaryDocument.isContained(url, in: tempRoot),
-                      "Download landed at \(url), outside \(tempRoot)")
+        XCTAssertTrue(FilenameSanitizer.isContained(url, in: tempRoot), "Download landed at \(url), outside \(tempRoot).")
         XCTAssertEqual(try url.checkResourceIsReachable(), true)
         subject = nil
-    }
-
-    // MARK: - Containment Tests
-
-    func testIsContained_fileInsideDirectory_isTrue() {
-        let dir = URL(fileURLWithPath: "/tmp/stage")
-        XCTAssertTrue(DefaultTemporaryDocument.isContained(dir.appendingPathComponent("a.pdf"), in: dir))
-        XCTAssertTrue(DefaultTemporaryDocument.isContained(dir.appendingPathComponent("sub/a.pdf"), in: dir))
-    }
-
-    func testIsContained_traversalOutOfDirectory_isFalse() {
-        let dir = URL(fileURLWithPath: "/tmp/stage")
-        XCTAssertFalse(DefaultTemporaryDocument.isContained(dir.appendingPathComponent("../a.pdf"), in: dir))
-        XCTAssertFalse(DefaultTemporaryDocument.isContained(dir.appendingPathComponent("../../Library/x.plist"), in: dir))
-        XCTAssertFalse(DefaultTemporaryDocument.isContained(dir.appendingPathComponent("sub/../../a.pdf"), in: dir))
-    }
-
-    func testIsContained_directoryItselfOrSiblingPrefix_isFalse() {
-        let dir = URL(fileURLWithPath: "/tmp/stage")
-        XCTAssertFalse(DefaultTemporaryDocument.isContained(dir, in: dir))
-        // "/tmp/stage-other/a.pdf" shares a string prefix with "/tmp/stage" but is not inside it.
-        XCTAssertFalse(DefaultTemporaryDocument.isContained(URL(fileURLWithPath: "/tmp/stage-other/a.pdf"), in: dir))
     }
 
     func testDownloadAsync() async {

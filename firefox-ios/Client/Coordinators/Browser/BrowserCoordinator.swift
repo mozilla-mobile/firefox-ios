@@ -1731,8 +1731,10 @@ final class BrowserCoordinator: BaseCoordinator,
             let result = try await webView.callAsyncJavaScript(readDocumentJS, contentWorld: .defaultClient)
             guard let base64 = result as? String,
                   let data = Data(base64Encoded: base64) else { return nil }
-            let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
+            let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
+            let fileURL = tempDirectory
                 .appendingPathComponent(Self.shareableFilename(for: tabURL, mimeType: tab.mimeType))
+            guard FilenameSanitizer.isContained(fileURL, in: tempDirectory) else { return nil }
             try data.write(to: fileURL)
             return fileURL
         } catch {
@@ -1743,8 +1745,8 @@ final class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    private static func shareableFilename(for url: URL, mimeType: String?) -> String {
-        let lastComponent = url.lastPathComponent
+    static func shareableFilename(for url: URL, mimeType: String?) -> String {
+        let lastComponent = FilenameSanitizer.sanitize(url.lastPathComponent, fallback: "")
         if !lastComponent.isEmpty, !(lastComponent as NSString).pathExtension.isEmpty {
             return lastComponent
         }
