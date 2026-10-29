@@ -44,6 +44,10 @@ final class TabTrayViewController: UIViewController,
 
         static let fixedSpaceWidth: CGFloat = 32
         static let segmentedControlHorizontalSpacing: CGFloat = 16
+        static let verticalBarSegmentedControlBottomSpacing: CGFloat = 18
+        /// UIKit places vertical bar items 8pt lower than Safari does on iPhone Duo, so Safari most likely
+        /// uses a custom bottom spacing as well. This matches its position.
+        static let verticalBarItemsBottomSpacing: CGFloat = 8
         static let titleFont: UIFont = FXFontStyles.Bold.caption2.systemFont()
         static let cornerRadius: CGFloat = 2
     }
@@ -111,6 +115,7 @@ final class TabTrayViewController: UIViewController,
 
     // MARK: - UI
     private var titleWidthConstraint: NSLayoutConstraint?
+    private var experimentSegmentControlBottomConstraint: NSLayoutConstraint?
     private var containerView: UIView = .build()
     private lazy var navigationToolbar: UIToolbar = .build { [self] toolbar in
         toolbar.delegate = self
@@ -293,6 +298,8 @@ final class TabTrayViewController: UIViewController,
         return fixedSpace
     }()
 
+    private lazy var verticalBarBottomSpace: UIBarButtonItem = .fixedSpace(UX.verticalBarItemsBottomSpacing)
+
     private lazy var bottomToolbarItems: [UIBarButtonItem] = {
         return [deleteButton, flexibleSpace, newTabButton]
     }()
@@ -389,6 +396,11 @@ final class TabTrayViewController: UIViewController,
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
             updateLayout()
+        }
+
+        if previousTraitCollection?.hasVerticalSystemBar != traitCollection.hasVerticalSystemBar {
+            updateExperimentSegmentControlBottomConstraint()
+            updateToolbarItems()
         }
     }
 
@@ -670,12 +682,12 @@ final class TabTrayViewController: UIViewController,
                 segmentedControl.trailingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.trailingAnchor,
                                                            constant: -UX.segmentedControlHorizontalSpacing),
 
-                experimentSegmentControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
                 experimentSegmentControl.leadingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.leadingAnchor),
                 experimentSegmentControl.trailingAnchor.constraint(
                     equalTo: containerView.safeAreaLayoutGuide.trailingAnchor),
                 experimentSegmentControl.heightAnchor.constraint(equalToConstant: segmentControlHeight)
             ])
+            updateExperimentSegmentControlBottomConstraint()
 
             setupBlurView()
         } else {
@@ -693,6 +705,22 @@ final class TabTrayViewController: UIViewController,
                 containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
         }
+    }
+
+    /// The vertical system bar lays its toolbar items out closer to the bottom edge than the safe area,
+    /// so the selector follows them to stay centered with the bottom-most item.
+    private func updateExperimentSegmentControlBottomConstraint() {
+        guard experimentSegmentControl.superview == containerView else { return }
+
+        experimentSegmentControlBottomConstraint?.isActive = false
+        experimentSegmentControlBottomConstraint = if traitCollection.hasVerticalSystemBar {
+            experimentSegmentControl.bottomAnchor.constraint(
+                equalTo: containerView.bottomAnchor,
+                constant: -UX.verticalBarSegmentedControlBottomSpacing)
+        } else {
+            experimentSegmentControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor)
+        }
+        experimentSegmentControlBottomConstraint?.isActive = true
     }
 
     private func setupBlurView() {
@@ -790,11 +818,15 @@ final class TabTrayViewController: UIViewController,
         }
 
         let isSyncTabsPanel = tabTrayState.isSyncTabsPanel
-        let items: [UIBarButtonItem]
+        var items: [UIBarButtonItem]
         if tabTrayUtils.shouldDisplayExperimentUI() {
             items = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
         } else {
             items = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
+        }
+        // A trailing space lifts the items off the bottom edge of the vertical system bar.
+        if traitCollection.hasVerticalSystemBar {
+            items.append(verticalBarBottomSpace)
         }
         setToolbarItemsIfChanged(items)
     }
