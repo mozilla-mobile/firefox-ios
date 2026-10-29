@@ -7,6 +7,8 @@ import UIKit
 
 final class GoogleLensInterstitialViewController: UIViewController, Themeable {
     private let interstitialView: GoogleLensInterstitialView = .build()
+    private var hasStartedEntrance = false
+    private var isExiting = false
 
     let themeManager: ThemeManager
     var themeListenerCancellable: Any?
@@ -32,6 +34,24 @@ final class GoogleLensInterstitialViewController: UIViewController, Themeable {
         interstitialView.pinToSuperview()
         listenForThemeChanges(withNotificationCenter: NotificationCenter.default)
         applyTheme()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        guard !hasStartedEntrance, !isExiting else { return }
+        hasStartedEntrance = true
+        interstitialView.animateEntrance()
+    }
+
+    func animateExit(completion: @escaping () -> Void) {
+        guard !isExiting else { return }
+        isExiting = true
+        interstitialView.animateExit(completion: completion)
+    }
+
+    func stopAnimation() {
+        isExiting = true
+        interstitialView.stopAnimation()
     }
 
     func applyTheme() {

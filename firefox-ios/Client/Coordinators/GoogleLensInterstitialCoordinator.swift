@@ -13,6 +13,7 @@ final class GoogleLensInterstitialCoordinator: BaseCoordinator {
     private var overlay: GoogleLensInterstitialViewController?
     private var loadingObservation: NSKeyValueObservation?
     private var isFinished = false
+    private var isExiting = false
 
     init(parentCoordinatorDelegate: ParentCoordinatorDelegate?,
          router: Router,
@@ -30,10 +31,11 @@ final class GoogleLensInterstitialCoordinator: BaseCoordinator {
             stop()
             return
         }
-        overlay = GoogleLensInterstitialViewController(windowUUID: tab.windowUUID, themeManager: themeManager)
+        overlay = GoogleLensInterstitialViewController(windowUUID: tab.windowUUID,
+                                                       themeManager: themeManager)
         loadingObservation = webView.observe(\.isLoading, options: [.old, .new]) { [weak self] _, change in
             guard change.oldValue == true, change.newValue == false else { return }
-            ensureMainThread { self?.stop() }
+            ensureMainThread { self?.finishLoading() }
         }
         if let presented = router.navigationController.presentedViewController {
             guard presented.isBeingDismissed, let transition = presented.transitionCoordinator else {
@@ -57,11 +59,26 @@ final class GoogleLensInterstitialCoordinator: BaseCoordinator {
         isFinished = true
         loadingObservation?.invalidate()
         loadingObservation = nil
+        overlay?.stopAnimation()
         if let overlay, router.navigationController.presentedViewController === overlay {
             router.dismiss(animated: false)
         }
         overlay = nil
         parentCoordinatorDelegate?.didFinish(from: self)
+    }
+
+    private func finishLoading() {
+        guard !isFinished, !isExiting else { return }
+        guard let overlay, router.navigationController.presentedViewController === overlay else {
+            stop()
+            return
+        }
+        isExiting = true
+        loadingObservation?.invalidate()
+        loadingObservation = nil
+        overlay.animateExit { [weak self] in
+            self?.stop()
+        }
     }
 
     private func presentOverlay() {

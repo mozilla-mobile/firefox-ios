@@ -116,6 +116,27 @@ final class GoogleLensInterstitialCoordinatorTests: XCTestCase {
         XCTAssertTrue(webView.navigationDelegate === delegate)
     }
 
+    func testStart_calledTwice_presentsOnlyOnce() {
+        let subject = createSubject()
+        defer { subject.stop() }
+
+        subject.start()
+        subject.start()
+
+        XCTAssertEqual(router.presentCalled, 1)
+    }
+
+    func testStop_calledTwice_finishesOnlyOnce() {
+        let subject = createSubject()
+        subject.start()
+
+        subject.stop()
+        subject.stop()
+
+        XCTAssertEqual(router.dismissCalled, 1)
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+    }
+
     private func createSubject() -> GoogleLensInterstitialCoordinator {
         return GoogleLensInterstitialCoordinator(parentCoordinatorDelegate: parentCoordinator,
                                                  router: router,
