@@ -1080,7 +1080,7 @@ extension String {
                 key: "FirefoxHome.PrivacyNotice.Body.Markdown.v160",
                 tableName: "FirefoxHomepage",
                 value: "We've updated our [Privacy Policy](PRIVACY_NOTICE_URL) to reflect the latest features in %@.",
-                comment: "Body text for the Privacy Notice card at the top of the homepage, informing users that the Privacy Policy has been updated. The %@ placeholder is the app name (e.g. Firefox). This string uses Markdown links: translate the link text inside square brackets ('Privacy Policy'). Keep PRIVACY_NOTICE_URL unchanged, and preserve the square brackets and parentheses. PRIVACY_NOTICE_URL links to the updated policy.")
+                comment: "Body text for the Privacy Notice update card. This string uses markdown links: [Link text here](URL_PLACEHOLDER_HERE). Translate only the text *inside* square brackets: [Privacy Policy]. For example, “[隐私政策](PRIVACY_NOTICE_URL)”. The PRIVACY_NOTICE_URL placeholder links to the updated policy. The %@ placeholder is the app name (e.g. Firefox). More info: https://www.markdownguide.org/basic-syntax/#links")
             public static let PrivacyNoticeLink = MZLocalizedString(
                 key: "FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148",
                 tableName: "FirefoxHomepage",
