@@ -40,6 +40,9 @@
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "কোন লগইন পাওয়া যায়নি";
 
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "কোন পাসওয়ার্ড পাওয়া যায়নি";
+
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "খুলুন আর পূরণ করুন";
 
