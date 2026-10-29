@@ -268,12 +268,7 @@ final class DefaultTemporaryDocument: NSObject,
         let tempFileURL = tempDirectory.appendingPathComponent(filename)
         // `filename` is sanitized at init, but never remove or move onto a path outside
         // the staging directory even if that invariant is broken by a future caller.
-        guard FilenameSanitizer.isContained(tempFileURL, in: tempDirectory) else {
-            logger.log("Refusing to store download outside staging directory",
-                       level: .warning,
-                       category: .webview)
-            return nil
-        }
+        guard FilenameSanitizer.isContained(tempFileURL, in: tempDirectory) else { return nil }
 
         try? FileManager.default.createDirectory(
             at: tempDirectory,
