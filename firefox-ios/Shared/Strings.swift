@@ -1075,7 +1075,7 @@ extension String {
                 key: "FirefoxHome.PrivacyNotice.Headline.v160",
                 tableName: "FirefoxHomepage",
                 value: "Privacy Notice updated",
-                comment: "Headline for the Privacy Notice card at the top of the homepage, informing users that the Privacy Policy has been updated.")
+                comment: "Heading for the Privacy Notice update card, displayed to notify users of recent changes to the terms.")
             public static let MarkdownBody = MZLocalizedString(
                 key: "FirefoxHome.PrivacyNotice.Body.Markdown.v160",
                 tableName: "FirefoxHomepage",
