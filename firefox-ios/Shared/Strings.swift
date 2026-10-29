@@ -1071,6 +1071,16 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "We’ve updated our %@ to reflect the latest features in %@. %@",
                 comment: "Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice")
+            public static let Headline = MZLocalizedString(
+                key: "FirefoxHome.PrivacyNotice.Headline.v160",
+                tableName: "FirefoxHomepage",
+                value: "Privacy Notice updated",
+                comment: "Headline for the Privacy Notice card at the top of the homepage, informing users that the Privacy Policy has been updated.")
+            public static let MarkdownBody = MZLocalizedString(
+                key: "FirefoxHome.PrivacyNotice.Body.Markdown.v160",
+                tableName: "FirefoxHomepage",
+                value: "We've updated our [Privacy Policy](PRIVACY_NOTICE_URL) to reflect the latest features in %@.",
+                comment: "Body text for the Privacy Notice card at the top of the homepage, informing users that the Privacy Policy has been updated. The %@ placeholder is the app name (e.g. Firefox). This string uses Markdown links: translate the link text inside square brackets ('Privacy Policy'). Keep PRIVACY_NOTICE_URL unchanged, and preserve the square brackets and parentheses. PRIVACY_NOTICE_URL links to the updated policy.")
             public static let PrivacyNoticeLink = MZLocalizedString(
                 key: "FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148",
                 tableName: "FirefoxHomepage",
