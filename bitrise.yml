@@ -2444,12 +2444,13 @@ workflows:
     - FOCUS_IOS_VERSION: "27.0"
     - FOCUS_IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - FOCUS_IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
+    - FOCUS_DUO_DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
     after_run:
     - _focus_nightly_uitests
 
   _focus_nightly_uitests:
     description: >-
-      Compile Focus once and run both smoke tests and full functional tests on an iPhone and an iPad.
+      Compile Focus once and run both smoke tests and full functional tests on an iPhone and an iPad, plus iPhone Duo when FOCUS_DUO_DESTINATION is set.
     before_run:
     - focus-clone-and-build-dependencies
     - focus-set-default-browser-entitlement
@@ -2531,6 +2532,45 @@ workflows:
             FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
             echo "Full Functional Tests (iPad) failures: ${FAILED_COUNT:-n/a}"
             envman add --key FOCUS_FAILED_FULL_FUNCTIONAL_IPAD --value "${FAILED_COUNT:-n/a}"
+    - xcode-test-without-building@0:
+        title: "Focus Smoketest - iPhone Duo"
+        timeout: 1800
+        is_always_run: true
+        run_if: '{{getenv "FOCUS_DUO_DESTINATION" | ne ""}}'
+        inputs:
+        - destination: $FOCUS_DUO_DESTINATION
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+    - script@1:
+        title: "Count failed tests - Smoketest - iPhone Duo"
+        is_always_run: true
+        run_if: '{{getenv "FOCUS_DUO_DESTINATION" | ne ""}}'
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            echo "Smoketest (iPhone Duo) failures: ${FAILED_COUNT:-n/a}"
+            envman add --key FOCUS_FAILED_SMOKETEST_DUO --value "${FAILED_COUNT:-n/a}"
+    - xcode-test-without-building@0:
+        title: "Focus Full Functional Tests - iPhone Duo"
+        timeout: 3600
+        is_always_run: true
+        run_if: '{{getenv "FOCUS_DUO_DESTINATION" | ne ""}}'
+        inputs:
+        - destination: $FOCUS_DUO_DESTINATION
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_FullFunctionalTests_iphonesimulator27.1-arm64.xctestrun
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+    - script@1:
+        title: "Count failed tests - Full Functional Tests - iPhone Duo"
+        is_always_run: true
+        run_if: '{{getenv "FOCUS_DUO_DESTINATION" | ne ""}}'
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            echo "Full Functional Tests (iPhone Duo) failures: ${FAILED_COUNT:-n/a}"
+            envman add --key FOCUS_FAILED_FULL_FUNCTIONAL_DUO --value "${FAILED_COUNT:-n/a}"
+            envman add --key FOCUS_DUO_SLACK_LINE --value "Failed tests on iPhone Duo - Smoketest: ${FOCUS_FAILED_SMOKETEST_DUO:-n/a}, Full Functional Tests: ${FAILED_COUNT:-n/a}"
     - deploy-to-bitrise-io@2:
         is_always_run: true
     - slack@4:
@@ -2547,6 +2587,7 @@ workflows:
         - message_on_error: |-
             Failed tests on iPhone - Smoketest: ${FOCUS_FAILED_SMOKETEST_IPHONE}, Full Functional Tests: ${FOCUS_FAILED_FULL_FUNCTIONAL_IPHONE}
             Failed tests on iPad - Smoketest: ${FOCUS_FAILED_SMOKETEST_IPAD}, Full Functional Tests: ${FOCUS_FAILED_FULL_FUNCTIONAL_IPAD}
+            ${FOCUS_DUO_SLACK_LINE}
         - color_on_error: danger
         - pretext: "*Focus-iOS* *Nightly Smoketest and Full Functional Tests (iPhone and iPad, iOS ${FOCUS_IOS_VERSION})* :white_check_mark:"
         - message: ''
