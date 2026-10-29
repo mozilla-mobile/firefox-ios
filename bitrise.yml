@@ -2466,6 +2466,7 @@ workflows:
     - xcode-test-without-building@0:
         title: "Focus Smoketest - iPhone"
         is_always_run: true
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - destination: $FOCUS_IPHONE_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
@@ -2476,12 +2477,17 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            if [ -z "$BITRISE_TEST_BUNDLE_PATH" ]; then
+                FAILED_COUNT="build failed"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
             echo "Smoketest (iPhone) failures: ${FAILED_COUNT:-n/a}"
             envman add --key FOCUS_FAILED_SMOKETEST_IPHONE --value "${FAILED_COUNT:-n/a}"
     - xcode-test-without-building@0:
         title: "Focus Full Functional Tests - iPhone"
         is_always_run: true
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - destination: $FOCUS_IPHONE_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_FullFunctionalTests_iphonesimulator27.1-arm64.xctestrun
@@ -2492,12 +2498,17 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            if [ -z "$BITRISE_TEST_BUNDLE_PATH" ]; then
+                FAILED_COUNT="build failed"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
             echo "Full Functional Tests (iPhone) failures: ${FAILED_COUNT:-n/a}"
             envman add --key FOCUS_FAILED_FULL_FUNCTIONAL_IPHONE --value "${FAILED_COUNT:-n/a}"
     - xcode-test-without-building@0:
         title: "Focus Smoketest - iPad"
         is_always_run: true
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - destination: $FOCUS_IPAD_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
@@ -2508,12 +2519,17 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            if [ -z "$BITRISE_TEST_BUNDLE_PATH" ]; then
+                FAILED_COUNT="build failed"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
             echo "Smoketest (iPad) failures: ${FAILED_COUNT:-n/a}"
             envman add --key FOCUS_FAILED_SMOKETEST_IPAD --value "${FAILED_COUNT:-n/a}"
     - xcode-test-without-building@0:
         title: "Focus Full Functional Tests - iPad"
         is_always_run: true
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - destination: $FOCUS_IPAD_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_FullFunctionalTests_iphonesimulator27.1-arm64.xctestrun
@@ -2524,13 +2540,17 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            if [ -z "$BITRISE_TEST_BUNDLE_PATH" ]; then
+                FAILED_COUNT="build failed"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
             echo "Full Functional Tests (iPad) failures: ${FAILED_COUNT:-n/a}"
             envman add --key FOCUS_FAILED_FULL_FUNCTIONAL_IPAD --value "${FAILED_COUNT:-n/a}"
     - xcode-test-without-building@0:
         title: "Focus Smoketest - iPhone Duo"
         is_always_run: true
-        run_if: '{{getenv "FOCUS_DUO_DESTINATION" | ne ""}}'
+        run_if: '{{and (getenv "FOCUS_DUO_DESTINATION" | ne "") (enveq "BITRISE_TEST_BUNDLE_PATH" "" | not)}}'
         inputs:
         - destination: $FOCUS_DUO_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
@@ -2542,13 +2562,17 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            if [ -z "$BITRISE_TEST_BUNDLE_PATH" ]; then
+                FAILED_COUNT="build failed"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
             echo "Smoketest (iPhone Duo) failures: ${FAILED_COUNT:-n/a}"
             envman add --key FOCUS_FAILED_SMOKETEST_DUO --value "${FAILED_COUNT:-n/a}"
     - xcode-test-without-building@0:
         title: "Focus Full Functional Tests - iPhone Duo"
         is_always_run: true
-        run_if: '{{getenv "FOCUS_DUO_DESTINATION" | ne ""}}'
+        run_if: '{{and (getenv "FOCUS_DUO_DESTINATION" | ne "") (enveq "BITRISE_TEST_BUNDLE_PATH" "" | not)}}'
         inputs:
         - destination: $FOCUS_DUO_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_FullFunctionalTests_iphonesimulator27.1-arm64.xctestrun
@@ -2560,7 +2584,11 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            if [ -z "$BITRISE_TEST_BUNDLE_PATH" ]; then
+                FAILED_COUNT="build failed"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
             echo "Full Functional Tests (iPhone Duo) failures: ${FAILED_COUNT:-n/a}"
             envman add --key FOCUS_FAILED_FULL_FUNCTIONAL_DUO --value "${FAILED_COUNT:-n/a}"
             envman add --key FOCUS_DUO_SLACK_LINE --value "Failed tests on iPhone Duo - Smoketest: ${FOCUS_FAILED_SMOKETEST_DUO:-n/a}, Full Functional Tests: ${FAILED_COUNT:-n/a}"
