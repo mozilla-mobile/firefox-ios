@@ -244,8 +244,10 @@ class ShareMenuTests: FeatureFlaggedTestBase {
             }
         }
         if #available(iOS 16, *) {
-            mozWaitForElementToExist(app.collectionViews.cells[option])
-            app.collectionViews.cells[option].tapOnApp()
+            let optionCell = app.collectionViews.cells[option]
+            mozWaitForElementToExist(optionCell)
+            optionCell.waitForFrameToSettle()
+            optionCell.tapOnApp()
         } else {
             app.buttons[option].waitAndTap()
         }
