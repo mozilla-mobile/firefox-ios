@@ -819,7 +819,7 @@ final class SearchViewController: SiteTableViewController,
                 let openedTabURL = openedTab.url?.decodeReaderModeURL ?? openedTab.url
                 configureOpenedTabsCell(
                     cell: twoLineCell,
-                    title: openedTab.title ?? openedTab.lastTitle,
+                    title: displayTitle(for: openedTab),
                     urlString: openedTabURL?.absoluteString
                 )
                 cell = twoLineCell
@@ -830,9 +830,10 @@ final class SearchViewController: SiteTableViewController,
                 let remoteTab = viewModel.filteredRemoteClientTabs[indexPath.row].tab
                 let remoteClient = viewModel.filteredRemoteClientTabs[indexPath.row].client
                 let urlString = (remoteTab.URL.decodeReaderModeURL ?? remoteTab.URL).absoluteString
+                let remoteTitle = remoteTab.title.isEmpty ? urlString : remoteTab.title
                 configureRemoteTabsCell(
                     cell: twoLineCell,
-                    title: remoteTab.title,
+                    title: remoteTitle,
                     description: remoteClient.name,
                     urlString: urlString
                 )
@@ -932,15 +933,29 @@ final class SearchViewController: SiteTableViewController,
         cell.accessoryView = nil
     }
 
+    /// Pages without a title fall back to their URL so the row isn't blank.
+    private func displayTitle(for tab: Tab) -> String {
+        return [tab.title, tab.lastTitle]
+            .compactMap { $0 }
+            .first(where: { !$0.isEmpty }) ?? (tab.url?.decodeReaderModeURL ?? tab.url)?.absoluteString ?? ""
+    }
+
     private func configureBookmarksAndHistoryCell(
         _ cell: TwoLineImageOverlayCell,
         _ title: String,
         _ description: String,
         _ isBookmark: Bool = false
     ) {
-        cell.descriptionLabel.isHidden = false
-        cell.titleLabel.text = title
-        cell.descriptionLabel.text = description
+        // Pages without a title should still show something meaningful: fall back
+        // to the URL as the title and skip the (duplicated) description line.
+        if title.isEmpty {
+            cell.titleLabel.text = description
+            cell.descriptionLabel.isHidden = true
+        } else {
+            cell.titleLabel.text = title
+            cell.descriptionLabel.isHidden = false
+            cell.descriptionLabel.text = description
+        }
         cell.leftOverlayImageView.image = isBookmark ? bookmarkedBadge : nil
         cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
         cell.leftImageView.layer.borderWidth = UX.IconBorderWidth

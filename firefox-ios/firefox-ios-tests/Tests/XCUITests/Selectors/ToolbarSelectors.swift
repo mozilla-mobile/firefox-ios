@@ -21,6 +21,10 @@ protocol ToolbarSelectorsSet {
     var SUMMARIZE_BUTTON: Selector { get }
     var CONTEXTUAL_HINT_CLOSE_BUTTON: Selector { get }
     var GOOGLE_LENS_TIP_TITLE: Selector { get }
+    var GOOGLE_LENS_BUTTON: Selector { get }
+    var GOOGLE_LENS_TAKE_PHOTO_ACTION: Selector { get }
+    var GOOGLE_LENS_PHOTO_LIBRARY_ACTION: Selector { get }
+    var GOOGLE_LENS_MENU_ACTIONS: Selector { get }
     var SUMMARIZE_CONTEXTUAL_HINT: Selector { get }
     var all: [Selector] { get }
 }
@@ -44,6 +48,11 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         static let summarizeContextualHint = "Tap to summarize this page. Touch and hold for Reader View."
         static let contextualHintCloseButton = "Close"
         static let googleLensTipTitle = "Search With Google Lens"
+        static let googleLensButton = AccessibilityIdentifiers.Browser.AddressToolbar.googleLensButton
+        static let googleLensTakePhotoAction = AccessibilityIdentifiers.Browser.AddressToolbar.googleLensTakePhotoAction
+        static let googleLensPhotoLibraryAction =
+            AccessibilityIdentifiers.Browser.AddressToolbar.googleLensPhotoLibraryAction
+        static let googleLensIdentifierPrefix = "AddressToolbar.googleLens"
     }
 
     let SETTINGS_MENU_BUTTON = Selector.buttonId(
@@ -150,6 +159,32 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         groups: ["toolbar"]
     )
 
+    let GOOGLE_LENS_BUTTON = Selector.buttonId(
+        IDs.googleLensButton,
+        description: "Google Lens button shown in the address bar while editing with no text",
+        groups: ["toolbar"]
+    )
+
+    let GOOGLE_LENS_TAKE_PHOTO_ACTION = Selector.buttonId(
+        IDs.googleLensTakePhotoAction,
+        description: "Take Photo row of the menu opened by the Google Lens button",
+        groups: ["toolbar"]
+    )
+
+    let GOOGLE_LENS_PHOTO_LIBRARY_ACTION = Selector.buttonId(
+        IDs.googleLensPhotoLibraryAction,
+        description: "Photo Library row of the menu opened by the Google Lens button",
+        groups: ["toolbar"]
+    )
+
+    // Every row of the Google Lens menu, matched by the identifier prefix the rows share with the button.
+    let GOOGLE_LENS_MENU_ACTIONS = Selector.buttonIdBeginsWith(
+        IDs.googleLensIdentifierPrefix,
+        excluding: IDs.googleLensButton,
+        description: "All rows of the menu opened by the Google Lens button",
+        groups: ["toolbar"]
+    )
+
     var all: [Selector] { [
         SETTINGS_MENU_BUTTON,
         TABS_BUTTON,
@@ -167,6 +202,10 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         SUMMARIZE_BUTTON,
         SUMMARIZE_CONTEXTUAL_HINT,
         CONTEXTUAL_HINT_CLOSE_BUTTON,
-        GOOGLE_LENS_TIP_TITLE
+        GOOGLE_LENS_TIP_TITLE,
+        GOOGLE_LENS_BUTTON,
+        GOOGLE_LENS_TAKE_PHOTO_ACTION,
+        GOOGLE_LENS_PHOTO_LIBRARY_ACTION,
+        GOOGLE_LENS_MENU_ACTIONS
     ] }
 }

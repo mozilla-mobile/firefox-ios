@@ -249,7 +249,8 @@ class MergeWindowsManagerTests: XCTestCase {
                                sceneDestroyer: SceneDestroying) -> MergeWindowsManager {
         return MergeWindowsManager(windowManager: windowManager,
                                    tabDataStore: mockTabDataStore,
-                                   sceneDestroyer: sceneDestroyer)
+                                   sceneDestroyer: sceneDestroyer,
+                                   isIpad: true)
     }
 
     private func createController(windowManager: WindowManager,
@@ -260,7 +261,8 @@ class MergeWindowsManagerTests: XCTestCase {
         return MergeWindowsQuickActionController(quickActions: quickActions,
                                                  windowManager: windowManager,
                                                  application: .shared,
-                                                 featureFlags: featureFlags)
+                                                 featureFlags: featureFlags,
+                                                 isIpad: true)
     }
 
     private func makeMergeTabData() -> TabData {
