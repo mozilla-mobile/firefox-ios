@@ -133,6 +133,9 @@ enum ToolbarModernAction: ModernAction {
     /// Enables or disables address bar animations. Disabled by the tab tray and tab swipes, and stays
     /// disabled until a non-homepage URL change or the next edit session re-enables it.
     case animationStateChanged(shouldAnimate: Bool)
+
+    /// The toolbar blur preference changed, for example when Reduce Transparency is toggled.
+    case translucencyDidChange(isTranslucent: Bool)
 }
 
 enum ToolbarActionType: ActionType {
@@ -162,7 +165,6 @@ enum ToolbarActionType: ActionType {
     case didSubmitSearchTerm
     case didSetSearchTerm
     case didStartTyping
-    case translucencyDidChange
     case navigationMiddleButtonDidChange
 }
 
