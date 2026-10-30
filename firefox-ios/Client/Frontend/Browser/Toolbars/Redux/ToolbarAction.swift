@@ -30,7 +30,6 @@ struct ToolbarAction: Action {
     let lockIconNeedsTheming: Bool?
     let safeListedURLImageName: String?
     let isLoading: Bool?
-    let shouldAnimate: Bool?
     let middleButton: NavigationBarMiddleButtonType?
     let isTranslationsEnabled: Bool?
     let translationConfiguration: TranslationConfiguration?
@@ -60,7 +59,6 @@ struct ToolbarAction: Action {
          safeListedURLImageName: String? = nil,
          isLoading: Bool? = nil,
          shouldShowKeyboard: Bool? = nil,
-         shouldAnimate: Bool? = nil,
          middleButton: NavigationBarMiddleButtonType? = nil,
          isTranslationsEnabled: Bool? = nil,
          translationConfiguration: TranslationConfiguration? = nil,
@@ -91,7 +89,6 @@ struct ToolbarAction: Action {
         self.lockIconNeedsTheming = lockIconNeedsTheming
         self.safeListedURLImageName = safeListedURLImageName
         self.isLoading = isLoading
-        self.shouldAnimate = shouldAnimate
         self.canSummarize = canSummarize
         self.middleButton = middleButton
         self.isTranslationsEnabled = isTranslationsEnabled
@@ -132,6 +129,13 @@ enum ToolbarModernAction: ModernAction {
 
     /// The number of tabs in the window changed.
     case numberOfTabsChanged(count: Int)
+
+    /// Enables or disables address bar animations. Disabled by the tab tray and tab swipes, and stays
+    /// disabled until a non-homepage URL change or the next edit session re-enables it.
+    case animationStateChanged(shouldAnimate: Bool)
+
+    /// The toolbar blur preference changed, for example when Reduce Transparency is toggled.
+    case translucencyDidChange(isTranslucent: Bool)
 }
 
 enum ToolbarActionType: ActionType {
@@ -144,7 +148,6 @@ enum ToolbarActionType: ActionType {
     case showMenuWarningBadge
     case didStartEditingUrl
     case cancelEdit
-    case animationStateChanged
     case readerModeStateChanged
     case backForwardButtonStateChanged
     case traitCollectionDidChange
@@ -162,7 +165,6 @@ enum ToolbarActionType: ActionType {
     case didSubmitSearchTerm
     case didSetSearchTerm
     case didStartTyping
-    case translucencyDidChange
     case navigationMiddleButtonDidChange
 }
 
