@@ -48,6 +48,18 @@ final class BrowserScreen {
         }
     }
 
+    /// Typing over a selected URL replaces it, so the field starts with `typedText`, possibly followed by an
+    /// inline autocompletion, and none of `previousValue` is left.
+    func assertAddressBarReplaced(_ previousValue: String, byTyping typedText: String, timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(addressBar, timeout: timeout)
+        let predicate = NSPredicate(format: "value BEGINSWITH %@ AND NOT (value CONTAINS %@)", typedText, previousValue)
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: addressBar)
+        guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else {
+            XCTFail("Expected '\(typedText)' to replace '\(previousValue)', found '\(addressBar.value as? String ?? "nil")'")
+            return
+        }
+    }
+
     func assertSearchEngineLogoExists(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(searchEngineLogo, timeout: timeout)
         XCTAssertTrue(searchEngineLogo.isLeftOf(rightElement: addressBar))

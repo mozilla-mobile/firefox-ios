@@ -12,6 +12,8 @@ class UrlBarTests: BaseTestCase {
     private var mainMenuScreen: MainMenuScreen!
     private var tabTrayScreen: TabTrayScreen!
     private var settingScreen: SettingScreen!
+    private var searchScreen: SearchScreen!
+    private var homePageScreen: HomePageScreen!
 
     override func setUp() async throws {
         if name.contains("testSearchEngineLogo") {
@@ -27,6 +29,8 @@ class UrlBarTests: BaseTestCase {
         mainMenuScreen = MainMenuScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)
         settingScreen = SettingScreen(app: app)
+        searchScreen = SearchScreen(app: app)
+        homePageScreen = HomePageScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306888
@@ -157,6 +161,79 @@ class UrlBarTests: BaseTestCase {
         // The webpage is correctly loaded with the newly edited website
         XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The edited URL did not load")
         browserScreen.assertAddressBarValueEquals(urlValueLong)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167399
+    // Regression
+    func testTappingAddressBarFromWebsite() {
+        let websiteURL = "localhost:\(serverPort)/test-fixture/\(TestPages.mozillaBook)"
+
+        // Step 1: open a website
+        browserScreen.navigateToURL(path(forTestPage: TestPages.mozillaBook))
+        waitUntilPageLoad()
+        XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The website did not load")
+
+        // Step 2: tapping the address bar shows the URL, the X button, suggestions and the keyboard
+        tapAddressBarAndAssertURLIsReadyToEdit(websiteURL)
+
+        // Step 3: the X button clears the URL and the address bar stays focused with the keyboard up
+        browserScreen.clearURL()
+        browserScreen.assertAddressBarContains(value: "Search or enter address")
+        browserScreen.assertAddressBarFocusedWithKeyboard()
+
+        // Step 4: with the URL selected again, typing replaces it and shows the X button and suggestions.
+        browserScreen.tapCancelButtonOnUrlBarExist()
+        tapAddressBarAndAssertURLIsReadyToEdit(websiteURL)
+        browserScreen.typeOnSearchBar(text: "localhost")
+        browserScreen.assertAddressBarReplaced(websiteURL, byTyping: "localhost")
+        browserScreen.assertClearButtonExists()
+        browserScreen.assertSuggestionRow(titled: TestLabels.mozillaBook)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167407
+    // Regression
+    func testHomepageAndNewTabButtonsFromWebsite() throws {
+        guard !iPad() else {
+            throw XCTSkip("The navigation toolbar middle button cannot be configured on iPad")
+        }
+        // Step 1: open a website
+        openMozillaBookFromNewTab()
+
+        // Step 2 (1): the default "+" middle button creates a new tab
+        toolbarScreen.tapOnNewTabButton()
+        homePageScreen.assertHomepageIsDisplayed()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "2", message: "The + button did not open a new tab")
+        // The new tab focuses the address bar, and the keyboard hides the toolbar's menu button
+        browserScreen.tapCancelButtonOnUrlBarExist()
+
+        // Step 2 (2): with the Home middle button, the homepage opens on the same tab
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        settingScreen.navigateToToolbarSettings()
+        settingScreen.selectNavigationToolbarMiddleButton(.home)
+        settingScreen.tapBackToSettings()
+        settingScreen.closeSettingsWithDoneButton()
+        openMozillaBookFromNewTab()
+        toolbarScreen.tapHomeButton()
+        homePageScreen.assertHomepageIsDisplayed()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "2", message: "The Home button opened a new tab")
+    }
+
+    private func openMozillaBookFromNewTab() {
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
+        waitUntilPageLoad()
+        waitForTabsButton()
+        XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The website did not load")
+    }
+
+    /// Tapping the address bar of a loaded page hands over the full URL, selected, for editing.
+    private func tapAddressBarAndAssertURLIsReadyToEdit(_ url: String) {
+        browserScreen.tapOnAddressBar()
+        browserScreen.assertAddressBarContains(value: url)
+        browserScreen.assertClearButtonExists()
+        searchScreen.assertSearchSuggestionsDisplayed()
+        browserScreen.assertAddressBarFocusedWithKeyboard()
     }
 
     private func tapUrlBarValidateKeyboardAndIcon() {

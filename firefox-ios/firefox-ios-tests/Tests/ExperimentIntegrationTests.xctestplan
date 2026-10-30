@@ -213,6 +213,8 @@
         "TranslationsTests\/testTranslationSettingsFromToggleOnToOff_translationExperimentOn()",
         "TranslationsTests\/testTranslationSettingsShouldShow_translationExperimentOn()",
         "URLValidationTests",
+        "UrlBarTests\/testHomepageAndNewTabButtonsFromWebsite()",
+        "UrlBarTests\/testTappingAddressBarFromWebsite()",
         "WhatsNewTest",
         "ZoomingTestsTAE",
         "ZoomingTestsTAE\/testSwitchingZoomedTabsLandscape_tabTrayExperimentOff()",

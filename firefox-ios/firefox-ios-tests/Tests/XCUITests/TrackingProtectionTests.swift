@@ -151,6 +151,74 @@ class TrackingProtectionTests: BaseTestCase {
         browserScreen.assertAddressBar_LockIconOffExist()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3167401
+    // Regression
+    func testSecureSiteConnectionElements() {
+        // Step 1: the secure page is opened
+        openPageForConnectionPanel("https://www.mozilla.org/")
+        browserScreen.assertAddressBar_LockIconExist()
+
+        // Step 2: the panel shows the site, the secure connection, the ETP switch and Privacy settings
+        assertConnectionPanelAndProtectionSettings(domain: "mozilla.org", secure: true)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167402
+    // Regression
+    func testInsecureSiteConnectionElements() {
+        // Step 1: the insecure (plain HTTP) page is opened
+        openPageForConnectionPanel(path(forTestPage: TestPages.mozillaBook))
+        XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The website did not load")
+
+        // Step 2: the panel shows the site, the insecure connection, the ETP switch and Privacy settings
+        assertConnectionPanelAndProtectionSettings(domain: "localhost", secure: false)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167403
+    // Regression
+    func testConnectionDisplayedAsSecure() {
+        // Step 1: the secure page loads with the secure connection shield
+        openPageForConnectionPanel("https://www.mozilla.org/")
+        browserScreen.assertAddressBar_LockIconExist()
+
+        // Step 2: after switching to Strict and going back, the connection is still shown as secure
+        openConnectionPanel()
+        trackingProtectionScreen.tapPrivacySettings()
+        trackingProtectionScreen.selectStrictProtectionLevel()
+        trackingProtectionScreen.closeTrackingProtectionSettings()
+        waitUntilPageLoad()
+        browserScreen.assertAddressBar_LockIconExist()
+        openConnectionPanel()
+        trackingProtectionScreen.assertPanelConnectionIs(secure: true)
+        trackingProtectionScreen.closePanel()
+    }
+
+    private func openPageForConnectionPanel(_ url: String) {
+        browserScreen = BrowserScreen(app: app)
+        trackingProtectionScreen = TrackingProtectionScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+
+        app.launch()
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL(url)
+        waitUntilPageLoad()
+        waitForTabsButton()
+    }
+
+    private func openConnectionPanel() {
+        toolbarScreen.tapSettingsMenuButton()
+        MainMenuScreen(app: app).tapSiteProtections()
+    }
+
+    private func assertConnectionPanelAndProtectionSettings(domain: String, secure: Bool) {
+        openConnectionPanel()
+        trackingProtectionScreen.assertPanelHeader(domain: domain)
+        trackingProtectionScreen.assertPanelConnectionIs(secure: secure)
+        trackingProtectionScreen.assertPanelTrackingProtectionSwitchValue(isOn: true)
+        trackingProtectionScreen.tapPrivacySettings()
+        trackingProtectionScreen.assertTrackingProtectionSettingsOpenedFromPanel()
+        trackingProtectionScreen.closeTrackingProtectionSettings()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2318742
     // Regression
     func testProtectionLevelMoreInfoMenu() {
