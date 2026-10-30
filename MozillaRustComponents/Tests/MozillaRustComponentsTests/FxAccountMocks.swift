@@ -27,6 +27,10 @@ class MockFxAccount: PersistedFirefoxAccount {
     /// Set to `.connected` for a restored account, `.disconnected` for no account,
     /// `.authIssues` for a restored account with auth problems.
     var initializeResult: FxaState = .disconnected
+    /// Events received by `processEvent`, in order.
+    var processedEvents = [FxaEvent]()
+    /// Last state returned by `processEvent`, mirroring the Rust state machine's own tracking.
+    private(set) var currentState: FxaState = .uninitialized
 
     init() {
         super.init(inner: FirefoxAccount(config: FxaConfig(server: FxaServer.custom(url: ""), clientId: "", redirectUri: "", tokenServerUrlOverride: nil)))
@@ -41,13 +45,26 @@ class MockFxAccount: PersistedFirefoxAccount {
     }
 
     override func processEvent(event: FxaEvent) throws -> FxaState {
-        queue.sync { invocations.append(.processEvent) }
+        queue.sync {
+            invocations.append(.processEvent)
+            processedEvents.append(event)
+        }
+        let newState = try transition(event: event)
+        queue.sync { currentState = newState }
+        return newState
+    }
+
+    private func transition(event: FxaEvent) throws -> FxaState {
         switch event {
         case .initialize:
             return initializeResult
         case .beginOAuthFlow:
             return .authenticating(oauthUrl: "https://foo.bar/oauth?state=bobo", initialState: .disconnected)
         case .beginPairingFlow:
+            // Mirrors the Rust state machine, which has no `AuthIssues -> BeginPairingFlow` transition.
+            if currentState == .authIssues {
+                throw FxaError.Other(message: "Invalid state transition: AuthIssues -> BeginPairingFlow")
+            }
             return .authenticating(oauthUrl: "https://foo.bar/oauth?state=bobo", initialState: .disconnected)
         case let .completeOAuthFlow(_, state):
             // Simulate Rust's OAuth state validation
