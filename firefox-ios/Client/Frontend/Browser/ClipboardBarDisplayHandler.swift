@@ -12,6 +12,13 @@ protocol ClipboardBarDisplayHandler {
     func checkIfShouldDisplayBar()
 }
 
+protocol ClipboardPasteboard {
+    var hasURLs: Bool { get }
+    var changeCount: Int { get }
+}
+
+extension UIPasteboard: ClipboardPasteboard {}
+
 protocol ClipboardBarDisplayHandlerDelegate: AnyObject {
     @MainActor
     @available(iOS 16.0, *)
@@ -31,10 +38,16 @@ final class DefaultClipboardBarDisplayHandler: ClipboardBarDisplayHandler, Notif
     private weak var firstTab: Tab?
     var clipboardToast: ButtonToast?
     private let windowUUID: WindowUUID
+    private let pasteboard: ClipboardPasteboard
 
-    init(prefs: Prefs, windowUUID: WindowUUID) {
+    init(
+        prefs: Prefs,
+        windowUUID: WindowUUID,
+        pasteboard: ClipboardPasteboard = UIPasteboard.general
+    ) {
         self.prefs = prefs
         self.windowUUID = windowUUID
+        self.pasteboard = pasteboard
 
         startObservingNotifications(
             withNotificationCenter: NotificationCenter.default,
@@ -60,10 +73,10 @@ final class DefaultClipboardBarDisplayHandler: ClipboardBarDisplayHandler, Notif
     func checkIfShouldDisplayBar() {
         // Clipboard bar feature needs to be enabled by users to be activated in the user settings
         guard prefs.boolForKey(PrefsKeys.ShowClipboardBar) ?? false,
-              UIPasteboard.general.hasURLs
+              pasteboard.hasURLs
         else { return }
 
-        let pasteBoardChangeCount = UIPasteboard.general.changeCount
+        let pasteBoardChangeCount = pasteboard.changeCount
         guard shouldDisplayBar(pasteBoardChangeCount) else { return }
 
         lastPasteBoardChangeCount = pasteBoardChangeCount
@@ -81,7 +94,7 @@ final class DefaultClipboardBarDisplayHandler: ClipboardBarDisplayHandler, Notif
         switch notification.name {
         case UIApplication.willEnterForegroundNotification:
             ensureMainThread {
-                self.appWillEnterForegroundNotification
+                self.appWillEnterForegroundNotification()
             }
         default:
             return
