@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import TestKit
 import XCTest
 import struct MozillaAppServices.EnrolledExperiment
 @testable import Client
@@ -44,6 +45,28 @@ final class ExperimentsTests: XCTestCase {
 
         XCTAssertEqual(Experiments.featureBranches(from: [experiment, rollout]), ["homepage": "treatment-a"])
         XCTAssertEqual(Experiments.featureBranches(from: [rollout, experiment]), ["homepage": "treatment-a"])
+    }
+
+    func testSendFeatureFlags_sendsFeatureBranchesToLogger() {
+        let logger = MockLogger()
+        let experiments = [
+            makeEnrollment(slug: "homepage-test", featureIds: ["homepage"], branch: "control"),
+            makeEnrollment(slug: "tab-tray-rollout", featureIds: ["tab-tray"], branch: "rollout", isRollout: true)
+        ]
+
+        Experiments.sendFeatureFlags(from: experiments, to: logger)
+
+        XCTAssertEqual(logger.setFeatureFlagsCalled, 1)
+        XCTAssertEqual(logger.savedFeatureFlags, ["homepage": "control", "tab-tray": "rollout"])
+    }
+
+    func testSendFeatureFlags_noActiveExperiments_clearsFeatureFlags() {
+        let logger = MockLogger()
+
+        Experiments.sendFeatureFlags(from: [], to: logger)
+
+        XCTAssertEqual(logger.setFeatureFlagsCalled, 1)
+        XCTAssertEqual(logger.savedFeatureFlags, [:])
     }
 
     private func makeEnrollment(slug: String,
