@@ -12,7 +12,10 @@ class VPNDebugSetting: HiddenSetting {
     fileprivate let prefs: Prefs = { return (AppContainer.shared.resolve() as Profile).prefs }()
     fileprivate let creator: VPNAuthCreating
 
-    init(settings: SettingsTableViewController, creator: VPNAuthCreating = VPNAuthCreator()) {
+    init(
+        settings: SettingsTableViewController,
+        creator: VPNAuthCreating = VPNAuthCreator(telemetry: DefaultVPNTelemetry())
+    ) {
         self.creator = creator
         super.init(settings: settings)
     }
