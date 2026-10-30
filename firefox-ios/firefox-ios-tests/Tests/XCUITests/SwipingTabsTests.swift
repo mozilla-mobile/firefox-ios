@@ -23,6 +23,8 @@ class SwipingTabsTests: BaseTestCase {
     }
 
     override func tearDown() async throws {
+        // Rotating with the app still up makes SpringBoard relaunch it once the rotation ends
+        app.terminate()
         XCUIDevice.shared.orientation = .portrait
         try await super.tearDown()
     }
@@ -59,6 +61,7 @@ class SwipingTabsTests: BaseTestCase {
         browserScreen.swipeToAndValidateAddressBarValue(swipeRight: false, mozillaValue)
         browserScreen.swipeToAndValidateAddressBarValue(swipeRight: false, searchValue)
         XCUIDevice.shared.orientation = .landscapeLeft
+        waitForRotation(to: .landscapeLeft)
         browserScreen.swipeToAndValidateAddressBarValue(swipeRight: true, searchValue)
         browserScreen.swipeToAndValidateAddressBarValue(swipeRight: false, searchValue)
     }

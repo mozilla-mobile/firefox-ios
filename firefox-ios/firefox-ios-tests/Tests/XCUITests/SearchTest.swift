@@ -154,15 +154,18 @@ class SearchTests: FeatureFlaggedTestBase {
         // Copy, Paste and Go to url
         app.launch()
         typeOnSearchBar(text: "www.mozilla.org")
-        if #available(iOS 17, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 17
-            || iPad() {
+        if iPad() {
             urlBarAddress.waitAndTap()
             urlBarAddress.waitAndTap()
         } else {
             urlBarAddress.press(forDuration: 1)
         }
         if !app.menuItems["Select All"].mozWaitForElementToExist(timeout: 3, failOnTimeout: false) {
-            urlBarAddress.waitAndTap()
+            if iPad() {
+                urlBarAddress.waitAndTap()
+            } else {
+                urlBarAddress.press(forDuration: 1)
+            }
         }
         app.menuItems["Select All"].waitAndTap()
         app.menuItems["Copy"].waitAndTap()
