@@ -165,7 +165,8 @@ class CodeCoverageGate {
 
             // Extract percentage (supports 0..1 or 0..100 in lineCoverage)
             let percent: Double = {
-                guard let entry, let raw = entry["lineCoverage"] as? Double else { return 0 }
+                guard let entry else { return 0 }
+                let raw = lineCoverage(of: entry)
                 return raw <= 1.000001 ? raw * 100.0 : raw
             }()
 
@@ -216,6 +217,7 @@ class CodeCoverageGate {
     private func swiftSourceCandidates(from files: [String]) -> [String] {
         files.filter {
             $0.hasSuffix(".swift") &&
+            !$0.hasPrefix("focus-ios/") &&
             !$0.contains("Tests/") &&
             !$0.contains("/Generated/") &&
             !$0.contains("/Strings.swift") &&
@@ -312,19 +314,13 @@ class CodeCoverageGate {
         String(format: "%.1f%%", value)
     }
 
-    // Match repo file to coverage entries by absolute path, falling back to exact filename.
-    // A file compiled into several targets (e.g. a BrowserKit file in both Client.app and its
-    // package test bundle) appears once per target, so the best-covered entry is used.
+    // Match repo file to coverage entries by absolute path. A file compiled into several targets
+    // (e.g. a BrowserKit file in both Client.app and its package test bundle) appears once per
+    // target, so the best-covered entry is used.
     private func coverageMatch(repoPath: String, coverageFiles: [[String: Any]]) -> [String: Any]? {
-        let pathMatches = coverageFiles.filter {
-            guard let path = $0["path"] as? String else { return false }
-            return path == repoPath || path.hasSuffix("/\(repoPath)")
-        }
-        let repoFile = URL(fileURLWithPath: repoPath).lastPathComponent
-        let candidates = pathMatches.isEmpty
-            ? coverageFiles.filter { URL(fileURLWithPath: ($0["name"] as? String) ?? "").lastPathComponent == repoFile }
-            : pathMatches
-        return candidates.max { lineCoverage(of: $0) < lineCoverage(of: $1) }
+        coverageFiles
+            .filter { ($0["path"] as? String)?.hasSuffix("/\(repoPath)") ?? false }
+            .max { lineCoverage(of: $0) < lineCoverage(of: $1) }
     }
 
     private func lineCoverage(of entry: [String: Any]) -> Double {
