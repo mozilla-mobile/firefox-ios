@@ -8,6 +8,9 @@ public protocol Logger: Sendable {
     var crashedLastLaunch: Bool { get }
 
     func setup(sendCrashReports: Bool)
+
+    func setFeatureFlags(_ featureBranches: [String: String])
+
     func logCustomError(error: Error)
 
     /// Log a new message to the logging system
@@ -37,6 +40,8 @@ public protocol Logger: Sendable {
 }
 
 public extension Logger {
+    func setFeatureFlags(_ featureBranches: [String: String]) {}
+
     func log(_ message: String,
              level: LoggerLevel,
              category: LoggerCategory,
