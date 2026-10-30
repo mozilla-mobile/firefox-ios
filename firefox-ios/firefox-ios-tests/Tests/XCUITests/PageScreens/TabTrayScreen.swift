@@ -136,6 +136,12 @@ final class TabTrayScreen {
         collectionView.cells.element(boundBy: 0).swipeLeft()
     }
 
+    func swipeToCloseTab(named name: String) {
+        let tabCell = cell(named: name)
+        BaseTestCase().mozWaitForElementToExist(tabCell)
+        tabCell.swipeLeft()
+    }
+
     func switchToPrivateBrowsing(timeout: TimeInterval = TIMEOUT) {
         let privateModeButton: XCUIElement
         if BaseTestCase().iPad() {
