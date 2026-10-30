@@ -312,30 +312,23 @@ class CodeCoverageGate {
         String(format: "%.1f%%", value)
     }
 
-    // Match repo file to coverage entry by filename/suffix
+    // Match repo file to coverage entries by absolute path, falling back to exact filename.
+    // A file compiled into several targets (e.g. a BrowserKit file in both Client.app and its
+    // package test bundle) appears once per target, so the best-covered entry is used.
     private func coverageMatch(repoPath: String, coverageFiles: [[String: Any]]) -> [String: Any]? {
+        let pathMatches = coverageFiles.filter {
+            guard let path = $0["path"] as? String else { return false }
+            return path == repoPath || path.hasSuffix("/\(repoPath)")
+        }
         let repoFile = URL(fileURLWithPath: repoPath).lastPathComponent
-        // Exact filename match first
-        let sameName = coverageFiles.filter {
-            URL(fileURLWithPath: ($0["name"] as? String) ?? "").lastPathComponent == repoFile
-        }
-        if sameName.count == 1 { return sameName.first }
-        if sameName.count > 1 {
-            // Disambiguate by longest common suffix with repoPath
-            func commonSuffixLen(_ a: String, _ b: String) -> Int {
-                let ar = Array(a.reversed()), br = Array(b.reversed())
-                var i = 0; while i < ar.count && i < br.count && ar[i] == br[i] { i += 1 }; return i
-            }
-            return sameName.max { a, b in
-                let sa = (a["name"] as? String) ?? "", sb = (b["name"] as? String) ?? ""
-                return commonSuffixLen(sa, repoPath) < commonSuffixLen(sb, repoPath)
-            }
-        }
-        // Fallback: raw suffix match
-        return coverageFiles.first { entry in
-            guard let name = entry["name"] as? String else { return false }
-            return name.hasSuffix(repoPath) || repoPath.hasSuffix(name)
-        }
+        let candidates = pathMatches.isEmpty
+            ? coverageFiles.filter { URL(fileURLWithPath: ($0["name"] as? String) ?? "").lastPathComponent == repoFile }
+            : pathMatches
+        return candidates.max { lineCoverage(of: $0) < lineCoverage(of: $1) }
+    }
+
+    private func lineCoverage(of entry: [String: Any]) -> Double {
+        entry["lineCoverage"] as? Double ?? 0
     }
 }
 
