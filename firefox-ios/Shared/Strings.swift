@@ -3042,6 +3042,13 @@ extension String {
                 comment: "Button shown below a Quick Answers result that the user taps to ask a follow-up question about the answer."
             )
 
+            public static let NewQuestionButton = MZLocalizedString(
+                key: "QuickAnswers.ContentView.NewQuestionButton.v161",
+                tableName: "QuickAnswers",
+                value: "Ask a New Question",
+                comment: "Button shown below a Quick Answers result that the user taps to ask a new, unrelated question."
+            )
+
             public static let Answering = MZLocalizedString(
                 key: "QuickAnswers.ContentView.Answering.v158",
                 tableName: "QuickAnswers",

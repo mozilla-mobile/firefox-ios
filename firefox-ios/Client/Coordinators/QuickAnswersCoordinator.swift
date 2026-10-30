@@ -8,7 +8,7 @@ import Common
 import Shared
 import UIKit
 
-final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHandler, FeatureFlaggable {
+final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHandler {
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let prefs: Prefs
     private let windowUUID: WindowUUID
@@ -82,7 +82,10 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
                 continueButton: .QuickAnswers.OptIn.ContinueButton
             ),
             contentView: .init(
-                placeholder: .QuickAnswers.ContentView.Placeholder,
+                placeholder: .QuickAnswers.ContentView.Listening,
+                followUpPlaceholder: .QuickAnswers.ContentView.ListeningFollowUp,
+                followUpButton: .QuickAnswers.ContentView.FollowUpButton,
+                newQuestionButton: .QuickAnswers.ContentView.NewQuestionButton,
                 answering: .QuickAnswers.ContentView.Answering,
                 footerFormat: .QuickAnswers.ContentView.FooterFormat,
                 sources: .QuickAnswers.ContentView.Sources,

@@ -311,6 +311,14 @@ final class BackgroundEffectView: UIView, ThemeApplicable {
         }
     }
 
+    func hideResult(duration: TimeInterval) {
+        blobsState.isPaused = false
+        UIView.animate(withDuration: duration, delay: 0.0, options: .curveEaseInOut) { [self] in
+            blobsHostingController.view.alpha = 1.0
+            resultWash.alpha = 0.0
+        }
+    }
+
     // MARK: - Presentation transition
     func prepareForPresentationTransition() {
         blobsHostingController.view.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationBlobsOffset)

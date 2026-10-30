@@ -54,6 +54,9 @@ struct QuickAnswersViewConfigurationTests {
     func testContentViewStrings_storesValues() {
         let subject = QuickAnswersViewConfiguration.ContentViewStrings(
             placeholder: "ask",
+            followUpPlaceholder: "follow up",
+            followUpButton: "ask follow up",
+            newQuestionButton: "ask new question",
             answering: "loading",
             footerFormat: "Powered by %@",
             sources: "Sources",
@@ -62,6 +65,9 @@ struct QuickAnswersViewConfigurationTests {
         )
 
         #expect(subject.placeholder == "ask")
+        #expect(subject.followUpPlaceholder == "follow up")
+        #expect(subject.followUpButton == "ask follow up")
+        #expect(subject.newQuestionButton == "ask new question")
         #expect(subject.answering == "loading")
         #expect(subject.footerFormat == "Powered by %@")
         #expect(subject.sources == "Sources")
@@ -125,6 +131,9 @@ struct QuickAnswersViewConfigurationTests {
             ),
             contentView: .init(
                 placeholder: "p",
+                followUpPlaceholder: "fp",
+                followUpButton: "fb",
+                newQuestionButton: "nb",
                 answering: "a",
                 footerFormat: "f",
                 sources: "s",
