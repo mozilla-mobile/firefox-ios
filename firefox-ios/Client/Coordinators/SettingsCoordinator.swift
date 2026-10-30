@@ -369,7 +369,8 @@ final class SettingsCoordinator: BaseCoordinator,
 
     func pressedVPN() {
         let viewController = VPNSettingsViewController(
-            windowUUID: windowUUID
+            windowUUID: windowUUID,
+            prefs: profile.prefs
         )
         router.push(viewController)
     }

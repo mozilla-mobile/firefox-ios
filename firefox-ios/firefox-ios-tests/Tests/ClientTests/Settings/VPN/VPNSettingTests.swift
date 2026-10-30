@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Shared
 import XCTest
 @testable import Client
 
@@ -41,6 +42,26 @@ final class VPNSettingTests: XCTestCase {
         XCTAssertEqual(subject.style, .value1)
     }
 
+    // MARK: - Status
+
+    func test_status_whenVPNDisabled_isOff() {
+        setVPNEnabled(false)
+        let subject = createSubject(dataUsage: VPNDataUsage(usedDataInGB: 5, dataLimitInGB: 5))
+        XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusOff)
+    }
+
+    func test_status_whenVPNEnabledAndUnderLimit_isOn() {
+        setVPNEnabled(true)
+        let subject = createSubject(dataUsage: VPNDataUsage(usedDataInGB: 2, dataLimitInGB: 5))
+        XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusOn)
+    }
+
+    func test_status_whenVPNEnabledAndLimitReached_isPaused() {
+        setVPNEnabled(true)
+        let subject = createSubject(dataUsage: VPNDataUsage(usedDataInGB: 5, dataLimitInGB: 5))
+        XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusPaused)
+    }
+
     // MARK: - Accessory
 
     func test_accessoryView_isNilBeforeThemeIsSet() {
@@ -70,12 +91,19 @@ final class VPNSettingTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func createSubject() -> VPNSetting {
+    private func createSubject(dataUsage: VPNDataUsage = .placeholder) -> VPNSetting {
         let subject = VPNSetting(
             settings: settings,
-            settingsDelegate: delegate
+            settingsDelegate: delegate,
+            dataUsage: dataUsage
         )
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func setVPNEnabled(_ isEnabled: Bool) {
+        let profile = makeProfile()
+        profile.prefs.setBool(isEnabled, forKey: PrefsKeys.VPNSettings.isEnabled)
+        settings.profile = profile
     }
 }

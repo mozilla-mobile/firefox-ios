@@ -7,6 +7,8 @@ import Shared
 
 final class VPNSetting: Setting {
     private weak var settingsDelegate: PrivacySettingsDelegate?
+    private let profile: Profile?
+    private let dataUsage: VPNDataUsage
 
     override var accessoryView: UIImageView? {
         guard let theme else { return nil }
@@ -20,16 +22,27 @@ final class VPNSetting: Setting {
     override var style: UITableViewCell.CellStyle { return .value1 }
 
     override var status: NSAttributedString? {
-        // TODO: - Figure out how we tell if the VPN is on, for now default to off
-        let statusString = String.VPN.Settings.StatusOff
+        // TODO: - Figure out how we tell if the VPN is on, for now use the VPN settings toggle.
+        let isEnabled = profile?.prefs.boolForKey(PrefsKeys.VPNSettings.isEnabled) ?? false
+        let statusString: String
+        if !isEnabled {
+            statusString = .VPN.Settings.StatusOff
+        } else if dataUsage.isLimitReached {
+            statusString = .VPN.Settings.StatusPaused
+        } else {
+            statusString = .VPN.Settings.StatusOn
+        }
         return NSAttributedString(string: statusString)
     }
 
     init(
         settings: SettingsTableViewController,
         settingsDelegate: PrivacySettingsDelegate?,
+        dataUsage: VPNDataUsage = .placeholder
     ) {
         self.settingsDelegate = settingsDelegate
+        self.profile = settings.profile
+        self.dataUsage = dataUsage
         let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(

@@ -175,6 +175,7 @@ public struct PrefsKeys {
     public struct VPNSettings {
         public static let endpointEnvironment = "vpnEndpointEnvironment"
         public static let lastUsedEnvironment = "vpnLastUsedEnvironment"
+        public static let isEnabled = "vpnIsEnabled"
     }
 
     public struct UserFeatureFlagPrefs {
