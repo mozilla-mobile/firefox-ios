@@ -116,9 +116,13 @@ public final class SummarizeController: UIViewController, Themeable {
         return LayoutContext(
             viewSize: view.bounds.size,
             traitCollection: traitCollection,
-            tabSnapshotTopOffset: configuration.tabSnapshot.tabSnapshotTopOffset
+            tabSnapshotTopOffset: configuration.tabSnapshot.tabSnapshotTopOffset,
+            isInitialLandscape: isInitialLandscape
         )
     }
+
+    private var isShowingSummary = false
+    private var isInitialLandscape = false
 
     public init(
         windowUUID: WindowUUID,
@@ -162,6 +166,7 @@ public final class SummarizeController: UIViewController, Themeable {
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        isInitialLandscape = view.bounds.width > view.bounds.height
         animationController.animateViewDidAppear(
             snapshotTransform: snapshotLayoutCalculator.calculateViewDidAppearTransform(context: layoutContext)
         ) { [weak self] in
@@ -270,15 +275,15 @@ public final class SummarizeController: UIViewController, Themeable {
     }
 
     private func adjustLayoutForRotation() {
-        // TODO: - FXIOS-14913 store initial layout to be able to restore the snapshot when rotating back to original layout
-        snapshotLayoutCalculator.didRotateInterface = true
         // remove any running animation cause they will look off on rotation
         tabSnapshotContainer.layer.removeAllAnimations()
 
         setupLoadingBackgroundGradient()
         topHalfBoundGuideBottomAnchor?.isActive = false
         makeTopHalfBoundGuideBottomAnchor()
-        tabSnapshotContainer.transform = snapshotLayoutCalculator.calculateDidRotateTransform(context: layoutContext)
+        tabSnapshotContainer.transform = isShowingSummary
+            ? snapshotLayoutCalculator.calculateSummaryTransform(context: layoutContext)
+            : snapshotLayoutCalculator.calculateInfoTransform(context: layoutContext)
     }
 
     private func makeTopHalfBoundGuideBottomAnchor() {
@@ -317,6 +322,7 @@ public final class SummarizeController: UIViewController, Themeable {
     }
 
     private func showSummary(_ summary: String) {
+        isShowingSummary = true
         tabSnapshotContainer.addGestureRecognizer(tabSnapshotPanGesture)
         configureSummaryView(summary: summary)
 
@@ -350,6 +356,7 @@ public final class SummarizeController: UIViewController, Themeable {
     }
 
     private func showError(_ error: SummarizerError) {
+        isShowingSummary = false
         if case .tosConsentMissing = error {
             viewModel.setConsentScreenShown()
         }
