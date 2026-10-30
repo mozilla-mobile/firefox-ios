@@ -7,7 +7,7 @@ import Shared
 import Common
 import Security
 
-class NativeErrorPageHelper: FeatureFlaggable {
+class NativeErrorPageHelper: FeatureFlaggable, UserFeaturePreferenceProvider {
     private enum Constants {
         static let certErrorQueryParam = "certerror"
         static let badCertQueryParam = "badcert"
@@ -115,6 +115,8 @@ class NativeErrorPageHelper: FeatureFlaggable {
             switch error.code {
             case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
                 return .internetConnection
+            case NSURLErrorCannotConnectToHost where userPreferences.getPreferenceFor(.vpnFeature):
+                return .vpnConnection(VPNConnectionErrorModel(url: url))
             case NSURLErrorServerCertificateUntrusted,
                  NSURLErrorServerCertificateHasBadDate,
                  NSURLErrorServerCertificateHasUnknownRoot,
