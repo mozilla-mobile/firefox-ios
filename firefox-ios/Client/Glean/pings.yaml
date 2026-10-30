@@ -29,6 +29,18 @@ first-session:
   notification_emails:
     - fx-ios-data-stewards@mozilla.com
 
+installation:
+  description: |
+    Recorded when installation information is collected.
+  include_client_id: true
+  send_if_empty: false
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/FXIOS-17053
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/36217
+  notification_emails:
+    - fx-ios-data-stewards@mozilla.com
+
 fx-accounts:
   description: |
     A ping for information about Mozilla Account usage. Sent at the same cadence
