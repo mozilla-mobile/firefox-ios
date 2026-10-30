@@ -5,12 +5,13 @@
 import Common
 import MozillaAppServices
 import Foundation
+import VPNKit
 
 /// Reads the `vpn-serverlist` Remote Settings collection (the same collection desktop Firefox
 /// uses — see `toolkit/components/ipprotection/IPProtectionServerlist.sys.mjs`) and exposes a
 /// flat selection API. Records are Country-rooted: Country → City → Server → Protocol.
 protocol VPNServerManaging: Sendable {
-    func selectServer(countryCode: String?) async -> VPNGuardian.Server?
+    func selectServer(countryCode: String?, environment: VPNEnvironment) async -> VPNGuardian.Server?
 }
 
 final class VPNServerManager: VPNServerManaging {
@@ -46,6 +47,12 @@ final class VPNServerManager: VPNServerManaging {
 
     private let client: RemoteSettingsClientProtocol
     private let logger: Logger
+    private static let stagingServer = VPNGuardian.Server(
+        hostname: "stage.m1.fastly-masque.net",
+        port: 2499,
+        city: "Staging",
+        countryCode: "STAGE"
+    )
 
     init(client: RemoteSettingsClientProtocol, logger: Logger = DefaultLogger.shared) {
         self.client = client
@@ -60,7 +67,11 @@ final class VPNServerManager: VPNServerManaging {
     /// The "REC" step also covers a requested country whose servers are all quarantined, or one
     /// that has since been dropped from the collection, so a stale selection degrades to
     /// Recommended rather than to whatever country happens to be first in record order.
-    func selectServer(countryCode: String? = nil) async -> VPNGuardian.Server? {
+    func selectServer(countryCode: String? = nil, environment: VPNEnvironment = .prod) async -> VPNGuardian.Server? {
+        // There is no location information for staging so we fall back to the hardcoded staging server
+        guard environment != .stage else {
+            return Self.stagingServer
+        }
         let countries = await decodeCountries()
         let preferred = countryCode ?? VPNServerManager.recommendedCountryCode
         if let pick = pickServer(in: countries.first(where: { $0.code == preferred })) {

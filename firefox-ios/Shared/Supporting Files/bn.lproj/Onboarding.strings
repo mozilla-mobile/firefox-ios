@@ -1,0 +1,15 @@
+/* Body text below the “5 GB, Free Every Month” (VPN.Onboarding.LimitSubheading.v160) subheading on the VPN onboarding card. Explains that the user can start using the VPN without signing in to an account. “it” refers to the VPN. */
+"VPN.Onboarding.LimitBody.v160" = "সাইন ইন না করেই এটি ব্যবহার করা শুরু করুন";
+
+/* Subheading on the VPN onboarding card. Explains how much VPN data the user gets every month at no cost. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.Onboarding.LimitSubheading.v160" = "প্রতি মাসে %1$@ জিবি, বিনামূল্যে";
+
+/* Body text below the “Browse From Multiple Locations” (VPN.Onboarding.LocationsSubheading.v160) subheading on the VPN onboarding card. Explains that choosing a VPN location makes it harder to tell where the user really is. “yours” refers to the user’s location. */
+"VPN.Onboarding.LocationsBody.v160" = "এমন একটি ভিপিএন লোকেশন বেছে নিন যা আপনার লোকেশন শনাক্ত করা আরও কঠিন করে তুলবে।";
+
+/* Subheading on the VPN onboarding card. Explains that the user can choose which country their browsing appears to come from. */
+"VPN.Onboarding.LocationsSubheading.v160" = "একাধিক লোকেশন থেকে ব্রাউজ করুন";
+
+/* Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox). */
+"VPN.Onboarding.Title.v160" = "%1$@-এর বিল্ট-ইন ভিপিএন ব্যবহার করুন";
+

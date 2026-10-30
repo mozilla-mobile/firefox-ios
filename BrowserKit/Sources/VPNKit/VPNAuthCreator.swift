@@ -90,8 +90,7 @@ public struct VPNAuthCreator: VPNAuthCreating {
     /// Also clears stored credentials when the environment changes, so the app re-attests against
     /// the correct server.
     private func resolveEnvironment(using prefs: Prefs) -> VPNEnvironment {
-        let environmentKey = prefs.stringForKey(PrefsKeys.VPNSettings.endpointEnvironment) ?? ""
-        let environment = VPNEnvironment(rawValue: environmentKey) ?? .prod
+        let environment = VPNEnvironment(prefs: prefs)
 
         prefs.resetIfEnvironmentChanged(
             environment.rawValue,

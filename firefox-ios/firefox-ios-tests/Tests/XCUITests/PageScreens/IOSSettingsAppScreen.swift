@@ -46,7 +46,12 @@ final class IOSSettingsAppScreen {
     private var settingsBackButton: XCUIElement {
         let identified = settingsApp.navigationBars.buttons["BackButton"]
         guard !identified.exists, settingsApp.navigationBars.count == 1 else { return identified }
-        return settingsApp.navigationBars.buttons.firstMatch
+        let navigationBar = settingsApp.navigationBars.firstMatch
+        // Trailing buttons don't qualify: the iOS 18 Apps page has a dictation button there
+        let leadingButton = navigationBar.buttons.allElementsBoundByIndex.first {
+            $0.frame.maxX < navigationBar.frame.midX
+        }
+        return leadingButton ?? identified
     }
 
     // MARK: - Assertions
@@ -77,8 +82,8 @@ final class IOSSettingsAppScreen {
         XCTAssertTrue(persisted.isSelected, "Firefox should still be the default browser after reopening the picker")
     }
 
-    /// Up to iOS 18.1 the choice lives in the app's own pane, which is where the Settings deep link lands.
-    /// iOS 18.2+ nests it under Settings > Apps > Default Apps, reached from the root the deep link opens.
+    /// Up to iOS 18.1 the choice lives in the app's own pane, where the Settings deep link lands. iOS 18.2+
+    /// nests it under Settings > Apps > Default Apps, reached from the root (iOS 18 lands on the Apps page).
     private func openDefaultBrowserPicker() {
         if appPaneDefaultBrowserRow.mozWaitForElementToExist(
             timeout: TIMEOUT_PICKER_PROBE,

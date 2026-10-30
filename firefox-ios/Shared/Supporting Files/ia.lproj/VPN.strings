@@ -1,0 +1,60 @@
+/* Body text of the system notification telling the user their free monthly VPN data has reset. */
+"VPN.DataLimitRefreshNotification.Body.v160" = "Tu datos mensual gratuite de VPN se ha actualisate.";
+
+/* Title of a system notification telling the user their free monthly VPN data has reset and is ready to use again. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.DataLimitRefreshNotification.Title.v160" = "%1$@ GB de datos de VPN es preste";
+
+/* Body text of the popup shown when the VPN stops working while the user is browsing. Warns that if they keep browsing, websites and other third parties may be able to see their location. */
+"VPN.ErrorBrowsingPopup.Body.v160" = "Le VPN non functiona a iste momento. Si tu continua a navigar, tu position pote esser visibile.";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes all of the user's open tabs. */
+"VPN.ErrorBrowsingPopup.CloseAllTabs.v160" = "Clauder tote le schedas";
+
+/* Confirmation shown after the user closes a single tab from the popup that appears when the VPN stops working while browsing. */
+"VPN.ErrorBrowsingPopup.ClosedOneTab.v160" = "1 scheda claudite";
+
+/* Confirmation shown after the user closes more than one tab from the popup that appears when the VPN stops working while browsing. %1$@ is the number of tabs that were closed (for example, 3). */
+"VPN.ErrorBrowsingPopup.ClosedXTabs.v160" = "%1$@ schedas claudite";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ErrorBrowsingPopup.CloseThisTab.v160" = "Clauder iste scheda";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes the popup so the user can keep browsing without the VPN. */
+"VPN.ErrorBrowsingPopup.Continue.v160" = "Continuar sin VPN";
+
+/* Title of a popup shown when the VPN stops working while the user is browsing with it on. Asks if the user wants to keep browsing without the VPN. */
+"VPN.ErrorBrowsingPopup.Title.v160" = "Continuar sin VPN?";
+
+/* Body text of the popup shown when the app fails to connect to the VPN. “Try again” means try connecting to the VPN again. */
+"VPN.ErrorConnectingPopup.Body.v160" = "Retenta in alcun minutas.";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it closes the popup. */
+"VPN.ErrorConnectingPopup.CloseButtonText.v160" = "Clauder";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it tries to connect to the VPN again. */
+"VPN.ErrorConnectingPopup.RetryButtonText.v160" = "Retentar";
+
+/* Title of a popup shown when the app fails to connect to the VPN. */
+"VPN.ErrorConnectingPopup.Title.v160" = "Impossibile connecter se a VPN";
+
+/* Alternative body text for the popup shown when the user has used all of their free monthly VPN data. Explains that their VPN data resets at the start of next month. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.ReachedDataLimitPopup.AltPopupBody.v160" = "Tote le %1$@ GB de datos de VPN usate. Le accesso remonta le mense proxime.";
+
+/* Body text of the popup shown when the user has used all of their free monthly VPN data. Explains that the VPN has turned off, so websites may be able to see their location if they keep browsing. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.ReachedDataLimitPopup.Body.v160" = "Tu ha usate tote le %1$@ GB de datos de VPN. Le VPN va mal, assi tu position pote esser visibile si tu continua a navigar.";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes all of the user's open tabs. */
+"VPN.ReachedDataLimitPopup.CloseAllTabs.v160" = "Clauder tote le schedas";
+
+/* Confirmation shown after the user closes a single tab from the popup that appears when they run out of free monthly VPN data. */
+"VPN.ReachedDataLimitPopup.ClosedOneTab.v160" = "1 scheda claudite";
+
+/* Confirmation shown after the user closes more than one tab from the popup that appears when they run out of free monthly VPN data. %1$@ is the number of tabs that were closed (for example, 3). */
+"VPN.ReachedDataLimitPopup.ClosedXTabs.v160" = "%1$@ schedas claudite";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ReachedDataLimitPopup.CloseThisTab.v160" = "Clauder iste scheda";
+
+/* Title of a popup shown when the user has used all of their free monthly VPN data. */
+"VPN.ReachedDataLimitPopup.Title.v160" = "Limite de datos de VPN attingite";
+

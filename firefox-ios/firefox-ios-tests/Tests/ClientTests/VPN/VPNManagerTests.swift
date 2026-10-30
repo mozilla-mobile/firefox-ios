@@ -3,7 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Network
+import Shared
 import TestKit
+import VPNKit
 import XCTest
 @testable import Client
 
@@ -18,6 +20,7 @@ final class VPNManagerTests: XCTestCase {
     private var mockGuardian: MockVPNGuardian!
     private var mockServerManager: MockVPNServerManager!
     private var mockProxyConfigurator: MockProxyConfigurator!
+    private var mockAuthCreator: MockVPNAuthCreator!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -33,6 +36,7 @@ final class VPNManagerTests: XCTestCase {
         mockGuardian = MockVPNGuardian()
         mockServerManager = MockVPNServerManager()
         mockProxyConfigurator = MockProxyConfigurator()
+        mockAuthCreator = MockVPNAuthCreator()
         DependencyHelperMock().bootstrapDependencies(
             injectedProfile: mockProfile,
             injectedWindowManager: mockWindowManager,
@@ -50,6 +54,7 @@ final class VPNManagerTests: XCTestCase {
         mockGuardian = nil
         mockServerManager = nil
         mockProxyConfigurator = nil
+        mockAuthCreator = nil
         try await super.tearDown()
     }
 
@@ -131,6 +136,28 @@ final class VPNManagerTests: XCTestCase {
         XCTAssertFalse(subject.isRunning)
     }
 
+    func testStart_whenTokenProviderUnavailable_doesNotApplyProxyOrSetPreference() async {
+        let subject = createSubject(injectGuardian: false)
+
+        await subject.start()
+
+        XCTAssertEqual(mockAuthCreator.makeTokenProviderCalled, 1)
+        XCTAssertEqual(mockServerManager.selectServerCalled, 0)
+        XCTAssertTrue(mockProxyConfigurator.params.isEmpty)
+        XCTAssertEqual(mockTabManager.tearDownWebViewsForProxyChangeCalled, 0)
+        XCTAssertFalse(subject.isRunning)
+    }
+
+    func testStart_selectsServerFromServerManager() async {
+        mockProfile.prefs.setString(VPNEnvironment.prod.rawValue, forKey: PrefsKeys.VPNSettings.endpointEnvironment)
+        let subject = createSubject()
+
+        await subject.start()
+
+        XCTAssertEqual(mockServerManager.selectServerCalled, 1)
+        XCTAssertEqual(mockProxyConfigurator.params.count, 1)
+    }
+
     // MARK: - stop
 
     func testStop_clearsProxyAndSetsPreferenceForVPNToFalse() async throws {
@@ -150,13 +177,13 @@ final class VPNManagerTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func createSubject() -> VPNManager {
+    private func createSubject(injectGuardian: Bool = true) -> VPNManager {
         let subject = VPNManager(
             logger: mockLogger,
-            clientConfig: .staging,
             profile: mockProfile,
             windowManager: mockWindowManager,
-            guardian: mockGuardian,
+            guardian: injectGuardian ? mockGuardian : nil,
+            authCreator: mockAuthCreator,
             serverManager: mockServerManager,
             proxyApplier: mockProxyConfigurator
         )
@@ -164,8 +191,8 @@ final class VPNManagerTests: XCTestCase {
         return subject
     }
 
-    private func makePass(token: String) -> VPNGuardian.ProxyPass {
-        return VPNGuardian.ProxyPass(
+    private func makePass(token: String) -> VPNProxyPass {
+        return VPNProxyPass(
             bearerToken: token,
             notBefore: Date(),
             expiresAt: Date().addingTimeInterval(3600),
@@ -182,5 +209,23 @@ private final class MockProxyConfigurator: ProxyConfigurator {
     func applyProxyConfigurations(_ configs: [ProxyConfiguration], forcingSessionReset: Bool) {
         params.append((configs, forcingSessionReset))
         onApply?()
+    }
+}
+
+private final class MockVPNAuthCreator: VPNAuthCreating {
+    var tokenProvider: VPNTokenProviding?
+    var makeTokenProviderCalled = 0
+
+    func makeTokenProvider(using prefs: Prefs) -> VPNTokenProviding? {
+        makeTokenProviderCalled += 1
+        return tokenProvider
+    }
+
+    func makeAuthService(using prefs: Prefs) -> VPNAuthenticating? {
+        return nil
+    }
+
+    func makeProxyTokenService(using prefs: Prefs) -> VPNProxyTokenFetching? {
+        return nil
     }
 }

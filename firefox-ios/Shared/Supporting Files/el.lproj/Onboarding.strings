@@ -218,7 +218,7 @@
 "Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "Συνέχεια";
 
 /* Description for the toolbar customization card. */
-"Onboarding.Modern.Customization.Toolbar.Description.v145" = "Ξεκινήστε να πληκτρολογείτε για λάβετε προτάσεις αναζήτησης, τις κορυφαίες ιστοσελίδες, τους σελιδοδείκτες, το ιστορικό και τις μηχανές αναζήτησης – όλα σε ένα μέρος.";
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "Ξεκινήστε να πληκτρολογείτε για προτάσεις αναζήτησης, κορυφαίους ιστοτόπους, σελιδοδείκτες, ιστορικό και μηχανές αναζήτησης, όλα σε ένα μέρος.";
 
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "Επιλέξτε πού θα βρίσκεται η γραμμή διευθύνσεων";
@@ -496,4 +496,13 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "Καλώς ορίσατε σε ένα ανεξάρτητο διαδίκτυο";
+
+/* Body text below the “5 GB, Free Every Month” (VPN.Onboarding.LimitSubheading.v160) subheading on the VPN onboarding card. Explains that the user can start using the VPN without signing in to an account. “it” refers to the VPN. */
+"VPN.Onboarding.LimitBody.v160" = "Ξεκινήστε να το χρησιμοποιείτε χωρίς σύνδεση";
+
+/* Subheading on the VPN onboarding card. Explains how much VPN data the user gets every month at no cost. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.Onboarding.LimitSubheading.v160" = "%1$@ GB δωρεάν, κάθε μήνα";
+
+/* Subheading on the VPN onboarding card. Explains that the VPN gives the user more privacy when they use public Wi-Fi networks. */
+"VPN.Onboarding.WifiSubheading.v160" = "Περισσότερο απόρρητο σε δημόσια Wi-Fi";
 

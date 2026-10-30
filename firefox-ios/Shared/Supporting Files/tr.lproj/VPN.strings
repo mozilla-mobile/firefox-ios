@@ -1,0 +1,42 @@
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes all of the user's open tabs. */
+"VPN.ErrorBrowsingPopup.CloseAllTabs.v160" = "Tüm sekmeleri kapat";
+
+/* Confirmation shown after the user closes a single tab from the popup that appears when the VPN stops working while browsing. */
+"VPN.ErrorBrowsingPopup.ClosedOneTab.v160" = "1 sekme kapatıldı";
+
+/* Confirmation shown after the user closes more than one tab from the popup that appears when the VPN stops working while browsing. %1$@ is the number of tabs that were closed (for example, 3). */
+"VPN.ErrorBrowsingPopup.ClosedXTabs.v160" = "%1$@ sekme kapatıldı";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ErrorBrowsingPopup.CloseThisTab.v160" = "Bu sekmeyi kapat";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes the popup so the user can keep browsing without the VPN. */
+"VPN.ErrorBrowsingPopup.Continue.v160" = "VPN olmadan devam et";
+
+/* Title of a popup shown when the VPN stops working while the user is browsing with it on. Asks if the user wants to keep browsing without the VPN. */
+"VPN.ErrorBrowsingPopup.Title.v160" = "VPN olmadan devam edilsin mi?";
+
+/* Body text of the popup shown when the app fails to connect to the VPN. “Try again” means try connecting to the VPN again. */
+"VPN.ErrorConnectingPopup.Body.v160" = "Birkaç dakika sonra yeniden deneyin.";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it closes the popup. */
+"VPN.ErrorConnectingPopup.CloseButtonText.v160" = "Kapat";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it tries to connect to the VPN again. */
+"VPN.ErrorConnectingPopup.RetryButtonText.v160" = "Yeniden dene";
+
+/* Title of a popup shown when the app fails to connect to the VPN. */
+"VPN.ErrorConnectingPopup.Title.v160" = "VPN’e bağlanılamadı";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes all of the user's open tabs. */
+"VPN.ReachedDataLimitPopup.CloseAllTabs.v160" = "Tüm sekmeleri kapat";
+
+/* Confirmation shown after the user closes a single tab from the popup that appears when they run out of free monthly VPN data. */
+"VPN.ReachedDataLimitPopup.ClosedOneTab.v160" = "1 sekme kapatıldı";
+
+/* Confirmation shown after the user closes more than one tab from the popup that appears when they run out of free monthly VPN data. %1$@ is the number of tabs that were closed (for example, 3). */
+"VPN.ReachedDataLimitPopup.ClosedXTabs.v160" = "%1$@ sekme kapatıldı";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ReachedDataLimitPopup.CloseThisTab.v160" = "Bu sekmeyi kapat";
+

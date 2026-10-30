@@ -13,3 +13,6 @@
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen. */
 "Microsurvey.Survey.HeaderLabel.v129" = "يُرجى إكمال الاستبيان";
 
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of a link on the survey and allows the user to navigate to our privacy policy details. */
+"Microsurvey.Survey.PrivacyPolicyLink.v127" = "تنويه الخصوصية";
+

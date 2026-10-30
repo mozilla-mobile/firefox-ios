@@ -137,7 +137,7 @@ final class DefaultTemporaryDocument: NSObject,
         self.request = Self.applyCookiesToRequest(request, cookies: cookies)
         self.cookies = cookies
         self.credential = credential
-        self.filename = filename ?? "unknown"
+        self.filename = FilenameSanitizer.sanitize(filename)
         self.mimeType = mimeType
         self.session = session
         self.logger = logger
@@ -155,7 +155,7 @@ final class DefaultTemporaryDocument: NSObject,
         self.request = request
         self.cookies = []
         self.credential = nil
-        self.filename = preflightResponse.suggestedFilename ?? "unknown"
+        self.filename = FilenameSanitizer.sanitize(preflightResponse.suggestedFilename)
         self.mimeType = mimeType
         self.session = session
         self.logger = logger
@@ -237,7 +237,9 @@ final class DefaultTemporaryDocument: NSObject,
         if let localFileURL {
             return localFileURL
         }
-        let tempFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
+        let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
+        let tempFileURL = tempDirectory.appendingPathComponent(filename)
+        guard FilenameSanitizer.isContained(tempFileURL, in: tempDirectory) else { return nil }
         if FileManager.default.fileExists(atPath: tempFileURL.path) {
             localFileURL = tempFileURL
             return tempFileURL
@@ -264,6 +266,9 @@ final class DefaultTemporaryDocument: NSObject,
         // By default the downloaded file is stored in the temp directory
         let tempDirectory = url.deletingPathExtension().deletingLastPathComponent()
         let tempFileURL = tempDirectory.appendingPathComponent(filename)
+        // `filename` is sanitized at init, but never remove or move onto a path outside
+        // the staging directory even if that invariant is broken by a future caller.
+        guard FilenameSanitizer.isContained(tempFileURL, in: tempDirectory) else { return nil }
 
         try? FileManager.default.createDirectory(
             at: tempDirectory,

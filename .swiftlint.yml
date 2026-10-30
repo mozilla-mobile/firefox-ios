@@ -22,6 +22,7 @@ only_rules: # Only enforce these rules, ignore all others
   - contains_over_first_not_nil
   - contains_over_range_nil_comparison
   - control_statement
+  - custom_rules
   # - convenience_type
   # - cyclomatic_complexity
   # - deployment_target
@@ -235,6 +236,17 @@ unneeded_override:
     - setUpWithError
     - tearDown
     - tearDownWithError
+
+custom_rules:
+  # Targeting a specific device breaks as soon as a new device ships. Disable it explicitly with
+  # `// swiftlint:disable:next no_is_duo` where there is no trait-based alternative.
+  no_is_duo:
+    name: "No isDuo"
+    regex: '\bisDuo\b'
+    match_kinds:
+      - identifier
+    message: "Prefer using size classes and device traits over targeting specific devices"
+    severity: error
 
 analyzer_rules: # Rules run by `swiftlint analyze`
   - unused_import

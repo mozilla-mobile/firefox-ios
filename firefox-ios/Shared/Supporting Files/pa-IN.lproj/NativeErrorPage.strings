@@ -106,3 +106,9 @@
 /* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
 "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "ਇਸ ਸਫ਼ੇ ਦੇ ਅਕਾਇਵ ਬਣਾਏ ਵਰਜ਼ਨ ਵਾਸਤੇ ਵੇਬੈਕ ਮਸ਼ੀਨ ਨੂੰ ਲੱਭਦਾ ਹੈ।";
 
+/* Body text of the error page shown when a website fails to load while the VPN is on. Suggests turning off the VPN first, then refreshing the page or checking the internet connection if that doesn't help. */
+"VPN.ErrorPage.Body.v160" = "VPN ਬੰਦ ਕਰਕੇ ਅਜ਼ਮਾਓ। ਜੇ ਸਾਈਟ ਫੇਰ ਵੀ ਖੁੱਲ੍ਹਦੀ ਹੈ ਤਾਂ ਸਫ਼ੇ ਨੂੰ ਤਾਜ਼ਾ ਕਰੋ ਜਾਂ ਆਪਣੇ ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਦੀ ਜਾਂਚ ਕਰੋ।";
+
+/* Title of an error page shown when a website fails to load while the VPN is on and the exact cause is unknown. “Can't be reached” means the website couldn't be loaded. */
+"VPN.ErrorPage.Title.v160" = "ਇਸ ਸਾਈਟ ਨੂੰ ਖੋਲ੍ਹਿ ਨਹੀਂ ਜਾ ਸਕਦਾ ਹੈ।";
+

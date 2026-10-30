@@ -812,8 +812,6 @@ public protocol MozAdsClientBuilderProtocol: AnyObject, Sendable {
     
     func environment(environment: MozAdsEnvironment)  -> MozAdsClientBuilder
     
-    func storeConfig(storeConfig: MozAdsStoreConfig)  -> MozAdsClientBuilder
-    
     func telemetry(telemetry: MozAdsTelemetry)  -> MozAdsClientBuilder
     
 }
@@ -903,16 +901,6 @@ open func environment(environment: MozAdsEnvironment) -> MozAdsClientBuilder  {
     uniffi_ads_client_fn_method_mozadsclientbuilder_environment(
             self.uniffiCloneHandle(),
         FfiConverterTypeMozAdsEnvironment_lower(environment),uniffiCallStatus
-    )
-})
-}
-    
-open func storeConfig(storeConfig: MozAdsStoreConfig) -> MozAdsClientBuilder  {
-    return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
-        uniffiCallStatus in
-    uniffi_ads_client_fn_method_mozadsclientbuilder_store_config(
-            self.uniffiCloneHandle(),
-        FfiConverterTypeMozAdsStoreConfig_lower(storeConfig),uniffiCallStatus
     )
 })
 }
@@ -2259,6 +2247,9 @@ public enum MozAdsReportReason: Equatable, Hashable {
     case inappropriate
     case notInterested
     case seenTooManyTimes
+    case scam
+    case misleading
+    case offensive
 
 
 
@@ -2286,6 +2277,12 @@ public struct FfiConverterTypeMozAdsReportReason: FfiConverterRustBuffer {
         
         case 3: return .seenTooManyTimes
         
+        case 4: return .scam
+        
+        case 5: return .misleading
+        
+        case 6: return .offensive
+        
         default: throw UniffiInternalError.unexpectedEnumCase
         }
     }
@@ -2304,6 +2301,18 @@ public struct FfiConverterTypeMozAdsReportReason: FfiConverterRustBuffer {
         
         case .seenTooManyTimes:
             writeInt(&buf, Int32(3))
+        
+        
+        case .scam:
+            writeInt(&buf, Int32(4))
+        
+        
+        case .misleading:
+            writeInt(&buf, Int32(5))
+        
+        
+        case .offensive:
+            writeInt(&buf, Int32(6))
         
         }
     }
@@ -3139,9 +3148,6 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclientbuilder_environment() != 58574) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_store_config() != 64545) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclientbuilder_telemetry() != 24985) {

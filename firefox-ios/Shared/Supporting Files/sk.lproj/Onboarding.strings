@@ -296,10 +296,10 @@
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "Ďalšie informácie";
 
 /* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
-"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140" = "Správy o zlyhaní nám umožňujú diagnostikovať a opraviť problémy s prehliadačom. %@";
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140" = "Hlásenia o zlyhaní nám umožňujú diagnostikovať a opraviť problémy s prehliadačom. %@";
 
 /* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
-"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "Automaticky odosielať správy o zlyhaní";
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "Automaticky odosielať hlásenia o zlyhaní";
 
 /* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Údaje o vašom zariadení, hardvérovej konfigurácii a spôsobe používania %1$@u pomáhajú zlepšovať funkcie, výkon a stabilitu pre každého. %2$@";
@@ -435,10 +435,10 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "Ďalšie informácie";
 
 /* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
-"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "Správy o zlyhaní nám umožňujú diagnostikovať a opraviť problémy s prehliadačom. %@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "Hlásenia o zlyhaní nám umožňujú diagnostikovať a opraviť problémy s prehliadačom. %@";
 
 /* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
-"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Automaticky odosielať správy o zlyhaní";
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Automaticky odosielať hlásenia o zlyhaní";
 
 /* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
 "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135" = "Údaje o vašom zariadení, hardvérovej konfigurácii a spôsobe používania %1$@u pomáhajú zlepšovať funkcie, výkon a stabilitu pre každého. %2$@";
@@ -505,4 +505,25 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "Vitajte na nezávislom internete";
+
+/* Body text below the “5 GB, Free Every Month” (VPN.Onboarding.LimitSubheading.v160) subheading on the VPN onboarding card. Explains that the user can start using the VPN without signing in to an account. “it” refers to the VPN. */
+"VPN.Onboarding.LimitBody.v160" = "Začnite používať VPN bez prihlásenia";
+
+/* Subheading on the VPN onboarding card. Explains how much VPN data the user gets every month at no cost. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.Onboarding.LimitSubheading.v160" = "%1$@ GB každý mesiac zadarmo";
+
+/* Body text below the “Browse From Multiple Locations” (VPN.Onboarding.LocationsSubheading.v160) subheading on the VPN onboarding card. Explains that choosing a VPN location makes it harder to tell where the user really is. “yours” refers to the user’s location. */
+"VPN.Onboarding.LocationsBody.v160" = "Vyberte si lokalitu VPN, aby bolo ťažšie zistiť, kde sa skutočne nachádzate.";
+
+/* Subheading on the VPN onboarding card. Explains that the user can choose which country their browsing appears to come from. */
+"VPN.Onboarding.LocationsSubheading.v160" = "Prehliadajte z rôznych krajín";
+
+/* Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox). */
+"VPN.Onboarding.Title.v160" = "Vyskúšajte VPN vstavanú v aplikácii %1$@";
+
+/* Body text below the “More Privacy On Public Wi-Fi” (VPN.Onboarding.WifiSubheading.v160) subheading on the VPN onboarding card. %1$@ is the app name (for example, Firefox). */
+"VPN.Onboarding.WifiBody.v160" = "Získajte v aplikácii %1$@ dodatočnú ochranu pri prehliadaní na cestách.";
+
+/* Subheading on the VPN onboarding card. Explains that the VPN gives the user more privacy when they use public Wi-Fi networks. */
+"VPN.Onboarding.WifiSubheading.v160" = "Viac súkromia pri používaní verejných sietí Wi‑Fi";
 

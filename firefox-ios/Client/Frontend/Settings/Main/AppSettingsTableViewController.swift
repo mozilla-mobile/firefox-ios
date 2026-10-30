@@ -448,6 +448,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
         }
 
+        // VPN backend is only possible on iOS 17 and later
+        if #available(iOS 17.0, *), featureFlagsProvider.isEnabled(.vpnFeature) {
+            privacySettings.append(VPNSetting(settings: self, settingsDelegate: parentCoordinator))
+        }
+
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
         if let profile {

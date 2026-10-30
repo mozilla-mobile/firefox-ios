@@ -61,3 +61,9 @@
 /* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
 "NativeErrorPage.Wayback.Error.SearchWayback.v155" = "Apskatīt arhivēto versiju";
 
+/* Body text of the error page shown when a website fails to load while the VPN is on. Suggests turning off the VPN first, then refreshing the page or checking the internet connection if that doesn't help. */
+"VPN.ErrorPage.Body.v160" = "Jāmēģina izslēgt VPN. Ja vietne joprojām neielādējas, jāatsvaidzina lapa vai jāpārbauda savienojums ar internetu.";
+
+/* Title of an error page shown when a website fails to load while the VPN is on and the exact cause is unknown. “Can't be reached” means the website couldn't be loaded. */
+"VPN.ErrorPage.Title.v160" = "Šo vietni nevar sasniegt.";
+

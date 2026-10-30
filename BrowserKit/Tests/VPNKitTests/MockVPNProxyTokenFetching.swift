@@ -7,18 +7,18 @@ import Foundation
 
 /// In-memory `VPNProxyTokenFetching` for tests.
 final class MockVPNProxyTokenFetching: VPNProxyTokenFetching, @unchecked Sendable {
-    var tokenToReturn: VPNProxyToken
+    var passToReturn: VPNProxyPass
     var fetchError: Error?
 
     private(set) var fetchCallCount = 0
 
-    init(tokenToReturn: VPNProxyToken) {
-        self.tokenToReturn = tokenToReturn
+    init(passToReturn: VPNProxyPass) {
+        self.passToReturn = passToReturn
     }
 
-    func fetchProxyToken() async throws -> VPNProxyToken {
+    func fetchProxyPass() async throws -> VPNProxyPass {
         fetchCallCount += 1
         if let fetchError { throw fetchError }
-        return tokenToReturn
+        return passToReturn
     }
 }

@@ -13,13 +13,7 @@ struct SearchEngineFlags {
         let flag = flagProvider.isEnabled(.searchConfigV3)
         DefaultLogger.shared.log("[SEC][v3] Search config v3 enabled: \(flag)", level: .info, category: .remoteSettings)
 
-        // Temporarily hardcoded false. Override locally for dev testing.
-        // This will allow shipping incremental updates gated behind this flag, once V3 work
-        // is complete this will be removed. [FXIOS-17007] & [FXIOS-16924]
-        let hardcodedFlag = false
-
-        // return flag
-        return hardcodedFlag
+        return flag
     }
 }
 

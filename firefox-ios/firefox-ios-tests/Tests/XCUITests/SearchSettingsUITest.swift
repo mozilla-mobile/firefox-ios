@@ -12,12 +12,14 @@ class SearchSettingsUITests: BaseTestCase {
     private var settingScreen: SettingScreen!
     private var toolbarScreen: ToolbarScreen!
     private var mainMenuScreen: MainMenuScreen!
+    private var searchSettingsScreen: SearchSettingsScreen!
 
     override func setUp() async throws {
         try await super.setUp()
         toolbarScreen = ToolbarScreen(app: app)
         mainMenuScreen = MainMenuScreen(app: app)
         settingScreen = SettingScreen(app: app)
+        searchSettingsScreen = SearchSettingsScreen(app: app)
         toolbarScreen.tapSettingsMenuButton()
         mainMenuScreen.tapSettings()
         settingScreen.navigateToSearchSettings()
@@ -132,6 +134,33 @@ class SearchSettingsUITests: BaseTestCase {
         }
         tablesQuery.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].waitAndTap()
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4146325
+    // Regression
+    func testGoogleLensToggleHiddenWhenGoogleIsAlternativeEngine() {
+        // Positive control: with Google as the default engine, the Google Lens toggle is shown
+        searchSettingsScreen.assertGoogleLensToggleExists()
+
+        // Step 1: Bing becomes the default engine and Google stays enabled as an alternative
+        searchSettingsScreen.selectDefaultSearchEngine(named: defaultSearchEngine2)
+        searchSettingsScreen.assertDefaultSearchEngine(is: defaultSearchEngine2)
+        searchSettingsScreen.assertAlternativeSearchEngineIsEnabled(named: defaultSearchEngine1)
+
+        // Step 2: reopening Settings > Search, the Google Lens toggle is not shown
+        searchSettingsScreen.tapOnBackButton()
+        settingScreen.navigateToSearchSettings()
+        searchSettingsScreen.assertGoogleLensToggleDoesNotExist()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4146322
+    // Regression
+    func testGoogleLensToggleVisibleWhenGoogleIsDefaultEngine() {
+        // Step 1: Google is the default search engine
+        searchSettingsScreen.assertDefaultSearchEngine(is: defaultSearchEngine1)
+
+        // Step 2: Settings > Search shows the Google Lens toggle with its description
+        searchSettingsScreen.assertGoogleLensToggleIsDisplayedWithDescription()
     }
 }
 

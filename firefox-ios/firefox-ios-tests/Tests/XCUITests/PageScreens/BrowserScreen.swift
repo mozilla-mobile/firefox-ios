@@ -237,6 +237,14 @@ final class BrowserScreen {
         )
     }
 
+    func assertClearButtonExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(clearButton, timeout: timeout)
+    }
+
+    func assertClearButtonDoesNotExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(clearButton, timeout: timeout)
+    }
+
     func tapClearButtonIfExists() {
         clearButton.tapIfExists()
     }

@@ -1006,11 +1006,11 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
     private func createShareItem(with tabID: TabUUID, and uuid: WindowUUID) -> ShareItem? {
         let tabManager = tabManager(for: uuid)
         guard let tab = tabManager?.getTabForUUID(uuid: tabID),
-              let url = tab.url?.absoluteString, !url.isEmpty
+              let url = tab.url?.siteURL.absoluteString, !url.isEmpty
         else { return nil }
 
         var title = tab.displayTitle.trimmingCharacters(in: .whitespacesAndNewlines)
-        if title.isEmpty {
+        if title.isEmpty || InternalURL(tab.url)?.isErrorPage == true {
             title = url
         }
         return ShareItem(url: url, title: title)

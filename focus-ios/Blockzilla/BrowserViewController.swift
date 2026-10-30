@@ -1981,7 +1981,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
-        if UIDevice.current.userInterfaceIdiom == .pad && !orientationWillChange {
+        // Hardware keyboards can fire spurious keyboardDidHide while the text field still has focus.
+        if UIDevice.current.userInterfaceIdiom == .pad && !orientationWillChange && !urlBar.isUrlTextFieldFirstResponder {
             urlBar.dismiss()
         }
         orientationWillChange = false

@@ -3349,6 +3349,20 @@ extension String {
                 comment: "Shown next to the VPN switch on the VPN settings screen while the VPN is connecting, right after the user turns it on."
             )
 
+            public static let Connected = MZLocalizedString(
+                key: "VPN.Settings.Connected.v161",
+                tableName: "Settings",
+                value: "VPN connected",
+                comment: "Announced by VoiceOver on the VPN settings screen when the VPN finishes connecting after the user turns on the VPN switch."
+            )
+
+            public static let DataLimitAccessibilityValue = MZLocalizedString(
+                key: "VPN.Settings.DataLimit.AccessibilityValue.v161",
+                tableName: "Settings",
+                value: "%1$@ of %2$@ gigabytes used. Resets on the first of every month.",
+                comment: "Read aloud by VoiceOver for the Data Limit section on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 gigabytes used”). The second sentence explains that the user’s free monthly VPN data resets on the first day of each month."
+            )
+
             public static let DataLimitTitle = MZLocalizedString(
                 key: "VPN.Settings.DataLimitTitle.v160",
                 tableName: "Settings",

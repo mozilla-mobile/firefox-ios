@@ -95,7 +95,7 @@
 "QuickAnswers.OptInRedesign.NoTrainingDescription.v158" = "Vaše údaje nepoužívame na trénovanie našich systémov.";
 
 /* Title of the third privacy row on the Quick Answers opt-in screen, explaining that the user's data is not used to train AI systems. */
-"QuickAnswers.OptInRedesign.NoTrainingTitle.v158" = "Vaše údaje sa nepoužívajú na trénovanie AI";
+"QuickAnswers.OptInRedesign.NoTrainingTitle.v158" = "Vaše údaje sa nepoužívajú na trénovanie umelej inteligencie";
 
 /* Description of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
 "QuickAnswers.OptInRedesign.PrivateByDesignDescription.v158" = "Nepoužívame váš hlas na vašu identifikáciu.";
