@@ -90,7 +90,7 @@ let package = Package(
             exact: "2.1.1"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
-            exact: "9.30.1"),
+            exact: "9.32.0"),
         .package(
             url: "https://github.com/nbhasin2/GCDWebServer.git",
             branch: "master"),
