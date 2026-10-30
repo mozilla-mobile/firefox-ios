@@ -418,6 +418,13 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForElementToExist(cancelButton)
     }
 
+    func scrollPageDown() {
+        let webView = app.webViews.firstMatch
+        BaseTestCase().mozWaitForElementToExist(webView)
+        webView.swipeUp()
+        webView.swipeUp()
+    }
+
     func assertPrivateBrowsingLabelExist() {
         let privateBrowsing = sel.PRIVATE_BROWSING.element(in: app)
         BaseTestCase().mozWaitForElementToExist(privateBrowsing)
