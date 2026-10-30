@@ -399,6 +399,32 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.shouldAnimate)
     }
 
+    func test_translucencyDidChange_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.translucencyDidChange(isTranslucent: !initialState.isTranslucent),
+            windowUUID
+        )
+
+        XCTAssertNotEqual(newState.isTranslucent, initialState.isTranslucent)
+    }
+
+    func test_translucencyDidChange_fromAnotherWindow_doesNotChangeState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.translucencyDidChange(isTranslucent: !initialState.isTranslucent),
+            WindowUUID()
+        )
+
+        XCTAssertEqual(newState.isTranslucent, initialState.isTranslucent)
+    }
+
     func test_showMenuWarningBadgeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()
