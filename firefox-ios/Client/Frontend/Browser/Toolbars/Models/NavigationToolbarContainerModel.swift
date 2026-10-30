@@ -20,14 +20,15 @@ struct NavigationToolbarContainerModel: Equatable {
 
     @MainActor
     init(
-        state: ToolbarState,
+        lens: AddressToolbarContainerLens,
         longPressMenuProvider: @escaping @MainActor (ToolbarActionConfiguration.ActionType) -> UIMenu? = { _ in nil },
         windowUUID: WindowUUID
     ) {
+        let state = lens.toolbarState
         self.displayBorder = state.navigationToolbar.displayBorder
         self.canShowNavigationHint = state.canShowNavigationHint
         self.isTranslucent = state.isTranslucent
-        self.actions = state.navigationToolbar.actions.map { action in
+        self.actions = lens.navigationToolbarActions.map { action in
             return ToolbarElement(
                 iconName: action.iconName,
                 title: action.actionLabel,

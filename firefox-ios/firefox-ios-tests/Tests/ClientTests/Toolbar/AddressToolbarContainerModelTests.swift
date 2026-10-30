@@ -410,24 +410,23 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     @MainActor
     func testTabsLongPress_inNavigationToolbar_providesMenuWithAndWithoutTopTabs() throws {
         for isShowingTopTabs in [true, false] {
-            var state = createToolbarState(isShowingTopTabs: isShowingTopTabs)
-            state.navigationToolbar.actions = [ToolbarActionConfiguration(
-                actionType: .tabs,
-                isEnabled: true,
-                a11yLabel: "Tabs",
-                a11yId: AccessibilityIdentifiers.Toolbar.tabsButton
-            )]
+            let state = createToolbarState(isShowingTopTabs: isShowingTopTabs)
+            let appState = AppState(presentedComponents: PresentedComponentsState(components: [.toolbar(state)]))
+            let lens = AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
+
             let menu = UIMenu(children: [UIAction(title: "New Tab") { _ in }])
             var requestedAction: ToolbarActionConfiguration.ActionType?
             let model = NavigationToolbarContainerModel(
-                state: state,
+                lens: lens,
                 longPressMenuProvider: { actionType in
                     requestedAction = actionType
                     return menu
                 },
                 windowUUID: windowUUID
             )
-            let tabs = try XCTUnwrap(model.actions.first)
+            let tabs = try XCTUnwrap(model.actions.first {
+                $0.a11yId == AccessibilityIdentifiers.Toolbar.tabsButton
+            })
 
             guard case let .menu(provider) = tabs.longPressBehavior else {
                 return XCTFail("Expected a tabs long-press menu, isShowingTopTabs: \(isShowingTopTabs)")
@@ -517,7 +516,6 @@ final class AddressToolbarContainerModelTests: XCTestCase {
 
     private func createBasicNavigationBarState() -> NavigationBarState {
         return NavigationBarState(windowUUID: windowUUID,
-                                  actions: [],
                                   displayBorder: false,
                                   middleButton: .newTab,
                                   isNovaDesignEnabled: false)

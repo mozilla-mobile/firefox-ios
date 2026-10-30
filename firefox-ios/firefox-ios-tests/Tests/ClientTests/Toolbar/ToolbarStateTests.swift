@@ -391,18 +391,16 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                numberOfTabs: 2,
-                isShowingTopTabs: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.numberOfTabsChanged
-            )
+            ToolbarModernAction.numberOfTabsChanged(count: 2),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.numberOfTabs, 2)
+        XCTAssertEqual(newState.addressToolbar, initialState.addressToolbar)
+        XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
     func test_toolbarPositionChangedAction_returnsExpectedState() {
