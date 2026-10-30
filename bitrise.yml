@@ -2447,6 +2447,41 @@ workflows:
         title: Set OpenInFocus version numbers
 
   Firefox_Nightly_SmokeTest_Iphone:
+    envs:
+    - SMOKETEST_SCHEME: Fennec
+    - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    - SMOKETEST_SLACK_TITLE: Nightly Smoketest iPhone
+    after_run:
+    - _firefox_smoketest
+
+  Firefox_SmokeTest_Iphone:
+    envs:
+    - SMOKETEST_SCHEME: Firefox
+    - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    - SMOKETEST_SLACK_TITLE: Smoketest Firefox scheme iPhone
+    after_run:
+    - _firefox_smoketest
+
+  Firefox_SmokeTest_Ipad:
+    envs:
+    - SMOKETEST_SCHEME: Firefox
+    - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
+    - SMOKETEST_SLACK_TITLE: Smoketest Firefox scheme iPad
+    after_run:
+    - _firefox_smoketest
+
+  Firefox_SmokeTest_IphoneDuo:
+    envs:
+    - SMOKETEST_SCHEME: Firefox
+    - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
+    - SMOKETEST_SLACK_TITLE: Smoketest Firefox scheme iPhone Duo
+    after_run:
+    - _firefox_smoketest
+
+  _firefox_smoketest:
+    description: >-
+      Shared steps for the Firefox smoke test workflows. Callers set SMOKETEST_SCHEME, SMOKETEST_DESTINATION
+      and SMOKETEST_SLACK_TITLE.
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -2460,18 +2495,17 @@ workflows:
         title: "Build Firefox iOS"
         timeout: 360
         inputs:
-        - scheme: Fennec
+        - scheme: $SMOKETEST_SCHEME
         - configuration: Debug
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
         - test_plan: Smoketest
         - xcodebuild_options: ONLY_ACTIVE_ARCH=YES COMPILER_INDEX_STORE_ENABLE=NO
-        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+        - destination: $SMOKETEST_DESTINATION
     - xcode-test-without-building@0:
         title: "Run all smoke tests"
         timeout: 3000
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
-        - xctestrun: "$BITRISE_XCTESTRUN_FILE_PATH"
+        - destination: $SMOKETEST_DESTINATION
         - xcodebuild_options: -collect-test-diagnostics never
     - script@1:
         title: Count failed tests
@@ -2493,17 +2527,18 @@ workflows:
         - title: ''
         - author_name: ''
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
-        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
         - footer: Created by Mobile Test Engineering
-        - footer_icon_on_error: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer_icon_on_error: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
         - footer_on_error: Created by Mobile Test Engineering
-        - pretext_on_error: "*Firefox-iOS* :firefox: *Nightly Smoketest iPhone* :x:"
+        - pretext_on_error: "*Firefox-iOS* :firefox: *${SMOKETEST_SLACK_TITLE}* :x:"
         - message_on_error: "Number of failed tests: ${SMOKETEST_FAILED_TEST_COUNT}"
         - color_on_error: danger
-        - pretext: "*Firefox-iOS* :firefox: *Nightly Smoketest iPhone* :white_check_mark:"
+        - pretext: "*Firefox-iOS* :firefox: *${SMOKETEST_SLACK_TITLE}* :white_check_mark:"
         - message: ''
         - timestamp: 'no'
-        - fields: ''
+        - fields: |
+            Branch | ${BITRISE_GIT_BRANCH}
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=tests
