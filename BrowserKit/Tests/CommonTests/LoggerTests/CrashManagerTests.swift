@@ -354,25 +354,23 @@ private struct MockCustomCrashReport: Error, CustomCrashReport {
 
 // MARK: - Feature flags
 extension CrashManagerTests {
-    func testFeatureFlagsContext_empty_returnsNil() {
-        XCTAssertNil(DefaultCrashManager.featureFlagsContext(from: [:]))
+    func testFeatureFlagNames_empty_returnsEmpty() {
+        XCTAssertEqual(DefaultCrashManager.featureFlagNames(from: [:]), [])
     }
 
-    func testFeatureFlagsContext_encodesFeatureAndBranchSortedWithTrueResult() {
-        let context = DefaultCrashManager.featureFlagsContext(from: ["tab-tray": "treatment-a",
-                                                                     "homepage": "control"])
-        let values = context?["values"] as? [[String: Any]]
+    func testFeatureFlagNames_encodesFeatureAndBranchSorted() {
+        let names = DefaultCrashManager.featureFlagNames(from: ["tab-tray": "treatment-a", "homepage": "control"])
 
-        XCTAssertEqual(values?.compactMap { $0["flag"] as? String }, ["homepage:control", "tab-tray:treatment-a"])
-        XCTAssertEqual(values?.compactMap { $0["result"] as? Bool }, [true, true])
+        XCTAssertEqual(names, ["homepage:control", "tab-tray:treatment-a"])
     }
 
-    func testFeatureFlagsContext_capsAtMaxFeatureFlags() {
+    func testFeatureFlagNames_capsAtMaxFeatureFlags() {
         let featureBranches = Dictionary(uniqueKeysWithValues: (0..<150).map { ("feature-\($0)", "branch") })
 
-        let values = DefaultCrashManager.featureFlagsContext(from: featureBranches)?["values"] as? [[String: Any]]
+        let names = DefaultCrashManager.featureFlagNames(from: featureBranches)
 
-        XCTAssertEqual(values?.count, DefaultCrashManager.maxFeatureFlags)
+        XCTAssertEqual(names.count, DefaultCrashManager.maxFeatureFlags)
+        XCTAssertEqual(names, Array(names.sorted()))
     }
 
     func testSetFeatureFlags_beforeSetup_doesNotConfigureScope() {
@@ -411,6 +409,15 @@ extension CrashManagerTests {
         XCTAssertEqual(featureFlags(in: sentryWrapper.scope), ["homepage:control"])
     }
 
+    func testSetFeatureFlags_afterSetup_recordsFlagsAsTrue() {
+        let subject = createSubject()
+        subject.setup(sendCrashReports: true)
+
+        subject.setFeatureFlags(["homepage": "control", "tab-tray": "treatment-a"])
+
+        XCTAssertEqual(featureFlagValues(in: sentryWrapper.scope)?.compactMap { $0["result"] as? Bool }, [true, true])
+    }
+
     func testSetFeatureFlags_replacesPreviousFlags() {
         let subject = createSubject()
         subject.setup(sendCrashReports: true)
@@ -439,7 +446,7 @@ extension CrashManagerTests {
 
         let context = sentryWrapper.scope.serialize()["context"] as? [String: Any]
         XCTAssertNotNil(context?["appContext"])
-        XCTAssertNotNil(context?[DefaultCrashManager.featureFlagsContextKey])
+        XCTAssertEqual(featureFlags(in: sentryWrapper.scope), ["homepage:control"])
     }
 }
 
@@ -465,10 +472,14 @@ extension CrashManagerTests {
 
 /// Returns the feature flag names recorded in the scope's Sentry `flags` context
 func featureFlags(in scope: Scope) -> [String]? {
+    return featureFlagValues(in: scope)?.compactMap { $0["flag"] as? String }
+}
+
+/// Returns the feature flag evaluations recorded in the scope's Sentry `flags` context
+func featureFlagValues(in scope: Scope) -> [[String: Any]]? {
     let context = scope.serialize()["context"] as? [String: Any]
-    let flags = context?[DefaultCrashManager.featureFlagsContextKey] as? [String: Any]
-    let values = flags?["values"] as? [[String: Any]]
-    return values?.compactMap { $0["flag"] as? String }
+    let flags = context?["flags"] as? [String: Any]
+    return flags?["values"] as? [[String: Any]]
 }
 
 // MARK: - MockSentryWrapper
