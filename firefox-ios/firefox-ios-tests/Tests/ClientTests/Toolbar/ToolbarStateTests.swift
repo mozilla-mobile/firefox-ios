@@ -358,16 +358,45 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                shouldAnimate: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.animationStateChanged)
+            ToolbarModernAction.animationStateChanged(shouldAnimate: false),
+            windowUUID
         )
 
         XCTAssertNotEqual(newState.shouldAnimate, initialState.shouldAnimate)
         XCTAssertFalse(newState.shouldAnimate)
+    }
+
+    func test_animationStateChanged_afterDisabled_restoresAnimation() {
+        let reducer = toolbarReducer()
+        let disabledState = reducer.modernReducer(
+            createSubject(),
+            ToolbarModernAction.animationStateChanged(shouldAnimate: false),
+            windowUUID
+        )
+
+        let newState = reducer.modernReducer(
+            disabledState,
+            ToolbarModernAction.animationStateChanged(shouldAnimate: true),
+            windowUUID
+        )
+
+        XCTAssertFalse(disabledState.shouldAnimate)
+        XCTAssertTrue(newState.shouldAnimate)
+    }
+
+    func test_animationStateChanged_fromAnotherWindow_doesNotChangeState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.animationStateChanged(shouldAnimate: false),
+            WindowUUID()
+        )
+
+        XCTAssertTrue(newState.shouldAnimate)
     }
 
     func test_showMenuWarningBadgeAction_returnsExpectedState() {
