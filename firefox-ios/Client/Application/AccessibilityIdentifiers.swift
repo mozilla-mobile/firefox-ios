@@ -853,6 +853,12 @@ struct AccessibilityIdentifiers {
             static let locationSetting = "Settings.VPN.LocationSetting"
             static let vpnToggle = "Settings.VPN.VPNToggle"
             static let dataUsage = "Settings.VPN.DataUsage"
+
+            struct Locations {
+                static let recommendedLocation = "Settings.VPN.Locations.RecommendedLocation"
+                static let location = "Settings.VPN.Locations.Location"
+                static let loadingIndicator = "Settings.VPN.Locations.LoadingIndicator"
+            }
         }
 
         struct BlockImages {
