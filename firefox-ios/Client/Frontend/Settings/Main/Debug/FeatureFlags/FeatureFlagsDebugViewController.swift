@@ -122,6 +122,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .checkForReinstalls,
+                titleText: format(string: "Check for Reinstalls"),
+                statusText: format(string: "Toggle to enable app reinstallation checks")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .customReaderModeScheme,
                 titleText: format(string: "Custom Reader Mode Scheme"),
                 statusText: format(string: "Toggle to serve reader mode via the readermode:// scheme handler")
