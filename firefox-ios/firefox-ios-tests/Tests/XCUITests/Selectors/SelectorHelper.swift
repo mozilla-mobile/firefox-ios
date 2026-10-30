@@ -33,6 +33,7 @@ enum SelectorStrategy {
     case otherElementsButtonByLabel(String)
     indirect case buttonInContainerByLabel(container: Selector, label: String) // button scoped to a container
     case collectionViewContainingIdPrefix(String) // collection view holding an element whose id has this prefix
+    case switchCellContainingStaticText(String) // table cell holding a switch and a text with this label
 }
 
 // Selector model (with metadata)
@@ -118,6 +119,8 @@ extension Selector {
             return container.element(in: app).buttons.matching(Self.labelOrIdentifier(label)).firstMatch
         case .collectionViewContainingIdPrefix(let prefix):
             return app.collectionViews.containing(NSPredicate(format: "identifier BEGINSWITH %@", prefix)).firstMatch
+        case .switchCellContainingStaticText(let label):
+            return Self.switchCells(containingStaticText: label, in: app).firstMatch
         }
     }
 
@@ -127,6 +130,14 @@ extension Selector {
 
     private static func labelOrIdentifier(_ value: String) -> NSPredicate {
         NSPredicate(format: "label == %@ OR identifier == %@", value, value)
+    }
+
+    @MainActor
+    private static func switchCells(containingStaticText label: String, in app: XCUIApplication) -> XCUIElementQuery {
+        let text = NSPredicate(format: "elementType == %d AND label == %@",
+                               XCUIElement.ElementType.staticText.rawValue,
+                               label)
+        return app.tables.cells.containing(.switch, identifier: nil).containing(text)
     }
 
     @MainActor
@@ -191,6 +202,8 @@ extension Selector {
             return container.element(in: app).buttons.matching(Self.labelOrIdentifier(label))
         case .collectionViewContainingIdPrefix(let prefix):
             return app.collectionViews.containing(NSPredicate(format: "identifier BEGINSWITH %@", prefix))
+        case .switchCellContainingStaticText(let label):
+            return Self.switchCells(containingStaticText: label, in: app)
         }
     }
 
