@@ -2470,6 +2470,14 @@ workflows:
     after_run:
     - _firefox_smoketest
 
+  Firefox_SmokeTest_IphoneDuo:
+    envs:
+    - SMOKETEST_SCHEME: Firefox
+    - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
+    - SMOKETEST_SLACK_TITLE: Smoketest Firefox scheme iPhone Duo
+    after_run:
+    - _firefox_smoketest
+
   _firefox_smoketest:
     description: >-
       Shared steps for the Firefox smoke test workflows. Callers set SMOKETEST_SCHEME, SMOKETEST_DESTINATION
