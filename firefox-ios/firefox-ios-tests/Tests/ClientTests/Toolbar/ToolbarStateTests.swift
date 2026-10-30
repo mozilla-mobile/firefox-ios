@@ -369,9 +369,10 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_animationStateChanged_afterDisabled_restoresAnimation() {
+        let subject = createSubject()
         let reducer = toolbarReducer()
         let disabledState = reducer.modernReducer(
-            createSubject(),
+            subject,
             ToolbarModernAction.animationStateChanged(shouldAnimate: false),
             windowUUID
         )
@@ -673,9 +674,10 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_keyboardDidHideAction_fromAnotherWindow_doesNotRestoreAddressBar() {
+        let subject = createSubject()
         let reducer = toolbarReducer()
         let minimizedState = reducer.modernReducer(
-            createSubject(),
+            subject,
             ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
             windowUUID
         )
