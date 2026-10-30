@@ -69,6 +69,20 @@ class BaseTestCase: XCTestCase {
         return false
     }
 
+    /// iPhone Duo reports `.phone` as its idiom, so it is identified by its simulator model identifier.
+    func iPhoneDuo() -> Bool {
+        return ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] == "iPhone19,4"
+    }
+
+    /// On iPhone Duo the back button lives in a toolbar, not the navigation bar.
+    func tapBackButton() {
+        let backButton = iPhoneDuo()
+            ? app.buttons["BackButton"].firstMatch
+            : app.navigationBars.buttons.element(boundBy: 0)
+        waitForHittable(backButton)
+        backButton.tap()
+    }
+
     func waitForEnable(_ element: XCUIElement, timeout: TimeInterval = 30.0, file: String = #file, line: UInt = #line) {
         waitFor(element, with: "enabled == true", timeout: timeout, file: file, line: line)
     }
