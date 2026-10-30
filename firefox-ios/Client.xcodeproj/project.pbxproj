@@ -1476,10 +1476,12 @@
 		A1B2C3D40000000000000002 /* GoogleLensTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000001 /* GoogleLensTelemetry.swift */; };
 		85E4D6B482984752928C87A3 /* AppAcquisitionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D99A1EBA034A54803AB9FC /* AppAcquisitionProvider.swift */; };
 		B4588BA31C3B41B0A4564FDE /* InstallationHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E90256F9C140259BE2D396 /* InstallationHistoryStore.swift */; };
+		CDD7D2B885574E4CB64841D5 /* InstallationTelemetryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8372AC9FB424B628EBF88C4 /* InstallationTelemetryService.swift */; };
 		A1B2C3D40000000000000004 /* GoogleLensTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000003 /* GoogleLensTelemetryTests.swift */; };
 		239774B3B3A54133934A305B /* AppAcquisitionProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F48D96CFF6348249C49E602 /* AppAcquisitionProviderTests.swift */; };
 		E78C6FCFE6D345ECA6C5C523 /* AppAcquisition.storekit in Resources */ = {isa = PBXBuildFile; fileRef = F4550A4022C4422288225951 /* AppAcquisition.storekit */; };
 		ADDE0E48932B4A3AAED26477 /* InstallationHistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC719121FA324FF09EDF9A8E /* InstallationHistoryStoreTests.swift */; };
+		575F2A83BBC44B708183F928 /* InstallationTelemetryServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9265DC73B6F84B12B461E19B /* InstallationTelemetryServiceTests.swift */; };
 		A1D8E7F93010234500C0DA7A /* SystemCellularDataStateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D8E7F83010234500C0DA7A /* SystemCellularDataStateProvider.swift */; };
 		A1F0D0012F70000100ABC001 /* NewsTransitionHeaderCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F0D0002F70000100ABC001 /* NewsTransitionHeaderCellTests.swift */; };
 		A510DA2030939AFF0041229B /* ThemedSwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A510DA1F30939AFF0041229B /* ThemedSwitchTableViewCell.swift */; };
@@ -10923,10 +10925,12 @@
 		A1B2C3D40000000000000001 /* GoogleLensTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensTelemetry.swift; sourceTree = "<group>"; };
 		63D99A1EBA034A54803AB9FC /* AppAcquisitionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAcquisitionProvider.swift; sourceTree = "<group>"; };
 		43E90256F9C140259BE2D396 /* InstallationHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationHistoryStore.swift; sourceTree = "<group>"; };
+		A8372AC9FB424B628EBF88C4 /* InstallationTelemetryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationTelemetryService.swift; sourceTree = "<group>"; };
 		A1B2C3D40000000000000003 /* GoogleLensTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLensTelemetryTests.swift; sourceTree = "<group>"; };
 		1F48D96CFF6348249C49E602 /* AppAcquisitionProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAcquisitionProviderTests.swift; sourceTree = "<group>"; };
 		F4550A4022C4422288225951 /* AppAcquisition.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = AppAcquisition.storekit; sourceTree = "<group>"; };
 		BC719121FA324FF09EDF9A8E /* InstallationHistoryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationHistoryStoreTests.swift; sourceTree = "<group>"; };
+		9265DC73B6F84B12B461E19B /* InstallationTelemetryServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationTelemetryServiceTests.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6789012345678 /* FeatureFlagsProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsProviderTests.swift; sourceTree = "<group>"; };
 		A1BF498F8BBB5DC36E678327 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		A1C4E7B92F1046D8A3E5C0B7 /* SceneSessionInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSessionInterface.swift; sourceTree = "<group>"; };
@@ -15579,6 +15583,7 @@
 				C7F051572D9F098200EC52C0 /* ContextMenuTelemetryTests.swift */,
 				A1B2C3D40000000000000003 /* GoogleLensTelemetryTests.swift */,
 				BC719121FA324FF09EDF9A8E /* InstallationHistoryStoreTests.swift */,
+				9265DC73B6F84B12B461E19B /* InstallationTelemetryServiceTests.swift */,
 				C0D3CA000000000000000003 /* SystemCameraTelemetryTests.swift */,
 				C0D3F1000000000000000003 /* SystemPhotoPickerTelemetryTests.swift */,
 				8A87E98B2E70792F006F0239 /* FxSuggestTelemetryTests.swift */,
@@ -18507,6 +18512,7 @@
 			children = (
 				63D99A1EBA034A54803AB9FC /* AppAcquisitionProvider.swift */,
 				43E90256F9C140259BE2D396 /* InstallationHistoryStore.swift */,
+				A8372AC9FB424B628EBF88C4 /* InstallationTelemetryService.swift */,
 			);
 			path = Redownloads;
 			sourceTree = "<group>";
@@ -20648,6 +20654,7 @@
 				A1B2C3D40000000000000002 /* GoogleLensTelemetry.swift in Sources */,
 				85E4D6B482984752928C87A3 /* AppAcquisitionProvider.swift in Sources */,
 				B4588BA31C3B41B0A4564FDE /* InstallationHistoryStore.swift in Sources */,
+				CDD7D2B885574E4CB64841D5 /* InstallationTelemetryService.swift in Sources */,
 				C0D3CA000000000000000002 /* SystemCameraTelemetry.swift in Sources */,
 				C0D3F1000000000000000002 /* SystemPhotoPickerTelemetry.swift in Sources */,
 				0E4AF8652D764046002E4238 /* DownloadProgressManager.swift in Sources */,
@@ -21625,6 +21632,7 @@
 				A1B2C3D40000000000000004 /* GoogleLensTelemetryTests.swift in Sources */,
 				239774B3B3A54133934A305B /* AppAcquisitionProviderTests.swift in Sources */,
 				ADDE0E48932B4A3AAED26477 /* InstallationHistoryStoreTests.swift in Sources */,
+				575F2A83BBC44B708183F928 /* InstallationTelemetryServiceTests.swift in Sources */,
 				C0D3CA000000000000000004 /* SystemCameraTelemetryTests.swift in Sources */,
 				C0D3F1000000000000000004 /* SystemPhotoPickerTelemetryTests.swift in Sources */,
 				219935F12B07DFA200E5966F /* TabDisplayPanelTests.swift in Sources */,
