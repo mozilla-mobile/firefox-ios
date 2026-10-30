@@ -44,7 +44,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
             createMessagingHelper: MockNimbusMessagingHelperUtility(),
             messagingStore: messagingStore,
             applicationHelper: applicationHelper,
-            messagingFeature: FxNimbusMessaging.shared.features.messaging
+            messagingFeature: FxNimbus.shared.features.messaging
         )
     }
 
