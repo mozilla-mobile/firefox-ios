@@ -15,6 +15,7 @@ enum SelectorStrategy {
     case collectionViewById(String)
     case tableById(String)
     case textFieldById(String)
+    case textFieldContainingButtonByLabel(String) // text field that holds a button with this label
     case imageById(String)
     case otherInTablesById(String)
     case tableCellById(String)
@@ -30,6 +31,9 @@ enum SelectorStrategy {
     case navigationBarButtonById(String)
     case collectionViewButtonByLabel(String)
     case otherElementsButtonByLabel(String)
+    indirect case buttonInContainerByLabel(container: Selector, label: String) // button scoped to a container
+    case collectionViewContainingIdPrefix(String) // collection view holding an element whose id has this prefix
+    case switchCellContainingStaticText(String) // table cell holding a switch and a text with this label
 }
 
 // Selector model (with metadata)
@@ -79,6 +83,8 @@ extension Selector {
             return app.tables[value]
         case .textFieldById:
             return app.textFields[value]
+        case .textFieldContainingButtonByLabel(let label):
+            return app.textFields.containing(Self.buttonLabeled(label)).firstMatch
         case .imageById:
             return app.images[value]
         case .otherInTablesById(let id):
@@ -109,7 +115,29 @@ extension Selector {
             return app.collectionViews.buttons[value]
         case .otherElementsButtonByLabel:
             return app.otherElements.buttons[value]
+        case .buttonInContainerByLabel(let container, let label):
+            return container.element(in: app).buttons.matching(Self.labelOrIdentifier(label)).firstMatch
+        case .collectionViewContainingIdPrefix(let prefix):
+            return app.collectionViews.containing(NSPredicate(format: "identifier BEGINSWITH %@", prefix)).firstMatch
+        case .switchCellContainingStaticText(let label):
+            return Self.switchCells(containingStaticText: label, in: app).firstMatch
         }
+    }
+
+    private static func buttonLabeled(_ label: String) -> NSPredicate {
+        NSPredicate(format: "elementType == %d AND label == %@", XCUIElement.ElementType.button.rawValue, label)
+    }
+
+    private static func labelOrIdentifier(_ value: String) -> NSPredicate {
+        NSPredicate(format: "label == %@ OR identifier == %@", value, value)
+    }
+
+    @MainActor
+    private static func switchCells(containingStaticText label: String, in app: XCUIApplication) -> XCUIElementQuery {
+        let text = NSPredicate(format: "elementType == %d AND label == %@",
+                               XCUIElement.ElementType.staticText.rawValue,
+                               label)
+        return app.tables.cells.containing(.switch, identifier: nil).containing(text)
     }
 
     @MainActor
@@ -138,6 +166,8 @@ extension Selector {
             return app.tables.matching(identifier: value)
         case .textFieldById:
             return app.textFields.matching(identifier: value)
+        case .textFieldContainingButtonByLabel(let label):
+            return app.textFields.containing(Self.buttonLabeled(label))
         case .imageById:
             return app.images.matching(identifier: value)
         case .otherInTablesById(let id):
@@ -168,6 +198,12 @@ extension Selector {
             return app.collectionViews.buttons.matching(NSPredicate(format: "label == %@", value))
         case .otherElementsButtonByLabel:
             return app.otherElements.buttons.matching(NSPredicate(format: "label == %@", value))
+        case .buttonInContainerByLabel(let container, let label):
+            return container.element(in: app).buttons.matching(Self.labelOrIdentifier(label))
+        case .collectionViewContainingIdPrefix(let prefix):
+            return app.collectionViews.containing(NSPredicate(format: "identifier BEGINSWITH %@", prefix))
+        case .switchCellContainingStaticText(let label):
+            return Self.switchCells(containingStaticText: label, in: app)
         }
     }
 

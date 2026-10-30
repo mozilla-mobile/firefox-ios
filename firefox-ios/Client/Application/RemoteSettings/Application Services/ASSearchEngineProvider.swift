@@ -13,12 +13,15 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
     private let logger: Logger
     private let iconDataFetcher: ASSearchEngineIconDataFetcherProtocol?
     private let selector: ASSearchEngineSelectorProtocol?
+    private let isSearchConfigV3Enabled: Bool
 
     init(logger: Logger = DefaultLogger.shared,
          selector: ASSearchEngineSelectorProtocol? = nil,
-         iconDataFetcher: ASSearchEngineIconDataFetcherProtocol? = ASSearchEngineIconDataFetcher()) {
+         iconDataFetcher: ASSearchEngineIconDataFetcherProtocol? = ASSearchEngineIconDataFetcher(),
+         isSearchConfigV3Enabled: Bool = SearchEngineFlags.isSearchConfigV3Enabled) {
         self.logger = logger
         self.iconDataFetcher = iconDataFetcher
+        self.isSearchConfigV3Enabled = isSearchConfigV3Enabled
         let profile = (AppContainer.shared.resolve() as Profile)
         if selector == nil {
             self.selector = ASSearchEngineSelector(service: profile.remoteSettingsService )
@@ -141,6 +144,41 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
             return
         }
 
+        guard isSearchConfigV3Enabled else {
+            getUnorderedV2Engines(localeCode: localeCode,
+                                  region: region,
+                                  selector: selector,
+                                  iconPopulator: iconPopulator,
+                                  completion: completion)
+            return
+        }
+
+        getUnorderedV3Engines(localeCode: localeCode,
+                              region: region,
+                              selector: selector,
+                              iconPopulator: iconPopulator) { engines in
+            if let engines {
+                completion(engines)
+                return
+            }
+            // TODO [FXIOS-17178]: Should we fallback to v2, or just fail? Needs investigation.
+            logger.log("[SEC][v3] Falling back to search-config-v2 for this session.",
+                       level: .warning,
+                       category: .remoteSettings)
+            self.getUnorderedV2Engines(localeCode: localeCode,
+                                       region: region,
+                                       selector: selector,
+                                       iconPopulator: iconPopulator,
+                                       completion: completion)
+        }
+    }
+
+    private func getUnorderedV2Engines(localeCode: String,
+                                       region: String,
+                                       selector: ASSearchEngineSelectorProtocol,
+                                       iconPopulator: ASSearchEngineIconDataFetcherProtocol,
+                                       completion: @escaping ([OpenSearchEngine]) -> Void) {
+        let logger = self.logger
         selector.fetchSearchEngines(locale: localeCode, region: region) { (result, error) in
             if let error {
                 logger.log("[SEC] Error fetching search engines via App Services: \(error)",
@@ -163,6 +201,40 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
                 var openSearchEngines: [OpenSearchEngine] = []
                 for (engine, iconImage) in enginesAndIcons {
                     openSearchEngines.append(ASSearchEngineUtilities.convertASToOpenSearch(engine, image: iconImage))
+                }
+                completion(openSearchEngines)
+            }
+        }
+    }
+
+    /// Completes with `nil` if search-config-v3 could not provide any engines, so the caller can fall back to v2.
+    private func getUnorderedV3Engines(localeCode: String,
+                                       region: String,
+                                       selector: ASSearchEngineSelectorProtocol,
+                                       iconPopulator: ASSearchEngineIconDataFetcherProtocol,
+                                       completion: @escaping ([OpenSearchEngine]?) -> Void) {
+        let logger = self.logger
+        selector.fetchSearchEnginesV3(locale: localeCode, region: region) { (result, error) in
+            if let error {
+                logger.log("[SEC][v3] Error fetching search engines via App Services: \(error)",
+                           level: .warning,
+                           category: .remoteSettings)
+            }
+
+            guard let result, !result.engines.isEmpty else {
+                logger.log("[SEC][v3] AS search engine fetch returned empty results",
+                           level: .warning,
+                           category: .remoteSettings)
+                completion(nil)
+                return
+            }
+
+            // Per AS team, optional engines can be ignored. Currently only used on Android.
+            let filteredEngines = result.engines.filter { $0.optional == false }
+
+            iconPopulator.populateEngineIconDataV3(filteredEngines) { enginesAndIcons in
+                let openSearchEngines = enginesAndIcons.map { engine, iconImage in
+                    ASSearchEngineUtilities.convertASToOpenSearch(engine, image: iconImage)
                 }
                 completion(openSearchEngines)
             }

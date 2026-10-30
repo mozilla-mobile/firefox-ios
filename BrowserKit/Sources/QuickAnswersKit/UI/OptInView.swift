@@ -5,9 +5,9 @@
 import UIKit
 import Common
 
-// TODO: - FXIOS-14720 Add Strings and accessibility ids
 final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
     private struct UX {
+        static let titleLabelTopPadding: CGFloat = 32.0
         static let contentSpacing: CGFloat = 16.0
         static let buttonContentInset = NSDirectionalEdgeInsets(
             top: 13.5,
@@ -15,11 +15,6 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
             bottom: 13.5,
             trailing: 16.0
         )
-        static let descriptionText = """
-        Ask a question out loud, and get a short answer from a Firefox partner. \
-        We don't store your voice or questions.
-        """
-        static let learnMoreText = "Learn more"
     }
 
     private var onContinue: (() -> Void)?
@@ -28,7 +23,6 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
     // MARK: - Subviews
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.headline.scaledFont()
-        $0.text = "Ask With Your Voice"
         $0.numberOfLines = 0
         $0.textAlignment = .center
         $0.adjustsFontForContentSizeCategory = true
@@ -40,7 +34,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
         $0.adjustsFontForContentSizeCategory = true
         $0.delegate = self
     }
-    private lazy var continueButton: UIButton = .build {
+    private lazy var continueButton: UIButton = .build { [weak self] in
         if #available(iOS 26, *) {
             $0.configuration = .prominentClearGlass()
         } else {
@@ -48,8 +42,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
         }
         $0.configuration?.cornerStyle = .capsule
         $0.configuration?.contentInsets = UX.buttonContentInset
-        $0.configuration?.title = "Continue"
-        $0.addAction(UIAction { [weak self] _ in self?.onContinue?() }, for: .touchUpInside)
+        $0.addAction(UIAction { _ in self?.onContinue?() }, for: .touchUpInside)
     }
 
     // MARK: - Init
@@ -67,7 +60,7 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
         addSubviews(titleLabel, descriptionTextView, continueButton)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: UX.titleLabelTopPadding),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 
@@ -79,11 +72,12 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
             continueButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             continueButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
             continueButton.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
-            continueButton.bottomAnchor.constraint(equalTo: bottomAnchor),
+            continueButton.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
         ])
     }
 
     func configure(
+        strings: QuickAnswersViewConfiguration.OptInStrings,
         learnMoreURL: URL?,
         theme: Theme,
         onContinue: @escaping () -> Void,
@@ -91,20 +85,26 @@ final class OptInView: UIView, UITextViewDelegate, ThemeApplicable {
     ) {
         self.onLearnMore = onLearnMore
         self.onContinue = onContinue
-        descriptionTextView.attributedText = makeDescriptionText(url: learnMoreURL)
+        titleLabel.text = strings.title
+        continueButton.configuration?.title = strings.continueButton
+        descriptionTextView.attributedText = makeDescriptionText(
+            description: strings.description,
+            learnMore: strings.learnMore,
+            url: learnMoreURL
+        )
         applyTheme(theme: theme)
     }
 
-    private func makeDescriptionText(url: URL?) -> NSAttributedString {
+    private func makeDescriptionText(description: String, learnMore: String, url: URL?) -> NSAttributedString {
         let font = FXFontStyles.Regular.subheadline.scaledFont()
         let text = NSMutableAttributedString(
-            string: UX.descriptionText + " ",
+            string: description + " ",
             attributes: [.font: font]
         )
         if let url {
             var linkAttributes: [NSAttributedString.Key: Any] = [.font: font]
             linkAttributes[.link] = url
-            text.append(NSAttributedString(string: UX.learnMoreText, attributes: linkAttributes))
+            text.append(NSAttributedString(string: learnMore, attributes: linkAttributes))
         }
         return text
     }

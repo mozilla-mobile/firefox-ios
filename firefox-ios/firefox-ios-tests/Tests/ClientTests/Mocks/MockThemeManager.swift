@@ -11,6 +11,13 @@ class MockThemeManager: ThemeManager {
     private var currentThemeStorage: Theme = LightTheme()
 
     var resolvedThemeCalledCount = 0
+    var isPrivateThemeOverrideEnabled = true
+
+    /// - Parameter currentTheme: the theme every lookup returns. Pass a Nova theme (e.g. `NovaLightTheme()`) to
+    ///   exercise code paths gated on `Theme.isNova`.
+    init(currentTheme: Theme = LightTheme()) {
+        self.currentThemeStorage = currentTheme
+    }
 
     func getCurrentTheme(for window: UUID?) -> Theme {
         getCurrentThemeCallCount += 1
@@ -56,7 +63,10 @@ class MockThemeManager: ThemeManager {
         systemThemeIsOn = isOn
     }
 
-    func setPrivateTheme(isOn: Bool, for window: UUID) {}
+    var setPrivateThemeCalls = [Bool]()
+    func setPrivateTheme(isOn: Bool, for window: UUID) {
+        setPrivateThemeCalls.append(isOn)
+    }
 
     func getPrivateThemeIsOn(for window: UUID) -> Bool { return false }
 

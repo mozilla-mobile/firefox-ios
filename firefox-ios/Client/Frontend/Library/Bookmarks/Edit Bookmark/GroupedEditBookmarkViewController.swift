@@ -20,8 +20,13 @@ final class GroupedEditBookmarkViewController: UIViewController,
     var themeManager: any ThemeManager
     var themeListenerCancellable: Any?
     var notificationCenter: any NotificationProtocol
+    let shouldUsePrivateOverride: Bool
+    var shouldBeInPrivateTheme: Bool { return false }
+
     private var theme: any Theme {
-        return themeManager.getCurrentTheme(for: currentWindowUUID)
+        return themeManager.resolveTheme(for: currentWindowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
     }
 
     lazy var tableView: UITableView = .build({ view in
@@ -68,12 +73,14 @@ final class GroupedEditBookmarkViewController: UIViewController,
 
     init(viewModel: GroupedEditBookmarkViewModel,
          windowUUID: WindowUUID,
+         shouldUsePrivateOverride: Bool = true,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.currentWindowUUID = windowUUID
+        self.shouldUsePrivateOverride = shouldUsePrivateOverride
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -124,10 +131,6 @@ final class GroupedEditBookmarkViewController: UIViewController,
         if let isDragging = transitionCoordinator?.isInteractive, !isDragging {
             navigationController?.setNavigationBarHidden(true, animated: false)
         }
-        // Save when popping the view off the navigation stack (when in library)
-        if isMovingFromParent {
-            viewModel.saveBookmark()
-        }
         onViewWillDisappear?()
     }
 
@@ -151,12 +154,11 @@ final class GroupedEditBookmarkViewController: UIViewController,
 
     @objc
     func saveButtonAction() {
-        // If we are in the standalone version of edit bookmark, we should save before dismissing
         if navigationController?.viewControllers.first == self {
             viewModel.saveBookmark()
             viewModel.didFinish()
         } else {
-            // If we are in the library, save will happen in viewWillDisappear
+            viewModel.saveBookmark()
             navigationController?.popViewController(animated: true)
         }
     }

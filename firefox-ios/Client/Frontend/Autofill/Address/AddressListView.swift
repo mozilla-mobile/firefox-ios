@@ -34,6 +34,8 @@ struct AddressListView: View {
     @State var subTextColor: Color = .clear
     @State var imageColor: Color = .clear
     @State var listColor: Color = .clear
+    @State private var accentColor: Color?
+    @State private var sheetColorScheme: ColorScheme?
 
     @State private var isLandscape = false
 
@@ -49,6 +51,8 @@ struct AddressListView: View {
                         ForEach(viewModel.addresses, id: \.self) { address in
                             AddressCellView(
                                 windowUUID: windowUUID,
+                                shouldUsePrivateOverride: true,
+                                shouldBeInPrivateTheme: false,
                                 address: address,
                                 onTap: {
                                     if viewModel.isEditingFeatureEnabled {
@@ -82,14 +86,16 @@ struct AddressListView: View {
                     editAddressView
                 }
             }
+            .tint(accentColor)
+            .preferredColorScheme(sheetColorScheme)
         }
         .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.resolveTheme(for: windowUUID, privateOverride: false))
             viewModel.editAddressWebViewManager.preloadWebView()
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.resolveTheme(for: windowUUID, privateOverride: false))
         }
         .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
             isLandscape = UIDevice.current.orientation.isLandscape
@@ -101,22 +107,37 @@ struct AddressListView: View {
 
     private var addAddressView: some View {
         return EditAddressViewControllerRepresentable(model: viewModel)
-            .navigationBarTitle(String.Addresses.Settings.Edit.AutofillAddAddressTitle, displayMode: .inline)
-            .navigationBarItems(
-                leading: Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
-                    viewModel.cancelAddButtonTap()
-                },
-                trailing: Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
-                    viewModel.saveAddressButtonTap()
+            // Keep the navigation item title populated even though the visible title is rendered
+            // by the `.principal` toolbar item below. XCUITest derives the navigation bar's
+            // accessibility identifier from this title, and the UI tests look the bar up by it.
+            .navigationTitle(String.Addresses.Settings.Edit.AutofillAddAddressTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
+                        viewModel.cancelAddButtonTap()
+                    }
                 }
-            )
+
+                ToolbarItem(placement: .principal) {
+                    Text(String.Addresses.Settings.Edit.AutofillAddAddressTitle)
+                        .font(.headline)
+                }
+
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
+                        viewModel.saveAddressButtonTap()
+                    }
+                }
+            }
     }
 
     private var editAddressView: some View {
         return EditAddressViewControllerRepresentable(model: viewModel)
-            .navigationBarTitle(viewModel.editNavigationbarTitle, displayMode: .inline)
+            .navigationTitle(viewModel.editNavigationbarTitle)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItemGroup(placement: .cancellationAction) {
+                ToolbarItem(placement: .navigationBarLeading) {
                     Button(viewModel.cancelButtonLabel) {
                         if viewModel.isEditMode {
                             viewModel.cancelEditButtonTap()
@@ -126,7 +147,12 @@ struct AddressListView: View {
                     }
                 }
 
-                ToolbarItemGroup(placement: .primaryAction) {
+                ToolbarItem(placement: .principal) {
+                    Text(viewModel.editNavigationbarTitle)
+                        .font(.headline)
+                }
+
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button(viewModel.primaryButtonLabel) {
                         if viewModel.isEditMode {
                             viewModel.saveEditButtonTap()
@@ -150,6 +176,8 @@ struct AddressListView: View {
         subTextColor = Color(color.textSecondary)
         imageColor = Color(color.iconSecondary)
         listColor = Color(color.layer1)
+        accentColor = theme.isNova ? Color(color.actionPrimary) : nil
+        sheetColorScheme = themeManager.isPrivateThemeOverrideEnabled ? theme.type.colorScheme : nil
     }
 
     @ViewBuilder var contentUnavailableView: some View {

@@ -1,0 +1,27 @@
+/* Label for button in the address toolbar, that cancels editing the address field when tapped. */
+"AddressToolbar.CancelEdit.Label.v138" = "रद्द करें";
+
+/* Accessibility label describing the Google Lens button on the address toolbar that prompts a menu to allow the user to take a new photo or select an existing photo from their photo library to search with Google Lens. */
+"AddressToolbar.GoogleLens.A11yLabel.v153.v2" = "Google Lens से इमेज सर्च करें";
+
+/* Action title in the Google Lens address toolbar context menu. Opens the photo library picker so the user can choose an existing photo to search with Google Lens. */
+"AddressToolbar.GoogleLens.ContextMenu.PhotoLibraryActionTitle.v153" = "फ़ोटो लाइब्रेरी";
+
+/* Action title in the Google Lens address toolbar context menu. Opens the camera so the user can take a new photo to search with Google Lens. */
+"AddressToolbar.GoogleLens.ContextMenu.TakePhotoActionTitle.v153" = "फ़ोटो लें";
+
+/* Accessibility label for the address field in the address toolbar. */
+"AddressToolbar.Location.A11y.Label.v128" = "सर्च करें या एड्रेस डालें";
+
+/* Placeholder for the address field in the address toolbar. */
+"AddressToolbar.Location.Placeholder.v128" = "सर्च करें या एड्रेस डालें";
+
+/* Accessibility label for the lock icon button in the address field of the address toolbar, responsible with Privacy & Security Settings. */
+"AddressToolbar.PrivacyAndSecuriySettings.A11y.Label.v128" = "प्राइवेसी और सुरक्षा सेटिंग";
+
+/* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility hint describing what tapping the search engine icon does. */
+"AddressToolbar.SearchEngine.A11y.Hint.v133" = "सर्च इंजन का चुनाव खोलता है";
+
+/* Accessibility label for the search engine icon in the address bar. %@ is the name of the search engine (e.g. Google). */
+"AddressToolbar.SearchEngine.A11y.Label.v128" = "सर्च इंजन: %@";
+

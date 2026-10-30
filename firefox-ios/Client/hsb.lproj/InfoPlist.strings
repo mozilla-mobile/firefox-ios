@@ -17,13 +17,13 @@
 "NSLocationWhenInUseUsageDescription" = "Websydła, kotrež wopytujeće, snano waše stejnišćo žadaja.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox waš mikrofon wužiwa, zo by awdio natočił a nahrał.";
+"NSMicrophoneUsageDescription" = "Firefox waš mikrofon wužiwa, zo by awdijo natočił a nahrał.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Z tym móžeće fota składować.";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Firefox rěčenske spóznaće wužiwa, zo by waš hłós do teksta za hłosowe pytanje přetworił.";
+"NSSpeechRecognitionUsageDescription" = "To Firefox zmóžnja, waše awdijo transkribować.";
 
 /* (No Comment) */
 "Scan QR Code" = "QR-kod skenować";

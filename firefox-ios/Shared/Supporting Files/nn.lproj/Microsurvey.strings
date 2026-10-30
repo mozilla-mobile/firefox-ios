@@ -8,7 +8,7 @@
 "Microsurvey.Prompt.LogoImage.AccessibilityLabel.v129" = "%@-logo";
 
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the text that appears on the prompt to inform the user that this is a prompt to take a survey. %@ is the app name (e.g. Firefox). */
-"Microsurvey.Prompt.TitleLabel.v127" = "Hjelp oss å gjere %@ betre. Det tek berre eitt minutt.";
+"Microsurvey.Prompt.TitleLabel.v127" = "Hjelp oss å gjere %@ betre. Det tek berre eit lite minutt.";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of button on the survey that a user can tap on to submit their responses. */
 "Microsurvey.Survey.Button.v127" = "Send inn";

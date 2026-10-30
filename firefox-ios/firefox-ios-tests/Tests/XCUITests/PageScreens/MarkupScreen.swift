@@ -44,13 +44,19 @@ final class MarkupScreen {
     // markup control, and which one happens varies by share entry point, so both are handled.
     private func assertPaletteIsOpen() {
         for _ in 0..<markupEntryAttempts {
-            if palette.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
-                BaseTestCase().mozWaitForElementToExist(penTool, timeout: TIMEOUT_LONG)
-                return
-            }
+            if waitForPaletteAndPen(timeout: TIMEOUT) { return }
             guard tapMarkupEntryControl() else { break }
         }
+        // The entry control goes away as soon as markup is requested, so running out of controls to
+        // tap means the palette is on its way rather than that it is never coming.
+        if waitForPaletteAndPen(timeout: TIMEOUT_LONG) { return }
         XCTFail("The Markup palette did not open. \(observedMarkupState())")
+    }
+
+    private func waitForPaletteAndPen(timeout: TimeInterval) -> Bool {
+        guard palette.mozWaitForElementToExist(timeout: timeout, failOnTimeout: false) else { return false }
+        BaseTestCase().mozWaitForElementToExist(penTool, timeout: TIMEOUT_LONG)
+        return true
     }
 
     /// Taps whichever markup control QuickLook exposes, and reports `false` when neither is on screen

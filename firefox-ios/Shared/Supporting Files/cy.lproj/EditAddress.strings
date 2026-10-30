@@ -1,5 +1,5 @@
 /* Title for the cancel button in the remove address alert. */
-"Addresses.EditAddress.Alert.CancelButton.v129" = "Diddymu";
+"Addresses.EditAddress.Alert.CancelButton.v129" = "Na";
 
 /* Message explaining the consequences of removing an address from all synced devices. */
 "Addresses.EditAddress.Alert.Message.v129" = "Bydd y cyfeiriad yn cael ei dynnu o'ch holl ddyfeisiau wedi'u cydweddu.";
@@ -98,7 +98,7 @@
 "Addresses.EditAddress.AutofillAddressZip.v129" = "Cod ZIP";
 
 /* Label for the button to cancel the current autofill operation or exit the form without saving changes. Provides users with an option to back out of a process without making any modifications. */
-"Addresses.EditAddress.AutofillCancelButton.v129" = "Diddymu";
+"Addresses.EditAddress.AutofillCancelButton.v129" = "Na";
 
 /* Title for the option allowing users to edit an existing saved address. This is used within the settings for autofill, enabling users to update their address details for accurate form autofilling. */
 "Addresses.EditAddress.AutofillEditAddressTitle.v129" = "Golygu cyfeiriad";

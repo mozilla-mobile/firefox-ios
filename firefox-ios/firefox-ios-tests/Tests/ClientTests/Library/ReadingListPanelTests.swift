@@ -32,7 +32,7 @@ class ReadingListPanelTests: XCTestCase {
     }
 
     private func createSubject() -> ReadingListPanel {
-        let profile = MockProfile()
+        let profile = makeProfile()
         let subject = ReadingListPanel(profile: profile, windowUUID: windowUUID)
         trackForMemoryLeaks(subject)
         return subject

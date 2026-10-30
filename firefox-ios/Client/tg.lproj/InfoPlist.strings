@@ -23,7 +23,7 @@
 "NSPhotoLibraryAddUsageDescription" = "Ин ба шумо барои нигоҳдории аксҳо имкон медиҳад.";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Браузери «Firefox» барои ҷустуҷӯи овозӣ аз шинохти нутқ истифода мебарад, то тавонад овози шуморо ба матн табдил диҳад.";
+"NSSpeechRecognitionUsageDescription" = "Ин ба браузери «Firefox» имкон медиҳад, то тавонад овози шуморо ба матн табдил диҳад.";
 
 /* (No Comment) */
 "Scan QR Code" = "Рамзи QR-ро аксбардорӣ намоед";

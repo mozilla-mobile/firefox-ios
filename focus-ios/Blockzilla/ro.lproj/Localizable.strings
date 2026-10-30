@@ -334,12 +334,6 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData.v2" = "Mozilla se străduiește să colecteze doar strictul necesar pentru a furniza și a îmbunătăți %@ pentru toți.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies" = "%@ poate instala și realiza studii din când în când.";
-
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies.v2" = "%@ selectează aleatoriu utilizatori pentru a testa funcționalități, ceea ce îmbunătățește calitatea pentru toți.";
-
 /* Title for section in settings menu */
 "Settings.general" = "General";
 
@@ -456,12 +450,6 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Trimite date privind utilizarea";
-
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies" = "Studii";
-
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies.v2" = "Permite studii de funcționalități";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Folosește Touch ID pentru a debloca aplicația";

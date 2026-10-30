@@ -13,7 +13,7 @@ final class TrackingProtectionViewControllerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
     }
 
     override func tearDown() async throws {
@@ -60,7 +60,6 @@ final class TrackingProtectionViewControllerTests: XCTestCase {
         let model = TrackingProtectionModel(
             userDefaults: nil,
             url: URL(string: "https://example.com")!,
-            displayTitle: "example.com",
             connectionSecure: true,
             globalETPIsEnabled: true,
             contentBlockerStatus: .noBlockedURLs,

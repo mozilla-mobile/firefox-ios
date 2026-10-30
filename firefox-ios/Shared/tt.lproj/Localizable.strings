@@ -727,6 +727,9 @@
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "Бу сайт өчен саклау СҮНДЕРЕЛГӘН";
 
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Бу сайт өчен саклау КАБЫНГАН";
+
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Ярдәм";
 
@@ -864,6 +867,9 @@
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "Ярар";
+
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "Гизүне башлау";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Абау! Firefox ватылды";
@@ -1447,8 +1453,14 @@
 /* The option that takes you to the siri shortcuts settings page */
 "Settings.Siri.SectionName" = "Siri ярлыклары";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Toggle.Link" = "Күбрәк белү.";
+
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Toggle.Message" = "Firefox ара-тирә тикшеренүләр урнаштырырга һәм үткәрергә мөмкин.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "Тикшеренүләр";
 
 /* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
 "Settings.Sync.ButtonDescription.v103" = "Табларны, кыстыргычларны, серсүзләрне һәм башкаларны синхронлау өчен сайтка керегез.";
@@ -1633,8 +1645,17 @@
 /* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as “Others”. */
 "TabTray.Header.FilteredTabs.SectionHeader" = "Башкалар";
 
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Актив булмаган таблар";
+
 /* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Яңа таб ачу";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Хосусый";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "Таблар";
 
 /* The title for the tab tray */
 "TabTray.Title" = "Ачык таблар";

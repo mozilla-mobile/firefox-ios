@@ -14,11 +14,11 @@ class ScreenshotHelper {
     private let logger: Logger
 
     @MainActor
-    private var isIpad: Bool {
+    private var usesRegularLayout: Bool {
         // An additional check for horizontalSizeClass is needed since for iPad in multi windows state
         // the smallest window possible has horizontalSizeClass equal to compact, thus behave like an iPhone.
-        return controller?.traitCollection.userInterfaceIdiom == .pad &&
-               controller?.traitCollection.horizontalSizeClass == .regular
+        return controller?.traitCollection.horizontalSizeClass == .regular &&
+               controller?.traitCollection.verticalSizeClass == .regular
     }
 
     init(controller: BrowserViewController,
@@ -50,6 +50,8 @@ class ScreenshotHelper {
         }
         // Handle home page snapshots, can not use Apple API snapshot function for this
         guard controller != nil else { return }
+        let availableSize = controller?.viewIfLoaded?.bounds.size ?? .zero
+        let shouldCropScreenshot = availableSize.height >= availableSize.width && !usesRegularLayout
 
         // Added check for native error pages.
         let isNativeErrorPage = controller?.contentContainer.hasNativeErrorPage ?? false
@@ -69,7 +71,7 @@ class ScreenshotHelper {
             if let screenshotTool {
                 // apply bounds only for iPhone in portrait, as otherwise it results in
                 // bad screenshot view port.
-                let screenshot: UIImage? = if UIWindow.isPortrait && !isIpad {
+                let screenshot: UIImage? = if shouldCropScreenshot {
                     screenshotTool.screenshot(bounds: screenshotBounds)
                 } else {
                     screenshotTool.screenshot(quality: 1.0)
@@ -107,7 +109,7 @@ class ScreenshotHelper {
 
             // apply bounds only for iPhone in portrait, as otherwise it results in
             // bad screenshot view port.
-            if UIWindow.isPortrait && !isIpad {
+            if shouldCropScreenshot {
                 configuration.rect = screenshotBounds
             }
             webView.setPullRefreshVisibility(isVisible: false)

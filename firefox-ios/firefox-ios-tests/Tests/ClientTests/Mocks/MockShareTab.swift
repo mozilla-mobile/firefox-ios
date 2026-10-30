@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Storage
 
 @testable import Client
 
@@ -14,6 +15,7 @@ class MockShareTab: ShareTab {
     var url: URL?
     var webView: TabWebView?
     var temporaryDocument: TemporaryDocument?
+    var mimeType: String?
 
     init(
         title: String,
@@ -21,16 +23,18 @@ class MockShareTab: ShareTab {
         canonicalURL: URL?,
         tabUUID: TabUUID = UUID().uuidString,
         withActiveWebView: Bool = true,
-        withTemporaryDocument: TemporaryDocument? = nil
+        withTemporaryDocument: TemporaryDocument? = nil,
+        mimeType: String? = nil
     ) {
         self.displayTitle = title
         self.url = url
         self.canonicalURL = canonicalURL
         self.tabUUID = tabUUID
+        self.mimeType = mimeType
         self.webView = TabWebView(frame: CGRect.zero,
                                   configuration: .init(),
                                   windowUUID: .XCTestDefaultUUID,
-                                  certStore: MockProfile().certStore)
+                                  certStore: CertStore())
         self.temporaryDocument = withTemporaryDocument
     }
 }

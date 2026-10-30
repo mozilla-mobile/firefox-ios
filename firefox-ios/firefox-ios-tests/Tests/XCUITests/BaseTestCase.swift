@@ -23,11 +23,19 @@ func path(forTestPage page: String) -> String {
 let TIMEOUT: TimeInterval = 10
 let TIMEOUT_LONG: TimeInterval = 20
 let PDF_TIMEOUT: TimeInterval = 60
+// TabDataStore throttles background saves by 2 seconds, plus one second of margin
+let tabPersistenceThrottleWait: UInt32 = 3
+// Start at Home set to "Homepage" triggers after 5 seconds of inactivity, plus two of margin
+let startAtHomeInactivityWait: TimeInterval = 7
 // Translation is network-bound and can take up to ~1 min to complete
 let TRANSLATION_TIMEOUT: TimeInterval = 90
 // Probe for optional UI that shows up immediately or not at all
 let TIMEOUT_PICKER_PROBE: TimeInterval = 3
 let MAX_SWIPE = 5
+let IngestSuggestionsCell = "Ingest new suggestions now"
+// Nimbus applies fetched recipes on the launch after the fetch, so two attempts is the floor.
+let SuggestRolloutLaunchAttempts = 5
+let SuggestRolloutProbeTimeout: TimeInterval = 5
 
 @MainActor
 class BaseTestCase: XCTestCase {
@@ -53,13 +61,16 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.DisableAnimations
         ]
 
-    func restartInBackground() {
+    /// - Parameter inactiveFor: how long to stay backgrounded before foregrounding again, for tests
+    /// that need a minimum amount of inactivity to elapse.
+    func restartInBackground(inactiveFor seconds: TimeInterval = 0) {
         // Send app to background, and re-enter
         XCUIDevice.shared.press(.home)
         // Let's be sure the app is backgrounded
         _ = app.wait(for: XCUIApplication.State.runningBackgroundSuspended, timeout: TIMEOUT)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
+        idle(for: seconds)
         app.activate()
         // Wait until the app is fully opened (running in foreground) before continuing
         let predicate = NSPredicate(format: "state == %d", XCUIApplication.State.runningForeground.rawValue)
@@ -70,14 +81,82 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func closeFromAppSwitcherAndRelaunch() {
+    /// - Parameter inactiveFor: how long to stay closed before relaunching, for tests that need a
+    /// minimum amount of inactivity to elapse.
+    func closeFromAppSwitcherAndRelaunch(inactiveFor seconds: TimeInterval = 0) {
         let swipeStart = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.999))
         let swipeEnd = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.001))
         _ = app.wait(for: .runningForeground, timeout: TIMEOUT)
         swipeStart.press(forDuration: 0.1, thenDragTo: swipeEnd)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
+        idle(for: seconds)
         app.activate()
+    }
+
+    /// Idles without blocking the runner: a `sleep()` while the app is not in the foreground gets
+    /// the test process killed.
+    func idle(for seconds: TimeInterval) {
+        guard seconds > 0 else { return }
+        RunLoop.current.run(until: Date().addingTimeInterval(seconds))
+    }
+
+    /// Kills the app and relaunches it keeping the profile, so tabs and preferences set during the
+    /// test survive the restart.
+    /// - Parameter inactiveFor: how long to stay closed before relaunching, for tests that need a
+    /// minimum amount of inactivity to elapse.
+    func forceCloseAndRelaunchApp(inactiveFor seconds: TimeInterval = 0) {
+        // Backgrounding is what saves the tabs, and the app must outlive that throttled write.
+        // It is foregrounded again first, as waiting at the home screen gets the runner killed.
+        restartInBackground()
+        sleep(tabPersistenceThrottleWait)
+        app.terminate()
+        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
+        idle(for: seconds)
+        // Session restore is opted into, as UI tests otherwise always start from a clean tab state
+        let keptArguments = app.launchArguments.filter {
+            $0 != LaunchArguments.ClearProfile && $0 != LaunchArguments.EnableSessionRestore
+        }
+        app.launchArguments = keptArguments + [LaunchArguments.EnableSessionRestore]
+        app.launch()
+        mozWaitForElementToExist(app.windows.otherElements.firstMatch)
+        // The navigator state does not survive a relaunch
+        setUpScreenGraph()
+    }
+
+    /// The Nimbus database lives inside the test profile, so clearing it would discard the fetched rollout.
+    func relaunchKeepingProfile() {
+        app.terminate()
+        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
+        app.launchArguments = app.launchArguments.filter { $0 != LaunchArguments.ClearProfile }
+        app.launch()
+        waitForTabsButtonHittable()
+        navigator.nowAt(NewTabScreen)
+    }
+
+    /// Enrolls the running app in the live Firefox Suggest rollout, leaving it on the home screen. On
+    /// release builds the feature is enabled by a Nimbus rollout rather than a channel default, and
+    /// Nimbus only applies fetched recipes on the launch that follows the fetch, hence the relaunches.
+    /// - Parameter ingestingSuggestions: also downloads suggestions, which only tests that assert on
+    /// suggestion results need.
+    func enrollInFirefoxSuggestRollout(ingestingSuggestions: Bool = true) {
+        for _ in 1...SuggestRolloutLaunchAttempts {
+            relaunchKeepingProfile()
+            navigator.goto(SettingsScreen)
+            navigator.performAction(Action.OpenSecretSettings)
+            navigator.goto(FirefoxSuggestSettings)
+            // The ingest row only exists while the feature is enabled, so it doubles as the enrollment probe.
+            guard mozWaitForElementToExist(app.cells[IngestSuggestionsCell],
+                                           timeout: SuggestRolloutProbeTimeout,
+                                           failOnTimeout: false) else { continue }
+            if ingestingSuggestions {
+                navigator.performAction(Action.IngestNewSuggestionsNow)
+            }
+            navigator.goto(HomePanelsScreen)
+            return
+        }
+
+        XCTFail("Firefox Suggest was not enabled after \(SuggestRolloutLaunchAttempts) launches")
     }
 
     func removeApp() {
@@ -125,15 +204,31 @@ class BaseTestCase: XCTestCase {
     func setUpExperimentVariables() {}
 
     func setUpApp() {
-        setUpLaunchArguments()
-        if ProcessInfo.processInfo.environment["EXPERIMENT_NAME"] != nil {
-            app.activate()
-        }
+        setUpAppWithoutLaunching()
         app.launch()
         mozWaitForElementToExist(app.windows.otherElements.firstMatch)
     }
 
+    /// `setUpApp()` without the launch, for test classes that launch the app themselves through a deeplink
+    /// (`launchIntoSettings`, `launchOpening`, `launchIntoReadingList`).
+    func setUpAppWithoutLaunching() {
+        setUpLaunchArguments()
+        if isExperimentRun {
+            app.activate()
+        }
+    }
+
+    private var isExperimentRun: Bool {
+        ProcessInfo.processInfo.environment["EXPERIMENT_NAME"] != nil
+    }
+
     func setUpLaunchArguments() {
+        // iOS 17 XCTest crashes the app once it is quarantined for high logging volume
+        // https://mozilla-hub.atlassian.net/browse/MTE-6254
+        if #available(iOS 18, *) {
+        } else if #available(iOS 17, *) {
+            app.launchEnvironment["OS_ACTIVITY_MODE"] = "disable"
+        }
         if !launchArguments.contains("FIREFOX_PERFORMANCE_TEST") {
             app.launchArguments = [LaunchArguments.Test] + launchArguments
         } else {
@@ -141,11 +236,43 @@ class BaseTestCase: XCTestCase {
         }
     }
 
+    /// Annotates every failure recorded in the current test, e.g. with a known bug link.
+    nonisolated(unsafe) private var knownFailureNote: String?
+
     override func setUp() async throws {
         try await super.setUp()
+        knownFailureNote = nil
         continueAfterFailure = false
         setUpApp()
         setUpScreenGraph()
+    }
+
+    /// Skips the current test when a third-party page it depends on is unreachable or answers with a
+    /// server error (5xx), so an outage of a site outside our control does not fail the run.
+    func skipIfSiteIsDown(_ urlString: String) async throws {
+        guard let url = URL(string: urlString) else { return }
+        var request = URLRequest(url: url, timeoutInterval: 15)
+        request.httpMethod = "HEAD"
+        let statusCode = try? await (URLSession.shared.data(for: request).1 as? HTTPURLResponse)?.statusCode
+        guard let statusCode, statusCode < 500 else {
+            throw XCTSkip("\(urlString) is down (\(statusCode.map { "HTTP \($0)" } ?? "unreachable"))")
+        }
+    }
+
+    /// Marks the current test as a known failure on the given iOS major versions without hiding it:
+    /// the test still fails, but each failure message names the iOS version and links `issue`.
+    func markKnownFailure(onIOS versions: [Int], issue: String) {
+        let major = ProcessInfo.processInfo.operatingSystemVersion.majorVersion
+        guard versions.contains(major) else { return }
+        knownFailureNote = "Known failure on iOS \(major): \(issue)"
+    }
+
+    override nonisolated func record(_ issue: XCTIssue) {
+        var issue = issue
+        if let note = knownFailureNote {
+            issue.compactDescription += " - \(note)"
+        }
+        super.record(issue)
     }
 
     override func tearDown() async throws {
@@ -156,6 +283,15 @@ class BaseTestCase: XCTestCase {
     var skipPlatform: Bool {
         guard let platform = specificForPlatform else { return false }
         return UIDevice.current.userInterfaceIdiom != platform
+    }
+
+    /// Below iOS 17 the locale check drops the News section and the Stories setting.
+    /// https://github.com/mozilla-mobile/firefox-ios/issues/35618
+    var isStoriesBrokenByLocaleBug: Bool {
+        if #available(iOS 17, *) {
+            return false
+        }
+        return true
     }
 
     func restart(_ app: XCUIApplication, args: [String] = []) {
@@ -378,7 +514,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         UIPasteboard.general.string = url
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2.0)
-        app.tables["Context Menu"].cells[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.waitAndTap()
+        app.cells.buttons[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.waitAndTap()
 
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
@@ -412,6 +548,111 @@ class BaseTestCase: XCTestCase {
 
     func waitForTabsButton() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+    }
+
+    /// Launches the app straight into a Settings screen by using a deeplink as the launch, which skips
+    /// the menu taps. A deeplink sent to an already running app costs more than the taps it replaces,
+    /// so this only pays off as the launch. Falls back to `app.launch()` and the menu below iOS 16.4.
+    /// With `.general` the navigator ends at `SettingsScreen` and can route anywhere from there.
+    /// With `.theme` it ends at `DisplaySettings` with no route out: go back with
+    /// `SettingScreen.tapBackToSettings()`, then call `settingsRootReachedByDeeplink()`.
+    func launchIntoSettings(_ section: SettingsDeeplink = .general) {
+        guard #available(iOS 16.4, *) else {
+            app.launch()
+            waitForTabsButton()
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(section.screen)
+            return
+        }
+        launchWithDeeplink(.settings(section))
+        let settingScreen = SettingScreen(app: app)
+        switch section {
+        case .general:
+            settingScreen.waitForSettingsRoot(timeout: TIMEOUT_LONG)
+            settingsRootReachedByDeeplink()
+        case .theme:
+            settingScreen.waitForThemeOptions(timeout: TIMEOUT_LONG)
+            navigator.nowAt(DisplaySettings)
+        }
+    }
+
+    /// Tells the navigator that the Settings root on screen was opened by a deeplink, so that it
+    /// enters `SettingsScreen` with a back edge to the browser instead of being forced there with `nowAt`.
+    func settingsRootReachedByDeeplink() {
+        navigator.nowAt(SettingsDeeplinkEntry)
+        navigator.goto(SettingsScreen)
+    }
+
+    /// Launches the app with `url` already loaded through an `open-url` deeplink, instead of launching
+    /// and typing it. The URL opens in a new tab next to the start page, so there is one more regular
+    /// tab than when typing it. Below iOS 16.4 it opens a new tab and types the URL, keeping that count.
+    func launchOpening(_ url: String, isPrivate: Bool = false) {
+        guard #available(iOS 16.4, *) else {
+            app.launch()
+            waitForTabsButton()
+            navigator.nowAt(NewTabScreen)
+            if isPrivate {
+                navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+            }
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            navigator.openURL(url)
+            waitUntilPageLoad()
+            navigator.nowAt(BrowserTab)
+            return
+        }
+        launchWithDeeplink(.openURL(url, isPrivate: isPrivate))
+        waitUntilPageLoad()
+        userState.isPrivate = isPrivate
+        let browserScreen = BrowserScreen(app: app)
+        let host = expectedAddressBarHost(for: url)
+        // A fresh profile's content blocker reload can cancel the first navigation (#35933), so retry once.
+        // The retry types into the same tab, so tab counts stay what the deeplink left.
+        if !browserScreen.addressBarContains(host) {
+            navigator.nowAt(NewTabScreen)
+            navigator.openURL(url)
+            waitUntilPageLoad()
+        }
+        browserScreen.assertAddressBarContains(value: host)
+        navigator.nowAt(BrowserTab)
+    }
+
+    /// The host the address bar shows for `url`, which leaves out the scheme, the path and a leading "www.".
+    private func expectedAddressBarHost(for url: String) -> String {
+        let host = URL(string: withHTTPScheme(url))?.host ?? url
+        return host.hasPrefix("www.") ? String(host.dropFirst(4)) : host
+    }
+
+    /// Launches the app straight into the Reading List panel through a deeplink, which skips the menu taps,
+    /// and waits for the empty panel that a cleared profile shows.
+    func launchIntoReadingList() {
+        guard #available(iOS 16.4, *) else {
+            app.launch()
+            waitForTabsButton()
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(LibraryPanel_ReadingList)
+            return
+        }
+        launchWithDeeplink(.homepanel(.readingList))
+        ReadingListScreen(app: app).waitForReadingListsPanel()
+        navigator.nowAt(LibraryPanel_ReadingList)
+    }
+
+    /// `deeplink` with the internal scheme of the build under test.
+    func deeplinkURL(_ deeplink: Deeplink) -> URL {
+        deeplink.url(scheme: currentScheme.internalURLScheme)
+    }
+
+    @available(iOS 16.4, *)
+    private func launchWithDeeplink(_ deeplink: Deeplink) {
+        // An app already launched by setUp would be relaunched by `app.open`, silently losing the time saving.
+        // The experiment plan activates the app on purpose before relaunching it, as `setUpApp()` does.
+        let runningStates: [XCUIApplication.State] = [.runningForeground, .runningBackground,
+                                                      .runningBackgroundSuspended]
+        if !isExperimentRun && runningStates.contains(app.state) {
+            XCTFail("The app is already running, so this deeplink launch relaunches it. " +
+                    "Make setUp skip its launch for this test with setUpAppWithoutLaunching().")
+        }
+        app.open(deeplinkURL(deeplink))
     }
 
     func waitForTabsButtonHittable(timeout: Double = TIMEOUT) {
@@ -522,11 +763,18 @@ class BaseTestCase: XCTestCase {
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         app.buttons["Cancel"].tapWithRetry()
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        let pasteAction = app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction]
-        urlBar.waitAndTap()
-        urlBar.pressWithRetry(duration: 2.0, element: pasteAction)
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        pasteAction.waitAndTap()
+        // Focusing the bar puts it in editing mode, where Firefox's long press menu is disabled and
+        // iOS offers its own edit menu instead. A longer press starts a drag lift.
+        let editMenuPaste = app.descendants(matching: .any).matching(
+            NSPredicate(
+                format: "label == %@ AND (elementType == %d OR elementType == %d)",
+                "Paste",
+                XCUIElement.ElementType.button.rawValue,
+                XCUIElement.ElementType.menuItem.rawValue
+            )
+        ).firstMatch
+        urlBar.pressWithRetry(duration: 0.8, element: editMenuPaste)
+        editMenuPaste.waitAndTap()
         mozWaitForElementToExist(urlBar)
         waitForPastedValue(in: urlBar, contains: url)
     }
@@ -697,8 +945,75 @@ extension BaseTestCase {
     }
 }
 
+/// Every deeplink the UI tests send to the app, as `<scheme>://<host>?<query>`. The hosts and paths mirror
+/// the app's `DeeplinkInput`, which the UI test target can't import.
+enum Deeplink {
+    /// `deep-link?url=/settings/<section>`
+    case settings(SettingsDeeplink)
+    /// `deep-link?url=/homepanel/<section>`
+    case homepanel(HomepanelDeeplink)
+    /// `open-url?private=<isPrivate>&url=<target>`. The app appends every query item that follows `url` to the
+    /// URL itself, so the target is fully percent-encoded and `private` goes first. `isPrivate: nil` leaves
+    /// `private` out, so the app reuses the last browsing mode.
+    case openURL(String, isPrivate: Bool?)
+
+    func url(scheme: String) -> URL {
+        URL(string: "\(scheme)://\(hostAndQuery)")!
+    }
+
+    private var hostAndQuery: String {
+        switch self {
+        case .settings(let section):
+            return "deep-link?url=/settings/\(section.rawValue)"
+        case .homepanel(let section):
+            return "deep-link?url=/homepanel/\(section.rawValue)"
+        case .openURL(let target, let isPrivate):
+            var allowed = CharacterSet.urlQueryAllowed
+            allowed.remove(charactersIn: "&=?+#")
+            let webURL = withHTTPScheme(target)
+            let encodedTarget = webURL.addingPercentEncoding(withAllowedCharacters: allowed) ?? webURL
+            let privateItem = isPrivate.map { "private=\($0)&" } ?? ""
+            return "open-url?\(privateItem)url=\(encodedTarget)"
+        }
+    }
+}
+
+/// Settings sections reachable through `deep-link?url=/settings/<rawValue>`. The app lowercases the path, so
+/// sections with a camelCase raw value in the app (`contentBlocker`, `creditCard`, `topSites`, `rateApp`)
+/// never match and must not be added here.
+enum SettingsDeeplink: String {
+    case general
+    case theme
+
+    var screen: String {
+        switch self {
+        case .general: return SettingsScreen
+        case .theme: return DisplaySettings
+        }
+    }
+}
+
+/// Library panels reachable through `deep-link?url=/homepanel/<rawValue>`.
+enum HomepanelDeeplink: String {
+    case readingList = "reading-list"
+}
+
+/// `url` with `http://` in front when it has no scheme, as typed test page addresses often don't.
+private func withHTTPScheme(_ url: String) -> String {
+    url.contains("://") ? url : "http://\(url)"
+}
+
 enum AppScheme {
     case fennec
     case firefox
     case firefoxBeta
+
+    /// Mirrors MOZ_INTERNAL_URL_SCHEME in each build's xcconfig.
+    var internalURLScheme: String {
+        switch self {
+        case .fennec: return "fennec"
+        case .firefox: return "firefox-internal"
+        case .firefoxBeta: return "firefox-beta"
+        }
+    }
 }

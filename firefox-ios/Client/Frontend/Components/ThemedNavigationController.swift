@@ -12,6 +12,10 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
+    /// Note: subclasses must redeclare this themselves — protocol extension defaults aren't part of the vtable.
+    var shouldUsePrivateOverride: Bool { return false }
+    var shouldBeInPrivateTheme: Bool { return false }
+
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
@@ -48,7 +52,7 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
         applyTheme()
     }
 
-    private func setupNavigationBarAppearance(theme: Theme) {
+    internal func setupNavigationBarAppearance(theme: Theme) {
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithDefaultBackground()
         standardAppearance.backgroundColor = theme.colors.layer1
@@ -67,7 +71,10 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
     }
 
     func applyTheme() {
-        setupNavigationBarAppearance(theme: themeManager.getCurrentTheme(for: windowUUID))
+        let theme = themeManager.resolveTheme(for: windowUUID,
+                                              shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                              shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+        setupNavigationBarAppearance(theme: theme)
         setNeedsStatusBarAppearanceUpdate()
     }
 }

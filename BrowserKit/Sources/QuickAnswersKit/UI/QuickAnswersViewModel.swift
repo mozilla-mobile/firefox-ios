@@ -21,28 +21,46 @@ final class QuickAnswersViewModel {
     private let store: Store
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
+    let feature: QuickAnswersFeature
     var onStateChange: ((State) -> Void)?
 
     /// The user-facing name of the model backing the request.
-    let modelDisplayName: String
+    var modelDisplayName: String {
+        return feature.model.displayName
+    }
+    private var model: QuickAnswersModel {
+        return feature.model
+    }
+
+    var isOptInRequired: Bool {
+        return !store.isOptInCompleted
+    }
+
+    /// Whether the opt-in is required and shown as a sheet over the browser rather than inline.
+    var isOptInSheetRequired: Bool {
+        return isOptInRequired && feature.isOptInRedesignEnabled
+    }
 
     init(
         prefs: Prefs,
         telemetry: QuickAnswersTelemetry,
-        configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa),
+        configFetcher: QuickAnswersConfigFetcher?,
         makeService: (Prefs, QuickAnswersConfigFetcher) throws -> QuickAnswersService = { prefs, configFetcher in
             try DefaultQuickAnswersService(configFetcher: configFetcher, prefs: prefs)
         }
     ) {
+        let configFetcher = configFetcher ?? DefaultQuickAnswersConfigFetcher(
+            feature: QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false)
+        )
         self.telemetry = telemetry
         self.store = Store(prefs: prefs)
-        self.modelDisplayName = configFetcher.model.displayName
+        self.feature = configFetcher.feature
         do {
             self.service = try makeService(prefs, configFetcher)
         } catch {
             self.service = nil
         }
-        telemetry.quickAnswersRequested()
+        telemetry.quickAnswersRequested(model: model)
     }
 
     /// Entry point for the flow: shows the opt-in screen until the user has consented,
@@ -81,7 +99,7 @@ final class QuickAnswersViewModel {
     private func startRecordingVoice() {
         guard let service else {
             let error = SpeechError.serviceNotInitialized
-            telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel)
+            recordRecordingFailure(error)
             onStateChange?(.speechResult(.empty(), error))
             return
         }
@@ -111,9 +129,20 @@ final class QuickAnswersViewModel {
             }
         } catch {
             try? await service.stopRecording()
-            let error = (error as? SpeechError) ?? SpeechError.unknown(error.localizedDescription)
-            telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel)
+            let error = (error as? SpeechError) ?? SpeechError.unknown(error.telemetryDescription)
+            recordRecordingFailure(error)
             onStateChange?(.speechResult(.empty(), error))
+        }
+    }
+
+    private func recordRecordingFailure(_ error: SpeechError) {
+        switch error {
+        case .microphonePermissionDenied:
+            telemetry.permissionDenied(permission: .microphone)
+        case .speechRecognitionPermissionDenied:
+            telemetry.permissionDenied(permission: .speechRecognition)
+        default:
+            telemetry.recordingCompleted(outcome: false, errorType: error.telemetryLabel)
         }
     }
 
@@ -129,10 +158,10 @@ final class QuickAnswersViewModel {
         let searchResult = await service.search(text: result.text)
         switch searchResult {
         case .success(let result):
-            telemetry.resultsCompleted(outcome: true, errorType: nil)
+            telemetry.resultsCompleted(outcome: true, errorType: nil, model: model)
             onStateChange?(.showSearchResult(result, nil))
         case .failure(let error):
-            telemetry.resultsCompleted(outcome: false, errorType: error.telemetryLabel)
+            telemetry.resultsCompleted(outcome: false, errorType: error.telemetryLabel, model: model)
             onStateChange?(.showSearchResult(.empty(), error))
         }
     }

@@ -13,6 +13,12 @@ import WebEngine
 
 // MARK: - WKUIDelegate
 extension BrowserViewController: WKUIDelegate {
+    static let telURLAllowedCharacters = CharacterSet(charactersIn: "0123456789+-.()#*,;")
+
+    // Characters left unescaped when rebuilding the URL; everything else is percent-encoded.
+    static let callingSchemeTargetAllowedCharacters = CharacterSet.alphanumerics
+        .union(CharacterSet(charactersIn: "-._~@+"))
+
     func webView(
         _ webView: WKWebView,
         createWebViewWith configuration: WKWebViewConfiguration,
@@ -33,6 +39,10 @@ extension BrowserViewController: WKUIDelegate {
 
             if url.scheme == "whatsapp" && UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:])
+            } else if url.scheme == "mailto" {
+                handleMailToNavigation(url: url)
+            } else if ["sms", "tel", "facetime", "facetime-audio"].contains(url.scheme) {
+                handleSpecialSchemeNavigation(url: url, tab: parentTab)
             }
 
             return nil
@@ -187,7 +197,7 @@ extension BrowserViewController: WKUIDelegate {
         Task { @MainActor in
             if let tab = tabManager[webView] {
                 // Need to wait here in case we're waiting for a pending `window.open()`.
-                try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
+                try? await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
                 tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
                 tabManager.removeTab(tab.tabUUID)
             }
@@ -642,7 +652,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
         // gives us the exact same behaviour as Safari.
         if ["sms", "tel", "facetime", "facetime-audio"].contains(url.scheme) {
-            handleSpecialSchemeNavigation(url: url)
+            handleSpecialSchemeNavigation(url: url, tab: tab)
             decisionHandler(.cancel)
             return
         }
@@ -652,9 +662,13 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        let shouldBlockExternalApps = profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false
+
         if isStoreURL(url) {
             decisionHandler(.cancel)
-            handleStoreURLNavigation(url: url)
+            if !shouldBlockExternalApps {
+                handleStoreURLNavigation(url: url)
+            }
             return
         }
 
@@ -689,8 +703,6 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
-
-        let shouldBlockExternalApps = profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false
 
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView.
         // We always allow this. Additionally, data URIs are also handled just like normal web pages.
@@ -749,14 +761,83 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.allow)
     }
 
-    private func handleSpecialSchemeNavigation(url: URL) {
+    private func handleSpecialSchemeNavigation(url: URL, tab: Tab) {
+        guard tab.popupThrottler.canShowAlert(type: .externalScheme) else { return }
+        tab.popupThrottler.willShowAlert(type: .externalScheme)
+
+        // When the scheme is opened from a window.open() popup, we move to its opener. Otherwise we
+        // move to the tab that initiated it. tab.requiredPopupConfiguration is only set if it
+        // was opened with window.open()
+        let originatingTab = (tab.requiredPopupConfiguration != nil ? tab.parent : nil) ?? tab
+        if tabManager.selectedTab !== originatingTab {
+            tabManager.selectTab(originatingTab)
+        }
+
         if url.scheme == "sms" { // All the other types show a native prompt
             showExternalAlert(withText: .ExternalSmsLinkConfirmation) { _ in
                 UIApplication.shared.open(url, options: [:])
             }
         } else {
-            UIApplication.shared.open(url, options: [:])
+            // tel, facetime, and facetime-audio open a native prompt. Strip the url down to a
+            // valid phone number (or email for FaceTime) first. We do this
+            // to avoid phishing scams or other modifications to the system prompt,
+            // see https://bugzilla.mozilla.org/show_bug.cgi?id=1328815
+            guard let sanitizedURL = sanitizedCallingSchemeURL(url) else {
+                logger.log("Blocked calling-scheme URL with no valid target after sanitization",
+                           level: .warning,
+                           category: .webview)
+                return
+            }
+            UIApplication.shared.open(sanitizedURL, options: [:])
         }
+    }
+
+    private func sanitizedCallingSchemeURL(_ url: URL) -> URL? {
+        guard let scheme = url.scheme?.lowercased(),
+              ["tel", "facetime", "facetime-audio"].contains(scheme)
+        else { return nil }
+
+        // strips the scheme, colon, and any leading slashes
+        var rawTarget = String(url.absoluteString.dropFirst(scheme.count + 1))
+        for _ in 0...1 where rawTarget.hasPrefix("/") {
+            rawTarget = String(rawTarget.dropFirst(1))
+        }
+        let decodedTarget = rawTarget.removingPercentEncoding ?? rawTarget
+
+        // Prefer an email for FaceTime targets containing an "@". If there's an "@" but no valid email,
+        // fall back to a phone number. Everything else is treated as a phone number.
+        // We rebuild the url from whatever we find
+        let matches = TextContentDetector.getTextContent(decodedTarget)
+        let email = (scheme != "tel" && decodedTarget.contains("@")) ? firstEmail(in: matches) : nil
+        let target = email ?? firstPhoneNumber(in: matches, fallback: decodedTarget)
+
+        guard let target,
+              let encodedTarget = target.addingPercentEncoding(
+                withAllowedCharacters: Self.callingSchemeTargetAllowedCharacters),
+              let sanitizedURL = URL(string: "\(scheme):\(encodedTarget)")
+        else { return nil }
+
+        return sanitizedURL
+    }
+
+    // Returns the first email address in the detected matches, or nil if none
+    private func firstEmail(in matches: [NSTextCheckingResult]?) -> String? {
+        guard let mailtoURL = matches?.first(where: { $0.url?.scheme?.lowercased() == "mailto" })?.url
+        else { return nil }
+        return String(mailtoURL.absoluteString.dropFirst("mailto:".count))
+    }
+
+    // Returns the first detected phone number. If no phone numbers are detected, we strip <fallback>
+    // of all non-phonenumber characters, returns nil if nothing remains
+    private func firstPhoneNumber(in matches: [NSTextCheckingResult]?, fallback: String) -> String? {
+        if let detected = matches?.first(where: { $0.resultType == .phoneNumber })?.phoneNumber {
+            return detected
+        }
+
+        let stripped = String(String.UnicodeScalarView(
+            fallback.unicodeScalars.filter { Self.telURLAllowedCharacters.contains($0) }
+        ))
+        return stripped.isEmpty ? nil : stripped
     }
 
     private func handleStoreURLNavigation(url: URL) {
@@ -844,12 +925,8 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        // Blob URLs are downloaded via DownloadHelper.js where we check if we need to handle any special cases like:
-        // - If the blob response has a .pkpass MIME type (FXIOS-11684)
-        // - The <a> tag pressed has a "download" attribute, indicating a file download (FXIOS-11125)
-        // Once inspected, if there are no special cases to handle, we will then navigate to the blob URL's location
-        // via JS since we are cancelling the navigation here
-        if url.scheme == "blob" && navigationAction.navigationType != .other {
+        // Read blob data in the web view, including passes opened by JavaScript navigation.
+        if url.scheme == "blob" {
             _ = DownloadContentScript.requestBlobDownload(url: url, tab: tab)
             decisionHandler(.cancel)
             return
@@ -999,15 +1076,24 @@ extension BrowserViewController: WKNavigationDelegate {
         // we may end up overriding the "Share Page With..." action to share a temp file that is not
         // representative of the contents of the web view.
         if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
-            if response.mimeType == MIMEType.PDF, let request {
+            let webViewDocFetchEnabled = featureFlagsProvider.isEnabled(.webViewDocumentFetchRefactor)
+            if response.mimeType == MIMEType.PDF, let request, !webViewDocFetchEnabled {
                 if !tab.shouldDownloadDocument(request) {
                     return .allow
                 }
                 handlePDFDownloadRequest(request: request, tab: tab, filename: response.suggestedFilename)
                 return .cancel
             }
-            if response.mimeType != MIMEType.HTML, let request {
-                tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
+            if response.mimeType != MIMEType.HTML {
+                if webViewDocFetchEnabled {
+                    // WebView fetch reads the document directly from the view, so no request is required.
+                    tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response)
+                } else if let request {
+                    tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response,
+                                                                     request: request)
+                } else {
+                    tab.temporaryDocument = nil
+                }
             } else {
                 tab.temporaryDocument = nil
             }
@@ -1094,7 +1180,7 @@ extension BrowserViewController: WKNavigationDelegate {
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         let nsError = error as NSError
-        if NativeErrorPageFeatureFlag().isNativeErrorPageEnabled {
+        if featureFlagsProvider.isEnabled(.nativeErrorPage) {
             store.dispatch(NativeErrorPageAction(
                 networkError: nsError,
                 windowUUID: windowUUID,
@@ -1118,8 +1204,24 @@ extension BrowserViewController: WKNavigationDelegate {
         // Open our helper and cancel this response from the webview.
         if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
                                                                     okAction: downloadAction) {
-            presentSheetWith(viewModel: downloadViewModel, on: self, from: addressToolbarContainer)
+            presentSheetWith(viewModel: downloadViewModel, from: addressToolbarContainer)
         }
+    }
+
+    private func presentSheetWith(viewModel: PhotonActionSheetViewModel, from view: UIView) {
+        guard let uuid = view.currentWindowUUID else { return }
+
+        let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: uuid)
+        sheet.modalPresentationStyle = viewModel.modalStyle
+        sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
+
+        if let popover = sheet.popoverPresentationController, sheet.modalPresentationStyle == .popover {
+            popover.delegate = self
+            popover.sourceView = view
+            popover.sourceRect = view.bounds
+            popover.permittedArrowDirections = viewModel.getPossibleArrowDirections(trait: traitCollection)
+        }
+        present(sheet, animated: true)
     }
 
     /// Tells the delegate that an error occurred during navigation.
@@ -1210,24 +1312,13 @@ extension BrowserViewController: WKNavigationDelegate {
             )
 
             if let errorPageURL = errorPageURLComponents.url {
-                let noInternetErrorCode = Int(
-                    CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
-                )
-                let isWaybackCode = WaybackCodes.isWaybackCode(error.code)
+                let isBadCertError = NativeErrorPageHelper.isBadCertDomainError(error)
 
-                let isNoInternetError = NativeErrorPageFeatureFlag().isNICErrorPageEnabled &&
-                    error.code == noInternetErrorCode
-                let isCertificateError = NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
-                    for: error,
-                    isOtherErrorPagesEnabled: NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
-                )
-                let isShowWayback = NativeErrorPageFeatureFlag().isWaybackEnabled && isWaybackCode
-
-                if isNoInternetError || isCertificateError || isShowWayback {
-                    if isCertificateError {
+                if featureFlagsProvider.isEnabled(.nativeErrorPage) {
+                    if isBadCertError {
                         NativeErrorPageHelper.logCertificateErrorDetails(error: error, logger: logger)
                     }
-                    // TODO: FXIOS-15800 Move error type determination to NativeErrorPageMiddleware
+
                     let action = NativeErrorPageAction(
                         networkError: error,
                         windowUUID: windowUUID,
@@ -1454,10 +1545,12 @@ private extension BrowserViewController {
     }
 
     // Handle MarketPlaceKitNavigation
-    // Allow only explicit user tap on a top level link
     private func shouldAllowMarketplaceKitNavigation(navigationType: WKNavigationType,
-                                                     isMainFrame: Bool) -> Bool {
-        return navigationType == .linkActivated && isMainFrame
+                                                     isMainFrame: Bool,
+                                                     url: URL? = nil) -> Bool {
+        guard isMainFrame else { return false }
+        // .linkActivated = real tap; .other = JS-initiated / redirect (altstore.io uses this).
+        return navigationType == .linkActivated || navigationType == .other
     }
 
     // Recognize a iTunes Store URL. These all trigger the native apps. Note that appstore.com and phobos.apple.com

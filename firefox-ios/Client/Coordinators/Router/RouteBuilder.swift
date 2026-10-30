@@ -8,21 +8,18 @@ import Glean
 import Shared
 import Common
 
-// TODO: FXIOS-14155 - RouteBuilder should not be @unchecked Sendable due to shouldOpenNewTab usage
-final class RouteBuilder: @unchecked Sendable {
+final class RouteBuilder {
     private var isPrivate = false
     private var prefs: Prefs?
-    private var mainQueue: DispatchQueueInterface
     private let actionExtensionTelemetry: ActionExtensionTelemetry
     private let shareExtensionTelemetry: ShareExtensionTelemetry
-    var shouldOpenNewTab = true
+    private var siriOpenTabThrottleIsActive = false
+    private(set) var siriOpenTabThrottleResetTask: Task<Void, Never>?
 
     init(
-        mainQueue: DispatchQueueInterface = DispatchQueue.main,
         actionExtensionTelemetry: ActionExtensionTelemetry = ActionExtensionTelemetry(),
         shareExtensionTelemetry: ShareExtensionTelemetry = ShareExtensionTelemetry()
     ) {
-        self.mainQueue = mainQueue
         self.actionExtensionTelemetry = actionExtensionTelemetry
         self.shareExtensionTelemetry = shareExtensionTelemetry
     }
@@ -40,6 +37,15 @@ final class RouteBuilder: @unchecked Sendable {
 
     @MainActor
     func makeRoute(url: URL) -> Route? {
+        switch FxAPairingURLParser.parse(url) {
+        case .pairing(let pairingURL):
+            return .fxaPairing(url: pairingURL)
+        case .invalidPairing:
+            return nil
+        case .notPairing:
+            break
+        }
+
         guard let urlScanner = URLScanner(url: url) else { return nil }
 
         if let host = parseURLHost(url) {
@@ -53,48 +59,16 @@ final class RouteBuilder: @unchecked Sendable {
 
             switch host {
             case .deepLink:
-                let deepLinkURL = urlScanner.fullURLQueryItem()?.lowercased()
-                let paths = deepLinkURL?.split(separator: "/") ?? []
-                guard let pathRaw = paths[safe: 0].flatMap(String.init),
-                      let path = DeeplinkInput.Path(rawValue: pathRaw),
-                      let subPath = paths[safe: 1].flatMap(String.init)
-                else { return nil }
-                if path == .settings, let subPath = Route.SettingsSection(rawValue: subPath) {
-                    return .settings(section: subPath)
-                } else if path == .homepanel, let subPath = Route.HomepanelSection(rawValue: subPath) {
-                    return .homepanel(section: subPath)
-                } else if path == .defaultBrowser, let subPath = Route.DefaultBrowserSection(rawValue: subPath) {
-                    return .defaultBrowser(section: subPath)
-                } else if path == .action, let subPath = Route.AppAction(rawValue: subPath) {
-                    return .action(action: subPath)
-                } else {
-                    return nil
-                }
+                return makeDeepLinkRoute(urlScanner: urlScanner)
 
             case .fxaSignIn where urlScanner.value(query: "signin") != nil:
-                return .fxaSignIn(
-                    params: FxALaunchParams(
-                        entrypoint: .fxaDeepLinkNavigation,
-                        query: url.getQuery()
-                    )
-                )
+                return makeFxaSignInRoute(url: url)
 
             case .openUrl:
-                let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
-                if isOpeningWithFirefoxExtension {
-                    actionExtensionTelemetry.shareURL()
-                }
-                return .search(url: urlQuery, isPrivate: isPrivate)
+                return makeOpenUrlRoute(urlScanner: urlScanner, urlQuery: urlQuery, isPrivate: isPrivate)
 
             case .openText:
-                let queryValue = urlScanner.value(query: "text") ?? ""
-                let queryURL = URIFixup.getURL(queryValue)
-                let safeQuery = queryURL != nil ? queryValue.replacingOccurrences(of: "://", with: "%3A%2F%2F") : queryValue
-                let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
-                if isOpeningWithFirefoxExtension {
-                    actionExtensionTelemetry.shareText()
-                }
-                return .searchQuery(query: safeQuery, isPrivate: isPrivate)
+                return makeOpenTextRoute(urlScanner: urlScanner, isPrivate: isPrivate)
 
             case .glean:
                 return .glean(url: url)
@@ -113,13 +87,7 @@ final class RouteBuilder: @unchecked Sendable {
 
             case .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
                 // Widget Quick links - medium - open copied url
-                if !UIPasteboard.general.hasURLs, let searchText = UIPasteboard.general.string {
-                    return .searchQuery(query: searchText, isPrivate: isPrivate)
-                } else {
-                    let url = UIPasteboard.general.url
-                    guard host.isValidURL(urlQuery: url) else { return nil }
-                    return .search(url: url, isPrivate: isPrivate)
-                }
+                return makeWidgetQuickLinkOpenCopiedRoute(isPrivate: isPrivate, host: host)
 
             case .widgetSmallQuickLinkClosePrivateTabs, .widgetMediumQuickLinkClosePrivateTabs:
                 // Widget Quick links - medium - close private tabs
@@ -127,22 +95,11 @@ final class RouteBuilder: @unchecked Sendable {
 
             case .widgetTabsMediumOpenUrl:
                 // Widget Tabs Quick View - medium
-                let tabs = SimpleTab.getSimpleTabs()
-                if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty, let tab = tabs[uuid] {
-                    return .searchURL(url: tab.url, tabId: uuid)
-                } else {
-                    return .search(url: nil, isPrivate: false)
-                }
+                return makeWidgetTabsMediumOpenUrlRoute(urlScanner: urlScanner)
 
             case .widgetTabsLargeOpenUrl:
                 // Widget Tabs Quick View - large
-                let tabs = SimpleTab.getSimpleTabs()
-                if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty {
-                    let tab = tabs[uuid]
-                    return .searchURL(url: tab?.url, tabId: uuid)
-                } else {
-                    return .search(url: nil, isPrivate: false)
-                }
+                return makeWidgetTabsLargeOpenUrlRoute(urlScanner: urlScanner)
 
             case .fxaSignIn:
                 return nil
@@ -154,16 +111,7 @@ final class RouteBuilder: @unchecked Sendable {
                     return nil
                 }
 
-                // Pass optional share message and subtitle here
-                var shareMessage: ShareMessage?
-                if let titleText = urlScanner.value(query: "title") {
-                    let subtitleText: String? = urlScanner.value(query: "subtitle")
-
-                    shareMessage = ShareMessage(message: titleText, subtitle: subtitleText)
-                }
-
-                // Deeplinks cannot have an associated tab or file, so this must be a website URL `.site` share
-                return .sharesheet(shareType: .site(url: shareURL), shareMessage: shareMessage)
+                return makeShareSheetRoute(urlScanner: urlScanner, shareURL: shareURL)
             }
         } else if urlScanner.isHTTPScheme {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
@@ -177,21 +125,111 @@ final class RouteBuilder: @unchecked Sendable {
         }
     }
 
-    func makeRoute(userActivity: NSUserActivity) -> Route? {
-        // If the user activity is a Siri shortcut to open the app, show a new search tab.
-        // By using shouldOpenNewTab we avoid duplicated user activities, from Siri, for new tab.
-        if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue && shouldOpenNewTab {
-            shouldOpenNewTab = false
-            mainQueue.asyncAfter(deadline: .now() + 1) { [weak self] in
-                self?.shouldOpenNewTab = true
+    private func makeFxaSignInRoute(url: URL) -> Route {
+        return .fxaSignIn(
+            params: FxALaunchParams(
+                entrypoint: .fxaDeepLinkNavigation,
+                query: url.getQuery()
+            )
+        )
+    }
+
+    private func makeOpenUrlRoute(urlScanner: URLScanner, urlQuery: URL?, isPrivate: Bool) -> Route? {
+        let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
+        if isOpeningWithFirefoxExtension {
+            actionExtensionTelemetry.shareURL()
+        }
+        if let urlQuery {
+            switch FxAPairingURLParser.parse(urlQuery) {
+            case .pairing(let pairingURL):
+                return .fxaPairing(url: pairingURL)
+            case .invalidPairing:
+                return nil
+            case .notPairing:
+                break
             }
+        }
+        return .search(url: urlQuery, isPrivate: isPrivate)
+    }
+
+    private func makeOpenTextRoute(urlScanner: URLScanner, isPrivate: Bool) -> Route? {
+        let queryValue = urlScanner.value(query: "text") ?? ""
+        let queryURL = URIFixup.getURL(queryValue)
+        let safeQuery = queryURL != nil ? queryValue.replacingOccurrences(of: "://", with: "%3A%2F%2F") : queryValue
+        let isOpeningWithFirefoxExtension = Bool(urlScanner.value(query: "openWithFirefox") ?? "") ?? false
+        if isOpeningWithFirefoxExtension {
+            actionExtensionTelemetry.shareText()
+        }
+        return .searchQuery(query: safeQuery, isPrivate: isPrivate)
+    }
+
+    private func makeWidgetQuickLinkOpenCopiedRoute(isPrivate: Bool, host: DeeplinkInput.Host) -> Route? {
+        if !UIPasteboard.general.hasURLs, let searchText = UIPasteboard.general.string {
+            return .searchQuery(query: searchText, isPrivate: isPrivate, options: [.widgetSearch])
+        } else {
+            let url = UIPasteboard.general.url
+            guard host.isValidURL(urlQuery: url) else { return nil }
+            return .search(url: url, isPrivate: isPrivate)
+        }
+    }
+
+    private func makeWidgetTabsMediumOpenUrlRoute(urlScanner: URLScanner) -> Route? {
+        let tabs = SimpleTab.getSimpleTabs()
+        if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty, let tab = tabs[uuid] {
+            return .searchURL(url: tab.url, tabId: uuid)
+        } else {
             return .search(url: nil, isPrivate: false)
+        }
+    }
+
+    private func makeWidgetTabsLargeOpenUrlRoute(urlScanner: URLScanner) -> Route? {
+        let tabs = SimpleTab.getSimpleTabs()
+        if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty {
+            let tab = tabs[uuid]
+            return .searchURL(url: tab?.url, tabId: uuid)
+        } else {
+            return .search(url: nil, isPrivate: false)
+        }
+    }
+
+    private func makeShareSheetRoute(urlScanner: URLScanner, shareURL: URL) -> Route? {
+        // Pass optional share message and subtitle here
+        var shareMessage: ShareMessage?
+        if let titleText = urlScanner.value(query: "title") {
+            let subtitleText: String? = urlScanner.value(query: "subtitle")
+
+            shareMessage = ShareMessage(message: titleText, subtitle: subtitleText)
+        }
+
+        // Deeplinks cannot have an associated tab or file, so this must be a website URL `.site` share
+        return .sharesheet(shareType: .site(url: shareURL), shareMessage: shareMessage)
+    }
+
+    @MainActor
+    func makeRoute(userActivity: NSUserActivity) -> Route? {
+        // A Siri openURL activity opens a new empty tab (no navigation to a URL)
+        // The throttle flag drops additional Siri activities within a time period
+        if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
+            guard !siriOpenTabThrottleIsActive else { return nil }
+            siriOpenTabThrottleIsActive = true
+            siriOpenTabThrottleResetTask = Task { [weak self] in
+                try? await Task.sleep(nanoseconds: NSEC_PER_SEC)
+                self?.siriOpenTabThrottleIsActive = false
+            }
+            return .search(url: nil, isPrivate: false, options: [.forceNewTab])
         }
 
         // If the user activity has a webpageURL, it's a deep link or an old history item.
         // Use the URL to create a new search tab.
         if let url = userActivity.webpageURL {
-            return .search(url: url, isPrivate: false)
+            switch FxAPairingURLParser.parse(url) {
+            case .pairing(let pairingURL):
+                return .fxaPairing(url: pairingURL)
+            case .invalidPairing:
+                return nil
+            case .notPairing:
+                return .search(url: url, isPrivate: false)
+            }
         }
 
         // If the user activity is a CoreSpotlight item, check its activity identifier to determine
@@ -235,12 +273,41 @@ final class RouteBuilder: @unchecked Sendable {
             }
         case .appIcon:
             return .settings(section: .appIcon)
+        case .mergeWindows:
+            return .action(action: .mergeWindows)
         }
     }
 
     private func getWidgetRoute(urlQuery: URL?, isPrivate: Bool) -> Route? {
         let isCustomLink = prefs?.stringForKey(NewTabAccessors.NewTabPrefKey) == NewTabPage.homePage.rawValue
-        return .search(url: urlQuery, isPrivate: isPrivate, options: isCustomLink ? [] : [.focusLocationField])
+        guard !isCustomLink else { return .search(url: urlQuery, isPrivate: isPrivate, options: []) }
+
+        // Without a URL, this is a widget search button that opens a focused address bar.
+        let options: Set<Route.SearchOptions> = urlQuery == nil
+            ? [.focusLocationField, .widgetSearch]
+            : [.focusLocationField]
+        return .search(url: urlQuery, isPrivate: isPrivate, options: options)
+    }
+
+    private func makeDeepLinkRoute(urlScanner: URLScanner) -> Route? {
+        let deepLinkURL = urlScanner.fullURLQueryItem()?.lowercased()
+        let paths = deepLinkURL?.split(separator: "/") ?? []
+        guard let pathRaw = paths[safe: 0].flatMap(String.init),
+              let path = DeeplinkInput.Path(rawValue: pathRaw),
+              let subPath = paths[safe: 1].flatMap(String.init)
+        else { return nil }
+
+        if path == .settings, let subPath = Route.SettingsSection(rawValue: subPath) {
+            return .settings(section: subPath)
+        } else if path == .homepanel, let subPath = Route.HomepanelSection(rawValue: subPath) {
+            return .homepanel(section: subPath)
+        } else if path == .defaultBrowser, let subPath = Route.DefaultBrowserSection(rawValue: subPath) {
+            return .defaultBrowser(section: subPath)
+        } else if path == .action, let subPath = Route.AppAction(rawValue: subPath) {
+            return .action(action: subPath)
+        } else {
+            return nil
+        }
     }
 
     // MARK: - Telemetry

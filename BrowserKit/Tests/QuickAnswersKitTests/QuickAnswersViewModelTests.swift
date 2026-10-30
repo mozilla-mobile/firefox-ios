@@ -62,6 +62,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(states[3], .loadingSearchResult)
         XCTAssertEqual(states[4], .showSearchResult(searchResult, nil))
         XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastRequestedModel, .exa)
         XCTAssertEqual(mockTelemetry.recordingStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastRecordingOutcome, true)
@@ -69,10 +70,12 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastResultsOutcome, true)
+        XCTAssertEqual(mockTelemetry.lastResultsModel, .exa)
+        XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 0)
     }
 
     func testStartFlow_withRecordError_receivesError() {
-        mockService.shouldThrowSpeechError = true
+        mockService.speechErrorToThrow = .unknown("Unknown error occurred")
         let expectation = XCTestExpectation()
         var states = [QuickAnswersViewModel.State]()
         let subject = createSubject(prefs: optInCompletedPrefs())
@@ -100,6 +103,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastRecordingOutcome, false)
         XCTAssertNotNil(mockTelemetry.lastRecordingErrorType)
+        XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 0)
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 0)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 0)
     }
@@ -133,6 +137,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.resultsStartedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.resultsCompletedCalledCount, 1)
         XCTAssertEqual(mockTelemetry.lastResultsOutcome, false)
+        XCTAssertEqual(mockTelemetry.lastResultsModel, .exa)
     }
 
     func testStartFlow_whenServiceNotInitialized_emitsServiceNotInitializedError() {
@@ -148,6 +153,44 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(mockTelemetry.lastRecordingErrorType, "service_not_initialized")
     }
 
+    // MARK: - Permission Denied Tests
+
+    func testStartFlow_whenMicrophonePermissionDenied_recordsPermissionDeniedOnly() {
+        mockService.speechErrorToThrow = .microphonePermissionDenied(isFirstTime: true)
+        let expectation = XCTestExpectation()
+        let subject = createSubject(prefs: optInCompletedPrefs())
+
+        subject.onStateChange = { state in
+            guard case .speechResult(_, .microphonePermissionDenied) = state else { return }
+            expectation.fulfill()
+        }
+        subject.startFlow()
+
+        wait(for: [expectation])
+
+        XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastPermissionDenied, .microphone)
+        XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 0)
+    }
+
+    func testStartFlow_whenSpeechRecognitionPermissionDenied_recordsPermissionDeniedOnly() {
+        mockService.speechErrorToThrow = .speechRecognitionPermissionDenied(isFirstTime: false)
+        let expectation = XCTestExpectation()
+        let subject = createSubject(prefs: optInCompletedPrefs())
+
+        subject.onStateChange = { state in
+            guard case .speechResult(_, .speechRecognitionPermissionDenied) = state else { return }
+            expectation.fulfill()
+        }
+        subject.startFlow()
+
+        wait(for: [expectation])
+
+        XCTAssertEqual(mockTelemetry.permissionDeniedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastPermissionDenied, .speechRecognition)
+        XCTAssertEqual(mockTelemetry.recordingCompletedCalledCount, 0)
+    }
+
     // MARK: - Opt-In Tests
 
     func testStartFlow_whenOptInNotCompleted_showsOptIn() {
@@ -159,6 +202,51 @@ final class QuickAnswersViewModelTests: XCTestCase {
 
         XCTAssertEqual(state, .showOptIn)
         XCTAssertEqual(mockService.recordVoiceCalledCount, 0)
+    }
+
+    func testIsOptInRequired_whenOptInNotCompleted_isTrue() {
+        let subject = createSubject()
+
+        XCTAssertTrue(subject.isOptInRequired)
+    }
+
+    func testIsOptInRequired_whenOptInCompleted_isFalse() {
+        let subject = createSubject(prefs: optInCompletedPrefs())
+
+        XCTAssertFalse(subject.isOptInRequired)
+    }
+
+    func testIsOptInSheetRequired_withRedesignAndOptInNotCompleted_isTrue() {
+        let subject = createSubject(isOptInRedesignEnabled: true)
+
+        XCTAssertTrue(subject.isOptInSheetRequired)
+    }
+
+    func testIsOptInSheetRequired_withRedesignAndOptInCompleted_isFalse() {
+        let subject = createSubject(prefs: optInCompletedPrefs(), isOptInRedesignEnabled: true)
+
+        XCTAssertFalse(subject.isOptInSheetRequired)
+    }
+
+    func testIsOptInSheetRequired_withoutRedesign_isFalse() {
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.isOptInSheetRequired)
+    }
+
+    func testIsOptInSheetRequired_withRedesignAfterCompleteOptIn_isFalse() {
+        mockService.speechResults = [SpeechResult(text: "Hello", isFinal: true)]
+        mockService.searchResult = .success(SearchResult(resultText: "Test", sources: []))
+        let subject = createSubject(isOptInRedesignEnabled: true)
+        let expectation = XCTestExpectation()
+
+        subject.onStateChange = { state in
+            if case .showSearchResult = state { expectation.fulfill() }
+        }
+        subject.completeOptIn()
+
+        wait(for: [expectation])
+        XCTAssertFalse(subject.isOptInSheetRequired)
     }
 
     func testCompleteOptIn_persistsConsentAndStartsRecording() {
@@ -217,32 +305,42 @@ final class QuickAnswersViewModelTests: XCTestCase {
     // MARK: - Model Display Name Tests
 
     func testModelDisplayName_withExaModel_returnsExa() {
-        let subject = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .exa))
+        let subject = createSubject(model: .exa)
 
         XCTAssertEqual(subject.modelDisplayName, QuickAnswersModel.exa.displayName)
     }
 
     func testModelDisplayName_withLinerModel_returnsLiner() {
-        let subject = createSubject(configFetcher: DefaultQuickAnswersConfigFetcher(model: .liner))
+        let subject = createSubject(model: .liner)
 
         XCTAssertEqual(subject.modelDisplayName, QuickAnswersModel.liner.displayName)
+    }
+
+    func testInit_withLinerModel_recordsRequestedWithModel() {
+        _ = createSubject(model: .liner)
+
+        XCTAssertEqual(mockTelemetry.quickAnswersRequestedCalledCount, 1)
+        XCTAssertEqual(mockTelemetry.lastRequestedModel, .liner)
     }
 
     // MARK: - Helper
     private func createSubject(
         prefs: Prefs = MockProfilePrefs(),
-        configFetcher: QuickAnswersConfigFetcher = DefaultQuickAnswersConfigFetcher(model: .exa)
+        model: QuickAnswersModel = .exa,
+        isOptInRedesignEnabled: Bool = false
     ) -> QuickAnswersViewModel {
-        let model = QuickAnswersViewModel(
+        let subject = QuickAnswersViewModel(
             prefs: prefs,
             telemetry: mockTelemetry,
-            configFetcher: configFetcher,
+            configFetcher: DefaultQuickAnswersConfigFetcher(
+                feature: QuickAnswersFeature(model: model, isOptInRedesignEnabled: isOptInRedesignEnabled)
+            ),
             makeService: { _, _ in
                 return self.mockService
             }
         )
-        trackForMemoryLeaks(model)
-        return model
+        trackForMemoryLeaks(subject)
+        return subject
     }
 
     private func createSubjectWithFailingService(prefs: Prefs = MockProfilePrefs()) -> QuickAnswersViewModel {
@@ -250,6 +348,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         let model = QuickAnswersViewModel(
             prefs: prefs,
             telemetry: mockTelemetry,
+            configFetcher: nil,
             makeService: { _, _ in throw ServiceInitError() }
         )
         trackForMemoryLeaks(model)

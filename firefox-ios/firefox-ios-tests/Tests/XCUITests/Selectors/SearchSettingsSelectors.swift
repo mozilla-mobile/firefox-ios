@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Localizations
+import Shared
 import XCTest
 
 protocol SearchSettingsSelectorsSet {
@@ -12,8 +14,27 @@ protocol SearchSettingsSelectorsSet {
     var RECENT_SEARCH_SWITCH: Selector { get }
     var DEFAULT_SEARCH_ENGINE_NAVBAR: Selector { get }
     var DEFAULT_SEARCH_ENGINE_SECTION_TITLE: Selector { get }
+    var DEFAULT_SEARCH_ENGINE_ROW: Selector { get }
+    var GOOGLE_LENS_ROW: Selector { get }
+    var GOOGLE_LENS_FOOTNOTE: Selector { get }
     var ALTERNATIVE_SEARCH_ENGINES_SECTION_TITLE: Selector { get }
+    var ADD_SEARCH_ENGINE_ROW: Selector { get }
+    var SHOW_SEARCH_SUGGESTIONS_SWITCH: Selector { get }
+    var SHOW_IN_PRIVATE_SESSIONS_SWITCH: Selector { get }
+    var SEARCH_BROWSING_HISTORY_SWITCH: Selector { get }
+    var SEARCH_BOOKMARKS_SWITCH: Selector { get }
+    var SEARCH_SYNCED_TABS_SWITCH: Selector { get }
+    var SUGGESTIONS_FROM_THE_WEB_SWITCH: Selector { get }
+    var SUGGESTIONS_FROM_SPONSORS_SWITCH: Selector { get }
+    var LEARN_MORE_ABOUT_FIREFOX_SUGGEST_ROW: Selector { get }
+    /// Title and description the 'Suggestions from Sponsors' row is expected to display, in the
+    /// single string the app folds them into for accessibility.
+    var SUGGESTIONS_FROM_SPONSORS_DISPLAYED_TEXT: String { get }
+    var SUGGESTIONS_FROM_THE_WEB_DISPLAYED_TEXT: String { get }
+    /// The 'Search Browsing History' row has no description, so its accessibility label is the title alone.
+    var SEARCH_BROWSING_HISTORY_DISPLAYED_TEXT: String { get }
     func searchEngineRow(named engineName: String) -> Selector
+    func alternativeSearchEngineRow(named engineName: String) -> Selector
     var all: [Selector] { get }
 }
 
@@ -26,7 +47,34 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
         static let backButton               = AccessibilityIdentifiers.Settings.Search.backButton
         static let defaultSearchEngineNavBar = "Default Search Engine"
         static let defaultSearchEngineSectionTitle = "Default Search Engine"
+        static let defaultSearchEngineRow = String.Settings.Search.AccessibilityLabels.DefaultSearchEngine
+        static let googleLensRow = String.Settings.Search.GoogleLens.Title
+        static let googleLensFootnote = String.Settings.Search.GoogleLens.Footnote
         static let alternativeSearchEnginesSectionTitle = "Alternative Search Engines"
+        static let addSearchEngineRow          = AccessibilityIdentifiers.Settings.Search.customEngineViewButton
+        static let showSearchSuggestionsSwitch = AccessibilityIdentifiers.Settings.Search.showSearchSuggestions
+        static let showInPrivateSessionsSwitch =
+            AccessibilityIdentifiers.Settings.Search.showPrivateModeSearchSuggestionsSwitch
+        static let searchBrowsingHistorySwitch =
+            AccessibilityIdentifiers.Settings.Search.showBrowsingHistorySuggestionsSwitch
+        static let searchBookmarksSwitch       = AccessibilityIdentifiers.Settings.Search.showBookmarksSuggestionsSwitch
+        static let searchSyncedTabsSwitch      = AccessibilityIdentifiers.Settings.Search.showSyncedTabsSuggestionsSwitch
+        static let suggestionsFromTheWebSwitch =
+            AccessibilityIdentifiers.Settings.Search.showNonSponsoredSuggestionsSwitch
+        static let suggestionsFromSponsorsSwitch =
+            AccessibilityIdentifiers.Settings.Search.showSponsoredSuggestionsSwitch
+        static let learnMoreAboutFirefoxSuggestRow = "Learn more about Firefox Suggest"
+        static let suggestionsFromSponsorsTitle = String.Settings.Search.Suggest.ShowSponsoredSuggestionsTitle
+        static let suggestionsFromSponsorsDescription = String.localizedStringWithFormat(
+            .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
+            AppName.shortName.rawValue
+        )
+        static let suggestionsFromTheWebTitle = String.Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle
+        static let suggestionsFromTheWebDescription = String.localizedStringWithFormat(
+            .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
+            AppName.shortName.rawValue
+        )
+        static let searchBrowsingHistoryTitle = String.Settings.Search.Suggest.SearchBrowsingHistory
     }
 
     let NAVBAR = Selector.navigationBarId(
@@ -71,10 +119,92 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
         groups: ["settings", "search"]
     )
 
+    // The row's value is the default engine's name.
+    let DEFAULT_SEARCH_ENGINE_ROW = Selector.cellByLabel(
+        IDs.defaultSearchEngineRow,
+        description: "Row showing the default search engine on Settings → Search, which opens the engine picker",
+        groups: ["settings", "search"]
+    )
+
+    // The toggle has no identifier, and the row's label is the title followed by its description.
+    let GOOGLE_LENS_ROW = Selector.cellLabelBeginsWith(
+        IDs.googleLensRow,
+        description: "Google Lens toggle row on Settings → Search, shown only while Google is the default engine",
+        groups: ["settings", "search"]
+    )
+
+    let GOOGLE_LENS_FOOTNOTE = Selector.staticTextByExactLabel(
+        IDs.googleLensFootnote,
+        description: "Footnote under the Google Lens toggle on Settings → Search",
+        groups: ["settings", "search"]
+    )
+
     let ALTERNATIVE_SEARCH_ENGINES_SECTION_TITLE = Selector.staticTextByExactLabel(
         IDs.alternativeSearchEnginesSectionTitle,
         description: "Section title for alternative search engines on Settings → Search",
         groups: ["settings", "search"]
+    )
+
+    let ADD_SEARCH_ENGINE_ROW = Selector.tableCellById(
+        IDs.addSearchEngineRow,
+        description: "Add Search Engine row on Settings → Search",
+        groups: ["settings", "search"]
+    )
+
+    let SHOW_SEARCH_SUGGESTIONS_SWITCH = Selector.switchById(
+        IDs.showSearchSuggestionsSwitch,
+        description: "Switch for 'Show Search Suggestions' on Settings → Search",
+        groups: ["settings", "search"]
+    )
+
+    let SHOW_IN_PRIVATE_SESSIONS_SWITCH = Selector.switchById(
+        IDs.showInPrivateSessionsSwitch,
+        description: "Switch for 'Show in Private Sessions' on Settings → Search",
+        groups: ["settings", "search"]
+    )
+
+    let SEARCH_BROWSING_HISTORY_SWITCH = Selector.switchById(
+        IDs.searchBrowsingHistorySwitch,
+        description: "Switch for 'Search Browsing History' on Settings → Search",
+        groups: ["settings", "search", "firefox suggest"]
+    )
+
+    let SEARCH_BOOKMARKS_SWITCH = Selector.switchById(
+        IDs.searchBookmarksSwitch,
+        description: "Switch for 'Search Bookmarks' on Settings → Search",
+        groups: ["settings", "search", "firefox suggest"]
+    )
+
+    let SEARCH_SYNCED_TABS_SWITCH = Selector.switchById(
+        IDs.searchSyncedTabsSwitch,
+        description: "Switch for 'Search Synced Tabs' on Settings → Search",
+        groups: ["settings", "search", "firefox suggest"]
+    )
+
+    let SUGGESTIONS_FROM_THE_WEB_SWITCH = Selector.switchById(
+        IDs.suggestionsFromTheWebSwitch,
+        description: "Switch for 'Suggestions from the Web' on Settings → Search",
+        groups: ["settings", "search", "firefox suggest"]
+    )
+
+    let SUGGESTIONS_FROM_SPONSORS_SWITCH = Selector.switchById(
+        IDs.suggestionsFromSponsorsSwitch,
+        description: "Switch for 'Suggestions from Sponsors' on Settings → Search",
+        groups: ["settings", "search", "firefox suggest"]
+    )
+
+    let SUGGESTIONS_FROM_SPONSORS_DISPLAYED_TEXT =
+        "\(IDs.suggestionsFromSponsorsTitle), \(IDs.suggestionsFromSponsorsDescription)"
+
+    let SUGGESTIONS_FROM_THE_WEB_DISPLAYED_TEXT =
+        "\(IDs.suggestionsFromTheWebTitle), \(IDs.suggestionsFromTheWebDescription)"
+
+    let SEARCH_BROWSING_HISTORY_DISPLAYED_TEXT = IDs.searchBrowsingHistoryTitle
+
+    let LEARN_MORE_ABOUT_FIREFOX_SUGGEST_ROW = Selector.staticTextInTablesByLabel(
+        IDs.learnMoreAboutFirefoxSuggestRow,
+        description: "'Learn more about Firefox Suggest' row on Settings → Search",
+        groups: ["settings", "search", "firefox suggest"]
     )
 
     func searchEngineRow(named engineName: String) -> Selector {
@@ -85,10 +215,25 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
         )
     }
 
+    /// Alternative engine rows have no label, so a row is found through the name text it contains. Only rows
+    /// with a switch match, which leaves out the default engine row that also shows the engine name.
+    func alternativeSearchEngineRow(named engineName: String) -> Selector {
+        Selector.switchCellContainingStaticText(
+            engineName,
+            description: "Alternative search engine row for '\(engineName)' on Settings → Search",
+            groups: ["settings", "search"]
+        )
+    }
+
     var all: [Selector] {
         [
             NAVBAR, BACK_BUTTON_iOS26, BACK_BUTTON, TRENDING_SEARCH_SWITCH, RECENT_SEARCH_SWITCH,
-            DEFAULT_SEARCH_ENGINE_NAVBAR, DEFAULT_SEARCH_ENGINE_SECTION_TITLE, ALTERNATIVE_SEARCH_ENGINES_SECTION_TITLE
+            DEFAULT_SEARCH_ENGINE_NAVBAR, DEFAULT_SEARCH_ENGINE_SECTION_TITLE, DEFAULT_SEARCH_ENGINE_ROW, GOOGLE_LENS_ROW,
+            GOOGLE_LENS_FOOTNOTE,
+            ALTERNATIVE_SEARCH_ENGINES_SECTION_TITLE,
+            ADD_SEARCH_ENGINE_ROW, SHOW_SEARCH_SUGGESTIONS_SWITCH, SHOW_IN_PRIVATE_SESSIONS_SWITCH,
+            SEARCH_BROWSING_HISTORY_SWITCH, SEARCH_BOOKMARKS_SWITCH, SEARCH_SYNCED_TABS_SWITCH,
+            SUGGESTIONS_FROM_THE_WEB_SWITCH, SUGGESTIONS_FROM_SPONSORS_SWITCH, LEARN_MORE_ABOUT_FIREFOX_SUGGEST_ROW
         ]
     }
 }

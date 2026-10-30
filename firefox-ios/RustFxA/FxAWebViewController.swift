@@ -24,6 +24,13 @@ class FxAWebViewController: UIViewController {
     fileprivate let viewModel: FxAWebViewModel
     private let logger: Logger
 
+    #if compiler(>=6.4)
+    @available(iOS 27.1, *)
+    override var preferredVerticalBarBehavior: UIVerticalBarBehavior {
+        return .disabled
+    }
+    #endif
+
     /**
      init() FxAWebView.
 

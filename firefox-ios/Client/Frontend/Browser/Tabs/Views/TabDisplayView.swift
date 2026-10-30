@@ -164,17 +164,20 @@ final class TabDisplayView: UIView,
 
         tabsState = state
 
-        dataSource.updateSnapshot(state: tabsState)
+        // Off screen (e.g. preloaded before the tab tray is presented) there is nothing to animate,
+        // so let UIKit reload instead of diffing.
+        dataSource.updateSnapshot(state: tabsState, animatingDifferences: window != nil)
 
         if let scrollState = state.scrollState {
             scrollToTab(scrollState)
         }
 
-        if state.didTapAddTab {
-            let action = TabPanelViewAction(panelType: self.panelType,
-                                            windowUUID: self.windowUUID,
-                                            actionType: TabPanelViewActionType.addNewTab)
-            store.dispatch(action)
+        // Users can only create tabs for normal and private tab panel types, but not synced tab panel type
+        if state.didTapAddTab, let type = TabsDisplayViewPanelType(fromTabTrayPanelType: panelType) {
+            store.dispatch(
+                TabPanelViewModernAction.addNewTab(ofType: type),
+                forWindowUUID: self.windowUUID
+            )
         }
     }
 
@@ -379,7 +382,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
               let destinationIndexPath = coordinator.destinationIndexPath,
               let dragItem = coordinator.items.first?.dragItem,
               let tab = dragItem.localObject as? TabModel,
-              let sourceIndex = tabsState.tabs.firstIndex(of: tab)
+              let sourceIndex = tabsState.tabs.firstIndex(where: { $0.tabUUID == tab.tabUUID })
         else { return }
 
         let section = destinationIndexPath.section

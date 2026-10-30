@@ -10,7 +10,8 @@ import JWTKit
 /// request construction and server contract fields.
 public enum MLPAServiceType: String, Sendable {
     case s2s = "s2s"
-    case quickAnswers = "answer"
+    case quickAnswersExa = "answer"
+    case quickAnswersLiner = "liner-answer"
 }
 
 public enum MLPAConstants {

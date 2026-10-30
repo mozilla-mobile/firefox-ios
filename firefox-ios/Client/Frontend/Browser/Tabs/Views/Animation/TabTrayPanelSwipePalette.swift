@@ -124,7 +124,9 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var layerSurfaceMedium: UIColor { base.layerSurfaceMedium }
     var layerSurfaceMediumAlpha: UIColor { base.layerSurfaceMediumAlpha }
     var layerSurfaceMediumAlt: UIColor { base.layerSurfaceMediumAlt }
+    var layerSurfaceMediumAltGlass: UIColor { base.layerSurfaceMediumAltGlass }
     var layerGradientSummary: Gradient { base.layerGradientSummary }
+    var layerToolbarGlass: UIColor { base.layerToolbarGlass }
 
     var actionPrimaryHover: UIColor { base.actionPrimaryHover }
     var actionPrimaryDisabled: UIColor { base.actionPrimaryDisabled }
@@ -184,6 +186,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     // MARK: - Nova only tokens
     var layerAccentSubtle: UIColor { base.layerAccentSubtle }
     var layerInverse: UIColor { base.layerInverse }
+    var layerGlassSelectedFill: UIColor { base.layerGlassSelectedFill }
     var textToast: UIColor { base.textToast }
     var iconOnColorDisabled: UIColor { base.iconOnColorDisabled }
     var iconPrivate: UIColor { base.iconPrivate }

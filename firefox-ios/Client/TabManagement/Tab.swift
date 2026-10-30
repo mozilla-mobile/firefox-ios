@@ -67,12 +67,6 @@ protocol LegacyTabDelegate: AnyObject {
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
-struct TabState {
-    var isPrivate = false
-    var url: URL?
-    var title: String?
-}
-
 enum TabUrlType: String {
     case regular
     case search
@@ -83,6 +77,7 @@ enum TabUrlType: String {
 }
 
 typealias TabUUID = String
+typealias TabGroupID = UUID
 
 @MainActor
 class Tab: NSObject,
@@ -92,6 +87,8 @@ class Tab: NSObject,
            ContentBlockerTab,
            TabWebViewDelegate,
            UIGestureRecognizerDelegate {
+    var groupID: TabGroupID?
+
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
         get {
@@ -114,10 +111,6 @@ class Tab: NSObject,
     let windowUUID: WindowUUID
 
     var urlType: TabUrlType = .regular
-
-    var tabState: TabState {
-        return TabState(isPrivate: _isPrivate, url: url, title: displayTitle)
-    }
 
     // PageMetadata is derived from the page content itself, and as such lags behind the
     // rest of the tab.
@@ -385,7 +378,9 @@ class Tab: NSObject,
             UserScriptManager.shared.injectUserScriptsIntoWebView(
                 webView,
                 nightMode: nightMode,
-                noImageMode: noImageMode
+                noImageMode: noImageMode,
+                backgroundAudio: featureFlagsProvider.isEnabled(.backgroundAudio)
+                    && BackgroundAudioHelper.isEnabled(profile.prefs)
             )
         }
     }
@@ -393,7 +388,7 @@ class Tab: NSObject,
     var nightMode: Bool {
         didSet {
             guard nightMode != oldValue else { return }
-            webView?.isOpaque = !nightMode
+            webView?.updateBackgroundForNightMode(nightMode)
             webView?.evaluateJavascriptInCustomContentWorld(
                 NightModeHelper.jsCallbackBuilder(nightMode),
                 in: .world(name: NightModeHelper.name())
@@ -401,7 +396,9 @@ class Tab: NSObject,
             UserScriptManager.shared.injectUserScriptsIntoWebView(
                 webView,
                 nightMode: nightMode,
-                noImageMode: noImageMode
+                noImageMode: noImageMode,
+                backgroundAudio: featureFlagsProvider.isEnabled(.backgroundAudio)
+                    && BackgroundAudioHelper.isEnabled(profile.prefs)
             )
         }
     }
@@ -469,6 +466,7 @@ class Tab: NSObject,
 
     var onWebViewLoadingStateChanged: (@MainActor () -> Void)?
     private var webViewLoadingObserver: NSKeyValueObservation?
+    private var blankLoadDelegate: BlankPageNavigationDelegate?
 
     private var temporaryDocumentsSession: TemporaryDocumentSession = [:]
 
@@ -483,6 +481,7 @@ class Tab: NSObject,
 
     init(profile: Profile,
          isPrivate: Bool = false,
+         groupID: TabGroupID? = nil,
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
          tabCreatedTime: Date = Date(),
@@ -490,6 +489,7 @@ class Tab: NSObject,
          logger: Logger = DefaultLogger.shared,
          documentLogger: DocumentLogger = AppContainer.shared.resolve(),
          dispatchQueue: DispatchQueueInterface = DispatchQueue.global(qos: .background)) {
+        self.groupID = groupID
         self.nightMode = false
         self.windowUUID = windowUUID
         self.noImageMode = false
@@ -569,7 +569,9 @@ class Tab: NSObject,
         UserScriptManager.shared.injectUserScriptsIntoWebView(
             webView,
             nightMode: nightMode,
-            noImageMode: noImageMode
+            noImageMode: noImageMode,
+            backgroundAudio: featureFlagsProvider.isEnabled(.backgroundAudio)
+                && BackgroundAudioHelper.isEnabled(profile.prefs)
         )
 
         tabDelegate?.tab(self, didCreateWebView: webView)
@@ -665,6 +667,30 @@ class Tab: NSObject,
     func offloadWebView() async {
         guard webView != nil else { return }
         await close()
+    }
+
+    /// Navigates to `about:blank` and waits for the navigation to finish.
+    /// Callers must persist any session data they need first, since this replaces the tab's
+    /// interaction state.
+    ///
+    /// ⚠️⚠️⚠️ Takes over `navigationDelegate` for the duration, so the usual delegate never sees the
+    /// blank navigation and doesn't update the address bar or history for it. That makes this
+    /// only safe on a webview which is about to be discarded.
+    func loadBlankPage() async {
+        guard let webView, let blankURL = URL(string: "about:blank") else { return }
+
+        let previousDelegate = webView.navigationDelegate
+        await withCheckedContinuation { continuation in
+            let delegate = BlankPageNavigationDelegate(continuation: continuation)
+            // `navigationDelegate` is weak, so the delegate needs an owner for the duration.
+            blankLoadDelegate = delegate
+            webView.navigationDelegate = delegate
+            // Cancels any provisional load in another web process, which `load` alone does not.
+            webView.stopLoading()
+            delegate.beginAwaiting(webView.load(URLRequest(url: blankURL)))
+        }
+        webView.navigationDelegate = previousDelegate
+        blankLoadDelegate = nil
     }
 
     func goBack() {
@@ -797,9 +823,6 @@ class Tab: NSObject,
             guard let webView = self.webView,
                   let findInteraction = webView.findInteraction else { return }
             isFindInPageMode = findInteraction.isFindNavigatorVisible && isBottomSearchBar
-            // Restore the keyboard dismiss mode to its default behavior (.onDrag) after find-in-page mode ends,
-            // allowing normal keyboard dismissal patterns to resume for regular web browsing interactions.
-            webView.scrollView.keyboardDismissMode = .onDrag
         } else {
             isFindInPageMode = doesFindInPageBarExist && isBottomSearchBar
         }
@@ -854,12 +877,11 @@ class Tab: NSObject,
     func applyTheme(theme: Theme) {
         UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
         webView?.applyTheme(theme: theme)
-        /// Configures the web view's background to prevent a white flash during initial load in night mode.
-        /// Note: Background colors are only visible when `isOpaque` is false — setting them while it's true has no effect.
+        // Keep the themed backing color for transparent web content in night mode.
         webView?.backgroundColor =  theme.colors.layer1
-        webView?.scrollView.backgroundColor = theme.colors.layer1
-        webView?.isOpaque = !nightMode
-        webView?.underPageBackgroundColor = nightMode ? .black : nil
+        // Let WebKit manage the scroll background as the page and opacity change.
+        webView?.scrollView.backgroundColor = nil
+        webView?.updateBackgroundForNightMode(nightMode)
     }
 
     // MARK: - Static Helpers

@@ -45,6 +45,12 @@ class ScreenGraphTest: XCTestCase {
                                LaunchArguments.DisableAnimations]
         app.activate()
     }
+
+    override func tearDown() async throws {
+        navigator = nil
+        app = nil
+        try await super.tearDown()
+    }
 }
 
 extension XCTestCase {
@@ -156,7 +162,7 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
         screenState.gesture(forAction: TestActions.LoadURLByPasting, TestActions.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
             app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.0)
-            app.tables["Context Menu"].cells[AccessibilityIdentifiers.Photon.pasteAndGoAction].waitAndTap()
+            app.cells.buttons[AccessibilityIdentifiers.Photon.pasteAndGoAction].waitAndTap()
         }
     }
     map.addScreenState(BrowserTabMenuMore) { screenState in
@@ -185,9 +191,7 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
         screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
 
         // More Options
-        screenState.tap(
-            app.tables.cells["MainMenu.MoreLess"],
-            to: BrowserTabMenuMore)
+        screenState.gesture(to: BrowserTabMenuMore) { expandTabMenuIfNeeded(in: app) }
 
         screenState.backAction = {
             if isTablet {

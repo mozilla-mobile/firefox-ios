@@ -7,4 +7,5 @@ public enum SummarizerTrigger: String, Sendable {
     case mainMenu
     case toolbarIcon
     case readerModeBarButton
+    case readerModeWithSummarizerButton
 }

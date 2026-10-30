@@ -26,13 +26,13 @@
 "Hide" = "Slēpt";
 
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
-"Logins will be permanently removed." = "Lietotājvārdi tiks neatgriezeniski aizvākti.";
+"Logins will be permanently removed." = "Pieteikšanās vienumi tiks neatgriezeniski noņemti.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
-"Logins will be removed from all connected devices." = "Lietotājvārdi tiks aizvākta visās savienotajās ierīcēs. Šo darbību nevar atjaunot.";
+"Logins will be removed from all connected devices." = "Pieteikšanās vienumi tiks noņemti visās savienotajās ierīcēs.";
 
 /* Label describing when the current login was last modified. %@ is the timestamp. */
-"Modified %@" = "Rediģēts %@";
+"Modified %@" = "Labots %@";
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Nav nevienas paroles";
@@ -52,6 +52,9 @@
 /* Accessibility label for the search input field in the Logins list */
 "Search Input Field" = "Meklēšanas ievades lauks";
 
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Meklēt";
+
 /* Label for the button used to select all logins. */
 "Select All" = "Izvēlēties visu";
 
@@ -59,5 +62,5 @@
 "Username" = "Lietotājvārds";
 
 /* Label displayed above the website row in Login Detail View. */
-"Website" = "Mājas lapa";
+"Website" = "Tīmekļvietne";
 

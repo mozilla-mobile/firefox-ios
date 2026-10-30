@@ -20,7 +20,7 @@ class TabTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockTabWebView = MockTabWebView(frame: .zero,
                                         configuration: .init(),
                                         windowUUID: windowUUID,
@@ -39,6 +39,64 @@ class TabTests: XCTestCase {
         mockDispatchQueue = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
+    }
+
+    func testGroupID_whenNormalTabCreated_defaultsToNil() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+
+        XCTAssertNil(tab.groupID)
+        XCTAssertFalse(tab.isPrivate)
+    }
+
+    func testGroupID_whenPrivateTabCreated_defaultsToNil() {
+        let tab = Tab(profile: mockProfile, isPrivate: true, windowUUID: windowUUID)
+
+        XCTAssertNil(tab.groupID)
+        XCTAssertTrue(tab.isPrivate)
+    }
+
+    func testGroupID_whenNormalTabCreatedWithGroup_preservesPrivacy() {
+        let groupID = UUID()
+        let tab = Tab(profile: mockProfile, groupID: groupID, windowUUID: windowUUID)
+
+        XCTAssertEqual(tab.groupID, groupID)
+        XCTAssertFalse(tab.isPrivate)
+        XCTAssertTrue(tab.isNormal)
+    }
+
+    func testGroupID_whenPrivateTabCreatedWithGroup_preservesPrivacy() {
+        let groupID = UUID()
+        let tab = Tab(profile: mockProfile, isPrivate: true, groupID: groupID, windowUUID: windowUUID)
+
+        XCTAssertEqual(tab.groupID, groupID)
+        XCTAssertTrue(tab.isPrivate)
+        XCTAssertFalse(tab.isNormal)
+    }
+
+    func testGroupID_whenChangedOnNormalTab_preservesPrivacy() {
+        let tab = Tab(profile: mockProfile, groupID: UUID(), windowUUID: windowUUID)
+        let groupID = UUID()
+
+        tab.groupID = groupID
+        XCTAssertEqual(tab.groupID, groupID)
+        XCTAssertFalse(tab.isPrivate)
+
+        tab.groupID = nil
+        XCTAssertNil(tab.groupID)
+        XCTAssertFalse(tab.isPrivate)
+    }
+
+    func testGroupID_whenChangedOnPrivateTab_preservesPrivacy() {
+        let tab = Tab(profile: mockProfile, isPrivate: true, groupID: UUID(), windowUUID: windowUUID)
+        let groupID = UUID()
+
+        tab.groupID = groupID
+        XCTAssertEqual(tab.groupID, groupID)
+        XCTAssertTrue(tab.isPrivate)
+
+        tab.groupID = nil
+        XCTAssertNil(tab.groupID)
+        XCTAssertTrue(tab.isPrivate)
     }
 
     func testShareURL_RemovingReaderModeComponents() {
@@ -573,6 +631,85 @@ class TabTests: XCTestCase {
             .preferredHTTPSNavigationPolicy
         XCTAssertNotEqual(policy, .automaticFallbackToHTTP)
         await subject.close()
+    }
+
+    // MARK: - loadBlankPage
+    @MainActor
+    func testLoadBlankPage_whenWebViewIsNil_doesNotCrash() async {
+        let subject = createSubject()
+
+        await subject.loadBlankPage()
+
+        XCTAssertNil(subject.webView)
+    }
+
+    @MainActor
+    func testLoadBlankPage_loadsAboutBlank() async {
+        let subject = createSubject()
+        subject.webView = mockTabWebView
+
+        await subject.loadBlankPage()
+        subject.webView = nil
+
+        XCTAssertEqual(mockTabWebView.loadCalled, 1)
+        XCTAssertEqual(mockTabWebView.loadedRequest?.url, URL(string: "about:blank"))
+    }
+
+    @MainActor
+    func testLoadBlankPage_installsBlankPageDelegateDuringLoad() async {
+        let subject = createSubject()
+        let previousDelegate = MockNavigationDelegate()
+        mockTabWebView.navigationDelegate = previousDelegate
+        subject.webView = mockTabWebView
+
+        await subject.loadBlankPage()
+        subject.webView = nil
+
+        XCTAssertTrue(mockTabWebView.navigationDelegateAtLoad is BlankPageNavigationDelegate)
+    }
+
+    @MainActor
+    func testLoadBlankPage_restoresPreviousDelegate() async {
+        let subject = createSubject()
+        let previousDelegate = MockNavigationDelegate()
+        mockTabWebView.navigationDelegate = previousDelegate
+        subject.webView = mockTabWebView
+
+        await subject.loadBlankPage()
+        subject.webView = nil
+
+        XCTAssertTrue(mockTabWebView.navigationDelegate === previousDelegate)
+    }
+
+    @MainActor
+    func testLoadBlankPage_waitsForNavigationToFinish() async throws {
+        let subject = createSubject()
+        let previousDelegate = MockNavigationDelegate()
+        let navigationSourceWebView = WKWebView(frame: .zero)
+        let navigation = try XCTUnwrap(navigationSourceWebView.loadHTMLString("", baseURL: nil))
+        mockTabWebView.navigationDelegate = previousDelegate
+        mockTabWebView.mockNavigation = navigation
+        let loadCalledExpectation = XCTestExpectation(description: "wait for load to be called")
+        mockTabWebView.loadCalledExpectation = loadCalledExpectation
+        subject.webView = mockTabWebView
+        var didFinishLoading = false
+
+        let task = Task {
+            await subject.loadBlankPage()
+            didFinishLoading = true
+        }
+
+        await fulfillment(of: [loadCalledExpectation])
+        XCTAssertFalse(didFinishLoading)
+        XCTAssertFalse(mockTabWebView.navigationDelegate === previousDelegate)
+
+        let blankPageDelegate = try XCTUnwrap(mockTabWebView.navigationDelegate as? BlankPageNavigationDelegate)
+        blankPageDelegate.webView(mockTabWebView, didFinish: navigation)
+        await task.value
+        subject.webView = nil
+
+        XCTAssertTrue(didFinishLoading)
+        XCTAssertTrue(mockTabWebView.navigationDelegate === previousDelegate)
     }
 
     // MARK: - Helpers

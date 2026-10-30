@@ -7,9 +7,6 @@ import Foundation
 @MainActor
 final class TabsSectionManager {
     struct UX {
-        // On iPad we can set to have bigger tabs, on iPhone we need smaller ones
-        @MainActor
-        static let cellEstimatedWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 170
         static let cellAbsoluteHeight: CGFloat = 200
         static let cardSpacing: CGFloat = 16
         static let experimentCardSpacing: CGFloat = 52
@@ -21,30 +18,49 @@ final class TabsSectionManager {
         static let experimentTitleHeight: CGFloat = 20
         static let experimentCellPortraitAspectRatio: CGFloat = 1.4
         static let experimentCellLandscapeAspectRatio: CGFloat = 0.67
+        static let regularCellEstimatedWidth: CGFloat = 250
+        static let compactCellEstimatedWidth: CGFloat = 170
+        static let minNumberOfCellsPerRow = 2
+        static let expandedPhoneNumberOfCellsPerRow = 3
     }
 
-    static func leadingInset(traitCollection: UITraitCollection,
-                             interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> CGFloat {
-        guard interfaceIdiom != .phone else { return UX.standardInset }
-
+    static func leadingInset(traitCollection: UITraitCollection) -> CGFloat {
         // Handles multitasking on iPad
-        return traitCollection.horizontalSizeClass == .regular ? UX.iPadInset : UX.standardInset
+        return usesRegularLayout(traitCollection) ? UX.iPadInset : UX.standardInset
     }
 
-    func layoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+    /// Regular in both dimensions: iPad, or an expanded foldable phone. Excludes large phones in landscape.
+    private static func usesRegularLayout(_ traitCollection: UITraitCollection) -> Bool {
+        return traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .regular
+    }
+
+    private func cellEstimatedWidth(for traitCollection: UITraitCollection) -> CGFloat {
+        return TabsSectionManager.usesRegularLayout(traitCollection)
+            ? UX.regularCellEstimatedWidth
+            : UX.compactCellEstimatedWidth
+    }
+
+    func numberOfCellsPerRow(for layoutEnvironment: NSCollectionLayoutEnvironment) -> Int {
+        let traitCollection = layoutEnvironment.traitCollection
+        if traitCollection.userInterfaceIdiom == .phone, TabsSectionManager.usesRegularLayout(traitCollection) {
+            return UX.expandedPhoneNumberOfCellsPerRow
+        }
+
         let availableWidth = layoutEnvironment.container.effectiveContentSize.width
-        let maxNumberOfCellsPerRow = Int(availableWidth / UX.cellEstimatedWidth)
-        let minNumberOfCellsPerRow = 2
+        let maxNumberOfCellsPerRow = Int(availableWidth / cellEstimatedWidth(for: traitCollection))
 
         // maxNumberOfCellsPerRow returns 1 on smaller screen sizes which is inconvenient to scroll through
         // so here we check we have 2 cells per row at minimum.
-        let numberOfCellsPerRow = maxNumberOfCellsPerRow < minNumberOfCellsPerRow
-                                    ? minNumberOfCellsPerRow
-                                    : maxNumberOfCellsPerRow
+        return max(maxNumberOfCellsPerRow, UX.minNumberOfCellsPerRow)
+    }
+
+    func layoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        let cellEstimatedWidth = self.cellEstimatedWidth(for: layoutEnvironment.traitCollection)
+        let numberOfCellsPerRow = self.numberOfCellsPerRow(for: layoutEnvironment)
 
         let cellHeight = UX.cellAbsoluteHeight
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .estimated(UX.cellEstimatedWidth),
+            widthDimension: .estimated(cellEstimatedWidth),
             heightDimension: .absolute(cellHeight)
         )
 
@@ -70,19 +86,11 @@ final class TabsSectionManager {
     }
 
     func experimentLayoutSection(_ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        guard UIDevice.current.userInterfaceIdiom != .pad else {
+        guard !TabsSectionManager.usesRegularLayout(layoutEnvironment.traitCollection) else {
             return experimentLayoutSectionIpad(layoutEnvironment)
         }
 
-        let availableWidth = layoutEnvironment.container.effectiveContentSize.width
-        let maxNumberOfCellsPerRow = Int(availableWidth / UX.cellEstimatedWidth)
-        let minNumberOfCellsPerRow = 2
-
-        // maxNumberOfCellsPerRow returns 1 on smaller screen sizes which is inconvenient to scroll through
-        // so here we check we have 2 cells per row at minimum.
-        let numberOfCellsPerRow = maxNumberOfCellsPerRow < minNumberOfCellsPerRow
-                                    ? minNumberOfCellsPerRow
-                                    : maxNumberOfCellsPerRow
+        let numberOfCellsPerRow = numberOfCellsPerRow(for: layoutEnvironment)
 
         let cellHeight = UX.cellAbsoluteHeight
         let itemWidth: CGFloat = 1.0 / CGFloat(numberOfCellsPerRow)
@@ -137,14 +145,7 @@ final class TabsSectionManager {
     ) -> NSCollectionLayoutSection {
         let availableWidth = layoutEnvironment.container.effectiveContentSize.width
         let availableHeight = layoutEnvironment.container.effectiveContentSize.height
-        let maxNumberOfCellsPerRow = Int(availableWidth / UX.cellEstimatedWidth)
-        let minNumberOfCellsPerRow = 2
-
-        // maxNumberOfCellsPerRow returns 1 on smaller screen sizes which is inconvenient to scroll through
-        // so here we check we have 2 cells per row at minimum.
-        let numberOfCellsPerRow = maxNumberOfCellsPerRow < minNumberOfCellsPerRow
-                                    ? minNumberOfCellsPerRow
-                                    : maxNumberOfCellsPerRow
+        let numberOfCellsPerRow = numberOfCellsPerRow(for: layoutEnvironment)
 
         let horizontalInset = TabsSectionManager.leadingInset(traitCollection: layoutEnvironment.traitCollection)
         let totalSpacing = CGFloat(numberOfCellsPerRow - 1) * UX.cardSpacing

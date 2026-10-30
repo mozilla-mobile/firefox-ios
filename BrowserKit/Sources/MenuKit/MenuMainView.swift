@@ -131,9 +131,12 @@ public final class MenuMainView: UIView, ThemeApplicable {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             UIAccessibility.post(notification: .announcement, argument: expandedHint)
 
-            guard let section = self?.menuData.first,
+            // The index is an index into the section options, so it has to be resolved against the
+            // table rows. Indexing `visibleCells` with it traps whenever fewer cells fit on screen.
+            guard let self,
+               let section = menuData.first,
                let optionalElementIndex = section.options.firstIndex(where: { $0.isOptional }),
-               let firstCell = self?.tableView.tableView.visibleCells[optionalElementIndex]
+               let firstCell = tableView.tableView.cellForRow(at: IndexPath(row: optionalElementIndex, section: 0))
             else { return }
 
             UIAccessibility.post(notification: .layoutChanged, argument: firstCell)

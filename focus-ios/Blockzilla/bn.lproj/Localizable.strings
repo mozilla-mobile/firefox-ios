@@ -2,13 +2,13 @@
 "About.learnMoreButton" = "আরও জানুন";
 
 /* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"About.missionLabel" = "%@ Mozilla দ্বারা প্রস্তুতকৃত। আমাদের মিশন হচ্ছে, ইন্টারনেটকে উন্মুক্ত রাখা এবং সেটির গুণগত মান বজায় রাখতে উৎসাহ দেওয়া।";
+"About.missionLabel" = "%@ Mozilla দ্বারা নির্মিত। আমাদের লক্ষ্য একটি সুস্থ ও উন্মুক্ত ইন্টারনেট গড়ে তোলা।";
 
 /* Label on About screen */
 "About.privateBullet1" = "অ্যাপের মধ্যেই অনুসন্ধান এবং ব্রাউজ করুন";
 
 /* Label on About screen */
-"About.privateBullet2" = "ট্রাকারদেরকে অবরুদ্ধ করুন(অথবা ট্রাকারদের অনুমতি দিতে সেটিংস আপডেট করুন)";
+"About.privateBullet2" = "ট্র্যাকার ব্লক করুন (অথবা ট্র্যাকার অনুমোদনের জন্য সেটিংস আপডেট করুন)";
 
 /* Label on About screen */
 "About.privateBullet3" = "সেইসাথে অনুসন্ধান এবং ব্রাউজিংয়ের পূর্ববর্তী তথ্য কুকির সাথে সরাতে মুছুন";
@@ -24,6 +24,9 @@
 
 /* Label for row in About screen */
 "About.rowRights" = "আপনার অধিকার";
+
+/* Label for row in About screen */
+"About.rowTerms" = "ব্যবহারের শর্তাবলী";
 
 /* Label on About screen */
 "About.safariBullet1" = "গোপনীয়তাকে আরো উন্নত করতে ট্রাকারদেরকে অবরুদ্ধ করুন";
@@ -101,7 +104,10 @@
 "Autocomplete.mySitesDesc" = "আপনার পছন্দসই URLs গুলি %@ অটোকমপ্লিট করতে সক্ষম করুন।";
 
 /* Label for enabling or disabling top sites */
-"Autocomplete.topSites" = "শীর্ষ সাইট";
+"Autocomplete.topSites" = "শীর্ষ সাইটগুলো";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "আনলক করুন";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "নতুন সেশন";
@@ -175,6 +181,51 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "বন্ধ";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "ইন্টারনেট সংযোগটি বিচ্ছিন্ন বলে মনে হচ্ছে।";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "পুনরায় চেষ্টা করুন";
+
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "শুরু করুন";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "দ্রুত। ব্যক্তিগত। কোনও চিত্তবিক্ষেপ ছাড়াই।";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "ব্রাউজিং শুরু করুন";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "এড়িয়ে যান";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "অতিরিক্ত গোপনীয়তার জন্য যখন আপনি অ্যাপটি বন্ধ করেন, তখন আমরা আপনার ইতিহাস মুছে ফেলি।";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "আপনার প্রতিটি লিঙ্ক খোলার সময় আপনার ডেটা সুরক্ষিত রাখতে %@ -কে ডিফল্ট করুন।";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ অন্যান্য ব্রাউজারের মতো নয়";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "ডিফল্ট ব্রাউজার হিসাবে সেট করুন";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "তোমার ইতিহাস তোমাকে অনুসরণ করে না";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.Incognito.Description" = "%@ হলো ট্র্যাকিং সুরক্ষা ও কনটেন্ট ব্লকিং সুবিধাযুক্ত একটি বিশেষ প্রাইভেসি ব্রাউজার।";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "শুধু নকগনিটোর চেয়েও বেশি";
+
+/* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
+"Onboarding.PrivacyNotice.LinkText" = "গোপনীয়তা সংক্রান্ত নোটিশ";
+
+/* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
+"Onboarding.PrivacyNotice.Text" = "ফায়ারফক্স আপনার গোপনীয়তার বিষয়ে যত্নশীল। %@ এ বিস্তারিত পড়ুন।";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari তে ট্যাপ করুন, তারপর কন্টেন্ট ব্লকার নির্বাচন করুন";
 
@@ -226,14 +277,14 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla এর প্রচেষ্টা হচ্ছে অত্যাবশ্যকীয় এবং প্রয়োজনীয় তথ্য ও উপাত্ত সংগ্রহ করে, সকলের জন্যে %@ এর আরও উন্নত সংস্করণ তৈরী করা।";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies" = "কিছু দিন পর %@ স্টাডিজ ইনস্টল এবং চালাতে পারে।";
-
 /* Title for section in settings menu */
 "Settings.general" = "সাধারণ";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "আরও জানুন।";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "লাইসেন্সেস";
 
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "উজ্জ্বল";
@@ -270,6 +321,9 @@
 
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "অনুসন্ধানের জন্যে স্ট্রিং";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "উদাহরণ: searchengine.example.com/search/?q=%s";
 
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "প্রতিলেপন বা অনুসন্ধান বাক্য লিখুন। প্রয়োজন হলে, অনুসন্ধান শব্দটি %s দিয়ে প্রতিস্থাপন করুন।";
@@ -327,9 +381,6 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "ব্যবহারের উপাত্ত প্রেরণ করে";
-
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies" = "অধ্যয়ন";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "অ্যাপ চালু করার জন্য টাচ আইডি ব্যবহার করুন";
@@ -504,4 +555,7 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "ট্র্যাকার ব্লক করা হয়েছে";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "ব্রাউজিং ইতিহাস মুছে দেওয়া হয়েছে! 🎉";
 

@@ -59,11 +59,22 @@ final class HomepageViewController: UIViewController,
     private var didFinishFirstLayout = false
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
+    private lazy var embeddedAddressBarView: UIView = .build { view in
+        view.isUserInteractionEnabled = false
+        view.layer.zPosition = 1
+        view.accessibilityIdentifier = a11y.EmbeddedAddressBar.view
+    }
+    private var embeddedAddressBarViewTopCellConstraint: NSLayoutConstraint?
     private var collectionViewTopContentInset: CGFloat = 0
 
     private var currentHomepageTabState: HomepageTabState {
         guard let activeTabUUID else { return HomepageTabState() }
         return homepageTabStateStore.state(for: activeTabUUID)
+    }
+
+    private var shouldShowEmbeddedAddressBar: Bool {
+        featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar)
+        && userPreferences.searchBarPosition == .top
     }
 
     private var currentTheme: Theme {
@@ -80,6 +91,7 @@ final class HomepageViewController: UIViewController,
     private let homepageTabStateStore: HomepageTabStateStoring
     private let overlayManager: OverlayModeManager
     private let logger: Logger
+    private let userPreferences: UserFeaturePreferring
     private let toastContainer: UIView
 
     // Telemetry related
@@ -98,6 +110,7 @@ final class HomepageViewController: UIViewController,
          toastContainer: UIView,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
+         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
          throttler: MainThreadThrottlerProtocol = MainThreadThrottler(seconds: 0.5)
     ) {
         self.windowUUID = windowUUID
@@ -110,6 +123,7 @@ final class HomepageViewController: UIViewController,
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
         self.logger = logger
+        self.userPreferences = userPreferences
         self.trackingImpressionsThrottler = throttler
 
         // FXIOS-11490: This should be refactored when we refactor CFR to adhere to Redux
@@ -222,6 +236,7 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        updateWallpaperConstraints(availableWallpaperHeight: homepageState.wallpaperState.availableWallpaperHeight)
 
         /// FXIOS-13970: Legacy homepage layout was appearing blank on iOS 15. The root cause was from applying the diffable
         /// data source snapshot before the view had finished it's first layout pass, causing the snapshot to be ignored.
@@ -384,8 +399,7 @@ final class HomepageViewController: UIViewController,
 
     private func handleToolbarStateOnScroll() {
         // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEditOnHomepage)
-        store.dispatch(action)
+        store.dispatch(ToolbarModernAction.cancelEditOnHomepage, forWindowUUID: windowUUID)
     }
 
     /// Calculates the number of tiles that can fit in a single row based on the available width.
@@ -469,6 +483,7 @@ final class HomepageViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
+        embeddedAddressBarView.backgroundColor = theme.colors.actionCritical
     }
 
     // MARK: - Layout
@@ -526,10 +541,37 @@ final class HomepageViewController: UIViewController,
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+
+        guard shouldShowEmbeddedAddressBar else { return }
+
+        view.addSubview(embeddedAddressBarView)
+
+        NSLayoutConstraint.activate(
+            [
+                embeddedAddressBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                embeddedAddressBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                embeddedAddressBarView.heightAnchor.constraint(
+                    equalToConstant: HomepageSectionLayoutProvider.UX.embeddedAddressBarHeight
+                ),
+                embeddedAddressBarView.topAnchor.constraint(
+                    greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor
+                )
+            ]
+        )
+    }
+
+    private func constrainEmbeddedAddressBar(toSearchBarCell cell: SearchBarCell) {
+        guard embeddedAddressBarView.superview != nil else { return }
+        embeddedAddressBarViewTopCellConstraint?.isActive = false
+
+        let constraint = embeddedAddressBarView.topAnchor.constraint(equalTo: cell.topAnchor)
+        constraint.priority = UILayoutPriority(999)
+        embeddedAddressBarViewTopCellConstraint = constraint
+        constraint.isActive = true
     }
 
     private func configureCollectionView() {
-        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        let collectionView = HomepageCollectionView(frame: view.bounds, collectionViewLayout: createLayout())
 
         HomepageItem.cellTypes.forEach {
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
@@ -637,6 +679,10 @@ final class HomepageViewController: UIViewController,
             return configuredCell(cellType: PrivacyNoticeCell.self, at: indexPath) { cell in
                 configurePrivacyNoticeCell(cell: cell)
             }
+        case .notificationCard:
+            return configuredCell(cellType: NotificationCardCell.self, at: indexPath) { cell in
+                configureNotificationCardCell(cell: cell)
+            }
         case .messageCard(let config):
             return configuredCell(cellType: HomepageMessageCardCell.self, at: indexPath) { cell in
                 cell.configure(with: config, windowUUID: windowUUID, theme: currentTheme)
@@ -656,6 +702,7 @@ final class HomepageViewController: UIViewController,
         case .searchBar:
             return configuredCell(cellType: SearchBarCell.self, at: indexPath) { cell in
                 cell.applyTheme(theme: currentTheme)
+                constrainEmbeddedAddressBar(toSearchBarCell: cell)
             }
         case .jumpBackIn(let tab):
             return configuredCell(cellType: JumpBackInCell.self, at: indexPath) { cell in
@@ -710,6 +757,17 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    private func configureNotificationCardCell(cell: NotificationCardCell) {
+        cell.configure(windowUUID: windowUUID,
+                       themeManager: themeManager,
+                       enableButtonAction: { [weak self] in
+                           self?.dispatchNotificationCardEnableButtonTapped()
+                       },
+                       closeButtonAction: { [weak self] in
+                           self?.dispatchNotificationCardCloseButtonTapped()
+                       })
+    }
+
     private func configureSyncedTabCell(
         _ config: JumpBackInSyncedTabConfiguration,
         item: HomepageItem,
@@ -762,7 +820,7 @@ final class HomepageViewController: UIViewController,
             }
 
             if case .pocket = section,
-               MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance {
+               SectionHeaderConfiguration.merino.style == .newsAffordance {
                 guard let newsTransitionHeaderCell = collectionView.dequeueSupplementary(
                     of: kind,
                     cellType: NewsTransitionHeaderCell.self,
@@ -798,18 +856,22 @@ final class HomepageViewController: UIViewController,
     ) -> NewsTransitionHeaderCell {
         let transitionEnabled = isNewsTransitionEnabled()
         newsTransitionHeaderCell.configure(
-            sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
+            sectionHeaderConfiguration: SectionHeaderConfiguration.merino,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
             theme: currentTheme,
             transitionEnabled: transitionEnabled,
             categories: homepageState.merinoState.availableCategories,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             newsfeedCategoryPickerOffsetX: currentHomepageTabState.newsfeedCategoryPickerOffsetX,
-            onCategoryPickerScroll: updateNewsfeedCategoryPickerOffsetX,
+            onCategoryPickerScroll: { [weak self] offsetX in
+                self?.updateNewsfeedCategoryPickerOffsetX(offsetX)
+            },
             onNewsAffordanceTap: { [weak self] in
                 self?.scrollNewsfeedToTop(onlyIfScrolledPastHeader: false, animated: true)
             },
-            onSelection: updatedSelectedNewsfeedCategory
+            onSelection: { [weak self] selectedNewsfeedCategoryID in
+                self?.updatedSelectedNewsfeedCategory(selectedNewsfeedCategoryID: selectedNewsfeedCategoryID)
+            }
         )
         newsTransitionHeaderCell.setTransitionProgress(newsTransitionProgress())
         return newsTransitionHeaderCell
@@ -822,7 +884,7 @@ final class HomepageViewController: UIViewController,
         switch section {
         case .topSites(let textColor, _, _):
             sectionLabelCell.configure(
-                sectionHeaderConfiguration: TopSitesSectionState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: SectionHeaderConfiguration.topSites,
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToShortcutsLibrary()
                 },
@@ -832,7 +894,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .jumpBackIn(let textColor, _):
             sectionLabelCell.configure(
-                sectionHeaderConfiguration: JumpBackInSectionState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: SectionHeaderConfiguration.jumpBackIn,
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToTabTray(with: .tabs)
                 },
@@ -843,7 +905,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .bookmarks(let textColor):
             sectionLabelCell.configure(
-                sectionHeaderConfiguration: BookmarksSectionState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: SectionHeaderConfiguration.bookmarks,
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToBookmarksPanel()
                 },
@@ -853,7 +915,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .pocket(let textColor):
             sectionLabelCell.configure(
-                sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: SectionHeaderConfiguration.merino,
                 textColor: textColor,
                 theme: currentTheme
             )
@@ -873,12 +935,23 @@ final class HomepageViewController: UIViewController,
         guard let headerView = getNewsTransitionHeader()  else { return }
         headerView.setTransitionEnabled(transitionEnabled)
         headerView.setTransitionProgress(transitionProgress)
+        headerView.setEmbeddedAddressBarOffset(embeddedAddressBarOverlap(with: headerView))
+    }
+
+    private func embeddedAddressBarOverlap(with headerView: UIView) -> CGFloat {
+        guard homepageState.searchBarState.shouldShowSearchBar,
+              embeddedAddressBarView.superview != nil
+        else { return 0 }
+
+        let barBottom = embeddedAddressBarView.convert(embeddedAddressBarView.bounds, to: view).maxY
+        let headerTop = headerView.convert(headerView.bounds, to: view).minY
+        return min(max(barBottom - headerTop, 0), embeddedAddressBarView.bounds.height)
     }
 
     /// Returns whether there is enough room at the bottom of the unscrolled homepage for the header to transition.
     /// This is determined by the existence of the spacer with a meaningful height
     private func isNewsTransitionEnabled() -> Bool {
-        guard MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
+        guard SectionHeaderConfiguration.merino.style == .newsAffordance,
               let collectionView,
               let spacerSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
                   if case .spacer = $0 {
@@ -927,27 +1000,27 @@ final class HomepageViewController: UIViewController,
         return renderer.image { context in
             themeManager.getCurrentTheme(for: windowUUID).colors.layer1.setFill()
             context.fill(CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
-            // Draw the wallpaper separately, so the potential safe area coordinates is filled with the
-            // wallpaper
-            wallpaperView.drawHierarchy(
-                in: CGRect(
-                    x: 0,
-                    y: 0,
-                    width: bounds.width,
-                    height: bounds.height
-                ),
-                afterScreenUpdates: false
+            let viewOrigin = CGPoint(x: bounds.origin.x, y: -bounds.origin.y)
+            let wallpaperFrame = wallpaperView.frame.offsetBy(dx: viewOrigin.x, dy: viewOrigin.y)
+            // Draw the wallpaper separately with the same geometry as on screen, so it matches the live homepage
+            // during tab transitions. The image keeps going below its frame to fill the space under the homepage.
+            wallpaperView.drawWallpaper(
+                aspectFilling: wallpaperFrame,
+                clippedTo: CGRect(
+                    x: wallpaperFrame.minX,
+                    y: wallpaperFrame.minY,
+                    width: wallpaperFrame.width,
+                    height: max(wallpaperFrame.height, bounds.height - wallpaperFrame.minY)
+                )
             )
 
-            view.drawHierarchy(
-                in: CGRect(
-                    x: bounds.origin.x,
-                    y: -bounds.origin.y,
-                    width: bounds.width,
-                    height: collectionView?.frame.height ?? 0.0
-                ),
-                afterScreenUpdates: false
-            )
+            // Skip the wallpaper view so it isn't drawn a second time with different geometry
+            for subview in view.subviews where subview !== wallpaperView && !subview.isHidden && subview.alpha > 0 {
+                subview.drawHierarchy(
+                    in: subview.frame.offsetBy(dx: viewOrigin.x, dy: viewOrigin.y),
+                    afterScreenUpdates: false
+                )
+            }
         }
     }
 
@@ -1135,6 +1208,24 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    private func dispatchNotificationCardEnableButtonTapped() {
+        store.dispatch(
+            HomepageAction(
+                windowUUID: self.windowUUID,
+                actionType: HomepageActionType.notificationCardEnableButtonTapped
+            )
+        )
+    }
+
+    private func dispatchNotificationCardCloseButtonTapped() {
+        store.dispatch(
+            HomepageAction(
+                windowUUID: self.windowUUID,
+                actionType: HomepageActionType.notificationCardCloseButtonTapped
+            )
+        )
+    }
+
     private func dispatchPrivacyNoticeLinkTapped(url: URL) {
         store.dispatch(
             NavigationBrowserAction(
@@ -1299,10 +1390,18 @@ final class HomepageViewController: UIViewController,
                 actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
             )
         case .jumpBackIn(let config):
+            guard let tab = tabManager.getTabForUUID(uuid: config.tabUUID) else {
+                logger.log(
+                    "Jump Back In tab \(config.tabUUID) selected but no longer exists",
+                    level: .warning,
+                    category: .homepage
+                )
+                return
+            }
             dispatchDidSelectCardItemAction(with: item)
             store.dispatch(
                 JumpBackInAction(
-                    tab: config.tab,
+                    tab: tab,
                     windowUUID: self.windowUUID,
                     actionType: JumpBackInActionType.tapOnCell
                 )
@@ -1508,5 +1607,17 @@ final class HomepageViewController: UIViewController,
 
         let location = touch.location(in: collectionView)
         return collectionView.indexPathForItem(at: location) == nil
+    }
+}
+
+/// Uses the window's horizontal safe area insets so the layout doesn't change while the homepage is
+/// translated horizontally (FXIOS-17138).
+private final class HomepageCollectionView: UICollectionView {
+    override var safeAreaInsets: UIEdgeInsets {
+        var insets = super.safeAreaInsets
+        guard let window else { return insets }
+        insets.left = window.safeAreaInsets.left
+        insets.right = window.safeAreaInsets.right
+        return insets
     }
 }

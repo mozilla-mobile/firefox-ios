@@ -355,6 +355,40 @@
 /* Title for the welcome card in the v2 onboarding flow. */
 "Onboarding.Modern.Welcome.Title.v145" = "Dì addio ai fastidiosi elementi traccianti";
 
+/* Body of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on news. %@ is a placeholder for the app name (e.g., Firefox). */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.BodyText.v159" = "Non perderti le ultime novità di %@.";
+
+/* Button on the home screen popup requesting notification permissions. Tapping this button accepts the permission request. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableButtonText.v158" = "Attiva notifiche";
+
+/* Voiceover text for the close button on the home screen popup requesting notification permissions. Tapping this button dismisses the popup. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableCloseButtonText.v159" = "Chiudi";
+
+/* Title of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on privacy features. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.Title.v159" = "Scopri le ultime funzioni per la privacy";
+
+/* Primary button on the onboarding card requesting permission to send notifications. Tapping this button accepts the permission request. */
+"Onboarding.MultiDay.NotificationCard.AcceptButtonText.v159" = "Attiva notifiche";
+
+/* Body of the onboarding card requesting permissions to send notifications, with examples of notifications the user will receive. %@ is the name of the app (e.g., Firefox). */
+"Onboarding.MultiDay.NotificationCard.BodyText.v159" = "Ricevi aggiornamenti sulla protezione offerta da %@, consigli e il tuo rapporto sulla privacy.";
+
+/* Secondary button on the onboarding card requesting permission to send notifications. Tapping this button declines the permission request.
+Secondary button on the onboarding card that prompts users to enable syncing for their account data. Tapping this button dismisses the prompt and closes the card. */
+"Onboarding.MultiDay.NotificationCard.DeclineButtonText.v159" = "Non adesso";
+
+/* Title for the onboarding card requesting permissions to send notifications.  “Stay in the loop” means “Remain informed”. */
+"Onboarding.MultiDay.NotificationCard.Title.v159" = "Non perderti le novità";
+
+/* Primary button on the onboarding card that prompts users to enable syncing for their account data. Tapping it directs the user sign into to their Mozilla account to access the feature. */
+"Onboarding.MultiDay.SyncCard.AcceptButtonText.v159" = "Accedi per sincronizzare";
+
+/* Body of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information). */
+"Onboarding.MultiDay.SyncCard.BodyText.v159" = "Accedi subito a password, cronologia e altri dati da qualsiasi dispositivo.";
+
+/* Title of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information). */
+"Onboarding.MultiDay.SyncCard.Title.v159" = "Sincronizza i tuoi dati";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Continua";
 
@@ -455,10 +489,10 @@
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "Chiudi e termina introduzione di %@";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Description.TreatementA.v120" = "Il nostro browser, supportato da un’organizzazione senza fini di lucro, blocca automaticamente le società che, di nascosto, cercano di seguire le tue attività sul Web.";
+"Onboarding.Welcome.Description.TreatementA.v120" = "Il nostro browser, supportato da un’organizzazione senza fini di lucro, aiuta a bloccare le aziende che, di nascosto, cercano di seguire le tue attività sul Web.";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
-"Onboarding.Welcome.Description.v120" = "Il nostro browser, supportato da un’organizzazione senza fini di lucro, blocca automaticamente le società che, di nascosto, cercano di seguire le tue attività sul Web.";
+"Onboarding.Welcome.Description.v120" = "Il nostro browser, supportato da un’organizzazione senza fini di lucro, aiuta a bloccare le aziende che, di nascosto, cercano di seguire le tue attività sul Web.";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Ulteriori informazioni nella nostra informativa sulla privacy";
@@ -471,4 +505,25 @@
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "Benvenuti nell’Internet indipendente";
+
+/* Body text below the “5 GB, Free Every Month” (VPN.Onboarding.LimitSubheading.v160) subheading on the VPN onboarding card. Explains that the user can start using the VPN without signing in to an account. “it” refers to the VPN. */
+"VPN.Onboarding.LimitBody.v160" = "Inizia a usarla senza bisogno di accedere";
+
+/* Subheading on the VPN onboarding card. Explains how much VPN data the user gets every month at no cost. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.Onboarding.LimitSubheading.v160" = "%1$@ GB gratis ogni mese";
+
+/* Body text below the “Browse From Multiple Locations” (VPN.Onboarding.LocationsSubheading.v160) subheading on the VPN onboarding card. Explains that choosing a VPN location makes it harder to tell where the user really is. “yours” refers to the user’s location. */
+"VPN.Onboarding.LocationsBody.v160" = "Scegli una posizione VPN per rendere più difficile individuare quella reale.";
+
+/* Subheading on the VPN onboarding card. Explains that the user can choose which country their browsing appears to come from. */
+"VPN.Onboarding.LocationsSubheading.v160" = "Naviga da più posizioni";
+
+/* Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox). */
+"VPN.Onboarding.Title.v160" = "Prova la VPN integrata di %1$@";
+
+/* Body text below the “More Privacy On Public Wi-Fi” (VPN.Onboarding.WifiSubheading.v160) subheading on the VPN onboarding card. %1$@ is the app name (for example, Firefox). */
+"VPN.Onboarding.WifiBody.v160" = "Aggiungi un ulteriore livello di protezione in %1$@ quando navighi in movimento.";
+
+/* Subheading on the VPN onboarding card. Explains that the VPN gives the user more privacy when they use public Wi-Fi networks. */
+"VPN.Onboarding.WifiSubheading.v160" = "Maggiore privacy sulle reti Wi-Fi pubbliche";
 

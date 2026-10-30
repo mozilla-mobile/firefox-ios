@@ -9,23 +9,21 @@ import MozillaAppServices
 @testable import Client
 
 @MainActor
-final class HomepageDiffableDataSourceTests: XCTestCase {
+final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility {
     var collectionView: UICollectionView?
     var diffableDataSource: HomepageDiffableDataSource?
-    private var profile: MockProfile!
-    private var mockNimbusLayer: MockNimbusFeatureFlagLayer!
+    internal var mockProfile: MockProfile!
+    internal var mockNimbusLayer: MockNimbusFeatureFlagLayer!
 
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        mockProfile = makeProfile()
         mockNimbusLayer = MockNimbusFeatureFlagLayer()
-        let featureFlagProvider = FeatureFlagsProvider(prefs: profile.prefs, backendLayer: mockNimbusLayer)
-        let userFeaturePreferences = UserFeaturePreferenceManager(prefs: profile.prefs, backendLayer: mockNimbusLayer)
 
         DependencyHelperMock().bootstrapDependencies(
-            injectedProfile: profile,
-            injectedFeatureFlagProvider: featureFlagProvider,
-            injectedUserFeaturePreferences: userFeaturePreferences
+            injectedProfile: mockProfile,
+            injectedFeatureFlagProvider: featureFlagsProviderFactory(),
+            injectedUserFeaturePreferences: userFeaturePreferenceManagerFactory()
         )
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -40,7 +38,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     override func tearDown() async throws {
         diffableDataSource = nil
         collectionView = nil
-        profile = nil
+        mockProfile = nil
         mockNimbusLayer = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
@@ -66,8 +64,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_updateSnapshot_withColorValueOnState() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
         let wallpaperConfig = WallpaperConfiguration(
-            landscapeImage: nil,
-            portraitImage: nil,
             textColor: .systemCyan,
             cardColor: .black,
             logoTextColor: .blue
@@ -683,17 +679,9 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
     }
 
-    private func setFeatureFlag(_ flag: FeatureFlagID, isEnabled: Bool) {
-        if isEnabled {
-            mockNimbusLayer.enabledFlags.insert(flag)
-        } else {
-            mockNimbusLayer.enabledFlags.remove(flag)
-        }
-    }
-
     @MainActor
     private func createTab(urlString: String) -> Tab {
-        let tab = Tab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = Tab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID)
         tab.url = URL(string: urlString)!
         return tab
     }

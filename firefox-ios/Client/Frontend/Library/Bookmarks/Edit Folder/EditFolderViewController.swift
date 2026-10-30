@@ -25,8 +25,13 @@ class EditFolderViewController: UIViewController,
     var notificationCenter: any NotificationProtocol
     var onViewWillDisappear: (() -> Void)?
     var onViewWillAppear: (() -> Void)?
+    let shouldUsePrivateOverride: Bool
+    var shouldBeInPrivateTheme: Bool { return false }
+
     private var theme: any Theme {
-        return themeManager.getCurrentTheme(for: currentWindowUUID)
+        return themeManager.resolveTheme(for: currentWindowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
     }
 
     private let viewModel: EditFolderViewModel
@@ -59,12 +64,14 @@ class EditFolderViewController: UIViewController,
 
     init(viewModel: EditFolderViewModel,
          windowUUID: WindowUUID,
+         shouldUsePrivateOverride: Bool = true,
          themeManager: any ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: any NotificationProtocol = NotificationCenter.default) {
         self.currentWindowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.viewModel = viewModel
+        self.shouldUsePrivateOverride = shouldUsePrivateOverride
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -109,11 +116,6 @@ class EditFolderViewController: UIViewController,
             navigationController?.setNavigationBarHidden(true, animated: false)
         }
         onViewWillDisappear?()
-
-        // Only save when clicking the back button, not when we swipe the view controller away
-        if isMovingFromParent {
-            viewModel.save()
-        }
     }
 
     private func setupSubviews() {
@@ -130,7 +132,7 @@ class EditFolderViewController: UIViewController,
 
     @objc
     func saveButtonAction() {
-        // Save will happen in viewWillDisappear
+        viewModel.save()
         navigationController?.popViewController(animated: true)
     }
 

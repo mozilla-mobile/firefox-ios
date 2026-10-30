@@ -53,6 +53,31 @@ final class SiteImageViewTests: XCTestCase {
     }
 
     @MainActor
+    func testFaviconSetup_whenImageIsInMemoryCache_setsImageWithoutClearingIt() {
+        let url = "https://www.firefox.com"
+        let cachedImage = UIImage()
+        imageFetcher.memoryCachedImage = cachedImage
+        let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
+
+        subject.setFavicon(FaviconImageViewModel(siteURLString: url, faviconCornerRadius: 8))
+
+        XCTAssertIdentical(subject.image, cachedImage, "cached favicon should be applied synchronously")
+        XCTAssertEqual(imageFetcher.getImageCalled, 0, "no asynchronous fetch should be started")
+    }
+
+    @MainActor
+    func testFaviconSetup_whenImageIsNotInMemoryCache_clearsImageAndFetches() {
+        let url = "https://www.firefox.com"
+        imageFetcher.memoryCachedImage = nil
+        let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
+        subject.image = UIImage()
+
+        subject.setFavicon(FaviconImageViewModel(siteURLString: url, faviconCornerRadius: 8))
+
+        XCTAssertNil(subject.image, "a reused view should not keep showing the previous site's favicon")
+    }
+
+    @MainActor
     func testCanMakeRequest_firstTime_true() {
         let url = "https://www.firefox.com"
         let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
@@ -90,10 +115,17 @@ final class MockSiteImageHandler: SiteImageHandler, @unchecked Sendable {
     var getImageCalled = 0
     var cacheFaviconURLCalled = 0
     var clearAllCachesCalled = 0
+    var memoryCachedImage: UIImage?
+    var getImageFromMemoryCalled = 0
 
     func getImage(model: SiteImageModel) async -> UIImage {
         getImageCalled += 1
         return image
+    }
+
+    func getImageFromMemory(model: SiteImageModel) -> UIImage? {
+        getImageFromMemoryCalled += 1
+        return memoryCachedImage
     }
 
     func cacheFaviconURL(siteURL: URL, faviconURL: URL) {

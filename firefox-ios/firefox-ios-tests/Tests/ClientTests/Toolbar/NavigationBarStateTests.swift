@@ -285,15 +285,4 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
             )
         )
     }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    // In order to avoid flaky tests, we should reset the store
-    // similar to production
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
-    }
 }

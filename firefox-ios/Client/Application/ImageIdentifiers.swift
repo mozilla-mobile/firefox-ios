@@ -33,7 +33,6 @@ struct ImageIdentifiers {
     public static let qrCodeScanBorder = "qrcode-scanBorder"
     public static let qrCodeScanLine = "qrcode-scanLine"
     public static let signinSync = "signin-sync"
-    public static let shieldCheckmarkColored = "shieldCheckmarkColored"
     public static let syncOpenTab = "sync_open_tab"
     public static let radioButtonNotSelected = "radioButtonNotSelected"
     public static let radioButtonSelected = "radioButtonSelected"
@@ -83,10 +82,10 @@ struct ImageIdentifiers {
             public static let toolbarBottomJapan = "onboardingToolbarIconBottomJapan"
         }
 
-        public struct ChallengeTheDefault {
-            public static let notifications = "onboardingNotificationsCTD"
-            public static let welcome = "onboardingWelcomeCTD"
-            public static let sync = "onboardingSyncCTD"
+        public struct ContinuousOnboarding {
+            public static let notification = "kitOnboardingNotifications"
+            public static let notificationCard = "kitCircle"
+            public static let sync = "kitOnboardingSync"
         }
     }
 

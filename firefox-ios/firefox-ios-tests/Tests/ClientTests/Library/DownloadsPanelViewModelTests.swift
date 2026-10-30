@@ -50,7 +50,7 @@ final class DownloadsPanelViewModelTests: XCTestCase {
     func testIsFirstSection_ForLastSevenDays() {
         let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date()) ?? Date()
         let threeDaysAgoResults: [Date: Int] = [threeDaysAgo: 2,
-                                         Date().lastMonth: 2]
+                                                Date().lastMonth: 2]
         let viewModel = createSubject(resultsPerSection: threeDaysAgoResults)
         viewModel.reloadData()
 
@@ -61,7 +61,7 @@ final class DownloadsPanelViewModelTests: XCTestCase {
     func testIsFirstSection_ForLastFourWeeks() {
         let twoWeeksAgo = Calendar.current.date(byAdding: .day, value: -14, to: Date()) ?? Date()
         let twoWeeksAgoResults: [Date: Int] = [twoWeeksAgo: 4,
-                                         Date().lastMonth: 2]
+                                               Date().lastMonth: 2]
         let viewModel = createSubject(resultsPerSection: twoWeeksAgoResults)
         viewModel.reloadData()
 
@@ -101,8 +101,8 @@ final class DownloadsPanelViewModelTests: XCTestCase {
     func testGetDownloadFile_ForLastTwentyFourHoursSecondFile() {
         let twelveHoursAgo = Calendar.current.date(byAdding: .hour, value: -12, to: Date()) ?? Date()
         let twelveHoursAgoResults: [Date: Int] = [twelveHoursAgo: 4,
-                                         Date.yesterday: 2,
-                                         Date().lastWeek: 2]
+                                                  Date.yesterday: 2,
+                                                  Date().lastWeek: 2]
         let viewModel = createSubject(resultsPerSection: twelveHoursAgoResults)
         viewModel.reloadData()
 
@@ -113,6 +113,22 @@ final class DownloadsPanelViewModelTests: XCTestCase {
 
         XCTAssertEqual(downloadFile.path.absoluteString, "https://test1.file.com")
         XCTAssertTrue(downloadFile.lastModified.isWithinLastTwentyFourHours())
+    }
+
+    func testGetDownloadFile_ForInvalidIndexReturnsNil() {
+        let viewModel = createSubject(resultsPerSection: [Date(timeIntervalSince1970: 0): 1])
+        viewModel.reloadData()
+        let invalidIndexPaths = [
+            IndexPath(row: 0, section: -1),
+            IndexPath(row: 0, section: 4),
+            IndexPath(row: -1, section: 3),
+            IndexPath(row: 1, section: 3),
+            IndexPath(row: 0, section: 0)
+        ]
+
+        for indexPath in invalidIndexPaths {
+            XCTAssertNil(viewModel.downloadedFileForIndexPath(indexPath), "Expected nil at \(indexPath)")
+        }
     }
 
     func testGetNumberOfItems_ForLastTwentyFourHours() {

@@ -23,7 +23,7 @@
 "NSPhotoLibraryAddUsageDescription" = "Mae hyn yn gadael i chi gadw lluniau.";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Mae Firefox yn defnyddio system adnabod lleferydd i drosi eich llais yn destun ar gyfer chwilio gyda'ch llais.";
+"NSSpeechRecognitionUsageDescription" = "Mae hyn yn galluogi Firefox i drawsgrifio'ch sain.";
 
 /* (No Comment) */
 "Scan QR Code" = "Sganiwch y Cod QR";

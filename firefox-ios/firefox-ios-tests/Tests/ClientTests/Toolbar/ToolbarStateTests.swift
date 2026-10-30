@@ -16,7 +16,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         DependencyHelperMock().bootstrapDependencies()
 
         // We must reset the global mock store prior to each test
@@ -145,12 +145,10 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                searchTerm: "text",
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didPasteSearchTerm)
+            ToolbarModernAction.didPasteSearchTerm(searchTerm: "text"),
+            windowUUID
         )
 
         XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
@@ -191,30 +189,45 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.cancelEditOnHomepage)
+            ToolbarModernAction.cancelEditOnHomepage,
+            windowUUID
         )
 
         XCTAssertEqual(newState.addressToolbar, initialState.addressToolbar)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
-    func test_keyboardStateDidChangeAction_returnsExpectedState() {
-        let initialState = createSubject()
+    func test_keyboardRequestChangeAction_whenHiding_returnsExpectedState() {
+        let baseState = createSubject()
+        let initialState = baseState.copy(addressToolbar: baseState.addressToolbar.copy(shouldShowKeyboard: true))
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                shouldShowKeyboard: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange)
+            ToolbarModernAction.didKeyboardRequestChange(shouldShow: false),
+            windowUUID
         )
 
         XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
+        XCTAssertFalse(newState.addressToolbar.shouldShowKeyboard)
+        XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
+    }
+
+    func test_keyboardRequestChangeAction_whenShowing_returnsExpectedState() {
+        let baseState = createSubject()
+        let initialState = baseState.copy(addressToolbar: baseState.addressToolbar.copy(shouldShowKeyboard: false))
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.didKeyboardRequestChange(shouldShow: true),
+            windowUUID
+        )
+
+        XCTAssertNotEqual(newState.addressToolbar, initialState.addressToolbar)
+        XCTAssertTrue(newState.addressToolbar.shouldShowKeyboard)
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
@@ -593,6 +606,36 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isAddressBarMinimized)
     }
 
+    func test_userDidScrollAction_fromAnotherWindow_doesNotMinimizeAddressBar() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
+            WindowUUID()
+        )
+
+        XCTAssertFalse(newState.isAddressBarMinimized)
+    }
+
+    func test_keyboardDidHideAction_fromAnotherWindow_doesNotRestoreAddressBar() {
+        let reducer = toolbarReducer()
+        let minimizedState = reducer.modernReducer(
+            createSubject(),
+            ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
+            windowUUID
+        )
+
+        let newState = reducer.modernReducer(
+            minimizedState,
+            ToolbarModernAction.keyboardDidHide,
+            WindowUUID()
+        )
+
+        XCTAssertTrue(newState.isAddressBarMinimized)
+    }
+
     // MARK: - Private
     private func createSubject() -> ToolbarState {
         return ToolbarState(windowUUID: windowUUID)
@@ -637,16 +680,5 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
                 ]
             )
         )
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    // In order to avoid flaky tests, we should reset the store
-    // similar to production
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

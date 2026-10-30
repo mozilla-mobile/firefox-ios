@@ -19,7 +19,7 @@ class PasswordManagerViewModelTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        let mockProfile = MockProfile()
+        let mockProfile = makeProfile()
         Self.setupTelemetry(with: mockProfile)
         self.mockLoginProvider = MockLoginProvider()
         let searchController = UISearchController()

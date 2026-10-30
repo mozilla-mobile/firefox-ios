@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import UIKit
-import Shared
 
 enum WallpaperManagerError: Error {
     case downloadFailed(Error)
@@ -17,13 +16,9 @@ protocol WallpaperManagerInterface {
     var availableCollections: [WallpaperCollection] { get }
     var canSettingsBeShown: Bool { get }
 
-    @MainActor
-    func canOnboardingBeShown(using: Profile) -> Bool
-    func onboardingSeen()
     func setCurrentWallpaper(to wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
     func fetchAssetsFor(_ wallpaper: Wallpaper, completion: @escaping @Sendable (Result<Void, Error>) -> Void)
     func removeUnusedAssets()
-    func checkForUpdates()
 }
 
 // TODO: FXIOS-14150 - WallpaperManager shouldn't be @unchecked Sendable
@@ -36,17 +31,14 @@ final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
 
     // MARK: - Properties
     private var networkingModule: WallpaperNetworking
-    private var userDefaults: UserDefaultsInterface
     private var logger: Logger
 
     // MARK: - Initializers
     init(
         with networkingModule: WallpaperNetworking = WallpaperNetworkingModule(),
-        userDefaults: UserDefaultsInterface = UserDefaults.standard,
         logger: Logger = DefaultLogger.shared
     ) {
         self.networkingModule = networkingModule
-        self.userDefaults = userDefaults
         self.logger = logger
     }
 
@@ -78,28 +70,6 @@ final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
         guard thumbnailUtility.areThumbnailsAvailable else { return false }
 
         return true
-    }
-
-    /// Determines whether the wallpaper onboarding can be shown
-    /// Doesn't need overlayState to check for CFR because the state was previously check
-    @MainActor
-    func canOnboardingBeShown(using profile: Profile) -> Bool {
-        let cfrHintUtility = ContextualHintEligibilityUtility(with: profile, overlayState: nil)
-        let jumpBackInCFRShown = !cfrHintUtility.canPresent(.jumpBackIn)
-        let cfrsHaveBeenShown = jumpBackInCFRShown
-
-        guard cfrsHaveBeenShown,
-              hasEnoughThumbnailsToShow,
-              !userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
-        else { return false }
-
-        return true
-    }
-
-    /// Update the value referenced for wallpaper onboarding when
-    /// wallpaper onboarding was shown
-    func onboardingSeen() {
-        userDefaults.set(true, forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
     }
 
     /// Sets and saves a selected wallpaper as currently selected wallpaper.
@@ -135,22 +105,27 @@ final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
     ) {
         let dataService = WallpaperDataService(with: networkingModule)
         let storageUtility = WallpaperStorageUtility()
+        let folderName = wallpaper.id
+        let iPhonePortraitName = wallpaper.fileName(for: .iPhonePortrait)
+        let iPhoneLandscapeName = wallpaper.fileName(for: .iPhoneLandscape)
+        let iPadPortraitName = wallpaper.fileName(for: .iPadPortrait)
+        let iPadLandscapeName = wallpaper.fileName(for: .iPadLandscape)
 
         Task(priority: .userInitiated) {
             do {
-                // Download both images at the same time for efficiency
-                async let portraitFetchRequest = dataService.getImage(
-                    named: wallpaper.portraitID,
-                    withFolderName: wallpaper.id)
-                async let landscapeFetchRequest = dataService.getImage(
-                    named: wallpaper.landscapeID,
-                    withFolderName: wallpaper.id)
+                async let iPhonePortrait = dataService.getImage(named: iPhonePortraitName, withFolderName: folderName)
+                async let iPhoneLandscape = dataService.getImage(named: iPhoneLandscapeName, withFolderName: folderName)
+                async let iPadPortrait = dataService.getImage(named: iPadPortraitName, withFolderName: folderName)
+                async let iPadLandscape = dataService.getImage(named: iPadLandscapeName, withFolderName: folderName)
 
-                let (portrait, landscape) = await (try portraitFetchRequest,
-                                                   try landscapeFetchRequest)
+                let (iPhonePortraitImage, iPhoneLandscapeImage, iPadPortraitImage, iPadLandscapeImage) = try await (
+                    iPhonePortrait, iPhoneLandscape, iPadPortrait, iPadLandscape
+                )
 
-                try storageUtility.store(portrait, withName: wallpaper.portraitID, andKey: wallpaper.id)
-                try storageUtility.store(landscape, withName: wallpaper.landscapeID, andKey: wallpaper.id)
+                try storageUtility.store(iPhonePortraitImage, withName: iPhonePortraitName)
+                try storageUtility.store(iPhoneLandscapeImage, withName: iPhoneLandscapeName)
+                try storageUtility.store(iPadPortraitImage, withName: iPadPortraitName)
+                try storageUtility.store(iPadLandscapeImage, withName: iPadLandscapeName)
 
                 completion(.success(()))
             } catch {

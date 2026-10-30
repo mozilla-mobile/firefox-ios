@@ -58,7 +58,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 
     private lazy var header: PasswordGeneratorHeaderView = .build()
 
-    private lazy var passwordField: PasswordGeneratorPasswordFieldView = .build { view in
+    private lazy var passwordField: PasswordGeneratorPasswordFieldView = .build { [weak self] view in
         view.refreshPasswordButtonOnClick = { [weak self] in
             guard let self else { return }
             store.dispatch(PasswordGeneratorAction(

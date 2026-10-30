@@ -1,0 +1,18 @@
+/* Prompt for saving the username in the Save Logins prompt. */
+"LoginsHelper.PromptSaveLogin.Title.v122" = "ذخیره نام کاربری؟";
+
+/* Prompt for saving a password in the Save Logins prompt. */
+"LoginsHelper.PromptSavePassword.Title.v122" = "ذخیره گذرواژه؟";
+
+/* Prompt for updating the password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg.v122" = "به‌روزرسانی گذرواژه؟";
+
+/* Prompt for updating a password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122" = "به‌روزرسانی گذرواژه؟";
+
+/* Placeholder text for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder.v122" = "جست‌و‌جوی گذرواژه‌ها";
+
+/* Title for the list of logins saved by the app */
+"LoginsList.Title.v122" = "ذخیره‌شده گذرواژه‌ها";
+

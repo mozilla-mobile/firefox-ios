@@ -77,6 +77,21 @@ final class ShortcutRouteTests: XCTestCase {
         XCTAssertNil(route)
     }
 
+    func testMergeWindowsShortcut() {
+        let subject = createSubject()
+        let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.MergeWindows",
+                                                     localizedTitle: "Combine Windows")
+
+        let route = subject.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
+
+        switch route {
+        case .action(let action):
+            XCTAssertEqual(action, .mergeWindows)
+        default:
+            XCTFail("The route should be a merge windows action route")
+        }
+    }
+
     func testInvalidShortcut() {
         let subject = createSubject()
         let shortcutItem = UIApplicationShortcutItem(type: "invalid shortcut",
@@ -91,7 +106,7 @@ final class ShortcutRouteTests: XCTestCase {
 
     func createSubject() -> RouteBuilder {
         let subject = RouteBuilder()
-        subject.configure(isPrivate: false, prefs: MockProfile().prefs)
+        subject.configure(isPrivate: false, prefs: makeProfile().prefs)
         trackForMemoryLeaks(subject)
         return subject
     }

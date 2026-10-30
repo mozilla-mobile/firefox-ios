@@ -10,6 +10,10 @@ import WebKit
 final class WKEngineWebViewTests: XCTestCase, @unchecked Sendable {
     private var delegate: MockWKEngineWebViewDelegate!
     private let testURL = URL(string: "https://www.example.com/")!
+    /// Served locally via `loadSimulatedRequest` so the load tests don't depend on network or DNS.
+    private static let testPageHTML = """
+    <html><head><title>Test Page</title></head><body><h1>Test Page</h1><p>Content</p></body></html>
+    """
 
     override func setUp() async throws {
         try await super.setUp()
@@ -55,7 +59,7 @@ final class WKEngineWebViewTests: XCTestCase, @unchecked Sendable {
         }
         let hasOnlySecureContentExpectation = expectation(that: \WKWebView.hasOnlySecureContent, on: subject)
 
-        subject.load(URLRequest(url: testURL))
+        _ = subject.loadSimulatedRequest(URLRequest(url: testURL), responseHTML: Self.testPageHTML)
 
         wait(
             for: [
@@ -67,7 +71,8 @@ final class WKEngineWebViewTests: XCTestCase, @unchecked Sendable {
                 canGoForwardExpectation,
                 contentSizeExpectation,
                 hasOnlySecureContentExpectation
-            ]
+            ],
+            timeout: 30
         )
 
         XCTAssertGreaterThan(delegate.webViewPropertyChangedCalled, 0)
@@ -79,7 +84,7 @@ final class WKEngineWebViewTests: XCTestCase, @unchecked Sendable {
         let subject = createSubject(pullRefreshViewType: MockUIRefreshControl.self)
         let pullRefresh = try XCTUnwrap(subject.scrollView.refreshControl as? MockUIRefreshControl)
 
-        subject.load(URLRequest(url: testURL))
+        _ = subject.loadSimulatedRequest(URLRequest(url: testURL), responseHTML: Self.testPageHTML)
 
         XCTAssertEqual(pullRefresh.beginRefreshingCalled, 1)
         XCTAssertEqual(pullRefresh.endRefreshingCalled, 0)
@@ -103,6 +108,23 @@ final class WKEngineWebViewTests: XCTestCase, @unchecked Sendable {
         let subject = createSubject(pullRefreshViewType: UIRefreshControl.self)
 
         XCTAssertNotNil(subject.scrollView.refreshControl)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+    }
+
+    func testInit_withUIRefreshControlSubclass_doesntConstrainPullRefreshAsSubview() throws {
+        let subject = createSubject(pullRefreshViewType: MockUIRefreshControl.self)
+
+        let pullRefresh = try XCTUnwrap(subject.scrollView.refreshControl as? MockUIRefreshControl)
+        XCTAssertTrue(pullRefresh.translatesAutoresizingMaskIntoConstraints)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+    }
+
+    func testScrollWillBeginZooming_withUIRefreshControl_removesRefreshControl() {
+        let subject = createSubject(pullRefreshViewType: MockUIRefreshControl.self)
+
+        subject.scrollViewWillBeginZooming(UIScrollView(), with: nil)
+
+        XCTAssertNil(subject.scrollView.refreshControl)
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 

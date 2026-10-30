@@ -9,7 +9,7 @@ protocol SummarizerConfigProvider: Sendable {
     func getConfig(
         summarizerModel: SummarizerModel,
         contentType: SummarizationContentType,
-        locale: Locale
+        languages: SummarizerLanguageResolution
     ) async -> SummarizerConfig
 }
 
@@ -35,7 +35,7 @@ struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
     func getConfig(
         summarizerModel: SummarizerModel,
         contentType: SummarizationContentType,
-        locale: Locale
+        languages: SummarizerLanguageResolution
     ) async -> SummarizerConfig {
         let initialConfig = SummarizerConfig(instructions: "", options: [:])
         // Merge configs in reverse order (so higher priority overrides lower)
@@ -48,8 +48,15 @@ struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
         let instructionsWithLocale = config.instructions
             .replacingOccurrences(
                 of: Constants.languageTag,
-                with: Constants.enLocale.localizedString(forIdentifier: locale.identifier) ?? Constants.englishLanguage
+                with: Constants.enLocale.localizedString(
+                    forIdentifier: languages.summaryLocale.identifier
+                ) ?? Constants.englishLanguage
             )
-        return SummarizerConfig(instructions: instructionsWithLocale, options: config.options)
+        return SummarizerConfig(
+            instructions: instructionsWithLocale,
+            options: config.options,
+            summaryLocale: languages.summaryLocale,
+            pageLocale: languages.pageLocale
+        )
     }
 }

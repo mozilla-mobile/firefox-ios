@@ -334,12 +334,6 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData.v2" = "Mozilla सबैको लागि %@ प्रदान र सुधार गर्न आवश्यक कुरा मात्र संकलन गर्ने प्रयास गर्दछ ।";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies" = "%@ ले समय-समयमा अध्ययनहरू स्थापना गर्न र चलाउन सक्छ।";
-
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies.v2" = "%@ अनियमित रूपमा प्रयोगकर्ताहरूलाई सुविधाहरू परीक्षण गर्न छनौट गर्दछ, जसले सबैका लागि गुणस्तर सुधार गर्दछ।";
-
 /* Title for section in settings menu */
 "Settings.general" = "सामान्य";
 
@@ -456,12 +450,6 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "उपयोग डाटा पठाउनुहोस्";
-
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies" = "अध्ययनहरु";
-
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies.v2" = "फिचर अध्ययनहरू गर्न अनुमति दिनुहोस्";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "एप अनलक गर्न टच आईडीको प्रयोग गर्नुहोस्";

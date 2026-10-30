@@ -39,6 +39,52 @@ fileprivate extension ForeignBytes {
     init(bufferPointer: UnsafeBufferPointer<UInt8>) {
         self.init(len: Int32(bufferPointer.count), data: bufferPointer.baseAddress)
     }
+
+    init(rawBufferPointer: UnsafeRawBufferPointer) {
+        self.init(
+            len: Int32(rawBufferPointer.count),
+            data: rawBufferPointer.baseAddress?.assumingMemoryBound(to: UInt8.self)
+        )
+    }
+}
+
+// Converter for `&[u8]` / `[ByRef] bytes` arguments.
+//
+// Conforms to `FfiConverter` so the compiler enforces the full converter
+// method set. Only the scope-bound `lower(_:_body:)` overload is sound —
+// zero-copy byte buffers only flow foreign -> Rust, and only in argument
+// position. The four protocol-witness methods (`lift`, `lower`, `read`,
+// `write`) `fatalError` at runtime if anyone reaches them.
+//
+// The scope-bound `lower` takes a closure because the `ForeignBytes`
+// pointer is only guaranteed valid for the duration of
+// `Data.withUnsafeBytes`. Callers must run the full FFI call inside
+// the closure body.
+fileprivate enum FfiConverterByRefBytes: FfiConverter {
+    typealias SwiftType = Data
+    typealias FfiType = ForeignBytes
+
+    static func lower<R>(_ value: Data, _ body: (ForeignBytes) throws -> R) rethrows -> R {
+        return try value.withUnsafeBytes { rawBuf in
+            try body(ForeignBytes(rawBufferPointer: rawBuf))
+        }
+    }
+
+    static func lower(_ value: Data) -> ForeignBytes {
+        fatalError("ByRef bytes cannot use the plain lower: returning ForeignBytes escapes the Data.withUnsafeBytes scope. Use the scope-bound lower(_:_body:) overload instead.")
+    }
+
+    static func lift(_ value: ForeignBytes) throws -> Data {
+        fatalError("ByRef bytes cannot be lifted: zero-copy &[u8] only flows foreign->Rust")
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        fatalError("ByRef bytes cannot be read from a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
+
+    static func write(_ value: Data, into buf: inout [UInt8]) {
+        fatalError("ByRef bytes cannot be written to a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
 }
 
 // For every type used in the interface, we provide helper methods for conveniently
@@ -469,7 +515,11 @@ fileprivate struct FfiConverterString: FfiConverter {
             return String()
         }
         let bytes = UnsafeBufferPointer<UInt8>(start: value.data!, count: Int(value.len))
-        return String(bytes: bytes, encoding: String.Encoding.utf8)!
+        // Use Swift's native UTF-8 decoder; `String(bytes:encoding:.utf8)` goes
+        // through Foundation's NSString and silently strips a leading U+FEFF BOM.
+        // Invalid UTF-8 substitutes U+FFFD instead of trapping (unreachable
+        // given Rust's `String` invariant).
+        return String(decoding: bytes, as: UTF8.self)
     }
 
     public static func lower(_ value: String) -> RustBuffer {
@@ -485,7 +535,8 @@ fileprivate struct FfiConverterString: FfiConverter {
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> String {
         let len: Int32 = try readInt(&buf)
-        return String(bytes: try readBytes(&buf, count: Int(len)), encoding: String.Encoding.utf8)!
+        // See `lift` above for why we avoid Foundation's NSString-backed decoder here.
+        return String(decoding: try readBytes(&buf, count: Int(len)), as: UTF8.self)
     }
 
     public static func write(_ value: String, into buf: inout [UInt8]) {
@@ -579,8 +630,7 @@ open func sendRequest(request: Request, settings: ClientSettings)async throws  -
         try  await uniffiRustCallAsync(
             rustFutureFunc: {
                 uniffi_viaduct_fn_method_backend_send_request(
-                    self.uniffiCloneHandle(),
-                    FfiConverterTypeRequest_lower(request),FfiConverterTypeClientSettings_lower(settings)
+                        self.uniffiCloneHandle(),FfiConverterTypeRequest_lower(request),FfiConverterTypeClientSettings_lower(settings)
                 )
             },
             pollFunc: ffi_viaduct_rust_future_poll_rust_buffer,
@@ -603,9 +653,8 @@ fileprivate struct UniffiCallbackInterfaceBackend {
     // Create the VTable using a series of closures.
     // Swift automatically converts these into C callback functions.
     //
-    // This creates 1-element array, since this seems to be the only way to construct a const
-    // pointer that we can pass to the Rust code.
-    static let vtable: [UniffiVTableCallbackInterfaceBackend] = [UniffiVTableCallbackInterfaceBackend(
+    // Store the vtable directly.
+    static let vtable: UniffiVTableCallbackInterfaceBackend = UniffiVTableCallbackInterfaceBackend(
         uniffiFree: { (uniffiHandle: UInt64) -> () in
             do {
                 try FfiConverterTypeBackend.handleMap.remove(handle: uniffiHandle)
@@ -665,11 +714,23 @@ fileprivate struct UniffiCallbackInterfaceBackend {
                 droppedCallback: uniffiOutDroppedCallback
             )
         }
-    )]
+    )
+
+    // Rust stores this pointer for future callback invocations, so it must live
+    // for the process lifetime (not just for the init function call).
+    //
+    // `nonisolated(unsafe)` is needed under Swift 6 strict concurrency.
+    // This is safe because the pointee is initialized once during static init
+    // and never mutated by either side of the FFI.  Its fields are C function pointers.
+    nonisolated(unsafe) static let vtablePtr: UnsafePointer<UniffiVTableCallbackInterfaceBackend> = {
+        let ptr = UnsafeMutablePointer<UniffiVTableCallbackInterfaceBackend>.allocate(capacity: 1)
+        ptr.initialize(to: vtable)
+        return UnsafePointer(ptr)
+    }()
 }
 
 private func uniffiCallbackInitBackend() {
-    uniffi_viaduct_fn_init_callback_vtable_backend(UniffiCallbackInterfaceBackend.vtable)
+    uniffi_viaduct_fn_init_callback_vtable_backend(UniffiCallbackInterfaceBackend.vtablePtr)
 }
 
 #if swift(>=5.8)
@@ -1051,8 +1112,7 @@ public func FfiConverterTypeResponse_lower(_ value: Response) -> RustBuffer {
     return FfiConverterTypeResponse.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * HTTP Methods.
  *
@@ -1173,7 +1233,8 @@ public func FfiConverterTypeMethod_lower(_ value: Method) -> RustBuffer {
 
 
 
-public enum ViaductError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
+public 
+enum ViaductError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -1450,10 +1511,6 @@ fileprivate struct FfiConverterDictionaryStringString: FfiConverterRustBuffer {
 }
 
 
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- */
 public typealias Headers = [String: String]
 
 #if swift(>=5.8)
@@ -1494,10 +1551,6 @@ public func FfiConverterTypeHeaders_lower(_ value: Headers) -> RustBuffer {
 
 
 
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- */
 public typealias ViaductUrl = String
 
 #if swift(>=5.8)
@@ -1712,8 +1765,9 @@ public func sendOhttpRequest(request: Request, channel: String)async throws  -> 
         )
 }
 public func initBackend(backend: Backend)  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_viaduct_fn_func_init_backend(
-        FfiConverterTypeBackend_lower(backend),$0
+        FfiConverterTypeBackend_lower(backend),uniffiCallStatus
     )
 }
 }
@@ -1721,7 +1775,8 @@ public func initBackend(backend: Backend)  {try! rustCall() {
  * Clear all OHTTP channel configurations
  */
 public func clearOhttpChannels()  {try! rustCall() {
-    uniffi_viaduct_fn_func_clear_ohttp_channels($0
+        uniffiCallStatus in
+    uniffi_viaduct_fn_func_clear_ohttp_channels(uniffiCallStatus
     )
 }
 }
@@ -1732,7 +1787,8 @@ public func clearOhttpChannels()  {try! rustCall() {
  * - "merino": For Firefox Suggest recommendations through Merino's dedicated relay/gateway
  */
 public func configureDefaultOhttpChannels()throws   {try rustCallWithError(FfiConverterTypeViaductError_lift) {
-    uniffi_viaduct_fn_func_configure_default_ohttp_channels($0
+        uniffiCallStatus in
+    uniffi_viaduct_fn_func_configure_default_ohttp_channels(uniffiCallStatus
     )
 }
 }
@@ -1741,9 +1797,10 @@ public func configureDefaultOhttpChannels()throws   {try rustCallWithError(FfiCo
  * If an existing OHTTP config exists with the same name, it will be overwritten
  */
 public func configureOhttpChannel(channel: String, config: OhttpConfig)throws   {try rustCallWithError(FfiConverterTypeViaductError_lift) {
+        uniffiCallStatus in
     uniffi_viaduct_fn_func_configure_ohttp_channel(
         FfiConverterString.lower(channel),
-        FfiConverterTypeOhttpConfig_lower(config),$0
+        FfiConverterTypeOhttpConfig_lower(config),uniffiCallStatus
     )
 }
 }
@@ -1752,7 +1809,8 @@ public func configureOhttpChannel(channel: String, config: OhttpConfig)throws   
  */
 public func listOhttpChannels() -> [String]  {
     return try!  FfiConverterSequenceString.lift(try! rustCall() {
-    uniffi_viaduct_fn_func_list_ohttp_channels($0
+        uniffiCallStatus in
+    uniffi_viaduct_fn_func_list_ohttp_channels(uniffiCallStatus
     )
 })
 }
@@ -1760,7 +1818,8 @@ public func listOhttpChannels() -> [String]  {
  * Allow non-HTTPS requests to the emulator loopback URL
  */
 public func allowAndroidEmulatorLoopback()  {try! rustCall() {
-    uniffi_viaduct_fn_func_allow_android_emulator_loopback($0
+        uniffiCallStatus in
+    uniffi_viaduct_fn_func_allow_android_emulator_loopback(uniffiCallStatus
     )
 }
 }
@@ -1771,8 +1830,9 @@ public func allowAndroidEmulatorLoopback()  {try! rustCall() {
  * header is set in the Request.
  */
 public func setGlobalDefaultUserAgent(userAgent: String)  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_viaduct_fn_func_set_global_default_user_agent(
-        FfiConverterString.lower(userAgent),$0
+        FfiConverterString.lower(userAgent),uniffiCallStatus
     )
 }
 }
@@ -1792,31 +1852,31 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_viaduct_checksum_func_send_ohttp_request() != 6311) {
+    if (uniffi_viaduct_checksum_func_send_ohttp_request() != 60356) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_func_init_backend() != 12274) {
+    if (uniffi_viaduct_checksum_func_init_backend() != 34397) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_func_clear_ohttp_channels() != 2859) {
+    if (uniffi_viaduct_checksum_func_clear_ohttp_channels() != 21471) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_func_configure_default_ohttp_channels() != 1921) {
+    if (uniffi_viaduct_checksum_func_configure_default_ohttp_channels() != 48511) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_func_configure_ohttp_channel() != 19406) {
+    if (uniffi_viaduct_checksum_func_configure_ohttp_channel() != 33688) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_func_list_ohttp_channels() != 38695) {
+    if (uniffi_viaduct_checksum_func_list_ohttp_channels() != 43749) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_func_allow_android_emulator_loopback() != 12993) {
+    if (uniffi_viaduct_checksum_func_allow_android_emulator_loopback() != 27278) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_func_set_global_default_user_agent() != 45260) {
+    if (uniffi_viaduct_checksum_func_set_global_default_user_agent() != 48124) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_method_backend_send_request() != 47528) {
+    if (uniffi_viaduct_checksum_method_backend_send_request() != 3462) {
         return InitializationResult.apiChecksumMismatch
     }
 

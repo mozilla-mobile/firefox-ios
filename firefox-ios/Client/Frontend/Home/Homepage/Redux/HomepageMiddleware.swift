@@ -14,19 +14,28 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     private let profile: Profile
     private let homepageTelemetry: HomepageTelemetry
     private let privacyNoticeHelper: PrivacyNoticeHelperProtocol
+    private let notificationManager: NotificationManagerProtocol
     private let notificationCenter: NotificationProtocol
+    private let userDefaults: UserDefaultsInterface
     private let windowManager: WindowManager
+    private let userPreferences: UserFeaturePreferring
 
     init(profile: Profile = AppContainer.shared.resolve(),
          homepageTelemetry: HomepageTelemetry = HomepageTelemetry(),
          privacyNoticeHelper: PrivacyNoticeHelperProtocol? = nil,
+         notificationManager: NotificationManagerProtocol = NotificationManager(),
          notificationCenter: NotificationProtocol,
-         windowManager: WindowManager = AppContainer.shared.resolve()) {
+         userDefaults: UserDefaultsInterface = UserDefaults.standard,
+         windowManager: WindowManager = AppContainer.shared.resolve(),
+         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()) {
         self.profile = profile
         self.homepageTelemetry = homepageTelemetry
         self.privacyNoticeHelper = privacyNoticeHelper ?? PrivacyNoticeHelper(prefs: profile.prefs)
+        self.notificationManager = notificationManager
         self.notificationCenter = notificationCenter
+        self.userDefaults = userDefaults
         self.windowManager = windowManager
+        self.userPreferences = userPreferences
         observeNotifications()
     }
 
@@ -40,6 +49,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         switch action.actionType {
         case HomepageActionType.viewDidAppear:
             self.homepageTelemetry.sendHomepageImpressionEvent()
+            self.dispatchNotificationCardConfigurationAction(action: action)
 
         case NavigationBrowserActionType.tapOnBookmarksShowMoreButton:
             self.homepageTelemetry.sendItemTappedTelemetryEvent(for: .bookmarkShowAll)
@@ -65,7 +75,12 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
 
         case HomepageActionType.initialize:
             self.dispatchPrivacyNoticeConfigurationAction(action: action)
+            self.dispatchNotificationCardConfigurationAction(action: action)
             self.dispatchSearchBarConfigurationAction(action: action)
+
+        case HomepageActionType.notificationCardCloseButtonTapped,
+            HomepageActionType.notificationCardEnableButtonTapped:
+            self.handleNotificationCardDismissed(action: action)
 
         case HomepageActionType.viewWillTransition, ToolbarActionType.cancelEdit,
             GeneralBrowserActionType.navigateBack, GeneralBrowserActionType.didCloseTabFromToolbar:
@@ -100,6 +115,49 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         }
     }
 
+    private func dispatchNotificationCardConfigurationAction(action: Action) {
+        guard shouldShowNotificationCard() else { return }
+
+        let windowUUID = action.windowUUID
+        // The card prompts the user to enable notifications, so it should only
+        // appear when they aren't already on. hasPermission() is async, so we
+        // confirm the live system permission before queueing the action.
+        Task { [weak self] in
+            guard let self else { return }
+            let notificationsEnabled = await self.notificationManager.hasPermission()
+            guard !notificationsEnabled else { return }
+            ensureMainThread {
+                store.dispatch(
+                    HomepageAction(
+                        windowUUID: windowUUID,
+                        actionType: HomepageMiddlewareActionType.configuredNotificationCard
+                    )
+                )
+            }
+        }
+    }
+
+    // The homepage "enable notifications" card shows on day 3, after
+    // the user declined notifications on the day 2 onboarding card.
+    // System notification settings are checked separately in dispatchNotificationCardConfigurationAction.
+    private func shouldShowNotificationCard() -> Bool {
+        let usesHardcodedOnboarding = featureFlagsProvider.isEnabled(.multiDayOnboarding)
+        let declinedNotifs = profile.prefs.boolForKey(PrefsKeys.onboardingNotificationsDeclined) ?? false
+        let dismissedNotifsCard = profile.prefs.boolForKey(PrefsKeys.onboardingNotificationCardDismissed) ?? false
+        let dayCount = profile.prefs.intForKey(PrefsKeys.onboardingActiveDayCount) ?? 0
+        let atLeastThreeDays = dayCount >= 3
+        return usesHardcodedOnboarding && declinedNotifs && !dismissedNotifsCard && atLeastThreeDays
+    }
+
+    // Handles dismissal of the homepage notification card
+    private func handleNotificationCardDismissed(action: Action) {
+        if let actionType = action.actionType as? HomepageActionType,
+           actionType == .notificationCardEnableButtonTapped {
+            notificationManager.enableNotifications(userDefaults: userDefaults, notificationCenter: notificationCenter)
+        }
+        profile.prefs.setBool(true, forKey: PrefsKeys.onboardingNotificationCardDismissed)
+    }
+
     private func dispatchSearchBarConfigurationAction(action: Action) {
         store.dispatch(
             HomepageAction(
@@ -114,10 +172,11 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
         and isLandscape: Bool = UIWindow.isLandscape
     ) -> Bool {
-        let isHomepageSearchEnabled = featureFlagsProvider.isEnabled(.homepageSearchBar)
+        let isHomepageSearchEnabled = featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar)
         let isCompact = device == .phone && !isLandscape
+        let isTopAddressBar = userPreferences.searchBarPosition == .top
 
-        guard isHomepageSearchEnabled, isCompact else {
+        guard isHomepageSearchEnabled, isCompact, isTopAddressBar else {
             return false
         }
         return true

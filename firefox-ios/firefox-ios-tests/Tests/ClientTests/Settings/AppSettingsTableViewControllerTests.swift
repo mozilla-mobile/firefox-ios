@@ -20,14 +20,14 @@ class AppSettingsTableViewControllerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        self.profile = MockProfile()
+        self.profile = makeProfile()
         self.tabManager = MockTabManager()
         self.appAuthenticator = MockAppAuthenticator()
         self.delegate = MockSettingsFlowDelegate()
         self.applicationHelper = MockApplicationHelper()
         self.mockSettingsDelegate = MockSettingsDelegate()
         self.mockParentCoordinator = MockSettingsFlowDelegate()
-        self.mockGleanUsageReportingMetricsService = MockGleanUsageReportingMetricsService(profile: MockProfile())
+        self.mockGleanUsageReportingMetricsService = MockGleanUsageReportingMetricsService(profile: makeProfile())
     }
 
     override func tearDown() async throws {

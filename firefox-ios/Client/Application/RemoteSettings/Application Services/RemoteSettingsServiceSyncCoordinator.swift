@@ -64,10 +64,11 @@ final class RemoteSettingsServiceSyncCoordinator: @unchecked Sendable, Notifiabl
         // Don't perform sync immediately upon becoming active, give the app
         // some time to allow any other work or threads to take priority
         syncTimer?.invalidate()
-        syncTimer = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false) { _ in
+        syncTimer = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false) { [weak self] _ in
+            guard let self else { return }
             // Sync needs to be scheduled on a background thread, otherwise it will block ui
-            DispatchQueue.global().async { [weak self] in
-                self?.syncIfNeeded()
+            DispatchQueue.global().async {
+                self.syncIfNeeded()
             }
         }
     }

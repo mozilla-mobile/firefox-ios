@@ -43,10 +43,17 @@ ai.quick_answers:
     type: event
     description: |
       Recorded the instant the user initiates the Quick Answers flow (e.g. taps the button on the homepage).
+    extra_keys:
+      model:
+        type: string
+        description: |
+          The model backing the Quick Answers request. See the `QuickAnswersModel` enum for the
+          valid values.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35786
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
@@ -107,10 +114,36 @@ ai.quick_answers:
         type: string
         description: |
           Optional. The error message if present.
+      model:
+        type: string
+        description: |
+          The model backing the Quick Answers request. See the `QuickAnswersModel` enum for the
+          valid values.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/33376
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/34483
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35786
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  permission_denied:
+    type: event
+    description: |
+      Recorded when the user denies one of the permissions the Quick Answers voice flow needs,
+      which stops the flow before any audio is transcribed. Quick Answers asks for the microphone
+      to capture the user's audio and for speech recognition to turn that audio into a transcription,
+      so the user can be prompted for, and deny, either of them.
+    extra_keys:
+      permission:
+        type: string
+        description: |
+          The permission the user denied. See the `QuickAnswersPermission` enum for the
+          valid values.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-16927
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/35786
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"

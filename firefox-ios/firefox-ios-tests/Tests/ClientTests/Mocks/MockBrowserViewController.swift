@@ -21,6 +21,7 @@ class MockBrowserViewController: BrowserViewController {
 
     var handleQueryCalled = false
     var handleQuery: String?
+    var handleQueryOptions: Set<Route.SearchOptions>?
     var showLibraryCalled = false
     var showLibraryPanel: LibraryPanelType?
 
@@ -37,6 +38,8 @@ class MockBrowserViewController: BrowserViewController {
     var presentSignInFlowType: FxAPageType?
     var presentSignInReferringPage: ReferringPage?
     var presentSignInCount = 0
+    var presentPairingURL: URL?
+    var presentPairingCount = 0
 
     var closePrivateTabsWidgetAction = 0
 
@@ -56,6 +59,7 @@ class MockBrowserViewController: BrowserViewController {
     var mockContentContainer = MockContentContainer()
 
     var viewControllerToPresent: UIViewController?
+    var dismissCalled = 0
 
     // Mock control for frame navigation
     var mockIsMainFrameNavigation = true
@@ -75,6 +79,18 @@ class MockBrowserViewController: BrowserViewController {
 
     override var presentedViewController: UIViewController? {
         return viewControllerToPresent
+    }
+
+    override func present(_ viewControllerToPresent: UIViewController,
+                          animated flag: Bool,
+                          completion: (() -> Void)? = nil) {
+        self.viewControllerToPresent = viewControllerToPresent
+    }
+
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        dismissCalled += 1
+        viewControllerToPresent = nil
+        completion?()
     }
 
     override var contentContainer: ContentContainer {
@@ -101,9 +117,13 @@ class MockBrowserViewController: BrowserViewController {
         openBlankNewTabCount += 1
     }
 
-    override func handle(query: String, isPrivate: Bool, shouldOpenNewTab: Bool = true) {
+    override func handle(query: String,
+                         isPrivate: Bool,
+                         shouldOpenNewTab: Bool = true,
+                         options: Set<Route.SearchOptions>? = nil) {
         handleQueryCalled = true
         handleQuery = query
+        handleQueryOptions = options
         handleQueryCount += 1
     }
 
@@ -118,7 +138,7 @@ class MockBrowserViewController: BrowserViewController {
         openURLInNewTabURL = url
         openURLInNewTabIsPrivate = isPrivate
         openURLInNewTabCount += 1
-        return Tab(profile: MockProfile(), windowUUID: windowUUID)
+        return Tab(profile: profile, windowUUID: windowUUID)
     }
 
     override func closeAllPrivateTabs() {
@@ -134,6 +154,11 @@ class MockBrowserViewController: BrowserViewController {
         presentSignInFlowType = flowType
         presentSignInReferringPage = referringPage
         presentSignInCount += 1
+    }
+
+    override func presentPairingViewController(_ pairingURL: URL) {
+        presentPairingURL = pairingURL
+        presentPairingCount += 1
     }
 
     override func embedContent(_ viewController: ContentContainable) -> Bool {

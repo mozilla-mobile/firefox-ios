@@ -238,9 +238,17 @@ private final class MockImageHandler: ImageHandler, @unchecked Sendable {
     var fetchHeroImageCalled = 0
     var clearCacheCalledCount = 0
 
+    var memoryFaviconImage: UIImage?
+    var fetchFaviconFromMemoryCalledCount = 0
+
     func fetchFavicon(imageModel: SiteImageModel) async -> UIImage {
         fetchFaviconCalledCount += 1
         return faviconImage
+    }
+
+    func fetchFaviconFromMemory(imageModel: SiteImageModel) -> UIImage? {
+        fetchFaviconFromMemoryCalledCount += 1
+        return memoryFaviconImage
     }
 
     func fetchHeroImage(imageModel: SiteImageModel) async throws -> UIImage {

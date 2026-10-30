@@ -1,0 +1,18 @@
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v114" = "साइन इन करें";
+
+/* Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v114" = "अपने होमपेज पर अब अन्य डिवाइसों के टैब के साथ, जहां छोड़ा था वहीं से शुरू करें।";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v114" = "स्क्रीन बदलना पहले से कहीं ज़्यादा आसान है";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v114" = "डिफ़ॉल्ट ब्राउज़र के रूप में सेट करें";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v114" = "नए रंग। नई सुविधा। मुनाफ़े से ऊपर लोगों को रखने की वही प्रतिबद्धता।";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v114" = "एक और भी निजी इंटरनेट में आपका स्वागत है";
+

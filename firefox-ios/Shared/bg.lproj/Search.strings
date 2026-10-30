@@ -4,6 +4,12 @@
 /* Label for search settings button. */
 "Search Settings" = "Настройки на търсене";
 
+/* When making a new search from the awesome bar, search results appear as the user write new letters in their search. This is the announcement VoiceOver reads to tell the user how many results are available, and that they are located above the address bar. %d is the number of results. */
+"Search.ResultsAbove.A11yAnnouncement.v158" = "Предложения по-горе: %d";
+
+/* When making a new search from the awesome bar, search results appear as the user write new letters in their search. This is the announcement VoiceOver reads to tell the user how many results are available, and that they are located below the address bar. %d is the number of results. */
+"Search.ResultsBelow.A11yAnnouncement.v158" = "Предложения по-долу: %d";
+
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a label for sponsored Firefox suggestions. */
 "Search.SponsoredSuggestionDescription.v119" = "Спонсорирано";
 

@@ -7,66 +7,55 @@ import Common
 import Shared
 
 // TODO: - FXIOS-16295 improve VoiceOver by adding notification announcement before and after recording.
-public final class QuickAnswersViewController: UIViewController,
-                                               UIAdaptivePresentationControllerDelegate,
-                                               Themeable {
+public final class QuickAnswersViewController: UIViewController, Themeable {
     private struct UX {
-        static let closeButtonSidePadding: CGFloat = 16.0
-        static let closeButtonPadding: CGFloat = 13.0
-        static let closeButtonContentInset = NSDirectionalEdgeInsets(
-            top: UX.closeButtonPadding,
-            leading: UX.closeButtonPadding,
-            bottom: UX.closeButtonPadding,
-            trailing: UX.closeButtonPadding
-        )
-        static let recordWaveEffectSize: CGFloat = 450.0
-        static let recordWaveEffectBottomPadding = 150.0
-        static let recordWaveEffectResultOpacity: CGFloat = 0.3
-        static let contentViewTopPadding: CGFloat = 32.0
-        static let contentViewBottomPadding: CGFloat = 12.0
-        static let contentViewHorizontalPadding: CGFloat = 24.0
+        static let titleFadeDuration: TimeInterval = 0.1
+        static let presentationNavigationBarOffset: CGFloat = -20.0
+        static let backdropFadeDuration: TimeInterval = 0.2
     }
 
     // MARK: - Properties
-    private let backgroundBlur: UIVisualEffectView = .build {
-        $0.effect = UIBlurEffect(style: .systemUltraThinMaterial)
-    }
-    private let backgroundRecordEffect: GradientCircleView = .build()
-    private lazy var closeButton: UIButton = .build {
-        if #available(iOS 26, *) {
-            $0.configuration = .prominentGlass()
-        } else {
-            $0.configuration = .filled()
-        }
-        $0.configuration?.cornerStyle = .capsule
-        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
-        $0.configuration?.contentInsets = UX.closeButtonContentInset
+    private lazy var backgroundEffectView = BackgroundEffectView(parentController: self)
+    private lazy var closeButton: UIButton = .build { [weak self] in
+        $0.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
         $0.addAction(
-            UIAction(handler: { [weak self] _ in
+            UIAction(handler: { _ in
                 self?.dismiss(with: nil)
             }),
             for: .touchUpInside
         )
-        // TODO: - FXIOS-14720 add Strings
-        $0.accessibilityLabel = "Close"
+    }
+    private let titleLabel: UILabel = .build {
+        $0.font = FXFontStyles.Bold.body.scaledFont()
+        $0.adjustsFontForContentSizeCategory = true
+        $0.alpha = 0.0
     }
     private let contentView: QuickAnswersContentView = .build()
-    private let transitionAnimator: CrossDissolveTransitionAnimator?
+    private let transitionDelegate: OptInTransitionAnimator
 
     public let themeManager: any ThemeManager
     public var currentWindowUUID: WindowUUID?
     public var themeListenerCancellable: Any?
+    private let windowUUID: WindowUUID
     private let notificationCenter: NotificationProtocol
     private weak var navigationHandler: QuickAnswersNavigationHandler?
     private let viewModel: QuickAnswersViewModel
     private let learnMoreURL: URL?
+    private let stringsConfiguration: QuickAnswersViewConfiguration
     private lazy var errorHandler = ErrorHandler(
         presenter: self,
+        strings: stringsConfiguration.errors,
         onDismiss: { [weak self] in
             self?.dismiss(with: nil)
         }
     )
-    private var hasAppeared = false
+    private lazy var privacyTipPresenter = QuickAnswersPrivacyTipPresenter(
+        presenter: self,
+        strings: stringsConfiguration.privacyBanner
+    )
 
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
@@ -77,6 +66,7 @@ public final class QuickAnswersViewController: UIViewController,
         telemetry: QuickAnswersTelemetry,
         configFetcher: QuickAnswersConfigFetcher,
         learnMoreURL: URL?,
+        stringsConfiguration: QuickAnswersViewConfiguration,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
     ) {
         self.init(
@@ -86,6 +76,7 @@ public final class QuickAnswersViewController: UIViewController,
             windowUUID: windowUUID,
             themeManager: themeManager,
             learnMoreURL: learnMoreURL,
+            stringsConfiguration: stringsConfiguration,
             notificationCenter: notificationCenter
         )
     }
@@ -97,28 +88,30 @@ public final class QuickAnswersViewController: UIViewController,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         learnMoreURL: URL?,
+        stringsConfiguration: QuickAnswersViewConfiguration,
         notificationCenter: NotificationProtocol
     ) {
         self.navigationHandler = navigationHandler
         self.currentWindowUUID = windowUUID
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        // The custom transition animator is only used for the cross dissolve transition; the form sheet
-        // relies on the system presentation.
-        if case let .crossDissolve(sourceRect) = transitionType {
-            self.transitionAnimator = CrossDissolveTransitionAnimator(
-                themeManager: themeManager,
-                windowUUID: windowUUID,
-                sourceRect: sourceRect
-            )
-        } else {
-            self.transitionAnimator = nil
+        self.stringsConfiguration = stringsConfiguration
+        let sourceRevealAnimator: SourceRevealTransitionAnimator = switch transitionType {
+        case let .sourceReveal(sourceRect):
+            SourceRevealTransitionAnimator(sourceRect: sourceRect, isOptInVisible: viewModel.isOptInRequired)
         }
+        self.transitionDelegate = OptInTransitionAnimator(
+            isOptInSheetPending: { [weak viewModel] in
+                viewModel?.isOptInSheetRequired ?? false
+            },
+            fallback: sourceRevealAnimator
+        )
         self.viewModel = viewModel
         self.learnMoreURL = learnMoreURL
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = transitionType.modalPresentationStyle
-        transitioningDelegate = transitionAnimator
+        modalPresentationStyle = .custom
+        transitioningDelegate = transitionDelegate
     }
 
     required init?(coder: NSCoder) {
@@ -128,7 +121,6 @@ public final class QuickAnswersViewController: UIViewController,
     // MARK: - Lifecycle
     override public func viewDidLoad() {
         super.viewDidLoad()
-        presentationController?.delegate = self
         setupSubviews()
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
@@ -137,52 +129,36 @@ public final class QuickAnswersViewController: UIViewController,
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Workaround for iPad: with formSheet presentation, viewWillAppear can fire twice when the
-        // user attempts to dismiss the sheet but the dismissal fails, so guard the one-time flow start.
-        guard !hasAppeared else { return }
-        hasAppeared = true
         viewModel.startFlow()
     }
 
     private func setupSubviews() {
+        closeButton.accessibilityLabel = stringsConfiguration.closeAccessibilityLabel
+        contentView.configureStrings(stringsConfiguration.contentView)
         view.addSubviews(
-            backgroundRecordEffect,
-            backgroundBlur,
+            backgroundEffectView,
             contentView,
-            closeButton,
         )
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: closeButton)
+        navigationItem.titleView = titleLabel
+        setContentScrollView(contentView.scrollView, for: .top)
+
+        backgroundEffectView.pinToSuperview()
 
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
-                                             constant: UX.closeButtonSidePadding),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                  constant: -UX.closeButtonSidePadding),
-
-            contentView.topAnchor.constraint(equalTo: closeButton.bottomAnchor,
-                                             constant: UX.contentViewTopPadding),
-            contentView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                                                 constant: UX.contentViewHorizontalPadding),
-            contentView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                                                  constant: -UX.contentViewHorizontalPadding),
-            contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                                                constant: -UX.contentViewBottomPadding),
-
-            backgroundRecordEffect.widthAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
-            backgroundRecordEffect.heightAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
-            backgroundRecordEffect.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            backgroundRecordEffect.bottomAnchor.constraint(equalTo: view.bottomAnchor,
-                                                           constant: UX.recordWaveEffectBottomPadding),
+            contentView.topAnchor.constraint(equalTo: view.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
-        backgroundBlur.pinToSuperview()
     }
 
     private func registerCallbacks() {
         viewModel.onStateChange = { [weak self] state in
             switch state {
             case .showOptIn:
-                self?.contentView.showOptIn()
+                self?.showOptIn()
             case .recordingStarted:
-                self?.backgroundRecordEffect.startAnimating()
                 self?.contentView.startAudioWaveformAnimation()
             case .speechResult(let result, let error):
                 if let error {
@@ -199,18 +175,28 @@ public final class QuickAnswersViewController: UIViewController,
                     self?.errorHandler.handleSearchError(error)
                 } else {
                     self?.triggerHaptic()
-                    self?.backgroundRecordEffect.alpha = UX.recordWaveEffectResultOpacity
-                    self?.contentView.configureAnswer(result.resultText, modelName: self?.viewModel.modelDisplayName ?? "")
-                    self?.contentView.configureSources(result.sources) { [weak self] url in
+                    self?.backgroundEffectView.showResult()
+                    self?.contentView.configureResult(
+                        result.resultText,
+                        modelName: self?.viewModel.modelDisplayName ?? "",
+                        sources: result.sources
+                    ) { [weak self] url in
                         self?.viewModel.recordCitationTapped()
                         self?.dismiss(with: url)
                     }
                 }
             }
         }
+        contentView.onTranscriptVisibilityChange = { [weak self] isTranscriptVisible, transcript in
+            UIView.animate(withDuration: UX.titleFadeDuration) {
+                self?.titleLabel.alpha = isTranscriptVisible ? 0.0 : 1.0
+                self?.titleLabel.text = isTranscriptVisible ? nil : transcript
+            }
+        }
         contentView.configureOptIn(
+            strings: stringsConfiguration.optIn,
             learnMoreURL: learnMoreURL,
-            theme: themeManager.getCurrentTheme(for: currentWindowUUID),
+            theme: themeManager.getCurrentTheme(for: windowUUID),
             onContinue: { [weak self] in
                 self?.contentView.hideOptIn()
                 self?.viewModel.completeOptIn()
@@ -219,6 +205,81 @@ public final class QuickAnswersViewController: UIViewController,
                 self?.dismiss(with: url)
             }
         )
+        if #available(iOS 17.0, *) {
+            contentView.configurePrivacyLink { [weak self] in
+                self?.presentPrivacyTip()
+            }
+        }
+    }
+
+    @available(iOS 17.0, *)
+    private func presentPrivacyTip() {
+        privacyTipPresenter.present(
+            from: contentView.privacyTipSourceView,
+            iconColor: themeManager.getCurrentTheme(for: currentWindowUUID).colors.textSecondary
+        )
+    }
+
+    // MARK: - Opt-in
+    private func showOptIn() {
+        guard viewModel.feature.isOptInRedesignEnabled else {
+            contentView.showOptIn()
+            return
+        }
+        let controller = OptInViewController(
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            strings: stringsConfiguration.optInRedesign,
+            closeAccessibilityLabel: stringsConfiguration.closeAccessibilityLabel,
+            onContinue: { [weak self] in
+                self?.presentedViewController?.dismiss(animated: true)
+                self?.viewModel.completeOptIn()
+            },
+            onLearnMore: { [weak self] in
+                self?.dismiss(with: self?.learnMoreURL)
+            },
+            onDismiss: { [weak self] in
+                self?.dismiss(with: nil)
+            }
+        )
+        present(controller, animated: true) { [weak self] in
+            self?.revealBackdrop()
+        }
+    }
+
+    /// Fades in this screen, which the presentation transition keeps hidden while the opt-in sheet slides up.
+    private func revealBackdrop() {
+        guard let backdropView = transitionDelegate.hiddenContainerView,
+              let superview = backdropView.superview else { return }
+        // Cross-dissolved rather than faded in, since the form sheet materials flash while an ancestor's alpha animates.
+        UIView.transition(with: superview, duration: UX.backdropFadeDuration, options: .transitionCrossDissolve) {
+            backdropView.isHidden = false
+        }
+    }
+
+    // MARK: - Presentation transition
+    func prepareForPresentationTransition(sourceRect: CGRect, isOptInVisible: Bool) {
+        contentView.prepareForPresentationTransition(
+            sourceRect: sourceRect,
+            containerWidth: view.frame.width,
+            topInset: navigationController?.navigationBar.frame.maxY ?? 0.0,
+            isOptInVisible: isOptInVisible
+        )
+        backgroundEffectView.alpha = 0.0
+        backgroundEffectView.prepareForPresentationTransition()
+        navigationController?.navigationBar.transform = CGAffineTransform(
+            translationX: 0.0,
+            y: UX.presentationNavigationBarOffset
+        )
+        navigationController?.navigationBar.alpha = 0.0
+    }
+
+    func applyPresentationTransition(isOptInVisible: Bool) {
+        contentView.applyPresentationTransition(isOptInVisible: isOptInVisible)
+        backgroundEffectView.alpha = 1.0
+        backgroundEffectView.applyPresentationTransition()
+        navigationController?.navigationBar.alpha = 1.0
+        navigationController?.navigationBar.transform = .identity
     }
 
     private func dismiss(with url: URL?) {
@@ -233,18 +294,13 @@ public final class QuickAnswersViewController: UIViewController,
         generator.impactOccurred()
     }
 
-    // MARK: - UIAdaptivePresentationControllerDelegate
-    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        dismiss(with: nil)
-    }
-
     // MARK: - Themeable
     public func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        view.backgroundColor = theme.colors.layer2
-        closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
-        closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
-        backgroundRecordEffect.applyTheme(theme: theme)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        view.backgroundColor = theme.colors.layer1
+        closeButton.tintColor = theme.colors.iconPrimary
+        titleLabel.textColor = theme.colors.textPrimary
         contentView.applyTheme(theme: theme)
+        backgroundEffectView.applyTheme(theme: theme)
     }
 }

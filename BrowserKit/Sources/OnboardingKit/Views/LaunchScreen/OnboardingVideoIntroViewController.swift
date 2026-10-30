@@ -23,10 +23,10 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
     private var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
     private let notificationCenter: NotificationProtocol
-    private lazy var continueButton: PrimaryRoundedButton = .build {
+    private lazy var continueButton: PrimaryRoundedButton = .build { [weak self] in
         $0.addAction(
             UIAction(
-                handler: { [weak self] _ in
+                handler: { _ in
                     self?.onDismiss?()
                 }),
             for: .touchUpInside

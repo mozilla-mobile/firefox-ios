@@ -357,7 +357,7 @@ class FirefoxHomeJumpBackInViewModelTests: XCTestCase {
         let remoteClient = remoteDesktopClient(name: "Fake Client 2")
         let remoteClientTabs = remoteTabs(idRange: 7...9)
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(), tabs: remoteTabs(idRange: 1...5)),
-                                     ClientAndTabs(client: remoteClient, tabs: remoteClientTabs)]
+                                         ClientAndTabs(client: remoteClient, tabs: remoteClientTabs)]
 
         let expectation = XCTestExpectation(description: "Main queue fires; updateRemoteTabs(completion:) is called.")
         subject.updateData {

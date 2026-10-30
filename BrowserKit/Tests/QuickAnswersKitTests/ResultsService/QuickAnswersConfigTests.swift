@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Testing
+import MLPAKit
 
 @testable import QuickAnswersKit
 
@@ -34,5 +35,11 @@ struct QuickAnswersConfigTests {
     func test_model_displayName() {
         #expect(QuickAnswersModel.exa.displayName == "Exa")
         #expect(QuickAnswersModel.liner.displayName == "Liner")
+    }
+
+    @Test
+    func test_model_serviceType() {
+        #expect(QuickAnswersModel.exa.serviceType == MLPAServiceType.quickAnswersExa)
+        #expect(QuickAnswersModel.liner.serviceType == MLPAServiceType.quickAnswersLiner)
     }
 }

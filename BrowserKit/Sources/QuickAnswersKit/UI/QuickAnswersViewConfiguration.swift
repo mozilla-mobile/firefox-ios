@@ -1,0 +1,157 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Foundation
+
+public struct QuickAnswersViewConfiguration: Sendable {
+    public let optIn: OptInStrings
+    public let optInRedesign: OptInRedesignStrings
+    public let contentView: ContentViewStrings
+    public let privacyBanner: PrivacyBannerStrings
+    public let errors: ErrorStrings
+    public let closeAccessibilityLabel: String
+    public let appName: String
+
+    public struct OptInStrings: Sendable {
+        public let title: String
+        public let description: String
+        public let learnMore: String
+        public let continueButton: String
+
+        public init(title: String, description: String, learnMore: String, continueButton: String) {
+            self.title = title
+            self.description = description
+            self.learnMore = learnMore
+            self.continueButton = continueButton
+        }
+    }
+
+    public struct OptInRedesignStrings: Sendable {
+        public let title: String
+        public let description: String
+        public let nothingGetsSavedTitle: String
+        public let nothingGetsSavedDescription: String
+        public let privateByDesignTitle: String
+        public let privateByDesignDescription: String
+        public let noTrainingTitle: String
+        public let noTrainingDescription: String
+        public let learnMore: String
+        public let continueButton: String
+
+        public init(
+            title: String,
+            description: String,
+            nothingGetsSavedTitle: String,
+            nothingGetsSavedDescription: String,
+            privateByDesignTitle: String,
+            privateByDesignDescription: String,
+            noTrainingTitle: String,
+            noTrainingDescription: String,
+            learnMore: String,
+            continueButton: String
+        ) {
+            self.title = title
+            self.description = description
+            self.nothingGetsSavedTitle = nothingGetsSavedTitle
+            self.nothingGetsSavedDescription = nothingGetsSavedDescription
+            self.privateByDesignTitle = privateByDesignTitle
+            self.privateByDesignDescription = privateByDesignDescription
+            self.noTrainingTitle = noTrainingTitle
+            self.noTrainingDescription = noTrainingDescription
+            self.learnMore = learnMore
+            self.continueButton = continueButton
+        }
+    }
+
+    public struct ContentViewStrings: Sendable {
+        public let placeholder: String
+        public let answering: String
+        public let footerFormat: String
+        public let sources: String
+        public let aboutYourPrivacy: String
+        public let answerHeader: String
+
+        public init(
+            placeholder: String,
+            answering: String,
+            footerFormat: String,
+            sources: String,
+            aboutYourPrivacy: String,
+            answerHeader: String
+        ) {
+            self.placeholder = placeholder
+            self.answering = answering
+            self.footerFormat = footerFormat
+            self.sources = sources
+            self.aboutYourPrivacy = aboutYourPrivacy
+            self.answerHeader = answerHeader
+        }
+    }
+
+    /// Strings of the tip shown when the user taps the "About your privacy" link in the content view footer.
+    public struct PrivacyBannerStrings: Sendable {
+        public let title: String
+        public let description: String
+
+        public init(title: String, description: String) {
+            self.title = title
+            self.description = description
+        }
+    }
+
+    public struct ErrorStrings: Sendable {
+        public let permissionAlertTitle: String
+        public let microphonePermissionMessage: String
+        public let speechRecognitionPermissionMessage: String
+        public let openSettings: String
+        public let cancel: String
+        public let dailyLimitTitle: String
+        public let dailyLimitMessage: String
+        public let genericErrorTitle: String
+        public let genericErrorMessage: String
+        public let ok: String
+
+        public init(
+            permissionAlertTitle: String,
+            microphonePermissionMessage: String,
+            speechRecognitionPermissionMessage: String,
+            openSettings: String,
+            cancel: String,
+            dailyLimitTitle: String,
+            dailyLimitMessage: String,
+            genericErrorTitle: String,
+            genericErrorMessage: String,
+            ok: String
+        ) {
+            self.permissionAlertTitle = permissionAlertTitle
+            self.microphonePermissionMessage = microphonePermissionMessage
+            self.speechRecognitionPermissionMessage = speechRecognitionPermissionMessage
+            self.openSettings = openSettings
+            self.cancel = cancel
+            self.dailyLimitTitle = dailyLimitTitle
+            self.dailyLimitMessage = dailyLimitMessage
+            self.genericErrorTitle = genericErrorTitle
+            self.genericErrorMessage = genericErrorMessage
+            self.ok = ok
+        }
+    }
+
+    public init(
+        optIn: OptInStrings,
+        optInRedesign: OptInRedesignStrings,
+        contentView: ContentViewStrings,
+        privacyBanner: PrivacyBannerStrings,
+        errors: ErrorStrings,
+        closeAccessibilityLabel: String,
+        appName: String
+    ) {
+        self.optIn = optIn
+        self.optInRedesign = optInRedesign
+        self.contentView = contentView
+        self.privacyBanner = privacyBanner
+        self.errors = errors
+        self.closeAccessibilityLabel = closeAccessibilityLabel
+        self.appName = appName
+    }
+}

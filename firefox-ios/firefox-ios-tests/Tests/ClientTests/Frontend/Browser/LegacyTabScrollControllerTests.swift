@@ -24,13 +24,12 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         try await super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         mockGesture = MockUIPanGestureRecognizer()
     }
 
     override func tearDown() async throws {
-        mockProfile?.shutdown()
         mockProfile = nil
         tab = nil
         DependencyHelperMock().reset()
@@ -178,6 +177,30 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         subject.observeValue(forKeyPath: "contentSize", of: scrollView, change: nil, context: nil)
 
         XCTAssertTrue(subject.isToolbarStateCollapsed)
+    }
+
+    // MARK: - hasScrollableContent
+
+    func testHasScrollableContent_contentTallerThanViewportPlusToolbars_isTrue() throws {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        // setupTabScroll sets the scroll view's own frame height to 2000, independent of the
+        // simulator/device's actual screen size.
+        let scrollView = try XCTUnwrap(tab.webView?.scrollView)
+        scrollView.contentSize = CGSize(width: 200, height: 2000 + 2 * UIConstants.ToolbarHeight + 1)
+
+        XCTAssertTrue(subject.hasScrollableContent)
+    }
+
+    func testHasScrollableContent_contentShorterThanViewportPlusToolbars_isFalse() throws {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        let scrollView = try XCTUnwrap(tab.webView?.scrollView)
+        scrollView.contentSize = CGSize(width: 200, height: 2000 + 2 * UIConstants.ToolbarHeight - 1)
+
+        XCTAssertFalse(subject.hasScrollableContent)
     }
 
     // MARK: - overKeyboardScrollHeight Helper Method Tests
@@ -346,7 +369,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
     private func setupTabScroll(with subject: LegacyTabScrollController) {
         tab.createWebview(configuration: .init())
         tab.webView?.scrollView.frame.size = CGSize(width: 200, height: 2000)
-        tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
+        tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 4000)
         tab.webView?.scrollView.delegate = subject
         subject.tab = tab
     }

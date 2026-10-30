@@ -1,0 +1,23 @@
+# The configuration for the background audio feature
+features:
+  background-audio-feature:
+    description: >
+      The feature flag to manage the roll out of background audio playback,
+      allowing media to continue playing when the app is backgrounded.
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is available
+        type: Boolean
+        default: false
+      default-on:
+        description: >
+          The default state of the user-facing toggle when no preference
+          has been set. Independent of enabled, which only controls
+          whether the feature is available.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: developer
+        value:
+          enabled: true

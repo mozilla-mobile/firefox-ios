@@ -176,6 +176,9 @@ class BookmarksTests: FeatureFlaggedTestBase {
 
         // Enter new url
         toolbarScreen.openNewTabFromTabTray()
+        // Workaround: the microsurvey prompt on the second homepage view clears the address bar mid-typing.
+        // Remove once https://github.com/mozilla-mobile/firefox-ios/issues/36300 is fixed.
+        browserScreen.dismissMicrosurveyIfExists()
         browserScreen.tapOnAddressBar()
         browserScreen.typeOnSearchBar(text: "https://mozilla.org")
 
@@ -202,6 +205,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3936976
     // Smoketest
+    // Regression
     func testSearchBookmarkIconDisplay() throws {
         if !isFennec {
             throw XCTSkip("Skipping test because bookmark search bar is off on Firefox")
@@ -212,6 +216,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         toolbarScreen.tapSettingsMenuButton()
         mainMenu.tapBookmarks()
         libraryScreen.assertBookmarkEmptyStateTextExists()
+        libraryScreen.assertEditButtonExists()
         libraryScreen.assertBottomSearchButtonExists(shouldExist: false)
 
         // Step 2: Create a new folder — search icon is displayed
@@ -229,10 +234,12 @@ class BookmarksTests: FeatureFlaggedTestBase {
         bookmark()
         toolbarScreen.tapSettingsMenuButton()
         mainMenu.tapBookmarks()
+        libraryScreen.assertEditButtonExists()
         libraryScreen.assertBottomSearchButtonExists(shouldExist: true)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3936981
+    // Regression
     func testBookmarkSearchResultContextMenu() throws {
         try launchWithBookmarksSearchEnabledAndOpenSearch()
         // Long-tap a searched bookmark — context menu shows expected options
@@ -241,6 +248,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3937449
+    // Regression
     func testBookmarkSearchResultDisclosureContextMenu() throws {
         try launchWithBookmarksSearchEnabledAndOpenSearch()
         // Tap the three-dot button on the search result — context menu shows expected options
@@ -249,6 +257,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3936982
+    // Regression
     func testBookmarkSearchResultOpenInNewTab() throws {
         try launchWithBookmarksSearchEnabledAndOpenSearch()
         // Long-tap a searched bookmark and select "Open in New Tab"
@@ -269,6 +278,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3936983
+    // Regression
     func testBookmarkSearchResultOpenInNewPrivateTab() throws {
         try launchWithBookmarksSearchEnabledAndOpenSearch()
         // Long-tap a searched bookmark and select "Open in a Private Tab"
@@ -290,6 +300,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3967271
+    // Regression
     func testFolderIsUpdatedAfterDeletingBookmarkViaSearch() throws {
         if !isFennec {
             throw XCTSkip("Skipping test because bookmark search bar is off on Firefox")
@@ -364,6 +375,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168587
+    // Regression
     func testAddNewFolder() {
         app.launch()
         toolbarScreen.tapSettingsMenuButton()
@@ -373,6 +385,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168596
+    // Regression
     func testDeleteEmptyFolderInEditMode() {
         app.launch()
         toolbarScreen.tapSettingsMenuButton()
@@ -424,6 +437,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168649
+    // Regression
     func testDeleteBookmarkContextMenu() {
         app.launch()
         toolbarScreen.assertTabsButtonExists()
@@ -489,6 +503,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306911
+    // Regression
     func testRecentlyBookmarked() {
         app.launch()
         navigator.openURL(path(forTestPage: url_2["url"]!))
@@ -692,9 +707,11 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168584
+    // Regression
     func testCheckDonebutton() {
         app.launch()
         toolbarScreen.tapSettingsMenuButton()
+        mainMenu.assertMenuOptionsExist()
         mainMenu.tapBookmarks()
         libraryScreen.assertBookmarkEmptyStateTextExists()
         libraryScreen.tapDoneButton()
@@ -732,6 +749,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168628
+    // Regression
     func testVerifyFolderSpecialCharacters() {
         app.launch()
         toolbarScreen.tapSettingsMenuButton()
@@ -741,6 +759,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168627
+    // Regression
     func testCreateFolderWithVeryLongName() {
         app.launch()
         let longFolderName = "A very long folder name used to verify that the title field " +
@@ -753,6 +772,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168629
+    // Regression
     func testDuplicateFoldersNames() {
         app.launch()
         let folderName = "Sample Folder."
@@ -785,6 +805,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3168590
+    // Regression
     func testUserRedirectToMostRecentlyAccessedFolder() {
         app.launch()
         let secondFolder = "Folder2"

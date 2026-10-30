@@ -69,31 +69,44 @@ public struct WebCompatReportViewModel: Equatable, Sendable {
         public let title: String
         public let kind: Kind
         public let a11yIdentifier: String
+        public let accessibilityHint: String?
 
-        public init(id: String, title: String, kind: Kind = .plain, a11yIdentifier: String) {
+        public init(
+            id: String,
+            title: String,
+            kind: Kind = .plain,
+            a11yIdentifier: String,
+            accessibilityHint: String? = nil
+        ) {
             self.id = id
             self.title = title
             self.kind = kind
             self.a11yIdentifier = a11yIdentifier
+            self.accessibilityHint = accessibilityHint
         }
     }
 
     public let navigationTitle: String
     public let closeButtonAccessibilityLabel: String
-    /// Nil hides the Preview bar button entirely. Preview is parked for v1 (FXIOS-16450).
+    /// Nil hides the Preview bar button entirely.
     public let previewButtonTitle: String?
     public let isPreviewEnabled: Bool
+    public let previewAccessibilityHint: String?
     public let sections: [Section]
 
-    public init(navigationTitle: String,
-                closeButtonAccessibilityLabel: String,
-                previewButtonTitle: String? = nil,
-                isPreviewEnabled: Bool = false,
-                sections: [Section] = []) {
+    public init(
+        navigationTitle: String,
+        closeButtonAccessibilityLabel: String,
+        previewButtonTitle: String? = nil,
+        isPreviewEnabled: Bool = false,
+        previewAccessibilityHint: String? = nil,
+        sections: [Section] = []
+    ) {
         self.navigationTitle = navigationTitle
         self.closeButtonAccessibilityLabel = closeButtonAccessibilityLabel
         self.previewButtonTitle = previewButtonTitle
         self.isPreviewEnabled = isPreviewEnabled
+        self.previewAccessibilityHint = previewAccessibilityHint
         self.sections = sections
     }
 }

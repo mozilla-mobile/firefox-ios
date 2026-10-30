@@ -13,11 +13,20 @@ let website1: [String: String] = [
 let website2 = path(forTestPage: TestPages.exampleHTML)
 
 class ToolbarTests: FeatureFlaggedTestBase {
+    private var browserScreen: BrowserScreen!
+    private var toolbarScreen: ToolbarScreen!
+    private var searchSettingsScreen: SearchSettingsScreen!
+
     override func setUp() async throws {
         try await super.setUp()
-        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
+        browserScreen = BrowserScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+        searchSettingsScreen = SearchSettingsScreen(app: app)
     }
 
+    // Each test sets its own orientation before `app.launch()`. Don't force one here: half the tests
+    // need portrait and were overriding a class-wide landscape default, so new tests silently
+    // inherited an orientation they didn't ask for.
     override func tearDown() async throws {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         try await super.tearDown()
@@ -28,6 +37,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
      * Tests landscape page navigation enablement with the URL bar with tab switching.
      */
     func testLandscapeNavigationWithTabSwitch() {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         app.launch()
         let urlPlaceholder = "Search or enter address"
         let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
@@ -82,6 +92,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2344430
     func testClearURLTextUsingBackspace() {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         app.launch()
         mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         navigator.openURL(website1["url"]!)
@@ -111,7 +122,6 @@ class ToolbarTests: FeatureFlaggedTestBase {
         if iPad() {
             throw XCTSkip("iPhone only test")
         }
-        // Landscape makes this fail on iPhone, so launch in portrait rather than rotating afterwards.
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         app.launch()
 
@@ -145,7 +155,9 @@ class ToolbarTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3197644
+    // Regression
     func testOpenNewTabButtonOnToolbar() throws {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         app.launch()
         if iPad() {
             throw XCTSkip("iPhone only test")
@@ -166,8 +178,6 @@ class ToolbarTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/4105580
     // Smoketest
     func testToolbarIsVisibleAfterTypingInWebPageTextField() {
-        let browserScreen = BrowserScreen(app: app)
-        let toolbarScreen = ToolbarScreen(app: app)
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         app.launch()
 
@@ -183,6 +193,128 @@ class ToolbarTests: FeatureFlaggedTestBase {
         toolbarScreen.assertToolbarIsVisible()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4135587
+    // Regression
+    func testGoogleLensIconReplacedByClearIconWhenTyping() {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+        app.launch()
+
+        // Step 1: in edit mode with an empty address bar, the Google Lens icon is visible
+        focusAddressBarClosingGoogleLensTip()
+        toolbarScreen.assertGoogleLensButtonExists()
+        browserScreen.assertClearButtonDoesNotExist()
+
+        // Step 2: typing a character replaces the Google Lens icon with the Clear icon
+        browserScreen.typeOnSearchBar(text: "m")
+        browserScreen.assertClearButtonExists()
+        toolbarScreen.assertGoogleLensButtonDoesNotExist()
+
+        // Step 3: clearing the text brings the Google Lens icon back
+        browserScreen.clearURL()
+        toolbarScreen.assertGoogleLensButtonExists()
+        browserScreen.assertClearButtonDoesNotExist()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4225090
+    // Regression
+    func testGoogleLensIconHiddenWhenGoogleIsNotDefaultSearchEngine() {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+        app.launch()
+        assertGoogleLensButtonShownInEditMode()
+
+        // Step 1: set Bing as the default search engine
+        navigator.goto(SearchSettings)
+        searchSettingsScreen.selectDefaultSearchEngine(named: defaultSearchEngine2)
+        searchSettingsScreen.assertDefaultSearchEngine(is: defaultSearchEngine2)
+        navigator.goto(HomePanelsScreen)
+
+        // Step 2: the app is backgrounded and reopened instead of killed, because a relaunched
+        // test app gets a new app-group container, treats the profile as new and wipes its prefs
+        restartInBackground()
+
+        // Step 3: in edit mode with an empty address bar, the Google Lens icon is not displayed
+        assertGoogleLensButtonHiddenInEditMode()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4225091
+    // Regression
+    func testGoogleLensIconHiddenInPrivateBrowsing() {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+        app.launch()
+        assertGoogleLensButtonShownInEditMode()
+
+        // Step 1: open a private tab
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        browserScreen.assertPrivateModeMessageCardExists()
+
+        // Step 2: in edit mode with an empty address bar, the Google Lens icon is not displayed
+        assertGoogleLensButtonHiddenInEditMode()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4225095
+    // Regression
+    func testGoogleLensAddressBarContextMenu() {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+        app.launch()
+        focusAddressBarClosingGoogleLensTip()
+
+        // Step 1: tapping the Google Lens icon opens a menu with only Photo Library and Take Photo
+        toolbarScreen.tapGoogleLensButton()
+        toolbarScreen.assertGoogleLensMenuShowsOnlyPhotoOptions()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/4146326
+    // Regression
+    func testReEnablingGoogleLensToggleRestoresLensIcon() {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+        app.launch()
+
+        // Step 1: with the Google Lens toggle off, edit mode shows no Lens icon
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SearchSettings)
+        searchSettingsScreen.assertGoogleLensToggle(isOn: true)
+        searchSettingsScreen.tapOnGoogleLensToggle()
+        searchSettingsScreen.assertGoogleLensToggle(isOn: false)
+        navigator.goto(HomePanelsScreen)
+        assertGoogleLensButtonHiddenInEditMode()
+        browserScreen.leaveAddressBarEditingIfActive()
+
+        // Step 2: turn the Google Lens toggle back on
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SearchSettings)
+        searchSettingsScreen.tapOnGoogleLensToggle()
+        searchSettingsScreen.assertGoogleLensToggle(isOn: true)
+        navigator.goto(HomePanelsScreen)
+
+        // Step 3: in edit mode, the Google Lens icon is visible again
+        browserScreen.tapOnAddressBar()
+        toolbarScreen.assertGoogleLensButtonExists()
+    }
+
+    /// Closing the first-run Google Lens tip leaves edit mode on without the keyboard, so the address bar is refocused.
+    private func focusAddressBarClosingGoogleLensTip() {
+        browserScreen.tapOnAddressBar()
+        if toolbarScreen.dismissGoogleLensTipIfPresented() {
+            browserScreen.tapOnAddressBar()
+        }
+    }
+
+    /// Positive control for the hidden-icon tests: before the change under test, edit mode shows the Lens icon.
+    private func assertGoogleLensButtonShownInEditMode() {
+        focusAddressBarClosingGoogleLensTip()
+        toolbarScreen.assertGoogleLensButtonExists()
+        browserScreen.leaveAddressBarEditingIfActive()
+        navigator.nowAt(NewTabScreen)
+    }
+
+    /// The keyboard check proves edit mode is on, so a missing icon is not just a missing address bar focus.
+    private func assertGoogleLensButtonHiddenInEditMode() {
+        browserScreen.tapOnAddressBar()
+        browserScreen.assertAddressBarFocusedWithKeyboard()
+        toolbarScreen.assertGoogleLensButtonDoesNotExist()
+    }
+
     private func validateAddNewTabButtonOnToolbar(isPrivate: Bool) {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         restartInBackground()
@@ -193,14 +325,20 @@ class ToolbarTests: FeatureFlaggedTestBase {
             mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
             if !isPrivate {
-                // News scrolls in after the relaunch and loads async; retry the swipe.
-                let news = app.otherElements["News"]
-                var swipes = 3
-                repeat {
-                    app.partialSwipeUp(distance: 0.2)
-                    swipes -= 1
-                } while !news.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) && swipes > 0
-                mozWaitForElementToExist(news)
+                if isStoriesBrokenByLocaleBug {
+                    // News only confirms the homepage scrolled here, and never renders below iOS 17.
+                    // https://github.com/mozilla-mobile/firefox-ios/issues/35618
+                    NewsScreen(app: app).assertNewsSectionIsAbsent()
+                } else {
+                    // News scrolls in after the relaunch and loads async; retry the swipe.
+                    let news = app.otherElements["News"]
+                    var swipes = 3
+                    repeat {
+                        app.partialSwipeUp(distance: 0.2)
+                        swipes -= 1
+                    } while !news.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) && swipes > 0
+                    mozWaitForElementToExist(news)
+                }
             }
             navigator.nowAt(BrowserTab)
             mozWaitElementHittable(element: app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: TIMEOUT)

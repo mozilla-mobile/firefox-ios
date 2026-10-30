@@ -8,6 +8,7 @@ enum Model: String {
     case simulator = "simulator"
     case iPhoneSE = "iPhone SE (1st gen)"
     case iPodTouch = "iPod touch 7th gen"
+    case iPhoneDuo = "iPhone Duo"
     case unrecognized = "?unrecognized?"
 }
 
@@ -16,6 +17,13 @@ extension UIDevice {
     var isTinyFormFactor: Bool {
         return UIDevice().type == .iPhoneSE || UIDevice().type == .iPodTouch
     }
+
+    // swiftlint:disable no_is_duo
+    /// True on the foldable iPhone Duo
+    var isDuo: Bool {
+        return UIDevice().type == .iPhoneDuo
+    }
+    // swiftlint:enable no_is_duo
 
     var isIphoneLandscape: Bool {
         return UIDevice().userInterfaceIdiom == .phone && UIWindow.isLandscape
@@ -33,8 +41,10 @@ extension UIDevice {
         let modelMap: [String: Model] = [
             "i386": .simulator,
             "x86_64": .simulator,
+            "arm64": .simulator,
             "iPhone8,4": .iPhoneSE,
-            "iPod9,1": .iPodTouch
+            "iPod9,1": .iPodTouch,
+            "iPhone19,4": .iPhoneDuo
         ]
 
         if let modelCode = modelCode, let model = modelMap[modelCode] {

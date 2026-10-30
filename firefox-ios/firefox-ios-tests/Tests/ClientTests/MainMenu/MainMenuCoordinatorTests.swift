@@ -10,7 +10,7 @@ import XCTest
 @MainActor
 final class MainMenuCoordinatorTests: XCTestCase, StoreTestUtility {
     private var mockRouter: MockRouter!
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -28,15 +28,6 @@ final class MainMenuCoordinatorTests: XCTestCase, StoreTestUtility {
     // MARK: - StoreTestUtility
     func setupAppState() -> AppState {
         return AppState()
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 
     func testInitialState() {
@@ -117,7 +108,7 @@ final class MainMenuCoordinatorTests: XCTestCase, StoreTestUtility {
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> MainMenuCoordinator {
-        let subject = MainMenuCoordinator(router: mockRouter, windowUUID: .XCTestDefaultUUID, profile: MockProfile())
+        let subject = MainMenuCoordinator(router: mockRouter, windowUUID: .XCTestDefaultUUID, profile: makeProfile())
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

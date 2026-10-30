@@ -36,8 +36,8 @@ final class SearchScreen {
     }
 
     func assertTrendingSearchesSectionTitleDoesNotExist(with engineName: String) {
-        _ = sel.trendingSearchesSectionTitle(with: engineName).element(in: app)
-        BaseTestCase().mozWaitForElementToNotExist(recentSearchesSectionTitle)
+        let text = sel.trendingSearchesSectionTitle(with: engineName).element(in: app)
+        BaseTestCase().mozWaitForElementToNotExist(text)
     }
 
     func assertRecentSearchesSectionTitle() {

@@ -28,6 +28,7 @@ class ChangeUserAgentTests: XCTestCase {
     }
 
     override func tearDown() {
+        try? FileManager.default.removeItem(at: file)
         testFilename = nil
         file = nil
         super.tearDown()

@@ -334,12 +334,6 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData.v2" = "Mozilla тек %@ әркім үшін ұсыну және жақсарту мақсатында керек деректерді жинауға тырысады.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies" = "%@ кейде зерттеулерді орнатып, орындай алады.";
-
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies.v2" = "%@ мүмкіндіктерді сынау үшін пайдаланушыларды кездейсоқ таңдайды, бұл барлығы үшін сапаны жақсартуға көмектеседі.";
-
 /* Title for section in settings menu */
 "Settings.general" = "Жалпы";
 
@@ -456,12 +450,6 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Қолдану деректерін жіберу";
-
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies" = "Зерттеулер";
-
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies.v2" = "Мүмкіндіктерді зерттеулерге рұқсат беру";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Қолданбаны босату үшін Touch ID қолданыңыз";

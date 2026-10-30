@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import GameController
 import WebKit
 
 import class Storage.CertStore
@@ -19,7 +20,7 @@ protocol TabWebViewDelegate: AnyObject {
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool
 }
 
-class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
+class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifiable {
     lazy var accessoryView: AccessoryViewProvider = .build(nil, {
         AccessoryViewProvider(windowUUID: self.windowUUID)
     })
@@ -30,6 +31,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     private var theme: Theme?
     private var uiTestLeakView: UIView? // Used for automation
     private var certStore: CertStore
+    var notificationCenter: any NotificationProtocol
 
     deinit {
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
@@ -61,8 +63,18 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
+        // Workaround to avoid crash: https://mozilla.sentry.io/issues/3081569597/?project=6176941
+        // For iPads with hardware keyboard we remove our custom `AccessoryView` as a temporary solution.
+        if shouldSuppressAccessoryViewOniPad { return nil }
 
         return accessoryView
+    }
+
+    private var shouldSuppressAccessoryViewOniPad: Bool {
+        guard #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .pad else { return false }
+        let isHardwareKeyboardConnected = GCKeyboard.coalesced != nil
+
+        return isHardwareKeyboardConnected
     }
 
     func configure(delegate: TabWebViewDelegate,
@@ -89,15 +101,74 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         }
     }
 
-    init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID, certStore: CertStore) {
+    init(
+        frame: CGRect,
+        configuration: WKWebViewConfiguration,
+        windowUUID: WindowUUID,
+        certStore: CertStore,
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
         self.windowUUID = windowUUID
         self.certStore = certStore
+        self.notificationCenter = notificationCenter
         super.init(frame: frame, configuration: configuration)
+        observeHardwareKeyboardChanges()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    #if compiler(>=6.4)
+    // One-way opt-in: WebKit exposes no reset to automatic obscured insets after an explicit value.
+    // Keep updating insets after the vertical bar disappears.
+    private var usesVerticalBarInsets = false
+
+    override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        // Recalculate WebKit's obscured region during layout after the safe area changes.
+        setNeedsLayout()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if #available(iOS 27.1, *) {
+            updateVerticalBarInsets()
+        }
+    }
+
+    @available(iOS 27.1, *)
+    private func updateVerticalBarInsets() {
+        if !usesVerticalBarInsets {
+            guard !traitCollection.duoExpanded,
+                  traitCollection.verticalBarEdge != .unspecified else { return }
+            usesVerticalBarInsets = true
+            scrollView.contentInsetAdjustmentBehavior = .always
+            // WebKit needs an opaque web view to paint the page background into the vertical bar.
+            isOpaque = true
+            underPageBackgroundColor = nil
+        }
+
+        var obscuredInsets = safeAreaInsets
+        if let window, window.traitCollection.verticalBarEdge != .unspecified {
+            // Translating the web view (e.g. during the tab swipe) changes its own horizontal safe area insets,
+            // so use the window's, which match at rest, to keep the layout viewport from resizing.
+            obscuredInsets.left = window.safeAreaInsets.left
+            obscuredInsets.right = window.safeAreaInsets.right
+        }
+        if traitCollection.duoExpanded {
+            // Expanded mode handles the bottom safe area outside the web view's obscured region.
+            obscuredInsets.bottom = 0
+        }
+        guard obscuredContentInsets != obscuredInsets else { return }
+        // iOS 26+: these insets mark edges covered by native UI in the web view's coordinates.
+        // WebKit shrinks the layout viewport and adjusts fixed/sticky elements around that UI.
+        //
+        // dev note: CSS 100vw can still include the vertical bar's width and overflow the unobscured viewport.
+        // Most likely a WKWebView viewport-sizing issue specifically on Duo.
+        obscuredContentInsets = obscuredInsets
+    }
+    #endif
 
     func removeAllUserScripts() {
         configuration.userContentController.removeAllUserScripts()
@@ -120,15 +191,6 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
                 self.delegate?.tabWebViewSearchWithFirefox(self, didSelectSearchWithFirefoxForSelection: selection)
             }
         }
-    }
-
-    override internal func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        // The find-in-page selection menu only appears if the webview is the first responder.
-        // Do not becomeFirstResponder on a mouse event.
-        if let event = event, event.allTouches?.contains(where: { $0.type != .indirectPointer }) ?? false {
-            becomeFirstResponder()
-        }
-        return super.hitTest(point, with: event)
     }
 
     // swiftlint:disable unneeded_override
@@ -191,7 +253,37 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         pullRefresh?.isHidden = !isVisible
     }
 
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .GCKeyboardDidConnect, .GCKeyboardDidDisconnect:
+            ensureMainThread {
+                self.reloadInputViews()
+            }
+        default: return
+        }
+    }
+
+    private func observeHardwareKeyboardChanges() {
+        guard #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .pad else { return }
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.GCKeyboardDidConnect, .GCKeyboardDidDisconnect]
+        )
+    }
+
     // MARK: - ThemeApplicable
+
+    func updateBackgroundForNightMode(_ enabled: Bool) {
+        #if compiler(>=6.4)
+        let useAutomaticBackground = !enabled || usesVerticalBarInsets
+        #else
+        let useAutomaticBackground = !enabled
+        #endif
+        isOpaque = useAutomaticBackground
+        underPageBackgroundColor = useAutomaticBackground ? nil : .black
+    }
 
     /// Updates the `background-color` of the webview to match
     /// the theme if the webview is showing "about:blank" (nil).

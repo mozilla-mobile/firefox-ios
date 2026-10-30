@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-// TODO: FXIOS-14934 - remove preconcurrency
 import AVFoundation
 import Speech
 import Common
@@ -36,6 +35,11 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
         self.audioManager = audioManager
         self.authorizer = authorizer
         self.locale = locale
+    }
+
+    /// Wether the transcriber module is available on this device.
+    static func isTranscriberModuleAvailable() -> Bool {
+        return SpeechTranscriber.isAvailable
     }
 
     func prepare() async throws {

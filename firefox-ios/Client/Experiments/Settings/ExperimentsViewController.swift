@@ -8,7 +8,7 @@ import Common
 import protocol MozillaAppServices.NimbusApi
 import struct MozillaAppServices.AvailableExperiment
 
-class ExperimentsViewController: UIViewController {
+final class ExperimentsViewController: UIViewController {
     private let experimentsView = ExperimentsTableView()
     private let experiments: NimbusApi
     private var availableExperiments: [AvailableExperiment]
@@ -26,9 +26,13 @@ class ExperimentsViewController: UIViewController {
             action: #selector(closeExperimentsPressed)
         )
 
-        NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: .main) { _ in
+        NotificationCenter.default.addObserver(
+            forName: .nimbusExperimentsApplied,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
             ensureMainThread {
-                self.onExperimentsApplied()
+                self?.onExperimentsApplied()
             }
         }
     }

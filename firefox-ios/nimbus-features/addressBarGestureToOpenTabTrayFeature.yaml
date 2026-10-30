@@ -13,12 +13,12 @@ features:
         description: >
           Decides if the interactive (fancier) version of this feature is enabled.
         type: Boolean
-        default: false
+        default: true
       enabled_closetab:
         description: >
           Decides if the interactive gesture can close tabs by dragging the tab up to the top edge of the screen
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value:

@@ -1,0 +1,55 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Foundation
+import Shared
+
+/// The backend environment the VPN App Attest (IPN)
+public enum VPNEnvironment: String, Sendable {
+    case dev
+    case stage
+    case prod
+
+    var baseURL: URL? {
+        switch self {
+        case .dev:
+            return URL(string: "https://dev.vpn.nonprod.webservices.mozgcp.net")
+        case .stage:
+            return URL(string: "https://vpn.allizom.org")
+        case .prod:
+            return URL(string: "https://vpn.mozilla.org")
+        }
+    }
+
+    public init(prefs: Prefs) {
+        let environmentKey = prefs.stringForKey(PrefsKeys.VPNSettings.endpointEnvironment) ?? ""
+        self = VPNEnvironment(rawValue: environmentKey) ?? .prod
+    }
+}
+
+/// HTTP constants and endpoint builders for the VPN App Attest (IPN) auth flow.
+public enum VPNConstants {
+    static let authorizationHeader = "Authorization"
+    static let bearerPrefix = "Bearer "
+    static let contentTypeHeader = "Content-Type"
+    static let contentTypeJSON = "application/json"
+    static let POST = "POST"
+    static let GET = "GET"
+
+    static func challengeEndpoint(with env: VPNEnvironment) -> URL? {
+        env.baseURL?.appendingPathComponent("api/v1/ipn/challenge")
+    }
+
+    static func enrollmentEndpoint(with env: VPNEnvironment) -> URL? {
+        env.baseURL?.appendingPathComponent("api/v1/ipn/enrollment")
+    }
+
+    static func refreshEndpoint(with env: VPNEnvironment) -> URL? {
+        env.baseURL?.appendingPathComponent("api/v1/ipn/refresh")
+    }
+
+    static func tokenEndpoint(with env: VPNEnvironment) -> URL? {
+        env.baseURL?.appendingPathComponent("api/v1/ipn/token")
+    }
+}

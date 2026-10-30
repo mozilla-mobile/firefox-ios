@@ -26,7 +26,7 @@
 "Bookmarks.Menu.DeleteBookmark.v132" = "Smazat záložku";
 
 /* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
-"Bookmarks.Menu.DeletedBookmark.v131" = "Smazáno “%@”";
+"Bookmarks.Menu.DeletedBookmark.v131" = "Smazáno „%@“";
 
 /* When a folder is longpressed in the bookmarks menu, a `Delete Folder` button is present. */
 "Bookmarks.Menu.DeleteFolder.v131" = "Smazat složku";

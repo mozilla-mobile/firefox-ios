@@ -54,13 +54,15 @@ struct FxSuggestTelemetry {
                                   value: systemRegion)
 
         switch telemetryInfo {
-        case let .amp(blockId, advertiser, iabCategory, _, clickReportingURL):
+        case let .amp(blockId, advertiser, iabCategory, _, clickReportingURL, suggestionId):
             gleanWrapper.recordQuantity(for: GleanMetrics.FxSuggest.blockId,
                                         value: blockId)
             gleanWrapper.recordString(for: GleanMetrics.FxSuggest.advertiser,
                                       value: advertiser)
             gleanWrapper.recordString(for: GleanMetrics.FxSuggest.iabCategory,
                                       value: iabCategory)
+            gleanWrapper.recordString(for: GleanMetrics.FxSuggest.suggestionId,
+                                      value: suggestionId)
 
             if let clickReportingURL {
                 gleanWrapper.recordUrl(for: GleanMetrics.FxSuggest.reportingUrl,
@@ -109,13 +111,15 @@ struct FxSuggestTelemetry {
                                   value: systemRegion)
 
         switch telemetryInfo {
-        case let .amp(blockId, advertiser, iabCategory, impressionReportingURL, _):
+        case let .amp(blockId, advertiser, iabCategory, impressionReportingURL, _, suggestionId):
             gleanWrapper.recordQuantity(for: GleanMetrics.FxSuggest.blockId,
                                         value: blockId)
             gleanWrapper.recordString(for: GleanMetrics.FxSuggest.advertiser,
                                       value: advertiser)
             gleanWrapper.recordString(for: GleanMetrics.FxSuggest.iabCategory,
                                       value: iabCategory)
+            gleanWrapper.recordString(for: GleanMetrics.FxSuggest.suggestionId,
+                                      value: suggestionId)
 
             if let impressionReportingURL {
                 gleanWrapper.recordUrl(for: GleanMetrics.FxSuggest.reportingUrl,

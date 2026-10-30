@@ -22,7 +22,7 @@ final class PasswordGeneratorViewControllerTests: XCTestCase {
 
     @MainActor
     func testPasswordGeneratorViewController_simpleCreation_hasNoLeaks() {
-        let mockProfile = MockProfile()
+        let mockProfile = makeProfile()
         let currentTab = Tab(profile: mockProfile, windowUUID: windowUUID)
         let mockEvaluator = MockPasswordGeneratorScriptEvaluator()
         let frameContext = PasswordGeneratorFrameContext(origin: "https://foo.com",

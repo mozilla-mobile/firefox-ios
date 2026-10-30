@@ -63,6 +63,7 @@ class ClipBoardTests: BaseTestCase {
 
     // This test is disabled in release, but can still run on master
     // https://mozilla.testrail.io/index.php?/cases/view/2325688
+    // Regression
     func testClipboard() {
         navigator.openURL(url)
         waitUntilPageLoad()
@@ -73,17 +74,15 @@ class ClipBoardTests: BaseTestCase {
         navigator.createNewTab()
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.nowAt(NewTabScreen)
-        navigator.goto(URLBarOpen)
+
         if #available(iOS 17, *) {
             if iPad() {
                 urlBarAddress.waitAndTap()
+                app.collectionViews.menuItems["Paste"].waitAndTap()
             } else {
                 urlBarAddress.press(forDuration: 1)
+                app.collectionViews.buttons["Paste"].waitAndTap()
             }
-            if !app.otherElements.buttons["Paste"].exists {
-                urlBarAddress.press(forDuration: 1)
-            }
-            app.otherElements.buttons["Paste"].waitAndTap()
             if #available(iOS 18, *) {
                 mozWaitForValueContains(urlBarAddress, value: "https://www.example.com/")
             } else {

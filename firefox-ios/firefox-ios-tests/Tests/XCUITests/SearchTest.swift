@@ -69,6 +69,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2436093
+    // Regression
     func testPromptPresence() {
         // Suggestion is on by default (starting on Oct 24th 2017), so the prompt should not appear
         app.launch()
@@ -225,6 +226,9 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306940
     // Smoketest
     func testSearchEngine() {
+        // The engine is verified through the host shown in the address bar, so keep the search term
+        // from replacing the URL there regardless of the channel default for this flag.
+        addLaunchArgument(jsonFileName: "searchTermInAddressBarOff", featureName: "toolbar-refactor-feature")
         app.launch()
         navigator.nowAt(NewTabScreen)
         // Change to the each search engine and verify the search uses it
@@ -237,7 +241,10 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2436091
+    // Regression
     func testSearchWithFirefoxOption() {
+        // The engine is verified through the host shown in the address bar
+        addLaunchArgument(jsonFileName: "searchTermInAddressBarOff", featureName: "toolbar-refactor-feature")
         app.launch()
         navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         waitUntilPageLoad()
@@ -294,14 +301,18 @@ class SearchTests: FeatureFlaggedTestBase {
     func testSearchAfterTypingTwoWords() {
         let browserScreen = BrowserScreen(app: app)
         let fooText = "foo bar"
+        // With the flag on, the address bar shows the search term instead of the URL once the
+        // results page of the search engine has loaded.
+        addLaunchArgument(jsonFileName: "searchTermInAddressBarOn", featureName: "toolbar-refactor-feature")
         app.launch()
         navigator.goto(URLBarOpen)
         app.typeText(fooText)
         app.typeText(XCUIKeyboardKey.return.rawValue)
-        browserScreen.assertAddressBarContains(value: "google", timeout: TIMEOUT)
+        browserScreen.assertAddressBarContains(value: fooText, timeout: TIMEOUT)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306943
+    // Smoketest
     func testSearchIconOnAboutHome() throws {
         app.launch()
         if iPad() {
@@ -345,13 +356,11 @@ class SearchTests: FeatureFlaggedTestBase {
     func testOpenTabsInSearchSuggestions() throws {
         let browserScreen = BrowserScreen(app: app)
         let toolbarScreen = ToolbarScreen(app: app)
-        app.launch()
         if #unavailable(iOS 16) {
             throw XCTSkip("Test fails intermittently for iOS 15")
         }
         // Go to localhost website and check the page displays correctly
-        navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
-        waitUntilPageLoad()
+        launchOpening("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
         // Open new tab
         validateSearchSuggestionText(typeText: "localhost")
         restartInBackground()
@@ -364,21 +373,27 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306886
     // SmokeTest
-    func testBottomVIewURLBar() throws {
+    func testBottomViewURLBar_trendingRecentSearchesExperimentOff() throws {
         let toolbarScreen = ToolbarScreen(app: app)
         let browserScreen = BrowserScreen(app: app)
         let firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
 
-        app.launch()
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "trending-searches-feature")
         if iPad() {
             throw XCTSkip("Toolbar option not available for iPad")
         } else {
             // Tap on toolbar bottom setting
-            navigator.nowAt(NewTabScreen)
+            launchIntoSettings()
             navigator.goto(ToolbarSettings)
             navigator.performAction(Action.SelectToolbarBottom)
             navigator.goto(HomePanelsScreen)
             navigator.goto(URLBarOpen)
+            // Workaround: closing the Google Lens tip leaves edit mode on without the keyboard, so refocus.
+            // Remove once https://github.com/mozilla-mobile/firefox-ios/issues/36249 is fixed.
+            if toolbarScreen.dismissGoogleLensTipIfPresented() {
+                browserScreen.tapOnAddressBar()
+            }
 
             // URL bar is moved to the bottom of the screen
             let menuSettingsButton = toolbarScreen.getToolbarSettingsMenuButtonElement()
@@ -420,10 +435,75 @@ class SearchTests: FeatureFlaggedTestBase {
         }
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4367103
+    // SmokeTest
+    func testBottomViewURLBar_trendingRecentSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
+        let toolbarScreen = ToolbarScreen(app: app)
+        let browserScreen = BrowserScreen(app: app)
+        let searchScreen = SearchScreen(app: app)
+
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        if iPad() {
+            throw XCTSkip("Toolbar option not available for iPad")
+        } else {
+            // Tap on toolbar bottom setting
+            launchIntoSettings()
+            navigator.goto(ToolbarSettings)
+            navigator.performAction(Action.SelectToolbarBottom)
+            navigator.goto(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+
+            // URL bar is moved to the bottom of the screen
+            let menuSettingsButton = toolbarScreen.getToolbarSettingsMenuButtonElement()
+            let firstTopSite = app.links.element(boundBy: 0)
+            toolbarScreen.assertSettingsButtonExists()
+            let urlBar = browserScreen.getAddressBarElement()
+            XCTAssertTrue(urlBar.isAbove(element: menuSettingsButton))
+            XCTAssertTrue(urlBar.isBelow(element: firstTopSite))
+
+            // In a new tab, tap on the URL bar
+            navigator.goto(NewTabScreen)
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+            urlBar.waitAndTap()
+
+            // The URL bar is focused and the keyboard is displayed
+            validateUrlHasFocusAndKeyboardIsDisplayed()
+
+            // Open a website
+            navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
+
+            // The keyboard is dismissed and page is correctly loaded
+            let keyboardCount = app.keyboards.count
+            XCTAssert(keyboardCount == 0, "The keyboard is shown")
+            waitUntilPageLoad()
+
+            // Tap on the URL bar
+            urlBar.waitAndTap()
+
+            // The URL bar is focused, Top Sites panel is displayed and the keyboard pops-up
+            validateUrlHasFocusAndKeyboardIsDisplayed()
+            searchScreen.assertTrendingSearchesSectionTitle(with: "Google")
+
+            // Tap the back icon <
+            browserScreen.tapCancelButtonOnUrlBarExist()
+
+            // The focused is dismissed from the URL bar
+            browserScreen.assertKeyboardFocusState(isFocusedOniPad: false)
+        }
+        */
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306942
+    // Regression
     func testSearchSuggestions() throws {
         guard #available(iOS 17.0, *) else { return }
 
+        // The engine is verified through the host shown in the address bar
+        addLaunchArgument(jsonFileName: "searchTermInAddressBarOff", featureName: "toolbar-refactor-feature")
         // Tap on URL Bar and type "g"
         app.launch()
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
@@ -469,15 +549,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // [Config] orientation:portrait, orientation:landscape
     // Smoketest
     func testFirefoxSuggest() {
-        app.launch()
-
-        // Workaround: "Ingest New Suggestions Now" from the
-        // secret settings may force the suggestions to be
-        // loaded.
-        navigator.goto(SettingsScreen)
-        navigator.performAction(Action.OpenSecretSettings)
-        navigator.performAction(Action.IngestNewSuggestionsNow)
-        navigator.goto(HomePanelsScreen)
+        launchWithFirefoxSuggestRollout()
 
         // Create an open Tab
         navigator.openURL("localhost:\(serverPort)/test-fixture/\(TestPages.mozillaOrg)")
@@ -511,7 +583,7 @@ class SearchTests: FeatureFlaggedTestBase {
             // https://github.com/mozilla-mobile/firefox-ios/issues/35243
             if !iPad() {
                 verifySearchSuggestion(searchTerm: "amazon",
-                                       expectedMatch: "Amazon.com - Official Site",
+                                       expectedMatch: "Amazon",
                                        hasFirefoxSuggest: true,
                                        isSponsored: true)
             }
@@ -521,38 +593,46 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2753093
     // Regression
     func testFirefoxSuggestPartialSponsored() {
-        app.launch()
-        // Workaround: Sponsored suggestions do not show up intermittently.
-        // Ingesting the new suggestions forces the app to have the sponsored
-        // results for Firefox Suggest consistently.
-        navigator.goto(SettingsScreen)
-        navigator.performAction(Action.OpenSecretSettings)
-        navigator.performAction(Action.IngestNewSuggestionsNow)
-        navigator.goto(HomePanelsScreen)
+        launchWithFirefoxSuggestRollout()
         verifySearchSuggestion(searchTerm: "amaz",
-                               expectedMatch: "Amazon.com - Official Site",
+                               expectedMatch: "Amazon",
                                hasFirefoxSuggest: true,
                                isSponsored: true)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2753076
-    // Regresssion
+    // Regression
     func testFirefoxSuggestPartialNonSponsored() {
-        app.launch()
-        // Precondition: Enable enhanced cross-platform suggest experiment
-        navigator.goto(SettingsScreen)
-        navigator.performAction(Action.OpenSecretSettings)
-        navigator.goto(ExperimentsScreen)
-        navigator.performAction(Action.ListAllExperiments)
-        navigator.userState.experimentToEnroll = "Enhanced Cross-Platform Suggest [iOS] - Phased Roll out 138+"
-        navigator.performAction(Action.EnrollExperiment)
-        navigator.goto(SettingsScreen)
-        navigator.goto(HomePanelsScreen)
-
+        launchWithFirefoxSuggestRollout()
         verifySearchSuggestion(searchTerm: "fifa",
                                expectedMatch: "Wikipedia - FIFA World Cup",
                                hasFirefoxSuggest: true,
                                isSponsored: false)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2753075
+    // Regression
+    func testFirefoxSuggestNonSponsoredUI() {
+        let keyword = "fifa"
+        let suggestion = "Wikipedia - FIFA World Cup"
+        launchWithFirefoxSuggestRollout()
+
+        // Step 1: A keyword triggers a non sponsored result in the Firefox Suggest section
+        browserScreen.searchAndAssertSuggestResult(term: keyword, title: suggestion, kind: .nonSponsored)
+
+        // Step 2: The result sits at the bottom of the Firefox Suggest section, not marked as sponsored
+        browserScreen.assertNonSponsoredSuggestRowUI(title: suggestion)
+
+        // Step 3: The non sponsored result is NOT displayed in private mode
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButtonHittable()
+        navigator.goto(TabTray)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.goto(NewTabScreen)
+        browserScreen.searchFromAddressBar(term: keyword)
+        browserScreen.assertAddressBarContains(value: keyword)
+        browserScreen.assertSuggestResult(title: suggestion, kind: .nonSponsored, shouldExist: false)
+        browserScreen.assertFirefoxSuggestHeader(shouldExist: false)
     }
 
     private func verifySearchSuggestion(searchTerm: String,
@@ -571,16 +651,20 @@ class SearchTests: FeatureFlaggedTestBase {
         // Search engine suggestions
         mozWaitForElementToExist(siteTable.otherElements["Google Search"])
         mozWaitForElementToExist(siteTable.staticTexts[searchTerm])
+        scrollSuggestionsIfLandscape()
 
         // Firefox Suggest is displayed
         if hasFirefoxSuggest {
             // A suggest query interrupted while the term is still being typed is dropped silently and
             // never retried, so the term is retyped to trigger a fresh one.
-            let match = app.tables.staticTexts[expectedMatch]
+            let match = app.tables.staticTexts.matching(
+                NSPredicate(format: "label CONTAINS %@", expectedMatch)
+            ).firstMatch
             var attemptsLeft = 2
             while attemptsLeft > 0, !mozWaitForElementToExist(match, timeout: 5, failOnTimeout: false) {
                 attemptsLeft -= 1
                 typeSearchTerm(searchTerm)
+                scrollSuggestionsIfLandscape()
             }
             mozWaitForElementToExist(siteTable.otherElements["Firefox Suggest"])
             mozWaitForElementToExist(match)
@@ -595,20 +679,29 @@ class SearchTests: FeatureFlaggedTestBase {
         }
     }
 
+    private func launchWithFirefoxSuggestRollout() {
+        app.launch()
+        waitForTabsButtonHittable()
+        enrollInFirefoxSuggestRollout()
+    }
+
     /// Clears the address bar before typing, so the term can be retyped without appending to itself.
     private func typeSearchTerm(_ searchTerm: String) {
         browserScreen.tapOnAddressBar()
         browserScreen.tapClearButtonIfExists()
         browserScreen.typeOnSearchBar(text: searchTerm)
+    }
+
+    private func scrollSuggestionsIfLandscape() {
         if XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft {
-            app.tables["SiteTable"].cells.firstMatch.swipeUp()
+            app.tables["SiteTable"].swipeUp()
         }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3209706
     // Regression
     func testDefaultSearchEngines() {
-        app.launch()
+        launchIntoSettings()
         navigator.goto(SearchSettings)
         searchSettingsScreen.assertDefaultSearchEngineSectionExists()
         searchSettingsScreen.assertAlternativeSearchEnginesSectionExists()
@@ -620,26 +713,17 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2753092
     // Regression
     func testFirefoxSuggestionsLandscapePrivate() {
-        app.launch()
-
-        // Precondition: "Ingest New Suggestions Now" from the
-        // secret settings
-        navigator.goto(SettingsScreen)
-        navigator.performAction(Action.OpenSecretSettings)
-        navigator.performAction(Action.IngestNewSuggestionsNow)
-        navigator.goto(HomePanelsScreen)
+        launchWithFirefoxSuggestRollout()
 
         // Step 1: Type a keyword that trigers a sponsored result
-        browserScreen.tapOnAddressBar()
-        browserScreen.tapClearButtonIfExists()
-        browserScreen.typeOnSearchBar(text: "Amazon")
+        browserScreen.searchFromAddressBar(term: "Amazon")
 
         // Step 2: Sponsored result should be specified
-        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
+        browserScreen.assertSuggestResult(title: "Amazon.com - Official Site", kind: .sponsored, shouldExist: true)
 
         // Step 3: Turn the device to landscape and observe the sponsored result
         settingsScreen.rotateDevice(to: .landscapeLeft)
-        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: true)
+        browserScreen.assertSuggestResult(title: "Amazon.com - Official Site", kind: .sponsored, shouldExist: true)
         navigator.performAction(Action.CloseURLBarOpen)
 
         // Step 4: Trigger a sponsored result in private mode
@@ -649,10 +733,8 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.goto(TabTray)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.goto(NewTabScreen)
-        browserScreen.tapOnAddressBar()
-        browserScreen.tapClearButtonIfExists()
-        browserScreen.typeOnSearchBar(text: "Amazon")
-        browserScreen.assertSponsoredResult(title: "Amazon.com - Official Site", shouldExist: false)
+        browserScreen.searchFromAddressBar(term: "Amazon")
+        browserScreen.assertSuggestResult(title: "Amazon.com - Official Site", kind: .sponsored, shouldExist: false)
     }
 
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
@@ -704,8 +786,9 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2753105
+    // Regression
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {
-        app.launch()
+        launchIntoSettings()
         navigator.goto(SearchSettings)
         navigator.nowAt(SearchSettings)
 
@@ -746,8 +829,9 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3374353
+    // Regression
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff() {
-        app.launch()
+        launchIntoSettings()
         // Disable general search suggests
         navigator.goto(SearchSettings)
         navigator.nowAt(SearchSettings)
@@ -794,6 +878,8 @@ class SearchTests: FeatureFlaggedTestBase {
     // MARK: - Pre Search (Trending Searches + Recent Searches)
     // https://mozilla.testrail.io/index.php?/cases/view/3296489
     func testTrendingSearches_trendingSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because trending search is off on Firefox")
         }
@@ -817,17 +903,21 @@ class SearchTests: FeatureFlaggedTestBase {
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForElementToExist(url)
         browserScreen.assertAddressBarContains(value: "google")
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296488
     func testTrendingSearchesSettingsToggleOn_trendingSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because trending search is off on Firefox")
         }
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
 
-        app.launch()
+        launchIntoSettings()
         navigator.goto(SearchSettings)
         navigator.nowAt(SearchSettings)
 
@@ -844,16 +934,20 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.assertAddressBarExists()
         browserScreen.tapOnAddressBar()
         searchScreen.assertTrendingSearchesSectionTitle(with: "Google")
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296487
     func testTrendingSearchesSettingsToggleOff_trendingSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because trending search is off on Firefox")
         }
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
-        app.launch()
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "recent-searches-feature")
+        launchIntoSettings()
 
         navigator.goto(SearchSettings)
         navigator.nowAt(SearchSettings)
@@ -871,10 +965,13 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.assertAddressBarExists()
         browserScreen.tapOnAddressBar()
         searchScreen.assertTrendingSearchesSectionTitleDoesNotExist(with: "Google")
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296486
     func testTrendingSearches_afterClearingURL_trendingSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because trending search is off on Firefox")
         }
@@ -900,10 +997,13 @@ class SearchTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
 
         browserScreen.assertAddressBarContains(value: "google")
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296485
     func testRecentSearches_recentSearchesExperimentOn()  throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because recent search is off on Firefox")
         }
@@ -926,10 +1026,13 @@ class SearchTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
 
         browserScreen.assertAddressBarContains(value: "google")
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296482
     func testRecentSearchesWithNoRecentSearches_recentSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because recent search is off on Firefox")
         }
@@ -944,15 +1047,19 @@ class SearchTests: FeatureFlaggedTestBase {
 
         searchScreen.assertSearchTableVisible()
         searchScreen.assertRecentSearchesSectionTitleDoesNotExist()
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296480
     func testRecentSearchesSettingsToggleOn_recentSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because recent search is off on Firefox")
         }
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "trending-searches-feature")
 
         app.launch()
 
@@ -973,15 +1080,19 @@ class SearchTests: FeatureFlaggedTestBase {
 
         browserScreen.tapOnAddressBar()
         searchScreen.assertRecentSearchesSectionTitle()
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296479
     func testRecentSearchesSettingsToggleOff_recentSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because recent search is off on Firefox")
         }
 
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "trending-searches-feature")
         app.launch()
 
         enterTextOnSearchBar(text: "example")
@@ -1001,10 +1112,13 @@ class SearchTests: FeatureFlaggedTestBase {
 
         browserScreen.tapOnAddressBar()
         searchScreen.assertRecentSearchesSectionTitleDoesNotExist()
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296478
     func testTrendingSearchesAndRecentSearchesSettingsToggleOn_trendingSearchesAndRecentSearchesExperimentOn() throws {
+        throw XCTSkip("Pre Search experiment (Trending + Recent Searches) is on hold")
+        /*
         if !isFennec {
             throw XCTSkip("Skipping test because trending search is off on Firefox")
         }
@@ -1030,6 +1144,7 @@ class SearchTests: FeatureFlaggedTestBase {
         browserScreen.tapOnAddressBar()
         searchScreen.assertTrendingSearchesSectionTitle(with: "Google")
         searchScreen.assertRecentSearchesSectionTitle()
+        */
     }
 
     private func dismissSearchSettingsScreen() {

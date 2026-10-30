@@ -25,7 +25,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     override func setUp() async throws {
         try await super.setUp()
         tabManager = MockTabManager()
-        profile = MockProfile()
+        profile = makeProfile()
         browserCoordinator = MockBrowserCoordinator()
         appStartupTelemetry = MockAppStartupTelemetry()
         recordVisitManager = MockRecordVisitObservationManager()
@@ -37,7 +37,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
-        profile.shutdown()
         profile = nil
         tabManager = nil
         appStartupTelemetry = nil
@@ -58,7 +57,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 advertiser: "test advertiser",
                 iabCategory: "999 - Test Category",
                 impressionReportingURL: URL(string: "https://example.com/ios_test_impression_reporting_url"),
-                clickReportingURL: URL(string: "https://example.com/ios_test_click_reporting_url")
+                clickReportingURL: URL(string: "https://example.com/ios_test_click_reporting_url"),
+                suggestionId: "test-suggestion-id"
             ),
             position: 3,
             didTap: false
@@ -588,82 +588,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(recordVisitManager.lastVisitObservation)
     }
 
-    // MARK: - updateInContentHomePanel
-
-    // NSURLErrorServerCertificateUntrusted alone is not enough to trigger the native
-    // error page — it also needs certerror=SSL_ERROR_BAD_CERT_DOMAIN in the URL.
-    func testUpdateInContentHomePanel_withNonBadCertDomainCertError_doesNotShowNativeErrorPage() {
-        setupNimbusNativeErrorPageTesting(
-            isEnabled: true,
-            noInternetConnectionErrorIsEnabled: true,
-            badCertDomainErrorPageIsEnabled: true
-        )
-        let subject = createSubject()
-        let certErrorCode = NSURLErrorServerCertificateUntrusted
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)"
-        )!
-
-        subject.updateInContentHomePanel(errorPageURL)
-
-        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
-    }
-
-    // A bad-cert-domain URL has both code=<cert error> AND certerror=SSL_ERROR_BAD_CERT_DOMAIN
-    func testUpdateInContentHomePanel_withBadCertDomainErrorURL_showsNativeErrorPage() {
-        setupNimbusNativeErrorPageTesting(
-            isEnabled: true,
-            noInternetConnectionErrorIsEnabled: true,
-            badCertDomainErrorPageIsEnabled: true
-        )
-        let subject = createSubject()
-        let certErrorCode = NSURLErrorServerCertificateUntrusted
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)&certerror=SSL_ERROR_BAD_CERT_DOMAIN"
-        )!
-
-        subject.updateInContentHomePanel(errorPageURL)
-
-        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 1)
-    }
-
-    func testUpdateInContentHomePanel_withNonCertErrorURL_doesNotShowNativeErrorPage() {
-        setupNimbusNativeErrorPageTesting(
-            isEnabled: true,
-            noInternetConnectionErrorIsEnabled: false,
-            badCertDomainErrorPageIsEnabled: true
-        )
-        let subject = createSubject()
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(NSURLErrorBadServerResponse)"
-        )!
-
-        subject.updateInContentHomePanel(errorPageURL)
-
-        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
-    }
-
-    func testUpdateInContentHomePanel_withCertErrorURL_andFeatureFlagDisabled_doesNotShowNativeErrorPage() {
-        setupNimbusNativeErrorPageTesting(
-            isEnabled: true,
-            noInternetConnectionErrorIsEnabled: true,
-            badCertDomainErrorPageIsEnabled: false
-        )
-        let subject = createSubject()
-        let certErrorCode = NSURLErrorServerCertificateUntrusted
-        let errorPageURL = URL(
-            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
-            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)"
-        )!
-
-        subject.updateInContentHomePanel(errorPageURL)
-
-        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
-    }
-
     // MARK: - rebuildNativeErrorPageStateIfNeeded
 
     func testRebuildNativeErrorPageStateIfNeeded_validWaybackURL_dispatchesReceivedError() {
@@ -727,54 +651,88 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Toolbar
 
-    func testToolbarLongPressMenu_rowsTitlesAndIcons() {
+    @MainActor
+    func testAddressToolbarDidHideEditingAccessoryButton_dismissesGoogleLensTipAndCancelsObservation() {
+        let subject = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let tipViewController = UIViewController()
+        let observationTask = Task<Void, Never> { }
+        subject.googleLensTipViewController = tipViewController
+        subject.viewControllerToPresent = tipViewController
+        subject.googleLensTipObservationTask = observationTask
+
+        subject.addressToolbarDidHideEditingAccessoryButton()
+
+        XCTAssertEqual(subject.dismissCalled, 1)
+        XCTAssertNil(subject.googleLensTipViewController)
+        XCTAssertTrue(observationTask.isCancelled)
+        XCTAssertNil(subject.googleLensTipObservationTask)
+    }
+
+    @MainActor
+    func testAddressToolbarDidHideEditingAccessoryButton_cancelsPendingTipWithoutDismissingAnotherModal() {
+        let subject = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        let otherViewController = UIViewController()
+        let observationTask = Task<Void, Never> { }
+        subject.viewControllerToPresent = otherViewController
+        subject.googleLensTipObservationTask = observationTask
+
+        subject.addressToolbarDidHideEditingAccessoryButton()
+
+        XCTAssertEqual(subject.dismissCalled, 0)
+        XCTAssertTrue(subject.presentedViewController === otherViewController)
+        XCTAssertTrue(observationTask.isCancelled)
+        XCTAssertNil(subject.googleLensTipObservationTask)
+    }
+
+    func testToolbarLongPressMenu_hasExpectedSectionsAndActions() throws {
+        let gleanWrapper = MockGleanWrapper()
+        let subject = createSubject(gleanWrapper: gleanWrapper)
+        let menu = try XCTUnwrap(subject.contextMenu(for: .tabs))
+        let sections = try menu.children.map { try XCTUnwrap($0 as? UIMenu) }
+        let tabActions = try sections[0].children.map { try XCTUnwrap($0 as? UIAction) }
+        let closeAction = try XCTUnwrap(sections[1].children.first as? UIAction)
+        let savedMetric = try XCTUnwrap(
+            gleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.TabTrayLongPressExtra>
+        )
+
+        XCTAssertEqual(sections.map(\.children.count), [2, 1])
+        XCTAssertEqual(
+            tabActions.map(\.title),
+            [String.KeyboardShortcuts.NewTab, String.KeyboardShortcuts.NewPrivateTab]
+        )
+        XCTAssertEqual(closeAction.title, String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton)
+        XCTAssertEqual(closeAction.attributes, .destructive)
+        XCTAssert(savedMetric === GleanMetrics.Toolbar.tabTrayLongPress)
+    }
+
+    func testLocationBarContextMenu_copyAddressActionHasExpectedIdentifier() throws {
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        tab.url = URL(string: "https://mozilla.org")
+        tabManager.selectedTab = tab
         let subject = createSubject()
-        let nav = subject.getNavigationToolbarLongPressActions()
-        XCTAssertEqual([nav.count, nav[0].count, nav[1].count], [2, 2, 1])
 
-        let newTabOnly = subject.getNewTabLongPressActions()
-        XCTAssertEqual([newTabOnly.count, newTabOnly[0].count], [1, 2])
+        let menu = try XCTUnwrap(subject.contextMenu(for: .locationView))
+        let section = try XCTUnwrap(menu.children.first as? UIMenu)
+        let copyAddressAction = try XCTUnwrap(
+            section.children
+                .compactMap { $0 as? UIAction }
+                .first { $0.title == String.CopyAddressTitle }
+        )
 
-        for index in 0..<2 {
-            let navigationItem = nav[0][index].items[0]
-            let newTabItem = newTabOnly[0][index].items[0]
-            XCTAssertEqual(navigationItem.title, newTabItem.title)
-            XCTAssertEqual(navigationItem.iconString, newTabItem.iconString)
-        }
-
-        let close = nav[1][0].items[0]
-        XCTAssertEqual(close.title, String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton)
-        XCTAssertEqual(close.iconString, StandardImageIdentifiers.Large.cross)
+        XCTAssertEqual(
+            copyAddressAction.accessibilityIdentifier,
+            AccessibilityIdentifiers.Photon.copyAddressAction
+        )
     }
 
-    func testDismissToolbarCFRs_mismatchedWindowUUID() {
-        let toolbarWindow = WindowUUID.XCTestDefaultUUID
-        let mismatchedWindow = WindowUUID.DefaultUITestingUUID
+    func testLocationBarContextMenu_withoutAvailableActions_returnsNil() {
+        let pasteboardItems = UIPasteboard.general.items
+        UIPasteboard.general.items = []
+        defer { UIPasteboard.general.items = pasteboardItems }
 
-        let state = AppState(presentedComponents: PresentedComponentsState(components: [
-            .browserViewController(BrowserViewControllerState(windowUUID: toolbarWindow)),
-            .toolbar(ToolbarState(windowUUID: toolbarWindow)),
-        ]))
-        mockStore = MockStoreForMiddleware(state: state)
-        StoreTestUtilityHelper.setupStore(with: mockStore)
+        let subject = createSubject()
 
-        createSubject().dismissToolbarCFRs(with: mismatchedWindow)
-    }
-
-    func testDismissToolbarCFRs_ToolbarAddedForWindow() {
-        let window = WindowUUID.XCTestDefaultUUID
-
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-        createSubject().dismissToolbarCFRs(with: window)
-
-        let state = AppState(presentedComponents: PresentedComponentsState(components: [
-            .browserViewController(BrowserViewControllerState(windowUUID: window)),
-            .toolbar(ToolbarState(windowUUID: window)),
-        ]))
-        mockStore = MockStoreForMiddleware(state: state)
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-        createSubject().dismissToolbarCFRs(with: window)
+        XCTAssertNil(subject.contextMenu(for: .locationView))
     }
 
     @MainActor
@@ -804,6 +762,19 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, .navigationButtonDoubleTapped)
     }
 
+    // MARK: - Key commands
+
+    @MainActor
+    func testKeyCommands_includesControlF5ForReloadIgnoringCache() throws {
+        let subject = createSubject()
+
+        let command = try XCTUnwrap(subject.keyCommands?.first {
+            $0.input == UIKeyCommand.f5 && $0.modifierFlags == .control
+        })
+
+        XCTAssertEqual(command.action, #selector(BrowserViewController.reloadTabIgnoringCacheKeyCommand))
+    }
+
     // MARK: - Tab manager restore
 
     @MainActor
@@ -822,10 +793,12 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Private
 
-    private func createSubject(file: StaticString = #filePath,
+    private func createSubject(gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+                               file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
+                                            gleanWrapper: gleanWrapper,
                                             appStartupTelemetry: appStartupTelemetry,
                                             recordVisitManager: recordVisitManager)
         screenshotHelper = MockScreenshotHelper(controller: subject)
@@ -867,17 +840,9 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         }
     }
 
-    private func setupNimbusNativeErrorPageTesting(
-        isEnabled: Bool,
-        noInternetConnectionErrorIsEnabled: Bool,
-        badCertDomainErrorPageIsEnabled: Bool
-    ) {
+    private func setupNimbusNativeErrorPageTesting(isEnabled: Bool) {
         FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
-            return NativeErrorPageFeature(
-                badCertDomainErrorPage: badCertDomainErrorPageIsEnabled,
-                enabled: isEnabled,
-                noInternetConnectionError: noInternetConnectionErrorIsEnabled
-            )
+            return NativeErrorPageFeature(enabled: isEnabled)
         }
     }
 
@@ -932,15 +897,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         )
         self.appState = appState
         return appState
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }
 

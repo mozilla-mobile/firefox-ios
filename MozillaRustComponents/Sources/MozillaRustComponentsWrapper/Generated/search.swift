@@ -39,6 +39,52 @@ fileprivate extension ForeignBytes {
     init(bufferPointer: UnsafeBufferPointer<UInt8>) {
         self.init(len: Int32(bufferPointer.count), data: bufferPointer.baseAddress)
     }
+
+    init(rawBufferPointer: UnsafeRawBufferPointer) {
+        self.init(
+            len: Int32(rawBufferPointer.count),
+            data: rawBufferPointer.baseAddress?.assumingMemoryBound(to: UInt8.self)
+        )
+    }
+}
+
+// Converter for `&[u8]` / `[ByRef] bytes` arguments.
+//
+// Conforms to `FfiConverter` so the compiler enforces the full converter
+// method set. Only the scope-bound `lower(_:_body:)` overload is sound —
+// zero-copy byte buffers only flow foreign -> Rust, and only in argument
+// position. The four protocol-witness methods (`lift`, `lower`, `read`,
+// `write`) `fatalError` at runtime if anyone reaches them.
+//
+// The scope-bound `lower` takes a closure because the `ForeignBytes`
+// pointer is only guaranteed valid for the duration of
+// `Data.withUnsafeBytes`. Callers must run the full FFI call inside
+// the closure body.
+fileprivate enum FfiConverterByRefBytes: FfiConverter {
+    typealias SwiftType = Data
+    typealias FfiType = ForeignBytes
+
+    static func lower<R>(_ value: Data, _ body: (ForeignBytes) throws -> R) rethrows -> R {
+        return try value.withUnsafeBytes { rawBuf in
+            try body(ForeignBytes(rawBufferPointer: rawBuf))
+        }
+    }
+
+    static func lower(_ value: Data) -> ForeignBytes {
+        fatalError("ByRef bytes cannot use the plain lower: returning ForeignBytes escapes the Data.withUnsafeBytes scope. Use the scope-bound lower(_:_body:) overload instead.")
+    }
+
+    static func lift(_ value: ForeignBytes) throws -> Data {
+        fatalError("ByRef bytes cannot be lifted: zero-copy &[u8] only flows foreign->Rust")
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        fatalError("ByRef bytes cannot be read from a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
+
+    static func write(_ value: Data, into buf: inout [UInt8]) {
+        fatalError("ByRef bytes cannot be written to a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
 }
 
 // For every type used in the interface, we provide helper methods for conveniently
@@ -471,7 +517,11 @@ fileprivate struct FfiConverterString: FfiConverter {
             return String()
         }
         let bytes = UnsafeBufferPointer<UInt8>(start: value.data!, count: Int(value.len))
-        return String(bytes: bytes, encoding: String.Encoding.utf8)!
+        // Use Swift's native UTF-8 decoder; `String(bytes:encoding:.utf8)` goes
+        // through Foundation's NSString and silently strips a leading U+FEFF BOM.
+        // Invalid UTF-8 substitutes U+FFFD instead of trapping (unreachable
+        // given Rust's `String` invariant).
+        return String(decoding: bytes, as: UTF8.self)
     }
 
     public static func lower(_ value: String) -> RustBuffer {
@@ -487,7 +537,8 @@ fileprivate struct FfiConverterString: FfiConverter {
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> String {
         let len: Int32 = try readInt(&buf)
-        return String(bytes: try readBytes(&buf, count: Int(len)), encoding: String.Encoding.utf8)!
+        // See `lift` above for why we avoid Foundation's NSString-backed decoder here.
+        return String(decoding: try readBytes(&buf, count: Int(len)), as: UTF8.self)
     }
 
     public static func write(_ value: String, into buf: inout [UInt8]) {
@@ -508,18 +559,18 @@ fileprivate struct FfiConverterString: FfiConverter {
 public protocol SearchEngineSelectorProtocol: AnyObject, Sendable {
     
     /**
-     * Clears the search configuration from memory if it is known that it is
-     * not required for a time, e.g. if the configuration will only be re-filtered
-     * after an app/environment update.
+     * Filters the search configuration with the user's given environment,
+     * and returns the set of engines and parameters that should be presented
+     * to the user.
      */
-    func clearSearchConfig() 
+    func filterEngineConfiguration(userEnvironment: SearchUserEnvironment) throws  -> RefinedSearchConfig
     
     /**
      * Filters the search configuration with the user's given environment,
      * and returns the set of engines and parameters that should be presented
      * to the user.
      */
-    func filterEngineConfiguration(userEnvironment: SearchUserEnvironment) throws  -> RefinedSearchConfig
+    func filterEngineConfigurationV3(userEnvironment: SearchUserEnvironmentV3) throws  -> RefinedSearchConfigV3
     
     func setConfigOverrides(overrides: String) throws 
     
@@ -533,17 +584,34 @@ public protocol SearchEngineSelectorProtocol: AnyObject, Sendable {
     func setSearchConfig(configuration: String) throws 
     
     /**
+     * Sets the search configuration from the given string. If the configuration
+     * string is unchanged since the last update, the cached configuration is
+     * reused to avoid unnecessary reprocessing. This helps optimize performance,
+     * particularly during test runs where the same configuration may be used
+     * repeatedly.
+     */
+    func setSearchConfigV3(configuration: String) throws 
+    
+    /**
      * Sets the RemoteSettingsService to use. The selector will create the
      * relevant remote settings client(s) from the service.
      *
      * # Params:
      * - `service`: The remote settings service instance for the application.
-     * - `options`: The remote settings options to be passed to the client(s).
      * - `apply_engine_overrides`: Whether or not to apply overrides from
      * `search-config-v2-overrides` to the selected engines. Should be false unless the
      * application supports the click URL feature.
      */
     func useRemoteSettingsServer(service: RemoteSettingsService, applyEngineOverrides: Bool) 
+    
+    /**
+     * Sets the RemoteSettingsService to use. The selector will create the
+     * relevant remote settings client(s) from the service.
+     *
+     * # Params:
+     * - `service`: The remote settings service instance for the application.
+     */
+    func useRemoteSettingsServerV3(service: RemoteSettingsService) 
     
 }
 /**
@@ -593,7 +661,8 @@ open class SearchEngineSelector: SearchEngineSelectorProtocol, @unchecked Sendab
 public convenience init() {
     let handle =
         try! rustCall() {
-    uniffi_search_fn_constructor_searchengineselector_new($0
+        uniffiCallStatus in
+    uniffi_search_fn_constructor_searchengineselector_new(uniffiCallStatus
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -612,15 +681,18 @@ public convenience init() {
 
     
     /**
-     * Clears the search configuration from memory if it is known that it is
-     * not required for a time, e.g. if the configuration will only be re-filtered
-     * after an app/environment update.
+     * Filters the search configuration with the user's given environment,
+     * and returns the set of engines and parameters that should be presented
+     * to the user.
      */
-open func clearSearchConfig()  {try! rustCall() {
-    uniffi_search_fn_method_searchengineselector_clear_search_config(
-            self.uniffiCloneHandle(),$0
+open func filterEngineConfiguration(userEnvironment: SearchUserEnvironment)throws  -> RefinedSearchConfig  {
+    return try  FfiConverterTypeRefinedSearchConfig_lift(try rustCallWithError(FfiConverterTypeSearchApiError_lift) {
+        uniffiCallStatus in
+    uniffi_search_fn_method_searchengineselector_filter_engine_configuration(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeSearchUserEnvironment_lower(userEnvironment),uniffiCallStatus
     )
-}
+})
 }
     
     /**
@@ -628,19 +700,21 @@ open func clearSearchConfig()  {try! rustCall() {
      * and returns the set of engines and parameters that should be presented
      * to the user.
      */
-open func filterEngineConfiguration(userEnvironment: SearchUserEnvironment)throws  -> RefinedSearchConfig  {
-    return try  FfiConverterTypeRefinedSearchConfig_lift(try rustCallWithError(FfiConverterTypeSearchApiError_lift) {
-    uniffi_search_fn_method_searchengineselector_filter_engine_configuration(
+open func filterEngineConfigurationV3(userEnvironment: SearchUserEnvironmentV3)throws  -> RefinedSearchConfigV3  {
+    return try  FfiConverterTypeRefinedSearchConfigV3_lift(try rustCallWithError(FfiConverterTypeSearchApiError_lift) {
+        uniffiCallStatus in
+    uniffi_search_fn_method_searchengineselector_filter_engine_configuration_v3(
             self.uniffiCloneHandle(),
-        FfiConverterTypeSearchUserEnvironment_lower(userEnvironment),$0
+        FfiConverterTypeSearchUserEnvironmentV3_lower(userEnvironment),uniffiCallStatus
     )
 })
 }
     
 open func setConfigOverrides(overrides: String)throws   {try rustCallWithError(FfiConverterTypeSearchApiError_lift) {
+        uniffiCallStatus in
     uniffi_search_fn_method_searchengineselector_set_config_overrides(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(overrides),$0
+        FfiConverterString.lower(overrides),uniffiCallStatus
     )
 }
 }
@@ -653,9 +727,26 @@ open func setConfigOverrides(overrides: String)throws   {try rustCallWithError(F
      * repeatedly.
      */
 open func setSearchConfig(configuration: String)throws   {try rustCallWithError(FfiConverterTypeSearchApiError_lift) {
+        uniffiCallStatus in
     uniffi_search_fn_method_searchengineselector_set_search_config(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(configuration),$0
+        FfiConverterString.lower(configuration),uniffiCallStatus
+    )
+}
+}
+    
+    /**
+     * Sets the search configuration from the given string. If the configuration
+     * string is unchanged since the last update, the cached configuration is
+     * reused to avoid unnecessary reprocessing. This helps optimize performance,
+     * particularly during test runs where the same configuration may be used
+     * repeatedly.
+     */
+open func setSearchConfigV3(configuration: String)throws   {try rustCallWithError(FfiConverterTypeSearchApiError_lift) {
+        uniffiCallStatus in
+    uniffi_search_fn_method_searchengineselector_set_search_config_v3(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(configuration),uniffiCallStatus
     )
 }
 }
@@ -666,16 +757,32 @@ open func setSearchConfig(configuration: String)throws   {try rustCallWithError(
      *
      * # Params:
      * - `service`: The remote settings service instance for the application.
-     * - `options`: The remote settings options to be passed to the client(s).
      * - `apply_engine_overrides`: Whether or not to apply overrides from
      * `search-config-v2-overrides` to the selected engines. Should be false unless the
      * application supports the click URL feature.
      */
 open func useRemoteSettingsServer(service: RemoteSettingsService, applyEngineOverrides: Bool)  {try! rustCall() {
+        uniffiCallStatus in
     uniffi_search_fn_method_searchengineselector_use_remote_settings_server(
             self.uniffiCloneHandle(),
         FfiConverterTypeRemoteSettingsService_lower(service),
-        FfiConverterBool.lower(applyEngineOverrides),$0
+        FfiConverterBool.lower(applyEngineOverrides),uniffiCallStatus
+    )
+}
+}
+    
+    /**
+     * Sets the RemoteSettingsService to use. The selector will create the
+     * relevant remote settings client(s) from the service.
+     *
+     * # Params:
+     * - `service`: The remote settings service instance for the application.
+     */
+open func useRemoteSettingsServerV3(service: RemoteSettingsService)  {try! rustCall() {
+        uniffiCallStatus in
+    uniffi_search_fn_method_searchengineselector_use_remote_settings_server_v3(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeRemoteSettingsService_lower(service),uniffiCallStatus
     )
 }
 }
@@ -1105,6 +1212,120 @@ public func FfiConverterTypeRefinedSearchConfig_lower(_ value: RefinedSearchConf
 
 
 /**
+ * Details of the search engines to display to the user, generated as a result
+ * of processing the search configuration v3.
+ */
+public struct RefinedSearchConfigV3: Equatable, Hashable {
+    /**
+     * A sorted list of engines. Clients may use the engine in the order that
+     * this list is specified, or they may implement their own order if they
+     * have other requirements.
+     *
+     * The application default engines should not be assumed from this order in
+     * case of future changes.
+     *
+     * The sort order is:
+     *
+     * * Application Default Engine
+     * * Application Default Engine for Private Mode (if specified & different)
+     * * Engines sorted by descending `SearchEngineDefinitionV3.orderHint`
+     * * Any other engines in alphabetical order (locale based comparison)
+     */
+    public var engines: [SearchEngineDefinitionV3]
+    /**
+     * The identifier of the engine that should be used for the application
+     * default engine. If this is undefined, an error has occurred, and the
+     * application should either default to the first engine in the engines
+     * list or otherwise handle appropriately.
+     */
+    public var appDefaultEngineId: String?
+    /**
+     * If specified, the identifier of the engine that should be used for the
+     * application default engine in private browsing mode.
+     * Only desktop uses this currently.
+     */
+    public var appPrivateDefaultEngineId: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * A sorted list of engines. Clients may use the engine in the order that
+         * this list is specified, or they may implement their own order if they
+         * have other requirements.
+         *
+         * The application default engines should not be assumed from this order in
+         * case of future changes.
+         *
+         * The sort order is:
+         *
+         * * Application Default Engine
+         * * Application Default Engine for Private Mode (if specified & different)
+         * * Engines sorted by descending `SearchEngineDefinitionV3.orderHint`
+         * * Any other engines in alphabetical order (locale based comparison)
+         */engines: [SearchEngineDefinitionV3], 
+        /**
+         * The identifier of the engine that should be used for the application
+         * default engine. If this is undefined, an error has occurred, and the
+         * application should either default to the first engine in the engines
+         * list or otherwise handle appropriately.
+         */appDefaultEngineId: String?, 
+        /**
+         * If specified, the identifier of the engine that should be used for the
+         * application default engine in private browsing mode.
+         * Only desktop uses this currently.
+         */appPrivateDefaultEngineId: String?) {
+        self.engines = engines
+        self.appDefaultEngineId = appDefaultEngineId
+        self.appPrivateDefaultEngineId = appPrivateDefaultEngineId
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension RefinedSearchConfigV3: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRefinedSearchConfigV3: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RefinedSearchConfigV3 {
+        return
+            try RefinedSearchConfigV3(
+                engines: FfiConverterSequenceTypeSearchEngineDefinitionV3.read(from: &buf), 
+                appDefaultEngineId: FfiConverterOptionString.read(from: &buf), 
+                appPrivateDefaultEngineId: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: RefinedSearchConfigV3, into buf: inout [UInt8]) {
+        FfiConverterSequenceTypeSearchEngineDefinitionV3.write(value.engines, into: &buf)
+        FfiConverterOptionString.write(value.appDefaultEngineId, into: &buf)
+        FfiConverterOptionString.write(value.appPrivateDefaultEngineId, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRefinedSearchConfigV3_lift(_ buf: RustBuffer) throws -> RefinedSearchConfigV3 {
+    return try FfiConverterTypeRefinedSearchConfigV3.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRefinedSearchConfigV3_lower(_ value: RefinedSearchConfigV3) -> RustBuffer {
+    return FfiConverterTypeRefinedSearchConfigV3.lower(value)
+}
+
+
+/**
  * A definition for an individual search engine to be presented to the user.
  */
 public struct SearchEngineDefinition: Equatable, Hashable {
@@ -1302,6 +1523,262 @@ public func FfiConverterTypeSearchEngineDefinition_lift(_ buf: RustBuffer) throw
 #endif
 public func FfiConverterTypeSearchEngineDefinition_lower(_ value: SearchEngineDefinition) -> RustBuffer {
     return FfiConverterTypeSearchEngineDefinition.lower(value)
+}
+
+
+/**
+ * A search-config-v3 definition for an individual search engine to be
+ * presented to the user.
+ */
+public struct SearchEngineDefinitionV3: Equatable, Hashable {
+    /**
+     * A list of aliases for this engine.
+     */
+    public var aliases: [String]
+    /**
+     * The character set this engine uses for queries.
+     */
+    public var charset: String
+    /**
+     * The classification of search engine according to the main search types.
+     */
+    public var classification: SearchEngineClassificationV3
+    /**
+     * The identifier of the search engine. This is used as an internal
+     * identifier, e.g. for saving the user's settings for the engine. It is
+     * also used to form the base telemetry id and may be extended by telemetrySuffix.
+     */
+    public var identifier: String
+    /**
+     * Indicates the date until which the engine variant or subvariant is considered new
+     * (format: YYYY-MM-DD).
+     */
+    public var isNewUntil: String?
+    /**
+     * The user visible name of the search engine.
+     */
+    public var name: String
+    /**
+     * This search engine is presented as an option that the user may enable.
+     * The application should not include these in the default list of the
+     * user's engines. If not supported, it should filter them out.
+     */
+    public var optional: Bool
+    /**
+     * The partner details for the engine.
+     * The key is the search access point to use, e.g. `default`, `newtab`,
+     * `context`, `widget`, `topsite` (this list may be incomplete, see the
+     * search-config v3 schema for a full list).
+     */
+    public var partner: [String: SearchEnginePartnerDetails]?
+    /**
+     * The URLs associated with the search engine.
+     */
+    public var urls: SearchEngineUrls
+    /**
+     * A hint to the order that this engine should be in the engine list. This
+     * is derived from the `engineOrders` section of the search configuration.
+     * The higher the number, the nearer to the front it should be.
+     * If the number is not specified, other methods of sorting may be relied
+     * upon (e.g. alphabetical).
+     */
+    public var orderHint: UInt32?
+    /**
+     * Whether the search engine has been deprecated. If this is true, then
+     * the engine will be removed from the configuration soon. The client should
+     * not display the configuration engine but may copy the engine details to a
+     * user-installed engine.
+     */
+    public var deprecated: Bool
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * A list of aliases for this engine.
+         */aliases: [String], 
+        /**
+         * The character set this engine uses for queries.
+         */charset: String, 
+        /**
+         * The classification of search engine according to the main search types.
+         */classification: SearchEngineClassificationV3, 
+        /**
+         * The identifier of the search engine. This is used as an internal
+         * identifier, e.g. for saving the user's settings for the engine. It is
+         * also used to form the base telemetry id and may be extended by telemetrySuffix.
+         */identifier: String, 
+        /**
+         * Indicates the date until which the engine variant or subvariant is considered new
+         * (format: YYYY-MM-DD).
+         */isNewUntil: String?, 
+        /**
+         * The user visible name of the search engine.
+         */name: String, 
+        /**
+         * This search engine is presented as an option that the user may enable.
+         * The application should not include these in the default list of the
+         * user's engines. If not supported, it should filter them out.
+         */optional: Bool, 
+        /**
+         * The partner details for the engine.
+         * The key is the search access point to use, e.g. `default`, `newtab`,
+         * `context`, `widget`, `topsite` (this list may be incomplete, see the
+         * search-config v3 schema for a full list).
+         */partner: [String: SearchEnginePartnerDetails]?, 
+        /**
+         * The URLs associated with the search engine.
+         */urls: SearchEngineUrls, 
+        /**
+         * A hint to the order that this engine should be in the engine list. This
+         * is derived from the `engineOrders` section of the search configuration.
+         * The higher the number, the nearer to the front it should be.
+         * If the number is not specified, other methods of sorting may be relied
+         * upon (e.g. alphabetical).
+         */orderHint: UInt32?, 
+        /**
+         * Whether the search engine has been deprecated. If this is true, then
+         * the engine will be removed from the configuration soon. The client should
+         * not display the configuration engine but may copy the engine details to a
+         * user-installed engine.
+         */deprecated: Bool) {
+        self.aliases = aliases
+        self.charset = charset
+        self.classification = classification
+        self.identifier = identifier
+        self.isNewUntil = isNewUntil
+        self.name = name
+        self.optional = optional
+        self.partner = partner
+        self.urls = urls
+        self.orderHint = orderHint
+        self.deprecated = deprecated
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension SearchEngineDefinitionV3: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSearchEngineDefinitionV3: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SearchEngineDefinitionV3 {
+        return
+            try SearchEngineDefinitionV3(
+                aliases: FfiConverterSequenceString.read(from: &buf), 
+                charset: FfiConverterString.read(from: &buf), 
+                classification: FfiConverterTypeSearchEngineClassificationV3.read(from: &buf), 
+                identifier: FfiConverterString.read(from: &buf), 
+                isNewUntil: FfiConverterOptionString.read(from: &buf), 
+                name: FfiConverterString.read(from: &buf), 
+                optional: FfiConverterBool.read(from: &buf), 
+                partner: FfiConverterOptionDictionaryStringTypeSearchEnginePartnerDetails.read(from: &buf), 
+                urls: FfiConverterTypeSearchEngineUrls.read(from: &buf), 
+                orderHint: FfiConverterOptionUInt32.read(from: &buf), 
+                deprecated: FfiConverterBool.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: SearchEngineDefinitionV3, into buf: inout [UInt8]) {
+        FfiConverterSequenceString.write(value.aliases, into: &buf)
+        FfiConverterString.write(value.charset, into: &buf)
+        FfiConverterTypeSearchEngineClassificationV3.write(value.classification, into: &buf)
+        FfiConverterString.write(value.identifier, into: &buf)
+        FfiConverterOptionString.write(value.isNewUntil, into: &buf)
+        FfiConverterString.write(value.name, into: &buf)
+        FfiConverterBool.write(value.optional, into: &buf)
+        FfiConverterOptionDictionaryStringTypeSearchEnginePartnerDetails.write(value.partner, into: &buf)
+        FfiConverterTypeSearchEngineUrls.write(value.urls, into: &buf)
+        FfiConverterOptionUInt32.write(value.orderHint, into: &buf)
+        FfiConverterBool.write(value.deprecated, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchEngineDefinitionV3_lift(_ buf: RustBuffer) throws -> SearchEngineDefinitionV3 {
+    return try FfiConverterTypeSearchEngineDefinitionV3.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchEngineDefinitionV3_lower(_ value: SearchEngineDefinitionV3) -> RustBuffer {
+    return FfiConverterTypeSearchEngineDefinitionV3.lower(value)
+}
+
+
+public struct SearchEnginePartnerDetails: Equatable, Hashable {
+    /**
+     * The partner code to use.
+     */
+    public var code: String?
+    /**
+     * The telemetry suffix to use.
+     */
+    public var telemetrySuffix: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * The partner code to use.
+         */code: String?, 
+        /**
+         * The telemetry suffix to use.
+         */telemetrySuffix: String?) {
+        self.code = code
+        self.telemetrySuffix = telemetrySuffix
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension SearchEnginePartnerDetails: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSearchEnginePartnerDetails: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SearchEnginePartnerDetails {
+        return
+            try SearchEnginePartnerDetails(
+                code: FfiConverterOptionString.read(from: &buf), 
+                telemetrySuffix: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: SearchEnginePartnerDetails, into buf: inout [UInt8]) {
+        FfiConverterOptionString.write(value.code, into: &buf)
+        FfiConverterOptionString.write(value.telemetrySuffix, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchEnginePartnerDetails_lift(_ buf: RustBuffer) throws -> SearchEnginePartnerDetails {
+    return try FfiConverterTypeSearchEnginePartnerDetails.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchEnginePartnerDetails_lower(_ value: SearchEnginePartnerDetails) -> RustBuffer {
+    return FfiConverterTypeSearchEnginePartnerDetails.lower(value)
 }
 
 
@@ -1791,8 +2268,142 @@ public func FfiConverterTypeSearchUserEnvironment_lower(_ value: SearchUserEnvir
     return FfiConverterTypeSearchUserEnvironment.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+/**
+ * The user's environment that is used for filtering the search configuration v3.
+ */
+public struct SearchUserEnvironmentV3: Equatable, Hashable {
+    /**
+     * The current locale of the application that the user is using.
+     */
+    public var locale: String
+    /**
+     * The home region that the user is currently identified as being within.
+     * On desktop & android there is a 14 day lag after detecting a region
+     * change before the home region changes. TBD: iOS?
+     */
+    public var region: String
+    /**
+     * The update channel of the user's build.
+     */
+    public var updateChannel: SearchUpdateChannelV3
+    /**
+     * The distribution id for the user's build.
+     */
+    public var distributionId: String
+    /**
+     * The search related experiment id that the user is included within. On
+     * desktop this is the `searchConfiguration.experiment` variable.
+     */
+    public var experiment: String
+    /**
+     * The application name that the user is using.
+     */
+    public var appName: SearchApplicationNameV3
+    /**
+     * The application version that the user is using.
+     */
+    public var version: String
+    /**
+     * The device type that the user is using.
+     */
+    public var deviceType: SearchDeviceTypeV3
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * The current locale of the application that the user is using.
+         */locale: String, 
+        /**
+         * The home region that the user is currently identified as being within.
+         * On desktop & android there is a 14 day lag after detecting a region
+         * change before the home region changes. TBD: iOS?
+         */region: String, 
+        /**
+         * The update channel of the user's build.
+         */updateChannel: SearchUpdateChannelV3, 
+        /**
+         * The distribution id for the user's build.
+         */distributionId: String, 
+        /**
+         * The search related experiment id that the user is included within. On
+         * desktop this is the `searchConfiguration.experiment` variable.
+         */experiment: String, 
+        /**
+         * The application name that the user is using.
+         */appName: SearchApplicationNameV3, 
+        /**
+         * The application version that the user is using.
+         */version: String, 
+        /**
+         * The device type that the user is using.
+         */deviceType: SearchDeviceTypeV3) {
+        self.locale = locale
+        self.region = region
+        self.updateChannel = updateChannel
+        self.distributionId = distributionId
+        self.experiment = experiment
+        self.appName = appName
+        self.version = version
+        self.deviceType = deviceType
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension SearchUserEnvironmentV3: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSearchUserEnvironmentV3: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SearchUserEnvironmentV3 {
+        return
+            try SearchUserEnvironmentV3(
+                locale: FfiConverterString.read(from: &buf), 
+                region: FfiConverterString.read(from: &buf), 
+                updateChannel: FfiConverterTypeSearchUpdateChannelV3.read(from: &buf), 
+                distributionId: FfiConverterString.read(from: &buf), 
+                experiment: FfiConverterString.read(from: &buf), 
+                appName: FfiConverterTypeSearchApplicationNameV3.read(from: &buf), 
+                version: FfiConverterString.read(from: &buf), 
+                deviceType: FfiConverterTypeSearchDeviceTypeV3.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: SearchUserEnvironmentV3, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.locale, into: &buf)
+        FfiConverterString.write(value.region, into: &buf)
+        FfiConverterTypeSearchUpdateChannelV3.write(value.updateChannel, into: &buf)
+        FfiConverterString.write(value.distributionId, into: &buf)
+        FfiConverterString.write(value.experiment, into: &buf)
+        FfiConverterTypeSearchApplicationNameV3.write(value.appName, into: &buf)
+        FfiConverterString.write(value.version, into: &buf)
+        FfiConverterTypeSearchDeviceTypeV3.write(value.deviceType, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchUserEnvironmentV3_lift(_ buf: RustBuffer) throws -> SearchUserEnvironmentV3 {
+    return try FfiConverterTypeSearchUserEnvironmentV3.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchUserEnvironmentV3_lower(_ value: SearchUserEnvironmentV3) -> RustBuffer {
+    return FfiConverterTypeSearchUserEnvironmentV3.lower(value)
+}
+
+
 /**
  * The list of possible submission methods for search engine urls.
  */
@@ -1862,7 +2473,8 @@ public func FfiConverterTypeJSONEngineMethod_lower(_ value: JsonEngineMethod) ->
 
 
 
-public enum SearchApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
+public 
+enum SearchApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -1935,8 +2547,7 @@ public func FfiConverterTypeSearchApiError_lower(_ value: SearchApiError) -> Rus
     return FfiConverterTypeSearchApiError.lower(value)
 }
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
 /**
  * The list of possible application names that are currently supported.
  */
@@ -2026,8 +2637,119 @@ public func FfiConverterTypeSearchApplicationName_lower(_ value: SearchApplicati
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+/**
+ * The list of possible application names that are supported by
+ * search-config-v3.
+ */
+
+public enum SearchApplicationNameV3: Equatable, Hashable {
+    
+    case firefoxAndroid
+    case firefoxIos
+    case focusAndroid
+    case focusIos
+    case firefoxWin
+    case firefoxMacosx
+    case firefoxLinux
+    case unknown
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension SearchApplicationNameV3: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSearchApplicationNameV3: FfiConverterRustBuffer {
+    typealias SwiftType = SearchApplicationNameV3
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SearchApplicationNameV3 {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .firefoxAndroid
+        
+        case 2: return .firefoxIos
+        
+        case 3: return .focusAndroid
+        
+        case 4: return .focusIos
+        
+        case 5: return .firefoxWin
+        
+        case 6: return .firefoxMacosx
+        
+        case 7: return .firefoxLinux
+        
+        case 8: return .unknown
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: SearchApplicationNameV3, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .firefoxAndroid:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .firefoxIos:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .focusAndroid:
+            writeInt(&buf, Int32(3))
+        
+        
+        case .focusIos:
+            writeInt(&buf, Int32(4))
+        
+        
+        case .firefoxWin:
+            writeInt(&buf, Int32(5))
+        
+        
+        case .firefoxMacosx:
+            writeInt(&buf, Int32(6))
+        
+        
+        case .firefoxLinux:
+            writeInt(&buf, Int32(7))
+        
+        
+        case .unknown:
+            writeInt(&buf, Int32(8))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchApplicationNameV3_lift(_ buf: RustBuffer) throws -> SearchApplicationNameV3 {
+    return try FfiConverterTypeSearchApplicationNameV3.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchApplicationNameV3_lower(_ value: SearchApplicationNameV3) -> RustBuffer {
+    return FfiConverterTypeSearchApplicationNameV3.lower(value)
+}
+
+
+
 
 public enum SearchDeviceType: Equatable, Hashable {
     
@@ -2100,8 +2822,83 @@ public func FfiConverterTypeSearchDeviceType_lower(_ value: SearchDeviceType) ->
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+/**
+ * The list of possible device types for search-config-v3.
+ */
+
+public enum SearchDeviceTypeV3: Equatable, Hashable {
+    
+    case smartphone
+    case tablet
+    case none
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension SearchDeviceTypeV3: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSearchDeviceTypeV3: FfiConverterRustBuffer {
+    typealias SwiftType = SearchDeviceTypeV3
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SearchDeviceTypeV3 {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .smartphone
+        
+        case 2: return .tablet
+        
+        case 3: return .none
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: SearchDeviceTypeV3, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .smartphone:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .tablet:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .none:
+            writeInt(&buf, Int32(3))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchDeviceTypeV3_lift(_ buf: RustBuffer) throws -> SearchDeviceTypeV3 {
+    return try FfiConverterTypeSearchDeviceTypeV3.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchDeviceTypeV3_lower(_ value: SearchDeviceTypeV3) -> RustBuffer {
+    return FfiConverterTypeSearchDeviceTypeV3.lower(value)
+}
+
+
+
 /**
  * The list of acceptable classifications for a search engine.
  */
@@ -2170,8 +2967,84 @@ public func FfiConverterTypeSearchEngineClassification_lower(_ value: SearchEngi
 }
 
 
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+/**
+ * The list of acceptable classifications for a search engine in
+ * search-config-v3.
+ */
+
+public enum SearchEngineClassificationV3: Equatable, Hashable {
+    
+    case ai
+    case general
+    case unknown
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension SearchEngineClassificationV3: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSearchEngineClassificationV3: FfiConverterRustBuffer {
+    typealias SwiftType = SearchEngineClassificationV3
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SearchEngineClassificationV3 {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .ai
+        
+        case 2: return .general
+        
+        case 3: return .unknown
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: SearchEngineClassificationV3, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .ai:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .general:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .unknown:
+            writeInt(&buf, Int32(3))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchEngineClassificationV3_lift(_ buf: RustBuffer) throws -> SearchEngineClassificationV3 {
+    return try FfiConverterTypeSearchEngineClassificationV3.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchEngineClassificationV3_lower(_ value: SearchEngineClassificationV3) -> RustBuffer {
+    return FfiConverterTypeSearchEngineClassificationV3.lower(value)
+}
+
+
+
 /**
  * The list of possible update channels for a user's build.
  * Use `default` for a self-build or an unknown channel.
@@ -2266,6 +3139,104 @@ public func FfiConverterTypeSearchUpdateChannel_lift(_ buf: RustBuffer) throws -
 #endif
 public func FfiConverterTypeSearchUpdateChannel_lower(_ value: SearchUpdateChannel) -> RustBuffer {
     return FfiConverterTypeSearchUpdateChannel.lower(value)
+}
+
+
+
+/**
+ * The list of possible update channels for a user's build, for
+ * search-config-v3. Use `default` for a self-build or an unknown channel.
+ */
+
+public enum SearchUpdateChannelV3: Equatable, Hashable {
+    
+    case nightly
+    case aurora
+    case beta
+    case release
+    case esr
+    case `default`
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension SearchUpdateChannelV3: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSearchUpdateChannelV3: FfiConverterRustBuffer {
+    typealias SwiftType = SearchUpdateChannelV3
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SearchUpdateChannelV3 {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .nightly
+        
+        case 2: return .aurora
+        
+        case 3: return .beta
+        
+        case 4: return .release
+        
+        case 5: return .esr
+        
+        case 6: return .`default`
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: SearchUpdateChannelV3, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .nightly:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .aurora:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .beta:
+            writeInt(&buf, Int32(3))
+        
+        
+        case .release:
+            writeInt(&buf, Int32(4))
+        
+        
+        case .esr:
+            writeInt(&buf, Int32(5))
+        
+        
+        case .`default`:
+            writeInt(&buf, Int32(6))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchUpdateChannelV3_lift(_ buf: RustBuffer) throws -> SearchUpdateChannelV3 {
+    return try FfiConverterTypeSearchUpdateChannelV3.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSearchUpdateChannelV3_lower(_ value: SearchUpdateChannelV3) -> RustBuffer {
+    return FfiConverterTypeSearchUpdateChannelV3.lower(value)
 }
 
 
@@ -2464,6 +3435,30 @@ fileprivate struct FfiConverterOptionDictionaryStringString: FfiConverterRustBuf
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionDictionaryStringTypeSearchEnginePartnerDetails: FfiConverterRustBuffer {
+    typealias SwiftType = [String: SearchEnginePartnerDetails]?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterDictionaryStringTypeSearchEnginePartnerDetails.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterDictionaryStringTypeSearchEnginePartnerDetails.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceString: FfiConverterRustBuffer {
     typealias SwiftType = [String]
 
@@ -2506,6 +3501,31 @@ fileprivate struct FfiConverterSequenceTypeSearchEngineDefinition: FfiConverterR
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             seq.append(try FfiConverterTypeSearchEngineDefinition.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypeSearchEngineDefinitionV3: FfiConverterRustBuffer {
+    typealias SwiftType = [SearchEngineDefinitionV3]
+
+    public static func write(_ value: [SearchEngineDefinitionV3], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeSearchEngineDefinitionV3.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [SearchEngineDefinitionV3] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [SearchEngineDefinitionV3]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeSearchEngineDefinitionV3.read(from: &buf))
         }
         return seq
     }
@@ -2562,6 +3582,32 @@ fileprivate struct FfiConverterDictionaryStringString: FfiConverterRustBuffer {
     }
 }
 
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterDictionaryStringTypeSearchEnginePartnerDetails: FfiConverterRustBuffer {
+    public static func write(_ value: [String: SearchEnginePartnerDetails], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterTypeSearchEnginePartnerDetails.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: SearchEnginePartnerDetails] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: SearchEnginePartnerDetails]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterTypeSearchEnginePartnerDetails.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
+    }
+}
+
 private enum InitializationResult {
     case ok
     case contractVersionMismatch
@@ -2577,22 +3623,28 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_search_checksum_method_searchengineselector_clear_search_config() != 14084) {
+    if (uniffi_search_checksum_method_searchengineselector_filter_engine_configuration() != 36168) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_search_checksum_method_searchengineselector_filter_engine_configuration() != 11688) {
+    if (uniffi_search_checksum_method_searchengineselector_filter_engine_configuration_v3() != 27212) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_search_checksum_method_searchengineselector_set_config_overrides() != 21942) {
+    if (uniffi_search_checksum_method_searchengineselector_set_config_overrides() != 48173) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_search_checksum_method_searchengineselector_set_search_config() != 21675) {
+    if (uniffi_search_checksum_method_searchengineselector_set_search_config() != 16876) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_search_checksum_method_searchengineselector_use_remote_settings_server() != 48578) {
+    if (uniffi_search_checksum_method_searchengineselector_set_search_config_v3() != 5301) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_search_checksum_constructor_searchengineselector_new() != 29883) {
+    if (uniffi_search_checksum_method_searchengineselector_use_remote_settings_server() != 26101) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_search_checksum_method_searchengineselector_use_remote_settings_server_v3() != 5567) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_search_checksum_constructor_searchengineselector_new() != 62233) {
         return InitializationResult.apiChecksumMismatch
     }
 

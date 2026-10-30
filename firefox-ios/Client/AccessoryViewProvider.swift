@@ -26,8 +26,6 @@ final class AccessoryViewProvider: UIView,
         static let spacerViewHeight: CGFloat = 4
         static let cornerRadius: CGFloat = 24.0
         static let buttonsWidth: CGFloat = 40
-        // Toolbar spacing around the autofill pill (insets + inter-item gaps).
-        static let autofillHorizontalPadding: CGFloat = 80
     }
 
     // MARK: - Properties
@@ -35,7 +33,6 @@ final class AccessoryViewProvider: UIView,
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     private var autofillAccessoryView: AutofillAccessoryViewButtonItem?
-    private var currentAccessoryViewWidth: CGFloat = 0
     let windowUUID: WindowUUID
 
     // Stub closures - these closures will be given as selectors in a future task
@@ -68,7 +65,7 @@ final class AccessoryViewProvider: UIView,
         if isiPad {
             return [.flexibleSpace(), autofillAccessoryView].compactMap { $0 }
         } else if let autofillAccessoryView {
-            return [navigationButtonsBarItem, autofillAccessoryView, doneButton]
+            return [navigationButtonsBarItem, .flexibleSpace(), autofillAccessoryView, .flexibleSpace(), doneButton]
         } else {
             return [navigationButtonsBarItem, .flexibleSpace(), doneButton]
         }
@@ -105,6 +102,18 @@ final class AccessoryViewProvider: UIView,
     /// we can control the spacing between them, then add the stack view as a single `UIBarButtonItem`.
     private lazy var navigationButtonsBarItem: UIBarButtonItem = {
         let barButton = UIBarButtonItem(customView: navigationButtonsStackView)
+        if #available(iOS 16.0, *) {
+            barButton.menuRepresentation = UIMenu(options: .displayInline, children: [
+                UIAction(title: .KeyboardAccessory.PreviousButtonA11yLabel,
+                         image: UIImage(named: StandardImageIdentifiers.Large.chevronUp)) { [weak self] _ in
+                    self?.tappedPreviousButton()
+                },
+                UIAction(title: .KeyboardAccessory.NextButtonA11yLabel,
+                         image: UIImage(named: StandardImageIdentifiers.Large.chevronDown)) { [weak self] _ in
+                    self?.tappedNextButton()
+                }
+            ])
+        }
         return barButton
     }()
 
@@ -116,6 +125,14 @@ final class AccessoryViewProvider: UIView,
         let barButton = UIBarButtonItem(customView: button)
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
         barButton.accessibilityLabel = .CreditCard.Settings.Done
+        if #available(iOS 16.0, *) {
+            barButton.menuRepresentation = UIAction(
+                title: .CreditCard.Settings.Done,
+                image: UIImage(named: StandardImageIdentifiers.Large.checkmark)
+            ) { [weak self] _ in
+                self?.tappedDoneButton()
+            }
+        }
         return barButton
     }()
 
@@ -202,8 +219,7 @@ final class AccessoryViewProvider: UIView,
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
 
-        super.init(frame: CGRect(width: UIScreen.main.bounds.width,
-                                 height: UX.accessoryViewHeight))
+        super.init(frame: CGRect(width: 0, height: UX.accessoryViewHeight))
 
         setupLayout()
         configureToolbarItems()
@@ -221,25 +237,7 @@ final class AccessoryViewProvider: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    /// Toolbar width left for the autofill pill once the side buttons and their spacing are removed.
-    /// Driven by geometry rather than device type
-    private var autofillFillWidth: CGFloat? {
-        guard #available(iOS 26.0, *) else { return nil }
-
-        let sideButtonsWidth = (navigationButtonsBarItem.customView?.bounds.width ?? 0)
-                             + (doneButton.customView?.bounds.width ?? 0)
-        let available = toolbar.bounds.width - sideButtonsWidth - UX.autofillHorizontalPadding
-        return available > 0 ? available : nil
-    }
-
     // MARK: - Lifecycle
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        guard bounds.width != currentAccessoryViewWidth else { return }
-
-        currentAccessoryViewWidth = bounds.width
-        autofillAccessoryView?.applyFillWidth(autofillFillWidth)
-    }
 
     override func removeFromSuperview() {
         super.removeFromSuperview()
@@ -269,9 +267,6 @@ final class AccessoryViewProvider: UIView,
         }
         configureToolbarItems()
         layoutIfNeeded()
-
-        // Update pill width after reload view
-        autofillAccessoryView?.applyFillWidth(autofillFillWidth)
     }
 
     private func setupSpacer(_ spacer: UIView, width: CGFloat) {
@@ -284,20 +279,22 @@ final class AccessoryViewProvider: UIView,
 
     private func setupHeightSpacer(_ spacer: UIView, height: CGFloat) {
         NSLayoutConstraint.activate([
-            spacer.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
+            spacer.leadingAnchor.constraint(equalTo: leadingAnchor),
+            spacer.trailingAnchor.constraint(equalTo: trailingAnchor),
             spacer.heightAnchor.constraint(equalToConstant: height)
         ])
         spacer.accessibilityElementsHidden = true
     }
 
     private func setupLayout() {
+        addSubviews(toolbarTopHeightSpacer, toolbar)
+
         [previousButton, nextButton].forEach { navigationButtonsStackView.addArrangedSubview($0) }
         setupHeightSpacer(toolbarTopHeightSpacer, height: UX.spacerViewHeight)
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
         if #unavailable(iOS 26.0) { layer.cornerRadius = UX.cornerRadius }
 
-        addSubviews(toolbarTopHeightSpacer, toolbar)
         if #available(iOS 26.0, *) {
             NSLayoutConstraint.activate([
                 previousButton.widthAnchor.constraint(equalToConstant: UX.buttonsWidth),

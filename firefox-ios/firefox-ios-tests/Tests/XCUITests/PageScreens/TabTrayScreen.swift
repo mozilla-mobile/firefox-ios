@@ -64,6 +64,17 @@ final class TabTrayScreen {
         XCTAssertEqual(cells.count, expected, "The number of tabs is not correct", file: file, line: line)
     }
 
+    /// Waits until the private panel has finished paging in, so its empty view is fully on screen.
+    func waitForEmptyPrivateModeOpened(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitElementHittable(element: sel.PRIVATE_EMPTY_STATE_TITLE.element(in: app), timeout: timeout)
+    }
+
+    func assertNoPrivateTabs(file: StaticString = #filePath, line: UInt = #line) {
+        // The empty view replaces the collection view, so it is the positive signal the tray is empty
+        BaseTestCase().mozWaitForElementToExist(sel.PRIVATE_EMPTY_STATE_TITLE.element(in: app))
+        XCTAssertEqual(collectionView.cells.count, 0, "Expected the private tab tray to be empty", file: file, line: line)
+    }
+
     func assertiPhoneTabCount(_ expected: Int, file: StaticString = #filePath, line: UInt = #line) {
         let iPhoneTabTray = sel.IPHONE_TAB_TRAY_COLLECTION_VIEW.element(in: app)
         BaseTestCase().mozWaitForElementToExist(iPhoneTabTray.cells.firstMatch)
@@ -240,6 +251,19 @@ final class TabTrayScreen {
             XCTAssertEqual(firstTabLabel, firstTab, "First tab \(context) is not correct", file: file, line: line)
             XCTAssertEqual(secondTabLabel, secondTab, "Second tab \(context) is not correct", file: file, line: line)
         }
+
+    /// Waits for each cell to carry its title, since a tab's label can lag behind its page load.
+    func assertTabTitles(inOrder titles: [String], file: StaticString = #filePath, line: UInt = #line) {
+        for (index, title) in titles.enumerated() {
+            let tabCell = collectionView.cells.element(boundBy: index)
+            let predicate = NSPredicate(format: "label == %@ OR label BEGINSWITH %@", title, "\(title).")
+            let expectation = XCTNSPredicateExpectation(predicate: predicate, object: tabCell)
+            let matched = XCTWaiter().wait(for: [expectation], timeout: TIMEOUT) == .completed
+            let found = tabCell.exists ? tabCell.label : "no tab"
+            XCTAssertTrue(matched, "Tab \(index) should be '\(title)', found '\(found)'", file: file, line: line)
+        }
+        assertTabCount(titles.count, file: file, line: line)
+    }
 
     func dragTab(from fromTabName: String, to toTabName: String) {
         let fromCell = collectionView.cells[fromTabName].firstMatch

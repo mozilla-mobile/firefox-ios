@@ -46,7 +46,14 @@ class RemoteTabsViewController: UIViewController,
     private let tabTrayUtils: TabTrayUtils
 
     var tableView: UITableView = .build()
-    private var isShowingEmptyView: Bool { state.showingEmptyState != nil }
+    private var isShowingEmptyView: Bool {
+        guard case .empty = state.contentState else { return false }
+        return true
+    }
+    private var tableViewContent: [ClientAndTabs]? {
+        guard case .tabs = state.contentState else { return nil }
+        return state.clientAndTabs
+    }
     private lazy var emptyView: RemoteTabsEmptyViewProtocol = {
         if isTabTrayUIExperimentsEnabled {
             let view = ExperimentRemoteTabsEmptyView()
@@ -104,6 +111,10 @@ class RemoteTabsViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         (navigationController as? ThemedNavigationController)?.applyTheme()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         updateInsets()
     }
 
@@ -115,8 +126,8 @@ class RemoteTabsViewController: UIViewController,
     }
 
     override func viewSafeAreaInsetsDidChange() {
-        super.view.safeAreaInsetsDidChange()
-        updateInsets()
+        super.viewSafeAreaInsetsDidChange()
+        view.setNeedsLayout()
     }
 
     // MARK: - UI
@@ -156,16 +167,18 @@ class RemoteTabsViewController: UIViewController,
     }
 
     func newState(state: RemoteTabsPanelState) {
-        let currentClientAndTabs = self.state.clientAndTabs
+        let previousTableViewContent = tableViewContent
         self.state = state
-        reloadUI(currentClientAndTabs: currentClientAndTabs)
-    }
-
-    private func reloadUI(currentClientAndTabs: [ClientAndTabs] = []) {
         updateUI()
-        if currentClientAndTabs != self.state.clientAndTabs {
+
+        if previousTableViewContent != tableViewContent {
             tableView.reloadData()
         }
+    }
+
+    private func reloadUI() {
+        updateUI()
+        tableView.reloadData()
     }
 
     private func updateUI() {
@@ -198,6 +211,11 @@ class RemoteTabsViewController: UIViewController,
         return false
     }
 
+    /// This override predates the Nova implementation and must remain unchanged.
+    var isSubjectToNovaPrivateOverride: Bool {
+        return false
+    }
+
     func applyTheme() {
         let theme = retrieveTheme()
         emptyView.applyTheme(theme: theme)
@@ -206,7 +224,7 @@ class RemoteTabsViewController: UIViewController,
     }
 
     private func configureEmptyView(isSyncing: Bool = false) {
-        guard let emptyStateReason = state.showingEmptyState else { return }
+        guard case let .empty(emptyStateReason) = state.contentState else { return }
         emptyView.configure(config: emptyStateReason, delegate: remoteTabsPanel, isSyncing: isSyncing)
         emptyView.applyTheme(theme: retrieveTheme())
     }

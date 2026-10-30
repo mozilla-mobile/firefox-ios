@@ -27,6 +27,27 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForValueContains(addressBar, value: value, timeout: timeout)
     }
 
+    /// Non-failing variant of `assertAddressBarContains`, for callers that retry when the page did not load.
+    func addressBarContains(_ value: String, timeout: TimeInterval = TIMEOUT) -> Bool {
+        let addressBar = sel.ADDRESS_BAR.element(in: app)
+        let predicate = NSPredicate(format: "value CONTAINS %@", value)
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: addressBar)
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    /// Exact-match variant of `assertAddressBarContains`. Needed when the point of the assertion is
+    /// that the toolbar shows *only* the domain: a substring check on the domain also passes when
+    /// the full URL is displayed, so it could never catch the difference.
+    func assertAddressBarValueEquals(_ expected: String, timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(addressBar, timeout: timeout)
+        let predicate = NSPredicate(format: "value == %@", expected)
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: addressBar)
+        guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else {
+            XCTFail("Expected the address bar to show '\(expected)', found '\(addressBar.value as? String ?? "nil")'")
+            return
+        }
+    }
+
     func assertSearchEngineLogoExists(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(searchEngineLogo, timeout: timeout)
         XCTAssertTrue(searchEngineLogo.isLeftOf(rightElement: addressBar))
@@ -76,17 +97,31 @@ final class BrowserScreen {
         }
     }
 
-    private func assertUserAgentTextExists(_ text: String, timeout: TimeInterval = TIMEOUT) {
+    private func userAgentText(_ text: String) -> XCUIElement {
         let pred = NSPredicate(
             format: "elementType == %d AND label == %@",
             XCUIElement.ElementType.staticText.rawValue,
             text
         )
-        let query = app.webViews.descendants(matching: .staticText).matching(pred)
-        let element = query.firstMatch
+        return app.webViews.descendants(matching: .staticText).matching(pred).firstMatch
+    }
 
+    private func assertUserAgentTextExists(_ text: String, timeout: TimeInterval = TIMEOUT) {
+        let element = userAgentText(text)
         BaseTestCase().mozWaitForElementToExist(element, timeout: timeout)
         XCTAssertTrue(element.exists, "Expected UA text '\(text)' was not found in the web view.")
+    }
+
+    /// Loads a UA test page and asserts the mobile UA, retrying once: a fresh-profile content blocker reload
+    /// cancels the first navigation. Remove the retry once https://github.com/mozilla-mobile/firefox-ios/issues/35933 is fixed.
+    func navigateToURLAndAssertMobileUserAgent(_ url: String, timeout: TimeInterval = TIMEOUT) {
+        navigateToURL(url)
+        let mobileUserAgent = userAgentText("MOBILE_UA")
+        if BaseTestCase().mozWaitForElementToExist(mobileUserAgent, timeout: timeout, failOnTimeout: false) {
+            return
+        }
+        navigateToURL(url)
+        assertMobileUserAgentIsDisplayed(timeout: timeout)
     }
 
     func assertDesktopUserAgentIsDisplayed(timeout: TimeInterval = TIMEOUT) {
@@ -147,12 +182,38 @@ final class BrowserScreen {
         webViewShowsText(containing: sel.BOOK_OF_MOZILLA_VERSE_TEXT.value, timeout: timeout)
     }
 
+    func assertExampleDomainPageDisplayed(timeout: TimeInterval = TIMEOUT) {
+        XCTAssertTrue(exampleDomainTextExists(timeout: timeout), "The Example Domain page should be displayed")
+    }
+
+    func assertBookOfMozillaPageDisplayed(timeout: TimeInterval = TIMEOUT) {
+        XCTAssertTrue(bookOfMozillaPageContentExists(timeout: timeout), "The Book of Mozilla page should be displayed")
+    }
+
     /// Scoped to the web view: an app-wide text search is also satisfied by a homepage tile or a tab
     /// label carrying the same page title, which cannot tell which page is on screen.
     private func webViewShowsText(containing text: String, timeout: TimeInterval) -> Bool {
         let predicate = NSPredicate(format: "label CONTAINS %@", text)
         let webViewText = app.webViews.staticTexts.containing(predicate).element(boundBy: 0)
         return BaseTestCase().mozWaitForElementToExist(webViewText, timeout: timeout, failOnTimeout: false)
+    }
+
+    func assertWebViewShowsText(containing text: String, timeout: TimeInterval = TIMEOUT) {
+        XCTAssertTrue(webViewShowsText(containing: text, timeout: timeout), "The web page should show '\(text)'")
+    }
+
+    /// The previous/next tab address bars only exist with a bottom toolbar. They sit off-screen
+    /// and are never hittable, so only their existence can be checked.
+    func assertTabSwipeIndicators(previous: Bool, next: Bool, timeout: TimeInterval = TIMEOUT) {
+        let indicators = [(sel.ADDRESS_BAR_LEADING_SKELETON, previous), (sel.ADDRESS_BAR_TRAILING_SKELETON, next)]
+        for (selector, shouldExist) in indicators {
+            let indicator = selector.element(in: app)
+            if shouldExist {
+                BaseTestCase().mozWaitForElementToExist(indicator, timeout: timeout)
+            } else {
+                BaseTestCase().mozWaitForElementToNotExist(indicator, timeout: timeout)
+            }
+        }
     }
 
     func assertExampleDomainTextExists(timeout: TimeInterval = TIMEOUT) {
@@ -167,9 +228,21 @@ final class BrowserScreen {
         openDesignatedURLButton.waitAndTap()
     }
 
+    /// The button fades in with the address bar layout, and a tap sent before it settles is dropped
+    /// with no hit point, so it is re-tapped until the field empties and the button goes away.
     func clearURL() {
-        BaseTestCase().mozWaitForElementToExist(clearButton)
-        clearButton.waitAndTap()
+        XCTAssertTrue(
+            clearButton.tapUntilElementDisappears(clearButton),
+            "The address bar was not cleared"
+        )
+    }
+
+    func assertClearButtonExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(clearButton, timeout: timeout)
+    }
+
+    func assertClearButtonDoesNotExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(clearButton, timeout: timeout)
     }
 
     func tapClearButtonIfExists() {
@@ -219,6 +292,46 @@ final class BrowserScreen {
         }
     }
 
+    func tapAddressBar() {
+        addressBar.waitAndTap()
+    }
+
+    /// Drags the address bar onto `target`, holding it only one second so the tracking protection
+    /// menu does not open and cover the drop target.
+    func dragAddressBar(onto target: XCUIElement) {
+        BaseTestCase().waitForElementsToExist([addressBar, target])
+        let start = addressBar.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+        let end = target.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        start.press(forDuration: 1, thenDragTo: end)
+    }
+
+    /// Taps the "<" chevron shown next to the address bar while it is being edited.
+    func tapCancelEditButton() {
+        cancelButton.waitAndTap()
+    }
+
+    /// Leaves address bar editing when the field holds keyboard focus, reporting whether it did.
+    /// Probes with a short timeout so a run where editing is never active does not pay for it.
+    @discardableResult
+    func leaveAddressBarEditingIfActive(timeout: TimeInterval = TIMEOUT_PICKER_PROBE) -> Bool {
+        guard addressBar.hasKeyboardFocus else { return false }
+        cancelButton.tapIfExists(timeout: timeout)
+        return addressBar.waitUntilKeyboardFocusLost(timeout: timeout)
+    }
+
+    /// Opening a blank new tab focuses the address bar, so the keyboard is raised on both idioms.
+    func assertAddressBarFocusedWithKeyboard() {
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        XCTAssertTrue(addressBar.waitForKeyboardFocus(), "The address bar should have keyboard focus.")
+        BaseTestCase().mozWaitForElementToExist(app.keyboards.element)
+    }
+
+    func assertAddressBarUnfocusedWithoutKeyboard() {
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        BaseTestCase().mozWaitForElementToNotExist(app.keyboards.element)
+        XCTAssertFalse(addressBar.hasKeyboardFocus, "The address bar should not have keyboard focus.")
+    }
+
     func dismissKeyboardIfVisible(maxTaps: Int = 3) {
         let keyboard = app.keyboards.firstMatch
         var remainingTaps = maxTaps
@@ -248,16 +361,26 @@ final class BrowserScreen {
     // Pastes the clipboard contents into the (already focused) address bar and asserts the resulting
     // value. Used to verify clipboard content in-app, avoiding the iOS 16+ cross-process paste prompt.
     func pasteAndAssertAddressBarContains(_ value: String) {
-        let pasteButton = sel.PASTE_BUTTON.element(in: app)
         if BaseTestCase().iPad() {
             addressBar.waitAndTap()
         } else {
             addressBar.press(forDuration: 1)
         }
-        if !pasteButton.exists {
-            addressBar.press(forDuration: 1)
+        if #unavailable(iOS 16) {
+            // The edit callout is a system menu item on iOS 15 rather than an otherElements
+            // button, and a longer press starts a drag lift instead of showing the callout.
+            let pasteMenuItem = app.menuItems["Paste"]
+            if !pasteMenuItem.exists {
+                addressBar.press(forDuration: 0.8)
+            }
+            pasteMenuItem.waitAndTap()
+        } else {
+            let pasteButton = sel.PASTE_BUTTON.element(in: app)
+            if !pasteButton.exists {
+                addressBar.press(forDuration: 1)
+            }
+            pasteButton.waitAndTap()
         }
-        pasteButton.waitAndTap()
         BaseTestCase().mozWaitForValueContains(addressBar, value: value)
     }
 
@@ -308,8 +431,21 @@ final class BrowserScreen {
         sel.CANCEL_BUTTON_URL_BAR.element(in: app).tapIfExists()
     }
 
-    func assertRFCLinkExist(timeout: TimeInterval = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(sel.LINK_RFC_2606.element(in: app), timeout: timeout)
+    /// On iOS 16 the first Cancel tap right after a new tab opens is swallowed, leaving the keyboard up,
+    /// which clips the lower homepage sections out of the accessibility tree.
+    func dismissURLBarOverlay(maxAttempts: Int = 3) {
+        for _ in 0..<maxAttempts {
+            guard cancelButton.mozWaitForElementToExist(timeout: 5.0, failOnTimeout: false) else { return }
+            cancelButton.tap()
+            if BaseTestCase().mozWaitForElementToNotExist(cancelButton, timeout: 3.0, failOnTimeout: false) {
+                return
+            }
+        }
+        XCTFail("The URL bar is still in editing mode after \(maxAttempts) Cancel taps")
+    }
+
+    func assertReservedTLDNamesLinkExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.LINK_RESERVED_TLD_NAMES.element(in: app), timeout: timeout)
     }
 
     func addressToolbarContainValue(value: String) {
@@ -346,6 +482,93 @@ final class BrowserScreen {
 
         let hasFocus = addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false
         XCTAssertTrue(hasFocus, "Expected the address bar to have keyboard focus, but it doesn't.")
+    }
+
+    /// Asserts edit mode was fully left, not just that the keyboard went away: a dismissed keyboard
+    /// with the address bar still focused (or the cancel button still up) leaves the toolbar in a
+    /// state the user can't recover from by tapping the address bar again.
+    func assertAddressBarLeftEditMode() {
+        let addressBar = sel.ADDRESS_BAR.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        BaseTestCase().mozWaitForElementToNotExist(app.keyboards.firstMatch)
+        BaseTestCase().mozWaitForElementToNotExist(cancelButton)
+
+        let hasFocus = addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false
+        XCTAssertFalse(hasFocus, "Expected the address bar to have left edit mode, but it still has focus.")
+    }
+
+    /// Re-focuses the address bar and asserts the keyboard comes back. Pairs with
+    /// `assertAddressBarLeftEditMode()`: together they catch a toolbar that looks dismissed but no
+    /// longer responds to taps.
+    func assertAddressBarRegainsKeyboardFocus() {
+        tapOnAddressBar()
+        assertAddressBarHasKeyboardFocus()
+        BaseTestCase().mozWaitForElementToExist(app.keyboards.firstMatch)
+    }
+
+    // MARK: - Address bar long press menu
+
+    /// Long presses the address bar to reveal Firefox's own context menu (Paste & Go / Paste /
+    /// Copy Address). Retries once: the first press can land before the toolbar settles.
+    func longPressAddressBar(duration: TimeInterval = 1.0) {
+        let contextMenu = sel.ADDRESS_BAR_CONTEXT_MENU.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        addressBar.press(forDuration: duration)
+        guard !contextMenu.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) else { return }
+        addressBar.press(forDuration: duration)
+        BaseTestCase().mozWaitForElementToExist(contextMenu)
+    }
+
+    /// `Paste & Go` and `Paste` are only built when the pasteboard holds a string, and
+    /// `Copy Address` only when the selected tab has a display URL, so seed both before asserting.
+    func assertAddressBarContextMenuOptionsExist() {
+        BaseTestCase().waitForElementsToExist([
+            sel.ADDRESS_BAR_CONTEXT_MENU.element(in: app),
+            sel.CONTEXT_MENU_PASTE_AND_GO.element(in: app),
+            sel.CONTEXT_MENU_PASTE.element(in: app),
+            sel.CONTEXT_MENU_COPY_ADDRESS.element(in: app)
+        ])
+    }
+
+    func tapContextMenuCopyAddress() {
+        sel.CONTEXT_MENU_COPY_ADDRESS.element(in: app).waitAndTap()
+        BaseTestCase().mozWaitForElementToNotExist(sel.ADDRESS_BAR_CONTEXT_MENU.element(in: app))
+    }
+
+    func dismissAddressBarContextMenu() {
+        app.webViews["contentView"].waitAndTap()
+        BaseTestCase().mozWaitForElementToNotExist(sel.ADDRESS_BAR_CONTEXT_MENU.element(in: app))
+    }
+
+    // MARK: - Web page text selection menu
+
+    /// Long presses a word on the web page, which selects it and shows the system edit menu.
+    func longPressWebPageWord(_ word: String, duration: TimeInterval = 3.0) {
+        let wordElement = sel.webPageElement(with: word).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(wordElement)
+        wordElement.press(forDuration: duration)
+    }
+
+    func assertTextSelectionMenuShown(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.TEXT_SELECTION_MENU_COPY.element(in: app), timeout: timeout)
+    }
+
+    func tapTextSelectionMenuCopy() {
+        tapTextSelectionMenuItem(sel.TEXT_SELECTION_MENU_COPY)
+    }
+
+    func tapTextSelectionMenuShare() {
+        tapTextSelectionMenuItem(sel.TEXT_SELECTION_MENU_SHARE)
+    }
+
+    /// The edit menu only fits a few items, so page forward until the item is shown.
+    private func tapTextSelectionMenuItem(_ selector: Selector, maxPages: Int = 4) {
+        let item = selector.element(in: app)
+        let more = sel.TEXT_SELECTION_MENU_MORE.element(in: app)
+        for _ in 0..<maxPages where !item.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) {
+            more.waitAndTap()
+        }
+        item.waitAndTap()
     }
 
     func longPressLink(named linkName: String, duration: TimeInterval = 2.0) {
@@ -433,13 +656,96 @@ final class BrowserScreen {
         }
     }
 
-    func assertSponsoredResult(title: String, shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
+    enum SuggestKind {
+        case sponsored
+        case nonSponsored
+    }
+
+    /// - Parameter kind: only `.sponsored` asserts the "Sponsored" label, which is not scoped to the
+    /// row, so its absence cannot be asserted without tripping on other sponsored entries.
+    /// - Parameter suggestSectionExists: defaults to `shouldExist`; pass `true` when only one kind of
+    /// entry is filtered out and the section itself stays.
+    func assertSuggestResult(
+        title: String,
+        kind: SuggestKind,
+        shouldExist: Bool = true,
+        suggestSectionExists: Bool? = nil,
+        timeout: TimeInterval = TIMEOUT_LONG
+    ) {
+        assertWebElements(
+            shouldExist: suggestSectionExists ?? shouldExist,
+            sel.SEARCH_SETTINGS_BUTTON.element(in: app),
+            timeout: timeout
+        )
+        assertWebElements(shouldExist: shouldExist, app.staticTexts[title], timeout: timeout)
+
+        guard kind == .sponsored else { return }
+        assertWebElements(shouldExist: shouldExist, sel.SPONSORED_LABEL.element(in: app), timeout: timeout)
+    }
+
+    /// Searches for `term` and asserts the Firefox Suggest entry for `title` is offered. A suggest
+    /// query interrupted while the term is still being typed is dropped silently, hence the retyping.
+    func searchAndAssertSuggestResult(term: String, title: String, kind: SuggestKind, maxAttempts: Int = 3) {
+        for _ in 0..<maxAttempts {
+            searchFromAddressBar(term: term)
+            if app.staticTexts[title].mozWaitForElementToExist(timeout: 5, failOnTimeout: false) { break }
+        }
+        assertSuggestResult(title: title, kind: kind)
+    }
+
+    /// Asserts the non-sponsored `title` row directly follows the Firefox Suggest header, which holds
+    /// a single entry, and has no "Sponsored" description.
+    func assertNonSponsoredSuggestRowUI(title: String, timeout: TimeInterval = TIMEOUT) {
+        let header = sel.FIREFOX_SUGGEST_HEADER.element(in: app)
+        let row = app.tables.cells.containing(.staticText, identifier: title).firstMatch
+        assertWebElements(header, row, row.staticTexts[title])
+
+        // Search engine suggestions arriving late shift the table, so poll until the layout settles
+        let isDirectlyBelowHeader = NSPredicate { _, _ in abs(row.frame.minY - header.frame.maxY) <= 1 }
+        let expectation = XCTNSPredicateExpectation(predicate: isDirectlyBelowHeader, object: nil)
+        XCTAssertEqual(
+            XCTWaiter().wait(for: [expectation], timeout: timeout),
+            .completed,
+            "The suggestion is not the row directly under the Firefox Suggest header"
+        )
+        assertWebElements(shouldExist: false, row.staticTexts[sel.SPONSORED_LABEL.value])
+    }
+
+    func assertFirefoxSuggestHeader(shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
+        assertWebElements(shouldExist: shouldExist, sel.FIREFOX_SUGGEST_HEADER.element(in: app), timeout: timeout)
+    }
+
+    /// Asserts on an address bar row backed by local data (browsing history or bookmarks), which is
+    /// listed by page title rather than under the Firefox Suggest section.
+    func assertSuggestionRow(titled title: String, shouldExist: Bool = true, timeout: TimeInterval = TIMEOUT_LONG) {
         assertWebElements(
             shouldExist: shouldExist,
-            sel.SEARCH_SETTINGS_BUTTON.element(in: app),
-            app.staticTexts[title],
-            sel.SPONSORED_LABEL.element(in: app),
+            sel.suggestionRow(titled: title).element(in: app),
             timeout: timeout
+        )
+    }
+
+    /// A late toolbar state update can reset the field right after the first keystroke ("ifa" for
+    /// "fifa"), so the term is cleared and retyped until the address bar starts with it.
+    func searchFromAddressBar(term: String, maxAttempts: Int = 3) {
+        let hasTerm = NSPredicate(format: "value BEGINSWITH %@", term)
+        for _ in 0..<maxAttempts {
+            tapOnAddressBar()
+            clearAddressBarText()
+            typeOnSearchBar(text: term)
+            let expectation = XCTNSPredicateExpectation(predicate: hasTerm, object: addressBar)
+            if XCTWaiter().wait(for: [expectation], timeout: TIMEOUT_PICKER_PROBE) == .completed { return }
+        }
+    }
+
+    /// Fails rather than returning with text still in the field, so a retry cannot append to the
+    /// previous term and search for "amazonamazon" instead.
+    private func clearAddressBarText() {
+        guard clearButton.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) else { return }
+        clearButton.waitAndTap()
+        XCTAssertTrue(
+            clearButton.waitUntilGone(),
+            "The address bar still holds text after tapping the clear button"
         )
     }
 
@@ -520,9 +826,17 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForElementToExist(linkText, timeout: timeout)
     }
 
-    func assertPrivateModeMessageCardExists(timeout: TimeInterval = TIMEOUT) {
-        let privateMessage = sel.PRIVATE_MODE_HOMEPAGE_TITLE.element(in: app)
-        BaseTestCase().mozWaitForElementToExist(privateMessage, timeout: timeout)
+    /// - Parameter verifyingCopy: also asserts the title and body text, which the presence of the
+    /// labels alone does not cover: an empty or wrong message still satisfies the identifiers.
+    func assertPrivateModeMessageCardExists(verifyingCopy: Bool = false, timeout: TimeInterval = TIMEOUT) {
+        let title = sel.PRIVATE_MODE_HOMEPAGE_TITLE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(title, timeout: timeout)
+        guard verifyingCopy else { return }
+
+        let body = sel.PRIVATE_MODE_HOMEPAGE_BODY.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(body, timeout: timeout)
+        XCTAssertEqual(title.label, sel.PRIVATE_MODE_HOMEPAGE_TITLE_TEXT_EN, "Private homepage title copy changed")
+        XCTAssertEqual(body.label, sel.PRIVATE_MODE_HOMEPAGE_BODY_TEXT_EN, "Private homepage body copy changed")
     }
 
     func tapPrivateModeActivityLink() {

@@ -39,7 +39,6 @@ class HistoryPanel: UIViewController,
     var currentWindowUUID: UUID? { windowUUID }
     let viewModel: HistoryPanelViewModel
     private let clearHistoryHelper: ClearHistorySheetProvider
-    var keyboardState: KeyboardState?
     var chevronImage = UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
@@ -122,19 +121,8 @@ class HistoryPanel: UIViewController,
 
         tableView.sectionHeaderTopPadding = 0
     }, {
-        UITableView(frame: .zero, style: self.tableViewStyle)
+        UITableView(frame: .zero, style: .libraryPanel)
     })
-
-    private var isNovaDesignEnabled: Bool {
-        (AppContainer.shared.resolve() as FeatureFlagProviding).isEnabled(.novaDesign)
-    }
-
-    private var tableViewStyle: UITableView.Style {
-        if #available(iOS 26.0, *), isNovaDesignEnabled {
-            return .insetGrouped
-        }
-        return .plain
-    }
 
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         UILongPressGestureRecognizer(target: self, action: #selector(onLongPressGestureRecognized))
@@ -142,6 +130,7 @@ class HistoryPanel: UIViewController,
 
     lazy var emptyStateOverlayView: UIView = createEmptyStateOverlayView()
     private weak var emptyStateOverlayBackgroundColorView: UIView?
+    private var emptyStateOverlayBackgroundHeightConstraint: NSLayoutConstraint?
     lazy var welcomeLabel: UILabel = .build { label in
         label.text = self.viewModel.emptyStateText
         label.textAlignment = .center
@@ -178,8 +167,6 @@ class HistoryPanel: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        KeyboardHelper.defaultHelper.addDelegate(self)
 
         startObservingNotifications(
             withNotificationCenter: NotificationCenter.default,
@@ -220,8 +207,13 @@ class HistoryPanel: UIViewController,
 
     // MARK: - Private helpers
 
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
     private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
     }
 
     private func setupLayout() {
@@ -229,14 +221,17 @@ class HistoryPanel: UIViewController,
         view.addSubview(bottomStackView)
         bottomStackView.addArrangedSubview(searchbar)
 
+        let isInsetGrouped = tableView.style == .insetGrouped
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.leadingAnchor.constraint(
+                equalTo: isInsetGrouped ? view.leadingAnchor : view.safeAreaLayoutGuide.leadingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.trailingAnchor.constraint(
+                equalTo: isInsetGrouped ? view.trailingAnchor : view.safeAreaLayoutGuide.trailingAnchor),
 
             bottomStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            bottomStackView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor),
             bottomStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
     }
@@ -246,30 +241,25 @@ class HistoryPanel: UIViewController,
         // Avoid refreshing if search is in progress
         guard !viewModel.isSearchInProgress else { return }
 
-        viewModel.reloadData { success in
-            ensureMainThread { [weak self] in
+        viewModel.reloadData { [weak self] success in
+            ensureMainThread {
                 self?.applySnapshot(animatingDifferences: animating)
             }
         }
     }
 
-    func updateLayoutForKeyboard() {
-        guard let keyboardHeight = keyboardState?.intersectionHeightForView(view),
-              keyboardHeight > 0 else {
-            bottomStackView.removeKeyboardSpacer()
-            return
-        }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
-        let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
-        bottomStackView.addKeyboardSpacer(spacerHeight: spacerHeight)
+        let bottomInset = bottomStackView.isHidden ? 0 : max(0, tableView.frame.maxY - bottomStackView.frame.minY)
+        tableView.contentInset.bottom = bottomInset
+        tableView.verticalScrollIndicatorInsets.bottom = bottomInset
+        emptyStateOverlayBackgroundHeightConstraint?.constant = tableView.bounds.height
     }
 
 	func updateBottomSearchBarLayout(isHidden: Bool) {
 		bottomStackView.isHidden = isHidden
-
-		let bottomInset = isHidden ? 0 : searchbar.bounds.height
-		tableView.contentInset.bottom = bottomInset
-		tableView.verticalScrollIndicatorInsets.bottom = bottomInset
+		view.setNeedsLayout()
 	}
 
     func shouldDismissOnDone() -> Bool {
@@ -312,7 +302,7 @@ class HistoryPanel: UIViewController,
     func showClearRecentHistory() {
         clearHistoryHelper.showClearRecentHistory(
             onViewController: self,
-            theme: themeManager.getCurrentTheme(for: windowUUID)
+            theme: currentTheme()
         ) { [weak self] dateOption in
             // Delete groupings that belong to THAT section.
             switch dateOption {
@@ -382,6 +372,7 @@ class HistoryPanel: UIViewController,
 
             case .OpenRecentlyClosedTabs:
                 self.historyCoordinatorDelegate?.showRecentlyClosedTab()
+                self.sendPanelChangeNotification()
                 self.applySnapshot(animatingDifferences: true)
 
             default:
@@ -442,7 +433,9 @@ class HistoryPanel: UIViewController,
         cell.configure(viewModel: viewModel)
         cell.accessibilityIdentifier = historyActionableModel.itemA11yId
         setTappableStateAndStyle(with: .historyActionables(historyActionableModel), on: cell)
-        cell.applyTheme(theme: currentTheme())
+        let theme = currentTheme()
+        cell.applyTheme(theme: theme)
+        cell.applyGroupedBackground(theme: theme, in: tableView)
         return cell
     }
 
@@ -473,7 +466,9 @@ class HistoryPanel: UIViewController,
         cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
         cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
         cell.accessoryView = nil
-        cell.applyTheme(theme: currentTheme())
+        let theme = currentTheme()
+        cell.applyTheme(theme: theme)
+        cell.applyGroupedBackground(theme: theme, in: tableView)
         return cell
     }
 
@@ -496,8 +491,9 @@ class HistoryPanel: UIViewController,
                     assertionFailure("FXIOS-11563 We should never have duplicates! Log how you made this crash happen.")
                 }
 
+                // FXIOS-10996 Force unique while we investigate history panel crashes
                 snapshot.appendItems(
-                    sectionDataUniqued.map { HistoryItem.site($0) }, // FXIOS-10996 Force unique while we investigate history panel crashes
+                    sectionDataUniqued.map { HistoryItem.site($0) },
                     toSection: section
                 )
             }
@@ -590,9 +586,11 @@ class HistoryPanel: UIViewController,
         }
         overlayView.addSubview(bgColor)
         emptyStateOverlayBackgroundColorView = bgColor
+        let bgColorHeightConstraint = bgColor.heightAnchor.constraint(equalToConstant: tableView.bounds.height)
+        emptyStateOverlayBackgroundHeightConstraint = bgColorHeightConstraint
 
         NSLayoutConstraint.activate([
-            bgColor.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height),
+            bgColorHeightConstraint,
             bgColor.widthAnchor.constraint(equalTo: overlayView.widthAnchor)
         ])
 
@@ -617,7 +615,7 @@ class HistoryPanel: UIViewController,
 
         let theme = currentTheme()
         tableView.backgroundColor = theme.colors.layer1
-        if #available(iOS 26.0, *), isNovaDesignEnabled {
+        if tableView.style == .insetGrouped {
             tableView.separatorColor = theme.colors.borderPrimary
         }
         emptyStateOverlayView.backgroundColor = theme.colors.layer1
@@ -741,6 +739,7 @@ extension HistoryPanel: UITableViewDelegate {
             guard viewModel.hasRecentlyClosed else { return }
             refreshControl?.endRefreshing()
             historyCoordinatorDelegate?.showRecentlyClosedTab()
+            sendPanelChangeNotification()
         }
     }
 
@@ -771,8 +770,7 @@ extension HistoryPanel: UITableViewDelegate {
         )
         header.configure(headerViewModel)
         header.applyTheme(theme: currentTheme())
-
-        if #available(iOS 26.0, *), isNovaDesignEnabled {
+        if tableView.style == .insetGrouped {
             header.showBorder(for: .top, false)
             header.showBorder(for: .bottom, false)
         }
@@ -837,6 +835,10 @@ extension HistoryPanel {
 extension HistoryPanel {
     func handleLeftTopButton() {
         updatePanelState(newState: .history(state: .mainView))
+        sendPanelChangeNotification()
+    }
+
+    private func sendPanelChangeNotification() {
         let userInfo: [String: Any] = ["state": state]
         NotificationCenter.default.post(name: .LibraryPanelStateDidChange, object: nil, userInfo: userInfo)
     }

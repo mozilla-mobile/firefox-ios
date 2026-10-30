@@ -25,8 +25,9 @@ actor DefaultFaviconURLCache: FaviconURLCache {
     init(fileManager: URLCacheFileManager = DefaultURLCacheFileManager()) {
         self.fileManager = fileManager
 
-        Task {
-            await retrieveCache()
+        Task { [weak self] in
+            let data = await fileManager.getURLCache()
+            await self?.loadCache(from: data)
         }
     }
 
@@ -80,8 +81,10 @@ actor DefaultFaviconURLCache: FaviconURLCache {
         return archiver.encodedData
     }
 
-    private func retrieveCache() async {
-        guard let data = await fileManager.getURLCache(),
+    /// Takes the already-read cache data rather than reading it itself, so the fetch can happen
+    /// without holding a reference to this actor. See the `Task` in `init`.
+    private func loadCache(from data: Data?) {
+        guard let data,
               let unarchiver = try? NSKeyedUnarchiver(forReadingFrom: data),
               let cacheList = unarchiver.decodeDecodable([FaviconURL].self, forKey: CacheConstants.cacheKey)
         else {

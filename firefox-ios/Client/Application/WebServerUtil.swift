@@ -81,6 +81,7 @@ of Mammon shall tremble. from The Book of Mozilla, 3:31 (Red Letter Edition) </s
                              "empty-login-form",
                              "empty-login-form-submit",
                              "test-example",
+                             "test-example-domains",
                              "test-example-link",
                              "test-mozilla-book",
                              "test-mozilla-org",

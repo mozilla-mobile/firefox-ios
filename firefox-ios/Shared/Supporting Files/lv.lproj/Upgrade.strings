@@ -1,0 +1,6 @@
+/* Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v114" = "Tagad vari atsākt, kur pārtrauci, ar cilnēm no citām ierīcēm sākumlapā.";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v114" = "Iestatīt kā noklusējuma pārlūku";
+

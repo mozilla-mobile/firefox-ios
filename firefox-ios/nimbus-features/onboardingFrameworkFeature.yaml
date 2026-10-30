@@ -572,15 +572,6 @@ enums:
     description: >
       The identifiers for the different images available for cards in onboarding
     variants:
-      welcome-ctd:
-        description: >
-          Corresponding to the welcome image for CTD
-      notifications-ctd:
-        description: >
-          Corresponding to the notifications image for CTD
-      sync-devices-ctd:
-        description: >
-          Corresponding to the sync image for CTD
       notifications:
         description: >
           Corresponding to the notifications image

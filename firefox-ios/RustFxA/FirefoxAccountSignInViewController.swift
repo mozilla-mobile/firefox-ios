@@ -49,6 +49,9 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
     var currentWindowUUID: UUID? { windowUUID }
 
+    let shouldUsePrivateOverride: Bool
+    var shouldBeInPrivateTheme: Bool { return false }
+
     /// This variable is used to track parent page that launched this sign in VC.
     /// telemetryObject deduced from parentType initializer is sent with telemetry events on button click
     private let telemetryObject: TelemetryWrapper.EventObject
@@ -64,6 +67,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     // UI
     private lazy var scrollView: UIScrollView = .build { view in
         view.backgroundColor = .clear
+        view.contentInsetAdjustmentBehavior = .always
     }
 
     private lazy var containerView: UIView = .build { view in
@@ -99,10 +103,13 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
                 guard let url = try? result.get(), let host = url.host else { return }
 
                 let font = FXFontStyles.Regular.headline.scaledFont()
+                // `FXFontStyles.Bold.headline` is semibold, same as the regular headline, so the URL is given a
+                // true bold weight at the same text style to keep it standing out from the surrounding copy.
+                let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .headline, size: 17)
 
                 let shortUrl = host + url.path // "firefox.com" + "/pair"
                 let msg: String = .FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
-                label.attributedText = msg.attributedText(boldString: shortUrl, font: font)
+                label.attributedText = msg.attributedText(boldString: shortUrl, font: font, boldFont: boldFont)
             }
         }
     }
@@ -146,6 +153,12 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         self.deepLinkParams = deepLinkParams
         self.profile = profile
         self.windowUUID = windowUUID
+        switch parentType {
+        case .settings, .library:
+            self.shouldUsePrivateOverride = true
+        case .appMenu, .onboarding, .upgrade, .tabTray:
+            self.shouldUsePrivateOverride = false
+        }
         switch parentType {
         case .appMenu:
             self.telemetryObject = .appMenu
@@ -214,7 +227,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
-            scrollView.frameLayoutGuide.widthAnchor.constraint(equalTo: containerView.widthAnchor),
+            containerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
 
             scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
@@ -230,6 +243,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
             pairImageView.topAnchor.constraint(equalTo: qrSignInLabel.bottomAnchor,
                                                constant: UX.horizontalPadding),
             pairImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            pairImageView.widthAnchor.constraint(lessThanOrEqualTo: containerView.widthAnchor,
+                                                 constant: -2 * UX.horizontalPadding),
 
             instructionsLabel.topAnchor.constraint(equalTo: pairImageView.bottomAnchor,
                                                    constant: UX.horizontalPadding),
@@ -251,12 +266,18 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
                                                   constant: -UX.horizontalPadding),
             emailButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
         ])
+        if let imageSize = pairImageView.image?.size, imageSize.width > 0 {
+            pairImageView.heightAnchor.constraint(equalTo: pairImageView.widthAnchor,
+                                                  multiplier: imageSize.height / imageSize.width).isActive = true
+        }
         containerView.setNeedsLayout()
         containerView.layoutIfNeeded()
     }
 
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = themeManager.resolveTheme(for: windowUUID,
+                                              shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                              shouldBeInPrivateTheme: shouldBeInPrivateTheme)
         let colors = theme.colors
         view.backgroundColor = colors.layer1
         qrSignInLabel.textColor = colors.textPrimary
@@ -393,7 +414,10 @@ extension FirefoxAccountSignInViewController {
             return signInVC
         }
 
-        let settingsTableViewController = SyncContentSettingsViewController(windowUUID: windowUUID)
+        let settingsTableViewController = SyncContentSettingsViewController(
+            windowUUID: windowUUID,
+            referringPage: referringPage
+        )
         settingsTableViewController.profile = profile
         return settingsTableViewController
     }

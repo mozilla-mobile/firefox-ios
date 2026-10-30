@@ -25,6 +25,8 @@ final class BrowserViewControllerLayoutManager {
     // Constraints to store - header
     private var headerTopConstraint: NSLayoutConstraint?
     private var headerHeightConstraint: NSLayoutConstraint?
+    private var systemTopBarLayoutGuide: UILayoutGuide?
+    private weak var addressToolbar: UIView?
 
     // Constraints to store - bottom container
     var overKeyboardContainerConstraint: NSLayoutConstraint?
@@ -65,8 +67,7 @@ final class BrowserViewControllerLayoutManager {
             headerView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
         ])
-        let topAnchor = getHeaderTopAnchor(isBottomSearchBar: isBottomSearchBar)
-        headerTopConstraint = headerView.topAnchor.constraint(equalTo: topAnchor)
+        headerTopConstraint = makeHeaderPositionConstraint(isBottomSearchBar: isBottomSearchBar)
         headerTopConstraint?.isActive = true
 
         if isBottomSearchBar {
@@ -79,18 +80,40 @@ final class BrowserViewControllerLayoutManager {
     func updateHeaderConstraints(isBottomSearchBar: Bool) {
         updateHeaderHeightConstraint(isBottomSearchBar: isBottomSearchBar)
 
-        let targetAnchor = getHeaderTopAnchor(isBottomSearchBar: isBottomSearchBar)
-
         // Preserve current offset
         let currentConstant = headerTopConstraint?.constant ?? 0
         headerTopConstraint?.isActive = false
 
         // Create constraint with new correct anchor
-        headerTopConstraint = headerView.topAnchor.constraint(equalTo: targetAnchor)
+        headerTopConstraint = makeHeaderPositionConstraint(isBottomSearchBar: isBottomSearchBar)
         headerTopConstraint?.constant = currentConstant
         headerTopConstraint?.isActive = true
 
         updateScrollControllerHeaderConstraint()
+    }
+
+    func updateHeaderBarLayout(isBottomSearchBar: Bool, addressToolbar: UIView) -> UILayoutGuide? {
+        var guide: UILayoutGuide?
+        #if compiler(>=6.4)
+        if #available(iOS 27.1, *),
+           !isBottomSearchBar,
+           !addressToolbar.isHidden,
+           addressToolbar.isDescendant(of: parentView),
+           parentView.traitCollection.userInterfaceIdiom == .phone {
+            // Use the iOS 27.1 bar layout API to keep address controls clear of iPhone Duo's status area.
+            // Only the region's center is used. The region is at least the height the status bar items are
+            // centered in, and a larger extent grows it downward, moving the center away from them.
+            // The smallest extent keeps the region at that minimum height.
+            guide = parentView.layoutGuide(for: .bar(onEdge: UIRectEdge.top, extent: 1))
+        }
+        #endif
+
+        if systemTopBarLayoutGuide !== guide {
+            systemTopBarLayoutGuide = guide
+            self.addressToolbar = addressToolbar
+            updateHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
+        }
+        return guide
     }
 
     func addReaderModeBarHeight(_ readerModeBar: ReaderModeBarView) {
@@ -237,6 +260,16 @@ final class BrowserViewControllerLayoutManager {
         headerHeightConstraint?.isActive = true
     }
 
+    /// Returns the constraint whose constant the scroll controller adjusts to move the header.
+    private func makeHeaderPositionConstraint(isBottomSearchBar: Bool) -> NSLayoutConstraint {
+        if !isBottomSearchBar, let systemTopBarLayoutGuide, let addressToolbar {
+            // Centers the address toolbar on the system bar region, in line with the status bar items.
+            // The header follows the toolbar, as the toolbar is one of its arranged views.
+            return addressToolbar.centerYAnchor.constraint(equalTo: systemTopBarLayoutGuide.centerYAnchor)
+        }
+        return headerView.topAnchor.constraint(equalTo: getHeaderTopAnchor(isBottomSearchBar: isBottomSearchBar))
+    }
+
     /// Returns the correct top anchor for the header based on search bar position and trait collection
     /// - Parameter isBottomSearchBar: Whether the search bar is positioned at the bottom
     /// - Returns: The appropriate NSLayoutYAxisAnchor to constrain the header to
@@ -246,18 +279,20 @@ final class BrowserViewControllerLayoutManager {
             return parentView.safeAreaLayoutGuide.topAnchor
         }
 
-        // Top toolbar depends on nav toolbar visibility
+        // Regular-height layouts need the safe area even when the top tabs bar is hidden.
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: parentView.traitCollection)
-        let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: parentView.traitCollection)
+        let shouldShowTabStrip = toolbarHelper.shouldShowTabStrip(for: parentView.traitCollection)
+        let isRegularHeight = parentView.traitCollection.verticalSizeClass == .regular
 
         // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
         // Bug: Safe area top inset doesn't update correctly on landscape rotation (remains 20pt)
         // on iOS 26. Prior to iOS 26, safe area inset was updating correctly on rotation.
         // Impact: Header remains partially visible when scrolling.
-        // Workaround: Manually adjust constraints based on orientation.
+        // Workaround: Use the view's top edge in compact-height layouts.
         // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
         // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
-        return (isNavToolbar || shouldShowTopTabs) ? parentView.safeAreaLayoutGuide.topAnchor : parentView.topAnchor
+        let usesSafeArea = isNavToolbar || shouldShowTabStrip || isRegularHeight
+        return usesSafeArea ? parentView.safeAreaLayoutGuide.topAnchor : parentView.topAnchor
     }
 
     private func updateScrollControllerHeaderConstraint() {

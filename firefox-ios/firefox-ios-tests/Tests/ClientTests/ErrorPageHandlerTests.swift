@@ -9,9 +9,20 @@ import Shared
 @testable import Client
 
 final class ErrorPageHandlerTests: XCTestCase {
+    private struct MockCellularDataStateProvider: CellularDataStateProvider {
+        let isRestricted: Bool
+    }
+
     override func setUp() async throws {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies()
+    }
+
+    func testSystemCellularDataStateProvider_sharedInstance_isStableAcrossReloads() {
+        let firstLoadProvider = SystemCellularDataStateProvider.shared
+        let reloadedPageProvider = SystemCellularDataStateProvider.shared
+
+        XCTAssertTrue(firstLoadProvider === reloadedPageProvider)
     }
 
     override func tearDown() async throws {
@@ -53,7 +64,7 @@ final class ErrorPageHandlerTests: XCTestCase {
             frame: .zero,
             configuration: WKWebViewConfiguration(),
             windowUUID: .XCTestDefaultUUID,
-            certStore: MockProfile().certStore
+            certStore: makeProfile().certStore
         )
         let failingURL = URL(string: "https://expired.badssl.com/")!
         let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorServerCertificateUntrusted)
@@ -64,6 +75,118 @@ final class ErrorPageHandlerTests: XCTestCase {
         let components = URLComponents(url: loadedURL, resolvingAgainstBaseURL: false)
         let certError = components?.queryItems?.first(where: { $0.name == certErrorQueryParam })?.value
         XCTAssertEqual(certError, certErrorUnknownIssuer)
+    }
+
+    @MainActor
+    func testLoadPage_withOfflineErrorAndRestrictedCellularData_showsCellularDataGuidance() throws {
+        setupNimbusNativeErrorPageTesting(isEnabled: false)
+        setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: true)
+        let subject = ErrorPageHelper(
+            certStore: nil,
+            cellularDataStateProvider: MockCellularDataStateProvider(isRestricted: true)
+        )
+        let webView = MockTabWebView(
+            frame: .zero,
+            configuration: WKWebViewConfiguration(),
+            windowUUID: .XCTestDefaultUUID,
+            certStore: makeProfile().certStore
+        )
+        let failingURL = URL(string: "https://example.com/")!
+        let error = NSError(
+            domain: NSURLErrorDomain,
+            code: NSURLErrorNotConnectedToInternet,
+            userInfo: [NSURLErrorFailingURLErrorKey: failingURL]
+        )
+
+        subject.loadPage(error, forUrl: failingURL, inWebView: webView)
+
+        let loadedURL = try XCTUnwrap(webView.loadedRequest?.url)
+        let components = URLComponents(url: loadedURL, resolvingAgainstBaseURL: false)
+        XCTAssertEqual(
+            components?.queryItems?.first(where: { $0.name == "cellularDataRestricted" })?.value,
+            "true"
+        )
+
+        let response = ErrorPageHandler().responseForErrorWebPage(request: URLRequest(url: loadedURL))
+        let html = try XCTUnwrap(response.flatMap { String(data: $0.1, encoding: .utf8) })
+        XCTAssertTrue(html.contains(String(
+            format: .NativeErrorPage.CellularDataRestricted.TitleLabel,
+            AppName.shortName.rawValue
+        )))
+        XCTAssertTrue(html.contains(String(
+            format: .NativeErrorPage.CellularDataRestricted.Description,
+            AppName.shortName.rawValue
+        )))
+    }
+
+    @MainActor
+    func testResponseForErrorWebPage_withRestrictedCellularDataAndFeatureDisabled_usesDefaultContent() throws {
+        setupNimbusNativeErrorPageTesting(isEnabled: true)
+        setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: false)
+        let errorURL = try XCTUnwrap(URL(string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)" +
+            "?url=https%3A%2F%2Fexample.com%2F&code=\(NSURLErrorNotConnectedToInternet)" +
+            "&description=Offline&domain=NSURLErrorDomain&cellularDataRestricted=true"))
+
+        let response = ErrorPageHandler().responseForErrorWebPage(request: URLRequest(url: errorURL))
+        let html = try XCTUnwrap(response.flatMap { String(data: $0.1, encoding: .utf8) })
+
+        XCTAssertFalse(html.contains(String.NativeErrorPage.CellularDataRestricted.TitleLabel))
+        XCTAssertFalse(html.contains(String.NativeErrorPage.CellularDataRestricted.Description))
+    }
+
+    @MainActor
+    func testLoadPage_withRestrictedCellularDataAndFeatureDisabled_keepsDefaultErrorPage() throws {
+        setupNimbusNativeErrorPageTesting(isEnabled: true)
+        setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: false)
+        let subject = ErrorPageHelper(
+            certStore: nil,
+            cellularDataStateProvider: MockCellularDataStateProvider(isRestricted: true)
+        )
+        let webView = MockTabWebView(
+            frame: .zero,
+            configuration: WKWebViewConfiguration(),
+            windowUUID: .XCTestDefaultUUID,
+            certStore: makeProfile().certStore
+        )
+        let failingURL = URL(string: "https://example.com/")!
+        let error = NSError(
+            domain: NSURLErrorDomain,
+            code: NSURLErrorNotConnectedToInternet,
+            userInfo: [NSURLErrorFailingURLErrorKey: failingURL]
+        )
+
+        subject.loadPage(error, forUrl: failingURL, inWebView: webView)
+
+        let loadedURL = try XCTUnwrap(webView.loadedRequest?.url)
+        let components = URLComponents(url: loadedURL, resolvingAgainstBaseURL: false)
+        XCTAssertNil(components?.queryItems?.first(where: { $0.name == "cellularDataRestricted" }))
+    }
+
+    @MainActor
+    func testLoadPage_withOfflineErrorAndAvailableCellularData_keepsDefaultErrorPage() throws {
+        setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: true)
+        let subject = ErrorPageHelper(
+            certStore: nil,
+            cellularDataStateProvider: MockCellularDataStateProvider(isRestricted: false)
+        )
+        let webView = MockTabWebView(
+            frame: .zero,
+            configuration: WKWebViewConfiguration(),
+            windowUUID: .XCTestDefaultUUID,
+            certStore: makeProfile().certStore
+        )
+        let failingURL = URL(string: "https://example.com/")!
+        let error = NSError(
+            domain: NSURLErrorDomain,
+            code: NSURLErrorNotConnectedToInternet,
+            userInfo: [NSURLErrorFailingURLErrorKey: failingURL]
+        )
+
+        subject.loadPage(error, forUrl: failingURL, inWebView: webView)
+
+        let loadedURL = try XCTUnwrap(webView.loadedRequest?.url)
+        let components = URLComponents(url: loadedURL, resolvingAgainstBaseURL: false)
+        XCTAssertNil(components?.queryItems?.first(where: { $0.name == "cellularDataRestricted" }))
     }
 }
 
@@ -98,5 +221,17 @@ private extension ErrorPageHandlerTests {
             urlString += "&\(certErrorQueryParam)=\(certErrorQuery)"
         }
         return URL(string: urlString)!
+    }
+
+    func setupNimbusNativeErrorPageTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
+            return NativeErrorPageFeature(enabled: isEnabled)
+        }
+    }
+
+    func setupNimbusCellularDataRestrictedErrorPageTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.cellularDataRestrictedErrorPageFeature.with { _, _ in
+            return CellularDataRestrictedErrorPageFeature(enabled: isEnabled)
+        }
     }
 }

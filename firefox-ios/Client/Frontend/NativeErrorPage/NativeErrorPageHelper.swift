@@ -7,7 +7,7 @@ import Shared
 import Common
 import Security
 
-class NativeErrorPageHelper {
+class NativeErrorPageHelper: FeatureFlaggable {
     private enum Constants {
         static let certErrorQueryParam = "certerror"
         static let badCertQueryParam = "badcert"
@@ -58,17 +58,9 @@ class NativeErrorPageHelper {
     /// Returns true when the error is a certificate error caused by a
     /// hostname mismatch (SSL_ERROR_BAD_CERT_DOMAIN / -9843). Other certificate
     /// failures return false so they fall back to the legacy HTML error page
-    private static func isBadCertDomainError(_ error: NSError) -> Bool {
+    static func isBadCertDomainError(_ error: NSError) -> Bool {
         guard isCertificateErrorCode(error.code) else { return false }
         return certStreamErrorCode(from: error) == NativeGeckoCode.badCertDomain.rawValue
-    }
-
-    /// Centralized predicate for whether we should show the native UI for a wrong-host certificate error.
-    static func shouldShowNativeBadCertDomainErrorPage(
-        for error: NSError,
-        isOtherErrorPagesEnabled: Bool
-    ) -> Bool {
-        return isOtherErrorPagesEnabled && isBadCertDomainError(error)
     }
 
     /// Builds the full set of URL query items for an error page, including
@@ -128,7 +120,7 @@ class NativeErrorPageHelper {
                  NSURLErrorServerCertificateHasUnknownRoot,
                  NSURLErrorServerCertificateNotYetValid:
                 return Self.buildCertificateErrorModel(for: error, url: url)
-            case _ where WaybackCodes.isWaybackCode(error.code):
+            case _ where WaybackCodes.isWaybackCode(error.code) && featureFlagsProvider.isEnabled(.waybackMachine):
                 return .wayback(WaybackErrorModel(url: url))
             default:
                 return .generic(GenericErrorModel(url: url))

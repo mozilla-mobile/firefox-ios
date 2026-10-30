@@ -32,6 +32,7 @@ For information on how to contribute to this project, including communication ch
 1. Make sure to select the `Fennec` [scheme](https://developer.apple.com/documentation/xcode/build-system?changes=_2) in Xcode.
 1. Select the destination device you want to build on.
 1. Run the app with `Cmd + R` or by pressing the `build and run` button.
+1. On your first build in Xcode, you may be asked to approve the `ModifiedCopy` Swift macro. Click `Trust & Enable` to let the build continue. This is expected, and the prompt comes back if the macro package changes.
 
 ⚠️ Important: In case you have dependencies issues with SPM, please try the following:
 

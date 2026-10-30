@@ -9,16 +9,18 @@ class NewTabSettingsTest: BaseTestCase {
     var browserScreen: BrowserScreen!
     var newTabSettingsScreen: NewTabSettingsScreen!
     var topSiteScreen: TopSitesScreen!
-    var toolbarScreen: ToolbarScreen!
+
+    /// Every test starts in New Tab settings, so each launches the app itself through a Settings deeplink.
+    override func setUpApp() {
+        setUpAppWithoutLaunching()
+    }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307026
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
-        toolbarScreen = ToolbarScreen(app: app)
 
-        toolbarScreen.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(NewTabSettings)
         newTabSettingsScreen.assertDefaultOptionsAreVisible()
     }
@@ -29,10 +31,8 @@ class NewTabSettingsTest: BaseTestCase {
         topSiteScreen = TopSitesScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
-        toolbarScreen = ToolbarScreen(app: app)
 
-        toolbarScreen.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(NewTabSettings)
         newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
 
@@ -49,8 +49,7 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307028
     func testChangeNewTabSettingsShowFirefoxHome() {
         // Set to history page first since FF Home is default
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
@@ -80,7 +79,7 @@ class NewTabSettingsTest: BaseTestCase {
         browserScreen = BrowserScreen(app: app)
         let targetURL = "mozilla.org"
 
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(NewTabSettings)
         newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
         // Check the placeholder value
@@ -100,7 +99,7 @@ class NewTabSettingsTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307030
     func testChangeNewTabSettingsLabel() {
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         // Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectNewTabAsCustomURL)
         navigator.nowAt(NewTabSettings)
@@ -127,11 +126,9 @@ class NewTabSettingsTest: BaseTestCase {
     func testKeyboardNotRaisedWhenTabOpenedFromTabTray() {
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
         browserScreen = BrowserScreen(app: app)
-        toolbarScreen = ToolbarScreen(app: app)
 
         // Add New tab and set it as Blank
-        toolbarScreen.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(NewTabSettings)
         newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
         navigator.performAction(Action.SelectNewTabAsBlankPage)
@@ -147,17 +144,87 @@ class NewTabSettingsTest: BaseTestCase {
         browserScreen.assertKeyboardBehaviorOnNewTab()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306878
+    // Regression
+    func testKeyboardRaisedWhenBlankTabOpenedFromContextMenusAndWidget() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior")
+        }
+        if !isFennec {
+            throw XCTSkip("The Firefox widget is only added to the home screen on the Fennec scheme")
+        }
+        browserScreen = BrowserScreen(app: app)
+        newTabSettingsScreen = NewTabSettingsScreen(app: app)
+        topSiteScreen = TopSitesScreen(app: app)
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
+
+        // Step 1: set the new tab page to Blank
+        launchIntoSettings()
+        navigator.goto(NewTabSettings)
+        newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
+        navigator.performAction(Action.SelectNewTabAsBlankPage)
+
+        // Steps 2-3: a new tab opens blank, and tapping the address bar raises the keyboard
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        topSiteScreen.assertNotVisibleTopSites()
+        browserScreen.tapAddressBar()
+        browserScreen.assertAddressBarFocusedWithKeyboard()
+        leaveAddressBarEditing()
+
+        // Steps 4-6: the tab tray long press menu, which is not offered on iPad
+        if !iPad() {
+            navigator.nowAt(NewTabScreen)
+            navigator.performAction(Action.OpenNewTabLongPressTabsButton)
+            assertBlankTabOpenedWithKeyboardRaised()
+            leaveAddressBarEditing()
+        }
+
+        // Steps 7-9: the app icon's New Tab quick action
+        navigator.nowAt(NewTabScreen)
+        springBoardScreen.pressHomeButton()
+        springBoardScreen.assertFennecIconExists()
+        springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        springBoardScreen.tapNewTabButton()
+        assertBlankTabOpenedWithKeyboardRaised()
+        leaveAddressBarEditing()
+
+        // Steps 10-12: the Firefox widget's New Search shortcut
+        springBoardScreen.pressHomeButton()
+        springBoardScreen.goToWidgetPage()
+        if !springBoardScreen.isFirefoxWidgetPresent() {
+            springBoardScreen.addFirefoxQuickActionsWidget(named: "Fennec")
+        }
+        springBoardScreen.tapFirefoxWidget()
+        assertBlankTabOpenedWithKeyboardRaised()
+    }
+
+    /// Each entry point leaves the address bar being edited, which the screen graph has no state
+    /// for, so the editing state is dropped before navigating on.
+    private func leaveAddressBarEditing() {
+        browserScreen.tapCancelEditButton()
+        browserScreen.assertAddressBarUnfocusedWithoutKeyboard()
+    }
+
+    /// Steps 4-6, 7-9 and 10-12 all repeat: the new tab is blank with the keyboard raised, the "<"
+    /// button leaves the editing state, and tapping the address bar raises the keyboard again.
+    private func assertBlankTabOpenedWithKeyboardRaised() {
+        topSiteScreen.assertNotVisibleTopSites()
+        browserScreen.assertAddressBarFocusedWithKeyboard()
+        browserScreen.tapCancelEditButton()
+        browserScreen.assertAddressBarUnfocusedWithoutKeyboard()
+        browserScreen.tapAddressBar()
+        browserScreen.assertAddressBarFocusedWithKeyboard()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306875
     // Smoketest
     func testNewTabCustomURLKeyboardNotRaised() {
-        toolbarScreen = ToolbarScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         newTabSettingsScreen = NewTabSettingsScreen(app: app)
         let targetURL = "mozilla.org"
 
         // Set a custom URL
-        toolbarScreen.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectNewTabAsCustomURL)
         // Check the value typed

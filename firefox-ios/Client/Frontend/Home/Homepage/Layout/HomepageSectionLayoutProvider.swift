@@ -19,6 +19,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         static let spacingBetweenSections: CGFloat = 44
         static let standardSingleItemHeight: CGFloat = 100
         static let sectionHeaderHeight: CGFloat = 75
+        static let embeddedAddressBarHeight: CGFloat = 50
 
         @MainActor
         static func leadingInset(
@@ -98,7 +99,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         struct TrackerBlockerModuleConstants {
-            static let height: CGFloat = 50
+            /// The section grows past this when the pill needs more room, e.g. with larger dynamic type
+            static let minimumHeight: CGFloat = 50
         }
 
         struct BookmarksConstants {
@@ -145,6 +147,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 itemHeight: UX.MessageCardConstants.height,
                 bottomInsets: UX.spacingBetweenSections
             )
+        case .notificationCard:
+            return createSingleItemSectionLayout(
+                for: traitCollection,
+                topInsets: UX.standardInset,
+                bottomInsets: UX.spacingBetweenSections
+            )
         case .topSites(_, let numberOfTilesPerRow, let shouldShowSectionHeader):
             return createTopSitesSectionLayout(
                 for: traitCollection,
@@ -157,7 +165,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 config: configuration
             )
         case .trackerBlockerModule:
-            return createTrackerBlockerModuleSectionLayout(for: traitCollection)
+            return createTrackerBlockerModuleSectionLayout(for: environment)
         case .pocket:
             return createStoriesSectionLayout(for: environment)
         case .bookmarks:
@@ -228,7 +236,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     ) -> NSCollectionLayoutSection {
         let itemSize: NSCollectionLayoutSize
         let traitCollection = environment.traitCollection
-        let sectionHeaderConfiguration = MerinoState.Constants.sectionHeaderConfiguration
+        let sectionHeaderConfiguration = SectionHeaderConfiguration.merino
 
         let containerWidth = environment.container.effectiveContentSize.width
         let horizontalInset = UX.leadingInset(traitCollection: traitCollection)
@@ -444,17 +452,17 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     private func createTrackerBlockerModuleSectionLayout(
-        for traitCollection: UITraitCollection
+        for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(UX.TrackerBlockerModuleConstants.height)
+            heightDimension: .absolute(getTrackerBlockerModuleCellHeight(environment: environment))
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: itemSize, subitem: item, count: 1)
         let section = NSCollectionLayoutSection(group: group)
 
-        let leadingInset = UX.leadingInset(traitCollection: traitCollection)
+        let leadingInset = UX.leadingInset(traitCollection: environment.traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: leadingInset,
@@ -517,7 +525,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func createSpacerSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let rawSpacerHeight = getRawSpacerHeight(environment: environment)
 
-        let merinoHeaderConfiguration = MerinoState.Constants.sectionHeaderConfiguration
+        let merinoHeaderConfiguration = SectionHeaderConfiguration.merino
         let headerHeight = getStoriesHeaderHeight(sectionHeaderConfiguration: merinoHeaderConfiguration,
                                                   environment: environment)
 
@@ -585,7 +593,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func getPrivacyNoticeSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         // Ensures we should be showing the privacy notice
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
-              state.shouldShowPrivacyNotice else { return 0 }
+              state.privacyNoticeState.shouldShowPrivacyNotice else { return 0 }
 
         var totalHeight: CGFloat = 0
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
@@ -608,7 +616,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             topSites: topSitesState.topSitesData,
             numberOfRows: topSitesState.numberOfRows,
             numberOfTilesPerRow: topSitesState.numberOfTilesPerRow,
-            headerState: TopSitesSectionState.Constants.sectionHeaderConfiguration,
+            headerState: SectionHeaderConfiguration.topSites,
             containerWidth: containerWidth,
             isLandscape: UIDevice.current.orientation.isLandscape,
             shouldShowSection: topSitesState.shouldShowSection,
@@ -643,7 +651,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         // Add header height
         if topSitesState.shouldShowSectionHeader {
             totalHeight += getHeaderHeight(
-                sectionHeaderConfiguration: TopSitesSectionState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: SectionHeaderConfiguration.topSites,
                 environment: environment
             )
         }
@@ -708,7 +716,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             syncedTabConfig: jumpBackInState.mostRecentSyncedTab,
             maxNumberOfLocalTabs: jumpBackInConfig.getMaxNumberOfLocalTabsLayout,
             numberOfLocalTabsToShow: numberOfLocalTabsToShow,
-            headerState: JumpBackInSectionState.Constants.sectionHeaderConfiguration,
+            headerState: SectionHeaderConfiguration.jumpBackIn,
             containerWidth: containerWidth,
             shouldShowSection: jumpBackInState.shouldShowSection,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
@@ -753,7 +761,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         // Add header height
         totalHeight += getHeaderHeight(
-            sectionHeaderConfiguration: JumpBackInSectionState.Constants.sectionHeaderConfiguration,
+            sectionHeaderConfiguration: SectionHeaderConfiguration.jumpBackIn,
             environment: environment
         )
 
@@ -774,11 +782,39 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return bookmarksMeasurement.totalHeight
     }
 
-    private func getTrackerBlockerModuleSectionHeight() -> CGFloat {
+    private func getTrackerBlockerModuleSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
               state.trackerBlockerModuleState.shouldShowSection else { return 0 }
 
-        return UX.TrackerBlockerModuleConstants.height + UX.spacingBetweenSections
+        return getTrackerBlockerModuleCellHeight(environment: environment) + UX.spacingBetweenSections
+    }
+
+    /// Creates a "dummy" tracker blocker pill cell and returns the height it needs, so that the pill doesn't
+    /// overlap the following section when dynamic type makes it taller than the minimum height.
+    private func getTrackerBlockerModuleCellHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        let blockedTrackerCount = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)?
+            .trackerBlockerModuleState.blockedTrackerCount ?? 0
+        let leadingInset = UX.leadingInset(traitCollection: environment.traitCollection)
+        let cellWidth = normalizedDimension(max(0, environment.container.contentSize.width - leadingInset * 2))
+        let measurementKey = HomepageLayoutMeasurementCache.TrackerBlockerModuleMeasurement.Key(
+            blockedTrackerCount: blockedTrackerCount,
+            cellWidth: cellWidth,
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
+        )
+
+        // Reuse the cached result when the key matches, overwrite it when inputs change.
+        if let cachedHeight = measurementsCache.height(for: measurementKey) {
+            return cachedHeight
+        }
+
+        let cell = TrackerBlockerModuleCell()
+        cell.configure(count: blockedTrackerCount, theme: LightTheme(), onTap: nil)
+        let fittingHeight = HomepageDimensionCalculator.fittingHeight(for: cell, width: cellWidth)
+        let height = max(fittingHeight, UX.TrackerBlockerModuleConstants.minimumHeight)
+
+        measurementsCache.setHeight(height, for: measurementKey)
+
+        return height
     }
 
     /// Creates a "dummy" search bar section and returns its height
@@ -787,7 +823,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return 0
         }
 
-        let searchState = state.searchState
+        let searchState = state.searchBarState
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let measurementKey = HomepageLayoutMeasurementCache.SearchBarMeasurement.Key(
             shouldShowSearchBar: searchState.shouldShowSearchBar,
@@ -876,7 +912,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let privacyNoticeHeight = getPrivacyNoticeSectionHeight(environment: environment)
         let topSitesHeight = getShortcutsSectionHeight(environment: environment)
         let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
-        let trackerBlockerModuleHeight = getTrackerBlockerModuleSectionHeight()
+        let trackerBlockerModuleHeight = getTrackerBlockerModuleSectionHeight(environment: environment)
         let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
 
@@ -903,7 +939,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let key = HomepageLayoutMeasurementCache.BookmarksMeasurement.Key(
             bookmarks: bookmarkState.bookmarks,
-            headerState: BookmarksSectionState.Constants.sectionHeaderConfiguration,
+            headerState: SectionHeaderConfiguration.bookmarks,
             containerWidth: containerWidth,
             shouldShowSection: bookmarkState.shouldShowSection,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
@@ -940,7 +976,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         // Get the rest of the section's height and cache and return the results
         let headerHeight = getHeaderHeight(
-            sectionHeaderConfiguration: BookmarksSectionState.Constants.sectionHeaderConfiguration,
+            sectionHeaderConfiguration: SectionHeaderConfiguration.bookmarks,
             environment: environment
         )
         let totalHeight = headerHeight

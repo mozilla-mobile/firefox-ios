@@ -37,11 +37,32 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Újratöltés";
 
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v155" = "Próbálja újra";
+
+/* On error page, message shown when the app can't connect because cellular data is turned off for the app and explaining to the user how to troubleshoot. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.Description.v156" = "Csatlakozzon a Wi-Fi-hez, vagy ugorjon az iOS beállításokhoz, és kapcsolja be a mobiladat-kapcsolatot a %@hoz.";
+
+/* On error page, title shown when the app can't connect because cellular data is turned off for this specific app in iOS settings. %@ is the app name (e.g. Firefox). */
+"NativeErrorPage.CellularDataRestricted.TitleLabel.v156" = "A mobiladat-kapcsolat ki van kapcsolva a %@ számára.";
+
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "A(z) %@ tulajdonosa nem állította be megfelelően, és nem hozható létre biztonságos kapcsolat.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Előfordulhat, hogy a webhely ideiglenesen nem érhető el, más címre költözött, illetve a tűzfal vagy a proxy blokkolja a kapcsolatot.\n\nEllenőrizze a kapcsolat beállításait, és próbálja újra.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "A %1$@ nem tudta elérni a kért webcímet.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "A %1$@ nem tudott kapcsolódni ehhez: %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Legyen óvatos. Úgy tűnik, hogy valami nincs rendben.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Úgy néz ki, hogy probléma van ezzel a webhellyel";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Visszalépés (ajánlott)";
@@ -52,6 +73,12 @@
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Úgy néz ki, hogy probléma van az internetkapcsolatával.";
 
+/* Label of the button on the connection error page - displayed if the user clicks on the button to requested an earlier version of the page and the search is in progress. */
+"NativeErrorPage.Wayback.Error.Checking.v155" = "Az archívum ellenőrzése…";
+
+/* Label shown when the app fails to reach the Wayback Machine while searching for an earlier version of a page. */
+"NativeErrorPage.Wayback.Error.CouldNotReach.v155" = "Nem sikerült elérni az archiválási szolgáltatást.";
+
 /* Description of the error page when the app is unable to connect to the server and will show a wayback fallback. %@ is the app name (e.g. Firefox). */
 "NativeErrorPage.Wayback.Error.Description.v154" = "Lehet, hogy a webhely foglalt vagy nem érhető el. Próbálja újra később. Ha a többi oldal sem tölt be, akkor ellenőrizze a Wi-Fi- vagy adatkapcsolatát. A %@ a Wayback Machine-en is megkeresheti az oldal korábbi verzióját.";
 
@@ -61,16 +88,27 @@
 /* The tappable link text within the Wayback footer description, opens web.archive.org. */
 "NativeErrorPage.Wayback.Error.LinkText.v155" = "Wayback Machine";
 
+/* Label shown when wayback responds and says no snapshot was found. */
+"NativeErrorPage.Wayback.Error.NotFound.v155" = "Nem található archivált verzió.";
+
 /* Button label allowing the user to retry searching the Wayback Machine after a failed attempt. */
 "NativeErrorPage.Wayback.Error.Retry.v154" = "Újra";
 
-/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine.
-Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+/* Button label displayed when there is no archived version of a webpage, allowing the user to search for the page URL using their default search engine. */
 "NativeErrorPage.Wayback.Error.Search.v155" = "Keresés a weben";
+
+/* Button label on the error page when the app is unable to connect to the server - clicking on the button launches a search for an earlier version of the page on the Wayback Machine. */
+"NativeErrorPage.Wayback.Error.SearchWayback.v155" = "Archivált verzió megtekintése";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
 "NativeErrorPage.Wayback.Error.Title.v154" = "A kapcsolódás sikertelen";
 
 /* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
 "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Megkeresi a Wayback Machine-en az oldal archivált változatát.";
+
+/* Body text of the error page shown when a website fails to load while the VPN is on. Suggests turning off the VPN first, then refreshing the page or checking the internet connection if that doesn't help. */
+"VPN.ErrorPage.Body.v160" = "Próbálja meg kikapcsolni a VPN-t. Ha a webhely továbbra sem tölt be, frissítse az oldalt vagy ellenőrizze az internetkapcsolatát.";
+
+/* Title of an error page shown when a website fails to load while the VPN is on and the exact cause is unknown. “Can't be reached” means the website couldn't be loaded. */
+"VPN.ErrorPage.Title.v160" = "Ez a webhely nem érhető el.";
 

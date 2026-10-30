@@ -14,7 +14,7 @@ final class JumpBackInSectionStateTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
         setupNimbusHomepageJumpBackInSectionDefaultTesting(isEnabled: false)
     }
@@ -53,6 +53,31 @@ final class JumpBackInSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.jumpBackInTabs.first?.descriptionText, "Www.Mozilla.Org")
         XCTAssertEqual(newState.jumpBackInTabs.first?.siteURL, "www.mozilla.org")
         XCTAssertEqual(newState.jumpBackInTabs.first?.accessibilityLabel, "www.mozilla.org, Www.Mozilla.Org")
+    }
+
+    @MainActor
+    func test_initializeAction_storesTabUUID_withoutRetainingTab() {
+        let reducer = jumpBackInSectionReducer()
+        weak var weakTab: Tab?
+        var tabUUID: TabUUID?
+        var newState: JumpBackInSectionState?
+
+        autoreleasepool {
+            let tab = createTab(urlString: "www.mozilla.org")
+            weakTab = tab
+            tabUUID = tab.tabUUID
+            newState = reducer.legacyReducer(
+                createSubject(),
+                TabManagerAction(
+                    recentTabs: [tab],
+                    windowUUID: .XCTestDefaultUUID,
+                    actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
+                )
+            )
+        }
+
+        XCTAssertEqual(newState?.jumpBackInTabs.first?.tabUUID, tabUUID)
+        XCTAssertNil(weakTab, "Jump Back In state should not keep a closed tab alive")
     }
 
     @MainActor

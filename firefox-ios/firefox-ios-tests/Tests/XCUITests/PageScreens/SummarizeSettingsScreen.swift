@@ -9,13 +9,42 @@ import XCTest
 @MainActor
 final class SummarizeSettingsScreen {
     private let app: XCUIApplication
+    private let sel: SummarizeSettingsSelectorsSet
 
-    init(app: XCUIApplication) {
+    private var summarizeToggle: XCUIElement { sel.SUMMARIZE_SWITCH.element(in: app) }
+    private var shakeGestureToggle: XCUIElement { sel.SHAKE_GESTURE_SWITCH.element(in: app) }
+    private var languageCell: XCUIElement { sel.LANGUAGE_CELL.element(in: app) }
+
+    init(app: XCUIApplication, selectors: SummarizeSettingsSelectorsSet = SummarizeSettingsSelectors()) {
         self.app = app
+        self.sel = selectors
     }
 
-    private var summarizeToggle: XCUIElement {
-        app.switches[AccessibilityIdentifiers.Settings.Summarize.summarizeContentSwitch]
+    func assertSummarizeAndShakeTogglesAreOnByDefault() {
+        BaseTestCase().waitForElementsToExist([
+            summarizeToggle,
+            sel.GESTURES_SECTION_HEADER.element(in: app),
+            shakeGestureToggle
+        ])
+        XCTAssertEqual(summarizeToggle.value as? String, "1", "Summarize content - toggle is enabled by default")
+        XCTAssertEqual(shakeGestureToggle.value as? String, "1", "Shake gesture - toggle is enabled by default")
+    }
+
+    func assertLanguageSectionShowsWebsiteLanguage() {
+        BaseTestCase().waitForElementsToExist([
+            sel.LANGUAGE_SECTION_HEADER.element(in: app),
+            languageCell,
+            sel.WEBSITE_LANGUAGE_VALUE.element(in: app)
+        ])
+    }
+
+    /// iOS 17.4+ opens a menu and older versions an action sheet; both list the options as buttons.
+    func openLanguagePicker() {
+        languageCell.waitAndTap()
+    }
+
+    func assertLanguageOptionsExist() {
+        BaseTestCase().waitForElementsToExist(sel.LANGUAGE_OPTIONS.map { $0.element(in: app) })
     }
 
     func assertSummarizeToggleIsOff() {

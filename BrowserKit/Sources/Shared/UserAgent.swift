@@ -38,6 +38,10 @@ open class UserAgent {
         return clientUserAgent(prefix: "Firefox-iOS-FxA")
     }
 
+    public static var waybackUserAgent: String {
+        return "firefox-ios-neterr/\(AppInfo.appVersion) (+https://mzl.la/3RNfZFB)"
+    }
+
     public static var defaultClientUserAgent: String {
         return clientUserAgent(prefix: "Firefox-iOS")
     }
@@ -128,6 +132,8 @@ struct CustomUserAgentConstant {
     static let customDesktopUAForDomain = [
         // FXIOS-10251: Do not appear as desktop/Safari for firefox.com/pair
         "firefox.com": defaultMobileUA,
+        // FXIOS-15905: Do not identify as (desktop) Safari on addons.m.o, bugzilla.m.o, support.m.o for correct info
+        "mozilla.org": defaultMobileUA,
         // TODO: FXIOS-15483 [webcompat] Docusign forms broken using desktop UA
         "docusign.com": defaultMobileUA,
         "docusign.net": defaultMobileUA

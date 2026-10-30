@@ -1,8 +1,17 @@
+/* Accessibility label for the close button on the country picker for the World Cup widget. This allows users to close the country picker. */
+"WorldCup.CountryPicker.Close.AccessibilityLabel.v151" = "دۇنيا لوڭقىسى دۆلەت تاللىغۇچنى ياپ";
+
 /* Section header for the Africa region in the World Cup country picker. */
 "WorldCup.CountryPicker.Confederation.Africa.v151" = "ئافرىقا";
 
 /* Section header for the Asia region in the World Cup country picker. */
 "WorldCup.CountryPicker.Confederation.Asia.v151" = "ئاسىيا";
+
+/* Section header for the Central America region in the World Cup country picker. Note: Central America falls under the CONCACAF confederation in FIFA. This string is included for completeness in case the UI groups countries by geographic region rather than confederation. */
+"WorldCup.CountryPicker.Confederation.CentralAmerica.v151" = "ئوتتۇرا ئامېرىكا";
+
+/* Section header for the CONCACAF confederation group in the World Cup country picker. CONCACAF is the abbreviation for Confederation of North, Central America and Caribbean Association Football. This covers North America, Central America, and the Caribbean. */
+"WorldCup.CountryPicker.Confederation.CONCACAF.v151" = "شىمالىي، ئوتتۇرا ئامېرىكا ۋە كارىب دېڭىزى پۇتبول بىرلەشمىسى";
 
 /* Section header for the Europe region in the World Cup country picker. */
 "WorldCup.CountryPicker.Confederation.Europe.v151" = "ياۋروپا";
@@ -10,11 +19,17 @@
 /* Section header for the North America region in the World Cup country picker. */
 "WorldCup.CountryPicker.Confederation.NorthAmerica.v151" = "شىمالىي ئامېرىكا";
 
+/* Section header for the Oceania region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Oceania.v151" = "ئوكيانىيە";
+
 /* Section header for the South America region in the World Cup country picker. */
 "WorldCup.CountryPicker.Confederation.SouthAmerica.v151" = "جەنۇبىي ئامېرىكا";
 
 /* Country name for England in the World Cup country picker. England cannot be resolved with standard locale APIs so it needs an explicit string. */
 "WorldCup.CountryPicker.Country.England.v151" = "ئەنگلىيە";
+
+/* Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.Scotland.v151" = "شوتلاندىيە";
 
 /* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
 "WorldCup.CountryPicker.SkipButton.Title.v151" = "ئاتلا";
@@ -73,6 +88,9 @@
 /* M is short for Minutes. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
 "WorldCup.HomepageWidget.CountDown.MinuteLabel.v151" = "م";
 
+/* Title for the countdown section of the World Cup widget showing the time remaining until the World Cup event. */
+"WorldCup.HomepageWidget.CountDown.Title.v151" = "دۇنيا لوڭقىسى پۇتبول مۇسابىقىسى باشلىنىش ۋاقتى";
+
 /* Label for the button that takes users to the World Cup schedule website on the countdown section. */
 "WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "كۈنتەرتىپنى كۆرسەت";
 
@@ -82,17 +100,41 @@
 /* The label for the button in the eliminated section that takes the user back to the team selection screen. */
 "WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "كوماندا تاللىنىدۇ";
 
+/* The description of the section in the World Cup widget that shows when the selected team was eliminated. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "باشقا پۇتبول كوماندىسىنى تاللاپ دۇنيا لوڭقىسى پۇتبول مۇسابىقىسىنىڭ ئەڭ يېڭى خەۋىرىگە ئەگىشىدۇ.";
+
+/* The accessibility label for the button in the eliminated section that removes the World Cup widget from the homepage. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonAccessibilityLabel.v151" = "دۇنيا لوڭقىسى مۇسابىقىسىنىڭ ئەپچىسىنى چىقىرىۋەت";
+
 /* The label for the button in the eliminated section that removes the World Cup widget from the homepage. */
 "WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151" = "چىقىرىۋەت";
 
 /* The title of the section in the World Cup widget that shows when the selected team was eliminated. */
 "WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151" = "ئەگىشىۋېرەمسىز؟";
 
+/* A generic error message used in the World Cup widget when the match data could not be loaded. */
+"WorldCup.HomepageWidget.ErrorLabel.v151" = "مۇسابىقە سانلىق مەلۇماتىنى يۈكلىيەلمىدۇق. يېڭىلاڭ.";
+
+/* The label indicating that the displaying match is in the extra time part of the game. */
+"WorldCup.HomepageWidget.ExtraTimeLabel.v151" = "ئۇزارتىلغان ۋاقىت";
+
 /* The label indicating that the displaying match is in the first half. */
 "WorldCup.HomepageWidget.FirstHalfLabel.v151" = "ئالدىنقى يېرىم مەيدان";
 
+/* Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event. */
+"WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151" = "دۇنيا لوڭقىسى يېڭىلىنىشىنى يوشۇر";
+
 /* Call to action for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
 "WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "كوماندىڭىزغا ئەگىشىڭ";
+
+/* Description for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
+"WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "شۇئان مۇسابىقە يېڭىلانما ئۇچۇرى ۋە باشقىلارغا ئېرىشىدۇ.";
+
+/* Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. 'Keep Tabs On' is an informal expression meaning to stay updated on or regularly follow something (in this case, World Cup matches and updates). It’s playfully related to Firefox in that “tabs” are a browser feature. It suggests ongoing awareness rather than active monitoring or control. Not to be translated literally as physical 'tabs' or tracking in a technical sense. the meaning is about staying informed. */
+"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "دۇنيا لوڭقىسى مۇسابىقە ئۇچۇرى";
+
+/* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
+"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "كوماندىغا ئەگەش";
 
 /* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTLabel.v151" = "(پۈتۈن مەيدان)";
@@ -100,11 +142,32 @@
 /* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "پۈتۈن مەيدان";
 
+/* The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "تولۇق مۇسابىقە ۋاقتى • نۇقتا توپ (%@)";
+
+/* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "ئىختىيارىي تام قەغەزگە ئېرىش";
+
+/* The label for the section in the World Cup widget showing the related matches of a team for the group phase. */
+"WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "مۇناسىۋەتلىك مۇسابىقە";
+
 /* The label indicating that the displaying match is in the half time. */
 "WorldCup.HomepageWidget.HalfTimeLabel.v151" = "ئوتتۇرا مەيدان دەم ئېلىش";
 
+/* The label that appears for live World Cup matches. */
+"WorldCup.HomepageWidget.LiveLabel.v151" = "شۇئان";
+
+/* Message shown in the World Cup widget when match data is temporarily unavailable. */
+"WorldCup.HomepageWidget.MatchUnavailableLabel.v151" = "ھازىر مۇسابىقە ئۇچۇرىنى ئىشلەتكىلى بولمايدۇ. بىر قانچە مىنۇتتىن كېيىن قايتا يېڭىلاڭ.";
+
 /* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
 "WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "يېڭىلا";
+
+/* Message shown in the World Cup widget when the device has no internet connection. */
+"WorldCup.HomepageWidget.OfflineLabel.v151" = "تورسىز ھالەتتە ئوخشايسىز. تور باغلىنىشىڭىزنى تەكشۈرۈپ قايتا سىناڭ.";
+
+/* The label indicating that the displaying match is in the penalties part of the game. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.PenaltiesLabel.v151" = "نۇقتا توپ (%@)";
 
 /* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
 "WorldCup.HomepageWidget.RemoveLabel.v151" = "چىقىرىۋەت";
@@ -112,14 +175,32 @@
 /* The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed. */
 "WorldCup.HomepageWidget.RetryButtonLabel.v151" = "يېڭىلا";
 
+/* The label for the 'Bronze final' match in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel.v151" = "مىس مېدال ھەل قىلغۇچ مۇسابىقىسى";
+
 /* The label for the 'Final' match in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "ھەل قىلغۇچ مۇسابىقە";
+
+/* The label for the 'Quarter-finals' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "چارەك ھەل قىلغۇچ مۇسابىقىلەر";
+
+/* The label for the 'Round of 16' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "16-ئايلانما";
+
+/* The label for the 'Round of 32' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "32-ئايلانما";
+
+/* The accessibility label for the scroll indicator that lets users navigate through the matches in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151" = "ئالدىنقى ياكى كېيىنكى مۇسابىقىنى كۆرۈش ئۈچۈن سىيرىلىدۇ";
 
 /* The label for the 'Semi-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "يېرىم ھەل قىلغۇچ مۇسابىقە";
 
 /* The label for the 'Third place' winner in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "ئۈچىنچى";
+
+/* The label for an upcoming match in the World Cup widget round phase. */
+"WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "يېقىنلىشىۋاتقىنى";
 
 /* The label for the World Cup championship winner in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "2026-يىللىق دۇنيا لوڭقىسى چېمپىيونلىرى";
@@ -132,4 +213,7 @@
 
 /* The label for the button that allows to share the selected match info in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.ShareLabel.v151" = "ھەمبەھىر";
+
+/* The description for the temporary view in the World Cup widget showing the team that has been previously selected. */
+"WorldCup.HomepageWidget.TemporaryView.Description.v151" = "دۇنيا لوڭقىسى يېقىنلاشقاندا، ئەڭ يېڭى ئۇچۇرلارنى يەتكۈزۈپ تۇرىمىز";
 

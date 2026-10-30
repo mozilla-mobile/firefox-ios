@@ -18,14 +18,11 @@ class HistoryPanelViewModelTests: XCTestCase {
         try await super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile(databasePrefix: "HistoryPanelViewModelTest")
-        profile.reopen()
+        profile = makeProfile()
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
-        clear(profile: profile)
-        profile.shutdown()
         profile = nil
         try await super.tearDown()
     }
@@ -187,6 +184,13 @@ class HistoryPanelViewModelTests: XCTestCase {
         }
     }
 
+    func testDeleteEverythingHistory() {
+        setupSiteVisits()
+
+        let result = profile.places.deleteEverythingHistory()
+        XCTAssertTrue(result.value.isSuccess, "History cleared.")
+    }
+
     // MARK: - Setup
     private func createSubject() -> HistoryPanelViewModel {
         let subject = HistoryPanelViewModel(profile: profile)
@@ -209,13 +213,6 @@ class HistoryPanelViewModelTests: XCTestCase {
         let result = profile.places.applyObservation(visitObservation: visitObservation)
 
         XCTAssertEqual(true, result.value.isSuccess, "Site added: \(url).", file: file, line: line)
-    }
-
-    private func clear(profile: MockProfile,
-                       file: StaticString = #filePath,
-                       line: UInt = #line) {
-        let result = profile.places.deleteEverythingHistory()
-        XCTAssertTrue(result.value.isSuccess, "History cleared.", file: file, line: line)
     }
 
     private func fetchHistory(from subject: HistoryPanelViewModel,
@@ -247,30 +244,5 @@ class HistoryPanelViewModelTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 5)
-    }
-
-    private func createSearchTermGroup(timestamp: MicrosecondTimestamp,
-                                       file: StaticString = #filePath,
-                                       line: UInt = #line) -> ASGroup<Site> {
-        var groupSites = [Site]()
-        for index in 0...3 {
-            var site = Site.createBasicSite(url: "http://site\(index).com", title: "Site \(index)")
-            site.latestVisit = Visit(date: timestamp)
-            let visit = VisitObservation(
-                url: site.url,
-                title: site.title,
-                visitType: .link,
-                at: Int64(timestamp) / 1000
-            )
-            XCTAssertTrue(
-                profile.places.applyObservation(visitObservation: visit).value.isSuccess,
-                "Site added: \(site.url).",
-                file: file,
-                line: line
-            )
-            groupSites.append(site)
-        }
-
-        return ASGroup<Site>(searchTerm: "site", groupedItems: groupSites, timestamp: timestamp)
     }
 }

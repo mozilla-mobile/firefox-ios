@@ -355,6 +355,16 @@
 /* Title for the welcome card in the v2 onboarding flow. */
 "Onboarding.Modern.Welcome.Title.v145" = "Sano hyvästit kammottaville seuraimille";
 
+/* Voiceover text for the close button on the home screen popup requesting notification permissions. Tapping this button dismisses the popup. */
+"Onboarding.MultiDay.HomeScreenNotificationsPopup.EnableCloseButtonText.v159" = "Sulje";
+
+/* Secondary button on the onboarding card requesting permission to send notifications. Tapping this button declines the permission request.
+Secondary button on the onboarding card that prompts users to enable syncing for their account data. Tapping this button dismisses the prompt and closes the card. */
+"Onboarding.MultiDay.NotificationCard.DeclineButtonText.v159" = "Ei nyt";
+
+/* Primary button on the onboarding card that prompts users to enable syncing for their account data. Tapping it directs the user sign into to their Mozilla account to access the feature. */
+"Onboarding.MultiDay.SyncCard.AcceptButtonText.v159" = "Kirjaudu synkronoidaksesi";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Jatka";
 
@@ -471,4 +481,22 @@
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "Tervetuloa itsenäiseen internetiin";
+
+/* Body text below the “5 GB, Free Every Month” (VPN.Onboarding.LimitSubheading.v160) subheading on the VPN onboarding card. Explains that the user can start using the VPN without signing in to an account. “it” refers to the VPN. */
+"VPN.Onboarding.LimitBody.v160" = "Aloita käyttö ilman kirjautumista";
+
+/* Subheading on the VPN onboarding card. Explains how much VPN data the user gets every month at no cost. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.Onboarding.LimitSubheading.v160" = "%1$@ Gt maksutta joka kuukausi";
+
+/* Body text below the “Browse From Multiple Locations” (VPN.Onboarding.LocationsSubheading.v160) subheading on the VPN onboarding card. Explains that choosing a VPN location makes it harder to tell where the user really is. “yours” refers to the user’s location. */
+"VPN.Onboarding.LocationsBody.v160" = "Valitse VPN-sijainti, jotta todellista sijaintiasi on vaikeampi jäljittää.";
+
+/* Subheading on the VPN onboarding card. Explains that the user can choose which country their browsing appears to come from. */
+"VPN.Onboarding.LocationsSubheading.v160" = "Selaa useista sijainneista";
+
+/* Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox). */
+"VPN.Onboarding.Title.v160" = "Kokeile %1$@in sisäänrakennettua VPN:ää";
+
+/* Subheading on the VPN onboarding card. Explains that the VPN gives the user more privacy when they use public Wi-Fi networks. */
+"VPN.Onboarding.WifiSubheading.v160" = "Parempi yksityisyys julkisissa Wi-Fi-verkoissa";
 

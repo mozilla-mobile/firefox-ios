@@ -13,6 +13,9 @@ final class SearchSettingsScreen {
     private var trendingSearchesToggle: XCUIElement { sel.TRENDING_SEARCH_SWITCH.element(in: app) }
     private var recentSearchesToggle: XCUIElement { sel.RECENT_SEARCH_SWITCH.element(in: app) }
     private var defaultSearchEngineSectionTitle: XCUIElement { sel.DEFAULT_SEARCH_ENGINE_SECTION_TITLE.element(in: app) }
+    private var defaultSearchEngineRow: XCUIElement { sel.DEFAULT_SEARCH_ENGINE_ROW.element(in: app) }
+    private var googleLensRow: XCUIElement { sel.GOOGLE_LENS_ROW.element(in: app) }
+    private var googleLensToggle: XCUIElement { googleLensRow.switches.firstMatch }
     private var alternativeSearchEnginesSectionTitle: XCUIElement {
         sel.ALTERNATIVE_SEARCH_ENGINES_SECTION_TITLE.element(in: app)
     }
@@ -83,6 +86,48 @@ final class SearchSettingsScreen {
         BaseTestCase().mozWaitForElementToNotExist(defaultSearchEngineNavBar, timeout: timeout)
     }
 
+    /// Opens the default engine picker from Settings → Search and picks `engineName`.
+    func selectDefaultSearchEngine(named engineName: String) {
+        defaultSearchEngineRow.waitAndTap()
+        sel.searchEngineRow(named: engineName).element(in: app).waitAndTap()
+        waitForSearchEngineSelectionComplete()
+    }
+
+    func assertDefaultSearchEngine(is engineName: String) {
+        BaseTestCase().mozWaitForElementToExist(defaultSearchEngineRow)
+        BaseTestCase().mozWaitForValueContains(defaultSearchEngineRow, value: engineName)
+    }
+
+    func assertAlternativeSearchEngineIsEnabled(named engineName: String) {
+        let engineRow = sel.alternativeSearchEngineRow(named: engineName).element(in: app)
+        assertSwitch(engineRow.switches.firstMatch, named: "\(engineName) alternative engine", isOn: true)
+    }
+
+    func assertGoogleLensToggleExists() {
+        BaseTestCase().mozWaitForElementToExist(googleLensRow)
+    }
+
+    func assertGoogleLensToggleDoesNotExist() {
+        BaseTestCase().mozWaitForElementToNotExist(googleLensRow)
+    }
+
+    /// The row's label joins the title and description, and the rest of the copy is the section footnote.
+    func assertGoogleLensToggleIsDisplayedWithDescription() {
+        let copy = String.Settings.Search.GoogleLens.self
+        let footnote = sel.GOOGLE_LENS_FOOTNOTE.element(in: app)
+        BaseTestCase().waitForElementsToExist([googleLensRow, googleLensToggle, footnote])
+        XCTAssertTrue(googleLensRow.isHittable, "Expected the Google Lens toggle to be on screen")
+        XCTAssertEqual(googleLensRow.label, "\(copy.Title), \(copy.Description)")
+    }
+
+    func tapOnGoogleLensToggle() {
+        googleLensToggle.waitAndTap()
+    }
+
+    func assertGoogleLensToggle(isOn: Bool) {
+        assertSwitch(googleLensToggle, named: "Google Lens toggle", isOn: isOn)
+    }
+
     func assertDefaultSearchEngineSectionExists() {
         BaseTestCase().mozWaitForElementToExist(defaultSearchEngineSectionTitle)
     }
@@ -93,5 +138,126 @@ final class SearchSettingsScreen {
 
     func assertSearchEngineExists(named engineName: String) {
         BaseTestCase().mozWaitForElementToExist(sel.searchEngineRow(named: engineName).element(in: app))
+    }
+
+    func assertAddSearchEngineRowExists() {
+        assertRowExists(sel.ADD_SEARCH_ENGINE_ROW)
+    }
+
+    func assertShowSearchSuggestionsSwitchIsOn() {
+        assertSwitch(sel.SHOW_SEARCH_SUGGESTIONS_SWITCH, isOn: true)
+    }
+
+    func assertShowInPrivateSessionsSwitchIsOff() {
+        assertSwitch(sel.SHOW_IN_PRIVATE_SESSIONS_SWITCH, isOn: false)
+    }
+
+    func assertSearchBrowsingHistorySwitchIsOn() {
+        assertSwitch(sel.SEARCH_BROWSING_HISTORY_SWITCH, isOn: true)
+    }
+
+    func assertSearchBrowsingHistorySwitchIsOff() {
+        assertSwitch(sel.SEARCH_BROWSING_HISTORY_SWITCH, isOn: false)
+    }
+
+    func tapOnSearchBrowsingHistorySwitch() {
+        tapOnSwitch(sel.SEARCH_BROWSING_HISTORY_SWITCH)
+    }
+
+    func assertSearchBrowsingHistorySwitchIsDisplayed() {
+        assertSwitchIsDisplayed(sel.SEARCH_BROWSING_HISTORY_SWITCH,
+                                showing: sel.SEARCH_BROWSING_HISTORY_DISPLAYED_TEXT)
+    }
+
+    func assertSearchBookmarksSwitchIsOn() {
+        assertSwitch(sel.SEARCH_BOOKMARKS_SWITCH, isOn: true)
+    }
+
+    func assertSearchSyncedTabsSwitchIsOn() {
+        assertSwitch(sel.SEARCH_SYNCED_TABS_SWITCH, isOn: true)
+    }
+
+    func assertSuggestionsFromTheWebSwitchIsOn() {
+        assertSwitch(sel.SUGGESTIONS_FROM_THE_WEB_SWITCH, isOn: true)
+    }
+
+    func assertSuggestionsFromTheWebSwitchIsOff() {
+        assertSwitch(sel.SUGGESTIONS_FROM_THE_WEB_SWITCH, isOn: false)
+    }
+
+    func tapOnSuggestionsFromTheWebSwitch() {
+        tapOnSwitch(sel.SUGGESTIONS_FROM_THE_WEB_SWITCH)
+    }
+
+    func assertSuggestionsFromTheWebSwitchIsDisplayed() {
+        assertSwitchIsDisplayed(sel.SUGGESTIONS_FROM_THE_WEB_SWITCH,
+                                showing: sel.SUGGESTIONS_FROM_THE_WEB_DISPLAYED_TEXT)
+    }
+
+    func assertSuggestionsFromSponsorsSwitchIsOn() {
+        assertSwitch(sel.SUGGESTIONS_FROM_SPONSORS_SWITCH, isOn: true)
+    }
+
+    func assertSuggestionsFromSponsorsSwitchIsOff() {
+        assertSwitch(sel.SUGGESTIONS_FROM_SPONSORS_SWITCH, isOn: false)
+    }
+
+    func tapOnSuggestionsFromSponsorsSwitch() {
+        tapOnSwitch(sel.SUGGESTIONS_FROM_SPONSORS_SWITCH)
+    }
+
+    func assertSuggestionsFromSponsorsSwitchIsDisplayed() {
+        assertSwitchIsDisplayed(sel.SUGGESTIONS_FROM_SPONSORS_SWITCH,
+                                showing: sel.SUGGESTIONS_FROM_SPONSORS_DISPLAYED_TEXT)
+    }
+
+    func assertLearnMoreAboutFirefoxSuggestRowExists() {
+        assertRowExists(sel.LEARN_MORE_ABOUT_FIREFOX_SUGGEST_ROW)
+    }
+
+    /// Rows further down the search settings table are only added to the accessibility tree once the
+    /// table view has scrolled them into range, hence the scroll before every assertion.
+    private func assertRowExists(_ selector: Selector) {
+        let element = selector.element(in: app)
+        BaseTestCase().scrollToElement(element)
+        BaseTestCase().mozWaitForElementToExist(element)
+    }
+
+    private func tapOnSwitch(_ selector: Selector) {
+        let toggle = selector.element(in: app)
+        BaseTestCase().scrollToElement(toggle, isHittable: true)
+        toggle.waitAndTap()
+    }
+
+    /// A row's title and description are set on its switch as one accessibility label, so that is
+    /// where the copy shown next to the toggle can be read back from.
+    private func assertSwitchIsDisplayed(_ selector: Selector, showing expectedLabel: String) {
+        let toggle = selector.element(in: app)
+        BaseTestCase().scrollToElement(toggle, isHittable: true)
+        BaseTestCase().mozWaitForElementToExist(toggle)
+
+        XCTAssertTrue(toggle.isHittable, "Expected '\(selector.description)' to be on screen")
+        XCTAssertEqual(
+            toggle.label,
+            expectedLabel,
+            "'\(selector.description)' is not showing the expected title and description"
+        )
+    }
+
+    private func assertSwitch(_ selector: Selector, isOn: Bool) {
+        assertSwitch(selector.element(in: app), named: selector.description, isOn: isOn)
+    }
+
+    private func assertSwitch(_ element: XCUIElement, named name: String, isOn: Bool) {
+        BaseTestCase().scrollToElement(element)
+        BaseTestCase().mozWaitForElementToExist(element)
+
+        let expectedValue = isOn ? "1" : "0"
+        let value = element.value as? String
+        XCTAssertEqual(
+            value,
+            expectedValue,
+            "Expected '\(name)' to be \(isOn ? "ON" : "OFF"), but got \(String(describing: value))"
+        )
     }
 }

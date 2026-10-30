@@ -14,6 +14,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
     private var router: MockRouter!
     private var parentCoordinator: MockParentCoordinator!
     private var themeManager: MockThemeManager!
+    private var featureFlagsProvider: MockNimbusFeatureFlags!
     private let testURL = URL(string: "https://example.com")!
     private let testQuery = "test search query"
 
@@ -22,6 +23,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         router = MockRouter(navigationController: MockNavigationController())
         parentCoordinator = MockParentCoordinator()
         themeManager = MockThemeManager()
+        featureFlagsProvider = MockNimbusFeatureFlags()
         DependencyHelperMock().bootstrapDependencies()
     }
 
@@ -29,17 +31,19 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         router = nil
         parentCoordinator = nil
         themeManager = nil
+        featureFlagsProvider = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
-    func test_start_presentsViewController() {
+    func test_start_presentsViewControllerInNavigationController() throws {
         let subject = createSubject()
 
         subject.start()
 
+        let navigationController = try XCTUnwrap(router.presentedViewController as? UINavigationController)
         XCTAssertEqual(router.presentCalled, 1)
-        XCTAssertTrue(router.presentedViewController is QuickAnswersViewController)
+        XCTAssertTrue(navigationController.viewControllers.first is QuickAnswersViewController)
     }
 
     func test_dismissQuickAnswers_dismissesControllerAndNotifiesParent() {
@@ -90,19 +94,74 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.dismissCalled, 1)
     }
 
+    func test_resolvedModel_withoutOverride_returnsNimbusModel() {
+        setupNimbus(model: .liner)
+        let subject = createSubject()
+
+        XCTAssertEqual(subject.resolvedModel(), QuickAnswersKit.QuickAnswersModel.liner)
+    }
+
+    func test_resolvedModel_withOverride_returnsOverriddenModel() {
+        setupNimbus(model: .liner)
+        let prefs = MockProfilePrefs()
+        prefs.setString(QuickAnswersKit.QuickAnswersModel.exa.rawValue,
+                        forKey: PrefsKeys.QuickAnswers.modelOverride)
+        let subject = createSubject(prefs: prefs)
+
+        XCTAssertEqual(subject.resolvedModel(), QuickAnswersKit.QuickAnswersModel.exa)
+    }
+
+    func test_resolvedModel_withUnknownOverride_returnsNimbusModel() {
+        setupNimbus(model: .liner)
+        let prefs = MockProfilePrefs()
+        prefs.setString("unknown-model", forKey: PrefsKeys.QuickAnswers.modelOverride)
+        let subject = createSubject(prefs: prefs)
+
+        XCTAssertEqual(subject.resolvedModel(), QuickAnswersKit.QuickAnswersModel.liner)
+    }
+
+    func test_resolvedFeature_withOptInRedesignEnabled_returnsFeatureWithResolvedModelAndRedesign() {
+        setupNimbus(model: .liner)
+        featureFlagsProvider.enabledFlags = [.quickAnswersOptInRedesign]
+        let subject = createSubject()
+
+        XCTAssertEqual(
+            subject.resolvedFeature(),
+            QuickAnswersKit.QuickAnswersFeature(model: .liner, isOptInRedesignEnabled: true)
+        )
+    }
+
+    func test_resolvedFeature_withOptInRedesignDisabled_returnsFeatureWithoutRedesign() {
+        setupNimbus(model: .exa)
+        let subject = createSubject()
+
+        XCTAssertEqual(
+            subject.resolvedFeature(),
+            QuickAnswersKit.QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false)
+        )
+    }
+
     // MARK: - Helper Methods
+    private func setupNimbus(model: Client.QuickAnswersModel) {
+        FxNimbus.shared.features.quickAnswersFeature.with { _, _ in
+            Client.QuickAnswersFeature(enabled: true, model: model)
+        }
+    }
+
     private func createSubject(
+        prefs: Prefs = MockProfilePrefs(),
         onNavigate: @escaping (QuickAnswersNavigationType) -> Void = { _ in },
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> QuickAnswersCoordinator {
         let subject = QuickAnswersCoordinator(
             parentCoordinatorDelegate: parentCoordinator,
-            prefs: MockProfilePrefs(),
+            prefs: prefs,
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             router: router,
-            transitionType: .crossDissolve(sourceRect: .zero),
+            transitionType: .sourceReveal(sourceRect: .zero),
+            featureFlagsProvider: featureFlagsProvider,
             onNavigate: onNavigate
         )
         trackForMemoryLeaks(subject, file: file, line: line)

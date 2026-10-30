@@ -16,7 +16,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         router = MockRouter(navigationController: UINavigationController())
-        profile = MockProfile()
+        profile = makeProfile()
         parentCoordinator = MockLibraryCoordinatorDelegate()
         navigationHandler = MockLibraryNavigationHandler()
     }
@@ -65,6 +65,23 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertTrue(navigationController.interactivePopGestureRecognizer?.delegate === originalGestureDelegate)
     }
 
+    func testBookmarksDeleteSwipeAction_avoidsDestructiveStyleAnimation() throws {
+        let subject = createSubject()
+        subject.start(from: LocalDesktopFolder())
+        let controller = try XCTUnwrap(router.pushedViewController as? BookmarksViewController)
+
+        let configuration = try XCTUnwrap(
+            controller.tableView(
+                controller.tableView,
+                trailingSwipeActionsConfigurationForRowAt: IndexPath(row: 0, section: 0)
+            )
+        )
+        let deleteAction = try XCTUnwrap(configuration.actions.first)
+
+        XCTAssertEqual(deleteAction.style, .normal)
+        XCTAssertEqual(deleteAction.backgroundColor, .systemRed)
+    }
+
     func testShowBookmarksDetail_forFolder() {
         let subject = createSubject()
         let folder = LocalDesktopFolder()
@@ -72,6 +89,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         subject.showBookmarkDetail(for: folder, folder: folder)
 
         XCTAssertTrue(router.pushedViewController is EditFolderViewController)
+        XCTAssertEqual((router.pushedViewController as? EditFolderViewController)?.shouldUsePrivateOverride, true)
         XCTAssertEqual(router.pushCalled, 1)
     }
 
@@ -96,6 +114,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         subject.showBookmarkDetail(bookmarkType: .bookmark, parentBookmarkFolder: LocalDesktopFolder())
 
         XCTAssertTrue(router.pushedViewController is EditBookmarkViewController)
+        XCTAssertEqual((router.pushedViewController as? EditBookmarkViewController)?.shouldUsePrivateOverride, true)
         XCTAssertEqual(router.pushCalled, 1)
     }
 
@@ -105,6 +124,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         subject.showBookmarkDetail(bookmarkType: .folder, parentBookmarkFolder: LocalDesktopFolder())
 
         XCTAssertTrue(router.pushedViewController is EditFolderViewController)
+        XCTAssertEqual((router.pushedViewController as? EditFolderViewController)?.shouldUsePrivateOverride, true)
         XCTAssertEqual(router.pushCalled, 1)
     }
 
@@ -116,6 +136,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         subject.showSignIn()
         let presentedViewController = router.presentedViewController as? UINavigationController
         XCTAssertTrue(presentedViewController?.visibleViewController is FirefoxAccountSignInViewController)
+        XCTAssertTrue(router.presentedViewController is LibraryNavigationController)
         XCTAssertEqual(router.presentCalled, 1)
     }
 

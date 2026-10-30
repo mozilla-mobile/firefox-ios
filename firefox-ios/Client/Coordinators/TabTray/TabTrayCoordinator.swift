@@ -14,7 +14,7 @@ protocol TabTrayNavigationHandler: AnyObject {
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController)
 }
 
-class TabTrayCoordinator: BaseCoordinator,
+final class TabTrayCoordinator: BaseCoordinator,
                           ParentCoordinatorDelegate,
                           TabTrayViewControllerDelegate,
                           TabTrayNavigationHandler {
@@ -55,6 +55,8 @@ class TabTrayCoordinator: BaseCoordinator,
 
     func start(with tabTraySection: TabTrayPanelType) {
         tabTrayViewController?.setupOpenPanel(panelType: tabTraySection)
+        // Build the tray and populate the selected panel now, before `present` kicks off the transition.
+        tabTrayViewController?.preloadSelectedPanelForPresentation()
     }
 
     private func makeChildPanels(dragAndDropDelegate: TabDisplayViewDragAndDropInteraction) -> [UINavigationController] {
@@ -100,10 +102,21 @@ class TabTrayCoordinator: BaseCoordinator,
     }
 
     private func makeTabsCoordinator(navigationController: UINavigationController) {
+        // A panel can be selected any number of times while the tab tray stays open, so reuse the
+        // coordinator already owning that navigation controller instead of appending a new
+        // coordinator and router on every switch.
+        guard !hasTabsCoordinator(for: navigationController) else { return }
         let router = DefaultRouter(navigationController: navigationController)
         let tabCoordinator = TabsCoordinator(router: router)
         add(child: tabCoordinator)
         tabCoordinator.parentCoordinator = self
+    }
+
+    private func hasTabsCoordinator(for navigationController: UINavigationController) -> Bool {
+        return childCoordinators.contains { child in
+            guard let tabsCoordinator = child as? TabsCoordinator else { return false }
+            return (tabsCoordinator.router.navigationController as? UINavigationController) === navigationController
+        }
     }
 
     private func makeRemoteTabsCoordinator(navigationController: UINavigationController, for window: WindowUUID) {

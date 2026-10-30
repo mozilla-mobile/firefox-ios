@@ -1,5 +1,5 @@
 /* The cancel button when confirming clear history. */
-"Cancel" = "Diddymu";
+"Cancel" = "Na";
 
 /* The confirmation button that clears history even when Sync is connected. */
 "OK" = "Iawn";

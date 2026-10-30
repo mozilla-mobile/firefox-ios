@@ -344,6 +344,107 @@ final class OnboardingScreen {
         XCTAssertEqual(secondaryButton.exists, secondaryExists)
     }
 
+    /// Asserts the current modern card renders its illustration. The image is hidden from accessibility,
+    /// so this samples the screenshot area between the title and description for non-background pixels.
+    func assertCurrentCardShowsImage() {
+        let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
+        let desc = sel.descriptionLabel(rootId: rootA11yId).element(in: app)
+        BaseTestCase().waitForElementsToExist([title, desc])
+
+        let area = CGRect(
+            x: desc.frame.minX,
+            y: title.frame.maxY,
+            width: desc.frame.width,
+            height: desc.frame.minY - title.frame.maxY
+        )
+        assertImageRendered(in: area, name: "Card \(rootA11yId)")
+    }
+
+    /// Asserts the modern ToS card renders its illustration, sampling the band just above its title.
+    func assertTermsOfServiceShowsImage() {
+        let tosRoot = AccessibilityIdentifiers.TermsOfService.root
+        let title = app.staticTexts["\(tosRoot)TitleLabel"]
+        let desc = app.staticTexts["\(tosRoot)DescriptionLabel"]
+        BaseTestCase().waitForElementsToExist([title, desc], timeout: TIMEOUT_LONG)
+
+        // The image sits 24pt above the title and is at least 70pt tall in every variant.
+        let area = CGRect(x: desc.frame.minX, y: title.frame.minY - 94, width: desc.frame.width, height: 70)
+        assertImageRendered(in: area, name: "Terms of Service card")
+    }
+
+    /// Asserts every option button on the current multiple choice card (address bar, theme) renders its
+    /// illustration, sampling the top of each button where the 150pt image is laid out.
+    func assertCurrentCardOptionsShowImages() {
+        let options = app.buttons.matching(
+            NSPredicate(format: "identifier BEGINSWITH %@", "\(rootA11yId)SegmentedButton.")
+        )
+        BaseTestCase().mozWaitForElementToExist(options.firstMatch)
+        XCTAssertGreaterThanOrEqual(options.count, 2, "Card \(rootA11yId) should show at least two options")
+
+        for option in options.allElementsBoundByIndex {
+            let area = CGRect(x: option.frame.minX, y: option.frame.minY, width: option.frame.width, height: 150)
+            assertImageRendered(in: area, name: "Option \(option.identifier)")
+        }
+    }
+
+    /// Fails unless more than 1% of the pixels in `area` (in points) differ from its dominant color.
+    private func assertImageRendered(in area: CGRect, name: String) {
+        guard area.width > 0, area.height > 0, let screenshot = app.screenshot().image.cgImage else {
+            XCTFail("\(name) has no room for an image (area: \(area))")
+            return
+        }
+        let scale = CGFloat(screenshot.width) / app.frame.width
+        let pixelArea = CGRect(
+            x: area.minX * scale,
+            y: area.minY * scale,
+            width: area.width * scale,
+            height: area.height * scale
+        ).integral
+        guard let crop = screenshot.cropping(to: pixelArea) else {
+            XCTFail("Could not crop the screenshot for \(name) (area: \(area))")
+            return
+        }
+
+        let ratio = nonBackgroundPixelRatio(in: crop)
+        XCTAssertGreaterThan(ratio, 0.01, "\(name) should show an image (non-background ratio: \(ratio))")
+    }
+
+    /// Fraction of pixels whose color differs noticeably from the most common color, used as the background.
+    private func nonBackgroundPixelRatio(in image: CGImage) -> Double {
+        let width = image.width
+        let height = image.height
+        var pixels = [UInt8](repeating: 0, count: width * height * 4)
+        let drawn = pixels.withUnsafeMutableBytes { buffer -> Bool in
+            guard let context = CGContext(
+                data: buffer.baseAddress,
+                width: width,
+                height: height,
+                bitsPerComponent: 8,
+                bytesPerRow: width * 4,
+                space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+            ) else { return false }
+            context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+            return true
+        }
+        guard drawn, width * height > 0 else { return 0 }
+
+        var colorCounts: [Int: Int] = [:]
+        for offset in stride(from: 0, to: pixels.count, by: 4) {
+            let key = Int(pixels[offset]) << 16 | Int(pixels[offset + 1]) << 8 | Int(pixels[offset + 2])
+            colorCounts[key, default: 0] += 1
+        }
+        let dominant = colorCounts.max { $0.value < $1.value }?.key ?? 0
+        let background = [dominant >> 16 & 0xFF, dominant >> 8 & 0xFF, dominant & 0xFF]
+
+        var differing = 0
+        for offset in stride(from: 0, to: pixels.count, by: 4) {
+            let delta = (0..<3).map { abs(Int(pixels[offset + $0]) - background[$0]) }.max() ?? 0
+            if delta > 40 { differing += 1 }
+        }
+        return Double(differing) / Double(width * height)
+    }
+
     /// Taps the primary button in the onboarding flow to navigate to the next screen (excluding ToS). Only call this
     /// method when the primary action for a specific onboarding card will cause forward navigation.
     func goToNextScreenViaPrimary() {

@@ -848,7 +848,7 @@
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingrafarasöfnun";
 
 /* The title for the option to view the What's new page. */
-"Menu.WhatsNew.Title" = "Hvað er nýtt";
+"Menu.WhatsNew.Title" = "Nýtt á döfinni";
 
 /* Label for the zoom page button in the menu, used to show the Zoom Page bar. %@ shows the current zoom level in percent. */
 "Menu.ZoomPage.Title.v113" = "Aðdráttur (%@)";
@@ -1500,6 +1500,9 @@
 
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
 "Settings.Sync.ButtonTitle.v103" = "Samstilla og vista gögn";
+
+/* In the settings account row, shown transiently while the user is being signed out of their account. */
+"Settings.Sync.SigningOut.Title.v154" = "Skrái út…";
 
 /* Title for the page where the user sign in to their Firefox Sync account. */
 "Settings.Sync.SignInView.Title.v103" = "Samstilla og vista gögn";

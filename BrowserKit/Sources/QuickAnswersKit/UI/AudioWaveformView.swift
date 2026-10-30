@@ -9,7 +9,6 @@ final class AudioWaveformView: UIView, ThemeApplicable {
     private struct UX {
         static let numberOfBars = 5
         static let barWidth: CGFloat = 2.0
-        static let barSpacing: CGFloat = 4.0
         static let barCornerRadius: CGFloat = 2.0
         static let minBarHeight: CGFloat = 4.0
         static let numberOfRandomHeights = 6
@@ -19,8 +18,23 @@ final class AudioWaveformView: UIView, ThemeApplicable {
         static let heightAnimationDurationCoefficient: CFTimeInterval = 0.1
         static let stopAnimationDuration: CFTimeInterval = 0.3
         static let stopAnimationKey = "stopAnimation"
+        static let barGradientStartPoint = CGPoint(x: 0.5, y: 0.0)
+        static let barGradientEndPoint = CGPoint(x: 0.5, y: 1.0)
+        static let glowGradientStartPoint = CGPoint(x: 0.5, y: 0.5)
+        static let glowGradientEndPoint = CGPoint(x: 1.0, y: 1.0)
+        static let glowSizeMultiplier: CGFloat = 3.5
+        static let glowInnerAlpha: CGFloat = 0.2
+        static let glowMiddleAlpha: CGFloat = 0.08
+        static let glowOuterAlpha: CGFloat = 0.0
     }
-    private var barLayers: [CALayer] = []
+    private var barLayers: [CAGradientLayer] = []
+    private let backgroundGradient: CAGradientLayer = {
+        let layer = CAGradientLayer()
+        layer.type = .radial
+        layer.startPoint = UX.glowGradientStartPoint
+        layer.endPoint = UX.glowGradientEndPoint
+        return layer
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,8 +46,11 @@ final class AudioWaveformView: UIView, ThemeApplicable {
     }
 
     private func setupBars() {
+        layer.addSublayer(backgroundGradient)
         for _ in 0..<UX.numberOfBars {
-            let barLayer = CALayer()
+            let barLayer = CAGradientLayer()
+            barLayer.startPoint = UX.barGradientStartPoint
+            barLayer.endPoint = UX.barGradientEndPoint
             barLayer.cornerRadius = UX.barCornerRadius
             layer.addSublayer(barLayer)
             barLayers.append(barLayer)
@@ -50,6 +67,9 @@ final class AudioWaveformView: UIView, ThemeApplicable {
             assertionFailure("The number of bars must be greater than 1")
             return
         }
+        let size = bounds.height * UX.glowSizeMultiplier
+        let center = CGPoint(x: bounds.midX - size / 2, y: bounds.midY - size / 2)
+        backgroundGradient.frame = CGRect(origin: center, size: .init(width: size, height: size))
         // start laying out at the center of the bounds.
         let y = (bounds.height - UX.minBarHeight) / 2
 
@@ -103,6 +123,16 @@ final class AudioWaveformView: UIView, ThemeApplicable {
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
-        barLayers.forEach { $0.backgroundColor = theme.colors.iconPrimary.cgColor }
+        let gradient = [
+            theme.colors.gradientAIStrongStop1.cgColor,
+            theme.colors.gradientAIStrongStop2.cgColor,
+            theme.colors.gradientAIStrongStop3.cgColor
+        ]
+        backgroundGradient.colors = [
+            theme.colors.gradientAIStrongStop2.withAlphaComponent(UX.glowInnerAlpha).cgColor,
+            theme.colors.gradientAIStrongStop1.withAlphaComponent(UX.glowMiddleAlpha).cgColor,
+            theme.colors.gradientAIStrongStop1.withAlphaComponent(UX.glowOuterAlpha).cgColor
+        ]
+        barLayers.forEach { $0.colors = gradient }
     }
 }

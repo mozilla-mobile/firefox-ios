@@ -16,14 +16,14 @@ jobs:
     steps:
       # Step 1: Check out the repository
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
             persist-credentials: false
             token: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 2: Set up Python
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c # v4
         with:
           python-version: "3.x"
 
@@ -71,7 +71,7 @@ jobs:
 
       # Step 7: Create a Pull Request
       - name: Create a Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
         if: env.BRANCH_CREATED == 'false'
         with:
           commit-message: "Update [v${{ env.next_version }}] outdated Bitrise steps ${{ env.current_date }}"
@@ -93,7 +93,7 @@ jobs:
     steps:
       - name: Report to Slack
         id: slack
-        uses: slackapi/slack-github-action@v2.0.0
+        uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d # v2.0.0
         with:
           payload-file-path: "./test-fixtures/ci/slack-notification-payload-update-bitrise-steps.json"
           payload-templated: true

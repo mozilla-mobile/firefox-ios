@@ -14,6 +14,9 @@ public enum LoggerCategory: String {
     /// Related to setting an alternative app icon and resetting to the default app icon.
     case appIcon
 
+    /// Related to our MLPA authentication service.
+    case mlpa
+
     /// Related to address, credit card and password autofill
     case autofill
 
@@ -89,6 +92,9 @@ public enum LoggerCategory: String {
 
     /// Related to translations feature
     case translations
+
+    /// Related to VPN feature
+    case vpn
 
     /// Webview scripts, webview delegate, webserver like GCDWebserver, showing webview alerts, webview navigation
     case webview

@@ -16,20 +16,24 @@ enum FeatureFlagID: String, CaseIterable {
     case addressBarMenu
     case adsClient
     case aiKillSwitch
-    case badCertDomainErrorPage
+    case backgroundAudio
     case bookmarksSearchFeature
+    case browserDataExport
+    case browserDataImport
+    case cellularDataRestrictedErrorPage
     case customReaderModeScheme
     case deeplinkOptimizationRefactor
     case downloadLiveActivities
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case googleLens
+    case googleLensSearchInterstitial
     case hntSponsoredShortcuts
     case homepageAddShortcutTile
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
     case homepagePinnedHeader
-    case homepageSearchBar
+    case homepageAnimatedCenterSearchBar
     case homepageStoryCategories
     case homepageTrackerBlockerModule
     case hostedSummarizer
@@ -37,17 +41,22 @@ enum FeatureFlagID: String, CaseIterable {
     case hostedSummarizerToolbarEntrypoint
     case httpsUpgrade
     case improvedAppStoreReviewTriggerFeature
+    case mergeWindows
     case microsurvey
     case modernOnboardingUI
+    case multiDayOnboarding
     case nativeErrorPage
     case newBookmarkFolderTree
     case novaDesign
-    case noInternetConnectionErrorPage
+    case novaPrivateThemeOverride
     case privacyDashboard
     case quickAnswers
+    case quickAnswersOptInRedesign
     case recentSearches
     case relayIntegration
     case reportBrokenSite
+    case searchConfigV3
+    case searchTermInAddressBar
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
     case shouldUseBrandRefreshConfiguration
@@ -58,6 +67,7 @@ enum FeatureFlagID: String, CaseIterable {
     case summarizerPermissiveGuardrails
     case tabScrollRefactorFeature
     case tabTrayiPadUIExperiments
+    case tabTrayScreenshotButtonStyle
     case tabTrayTranslucency
     case tabTrayUIExperiments
     case tosFeature
@@ -69,6 +79,7 @@ enum FeatureFlagID: String, CaseIterable {
     case videoIntroOnboarding
     case vpnFeature
     case waybackMachine
+    case webViewDocumentFetchRefactor
 
     /// The user preferences key for features that support user-togglable settings.
     /// Returns `nil` for features that are not user-configurable.
@@ -87,6 +98,7 @@ enum FeatureFlagID: String, CaseIterable {
         case .sentFromFirefox: return FlagKeys.SentFromFirefox
         case .startAtHome: return FlagKeys.StartAtHome
         case .quickAnswers: return PrefsKeys.Settings.quickAnswersFeature
+        case .vpnFeature: return PrefsKeys.Settings.vpnFeature
         default: return nil
         }
     }
@@ -103,35 +115,42 @@ enum FeatureFlagID: String, CaseIterable {
                 .addressBarMenu,
                 .adsClient,
                 .aiKillSwitch,
-                .badCertDomainErrorPage,
+                .backgroundAudio,
                 .bookmarksSearchFeature,
+                .browserDataExport,
+                .browserDataImport,
                 .customReaderModeScheme,
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,
                 .googleLens,
+                .googleLensSearchInterstitial,
                 .homepageAddShortcutTile,
                 .homepagePinnedHeader,
-                .homepageSearchBar,
+                .homepageAnimatedCenterSearchBar,
                 .homepageStoryCategories,
                 .homepageTrackerBlockerModule,
                 .hostedSummarizer,
                 .httpsUpgrade,
                 .improvedAppStoreReviewTriggerFeature,
+                .mergeWindows,
                 .microsurvey,
+                .multiDayOnboarding,
                 .nativeErrorPage,
                 .newBookmarkFolderTree,
-                .novaDesign,
-                .noInternetConnectionErrorPage,
+                .novaPrivateThemeOverride,
                 .privacyDashboard,
                 .quickAnswers,
+                .quickAnswersOptInRedesign,
                 .recentSearches,
                 .relayIntegration,
                 .reportBrokenSite,
+                .searchTermInAddressBar,
                 .sentFromFirefox,
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,
                 .summarizerPermissiveGuardrails,
                 .tabScrollRefactorFeature,
+                .tabTrayScreenshotButtonStyle,
                 .tabTrayUIExperiments,
                 .touFeature,
                 .translation,
@@ -139,7 +158,8 @@ enum FeatureFlagID: String, CaseIterable {
                 .trendingSearches,
                 .unifiedSearch,
                 .vpnFeature,
-                .waybackMachine:
+                .waybackMachine,
+                .webViewDocumentFetchRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil

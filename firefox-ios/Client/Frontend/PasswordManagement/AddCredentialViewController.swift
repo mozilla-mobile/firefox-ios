@@ -18,7 +18,7 @@ enum AddCredentialField: Int {
     }
 }
 
-class AddCredentialViewController: UIViewController, Themeable {
+final class AddCredentialViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
@@ -29,8 +29,8 @@ class AddCredentialViewController: UIViewController, Themeable {
         UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft
     }
 
-    lazy var tableView: UITableView = .build { [weak self] tableView in
-        guard let self = self else { return }
+    private lazy var tableView: UITableView = .build({ [weak self] tableView in
+        guard let self else { return }
         tableView.accessibilityIdentifier = "Add Credential"
         tableView.delegate = self
         tableView.dataSource = self
@@ -38,12 +38,28 @@ class AddCredentialViewController: UIViewController, Themeable {
         // Add empty footer view to prevent separators from being drawn past the last item.
         tableView.tableFooterView = UIView()
         tableView.separatorInset = .zero
-    }
+    },
+    {
+        if #available(iOS 26.0, *) {
+            return UITableView(frame: .zero, style: .insetGrouped)
+        } else {
+            return UITableView(frame: .zero, style: .grouped)
+        }
+    })
     fileprivate weak var websiteField: UITextField?
     fileprivate weak var usernameField: UITextField?
     fileprivate weak var passwordField: UITextField?
 
     fileprivate let didSaveAction: (LoginEntry) -> Void
+
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    private func currentTheme() -> Theme {
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+    }
 
     fileprivate lazy var cancelButton: UIBarButtonItem = {
         let button = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
@@ -58,7 +74,7 @@ class AddCredentialViewController: UIViewController, Themeable {
             action: #selector(addCredential)
         )
         button.isEnabled = false
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         if #available(iOS 26.0, *) {
             button.tintColor = theme.colors.textAccent
         } else {
@@ -173,7 +189,7 @@ extension AddCredentialViewController: UITableViewDataSource {
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.usernameField,
                 isEditingFieldData: true)
             loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            loginCell.applyTheme(theme: currentTheme())
             usernameField = loginCell.descriptionLabel
             if isRTLLanguage {
                 usernameField?.textAlignment = .right
@@ -187,7 +203,7 @@ extension AddCredentialViewController: UITableViewDataSource {
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.passwordField,
                 isEditingFieldData: true)
             loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            loginCell.applyTheme(theme: currentTheme())
             passwordField = loginCell.descriptionLabel
             return loginCell
 
@@ -199,7 +215,7 @@ extension AddCredentialViewController: UITableViewDataSource {
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.websiteField,
                 isEditingFieldData: true)
             loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            loginCell.applyTheme(theme: currentTheme())
             websiteField = loginCell.descriptionLabel
             if isRTLLanguage {
                 websiteField?.textAlignment = .right
@@ -224,7 +240,7 @@ extension AddCredentialViewController: UITableViewDataSource {
     }
 
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
 

@@ -8,7 +8,7 @@ import XCTest
 @testable import Client
 
 @MainActor
-final class MicrosurveyPromptMiddlewareTests: XCTestCase {
+final class MicrosurveyPromptMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockMicrosurveyManager: MockMicrosurveySurfaceManager!
     var mockStore: MockStoreForMiddleware<AppState>!
 
@@ -113,14 +113,5 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
                 ]
             )
         )
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

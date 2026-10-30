@@ -15,7 +15,7 @@ final class IntroScreenManagerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         prefs = MockProfilePrefs()
-        let mockProfile = MockProfile(databasePrefix: "IntroScreenManagerTests_")
+        let mockProfile = makeProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
     }
 

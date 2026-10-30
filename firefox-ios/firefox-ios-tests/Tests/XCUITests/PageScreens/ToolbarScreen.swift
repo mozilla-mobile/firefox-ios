@@ -25,6 +25,12 @@ final class ToolbarScreen {
     private var translateLoadingButton: XCUIElement { sel.TRANSLATE_LOADING_BUTTON.element(in: app) }
     private var translateActiveButton: XCUIElement { sel.TRANSLATE_ACTIVE_BUTTON.element(in: app) }
     private var translateLanguageEnglishOption: XCUIElement { sel.TRANSLATE_LANGUAGE_ENGLISH_OPTION.element(in: app) }
+    private var summarizeButton: XCUIElement { sel.SUMMARIZE_BUTTON.element(in: app) }
+    private var summarizeContextualHint: XCUIElement { sel.SUMMARIZE_CONTEXTUAL_HINT.element(in: app) }
+    private var googleLensTipTitle: XCUIElement { sel.GOOGLE_LENS_TIP_TITLE.element(in: app) }
+    private var googleLensButton: XCUIElement { sel.GOOGLE_LENS_BUTTON.element(in: app) }
+    private var googleLensTakePhotoAction: XCUIElement { sel.GOOGLE_LENS_TAKE_PHOTO_ACTION.element(in: app) }
+    private var googleLensPhotoLibraryAction: XCUIElement { sel.GOOGLE_LENS_PHOTO_LIBRARY_ACTION.element(in: app) }
 
     func assertSettingsButtonExists(timeout: TimeInterval = TIMEOUT) {
         let settingsButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
@@ -77,10 +83,12 @@ final class ToolbarScreen {
         BaseTestCase().mozWaitForElementToExist(newTabButton)
     }
 
-    func assertTabsButtonValue(expectedCount: String) {
+    /// Polls before failing, as the counter settles asynchronously after a tab is added or restored.
+    func assertTabsButtonValue(expectedCount: String, message: String? = nil) {
         BaseTestCase().mozWaitForElementToExist(tabsButton)
-        let tabsButtonValue = tabsButton.value as? String
-        XCTAssertEqual(expectedCount, tabsButtonValue, "Expected \(expectedCount) open tabs after switching")
+        guard !tabsButtonHasValue(expectedCount) else { return }
+        let actual = tabsButton.value as? String ?? "none"
+        XCTFail("\(message ?? "Unexpected number of open tabs"). Expected \(expectedCount), found \(actual)")
     }
 
     func tabsButtonHasValue(_ expectedCount: String, timeout: TimeInterval = TIMEOUT) -> Bool {
@@ -150,6 +158,35 @@ final class ToolbarScreen {
         sel.RELOAD_BUTTON.element(in: app).waitAndTap()
     }
 
+    /// Long-presses Reload and taps Request Desktop/Mobile Site, retrying the press once.
+    /// Content blocker reloads swap Reload for Stop mid-press: https://github.com/mozilla-mobile/firefox-ios/issues/35933
+    func toggleRequestDesktopSiteFromReloadMenu() {
+        let requestDesktopSiteMenuItem = ContextMenuSelectors().REQUEST_DESKTOP_SITE.element(in: app)
+        longPressReloadUntilMenuItemExists(requestDesktopSiteMenuItem)
+        requestDesktopSiteMenuItem.waitAndTap()
+    }
+
+    /// Long-presses Reload and taps Reload With/Without Tracking Protection, retrying the press once.
+    /// The safelist toggle reloads the tab seconds later, mid-press: https://github.com/mozilla-mobile/firefox-ios/issues/35933
+    func reloadTrackingProtectionFromReloadMenu(expectedLabel: String) {
+        let menuItem = ContextMenuSelectors().RELOAD_TRACKING_PROTECTION.element(in: app)
+        longPressReloadUntilMenuItemExists(menuItem)
+        XCTAssertEqual(menuItem.label, expectedLabel)
+        menuItem.waitAndTap()
+    }
+
+    /// Long-presses Reload until `menuItem` shows, pressing a second time if the first press opened no menu.
+    private func longPressReloadUntilMenuItemExists(_ menuItem: XCUIElement) {
+        let reloadButton = sel.RELOAD_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(reloadButton)
+        reloadButton.press(forDuration: 1)
+        if !BaseTestCase().mozWaitForElementToExist(menuItem, timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) {
+            BaseTestCase().mozWaitForElementToExist(reloadButton)
+            reloadButton.press(forDuration: 1)
+        }
+        BaseTestCase().mozWaitForElementToExist(menuItem)
+    }
+
     func getToolbarSettingsMenuButtonElement() -> XCUIElement {
         let settingMenuButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(settingMenuButton, timeout: TIMEOUT)
@@ -176,6 +213,90 @@ final class ToolbarScreen {
 
     func tapHomeButton() {
         homeButton.waitAndTap()
+    }
+
+    // MARK: - Summarize Button
+
+    /// The button appears only once the page has been checked for summarization, which happens
+    /// asynchronously after load, hence the long default timeout.
+    func assertSummarizeButtonExists(timeout: TimeInterval = TIMEOUT_LONG) {
+        BaseTestCase().mozWaitForElementToExist(summarizeButton, timeout: timeout)
+    }
+
+    func longPressSummarizeButton() {
+        BaseTestCase().mozWaitForElementToExist(summarizeButton)
+        summarizeButton.press(forDuration: 1.5)
+    }
+
+    func assertSummarizeContextualHintIsDisplayed(timeout: TimeInterval = TIMEOUT_LONG) {
+        BaseTestCase().mozWaitForElementToExist(summarizeContextualHint, timeout: timeout)
+        XCTAssertNotNil(closeButton(nextTo: summarizeContextualHint), "The contextual hint has no \"x\" button")
+    }
+
+    func assertGoogleLensButtonExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(googleLensButton, timeout: timeout)
+    }
+
+    func assertGoogleLensButtonDoesNotExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(googleLensButton, timeout: timeout)
+    }
+
+    func tapGoogleLensButton() {
+        googleLensButton.waitAndTap()
+    }
+
+    /// The rows are counted through the identifier prefix they share, so an extra Lens action fails the count.
+    func assertGoogleLensMenuShowsOnlyPhotoOptions() {
+        let titles = String.AddressToolbar.GoogleLens.ContextMenu.self
+        BaseTestCase().waitForElementsToExist([googleLensPhotoLibraryAction, googleLensTakePhotoAction])
+        XCTAssertEqual(googleLensPhotoLibraryAction.label, titles.PhotoLibraryActionTitle)
+        XCTAssertEqual(googleLensTakePhotoAction.label, titles.TakePhotoActionTitle)
+        XCTAssertEqual(
+            sel.GOOGLE_LENS_MENU_ACTIONS.query(in: app).count,
+            2,
+            "The Google Lens menu should have exactly two rows"
+        )
+    }
+
+    /// TipKit shows this tip once per simulator, the first time the address bar is focused, and it stays
+    /// up after the page loads, which keeps other contextual hints from being presented.
+    /// Returns whether the tip was dismissed.
+    @discardableResult
+    func dismissGoogleLensTipIfPresented() -> Bool {
+        guard googleLensTipTitle.mozWaitForElementToExist(timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) else {
+            return false
+        }
+        // The iPad popover ignores taps on its "x", so fall back to tapping outside the tip
+        closeButton(nextTo: googleLensTipTitle)?.tap()
+        if !BaseTestCase().mozWaitForElementToNotExist(googleLensTipTitle,
+                                                       timeout: TIMEOUT_PICKER_PROBE,
+                                                       failOnTimeout: false) {
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.02, dy: 0.5)).tap()
+            BaseTestCase().mozWaitForElementToNotExist(googleLensTipTitle)
+        }
+        return true
+    }
+
+    /// Tapping the hint's text leaves it open, so it is closed with its "x" button.
+    func closeSummarizeContextualHint() {
+        BaseTestCase().mozWaitForElementToExist(summarizeContextualHint)
+        closeButton(nextTo: summarizeContextualHint)?.tap()
+    }
+
+    /// iPad tabs and the address bar also have "Close" buttons, so pick the nearest one on the
+    /// hint's text rows, to the right of the text.
+    private func closeButton(nextTo text: XCUIElement) -> XCUIElement? {
+        let textFrame = text.frame
+        return sel.CONTEXTUAL_HINT_CLOSE_BUTTON.query(in: app).allElementsBoundByIndex
+            .filter { button in
+                let center = CGPoint(x: button.frame.midX, y: button.frame.midY)
+                return center.x > textFrame.minX && (textFrame.minY...textFrame.maxY).contains(center.y)
+            }
+            .min { abs($0.frame.midX - textFrame.maxX) < abs($1.frame.midX - textFrame.maxX) }
+    }
+
+    func assertSummarizeContextualHintIsDismissed() {
+        BaseTestCase().mozWaitForElementToNotExist(summarizeContextualHint)
     }
 
     // MARK: - Translate Button

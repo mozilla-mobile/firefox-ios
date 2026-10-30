@@ -90,8 +90,8 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, @unchecked Send
                 return
             }
 
-            getBookmarksAsSites(matchingSearchQuery: query, limit: 5) { bookmarks in
-                ensureMainThread { [weak self] in
+            getBookmarksAsSites(matchingSearchQuery: query, limit: 5) { [weak self] bookmarks in
+                ensureMainThread {
                     guard let self else { return }
                     let query = self.query
                     self.getHistoryAsSites(matchingSearchQuery: query, limit: 100) { history in

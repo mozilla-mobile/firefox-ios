@@ -21,7 +21,7 @@ final class ManageFxAccountSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
+        let theme = settings.currentTheme()
         super.init(
             title: NSAttributedString(
                 string: .FxAManageAccount,
@@ -35,8 +35,8 @@ final class ManageFxAccountSetting: Setting {
             forName: .accountLoggedOut,
             object: nil,
             queue: .main
-        ) { _ in
-            ensureMainThread { [weak settings] in
+        ) { [weak settings] _ in
+            ensureMainThread {
                 settings?.dismiss(animated: true, completion: nil)
             }
         }
@@ -67,8 +67,10 @@ final class ManageFxAccountSetting: Setting {
     }
 }
 
-class DisconnectSetting: Setting {
-    let settingsVC: SettingsTableViewController
+final class DisconnectSetting: Setting {
+    // `unowned` is chosen here because the setting can't outlive the VC that owns it.
+    // It skips the optional unwrapping that `weak` would require.
+    unowned let settingsVC: SettingsTableViewController
     let profile: Profile?
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
 
@@ -185,10 +187,21 @@ class DeviceNameSetting: StringSetting {
     }
 }
 
-class SyncContentSettingsViewController: SettingsTableViewController {
+final class SyncContentSettingsViewController: SettingsTableViewController {
     fileprivate var enginesToSyncOnExit: Set<String> = Set()
 
-    init(windowUUID: WindowUUID) {
+    /// Keep the private theme override just for Settings, since this is also presented from MainMenu.
+    private let _shouldUsePrivateOverride: Bool
+    override var shouldUsePrivateOverride: Bool { return _shouldUsePrivateOverride }
+    override var shouldBeInPrivateTheme: Bool { return false }
+
+    init(windowUUID: WindowUUID, referringPage: ReferringPage = .settings) {
+        switch referringPage {
+        case .settings:
+            self._shouldUsePrivateOverride = true
+        case .appMenu, .none, .onboarding, .tabTray, .library:
+            self._shouldUsePrivateOverride = false
+        }
         super.init(style: .grouped, windowUUID: windowUUID)
 
         self.title = .FxASettingsTitle

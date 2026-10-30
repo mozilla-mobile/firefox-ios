@@ -23,7 +23,7 @@
 "NSPhotoLibraryAddUsageDescription" = "Hér getur þú vistað myndir.";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Firefox notar talgreiningu til að breyta rödd þinni í texta fyrir raddleit.";
+"NSSpeechRecognitionUsageDescription" = "Þetta gerir Firefox kleift að umrita hljóðið þitt.";
 
 /* (No Comment) */
 "Scan QR Code" = "Skanna QR-kóða";

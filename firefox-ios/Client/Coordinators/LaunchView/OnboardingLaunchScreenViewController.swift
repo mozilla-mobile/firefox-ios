@@ -68,7 +68,7 @@ class OnboardingLaunchScreenViewController: UIViewController,
     }
 
     override var prefersStatusBarHidden: Bool {
-        return true
+        return false
     }
 
     override var shouldAutorotate: Bool {

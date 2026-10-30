@@ -1,6 +1,6 @@
 /* Text displayed above the input field when changing the existing passcode */
-"Enter passcode" = "पासकोड दर्ज करें";
+"Enter passcode" = "पासकोड डालें";
 
 /* Touch ID prompt subtitle when accessing logins */
-"Use your fingerprint to access Logins now." = "अब लॉगिन करने के लिए अपने फिंगरप्रिंट का उपयोग करें।";
+"Use your fingerprint to access Logins now." = "लॉगिन एक्सेस करने के लिए अब अपने फ़िंगरप्रिंट का इस्तेमाल करें।";
 

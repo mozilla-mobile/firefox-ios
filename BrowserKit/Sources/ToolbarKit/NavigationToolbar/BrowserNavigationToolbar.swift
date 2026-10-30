@@ -71,10 +71,12 @@ public final class BrowserNavigationToolbar: UIView,
             toolbarBorderView.topAnchor.constraint(equalTo: topAnchor),
             toolbarBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
-            actionStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalEdgeSpace),
+            actionStack.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
+                                                 constant: UX.horizontalEdgeSpace),
             actionStack.topAnchor.constraint(equalTo: toolbarBorderView.bottomAnchor),
             actionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
-            actionStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalEdgeSpace),
+            actionStack.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
+                                                  constant: -UX.horizontalEdgeSpace),
         ])
 
         setupAccessibility()
@@ -109,6 +111,10 @@ public final class BrowserNavigationToolbar: UIView,
 
             return button
         }
+
+        // Buttons are cached and reused, so the stack often ends up with the exact same arrangement.
+        // Tearing it down and rebuilding it in that case only invalidates layout for no visible change.
+        guard !actionStack.arrangedSubviews.elementsEqual(buttons, by: { $0 === $1 }) else { return }
 
         actionStack.removeAllArrangedViews()
 

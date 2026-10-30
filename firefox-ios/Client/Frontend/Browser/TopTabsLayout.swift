@@ -12,8 +12,6 @@ protocol TopTabsScrollDelegate: AnyObject {
 class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     struct UX {
         static let separatorWidth: CGFloat = 1
-        @MainActor
-        static let minTabWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 130 : 76
         static let maxTabWidth: CGFloat = 220
     }
 
@@ -37,7 +35,8 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         let items = collectionView.numberOfItems(inSection: 0)
         var width = collectionView.frame.width / CGFloat(items)
-        width = max(UX.minTabWidth, min(width, UX.maxTabWidth))
+        let minTabWidth: CGFloat = collectionView.traitCollection.horizontalSizeClass == .regular ? 130 : 76
+        width = max(minTabWidth, min(width, UX.maxTabWidth))
         return CGSize(width: width, height: collectionView.frame.height)
     }
 

@@ -4,14 +4,14 @@
 
 import XCTest
 
-let testBasicHTTPAuthURL = "https://jigsaw.w3.org/HTTP/Basic/"
+let testBasicHTTPAuthURL = "https://httpbin.org/basic-auth/guest/guest"
 
 class AuthenticationTest: BaseTestCase {
     let username = "Username"
     let password = "Password"
     // https://mozilla.testrail.io/index.php?/cases/view/2360560
+    // Regression
     func testBasicHTTPAuthenticationPromptVisibleAndLogin() {
-        let browserScreen = BrowserScreen(app: app)
         navigator.openURL(testBasicHTTPAuthURL)
         waitUntilPageLoad()
 
@@ -21,10 +21,8 @@ class AuthenticationTest: BaseTestCase {
             app.buttons["TabLocationView.reloadButton"].waitAndTap()
             waitUntilPageLoad()
         }
-        browserScreen.tapWebViewTextIfExists(text: "Verify you are human")
-        waitUntilPageLoad()
         mozWaitForElementToExist(app.staticTexts[
-            "A username and password are being requested by jigsaw.w3.org. The site says: test"
+            "A username and password are being requested by httpbin.org. The site says: Fake Realm"
         ])
         let placeholderValueUsername = app.alerts.textFields.element(boundBy: 0)
         let placeholderValuePassword = app.alerts.secureTextFields.element(boundBy: 0)
@@ -51,7 +49,9 @@ class AuthenticationTest: BaseTestCase {
             logIn()
             waitUntilPageLoad()
         }
-        mozWaitForElementToExist(app.webViews["Web content"].staticTexts["Your browser made it!"])
+        mozWaitForElementToExist(
+            app.webViews["Web content"].staticTexts.containingText("\"authenticated\": true").element
+        )
     }
 
     private func logIn() {

@@ -170,6 +170,11 @@ final class RemoteTabsPanel: UIViewController,
         return false
     }
 
+    /// This override predates the Nova implementation and must remain unchanged.
+    var isSubjectToNovaPrivateOverride: Bool {
+        return false
+    }
+
     // MARK: - TabTrayThemeable
 
     func retrieveTheme() -> Theme {
@@ -237,6 +242,10 @@ final class RemoteTabsPanel: UIViewController,
     }
 
     // MARK: - RemotePanelDelegate
+    func remotePanelDidRequestToRefreshTabs() {
+        refreshTabs()
+    }
+
     func remotePanelDidRequestToSignIn() {
         remoteTabsDelegate?.presentFirefoxAccountSignIn()
     }

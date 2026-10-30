@@ -16,6 +16,7 @@ final class LocationView: UIView,
         static let gradientViewWidth: CGFloat = 40
         static let safeOffset: CGFloat = 40
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
+        static let searchIconImageViewSize = CGSize(width: 20, height: 16)
         static let shieldImageViewSize = CGSize(width: 24, height: 24)
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
         static let iconAnimationTime: CGFloat = 0.1
@@ -32,8 +33,8 @@ final class LocationView: UIView,
 
     private var urlAbsolutePath: String?
     private var searchTerm: String?
+    private var shouldDisplaySearchTerm = false
     private var onTapLockIcon: (@MainActor (UIButton) -> Void)?
-    private var onLongPress: (@MainActor () -> Void)?
     private weak var delegate: LocationViewDelegate?
     private var theme: any Theme = LightTheme()
     private var isUnifiedSearchEnabled = false
@@ -48,6 +49,9 @@ final class LocationView: UIView,
     private var isURLTextFieldEmpty: Bool {
         urlTextField.text?.isEmpty == true
     }
+    private var isDisplayingSearchTerm: Bool {
+        !isEditing && shouldDisplaySearchTerm && searchTerm != nil
+    }
     private var hasHomeIndicator: Bool {
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
               let window = windowScene.windows.first else { return false }
@@ -55,7 +59,6 @@ final class LocationView: UIView,
     }
 
     private var tapGestureRecognizer: UITapGestureRecognizer?
-    private var longPressGestureRecognizer: UILongPressGestureRecognizer?
 
     /// Determines if the URL text field's content is wider than the visible area, accounting for a safe offset.
     /// An additional offset (default is 0) used when reader mode is available,
@@ -64,9 +67,9 @@ final class LocationView: UIView,
         guard let text = urlTextField.text, let font = urlTextField.font, !isAddressBarMinimized else {
             return false
         }
-        let (_, normalizedHost) = URL.getSubdomainAndHost(from: text)
+        let displayedText = isDisplayingSearchTerm ? text : URL.getSubdomainAndHost(from: text).normalizedHost
         let locationViewVisibleWidth = frame.width - iconContainerStackView.frame.width - UX.horizontalSpace - offset
-        let urlTextFieldWidth = normalizedHost.size(withAttributes: [.font: font]).width
+        let urlTextFieldWidth = displayedText.size(withAttributes: [.font: font]).width
 
         return urlTextFieldWidth >= locationViewVisibleWidth
     }
@@ -87,9 +90,10 @@ final class LocationView: UIView,
     private var urlTextFieldTrailingConstraint: NSLayoutConstraint?
     private var iconContainerStackViewLeadingConstraint: NSLayoutConstraint?
     private var lockIconWidthAnchor: NSLayoutConstraint?
+    private var searchIconWidthAnchor: NSLayoutConstraint?
 
     // MARK: - Search Engine / Lock Image
-    private lazy var iconContainerStackView: UIStackView = .build { view in
+    private(set) lazy var iconContainerStackView: UIStackView = .build { view in
         view.alignment = .center
     }
 
@@ -97,10 +101,19 @@ final class LocationView: UIView,
     // and we can remove `PlainSearchEngineView` from the project.
     private lazy var plainSearchEngineView: PlainSearchEngineView = .build()
     private lazy var dropDownSearchEngineView: DropDownSearchEngineView = .build()
-    private lazy var searchEngineContentView: SearchEngineView = plainSearchEngineView
-    private lazy var lockIconButton: UIButton = .build { button in
+    private(set) lazy var searchEngineContentView: SearchEngineView = plainSearchEngineView
+    private(set) lazy var lockIconButton: UIButton = .build { button in
         button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(self.didTapLockIcon), for: .touchUpInside)
+    }
+
+    /// Shown in place of the shield icon when the location view displays a search term instead of a URL.
+    private(set) lazy var searchIconImageView: UIImageView = .build { imageView in
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.search)?.withRenderingMode(.alwaysTemplate)
+        imageView.contentMode = .scaleAspectFit
+        imageView.isAccessibilityElement = false
+        imageView.heightAnchor.constraint(equalToConstant: UX.searchIconImageViewSize.height).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: UX.searchIconImageViewSize.width).isActive = true
     }
 
     private lazy var glassEffect: UIVisualEffect? = if #available(iOS 26.0, *) { UIGlassEffect() } else { nil }
@@ -109,7 +122,7 @@ final class LocationView: UIView,
     }
 
     // MARK: - URL Text Field
-    private lazy var urlTextField: LocationTextField = .build { [self] urlTextField in
+    private(set) lazy var urlTextField: LocationTextField = .build { [self] urlTextField in
         urlTextField.backgroundColor = .clear
         urlTextField.font = FXFontStyles.Regular.body.scaledFont()
         urlTextField.adjustsFontForContentSizeCategory = true
@@ -134,7 +147,6 @@ final class LocationView: UIView,
         super.init(frame: .zero)
         setupLayout()
         setupGradientLayer()
-        addLongPressGestureRecognizer()
     }
 
     required init?(coder: NSCoder) {
@@ -142,16 +154,17 @@ final class LocationView: UIView,
     }
 
     override func becomeFirstResponder() -> Bool {
-        super.becomeFirstResponder()
         // Skip if urlTextField is already first responder to avoid triggering duplicate delegate callbacks
         guard !urlTextField.isFirstResponder else { return true }
+        urlTextField.isUserInteractionEnabled = true
+        super.becomeFirstResponder()
         return urlTextField.becomeFirstResponder()
     }
 
     override func resignFirstResponder() -> Bool {
-        super.resignFirstResponder()
         // Skip if urlTextField has already resigned to avoid redundant state changes
         guard urlTextField.isFirstResponder else { return true }
+        super.resignFirstResponder()
         return urlTextField.resignFirstResponder()
     }
 
@@ -162,10 +175,10 @@ final class LocationView: UIView,
         configureURLPlaceholder(basedOn: config)
         setTextFieldPlaceholder(color: theme.colors.textPrimary)
         urlTextField.text = config.url?.absoluteString
+        formatAndTruncateURLTextField()
         updateIconContainer(isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
         layoutContainerView(isEditing: config.isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
-        formatAndTruncateURLTextField()
     }
 
     func configure(_ config: LocationViewConfiguration,
@@ -206,15 +219,8 @@ final class LocationView: UIView,
         updateIconContainer(isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
         handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
-        handleGesture(
-            &longPressGestureRecognizer,
-            type: UILongPressGestureRecognizer.self,
-            action: #selector(handleLongPress)
-        )
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
-        searchTerm = config.searchTerm
-        onLongPress = config.onLongPress
 
         layoutContainerView(isEditing: config.isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
         applyTheme(theme: theme)
@@ -327,7 +333,8 @@ final class LocationView: UIView,
     }
 
     private func updateGradient() {
-        let showGradientForLongURL = isNormalizedHostWiderThanVisibleArea() && !isEditing
+        // A displayed search term truncates at the tail, so the leading gradient used for long hosts is not needed.
+        let showGradientForLongURL = isNormalizedHostWiderThanVisibleArea() && !isEditing && !isDisplayingSearchTerm
         gradientView.isHidden = !showGradientForLongURL
         // Use the containerView height since gradient's view height could be still not updated here
         // This can avoid to call containerView.layoutIfNeeded() which is an expensive call.
@@ -336,7 +343,7 @@ final class LocationView: UIView,
     }
 
     private func updateURLTextFieldLeadingConstraintBasedOnState() {
-        let shouldAdjustForOverflow = isNormalizedHostWiderThanVisibleArea() && !isEditing
+        let shouldAdjustForOverflow = isNormalizedHostWiderThanVisibleArea() && !isEditing  && !isDisplayingSearchTerm
         let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isEditing
 
         func handleOverflowAdjustment() {
@@ -362,8 +369,12 @@ final class LocationView: UIView,
         urlTextFieldLeadingConstraint?.constant = constant
     }
 
-    private func removeContainerIcons() {
+    /// Rebuilds the icon container only when its arrangement actually changes. `configure` runs on every
+    /// toolbar state update, and tearing the stack down to re-add the same icon just invalidates layout.
+    private func setContainerIcons(_ icons: [UIView]) {
+        guard !iconContainerStackView.arrangedSubviews.elementsEqual(icons, by: { $0 === $1 }) else { return }
         iconContainerStackView.removeAllArrangedViews()
+        icons.forEach { iconContainerStackView.addArrangedSubview($0) }
     }
 
     private func updateIconContainer(isURLTextFieldCentered: Bool,
@@ -378,55 +389,80 @@ final class LocationView: UIView,
         if isURLTextFieldEmpty {
             updateUIForSearchEngineDisplay(isURLTextFieldCentered: isURLTextFieldCentered)
         } else {
-            updateUIForLockIconDisplay()
+            updateUIForPageIconDisplay()
         }
         animateIconAppearance()
         urlTextFieldTrailingConstraint?.constant = -locationTextFieldTrailingPadding
     }
 
     private func animateIconAppearance() {
-        let shouldShowLockIcon: Bool
         if isEditing {
             lockIconButton.alpha = 0
-            shouldShowLockIcon = false
-        } else if isURLTextFieldEmpty {
-            shouldShowLockIcon = false
-        } else if lockIconImageName == nil {
-            shouldShowLockIcon = false
-        } else {
-            shouldShowLockIcon = true
+            searchIconImageView.alpha = 0
         }
+        let hasPageContent = !isEditing && !isURLTextFieldEmpty
+        let shouldShowSearchIcon = hasPageContent && isDisplayingSearchTerm
+        let shouldShowLockIcon = hasPageContent && !isDisplayingSearchTerm && lockIconImageName != nil
+
+        let searchEngineAlpha: CGFloat = (shouldShowLockIcon || shouldShowSearchIcon) ? 0 : 1
+        let lockIconAlpha: CGFloat = shouldShowLockIcon ? 1 : 0
+        let searchIconAlpha: CGFloat = shouldShowSearchIcon ? 1 : 0
+
+        // Skip the animation when all icons already sit at their target alpha, otherwise every toolbar
+        // state update kicks off an animation block that has nothing to animate.
+        guard searchEngineContentView.alpha != searchEngineAlpha
+                || lockIconButton.alpha != lockIconAlpha
+                || searchIconImageView.alpha != searchIconAlpha
+        else { return }
 
         let isAnimationEnabled = !UIAccessibility.isReduceMotionEnabled
         if isAnimationEnabled {
             UIView.animate(withDuration: UX.iconAnimationTime, delay: UX.iconAnimationDelay) {
-                self.searchEngineContentView.alpha = shouldShowLockIcon ? 0 : 1
-                self.lockIconButton.alpha = shouldShowLockIcon ? 1 : 0
+                self.searchEngineContentView.alpha = searchEngineAlpha
+                self.lockIconButton.alpha = lockIconAlpha
+                self.searchIconImageView.alpha = searchIconAlpha
             }
         } else {
-            searchEngineContentView.alpha = shouldShowLockIcon ? 0 : 1
-            lockIconButton.alpha = shouldShowLockIcon ? 1 : 0
+            searchEngineContentView.alpha = searchEngineAlpha
+            lockIconButton.alpha = lockIconAlpha
+            searchIconImageView.alpha = searchIconAlpha
         }
     }
 
     private func updateUIForSearchEngineDisplay(isURLTextFieldCentered: Bool) {
-        removeContainerIcons()
-        if !isURLTextFieldCentered || isEditing {
-            iconContainerStackView.addArrangedSubview(searchEngineContentView)
-        }
+        let shouldShowSearchEngine = !isURLTextFieldCentered || isEditing
+        setContainerIcons(shouldShowSearchEngine ? [searchEngineContentView] : [])
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
         iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
         updateGradient()
     }
 
+    /// Shows the search icon when a search term is displayed, otherwise the TP icon.
+    private func updateUIForPageIconDisplay() {
+        if isDisplayingSearchTerm {
+            updateUIForSearchIconDisplay()
+        } else {
+            updateUIForLockIconDisplay()
+        }
+    }
+
+    private func updateUIForSearchIconDisplay() {
+        guard !isEditing else { return }
+        setContainerIcons([searchIconImageView])
+
+        updateURLTextFieldLeadingConstraintBasedOnState()
+        iconContainerStackViewLeadingConstraint?.constant = 0
+        updateGradient()
+    }
+
     private func updateUIForLockIconDisplay() {
         guard !isEditing else { return }
-        removeContainerIcons()
-        iconContainerStackView.addArrangedSubview(lockIconButton)
+        setContainerIcons([lockIconButton])
 
         updateURLTextFieldLeadingConstraintBasedOnState()
 
-        let leadingConstraint = lockIconImageName == nil ? UX.iconContainerNoLockLeadingSpace : 0.0
+        let noLockLeadingSpace = isURLTextFieldCentered ? UX.shieldImageViewSize.width : UX.iconContainerNoLockLeadingSpace
+        let leadingConstraint = lockIconImageName == nil ? noLockLeadingSpace : 0.0
         iconContainerStackViewLeadingConstraint?.constant = leadingConstraint
         updateGradient()
     }
@@ -461,7 +497,7 @@ final class LocationView: UIView,
     }
 
     private func restoreLocationViewSize() {
-        urlTextField.isUserInteractionEnabled = true
+        urlTextField.isUserInteractionEnabled = isEditing
         isUserInteractionEnabled = true
         UIView.animate(
             withDuration: UX.identityResetAnimationDuration,
@@ -510,7 +546,14 @@ final class LocationView: UIView,
         urlTextField.editingAccessoryAction = configurationIsEditing ?
             config.editingAccessoryAction :
             nil
-        _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
+        // Only touch the responder chain when the state actually changes.
+        if shouldShowKeyboard {
+            if !urlTextField.isFirstResponder {
+                _ = becomeFirstResponder()
+            }
+        } else if urlTextField.isFirstResponder {
+            _ = resignFirstResponder()
+        }
 
         // Remove the default drop interaction from the URL text field so that our
         // custom drop interaction on the BVC can accept dropped URLs.
@@ -546,6 +589,7 @@ final class LocationView: UIView,
 
     private func configureURLPlaceholder(basedOn config: LocationViewConfiguration) {
         isEditing = config.isEditing
+        urlTextField.isUserInteractionEnabled = isEditing && !isAddressBarMinimized
         if !isEditing && config.url != nil {
             // allow proper centering of the urlTextField removing placeholder size.
             urlTextField.placeholder = nil
@@ -553,10 +597,13 @@ final class LocationView: UIView,
             urlTextField.placeholder = config.urlTextFieldPlaceholder
         }
         urlAbsolutePath = config.url?.absoluteString
+        searchTerm = config.searchTerm
+        shouldDisplaySearchTerm = config.shouldDisplaySearchTerm
     }
 
     /// Updates the URL text field (when not editing) by:
-    /// - Extracting the subdomain and normalized host.
+    /// - Showing the search term, truncated from the tail, when one is displayed in place of the URL.
+    /// - Otherwise extracting the subdomain and normalized host.
     /// - Applying primary color to the host and secondary color to the subdomain.
     /// - Truncating from the head if the text is too long.
     /// - Setting the styled result as the text field's attributed text.
@@ -564,15 +611,24 @@ final class LocationView: UIView,
         guard !isEditing else { return }
 
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineBreakMode = .byTruncatingHead
+        paragraphStyle.lineBreakMode = .byTruncatingTail
+
+        let (primaryColor, secondaryColor) = getPrimaryAndSecondaryColors()
+
+        if shouldDisplaySearchTerm, let searchTerm {
+            urlTextField.attributedText = NSAttributedString(
+                string: searchTerm,
+                attributes: [.foregroundColor: primaryColor, .paragraphStyle: paragraphStyle])
+            return
+        }
 
         let urlString = urlAbsolutePath ?? ""
         let (subdomain, normalizedHost) = URL.getSubdomainAndHost(from: urlString)
 
-        let (primaryColor, secondaryColor) = getPrimaryAndSecondaryColors()
         let attributedString = NSMutableAttributedString(
             string: normalizedHost,
             attributes: [.foregroundColor: primaryColor])
+        paragraphStyle.lineBreakMode = .byTruncatingHead
 
         if let subdomain {
             let range = NSRange(location: 0, length: subdomain.count)
@@ -615,9 +671,7 @@ final class LocationView: UIView,
 
         if let safeListedURLImageName {
             if theme.isNova {
-                let shieldDotImageName = theme.type == .light
-                    ? StandardImageIdentifiers.Medium.shieldCheckmarkDotFillMulticolorLight
-                    : StandardImageIdentifiers.Medium.shieldCheckmarkDotFillMulticolorDark
+                let shieldDotImageName = StandardImageIdentifiers.Medium.shieldCheckmarkDotFillMulticolor
                 lockIconButton.setImage(UIImage(named: shieldDotImageName), for: .normal)
                 return
             }
@@ -645,17 +699,12 @@ final class LocationView: UIView,
     }
 
     // MARK: - Gesture Recognizers
-    private func addLongPressGestureRecognizer() {
-        let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(LocationView.handleLongPress))
-        urlTextField.addGestureRecognizer(gestureRecognizer)
-    }
-
     private func handleGesture<T: UIGestureRecognizer>(
         _ gesture: inout T?,
         type: T.Type,
         action: Selector
     ) {
-        if isURLTextFieldCentered {
+        if !isEditing || isURLTextFieldCentered {
             if gesture == nil {
                 let newGesture = type.init(target: self, action: action)
                 addGestureRecognizer(newGesture)
@@ -671,13 +720,6 @@ final class LocationView: UIView,
     @objc
     private func didTapLockIcon() {
         onTapLockIcon?(lockIconButton)
-    }
-
-    @objc
-    private func handleLongPress(_ recognizer: UILongPressGestureRecognizer) {
-        if recognizer.state == .began {
-            onLongPress?()
-        }
     }
 
     // MARK: - MenuHelperURLBarInterface
@@ -722,6 +764,7 @@ final class LocationView: UIView,
 
     func locationTextFieldDidBeginEditing(_ textField: UITextField) {
         guard !isEditing else { return }
+
         updateUIForSearchEngineDisplay(isURLTextFieldCentered: isURLTextFieldCentered)
         let searchText = searchTerm != nil ? searchTerm : urlAbsolutePath
 
@@ -736,7 +779,7 @@ final class LocationView: UIView,
         if isURLTextFieldEmpty {
             updateGradient()
         } else {
-            updateUIForLockIconDisplay()
+            updateUIForPageIconDisplay()
         }
     }
 
@@ -746,6 +789,10 @@ final class LocationView: UIView,
 
     func locationTextFieldDidDisplayEditingAccessoryButton(_ button: UIButton, contextualHintType: String) {
         delegate?.locationViewDidDisplayEditingAccessoryButton(button, contextualHintType: contextualHintType)
+    }
+
+    func locationTextFieldDidHideEditingAccessoryButton() {
+        delegate?.locationViewDidHideEditingAccessoryButton()
     }
 
     // MARK: - Accessibility
@@ -766,8 +813,17 @@ final class LocationView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         let colors = theme.colors
-        let usesAlternativeLocationColor = !theme.isNova && hasAlternativeLocationColor
-        let mainBackgroundColor = usesAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
+
+        var mainBackgroundColor = hasAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
+
+        if theme.isNova {
+            // for Nova themes we want to use the alternative color for both top and bottom toolbar
+            mainBackgroundColor = if #unavailable(iOS 26) {
+                colors.layerSurfaceMediumAlt
+            } else {
+                colors.layerSurfaceMediumAltGlass
+            }
+        }
         let (primaryColor, secondaryColor) = getPrimaryAndSecondaryColors()
 
         gradientLayer.colors = Gradient(
@@ -779,6 +835,7 @@ final class LocationView: UIView,
         searchEngineContentView.applyTheme(theme: theme)
         lockIconButton.tintColor = secondaryColor
         lockIconButton.backgroundColor = isAddressBarMinimized ? nil : mainBackgroundColor
+        searchIconImageView.tintColor = secondaryColor
         urlTextField.applyTheme(theme: theme)
         urlTextField.textColor = primaryColor
         setTextFieldPlaceholder(color: colors.textPrimary)

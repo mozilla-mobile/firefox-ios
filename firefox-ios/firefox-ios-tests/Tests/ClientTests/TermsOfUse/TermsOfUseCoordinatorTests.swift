@@ -24,7 +24,7 @@ final class TermsOfUseCoordinatorTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
         router = MockRouter(navigationController: MockNavigationController())
         notificationCenter = MockNotificationCenter()
         setupNimbusTouFeatureForTesting(isEnabled: true, maxRemindersCount: 5)

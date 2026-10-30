@@ -14,7 +14,7 @@ class TabCellTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         cellDelegate = MockTabCellDelegate()
-        profile = MockProfile()
+        profile = makeProfile()
     }
 
     override func tearDown() async throws {

@@ -13,6 +13,7 @@ class FirefoxSuggestTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2360075
+    // Regression
     func testFirefoxSuggestExists() {
         // Firefox Suggest only appears once a search has been performed for the same text,
         // so perform the search first and then search again with the same text.

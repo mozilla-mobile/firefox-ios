@@ -17,6 +17,11 @@ final class UserTelemetryTests: XCTestCase {
         mockGleanWrapper = MockGleanWrapper()
     }
 
+    override func tearDown() {
+        mockGleanWrapper = nil
+        super.tearDown()
+    }
+
     func testSetFirefoxAccountID_recordsData() throws {
         let metric = GleanMetrics.UserClientAssociation.uid
         let expectedValue = mockFirefoxAccountId

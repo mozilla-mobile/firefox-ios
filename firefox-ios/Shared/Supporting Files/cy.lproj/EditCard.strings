@@ -2,7 +2,7 @@
 "CreditCard.EditCard.AddCreditCardTitle.v122" = "Ychwanegu Cerdyn";
 
 /* Button label for cancelling editing of the credit card details shown in the form */
-"CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "Diddymu";
+"CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "Na";
 
 /* Title label for user to input their credit card Expiration date in the format MM / YY printed on their credit card in the text box below. */
 "CreditCard.EditCard.CardExpirationDateTitle.v112" = "Daw i ben MM / BB";

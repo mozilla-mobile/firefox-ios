@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 import Common
+import TabDataStore
 import XCTest
 
 @testable import Client
@@ -122,7 +123,7 @@ class MockTabManager: TabManager {
     func expireLoginAlerts() {}
 
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
-        return Tab(profile: MockProfile(), windowUUID: windowUUID)
+        return Tab(profile: profile, windowUUID: windowUUID)
     }
 
     func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],
@@ -133,11 +134,18 @@ class MockTabManager: TabManager {
     func addTab(_ request: URLRequest?,
                 afterTab: Tab?,
                 zombie: Bool,
-                isPrivate: Bool
+                isPrivate: Bool,
+                groupID: TabGroupID?
     ) -> Tab {
         addTabWasCalled = true
         let isHomePage = request?.url?.absoluteString == "internal://local/about/home"
-        return MockTab(profile: MockProfile(), isPrivate: isPrivate, windowUUID: windowUUID, isHomePage: isHomePage)
+        return MockTab(
+            profile: MockProfile.unmanaged(),
+            isPrivate: isPrivate,
+            groupID: groupID,
+            windowUUID: windowUUID,
+            isHomePage: isHomePage
+        )
     }
 
     func backgroundRemoveAllTabs(isPrivate: Bool,
@@ -159,8 +167,37 @@ class MockTabManager: TabManager {
     }
     func offloadBackgroundWebViews() async {}
 
+    var tearDownWebViewsForProxyChangeCalled = 0
+    func tearDownWebViewsForProxyChange() async {
+        tearDownWebViewsForProxyChangeCalled += 1
+    }
+
+    var restoreSelectedTabForProxyChangeCalled = 0
+    func restoreSelectedTabForProxyChange() {
+        restoreSelectedTabForProxyChangeCalled += 1
+    }
+
     var restoreScreenshotCalls: [Tab] = []
     func restoreScreenshot(for tab: Tab) {
         restoreScreenshotCalls.append(tab)
+    }
+
+    var tabDataForWindowMergeResult: [TabData] = []
+    var tabDataForWindowMergeCalled = 0
+    func tabDataForWindowMerge() -> [TabData] {
+        tabDataForWindowMergeCalled += 1
+        return tabDataForWindowMergeResult
+    }
+
+    var addedWindowMergeTabData: [TabData] = []
+    var addTabsFromWindowMergeCalled = 0
+    func addTabs(fromWindowMergeData tabDataList: [TabData]) {
+        addTabsFromWindowMergeCalled += 1
+        addedWindowMergeTabData = tabDataList
+    }
+
+    var discardTabsMovedToAnotherWindowCalled = 0
+    func discardTabsMovedToAnotherWindow() {
+        discardTabsMovedToAnotherWindowCalled += 1
     }
 }

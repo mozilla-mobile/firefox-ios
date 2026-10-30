@@ -39,6 +39,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323463
+    // Regression
     func testFindInLargeDoc() {
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
         waitUntilPageLoad()
@@ -139,6 +140,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323801
+    // Regression
     func testQueryWithNoMatches() {
         userState.url = path(forTestPage: TestPages.mozillaBook)
         openFindInPageFromMenu(openSite: userState.url!)
@@ -154,6 +156,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323802
+    // Regression
     func testBarDisappearsWhenReloading() {
         userState.url = path(forTestPage: TestPages.mozillaBook)
         openFindInPageFromMenu(openSite: userState.url!)
@@ -195,6 +198,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323467
+    // Regression
     func testFindFromLongTap() {
         userState.url = path(forTestPage: TestPages.mozillaBook)
         openFindInPageFromMenu(openSite: userState.url!)

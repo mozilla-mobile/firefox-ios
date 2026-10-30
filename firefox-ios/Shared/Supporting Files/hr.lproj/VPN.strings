@@ -1,0 +1,60 @@
+/* Body text of the system notification telling the user their free monthly VPN data has reset. */
+"VPN.DataLimitRefreshNotification.Body.v160" = "Tvoji besplatni mjesečni podaci za VPN su osvježeni.";
+
+/* Title of a system notification telling the user their free monthly VPN data has reset and is ready to use again. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.DataLimitRefreshNotification.Title.v160" = "Spremno je %1$@ GB VPN podataka";
+
+/* Body text of the popup shown when the VPN stops working while the user is browsing. Warns that if they keep browsing, websites and other third parties may be able to see their location. */
+"VPN.ErrorBrowsingPopup.Body.v160" = "VPN trenutno ne radi. Ako nastaviš pregledavati, tvoja će lokacija biti vidljiva.";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes all of the user's open tabs. */
+"VPN.ErrorBrowsingPopup.CloseAllTabs.v160" = "Zatvori sve kartice";
+
+/* Confirmation shown after the user closes a single tab from the popup that appears when the VPN stops working while browsing. */
+"VPN.ErrorBrowsingPopup.ClosedOneTab.v160" = "Zatvorena je 1 kartica";
+
+/* Confirmation shown after the user closes more than one tab from the popup that appears when the VPN stops working while browsing. %1$@ is the number of tabs that were closed (for example, 3). */
+"VPN.ErrorBrowsingPopup.ClosedXTabs.v160" = "Zatvoreno kartica: %1$@";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ErrorBrowsingPopup.CloseThisTab.v160" = "Zatvori ovu karticu";
+
+/* Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes the popup so the user can keep browsing without the VPN. */
+"VPN.ErrorBrowsingPopup.Continue.v160" = "Nastavi bez VPN-a";
+
+/* Title of a popup shown when the VPN stops working while the user is browsing with it on. Asks if the user wants to keep browsing without the VPN. */
+"VPN.ErrorBrowsingPopup.Title.v160" = "Nastaviti bez VPN-a?";
+
+/* Body text of the popup shown when the app fails to connect to the VPN. “Try again” means try connecting to the VPN again. */
+"VPN.ErrorConnectingPopup.Body.v160" = "Pokušaj ponovno za par minuta.";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it closes the popup. */
+"VPN.ErrorConnectingPopup.CloseButtonText.v160" = "Zatvori";
+
+/* Button on the popup shown when the app fails to connect to the VPN. Tapping it tries to connect to the VPN again. */
+"VPN.ErrorConnectingPopup.RetryButtonText.v160" = "Pokušaj ponovno";
+
+/* Title of a popup shown when the app fails to connect to the VPN. */
+"VPN.ErrorConnectingPopup.Title.v160" = "Povezivanje VPN-a nije uspjelo";
+
+/* Alternative body text for the popup shown when the user has used all of their free monthly VPN data. Explains that their VPN data resets at the start of next month. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.ReachedDataLimitPopup.AltPopupBody.v160" = "Iskorišteno su svi VPN podaci (%1$@ GB). Pristup se ponovno postavlja sljedeći mjesec.";
+
+/* Body text of the popup shown when the user has used all of their free monthly VPN data. Explains that the VPN has turned off, so websites may be able to see their location if they keep browsing. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
+"VPN.ReachedDataLimitPopup.Body.v160" = "Iskoristio/la si sve svoje VPN podatke (%1$@ GB). VPN je isključen pa će tvoja lokacija možda biti vidljiva kada nastaviš pregledavati web.";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes all of the user's open tabs. */
+"VPN.ReachedDataLimitPopup.CloseAllTabs.v160" = "Zatvori sve kartice";
+
+/* Confirmation shown after the user closes a single tab from the popup that appears when they run out of free monthly VPN data. */
+"VPN.ReachedDataLimitPopup.ClosedOneTab.v160" = "Zatvorena je 1 kartica";
+
+/* Confirmation shown after the user closes more than one tab from the popup that appears when they run out of free monthly VPN data. %1$@ is the number of tabs that were closed (for example, 3). */
+"VPN.ReachedDataLimitPopup.ClosedXTabs.v160" = "Zatvoreno kartica: %1$@";
+
+/* Button on the popup shown when the user runs out of free monthly VPN data. Tapping it closes only the tab the user is currently viewing. */
+"VPN.ReachedDataLimitPopup.CloseThisTab.v160" = "Zatvori ovu karticu";
+
+/* Title of a popup shown when the user has used all of their free monthly VPN data. */
+"VPN.ReachedDataLimitPopup.Title.v160" = "Dosegnuto je ograničenje podataka VPN-a";
+

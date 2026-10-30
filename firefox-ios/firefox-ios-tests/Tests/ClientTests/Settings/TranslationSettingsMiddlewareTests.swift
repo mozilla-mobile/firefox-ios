@@ -11,13 +11,13 @@ import XCTest
 
 @MainActor
 final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
     private var mockProfile: MockProfile!
     private var mockModelsFetcher: MockTranslationModelsFetcher!
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockModelsFetcher = MockTranslationModelsFetcher()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
@@ -471,15 +471,6 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
     private func makeLanguages(_ codes: [String]) -> [PreferredLanguageDetails] {
         return codes.map { PreferredLanguageDetails(code: $0, mainText: $0, subtitleText: nil) }
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 
     // MARK: - Helpers

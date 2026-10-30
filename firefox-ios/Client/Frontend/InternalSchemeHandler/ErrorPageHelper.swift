@@ -15,6 +15,7 @@ private let MessageOpenInSafari = "openInSafari"
 private let MessageCertVisitOnce = "certVisitOnce"
 private let ErrorPageBadCertParam = "badcert"
 private let ErrorPageCertErrorParam = "certerror"
+private let ErrorPageCellularDataRestrictedParam = "cellularDataRestricted"
 private let PeerCertificateChainKey = "NSErrorPeerCertificateChainKey"
 private let StreamErrorCodeKey = "_kCFStreamErrorCodeKey"
 
@@ -180,7 +181,7 @@ private func cfErrorToName(_ err: CFNetworkErrors) -> String {
     }
 }
 
-final class ErrorPageHandler: InternalSchemeResponse {
+final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
     static let path = InternalURL.Path.errorpage.rawValue
     // When nativeErrorPage feature flag is true, only create
     // html page with gray background similar to homepage or private homepage.
@@ -191,26 +192,11 @@ final class ErrorPageHandler: InternalSchemeResponse {
         guard let url = request.url,
               let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let code = components.valueForQuery("code"),
-              let errCode = Int(code) else {
+              Int(code) != nil else {
             return nil
         }
 
-        // Used for checking if current error code is for no internet connection
-        let noInternetErrorCode = Int(
-            CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
-        )
-
-        let isNoInternetError = NativeErrorPageFeatureFlag().isNICErrorPageEnabled &&
-            (errCode == noInternetErrorCode) && !useOldErrorPage
-        let isCertificateError = NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled &&
-            NativeErrorPageHelper.isBadCertDomainErrorURL(url) && !useOldErrorPage
-
-        // Used for checking if current error code is one that should fall back to wayback
-        let isWaybackCode = WaybackCodes.isWaybackCode(errCode)
-        let isWaybackError = NativeErrorPageFeatureFlag().isWaybackEnabled && isWaybackCode && !useOldErrorPage
-
-        // Handle No internet access or certificate errors with native error page
-        if isNoInternetError || isCertificateError || isWaybackError {
+        if featureFlagsProvider.isEnabled(.nativeErrorPage) && !useOldErrorPage {
             return responseForNativeErrorPage(request: request)
         } else {
             return responseForErrorWebPage(request: request)
@@ -255,6 +241,21 @@ final class ErrorPageHandler: InternalSchemeResponse {
             "error_title": errDescription,
             "short_description": errDomain,
             ]
+
+        let offlineErrorCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+        let isCellularDataRestricted = featureFlagsProvider.isEnabled(.cellularDataRestrictedErrorPage)
+            && errCode == offlineErrorCode
+            && components.valueForQuery(ErrorPageCellularDataRestrictedParam) == "true"
+        if isCellularDataRestricted {
+            variables["error_title"] = String(
+                format: .NativeErrorPage.CellularDataRestricted.TitleLabel,
+                AppName.shortName.rawValue
+            )
+            variables["short_description"] = String(
+                format: .NativeErrorPage.CellularDataRestricted.Description,
+                AppName.shortName.rawValue
+            )
+        }
 
         let tryAgain: String = .ErrorPageTryAgain
         // swiftlint:disable line_length
@@ -308,14 +309,17 @@ final class ErrorPageHandler: InternalSchemeResponse {
     }
 }
 
-class ErrorPageHelper {
+class ErrorPageHelper: FeatureFlaggable {
     fileprivate weak var certStore: CertStore?
     private var logger: Logger
+    private let cellularDataStateProvider: any CellularDataStateProvider
 
     init(certStore: CertStore?,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         cellularDataStateProvider: any CellularDataStateProvider = SystemCellularDataStateProvider.shared) {
         self.certStore = certStore
         self.logger = logger
+        self.cellularDataStateProvider = cellularDataStateProvider
     }
 
     @MainActor
@@ -337,6 +341,11 @@ class ErrorPageHelper {
             // 'timestamp' is used for the js reload logic
             URLQueryItem(name: "timestamp", value: "\(Int(Date().timeIntervalSince1970 * 1000))")
         ]
+
+        if featureFlagsProvider.isEnabled(.cellularDataRestrictedErrorPage) &&
+            cellularDataStateProvider.isRestrictedOfflineError(error) {
+            queryItems.append(URLQueryItem(name: ErrorPageCellularDataRestrictedParam, value: "true"))
+        }
 
         // If this is an invalid certificate, show a certificate error allowing the
         // user to go back or continue. The certificate itself is encoded and added as

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Glean
+import UIKit
 import XCTest
 @testable import Client
 
@@ -93,5 +94,59 @@ final class SearchTelemetryTests: XCTestCase {
 
     private func createSubject() -> SearchTelemetry {
         return SearchTelemetry(tabManager: MockTabManager(), gleanWrapper: mockGleanWrapper)
+    }
+}
+
+// MARK: - search-config-v3 partner codes
+
+extension SearchTelemetryTests {
+    @MainActor
+    func test_searchConfigV3PartnerCode_withoutV3Engine_returnsNil() throws {
+        let subject = try createV3Subject(partners: nil)
+        let url = URL(string: "https://www.google.com/search?client=ios-firefox-o-re&q=kitten")
+
+        XCTAssertNil(subject.searchConfigV3PartnerCode(for: .google, url: url))
+    }
+
+    @MainActor
+    func test_searchConfigV3PartnerCode_withConfiguredClient_returnsClient() throws {
+        let subject = try createV3Subject(partners: SearchPartnerResolverTests.googleIOSPartners)
+        let url = URL(string: "https://www.google.com/search?client=ios-firefox-cm-re&q=kitten")
+
+        XCTAssertEqual(subject.searchConfigV3PartnerCode(for: .google, url: url), "ios-firefox-cm-re")
+    }
+
+    @MainActor
+    func test_searchConfigV3PartnerCode_withUnknownOrMissingClient_returnsNone() throws {
+        let subject = try createV3Subject(partners: SearchPartnerResolverTests.googleIOSPartners)
+
+        let unknown = URL(string: "https://www.google.com/search?client=other&q=kitten")
+        let missing = URL(string: "https://www.google.com/search?q=kitten")
+
+        XCTAssertEqual(subject.searchConfigV3PartnerCode(for: .google, url: unknown), "none")
+        XCTAssertEqual(subject.searchConfigV3PartnerCode(for: .google, url: missing), "none")
+    }
+
+    @MainActor
+    func test_searchConfigV3PartnerCode_nonGoogleProvider_returnsNil() throws {
+        let subject = try createV3Subject(partners: SearchPartnerResolverTests.googleIOSPartners)
+        let url = URL(string: "https://duckduckgo.com/?q=kitten")
+
+        XCTAssertNil(subject.searchConfigV3PartnerCode(for: .none, url: url))
+    }
+
+    private func createV3Subject(partners: [String: SearchEnginePartner]?) throws -> SearchTelemetry {
+        let image = try XCTUnwrap(UIImage(named: "wikipedia", in: Bundle(for: SearchTelemetryTests.self), with: nil))
+        let engine = OpenSearchEngine(engineID: "google",
+                                      shortName: "Google",
+                                      telemetrySuffix: nil,
+                                      image: image,
+                                      searchTemplate: "https://www.google.com/search?client={partnerCode}&q={searchTerms}",
+                                      suggestTemplate: nil,
+                                      isCustomEngine: false,
+                                      partners: partners)
+        return SearchTelemetry(tabManager: MockTabManager(),
+                               gleanWrapper: mockGleanWrapper,
+                               searchEnginesManager: MockSearchEnginesManager(searchEngines: [engine]))
     }
 }

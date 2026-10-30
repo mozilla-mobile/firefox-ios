@@ -15,8 +15,7 @@ let website_2 = [
     "label": "Example",
     "value": "example",
     "link": "More information...",
-    "moreLinkLongPressUrl": "iana.org",
-    "moreLinkLongPressInfo": "iana"
+    "moreLinkLongPressUrl": "localhost"
 ]
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
 
@@ -39,7 +38,14 @@ class NavigationTest: FeatureFlaggedTestSuite {
     override func setUp() async throws {
         try await super.setUp()
 
-        launchApp()
+        browserScreen = BrowserScreen(app: app)
+        // These tests launch the app themselves through a deeplink
+        let deeplinkLaunchTests = ["testTapSigninShowsFxAFromSettings", "testPopUpBlocker",
+                                   "testValidatePopUpWindows", "testOpenExternalLink",
+                                   "testLongTapOnTextSelection"]
+        if !deeplinkLaunchTests.contains(where: name.contains) {
+            launchApp()
+        }
     }
 
     private func restartTheApp() {
@@ -51,6 +57,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
+    // Regression
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"
         let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
@@ -113,9 +120,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441493
     func testTapSigninShowsFxAFromSettings() {
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+        launchIntoSettings()
         // Open FxAccount from settings menu and check the Sign in to Firefox screen
         let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
             .staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton]
@@ -181,6 +186,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441495
+    // Regression
     func testScrollingBehaviorInAWebPage() {
         navigator.nowAt(HomePanelsScreen)
         navigator.openURL(website_1["url"]!)
@@ -207,18 +213,43 @@ class NavigationTest: FeatureFlaggedTestSuite {
         contextMenuScreen.waitForContextMenuOptions()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306835
+    // Regression
+    func testLongTapOnTextSelection() {
+        let tabTrayScreen = TabTrayScreen(app: app)
+        let photonActionSheetScreen = PhotonActionSheetScreen(app: app)
+        launchOpening(path(forTestPage: TestPages.mozillaBook))
+
+        // Long tap a word, copy it and paste it into the URL bar of a new tab
+        browserScreen.longPressWebPageWord("from")
+        browserScreen.assertTextSelectionMenuShown()
+        browserScreen.tapTextSelectionMenuCopy()
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        browserScreen.pasteAndAssertAddressBarContains("from")
+
+        // Go back to the website, long tap another word and share it
+        navigator.performAction(Action.CloseURLBarOpen)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.tapOnCell(named: TestLabels.mozillaBook)
+        navigator.nowAt(BrowserTab)
+        browserScreen.longPressWebPageWord("cloud")
+        browserScreen.assertTextSelectionMenuShown()
+        browserScreen.tapTextSelectionMenuShare()
+        photonActionSheetScreen.assertShareSheetExists()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2441496
+    // Regression
     func testCopyLink() {
         longPressLinkOptions(optionSelected: "Copy Link")
         let searchBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        searchBar.pressWithRetry(duration: 2, element: app.tables["Context Menu"])
-
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
+        let pasteAction = app.cells.buttons[AccessibilityIdentifiers.Photon.pasteAction]
+        searchBar.pressWithRetry(duration: 2, element: pasteAction)
+        pasteAction.waitAndTap()
         app.buttons["Go"].waitAndTap()
         waitUntilPageLoad()
-        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        mozWaitForValueContains(url, value: website_2["moreLinkLongPressInfo"]!)
+        browserScreen.assertReservedTLDNamesLinkExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441497
@@ -230,74 +261,30 @@ class NavigationTest: FeatureFlaggedTestSuite {
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
 
-        app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
+        app.cells.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
         app.buttons["Go"].waitAndTap()
         waitUntilPageLoad()
-        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        mozWaitForValueContains(url, value: website_2["moreLinkLongPressInfo"]!)
+        browserScreen.assertReservedTLDNamesLinkExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441923
-    func testLongPressOnAddressBar() throws {
-        // Long press on the URL requires copy & paste permission
-        throw XCTSkip("Test needs to be updated")
-        /*
-            app.launch()
-            // This test is for populated clipboard only so we need to make sure there's something in Pasteboard
-            urlBarAddress.typeText("www.google.com")
-            // Tapping two times when the text is not selected will reveal the menu
-            urlBarAddress.tap()
-            mozWaitForElementToExist(urlBarAddress)
-            urlBarAddress.tap()
-            mozWaitForElementToExist(app.menuItems["Select All"])
-            XCTAssertTrue(app.menuItems["Select All"].exists)
-            XCTAssertTrue(app.menuItems["Select"].exists)
+    // Regression
+    func testLongPressOnAddressBar() {
+        // `Paste & Go` and `Paste` are only built when the pasteboard holds a string, so seed it
+        // from the test process rather than copying in-app, which triggers the cross-process paste
+        // permission prompt the previous version of this test was disabled for.
+        UIPasteboard.general.string = website_2["url"]!
 
-            // Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
-            app.menuItems["Select All"].tap()
-            mozWaitForElementToExist(app.menuItems["Copy"])
-            if iPad() {
-                XCTAssertTrue(app.menuItems["Copy"].exists)
-                XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Paste"].exists)
-                XCTAssertTrue(app.menuItems["Open Link"].exists)
-                XCTAssertTrue(app.menuItems["Add to Reading List"].exists)
-                XCTAssertTrue(app.menuItems["Share…"].exists)
-                XCTAssertTrue(app.menuItems["Paste & Go"].exists)
-            } else {
-                XCTAssertTrue(app.menuItems["Copy"].exists)
-                XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Paste"].exists)
-                XCTAssertTrue(app.menuItems["Open Link"].exists)
-            }
+        // Open a webpage so the selected tab has a display URL, which `Copy Address` requires.
+        navigator.openURL(website_1["url"]!)
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
 
-            urlBarAddress.typeText("\n")
-            waitUntilPageLoad()
-            mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        // Long press on the address bar reveals the menu with all its options.
+        browserScreen.longPressAddressBar()
+        browserScreen.assertAddressBarContextMenuOptionsExist()
 
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 3)
-            app.tables.otherElements[StandardImageIdentifiers.Large.link].tap()
-
-            sleep(2)
-            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
-            // Since the textField value appears all selected first time is clicked
-            // this workaround is necessary
-            mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-            urlBarAddress.waitAndTap()
-            mozWaitForElementToExist(app.menuItems["Copy"])
-            if iPad() {
-                XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Copy"].exists)
-                XCTAssertTrue(app.menuItems["Open Link"].exists)
-                XCTAssertTrue(app.menuItems["Add to Reading List"].exists)
-                XCTAssertTrue(app.menuItems["Paste"].exists)
-            } else {
-                XCTAssertTrue(app.menuItems["Copy"].exists)
-                XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Open Link"].exists)
-            }
-        }
-         */
+        browserScreen.dismissAddressBarContextMenu()
     }
 
     private func longPressLinkOptions(optionSelected: String) {
@@ -317,6 +304,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441498
+    // Regression
     func testDownloadLink() {
         longPressLinkOptions(optionSelected: "Download Link")
         mozWaitForElementToExist(app.tables["Context Menu"])
@@ -327,16 +315,17 @@ class NavigationTest: FeatureFlaggedTestSuite {
         // There should be one item downloaded. It's name and size should be shown
         let downloadedList = app.tables["DownloadsTable"].cells.count
         XCTAssertEqual(downloadedList, 1, "The number of items in the downloads table is not correct")
-        mozWaitForElementToExist(app.tables.cells.staticTexts["example-domains.html"])
+        mozWaitForElementToExist(app.tables.cells.staticTexts[TestPages.exampleDomainsHTML])
 
         // Tap on the just downloaded link to check that the web page is loaded
-        app.tables.cells.staticTexts["example-domains.html"].waitAndTap()
+        app.tables.cells.staticTexts[TestPages.exampleDomainsHTML].waitAndTap()
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        mozWaitForValueContains(url, value: "example-domains.html")
+        mozWaitForValueContains(url, value: TestPages.exampleDomainsHTML)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441499
+    // Regression
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
         if #available(iOS 16, *) {
@@ -386,14 +375,12 @@ class NavigationTest: FeatureFlaggedTestSuite {
         let browserScreen = BrowserScreen(app: app)
 
         // Check that it is enabled by default
-        navigator.nowAt(BrowserTab)
-        toolbarScreen.assertTabToolbarMenuButtonExists()
+        launchIntoSettings()
         navigator.goto(BrowsingSettings)
         settingsScreen.waitForBrowsingLinksSection()
         settingsScreen.assertBlockPopUpsSwitchIsOn()
         // Navigate back to the homepage
-        navigator.goto(BrowserTab)
-        navigator.nowAt(NewTabScreen)
+        navigator.goto(NewTabScreen)
 
         // Check that there are no pop ups
         navigator.openURL(popUpTestUrl)
@@ -459,8 +446,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     // https://mozilla.testrail.io/index.php?/cases/view/2307022
     // In this test, the parent window opens a child and in the child it creates a fake link 'link-created-by-parent'
     func testValidatePopUpWindows() {
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(BrowsingSettings)
         let switchBlockPopUps = app.tables.cells.switches[AccessibilityIdentifiers.Settings.Browsing.blockPopUps]
         switchBlockPopUps.waitAndTap()
@@ -511,9 +497,15 @@ class NavigationTest: FeatureFlaggedTestSuite {
         browserScreen.assertAddressBarContains(value: "example.com")
         XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
         // swiftlint:enable empty_count
+
+        // Navigating away must leave edit mode, not just hide the keyboard, and the address bar has
+        // to stay tappable afterwards.
+        browserScreen.assertAddressBarLeftEditMode()
+        browserScreen.assertAddressBarRegainsKeyboardFocus()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441772
+    // Regression
     func testOpenInNewTab() {
         // Long-tap on an article link. Choose "Open in New Tab".
         openContextMenuForArticleLink()
@@ -528,6 +520,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441773
+    // Regression
     func testOpenInNewPrivateTab() {
         // Long-tap on an article link. Choose "Open in New Private Tab".
         openContextMenuForArticleLink()
@@ -552,6 +545,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441774
+    // Regression
     func testBookmarkLink() {
         // Long-tap on an article link. Choose "Bookmark Link".
         openContextMenuForArticleLink()
@@ -567,6 +561,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2695828
+    // Regression
     func testBackArrowNavigation() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
@@ -595,7 +590,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     // https://mozilla.testrail.io/index.php?/cases/view/2721282
     func testOpenExternalLink() {
         // Go to Settings -> Browsing and disable "Block external links" toggle
-        navigator.nowAt(NewTabScreen)
+        launchIntoSettings()
         navigator.goto(BrowsingSettings)
         mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.links])
         let switchBlockLinks = app.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockExternal.title]
@@ -615,6 +610,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306833
+    // Regression
     func testLongTapFirefoxIconNewTab() throws {
         guard #available(iOS 18, *) else {
             throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
@@ -684,7 +680,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         mozWaitForElementToExist(app.navigationBars["App Icon"])
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/edit/3408300
+    // https://mozilla.testrail.io/index.php?/cases/view/3408300
     func testLongTapFirefoxIconOpenLastBookmark() throws {
         guard #available(iOS 18, *) else {
             throw XCTSkip("Test requires iOS 18+ due to app icon springboard context menu behavior")
@@ -740,6 +736,9 @@ class NavigationTest: FeatureFlaggedTestSuite {
         navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: TestPages.exampleHTML))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
+        // Workaround: the Google Lens tip stays over the loaded page and swallows the long press.
+        // Remove once https://github.com/mozilla-mobile/firefox-ios/issues/36249 is fixed.
+        ToolbarScreen(app: app).dismissGoogleLensTipIfPresented()
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0))
     }

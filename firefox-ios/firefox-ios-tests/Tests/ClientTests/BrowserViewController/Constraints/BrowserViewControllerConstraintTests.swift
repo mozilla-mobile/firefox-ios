@@ -254,6 +254,82 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
         }
     }
 
+    // MARK: - Keyboard Spacer Tests
+
+    /// The keyboard spacer is what fills the gap left by the keyboard while the address bar is in
+    /// edit mode. If it survives the keyboard being dismissed, the user is left with dead space
+    /// below the address bar, so these cover its full add/replace/remove lifecycle.
+    func test_addKeyboardSpacer_addsSpacerWithRequestedHeight() throws {
+        let subject = createSubject()
+
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 300)
+
+        let spacer = try XCTUnwrap(keyboardSpacer(in: subject.overKeyboardContainer))
+        XCTAssertEqual(heightConstraintConstant(of: spacer), 300)
+    }
+
+    func test_removeKeyboardSpacer_removesSpacerFromHierarchy() {
+        let subject = createSubject()
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 300)
+
+        subject.overKeyboardContainer.removeKeyboardSpacer()
+
+        // Both checks matter: removeArrangedSubview() alone would leave the view in `subviews`
+        // still holding its height constraint.
+        XCTAssertNil(keyboardSpacer(in: subject.overKeyboardContainer))
+        XCTAssertFalse(subject.overKeyboardContainer.subviews.contains { isKeyboardSpacer($0) })
+    }
+
+    /// `keyboardWillChange` fires repeatedly while the keyboard frame animates, so the spacer gets
+    /// added many times per dismissal. Stacking them would multiply the dead space.
+    func test_addKeyboardSpacerTwice_doesNotStackSpacers() {
+        let subject = createSubject()
+
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 300)
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 300)
+
+        let spacers = subject.overKeyboardContainer.arrangedSubviews.filter { isKeyboardSpacer($0) }
+        XCTAssertEqual(spacers.count, 1)
+    }
+
+    func test_addKeyboardSpacer_withNewHeight_replacesHeightConstraint() throws {
+        let subject = createSubject()
+
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 300)
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 120)
+
+        let spacer = try XCTUnwrap(keyboardSpacer(in: subject.overKeyboardContainer))
+        let heightConstraints = spacer.constraints.filter {
+            $0.firstAttribute == .height && $0.secondItem == nil
+        }
+        XCTAssertEqual(heightConstraints.count, 1, "A stale height constraint would conflict with the new one")
+        XCTAssertEqual(heightConstraints.first?.constant, 120)
+    }
+
+    /// `keyboardWillHide` can arrive without a matching show (for example after a rotation), and the
+    /// removal must stay a no-op rather than trip over missing state.
+    func test_removeKeyboardSpacer_whenNoSpacerAdded_doesNothing() {
+        let subject = createSubject()
+        let arrangedCountBefore = subject.overKeyboardContainer.arrangedSubviews.count
+
+        subject.overKeyboardContainer.removeKeyboardSpacer()
+
+        XCTAssertEqual(subject.overKeyboardContainer.arrangedSubviews.count, arrangedCountBefore)
+    }
+
+    func test_addThenRemoveKeyboardSpacer_leavesNoResidualHeight() {
+        let subject = createSubject()
+        let heightBefore = containerHeight(of: subject)
+
+        subject.overKeyboardContainer.addKeyboardSpacer(spacerHeight: 300)
+        let heightWithSpacer = containerHeight(of: subject)
+        subject.overKeyboardContainer.removeKeyboardSpacer()
+        let heightAfter = containerHeight(of: subject)
+
+        XCTAssertGreaterThan(heightWithSpacer, heightBefore, "The spacer should grow the container")
+        XCTAssertEqual(heightAfter, heightBefore, accuracy: 1.0)
+    }
+
     // MARK: - Constraint Priority Tests
 
     func test_bottomContainer_hasRequiredPriorityConstraints() {
@@ -271,7 +347,100 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
         XCTAssertGreaterThan(requiredConstraints.count, 0)
     }
 
+    // MARK: - Search Bar Position Tests
+
+    func test_searchBarPositionDidChange_toBottom_whenDuoExpanded_keepsAddressBarInHeader() throws {
+        guard #available(iOS 17.0, *) else {
+            throw XCTSkip("traitOverrides requires iOS 17+")
+        }
+        let subject = createSubject(isBottomSearchBar: false)
+        setDuoExpandedTraits(on: subject)
+
+        subject.searchBarPositionDidChange(newSearchBarPosition: .bottom)
+
+        XCTAssertFalse(subject.isBottomSearchBar)
+        XCTAssertTrue(subject.addressToolbarContainer.superview === subject.header)
+        drainMainQueue()
+    }
+
+    func test_searchBarPositionDidChange_toBottom_whenNotDuoExpanded_movesAddressBarToBottom() throws {
+        guard #available(iOS 17.0, *) else {
+            throw XCTSkip("traitOverrides requires iOS 17+")
+        }
+        let subject = createSubject(isBottomSearchBar: false)
+        setDuoClosedTraits(on: subject)
+
+        subject.searchBarPositionDidChange(newSearchBarPosition: .bottom)
+
+        XCTAssertTrue(subject.isBottomSearchBar)
+        XCTAssertTrue(subject.addressToolbarContainer.superview === subject.overKeyboardContainer)
+        drainMainQueue()
+    }
+
+    // MARK: - Progress Bar Placement Tests
+
+    func test_viewDidLayoutSubviews_withTabStripBelowAddressBar_anchorsProgressBarBelowTabStrip() throws {
+        let subject = createSubject(isBottomSearchBar: false)
+        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
+        let addressIndex = try XCTUnwrap(subject.header.arrangedSubviews.firstIndex(of: subject.addressToolbarContainer))
+        subject.header.insertArrangedSubview(topTabsViewController.view, at: addressIndex + 1)
+        subject.topTabsViewController = topTabsViewController
+
+        subject.view.setNeedsLayout()
+        subject.view.layoutIfNeeded()
+
+        let isAnchoredBelowTabStrip = subject.header.constraints.contains {
+            $0.isActive &&
+            $0.firstItem is GradientProgressBar &&
+            $0.firstAttribute == .top &&
+            $0.secondItem === topTabsViewController.view &&
+            $0.secondAttribute == .bottom
+        }
+        XCTAssertTrue(isAnchoredBelowTabStrip)
+    }
+
     // MARK: - Helper Methods
+
+    @available(iOS 17.0, *)
+    private func setDuoExpandedTraits(on subject: BrowserViewController) {
+        subject.traitOverrides.userInterfaceIdiom = .phone
+        subject.traitOverrides.horizontalSizeClass = .regular
+        subject.traitOverrides.verticalSizeClass = .regular
+        subject.updateTraitsIfNeeded()
+    }
+
+    @available(iOS 17.0, *)
+    private func setDuoClosedTraits(on subject: BrowserViewController) {
+        subject.traitOverrides.userInterfaceIdiom = .phone
+        subject.traitOverrides.horizontalSizeClass = .compact
+        subject.traitOverrides.verticalSizeClass = .regular
+        subject.updateTraitsIfNeeded()
+    }
+
+    /// Lets trait change work that `BrowserViewController` queues on the main queue finish,
+    /// so it releases the subject before the memory leak check runs.
+    private func drainMainQueue() {
+        let drained = expectation(description: "Main queue drained")
+        DispatchQueue.main.async { drained.fulfill() }
+        wait(for: [drained], timeout: 1)
+    }
+
+    private func isKeyboardSpacer(_ view: UIView) -> Bool {
+        view.accessibilityIdentifier == AccessibilityIdentifiers.Browser.keyboardSpacer
+    }
+
+    private func keyboardSpacer(in container: BaseAlphaStackView) -> UIView? {
+        container.arrangedSubviews.first { isKeyboardSpacer($0) }
+    }
+
+    private func heightConstraintConstant(of view: UIView) -> CGFloat? {
+        view.constraints.first { $0.firstAttribute == .height && $0.secondItem == nil }?.constant
+    }
+
+    private func containerHeight(of subject: BrowserViewController) -> CGFloat {
+        subject.view.layoutIfNeeded()
+        return subject.overKeyboardContainer.frame.height
+    }
 
     /// Check if a view has a constraint with the given attribute related to another view
     private func hasConstraint(for view: UIView,

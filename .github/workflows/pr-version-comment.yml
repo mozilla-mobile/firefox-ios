@@ -11,26 +11,33 @@ jobs:
 
     steps:
       - name: Check out main
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Read version.txt
         id: get_version
-        run: echo "version=$(cat version.txt)" >> $GITHUB_OUTPUT
+        # Strip newlines before writing to GITHUB_OUTPUT; an embedded newline would
+        # otherwise let the file's contents inject additional step outputs.
+        run: |
+          set -euo pipefail
+          version=$(tr -d '\r\n' < version.txt)
+          printf 'version=%s\n' "$version" >> "$GITHUB_OUTPUT"
 
       - name: Get PR number for this merge commit
         id: get_pr
         run: |
-          pr_number=$(gh pr list --search "${{ github.sha }}" --state merged --json number --jq '.[0].number')
+          set -euo pipefail
+          pr_number=$(gh pr list --search "$COMMIT_SHA" --state merged --json number --jq '.[0].number')
           if [ -z "$pr_number" ]; then
-            echo "No merged PR found for commit ${{ github.sha }}. Likely a direct push to main. Skipping comment."
+            echo "No merged PR found for commit $COMMIT_SHA. Likely a direct push to main. Skipping comment."
           fi
-          echo "pr_number=$pr_number" >> $GITHUB_OUTPUT
+          printf 'pr_number=%s\n' "$pr_number" >> "$GITHUB_OUTPUT"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMIT_SHA: ${{ github.sha }}
 
       - name: Comment on PR
         if: steps.get_pr.outputs.pr_number != ''
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ steps.get_pr.outputs.pr_number }}

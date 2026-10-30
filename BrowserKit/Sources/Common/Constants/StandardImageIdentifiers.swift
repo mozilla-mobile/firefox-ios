@@ -4,7 +4,7 @@
 
 import Foundation
 
-/// This struct defines all the standard image identifiers of icons and images used in the app.
+/// This struct defines all the standard image identifiers of icons used in the app.
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
 public struct StandardImageIdentifiers {
@@ -39,8 +39,7 @@ public struct StandardImageIdentifiers {
         public static let readerSummarize = "readerSummarizeMedium"
         public static let readerView = "readerViewMedium"
         public static let shareApple = "shareAppleMedium"
-        public static let shieldCheckmarkDotFillMulticolorDark = "shieldCheckmarkDotFillMulticolorMediumDark"
-        public static let shieldCheckmarkDotFillMulticolorLight = "shieldCheckmarkDotFillMulticolorMediumLight"
+        public static let shieldCheckmarkDotFillMulticolor = "shieldCheckmarkDotFillMulticolorMedium"
         public static let sun = "sunMedium"
         public static let sunFill = "sunFillMedium"
         public static let translate = "translateMedium"
@@ -125,12 +124,14 @@ public struct StandardImageIdentifiers {
         public static let shieldSlash = "shieldSlashLarge"
         public static let soccerBall = "soccerBallLarge"
         public static let socialMedia = "socialMediaLarge"
+        public static let sparkle = "sparkleLarge"
         public static let subtract = "subtractLarge"
         public static let summarizer = "summarizerLarge"
         public static let sync = "syncLarge"
         public static let syncTabs = "syncTabsLarge"
         public static let tab = "tabLarge"
         public static let tabTray = "tabTrayLarge"
+        public static let textSettings = "textSettingsLarge"
         public static let translateActiveAltMulticolor = "translateActiveAltMulticolorLarge"
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"
@@ -139,6 +140,9 @@ public struct StandardImageIdentifiers {
     // Icon size 30x30
     public struct ExtraLarge {
         public static let crossCircleFill = "crossCircleFillExtraLarge"
+        public static let database = "databaseExtraLarge"
+        public static let personSpeaking = "personSpeakingExtraLarge"
+        public static let saveArrow = "saveArrowExtraLarge"
     }
 
     // Icon size 72x72

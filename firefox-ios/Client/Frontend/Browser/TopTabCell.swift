@@ -79,10 +79,11 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         isSelectedTab = selected
         windowUUID = tab.windowUUID
 
-        titleText.text = tab.getTabTrayTitle()
-        accessibilityLabel = getA11yTitleLabel(tab: tab)
+        let title = tab.getTabTrayTitle()
+        titleText.text = title
+        accessibilityLabel = getA11yTitleLabel(title: title)
         showsLargeContentViewer = true
-        largeContentTitle = tab.getTabTrayTitle()
+        largeContentTitle = title
 
         closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel,
                                                 self.titleText.text ?? "")
@@ -98,13 +99,15 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         let hideCloseButton = frame.width < UX.closeButtonThreshold && !selected
         closeButton.isHidden = hideCloseButton
 
-        favicon.manuallySetImage(UIImage(named: ImageIdentifiers.firefoxFavicon) ?? UIImage())
-
         favicon.backgroundColor = .clear
 
+        // Setting the placeholder here would clear `currentURLString` and defeat the de-duplication
+        // in `setFavicon`, blanking the image on every reload.
         if let siteURL = tab.url?.absoluteString, !tab.isFxHomeTab {
             favicon.setFavicon(FaviconImageViewModel(siteURLString: siteURL,
                                                      faviconCornerRadius: UX.faviconCornerRadius))
+        } else {
+            favicon.manuallySetImage(UIImage(named: ImageIdentifiers.firefoxFavicon) ?? UIImage())
         }
     }
 
@@ -191,10 +194,8 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         clipsToBounds = false
     }
 
-    func getA11yTitleLabel(tab: Tab) -> String? {
-        let baseName = tab.getTabTrayTitle()
-
-        if isSelectedTab, !tab.getTabTrayTitle().isEmpty {
+    private func getA11yTitleLabel(title baseName: String) -> String? {
+        if isSelectedTab, !baseName.isEmpty {
             return baseName + ". " + String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel
         } else if isSelectedTab {
             return String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel

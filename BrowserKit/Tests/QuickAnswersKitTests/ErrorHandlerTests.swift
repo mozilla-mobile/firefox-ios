@@ -85,8 +85,27 @@ struct ErrorHandlerTests {
 
     // MARK: - Helper
     private func createSubject() -> ErrorHandler {
-        let subject = ErrorHandler(presenter: presenter, onDismiss: { [dismissSpy] in dismissSpy.callCount += 1 })
+        let subject = ErrorHandler(
+            presenter: presenter,
+            strings: .mock,
+            onDismiss: { [dismissSpy] in dismissSpy.callCount += 1 }
+        )
         testHelper.trackForMemoryLeaks(subject)
         return subject
     }
+}
+
+extension QuickAnswersViewConfiguration.ErrorStrings {
+    static let mock = QuickAnswersViewConfiguration.ErrorStrings(
+        permissionAlertTitle: "Permission Title",
+        microphonePermissionMessage: "Mic Message",
+        speechRecognitionPermissionMessage: "Speech Message",
+        openSettings: "Open Settings",
+        cancel: "Cancel",
+        dailyLimitTitle: "Daily Limit",
+        dailyLimitMessage: "Daily Limit Message",
+        genericErrorTitle: "Error",
+        genericErrorMessage: "Error Message",
+        ok: "Ok"
+    )
 }

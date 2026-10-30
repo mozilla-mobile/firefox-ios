@@ -23,6 +23,7 @@ public protocol WebCompatReportSheetDelegate: AnyObject {
 public final class WebCompatReportSheetViewController: UIViewController,
                                                        ThemeApplicable,
                                                        UICollectionViewDelegate,
+                                                       UIGestureRecognizerDelegate,
                                                        Notifiable {
     public weak var delegate: WebCompatReportSheetDelegate?
 
@@ -100,6 +101,7 @@ public final class WebCompatReportSheetViewController: UIViewController,
         closeButton.accessibilityLabel = viewModel.closeButtonAccessibilityLabel
         previewButton.title = viewModel.previewButtonTitle
         previewButton.isEnabled = viewModel.isPreviewEnabled
+        previewButton.accessibilityHint = viewModel.previewAccessibilityHint
         navigationItem.rightBarButtonItem = viewModel.previewButtonTitle == nil ? nil : previewButton
         applySnapshot()
     }
@@ -125,7 +127,21 @@ public final class WebCompatReportSheetViewController: UIViewController,
     private func setupDismissKeyboardGesture() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
+        tap.delegate = self
         view.addGestureRecognizer(tap)
+    }
+
+    // MARK: - UIGestureRecognizerDelegate
+
+    /// Taps inside an editable field (e.g. the URL field's clear button) must reach the
+    /// field itself; only taps on empty space dismiss the keyboard.
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        var hitView = touch.view
+        while let current = hitView {
+            if current is UITextField || current is UITextView { return false }
+            hitView = current.superview
+        }
+        return true
     }
 
     // MARK: - Keyboard
@@ -293,7 +309,12 @@ public final class WebCompatReportSheetViewController: UIViewController,
     -> UICollectionView.CellRegistration<WebCompatSendButtonCell, WebCompatReportViewModel.Row> {
         return UICollectionView.CellRegistration { [weak self] cell, _, row in
             guard let self, case let .sendButton(isEnabled) = row.kind else { return }
-            cell.configure(title: row.title, isEnabled: isEnabled, a11yIdentifier: row.a11yIdentifier) { [weak self] in
+            cell.configure(
+                title: row.title,
+                isEnabled: isEnabled,
+                a11yIdentifier: row.a11yIdentifier,
+                accessibilityHint: row.accessibilityHint
+            ) { [weak self] in
                 // Text fields report on end-editing, so commit the active one before submitting.
                 self?.view.endEditing(true)
                 self?.delegate?.webCompatReportSheetDidTapButton(id: row.id)
@@ -428,6 +449,12 @@ public final class WebCompatReportSheetViewController: UIViewController,
         collectionView.backgroundColor = theme.colors.layer1
         collectionView.setCollectionViewLayout(makeLayout(backgroundColor: theme.colors.layer1), animated: false)
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
+        if theme.isNova {
+            previewButton.tintColor = theme.colors.actionPrimary
+            if #available(iOS 26.0, *) {
+                previewButton.setTitleTextAttributes([.foregroundColor: theme.colors.textInverted], for: .normal)
+            }
+        }
         if hasAppliedThemeOnce {
             reconfigureAllItems()
         }

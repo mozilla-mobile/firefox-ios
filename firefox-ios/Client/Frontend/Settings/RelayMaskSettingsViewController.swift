@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import ComponentLibrary
 
-class RelayMaskSettingsViewController: SettingsTableViewController {
+final class RelayMaskSettingsViewController: SettingsTableViewController {
     private lazy var linkButton: LinkButton = .build()
     private let relayController: RelayControllerProtocol
 
@@ -30,7 +30,7 @@ class RelayMaskSettingsViewController: SettingsTableViewController {
 
     override func generateSettings() -> [SettingSection] {
         guard let profile, let tabManager else { return [] }
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         let showEmailMaskSuggestions = BoolSetting(prefs: profile.prefs,
                                                    theme: theme,
                                                    prefKey: PrefsKeys.ShowRelayMaskSuggestions,
@@ -81,7 +81,11 @@ class RelayMaskSettingsViewController: SettingsTableViewController {
 
     @objc
     func learnMoreTapped() {
-        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        let viewController = SettingsContentViewController(
+            windowUUID: windowUUID,
+            shouldUsePrivateOverride: true,
+            shouldBeInPrivateTheme: false
+        )
         viewController.url = SupportUtils.URLForRelayMaskLearnMoreArticle
         navigationController?.pushViewController(viewController, animated: true)
         relayController.telemetry.learnMoreTapped()
@@ -97,7 +101,7 @@ class RelayMaskSettingsViewController: SettingsTableViewController {
 
 final class ManageRelayMasksSetting: Setting {
     private let windowUUID: WindowUUID
-    private let parentNav: UINavigationController?
+    private weak let parentNav: UINavigationController?
     private let tabManager: TabManager
     private let relayController: RelayControllerProtocol
     private(set) var manageMasksURL: URL?

@@ -31,7 +31,7 @@ class AutoFillPasswordSettingsViewController: SettingsTableViewController {
 
         let autofillAddressStatus = AddressLocaleFeatureValidator.isValidRegion(for: SystemLocaleProvider().regionCode())
         if autofillAddressStatus, let profile {
-            sectionItems.append(AddressAutofillSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
+            sectionItems.append(AddressAutofillSetting(theme: currentTheme(),
                                                        profile: profile,
                                                        settingsDelegate: parentCoordinator))
         }

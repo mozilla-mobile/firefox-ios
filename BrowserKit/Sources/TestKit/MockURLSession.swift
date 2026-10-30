@@ -21,6 +21,11 @@ public final class MockURLSession: URLSessionProtocol, @unchecked Sendable {
     private let error: Error?
     public private(set) var lastURLRequest: URLRequest?
 
+    /// Tracking both request and body because`URLSession` takes the payload from
+    /// `bodyData` and ignores `request.httpBody`, so the two can disagree.
+    public private(set) var lastUploadRequest: URLRequest?
+    public private(set) var lastUploadBody: Data?
+
     public init(
         with data: Data? = nil,
         response: URLResponse? = nil,
@@ -71,6 +76,8 @@ public final class MockURLSession: URLSessionProtocol, @unchecked Sendable {
         from bodyData: Data?,
         completionHandler: @escaping (Data?, URLResponse?, (any Error)?) -> Void
     ) -> URLSessionUploadTaskProtocol {
+        lastUploadRequest = request
+        lastUploadBody = bodyData
         completionHandler(data, response, error)
         return uploadTask
     }

@@ -6,6 +6,11 @@ import Common
 import Shared
 import WebKit
 
+enum DownloadPathError: Error {
+    /// The filename would place the download outside the Downloads directory.
+    case unsafeFilename(String)
+}
+
 protocol DownloadDelegate: AnyObject {
     @MainActor
     func download(_ download: Download, didCompleteWithError error: Error?)
@@ -45,7 +50,7 @@ class Download: NSObject {
     @MainActor
     func resume() {}
 
-    fileprivate func uniqueDownloadPathForFilename(_ filename: String) throws -> URL {
+    func uniqueDownloadPathForFilename(_ filename: String) throws -> URL {
         let downloadsPath = try FileManager.default.url(
             for: .documentDirectory,
             in: .userDomainMask,
@@ -54,6 +59,10 @@ class Download: NSObject {
         ).appendingPathComponent("Downloads")
 
         let basePath = downloadsPath.appendingPathComponent(filename)
+        // `filename` is sanitized where it is assigned, but never write outside the Downloads
+        guard FilenameSanitizer.isContained(basePath, in: downloadsPath) else {
+            throw DownloadPathError.unsafeFilename(filename)
+        }
         let fileExtension = basePath.pathExtension
         let filenameWithoutExtension = !fileExtension.isEmpty ? String(filename.dropLast(fileExtension.count + 1)) : filename
 
@@ -89,7 +98,7 @@ class Download: NSObject {
 }
 
 // FIXME: FXIOS-14051 Class is not thread safe and Sendable
-class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate, @unchecked Sendable {
+final class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate, @unchecked Sendable {
     let preflightResponse: URLResponse
     let request: URLRequest
 
@@ -125,7 +134,7 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
         super.init(originWindow: originWindow)
 
         if let filename = preflightResponse.suggestedFilename {
-            self.filename = Download.stripUnicode(fromFilename: filename)
+            self.filename = FilenameSanitizer.sanitize(Download.stripUnicode(fromFilename: filename))
         }
 
         if let mimeType = preflightResponse.mimeType {
@@ -185,6 +194,11 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
             resumeData != nil {
             return
         }
+        // The download is in a terminal state. The session must be invalidated
+        // because URLSession strongly retains its delegate (self) until then,
+        // which would otherwise leak self (HTTPDownload).
+        // https://developer.apple.com/documentation/foundation/urlsession#Using-a-session-delegate
+        session.finishTasksAndInvalidate()
         ensureMainThread {
             self.delegate?.download(self, didCompleteWithError: error)
         }
@@ -233,7 +247,7 @@ class BlobDownload: Download {
 
         super.init(originWindow: originWindow)
 
-        self.filename = Download.stripUnicode(fromFilename: filename)
+        self.filename = FilenameSanitizer.sanitize(Download.stripUnicode(fromFilename: filename))
         self.mimeType = mimeType
 
         self.totalBytesExpected = size

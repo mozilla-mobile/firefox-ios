@@ -1,0 +1,129 @@
+/* The accessibility label for the back button in the EnhancedTrackingProtection screen header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v137" = "वापस जाएं";
+
+/* The accessibility label for the close button in the EnhancedTrackingProtection screen header navigation view. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v137" = "बंद करें";
+
+/* The title for the certificate common name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "कॉमन नेम";
+
+/* The title for the certificate issuer country inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131" = "देश";
+
+/* The title for the certificate issuer name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerName.v131" = "जारीकर्ता का नाम";
+
+/* The title for the certificate issuer organization inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerOrganization.v131" = "ऑर्गनाइज़ेशन";
+
+/* The title for the certificate subject alt names section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNames.v131" = "सब्जेक्ट ऑल्ट नेम";
+
+/* The title for the certificate subject alt names DNS name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNamesDNSName.v131" = "DNS नेम";
+
+/* The title for the certificate subject name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectName.v131" = "सब्जेक्ट नेम";
+
+/* The title for the certificates screen inside the certificates screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Title.v131" = "सर्टिफ़िकेट";
+
+/* The title for the certificate validity section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Validity.v131" = "वैधता";
+
+/* The title for the certificate validity not after date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotAfter.v131" = "इसके बाद नहीं";
+
+/* The title for the certificate validity not before date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotBefore.v131" = "इससे पहले नहीं";
+
+/* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "रद्द करें";
+
+/* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "मिटाएं";
+
+/* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. %@ is the currently visited website. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "%@ के लिए कुकीज़ और साइट डेटा हटाने से, आप वेबसाइटों से लॉग आउट हो सकते हैं और शॉपिंग कार्ट खाली हो सकती हैं।";
+
+/* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "कुकीज़ और साइट डेटा मिटाएं";
+
+/* The title for the clear cookies and site data button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "कुकीज़ और साइट डेटा मिटाएं";
+
+/* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
+"Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "कुकीज़ और साइट डेटा हटा दिया गया";
+
+/* The accessibility label for the close button in the Enhanced Tracking protection menu. */
+"Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132" = "प्राइवेसी और सुरक्षा मेन्यू बंद करें";
+
+/* Text to let users know that the current website is secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "सुरक्षित कनेक्शन";
+
+/* Text to let users know that the current website is not secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "कनेक्शन सुरक्षित नहीं है";
+
+/* Text to let users know that no trackers were found on the current website. */
+"Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "कोई ट्रैकर नहीं मिला";
+
+/* Text to let users know how many analytics trackers were blocked on the current website. %@ is the number of cookies of this type detected. */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "ट्रैकिंग सामग्री: %@";
+
+/* Text to let users know how many cross-site tracking cookies were blocked on the current website. %@ is the number of cookies of this type detected. */
+"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "क्रॉस-साइट ट्रैकिंग कुकीज़: %@";
+
+/* Text to let users know how many fingerprinters were blocked on the current website. %@ is the number of fingerprinters detected. */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "फ़िंगरप्रिंटर: %@";
+
+/* Text to let users know how many social media trackers were blocked on the current website. %@ is the number of cookies of this type detected. */
+"Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129" = "सोशल मीडिया ट्रैकर: %@";
+
+/* Text to let users know how many trackers were blocked on the current website. %@ is the number of trackers blocked. */
+"Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "ब्लॉक किए गए ट्रैकर: %@";
+
+/* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
+"Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "'स्टैंडर्ड' पेज लोड होना शुरू होने के बाद आम ट्रैकर ब्लॉक करता है, इसलिए आपको ट्रैकर की गिनती ज़्यादा दिख सकती है। %@";
+
+/* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
+"Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "'सख़्त' पेज लोड होने से पहले ही ट्रैकर रोककर ज़्यादा ट्रैकर ब्लॉक करता है, इसलिए आपको ट्रैकर की गिनती कम दिख सकती है। %@";
+
+/* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
+"Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "%@ द्वारा वेरिफ़ाई किया गया";
+
+/* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
+"Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "सर्टिफ़िकेट देखें";
+
+/* Title for a link that explains how current Tracking Protection mode work. */
+"Menu.EnhancedTrackingProtection.Link.LearnMore.v150" = "और जानें";
+
+/* Header for the enhanced tracking protection screen when the user has opted out of the feature. %@ is the app name (e.g. Firefox). */
+"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ चालू नहीं है। हमारा सुझाव है कि आप सुरक्षा फिर से चालू कर दें।";
+
+/* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
+"Menu.EnhancedTrackingProtection.Off.Title.v128" = "आपने सुरक्षा बंद कर दी हैं";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected. */
+"Menu.EnhancedTrackingProtection.On.Header.v128" = "आप सुरक्षित हैं। अगर हमें कुछ दिखेगा, तो हम आपको बता देंगे।";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "आपका कनेक्शन सुरक्षित नहीं है।";
+
+/* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "इस साइट पर सावधानी बरतें";
+
+/* Title for the enhanced tracking protection screen when the user has selected to be protected. %@ is the app name (e.g. Firefox). */
+"Menu.EnhancedTrackingProtection.On.Title.v128" = "%@ में सुरक्षा चालू है";
+
+/* The title for the privacy settings button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.PrivacySettings.Title.v128" = "प्राइवेसी सेटिंग";
+
+/* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.Switch.Title.v128" = "उन्नत ट्रैकिंग सुरक्षा";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "सुरक्षा बंद है। हमारा सुझाव है कि आप इसे फिर से चालू कर दें।";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "अगर इस साइट में कुछ गड़बड़ दिखाई देती है, तो इसे बंद करके देखें।";
+

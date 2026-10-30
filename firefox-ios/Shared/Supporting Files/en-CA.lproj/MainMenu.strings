@@ -98,7 +98,7 @@
 "MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "Customize Homepage";
 
 /* On the main menu, the accessibility labels for the action that will take the user to a website to get help from Mozilla. */
-"MainMenu.SettingsSection.AccessibilityLabels.GetHelp.v132" = "Get help";
+"MainMenu.SettingsSection.AccessibilityLabels.GetHelp.v132" = "Get Help";
 
 /* On the main menu, the accessibility labels for the action that will take the user to the Settings menu. */
 "MainMenu.SettingsSection.AccessibilityLabels.Settings.v132" = "Settings";
@@ -110,7 +110,7 @@
 "MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "Customize Homepage";
 
 /* On the main menu, the title for the action that will take the user to a website to get help from Mozilla. */
-"MainMenu.SettingsSection.GetHelp.Title.v131" = "Get help";
+"MainMenu.SettingsSection.GetHelp.Title.v131" = "Get Help";
 
 /* On the main menu, the title for the action that will take the user to the Settings menu. */
 "MainMenu.SettingsSection.Settings.Title.v131" = "Settings";

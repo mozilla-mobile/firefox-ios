@@ -68,8 +68,8 @@ final class DefaultClipboardBarDisplayHandler: ClipboardBarDisplayHandler, Notif
 
         lastPasteBoardChangeCount = pasteBoardChangeCount
 
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(windowUUID)]) {
-            Task { @MainActor [weak self] in
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(windowUUID)]) { [weak self] in
+            Task { @MainActor in
                 self?.delegate?.shouldDisplay()
             }
         }

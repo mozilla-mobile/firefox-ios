@@ -34,7 +34,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         let result = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
 
         XCTAssertNotNil(result, "Should create LiteLLM client with prod environment")
@@ -51,7 +51,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         let result = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
 
         XCTAssertNotNil(result, "Should create LiteLLM client with dev environment")
@@ -68,7 +68,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         let result = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
 
         XCTAssertNotNil(result, "Should create LiteLLM client with stage environment")
@@ -83,7 +83,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         let result = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
 
         XCTAssertNotNil(result, "Should create LiteLLM client with default prod environment")
@@ -100,7 +100,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         let result = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
 
         XCTAssertNotNil(result, "Should create LiteLLM client with default prod environment")
@@ -133,7 +133,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
 
         XCTAssertNil(mockKeyStore.loadKeyID(), "Should clear key when environment changes")
@@ -152,7 +152,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
 
         XCTAssertNil(mockKeyStore.loadKeyID(), "Should clear key when environment changes from prod to stage")
@@ -172,7 +172,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
 
         XCTAssertEqual(
@@ -195,7 +195,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
 
         XCTAssertEqual(
@@ -220,15 +220,15 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
 
         XCTAssertEqual(
@@ -245,14 +245,14 @@ final class LiteLLMCreatorTests: XCTestCase {
         mockPrefs.setString(MLPAEnvironment.prod.rawValue, forKey: PrefsKeys.MLPASettings.mlpaEndpointEnvironment)
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
         try mockKeyStore.saveKeyID(existingKeyID)
 
         mockPrefs.setString(MLPAEnvironment.dev.rawValue, forKey: PrefsKeys.MLPASettings.mlpaEndpointEnvironment)
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
         XCTAssertNil(mockKeyStore.loadKeyID(), "Should clear key when switching from prod to dev")
         try mockKeyStore.saveKeyID(existingKeyID)
@@ -260,7 +260,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         mockPrefs.setString(MLPAEnvironment.stage.rawValue, forKey: PrefsKeys.MLPASettings.mlpaEndpointEnvironment)
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers
+            serviceType: .quickAnswersExa
         )
         XCTAssertNil(mockKeyStore.loadKeyID(), "Should clear key when switching from dev to stage")
     }

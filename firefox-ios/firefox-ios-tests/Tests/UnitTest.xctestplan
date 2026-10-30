@@ -18,6 +18,11 @@
         },
         {
           "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "VPNKit",
+          "name" : "VPNKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
           "identifier" : "MLPAKit",
           "name" : "MLPAKit"
         },
@@ -287,6 +292,7 @@
         "HistoryHighlightsDataAdaptorTests\/testReloadDataOnNotification()",
         "HistoryHighlightsTests",
         "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
+        "NotificationManagerTests\/testGetNotificationSettings()",
         "OnboardingTelemetryUtilityTests\/testSendOnboardingCardView_WelcomeCard_Success()",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
@@ -330,6 +336,13 @@
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "AppAttestKitTests",
         "name" : "AppAttestKitTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "VPNKitTests",
+        "name" : "VPNKitTests"
       }
     },
     {

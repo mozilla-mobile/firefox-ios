@@ -61,12 +61,12 @@ public final class SummarizeController: UIViewController, Themeable {
         $0.numberOfLines = 0
         $0.textAlignment = .center
     }
-    private lazy var closeButton: UIButton = .build {
+    private lazy var closeButton: UIButton = .build { [weak self] in
         $0.setImage(
             UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
             for: .normal
         )
-        $0.addAction(UIAction(handler: { [weak self] _ in
+        $0.addAction(UIAction(handler: { _ in
             self?.dismissSummary()
         }), for: .touchUpInside)
         $0.showsLargeContentViewer = true

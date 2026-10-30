@@ -384,11 +384,19 @@ class TabTraySelectorView: UIView, ThemeApplicable {
             backgroundColor = trackColor.withAlphaComponent(tabTrayUtils.backgroundAlpha())
         } else if theme.isNova, !DeviceInfo.isRunningLiquidGlassEarlyBeta, !(theme is TabTrayPanelSwipeTheme) {
             let glass = UIGlassEffect(style: .regular)
-            glass.tintColor = theme.type == .light ? UIColor.clear : theme.colors.layerGlassTintNova
+            glass.tintColor = theme.colors.layerGlassTintNova
             visualEffectView.effect = glass
         }
 
-        selectionBackgroundView.backgroundColor = theme.isNova ? theme.colors.layer2 : theme.colors.layerEmphasis
+        if #available(iOS 26, *) {
+            selectionBackgroundView.backgroundColor = theme.isNova
+                ? theme.colors.layerGlassSelectedFill
+                : theme.colors.layerEmphasis
+        } else {
+            selectionBackgroundView.backgroundColor = theme.isNova
+                ? theme.colors.layer2
+                : theme.colors.layerEmphasis
+        }
 
         for button in buttons {
             button.applyTheme(theme: theme)

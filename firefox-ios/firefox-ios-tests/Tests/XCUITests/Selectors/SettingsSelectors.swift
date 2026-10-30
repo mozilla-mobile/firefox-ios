@@ -43,6 +43,9 @@ protocol SettingsSelectorsSet {
     var BLOCK_POPUPS_SWITCH: Selector { get }
     var TOOLBAR_CELL: Selector { get }
     var BOTTOM_TOOLBAR_BUTTON: Selector { get }
+    var TOP_TOOLBAR_BUTTON: Selector { get }
+    var NAVIGATION_TOOLBAR_HOME_BUTTON: Selector { get }
+    var NAVIGATION_TOOLBAR_NEW_TAB_BUTTON: Selector { get }
     var DEFAULT_BROWSER_CELL: Selector { get }
     var SEARCH_CELL: Selector { get }
     var BROWSING_CELL_TITLE: Selector { get }
@@ -54,6 +57,10 @@ protocol SettingsSelectorsSet {
 
     // Translation
     var TRANSLATION_CELL_TITLE: Selector { get }
+
+    // Page Summaries
+    var SUMMARIZE_CELL: Selector { get }
+    var GENERAL_SECTION_HEADER: Selector { get }
 
     var NO_IMAGE_MODE_STATUS_SWITCH: Selector { get }
 
@@ -81,12 +88,17 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let settingTitle = "Settings"
         static let toolbarCellSettings = AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting
         static let bottomToolbarButton = AccessibilityIdentifiers.Settings.SearchBar.bottomSetting
+        static let topToolbarButton = AccessibilityIdentifiers.Settings.SearchBar.topSetting
+        static let navigationToolbarHomeButton = AccessibilityIdentifiers.Settings.NavigationToolbar.homeButton
+        static let navigationToolbarNewTabButton = AccessibilityIdentifiers.Settings.NavigationToolbar.newTabButton
         static let defaultBrowserSettings = AccessibilityIdentifiers.Settings.DefaultBrowser.defaultBrowser
         static let searchCellTitle = AccessibilityIdentifiers.Settings.Search.title
         static let browsingCellTitle = AccessibilityIdentifiers.Settings.Browsing.title
         static let blockImages = AccessibilityIdentifiers.Settings.BlockImages.title
         static let noImageModeStatus = "NoImageModeStatus"
         static let translationCellTitle = AccessibilityIdentifiers.Settings.Translation.title
+        static let summarizeCell = AccessibilityIdentifiers.Settings.Summarize.title
+        static let generalSectionHeader = "GENERAL"
         static let sendData = "settings.sendUsageData"
         static let sendCrashReports = "settings.sendCrashReports"
     }
@@ -261,6 +273,24 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings"]
     )
 
+    let TOP_TOOLBAR_BUTTON = Selector.buttonId(
+        IDs.topToolbarButton,
+        description: "Top toolbar setting button",
+        groups: ["settings"]
+    )
+
+    let NAVIGATION_TOOLBAR_HOME_BUTTON = Selector.buttonId(
+        IDs.navigationToolbarHomeButton,
+        description: "Home option of the navigation toolbar middle button setting",
+        groups: ["settings"]
+    )
+
+    let NAVIGATION_TOOLBAR_NEW_TAB_BUTTON = Selector.buttonId(
+        IDs.navigationToolbarNewTabButton,
+        description: "New Tab option of the navigation toolbar middle button setting",
+        groups: ["settings"]
+    )
+
     let DEFAULT_BROWSER_CELL = Selector.tableCellById(
         IDs.defaultBrowserSettings,
         description: "Default browser cell in Settings",
@@ -295,6 +325,18 @@ struct SettingsSelectors: SettingsSelectorsSet {
         IDs.translationCellTitle,
         description: "Translation settings cell",
         groups: ["settings", "translation"]
+    )
+
+    let SUMMARIZE_CELL = Selector.tableCellById(
+        IDs.summarizeCell,
+        description: "Page Summaries settings cell",
+        groups: ["settings", "summarizer"]
+    )
+
+    let GENERAL_SECTION_HEADER = Selector.staticTextInTablesByLabel(
+        IDs.generalSectionHeader,
+        description: "General section header in Settings",
+        groups: ["settings"]
     )
 
     let SEND_DATA_CELL = Selector.switchById(
@@ -398,8 +440,10 @@ struct SettingsSelectors: SettingsSelectorsSet {
          CLOSE_PRIVATE_TABS_SWITCH, CONTENT_BLOCKER_CELL, NOTIFICATIONS_CELL,
          PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
          CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
-         NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, BOTTOM_TOOLBAR_BUTTON, DEFAULT_BROWSER_CELL,
+         NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, BOTTOM_TOOLBAR_BUTTON, TOP_TOOLBAR_BUTTON,
+         NAVIGATION_TOOLBAR_HOME_BUTTON, NAVIGATION_TOOLBAR_NEW_TAB_BUTTON, DEFAULT_BROWSER_CELL,
          SEARCH_CELL, BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH,
-         TRANSLATION_CELL_TITLE, SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL, APPEARANCE_NAVIGATION_BAR]
+         TRANSLATION_CELL_TITLE, SUMMARIZE_CELL, GENERAL_SECTION_HEADER, SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL,
+         APPEARANCE_NAVIGATION_BAR]
     }
 }

@@ -15,7 +15,7 @@ final class RemoteTabsMiddlewareTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
@@ -204,14 +204,5 @@ final class RemoteTabsMiddlewareTests: XCTestCase, StoreTestUtility {
     func setupAppState() -> Client.AppState {
         appState = AppState()
         return appState
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

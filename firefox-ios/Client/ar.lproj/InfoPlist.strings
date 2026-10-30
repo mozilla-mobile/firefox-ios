@@ -22,9 +22,6 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "يتيح لك هذا حفظ الصور.";
 
-/* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "يستخدم فايرفوكس التعرف على الصوت لتحويل صوتك إلى نص للبحث الصوتي.";
-
 /* (No Comment) */
 "Scan QR Code" = "مسح رمز الاستجابة السريعة";
 

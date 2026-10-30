@@ -334,12 +334,6 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData.v2" = "Mozilla се труди да сакупи само оно што јој је потребно за пружање и унапређење %@-а за све.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies" = "%@ може повремено да инсталира и покреће истраживања.";
-
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies.v2" = "%@ насумично обира кориснике за тестирање могућности, чиме се побољшава квалитет за све.";
-
 /* Title for section in settings menu */
 "Settings.general" = "Опште";
 
@@ -456,12 +450,6 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Шаљи податке о употреби";
-
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies" = "Истраживања";
-
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies.v2" = "Дозволи истраживања функција";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Употребите Touch ID за откључавање апликације";

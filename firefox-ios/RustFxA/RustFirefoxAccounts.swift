@@ -100,6 +100,8 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
            // After everything is setup, register for push notifications
             if manager.hasAccount() {
                 NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+            } else {
+                RustFirefoxAccounts.shared.clearUserProfileCache()
             }
 
             completion(manager)
@@ -117,7 +119,59 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
     }
 
     public var isChinaSyncServiceEnabled: Bool {
-        return RustFirefoxAccounts.prefs?.boolForKey(PrefsKeys.KeyEnableChinaSyncService) ?? AppInfo.isChinaEdition
+        return RustFirefoxAccounts.isChinaSyncServiceEnabled(prefs: RustFirefoxAccounts.prefs)
+    }
+
+    static func isChinaSyncServiceEnabled(prefs: Prefs?) -> Bool {
+        return prefs?.boolForKey(PrefsKeys.KeyEnableChinaSyncService) ?? AppInfo.isChinaEdition
+    }
+
+    // TODO: FXIOS-16756 These hosts are duplicated from the Rust component, which owns the real
+    // server definitions. Drop this copy once app-services exposes them through uniffi.
+    private static let releaseContentServer = "https://accounts.firefox.com"
+    private static let stageContentServer = "https://accounts.stage.mozaws.net"
+    private static let stableDevContentServer = "https://stable.dev.lcip.org"
+    private static let chinaContentServer = "https://accounts.firefox.com.cn"
+
+    /// The FxA content server this build is configured against.
+    ///
+    /// Mirrors the server selection in `createAccountManager` so that callers which must
+    /// decide whether web content is trusted, such as the WebChannel bridge and pairing URL
+    /// routing, agree with the account manager about which origin is ours.
+    public static func contentServerURL() -> URL? {
+        return contentServerURL(prefs: RustFirefoxAccounts.prefs)
+    }
+
+    /// Stays `public` so the pairing URL parser in Client can resolve the same origin, and so the
+    /// prefs seam is reachable from tests in another module.
+    public static func contentServerURL(prefs: Prefs?) -> URL? {
+        return URL(string: contentServerString(prefs: prefs))
+    }
+
+    static func isUsingCustomContentServer(prefs: Prefs?) -> Bool {
+        return prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false
+            || prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false
+    }
+
+    /// The content server exactly as `createAccountManager` hands it to `FxAConfig`. A custom value
+    /// is returned verbatim so an unparseable one still fails loudly in the Rust layer rather than
+    /// silently redirecting the account manager to a different live server.
+    static func contentServerString(prefs: Prefs?) -> String {
+        if isUsingCustomContentServer(prefs: prefs) {
+            if prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false,
+               let custom = prefs?.stringForKey(PrefsKeys.KeyCustomFxAContentServer) {
+                return custom
+            }
+            return stableDevContentServer
+        }
+
+        if prefs?.intForKey(PrefsKeys.UseStageServer) == 1 {
+            return stageContentServer
+        }
+        if isChinaSyncServiceEnabled(prefs: prefs) {
+            return chinaContentServer
+        }
+        return releaseContentServer
     }
 
     @MainActor
@@ -135,19 +189,9 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
         }
 
         let config: FxAConfig
-        let useCustom = prefs?.boolForKey(
-            PrefsKeys.KeyUseCustomFxAContentServer
-        ) ?? false || prefs?.boolForKey(
-            PrefsKeys.KeyUseCustomSyncTokenServerOverride
-        ) ?? false
+        let useCustom = RustFirefoxAccounts.isUsingCustomContentServer(prefs: prefs)
         if useCustom {
-            let contentUrl: String
-            if prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false,
-               let url = prefs?.stringForKey(PrefsKeys.KeyCustomFxAContentServer) {
-                contentUrl = url
-            } else {
-                contentUrl = "https://stable.dev.lcip.org"
-            }
+            let contentUrl = RustFirefoxAccounts.contentServerString(prefs: prefs)
 
             let serverOverride = prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false
             let tokenServer = serverOverride ? prefs?.stringForKey(PrefsKeys.KeyCustomSyncTokenServerOverride) : nil
@@ -218,8 +262,13 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
 
     /// Cache the user profile (i.e. email, user name) for when the app starts offline. Notice this gets
     /// cleared when an account is disconnected.
-    private let prefKeyCachedUserProfile = "prefKeyCachedUserProfile"
+    public static let prefKeyCachedUserProfile = "prefKeyCachedUserProfile"
     private var cachedUserProfile: FxAUserProfile?
+
+    public func clearUserProfileCache(prefs: Prefs? = nil) {
+        cachedUserProfile = nil
+        (prefs ?? RustFirefoxAccounts.prefs)?.removeObjectForKey(Self.prefKeyCachedUserProfile)
+    }
 
     /// In-flight account operation the account manager applies asynchronously; UI reads it to show a
     /// transitional label ("Signing out…") instead of stale account info during the window.
@@ -231,6 +280,7 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
     public private(set) var accountTransition: AccountTransition = .idle
 
     public var userProfile: FxAUserProfile? {
+        guard accountTransition != .signingOut else { return nil }
         let prefs = RustFirefoxAccounts.prefs
 
         if let profile = RustFirefoxAccounts.shared.accountManager?.accountProfile() {
@@ -240,10 +290,10 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
 
             cachedUserProfile = FxAUserProfile(profile: profile)
             if let data = try? JSONEncoder().encode(cachedUserProfile!) {
-                prefs?.setObject(data, forKey: prefKeyCachedUserProfile)
+                prefs?.setObject(data, forKey: Self.prefKeyCachedUserProfile)
             }
         } else if cachedUserProfile == nil {
-            if let data: Data = prefs?.objectForKey(prefKeyCachedUserProfile) {
+            if let data: Data = prefs?.objectForKey(Self.prefKeyCachedUserProfile) {
                 cachedUserProfile = try? JSONDecoder().decode(FxAUserProfile.self, from: data)
             }
         }
@@ -256,11 +306,11 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
         // Enter the "Signing out…" transition immediately; `logout` completes asynchronously, after which
         // the account manager's state becomes authoritative again.
         accountTransition = .signingOut
+        // Clear the profile cache up front.
+        clearUserProfileCache()
         NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         accountManager.logout { [weak self] _ in
             guard let self else { return }
-            cachedUserProfile = nil
-            RustFirefoxAccounts.prefs?.removeObjectForKey(prefKeyCachedUserProfile)
             accountTransition = .idle
             NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         }

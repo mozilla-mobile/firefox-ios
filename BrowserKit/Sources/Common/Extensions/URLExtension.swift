@@ -125,7 +125,7 @@ extension URL {
     /// ```
     public static func getSubdomainAndHost(from urlString: String) -> (subdomain: String?, normalizedHost: String) {
         guard let url = URL(string: urlString) else { return (nil, urlString) }
-        let normalizedHost = url.normalizedHost ?? urlString
+        let normalizedHost = url.normalizedHost ?? (url.scheme == "about" ? "about:blank" : urlString)
 
         guard let publicSuffix = url.publicSuffix else { return (nil, normalizedHost) }
 
@@ -240,9 +240,11 @@ extension URL {
         if additionalPartCount > 0 {
             if let suffix = suffix {
                 // Take out the public suffixed and add in the additional parts we want.
-                let literalFromEnd: NSString.CompareOptions = [.literal,        // Match the string exactly.
-                                     .backwards,      // Search from the end.
-                                     .anchored]         // Stick to the end.
+                let literalFromEnd: NSString.CompareOptions = [
+                    .literal,   // Match the string exactly.
+                    .backwards, // Search from the end.
+                    .anchored   // Stick to the end.
+                ]
                 let suffixlessHost = host.replacingOccurrences(
                     of: suffix,
                     with: "",

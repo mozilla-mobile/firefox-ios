@@ -75,7 +75,7 @@ final class AddressListViewModelTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockLogger = MockLogger()
         mockAutofill = MockAutofill()
         mockThemeManager = MockThemeManager()
@@ -337,7 +337,7 @@ final class MockAutofill: AddressProvider, SyncAutofillProvider, @unchecked Send
         reportPreSyncKeyRetrievalFailureCalled += 1
     }
 
-    func verifyCreditCards(key: String, completionHandler: @escaping @Sendable (Bool) -> Void) {
+    func verifyCreditCards(completionHandler: @escaping @Sendable (Bool) -> Void) {
         verifyCreditCardsCalled += 1
         completionHandler(creditCardsVerified)
     }

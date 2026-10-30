@@ -34,6 +34,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     private var sharedContainerIdentifier: String
 
     private var isNovaDesignOnClosure: () -> Bool
+    private var isPrivateThemeOverrideEnabledClosure: () -> Bool
 
     private var nightModeIsOn: Bool {
         return userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
@@ -55,6 +56,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return isNovaDesignOnClosure()
     }
 
+    public var isPrivateThemeOverrideEnabled: Bool {
+        return isPrivateThemeOverrideEnabledClosure()
+    }
+
     // MARK: - Initializers
 
     public init(
@@ -62,13 +67,15 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         mainQueue: DispatchQueueInterface = DispatchQueue.main,
         sharedContainerIdentifier: String,
-        isNovaDesignOnClosure: @escaping () -> Bool = { false }
+        isNovaDesignOnClosure: @escaping () -> Bool = { false },
+        isPrivateThemeOverrideEnabledClosure: @escaping () -> Bool = { false }
     ) {
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.mainQueue = mainQueue
         self.sharedContainerIdentifier = sharedContainerIdentifier
         self.isNovaDesignOnClosure = isNovaDesignOnClosure
+        self.isPrivateThemeOverrideEnabledClosure = isPrivateThemeOverrideEnabledClosure
 
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
@@ -188,7 +195,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         let style = theme.type.getInterfaceStyle()
         self.windows[window]?.overrideUserInterfaceStyle = style
         // Nova only: highlighted text purple tint.
-        let selectedTextTint = theme.isNova ? theme.colors.layerSelectedText : nil
+        let selectedTextTint = theme.isNova ? theme.colors.actionPrimary : nil
         UITextField.appearance().tintColor = selectedTextTint
         UITextView.appearance().tintColor = selectedTextTint
         notifyCurrentThemeDidChange(for: window)
@@ -208,7 +215,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func determineUserTheme() -> ThemeType {
-        if nightModeIsOn { return .nightMode }
         if systemThemeIsOn { return getThemeTypeBasedOnSystem() }
         if automaticBrightnessIsOn { return getThemeTypeBasedOnBrightness() }
 

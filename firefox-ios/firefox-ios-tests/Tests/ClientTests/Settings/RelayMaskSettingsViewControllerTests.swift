@@ -14,7 +14,7 @@ final class RelayMaskSettingsViewControllerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        self.profile = MockProfile()
+        self.profile = makeProfile()
         self.tabManager = MockTabManager()
     }
 
@@ -23,6 +23,16 @@ final class RelayMaskSettingsViewControllerTests: XCTestCase {
         self.profile = nil
         self.tabManager = nil
         try await super.tearDown()
+    }
+
+    func test_doesNotLeak_whenEmbeddedInNavigationController_andSettingsStored() {
+        let subject = createSubject()
+        let navigationController = UINavigationController(rootViewController: subject)
+        trackForMemoryLeaks(navigationController)
+        // Mirrors viewWillAppear(_:), which retains the generated settings on the controller.
+        // ManageRelayMasksSetting captures the navigation controller, which owns the controller,
+        // so a strong back-reference here would leak the whole navigation stack.
+        subject.settings = subject.generateSettings()
     }
 
     func test_expectedSettingsOutput() throws {

@@ -6,12 +6,18 @@ import Common
 import Foundation
 import Shared
 
-class AutoplaySettingsViewController: SettingsTableViewController {
+final class AutoplaySettingsViewController: SettingsTableViewController {
     private let prefs: Prefs
     private var currentChoice: AutoplayAction?
 
-    init(prefs: Prefs, windowUUID: WindowUUID) {
+    /// Keep the private theme override just for Settings, since this is also presented from the Site Menu.
+    private let _shouldUsePrivateOverride: Bool
+    override var shouldUsePrivateOverride: Bool { return _shouldUsePrivateOverride }
+    override var shouldBeInPrivateTheme: Bool { return false }
+
+    init(prefs: Prefs, windowUUID: WindowUUID, shouldUsePrivateOverride: Bool = true) {
         self.prefs = prefs
+        self._shouldUsePrivateOverride = shouldUsePrivateOverride
         super.init(style: .grouped, windowUUID: windowUUID)
 
         self.title = .Settings.Autoplay.Autoplay
@@ -38,9 +44,9 @@ class AutoplaySettingsViewController: SettingsTableViewController {
             title: NSAttributedString(string: .Settings.Autoplay.AllowAudioAndVideo),
             subtitle: nil,
             accessibilityIdentifier: AccessibilityIdentifiers.Settings.Autoplay.allowAudioAndVideo,
-            isChecked: { return self.currentChoice == AutoplayAction.allowAudioAndVideo },
-            onChecked: {
-                self.currentChoice = AutoplayAction.allowAudioAndVideo
+            isChecked: { [weak self] in return self?.currentChoice == AutoplayAction.allowAudioAndVideo },
+            onChecked: { [weak self] in
+                self?.currentChoice = AutoplayAction.allowAudioAndVideo
                 onFinished()
             }
         )
@@ -49,9 +55,9 @@ class AutoplaySettingsViewController: SettingsTableViewController {
             title: NSAttributedString(string: .Settings.Autoplay.BlockAudio),
             subtitle: nil,
             accessibilityIdentifier: AccessibilityIdentifiers.Settings.Autoplay.blockAudio,
-            isChecked: { return self.currentChoice == AutoplayAction.blockAudio },
-            onChecked: {
-                self.currentChoice = AutoplayAction.blockAudio
+            isChecked: { [weak self] in return self?.currentChoice == AutoplayAction.blockAudio },
+            onChecked: { [weak self] in
+                self?.currentChoice = AutoplayAction.blockAudio
                 onFinished()
             }
         )
@@ -60,9 +66,9 @@ class AutoplaySettingsViewController: SettingsTableViewController {
             title: NSAttributedString(string: .Settings.Autoplay.BlockAudioAndVideo),
             subtitle: nil,
             accessibilityIdentifier: AccessibilityIdentifiers.Settings.Autoplay.blockAudioAndVideo,
-            isChecked: { return self.currentChoice == AutoplayAction.blockAudioAndVideo },
-            onChecked: {
-                self.currentChoice = AutoplayAction.blockAudioAndVideo
+            isChecked: { [weak self] in return self?.currentChoice == AutoplayAction.blockAudioAndVideo },
+            onChecked: { [weak self] in
+                self?.currentChoice = AutoplayAction.blockAudioAndVideo
                 onFinished()
             }
         )

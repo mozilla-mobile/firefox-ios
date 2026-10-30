@@ -9,6 +9,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
     private var readingListScreen: ReadingListScreen!
     private var toolBarScreen: ToolbarScreen!
     private var browserScreen: BrowserScreen!
+    private var mainMenuScreen: MainMenuScreen!
 
     override func setUp() async throws {
         launchArguments.append(LaunchArguments.SkipAppleIntelligence)
@@ -16,6 +17,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         readingListScreen = ReadingListScreen(app: app)
         toolBarScreen = ToolbarScreen(app: app)
         browserScreen = BrowserScreen(app: app)
+        mainMenuScreen = MainMenuScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306994
@@ -23,12 +25,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
     func testLoadReaderContent() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
-        waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
+        launchOpening(path(forTestPage: TestPages.mozillaBook))
         readingListScreen.assertFennecAlertNotExists()
         readingListScreen.tapOnReaderView()
         // The settings of reader view are shown as well as the content of the web site
@@ -46,11 +43,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
     func testAddToReadingList() throws {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        // Navigate to reading list
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(LibraryPanel_ReadingList)
+        launchIntoReadingList()
 
         // Check to make sure the reading list is empty
         readingListScreen.checkReadingListNumberOfItems(items: 0)
@@ -118,6 +111,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306996
+    // Regression
     func testRemoveFromReadingView() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
@@ -136,6 +130,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306997
+    // Regression
     func testMarkAsReadAndUnreadFromReadingList() throws {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
@@ -235,11 +230,8 @@ class ReadingListTests: FeatureFlaggedTestBase {
     func testReadingList() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_ReadingList)
         // Validate empty reading list panel
-        readingListScreen.waitForReadingListsPanel()
+        launchIntoReadingList()
         readingListScreen.tapOnDoneButton()
         // Add item to reading list and check that it appears
         addContentToReaderView()
@@ -289,10 +281,34 @@ class ReadingListTests: FeatureFlaggedTestBase {
     func testAddToReaderListOptions() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
-        app.launch()
-        addContentToReaderView()
+        launchOpening(path(forTestPage: TestPages.mozillaBook))
+        readingListScreen.addCurrentPageToReadingList()
         // Check that Settings layouts options are shown
         readingListScreen.openReaderModeSettings()
         readingListScreen.assertReaderModeOptionsVisible()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3895120
+    // Regression
+    func testReaderViewMainMenuButton() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL(path(forTestPage: TestPages.mozillaBook))
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        // The menu item is only enabled once the page is known to be readerable
+        readingListScreen.assertReaderButtonExists()
+        navigator.goto(BrowserTabMenuMore)
+        mainMenuScreen.assertReaderViewIsBelowPageZoom()
+        mainMenuScreen.assertReaderViewIs(on: false)
+
+        mainMenuScreen.tapReaderView()
+        readingListScreen.assertReaderListContentVisible()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenuMore)
+        mainMenuScreen.assertReaderViewIs(on: true)
     }
 }

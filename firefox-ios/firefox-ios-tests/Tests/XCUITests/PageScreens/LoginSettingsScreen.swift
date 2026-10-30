@@ -111,10 +111,32 @@ final class LoginSettingsScreen {
         XCTAssertEqual(toggle.value as? String, "1", "Save passwords toggle is not enabled by default")
     }
 
-    func openLoginAtIndex(_ index: Int) {
+    /// The row sits under the first-run sheet, whose dismissal animation swallows a tap sent as soon
+    /// as the sheet leaves the hierarchy, so the row is re-tapped until the detail screen pushes.
+    func openLoginAtIndex(_ index: Int, attempts: Int = 3) {
+        let base = BaseTestCase()
         let cell = sel.LOGIN_LIST.element(in: app).cells.element(boundBy: index)
-        BaseTestCase().mozWaitForElementToExist(cell)
-        cell.waitAndTap()
+        let detailList = sel.LOGIN_DETAIL_LIST.element(in: app)
+        base.mozWaitForElementToExist(cell)
+        for _ in 0..<attempts {
+            // Re-tapping once the push has started would force-tap a coordinate that by then sits
+            // over the detail screen, so a landed tap is waited out rather than repeated.
+            if detailList.exists { return }
+            guard cell.exists else { break }
+            cell.tap(force: true)
+            if detailList.mozWaitForElementToExist(timeout: 5, failOnTimeout: false) { return }
+        }
+        if detailList.mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) { return }
+        XCTFail("The login detail screen did not open after \(attempts) taps")
+    }
+
+    func assertLoginDetailListExists() {
+        BaseTestCase().mozWaitForElementToExist(sel.LOGIN_DETAIL_LIST.element(in: app))
+    }
+
+    func tapLoginDetailCellContaining(_ text: String) {
+        assertLoginDetailListExists()
+        sel.LOGIN_DETAIL_LIST.element(in: app).cells.elementContainingText(text).waitAndTap()
     }
 
     func revealPassword() {
@@ -161,6 +183,19 @@ final class LoginSettingsScreen {
             }
             attempts -= 1
         } while passcode.exists && attempts > 0
+    }
+
+    /// The Passwords intro shows only on the first visit, since its seen flag lives in UserDefaults.
+    func tapOnboardingContinueIfShown() {
+        let continueButton = sel.ONBOARDING_CONTINUE_BUTTON.element(in: app)
+        if BaseTestCase().mozWaitForElementToExist(continueButton, timeout: TIMEOUT_PICKER_PROBE, failOnTimeout: false) {
+            continueButton.waitAndTap()
+        }
+    }
+
+    /// The simulator has no Face ID enrolled, so device owner authentication always asks for the passcode.
+    func assertPasscodePromptShown(timeout: TimeInterval = TIMEOUT_LONG) {
+        BaseTestCase().mozWaitForElementToExist(sel.PASSCODE_FIELD.element(in: springboard), timeout: timeout)
     }
 
     func assertLoginCreatedFirstMatch() {

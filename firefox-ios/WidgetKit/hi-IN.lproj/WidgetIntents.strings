@@ -1,48 +1,48 @@
 /* (No Comment) */
-"2GqvPe" = "कॉपी की गई लिंक पर जाएं";
+"2GqvPe" = "कॉपी किए गए लिंक पर जाएं";
 
 /* (No Comment) */
-"ctDNmu" = "Quick access to various Firefox actions";
+"ctDNmu" = "अलग-अलग Firefox कार्रवाइयों का तुरंत एक्सेस";
 
 /* (No Comment) */
-"eHmH1H" = "निजी टैब बंद करें";
+"eHmH1H" = "प्राइवेट टैब मिटाएं";
 
 /* (No Comment) */
-"eqyNJg" = "तुरंत कारवाई";
+"eqyNJg" = "क्विक ऐक्शन";
 
 /* (No Comment) */
-"eV8mOT" = "तुरंत कारवाई प्रकार";
+"eV8mOT" = "क्विक ऐक्शन का प्रकार";
 
 /* (No Comment) */
-"fi3W24-2GqvPe" = "There are ${count} options matching ‘Go to Copied Link’.";
+"fi3W24-2GqvPe" = "'कॉपी किए गए लिंक पर जाएं' से मेल खाते ${count} विकल्प हैं।";
 
 /* (No Comment) */
-"fi3W24-eHmH1H" = "There are ${count} options matching ‘Clear Private Tabs’.";
+"fi3W24-eHmH1H" = "'प्राइवेट टैब मिटाएं' से मेल खाते ${count} विकल्प हैं।";
 
 /* (No Comment) */
-"fi3W24-scEmjs" = "There are ${count} options matching ‘New Private Search’.";
+"fi3W24-scEmjs" = "'नई प्राइवेट सर्च' से मेल खाते ${count} विकल्प हैं।";
 
 /* (No Comment) */
-"fi3W24-xRJbBP" = "There are ${count} options matching ‘New Search’.";
+"fi3W24-xRJbBP" = "'नई सर्च' से मेल खाते ${count} विकल्प हैं।";
 
 /* (No Comment) */
-"PzSrmZ-2GqvPe" = "Just to confirm, you wanted ‘Go to Copied Link’?";
+"PzSrmZ-2GqvPe" = "पुष्टि के लिए, आप 'कॉपी किए गए लिंक पर जाएं' चाहते थे?";
 
 /* (No Comment) */
-"PzSrmZ-eHmH1H" = "Just to confirm, you wanted ‘Clear Private Tabs’?";
+"PzSrmZ-eHmH1H" = "पुष्टि के लिए, आप 'प्राइवेट टैब मिटाएं' चाहते थे?";
 
 /* (No Comment) */
-"PzSrmZ-scEmjs" = "Just to confirm, you wanted ‘New Private Search’?";
+"PzSrmZ-scEmjs" = "पुष्टि के लिए, आप 'नई प्राइवेट सर्च' चाहते थे?";
 
 /* (No Comment) */
-"PzSrmZ-xRJbBP" = "Just to confirm, you wanted ‘New Search’?";
+"PzSrmZ-xRJbBP" = "पुष्टि के लिए, आप 'नई सर्च' चाहते थे?";
 
 /* (No Comment) */
-"scEmjs" = "नई निजी खोज";
+"scEmjs" = "नई प्राइवेट सर्च";
 
 /* (No Comment) */
-"w9jdPK" = "तुरंत कारवाई";
+"w9jdPK" = "क्विक ऐक्शन";
 
 /* (No Comment) */
-"xRJbBP" = "नयी खोज";
+"xRJbBP" = "नई सर्च";
 

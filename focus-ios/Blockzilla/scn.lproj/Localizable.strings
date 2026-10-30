@@ -328,9 +328,6 @@
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla cerca di ricògghiri sulu chiḍḍu chi ci serbi pi fari megghiu %@ pi tutti.";
 
-/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies" = "%@ po nzitari e abbiari studi di tempu ’n tempu.";
-
 /* Title for section in settings menu */
 "Settings.general" = "Ginirali";
 
@@ -444,9 +441,6 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Manna i dati d’usu";
-
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies" = "Studi";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Usa Touch ID pi sbluccari l’applicazzioni";

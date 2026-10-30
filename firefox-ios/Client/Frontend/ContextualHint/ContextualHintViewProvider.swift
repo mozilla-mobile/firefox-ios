@@ -19,7 +19,6 @@ enum ContextualHintType: String {
     case mainMenu = "MainMenu"
     case navigation = "Navigation"
     case relay = "Relay"
-    case translation = "Translation"
     case summarizeToolbarEntry = "SummarizeToolbarEntry"
 }
 

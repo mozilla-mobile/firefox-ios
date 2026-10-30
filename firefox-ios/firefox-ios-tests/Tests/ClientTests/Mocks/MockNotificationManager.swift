@@ -5,7 +5,7 @@
 import Foundation
 @testable import Client
 
-class MockNotificationManager: NotificationManagerProtocol {
+class MockNotificationManager: NotificationManagerProtocol, @unchecked Sendable {
     let wasAuthorizationSuccessful = true
     var requestAuthorizationCalled = false
     var shouldGrantPermission = true

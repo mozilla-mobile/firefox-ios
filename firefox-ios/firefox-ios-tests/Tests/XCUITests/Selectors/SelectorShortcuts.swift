@@ -103,6 +103,27 @@ extension Selector {
         return Selector(strategy: .predicate(p), value: id, description: description, groups: groups)
     }
 
+    static func cellIdBeginsWith(_ prefix: String, description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND identifier BEGINSWITH %@",
+                            XCUIElement.ElementType.cell.rawValue,
+                            prefix)
+        return Selector(strategy: .predicate(p), value: prefix, description: description, groups: groups)
+    }
+
+    static func cellLabelBeginsWith(_ prefix: String, description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND label BEGINSWITH %@",
+                            XCUIElement.ElementType.cell.rawValue,
+                            prefix)
+        return Selector(strategy: .predicate(p), value: prefix, description: description, groups: groups)
+    }
+
+    /// Matches a toggle row by the text it shows, for rows whose cell has neither an identifier nor a label.
+    static func switchCellContainingStaticText(_ label: String,
+                                               description: String,
+                                               groups: [String] = []) -> Selector {
+        Selector(strategy: .switchCellContainingStaticText(label), value: label, description: description, groups: groups)
+    }
+
     static func cellByLabel(_ label: String, description: String, groups: [String]) -> Selector {
         let p = NSPredicate(format: "elementType == %d AND label == %@",
                             XCUIElement.ElementType.cell.rawValue,
@@ -130,6 +151,21 @@ extension Selector {
         )
     }
 
+    static func iconById(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(
+            strategy: .predicate(
+                NSPredicate(
+                    format: "elementType == %d AND identifier == %@",
+                    XCUIElement.ElementType.icon.rawValue,
+                    id
+                )
+            ),
+            value: id,
+            description: description,
+            groups: groups
+        )
+    }
+
     static func staticTextByExactLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
         Selector(
             strategy: .predicate(
@@ -143,6 +179,12 @@ extension Selector {
             description: description,
             groups: groups
         )
+    }
+
+    static func textFieldContainingButton(labeled label: String,
+                                          description: String,
+                                          groups: [String] = []) -> Selector {
+        Selector(strategy: .textFieldContainingButtonByLabel(label), value: label, description: description, groups: groups)
     }
 
     static func staticTextLabelContains(_ text: String, description: String, groups: [String] = []) -> Selector {
@@ -179,6 +221,20 @@ extension Selector {
                  value: id,
                  description: description,
                  groups: groups
+        )
+    }
+
+    static func searchFieldByIdOrLabel(_ value: String, description: String, groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (identifier == %@ OR label == %@)",
+            XCUIElement.ElementType.searchField.rawValue,
+            value,
+            value
+        )
+        return Selector(strategy: .predicate(predicate),
+                        value: value,
+                        description: description,
+                        groups: groups
         )
     }
 
@@ -289,6 +345,18 @@ extension Selector {
                         groups: groups)
     }
 
+    /// Matches buttons whose identifier starts with `prefix`, leaving out the one with identifier `excludedId`.
+    static func buttonIdBeginsWith(_ prefix: String,
+                                   excluding excludedId: String,
+                                   description: String,
+                                   groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND identifier BEGINSWITH %@ AND identifier != %@",
+                            XCUIElement.ElementType.button.rawValue,
+                            prefix,
+                            excludedId)
+        return Selector(strategy: .predicate(p), value: prefix, description: description, groups: groups)
+    }
+
     static func buttonLabelContains(_ text: String,
                                     description: String,
                                     groups: [String] = []) -> Selector {
@@ -296,6 +364,26 @@ extension Selector {
             format: "elementType == %d AND label CONTAINS[c] %@",
             XCUIElement.ElementType.button.rawValue,
             text
+        )
+
+        return Selector(
+            strategy: .predicate(predicate),
+            value: text,
+            description: description,
+            groups: groups
+        )
+    }
+
+    /// Matches a button whose label contains either text, for elements labelled differently per scheme.
+    static func buttonLabelContainsEither(_ text: String,
+                                          or otherText: String,
+                                          description: String,
+                                          groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND (label CONTAINS[c] %@ OR label CONTAINS[c] %@)",
+            XCUIElement.ElementType.button.rawValue,
+            text,
+            otherText
         )
 
         return Selector(
@@ -456,6 +544,61 @@ extension Selector {
 
     static func otherElementsButtonByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
         Selector(strategy: .otherElementsButtonByLabel(label), value: label, description: description, groups: groups)
+    }
+
+    /// Matches a button only inside `container`, for labels that other buttons in the app share.
+    static func buttonByLabel(_ label: String,
+                              in container: Selector,
+                              description: String,
+                              groups: [String] = []) -> Selector {
+        Selector(
+            strategy: .buttonInContainerByLabel(container: container, label: label),
+            value: label,
+            description: description,
+            groups: groups
+        )
+    }
+
+    /// Matches the collection view holding an element whose identifier starts with `prefix`.
+    static func collectionViewContainingIdPrefix(_ prefix: String,
+                                                 description: String,
+                                                 groups: [String] = []) -> Selector {
+        Selector(
+            strategy: .collectionViewContainingIdPrefix(prefix),
+            value: prefix,
+            description: description,
+            groups: groups
+        )
+    }
+
+    /// Edit menu items surface as menu items on older iOS and as buttons on newer versions.
+    static func menuItemOrButtonByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(
+            format: "(elementType == %d OR elementType == %d) AND label == %@",
+            XCUIElement.ElementType.menuItem.rawValue,
+            XCUIElement.ElementType.button.rawValue,
+            label
+        )
+        return Selector(strategy: .predicate(p), value: label, description: description, groups: groups)
+    }
+
+    /// Matches a button by label, skipping the button with `excludedButtonId`,
+    /// or the menu item with `menuItemId` (older iOS surfaces the same control as a menu item).
+    static func buttonByLabelOrMenuItemId(_ label: String,
+                                          excludingButtonId excludedButtonId: String,
+                                          menuItemId: String,
+                                          description: String,
+                                          groups: [String] = []) -> Selector {
+        let p = NSPredicate(
+            format: "(elementType == %d AND label == %@ AND identifier != %@) " +
+                    "OR (elementType == %d AND identifier == %@)",
+            XCUIElement.ElementType.button.rawValue,
+            label,
+            excludedButtonId,
+            XCUIElement.ElementType.menuItem.rawValue,
+            menuItemId
+        )
+        return Selector(strategy: .predicate(p), value: label, description: description, groups: groups)
     }
 
     static func otherElementByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {

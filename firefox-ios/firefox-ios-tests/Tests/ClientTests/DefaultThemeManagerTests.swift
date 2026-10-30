@@ -293,16 +293,38 @@ final class DefaultThemeManagerTests: XCTestCase {
         XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).colors.layer1, LightTheme().colors.layer1)
     }
 
+    // MARK: - Private theme override
+
+    func testDTM_privateThemeOverrideOff_legacyInPrivateMode_keepsPrivateTheme() {
+        let sut = createSubject(with: userDefaults)
+        sut.setSystemTheme(isOn: false)
+        sut.setManualTheme(to: .light)
+        sut.setPrivateTheme(isOn: true, for: windowUUID)
+
+        XCTAssertTrue(sut.resolveTheme(for: windowUUID, privateOverride: false) is PrivateModeTheme)
+    }
+
+    func testDTM_privateThemeOverrideOn_inPrivateMode_forcingRegularTheme_returnsRegularTheme() {
+        let sut = createSubject(with: userDefaults, isNovaDesignOn: true, isPrivateThemeOverrideOn: true)
+        sut.setSystemTheme(isOn: false)
+        sut.setManualTheme(to: .light)
+        sut.setPrivateTheme(isOn: true, for: windowUUID)
+
+        XCTAssertTrue(sut.resolveTheme(for: windowUUID, privateOverride: false) is NovaLightTheme)
+    }
+
     // MARK: - Helper methods
 
     private func createSubject(with userDefaults: UserDefaultsInterface,
                                isNovaDesignOn: Bool = false,
+                               isPrivateThemeOverrideOn: Bool = false,
                                file: StaticString = #filePath,
                                line: UInt = #line) -> DefaultThemeManager {
         let subject = DefaultThemeManager(
             userDefaults: userDefaults,
             sharedContainerIdentifier: "",
-            isNovaDesignOnClosure: { isNovaDesignOn }
+            isNovaDesignOnClosure: { isNovaDesignOn },
+            isPrivateThemeOverrideEnabledClosure: { isPrivateThemeOverrideOn }
         )
         subject.setWindow(UIWindow(frame: .zero), for: windowUUID)
         trackForMemoryLeaks(subject, file: file, line: line)

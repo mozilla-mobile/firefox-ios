@@ -103,7 +103,7 @@ final class DefaultTemporaryDocument: NSObject,
                                       URLSessionDownloadDelegate,
                                       @unchecked Sendable {
     private let session: URLSession
-    private let request: URLRequest
+    private let request: URLRequest?
     private let cookies: [HTTPCookie]
     private let credential: URLCredential?
     private var currentDownloadTask: URLSessionDownloadTask?
@@ -122,7 +122,7 @@ final class DefaultTemporaryDocument: NSObject,
     private let logger: Logger
 
     var sourceURL: URL? {
-        return request.url
+        return request?.url
     }
 
     init(
@@ -137,7 +137,7 @@ final class DefaultTemporaryDocument: NSObject,
         self.request = Self.applyCookiesToRequest(request, cookies: cookies)
         self.cookies = cookies
         self.credential = credential
-        self.filename = filename ?? "unknown"
+        self.filename = FilenameSanitizer.sanitize(filename)
         self.mimeType = mimeType
         self.session = session
         self.logger = logger
@@ -147,7 +147,7 @@ final class DefaultTemporaryDocument: NSObject,
 
     init(
         preflightResponse: URLResponse,
-        request: URLRequest,
+        request: URLRequest? = nil,
         mimeType: String? = nil,
         session: URLSession = .shared,
         logger: Logger = DefaultLogger.shared
@@ -155,7 +155,7 @@ final class DefaultTemporaryDocument: NSObject,
         self.request = request
         self.cookies = []
         self.credential = nil
-        self.filename = preflightResponse.suggestedFilename ?? "unknown"
+        self.filename = FilenameSanitizer.sanitize(preflightResponse.suggestedFilename)
         self.mimeType = mimeType
         self.session = session
         self.logger = logger
@@ -207,6 +207,7 @@ final class DefaultTemporaryDocument: NSObject,
         if let tempFile = queryTempFile() {
             return tempFile
         }
+        guard let request else { return nil }
         let response = try? await session.download(for: request)
         guard let location = response?.0, let tempFileURL = storeTempDownloadFile(at: location) else { return nil }
 
@@ -220,6 +221,12 @@ final class DefaultTemporaryDocument: NSObject,
             }
             return
         }
+        guard let request else {
+            ensureMainThread {
+                completion(nil)
+            }
+            return
+        }
         onDownload = completion
         currentDownloadTask = session.downloadTask(with: request)
         currentDownloadTask?.delegate = WeakURLSessionDelegate(delegate: self)
@@ -230,7 +237,9 @@ final class DefaultTemporaryDocument: NSObject,
         if let localFileURL {
             return localFileURL
         }
-        let tempFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
+        let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
+        let tempFileURL = tempDirectory.appendingPathComponent(filename)
+        guard FilenameSanitizer.isContained(tempFileURL, in: tempDirectory) else { return nil }
         if FileManager.default.fileExists(atPath: tempFileURL.path) {
             localFileURL = tempFileURL
             return tempFileURL
@@ -257,6 +266,9 @@ final class DefaultTemporaryDocument: NSObject,
         // By default the downloaded file is stored in the temp directory
         let tempDirectory = url.deletingPathExtension().deletingLastPathComponent()
         let tempFileURL = tempDirectory.appendingPathComponent(filename)
+        // `filename` is sanitized at init, but never remove or move onto a path outside
+        // the staging directory even if that invariant is broken by a future caller.
+        guard FilenameSanitizer.isContained(tempFileURL, in: tempDirectory) else { return nil }
 
         try? FileManager.default.createDirectory(
             at: tempDirectory,
@@ -314,7 +326,10 @@ final class DefaultTemporaryDocument: NSObject,
         let isHTTPAuthChallenge = method == NSURLAuthenticationMethodHTTPBasic
             || method == NSURLAuthenticationMethodHTTPDigest
             || method == NSURLAuthenticationMethodNTLM
-        if let credential, isHTTPAuthChallenge, challenge.protectionSpace.host == request.url?.host {
+        if isHTTPAuthChallenge,
+           let credential,
+           let request,
+           challenge.protectionSpace.host == request.url?.host {
             completionHandler(.useCredential, credential)
         } else {
             completionHandler(.performDefaultHandling, nil)

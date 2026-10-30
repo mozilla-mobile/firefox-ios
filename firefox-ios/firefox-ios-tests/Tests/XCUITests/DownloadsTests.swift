@@ -56,6 +56,7 @@ class DownloadsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306897
+    // Regression
     func testDownloadFileContextMenu() {
         navigator.openURL(testURL)
         waitUntilPageLoad()
@@ -107,6 +108,7 @@ class DownloadsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306900
+    // Regression
     func testDeleteDownloadedFile() throws {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
@@ -170,6 +172,7 @@ class DownloadsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306902
+    // Regression
     func testLongPressOnDownloadedFile() {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
@@ -248,6 +251,7 @@ class DownloadsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306904
+    // Regression
     func testRemoveUserDataRemovesDownloadedFiles() {
         navigator.nowAt(NewTabScreen)
         // The option to remove downloaded files from clear private data is off by default

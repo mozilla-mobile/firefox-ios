@@ -8,7 +8,7 @@
 "Intro.Slides.Next.Button" = "Ďalej";
 
 /* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Hľadáte niečo iné? Vyberte si iný vyhľadávací modul.";
+"Intro.Slides.Search.Description" = "Hľadáte niečo iné? Vyberte iný vyhľadávač.";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
 "Intro.Slides.Search.Title" = "Prehliadanie podľa vás";

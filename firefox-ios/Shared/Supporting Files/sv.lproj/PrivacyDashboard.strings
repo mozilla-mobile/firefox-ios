@@ -1,3 +1,6 @@
+/* On the Privacy Dashboard popup, the accessibility label read out for one of the tracker category rows. The first placeholder (%1$@) is the category's name, such as Fingerprinters. The second placeholder (%2$@) is how many trackers of that category we've blocked this week. */
+"PrivacyDashboard.CategoryAccessibilityLabel.v156" = "%1$@, blockerad: %2$@";
+
 /* On the Privacy Dashboard popup, the title text for the bar & label showing how many cross-site tracking cookies we've blocked. */
 "PrivacyDashboard.CrossSiteTrackers.v155" = "Globala spårningskakor";
 
@@ -7,11 +10,14 @@
 /* On the Privacy Dashboard popup, the text for the header when we have blocked some trackers this week. This is going to have, above it, in bold letters, the number of trackers blocked this week. */
 "PrivacyDashboard.HeaderLabel.v155" = "Spårare blockerade den här veckan";
 
+/* On the Privacy Dashboard popup, the accessibility label read out for the weekly count. The count and the header below it are two separate labels on screen, but are read out as this one sentence. The placeholder (%@) is how many trackers we've blocked this week. */
+"PrivacyDashboard.HeaderLabelAccessibilityLabel.v156" = "Spårare blockerade denna vecka: %@";
+
 /* On the Privacy Dashboard popup, the text for the header of the popup, in the case where we have not yet blocked any trackers yet. The placeholder %@ will be the app name, Firefox. */
 "PrivacyDashboard.HeaderLabelForNoTrackersBlocked.v155" = "%@ blockerar spårare när du surfar, du ser dem här.";
 
 /* On the Privacy Dashboard popup, the title text for the bar & label showing how many social media trackers we've blocked. */
-"PrivacyDashboard.SocialTrackers.v155" = "Sociala media-spårare";
+"PrivacyDashboard.SocialTrackers.v155" = "Spårare för sociala medier";
 
 /* On the Privacy Dashboard popup, the text for the footer of the page. The first placeholder (%1$@) is the total number of trackers we've blocked, in a localized format (provided by Swift's built in number localization). The second placeholder (%2$@) will be a date in DD/MM/YY format, and will denote the date we've started blocking trackers for the user. */
 "PrivacyDashboard.TotalTrackersBlockedSince.v155" = "%1$@ sedan %2$@ 🎉";

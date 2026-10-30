@@ -311,7 +311,7 @@
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "Помозите нам да учинимо %@ бољим";
 
 /* Subtitle for the Terms of Service screen in the onboarding process. The '\n' symbols denote empty lines separating the first link parameter from the rest of the text. */
-"Onboarding.Modern.TermsOfService.Subtitle.v140" = "Учитај странице муњевито брзо\nСамостална заштита од праћења\nСинхронизуј на свим својим уређајима";
+"Onboarding.Modern.TermsOfService.Subtitle.v140" = "Учитај странице муњевито брзо\nСамостална заштита од праћења\nУсклађивање на свим својим уређајима";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
 "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "Наставком се слажете са %@";

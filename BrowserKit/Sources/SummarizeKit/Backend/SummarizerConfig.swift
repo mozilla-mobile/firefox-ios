@@ -1,6 +1,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
+import Foundation
 import LLMKit
 import FoundationModels
 
@@ -15,12 +16,24 @@ public struct SummarizerConfig: LLMConfig, Equatable, Sendable {
     /// 2. The Apple foundation model is a new API that may introduce additional parameters or change existing ones.
     /// Options can include things like temperature, max tokens, and other model-specific settings.
     nonisolated(unsafe) public let options: [String: AnyHashable]
+    /// The language the summary is generated in.
+    public let summaryLocale: Locale?
+    /// The detected language of the content being summarized.
+    public let pageLocale: Locale?
+
     public static let defaultConfig =
         SummarizerConfig(instructions: SummarizerModelInstructions.defaultInstructions, options: [:])
 
-    public init(instructions: String, options: [String: AnyHashable]) {
+    public init(
+        instructions: String,
+        options: [String: AnyHashable],
+        summaryLocale: Locale? = nil,
+        pageLocale: Locale? = nil
+    ) {
         self.instructions = instructions
         self.options = options
+        self.summaryLocale = summaryLocale
+        self.pageLocale = pageLocale
     }
 
     /// Returns a new config by merging the current config with another config.
@@ -28,7 +41,12 @@ public struct SummarizerConfig: LLMConfig, Equatable, Sendable {
     public func merging(with other: SummarizerConfig) -> SummarizerConfig {
         let mergedInstructions = self.instructions.isEmpty ? other.instructions : self.instructions
         let mergedOptions = self.options.merging(other.options) { current, _ in current }
-        return SummarizerConfig(instructions: mergedInstructions, options: mergedOptions)
+        return SummarizerConfig(
+            instructions: mergedInstructions,
+            options: mergedOptions,
+            summaryLocale: self.summaryLocale ?? other.summaryLocale,
+            pageLocale: self.pageLocale ?? other.pageLocale
+        )
     }
 }
 

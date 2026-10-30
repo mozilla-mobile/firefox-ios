@@ -15,7 +15,7 @@ class StartAtHomeHelperTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        profile = MockProfile()
+        profile = makeProfile()
         tabManager = MockTabManager()
 
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
@@ -35,6 +35,18 @@ class StartAtHomeHelperTests: XCTestCase {
         let shouldSkip = helper.shouldSkipStartHome
 
         XCTAssertFalse(shouldSkip, "Should not skip StartAtHome")
+    }
+
+    func testShouldSkipStartAtHome_RunningUITest() throws {
+        setupHelper(isRunningUITest: true)
+        let shouldSkip = helper.shouldSkipStartHome
+        XCTAssertTrue(shouldSkip, "Expected to skip because a UI test is running")
+    }
+
+    func testShouldNotSkipStartAtHome_RunningUITestWithOptIn() throws {
+        setupHelper(isRunningUITest: true, isStartAtHomeEnabledForTests: true)
+        let shouldSkip = helper.shouldSkipStartHome
+        XCTAssertFalse(shouldSkip, "Expected not to skip because the UI test opted into Start at Home")
     }
 
     func testShouldSkipStartAtHome_RestoringTabs() throws {
@@ -124,13 +136,16 @@ class StartAtHomeHelperTests: XCTestCase {
     // MARK: - Private
     private func setupHelper(
         appSessionManager: MockAppSessionManager = MockAppSessionManager(),
-        isRestoringTabs: Bool = false
+        isRestoringTabs: Bool = false,
+        isRunningUITest: Bool = false,
+        isStartAtHomeEnabledForTests: Bool = false
     ) {
         helper = StartAtHomeHelper(
             appSessionManager: appSessionManager,
             prefs: profile.prefs,
             isRestoringTabs: isRestoringTabs,
-            isRunningUITest: false
+            isRunningUITest: isRunningUITest,
+            isStartAtHomeEnabledForTests: isStartAtHomeEnabledForTests
         )
 
         helper.startAtHomeSetting = .afterFourHours

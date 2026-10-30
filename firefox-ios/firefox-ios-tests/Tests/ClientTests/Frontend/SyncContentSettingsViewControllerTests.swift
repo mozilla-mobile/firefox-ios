@@ -15,7 +15,7 @@ class SyncContentSettingsViewControllerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
         syncContentSettingsVC = SyncContentSettingsViewController(windowUUID: windowUUID)
         syncContentSettingsVC?.profile = profile
     }
@@ -25,6 +25,14 @@ class SyncContentSettingsViewControllerTests: XCTestCase {
         profile = nil
         syncContentSettingsVC = nil
         try await super.tearDown()
+    }
+
+    func test_syncContentSettingsViewController_doesNotLeak_whenGeneratedSettingsAreStored() {
+        let subject = SyncContentSettingsViewController(windowUUID: windowUUID)
+        subject.profile = profile
+        trackForMemoryLeaks(subject)
+        // Mirrors viewWillAppear(_:), which retains the generated settings on the controller.
+        subject.settings = subject.generateSettings()
     }
 
     func test_syncContentSettingsViewController_generateSettingsCount() {

@@ -6,7 +6,7 @@ import Foundation
 import Common
 import Shared
 
-class TopSitesRowCountSettingsController: SettingsTableViewController, FeatureFlaggable {
+final class TopSitesRowCountSettingsController: SettingsTableViewController, FeatureFlaggable {
     let prefs: Prefs
     var numberOfRows: Int32
     nonisolated static let defaultNumberOfRows: Int32 = 2
@@ -25,30 +25,9 @@ class TopSitesRowCountSettingsController: SettingsTableViewController, FeatureFl
 
     override func generateSettings() -> [SettingSection] {
         updateNumberofRows()
-        let createSetting: (Int32) -> CheckmarkSetting = { num in
-            return CheckmarkSetting(title: NSAttributedString(string: "\(num)"),
-                                    subtitle: nil,
-                                    isChecked: {
-                return num == self.numberOfRows
-            },
-                                    onChecked: {
-                guard self.numberOfRows != num else { return }
-                self.numberOfRows = num
-                self.prefs.setInt(Int32(num), forKey: PrefsKeys.NumberOfTopSiteRows)
-                self.tableView.reloadData()
-
-                store.dispatch(
-                    TopSitesAction(
-                        numberOfRows: Int(num),
-                        windowUUID: self.windowUUID,
-                        actionType: TopSitesActionType.updatedNumberOfRows
-                    )
-                )
-            })
-        }
 
         var rows = [CheckmarkSetting]()
-        if featureFlagsProvider.isEnabled(.homepageSearchBar) {
+        if featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar) {
             rows = [1, 2].map(createSetting)
         } else {
             rows = [1, 2, 3, 4].map(createSetting)
@@ -61,9 +40,31 @@ class TopSitesRowCountSettingsController: SettingsTableViewController, FeatureFl
         )]
     }
 
+    private func createSetting(_ num: Int32) -> CheckmarkSetting {
+        return CheckmarkSetting(title: NSAttributedString(string: "\(num)"),
+                                subtitle: nil,
+                                isChecked: { [weak self] in
+            return num == self?.numberOfRows
+        },
+                                onChecked: { [weak self] in
+            guard let self, numberOfRows != num else { return }
+            numberOfRows = num
+            prefs.setInt(Int32(num), forKey: PrefsKeys.NumberOfTopSiteRows)
+            tableView.reloadData()
+
+            store.dispatch(
+                TopSitesAction(
+                    numberOfRows: Int(num),
+                    windowUUID: windowUUID,
+                    actionType: TopSitesActionType.updatedNumberOfRows
+                )
+            )
+        })
+    }
+
     private func updateNumberofRows() {
         let defaultValue = TopSitesRowCountSettingsController.defaultNumberOfRows
-        if featureFlagsProvider.isEnabled(.homepageSearchBar) {
+        if featureFlagsProvider.isEnabled(.homepageAnimatedCenterSearchBar) {
             let savedNumberOfRows = self.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? defaultValue
             numberOfRows = savedNumberOfRows > 2 ? defaultValue : savedNumberOfRows
         } else {

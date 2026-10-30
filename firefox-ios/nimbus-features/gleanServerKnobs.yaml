@@ -1,0 +1,42 @@
+features:
+  glean-server-knobs:
+    description: "A feature that provides server-side configurations for Glean metrics (aka Server Knobs)."
+    allow-coenrollment: true
+    variables:
+      gleanMetricConfiguration:
+        description: Configuration for Glean Server Knobs
+        type: GleanServerKnobsConfiguration
+        default: {}
+      enable-event-timestamps:
+        description: "Enables precise event timestamps for Glean events"
+        type: Boolean
+        default: true
+      delay-ping-lifetime-io:
+        description: "Glean will delay io for ping lifetime metrics"
+        type: Boolean
+        default: true
+      ping-lifetime-threshold:
+        description: "Write count threshold when to auto-flush"
+        type: Int
+        default: 1000
+      ping-lifetime-max-time:
+        description: "After what time to auto-flush"
+        type: Int
+        default: 2000
+types:
+  objects:
+    GleanServerKnobsConfiguration:
+      description: A configuration object for Glean server knobs.
+      fields:
+        metrics_enabled:
+          description: A map of metric base-identifiers to booleans representing the state of the 'enabled' flag for that metric.
+          type: Map<String, Boolean>
+          default: {}
+        pings_enabled:
+          description: A map of ping names to booleans representing the state of the 'enabled' flag for that ping.
+          type: Map<String, Boolean>
+          default: {}
+        event_threshold:
+          description: The threshold of events that will be buffered before an events ping is collected and submitted.
+          type: Option<Int>
+          default: null

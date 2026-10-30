@@ -12,15 +12,6 @@ enum ResultsServiceError: Error, Equatable {
     case unableToCreateService
     case unknown(String)
 
-    var shouldRetry: Bool {
-        switch self {
-        case .invalidResponse, .noMessage:
-            return false
-        default:
-            return true
-        }
-    }
-
     var telemetryLabel: String {
         switch self {
         case .invalidResponse: return "invalid_response"
@@ -30,7 +21,7 @@ enum ResultsServiceError: Error, Equatable {
         case .maxUsers: return "max_users"
         case .payloadTooLarge: return "payload_too_large"
         case .unableToCreateService: return "unable_to_create_service"
-        case .unknown: return "unknown"
+        case .unknown(let description): return "unknown(\(description))"
         }
     }
 }

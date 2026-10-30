@@ -298,9 +298,6 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "استعمال شدہ کوائف ارسال کریں";
 
-/* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies" = "مطالعہ";
-
 /* Status off for tracking protection in settings screen */
 "Settings.trackingProtectionOff" = "بند";
 

@@ -95,6 +95,15 @@ class ThemeableTests: XCTestCaseRootViewController {
         XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 1)
     }
 
+    func test_updateThemeApplicableSubviews_whenSubclassOverridesPrivateTheme_returnsProperTheme() {
+        let subject = TestsThemeableSubclass(themeManager: mockThemeManager)
+
+        subject.updateThemeApplicableSubviews(UIView(), for: .XCTestDefaultUUID)
+
+        XCTAssertEqual(mockThemeManager.getCurrentThemeCallCount, 0)
+        XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 1)
+    }
+
     func test_updateThemeApplicableSubviews_withDefault_forcePrivateTheme_returnsProperTheme() {
         testThemeable.shouldUsePrivateOverride = false
         testThemeable.shouldBeInPrivateTheme = true
@@ -102,6 +111,17 @@ class ThemeableTests: XCTestCaseRootViewController {
 
         XCTAssertEqual(mockThemeManager.getCurrentThemeCallCount, 1)
         XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 0)
+    }
+
+    func test_updateThemeApplicableSubviews_whenNotSubjectToNovaOverride_andFeatureDisabled_keepsPrivateThemeOverride() {
+        mockThemeManager.isPrivateThemeOverrideEnabled = false
+        testThemeable.isSubjectToNovaPrivateOverride = false
+        testThemeable.shouldUsePrivateOverride = true
+        testThemeable.shouldBeInPrivateTheme = false
+        testThemeable.updateThemeApplicableSubviews(UIView(), for: .XCTestDefaultUUID)
+
+        XCTAssertEqual(mockThemeManager.getCurrentThemeCallCount, 0)
+        XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 1)
     }
 }
 
@@ -123,6 +143,36 @@ class TestsTableView: NSObject, UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+// MARK: - Subclass override
+
+/// Mirrors `ThemedNavigationController` / `SettingsNavigationController`: the base class conforms to
+/// `Themeable` and declares the private override properties so that a subclass can override them.
+class TestsThemeableBase: UIViewController, @MainActor Themeable {
+    var themeManager: ThemeManager
+    var themeListenerCancellable: Any?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
+    var shouldUsePrivateOverride: Bool { return false }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    init(themeManager: ThemeManager) {
+        self.themeManager = themeManager
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme() {}
+    var currentWindowUUID: UUID? { return .XCTestDefaultUUID }
+}
+
+final class TestsThemeableSubclass: TestsThemeableBase {
+    override var shouldUsePrivateOverride: Bool { return true }
+    override var shouldBeInPrivateTheme: Bool { return false }
+}
+
 // MARK: - TestsThemeable
 final class TestsThemeable: UIViewController, @MainActor Themeable {
     var themeManager: ThemeManager = MockThemeManager()
@@ -133,4 +183,5 @@ final class TestsThemeable: UIViewController, @MainActor Themeable {
     var currentWindowUUID: UUID? { return .XCTestDefaultUUID }
     var shouldUsePrivateOverride = false
     var shouldBeInPrivateTheme = false
+    var isSubjectToNovaPrivateOverride = true
 }

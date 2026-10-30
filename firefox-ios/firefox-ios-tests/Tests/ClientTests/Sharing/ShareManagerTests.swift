@@ -20,7 +20,7 @@ final class ShareManagerTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        DependencyHelperMock().bootstrapDependencies(injectedProfile: MockProfile())
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: makeProfile())
         testTab = MockShareTab(
             title: testWebpageDisplayTitle,
             url: testWebURL,

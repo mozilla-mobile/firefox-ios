@@ -4,6 +4,7 @@
 
 import Shared
 import Storage
+import UIKit
 import XCTest
 import Common
 
@@ -15,7 +16,7 @@ final class TopSitesManagerTests: XCTestCase {
     private var mockNotificationCenter: MockNotificationCenter!
     override func setUp() async throws {
         try await super.setUp()
-        profile = MockProfile()
+        profile = makeProfile()
         mockNotificationCenter = MockNotificationCenter()
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
@@ -221,9 +222,7 @@ final class TopSitesManagerTests: XCTestCase {
 
         let topSites = subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.duplicateTile.compactMap { TopSiteConfiguration(site: $0) },
-            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap {
-                Site.createSponsoredSite(fromUnifiedTile: $0)
-            }
+            sponsoredSites: MockSponsoredTileData.defaultSuccessData
         )
 
         XCTAssertEqual(topSites.count, 2)
@@ -237,9 +236,7 @@ final class TopSitesManagerTests: XCTestCase {
         let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager(), maxCount: 2)
         let topSites = subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.noPinnedData.compactMap { TopSiteConfiguration(site: $0) },
-            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap {
-                Site.createSponsoredSite(fromUnifiedTile: $0)
-            }
+            sponsoredSites: MockSponsoredTileData.defaultSuccessData
         )
 
         XCTAssertEqual(topSites.count, 2)
@@ -254,9 +251,7 @@ final class TopSitesManagerTests: XCTestCase {
 
         let topSites = subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.defaultSuccessData.compactMap { TopSiteConfiguration(site: $0) },
-            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap {
-                Site.createSponsoredSite(fromUnifiedTile: $0)
-            }
+            sponsoredSites: MockSponsoredTileData.defaultSuccessData
         )
         XCTAssertEqual(topSites.count, 6)
         let expectedTitles = [
@@ -284,9 +279,7 @@ final class TopSitesManagerTests: XCTestCase {
 
         let topSites = subject.recalculateTopSites(
             otherSites: MockTopSiteHistoryManager.noPinnedData.compactMap { TopSiteConfiguration(site: $0) },
-            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap {
-                Site.createSponsoredSite(fromUnifiedTile: $0)
-            }
+            sponsoredSites: MockSponsoredTileData.defaultSuccessData
         )
         XCTAssertEqual(topSites.count, 3)
         let expectedTitles = [
@@ -319,9 +312,7 @@ final class TopSitesManagerTests: XCTestCase {
 
         let topSites = subject.recalculateTopSites(
             otherSites: [],
-            sponsoredSites: MockSponsoredTileData.defaultSuccessData.compactMap {
-                Site.createSponsoredSite(fromUnifiedTile: $0)
-            }
+            sponsoredSites: MockSponsoredTileData.defaultSuccessData
         )
 
         XCTAssertEqual(topSites.compactMap { $0.title }, ["Google Test", "Mozilla Sponsored Tile"])
@@ -384,7 +375,7 @@ final class TopSitesManagerTests: XCTestCase {
 
     func test_pinTopSite_callsProperMethods() throws {
         let mockPinnedSites = MockablePinnedSites()
-        let profile = MockProfile(injectedPinnedSites: mockPinnedSites)
+        let profile = makeProfile(injectedPinnedSites: mockPinnedSites)
         let mockTopSiteHistoryManager = MockTopSiteHistoryManager()
         let subject = try createSubject(
             injectedProfile: profile,
@@ -463,19 +454,72 @@ final class TopSitesManagerTests: XCTestCase {
     private func createSponsoredSites(count: Int = 10) -> [Site] {
         var sponsoredSites = [Site]()
         (0..<count).forEach {
-            let tile = UnifiedTile(
-                format: "",
-                url: "www.url\($0).com",
-                callbacks: UnifiedTileCallback(
-                    click: "www.url\($0).com/click",
-                    impression: "www.url\($0).com"
-                ),
-                imageUrl: "www.url\($0).com/image1.jpg",
-                name: "Sponsored Tile \($0)",
-                blockKey: "Block_key_1"
+            sponsoredSites.append(
+                MockSponsoredTileData.makeSponsoredSite(
+                    url: "www.url\($0).com",
+                    title: "Sponsored Tile \($0)",
+                    clickURL: "www.url\($0).com/click",
+                    impressionURL: "www.url\($0).com",
+                    imageURL: "www.url\($0).com/image1.jpg"
+                )
             )
-            sponsoredSites.append(Site.createSponsoredSite(fromUnifiedTile: tile))
         }
         return sponsoredSites
+    }
+}
+
+// MARK: - search-config-v3 Google top site
+
+extension TopSitesManagerTests {
+    func test_recalculateTopSites_withV3GoogleEngine_usesTopSitePartnerCode() throws {
+        let engines = MockSearchEnginesManager(searchEngines: [try makeGoogleEngine(partners: [
+            "default": SearchEnginePartner(code: "ios-firefox-o-re", telemetrySuffix: "ios-main"),
+            "topsite": SearchEnginePartner(code: "ios-firefox-b-re", telemetrySuffix: "ios-topsite")
+        ])])
+        let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager(), searchEngineManager: engines)
+
+        let topSites = subject.recalculateTopSites(otherSites: [], sponsoredSites: [])
+
+        XCTAssertEqual(topSites.first?.site.url, "https://www.google.com/webhp?client=ios-firefox-b-re&channel=ts")
+        XCTAssertEqual(topSites.first?.isGoogleURL, true)
+        XCTAssertEqual(topSites.first?.isGooglePinnedTile, true)
+    }
+
+    func test_recalculateTopSites_withV2GoogleEngine_usesExistingGoogleTopSite() throws {
+        let engines = MockSearchEnginesManager(searchEngines: [try makeGoogleEngine(partners: nil)])
+        let subject = try createSubject(googleTopSiteManager: MockGoogleTopSiteManager(), searchEngineManager: engines)
+
+        let topSites = subject.recalculateTopSites(otherSites: [], sponsoredSites: [])
+
+        XCTAssertEqual(topSites.first?.site.url, GoogleTopSiteManager.Constants.usUrl)
+    }
+
+    func test_searchConfigV3URL_withoutPartnerCode_omitsClient() {
+        XCTAssertEqual(GoogleTopSiteManager.searchConfigV3URL(partnerCode: nil),
+                       "https://www.google.com/webhp?channel=ts")
+        XCTAssertEqual(GoogleTopSiteManager.searchConfigV3URL(partnerCode: ""),
+                       "https://www.google.com/webhp?channel=ts")
+    }
+
+    func test_isGoogleTopSiteURL() {
+        XCTAssertTrue(GoogleTopSiteManager.isGoogleTopSiteURL(GoogleTopSiteManager.Constants.usUrl))
+        XCTAssertTrue(GoogleTopSiteManager.isGoogleTopSiteURL(GoogleTopSiteManager.Constants.rowUrl))
+        XCTAssertTrue(GoogleTopSiteManager.isGoogleTopSiteURL("https://www.google.com/webhp?client=ios-firefox-b-re&channel=ts"))
+        XCTAssertTrue(GoogleTopSiteManager.isGoogleTopSiteURL("https://www.google.com/webhp?channel=ts"))
+        XCTAssertFalse(GoogleTopSiteManager.isGoogleTopSiteURL("https://www.google.com/webhp?client=firefox-b-m"))
+        XCTAssertFalse(GoogleTopSiteManager.isGoogleTopSiteURL("https://www.google.com/search?channel=ts"))
+        XCTAssertFalse(GoogleTopSiteManager.isGoogleTopSiteURL("https://example.com/webhp?channel=ts"))
+    }
+
+    private func makeGoogleEngine(partners: [String: SearchEnginePartner]?) throws -> OpenSearchEngine {
+        let image = try XCTUnwrap(UIImage(named: "wikipedia", in: Bundle(for: TopSitesManagerTests.self), with: nil))
+        return OpenSearchEngine(engineID: "google",
+                                shortName: "Google",
+                                telemetrySuffix: nil,
+                                image: image,
+                                searchTemplate: "https://www.google.com/search?client={partnerCode}&q={searchTerms}",
+                                suggestTemplate: nil,
+                                isCustomEngine: false,
+                                partners: partners)
     }
 }

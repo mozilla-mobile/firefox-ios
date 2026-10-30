@@ -20,7 +20,7 @@ jobs:
         runs-on: macos-15
         steps:
             - name: Check out source code
-              uses: actions/checkout@v4.1.7
+              uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
             - name: Setup Xcode
               id: xcode
               run: |
@@ -43,7 +43,7 @@ jobs:
               working-directory: ${{ env.browser }}
             - name: Save Derived Data
               id: upload-derived-data
-              uses: actions/upload-artifact@v4.3.3
+              uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
               with:
                 name: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
                 path: ~/DerivedData/Build/Products
@@ -60,7 +60,7 @@ jobs:
                 ios_simulator: [ 'iPhone 16', 'iPad (10th generation)']
         steps:
             - name: Check out source code
-              uses: actions/checkout@v4.1.7
+              uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
             - name: Install packages
               id: packages
               run: |
@@ -76,7 +76,7 @@ jobs:
                 ./bootstrap.sh --force
             - name: Get derived data
               id: download-derived-data
-              uses: actions/download-artifact@v4
+              uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
               with:
                 name: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
                 path: ~/DerivedData/Build/Products
@@ -103,21 +103,21 @@ jobs:
               working-directory:  ${{ env.browser }}
             - name: Upload log file
               id: upload-log
-              uses: actions/upload-artifact@v4.3.3
+              uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
               with:
                 name: ${{ env.browser }}-${{ matrix.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
                 path: ${{ env.browser }}/xcodebuild.log
                 retention-days: 90
             - name: Upload junit files
               id: upload-junit
-              uses: actions/upload-artifact@v4.3.3
+              uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
               with:
                 name: ${{ env.browser }}-${{ matrix.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-junit-${{ github.run_number }}
                 path: ${{ env.browser }}/build/reports/junit.xml
                 retention-days: 90
             - name: Report to Slack
               id: slack
-              uses: slackapi/slack-github-action@v2.0.0
+              uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d # v2.0.0
               with:
                 payload-file-path: ${{ env.browser }}/slack.json
                 payload-templated: true

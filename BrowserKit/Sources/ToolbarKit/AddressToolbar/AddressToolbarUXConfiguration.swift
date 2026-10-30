@@ -47,6 +47,8 @@ public struct AddressToolbarUXConfiguration {
     }
 
     func addressToolbarBackgroundColor(theme: some Theme) -> UIColor {
+        guard !isAddressBarMinimized else { return .clear }
+
         let backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceLow : theme.colors.layer1
         if shouldBlur {
             return backgroundColor.withAlphaComponent(backgroundAlpha)
@@ -57,14 +59,22 @@ public struct AddressToolbarUXConfiguration {
 
     func locationContainerBackgroundColor(theme: some Theme) -> UIColor {
         guard !isAddressBarMinimized else { return .clear }
+        guard isLocationTextCentered else { return theme.colors.layerEmphasis }
 
-        let alternativeLocationColor = theme.isNova ? theme.colors.layerSurfaceMedium : theme.colors.layerSurfaceMediumAlt
+        if #available(iOS 26, *) {
+            if theme.isNova {
+                return theme.colors.layerSurfaceMediumAltGlass
+            }
 
-        if hasAlternativeLocationColor {
-            return isLocationTextCentered ? alternativeLocationColor : theme.colors.layerEmphasis
-        } else {
-            return isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerEmphasis
+            return hasAlternativeLocationColor
+                ? theme.colors.layerSurfaceMediumAlt
+                : theme.colors.layerSurfaceMedium
         }
+
+        // On iOS 18, Nova always uses the alternative color.
+        return (theme.isNova || hasAlternativeLocationColor)
+            ? theme.colors.layerSurfaceMediumAlt
+            : theme.colors.layerSurfaceMedium
     }
 
     public func locationViewVerticalPaddings(addressBarPosition: AddressToolbarPosition) -> (top: CGFloat, bottom: CGFloat) {

@@ -1,5 +1,5 @@
 /* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
-"Add to Bookmarks" = "اضافه کردن به نشانک‌ها";
+"Add to Bookmarks" = "افزودن به نشانک‌ها";
 
 /* Label for preview action on Tab Tray Tab to close the current tab */
 "Close Tab" = "بستن زبانه";
@@ -11,8 +11,11 @@
 "Menu.SendLinkToDevice" = "ارسال پیوند به دستگاه";
 
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
-"Open Last Bookmark" = "بازکردن آخرین نشانک";
+"Open Last Bookmark" = "باز کردن آخرین نشانک";
 
 /* Label for preview action on Tab Tray Tab to send the current tab to another device */
 "Send to Device" = "ارسال به دستگاه";
+
+/* Label for preview action on Tab Tray Tab to remove current tab from Bookmarks */
+"TabPeek.RemoveBookmark.v146" = "حذف نشانک";
 

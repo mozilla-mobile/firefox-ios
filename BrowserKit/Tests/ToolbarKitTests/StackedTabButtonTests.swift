@@ -65,7 +65,6 @@ final class StackedTabButtonTests: XCTestCase {
             a11yLabel: "Tabs",
             a11yHint: nil,
             a11yId: "testId",
-            hasLongPressAction: false,
             previousTabScreenshot: previousTabScreenshot,
             nextTabScreenshot: nextTabScreenshot,
             onSelected: nil

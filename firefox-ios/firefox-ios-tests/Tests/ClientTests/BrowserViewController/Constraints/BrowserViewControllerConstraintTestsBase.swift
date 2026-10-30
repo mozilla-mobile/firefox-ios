@@ -15,12 +15,11 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
         try await super.setUp()
         tabManager = MockTabManager()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
-        profile = MockProfile()
+        profile = makeProfile()
         setupNimbusHomepagePinnedHeaderTesting(isEnabled: false)
     }
 
     override func tearDown() async throws {
-        profile.shutdown()
         profile = nil
         tabManager = nil
         DependencyHelperMock().reset()
@@ -54,7 +53,7 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
     }
 
     func selectTabWithFindInPage() {
-        let tab = Tab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
         tab.isFindInPageMode = false
         tabManager.selectedTab = tab
     }

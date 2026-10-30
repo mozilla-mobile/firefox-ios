@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import UIKit
 import Common
+import ComponentLibrary
 
 /// This class is used as a custom Context Menu for long press action throughout the application.
 /// It was also used as the Main menu in our application, and the code is a bit tangled in here
@@ -38,6 +39,8 @@ class PhotonActionSheet: UIViewController,
     var themeListenerCancellable: Any?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    let shouldUsePrivateOverride: Bool
+    var shouldBeInPrivateTheme: Bool { return false }
 
     weak var coordinator: ContextMenuCoordinatorDelegate?
 
@@ -59,11 +62,13 @@ class PhotonActionSheet: UIViewController,
 
     init(viewModel: PhotonActionSheetViewModel,
          windowUUID: WindowUUID,
+         shouldUsePrivateOverride: Bool = false,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
         self.themeManager = themeManager
         self.windowUUID = windowUUID
+        self.shouldUsePrivateOverride = shouldUsePrivateOverride
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
@@ -265,8 +270,18 @@ class PhotonActionSheet: UIViewController,
         applyTheme()
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+    }
+
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
+
+        if shouldUsePrivateOverride {
+            overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
+        }
 
         if viewModel.presentationStyle == .centered {
             setupBackgroundBlur()
@@ -373,7 +388,7 @@ class PhotonActionSheet: UIViewController,
         else { return UITableViewCell() }
 
         let actions = viewModel.actions[indexPath.section][indexPath.row]
-        cell.configure(actions: actions, viewModel: viewModel, theme: themeManager.getCurrentTheme(for: windowUUID))
+        cell.configure(actions: actions, viewModel: viewModel, theme: currentTheme())
         cell.delegate = self
 
         let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
@@ -395,7 +410,7 @@ class PhotonActionSheet: UIViewController,
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = viewModel.getViewHeader(tableView: tableView, section: section)
-        (header as? ThemeApplicable)?.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        (header as? ThemeApplicable)?.applyTheme(theme: currentTheme())
         return header
     }
 

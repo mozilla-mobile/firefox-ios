@@ -1,3 +1,21 @@
 /* Action button for deleting history entries in the history panel. */
-"Delete" = "मिटाएं";
+"Delete" = "डिलीट करें";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear all browsing history */
+"LibraryPanel.History.AllTimeOption.v138" = "हर समय";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 4 weeks */
+"LibraryPanel.History.LastFourWeeksOption.v138" = "पिछले 4 हफ़्ते";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
+"LibraryPanel.History.LastHourOption.v138" = "पिछला घंटा";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
+"LibraryPanel.History.LastSevenDaysOption.v138" = "पिछले 7 दिन";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
+"LibraryPanel.History.LastTwentyFourHoursOption.v138" = "पिछले 24 घंटे";
+
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "हिस्ट्री (इसमें अन्य डिवाइसों की सिंक की गई हिस्ट्री भी शामिल है), कुकीज़ और अन्य ब्राउज़िंग डेटा डिलीट करता है।";
 

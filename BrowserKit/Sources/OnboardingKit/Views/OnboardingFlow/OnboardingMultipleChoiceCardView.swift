@@ -26,6 +26,7 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         variant: OnboardingVariant,
+        selectedAction: ViewModel.OnboardingMultipleChoiceActionType?,
         onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
         onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     ) {
@@ -36,22 +37,19 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
         self.onBottomButtonAction = onBottomButtonAction
         self.onMultipleChoiceAction = onMultipleChoiceAction
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
-        guard let defaultAction = viewModel.defaultSelectedButton?.action else {
+        guard let initialAction = selectedAction ?? viewModel.defaultSelectedButton?.action else {
             return nil
         }
-        _selectedAction = State(initialValue: defaultAction)
+        _selectedAction = State(initialValue: initialAction)
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            cardContent(geometry: geometry)
-        }
-        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
+        cardContent
+            .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
-    @ViewBuilder
-    private func cardContent(geometry: GeometryProxy) -> some View {
-        ScrollView(showsIndicators: false) {
+    private var cardContent: some View {
+        OnboardingCardLayout { _ in
             VStack {
                 titleView
                     .padding(.top, UX.CardView.titleCompactTopPadding)
@@ -63,26 +61,11 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
                     bodyView
                     Spacer(minLength: UX.CardView.minContentSpacing)
                 }
-                VStack(spacing: UX.CardView.buttonsSpacing) {
-                    primaryButton
-                    // Hidden spacer button to maintain consistent layout spacing
-                    // when secondary button is not present
-                    OnboardingSecondaryButton(
-                        title: " ",
-                        action: {
-                        },
-                        theme: themeManager.getCurrentTheme(for: windowUUID),
-                        accessibilityIdentifier: "")
-                    .opacity(0.0)
-                    .disabled(true)
-                    .accessibilityHidden(true)
-                }
-                .padding(.bottom, UX.CardView.buttonsBottomPadding)
             }
-            .padding(.horizontal, UX.CardView.cardHorizontalPadding)
-            .frame(minHeight: geometry.size.height, maxHeight: .infinity, alignment: .center)
+        } buttons: {
+            primaryButton
+                .padding(.bottom, UX.CardView.buttonsBottomPadding)
         }
-        .scrollBounceBehavior(basedOnSize: true)
         .if(horizontalSizeClass != .regular) { view in
             view.cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius, variant: variant)
         }

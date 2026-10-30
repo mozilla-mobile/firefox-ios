@@ -10,27 +10,20 @@ private let defaultURL = "https://www.mozilla.org/en-US/book/"
 @MainActor
 func registerUrlBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
     map.addScreenState(URLBarLongPressMenu) { screenState in
-        let menu = app.tables["Context Menu"].firstMatch
-
         if #unavailable(iOS 16) {
             screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
                 UIPasteboard.general.string = userState.url ?? defaultURL
-                menu.otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.waitAndTap()
+                app.cells.buttons[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.waitAndTap()
             }
         }
 
         screenState.gesture(forAction: Action.SetURLByPasting) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
-            menu.cells[AccessibilityIdentifiers.Photon.pasteAction].firstMatch.waitAndTap()
+            app.cells.buttons[AccessibilityIdentifiers.Photon.pasteAction].firstMatch.waitAndTap()
         }
 
         screenState.backAction = {
-            if isTablet {
-                // There is no Cancel option in iPad.
-                app.otherElements["PopoverDismissRegion"].waitAndTap()
-            } else {
-                app.buttons["PhotonMenu.close"].waitAndTap()
-            }
+            app.otherElements["PopoverDismissRegion"].waitAndTap()
         }
         screenState.dismissOnUse = true
     }
@@ -44,6 +37,9 @@ func registerUrlBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppli
             // Workaround BB iOS13 be sure tap happens on url bar
             searchTextField.waitAndTap()
             searchTextField.waitAndTap()
+            // Tapping doesn't reliably select the existing text (seen on iPad), so typing can insert
+            // into rather than replace it. Clear explicitly before typing.
+            app.buttons["Clear text"].tapIfExists(timeout: 1.5)
             // On CI the field is occasionally focus-less after tapping, which makes typeText abort;
             // wait for keyboard focus (re-tapping if needed) before typing.
             searchTextField.tapAndTypeTextWhenFocused(url)

@@ -31,14 +31,19 @@ class DownloadsPanel: UIViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
-    private lazy var tableView: UITableView = .build { tableView in
+    private lazy var tableView: UITableView = .build({ tableView in
         tableView.register(TwoLineImageOverlayCell.self,
                            forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
         tableView.register(SiteTableViewHeader.self,
                            forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
-        tableView.layoutMargins = .zero
+        if tableView.style == .plain {
+            tableView.layoutMargins = .zero
+        }
         tableView.keyboardDismissMode = .onDrag
         tableView.accessibilityIdentifier = "DownloadsTable"
         tableView.cellLayoutMarginsFollowReadableWidth = false
@@ -46,7 +51,9 @@ class DownloadsPanel: UIViewController,
 
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
-    }
+    }, {
+        UITableView(frame: .zero, style: .libraryPanel)
+    })
 
     // MARK: - Lifecycle
     init(windowUUID: WindowUUID,
@@ -135,6 +142,12 @@ class DownloadsPanel: UIViewController,
         updateEmptyPanelState()
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+    }
+
     private func deleteDownloadedFile(_ downloadedFile: DownloadedFile) -> Bool {
         do {
             try FileManager.default.removeItem(at: downloadedFile.path)
@@ -189,7 +202,7 @@ class DownloadsPanel: UIViewController,
     ) -> UIImage? {
         let radius: CGFloat = 5.0
         let strokeWidth: CGFloat = 1.0
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         let strokeColor: UIColor = theme.colors.iconSecondary
         let fontSize: CGFloat = 9.0
 
@@ -234,10 +247,10 @@ class DownloadsPanel: UIViewController,
                 view.bringSubviewToFront(emptyStateOverlayView)
 
                 NSLayoutConstraint.activate([
-                    emptyStateOverlayView.topAnchor.constraint(equalTo: view.topAnchor),
-                    emptyStateOverlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                    emptyStateOverlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                    emptyStateOverlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+                    emptyStateOverlayView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                    emptyStateOverlayView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                    emptyStateOverlayView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                    emptyStateOverlayView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
                 ])
             }
         } else {
@@ -246,11 +259,11 @@ class DownloadsPanel: UIViewController,
     }
 
     private func createEmptyStateOverlayView() -> UIView {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let overlayView: UIView = .build { view in
+        let theme = currentTheme()
+        let overlayView: UIScrollView = .build { view in
             view.backgroundColor = theme.colors.layer1
-            view.translatesAutoresizingMaskIntoConstraints = false
         }
+        let contentView: UIView = .build()
         let logoImageView: UIImageView = .build { imageView in
             imageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.download)?
                 .withRenderingMode(.alwaysTemplate)
@@ -265,18 +278,30 @@ class DownloadsPanel: UIViewController,
             label.adjustsFontSizeToFitWidth = true
         }
 
-        overlayView.addSubview(logoImageView)
-        overlayView.addSubview(welcomeLabel)
+        overlayView.addSubview(contentView)
+        contentView.addSubview(logoImageView)
+        contentView.addSubview(welcomeLabel)
 
         NSLayoutConstraint.activate([
-            logoImageView.topAnchor.constraint(equalTo: overlayView.topAnchor, constant: UX.welcomeScreenTopPadding),
-            logoImageView.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
+            contentView.leadingAnchor.constraint(equalTo: overlayView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: overlayView.contentLayoutGuide.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: overlayView.contentLayoutGuide.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: overlayView.contentLayoutGuide.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: overlayView.frameLayoutGuide.widthAnchor),
+            contentView.heightAnchor.constraint(greaterThanOrEqualTo: overlayView.frameLayoutGuide.heightAnchor),
+
+            logoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.welcomeScreenTopPadding),
+            logoImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             logoImageView.heightAnchor.constraint(equalToConstant: 60),
             logoImageView.widthAnchor.constraint(equalToConstant: 60),
 
-            welcomeLabel.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
+            welcomeLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             welcomeLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: UX.welcomeScreenPadding),
-            welcomeLabel.widthAnchor.constraint(equalToConstant: UX.welcomeScreenItemWidth)
+            welcomeLabel.widthAnchor.constraint(equalToConstant: UX.welcomeScreenItemWidth),
+            welcomeLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor,
+                                                 constant: -UX.welcomeScreenPadding),
+            welcomeLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                 constant: -UX.welcomeScreenPadding).priority(.defaultLow)
         ])
 
         return overlayView
@@ -298,7 +323,7 @@ class DownloadsPanel: UIViewController,
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            let theme = currentTheme()
             header.textLabel?.textColor = theme.colors.textPrimary
             header.contentView.backgroundColor = theme.colors.layer1
         }
@@ -324,8 +349,13 @@ class DownloadsPanel: UIViewController,
             accessory: .none
         )
         headerView.configure(headerViewModel)
-        headerView.showBorder(for: .top, !viewModel.isFirstSection(section))
-        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        if tableView.style == .insetGrouped {
+            headerView.showBorder(for: .top, false)
+            headerView.showBorder(for: .bottom, false)
+        } else {
+            headerView.showBorder(for: .top, !viewModel.isFirstSection(section))
+        }
+        headerView.applyTheme(theme: currentTheme())
 
         return headerView
     }
@@ -336,7 +366,9 @@ class DownloadsPanel: UIViewController,
             cell.titleLabel.text = downloadedFile.filename
             cell.descriptionLabel.text = downloadedFile.formattedSize
             cell.leftImageView.manuallySetImage(iconForFileExtension(downloadedFile.fileExtension) ?? UIImage())
-            cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            let theme = currentTheme()
+            cell.applyTheme(theme: theme)
+            cell.applyGroupedBackground(theme: theme, in: tableView)
         }
         return cell
     }
@@ -424,7 +456,7 @@ class DownloadsPanel: UIViewController,
         emptyStateOverlayView = createEmptyStateOverlayView()
         updateEmptyPanelState()
 
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         tableView.backgroundColor = theme.colors.layer1
         tableView.separatorColor = theme.colors.borderPrimary
 

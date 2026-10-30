@@ -9,7 +9,7 @@ import Shared
 import XCTest
 
 class TestSQLitePinnedSites: XCTestCase {
-    let files = MockFiles()
+    lazy var files = makeTemporaryFiles()
     @discardableResult
     private func chainSuccess(
         _ initial: @Sendable () -> Success,
@@ -24,24 +24,6 @@ class TestSQLitePinnedSites: XCTestCase {
                 return deferMaybe(result.failureValue!)
             }
         }
-    }
-
-    fileprivate func deleteDatabases() {
-        do {
-            try files.remove("browser.db")
-        } catch {}
-    }
-
-    override func tearDown() {
-        super.tearDown()
-        self.deleteDatabases()
-    }
-
-    override func setUp() {
-        super.setUp()
-
-        // Just in case tearDown didn't run or succeed last time!
-        self.deleteDatabases()
     }
 
     func testPinnedTopSites() {

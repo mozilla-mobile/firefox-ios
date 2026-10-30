@@ -4,9 +4,9 @@ features:
     description: >
       This feature is for managing the roll out of the Homepage New Tab Redesign feature.
     variables:
-      search-bar:
+      animated-center-search-bar:
         description: >
-          If true, enables the search bar feature on homepage for users.
+          If true, enables the animated center search bar feature on homepage for users.
         type: Boolean
         default: false
       bookmarks-section-default:
@@ -37,7 +37,7 @@ features:
     defaults:
       - channel: beta
         value:
-          search-bar: false
+          animated-center-search-bar: false
           bookmarks-section-default: false
           jbi-section-default: false
           categories-enabled: false
@@ -46,7 +46,7 @@ features:
 
       - channel: developer
         value:
-          search-bar: false
+          animated-center-search-bar: false
           bookmarks-section-default: false
           jbi-section-default: false
           categories-enabled: true

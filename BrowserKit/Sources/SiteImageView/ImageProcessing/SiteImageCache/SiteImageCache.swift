@@ -16,6 +16,9 @@ protocol SiteImageCache: Sendable {
     /// - Throws: An error if the image cannot be retrieved.
     func getImage(cacheKey: String, type: SiteImageType) async throws -> UIImage
 
+    /// Memory-only lookup that does not suspend. `nil` when the image isn't in the memory cache.
+    nonisolated func getImageFromMemory(cacheKey: String, type: SiteImageType) -> UIImage?
+
     /// Stores an image in the cache.
     /// - Parameters:
     ///   - image: The image to cache.
@@ -57,7 +60,11 @@ actor DefaultSiteImageCache: SiteImageCache {
         imageCache.clear()
     }
 
-    private func createCacheKey(_ cacheKey: String, forType type: SiteImageType) -> String {
+    nonisolated func getImageFromMemory(cacheKey: String, type: SiteImageType) -> UIImage? {
+        return imageCache.retrieveFromMemory(forKey: createCacheKey(cacheKey, forType: type))
+    }
+
+    nonisolated private func createCacheKey(_ cacheKey: String, forType type: SiteImageType) -> String {
         return "\(cacheKey)-\(type.rawValue)"
     }
 }

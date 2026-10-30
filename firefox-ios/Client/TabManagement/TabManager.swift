@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import WebKit
+import TabDataStore
 
 enum TabManagerConstants {
     static let tabScreenshotNamespace = "TabManagerScreenshots"
@@ -62,12 +63,14 @@ protocol TabManager: AnyObject {
     ///   - zombie: Whether the webview should be created right away or not,
     ///   only set to false if you need to select the tab right away
     ///   - isPrivate: whether the tabs should be created in private mode or not
+    ///   - groupID: The group identifier, or nil for an ungrouped tab
     /// - Returns: The newly created tab
     @discardableResult
     func addTab(_ request: URLRequest?,
                 afterTab: Tab?,
                 zombie: Bool,
-                isPrivate: Bool) -> Tab
+                isPrivate: Bool,
+                groupID: TabGroupID?) -> Tab
 
     // MARK: - Remove tab
 
@@ -89,6 +92,29 @@ protocol TabManager: AnyObject {
     // MARK: Get Tab
     func getTabForUUID(uuid: TabUUID) -> Tab?
     func getTabForURL(_ url: URL) -> Tab?
+
+    // MARK: - Window merging
+
+    /// Persists the live session state (back/forward history) of every tab in this window and
+    /// returns the serialized tab data, used when merging this window's tabs into another window.
+    /// Private tabs are included only when the user's "close private tabs" setting is disabled,
+    /// matching the behaviour applied when the window would otherwise be closed.
+    /// - Returns: the tab data for every tab that should move to the destination window.
+    func tabDataForWindowMerge() -> [TabData]
+
+    /// Appends tabs from other windows' merged data into this window. The tabs are created as
+    /// zombies (no webview until selected) and keep their original UUIDs, so their history is
+    /// restored from the tab session store on selection. Tabs whose UUID already exists are skipped.
+    /// - Parameter tabDataList: the tab data collected from the other windows being merged.
+    func addTabs(fromWindowMergeData tabDataList: [TabData])
+
+    /// Empties this window's tab list after its tabs were copied into another window by
+    /// `tabDataForWindowMerge()`. The tabs' session data and screenshots are deliberately left on
+    /// disk because the destination window's tabs now reference them by the same UUIDs. Called
+    /// before the merged-away window is closed so that a save triggered on the way down writes an
+    /// empty tab list rather than resurrecting tabs that have already moved.
+    @MainActor
+    func discardTabsMovedToAnotherWindow()
 
     // MARK: Other Tab Actions
     func clearAllTabsHistory()
@@ -118,6 +144,17 @@ protocol TabManager: AnyObject {
     func tabDidSetScreenshot(_ tab: Tab)
     func offloadBackgroundWebViews() async
 
+    /// Stops in-flight loads and discards every webview, the selected tab's included, ahead of
+    /// a `proxyConfigurations` change (e.g. on VPN toggle). Webviews hold the pre-change
+    /// connection pool, so they have to bee closed and have inflight requests cancelled
+    /// for the new proxy to take effect.
+    func tearDownWebViewsForProxyChange() async
+
+    /// Rebuilds the selected tab's webview against a fresh `WKWebViewConfiguration` once the new
+    /// proxy stack is in place, restoring the session saved during teardown so the tab keeps its
+    /// back/forward list across the change.
+    func restoreSelectedTabForProxyChange()
+
     /// ADR 0008: load `tab`'s screenshot from disk if it isn't already in memory. Intended for
     /// just-in-time loading driven by the tab tray's prefetch data source. No-op if the tab
     /// already has a screenshot.
@@ -137,12 +174,14 @@ extension TabManager {
     func addTab(_ request: URLRequest? = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
-                isPrivate: Bool = false
+                isPrivate: Bool = false,
+                groupID: TabGroupID? = nil
     ) -> Tab {
         addTab(request,
                afterTab: afterTab,
                zombie: zombie,
-               isPrivate: isPrivate)
+               isPrivate: isPrivate,
+               groupID: groupID)
     }
 
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, isPrivate: Bool = false) {

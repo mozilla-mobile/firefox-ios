@@ -100,6 +100,7 @@ final class ZoomingTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306948
+    // Regression
     func testSwitchingZoomedTabs() {
         validateZoomLevelOnSwitchingTabs()
         // Repeat all steps in private browsing
@@ -111,7 +112,7 @@ final class ZoomingTests: BaseTestCase {
         validateZoomLevelOnSwitchingTabs()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2609150
+    // https://mozilla.testrail.io/index.php?/cases/view/2306948
     func testSwitchingZoomedTabsLandscape() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         validateZoomLevelOnSwitchingTabs()

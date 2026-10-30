@@ -18,6 +18,12 @@ class FaviconURLHandlerTests: XCTestCase {
         mockCache = MockFaviconURLCache()
     }
 
+    override func tearDown() {
+        mockFetcher = nil
+        mockCache = nil
+        super.tearDown()
+    }
+
     func testGetFaviconURL_inCache() async throws {
         await mockCache.setTestResult(url: faviconURL)
         let model = createSiteImageModel(siteURL: siteURL)

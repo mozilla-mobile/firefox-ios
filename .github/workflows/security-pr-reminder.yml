@@ -1,0 +1,61 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: 'Security PR Reminder'
+
+on:
+  pull_request_target:
+    types: [opened, edited]
+
+permissions: {}
+
+jobs:
+  security-pr-reminder:
+    # Skip bot-authored PRs
+    if: github.event.pull_request.user.type != 'Bot'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: security-pr-reminder-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    permissions:
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      NUMBER: ${{ github.event.pull_request.number }}
+      PR_BODY: ${{ github.event.pull_request.body }}
+      PR_TITLE: ${{ github.event.pull_request.title }}
+
+    steps:
+      - name: Post security reminder if PR references Bugzilla
+        shell: bash
+        env:
+          # Hidden marker used to avoid redundant reminders if the PR is edited
+          MARKER: '<!-- security-bugzilla-reminder -->'
+          BODY: |
+            <!-- security-bugzilla-reminder -->
+            🐞 This PR references Bugzilla. For security fixes, please be sure to assign the current iOS security monitor.
+        run: |
+          set -euo pipefail
+          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && return 1; sleep 2; done; }
+
+          # Only act on security PRs that reference Bugzilla in the description.        
+          title_match=false
+          body_link_match=false
+          if printf '%s' "$PR_TITLE" | grep -qi 'bugzilla'; then title_match=true; fi
+          if printf '%s' "$PR_BODY" | grep -Eiq 'https?://[^[:space:]]*bugzilla|bugzilla\.mozilla\.org'; then body_link_match=true; fi
+          if [ "$title_match" = false ] && [ "$body_link_match" = false ]; then
+            echo "No 'bugzilla' in title and no Bugzilla link in description; nothing to do."
+            exit 0
+          fi
+
+          existing=$(gh pr view "$NUMBER" -R "$GH_REPO" --json comments --jq '.comments[].body' || true)
+          if printf '%s' "$existing" | grep -qF "$MARKER"; then
+            echo "Reminder already present on PR #$NUMBER; skipping."
+            exit 0
+          fi
+
+          echo "Posting security reminder on PR #$NUMBER."
+          retry gh pr comment "$NUMBER" -R "$GH_REPO" -b "$BODY"

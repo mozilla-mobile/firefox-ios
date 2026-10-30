@@ -82,7 +82,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
 
     func test_translateItem_notPresent_whenFlagDisabled() {
         setLanguagePickerEnabled(false)
-        let mockProfile = MockProfile()
+        let mockProfile = makeProfile()
         let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
         let tabInfo = getTabInfo(translationConfiguration: config)
 
@@ -99,7 +99,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
 
     func test_translateItem_inactive_whenStateIsInactive() {
         setLanguagePickerEnabled(true)
-        let mockProfile = MockProfile()
+        let mockProfile = makeProfile()
         let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
         let tabInfo = getTabInfo(translationConfiguration: config)
 
@@ -117,7 +117,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
 
     func test_translateItem_active_whenStateIsActive() {
         setLanguagePickerEnabled(true)
-        let mockProfile = MockProfile()
+        let mockProfile = makeProfile()
         let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .active, translatedToLanguage: "fr")
         let tabInfo = getTabInfo(translationConfiguration: config)
 
@@ -136,7 +136,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
 
     func test_translateItem_singleLanguage_inactive_showsNoEllipsis() {
         setLanguagePickerEnabled(true)
-        let mockProfile = MockProfile()
+        let mockProfile = makeProfile()
         mockProfile.prefs.setString("en", forKey: PrefsKeys.Settings.translationPreferredLanguages)
         let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
         let tabInfo = getTabInfo(translationConfiguration: config)
@@ -155,7 +155,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
 
     func test_translateItem_singleLanguage_active_showsNoEllipsis() {
         setLanguagePickerEnabled(true)
-        let mockProfile = MockProfile()
+        let mockProfile = makeProfile()
         mockProfile.prefs.setString("en", forKey: PrefsKeys.Settings.translationPreferredLanguages)
         let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .active, translatedToLanguage: "en")
         let tabInfo = getTabInfo(translationConfiguration: config)
@@ -174,7 +174,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
 
     func test_translateItem_inactive_a11yHintIsOff() {
         setLanguagePickerEnabled(true)
-        let mockProfile = MockProfile()
+        let mockProfile = makeProfile()
         let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
         let tabInfo = getTabInfo(translationConfiguration: config)
 
@@ -192,7 +192,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
 
     func test_translateItem_active_a11yHintIsLanguageName() {
         setLanguagePickerEnabled(true)
-        let mockProfile = MockProfile()
+        let mockProfile = makeProfile()
         let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .active, translatedToLanguage: "fr")
         let tabInfo = getTabInfo(translationConfiguration: config)
 
@@ -259,7 +259,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         featureFlagProvider.enabledFlags = isReportBrokenSiteEnabled ? [.reportBrokenSite] : []
         DependencyHelperMock().bootstrapDependencies(injectedFeatureFlagProvider: featureFlagProvider)
 
-        let profile = MockProfile()
+        let profile = makeProfile()
         profile.prefs.setBool(isTelemetryEnabled, forKey: AppConstants.prefSendUsageData)
         return MainMenuConfigurationUtility(profile: profile)
     }

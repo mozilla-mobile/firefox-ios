@@ -2,16 +2,27 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import XCTest
 
 let mozDeveloperWebsite = "https://developer.mozilla.org/en-US"
 let searchFieldPlaceholder = "Search MDN"
 class ThirdPartySearchTest: BaseTestCase {
+    override func setUp() async throws {
+        // The engine is verified through the host shown in the address bar
+        launchArguments += [
+            "\(LaunchArguments.LoadExperiment)searchTermInAddressBarOff",
+            "\(LaunchArguments.ExperimentFeatureName)toolbar-refactor-feature"
+        ]
+        try await super.setUp()
+    }
+
     fileprivate func dismissKeyboardAssistant(forApp app: XCUIApplication) {
         app.buttons["Done"].waitAndTap()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2443998
+    // Regression
     func testCustomSearchEngines() {
         addCustomSearchEngine()
 
@@ -31,11 +42,16 @@ class ThirdPartySearchTest: BaseTestCase {
             XCTFail("Failed to retrieve the URL value from the browser's URL bar")
             return
         }
-        XCTAssertEqual(url, "developer.mozilla.org", "The URL should indicate that the search was performed on MDN and not the default")
+        XCTAssertEqual(
+            url,
+            "developer.mozilla.org",
+            "The URL should indicate that the search was performed on MDN and not the default"
+        )
         mozWaitForElementToExist(app.staticTexts["MDN"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2444328
+    // Regression
     func testCustomSearchEngineAsDefault() {
         addCustomSearchEngine()
 
@@ -57,11 +73,15 @@ class ThirdPartySearchTest: BaseTestCase {
             XCTFail("Failed to retrieve the URL value from the browser's URL bar")
             return
         }
-        XCTAssert(url.hasPrefix("developer.mozilla.org"), "The URL should indicate that the search was performed on MDN and not the default")
+        XCTAssert(
+            url.hasPrefix("developer.mozilla.org"),
+            "The URL should indicate that the search was performed on MDN and not the default"
+        )
         mozWaitForElementToExist(app.staticTexts["MDN"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306941
+    // Regression
     func testCustomSearchEngineDeletion() {
         addCustomSearchEngine()
 

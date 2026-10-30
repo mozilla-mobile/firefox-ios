@@ -78,6 +78,7 @@ final class TabManagerImplementation: NSObject,
     private let tabSessionStore: TabSessionStore
     nonisolated private let imageStore: DiskImageStore?
     private let windowManager: WindowManager
+    private let themeManager: ThemeManager
     private let windowIsNew: Bool
     private let profile: Profile
     private weak var navigationDelegate: WKNavigationDelegate?
@@ -112,6 +113,7 @@ final class TabManagerImplementation: NSObject,
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          windowManager: WindowManager = AppContainer.shared.resolve(),
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
          tabs: [Tab] = []
     ) {
         let dataStore =  tabDataStore ?? DefaultTabDataStore(logger: logger, fileManager: DefaultTabFileManager())
@@ -120,6 +122,7 @@ final class TabManagerImplementation: NSObject,
         self.imageStore = imageStore
         self.notificationCenter = notificationCenter
         self.windowManager = windowManager
+        self.themeManager = themeManager
         self.windowIsNew = uuid.isNew
         self.windowUUID = uuid.uuid
         self.profile = profile
@@ -345,25 +348,28 @@ final class TabManagerImplementation: NSObject,
     }
 
     // MARK: - Add Tab
-    func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
+    func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool, groupID: TabGroupID? = nil) -> Tab {
         return addTab(request,
                       afterTab: afterTab,
                       flushToDisk: true,
                       zombie: false,
-                      isPrivate: isPrivate)
+                      isPrivate: isPrivate,
+                      groupID: groupID)
     }
 
     @discardableResult
     func addTab(_ request: URLRequest? = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
-                isPrivate: Bool = false
+                isPrivate: Bool = false,
+                groupID: TabGroupID? = nil
     ) -> Tab {
         return addTab(request,
                       afterTab: afterTab,
                       flushToDisk: true,
                       zombie: zombie,
-                      isPrivate: isPrivate)
+                      isPrivate: isPrivate,
+                      groupID: groupID)
     }
 
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, isPrivate: Bool = false) {
@@ -396,14 +402,19 @@ final class TabManagerImplementation: NSObject,
     ///   - flushToDisk: Will save session data and persist tabs data to disk if true
     ///   - zombie: Whether it should create the webview right away for this tab or not
     ///   - isPrivate: Whether the tab should be created in private mode or not
+    ///   - groupID: The group identifier, or nil for an ungrouped tab
     /// - Returns: the newly created tab
     private func addTab(_ request: URLRequest? = nil,
                         afterTab: Tab? = nil,
                         flushToDisk: Bool,
                         zombie: Bool,
-                        isPrivate: Bool = false
+                        isPrivate: Bool = false,
+                        groupID: TabGroupID? = nil
     ) -> Tab {
-        let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
+        let tab = Tab(profile: profile,
+                      isPrivate: isPrivate,
+                      groupID: groupID,
+                      windowUUID: windowUUID)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
@@ -444,10 +455,11 @@ final class TabManagerImplementation: NSObject,
                    level: .debug,
                    category: .tabs)
 
-        guard !AppConstants.isRunningUITests,
+        guard !AppConstants.isRunningUITests || AppConstants.isSessionRestoreEnabledForTests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
             ensureAtLeastOneSelectedTab()
+            signalTabRestorationSkipped()
             return
         }
 
@@ -474,10 +486,11 @@ final class TabManagerImplementation: NSObject,
                    level: .debug,
                    category: .tabs)
 
-        guard !AppConstants.isRunningUITests,
+        guard !AppConstants.isRunningUITests || AppConstants.isSessionRestoreEnabledForTests,
               !DebugSettingsBundleOptions.skipSessionRestore
         else {
             ensureAtLeastOneSelectedTab()
+            signalTabRestorationSkipped()
             return
         }
 
@@ -502,6 +515,15 @@ final class TabManagerImplementation: NSObject,
                        level: .debug,
                        category: .tabs)
         }
+    }
+
+    /// Releases `AppEventQueue` waiters when no restore will run, otherwise deeplink routes are stranded.
+    private func signalTabRestorationSkipped() {
+        let event = AppEvent.tabRestoration(windowUUID)
+        guard !AppEventQueue.activityIsCompleted(event) else { return }
+
+        AppEventQueue.started(event)
+        AppEventQueue.completed(event)
     }
 
     private func ensureAtLeastOneSelectedTab() {
@@ -530,13 +552,20 @@ final class TabManagerImplementation: NSObject,
                 }
                 return
             }
-
             if let mostRecentViableTab = mostRecentTab(inTabs: viableTabs), mostRecentViableTab == removedTab.parent {
                 // 1. Try to select the most recently used viable tab, if it's the removed tab's parent.
                 selectTab(mostRecentViableTab, previous: removedTab)
-            } else if let rightOrLeftTab = findRightOrLeftTab(forRemovedTab: removedTab, withDeletedIndex: deletedIndex) {
+            } else if let rightOrLeftTab = findRightOrLeftTab(
+                forRemovedTab: removedTab,
+                withDeletedIndex: deletedIndex
+            ) {
                 // 2. Try to select an array neighbour of the same tab type
-                selectTab(rightOrLeftTab, previous: removedTab)
+                selectTabInternal(
+                    rightOrLeftTab,
+                    previous: removedTab,
+                    immediatePreservation: false,
+                    updateLastExecutedTime: false
+                )
             } else {
                 // 3. If there are no suitable tabs to select, create a new normal tab.
                 selectTab(addTab(), previous: removedTab)
@@ -663,6 +692,7 @@ final class TabManagerImplementation: NSObject,
     private func populateTab(_ tab: Tab, from tabData: TabData) {
         tab.url = URL(string: tabData.siteUrl)
         tab.lastTitle = tabData.title
+        tab.faviconURL = tabData.faviconURL
         tab.tabUUID = tabData.id.uuidString
         tab.screenshotUUID = tabData.id
         tab.firstCreatedTime = tabData.createdAtTime.toTimestamp()
@@ -680,6 +710,13 @@ final class TabManagerImplementation: NSObject,
 
     private func handleTabSelectionAfterRestore(tabToSelect: Tab?) {
         assert(Thread.isMainThread)
+        if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(windowUUID)) {
+            logger.log("Skipping post-restore tab selection; deeplink tab pending",
+                       level: .debug,
+                       category: .tabs)
+            return
+        }
+
         if let tabToSelect {
             selectTab(tabToSelect)
         } else {
@@ -921,6 +958,62 @@ final class TabManagerImplementation: NSObject,
         self.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
     }
 
+    // MARK: - Window merging
+
+    func tabDataForWindowMerge() -> [TabData] {
+        // Persist the live session state (back/forward history) of every tab that currently has a
+        // webview, so that once the tabs are recreated in the destination window their history can
+        // be restored from the tab session store (keyed by tab UUID). Tabs without a live webview
+        // already have their session persisted on disk from when they were last active.
+        for tab in tabs {
+            guard let sessionData = tab.webView?.interactionState as? Data,
+                  let tabID = UUID(uuidString: tab.tabUUID)
+            else { continue }
+            tabSessionStore.saveTabSession(tabID: tabID, sessionData: sessionData)
+        }
+        return generateTabDataForSaving()
+    }
+
+    func addTabs(fromWindowMergeData tabDataList: [TabData]) {
+        var existingUUIDs = Set(tabs.map { $0.tabUUID })
+        var didAddTab = false
+        for tabData in tabDataList where !existingUUIDs.contains(tabData.id.uuidString) {
+            let tab = createTab(with: tabData)
+            tabs.append(tab)
+            existingUUIDs.insert(tab.tabUUID)
+            restoreScreenshot(for: tab)
+            delegates.forEach {
+                $0.get()?.tabManager(self,
+                                     didAddTab: tab,
+                                     placeNextToParentTab: false,
+                                     isRestoring: !tabRestoreHasFinished)
+            }
+            didAddTab = true
+        }
+
+        guard didAddTab else { return }
+
+        // Keep the current selection; merged tabs are appended as zombies. Notifying delegates
+        // refreshes the tab tray, and commitChanges persists the now-merged window to disk.
+        delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
+        commitChanges()
+    }
+
+    func discardTabsMovedToAnotherWindow() {
+        guard !tabs.isEmpty else { return }
+
+        tabs = []
+        selectedIndex = -1
+
+        // No Tab.close(), `.didClose` or screenshot/session cleanup: these tabs moved rather than
+        // closed, and the destination window reuses their UUIDs, so their on-disk data must survive.
+        delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: nil) }
+
+        // Replaces the tab list any already-scheduled save still holds, which would otherwise be
+        // written after this point and bring the moved tabs back.
+        preserveTabs(forced: true)
+    }
+
     private func saveAllTabData() {
         // Only preserve tabs after the restore has finished
         guard tabRestoreHasFinished, let tab = selectedTab, let url = tab.url else { return }
@@ -941,11 +1034,24 @@ final class TabManagerImplementation: NSObject,
     /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case
     /// where the index of the tab has changed (such as after deletion).
     func selectTab(_ tab: Tab?, previous: Tab? = nil, immediatePreservation: Bool = false) {
+        selectTabInternal(
+            tab,
+            previous: previous,
+            immediatePreservation: immediatePreservation,
+            updateLastExecutedTime: true
+        )
+    }
+
+    private func selectTabInternal(
+        _ tab: Tab?,
+        previous: Tab?,
+        immediatePreservation: Bool,
+        updateLastExecutedTime: Bool
+    ) {
         assert(Thread.isMainThread)
         // Fallback everywhere to selectedTab if no previous tab
         let previous = previous ?? selectedTab
         previous?.pauseDocumentDownload()
-
         guard let tab = tab,
               let tabUUID = UUID(uuidString: tab.tabUUID)
         else {
@@ -960,7 +1066,6 @@ final class TabManagerImplementation: NSObject,
         logger.log("Select tab",
                    level: .info,
                    category: .tabs)
-
         // Before moving to a new tab save the current tab session data in order to preserve things like scroll position
         saveSessionData(forTab: selectedTab)
 
@@ -972,11 +1077,16 @@ final class TabManagerImplementation: NSObject,
         }
 
         selectedIndex = tabs.firstIndex(of: tab) ?? -1
-
         preserveTabs(immediate: immediatePreservation)
 
-        let sessionData = tabSessionStore.fetchTabSession(tabID: tabUUID)
-        selectTabWithSession(tab: tab, sessionData: sessionData)
+        let sessionData = fetchTabSession(for: tab, tabID: tabUUID)
+        selectTabWithSession(
+            tab: tab,
+            sessionData: sessionData,
+            updateLastExecutedTime: updateLastExecutedTime
+        )
+
+        themeManager.setPrivateTheme(isOn: tab.isPrivate, for: windowUUID)
 
         let action = PrivateModeAction(isPrivate: tab.isPrivate,
                                        windowUUID: windowUUID,
@@ -984,7 +1094,6 @@ final class TabManagerImplementation: NSObject,
         store.dispatch(action)
 
         tab.resumeDocumentDownload()
-
         didSelectTab(url)
         updateMenuItemsForSelectedTab()
         if isDeeplinkOptimizationRefactorEnabled {
@@ -992,7 +1101,6 @@ final class TabManagerImplementation: NSObject,
         } else {
             dispatchDidSetScreenshotAction(for: tab)
         }
-
         // Broadcast updates for any listeners
         delegates.forEach {
             $0.get()?.tabManager(
@@ -1009,7 +1117,6 @@ final class TabManagerImplementation: NSObject,
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
         }
-
         // Note: we setup last session private case as the session is tied to user's selected
         // tab but there are times when tab manager isn't available and we need to know
         // users's last state (Private vs Regular)
@@ -1059,11 +1166,23 @@ final class TabManagerImplementation: NSObject,
         store.dispatch(action)
     }
 
-    private func selectTabWithSession(tab: Tab, sessionData: Data?) {
+    private func fetchTabSession(for tab: Tab, tabID: UUID) -> Data? {
+        let hasLiveSelectedTab = selectedTab === tab && tab.webView != nil
+        return hasLiveSelectedTab ? nil : tabSessionStore.fetchTabSession(tabID: tabID)
+    }
+
+    private func selectTabWithSession(
+        tab: Tab,
+        sessionData: Data?,
+        updateLastExecutedTime: Bool
+    ) {
         MainActor.assertIsolated("Expected to be called only on main actor.")
         let configuration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
         selectedTab?.createWebview(with: sessionData, configuration: configuration)
-        selectedTab?.lastExecutedTime = Date.now()
+
+        if updateLastExecutedTime {
+            selectedTab?.lastExecutedTime = Date.now()
+        }
     }
 
     // MARK: - TabEventHandler
@@ -1099,22 +1218,52 @@ final class TabManagerImplementation: NSObject,
     }
 
     private func cleanUpUnusedScreenshots() {
-        // Clean up any screenshots that are no longer associated with a tab.
-        var savedUUIDs = Set<String>()
-        tabs.forEach { savedUUIDs.insert($0.screenshotUUID?.uuidString ?? "") }
-        let savedUUIDsCopy = savedUUIDs
+        // Clean up any screenshots that are no longer associated with a tab. The image store is
+        // shared by every window, so it must be pruned against all of them (see liveTabUUIDs).
+        let openWindowsTabUUIDs = openWindowsTabUUIDs()
         let imageStore = imageStore
+        let tabDataStore = tabDataStore
         Task {
-            try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
+            let liveTabUUIDs = await Self.liveTabUUIDs(including: openWindowsTabUUIDs, tabDataStore: tabDataStore)
+            try? await imageStore?.clearAllScreenshotsExcluding(liveTabUUIDs)
         }
     }
 
     private func cleanUpTabSessionData() {
-        let liveTabs = tabs.compactMap { UUID(uuidString: $0.tabUUID) }
+        // The tab session store is shared by every window, so it must be pruned against all of
+        // them (see liveTabUUIDs).
+        let openWindowsTabUUIDs = openWindowsTabUUIDs()
         let tabSessionStore = tabSessionStore
+        let tabDataStore = tabDataStore
         Task {
-            await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
+            let liveTabUUIDs = await Self.liveTabUUIDs(including: openWindowsTabUUIDs, tabDataStore: tabDataStore)
+            await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabUUIDs.compactMap { UUID(uuidString: $0) })
         }
+    }
+
+    private func openWindowsTabUUIDs() -> Set<String> {
+        var uuids = Set(tabs.map { $0.tabUUID })
+        // This window may not be registered with the WindowManager yet during its own restore.
+        for tabManager in windowManager.allWindowTabManagers() {
+            uuids.formUnion(tabManager.tabs.map { $0.tabUUID })
+        }
+        return uuids
+    }
+
+    /// The tab UUIDs that must be kept in the process-wide screenshot and tab session stores.
+    ///
+    /// Both stores are shared by every window but are pruned per window, so a window that offered
+    /// only its own tabs would delete the screenshots and browsing history of every other window —
+    /// including tabs that had just been moved into another window by a window merge. Windows that
+    /// are saved but not open yet (or still restoring) are read back from disk for the same reason.
+    private static func liveTabUUIDs(including openWindowsTabUUIDs: Set<String>,
+                                     tabDataStore: TabDataStore) async -> Set<String> {
+        var uuids = openWindowsTabUUIDs
+        for uuid in tabDataStore.fetchWindowDataUUIDs() {
+            guard let windowData = await tabDataStore.fetchWindowData(uuid: uuid) else { continue }
+            uuids.formUnion(windowData.tabData.map { $0.id.uuidString })
+        }
+        return uuids
     }
 
     func clearAllTabsHistory() {
@@ -1182,10 +1331,38 @@ final class TabManagerImplementation: NSObject,
         }
     }
 
+    func tearDownWebViewsForProxyChange() async {
+        let liveTabs = tabs.filter { $0.webView != nil }
+        logger.log("Tearing down \(liveTabs.count) webviews ahead of proxy change",
+                   level: .info,
+                   category: .tabs)
+
+        // Save selected tab session state before loading a blank page and offloading webviews
+        saveSessionData(forTab: selectedTab)
+
+        for tab in liveTabs {
+            await tab.loadBlankPage()
+            await tab.offloadWebView()
+        }
+    }
+
+    func restoreSelectedTabForProxyChange() {
+        guard let selectedTab,
+              let tabUUID = UUID(uuidString: selectedTab.tabUUID)
+        else { return }
+
+        selectTabWithSession(
+            tab: selectedTab,
+            sessionData: tabSessionStore.fetchTabSession(tabID: tabUUID),
+            updateLastExecutedTime: true
+        )
+    }
+
     func addPopupForParentTab(profile: any Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
         assert(Thread.isMainThread)
         let popup = Tab(profile: profile,
                         isPrivate: parentTab.isPrivate,
+                        groupID: parentTab.groupID,
                         windowUUID: windowUUID)
         // Configure the tab for the child popup webview. In this scenario we need to be sure to pass along
         // the specific `configuration` that we are given by the WKUIDelegate callback, since if we do not
@@ -1290,7 +1467,7 @@ final class TabManagerImplementation: NSObject,
         let arraySlice = tabs[0..<deletedIndex]
 
         // Get the count of similar tabs on left side of the array
-        let mappedDeletedIndex = arraySlice.filter({ removedTab.isSameTypeAs($0) }).count
+        let mappedDeletedIndex = arraySlice.count(where: { removedTab.isSameTypeAs($0) })
         let filteredTabs = tabs.filter({ removedTab.isSameTypeAs($0) })
 
         // Now that we know at which index in the subarray the removedTab was removed, we can look for its nearest left or

@@ -7,7 +7,7 @@ import Shared
 import TipKit
 import UIKit
 
-extension BrowserViewController: PhotonActionSheetProtocol {
+extension BrowserViewController {
     // Starts a timer to monitor for a navigation button double tap for the navigation contextual hint
     @MainActor
     func startNavigationButtonDoubleTapTimer() {
@@ -32,8 +32,8 @@ extension BrowserViewController: PhotonActionSheetProtocol {
             presentedUsing: { [weak self] in
                 self?.presentContextualHint(for: .navigation)
             },
-            actionOnDismiss: {
-                let action = ToolbarAction(windowUUID: self.windowUUID,
+            actionOnDismiss: { [windowUUID] in
+                let action = ToolbarAction(windowUUID: windowUUID,
                                            actionType: ToolbarActionType.navigationHintFinishedPresenting)
                 store.dispatch(action)
             },
@@ -94,32 +94,6 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         summarizeToolbarEntryContextHintVC.stopTimer()
     }
 
-    // MARK: - Translation CFR
-    func configureTranslationContextualHint(for view: UIView) {
-        guard let state = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
-        // Show up arrow for iPad and landscape or top address bar; otherwise show down arrow
-        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
-        let shouldShowUpArrow = state.toolbarPosition == .top || !showNavToolbar
-
-        translationContextHintVC.configure(
-            anchor: view,
-            withArrowDirection: shouldShowUpArrow ? .up : .down,
-            andDelegate: self,
-            presentedUsing: { [weak self] in
-                self?.presentContextualHint(for: .translation)
-            },
-            actionOnDismiss: { [weak view] in
-                UIAccessibility.post(notification: .layoutChanged, argument: view)
-            },
-            andActionForButton: { },
-            overlayState: overlayManager)
-    }
-
-    private func presentTranslationContextualHint() {
-        present(translationContextHintVC, animated: true)
-        UIAccessibility.post(notification: .layoutChanged, argument: translationContextHintVC)
-    }
-
     @MainActor
     func configureGoogleLensTip(for button: UIButton) {
         guard #available(iOS 17.0, *),
@@ -169,38 +143,28 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         }
     }
 
+    func dismissGoogleLensTip() {
+        googleLensTipObservationTask?.cancel()
+        googleLensTipObservationTask = nil
+
+        if let tipViewController = googleLensTipViewController,
+           presentedViewController === tipViewController {
+            dismiss(animated: true)
+        }
+        googleLensTipViewController = nil
+    }
+
     private func presentContextualHint(for hintType: ContextualHintType) {
         scrollController.showToolbars(animated: true)
         switch hintType {
         case .summarizeToolbarEntry: presentSummarizeToolbarEntryContextualHint()
-        case .translation: presentTranslationContextualHint()
         case .navigation: presentNavigationContextualHint()
         default: break
         }
     }
 
-    func dismissToolbarCFRs(with windowUUID: WindowUUID) {
-        guard let toolbarState = store.state.componentState(
-            ToolbarState.self,
-            for: .toolbar,
-            window: windowUUID
-        ) else {
-            return
-        }
-        let translationAction = toolbarState.addressToolbar.leadingPageActions.first(where: { $0.actionType == .translate })
-        if translationAction == nil {
-            resetTranslationCFRTimer()
-        }
-    }
-
     func resetCFRsTimer() {
         resetSummarizeToolbarCFRTimer()
-    }
-
-    // Reset the CFR timer for the translation button to avoid presenting the CFR
-    // In cases, such as if translation icon is not available
-    private func resetTranslationCFRTimer() {
-        translationContextHintVC.stopTimer()
     }
 
     func dismissUrlBar() {
@@ -209,46 +173,175 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         }
     }
 
-    func getNavigationToolbarLongPressActions() -> [[PhotonRowActions]] {
-        let newTab = getNewTabAction()
-        let newPrivateTab = getNewPrivateTabAction()
-        let closeTab = getCloseTabAction()
-
-        return [[newTab, newPrivateTab], [closeTab]]
+    func contextMenu(for actionType: ToolbarActionConfiguration.ActionType) -> UIMenu? {
+        switch actionType {
+        case .locationView:
+            let actions = getLocationBarActions()
+            return actions.isEmpty
+                ? nil
+                : .init(children: [UIMenu(options: .displayInline, children: actions)])
+        case .reload:
+            guard let tab = tabManager.selectedTab else { return nil }
+            let actions = getRefreshActions(for: tab)
+            return actions.isEmpty ? nil : .init(children: [UIMenu(options: .displayInline, children: actions)])
+        case .newTab:
+            toolbarTelemetry.oneTapNewTabButtonLongPressed(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            return makeNewTabMenu()
+        case .tabs:
+            toolbarTelemetry.tabTrayButtonLongPressed(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            return .init(children: [
+                UIMenu(options: .displayInline, children: [getNewTabAction(), getNewPrivateTabAction()]),
+                UIMenu(options: .displayInline, children: [getCloseTabAction()])
+            ])
+        default:
+            return nil
+        }
     }
 
-    func getNewTabLongPressActions() -> [[PhotonRowActions]] {
-        let newTab = getNewTabAction()
-        let newPrivateTab = getNewPrivateTabAction()
-
-        return [[newTab, newPrivateTab]]
+    func makeNewTabMenu() -> UIMenu {
+        return .init(children: [
+            UIMenu(options: .displayInline, children: [getNewTabAction(), getNewPrivateTabAction()])
+        ])
     }
 
-    private func getNewTabAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .KeyboardShortcuts.NewTab,
-                                     iconString: StandardImageIdentifiers.Large.plus,
-                                     iconType: .Image) { _ in
+    private func getLocationBarActions() -> [UIAction] {
+        var actions = [UIAction]()
+        if UIPasteboard.general.hasStrings {
+            let pasteAndGoAction = UIAction(
+                title: .PasteAndGoTitle,
+                image: UIImage(named: StandardImageIdentifiers.Large.clipboard)?.withRenderingMode(.alwaysTemplate)
+            ) { [weak self] _ in
+                UIPasteboard.general.asyncString { pasteboardContents in
+                    guard let pasteboardContents else { return }
+                    ensureMainThread {
+                        self?.addressToolbarContainer.performAfterContextMenuDismissal {
+                            self?.addressToolbarContainer.delegate?.openBrowser(searchTerm: pasteboardContents)
+                        }
+                    }
+                }
+            }
+            pasteAndGoAction.accessibilityIdentifier = AccessibilityIdentifiers.Photon.pasteAndGoAction
+            actions.append(pasteAndGoAction)
+
+            let pasteAction = UIAction(
+                title: .PasteTitle,
+                image: UIImage(named: StandardImageIdentifiers.Large.clipboard)?.withRenderingMode(.alwaysTemplate)
+            ) { [weak self] _ in
+                UIPasteboard.general.asyncString { pasteboardContents in
+                    guard let pasteboardContents else { return }
+                    ensureMainThread {
+                        self?.addressToolbarContainer.performAfterContextMenuDismissal {
+                            self?.addressToolbarContainer.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+                        }
+                    }
+                }
+            }
+            pasteAction.accessibilityIdentifier = AccessibilityIdentifiers.Photon.pasteAction
+            actions.append(pasteAction)
+        }
+
+        if tabManager.selectedTab?.canonicalURL?.displayURL != nil {
+            let copyAddressAction = UIAction(
+                title: .CopyAddressTitle,
+                image: UIImage(named: StandardImageIdentifiers.Large.link)?.withRenderingMode(.alwaysTemplate)
+            ) { [weak self] _ in
+                let currentURL = self?.tabManager.selectedTab?.currentURL()
+                if let url = self?.tabManager.selectedTab?.canonicalURL?.displayURL ?? currentURL {
+                    UIPasteboard.general.url = url
+                }
+            }
+            copyAddressAction.accessibilityIdentifier = AccessibilityIdentifiers.Photon.copyAddressAction
+            actions.append(copyAddressAction)
+        }
+        return actions
+    }
+
+    private func getRefreshActions(for tab: Tab) -> [UIAction] {
+        guard tab.webView?.url != nil,
+              (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active
+        else { return [] }
+
+        let defaultUAisDesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent())
+        let toggleActionTitle: String
+        if defaultUAisDesktop {
+            toggleActionTitle = tab.changedUserAgent
+                ? .LegacyAppMenu.AppMenuViewDesktopSiteTitleString
+                : .LegacyAppMenu.AppMenuViewMobileSiteTitleString
+        } else {
+            toggleActionTitle = tab.changedUserAgent
+                ? .LegacyAppMenu.AppMenuViewMobileSiteTitleString
+                : .LegacyAppMenu.AppMenuViewDesktopSiteTitleString
+        }
+
+        let toggleDesktopSite = UIAction(
+            title: toggleActionTitle,
+            image: UIImage(named: StandardImageIdentifiers.Large.deviceDesktop)?.withRenderingMode(.alwaysTemplate)
+        ) { _ in
+            if let url = tab.url {
+                tab.toggleChangeUserAgent()
+                Tab.ChangeUserAgent.updateDomainList(
+                    forUrl: url,
+                    isChangedUA: tab.changedUserAgent,
+                    isPrivate: tab.isPrivate
+                )
+            }
+        }
+        toggleDesktopSite.accessibilityIdentifier = StandardImageIdentifiers.Large.deviceDesktop
+
+        guard let url = tab.webView?.url,
+              let helper = tab.contentBlocker,
+              helper.isEnabled,
+              helper.blockingStrengthPref == .strict
+        else { return [toggleDesktopSite] }
+
+        let isSafelisted = helper.status == .safelisted
+        let title: String = isSafelisted ? .TrackingProtectionReloadWith : .TrackingProtectionReloadWithout
+        let imageName = StandardImageIdentifiers.Large.shieldSlash
+        let toggleTrackingProtection = UIAction(
+            title: title,
+            image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+        ) { _ in
+            ContentBlocker.shared.safelist(enable: !isSafelisted, url: url) {
+                tab.reload()
+            }
+        }
+        toggleTrackingProtection.accessibilityIdentifier = imageName
+        return [toggleDesktopSite, toggleTrackingProtection]
+    }
+
+    private func getNewTabAction() -> UIAction {
+        let action = UIAction(
+            title: .KeyboardShortcuts.NewTab,
+            image: UIImage(named: StandardImageIdentifiers.Large.plus)?.withRenderingMode(.alwaysTemplate)
+        ) { _ in
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
-        }.items
+        }
+        action.accessibilityIdentifier = StandardImageIdentifiers.Large.plus
+        return action
     }
 
-    private func getNewPrivateTabAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
-                                     iconString: StandardImageIdentifiers.Large.privateMode,
-                                     iconType: .Image) { _ in
+    private func getNewPrivateTabAction() -> UIAction {
+        let action = UIAction(
+            title: .KeyboardShortcuts.NewPrivateTab,
+            image: UIImage(named: StandardImageIdentifiers.Large.privateMode)?.withRenderingMode(.alwaysTemplate)
+        ) { _ in
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .tabTray)
-        }.items
+        }
+        action.accessibilityIdentifier = StandardImageIdentifiers.Large.privateMode
+        return action
     }
 
-    private func getCloseTabAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton,
-                                     iconString: StandardImageIdentifiers.Large.cross,
-                                     iconType: .Image) { _ in
+    private func getCloseTabAction() -> UIAction {
+        let action = UIAction(
+            title: String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton,
+            image: UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+            attributes: .destructive
+        ) { _ in
             if let tab = self.tabManager.selectedTab {
                 self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
                 self.tabManager.removeTab(tab.tabUUID)
@@ -260,6 +353,8 @@ extension BrowserViewController: PhotonActionSheetProtocol {
                 )
                 self.updateTabCountUsingTabManager(self.tabManager)
             }
-        }.items
+        }
+        action.accessibilityIdentifier = StandardImageIdentifiers.Large.cross
+        return action
     }
 }

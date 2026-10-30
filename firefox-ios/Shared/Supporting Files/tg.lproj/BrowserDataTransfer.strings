@@ -1,0 +1,9 @@
+/* Button that dismisses the alert shown when Firefox could not finish importing data from another browser. */
+"BrowserDataTransfer.ImportFailure.DismissButton.v160" = "Нодида гузарондан";
+
+/* Message of the alert shown when Firefox could not finish importing data from another browser. */
+"BrowserDataTransfer.ImportFailure.Message.v160" = "Баъдтар аз нав кӯшиш кунед.";
+
+/* Button that dismisses the alert shown after Firefox finishes importing data from another browser. */
+"BrowserDataTransfer.ImportSuccess.GotItButton.v160" = "Фаҳмидам";
+

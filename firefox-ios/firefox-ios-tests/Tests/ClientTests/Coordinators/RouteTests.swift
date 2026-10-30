@@ -72,6 +72,107 @@ class RouteTests: XCTestCase {
         }
     }
 
+    /// Uses the release host because the parser now matches the content server the build is
+    /// configured against, which is release unless a pref selects another one. Stage no longer
+    /// routes on a release build.
+    func testPairingRouteFromSystemCameraDeepLink() {
+        let subject = createSubject()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key&v=2"
+        )!
+        let url = wrappedDeepLink(for: pairingURL)
+
+        let route = subject.makeRoute(url: url)
+
+        guard case .fxaPairing(let routedURL) = route else {
+            return XCTFail("The route should be an FxA pairing route")
+        }
+        XCTAssertEqual(routedURL, pairingURL)
+    }
+
+    func testPairingRouteFromSystemCameraUserActivity() {
+        let subject = createSubject()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key&v=2"
+        )!
+        let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
+        activity.webpageURL = pairingURL
+
+        let route = subject.makeRoute(userActivity: activity)
+
+        guard case .fxaPairing(let routedURL) = route else {
+            return XCTFail("The route should be an FxA pairing route")
+        }
+        XCTAssertEqual(routedURL, pairingURL)
+    }
+
+    func testPairingRouteFromDefaultBrowserURL() {
+        let subject = createSubject()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key&v=2"
+        )!
+
+        guard case .fxaPairing(let routedURL) = subject.makeRoute(url: pairingURL) else {
+            return XCTFail("The route should be an FxA pairing route")
+        }
+        XCTAssertEqual(routedURL, pairingURL)
+    }
+
+    func testInvalidPairingDeepLinkDoesNotOpenBrowserTab() {
+        let subject = createSubject()
+        let pairingURL = URL(string: "https://accounts.firefox.com/pair#v=2")!
+        let url = wrappedDeepLink(for: pairingURL)
+
+        XCTAssertNil(subject.makeRoute(url: url))
+    }
+
+    func testInvalidPairingUserActivityDoesNotOpenBrowserTab() {
+        let subject = createSubject()
+        let pairingURL = URL(string: "https://accounts.firefox.com/pair#v=2")!
+        let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
+        activity.webpageURL = pairingURL
+
+        XCTAssertNil(subject.makeRoute(userActivity: activity))
+    }
+
+    func testNonV2PairingUserActivityOpensBrowserTab() {
+        let subject = createSubject()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key"
+        )!
+        let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
+        activity.webpageURL = pairingURL
+
+        guard case .search(let routedURL, _, _) = subject.makeRoute(userActivity: activity) else {
+            return XCTFail("A non-v2 pairing URL should use the existing browser route")
+        }
+        XCTAssertEqual(routedURL, pairingURL)
+    }
+
+    func testNonV2DirectPairingURLOpensBrowserTab() {
+        let subject = createSubject()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key&v=1"
+        )!
+
+        guard case .search(let routedURL, _, _) = subject.makeRoute(url: pairingURL) else {
+            return XCTFail("A non-v2 pairing URL should use the existing browser route")
+        }
+        XCTAssertEqual(routedURL, pairingURL)
+    }
+
+    func testNonV2WrappedPairingDeepLinkOpensBrowserTab() {
+        let subject = createSubject()
+        let pairingURL = URL(
+            string: "https://accounts.firefox.com/pair#channel_id=channel&channel_key=key&v=1"
+        )!
+
+        guard case .search(let routedURL, _, _) = subject.makeRoute(url: wrappedDeepLink(for: pairingURL)) else {
+            return XCTFail("A non-v2 pairing URL should use the existing browser route")
+        }
+        XCTAssertEqual(routedURL, pairingURL)
+    }
+
     func testSettingsRouteWithClearPrivateData() {
         let subject = createSubject()
         let url = URL(string: "firefox://deep-link?url=/settings/clear-private-data")!
@@ -428,9 +529,10 @@ class RouteTests: XCTestCase {
         let route = subject.makeRoute(url: url)
 
         switch route {
-        case .searchQuery(let query, let isPrivate):
+        case .searchQuery(let query, let isPrivate, let options):
             XCTAssertEqual(query, "test search text")
             XCTAssertFalse(isPrivate)
+            XCTAssertEqual(options, [.widgetSearch])
         default:
             XCTFail("The route should be a search route")
         }
@@ -571,9 +673,10 @@ class RouteTests: XCTestCase {
         let route = subject.makeRoute(url: url)
 
         switch route {
-        case .searchQuery(let query, let isPrivate):
+        case .searchQuery(let query, let isPrivate, let options):
             XCTAssertEqual(query, "google")
             XCTAssertFalse(isPrivate)
+            XCTAssertNil(options)
         default:
             XCTFail("The route should be a search route")
         }
@@ -721,8 +824,56 @@ class RouteTests: XCTestCase {
 
     func createSubject() -> RouteBuilder {
         let subject = RouteBuilder()
-        subject.configure(isPrivate: false, prefs: MockProfile().prefs)
+        subject.configure(isPrivate: false, prefs: makeProfile().prefs)
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func wrappedDeepLink(for url: URL) -> URL {
+        var components = URLComponents(string: "firefox://open-url")!
+        components.queryItems = [URLQueryItem(name: "url", value: url.absoluteString)]
+        return components.url!
+    }
+}
+
+// MARK: - Widget search access point
+
+extension RouteTests {
+    func testWidgetMediumQuicklinkOpenCopied_withText_addsWidgetSearchOption() {
+        let subject = createSubject()
+        UIPasteboard.general.string = "copied search text"
+
+        let route = subject.makeRoute(url: URL(string: "firefox://widget-medium-quicklink-open-copied")!)
+
+        guard case .searchQuery(let query, _, let options) = route else {
+            return XCTFail("The route should be a search query route")
+        }
+        XCTAssertEqual(query, "copied search text")
+        XCTAssertEqual(options, [.widgetSearch])
+    }
+
+    func testWidgetSmallQuicklinkSearch_withoutURL_addsWidgetSearchOption() {
+        let subject = createSubject()
+
+        let route = subject.makeRoute(url: URL(string: "firefox://widget-small-quicklink-open-url?private=false")!)
+
+        guard case .search(let url, _, let options) = route else {
+            return XCTFail("The route should be a search route")
+        }
+        XCTAssertNil(url)
+        XCTAssertEqual(options, [.focusLocationField, .widgetSearch])
+    }
+
+    func testWidgetMediumQuicklinkSearch_withoutURL_addsWidgetSearchOption() {
+        let subject = createSubject()
+
+        let route = subject.makeRoute(url: URL(string: "firefox://widget-medium-quicklink-open-url?private=true")!)
+
+        guard case .search(let url, let isPrivate, let options) = route else {
+            return XCTFail("The route should be a search route")
+        }
+        XCTAssertNil(url)
+        XCTAssertTrue(isPrivate)
+        XCTAssertEqual(options, [.focusLocationField, .widgetSearch])
     }
 }

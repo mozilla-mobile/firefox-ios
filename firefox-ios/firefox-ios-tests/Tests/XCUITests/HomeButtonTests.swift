@@ -20,10 +20,11 @@ class HomeButtonTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306925
+    // Regression
     func testGoHome() throws {
         browserScreen.navigateToURL(path(forTestPage: TestPages.mozillaOrg))
         waitUntilPageLoad()
-        toolbarScreen.tapHomeButton()
+        toolbarScreen.tapOnNewTabButton()
         waitForTabsButton()
         if !iPad() {
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
@@ -37,18 +38,20 @@ class HomeButtonTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306883
+    // Regression
     func testSwitchHomepageKeyboardRaisedUp() {
         // Open a new tab and load a web page
         browserScreen.navigateToURL("http://localhost:\(serverPort)/test-fixture/\(TestPages.findInPage)")
         waitUntilPageLoad()
 
-        // Switch to Homepage by taping the home button
-        toolbarScreen.tapHomeButton()
+        // Switch to Homepage by taping the new tab button
+        toolbarScreen.tapOnNewTabButton()
 
         validateHomePageAndKeyboardRaisedUp(showKeyboard: true)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306881
+    // Regression
     func testAppLaunchKeyboardNotRaisedUp() {
         toolbarScreen.assertSettingsButtonExists()
         validateHomePageAndKeyboardRaisedUp()

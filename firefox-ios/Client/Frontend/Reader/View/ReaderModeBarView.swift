@@ -28,7 +28,7 @@ enum ReaderModeBarButtonType {
         switch self {
         case .markAsRead: return StandardImageIdentifiers.Large.notificationDotFill
         case .markAsUnread: return StandardImageIdentifiers.Large.notificationDot
-        case .settings: return "SettingsSerif"
+        case .settings: return StandardImageIdentifiers.Large.textSettings
         case .addToReadingList: return StandardImageIdentifiers.Large.readingListAdd
         case .removeFromReadingList: return StandardImageIdentifiers.Large.delete
         case .summarizer: return StandardImageIdentifiers.Large.lightning
@@ -51,7 +51,7 @@ protocol ReaderModeBarViewDelegate: AnyObject {
 class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, SearchBarLocationProvider, ThemeApplicable {
     weak var delegate: ReaderModeBarViewDelegate?
 
-    var parent: UIStackView?
+    weak var parent: UIStackView?
 
     var contextStrokeColor: UIColor?
 
@@ -116,8 +116,8 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         buttonStackView.addArrangedSubview(listStatusButton)
         addSubview(buttonStackView)
         NSLayoutConstraint.activate([
-            buttonStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            buttonStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            buttonStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            buttonStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             buttonStackView.topAnchor.constraint(equalTo: topAnchor),
             buttonStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])

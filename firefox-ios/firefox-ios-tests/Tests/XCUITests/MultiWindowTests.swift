@@ -35,6 +35,7 @@ class MultiWindowTests: IpadOnlyTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2711015
+    // Regression
     func testMultiWindowSplitView() {
         if skipPlatform { return }
         dismissSurveyPrompt()
@@ -43,6 +44,7 @@ class MultiWindowTests: IpadOnlyTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2711016
+    // Regression
     func testMultiWindowNewTab() {
         if skipPlatform { return }
         splitViewFromHomeScreen()
@@ -68,6 +70,7 @@ class MultiWindowTests: IpadOnlyTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3374336
+    // Regression
     func testOpenWindowFromTabSwitcher() {
         if skipPlatform { return }
         openWindowFromTabSwitcher(windowsNumber: 1)

@@ -15,7 +15,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
     private var themeManager: MockThemeManager!
     private var mockFlags: MockNimbusFeatureFlags!
     private var tabPreview: SwipeUpTabWebViewPreview!
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
     private var mockGleanWrapper: MockGleanWrapper!
 
     // releaseOutcome thresholds against a 600pt tall preview: close (1/3) y = 200, tabTray (2/3) y = 400.
@@ -24,7 +24,7 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
         tabManager = MockTabManager()
         mockVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
         themeManager = MockThemeManager()
@@ -34,7 +34,6 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
     }
 
     override func tearDown() async throws {
-        profile.shutdown()
         profile = nil
         tabManager = nil
         mockVC = nil
@@ -43,7 +42,6 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
         tabPreview = nil
         mockGleanWrapper = nil
         resetStore()
-        mockStore = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -302,15 +300,6 @@ final class SwipeUpTabPreviewGestureHandlerTests: XCTestCase, StoreTestUtility {
 
     func setupAppState() -> AppState {
         return AppState()
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }
 

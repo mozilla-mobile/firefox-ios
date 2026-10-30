@@ -40,18 +40,7 @@ class InitialViewController: UIViewController {
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         super.viewDidLoad()
 
-        view.backgroundColor = .clear
-
-        // iPad drop shadow removal hack!
-        var view = parent?.view
-        while view != nil, view!.classForCoder.description() != "UITransitionView" {
-            view = view?.superview
-        }
-        if let view = view {
-            // For reasons unknown, if the alpha is < 1.0, the drop shadow is not shown
-            view.alpha = 0.99
-        }
-
+        self.view.backgroundColor = UIColor(white: 0.0, alpha: UX.alphaForFullscreenOverlay)
         self.view.alpha = 0
 
         self.getShareItem { shareItem in

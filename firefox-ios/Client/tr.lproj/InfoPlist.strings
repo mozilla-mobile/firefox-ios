@@ -23,7 +23,7 @@
 "NSPhotoLibraryAddUsageDescription" = "Fotoğraf kaydetmenize olanak sağlar.";
 
 /* Privacy - Speech Recognition Usage Description */
-"NSSpeechRecognitionUsageDescription" = "Firefox, sesli arama için sesinizi metne dönüştürmek amacıyla konuşma tanıma özelliğini kullanır.";
+"NSSpeechRecognitionUsageDescription" = "Firefox’un sesinizi metne dönüştürmesini sağlar.";
 
 /* (No Comment) */
 "Scan QR Code" = "QR kodu tara";

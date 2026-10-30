@@ -17,11 +17,11 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockSummarizerLanguageProvider: MockSummarizerLanguageProvider!
     private let mockURL = URL(string: "https://example.com")!
     private var mockProfile: MockProfile!
-    private var mockStore: MockStoreForMiddleware<AppState>!
+    var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         mockTabManager = MockTabManager()
         mockWindowManager = MockWindowManager(
             wrappedManager: WindowManagerImplementation(),
@@ -472,7 +472,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func setupWebViewForTabManager(isHomePage: Bool = false) {
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID, isHomePage: isHomePage)
+        let tab = MockTab(profile: makeProfile(), windowUUID: .XCTestDefaultUUID, isHomePage: isHomePage)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
     }
@@ -497,16 +497,5 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
                 ]
             )
         )
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    // In order to avoid flaky tests, we should reset the store
-    // similar to production
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }

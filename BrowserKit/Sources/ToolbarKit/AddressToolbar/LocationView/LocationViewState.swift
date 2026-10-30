@@ -21,13 +21,13 @@ public struct LocationViewConfiguration {
     public let url: URL?
     public let droppableUrl: URL?
     public let searchTerm: String?
+    public let shouldDisplaySearchTerm: Bool
     public let isEditing: Bool
     public let didStartTyping: Bool
     public let shouldShowKeyboard: Bool
     public let shouldSelectSearchTerm: Bool
     public let editingAccessoryAction: ToolbarElement?
     public var onTapLockIcon: (@MainActor (UIButton) -> Void)?
-    public var onLongPress: (@MainActor () -> Void)?
 
     public init(
         searchEngineImageViewA11yId: String,
@@ -43,13 +43,13 @@ public struct LocationViewConfiguration {
         url: URL?,
         droppableUrl: URL?,
         searchTerm: String?,
+        shouldDisplaySearchTerm: Bool = false,
         isEditing: Bool,
         didStartTyping: Bool,
         shouldShowKeyboard: Bool,
         shouldSelectSearchTerm: Bool,
         editingAccessoryAction: ToolbarElement? = nil,
-        onTapLockIcon: (@MainActor (UIButton) -> Void)? = nil,
-        onLongPress: (@MainActor () -> Void)? = nil
+        onTapLockIcon: (@MainActor (UIButton) -> Void)? = nil
     ) {
         self.searchEngineImageViewA11yId = searchEngineImageViewA11yId
         self.searchEngineImageViewA11yLabel = searchEngineImageViewA11yLabel
@@ -64,12 +64,12 @@ public struct LocationViewConfiguration {
         self.url = url
         self.droppableUrl = droppableUrl
         self.searchTerm = searchTerm
+        self.shouldDisplaySearchTerm = shouldDisplaySearchTerm
         self.isEditing = isEditing
         self.didStartTyping = didStartTyping
         self.shouldShowKeyboard = shouldShowKeyboard
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
         self.editingAccessoryAction = editingAccessoryAction
         self.onTapLockIcon = onTapLockIcon
-        self.onLongPress = onLongPress
     }
 }

@@ -2,7 +2,7 @@
 "Are you sure?" = "Ydych chi'n siŵr?";
 
 /* Prompt option for cancelling out of deletion */
-"Cancel" = "Diddymu";
+"Cancel" = "Na";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
 "Clear Search" = "Clirio'r Chwilio";
@@ -17,7 +17,7 @@
 "Delete" = "Dileu";
 
 /* Prompt option for cancelling out of deletion */
-"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Diddymu";
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Na";
 
 /* Label for the button used to delete the current login. */
 "DeleteLoginAlert.DeleteButton.Title.v122" = "Tynnu";

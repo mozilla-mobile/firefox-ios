@@ -41,6 +41,15 @@ jobs:
           set -euo pipefail
           retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && return 1; sleep 2; done; }
 
+          # Validate before arithmetic: bash evaluates variable contents recursively inside
+          # $(( )), so a non-numeric value reaching here could execute command substitution.
+          for var in ADDITIONS DELETIONS; do
+            if ! [[ "${!var}" =~ ^[0-9]+$ ]]; then
+              echo "::warning::$var is not numeric ('${!var}'); skipping."
+              exit 0
+            fi
+          done
+
           total=$(( ADDITIONS + DELETIONS ))
           echo "PR #$NUMBER: additions=$ADDITIONS, deletions=$DELETIONS, total=$total (threshold=$BIG_PR_THRESHOLD), event=$EVENT_ACTION"
 

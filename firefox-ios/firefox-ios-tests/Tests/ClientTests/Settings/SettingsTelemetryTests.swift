@@ -19,6 +19,11 @@ final class SettingsTelemetryTests: XCTestCase {
         mockGleanWrapper = MockGleanWrapper()
     }
 
+    override func tearDown() {
+        mockGleanWrapper = nil
+        super.tearDown()
+    }
+
     func testOptionSelected_recordsData() throws {
         // The event and event extras type under test
         let event = GleanMetrics.Settings.optionSelected

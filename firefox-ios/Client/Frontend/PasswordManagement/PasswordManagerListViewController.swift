@@ -30,6 +30,15 @@ class PasswordManagerListViewController: SensitiveViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
+    var shouldUsePrivateOverride: Bool { return true }
+    var shouldBeInPrivateTheme: Bool { return false }
+
+    private func currentTheme() -> Theme {
+        return themeManager.resolveTheme(for: windowUUID,
+                                         shouldUsePrivateOverride: shouldUsePrivateOverride,
+                                         shouldBeInPrivateTheme: shouldBeInPrivateTheme)
+    }
+
     weak var coordinator: PasswordManagerFlowDelegate?
 
     fileprivate lazy var selectionButton: UIButton = .build { button in
@@ -45,7 +54,7 @@ class PasswordManagerListViewController: SensitiveViewController,
         self.viewModel = PasswordManagerViewModel(
             profile: profile,
             searchController: searchController,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
+            theme: themeManager.resolveTheme(for: windowUUID, privateOverride: false),
             loginProvider: profile.logins
         )
         self.loginDataSource = LoginDataSource(viewModel: viewModel)
@@ -167,7 +176,7 @@ class PasswordManagerListViewController: SensitiveViewController,
     }
 
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         viewModel.theme = theme
         loginDataSource.viewModel = viewModel
 
@@ -303,8 +312,10 @@ extension PasswordManagerListViewController: UISearchControllerDelegate {
 // MARK: - Selectors
 private extension PasswordManagerListViewController {
     func loadLogins(_ query: String? = nil) {
-        loadingView.isHidden = false
-        loadingView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        if let query, !query.isEmpty {
+            loadingView.isHidden = false
+            loadingView.applyTheme(theme: currentTheme())
+        }
         viewModel.loadLogins(query, loginDataSource: self.loginDataSource)
     }
 
@@ -351,8 +362,8 @@ private extension PasswordManagerListViewController {
         viewModel.profile.hasSyncedLogins()
             .uponQueue(.main) { yes in
                 // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-                MainActor.assumeIsolated {
-                    self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
+                MainActor.assumeIsolated { [unowned self] in
+                    self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ _ in
                         // Delete here
                         let guidsToDelete = self.tableView.allLoginIndexPaths.compactMap { index in
                             if let loginRecord = self.viewModel.loginAtIndexPath(index),
@@ -421,7 +432,7 @@ extension PasswordManagerListViewController: UITableViewDelegate {
             headerView.showBorder(for: .top, true)
             headerView.showBorder(for: .bottom, true)
         }
-        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        headerView.applyTheme(theme: currentTheme())
         return headerView
     }
 

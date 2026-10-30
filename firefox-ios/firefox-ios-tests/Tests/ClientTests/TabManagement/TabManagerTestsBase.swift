@@ -18,6 +18,7 @@ class TabManagerTestsBase: XCTestCase {
     var mockSessionStore: MockTabSessionStore!
     var mockProfile: MockProfile!
     var mockDiskImageStore: MockDiskImageStore!
+    var mockThemeManager: MockThemeManager!
     let sleepTime: UInt64 = 1 * NSEC_PER_SEC
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     /// 9 Sep 2001 8:00 pm GMT + 0
@@ -30,11 +31,12 @@ class TabManagerTestsBase: XCTestCase {
         let uuid: WindowUUID = .XCTestDefaultUUID
         tabWindowUUID = uuid
 
-        mockProfile = MockProfile()
+        mockProfile = makeProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
         mockSessionStore = MockTabSessionStore()
+        mockThemeManager = await MockThemeManager()
         setIsDeeplinkOptimizationRefactorEnabled(false)
     }
 
@@ -43,6 +45,7 @@ class TabManagerTestsBase: XCTestCase {
         mockDiskImageStore = nil
         mockTabStore = nil
         mockSessionStore = nil
+        mockThemeManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -60,6 +63,7 @@ class TabManagerTestsBase: XCTestCase {
             uuid: ReservedWindowUUID(uuid: windowUUID ?? tabWindowUUID, isNew: false),
             tabDataStore: mockTabStore,
             tabSessionStore: mockSessionStore,
+            themeManager: mockThemeManager,
             tabs: tabs
         )
         trackForMemoryLeaks(subject, file: file, line: line)
@@ -96,15 +100,15 @@ class TabManagerTestsBase: XCTestCase {
                 tab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
             case .normalOlderLastMonth:
                 let lastMonthDate = testDate.lastMonth
-                tab = Tab(profile: MockProfile(), windowUUID: tabWindowUUID, tabCreatedTime: lastMonthDate)
+                tab = Tab(profile: makeProfile(), windowUUID: tabWindowUUID, tabCreatedTime: lastMonthDate)
             case .privateAny:
                 tab = Tab(profile: mockProfile, isPrivate: true, windowUUID: tabWindowUUID)
             case .normalOlder2Weeks:
                 let twoWeeksDate = testDate.lastTwoWeek
-                tab = Tab(profile: MockProfile(), windowUUID: tabWindowUUID, tabCreatedTime: twoWeeksDate)
+                tab = Tab(profile: makeProfile(), windowUUID: tabWindowUUID, tabCreatedTime: twoWeeksDate)
             case .normalOlderYesterday:
                 let yesterdayDate = testDate.dayBefore
-                tab = Tab(profile: MockProfile(), windowUUID: tabWindowUUID, tabCreatedTime: yesterdayDate)
+                tab = Tab(profile: makeProfile(), windowUUID: tabWindowUUID, tabCreatedTime: yesterdayDate)
             }
             tab.url = testURL(count: i)
             tabs.append(tab)

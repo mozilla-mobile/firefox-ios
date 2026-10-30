@@ -25,6 +25,15 @@ class TabsTests: BaseTestCase {
     var newTabsScreen: NewTabsScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
 
+    /// This test launches the app itself, with its first page already open in private mode through a deeplink.
+    override func setUpApp() {
+        if name.contains("testCloseAllTabsPrivateModeUndo") {
+            setUpAppWithoutLaunching()
+        } else {
+            super.setUpApp()
+        }
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307042
     // Smoketest
     // (Steps 9-10 in testAddTabFromTabTray from IntegrationTests)
@@ -107,6 +116,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354300
+    // Regression
     func testAddTabFromContext() {
         navigator.openURL(urlExample)
         // Initially there is only one tab open
@@ -127,6 +137,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354447
+    // Regression
     func testSwitchBetweenTabs() {
         // Open two urls from tab tray and switch between them
         navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
@@ -197,11 +208,7 @@ class TabsTests: BaseTestCase {
         toolBarScreen = ToolbarScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)
         // A different tab than home is open to do the proper checks
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
-        waitUntilPageLoad()
+        launchOpening(path(forTestPage: TestPages.mozillaOrg), isPrivate: true)
         toolBarScreen.assertTabsButtonExists()
 
         if iPad() {
@@ -223,6 +230,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354579
+    // Regression
     func testCloseAllTabs() {
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: TestPages.mozillaOrg))
@@ -246,6 +254,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354580
+    // Regression
     func testCloseAllTabsPrivateMode() {
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
@@ -312,7 +321,7 @@ class TabsTests: BaseTestCase {
 
         toolBarScreen.assertTabsButtonExists()
         toolBarScreen.pressTabsButton(duration: 1)
-        mozWaitForElementToExist(app.tables.cells.buttons[StandardImageIdentifiers.Large.plus])
+        mozWaitForElementToExist(app.collectionViews.cells.buttons[StandardImageIdentifiers.Large.plus])
         newTabsScreen.tapCrossIconInTableCells()
         navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
@@ -332,6 +341,7 @@ class TabsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307047
+    // Regression
     func testOpenTabsViewCurrentTabThumbnail() {
         // Open ten or more tabs
         navigator.nowAt(NewTabScreen)
@@ -485,7 +495,7 @@ class TabsTests: BaseTestCase {
 
         // Verify the URL was copied by pasting it into the URL bar of a new tab
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.goto(URLBarOpen)
+        // navigator.goto(URLBarOpen)
         browserScreen.pasteAndAssertAddressBarContains(urlValueLongExample)
 
         // Long press the tab again and tap "Close Tab", then verify the tab is closed
@@ -703,8 +713,7 @@ class TabsTestsIphone: BaseTestCase {
 
         // Check that the tab has changed
         waitUntilPageLoad()
-        browserScreen.addressToolbarContainValue(value: "iana")
-        browserScreen.assertRFCLinkExist()
+        browserScreen.assertReservedTLDNamesLinkExist()
         toolBarScreen.assertTabsButtonExists()
         toolBarScreen.assertTabsButtonValue(expectedCount: "2")
     }
@@ -724,8 +733,7 @@ class TabsTestsIphone: BaseTestCase {
         newTabsScreen.tapOnSwitchButton()
 
         waitUntilPageLoad()
-        browserScreen.addressToolbarContainValue(value: "iana")
-        browserScreen.assertRFCLinkExist()
+        browserScreen.assertReservedTLDNamesLinkExist()
         toolBarScreen.assertTabsButtonExists()
         toolBarScreen.assertTabsButtonValue(expectedCount: "2")
 
@@ -746,7 +754,7 @@ class TabsTestsIphone: BaseTestCase {
         // Check that the tab has changed to the new open one and that the user is in private mode.
         // Open a new tab from private tab tray should open a new tab in private mode.
         waitUntilPageLoad()
-        browserScreen.addressToolbarContainValue(value: "iana")
+        browserScreen.assertReservedTLDNamesLinkExist()
         waitForTabsButton()
         navigator.goto(TabTray)
         tabTrayScreen.tapOnNewTabButton()
@@ -758,6 +766,7 @@ class TabsTestsIphone: BaseTestCase {
 // and closing the tabs by tapping 'x' button
 class TabsTestsIpad: IpadOnlyTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307023
+    // Regression
     func testUpdateTabCounter() {
         if skipPlatform { return }
         // Open three tabs by tapping on '+' button

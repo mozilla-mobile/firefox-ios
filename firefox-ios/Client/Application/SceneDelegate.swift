@@ -43,11 +43,6 @@ class SceneDelegate: UIResponder,
         guard !AppConstants.isRunningUnitTest else { return }
         logger.log("SceneDelegate: will connect to session", level: .info, category: .lifecycle)
 
-        // Add hooks for the nimbus-cli to test experiments on device or involving deeplinks.
-        if let url = connectionOptions.urlContexts.first?.url {
-            Experiments.shared.initializeTooling(url: url)
-        }
-
         routeBuilder.configure(
             isPrivate: UserDefaults.standard.bool(
                 forKey: PrefsKeys.LastSessionWasPrivate
@@ -71,6 +66,10 @@ class SceneDelegate: UIResponder,
         // Handle clean-up here for closing windows on iPad
         guard let sceneCoordinator = (scene.delegate as? SceneDelegate)?.sceneCoordinator else { return }
 
+        if AppEventQueue.activityIsInProgress(.pendingDeeplinkTab(sceneCoordinator.windowUUID)) {
+            AppEventQueue.completed(.pendingDeeplinkTab(sceneCoordinator.windowUUID))
+        }
+
         // For now, we explicitly cancel downloads for windows that are closed.
         // On iPhone this will happen during app termination, for iPad it will
         // occur on termination or when a window is disconnected/closed by iPadOS
@@ -80,6 +79,9 @@ class SceneDelegate: UIResponder,
         (AppContainer.shared.resolve() as WindowManager).windowWillClose(uuid: sceneCoordinator.windowUUID)
         self.sceneCoordinator?.removeAllChildren()
         self.sceneCoordinator = nil
+
+        // The set of open windows changed; only offer the "Combine Windows" Quick Action when 2+ remain.
+        MergeWindowsQuickActionController().update()
     }
 
     // MARK: - Transitioning to Foreground
@@ -100,6 +102,10 @@ class SceneDelegate: UIResponder,
                 self.tabErrorTelemetryHelper.validateTabCountForForegroundedScene(uuid)
             }
         }
+
+        // The set of open windows may have changed; only offer the "Combine Windows" Quick Action
+        // when 2+ windows are open.
+        MergeWindowsQuickActionController().update()
     }
 
     // MARK: - Transitioning to Background
@@ -237,9 +243,13 @@ class SceneDelegate: UIResponder,
         logger.log("Scene coordinator will handle a route", level: .info, category: .coordinator)
         sessionManager.launchSessionProvider.openedFromExternalSource = true
 
+        if route.willSelectTabOnHandling {
+            AppEventQueue.started(.pendingDeeplinkTab(sceneCoordinator.windowUUID))
+        }
+
         if isDeeplinkOptimizationRefactorEnabled {
-            AppEventQueue.wait(for: [.startupFlowComplete]) {
-                ensureMainThread { [weak self] in
+            AppEventQueue.wait(for: [.startupFlowComplete]) { [weak self] in
+                ensureMainThread {
                     self?.logger.log("Start up flow done, will handle route",
                                      level: .info,
                                      category: .coordinator)
@@ -248,8 +258,8 @@ class SceneDelegate: UIResponder,
                 }
             }
         } else {
-            AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) {
-                ensureMainThread { [weak self] in
+            AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) { [weak self] in
+                ensureMainThread {
                     self?.logger.log("Start up flow and restoration done, will handle route",
                                      level: .info,
                                      category: .coordinator)

@@ -22,7 +22,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
+        profile = makeProfile()
         tabManager = MockTabManager()
         fileManager = MockFileManager()
     }
@@ -183,16 +183,16 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     @MainActor
-    func testWebViewDecidePolicyForNavigationAction_allowsLoading_whenBlobSchemeWithNavigationTypeOther() {
+    func testWebViewDecidePolicyForNavigationAction_cancelLoading_whenBlobSchemeWithNavigationTypeOther() {
         let subject = createSubject()
         let tab = createTab()
-        let blob = URL(string: "blob://blobfile")!
+        let blob = URL(string: "blob:https://example.com/4a1b4a40-7aa5-4ff7-a34c-b54c32ce1339")!
         tabManager.tabs = [tab]
 
         subject.webView(tab.webView!,
                         decidePolicyFor: MockNavigationAction(url: blob,
                                                               type: .other)) { policy in
-            XCTAssertEqual(policy, .allow)
+            XCTAssertEqual(policy, .cancel)
         }
     }
 
@@ -345,6 +345,53 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    // MARK: - Create web view
+
+    @MainActor
+    func testWebViewCreateWebView_withMailtoScheme_showsMailAlertWithoutOpeningTab() throws {
+        let subject = MockBrowserViewController(profile: profile,
+                                                tabManager: tabManager,
+                                                userInitiatedQueue: MockDispatchQueue())
+        trackForMemoryLeaks(subject)
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let url = URL(string: "mailto:test@example.com")!
+
+        let newWebView = subject.webView(tab.webView!,
+                                         createWebViewWith: WKWebViewConfiguration(),
+                                         for: MockNavigationAction(url: url, type: .linkActivated),
+                                         windowFeatures: WKWindowFeatures())
+
+        XCTAssertNil(newWebView)
+        XCTAssertTrue(tabManager.lastSelectedTabs.isEmpty)
+        let alert = try XCTUnwrap(subject.presentedViewController as? UIAlertController)
+        XCTAssertEqual(alert.message, .ExternalMailLinkConfirmation)
+        // The alert's action captures the BVC, so drop it to avoid a leak since the mock never dismisses it
+        subject.viewControllerToPresent = nil
+    }
+
+    @MainActor
+    func testWebViewCreateWebView_withSmsScheme_showsSmsAlertWithoutOpeningTab() throws {
+        let subject = MockBrowserViewController(profile: profile,
+                                                tabManager: tabManager,
+                                                userInitiatedQueue: MockDispatchQueue())
+        trackForMemoryLeaks(subject)
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        let url = URL(string: "sms:+15555555555")!
+
+        let newWebView = subject.webView(tab.webView!,
+                                         createWebViewWith: WKWebViewConfiguration(),
+                                         for: MockNavigationAction(url: url, type: .linkActivated),
+                                         windowFeatures: WKWindowFeatures())
+
+        XCTAssertNil(newWebView)
+        XCTAssertTrue(tabManager.lastSelectedTabs.isEmpty)
+        let alert = try XCTUnwrap(subject.presentedViewController as? UIAlertController)
+        XCTAssertEqual(alert.message, .ExternalSmsLinkConfirmation)
+    }
+
     // MARK: - Authentication
 
     @MainActor
@@ -414,7 +461,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let tab = MockTabWebView(frame: .zero,
                                  configuration: WKWebViewConfiguration(),
                                  windowUUID: .XCTestDefaultUUID,
-                                 certStore: MockProfile().certStore)
+                                 certStore: makeProfile().certStore)
         tab.loadedURL = url
         return tab
     }

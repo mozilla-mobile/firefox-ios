@@ -41,6 +41,7 @@ class HistoryTests: BaseTestCase {
     var settingScreen: SettingScreen!
     var browserScreen: BrowserScreen!
     var historyScreen: HistoryScreen!
+    var mainMenuScreen: MainMenuScreen!
 
     override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out the function name
@@ -61,14 +62,19 @@ class HistoryTests: BaseTestCase {
         settingScreen = SettingScreen(app: app)
         browserScreen = BrowserScreen(app: app)
         historyScreen = HistoryScreen(app: app)
+        mainMenuScreen = MainMenuScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307300
+    // Regression
     func testEmptyHistoryListFirstTime() {
         navigator.nowAt(NewTabScreen)
 
-        // Go to History List from Top Sites and check it is empty
-        navigator.goto(LibraryPanel_History)
+        // Go to History List from the main menu and check it is empty
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.assertMenuOptionsExist()
+        mainMenuScreen.tapHistory()
+        navigator.nowAt(LibraryPanel_History)
         waitForElementsToExist(
             [
                 app.tables.cells[HistoryPanelA11y.recentlyClosedCell],
@@ -79,6 +85,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307301
+    // Regression
     func testOpenSyncDevices() {
         // Firefox sync page should be available
         navigator.nowAt(NewTabScreen)
@@ -94,6 +101,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307487
+    // Regression
     func testClearHistoryFromSettings() throws {
         navigator.nowAt(NewTabScreen)
         // Browse to have an item in history list
@@ -146,6 +154,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307357
+    // Regression
     func testRecentlyClosedWebsiteOpen() {
         // Open "Book of Mozilla"
         openBookOfMozilla()
@@ -211,6 +220,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307479
+    // Regression
     func testRemoveAllTabsButtonRecentlyClosedHistory() {
         // Open "Book of Mozilla"
         openBookOfMozilla()
@@ -293,6 +303,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307484
+    // Regression
     func testOpenInNewTabRecentlyClosedItem() {
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()

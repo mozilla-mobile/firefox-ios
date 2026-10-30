@@ -39,6 +39,52 @@ fileprivate extension ForeignBytes {
     init(bufferPointer: UnsafeBufferPointer<UInt8>) {
         self.init(len: Int32(bufferPointer.count), data: bufferPointer.baseAddress)
     }
+
+    init(rawBufferPointer: UnsafeRawBufferPointer) {
+        self.init(
+            len: Int32(rawBufferPointer.count),
+            data: rawBufferPointer.baseAddress?.assumingMemoryBound(to: UInt8.self)
+        )
+    }
+}
+
+// Converter for `&[u8]` / `[ByRef] bytes` arguments.
+//
+// Conforms to `FfiConverter` so the compiler enforces the full converter
+// method set. Only the scope-bound `lower(_:_body:)` overload is sound —
+// zero-copy byte buffers only flow foreign -> Rust, and only in argument
+// position. The four protocol-witness methods (`lift`, `lower`, `read`,
+// `write`) `fatalError` at runtime if anyone reaches them.
+//
+// The scope-bound `lower` takes a closure because the `ForeignBytes`
+// pointer is only guaranteed valid for the duration of
+// `Data.withUnsafeBytes`. Callers must run the full FFI call inside
+// the closure body.
+fileprivate enum FfiConverterByRefBytes: FfiConverter {
+    typealias SwiftType = Data
+    typealias FfiType = ForeignBytes
+
+    static func lower<R>(_ value: Data, _ body: (ForeignBytes) throws -> R) rethrows -> R {
+        return try value.withUnsafeBytes { rawBuf in
+            try body(ForeignBytes(rawBufferPointer: rawBuf))
+        }
+    }
+
+    static func lower(_ value: Data) -> ForeignBytes {
+        fatalError("ByRef bytes cannot use the plain lower: returning ForeignBytes escapes the Data.withUnsafeBytes scope. Use the scope-bound lower(_:_body:) overload instead.")
+    }
+
+    static func lift(_ value: ForeignBytes) throws -> Data {
+        fatalError("ByRef bytes cannot be lifted: zero-copy &[u8] only flows foreign->Rust")
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        fatalError("ByRef bytes cannot be read from a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
+
+    static func write(_ value: Data, into buf: inout [UInt8]) {
+        fatalError("ByRef bytes cannot be written to a buffer: zero-copy &[u8] is only supported in argument position, not nested in records/options/etc.")
+    }
 }
 
 // For every type used in the interface, we provide helper methods for conveniently
@@ -463,7 +509,11 @@ fileprivate struct FfiConverterString: FfiConverter {
             return String()
         }
         let bytes = UnsafeBufferPointer<UInt8>(start: value.data!, count: Int(value.len))
-        return String(bytes: bytes, encoding: String.Encoding.utf8)!
+        // Use Swift's native UTF-8 decoder; `String(bytes:encoding:.utf8)` goes
+        // through Foundation's NSString and silently strips a leading U+FEFF BOM.
+        // Invalid UTF-8 substitutes U+FFFD instead of trapping (unreachable
+        // given Rust's `String` invariant).
+        return String(decoding: bytes, as: UTF8.self)
     }
 
     public static func lower(_ value: String) -> RustBuffer {
@@ -479,7 +529,8 @@ fileprivate struct FfiConverterString: FfiConverter {
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> String {
         let len: Int32 = try readInt(&buf)
-        return String(bytes: try readBytes(&buf, count: Int(len)), encoding: String.Encoding.utf8)!
+        // See `lift` above for why we avoid Foundation's NSString-backed decoder here.
+        return String(decoding: try readBytes(&buf, count: Int(len)), as: UTF8.self)
     }
 
     public static func write(_ value: String, into buf: inout [UInt8]) {
@@ -562,8 +613,9 @@ open class OhttpSession: OhttpSessionProtocol, @unchecked Sendable {
 public convenience init(config: [UInt8])throws  {
     let handle =
         try rustCallWithError(FfiConverterTypeOhttpError_lift) {
+        uniffiCallStatus in
     uniffi_as_ohttp_client_fn_constructor_ohttpsession_new(
-        FfiConverterSequenceUInt8.lower(config),$0
+        FfiConverterSequenceUInt8.lower(config),uniffiCallStatus
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -588,9 +640,10 @@ public convenience init(config: [UInt8])throws  {
      */
 open func decapsulate(encoded: [UInt8])throws  -> OhttpResponse  {
     return try  FfiConverterTypeOhttpResponse_lift(try rustCallWithError(FfiConverterTypeOhttpError_lift) {
+        uniffiCallStatus in
     uniffi_as_ohttp_client_fn_method_ohttpsession_decapsulate(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceUInt8.lower(encoded),$0
+        FfiConverterSequenceUInt8.lower(encoded),uniffiCallStatus
     )
 })
 }
@@ -602,6 +655,7 @@ open func decapsulate(encoded: [UInt8])throws  -> OhttpResponse  {
      */
 open func encapsulate(method: String, scheme: String, server: String, endpoint: String, headers: [String: String], payload: [UInt8])throws  -> [UInt8]  {
     return try  FfiConverterSequenceUInt8.lift(try rustCallWithError(FfiConverterTypeOhttpError_lift) {
+        uniffiCallStatus in
     uniffi_as_ohttp_client_fn_method_ohttpsession_encapsulate(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(method),
@@ -609,7 +663,7 @@ open func encapsulate(method: String, scheme: String, server: String, endpoint: 
         FfiConverterString.lower(server),
         FfiConverterString.lower(endpoint),
         FfiConverterDictionaryStringString.lower(headers),
-        FfiConverterSequenceUInt8.lower(payload),$0
+        FfiConverterSequenceUInt8.lower(payload),uniffiCallStatus
     )
 })
 }
@@ -726,7 +780,8 @@ open class OhttpTestServer: OhttpTestServerProtocol, @unchecked Sendable {
 public convenience init() {
     let handle =
         try! rustCall() {
-    uniffi_as_ohttp_client_fn_constructor_ohttptestserver_new($0
+        uniffiCallStatus in
+    uniffi_as_ohttp_client_fn_constructor_ohttptestserver_new(uniffiCallStatus
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -749,26 +804,29 @@ public convenience init() {
      */
 open func getConfig() -> [UInt8]  {
     return try!  FfiConverterSequenceUInt8.lift(try! rustCall() {
+        uniffiCallStatus in
     uniffi_as_ohttp_client_fn_method_ohttptestserver_get_config(
-            self.uniffiCloneHandle(),$0
+            self.uniffiCloneHandle(),uniffiCallStatus
     )
 })
 }
     
 open func receive(message: [UInt8])throws  -> TestServerRequest  {
     return try  FfiConverterTypeTestServerRequest_lift(try rustCallWithError(FfiConverterTypeOhttpError_lift) {
+        uniffiCallStatus in
     uniffi_as_ohttp_client_fn_method_ohttptestserver_receive(
             self.uniffiCloneHandle(),
-        FfiConverterSequenceUInt8.lower(message),$0
+        FfiConverterSequenceUInt8.lower(message),uniffiCallStatus
     )
 })
 }
     
 open func respond(response: OhttpResponse)throws  -> [UInt8]  {
     return try  FfiConverterSequenceUInt8.lift(try rustCallWithError(FfiConverterTypeOhttpError_lift) {
+        uniffiCallStatus in
     uniffi_as_ohttp_client_fn_method_ohttptestserver_respond(
             self.uniffiCloneHandle(),
-        FfiConverterTypeOhttpResponse_lower(response),$0
+        FfiConverterTypeOhttpResponse_lower(response),uniffiCallStatus
     )
 })
 }
@@ -952,7 +1010,8 @@ public func FfiConverterTypeTestServerRequest_lower(_ value: TestServerRequest) 
 }
 
 
-public enum OhttpError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
+public 
+enum OhttpError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -1147,22 +1206,22 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_as_ohttp_client_checksum_method_ohttpsession_decapsulate() != 58277) {
+    if (uniffi_as_ohttp_client_checksum_method_ohttpsession_decapsulate() != 17150) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_as_ohttp_client_checksum_method_ohttpsession_encapsulate() != 34473) {
+    if (uniffi_as_ohttp_client_checksum_method_ohttpsession_encapsulate() != 23599) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_as_ohttp_client_checksum_method_ohttptestserver_get_config() != 861) {
+    if (uniffi_as_ohttp_client_checksum_method_ohttptestserver_get_config() != 7995) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_as_ohttp_client_checksum_method_ohttptestserver_receive() != 9216) {
+    if (uniffi_as_ohttp_client_checksum_method_ohttptestserver_receive() != 43228) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_as_ohttp_client_checksum_method_ohttptestserver_respond() != 29697) {
+    if (uniffi_as_ohttp_client_checksum_method_ohttptestserver_respond() != 26371) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_as_ohttp_client_checksum_constructor_ohttpsession_new() != 12377) {
+    if (uniffi_as_ohttp_client_checksum_constructor_ohttpsession_new() != 36172) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_as_ohttp_client_checksum_constructor_ohttptestserver_new() != 10284) {

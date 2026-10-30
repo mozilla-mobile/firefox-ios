@@ -13,6 +13,7 @@ struct HeaderState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var isPrivate: Bool
     var showQuickAnswersButton: Bool
+    var shouldStartQuickAnswersButtonGlow: Bool
 
     init(
         windowUUID: WindowUUID,
@@ -23,18 +24,21 @@ struct HeaderState: StateType, Equatable, Hashable {
         self.init(
             windowUUID: windowUUID,
             isPrivate: isPrivate,
-            showQuickAnswersButton: showQuickAnswersButton
+            showQuickAnswersButton: showQuickAnswersButton,
+            shouldStartQuickAnswersButtonGlow: quickAnswersStore.shouldStartEntryPointButtonGlow
         )
     }
 
     private init(
         windowUUID: WindowUUID,
         isPrivate: Bool,
-        showQuickAnswersButton: Bool
+        showQuickAnswersButton: Bool,
+        shouldStartQuickAnswersButtonGlow: Bool
     ) {
         self.windowUUID = windowUUID
         self.isPrivate = isPrivate
         self.showQuickAnswersButton = showQuickAnswersButton
+        self.shouldStartQuickAnswersButtonGlow = shouldStartQuickAnswersButtonGlow
     }
 
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
@@ -73,16 +77,17 @@ struct HeaderState: StateType, Equatable, Hashable {
         else {
             return defaultState(from: state)
         }
-        return state.copy(
-            showQuickAnswersButton: showQuickAnswers && !state.isPrivate
-        )
+        return state
+            .copy(showQuickAnswersButton: showQuickAnswers && !state.isPrivate)
+            .copy(shouldStartQuickAnswersButtonGlow: quickAnswersAction.shouldStartEntryPointButtonGlow)
     }
 
     static func defaultState(from state: HeaderState) -> HeaderState {
         return HeaderState(
             windowUUID: state.windowUUID,
             isPrivate: state.isPrivate,
-            showQuickAnswersButton: state.showQuickAnswersButton
+            showQuickAnswersButton: state.showQuickAnswersButton,
+            shouldStartQuickAnswersButtonGlow: state.shouldStartQuickAnswersButtonGlow
         )
     }
 }

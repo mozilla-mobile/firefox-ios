@@ -13,7 +13,7 @@
 #
 # Usage: From the repo's root directory, run the following command:
 # 
-# license-plist --config-path "./firefox-ios/Client/Assets/About/license_plist.yml" \
+# license-plist --config-path "./firefox-ios/Client/Assets/About/license_plist_config.yml" \
 #			  --package-paths "BrowserKit/Package.swift" \
 #			  --xcodeproj-path "firefox-ios/Client.xcodeproj"
 #

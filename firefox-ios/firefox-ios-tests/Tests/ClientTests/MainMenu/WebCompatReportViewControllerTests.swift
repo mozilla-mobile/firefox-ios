@@ -46,6 +46,19 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(coordinator.didFinishCallCount, 1)
     }
 
+    func testPresentationControllerDidDismiss_dispatchesCancelAndNotifiesCoordinator() {
+        let coordinator = MockWebCompatReportCoordinatorDelegate()
+        let subject = createSubject(reportedURL: nil)
+        subject.reportCoordinator = coordinator
+        subject.loadViewIfNeeded()
+        let presentationController = UIPresentationController(presentedViewController: subject, presenting: nil)
+
+        subject.presentationControllerDidDismiss(presentationController)
+
+        XCTAssertEqual(lastViewAction()?.actionType as? WebCompatReporterViewActionType, .cancel)
+        XCTAssertEqual(coordinator.didFinishCallCount, 1)
+    }
+
     // MARK: - Delegate intents → Redux actions
 
     func testDidTapLearnMore_forwardsURLToCoordinator() throws {
@@ -312,6 +325,17 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(text, "Broken images")
     }
 
+    func testMakeSections_detailsRowLabelsItselfOptional() {
+        let state = WebCompatReporterState(windowUUID: windowUUID)
+            .copy(url: "https://example.com")
+            .copy(selectedCategory: .siteNotUsable)
+
+        let sections = WebCompatReportViewController.makeSections(from: state)
+
+        let details = sections.first { $0.id == "additionalDetails" }
+        XCTAssertEqual(details?.rows.first?.title, .WebCompatReporter.Fields.DetailsPlaceholder)
+    }
+
     func testMakeSections_attachesLearnMoreFooterWithATappableLink() throws {
         let state = WebCompatReporterState(windowUUID: windowUUID).copy(url: "https://example.com")
 
@@ -348,15 +372,6 @@ final class WebCompatReportViewControllerTests: XCTestCase, StoreTestUtility {
                 ]
             )
         )
-    }
-
-    func setupStore() {
-        mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
-    }
-
-    func resetStore() {
-        StoreTestUtilityHelper.resetStore()
     }
 }
 

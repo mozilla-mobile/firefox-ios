@@ -58,7 +58,7 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
             let downloadsStates = DownloadLiveActivityUtil.buildContentState(downloads: downloadProgressManager.downloads)
             let contentState = DownloadLiveActivityAttributes.ContentState(downloads: downloadsStates)
             await update()
-            try await Task.sleep(nanoseconds: durationToDismissal.rawValue)
+            try? await Task.sleep(nanoseconds: durationToDismissal.rawValue)
             await downloadLiveActivity?.end(using: contentState, dismissalPolicy: .immediate)
         }
     }

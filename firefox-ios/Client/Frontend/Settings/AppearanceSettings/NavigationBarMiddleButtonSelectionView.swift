@@ -26,7 +26,8 @@ struct NavigationBarMiddleButtonSelectionView: View {
             GenericSelectableItemCellView(
                 title: NavigationBarMiddleButtonType.newTab.label,
                 isSelected: selectedMiddleButton == NavigationBarMiddleButtonType.newTab,
-                theme: theme
+                theme: theme,
+                a11yIdentifier: identifierName(for: .newTab)
             ) {
                 selectedMiddleButton = NavigationBarMiddleButtonType.newTab
                 onSelected?(selectedMiddleButton)
@@ -38,7 +39,8 @@ struct NavigationBarMiddleButtonSelectionView: View {
             GenericSelectableItemCellView(
                 title: NavigationBarMiddleButtonType.home.label,
                 isSelected: selectedMiddleButton == NavigationBarMiddleButtonType.home,
-                theme: theme
+                theme: theme,
+                a11yIdentifier: identifierName(for: .home)
             ) {
                 selectedMiddleButton = NavigationBarMiddleButtonType.home
                 onSelected?(selectedMiddleButton)
