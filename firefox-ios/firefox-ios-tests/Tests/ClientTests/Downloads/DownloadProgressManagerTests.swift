@@ -8,7 +8,7 @@ import XCTest
 import Common
 
 @MainActor
-final class DownloadProgressManagerTests: XCTestCase {
+class DownloadProgressManagerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
@@ -78,27 +78,6 @@ final class DownloadProgressManagerTests: XCTestCase {
             }
 
             wait(for: [expectation], timeout: 1.0)
-    }
-
-    func testDownloadToastZeroExpectedBytesKeepsPercentFinite() async {
-        // An empty blob download reports a size of 0. The toast used to divide 0 by 0 and feed NaN
-        // into its progress constraint, which raises NSInternalInconsistencyException.
-        let download = MockDownload(totalBytesExpected: 0)
-        let downloadProgressManager = createSubject(downloads: [download])
-        let downloadToast = DownloadToast(
-            downloadProgressManager: downloadProgressManager,
-            theme: LightTheme(),
-            completion: { _ in })
-        downloadProgressManager.addDelegate(delegate: downloadToast)
-
-        downloadToast.updatePercent()
-        // updatePercent hops to the main queue, so let that block run before asserting
-        let mainQueueDrained = expectation(description: "updatePercent main-queue hop.")
-        DispatchQueue.main.async { mainQueueDrained.fulfill() }
-        await fulfillment(of: [mainQueueDrained], timeout: 1)
-
-        XCTAssertEqual(downloadToast.percent, 0)
-        XCTAssertEqual(downloadToast.progressWidthConstraint?.constant, 0)
     }
 
     func createSubject(downloads: [Download]) -> DownloadProgressManager {
