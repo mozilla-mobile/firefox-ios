@@ -59,7 +59,7 @@ pipelines:
       firefox_fullfunctional_iphone_shard:
         depends_on:
         - firefox_fullfunctional_iphone_build
-        parallel: 5
+        parallel: 4
 
 workflows:
   firefox_accessibility_test:
@@ -735,7 +735,7 @@ workflows:
             fi
         title: Detect standalone build
   firefox_fullfunctional_iphone_build:
-    description: Build Fennec scheme and shard the full functional tests across 5 VMs
+    description: Build Fennec scheme and shard the full functional tests across 4 VMs
     envs:
     - FULLFUNCTIONAL_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     before_run:
@@ -759,7 +759,7 @@ workflows:
     - xcode-test-shard-calculation@0:
         inputs:
         - product_path: $BITRISE_XCTESTRUN_FILE_PATH
-        - shard_count: 5
+        - shard_count: 4
         - destination: $FULLFUNCTIONAL_DESTINATION
     - deploy-to-bitrise-io@2:
         inputs:
