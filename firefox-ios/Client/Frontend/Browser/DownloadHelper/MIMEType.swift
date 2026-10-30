@@ -20,6 +20,7 @@ struct MIMEType {
     static let PNG = "image/png"
     static let WebP = "image/webp"
     static let Calendar = "text/calendar"
+    static let ConfigurationProfile = "application/x-apple-aspen-config"
     static let USDZ = "model/vnd.usdz+zip"
     static let Reality = "model/vnd.reality"
     static let OpenDocument = "application/msword"

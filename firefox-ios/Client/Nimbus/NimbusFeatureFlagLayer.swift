@@ -72,6 +72,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .cellularDataRestrictedErrorPage:
             return checkCellularDataRestrictedErrorPageFeature()
 
+        case .configurationProfile:
+            return checkConfigurationProfileFeature()
+
         case .customReaderModeScheme:
             return checkCustomReaderModeSchemeFeature()
 
@@ -545,6 +548,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkCellularDataRestrictedErrorPageFeature() -> Bool {
         return nimbus.features.cellularDataRestrictedErrorPageFeature.value().enabled
+    }
+
+    private func checkConfigurationProfileFeature() -> Bool {
+        return nimbus.features.configurationProfileFeature.value().enabled
     }
 
     private func checkMultiDayOnboardingFeature() -> Bool {
