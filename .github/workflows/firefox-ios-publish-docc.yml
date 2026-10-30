@@ -19,10 +19,10 @@ concurrency:
 
 jobs:
   docs:
-    runs-on: macos-26
+    runs-on: xcode-27
     strategy:
       matrix:
-        xcode: ["26.5"]
+        xcode: ["27.1"]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
