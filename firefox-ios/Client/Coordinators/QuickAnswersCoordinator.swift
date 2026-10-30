@@ -8,7 +8,7 @@ import Common
 import Shared
 import UIKit
 
-final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHandler {
+final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHandler, FeatureFlaggable {
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let prefs: Prefs
     private let windowUUID: WindowUUID
@@ -116,7 +116,8 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     func resolvedFeature() -> QuickAnswersKit.QuickAnswersFeature {
         return QuickAnswersKit.QuickAnswersFeature(
             model: resolvedModel(),
-            isOptInRedesignEnabled: featureFlagsProvider.isEnabled(.quickAnswersOptInRedesign)
+            isOptInRedesignEnabled: featureFlagsProvider.isEnabled(.quickAnswersOptInRedesign),
+            isFollowUpEnabled: featureFlagsProvider.isEnabled(.quickAnswersFollowUp)
         )
     }
 

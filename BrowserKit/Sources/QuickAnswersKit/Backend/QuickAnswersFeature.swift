@@ -8,9 +8,12 @@ public struct QuickAnswersFeature: Equatable, Sendable {
     public let model: QuickAnswersModel
     /// Whether the redesigned opt-in is shown as a sheet over the browser.
     public let isOptInRedesignEnabled: Bool
+    /// Whether follow up questions are enabled, so past exchanges are sent along with a new question.
+    public let isFollowUpEnabled: Bool
 
-    public init(model: QuickAnswersModel, isOptInRedesignEnabled: Bool) {
+    public init(model: QuickAnswersModel, isOptInRedesignEnabled: Bool, isFollowUpEnabled: Bool = false) {
         self.model = model
         self.isOptInRedesignEnabled = isOptInRedesignEnabled
+        self.isFollowUpEnabled = isFollowUpEnabled
     }
 }

@@ -17,31 +17,48 @@ final class DefaultResultsService: ResultsService {
     }
     private let client: LiteLLMClientProtocol
     private let configFetcher: QuickAnswersConfigFetcher
+    private let conversation: QuickAnswersConversation
 
-    init(client: LiteLLMClientProtocol, configFetcher: QuickAnswersConfigFetcher) {
+    init(
+        client: LiteLLMClientProtocol,
+        configFetcher: QuickAnswersConfigFetcher,
+        conversation: QuickAnswersConversation = DefaultQuickAnswersConversation()
+    ) {
         self.client = client
         self.configFetcher = configFetcher
+        self.conversation = conversation
     }
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
         do {
             let config = try await configFetcher.fetch()
-            let messages = makeMessages(for: transcription, config: config)
+            let messages = await makeMessages(for: transcription, config: config)
             let fullResponse = try await requestChatCompletion(for: messages, config: config)
             let citations = fullResponse.providerSpecificFields?.citations ?? []
+            if configFetcher.feature.isFollowUpEnabled {
+                await conversation.append(question: transcription, answer: fullResponse.content)
+            }
             return formatResult(from: fullResponse.content, and: citations)
         } catch {
             throw mapError(error)
         }
     }
 
-    private func makeMessages(for transcription: String, config: LLMConfig) -> [QuickAnswersMessage] {
-        var messages: [QuickAnswersMessage] = []
-        if !config.instructions.isEmpty {
-            messages.append(LiteLLMMessage(role: .system, content: config.instructions))
+    private func makeMessages(for transcription: String, config: LLMConfig) async -> [QuickAnswersMessage] {
+        let systemMessages = makeSystemMessages(config: config)
+        guard configFetcher.feature.isFollowUpEnabled else {
+            return systemMessages + [QuickAnswersMessage(role: .user, content: transcription)]
         }
-        messages.append(LiteLLMMessage(role: .user, content: transcription))
-        return messages
+        return await conversation.applyHistory(
+            to: systemMessages,
+            question: transcription,
+            supportsAssistantRole: configFetcher.supportsAssistantRole
+        )
+    }
+
+    private func makeSystemMessages(config: LLMConfig) -> [QuickAnswersMessage] {
+        guard !config.instructions.isEmpty else { return [] }
+        return [LiteLLMMessage(role: .system, content: config.instructions)]
     }
 
     private func requestChatCompletion(
