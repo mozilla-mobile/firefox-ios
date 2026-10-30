@@ -19,7 +19,6 @@ struct ZoomSiteListView: View {
         static let footerTopPadding: CGFloat = 8
         static let cellHeight: CGFloat = 48
         static let listPadding: CGFloat = 5
-        static let dividerHeight: CGFloat = 0.5
         static let cornerRadius: CGFloat = 24
     }
 
@@ -85,11 +84,6 @@ struct ZoomSiteListView: View {
                     .padding([.leading, .trailing, .top], UX.sectionPadding)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(sectionBackground)
-
-                // Top divider for the list
-                Divider()
-                    .frame(height: UX.dividerHeight)
-                    .background(theme.colors.borderPrimary.color)
 
                 zoomSitesListView
             }
