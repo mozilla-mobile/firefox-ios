@@ -54,7 +54,9 @@ final class CrashReportFeatureFlagsIntegrationTests: XCTestCase {
     private func createSubject() -> DefaultLogger {
         let crashManager = DefaultCrashManager(sentryWrapper: sentryWrapper,
                                                isSimulator: false,
-                                               skipReleaseNameCheck: true)
+                                               skipReleaseNameCheck: true,
+                                               bundleIdentifier: { "org.mozilla.ios.Firefox" },
+                                               appVersion: { "158.0" })
         return DefaultLogger(swiftyBeaverBuilder: MockSwiftyBeaverBuilder(), crashManager: crashManager)
     }
 }
