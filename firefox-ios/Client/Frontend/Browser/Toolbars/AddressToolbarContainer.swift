@@ -774,8 +774,8 @@ final class AddressToolbarContainer: UIView,
 
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         } else {
+            store.dispatch(ToolbarModernAction.animationStateChanged(shouldAnimate: true), forWindowUUID: windowUUID)
             let action = ToolbarAction(searchTerm: locationText,
-                                       shouldAnimate: true,
                                        windowUUID: windowUUID,
                                        actionType: ToolbarActionType.didStartEditingUrl)
             store.dispatch(action)
