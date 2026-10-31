@@ -400,8 +400,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         settingsScreen.tapOnBlockPopupsSwitch()
         settingsScreen.assertBlockPopUpsSwitchIsOff()
         // Navigate back to the homepage
-        settingsScreen.navigateBackToHomePage()
-        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(HomePanelsScreen)
 
         // Check that now pop ups are shown, two sites loaded
         navigator.goto(URLBarOpen)

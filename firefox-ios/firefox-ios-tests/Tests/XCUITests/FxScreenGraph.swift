@@ -141,12 +141,20 @@ let iOS_Settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
 @MainActor
 let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 
+/// iPhone Duo reports `.phone` as its idiom, so it is identified by its simulator model identifier.
+func isIPhoneDuo() -> Bool {
+    return ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] == "iPhone19,4"
+}
+
 @MainActor
 func navigationControllerBackAction(for app: XCUIApplication) -> () -> Void {
     return {
-        let backButton = app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
+        // On iPhone Duo the back button lives in a toolbar, not the navigation bar.
+        let backButton = isIPhoneDuo()
+            ? app.buttons["BackButton"].firstMatch
+            : app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
         backButton.mozWaitElementHittable(timeout: TIMEOUT)
-        app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
+        backButton.waitAndTap()
     }
 }
 

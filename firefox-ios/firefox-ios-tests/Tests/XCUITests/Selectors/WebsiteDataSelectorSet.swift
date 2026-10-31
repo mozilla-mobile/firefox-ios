@@ -10,6 +10,8 @@ protocol WebsiteDataSelectorsSet {
     var ALERT_OK_BUTTON: Selector { get }
     var BUTTON_DATA_MANAGEMENT: Selector { get }
     var BUTTON_SETTINGS: Selector { get }
+    var BUTTON_BACK: Selector { get }
+    var NAVBAR_DATA_MANAGEMENT: Selector { get }
     var BUTTON_DONE: Selector { get }
     var CELL_SHOW_MORE: Selector { get }
     var EXAMPLE_EQUAL: Selector { get }
@@ -39,6 +41,7 @@ struct WebsiteDataSelectors: WebsiteDataSelectorsSet {
         static let circleImageId    = "circle"
         static let dataManagement   = "Data Management"
         static let settings         = "Settings"
+        static let backButton       = "BackButton"
         static let doneButton       = "Done"
         static let exampleUrl       = "example.com"
     }
@@ -70,6 +73,19 @@ struct WebsiteDataSelectors: WebsiteDataSelectorsSet {
     let BUTTON_SETTINGS = Selector.buttonByLabel(
         IDs.settings,
         description: "Back button to Settings screen",
+        groups: ["settings"]
+    )
+
+    // On iPhone Duo the back button is in a toolbar, with no label
+    let BUTTON_BACK = Selector.buttonId(
+        IDs.backButton,
+        description: "iPhone Duo back button to the previous Settings screen",
+        groups: ["settings"]
+    )
+
+    let NAVBAR_DATA_MANAGEMENT = Selector.navigationBarByTitle(
+        IDs.dataManagement,
+        description: "Data Management screen navigation bar",
         groups: ["settings"]
     )
 
@@ -134,7 +150,7 @@ struct WebsiteDataSelectors: WebsiteDataSelectorsSet {
     var all: [Selector] {
         [
             TABLE_WEBSITE_DATA, CELL_CLEAR_ALL, ALERT_OK_BUTTON,
-            BUTTON_DATA_MANAGEMENT, BUTTON_SETTINGS, BUTTON_DONE,
+            BUTTON_DATA_MANAGEMENT, BUTTON_SETTINGS, BUTTON_BACK, NAVBAR_DATA_MANAGEMENT, BUTTON_DONE,
             CELL_SHOW_MORE, EXAMPLE_EQUAL, EXAMPLE_CONTAINS,
             CIRCLE_IMAGE_ANYWHERE, STATIC_TEXT_EXAMPLE_IN_CELL
         ]

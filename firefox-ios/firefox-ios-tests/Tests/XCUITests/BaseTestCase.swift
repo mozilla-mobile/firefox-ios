@@ -65,7 +65,14 @@ class BaseTestCase: XCTestCase {
     /// that need a minimum amount of inactivity to elapse.
     func restartInBackground(inactiveFor seconds: TimeInterval = 0) {
         // Send app to background, and re-enter
-        XCUIDevice.shared.press(.home)
+        if iPhoneDuo() {
+            iOS_Settings.activate()
+            XCTAssertTrue(iOS_Settings.wait(for: .runningForeground, timeout: TIMEOUT))
+            iOS_Settings.terminate()
+        } else {
+            XCUIDevice.shared.press(.home)
+            mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
+        }
         // Let's be sure the app is backgrounded
         _ = app.wait(for: XCUIApplication.State.runningBackgroundSuspended, timeout: TIMEOUT)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
@@ -530,6 +537,10 @@ class BaseTestCase: XCTestCase {
         return false
     }
 
+    func iPhoneDuo() -> Bool {
+        return isIPhoneDuo()
+    }
+
     /// - Parameter timeout: how long the loading indicator may stay up. Raise it for slow resources.
     func waitUntilPageLoad(timeout: TimeInterval = 10) {
         let app = XCUIApplication()
@@ -745,9 +756,6 @@ class BaseTestCase: XCTestCase {
         app.buttons["Close"].tapIfExists()
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
-        if !app.navigationBars["Appearance"].mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
-            navigator.goto(DisplaySettings)
-        }
         mozWaitForElementToExist(app.navigationBars["Appearance"])
         if theme == "Dark" {
             navigator.performAction(Action.SelectDarkTheme)
