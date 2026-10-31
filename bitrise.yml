@@ -2453,13 +2453,6 @@ workflows:
     after_run:
     - _firefox_nightly_smoketest
 
-  Firefox_Nightly_SmokeTest_Iphone_Duo:
-    envs:
-    - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
-    - SMOKETEST_DEVICE_NAME: iPhone Duo
-    after_run:
-    - _firefox_nightly_smoketest
-
   _firefox_nightly_smoketest:
     description: >-
       Shared steps for the Firefox_Nightly_SmokeTest_* workflows. Callers set
