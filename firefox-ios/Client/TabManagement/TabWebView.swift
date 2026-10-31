@@ -281,7 +281,9 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Notifi
         #else
         let useAutomaticBackground = !enabled
         #endif
-        isOpaque = useAutomaticBackground
+        // Keep the web view opaque: a transparent web view shows the window's white
+        // background during swipe-back transitions when WebKit has no snapshot in memory.
+        isOpaque = true
         underPageBackgroundColor = useAutomaticBackground ? nil : .black
     }
 
