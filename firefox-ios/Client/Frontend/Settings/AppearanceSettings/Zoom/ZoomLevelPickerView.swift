@@ -15,7 +15,6 @@ struct ZoomLevelPickerView: View {
         static let chevronImageIdentifier = "chevron.down"
         static let sectionPadding: CGFloat = 16
         static let verticalPadding: CGFloat = 12
-        static let dividerHeight: CGFloat = 0.5
         static let pickerLabelSpacing: CGFloat = 4
         static let cornerRadius: CGFloat = 24
     }
@@ -65,22 +64,9 @@ struct ZoomLevelPickerView: View {
     }
 
     var defaultZoomPicker: some View {
-        VStack(spacing: 0) {
-            // Top divider
-            Divider()
-                .frame(height: UX.dividerHeight)
-                .background(theme.colors.borderPrimary.color)
-
-            // Picker content
-            pickerContent
-
-            // Bottom divider
-            Divider()
-                .frame(height: UX.dividerHeight)
-                .background(theme.colors.borderPrimary.color)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(backgroundColor)
+        pickerContent
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(backgroundColor)
     }
 
     var pickerContent: some View {
