@@ -913,8 +913,10 @@ extension BrowserViewController: WKNavigationDelegate {
         let response = navigationResponse.response
         let responseURL = response.url
 
-        tabManager[webView]?.mimeType = response.mimeType
-        notificationCenter.post(name: .TabMimeTypeDidSet, withUserInfo: windowUUID.userInfo)
+        if navigationResponse.isForMainFrame {
+            tabManager[webView]?.mimeType = response.mimeType
+            notificationCenter.post(name: .TabMimeTypeDidSet, withUserInfo: windowUUID.userInfo)
+        }
 
         // Check for google lens web navigation response to record http status code extra
         if let tab = tabManager[webView],
@@ -974,7 +976,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // In order to handle blob urls as well we need to use EventKitUI and parse the calendars ourselves.
         if let url = responseURL,
            ["http", "https"].contains(url.scheme),
-           tabManager[webView]?.mimeType == MIMEType.Calendar {
+           response.mimeType == MIMEType.Calendar {
             let alertMessage: String
             if let baseDomain = url.baseDomain {
                 alertMessage = String(format: .Alerts.AddToCalendar.Body, baseDomain)
