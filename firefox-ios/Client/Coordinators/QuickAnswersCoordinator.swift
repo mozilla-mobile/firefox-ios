@@ -116,7 +116,8 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     func resolvedFeature() -> QuickAnswersKit.QuickAnswersFeature {
         return QuickAnswersKit.QuickAnswersFeature(
             model: resolvedModel(),
-            isOptInRedesignEnabled: featureFlagsProvider.isEnabled(.quickAnswersOptInRedesign)
+            isOptInRedesignEnabled: featureFlagsProvider.isEnabled(.quickAnswersOptInRedesign),
+            isFollowUpEnabled: featureFlagsProvider.isEnabled(.quickAnswersFollowUp)
         )
     }
 

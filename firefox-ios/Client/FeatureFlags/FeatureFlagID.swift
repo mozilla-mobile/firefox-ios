@@ -53,6 +53,7 @@ enum FeatureFlagID: String, CaseIterable {
     case privacyDashboard
     case quickAnswers
     case quickAnswersOptInRedesign
+    case quickAnswersFollowUp
     case recentSearches
     case relayIntegration
     case reportBrokenSite
@@ -143,6 +144,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .privacyDashboard,
                 .quickAnswers,
                 .quickAnswersOptInRedesign,
+                .quickAnswersFollowUp,
                 .recentSearches,
                 .relayIntegration,
                 .reportBrokenSite,
