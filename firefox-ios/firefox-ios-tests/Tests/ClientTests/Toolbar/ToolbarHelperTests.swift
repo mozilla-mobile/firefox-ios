@@ -58,30 +58,33 @@ final class ToolbarHelperTests: XCTestCase {
         XCTAssertFalse(subject.shouldShowTopTabs(for: traits))
     }
 
-    func test_getLockIconState_secureWebsiteMode_returnsExpectedValues() async {
-        let subject = await ToolbarHelper(userInterfaceIdiom: .phone)
-        let state = subject.getLockIconState(hasOnlySecureContent: true, isWebsiteMode: true)
+    func test_lockIconState_secureWebsiteMode_returnsExpectedValues() {
+        let state = LockIconState(hasOnlySecureContent: true, isWebsiteMode: true)
 
         XCTAssertEqual(state.imageName, StandardImageIdentifiers.Small.shieldCheckmarkFill)
         XCTAssertEqual(state.a11yId, AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon)
         XCTAssertTrue(state.needsTheming)
     }
 
-    func test_getLockIconState_insecureWebsiteMode_returnsExpectedValues() async {
-        let subject = await ToolbarHelper(userInterfaceIdiom: .phone)
-        let state = subject.getLockIconState(hasOnlySecureContent: false, isWebsiteMode: true)
+    func test_lockIconState_insecureWebsiteMode_returnsExpectedValues() {
+        let state = LockIconState(hasOnlySecureContent: false, isWebsiteMode: true)
 
         XCTAssertEqual(state.imageName, StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
         XCTAssertEqual(state.a11yId, AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff)
         XCTAssertFalse(state.needsTheming)
     }
 
-    func test_getLockIconState_notWebsiteMode_hidesIconButKeepsA11yId() async {
-        let subject = await ToolbarHelper(userInterfaceIdiom: .phone)
-        let state = subject.getLockIconState(hasOnlySecureContent: true, isWebsiteMode: false)
+    func test_lockIconState_notWebsiteMode_hidesIconButKeepsA11yId() {
+        let state = LockIconState(hasOnlySecureContent: true, isWebsiteMode: false)
 
         XCTAssertNil(state.imageName)
         XCTAssertEqual(state.a11yId, AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon)
         XCTAssertTrue(state.needsTheming)
+    }
+
+    func test_lockIconState_unknownSecureContent_returnsNone() {
+        let state = LockIconState(hasOnlySecureContent: nil, isWebsiteMode: true)
+
+        XCTAssertEqual(state, .none)
     }
 }
