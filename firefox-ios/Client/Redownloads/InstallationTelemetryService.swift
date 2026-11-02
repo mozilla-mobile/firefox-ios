@@ -18,6 +18,7 @@ final class InstallationTelemetryService {
     private let featureFlagsProvider: FeatureFlagProviding
     private let dateProvider: DateProvider
     private let installationPrefs: Prefs
+    private let logger: Logger
     private var isProcessing = false
 
     init(
@@ -27,7 +28,8 @@ final class InstallationTelemetryService {
         acquisition: AppAcquisitionProviding = StoreKitAppAcquisitionProvider(),
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
-        dateProvider: DateProvider = SystemDateProvider()
+        dateProvider: DateProvider = SystemDateProvider(),
+        logger: Logger = DefaultLogger.shared
     ) {
         self.installationPrefs = installationPrefs
         self.history = history
@@ -36,6 +38,7 @@ final class InstallationTelemetryService {
         self.profilePrefs = profilePrefs
         self.featureFlagsProvider = featureFlagsProvider
         self.dateProvider = dateProvider
+        self.logger = logger
         initializeProcessingState()
     }
 
@@ -57,6 +60,20 @@ final class InstallationTelemetryService {
         featureFlagsProvider.isEnabled(.checkForReinstalls) &&
         profilePrefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == true &&
         (profilePrefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
+    }
+
+    func update() {
+        guard !AppConstants.isRunningUnitTest else { return }
+        Task {
+            do {
+                try await onForeground()
+            } catch {
+                logger.log("Could not update installation history",
+                           level: .warning,
+                           category: .telemetry,
+                           description: error.localizedDescription)
+            }
+        }
     }
 
     func onForeground() async throws {
