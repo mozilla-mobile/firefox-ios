@@ -1067,8 +1067,9 @@ class BrowserViewController: UIViewController,
             handleAutoTranslatePrompt(state: state)
         }
 
-        if let readerMode = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
-            if readerMode.state == .active && !contentContainer.hasHomepage {
+        if let selectedTab = tabManager.selectedTab,
+           selectedTab.getContentScript(name: ReaderMode.name()) is ReaderMode {
+            if isShowingReaderMode(tab: selectedTab) && !contentContainer.hasHomepage {
                 showReaderModeBar(animated: false)
             } else {
                 hideReaderModeBar(animated: false)
@@ -4915,7 +4916,7 @@ extension BrowserViewController: TabManagerDelegate {
         if let url = selectedTab.webView?.url, InternalURL.scheme != url.scheme,
            let readerMode = selectedTab.getContentScript(name: ReaderMode.name()) as? ReaderMode {
             updateReaderModeState(for: selectedTab, readerModeState: readerMode.state)
-            if readerMode.state == .active {
+            if isShowingReaderMode(tab: selectedTab) {
                 showReaderModeBar(animated: false)
             } else {
                 hideReaderModeBar(animated: false)
