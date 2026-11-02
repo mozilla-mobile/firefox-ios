@@ -41,8 +41,9 @@ final class InstallationTelemetryService {
 
     /// Marks existing users as processed so enabling this feature does not count them as new installations.
     private func initializeProcessingState() {
-        guard featureFlagsProvider.isEnabled(.checkForReinstalls) else { return }
-        guard installationPrefs.boolForKey(PrefsKeys.installationProcessedKey) == nil else { return }
+        guard featureFlagsProvider.isEnabled(.checkForReinstalls),
+            installationPrefs.boolForKey(PrefsKeys.installationProcessedKey) == nil
+        else { return }
 
         let hasSeenIntro = profilePrefs.intForKey(PrefsKeys.IntroSeen) != nil
         installationPrefs.setBool(hasSeenIntro, forKey: PrefsKeys.installationProcessedKey)
