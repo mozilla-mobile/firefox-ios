@@ -7,7 +7,7 @@ import XCTest
 
 @testable import VPNKit
 
-final class VPNAttestationFailureReasonTests: XCTestCase {
+final class VPNTelemetryTests: XCTestCase {
     func test_init_neverForwardsTheResponseBody() {
         let htmlPage = AppAttestServiceError.serverError(
             statusCode: 502,
