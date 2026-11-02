@@ -118,9 +118,9 @@ final class InstallationTelemetryService {
         )
 
         if let lastSeenDate = previous?.lastSeenDate {
-            gleanWrapper.recordString(
+            gleanWrapper.recordDatetime(
                 for: GleanMetrics.Installation.lastSeenDate,
-                value: lastSeenDate.toISO8601DateString()
+                value: lastSeenDate
             )
         }
 
@@ -132,9 +132,9 @@ final class InstallationTelemetryService {
     /// Saves the original purchase date and app version to Glean when available.
     private func recordAcquisition(_ result: AcquisitionOutcome) {
         guard case .available(let info) = result else { return }
-        gleanWrapper.recordString(
+        gleanWrapper.recordDatetime(
             for: GleanMetrics.Installation.originalPurchaseDate,
-            value: info.originalPurchaseDate.toISO8601DateString()
+            value: info.originalPurchaseDate
         )
         gleanWrapper.recordString(
             for: GleanMetrics.Installation.originalAppVersion,
