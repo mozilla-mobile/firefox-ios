@@ -2822,14 +2822,15 @@ remote_settings:
 
 installation:
   original_purchase_date:
-    type: string
+    type: datetime
+    time_unit: day
     description: |
-      Original app acquisition date in UTC YYYY-MM-DD.
+      Original app acquisition date.
     lifetime: ping
     send_in_pings:
       - installation
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-1028
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17053
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/36217
     data_sensitivity:
@@ -2845,7 +2846,7 @@ installation:
     send_in_pings:
       - installation
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-1028
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17053
     data_reviews: []
     data_sensitivity:
       - technical
@@ -2861,7 +2862,7 @@ installation:
     send_in_pings:
       - installation
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-1028
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17053
     data_reviews: []
     data_sensitivity:
       - technical
@@ -2869,14 +2870,15 @@ installation:
       - fx-ios-data-stewards@mozilla.com
     expires: never
   last_seen_date:
-    type: string
+    type: datetime
+    time_unit: day
     description: |
-      Last recorded activity date from the previous installation in UTC YYYY-MM-DD.
+      Last recorded activity date from the previous installation.
     lifetime: ping
     send_in_pings:
       - installation
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXMO-1028
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-17053
     data_reviews: []
     data_sensitivity:
       - technical
