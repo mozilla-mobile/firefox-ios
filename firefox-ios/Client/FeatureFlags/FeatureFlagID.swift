@@ -62,6 +62,7 @@ enum FeatureFlagID: String, CaseIterable {
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
     case summarizerPermissiveGuardrails
+    case tabGroups
     case tabScrollRefactorFeature
     case tabTrayiPadUIExperiments
     case tabTrayScreenshotButtonStyle
@@ -142,6 +143,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,
                 .summarizerPermissiveGuardrails,
+                .tabGroups,
                 .tabScrollRefactorFeature,
                 .tabTrayScreenshotButtonStyle,
                 .tabTrayUIExperiments,
