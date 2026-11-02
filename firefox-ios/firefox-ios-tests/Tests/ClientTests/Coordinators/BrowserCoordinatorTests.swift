@@ -506,6 +506,73 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(subject.childCoordinators.first is CameraCoordinator)
     }
 
+    // MARK: - VPN alerts
+
+    func testShowVPNFailureAlert_presentsAlertWithActions() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showVPNFailureAlert()
+
+        let alert = try XCTUnwrap(browserViewController.viewControllerToPresent as? UIAlertController)
+        XCTAssertEqual(alert.title, .VPN.ErrorBrowsingPopup.Title)
+        XCTAssertEqual(alert.message, .VPN.ErrorBrowsingPopup.Body)
+        XCTAssertEqual(alert.actions.map(\.title), [
+            .VPN.ErrorBrowsingPopup.Continue,
+            .VPN.ErrorBrowsingPopup.CloseAllTabs,
+            .VPN.ErrorBrowsingPopup.CloseThisTab
+        ])
+        XCTAssertEqual(alert.actions.first?.style, .destructive)
+    }
+
+    func testShowVPNDataLimitAlert_presentsAlertWithDataLimitAndActions() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showVPNDataLimitAlert(dataLimitBytes: 50_000_000_000)
+
+        let alert = try XCTUnwrap(browserViewController.viewControllerToPresent as? UIAlertController)
+        XCTAssertEqual(alert.title, .VPN.ReachedDataLimitPopup.Title)
+        XCTAssertEqual(alert.message, String(format: .VPN.ReachedDataLimitPopup.Body, "50"))
+        XCTAssertEqual(alert.actions.map(\.title), [
+            .VPN.ErrorBrowsingPopup.Continue,
+            .VPN.ReachedDataLimitPopup.CloseAllTabs,
+            .VPN.ReachedDataLimitPopup.CloseThisTab
+        ])
+        XCTAssertEqual(alert.actions.first?.style, .destructive)
+    }
+
+    func testShowVPNAlert_whileVPNAlertStillAlive_doesNotPresentAnother() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showVPNFailureAlert()
+        let firstAlert = try XCTUnwrap(browserViewController.viewControllerToPresent as? UIAlertController)
+        // Clear the mock so a second alert would be presented on it rather than on `firstAlert`.
+        browserViewController.viewControllerToPresent = nil
+
+        withExtendedLifetime(firstAlert) {
+            subject.showVPNFailureAlert()
+            subject.showVPNDataLimitAlert(dataLimitBytes: 50_000_000_000)
+        }
+
+        XCTAssertNil(browserViewController.viewControllerToPresent)
+    }
+
+    func testShowVPNAlert_afterPreviousVPNAlertReleased_presentsNewAlert() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        // The alert is autoreleased, so drain the pool to release it with the mock's reference.
+        autoreleasepool {
+            subject.showVPNFailureAlert()
+            browserViewController.viewControllerToPresent = nil
+        }
+
+        subject.showVPNDataLimitAlert(dataLimitBytes: 50_000_000_000)
+
+        let alert = browserViewController.viewControllerToPresent as? UIAlertController
+        XCTAssertEqual(alert?.title, .VPN.ReachedDataLimitPopup.Title)
+    }
+
     func testSearchGoogleLens_fromToolbarButton_startsSearchTimer() throws {
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
         tab.webView = MockTabWebView(tab: tab)

@@ -815,6 +815,7 @@
 		614987AF2F6B37E300BC5ACA /* AIControlsModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614987AE2F6B37E300BC5ACA /* AIControlsModelTests.swift */; };
 		615532D42D7AA5F30046347F /* ScreenshotHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615532D32D7AA5F30046347F /* ScreenshotHelperTests.swift */; };
 		6167273D307809540013FD50 /* VPNManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6167273C307809540013FD50 /* VPNManagerTests.swift */; };
+		A1F0C0DE3100000000000008 /* VPNMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F0C0DE3100000000000007 /* VPNMiddlewareTests.swift */; };
 		61672740307838910013FD50 /* MockVPNGuardian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6167273F307838910013FD50 /* MockVPNGuardian.swift */; };
 		61672742307838F40013FD50 /* MockVPNServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61672741307838F40013FD50 /* MockVPNServerManager.swift */; };
 		A1F0C0DE3100000000000006 /* MockVPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F0C0DE3100000000000005 /* MockVPNManager.swift */; };
@@ -9822,6 +9823,7 @@
 		614987AE2F6B37E300BC5ACA /* AIControlsModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsModelTests.swift; sourceTree = "<group>"; };
 		615532D32D7AA5F30046347F /* ScreenshotHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotHelperTests.swift; sourceTree = "<group>"; };
 		6167273C307809540013FD50 /* VPNManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNManagerTests.swift; sourceTree = "<group>"; };
+		A1F0C0DE3100000000000007 /* VPNMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNMiddlewareTests.swift; sourceTree = "<group>"; };
 		6167273F307838910013FD50 /* MockVPNGuardian.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockVPNGuardian.swift; sourceTree = "<group>"; };
 		61672741307838F40013FD50 /* MockVPNServerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockVPNServerManager.swift; sourceTree = "<group>"; };
 		A1F0C0DE3100000000000005 /* MockVPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockVPNManager.swift; sourceTree = "<group>"; };
@@ -16219,6 +16221,7 @@
 				B1A9E0032FA0000000C0FFEE /* VPNGuardianTests.swift */,
 				B1A9E0052FA0000000C0FFEE /* VPNServerManagerTests.swift */,
 				6167273C307809540013FD50 /* VPNManagerTests.swift */,
+				A1F0C0DE3100000000000007 /* VPNMiddlewareTests.swift */,
 			);
 			path = VPN;
 			sourceTree = "<group>";
@@ -21574,6 +21577,7 @@
 				8A55E8042BFBA9BE006DBD85 /* MicrosurveyCoordinatorTests.swift in Sources */,
 				8A832A9729DCBD3C0025D5DD /* LaunchTypeTests.swift in Sources */,
 				6167273D307809540013FD50 /* VPNManagerTests.swift in Sources */,
+				A1F0C0DE3100000000000008 /* VPNMiddlewareTests.swift in Sources */,
 				219AEECE2E5E524300BF5F6F /* MockTabProviderProtocol.swift in Sources */,
 				8A28C628291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift in Sources */,
 				21365E3E2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift in Sources */,

@@ -9,6 +9,7 @@ final class MockVPNManager: VPNRunnable {
     var isRunning = false
     var startCalled = 0
     var stopCalled = 0
+    var onStop: (() -> Void)?
 
     func start() async {
         startCalled += 1
@@ -18,5 +19,6 @@ final class MockVPNManager: VPNRunnable {
     func stop() async {
         stopCalled += 1
         isRunning = false
+        onStop?()
     }
 }

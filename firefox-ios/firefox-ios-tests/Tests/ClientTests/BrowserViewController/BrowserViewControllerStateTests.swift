@@ -61,6 +61,38 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.displayView, .googleLensCamera)
     }
 
+    func testShowVPNFailureAlertAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let action = getAction(for: .showVPNFailureAlert)
+        let newState = reducer.legacyReducer(initialState, action)
+
+        XCTAssertEqual(newState.displayView, .vpnFailureAlert)
+    }
+
+    func testShowVPNDataLimitAlertAction_setsDisplayViewWithDataLimit() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let action = GeneralBrowserAction(vpnDataLimitBytes: 5_000_000_000,
+                                          windowUUID: .XCTestDefaultUUID,
+                                          actionType: GeneralBrowserActionType.showVPNDataLimitAlert)
+        let newState = reducer.legacyReducer(initialState, action)
+
+        XCTAssertEqual(newState.displayView, .vpnDataLimitAlert(dataLimitBytes: 5_000_000_000))
+    }
+
+    func testShowVPNDataLimitAlertAction_withoutDataLimit_doesNotSetDisplayView() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let action = getAction(for: .showVPNDataLimitAlert)
+        let newState = reducer.legacyReducer(initialState, action)
+
+        XCTAssertNil(newState.displayView)
+    }
+
     func testShowPasswordGeneratorAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
