@@ -2878,6 +2878,8 @@ workflows:
       downloadable with Xcode 27.1, so it is installed from gs://mobile-ios-simulators.
     envs:
     - IOS17_RUNTIME_DMG: gs://mobile-ios-simulators/runtimes/iOS_17.5_21F79.dmg
+    - IOS17_SIMULATOR_NAME: iPhone 15 (iOS 17.5)
+    - IOS17_DESTINATION: platform=iOS Simulator,name=iPhone 15 (iOS 17.5),OS=17.5
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -2904,11 +2906,10 @@ workflows:
             ADDED=$(date +%s)
 
             # Adding the runtime auto-creates default devices, including an "iPhone 15",
-            # so use a unique name and target the new simulator by its UDID.
+            # so the new simulator needs a unique name.
             RUNTIME_ID=$(xcrun simctl list runtimes -j | jq -r '.runtimes[] | select(.version == "17.5") | .identifier')
-            SIM_UDID=$(xcrun simctl create "iPhone 15 (iOS 17.5)" com.apple.CoreSimulator.SimDeviceType.iPhone-15 "$RUNTIME_ID")
+            xcrun simctl create "$IOS17_SIMULATOR_NAME" com.apple.CoreSimulator.SimDeviceType.iPhone-15 "$RUNTIME_ID"
             xcrun simctl list devices "iOS 17.5"
-            envman add --key IOS17_DESTINATION --value "platform=iOS Simulator,id=$SIM_UDID"
 
             echo "Download: $((DOWNLOADED - START))s, runtime add: $((ADDED - DOWNLOADED))s"
     - restore-spm-cache@3:
