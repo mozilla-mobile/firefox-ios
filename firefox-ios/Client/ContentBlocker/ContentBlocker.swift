@@ -153,6 +153,7 @@ class ContentBlocker: Notifiable {
     var setupCompleted = false
     let logger: Logger
     var adBlockerListFetcher: AdBlockerListFetcherProtocol = ASAdBlockerListFetcher()
+    var isProxyEnabled: () -> Bool = { DefaultWKEngineConfigurationProvider.isProxyEnabled }
 
     static let shared = ContentBlocker()
 
@@ -254,7 +255,7 @@ class ContentBlocker: Notifiable {
             add(contentRuleList: rule, toTab: tab)
         }
 
-        if let rule = proxyHardeningRule, DefaultWKEngineConfigurationProvider.isProxyEnabled {
+        if let rule = proxyHardeningRule, isProxyEnabled() {
             add(contentRuleList: rule, toTab: tab)
         }
     }

@@ -15,6 +15,8 @@ class UserScriptManager {
 
     private let compiledUserScripts: [String: WKUserScript]
 
+    var isProxyEnabled: () -> Bool = { DefaultWKEngineConfigurationProvider.isProxyEnabled }
+
     private let noImageModeUserScript = WKUserScript.createInDefaultContentWorld(
         source: "window.__firefox__.NoImageMode.setEnabled(true)",
         injectionTime: .atDocumentStart,
@@ -44,7 +46,7 @@ class UserScriptManager {
     ///
     /// Runs in the page content world to shadow the page's own globals, and in every frame since a
     /// subframe can reach both features too.
-    private let proxyHardeningUserScript = WKUserScript.createInPageContentWorld(
+    let proxyHardeningUserScript = WKUserScript.createInPageContentWorld(
         source: """
         (function() {
             const unsupported = () => Promise.reject(new DOMException('Not supported', 'NotAllowedError'));
@@ -193,7 +195,7 @@ class UserScriptManager {
         if backgroundAudio {
             webView?.configuration.userContentController.addUserScript(backgroundAudioUserScript)
         }
-        if DefaultWKEngineConfigurationProvider.isProxyEnabled {
+        if isProxyEnabled() {
             webView?.configuration.userContentController.addUserScript(proxyHardeningUserScript)
         }
     }
