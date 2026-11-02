@@ -2830,7 +2830,8 @@ installation:
       - installation
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXMO-1028
-    data_reviews: []
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36217
     data_sensitivity:
       - technical
     notification_emails:
