@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 
-#if DEBUG || MOCKABLE_STORE
+#if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
 final class InstallationDetailsSetting: HiddenSetting {
     private let historyStore: InstallationHistoryStoring
     private let acquisition: AppAcquisitionProviding

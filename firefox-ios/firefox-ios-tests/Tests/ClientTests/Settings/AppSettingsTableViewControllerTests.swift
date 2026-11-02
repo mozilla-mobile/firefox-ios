@@ -141,35 +141,99 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         XCTAssertFalse(subject.settings.isEmpty)
     }
 
-    #if DEBUG || MOCKABLE_STORE
-    func testResetInstallationHistory_whenSuccessful_presentsConfirmation() throws {
+    #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+    func testInstallationFlowPicker_doesNotChangeStateBeforeSelection() throws {
         let settings = ResetHistorySettingsSpy(windowUUID: .XCTestDefaultUUID)
         let historyStore = ResetHistoryStoreMock()
-        let subject = ResetInstallationHistorySetting(settings: settings, historyStore: historyStore)
+        profile.prefs.setBool(true, forKey: PrefsKeys.installationProcessedKey)
+        let subject = ResetInstallationHistorySetting(settings: settings,
+                                                      historyStore: historyStore,
+                                                      installationPrefs: profile.prefs)
         subject.theme = LightTheme()
 
-        XCTAssertEqual(subject.title?.string, "Reset installation history")
+        XCTAssertEqual(subject.title?.string, "Test installation flow")
         subject.onClick(nil)
 
-        XCTAssertEqual(historyStore.resetCallCount, 1)
+        XCTAssertEqual(historyStore.resetCallCount, 0)
         XCTAssertEqual(historyStore.loadCallCount, 0)
+        XCTAssertEqual(profile.prefs.boolForKey(PrefsKeys.installationProcessedKey), true)
         let alert = try XCTUnwrap(settings.alert)
-        XCTAssertEqual(alert.title, "Installation history")
-        XCTAssertEqual(alert.message, "Installation history deleted. The processing flag and telemetry are unchanged.")
-        XCTAssertEqual(alert.actions.first?.title, "OK")
+        XCTAssertEqual(alert.title, "Test installation flow")
+        XCTAssertEqual(alert.actions.map(\.title), ["New installation", "Reinstall", .CancelString])
+        XCTAssertEqual(alert.actions.first?.style, .destructive)
+        XCTAssertEqual(alert.actions.last?.style, .cancel)
     }
 
-    func testResetInstallationHistory_whenResetFails_presentsError() throws {
+    func testNewInstallation_clearsHistoryAndMarksProcessingPending() {
+        let settings = ResetHistorySettingsSpy(windowUUID: .XCTestDefaultUUID)
+        let historyStore = ResetHistoryStoreMock()
+        historyStore.state = .valid(InstallationHistory(installCounter: 4, lastSeenDate: Date()))
+        profile.prefs.setBool(true, forKey: PrefsKeys.installationProcessedKey)
+        profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
+        let subject = ResetInstallationHistorySetting(settings: settings,
+                                                      historyStore: historyStore,
+                                                      installationPrefs: profile.prefs)
+
+        subject.prepare(.newInstallation)
+
+        XCTAssertEqual(historyStore.resetCallCount, 1)
+        XCTAssertEqual(historyStore.state, .missing)
+        XCTAssertEqual(profile.prefs.boolForKey(PrefsKeys.installationProcessedKey), false)
+        XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.IntroSeen), 1)
+        XCTAssertEqual(settings.alert?.title, "New installation ready")
+    }
+
+    func testReinstall_preservesHistoryAndMarksProcessingPending() {
+        let settings = ResetHistorySettingsSpy(windowUUID: .XCTestDefaultUUID)
+        let historyStore = ResetHistoryStoreMock()
+        let history = InstallationHistory(installCounter: 4, lastSeenDate: Date(timeIntervalSince1970: 60))
+        historyStore.state = .valid(history)
+        profile.prefs.setBool(true, forKey: PrefsKeys.installationProcessedKey)
+        let subject = ResetInstallationHistorySetting(settings: settings,
+                                                      historyStore: historyStore,
+                                                      installationPrefs: profile.prefs)
+
+        subject.prepare(.reinstall)
+
+        XCTAssertEqual(historyStore.resetCallCount, 0)
+        XCTAssertEqual(historyStore.state, .valid(history))
+        XCTAssertEqual(profile.prefs.boolForKey(PrefsKeys.installationProcessedKey), false)
+        XCTAssertEqual(settings.alert?.title, "Reinstall ready")
+    }
+
+    func testReinstall_withoutValidHistory_doesNotResetProcessing() {
+        let settings = ResetHistorySettingsSpy(windowUUID: .XCTestDefaultUUID)
+        let historyStore = ResetHistoryStoreMock()
+        profile.prefs.setBool(true, forKey: PrefsKeys.installationProcessedKey)
+        let subject = ResetInstallationHistorySetting(settings: settings,
+                                                      historyStore: historyStore,
+                                                      installationPrefs: profile.prefs)
+
+        for state in [InstallationHistoryState.missing, .corrupt] {
+            historyStore.state = state
+            subject.prepare(.reinstall)
+
+            XCTAssertEqual(historyStore.resetCallCount, 0)
+            XCTAssertEqual(profile.prefs.boolForKey(PrefsKeys.installationProcessedKey), true)
+            XCTAssertEqual(settings.alert?.title, "Installation history needed")
+        }
+    }
+
+    func testInstallationFlow_whenKeychainFails_doesNotResetProcessing() {
         let settings = ResetHistorySettingsSpy(windowUUID: .XCTestDefaultUUID)
         let historyStore = ResetHistoryStoreMock()
         historyStore.error = InstallationHistoryError.invalidValue
-        let subject = ResetInstallationHistorySetting(settings: settings, historyStore: historyStore)
+        profile.prefs.setBool(true, forKey: PrefsKeys.installationProcessedKey)
+        let subject = ResetInstallationHistorySetting(settings: settings,
+                                                      historyStore: historyStore,
+                                                      installationPrefs: profile.prefs)
 
-        subject.onClick(nil)
+        for flow in [ResetInstallationHistorySetting.Flow.newInstallation, .reinstall] {
+            subject.prepare(flow)
 
-        XCTAssertEqual(historyStore.resetCallCount, 1)
-        let alert = try XCTUnwrap(settings.alert)
-        XCTAssertTrue(try XCTUnwrap(alert.message).hasPrefix("Could not reset installation history: "))
+            XCTAssertEqual(profile.prefs.boolForKey(PrefsKeys.installationProcessedKey), true)
+            XCTAssertEqual(settings.alert?.title, "Could not prepare installation flow")
+        }
     }
 
     func testInstallationDetails_whenHistoryExists_showsValuesWithoutChangingHistory() async {
@@ -248,7 +312,7 @@ class AppSettingsTableViewControllerTests: XCTestCase {
     }
 }
 
-#if DEBUG || MOCKABLE_STORE
+#if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
 @MainActor
 private final class ResetHistorySettingsSpy: SettingsTableViewController {
     private(set) var alert: UIAlertController?
@@ -280,6 +344,7 @@ private final class ResetHistoryStoreMock: InstallationHistoryStoring {
     func resetForTesting() throws {
         resetCallCount += 1
         if let error { throw error }
+        state = .missing
     }
 }
 
