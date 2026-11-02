@@ -228,13 +228,21 @@ class FxAWebViewModel {
         }
     }
 
-    private func makeRequest(_ url: URL) -> URLRequest {
+    func makeRequest(_ url: URL) -> URLRequest {
         let args = deepLinkParams.query.filter { $0.key.starts(with: "utm_") }.map {
             return URLQueryItem(name: $0.key, value: $0.value)
         }
 
         var comp = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        comp?.queryItems?.append(contentsOf: args)
+        var queryItems = comp?.queryItems ?? []
+        if case .pairingV2 = pageType {
+            queryItems.removeAll { $0.name == "embed" }
+            queryItems.append(URLQueryItem(name: "embed", value: "customtab"))
+        }
+        queryItems.append(contentsOf: args)
+        if !queryItems.isEmpty {
+            comp?.queryItems = queryItems
+        }
         if let url = comp?.url {
             return URLRequest(url: url)
         }
