@@ -94,6 +94,35 @@ final class TabGroupManagerTests: XCTestCase {
         try await manager.flush()
     }
 
+    func testBulkMoveKeepsUniqueOrderedMembership() async throws {
+        let manager = try await makeManager()
+        let group = try manager.createGroup(title: "Work")
+        let first = makeTab()
+        let second = makeTab(window: first.windowUUID)
+        manager.bind(first)
+        manager.bind(second)
+        try manager.moveTabs([first, second, first], to: group)
+        XCTAssertEqual(manager.tabIDs(in: group), [first.tabUUID, second.tabUUID])
+        XCTAssertEqual(first.groupID, group)
+        XCTAssertEqual(second.groupID, group)
+        try await manager.flush()
+    }
+
+    func testBulkMoveRejectsTabsFromDifferentWindows() async throws {
+        let manager = try await makeManager()
+        let group = try manager.createGroup(title: "Work")
+        let first = makeTab()
+        let second = makeTab()
+        manager.bind(first)
+        manager.bind(second)
+        XCTAssertThrowsError(try manager.moveTabs([first, second], to: group))
+        XCTAssertTrue(manager.tabIDs(in: group).isEmpty)
+        XCTAssertNil(manager.activeWindow(for: group))
+        XCTAssertNil(first.groupID)
+        XCTAssertNil(second.groupID)
+        try await manager.flush()
+    }
+
     func testGroupCanOnlyBeActiveInOneWindow() async throws {
         let manager = try await makeManager()
         let group = try manager.createGroup(title: "Shared")

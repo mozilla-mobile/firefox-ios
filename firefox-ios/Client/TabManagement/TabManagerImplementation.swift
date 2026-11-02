@@ -951,7 +951,9 @@ final class TabManagerImplementation: NSObject,
     @MainActor
     private func preloadScreenshotsAroundSelectedTab() {
         guard let selectedTab else { return }
-        let currentTabs = selectedTab.isPrivate ? privateTabs : normalTabs
+        let currentTabs = selectedTab.isPrivate
+            ? privateTabs
+            : TabGroupsSessionStore.visibleNormalTabs(normalTabs, for: windowUUID)
         guard let selectedIndex = currentTabs.firstIndex(of: selectedTab) else { return }
 
         let radius = 1
@@ -973,7 +975,9 @@ final class TabManagerImplementation: NSObject,
     @MainActor
     private func dispatchDidSetScreenshotAction(for tab: Tab) {
         guard selectedTab === tab else { return }
-        let currentTabs = tab.isPrivate ? privateTabs : normalTabs
+        let currentTabs = tab.isPrivate
+            ? privateTabs
+            : TabGroupsSessionStore.visibleNormalTabs(normalTabs, for: windowUUID)
         guard let index = currentTabs.firstIndex(of: tab) else { return }
 
         store.dispatch(

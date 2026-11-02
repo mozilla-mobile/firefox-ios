@@ -256,7 +256,9 @@ final class AddressToolbarContainer: UIView,
             setupSkeletonAddressBarsLayout(isBottomSearchBar: true)
         }
 
-        let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        let tabs = selectedTab.isPrivate
+            ? tabManager.privateTabs
+            : TabGroupsSessionStore.visibleNormalTabs(tabManager.normalTabs, for: tabManager.windowUUID)
         guard let index = tabs.firstIndex(where: { $0 === selectedTab }) else { return }
 
         let previousTab = tabs[safe: index-1]

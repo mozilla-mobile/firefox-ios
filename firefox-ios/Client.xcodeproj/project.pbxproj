@@ -2478,6 +2478,12 @@
 		B42E21CA8C8C4FBAA1D93406 /* TabGroupStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD09DA3FE794078AA98D479 /* TabGroupStorageTests.swift */; };
 		5D8588936E994558A41B50DA /* TabManagerGroupMembershipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE778A33B394DD78BFB9685 /* TabManagerGroupMembershipTests.swift */; };
 		6090112291C64C03A9DEEB88 /* MockTabGroupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82E412E9E394B76B9BC1996 /* MockTabGroupStorage.swift */; };
+		C38C7F7C1F1A42D8937CCF21 /* TabGroupsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38C7F7C1F1A42D8937CCF22 /* TabGroupsController.swift */; };
+		C38C7F7C1F1A42D8937CCF23 /* TabGroupsControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38C7F7C1F1A42D8937CCF24 /* TabGroupsControllerTests.swift */; };
+		147C691A14F1B859273B1B22 /* TabGroupsSessionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D4991B0446EC87F006A9C8 /* TabGroupsSessionStoreTests.swift */; };
+		CB229C3DBF374FCB5F7BE2EC /* TabGroupsTabActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9861A6A024B27D42B33B475E /* TabGroupsTabActionsTests.swift */; };
+		C38C7F7C1F1A42D8937CCF25 /* TabGroupsSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38C7F7C1F1A42D8937CCF26 /* TabGroupsSessionStore.swift */; };
+		55EBB7718ABDD8B91B668150 /* TabGroupsTabActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE9110B09488F42C4FE72C6 /* TabGroupsTabActions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -12652,6 +12658,12 @@
 		6AD09DA3FE794078AA98D479 /* TabGroupStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabGroupStorageTests.swift"; sourceTree = "<group>"; };
 		7EE778A33B394DD78BFB9685 /* TabManagerGroupMembershipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabManagerGroupMembershipTests.swift"; sourceTree = "<group>"; };
 		A82E412E9E394B76B9BC1996 /* MockTabGroupStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabGroupStorage.swift; sourceTree = "<group>"; };
+		C38C7F7C1F1A42D8937CCF22 /* TabGroupsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsController.swift; sourceTree = "<group>"; };
+		C38C7F7C1F1A42D8937CCF24 /* TabGroupsControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsControllerTests.swift; sourceTree = "<group>"; };
+		39D4991B0446EC87F006A9C8 /* TabGroupsSessionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsSessionStoreTests.swift; sourceTree = "<group>"; };
+		9861A6A024B27D42B33B475E /* TabGroupsTabActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsTabActionsTests.swift; sourceTree = "<group>"; };
+		C38C7F7C1F1A42D8937CCF26 /* TabGroupsSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsSessionStore.swift; sourceTree = "<group>"; };
+		6EE9110B09488F42C4FE72C6 /* TabGroupsTabActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsTabActions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -14904,6 +14916,9 @@
 				39F819C51FD70F5D009E31E4 /* GlobalTabEventHandlers.swift */,
 				8A9BA6BC2F7C4CDF00D892C4 /* RemoteTabCreator.swift */,
 				D3A994961A3686BD008AD1AC /* Tab.swift */,
+				C38C7F7C1F1A42D8937CCF22 /* TabGroupsController.swift */,
+				C38C7F7C1F1A42D8937CCF26 /* TabGroupsSessionStore.swift */,
+				6EE9110B09488F42C4FE72C6 /* TabGroupsTabActions.swift */,
 				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
 				61C92A002DEF39F9004ACF49 /* TabConfigurationProvider.swift */,
 				8A0A7C2C2F61E3E400D00820 /* TabContentScriptManager.swift */,
@@ -15575,6 +15590,9 @@
 				8AFC1B782FAAAA3D0070CA11 /* TabManagerPrivacyModeTests.swift */,
 				8AFC09542FA54A240070CA11 /* TabManagerRemoveTabTests.swift */,
 				8A3FD28F2FABB9BA001F5DE9 /* TabManagerReorderTabsTests.swift */,
+				C38C7F7C1F1A42D8937CCF24 /* TabGroupsControllerTests.swift */,
+				39D4991B0446EC87F006A9C8 /* TabGroupsSessionStoreTests.swift */,
+				9861A6A024B27D42B33B475E /* TabGroupsTabActionsTests.swift */,
 				8AE65C042FE219A500CBBE66 /* TabManagerRestoreScreenshotTests.swift */,
 				8AFC09552FA54A240070CA11 /* TabManagerRestoreTabsTests.swift */,
 				5A475E8929DB87F2009C13FD /* TabManagerTests.swift */,
@@ -21153,6 +21171,9 @@
 				DD915E4994B84516BCC312F7 /* TabGroupStorage.swift in Sources */,
 				E999A3B13EB34C37B3332DAB /* TabGroup.swift in Sources */,
 				5A8017E029CE15D90047120D /* TabManagerImplementation.swift in Sources */,
+				C38C7F7C1F1A42D8937CCF21 /* TabGroupsController.swift in Sources */,
+				C38C7F7C1F1A42D8937CCF25 /* TabGroupsSessionStore.swift in Sources */,
+				55EBB7718ABDD8B91B668150 /* TabGroupsTabActions.swift in Sources */,
 				8AABBD012A001ADF0089941E /* ApplicationHelper.swift in Sources */,
 				E633E2DA1C21EAF8001FFF6C /* PasswordDetailViewController.swift in Sources */,
 				2142B12C2D9F1284003AA82F /* ZoomPageManager.swift in Sources */,
@@ -21732,6 +21753,9 @@
 				8A3FD2902FABB9BA001F5DE9 /* TabManagerClearHistoryTests.swift in Sources */,
 				8A3FD2912FABB9BA001F5DE9 /* TabManagerGetTabTests.swift in Sources */,
 				8A3FD2922FABB9BA001F5DE9 /* TabManagerReorderTabsTests.swift in Sources */,
+				C38C7F7C1F1A42D8937CCF23 /* TabGroupsControllerTests.swift in Sources */,
+				147C691A14F1B859273B1B22 /* TabGroupsSessionStoreTests.swift in Sources */,
+				CB229C3DBF374FCB5F7BE2EC /* TabGroupsTabActionsTests.swift in Sources */,
 				E169C6E82979CA0E0017B8D7 /* URLMailTests.swift in Sources */,
 				8A7A26E129D4785900EA76F1 /* MockRouter.swift in Sources */,
 				965C3C96293431FC006499ED /* MockLaunchSessionProvider.swift in Sources */,
