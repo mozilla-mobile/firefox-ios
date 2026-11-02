@@ -8,7 +8,7 @@ import Common
 import Shared
 import UIKit
 
-final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHandler, FeatureFlaggable {
+final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHandler {
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let prefs: Prefs
     private let windowUUID: WindowUUID
