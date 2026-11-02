@@ -24,6 +24,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		C2E100A22FC0000100AABB01 /* WallpaperEngagementCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E100A12FC0000100AABB01 /* WallpaperEngagementCoordinator.swift */; };
+		C2E100A52FC0000100AABB01 /* WallpaperEngagementCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E100A42FC0000100AABB01 /* WallpaperEngagementCoordinatorTests.swift */; };
 		032CE5F62EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032CE5F52EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift */; };
 		033A5FCC2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A5FCB2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift */; };
 		033A62002E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A61FF2E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift */; };
@@ -2829,6 +2831,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C2E100A12FC0000100AABB01 /* WallpaperEngagementCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperEngagementCoordinator.swift; sourceTree = "<group>"; };
+		C2E100A42FC0000100AABB01 /* WallpaperEngagementCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperEngagementCoordinatorTests.swift; sourceTree = "<group>"; };
 		001348F79CA80B94DCD3E535 /* km */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = km; path = km.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		00218A431FC749D7BC8EC05D /* homepageStoryCategoriesOn.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = homepageStoryCategoriesOn.json; sourceTree = "<group>"; };
 		003141C6B19507C79B6C399C /* ga */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -13097,6 +13101,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C2E100A32FC0000100AABB01 /* WallpaperEngagement */ = {
+			isa = PBXGroup;
+			children = (
+				C2E100A12FC0000100AABB01 /* WallpaperEngagementCoordinator.swift */,
+			);
+			path = WallpaperEngagement;
+			sourceTree = "<group>";
+		};
 		033C94F32E2F839900C2382F /* TermsOfUse */ = {
 			isa = PBXGroup;
 			children = (
@@ -15400,6 +15412,7 @@
 				61F7A4322D136C3A00F7317B /* RouteBuilderTests.swift */,
 				0B6153E12E24ECCA000D2FBD /* SummarizeCoordinatorTests.swift */,
 				C20931712F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift */,
+				C2E100A42FC0000100AABB01 /* WallpaperEngagementCoordinatorTests.swift */,
 				8C76F014302344B700D4BC87 /* WebCompatReportCoordinatorTests.swift */,
 				8CE71B443025C459006C7828 /* WebCompatReportPreviewCoordinatorTests.swift */,
 				FB16062100000000000000B1 /* PhotoPickerCoordinatorTests.swift */,
@@ -17276,6 +17289,7 @@
 			children = (
 				612194E42CE50A7B001664BB /* Redux */,
 				C84655DC2887384200861B4A /* v1 */,
+				C2E100A32FC0000100AABB01 /* WallpaperEngagement */,
 				612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */,
 			);
 			path = Wallpapers;
@@ -21443,6 +21457,7 @@
 				EDBD5C1C2DFA248E0050A59A /* HistoryTelemetry.swift in Sources */,
 				F85C7EDD27109241004BDBA4 /* PasswordManagerOnboardingViewController.swift in Sources */,
 				612194E32CE507CF001664BB /* WallpaperBackgroundView.swift in Sources */,
+				C2E100A22FC0000100AABB01 /* WallpaperEngagementCoordinator.swift in Sources */,
 				D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */,
 				0BDDB3462CA6E43A00D501DF /* BookmarksSaver.swift in Sources */,
 				EBB89506219398E500EB91A0 /* TabContentBlocker.swift in Sources */,
@@ -22083,6 +22098,7 @@
 				ABEF80D92A2F283E003F52C4 /* CreditCardBottomSheetViewModelTests.swift in Sources */,
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
 				C20931722F3CAB0100F0B05C /* QuickAnswersCoordinatorTests.swift in Sources */,
+				C2E100A52FC0000100AABB01 /* WallpaperEngagementCoordinatorTests.swift in Sources */,
 				8C76F015302344B700D4BC87 /* WebCompatReportCoordinatorTests.swift in Sources */,
 				8CE71B453025C459006C7828 /* WebCompatReportPreviewCoordinatorTests.swift in Sources */,
 				FB16062100000000000000B2 /* PhotoPickerCoordinatorTests.swift in Sources */,

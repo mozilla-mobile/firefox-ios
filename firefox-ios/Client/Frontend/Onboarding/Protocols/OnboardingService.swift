@@ -329,7 +329,7 @@ final class OnboardingService: UserFeaturePreferenceProvider {
             }
         )
 
-        let bottomSheetVC = OnboardingBottomSheetViewController(windowUUID: windowUUID)
+        let bottomSheetVC = NativeBottomSheetViewController(windowUUID: windowUUID)
         bottomSheetVC.onDismiss = { [weak self] in
             self?.telemetryUtility?.sendDismissButtonTappedTelemetry()
         }
