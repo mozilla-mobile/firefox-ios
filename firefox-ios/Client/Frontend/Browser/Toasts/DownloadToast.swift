@@ -66,12 +66,12 @@ final class DownloadToast: Toast, DownloadProgressDelegate {
             UIView.animate(withDuration: 0.05) {
                 self.descriptionLabel.text = self.descriptionText
 
-                if let percent = self.percent {
+                // Auto Layout rejects a non-finite constant (NaN or infinity) and crashes,
+                // so only apply a valid finite value.
+                if let percent = self.percent, percent.isFinite {
                     self.progressView.isHidden = false
                     let width = self.toastView.frame.width * percent
-                    // Auto Layout rejects a non-finite constant (NaN or infinity) and crashes,
-                    // so only apply a valid width.
-                    if width.isFinite { self.progressWidthConstraint?.constant = width }
+                    self.progressWidthConstraint?.constant = width
                 } else {
                     self.progressView.isHidden = true
                 }
