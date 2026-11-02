@@ -36,7 +36,7 @@ vpn.attestation:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/VPN-7819
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36115
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -48,7 +48,7 @@ vpn.attestation:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/VPN-7819
     data_reviews:
-      - TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/36115
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
