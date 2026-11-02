@@ -497,7 +497,7 @@ final class VPNAuthServiceTests: XCTestCase {
         refresher: VPNSessionRefreshing,
         tokenStore: VPNTokenStore,
         appAttestService: AppAttestServiceProtocol = MockAppAttestService(isSupported: true),
-        telemetry: VPNTelemetry? = nil
+        telemetry: VPNTelemetry = MockVPNTelemetry()
     ) throws -> VPNAuthService {
         let client = try AppAttestClient(
             appAttestService: appAttestService,

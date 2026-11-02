@@ -25,13 +25,13 @@ struct VPNAuthService: VPNAuthenticating {
     private let appAttestClient: AppAttestClient
     private let sessionRefresher: VPNSessionRefreshing
     private let tokenStore: VPNTokenStore
-    private let telemetry: VPNTelemetry?
+    private let telemetry: VPNTelemetry
 
     init(
         appAttestClient: AppAttestClient,
         sessionRefresher: VPNSessionRefreshing,
         tokenStore: VPNTokenStore,
-        telemetry: VPNTelemetry? = nil
+        telemetry: VPNTelemetry
     ) {
         self.appAttestClient = appAttestClient
         self.sessionRefresher = sessionRefresher
@@ -102,14 +102,14 @@ struct VPNAuthService: VPNAuthenticating {
                 throw VPNAuthError.sessionNotPersisted
             }
 
-            telemetry?.record(.attestationSucceeded)
+            telemetry.record(.attestationSucceeded)
             return session.deviceSessionJwt
         } catch let error as CancellationError {
             throw error
         } catch let error as URLError where error.code == .cancelled {
             throw error
         } catch {
-            telemetry?.record(.attestationFailed(reason: VPNAttestationFailureReason(error)))
+            telemetry.record(.attestationFailed(reason: VPNAttestationFailureReason(error)))
             throw error
         }
     }
