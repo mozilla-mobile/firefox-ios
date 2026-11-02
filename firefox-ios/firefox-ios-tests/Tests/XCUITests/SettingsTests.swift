@@ -14,6 +14,8 @@ class SettingsTests: FeatureFlaggedTestBase {
             name.contains("testSummarizeContentSettingsShouldShow_hostedSummarizeExperimentOn") {
             switchThemeToDarkOrLight(theme: "Light")
         }
+        // Rotating with the app still up makes SpringBoard relaunch it once the rotation ends
+        app.terminate()
         XCUIDevice.shared.orientation = .portrait
         try await super.tearDown()
     }
