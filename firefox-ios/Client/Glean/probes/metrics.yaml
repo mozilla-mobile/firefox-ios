@@ -2881,7 +2881,7 @@ installation:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-17053
     data_reviews: []
     data_sensitivity:
-      - technical
+      - interaction
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
