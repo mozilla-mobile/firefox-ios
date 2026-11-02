@@ -15,9 +15,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
     let borderPosition: AddressToolbarBorderPosition?
     var url: URL?
     var searchTerm: String?
-    var lockIconButtonA11yId: String?
-    var lockIconImageName: String?
-    var lockIconNeedsTheming: Bool
+    var hasOnlySecureContent: Bool?
+    var isWebsiteMode: Bool
     var safeListedURLImageName: String?
     var isEditing: Bool
     var shouldShowKeyboard: Bool
@@ -69,9 +68,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             borderPosition: nil,
             url: nil,
             searchTerm: nil,
-            lockIconButtonA11yId: nil,
-            lockIconImageName: nil,
-            lockIconNeedsTheming: true,
+            hasOnlySecureContent: nil,
+            isWebsiteMode: false,
             safeListedURLImageName: nil,
             isEditing: false,
             shouldShowKeyboard: false,
@@ -92,9 +90,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
          searchTerm: String?,
-         lockIconButtonA11yId: String?,
-         lockIconImageName: String?,
-         lockIconNeedsTheming: Bool,
+         hasOnlySecureContent: Bool?,
+         isWebsiteMode: Bool,
          safeListedURLImageName: String?,
          isEditing: Bool,
          shouldShowKeyboard: Bool,
@@ -112,9 +109,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         self.borderPosition = borderPosition
         self.url = url
         self.searchTerm = searchTerm
-        self.lockIconButtonA11yId = lockIconButtonA11yId
-        self.lockIconImageName = lockIconImageName
-        self.lockIconNeedsTheming = lockIconNeedsTheming
+        self.hasOnlySecureContent = hasOnlySecureContent
+        self.isWebsiteMode = isWebsiteMode
         self.safeListedURLImageName = safeListedURLImageName
         self.isEditing = isEditing
         self.shouldShowKeyboard = shouldShowKeyboard
@@ -140,6 +136,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return handleCancelEditOnHomepageAction(state: state, windowUUID: actionWindowUUID)
         case .didPasteSearchTerm(let searchTerm):
             return handleDidPasteSearchTermAction(state: state, searchTerm: searchTerm)
+        case .lockIconChanged(let hasOnlySecureContent, let isWebsiteMode):
+            return state
+                .copy(hasOnlySecureContent: hasOnlySecureContent)
+                .copy(isWebsiteMode: isWebsiteMode)
         default:
             return defaultState(from: state)
         }
@@ -175,9 +175,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         case ToolbarActionType.urlDidChange:
             return handleUrlDidChangeAction(state: state, action: action)
-
-        case ToolbarActionType.lockIconChanged:
-            return handleLockIconChangedAction(state: state, action: action)
 
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleBackForwardButtonStateChangedAction(state: state, action: action)
@@ -236,9 +233,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             .copy(borderPosition: borderPosition)
             .copy(url: nil)
             .copy(searchTerm: nil)
-            .copy(lockIconButtonA11yId: nil)
-            .copy(lockIconImageName: nil)
-            .copy(lockIconNeedsTheming: true)
+            .copy(hasOnlySecureContent: nil)
+            .copy(isWebsiteMode: false)
             .copy(safeListedURLImageName: nil)
             .copy(isEditing: false)
             .copy(shouldShowKeyboard: false)
@@ -277,12 +273,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handleReaderModeStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        let lockIconImageName = toolbarAction.readerModeState == .active ? nil : state.lockIconImageName
         let canSummarize = toolbarAction.canSummarize
         let readerModeState = toolbarAction.readerModeState
 
         return state
-            .copy(lockIconImageName: lockIconImageName)
             .copy(readerModeState: readerModeState)
             .copy(canSummarize: canSummarize)
     }
@@ -306,9 +300,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return state
             .copy(url: toolbarAction.url)
             .copy(searchTerm: nil)
-            .copy(lockIconButtonA11yId: toolbarAction.lockIconButtonA11yId ?? state.lockIconButtonA11yId)
-            .copy(lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName)
-            .copy(lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming)
+            .copy(hasOnlySecureContent: toolbarAction.hasOnlySecureContent ?? state.hasOnlySecureContent)
+            .copy(isWebsiteMode: toolbarAction.isWebsiteMode ?? state.isWebsiteMode)
             .copy(safeListedURLImageName: toolbarAction.safeListedURLImageName)
             .copy(translationConfiguration: translationConfiguration)
             .copy(isEmptySearch: isEmptySearch)
@@ -322,16 +315,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // (see `Tab.translationConfiguration`). Inheriting the existing Redux state here would leak
         // the previous tab's icon onto a new tab whose own state is nil (FXIOS-15606).
         return action.translationConfiguration ?? existingConfig
-    }
-
-    @MainActor
-    private static func handleLockIconChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        return state
-            .copy(lockIconButtonA11yId: toolbarAction.lockIconButtonA11yId ?? state.lockIconButtonA11yId)
-            .copy(lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName)
-            .copy(lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming)
     }
 
     @MainActor
@@ -521,9 +504,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
-            lockIconButtonA11yId: state.lockIconButtonA11yId,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            hasOnlySecureContent: state.hasOnlySecureContent,
+            isWebsiteMode: state.isWebsiteMode,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
             shouldShowKeyboard: state.shouldShowKeyboard,

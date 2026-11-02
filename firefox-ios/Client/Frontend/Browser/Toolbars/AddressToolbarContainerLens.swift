@@ -23,6 +23,7 @@ struct AddressToolbarContainerLens: StateLens {
     let navigationActions: [ToolbarActionConfiguration]
     let browserActions: [ToolbarActionConfiguration]
     let navigationToolbarActions: [ToolbarActionConfiguration]
+    let lockIconState: LockIconState
 
     // MARK: - Private initializers
     private init(toolbarState: ToolbarState,
@@ -30,13 +31,15 @@ struct AddressToolbarContainerLens: StateLens {
                  trailingPageActions: [ToolbarActionConfiguration],
                  navigationActions: [ToolbarActionConfiguration],
                  browserActions: [ToolbarActionConfiguration],
-                 navigationToolbarActions: [ToolbarActionConfiguration]) {
+                 navigationToolbarActions: [ToolbarActionConfiguration],
+                 lockIconState: LockIconState) {
         self.toolbarState = toolbarState
         self.leadingPageActions = leadingPageActions
         self.trailingPageActions = trailingPageActions
         self.navigationActions = navigationActions
         self.browserActions = browserActions
         self.navigationToolbarActions = navigationToolbarActions
+        self.lockIconState = lockIconState
     }
 
     private init(windowUUID: WindowUUID) {
@@ -45,7 +48,8 @@ struct AddressToolbarContainerLens: StateLens {
                   trailingPageActions: [],
                   navigationActions: [],
                   browserActions: [],
-                  navigationToolbarActions: [])
+                  navigationToolbarActions: [],
+                  lockIconState: .none)
     }
 
     // MARK: - Lens initialization
@@ -108,12 +112,17 @@ struct AddressToolbarContainerLens: StateLens {
             isPrivateMode: toolbarState.isPrivateMode,
             isNovaDesignEnabled: toolbarState.navigationToolbar.isNovaDesignEnabled)
 
+        let lockIconState = LockIconState(
+            hasOnlySecureContent: addressToolbar.hasOnlySecureContent,
+            isWebsiteMode: addressToolbar.isWebsiteMode && addressToolbar.readerModeState != .active)
+
         self.init(toolbarState: toolbarState,
                   leadingPageActions: leadingPageActions,
                   trailingPageActions: trailingPageActions,
                   navigationActions: navigationActions,
                   browserActions: browserActions,
-                  navigationToolbarActions: navigationToolbarActions)
+                  navigationToolbarActions: navigationToolbarActions,
+                  lockIconState: lockIconState)
     }
 
     private static func shouldHaveAlternativeLocationColor(toolbarState: ToolbarState) -> Bool {
