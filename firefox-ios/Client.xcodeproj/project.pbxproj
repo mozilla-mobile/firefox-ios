@@ -2472,7 +2472,12 @@
 		FF0005AD2F000004000BBBBB /* MockQuickAnswersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0005AC2F000003000BBBBB /* MockQuickAnswersStore.swift */; };
 		E999A3B13EB34C37B3332DAB /* TabGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26429A7398AB4385811DE3CF /* TabGroup.swift */; };
 		DD915E4994B84516BCC312F7 /* TabGroupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794018D1D6FD426CABE24839 /* TabGroupStorage.swift */; };
+		947C94787C5C4CE48C18BAC9 /* TabGroupMembershipLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312B546BDE23482D8E5ED7F7 /* TabGroupMembershipLookup.swift */; };
+		76FDD76399C741A1AA8CDCE7 /* TabGroupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB3CC8BD0A1343DD88493985 /* TabGroupManager.swift */; };
+		2FA34F5C84984B358A8A913A /* TabGroupManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68570F3854C7482A88C09B22 /* TabGroupManagerTests.swift */; };
 		B42E21CA8C8C4FBAA1D93406 /* TabGroupStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD09DA3FE794078AA98D479 /* TabGroupStorageTests.swift */; };
+		5D8588936E994558A41B50DA /* TabManagerGroupMembershipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE778A33B394DD78BFB9685 /* TabManagerGroupMembershipTests.swift */; };
+		6090112291C64C03A9DEEB88 /* MockTabGroupStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82E412E9E394B76B9BC1996 /* MockTabGroupStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -12641,7 +12646,12 @@
 		FFEB4308B5A82E56F1EEEC56 /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		26429A7398AB4385811DE3CF /* TabGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabGroup.swift"; sourceTree = "<group>"; };
 		794018D1D6FD426CABE24839 /* TabGroupStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabGroupStorage.swift"; sourceTree = "<group>"; };
+		312B546BDE23482D8E5ED7F7 /* TabGroupMembershipLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabGroupMembershipLookup.swift"; sourceTree = "<group>"; };
+		FB3CC8BD0A1343DD88493985 /* TabGroupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabGroupManager.swift"; sourceTree = "<group>"; };
+		68570F3854C7482A88C09B22 /* TabGroupManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabGroupManagerTests.swift"; sourceTree = "<group>"; };
 		6AD09DA3FE794078AA98D479 /* TabGroupStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabGroupStorageTests.swift"; sourceTree = "<group>"; };
+		7EE778A33B394DD78BFB9685 /* TabManagerGroupMembershipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabManagerGroupMembershipTests.swift"; sourceTree = "<group>"; };
+		A82E412E9E394B76B9BC1996 /* MockTabGroupStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabGroupStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -14214,6 +14224,7 @@
 			children = (
 				5A475E9029DB8AA7009C13FD /* MockDiskImageStore.swift */,
 				5A475E8C29DB888E009C13FD /* MockTabDataStore.swift */,
+				A82E412E9E394B76B9BC1996 /* MockTabGroupStorage.swift */,
 				8A3F08AF2FB40BDC001F5DE9 /* MockTabRestorerDelegate.swift */,
 				5AC7110629F822E60011ED11 /* MockTabSessionStore.swift */,
 			);
@@ -14899,6 +14910,8 @@
 				39455F761FC83F430088A22C /* TabEventHandler.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				5A64225029CB506500EEC3E5 /* TabManagerDelegate.swift */,
+				FB3CC8BD0A1343DD88493985 /* TabGroupManager.swift */,
+				312B546BDE23482D8E5ED7F7 /* TabGroupMembershipLookup.swift */,
 				794018D1D6FD426CABE24839 /* TabGroupStorage.swift */,
 				26429A7398AB4385811DE3CF /* TabGroup.swift */,
 				5A8017DF29CE15D90047120D /* TabManagerImplementation.swift */,
@@ -15566,6 +15579,8 @@
 				8AFC09552FA54A240070CA11 /* TabManagerRestoreTabsTests.swift */,
 				5A475E8929DB87F2009C13FD /* TabManagerTests.swift */,
 				B1A9E0012FA0000000C0FFEE /* BlankPageNavigationDelegateTests.swift */,
+				7EE778A33B394DD78BFB9685 /* TabManagerGroupMembershipTests.swift */,
+				68570F3854C7482A88C09B22 /* TabGroupManagerTests.swift */,
 				8AFC09562FA54A240070CA11 /* TabManagerTestsBase.swift */,
 				8A3F08AD2FB40BD0001F5DE9 /* TabRestorerTests.swift */,
 				8AD08D1627E91AC800B8E907 /* TabsTelemetryTests.swift */,
@@ -21133,6 +21148,8 @@
 				8A48808C2E68DD8100AD43D5 /* PingUploaderProtocol.swift in Sources */,
 				ABEF80D52A254185003F52C4 /* CreditCardBottomSheetFooterView.swift in Sources */,
 				C869912E28917688007ACC5C /* WallpaperDataService.swift in Sources */,
+				76FDD76399C741A1AA8CDCE7 /* TabGroupManager.swift in Sources */,
+				947C94787C5C4CE48C18BAC9 /* TabGroupMembershipLookup.swift in Sources */,
 				DD915E4994B84516BCC312F7 /* TabGroupStorage.swift in Sources */,
 				E999A3B13EB34C37B3332DAB /* TabGroup.swift in Sources */,
 				5A8017E029CE15D90047120D /* TabManagerImplementation.swift in Sources */,
@@ -21881,6 +21898,9 @@
 				8CC6023F301C89A80041B7D0 /* WebCompatReportRecorderTests.swift in Sources */,
 				5A475E8E29DB89C7009C13FD /* TabManagerTests.swift in Sources */,
 				B1A9E0022FA0000000C0FFEE /* BlankPageNavigationDelegateTests.swift in Sources */,
+				6090112291C64C03A9DEEB88 /* MockTabGroupStorage.swift in Sources */,
+				5D8588936E994558A41B50DA /* TabManagerGroupMembershipTests.swift in Sources */,
+				2FA34F5C84984B358A8A913A /* TabGroupManagerTests.swift in Sources */,
 				21A44806304B48400054DF7C /* TrailingPageActionsBuilderTests.swift in Sources */,
 				0B5CAF0D2E40DA89008B5D5A /* MockSummarizationChecker.swift in Sources */,
 				E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */,
