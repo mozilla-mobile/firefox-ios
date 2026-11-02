@@ -443,7 +443,7 @@
 "Settings.toggleHomeScreenTips" = "Zobrazovať tipy na domovskej obrazovke";
 
 /* Label for Rollouts toggle on the settings screen */
-"Settings.toggleRollouts" = "Povoliť vzdialené vylepšenia";
+"Settings.toggleRollouts" = "Povoliť vylepšenia na diaľku";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -692,7 +692,7 @@
 "WidgetOnboardingCard.ActionButton" = "Ako na to";
 
 /* Subtitle shown on card view explaining the app has a widget option. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"WidgetOnboardingCard.Subtitle" = "Necháme vás v súkromnom prehliadaní, ale nabudúce môžete začať rýchlejšie s miniaplikáciou %@ na ploche.";
+"WidgetOnboardingCard.Subtitle" = "Necháme vás na vaše súkromné prehliadanie, ale nabudúce začnite rýchlejšie s miniaplikáciou %@ na domovskej obrazovke.";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "História prehliadania bola vymazaná! 🎉";
