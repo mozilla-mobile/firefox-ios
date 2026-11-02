@@ -195,7 +195,7 @@ class AppDelegate: UIResponder,
             profile.removeAccount()
         }
 
-        TelemetryWrapper.shared.updateInstallationTelemetry()
+        installationTelemetryService.update()
 
         profile.syncManager?.applicationDidBecomeActive()
         webServerUtil?.setUpWebServer()

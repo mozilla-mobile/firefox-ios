@@ -59,15 +59,12 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
     private var searchEnginesManager: SearchEnginesManagerProvider?
     private var logger: Logger
     private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
-    private let installationTelemetryService: InstallationTelemetryService
 
     init(logger: Logger = DefaultLogger.shared,
-         gleanUsageReportingMetricsService: GleanUsageReportingMetricsService = AppContainer.shared.resolve(),
-         installationTelemetryService: InstallationTelemetryService = AppContainer.shared.resolve()) {
+         gleanUsageReportingMetricsService: GleanUsageReportingMetricsService = AppContainer.shared.resolve()) {
         crashedLastLaunch = logger.crashedLastLaunch
         self.logger = logger
         self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
-        self.installationTelemetryService = installationTelemetryService
     }
 
     private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
@@ -100,21 +97,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
 
         // Initialize Glean
         initGlean(profile, sendUsageData: sendUsageData)
-    }
-
-    @MainActor
-    func updateInstallationTelemetry() {
-        guard !AppConstants.isRunningUnitTest else { return }
-        Task {
-            do {
-                try await installationTelemetryService.onForeground()
-            } catch {
-                logger.log("Could not update installation history",
-                           level: .warning,
-                           category: .telemetry,
-                           description: error.localizedDescription)
-            }
-        }
     }
 
     /// Never follows `prefSendUsageData`: `usage-reporting` is `follows_collection_enabled: false`.
@@ -177,8 +159,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
         glean.initialize(uploadEnabled: sendUsageData,
                          configuration: gleanConfig,
                          buildInfo: GleanMetrics.GleanBuild.info)
-
-        updateInstallationTelemetry()
 
         // Set the metric configuration from Nimbus.
         glean.applyServerKnobsConfig(FxNimbus.shared.features.gleanServerKnobs.value().toJSONString())

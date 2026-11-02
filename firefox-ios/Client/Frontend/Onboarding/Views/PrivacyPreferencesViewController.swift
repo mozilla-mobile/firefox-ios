@@ -19,6 +19,7 @@ final class PrivacyPreferencesViewController: UIViewController,
 
     // MARK: - Properties
     private var profile: Profile
+    private let installationTelemetryService: InstallationTelemetryService
     var windowUUID: WindowUUID
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
@@ -64,9 +65,11 @@ final class PrivacyPreferencesViewController: UIViewController,
         profile: Profile,
         windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        notificationCenter: NotificationProtocol = NotificationCenter.default
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        installationTelemetryService: InstallationTelemetryService = AppContainer.shared.resolve()
     ) {
         self.profile = profile
+        self.installationTelemetryService = installationTelemetryService
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -187,7 +190,7 @@ final class PrivacyPreferencesViewController: UIViewController,
 
         technicalDataSwitch.switchCallback = { [weak self] value in
             self?.profile.prefs.setBool(value, forKey: AppConstants.prefSendUsageData)
-            TelemetryWrapper.shared.updateInstallationTelemetry()
+            self?.installationTelemetryService.update()
             self?.profile.prefs.setBool(value, forKey: AppConstants.prefStudiesToggle)
             if !value {
                 GleanMetrics.Pings.shared.onboardingOptOut.submit()

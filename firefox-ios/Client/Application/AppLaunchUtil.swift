@@ -15,13 +15,16 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
     private let profile: Profile
     private let introScreenManager: IntroScreenManager
     private let termsOfServiceManager: TermsOfServiceManager
+    private let installationTelemetryService: InstallationTelemetryService
 
     init(
         logger: Logger = DefaultLogger.shared,
-        profile: Profile
+        profile: Profile,
+        installationTelemetryService: InstallationTelemetryService = AppContainer.shared.resolve()
     ) {
         self.logger = logger
         self.profile = profile
+        self.installationTelemetryService = installationTelemetryService
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
     }
@@ -49,24 +52,20 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
         // Need to get "settings.sendCrashReports" this way so that Sentry can be initialized before getting the Profile.
         let sendCrashReports = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendCrashReports) ?? true
 
-        if termsOfServiceManager.isFeatureEnabled {
-            // Two cases:
-            // 1. when ToS screen has been presented and user accepted it
-            // 2. or when ToS screen is not presented because is not fresh install
-            let isTermsOfServiceAccepted = termsOfServiceManager.isAccepted || !introScreenManager.shouldShowIntroScreen
-            logger.setup(sendCrashReports: sendCrashReports && isTermsOfServiceAccepted)
-            if isTermsOfServiceAccepted {
-                TelemetryWrapper.shared.setup(profile: profile)
-                TelemetryWrapper.shared.recordStartUpTelemetry()
-            } else {
-                // If ToS are not accepted, we still need to setup the Contextual Identifier for
-                // the Unified Ads Sponsored tiles
-                TelemetryContextualIdentifier.setupContextId(isGleanMetricsAllowed: false)
-            }
-        } else {
-            logger.setup(sendCrashReports: sendCrashReports)
+        // Telemetry can start when ToS are disabled, accepted, or skipped for an existing installation.
+        let canInitializeTelemetry = !termsOfServiceManager.isFeatureEnabled
+            || termsOfServiceManager.isAccepted
+            || !introScreenManager.shouldShowIntroScreen
+
+        logger.setup(sendCrashReports: sendCrashReports && canInitializeTelemetry)
+        if canInitializeTelemetry {
             TelemetryWrapper.shared.setup(profile: profile)
+            installationTelemetryService.update()
             TelemetryWrapper.shared.recordStartUpTelemetry()
+        } else {
+            // If ToS are not accepted, we still need to setup the Contextual Identifier for
+            // the Unified Ads Sponsored tiles
+            TelemetryContextualIdentifier.setupContextId(isGleanMetricsAllowed: false)
         }
 
         setUserAgent()
