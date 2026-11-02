@@ -49,6 +49,7 @@ final class BrowserCoordinator: BaseCoordinator,
     var homepageViewController: HomepageViewController?
     private weak var nativeErrorPageViewController: NativeErrorPageViewController?
     private weak var privateHomepageViewController: PrivateHomepageViewController?
+    private weak var vpnAlert: UIAlertController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -1341,6 +1342,64 @@ final class BrowserCoordinator: BaseCoordinator,
         store.dispatch(GeneralBrowserAction(showOverlay: false,
                                             windowUUID: self.windowUUID,
                                             actionType: GeneralBrowserActionType.leaveOverlay))
+    }
+
+    func showVPNFailureAlert() {
+        guard vpnAlert == nil else { return }
+        let alert = UIAlertController(
+            title: .VPN.ErrorBrowsingPopup.Title,
+            message: .VPN.ErrorBrowsingPopup.Body,
+            preferredStyle: .alert
+        )
+        addVPNAlertAction(
+            to: alert,
+            title: .VPN.ErrorBrowsingPopup.Continue,
+            style: .destructive,
+            actionType: .continueWithoutVPN
+        )
+        addVPNAlertAction(to: alert, title: .VPN.ErrorBrowsingPopup.CloseAllTabs, actionType: .closeAllTabs)
+        addVPNAlertAction(to: alert, title: .VPN.ErrorBrowsingPopup.CloseThisTab, actionType: .closeThisTab)
+        presentVPNAlert(alert)
+    }
+
+    func showVPNDataLimitAlert(dataLimitBytes: Int64) {
+        guard vpnAlert == nil else { return }
+        let dataLimitGB = Measurement(value: Double(dataLimitBytes), unit: UnitInformationStorage.bytes)
+            .converted(to: .gigabytes).value
+        let alert = UIAlertController(
+            title: .VPN.ReachedDataLimitPopup.Title,
+            message: String(
+                format: .VPN.ReachedDataLimitPopup.Body,
+                dataLimitGB.formatted(.number.precision(.fractionLength(0...1)))
+            ),
+            preferredStyle: .alert
+        )
+        addVPNAlertAction(
+            to: alert,
+            title: .VPN.ErrorBrowsingPopup.Continue,
+            style: .destructive,
+            actionType: .continueWithoutVPN
+        )
+        addVPNAlertAction(to: alert, title: .VPN.ReachedDataLimitPopup.CloseAllTabs, actionType: .closeAllTabs)
+        addVPNAlertAction(to: alert, title: .VPN.ReachedDataLimitPopup.CloseThisTab, actionType: .closeThisTab)
+        presentVPNAlert(alert)
+    }
+
+    private func addVPNAlertAction(
+        to alert: UIAlertController,
+        title: String,
+        style: UIAlertAction.Style = .default,
+        actionType: VPNActionType
+    ) {
+        alert.addAction(UIAlertAction(title: title, style: style) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: actionType))
+        })
+    }
+
+    private func presentVPNAlert(_ alert: UIAlertController) {
+        vpnAlert = alert
+        browserViewController.topmostPresentedViewController.present(alert, animated: true)
     }
 
     func searchGoogleLens(with image: UIImage, source: GoogleLensTelemetry.Source, searchTimerId: GleanTimerId? = nil) {

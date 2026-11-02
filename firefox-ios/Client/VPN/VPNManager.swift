@@ -97,6 +97,7 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
             self.activeServer = server
             self.userPreferences.setPreferenceFor(.vpnFeature, to: true)
             self.startPassRotation(after: pass)
+            self.showDataLimitAlertIfNeeded(for: pass)
         } catch {
             self.logger.log("VPN start failed: \(error)", level: .warning, category: .vpn)
         }
@@ -125,6 +126,7 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
                           let server = self.activeServer else { return }
                     let config = try self.buildProxyConfig(server: server, pass: new)
                     self.proxyApplier.applyProxyConfigurations([config], forcingSessionReset: false)
+                    self.showDataLimitAlertIfNeeded(for: new)
                     self.logger.log(
                         "Rotated VPN proxy pass — next expiry \(new.expiresAt)",
                         level: .info,
@@ -132,14 +134,47 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
                     )
                 }
             } catch {
-                // TODO: surface error to the user here
                 self?.logger.log(
                     "Pass rotation failed terminally, stopping rotation: \(error)",
                     level: .warning,
                     category: .vpn
                 )
+                self?.showFailureAlert()
             }
         }
+    }
+
+    private func showFailureAlert() {
+        guard let windowUUID = alertWindowUUID() else { return }
+        store.dispatch(
+            GeneralBrowserAction(
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showVPNFailureAlert
+            )
+        )
+    }
+
+    private func showDataLimitAlertIfNeeded(for pass: VPNProxyPass) {
+        guard let usage = pass.usage,
+              !usage.unlimited,
+              usage.remaining <= 0,
+              let windowUUID = alertWindowUUID() else { return }
+        store.dispatch(
+            GeneralBrowserAction(
+                vpnDataLimitBytes: usage.max,
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showVPNDataLimitAlert
+            )
+        )
+    }
+
+    /// The foreground window, falling back to any open window, so VPN alerts only show once.
+    private func alertWindowUUID() -> WindowUUID? {
+        let windows = windowManager.windows
+        let activeWindowUUID = windows.first {
+            $0.value.sceneCoordinator?.window?.windowScene?.activationState == .foregroundActive
+        }?.key
+        return activeWindowUUID ?? windows.keys.first
     }
 
     /// Tear down every webview, wait for WebKit to process the resulting load cancellations,

@@ -59,6 +59,13 @@ class DependencyHelper {
         let userFeaturePreferenceManager = UserFeaturePreferenceManager(prefs: profile.prefs)
         AppContainer.shared.register(service: userFeaturePreferenceManager as UserFeaturePreferring)
 
+        // Registered app-wide so a running proxy session, and its pass rotation task, outlive
+        // the screen that started it. Only resolve this behind the same availability and flag checks.
+        if #available(iOS 17.0, *), featureFlagsProvider.isEnabled(.vpnFeature) {
+            let vpnManager = VPNManager(profile: profile, windowManager: windowManager)
+            AppContainer.shared.register(service: vpnManager as VPNRunnable)
+        }
+
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }

@@ -3508,7 +3508,7 @@ extension String {
                 key: "VPN.ErrorBrowsingPopup.Continue.v160",
                 tableName: "VPN",
                 value: "Continue Without VPN",
-                comment: "Button on the popup shown when the VPN stops working while the user is browsing. Tapping it closes the popup so the user can keep browsing without the VPN."
+                comment: "Button on the popups shown when the VPN stops working while the user is browsing, or when the user runs out of free monthly VPN data. Tapping it closes the popup so the user can keep browsing without the VPN."
             )
 
             public static let CloseAllTabs = MZLocalizedString(
