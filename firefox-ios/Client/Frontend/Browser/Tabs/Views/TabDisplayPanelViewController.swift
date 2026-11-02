@@ -25,6 +25,9 @@ final class TabDisplayPanelViewController: UIViewController,
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
     var tabsState: TabsPanelState
+    var tabGroupsController: TabGroupsController? {
+        didSet { tabDisplayView.tabGroupsController = tabGroupsController }
+    }
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     private var viewHasAppeared = false
@@ -289,6 +292,11 @@ final class TabDisplayPanelViewController: UIViewController,
     }
 
     private func updateInsets() {
+        if TabGroupsFeatureFlag.isEnabled, tabGroupsController != nil, panelType == .tabs {
+            let bottomInset = TabGroupsTrayBarMetrics.bottomHeight + TabGroupsTrayBarMetrics.contentSpacing
+            tabDisplayView.updateInsets(top: TabGroupsTrayBarMetrics.topHeight, bottom: bottomInset)
+            return
+        }
         if isCompactLayout {
             let bottomInset = if emptyPrivateTabsView.needsSafeArea {
                 DefaultTabTrayUtils().segmentedControlHeight + view.safeAreaInsets.bottom
