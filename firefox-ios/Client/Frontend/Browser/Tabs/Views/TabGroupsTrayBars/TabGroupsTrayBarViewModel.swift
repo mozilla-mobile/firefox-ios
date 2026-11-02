@@ -8,6 +8,8 @@ enum TabGroupsTrayBarMetrics {
     static let topHeight: CGFloat = 48
     static let bottomHeight: CGFloat = 56
     static let buttonSize: CGFloat = 40
+    static let contentSpacing: CGFloat = 8
+    static let groupTintOpacity = 0.18
 }
 
 struct TabGroupsTrayBarViewModel: Equatable {
@@ -16,11 +18,13 @@ struct TabGroupsTrayBarViewModel: Equatable {
         let selectedPanelBackground: Color
         let emphasis: Color
         let onEmphasis: Color
+        let destructive: Color
 
         static let system = Colors(primaryText: Color(uiColor: .label),
                                    selectedPanelBackground: Color(uiColor: .secondarySystemGroupedBackground),
                                    emphasis: Color(uiColor: .label),
-                                   onEmphasis: Color(uiColor: .systemBackground))
+                                   onEmphasis: Color(uiColor: .systemBackground),
+                                   destructive: Color(uiColor: .systemRed))
     }
 
     enum Panel: Equatable {
@@ -31,7 +35,6 @@ struct TabGroupsTrayBarViewModel: Equatable {
 
     let destinationTitle: String
     let isGroupSelected: Bool
-    let tabCount: Int
     let selectedPanel: Panel
     let privateTitle: String
     let syncedTitle: String
@@ -39,17 +42,25 @@ struct TabGroupsTrayBarViewModel: Equatable {
     let moreAccessibilityLabel: String
     let addTabAccessibilityLabel: String
     let tabCountTitle: String
+    let selectionTitle: String
+    let finishSelectionAccessibilityLabel: String
+    let newGroupTitle: String
+    let moveToGroupTitle: String
+    let closeSelectedTabsTitle: String
     var colors: Colors = .system
     var groupEmoji: String?
     var groupColor: Color?
-
-    var tabsTitle: String { tabCountTitle }
+    var selectedTabCount: Int?
 }
 
 enum TabGroupsTrayBarAction: Equatable {
     case openDestinationPicker
     case openMoreMenu
     case addTab
+    case finishSelection
+    case createGroupFromSelection
+    case moveSelectionToGroup
+    case closeSelectedTabs
     case selectPanel(TabGroupsTrayBarViewModel.Panel)
     case done
 }
