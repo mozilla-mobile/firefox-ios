@@ -2872,6 +2872,64 @@ workflows:
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=tests
 
+  Firefox_SmokeTest_Iphone_iOS17:
+    description: >-
+      Run the Firefox smoke tests on an iOS 17.5 simulator. The iOS 17.5 runtime is not
+      downloadable with Xcode 27.1, so it is installed from gs://mobile-ios-simulators.
+    envs:
+    - IOS17_RUNTIME_DMG: gs://mobile-ios-simulators/runtimes/iOS_17.5_21F79.dmg
+    - IOS17_DESTINATION: platform=iOS Simulator,name=iPhone 15,OS=17.5
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    - skip_macro_validation
+    steps:
+    - script@1:
+        title: Install iOS 17.5 runtime from GCS
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euxo pipefail
+
+            curl -o /tmp/key-file.json "$BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL"
+            gcloud auth activate-service-account -q --key-file /tmp/key-file.json
+
+            START=$(date +%s)
+            gcloud storage cp "$IOS17_RUNTIME_DMG" /tmp/ios17.dmg
+            gcloud storage cat "${IOS17_RUNTIME_DMG}.sha256" | awk '{print $1"  /tmp/ios17.dmg"}' | shasum -a 256 -c -
+            DOWNLOADED=$(date +%s)
+
+            xcrun simctl runtime add /tmp/ios17.dmg
+            rm /tmp/ios17.dmg
+            ADDED=$(date +%s)
+
+            RUNTIME_ID=$(xcrun simctl list runtimes -j | jq -r '.runtimes[] | select(.version == "17.5") | .identifier')
+            xcrun simctl create "iPhone 15" com.apple.CoreSimulator.SimDeviceType.iPhone-15 "$RUNTIME_ID"
+            xcrun simctl list devices "iOS 17.5"
+
+            echo "Download: $((DOWNLOADED - START))s, runtime add: $((ADDED - DOWNLOADED))s"
+    - restore-spm-cache@3:
+        is_always_run: true
+    - activate-build-cache-for-xcode@0: {}
+    - xcode-build-for-test@3:
+        title: "Build Firefox iOS"
+        inputs:
+        - scheme: Firefox
+        - configuration: Debug
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - test_plan: Smoketest
+        - xcodebuild_options: ONLY_ACTIVE_ARCH=YES COMPILER_INDEX_STORE_ENABLE=NO
+        - destination: $IOS17_DESTINATION
+    - xcode-test-without-building@0:
+        title: "Run all smoke tests"
+        inputs:
+        - destination: $IOS17_DESTINATION
+        - xctestrun: "$BITRISE_XCTESTRUN_FILE_PATH"
+        - xcodebuild_options: -collect-test-diagnostics never
+    - deploy-to-bitrise-io@2:
+        is_always_run: true
+
   focus-configure-nimbus:
     steps:
     - script@1:
