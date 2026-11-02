@@ -59,7 +59,7 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
         profile: Profile = AppContainer.shared.resolve(),
         windowManager: WindowManager = AppContainer.shared.resolve(),
         guardian: VPNGuardianProviding? = nil,
-        authCreator: VPNAuthCreating = VPNAuthCreator(),
+        authCreator: VPNAuthCreating = VPNAuthCreator(telemetry: DefaultVPNTelemetry()),
         serverManager: VPNServerManaging? = nil,
         proxyApplier: ProxyConfigurator = DefaultProxyConfigurator()
     ) {
