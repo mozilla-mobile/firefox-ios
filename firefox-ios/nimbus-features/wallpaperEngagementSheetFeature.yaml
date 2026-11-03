@@ -16,14 +16,3 @@ features:
           so a new value is needed for every wallpaper drop.
         type: String
         default: ""
-      backdrop-color:
-        description: >
-          Hex color (e.g. "8E5CD9") of the gradient shown behind the sheet image.
-        type: String
-        default: "8E5CD9"
-      image:
-        description: >
-          Base64 encoded image shown at the top of the sheet. When empty or
-          invalid, a default image is shown.
-        type: String
-        default: ""

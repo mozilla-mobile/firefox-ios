@@ -6469,6 +6469,21 @@ extension String {
         tableName: nil,
         value: "Something went wrong with this wallpaper.",
         comment: "The message of the error displayed to a user when they trying to change a wallpaper failed.")
+    public static let WallpaperEngagementSheetTitle = MZLocalizedString(
+        key: "Wallpaper.EngagementSheet.Title.v162",
+        tableName: nil,
+        value: "A little fright. A fresh look.",
+        comment: "The title of the bottom sheet that promotes new wallpapers.")
+    public static let WallpaperEngagementSheetDescription = MZLocalizedString(
+        key: "Wallpaper.EngagementSheet.Description.v162",
+        tableName: nil,
+        value: "Get into the Halloween spirit with our new wallpapers.",
+        comment: "The description of the bottom sheet that promotes new wallpapers.")
+    public static let WallpaperEngagementSheetButton = MZLocalizedString(
+        key: "Wallpaper.EngagementSheet.Button.v162",
+        tableName: nil,
+        value: "Get Wallpapers",
+        comment: "The button of the bottom sheet that promotes new wallpapers. Tapping it opens the wallpaper settings.")
     public static let WallpaperErrorTryAgain = MZLocalizedString(
         key: "Wallpaper.Error.TryAgain.v106",
         tableName: nil,

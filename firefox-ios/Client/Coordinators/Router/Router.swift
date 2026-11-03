@@ -21,6 +21,11 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     @MainActor
     var isPresenting: Bool { get }
 
+    /// Boolean value indicating whether or not the router's view has a bottom safe area inset
+    /// (e.g. devices with a home indicator)
+    @MainActor
+    var hasBottomSafeArea: Bool { get }
+
     /// Present a view controller for a vertical flow.
     /// - Parameters:
     ///   - viewController: The view controller to present

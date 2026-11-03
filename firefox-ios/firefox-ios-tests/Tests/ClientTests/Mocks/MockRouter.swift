@@ -14,6 +14,7 @@ class MockRouter: NSObject, Router {
         return presentCalled != 0
     }
 
+    var hasBottomSafeArea = false
     var presentedViewController: UIViewController?
     var presentCalled = 0
     var presentCalledWithAnimation = 0

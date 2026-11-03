@@ -27,16 +27,6 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
         return nimbus.features.wallpaperEngagementSheetFeature.value().marketingSlug
     }
 
-    private var backdropColor: UIColor {
-        let hex = nimbus.features.wallpaperEngagementSheetFeature.value().backdropColor
-        return UIColor(colorString: hex.replacingOccurrences(of: "#", with: ""))
-    }
-
-    private var image: UIImage? {
-        let base64 = nimbus.features.wallpaperEngagementSheetFeature.value().image
-        return Data(base64Encoded: base64, options: .ignoreUnknownCharacters).flatMap(UIImage.init(data:))
-    }
-
     init(
         router: Router,
         windowUUID: WindowUUID,
@@ -65,8 +55,7 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
     func start() {
         let contentView = WallpaperEngagementView(
             windowUUID: windowUUID,
-            image: image,
-            backdropColor: backdropColor
+            hasBottomSafeArea: router.hasBottomSafeArea
         ) { [weak self] in
             self?.router.dismiss(animated: true) {
                 guard let self else { return }
@@ -82,7 +71,7 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
         }
         bottomSheetVC.configure(
             closeButtonModel: CloseButtonViewModel(
-                a11yLabel: "Close",
+                a11yLabel: .CancelString,
                 a11yIdentifier: AccessibilityIdentifiers.WallpaperEngagementSheet.closeButton
             ),
             child: hostingController
@@ -103,6 +92,7 @@ private struct WallpaperEngagementView: ThemeableView {
     private struct UX {
         static let imageSize: CGFloat = 200
         static let imageTopPadding: CGFloat = 8
+        static let backdropColor = Color(red: 0x8E / 255, green: 0x5C / 255, blue: 0xD9 / 255)
         static let backdropHeight: CGFloat = imageSize / 1.7
         static let backdropOpacityStart: CGFloat = 0.5
         static let backdropOpacityEnd: CGFloat = 0.0
@@ -118,21 +108,17 @@ private struct WallpaperEngagementView: ThemeableView {
     let windowUUID: WindowUUID
     let themeManager: ThemeManager
     @State var theme: Theme
-    private let image: UIImage?
-    private let backdropColor: UIColor
-    @State private var hasBottomSafeArea = false
+    private let hasBottomSafeArea: Bool
     private let onTapCTA: () -> Void
 
     init(
         windowUUID: WindowUUID,
-        image: UIImage?,
-        backdropColor: UIColor,
+        hasBottomSafeArea: Bool,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         onTapCTA: @escaping () -> Void
     ) {
         self.windowUUID = windowUUID
-        self.image = image
-        self.backdropColor = backdropColor
+        self.hasBottomSafeArea = hasBottomSafeArea
         self.themeManager = themeManager
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
         self.onTapCTA = onTapCTA
@@ -144,10 +130,10 @@ private struct WallpaperEngagementView: ThemeableView {
                     .padding(.top, UX.imageTopPadding)
                     .padding(.bottom, UX.imageTitleSpacing)
                 VStack(spacing: UX.titleSpacing) {
-                    Text("A little fright. A fresh look.")
+                    Text(String.WallpaperEngagementSheetTitle)
                         .font(FXFontStyles.Bold.title2.scaledSwiftUIFont())
                         .foregroundColor(theme.colors.textPrimary.color)
-                    Text("Get into the Halloween spirit with our new wallpapers.")
+                    Text(String.WallpaperEngagementSheetDescription)
                         .font(FXFontStyles.Regular.callout.scaledSwiftUIFont())
                         .foregroundColor(theme.colors.textSecondary.color)
                         .padding(.horizontal, UX.textsHorizontalPadding)
@@ -155,12 +141,13 @@ private struct WallpaperEngagementView: ThemeableView {
                 .multilineTextAlignment(.center)
                 .padding(.bottom, UX.contentBottomPadding)
                 Button(action: onTapCTA) {
-                    Text("Get Wallpapers")
+                    Text(String.WallpaperEngagementSheetButton)
                 }
                 .primaryButtonStyle(theme: theme)
                 .accessibilityIdentifier(AccessibilityIdentifiers.WallpaperEngagementSheet.ctaButton)
             }
             .padding(.horizontal, UX.horizontalPadding)
+            .padding(.bottom, hasBottomSafeArea ? 0 : UX.bottomPadding)
             .listenToThemeChanges(in: self, theme: $theme)
     }
 
@@ -179,8 +166,8 @@ private struct WallpaperEngagementView: ThemeableView {
             .fill(
                 EllipticalGradient(
                     colors: [
-                        Color(backdropColor).opacity(UX.backdropOpacityStart),
-                        Color(backdropColor).opacity(UX.backdropOpacityEnd)
+                        UX.backdropColor.opacity(UX.backdropOpacityStart),
+                        UX.backdropColor.opacity(UX.backdropOpacityEnd)
                     ]
                 )
             )
@@ -190,18 +177,11 @@ private struct WallpaperEngagementView: ThemeableView {
             .offset(CGSize(width: 0.0, height: UX.backdropHeight / 5))
     }
 
-    @ViewBuilder
     private var promoImage: some View {
-        if let image {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFit()
-        } else {
-            Image(StandardImageIdentifiers.Large.image)
-                .renderingMode(.template)
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(theme.colors.iconSecondary.color)
-        }
+        Image(StandardImageIdentifiers.Large.image)
+            .renderingMode(.template)
+            .resizable()
+            .scaledToFit()
+            .foregroundColor(theme.colors.iconSecondary.color)
     }
 }
