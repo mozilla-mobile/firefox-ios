@@ -59,8 +59,8 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
               !marketingSlug.isEmpty,
               wallpaperManager.canSettingsBeShown
         else { return false }
-        // The marketing slug needs to be different than the one saved since we can't programmatically unenroll
-        // from the rollout. Also this gives the ability to enable a new rollout with different marketing slug.
+        // The marketing slug needs to be different from the saved one, since we can't programmatically unenroll
+        // from the rollout. This also lets us enable a new rollout with a different marketing slug.
         return marketingSlug != prefs.stringForKey(PrefsKeys.Wallpapers.EngagementSheetShownMarketingSlug)
     }
 
@@ -104,8 +104,8 @@ private struct WallpaperEngagementView: ThemeableView {
     private struct UX {
         static let imageSize: CGFloat = 200
         static let imageTopPadding: CGFloat = 8
-        // This is hard coded and not following design system since it is going to be changed
-        // according to the new theme of wallpapers released e.g (Christmas).
+        // This is hardcoded and doesn't follow the design system, since it will change
+        // according to the theme of each new wallpaper release (e.g. Christmas).
         static let backdropColor = Color(UIColor(rgb: 0x8E5CD9))
         static let backdropHeight: CGFloat = imageSize / 1.7
         static let backdropOpacityStart: CGFloat = 0.5
