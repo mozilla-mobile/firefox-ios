@@ -1355,10 +1355,10 @@ final class BrowserCoordinator: BaseCoordinator,
             to: alert,
             title: .VPN.ErrorBrowsingPopup.Continue,
             style: .destructive,
-            actionType: .continueWithoutVPN
+            action: .continueWithoutVPN
         )
-        addVPNAlertAction(to: alert, title: .VPN.ErrorBrowsingPopup.CloseAllTabs, actionType: .closeAllTabs)
-        addVPNAlertAction(to: alert, title: .VPN.ErrorBrowsingPopup.CloseThisTab, actionType: .closeThisTab)
+        addVPNAlertAction(to: alert, title: .VPN.ErrorBrowsingPopup.CloseAllTabs, action: .closeAllTabs)
+        addVPNAlertAction(to: alert, title: .VPN.ErrorBrowsingPopup.CloseThisTab, action: .closeThisTab)
         presentVPNAlert(alert)
     }
 
@@ -1378,10 +1378,10 @@ final class BrowserCoordinator: BaseCoordinator,
             to: alert,
             title: .VPN.ErrorBrowsingPopup.Continue,
             style: .destructive,
-            actionType: .continueWithoutVPN
+            action: .continueWithoutVPN
         )
-        addVPNAlertAction(to: alert, title: .VPN.ReachedDataLimitPopup.CloseAllTabs, actionType: .closeAllTabs)
-        addVPNAlertAction(to: alert, title: .VPN.ReachedDataLimitPopup.CloseThisTab, actionType: .closeThisTab)
+        addVPNAlertAction(to: alert, title: .VPN.ReachedDataLimitPopup.CloseAllTabs, action: .closeAllTabs)
+        addVPNAlertAction(to: alert, title: .VPN.ReachedDataLimitPopup.CloseThisTab, action: .closeThisTab)
         presentVPNAlert(alert)
     }
 
@@ -1389,11 +1389,11 @@ final class BrowserCoordinator: BaseCoordinator,
         to alert: UIAlertController,
         title: String,
         style: UIAlertAction.Style = .default,
-        actionType: VPNActionType
+        action: VPNModernAction
     ) {
         alert.addAction(UIAlertAction(title: title, style: style) { [weak self] _ in
             guard let self else { return }
-            store.dispatch(VPNAction(windowUUID: self.windowUUID, actionType: actionType))
+            store.dispatch(action, forWindowUUID: self.windowUUID)
         })
     }
 

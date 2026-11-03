@@ -98,12 +98,10 @@ final class VPNMiddlewareTests: XCTestCase {
         XCTAssertEqual(tabCountsClosedAtStop, [2, 2])
     }
 
-    func testNonVPNAction_isIgnored() async {
+    func testAlertAction_isIgnored() async {
         let subject = createSubject()
-        let action = GeneralBrowserAction(windowUUID: firstWindowUUID,
-                                          actionType: GeneralBrowserActionType.showVPNFailureAlert)
 
-        subject.vpnProvider.legacyMiddleware(AppState(), action)
+        subject.vpnProvider.modernMiddleware(AppState(), VPNAlertModernAction.showFailureAlert, firstWindowUUID)
         await Task.yield()
 
         XCTAssertEqual(mockVPNManager.stopCalled, 0)
@@ -116,14 +114,14 @@ final class VPNMiddlewareTests: XCTestCase {
     }
 
     /// The middleware handles actions in a `Task`, so this waits for `stop()`, its last step.
-    private func dispatch(_ actionType: VPNActionType, to subject: VPNMiddleware) async {
+    private func dispatch(_ action: VPNModernAction, to subject: VPNMiddleware) async {
         let stopped = expectation(description: "VPN stopped")
         let existingOnStop = mockVPNManager.onStop
         mockVPNManager.onStop = {
             existingOnStop?()
             stopped.fulfill()
         }
-        subject.vpnProvider.legacyMiddleware(AppState(), VPNAction(windowUUID: firstWindowUUID, actionType: actionType))
+        subject.vpnProvider.modernMiddleware(AppState(), action, firstWindowUUID)
         await fulfillment(of: [stopped], timeout: 1)
     }
 }

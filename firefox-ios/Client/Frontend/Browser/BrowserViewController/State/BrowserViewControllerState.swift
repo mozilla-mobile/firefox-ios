@@ -143,8 +143,16 @@ struct BrowserViewControllerState: ScreenState {
     static let reducer: Reducer<Self> = (legacyReducer, modernReducer)
 
     static let modernReducer: ReducerMethod<Self> = { state, action, actionWindowUUID in
-        // Does not handle any modern actions
-        return defaultState(from: state)
+        guard let action = action as? VPNAlertModernAction,
+              actionWindowUUID == .unavailable || actionWindowUUID == state.windowUUID
+        else { return defaultState(from: state) }
+
+        switch action {
+        case .showFailureAlert:
+            return state.resetTransientState().copy(displayView: .vpnFailureAlert)
+        case .showDataLimitAlert(let dataLimitBytes):
+            return state.resetTransientState().copy(displayView: .vpnDataLimitAlert(dataLimitBytes: dataLimitBytes))
+        }
     }
 
     static let legacyReducer: LegacyReducerMethod<Self> = { state, action in
@@ -374,13 +382,6 @@ struct BrowserViewControllerState: ScreenState {
             return handleShowGoogleLensPhotoPickerAction(state: state, action: action)
         case GeneralBrowserActionType.showGoogleLensCamera:
             return handleShowGoogleLensCameraAction(state: state, action: action)
-        case GeneralBrowserActionType.showVPNFailureAlert:
-            return handleDisplayViewAction(.vpnFailureAlert, state: state, action: action)
-        case GeneralBrowserActionType.showVPNDataLimitAlert:
-            guard let dataLimitBytes = action.vpnDataLimitBytes else {
-                return passthroughState(from: state, action: action)
-            }
-            return handleDisplayViewAction(.vpnDataLimitAlert(dataLimitBytes: dataLimitBytes), state: state, action: action)
         default:
             return passthroughState(from: state, action: action)
         }
@@ -643,20 +644,6 @@ struct BrowserViewControllerState: ScreenState {
         return state
             .resetTransientState()
             .copy(displayView: .googleLensCamera)
-            .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
-            .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
-                .legacyReducer(state.autoTranslatePromptState, action))
-    }
-
-    @MainActor
-    private static func handleDisplayViewAction(
-        _ displayView: DisplayType,
-        state: BrowserViewControllerState,
-        action: GeneralBrowserAction
-    ) -> BrowserViewControllerState {
-        return state
-            .resetTransientState()
-            .copy(displayView: displayView)
             .copy(microsurveyState: MicrosurveyPromptState.reducer.legacyReducer(state.microsurveyState, action))
             .copy(autoTranslatePromptState: AutoTranslatePromptState.reducer
                 .legacyReducer(state.autoTranslatePromptState, action))

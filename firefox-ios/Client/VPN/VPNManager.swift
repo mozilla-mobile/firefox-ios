@@ -146,12 +146,7 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
 
     private func showFailureAlert() {
         guard let windowUUID = alertWindowUUID() else { return }
-        store.dispatch(
-            GeneralBrowserAction(
-                windowUUID: windowUUID,
-                actionType: GeneralBrowserActionType.showVPNFailureAlert
-            )
-        )
+        store.dispatch(VPNAlertModernAction.showFailureAlert, forWindowUUID: windowUUID)
     }
 
     private func showDataLimitAlertIfNeeded(for pass: VPNProxyPass) {
@@ -159,13 +154,7 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
               !usage.unlimited,
               usage.remaining <= 0,
               let windowUUID = alertWindowUUID() else { return }
-        store.dispatch(
-            GeneralBrowserAction(
-                vpnDataLimitBytes: usage.max,
-                windowUUID: windowUUID,
-                actionType: GeneralBrowserActionType.showVPNDataLimitAlert
-            )
-        )
+        store.dispatch(VPNAlertModernAction.showDataLimitAlert(dataLimitBytes: usage.max), forWindowUUID: windowUUID)
     }
 
     /// The foreground window, falling back to any open window, so VPN alerts only show once.

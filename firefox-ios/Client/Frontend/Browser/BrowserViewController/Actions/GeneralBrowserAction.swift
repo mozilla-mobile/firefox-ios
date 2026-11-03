@@ -24,7 +24,6 @@ struct GeneralBrowserAction: Action {
     let translationLanguages: [String]?
     let isPageTranslated: Bool
     let translatedToLanguage: String?
-    let vpnDataLimitBytes: Int64?
     init(selectedTabURL: URL? = nil,
          destinationURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
@@ -38,7 +37,6 @@ struct GeneralBrowserAction: Action {
          translationLanguages: [String]? = nil,
          isPageTranslated: Bool = false,
          translatedToLanguage: String? = nil,
-         vpnDataLimitBytes: Int64? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -56,7 +54,6 @@ struct GeneralBrowserAction: Action {
         self.translationLanguages = translationLanguages
         self.isPageTranslated = isPageTranslated
         self.translatedToLanguage = translatedToLanguage
-        self.vpnDataLimitBytes = vpnDataLimitBytes
     }
 }
 
@@ -90,8 +87,6 @@ enum GeneralBrowserActionType: ActionType {
     case showTranslationLanguagePicker
     case showGoogleLensPhotoPicker
     case showGoogleLensCamera
-    case showVPNFailureAlert
-    case showVPNDataLimitAlert
 }
 
 struct GeneralBrowserMiddlewareAction: Action {

@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Redux
 import XCTest
 import SummarizeKit
@@ -65,8 +66,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
 
-        let action = getAction(for: .showVPNFailureAlert)
-        let newState = reducer.legacyReducer(initialState, action)
+        let newState = reducer.modernReducer(initialState, VPNAlertModernAction.showFailureAlert, .XCTestDefaultUUID)
 
         XCTAssertEqual(newState.displayView, .vpnFailureAlert)
     }
@@ -75,20 +75,20 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
 
-        let action = GeneralBrowserAction(vpnDataLimitBytes: 5_000_000_000,
-                                          windowUUID: .XCTestDefaultUUID,
-                                          actionType: GeneralBrowserActionType.showVPNDataLimitAlert)
-        let newState = reducer.legacyReducer(initialState, action)
+        let newState = reducer.modernReducer(
+            initialState,
+            VPNAlertModernAction.showDataLimitAlert(dataLimitBytes: 5_000_000_000),
+            .XCTestDefaultUUID
+        )
 
         XCTAssertEqual(newState.displayView, .vpnDataLimitAlert(dataLimitBytes: 5_000_000_000))
     }
 
-    func testShowVPNDataLimitAlertAction_withoutDataLimit_doesNotSetDisplayView() {
+    func testShowVPNFailureAlertAction_forAnotherWindow_doesNotSetDisplayView() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
 
-        let action = getAction(for: .showVPNDataLimitAlert)
-        let newState = reducer.legacyReducer(initialState, action)
+        let newState = reducer.modernReducer(initialState, VPNAlertModernAction.showFailureAlert, WindowUUID())
 
         XCTAssertNil(newState.displayView)
     }

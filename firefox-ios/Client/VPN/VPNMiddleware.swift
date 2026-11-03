@@ -30,34 +30,32 @@ final class VPNMiddleware {
     lazy var vpnProvider: Middleware<AppState> = (legacyProvider, modernProvider)
 
     lazy var modernProvider: MiddlewareClosure<AppState> = { [self] state, action, windowUUID in
-        // Does not test any modern actions
+        guard let action = action as? VPNModernAction else { return }
+        Task {
+            await self.handleAlertChoice(action, windowUUID: windowUUID)
+        }
     }
 
-    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { [self] state, action in
-        guard let action = action as? VPNAction else { return }
-        Task {
-            await self.handleFailureAlertAction(action)
-        }
+    lazy var legacyProvider: LegacyMiddlewareClosure<AppState> = { state, action in
+        // Does not handle any legacy actions
     }
 
     /// Closes tabs before stopping, so traffic stays proxied until those tabs are gone and
     /// `stop()` doesn't rebuild webviews for tabs about to be closed.
-    private func handleFailureAlertAction(_ action: VPNAction) async {
-        switch action.actionType {
-        case VPNActionType.continueWithoutVPN:
+    private func handleAlertChoice(_ action: VPNModernAction, windowUUID: WindowUUID) async {
+        switch action {
+        case .continueWithoutVPN:
             break
-        case VPNActionType.closeThisTab:
-            let tabManager = windowManager.tabManager(for: action.windowUUID)
+        case .closeThisTab:
+            let tabManager = windowManager.tabManager(for: windowUUID)
             if let selectedTab = tabManager?.selectedTab {
                 tabManager?.removeTab(selectedTab.tabUUID)
             }
-        case VPNActionType.closeAllTabs:
+        case .closeAllTabs:
             for tabManager in windowManager.allWindowTabManagers() {
                 tabManager.removeAllTabs(isPrivateMode: true)
                 tabManager.removeAllTabs(isPrivateMode: false)
             }
-        default:
-            return
         }
 
         guard let vpnManager else {
