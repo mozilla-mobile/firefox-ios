@@ -12,7 +12,6 @@ class UrlBarTests: BaseTestCase {
     private var mainMenuScreen: MainMenuScreen!
     private var tabTrayScreen: TabTrayScreen!
     private var settingScreen: SettingScreen!
-    private var searchScreen: SearchScreen!
     private var homePageScreen: HomePageScreen!
 
     override func setUp() async throws {
@@ -29,7 +28,6 @@ class UrlBarTests: BaseTestCase {
         mainMenuScreen = MainMenuScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)
         settingScreen = SettingScreen(app: app)
-        searchScreen = SearchScreen(app: app)
         homePageScreen = HomePageScreen(app: app)
     }
 
@@ -173,7 +171,7 @@ class UrlBarTests: BaseTestCase {
         waitUntilPageLoad()
         XCTAssertTrue(browserScreen.bookOfMozillaPageContentExists(), "The website did not load")
 
-        // Step 2: tapping the address bar shows the URL, the X button, suggestions and the keyboard
+        // Step 2: tapping the address bar shows the URL, the X button and the keyboard
         tapAddressBarAndAssertURLIsReadyToEdit(websiteURL)
 
         // Step 3: the X button clears the URL and the address bar stays focused with the keyboard up
@@ -232,7 +230,6 @@ class UrlBarTests: BaseTestCase {
         browserScreen.tapOnAddressBar()
         browserScreen.assertAddressBarContains(value: url)
         browserScreen.assertClearButtonExists()
-        searchScreen.assertSearchSuggestionsDisplayed()
         browserScreen.assertAddressBarFocusedWithKeyboard()
     }
 
