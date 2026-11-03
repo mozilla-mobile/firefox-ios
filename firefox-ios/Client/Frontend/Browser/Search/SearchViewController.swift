@@ -85,7 +85,7 @@ final class SearchViewController: SiteTableViewController,
     private var bottomConstraintWithoutKeyboard: NSLayoutConstraint?
 
     private var isCompact: Bool {
-        return UIScreen.main.traitCollection.horizontalSizeClass == .compact
+        return traitCollection.horizontalSizeClass == .compact
     }
 
     private let searchEngineStackView: UIStackView = .build { stackView in
