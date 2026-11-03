@@ -279,13 +279,8 @@ final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, Store
             if shouldCompleteTransition {
                 webPagePreview.isHidden = true
                 webPagePreview.alpha = 1
-                store.dispatch(
-                    ToolbarAction(
-                        shouldAnimate: false,
-                        windowUUID: windowUUID,
-                        actionType: ToolbarActionType.animationStateChanged
-                    )
-                )
+                store.dispatch(ToolbarModernAction.animationStateChanged(shouldAnimate: false),
+                               forWindowUUID: windowUUID)
                 // Reset the positions and select the new tab if the transition was completed.
                 addressToolbarContainer.applyTransform(.identity, shouldAddNewTab: shouldShowNewTab)
                 contentContainer.transform = .identity

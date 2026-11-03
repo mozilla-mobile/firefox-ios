@@ -150,8 +150,11 @@ final class AddressToolbarContainerLensTests: XCTestCase {
     }
 
     func testInit_navigationToolbarActions_onWebsite_returnsConfiguredMiddleAction() {
-        XCTAssertEqual(createSubject(url: url, middleButton: .home).navigationToolbarActions[2].actionType, .home)
-        XCTAssertEqual(createSubject(url: url, middleButton: .newTab).navigationToolbarActions[2].actionType, .newTab)
+        let subjectHomeButton = createSubject(url: url, middleButton: .home)
+        XCTAssertEqual(subjectHomeButton.navigationToolbarActions[2].actionType, .home)
+
+        let subjectNewTab = createSubject(url: url, middleButton: .newTab)
+        XCTAssertEqual(subjectNewTab.navigationToolbarActions[2].actionType, .newTab)
     }
 
     func testInit_navigationToolbarActions_returnsBackAndForwardEnabledState() {

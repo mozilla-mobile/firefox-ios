@@ -164,6 +164,12 @@ struct ToolbarState: ScreenState, Sendable {
                 .copy(isAddressBarMinimized: false)
                 .copy(isAccessoryViewVisible: false)
 
+        case .animationStateChanged(let shouldAnimate):
+            return state.copy(shouldAnimate: shouldAnimate)
+
+        case .translucencyDidChange(let isTranslucent):
+            return state.copy(isTranslucent: isTranslucent)
+
         case .didKeyboardRequestChange, .cancelEditOnHomepage, .didPasteSearchTerm:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
             return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
@@ -198,7 +204,6 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarMiddlewareActionType.googleLensAvailabilityDidChange, ToolbarActionType.clearSearch,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
-            ToolbarActionType.animationStateChanged, ToolbarActionType.translucencyDidChange,
             ToolbarActionType.readerModeStateChanged,
             ToolbarActionType.navigationMiddleButtonDidChange,
             TranslationsActionType.didStartTranslatingPage,
@@ -279,8 +284,6 @@ struct ToolbarState: ScreenState, Sendable {
             .copy(isShowingTopTabs: toolbarAction?.isShowingTopTabs ?? state.isShowingTopTabs)
             .copy(canGoBack: toolbarAction?.canGoBack ?? state.canGoBack)
             .copy(canGoForward: toolbarAction?.canGoForward ?? state.canGoForward)
-            .copy(shouldAnimate: toolbarAction?.shouldAnimate ?? state.shouldAnimate)
-            .copy(isTranslucent: toolbarAction?.isTranslucent ?? state.isTranslucent)
             .copy(isTranslationsEnabled: actionIsTranslationsEnabled ?? state.isTranslationsEnabled)
     }
 

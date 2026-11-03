@@ -1411,13 +1411,8 @@ class BrowserViewController: UIViewController,
         updateBlurViews()
         addOrUpdateMaskViewIfNeeded()
 
-        store.dispatch(
-            ToolbarAction(
-                isTranslucent: toolbarHelper.shouldBlur(),
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.translucencyDidChange
-            )
-        )
+        store.dispatch(ToolbarModernAction.translucencyDidChange(isTranslucent: toolbarHelper.shouldBlur()),
+                       forWindowUUID: windowUUID)
     }
 
     /// As part of the homepage search bar work, we want to only hide the toolbar when the homepage search bar appears.
@@ -2486,13 +2481,7 @@ class BrowserViewController: UIViewController,
         )?.shouldAnimate
 
         guard shouldAnimate == false else { return }
-        store.dispatch(
-            ToolbarAction(
-                shouldAnimate: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.animationStateChanged
-            )
-        )
+        store.dispatch(ToolbarModernAction.animationStateChanged(shouldAnimate: true), forWindowUUID: windowUUID)
     }
 
     // MARK: - Webview property changed
@@ -2951,13 +2940,7 @@ class BrowserViewController: UIViewController,
         case .tabTray:
             updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
-            store.dispatch(
-                ToolbarAction(
-                    shouldAnimate: false,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.animationStateChanged
-                )
-            )
+            store.dispatch(ToolbarModernAction.animationStateChanged(shouldAnimate: false), forWindowUUID: windowUUID)
         case .share:
             // User tapped the Share button in the toolbar
             guard let button = state.buttonTapped else { return }
@@ -3598,8 +3581,9 @@ class BrowserViewController: UIViewController,
             // This let's the user spam the Cmd+T button without lots of responder changes.
             guard let self, tab == self.tabManager.selectedTab else { return }
 
+            store.dispatch(ToolbarModernAction.animationStateChanged(shouldAnimate: true),
+                           forWindowUUID: self.windowUUID)
             let action = ToolbarAction(searchTerm: searchText,
-                                       shouldAnimate: true,
                                        windowUUID: self.windowUUID,
                                        actionType: ToolbarActionType.didStartEditingUrl)
             store.dispatch(action)
