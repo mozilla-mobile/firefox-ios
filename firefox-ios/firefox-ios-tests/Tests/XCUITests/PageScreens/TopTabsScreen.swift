@@ -9,13 +9,19 @@ import XCTest
 final class TopTabsScreen {
     private let app: XCUIApplication
     private let sel: TopTabsSelectorsSet
+    private let browserSel: BrowserSelectorsSet
 
-    init(app: XCUIApplication, selectors: TopTabsSelectorsSet = TopTabsSelectors()) {
+    init(
+        app: XCUIApplication,
+        selectors: TopTabsSelectorsSet = TopTabsSelectors(),
+        browserSelectors: BrowserSelectorsSet = BrowserSelectors()
+    ) {
         self.app = app
         self.sel = selectors
+        self.browserSel = browserSelectors
     }
 
-    private var collectionView: XCUIElement { sel.COLLECTION_VIEW.element(in: app) }
+    private var collectionView: XCUIElement { browserSel.TOPTABS_COLLECTIONVIEW.element(in: app) }
     private var privateModeButton: XCUIElement { sel.PRIVATE_MODE_BUTTON.element(in: app) }
 
     private func selectedTab(titled title: String) -> XCUIElement {

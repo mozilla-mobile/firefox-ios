@@ -5,22 +5,14 @@
 import XCTest
 
 protocol TopTabsSelectorsSet {
-    var COLLECTION_VIEW: Selector { get }
     var PRIVATE_MODE_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
 struct TopTabsSelectors: TopTabsSelectorsSet {
     private enum IDs {
-        static let collectionView = AccessibilityIdentifiers.Browser.TopTabs.collectionView
         static let privateModeButton = AccessibilityIdentifiers.Browser.TopTabs.privateModeButton
     }
-
-    let COLLECTION_VIEW = Selector.collectionViewIdOrLabel(
-        IDs.collectionView,
-        description: "Top Tabs bar shown above the address bar on iPad",
-        groups: ["browser", "topTabs"]
-    )
 
     let PRIVATE_MODE_BUTTON = Selector.buttonId(
         IDs.privateModeButton,
@@ -28,5 +20,5 @@ struct TopTabsSelectors: TopTabsSelectorsSet {
         groups: ["browser", "topTabs"]
     )
 
-    var all: [Selector] { [COLLECTION_VIEW, PRIVATE_MODE_BUTTON] }
+    var all: [Selector] { [PRIVATE_MODE_BUTTON] }
 }
