@@ -13,7 +13,7 @@ on:
 jobs:
   determine-locales:
     name: Determine lists of locales
-    runs-on: macos-26
+    runs-on: xcode-27
     outputs:
       locales: ${{ steps.my_locales.outputs.locales }}
     steps:
@@ -83,7 +83,7 @@ jobs:
     name: Merge all screenshots
     needs: generate-screenshots
     if: always()
-    runs-on: macos-26
+    runs-on: xcode-27
     steps:
       - name: Merge screenshots
         uses: actions/upload-artifact/merge@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
