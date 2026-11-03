@@ -148,16 +148,6 @@ final class WallpaperEngagementCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 
-    func test_start_whenCloseButtonIsTapped_dismissesThroughRouter() throws {
-        let subject = createSubject()
-        subject.start()
-        let bottomSheet = try XCTUnwrap(router.presentedViewController as? NativeBottomSheetViewController)
-
-        bottomSheet.dismissAction?()
-
-        XCTAssertEqual(router.dismissCalled, 1)
-    }
-
     // MARK: - Helpers
 
     private func createSubject() -> WallpaperEngagementCoordinator {

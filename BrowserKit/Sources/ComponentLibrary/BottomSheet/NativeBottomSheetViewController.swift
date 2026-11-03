@@ -32,17 +32,11 @@ public class NativeBottomSheetViewController: UIViewController,
     private var child: UIViewController?
     /// Closure called when the bottom sheet is dismissed via the close button
     public var onDismiss: (() -> Void)?
-    /// Replaces the default self-dismissal of the close button, e.g. to dismiss through a router
-    public var dismissAction: (() -> Void)?
 
     private lazy var closeButton: UIButton = .build { [weak self] in
         $0.addAction(UIAction(handler: { _ in
             self?.onDismiss?()
-            if let dismissAction = self?.dismissAction {
-                dismissAction()
-            } else {
-                self?.dismiss(animated: true)
-            }
+            self?.dismiss(animated: true)
         }), for: .touchUpInside)
         if #available(iOS 26, *) {
             $0.configuration = .prominentClearGlass()

@@ -81,9 +81,6 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
         bottomSheetVC.onDismiss = { [weak self] in
             self?.finish()
         }
-        bottomSheetVC.dismissAction = { [weak self] in
-            self?.router.dismiss(animated: true, completion: nil)
-        }
         bottomSheetVC.configure(
             closeButtonModel: CloseButtonViewModel(
                 a11yLabel: .CloseButtonTitle,
