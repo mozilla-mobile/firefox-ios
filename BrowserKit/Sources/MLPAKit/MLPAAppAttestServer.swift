@@ -43,7 +43,7 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         ]
 
         guard let url = components?.url else {
-            throw AppAttestServiceError.invalidKeyID
+            throw AppAttestServiceError.invalidURL(description: "challengeURL")
         }
 
         let (data, response) = try await urlSession.data(from: url)
