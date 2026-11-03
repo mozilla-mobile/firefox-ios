@@ -12,7 +12,6 @@ struct VPNLocationsView: ThemeableView {
         static let outerPadding: CGFloat = 16
         static let sectionSpacing: CGFloat = 16
         static let rowTextSpacing: CGFloat = 4
-        static let loadingSpacing: CGFloat = 8
         // TODO: FXIOS-16876 Replace the simulated delay and sample list
         static let simulatedLoadingNanoseconds: UInt64 = 2_000_000_000
         static let sampleRegionCodes = ["CA", "DE", "FR", "GB", "JP", "NL", "SE", "US"]
@@ -97,18 +96,12 @@ struct VPNLocationsView: ThemeableView {
     }
 
     private var loadingIndicator: some View {
-        HStack(spacing: UX.loadingSpacing) {
-            ProgressView()
-                .accessibilityHidden(true)
-            Text(String.VPN.LocationPicker.FindingLocationsText)
-                .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
-                .foregroundStyle(theme.colors.textSecondary.color)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
-        .padding(.vertical, VPNHelpers.UX.rowVerticalPadding)
-        .accessibilityElement(children: .combine)
-        .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.Locations.loadingIndicator)
+        VPNHelpers.loadingIndicator(text: .VPN.LocationPicker.FindingLocationsText, theme: theme)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
+            .padding(.vertical, VPNHelpers.UX.rowVerticalPadding)
+            .accessibilityElement(children: .combine)
+            .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.Locations.loadingIndicator)
     }
 
     // MARK: - Actions
