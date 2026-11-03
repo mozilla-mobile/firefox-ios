@@ -54,6 +54,8 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
               !marketingSlug.isEmpty,
               wallpaperManager.canSettingsBeShown
         else { return false }
+        // The marketing slug needs to be different then the one saved since we can't programmatically unenroll
+        // from the rollout. Also this gives the ability to enable a new rollout with different marketing slug.
         return marketingSlug != prefs.stringForKey(PrefsKeys.Wallpapers.EngagementSheetShownMarketingSlug)
     }
 
@@ -76,7 +78,7 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
         }
         bottomSheetVC.configure(
             closeButtonModel: CloseButtonViewModel(
-                a11yLabel: .CancelString,
+                a11yLabel: .CloseButtonTitle,
                 a11yIdentifier: AccessibilityIdentifiers.WallpaperEngagementSheet.closeButton
             ),
             child: hostingController
@@ -97,6 +99,8 @@ private struct WallpaperEngagementView: ThemeableView {
     private struct UX {
         static let imageSize: CGFloat = 200
         static let imageTopPadding: CGFloat = 8
+        // This is hard coded and not following design system since it is going to be changed
+        // according to the new theme of wallpapers released e.g (Christmas).
         static let backdropColor = Color(UIColor(rgb: 0x8E5CD9))
         static let backdropHeight: CGFloat = imageSize / 1.7
         static let backdropOpacityStart: CGFloat = 0.5
@@ -108,6 +112,8 @@ private struct WallpaperEngagementView: ThemeableView {
         static let contentBottomPadding: CGFloat = 24
         static let horizontalPadding: CGFloat = 24
         static let bottomPadding: CGFloat = 24
+        static let contentMaxWidth: CGFloat = 420
+        static let buttonMaxWidth: CGFloat = 367
     }
 
     let windowUUID: WindowUUID
@@ -130,30 +136,33 @@ private struct WallpaperEngagementView: ThemeableView {
     }
 
     var body: some View {
-            VStack(spacing: 0) {
-                promo
-                    .padding(.top, UX.imageTopPadding)
-                    .padding(.bottom, UX.imageTitleSpacing)
-                VStack(spacing: UX.titleSpacing) {
-                    Text(String.Wallpapers.EngagementSheetTitle)
-                        .font(FXFontStyles.Bold.title2.scaledSwiftUIFont())
-                        .foregroundColor(theme.colors.textPrimary.color)
-                    Text(String.Wallpapers.EngagementSheetDescription)
-                        .font(FXFontStyles.Regular.callout.scaledSwiftUIFont())
-                        .foregroundColor(theme.colors.textSecondary.color)
-                        .padding(.horizontal, UX.textsHorizontalPadding)
-                }
-                .multilineTextAlignment(.center)
-                .padding(.bottom, UX.contentBottomPadding)
-                Button(action: onTapCTA) {
-                    Text(String.Wallpapers.EngagementSheetButton)
-                }
-                .primaryButtonStyle(theme: theme)
-                .accessibilityIdentifier(AccessibilityIdentifiers.WallpaperEngagementSheet.ctaButton)
+        VStack(spacing: 0) {
+            promo
+                .padding(.top, UX.imageTopPadding)
+                .padding(.bottom, UX.imageTitleSpacing)
+            VStack(spacing: UX.titleSpacing) {
+                Text(String.Wallpapers.EngagementSheetTitle)
+                    .font(FXFontStyles.Bold.title2.scaledSwiftUIFont())
+                    .foregroundColor(theme.colors.textPrimary.color)
+                Text(String.Wallpapers.EngagementSheetDescription)
+                    .font(FXFontStyles.Regular.callout.scaledSwiftUIFont())
+                    .foregroundColor(theme.colors.textSecondary.color)
+                    .padding(.horizontal, UX.textsHorizontalPadding)
             }
-            .padding(.horizontal, UX.horizontalPadding)
-            .padding(.bottom, hasBottomSafeArea ? 0 : UX.bottomPadding)
-            .listenToThemeChanges(in: self, theme: $theme)
+            .multilineTextAlignment(.center)
+            .padding(.bottom, UX.contentBottomPadding)
+            Button(action: onTapCTA) {
+                Text(String.Wallpapers.EngagementSheetButton)
+            }
+            .primaryButtonStyle(theme: theme)
+            .frame(maxWidth: UX.buttonMaxWidth)
+            .accessibilityIdentifier(AccessibilityIdentifiers.WallpaperEngagementSheet.ctaButton)
+        }
+        .padding(.horizontal, UX.horizontalPadding)
+        .frame(maxWidth: UX.contentMaxWidth)
+        .frame(maxWidth: .infinity)
+        .padding(.bottom, hasBottomSafeArea ? 0 : UX.bottomPadding)
+        .listenToThemeChanges(in: self, theme: $theme)
     }
 
     private var promo: some View {
