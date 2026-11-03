@@ -317,6 +317,75 @@ final class ToolbarScreen {
         }
     }
 
+    /// Share and translate are the address bar's leading page actions, laid out side by side in that order.
+    func assertTranslateButtonIsNextToShareButton() {
+        BaseTestCase().waitForElementsToExist([shareButton, translateButton])
+        XCTAssertTrue(translateButton.isRightOf(rightElement: shareButton), "Translate button should be right of share")
+        XCTAssertEqual(
+            shareButton.frame.midY,
+            translateButton.frame.midY,
+            accuracy: 2,
+            "Translate and share buttons should be on the same row"
+        )
+    }
+
+    func longPressTranslateButton(with mode: TranslationButtonType = .inactive, duration: TimeInterval = 1.5) {
+        let button: XCUIElement
+        switch mode {
+        case .inactive:
+            button = translateButton
+        case .loading:
+            button = translateLoadingButton
+        case .active:
+            button = translateActiveButton
+        }
+        BaseTestCase().mozWaitForElementToExist(button)
+        button.press(forDuration: duration)
+    }
+
+    /// Checks the picker lists exactly one target language between its title and "Preferred Languages…".
+    func assertTranslationLanguagePickerShowsSingleLanguage(_ languageOption: String) {
+        let sheet = translationLanguagePicker(titled: sel.TRANSLATE_LANGUAGE_PICKER_TITLE.value)
+        BaseTestCase().waitForElementsToExist([
+            sheet.buttons[languageOption],
+            sel.TRANSLATE_PREFERRED_LANGUAGES_OPTION.element(in: app)
+        ])
+
+        let nonLanguageOptions = [sel.TRANSLATE_PREFERRED_LANGUAGES_OPTION.value, String.CancelString]
+        let languageOptions = sheet.buttons.matching(NSPredicate(format: "NOT (label IN %@)", nonLanguageOptions))
+        XCTAssertEqual(languageOptions.count, 1, "Expected only '\(languageOption)' as a target language")
+    }
+
+    /// Checks the picker shown for a translated page: "Page Translated to …", "Show Original",
+    /// the remaining preferred languages and "Preferred Languages…".
+    func assertActiveTranslationLanguagePicker(translatedTo language: String, otherLanguages: [String]) {
+        let title = String(format: String.Translations.LanguagePicker.PageTranslatedTitle, language)
+        let sheet = translationLanguagePicker(titled: title)
+        BaseTestCase().waitForElementsToExist(
+            [sheet.buttons[sel.TRANSLATE_SHOW_ORIGINAL_OPTION.value]]
+            + otherLanguages.map { sheet.buttons[$0] }
+            + [sheet.buttons[sel.TRANSLATE_PREFERRED_LANGUAGES_OPTION.value]]
+        )
+    }
+
+    func tapShowOriginal() {
+        sel.TRANSLATE_SHOW_ORIGINAL_OPTION.element(in: app).waitAndTap()
+    }
+
+    func assertTranslationLanguagePickerIsDismissed() {
+        BaseTestCase().mozWaitForElementToNotExist(sel.TRANSLATE_PREFERRED_LANGUAGES_OPTION.element(in: app))
+    }
+
+    /// iOS 17 exposes the action sheet as an "Other" element labelled with its title, not as a Sheet.
+    private func translationLanguagePicker(titled title: String) -> XCUIElement {
+        BaseTestCase().mozWaitForElementToExist(
+            app.staticTexts.matching(NSPredicate(format: "label == %@", title)).firstMatch
+        )
+        return app.sheets.firstMatch.exists
+            ? app.sheets.firstMatch
+            : app.otherElements.matching(NSPredicate(format: "label == %@", title)).firstMatch
+    }
+
     /// Selects English in the translation language picker action sheet when it is shown.
     /// The picker only appears when the language picker feature is enabled and multiple
     /// target languages are available, so this is a no-op when the sheet doesn't show.

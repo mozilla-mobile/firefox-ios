@@ -18,6 +18,9 @@ protocol ToolbarSelectorsSet {
     var TRANSLATE_LOADING_BUTTON: Selector { get }
     var TRANSLATE_ACTIVE_BUTTON: Selector { get }
     var TRANSLATE_LANGUAGE_ENGLISH_OPTION: Selector { get }
+    var TRANSLATE_LANGUAGE_PICKER_TITLE: Selector { get }
+    var TRANSLATE_PREFERRED_LANGUAGES_OPTION: Selector { get }
+    var TRANSLATE_SHOW_ORIGINAL_OPTION: Selector { get }
     var SUMMARIZE_BUTTON: Selector { get }
     var CONTEXTUAL_HINT_CLOSE_BUTTON: Selector { get }
     var GOOGLE_LENS_TIP_TITLE: Selector { get }
@@ -44,6 +47,9 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         static let translateLoadingButton = AccessibilityIdentifiers.Toolbar.translateLoadingButton
         static let translateActiveButton = AccessibilityIdentifiers.Toolbar.translateActiveButton
         static let translateLanguageEnglishOption = "English"
+        static let translateLanguagePickerTitle = String.Translations.LanguagePicker.Title
+        static let translatePreferredLanguagesOption = String.Translations.LanguagePicker.PreferredLanguagesTitle
+        static let translateShowOriginalOption = String.Translations.LanguagePicker.ShowOriginal
         static let summarizeButton = AccessibilityIdentifiers.Toolbar.summarizeButton
         static let summarizeContextualHint = "Tap to summarize this page. Touch and hold for Reader View."
         static let contextualHintCloseButton = "Close"
@@ -134,6 +140,24 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         groups: ["translation"]
     )
 
+    let TRANSLATE_LANGUAGE_PICKER_TITLE = Selector.staticTextByExactLabel(
+        IDs.translateLanguagePickerTitle,
+        description: "'Translate Page to…' title of the translation language picker",
+        groups: ["translation"]
+    )
+
+    let TRANSLATE_PREFERRED_LANGUAGES_OPTION = Selector.buttonId(
+        IDs.translatePreferredLanguagesOption,
+        description: "'Preferred Languages…' option in the translation language picker",
+        groups: ["translation"]
+    )
+
+    let TRANSLATE_SHOW_ORIGINAL_OPTION = Selector.buttonId(
+        IDs.translateShowOriginalOption,
+        description: "'Show Original' option in the translated-page language picker",
+        groups: ["translation"]
+    )
+
     let SUMMARIZE_BUTTON = Selector.buttonId(
         IDs.summarizeButton,
         description: "Summarize (lightning) button in the address bar",
@@ -199,6 +223,9 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         TRANSLATE_LOADING_BUTTON,
         TRANSLATE_ACTIVE_BUTTON,
         TRANSLATE_LANGUAGE_ENGLISH_OPTION,
+        TRANSLATE_LANGUAGE_PICKER_TITLE,
+        TRANSLATE_PREFERRED_LANGUAGES_OPTION,
+        TRANSLATE_SHOW_ORIGINAL_OPTION,
         SUMMARIZE_BUTTON,
         SUMMARIZE_CONTEXTUAL_HINT,
         CONTEXTUAL_HINT_CLOSE_BUTTON,
