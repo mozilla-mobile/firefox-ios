@@ -27,6 +27,11 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
         return nimbus.features.wallpaperEngagementSheetFeature.value().marketingSlug
     }
 
+    private var hasBottomSafeArea: Bool {
+        guard let viewController = router.navigationController as? UIViewController else { return false }
+        return viewController.view.safeAreaInsets.bottom > 0
+    }
+
     init(
         router: Router,
         windowUUID: WindowUUID,
@@ -55,7 +60,7 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
     func start() {
         let contentView = WallpaperEngagementView(
             windowUUID: windowUUID,
-            hasBottomSafeArea: router.hasBottomSafeArea
+            hasBottomSafeArea: hasBottomSafeArea
         ) { [weak self] in
             self?.router.dismiss(animated: true) {
                 guard let self else { return }
