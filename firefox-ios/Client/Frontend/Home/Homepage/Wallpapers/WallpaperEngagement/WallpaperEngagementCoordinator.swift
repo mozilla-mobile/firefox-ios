@@ -97,7 +97,7 @@ private struct WallpaperEngagementView: ThemeableView {
     private struct UX {
         static let imageSize: CGFloat = 200
         static let imageTopPadding: CGFloat = 8
-        static let backdropColor = Color(red: 0x8E / 255, green: 0x5C / 255, blue: 0xD9 / 255)
+        static let backdropColor = Color(UIColor(rgb: 0x8E5CD9))
         static let backdropHeight: CGFloat = imageSize / 1.7
         static let backdropOpacityStart: CGFloat = 0.5
         static let backdropOpacityEnd: CGFloat = 0.0
@@ -135,10 +135,10 @@ private struct WallpaperEngagementView: ThemeableView {
                     .padding(.top, UX.imageTopPadding)
                     .padding(.bottom, UX.imageTitleSpacing)
                 VStack(spacing: UX.titleSpacing) {
-                    Text(String.WallpaperEngagementSheetTitle)
+                    Text(String.Wallpapers.EngagementSheetTitle)
                         .font(FXFontStyles.Bold.title2.scaledSwiftUIFont())
                         .foregroundColor(theme.colors.textPrimary.color)
-                    Text(String.WallpaperEngagementSheetDescription)
+                    Text(String.Wallpapers.EngagementSheetDescription)
                         .font(FXFontStyles.Regular.callout.scaledSwiftUIFont())
                         .foregroundColor(theme.colors.textSecondary.color)
                         .padding(.horizontal, UX.textsHorizontalPadding)
@@ -146,7 +146,7 @@ private struct WallpaperEngagementView: ThemeableView {
                 .multilineTextAlignment(.center)
                 .padding(.bottom, UX.contentBottomPadding)
                 Button(action: onTapCTA) {
-                    Text(String.WallpaperEngagementSheetButton)
+                    Text(String.Wallpapers.EngagementSheetButton)
                 }
                 .primaryButtonStyle(theme: theme)
                 .accessibilityIdentifier(AccessibilityIdentifiers.WallpaperEngagementSheet.ctaButton)

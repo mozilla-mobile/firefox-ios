@@ -6469,21 +6469,6 @@ extension String {
         tableName: nil,
         value: "Something went wrong with this wallpaper.",
         comment: "The message of the error displayed to a user when they trying to change a wallpaper failed.")
-    public static let WallpaperEngagementSheetTitle = MZLocalizedString(
-        key: "Wallpaper.EngagementSheet.Title.v162",
-        tableName: nil,
-        value: "A little fright. A fresh look.",
-        comment: "The title of the bottom sheet that promotes new wallpapers.")
-    public static let WallpaperEngagementSheetDescription = MZLocalizedString(
-        key: "Wallpaper.EngagementSheet.Description.v162",
-        tableName: nil,
-        value: "Get into the Halloween spirit with our new wallpapers.",
-        comment: "The description of the bottom sheet that promotes new wallpapers.")
-    public static let WallpaperEngagementSheetButton = MZLocalizedString(
-        key: "Wallpaper.EngagementSheet.Button.v162",
-        tableName: nil,
-        value: "Get Wallpapers",
-        comment: "The button of the bottom sheet that promotes new wallpapers. Tapping it opens the wallpaper settings.")
     public static let WallpaperErrorTryAgain = MZLocalizedString(
         key: "Wallpaper.Error.TryAgain.v106",
         tableName: nil,
@@ -6746,6 +6731,27 @@ extension String {
             tableName: "EngagementNotification",
             value: "Find something nearby. Or discover something fun.",
             comment: "Body of notification sent to user after inactivity to encourage them to use the search feature.")
+    }
+}
+
+// MARK: - Wallpapers
+extension String {
+    public struct Wallpapers {
+        public static let EngagementSheetTitle = MZLocalizedString(
+            key: "Wallpapers.EngagementSheet.Title.v161",
+            tableName: "Wallpapers",
+            value: "A little fright. A fresh look.",
+            comment: "The title of the bottom sheet that promotes new wallpapers.")
+        public static let EngagementSheetDescription = MZLocalizedString(
+            key: "Wallpapers.EngagementSheet.Description.v161",
+            tableName: "Wallpapers",
+            value: "Get into the Halloween spirit with our new wallpapers.",
+            comment: "The description of the bottom sheet that promotes new wallpapers.")
+        public static let EngagementSheetButton = MZLocalizedString(
+            key: "Wallpapers.EngagementSheet.Button.v161",
+            tableName: "Wallpapers",
+            value: "Get Wallpapers",
+            comment: "The button of the bottom sheet that promotes new wallpapers. Tapping it opens the wallpaper settings.")
     }
 }
 
