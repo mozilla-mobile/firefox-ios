@@ -32,11 +32,17 @@ public class NativeBottomSheetViewController: UIViewController,
     private var child: UIViewController?
     /// Closure called when the bottom sheet is dismissed via the close button
     public var onDismiss: (() -> Void)?
+    /// Replaces the default self-dismissal of the close button, e.g. to dismiss through a router
+    public var dismissAction: (() -> Void)?
 
     private lazy var closeButton: UIButton = .build { [weak self] in
         $0.addAction(UIAction(handler: { _ in
             self?.onDismiss?()
-            self?.dismiss(animated: true)
+            if let dismissAction = self?.dismissAction {
+                dismissAction()
+            } else {
+                self?.dismiss(animated: true)
+            }
         }), for: .touchUpInside)
         if #available(iOS 26, *) {
             $0.configuration = .prominentClearGlass()
@@ -182,7 +188,7 @@ public class NativeBottomSheetViewController: UIViewController,
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        let backgroundAlpha = UIAccessibility.isReduceMotionEnabled ? 1.0 : UX.backgroundAlpha
+        let backgroundAlpha = UIAccessibility.isReduceTransparencyEnabled ? 1.0 : UX.backgroundAlpha
         view.backgroundColor = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
         // The background view is not needed when presenting a bottom sheet in iOS 26.
         // The bottom sheet presentation already contains the glass effect.

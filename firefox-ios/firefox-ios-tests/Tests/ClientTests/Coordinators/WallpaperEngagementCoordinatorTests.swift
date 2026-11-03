@@ -4,6 +4,7 @@
 
 import XCTest
 import Common
+import ComponentLibrary
 import Shared
 import TestKit
 
@@ -135,6 +136,26 @@ final class WallpaperEngagementCoordinatorTests: XCTestCase {
         router.savedCompletion?()
 
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+    }
+
+    func test_start_whenCloseButtonIsTapped_notifiesParent() throws {
+        let subject = createSubject()
+        subject.start()
+        let bottomSheet = try XCTUnwrap(router.presentedViewController as? NativeBottomSheetViewController)
+
+        bottomSheet.onDismiss?()
+
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+    }
+
+    func test_start_whenCloseButtonIsTapped_dismissesThroughRouter() throws {
+        let subject = createSubject()
+        subject.start()
+        let bottomSheet = try XCTUnwrap(router.presentedViewController as? NativeBottomSheetViewController)
+
+        bottomSheet.dismissAction?()
+
+        XCTAssertEqual(router.dismissCalled, 1)
     }
 
     // MARK: - Helpers

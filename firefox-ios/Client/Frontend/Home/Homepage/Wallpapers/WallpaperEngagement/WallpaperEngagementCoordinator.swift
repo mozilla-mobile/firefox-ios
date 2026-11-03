@@ -59,7 +59,7 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
               !marketingSlug.isEmpty,
               wallpaperManager.canSettingsBeShown
         else { return false }
-        // The marketing slug needs to be different then the one saved since we can't programmatically unenroll
+        // The marketing slug needs to be different than the one saved since we can't programmatically unenroll
         // from the rollout. Also this gives the ability to enable a new rollout with different marketing slug.
         return marketingSlug != prefs.stringForKey(PrefsKeys.Wallpapers.EngagementSheetShownMarketingSlug)
     }
@@ -80,6 +80,9 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
         let bottomSheetVC = NativeBottomSheetViewController(windowUUID: windowUUID)
         bottomSheetVC.onDismiss = { [weak self] in
             self?.finish()
+        }
+        bottomSheetVC.dismissAction = { [weak self] in
+            self?.router.dismiss(animated: true, completion: nil)
         }
         bottomSheetVC.configure(
             closeButtonModel: CloseButtonViewModel(

@@ -1411,6 +1411,25 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    // MARK: - WallpaperEngagementCoordinatorDelegate
+
+    func testWallpaperEngagementDidTapCTA_removesChildAndShowsWallpaperSettings() {
+        let subject = createSubject()
+        let wallpaperCoordinator = WallpaperEngagementCoordinator(
+            router: mockRouter,
+            windowUUID: windowUUID,
+            tabManager: tabManager,
+            prefs: profile.prefs
+        )
+        subject.add(child: wallpaperCoordinator)
+
+        subject.wallpaperEngagementDidTapCTA(from: wallpaperCoordinator)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is SettingsCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+    }
+
     // MARK: - Report broken site
 
     func testPresentReportBrokenSite_startsTheReportCoordinator() {
