@@ -206,7 +206,10 @@ final class BrowserCoordinator: BaseCoordinator,
         coordinator.parentCoordinator = self
         coordinator.delegate = self
         add(child: coordinator)
-        coordinator.start()
+        browserViewController.view.endEditing(true)
+        DispatchQueue.main.async {
+            coordinator.start()
+        }
     }
 
     private func dispatchActionForEmbeddingHomepage(with isZeroSearch: Bool) {

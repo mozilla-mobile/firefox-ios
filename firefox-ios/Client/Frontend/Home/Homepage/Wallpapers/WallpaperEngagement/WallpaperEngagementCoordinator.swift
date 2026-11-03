@@ -196,6 +196,7 @@ private struct WallpaperEngagementView: ThemeableView {
             .offset(CGSize(width: 0.0, height: UX.backdropHeight / 5))
     }
 
+    // Swap this image for the one matching each wallpaper advertising campaign.
     private var promoImage: some View {
         Image(StandardImageIdentifiers.Large.image)
             .renderingMode(.template)
