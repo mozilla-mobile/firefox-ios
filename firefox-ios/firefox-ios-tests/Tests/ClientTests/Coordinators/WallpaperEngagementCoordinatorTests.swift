@@ -16,6 +16,7 @@ final class WallpaperEngagementCoordinatorTests: XCTestCase {
     private var featureFlagsProvider: MockNimbusFeatureFlags!
     private var wallpaperManager: WallpaperManagerMock!
     private var parentCoordinator: MockParentCoordinator!
+    private var tabManager: MockTabManager!
     private let marketingSlug = "wallpaper-drop-1"
 
     override func setUp() async throws {
@@ -27,6 +28,8 @@ final class WallpaperEngagementCoordinatorTests: XCTestCase {
         featureFlagsProvider.enabledFlags = [.wallpaperEngagementSheet]
         wallpaperManager = WallpaperManagerMock()
         parentCoordinator = MockParentCoordinator()
+        tabManager = MockTabManager()
+        tabManager.selectedTab = makeTab()
         setMarketingSlug(marketingSlug)
     }
 
@@ -36,12 +39,34 @@ final class WallpaperEngagementCoordinatorTests: XCTestCase {
         featureFlagsProvider = nil
         wallpaperManager = nil
         parentCoordinator = nil
+        tabManager = nil
         setMarketingSlug("")
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
     // MARK: - shouldShow
+
+    func test_shouldShow_whenNoSelectedTab_returnsFalse() {
+        tabManager.selectedTab = nil
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.shouldShow())
+    }
+
+    func test_shouldShow_whenSelectedTabIsNotHomepage_returnsFalse() {
+        tabManager.selectedTab = makeTab(isHomePage: false)
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.shouldShow())
+    }
+
+    func test_shouldShow_whenSelectedTabIsPrivate_returnsFalse() {
+        tabManager.selectedTab = makeTab(isPrivate: true)
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.shouldShow())
+    }
 
     func test_shouldShow_whenFlagDisabled_returnsFalse() {
         featureFlagsProvider.enabledFlags = []
@@ -118,6 +143,7 @@ final class WallpaperEngagementCoordinatorTests: XCTestCase {
         let subject = WallpaperEngagementCoordinator(
             router: router,
             windowUUID: .XCTestDefaultUUID,
+            tabManager: tabManager,
             prefs: prefs,
             wallpaperManager: wallpaperManager,
             featureFlagsProvider: featureFlagsProvider
@@ -125,6 +151,15 @@ final class WallpaperEngagementCoordinatorTests: XCTestCase {
         subject.parentCoordinator = parentCoordinator
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func makeTab(isPrivate: Bool = false, isHomePage: Bool = true) -> Tab {
+        return MockTab(
+            profile: MockProfile(),
+            isPrivate: isPrivate,
+            windowUUID: .XCTestDefaultUUID,
+            isHomePage: isHomePage
+        )
     }
 
     private func setMarketingSlug(_ slug: String) {

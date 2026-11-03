@@ -18,6 +18,7 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
     weak var delegate: WallpaperEngagementCoordinatorDelegate?
 
     private let windowUUID: WindowUUID
+    private let tabManager: TabManager
     private let featureFlagsProvider: FeatureFlagProviding
     private let nimbus: FxNimbus
     private let prefs: Prefs
@@ -35,12 +36,14 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
     init(
         router: Router,
         windowUUID: WindowUUID,
+        tabManager: TabManager,
         prefs: Prefs,
         wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         nimbus: FxNimbus = .shared
     ) {
         self.windowUUID = windowUUID
+        self.tabManager = tabManager
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
         self.featureFlagsProvider = featureFlagsProvider
@@ -49,8 +52,10 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
     }
 
     func shouldShow() -> Bool {
-        return true
-        guard featureFlagsProvider.isEnabled(.wallpaperEngagementSheet),
+        guard let selectedTab = tabManager.selectedTab,
+              selectedTab.isFxHomeTab,
+              !selectedTab.isPrivate,
+              featureFlagsProvider.isEnabled(.wallpaperEngagementSheet),
               !marketingSlug.isEmpty,
               wallpaperManager.canSettingsBeShown
         else { return false }

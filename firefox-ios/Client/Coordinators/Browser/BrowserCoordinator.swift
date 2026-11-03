@@ -193,15 +193,13 @@ final class BrowserCoordinator: BaseCoordinator,
         let hasBlockingChild = childCoordinators.contains {
             $0 is TermsOfUseCoordinator || $0 is WallpaperEngagementCoordinator
         }
-        guard let selectedTab = tabManager.selectedTab,
-              selectedTab.isFxHomeTab,
-              !selectedTab.isPrivate,
-              !hasBlockingChild,
+        guard !hasBlockingChild,
               !router.isPresenting else { return }
 
         let coordinator = WallpaperEngagementCoordinator(
             router: router,
             windowUUID: windowUUID,
+            tabManager: tabManager,
             prefs: profile.prefs
         )
         guard coordinator.shouldShow() else { return }
