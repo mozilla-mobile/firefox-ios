@@ -7,7 +7,7 @@ import Common
 import Shared
 import Storage
 
-struct SearchEngineFlags {
+enum SearchEngineFlags {
     static var isSearchConfigV3Enabled: Bool {
         let flagProvider: FeatureFlagProviding = AppContainer.shared.resolve()
         let flag = flagProvider.isEnabled(.searchConfigV3)

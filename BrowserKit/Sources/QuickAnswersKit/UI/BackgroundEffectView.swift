@@ -17,7 +17,7 @@ final class BlendedBlobsGradientState: ObservableObject {
 /// soft radial fade so the overall result reads as a single oval.
 /// When reduce motion is on, a static frame is rendered instead.
 struct BlendedBlobsGradient: View {
-    private struct UX {
+    private enum UX {
         /// Per blob values, cycled when there are more blobs than entries.
         static let speeds: [CGFloat] = [1.5, 1.4, 1.3]
         /// Blob radius, relative to the region radius. Above 1.0 so the blobs overflow the region
@@ -233,7 +233,7 @@ struct BlendedBlobsGradient: View {
 /// Layers the blended blobs between a glow in the top trailing corner and a wash that fades in once
 /// a result is shown.
 final class BackgroundEffectView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let resultBlobsAlpha: CGFloat = 0.5
         static let resultFadeDuration: TimeInterval = 0.3
         static let resultFadeDelay: TimeInterval = 0.2

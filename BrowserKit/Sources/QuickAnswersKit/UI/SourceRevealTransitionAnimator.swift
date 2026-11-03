@@ -14,7 +14,7 @@ public enum QuickAnswersTransitionType: Equatable, Sendable {
 final class SourceRevealTransitionAnimator: NSObject,
                                             UIViewControllerTransitioningDelegate,
                                             UIViewControllerAnimatedTransitioning {
-    private struct UX {
+    private enum UX {
         static let presentationDuration: TimeInterval = 0.3
         static let presentationBlurFadeDuration: TimeInterval = 0.05
         static let dismissalDuration: TimeInterval = 0.25

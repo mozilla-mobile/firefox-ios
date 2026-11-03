@@ -173,7 +173,7 @@ public enum PrefsKeys {
         public static let lastUsedEnvironment = "mlpaLastUsedEnvironment"
     }
 
-    public struct VPNSettings {
+    public enum VPNSettings {
         public static let endpointEnvironment = "vpnEndpointEnvironment"
         public static let lastUsedEnvironment = "vpnLastUsedEnvironment"
     }

@@ -302,7 +302,7 @@ enum AccessibilityIdentifiers {
             static let itemCell = "SearchBarCell"
         }
 
-        struct EmbeddedAddressBar {
+        enum EmbeddedAddressBar {
             static let view = "EmbeddedAddressBar"
         }
 
@@ -479,7 +479,7 @@ enum AccessibilityIdentifiers {
         }
     }
 
-    struct WallpaperEngagementSheet {
+    enum WallpaperEngagementSheet {
         static let closeButton = "WallpaperEngagementSheet.closeButton"
         static let ctaButton = "WallpaperEngagementSheet.ctaButton"
     }
@@ -551,7 +551,7 @@ enum AccessibilityIdentifiers {
             static let pageZoomTitle = "PageZoomTitle"
             static let wallpaperTitle = "WallpaperTitle"
 
-            struct Wallpaper {
+            enum Wallpaper {
                 static let collectionTitle = "wallpaperCollectionTitle"
                 static let collectionDescription = "wallpaperCollectionDescription"
                 static let collectionButton = "wallpaperCollectionButton"
@@ -850,7 +850,7 @@ enum AccessibilityIdentifiers {
             static let learnMoreButton = "Settings.QuickAnswers.LearnMoreButton"
         }
 
-        struct VPN {
+        enum VPN {
             static let title = "Settings.VPN.Title"
         }
 

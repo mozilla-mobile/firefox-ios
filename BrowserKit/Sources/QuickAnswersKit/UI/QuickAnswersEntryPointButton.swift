@@ -7,7 +7,7 @@ import UIKit
 
 /// Capsule shaped button that opens Quick Answers. It glows at most once per instance, for `UX.glowDuration`.
 public final class QuickAnswersEntryPointButton: UIButton {
-    private struct UX {
+    private enum UX {
         static let borderWidth: CGFloat = 1
         static let glowDuration: TimeInterval = 5.0
         static let backgroundOpacity: Float = 0.14

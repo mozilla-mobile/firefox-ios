@@ -81,7 +81,7 @@ enum ImageIdentifiers {
             public static let toolbarBottomJapan = "onboardingToolbarIconBottomJapan"
         }
 
-        public struct ContinuousOnboarding {
+        public enum ContinuousOnboarding {
             public static let notification = "kitOnboardingNotifications"
             public static let notificationCard = "kitCircle"
             public static let sync = "kitOnboardingSync"

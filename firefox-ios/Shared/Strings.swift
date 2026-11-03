@@ -86,7 +86,7 @@ extension String {
                 comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the cancel action for the alert, cancelling the action to add the event to the calendar.")
         }
 
-        public struct ConfigurationProfile {
+        public enum ConfigurationProfile {
             public static let Title = MZLocalizedString(
                 key: "Alerts.ConfigurationProfile.Title.v160.1",
                 tableName: "Alerts",
@@ -309,8 +309,8 @@ extension String {
 
 // MARK: - Browser Data Transfer
 extension String {
-    public struct BrowserDataTransfer {
-        public struct ImportedBookmarksFolder {
+    public enum BrowserDataTransfer {
+        public enum ImportedBookmarksFolder {
             public static let Title = MZLocalizedString(
                 key: "BrowserDataTransfer.ImportedBookmarksFolder.Title.v160",
                 tableName: "BrowserDataTransfer",
@@ -318,7 +318,7 @@ extension String {
                 comment: "Name of the bookmarks folder that holds bookmarks imported from another browser. %@ is the date when the import happens, formatted for the user’s locale without the time.")
         }
 
-        public struct ImportFailure {
+        public enum ImportFailure {
             public static let Title = MZLocalizedString(
                 key: "BrowserDataTransfer.ImportFailure.Title.v160",
                 tableName: "BrowserDataTransfer",
@@ -336,7 +336,7 @@ extension String {
                 comment: "Button that dismisses the alert shown when Firefox could not finish importing data from another browser.")
         }
 
-        public struct ImportSuccess {
+        public enum ImportSuccess {
             public static let Title = MZLocalizedString(
                 key: "BrowserDataTransfer.ImportSuccess.Title.v160",
                 tableName: "BrowserDataTransfer",
@@ -354,7 +354,7 @@ extension String {
                 comment: "Button that dismisses the alert shown after Firefox finishes importing data from another browser.")
         }
 
-        public struct Settings {
+        public enum Settings {
             public static let SectionTitle = MZLocalizedString(
                 key: "BrowserDataTransfer.Settings.SectionTitle.v160",
                 tableName: "BrowserDataTransfer",
@@ -1921,8 +1921,8 @@ extension String {
             value: "Skip",
             comment: "Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page.")
 
-        public struct MultiDay {
-            public struct NotificationCard {
+        public enum MultiDay {
+            public enum NotificationCard {
                 public static let Title = MZLocalizedString(
                     key: "Onboarding.MultiDay.NotificationCard.Title.v159",
                     tableName: "Onboarding",
@@ -1944,7 +1944,7 @@ extension String {
                     value: "Not Now",
                     comment: "Secondary button on the onboarding card requesting permission to send notifications. Tapping this button declines the permission request.")
             }
-            public struct HomeScreenNotificationsPopup {
+            public enum HomeScreenNotificationsPopup {
                 public static let Title = MZLocalizedString(
                     key: "Onboarding.MultiDay.HomeScreenNotificationsPopup.Title.v159",
                     tableName: "Onboarding",
@@ -1966,7 +1966,7 @@ extension String {
                     value: "Close",
                     comment: "Voiceover text for the close button on the home screen popup requesting notification permissions. Tapping this button dismisses the popup.")
             }
-            public struct SyncCard {
+            public enum SyncCard {
                 public static let Title = MZLocalizedString(
                     key: "Onboarding.MultiDay.SyncCard.Title.v159",
                     tableName: "Onboarding",
@@ -2986,7 +2986,7 @@ extension String {
             )
         }
 
-        public struct OptInRedesign {
+        public enum OptInRedesign {
             public static let Title = MZLocalizedString(
                 key: "QuickAnswers.OptInRedesign.Title.v158",
                 tableName: "QuickAnswers",
@@ -3130,7 +3130,7 @@ extension String {
             )
         }
 
-        public struct PrivacyBanner {
+        public enum PrivacyBanner {
             public static let Title = MZLocalizedString(
                 key: "QuickAnswers.PrivacyBanner.Title.v158",
                 tableName: "QuickAnswers",
@@ -3146,7 +3146,7 @@ extension String {
             )
         }
 
-        public struct ReturnPill {
+        public enum ReturnPill {
             public static let Subtitle = MZLocalizedString(
                 key: "QuickAnswers.ReturnPill.Subtitle.v158",
                 tableName: "QuickAnswers",
@@ -3309,7 +3309,7 @@ extension String {
             )
         }
 
-        public struct QuickActions {
+        public enum QuickActions {
             public static let Title = MZLocalizedString(
                 key: "QuickAnswers.QuickActions.Title.v158",
                 tableName: "QuickAnswers",
@@ -3322,8 +3322,8 @@ extension String {
 
 // MARK: - VPN
 extension String {
-    public struct VPN {
-        public struct Settings {
+    public enum VPN {
+        public enum Settings {
             public static let Title = MZLocalizedString(
                 key: "VPN.Settings.Title.v160",
                 tableName: "Settings",
@@ -3437,7 +3437,7 @@ extension String {
             )
         }
 
-        public struct Onboarding {
+        public enum Onboarding {
             public static let Title = MZLocalizedString(
                 key: "VPN.Onboarding.Title.v160",
                 tableName: "Onboarding",
@@ -3488,7 +3488,7 @@ extension String {
             )
         }
 
-        public struct ErrorConnectingPopup {
+        public enum ErrorConnectingPopup {
             public static let Title = MZLocalizedString(
                 key: "VPN.ErrorConnectingPopup.Title.v160",
                 tableName: "VPN",
@@ -3518,7 +3518,7 @@ extension String {
             )
         }
 
-        public struct ErrorPage {
+        public enum ErrorPage {
             public static let Title = MZLocalizedString(
                 key: "VPN.ErrorPage.Title.v160",
                 tableName: "NativeErrorPage",
@@ -3534,7 +3534,7 @@ extension String {
             )
         }
 
-        public struct ErrorBrowsingPopup {
+        public enum ErrorBrowsingPopup {
             public static let Title = MZLocalizedString(
                 key: "VPN.ErrorBrowsingPopup.Title.v160",
                 tableName: "VPN",
@@ -3585,7 +3585,7 @@ extension String {
             )
         }
 
-        public struct ReachedDataLimitPopup {
+        public enum ReachedDataLimitPopup {
             public static let Title = MZLocalizedString(
                 key: "VPN.ReachedDataLimitPopup.Title.v160",
                 tableName: "VPN",
@@ -3636,7 +3636,7 @@ extension String {
             )
         }
 
-        public struct DataLimitRefreshNotification {
+        public enum DataLimitRefreshNotification {
             public static let Title = MZLocalizedString(
                 key: "VPN.DataLimitRefreshNotification.Title.v160",
                 tableName: "VPN",
@@ -3652,7 +3652,7 @@ extension String {
             )
         }
 
-        public struct LocationPicker {
+        public enum LocationPicker {
             public static let RecommendedMainText = MZLocalizedString(
                 key: "VPN.LocationPicker.RecommendedMainText.v160",
                 tableName: "Settings",
@@ -6746,7 +6746,7 @@ extension String {
 
 // MARK: - Wallpapers
 extension String {
-    public struct Wallpapers {
+    public enum Wallpapers {
         public static let EngagementSheetTitle = MZLocalizedString(
             key: "Wallpapers.EngagementSheet.Title.v161",
             tableName: "Wallpapers",
@@ -9771,7 +9771,7 @@ extension String {
     /// https://github.com/mozilla-mobile/firefox-ios/wiki/How-to-add-and-modify-Strings#oldstrings-struct
     /// periphery:ignore - These strings are getting removed every couple of months
     enum OldStrings {
-        struct v158 {
+        enum v158 {
             public static let TitleLabel = MZLocalizedString(
                 key: "NativeErrorPage.GenericError.TitleLabel.v131",
                 tableName: "NativeErrorPage",
