@@ -649,6 +649,27 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchActionType, GeneralBrowserActionType.didTapReaderModeBarSummarizerButton)
     }
 
+    func testNewState_whenSelectedTabIsNotReaderModePage_andReaderModeStateIsStillActive_hidesReaderModeBar() {
+        let subject = createSubject()
+        setupSelectedTabWithReaderMode(url: URL(string: "https://example.com/article"), readerModeState: .active)
+        subject.readerModeBar = ReaderModeBarView(frame: .zero)
+
+        subject.newState(state: BrowserViewControllerState(windowUUID: .XCTestDefaultUUID))
+
+        XCTAssertNil(subject.readerModeBar)
+    }
+
+    func testNewState_whenSelectedTabIsReaderModePage_andReaderModeStateIsNotActiveYet_showsReaderModeBar() {
+        let subject = createSubject()
+        let readerModeURL = URL(string: "https://example.com/article")?
+            .encodeReaderModeURL(ReaderModeSchemeHandler.baseURL)
+        setupSelectedTabWithReaderMode(url: readerModeURL, readerModeState: .available)
+
+        subject.newState(state: BrowserViewControllerState(windowUUID: .XCTestDefaultUUID))
+
+        XCTAssertNotNil(subject.readerModeBar)
+    }
+
     // MARK: - Toolbar
 
     @MainActor
@@ -808,6 +829,15 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    private func setupSelectedTabWithReaderMode(url: URL?, readerModeState: ReaderModeState) {
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let readerMode = ReaderMode(tab: tab)
+        readerMode.state = readerModeState
+        tab.addContentScript(readerMode, name: ReaderMode.name())
+        tab.url = url
+        tabManager.selectedTab = tab
     }
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {

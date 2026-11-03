@@ -40,6 +40,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         static let resultCascadeStartDelay: TimeInterval = 0.1
         static let resultCascadeStagger: TimeInterval = 0.1
         static let presentationSlideOffset: CGFloat = 15.0
+        static let dismissSlideOffset: CGFloat = 100.0
     }
 
     // MARK: - Subviews
@@ -182,9 +183,9 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
     }
 
     // MARK: - Configuration
-    func configureStrings(_ strings: QuickAnswersViewConfiguration.ContentViewStrings) {
+    func configureStrings(_ strings: QuickAnswersViewConfiguration.ContentViewStrings, isFollowUpQuestion: Bool) {
         self.strings = strings
-        placeholderLabel.text = strings.placeholder
+        placeholderLabel.text = isFollowUpQuestion ? strings.followUpPlaceholder : strings.placeholder
         searchingLabel.text = strings.answering
         sourceView.configureStrings(sourcesHeader: strings.sources)
         privacyButton.configuration?.title = strings.aboutYourPrivacy
@@ -279,6 +280,16 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         hasDisplayedResults = true
         animateResultCascade()
         UIAccessibility.post(notification: .screenChanged, argument: self)
+    }
+
+    /// Fades and slides down the content inside the scroll view, so the scroll view safe area doesn't change.
+    func animateOut(duration: TimeInterval, completion: @escaping () -> Void) {
+        UIView.animate(withDuration: duration, delay: 0.0, options: .curveEaseIn) { [self] in
+            contentView.alpha = 0.0
+            contentView.transform = CGAffineTransform(translationX: 0.0, y: UX.dismissSlideOffset)
+        } completion: { _ in
+            completion()
+        }
     }
 
     // MARK: - Presentation transition

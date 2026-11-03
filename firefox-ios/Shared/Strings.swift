@@ -88,27 +88,27 @@ extension String {
 
         public struct ConfigurationProfile {
             public static let Title = MZLocalizedString(
-                key: "Alerts.ConfigurationProfile.Title.v160",
+                key: "Alerts.ConfigurationProfile.Title.v160.1",
                 tableName: "Alerts",
                 value: "Download configuration profile?",
                 comment: "Title of dialogue window. Prompts the user to confirm they want to download a configuration profile that can be installed in device settings.")
             public static let Body = MZLocalizedString(
-                key: "Alerts.ConfigurationProfile.Body.v160",
+                key: "Alerts.ConfigurationProfile.Body.v160.1",
                 tableName: "Alerts",
                 value: "%@ is asking to download a configuration profile. You can review and install it in Settings.",
                 comment: "Message of dialogue window. Prompts the user to confirm they want to download a configuration profile that can be installed in device settings. %@ is the name/domain of the website initiating the download, for example 'google.com'")
             public static let BodyDefault = MZLocalizedString(
-                key: "Alerts.ConfigurationProfile.BodyDefault.v160",
+                key: "Alerts.ConfigurationProfile.BodyDefault.v160.1",
                 tableName: "Alerts",
                 value: "This site is asking to download a configuration profile. You can review and install it in Settings.",
                 comment: "Message of dialogue window. Prompts the user to confirm they want to download a configuration profile that can be installed in device settings. This variant is displayed when the website initiating the download doesn't have a base domain to display.")
             public static let ContinueButton = MZLocalizedString(
-                key: "Alerts.ConfigurationProfile.Button.Continue.v160",
+                key: "Alerts.ConfigurationProfile.Button.Continue.v160.1",
                 tableName: "Alerts",
                 value: "Continue",
                 comment: "Primary Button in dialogue window. If tapped, confirms the user wants to download the configuration profile and the download starts.")
             public static let CancelButton = MZLocalizedString(
-                key: "Alerts.ConfigurationProfile.Button.Cancel.v160",
+                key: "Alerts.ConfigurationProfile.Button.Cancel.v160.1",
                 tableName: "Alerts",
                 value: "Cancel",
                 comment: "Secondary Button in dialogue window. If tapped, cancels the download and closes the window.")
@@ -3068,6 +3068,13 @@ extension String {
                 tableName: "QuickAnswers",
                 value: "Ask a Follow-Up",
                 comment: "Button shown below a Quick Answers result that the user taps to ask a follow-up question about the answer."
+            )
+
+            public static let NewQuestionButton = MZLocalizedString(
+                key: "QuickAnswers.ContentView.NewQuestionButton.v161",
+                tableName: "QuickAnswers",
+                value: "Ask a New Question",
+                comment: "Button shown below a Quick Answers result that the user taps to ask a new, unrelated question."
             )
 
             public static let Answering = MZLocalizedString(

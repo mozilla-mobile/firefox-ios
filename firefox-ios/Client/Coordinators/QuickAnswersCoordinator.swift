@@ -82,7 +82,10 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
                 continueButton: .QuickAnswers.OptIn.ContinueButton
             ),
             contentView: .init(
-                placeholder: .QuickAnswers.ContentView.Placeholder,
+                placeholder: .QuickAnswers.ContentView.Listening,
+                followUpPlaceholder: .QuickAnswers.ContentView.ListeningFollowUp,
+                followUpButton: .QuickAnswers.ContentView.FollowUpButton,
+                newQuestionButton: .QuickAnswers.ContentView.NewQuestionButton,
                 answering: .QuickAnswers.ContentView.Answering,
                 footerFormat: .QuickAnswers.ContentView.FooterFormat,
                 sources: .QuickAnswers.ContentView.Sources,
@@ -116,7 +119,8 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     func resolvedFeature() -> QuickAnswersKit.QuickAnswersFeature {
         return QuickAnswersKit.QuickAnswersFeature(
             model: resolvedModel(),
-            isOptInRedesignEnabled: featureFlagsProvider.isEnabled(.quickAnswersOptInRedesign)
+            isOptInRedesignEnabled: featureFlagsProvider.isEnabled(.quickAnswersOptInRedesign),
+            isFollowUpEnabled: featureFlagsProvider.isEnabled(.quickAnswersFollowUp)
         )
     }
 

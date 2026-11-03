@@ -66,6 +66,11 @@ public struct QuickAnswersViewConfiguration: Sendable {
 
     public struct ContentViewStrings: Sendable {
         public let placeholder: String
+        /// Replaces `placeholder` when the new question follows up on the previous answers.
+        public let followUpPlaceholder: String
+        public let followUpButton: String
+        /// Replaces `followUpButton` when the model can't follow up on the previous answers.
+        public let newQuestionButton: String
         public let answering: String
         public let footerFormat: String
         public let sources: String
@@ -74,6 +79,9 @@ public struct QuickAnswersViewConfiguration: Sendable {
 
         public init(
             placeholder: String,
+            followUpPlaceholder: String,
+            followUpButton: String,
+            newQuestionButton: String,
             answering: String,
             footerFormat: String,
             sources: String,
@@ -81,6 +89,9 @@ public struct QuickAnswersViewConfiguration: Sendable {
             answerHeader: String
         ) {
             self.placeholder = placeholder
+            self.followUpPlaceholder = followUpPlaceholder
+            self.followUpButton = followUpButton
+            self.newQuestionButton = newQuestionButton
             self.answering = answering
             self.footerFormat = footerFormat
             self.sources = sources

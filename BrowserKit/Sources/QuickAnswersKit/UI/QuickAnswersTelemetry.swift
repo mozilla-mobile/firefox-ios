@@ -12,23 +12,25 @@ public enum QuickAnswersPermission: String {
     case speechRecognition = "speech_recognition"
 }
 
+/// Events of a single question take an `isFollowUp` dimension: `true` when the question was asked after a
+/// previous answer in the same session, `false` for the first one.
 public protocol QuickAnswersTelemetry {
     /// Fires when the user initiates the Quick Answers flow.
     /// - Parameter model: The model backing the request.
     func quickAnswersRequested(model: QuickAnswersModel)
 
     /// Fires when the service starts attempting to capture user audio.
-    func recordingStarted()
+    func recordingStarted(isFollowUp: Bool)
 
     /// Fires when the transcription completes.
     /// - Parameters:
     ///   - outcome: `true` if the transcription succeeded, `false` if it failed.
     ///   - errorType: A description of the failure when `outcome` is `false`, otherwise `nil`.
-    func recordingCompleted(outcome: Bool, errorType: String?)
+    func recordingCompleted(outcome: Bool, errorType: String?, isFollowUp: Bool)
 
     /// Fires when the results service starts to fetch results from the backend.
     @MainActor
-    func resultsStarted()
+    func resultsStarted(isFollowUp: Bool)
 
     /// Fires when the results service returns the summary or errors out.
     /// - Parameters:
@@ -36,7 +38,7 @@ public protocol QuickAnswersTelemetry {
     ///   - errorType: A description of the failure when `outcome` is `false`, otherwise `nil`.
     ///   - model: The model backing the request.
     @MainActor
-    func resultsCompleted(outcome: Bool, errorType: String?, model: QuickAnswersModel)
+    func resultsCompleted(outcome: Bool, errorType: String?, model: QuickAnswersModel, isFollowUp: Bool)
 
     /// Fires when the user denies one of the permissions the voice flow needs.
     /// - Parameter permission: The permission that was denied.

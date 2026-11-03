@@ -1700,7 +1700,6 @@
 		C25020842ECDE75D0071506F /* MockTranslationsSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25020832ECDE7550071506F /* MockTranslationsSchemeHandler.swift */; };
 		C2506C932A6A863600F2B76E /* HistoryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C922A6A863600F2B76E /* HistoryCoordinator.swift */; };
 		C2506C952A6A8D2600F2B76E /* HistoryCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */; };
-		C25D03C12FBB65EB00CA9BDE /* kitHeroGif.gif in Resources */ = {isa = PBXBuildFile; fileRef = C25D03C02FBB65EB00CA9BDE /* kitHeroGif.gif */; };
 		C26B96D72F29188100D4B140 /* TestKit in Frameworks */ = {isa = PBXBuildFile; productRef = C26B96D62F29188100D4B140 /* TestKit */; };
 		C27470A22F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27470A12F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift */; };
 		C27470A42F4C8EBB00920313 /* PickerSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27470A32F4C8EBB00920313 /* PickerSettingTests.swift */; };
@@ -11356,7 +11355,6 @@
 		C25020832ECDE7550071506F /* MockTranslationsSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTranslationsSchemeHandler.swift; sourceTree = "<group>"; };
 		C2506C922A6A863600F2B76E /* HistoryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCoordinator.swift; sourceTree = "<group>"; };
 		C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCoordinatorTests.swift; sourceTree = "<group>"; };
-		C25D03C02FBB65EB00CA9BDE /* kitHeroGif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = kitHeroGif.gif; sourceTree = "<group>"; };
 		C26C4D1F8CFB13730BA74DF5 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		C27470A12F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerLanguageExpansionConfigurationTests.swift; sourceTree = "<group>"; };
 		C27470A32F4C8EBB00920313 /* PickerSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerSettingTests.swift; sourceTree = "<group>"; };
@@ -18343,7 +18341,6 @@
 				D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */,
 				D03F8F22200EAC1E003C2224 /* AllFramesAtDocumentStart.js */,
 				0BBAC4BB2CDD44EC0072DB61 /* easterEggGif.gif */,
-				C25D03C02FBB65EB00CA9BDE /* kitHeroGif.gif */,
 				43F92B3729E9F52B000C0F17 /* AutofillAllFramesAtDocumentStart.js */,
 				BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */,
 				43879AFB287BDFB100B15D10 /* CC_Script */,
@@ -19566,7 +19563,6 @@
 				43F92B3829E9F52B000C0F17 /* AutofillAllFramesAtDocumentStart.js in Resources */,
 				8C29376A2BF79EE000146613 /* AddressFormManager.css in Resources */,
 				8C29376B2BF79EE000146613 /* AddressFormManager.html in Resources */,
-				C25D03C12FBB65EB00CA9BDE /* kitHeroGif.gif in Resources */,
 				39D056382665235700FBEE59 /* initial_experiments.json in Resources */,
 				ED26BFD72DE5260700FB2B3F /* glean_index.yaml in Resources */,
 				D38A1EE01CB458EC0080C842 /* CertError.html in Resources */,

@@ -29,7 +29,6 @@ struct GenericSectionView<Content: View>: View {
 
     private struct UX {
         static var sectionPadding: CGFloat { 16 }
-        static var dividerHeight: CGFloat { 0.7 }
         static var textPadding: CGFloat { 8 }
         static var contentPadding: CGFloat { 4 }
     }
@@ -52,12 +51,8 @@ struct GenericSectionView<Content: View>: View {
                                      sectionTitleColor: sectionTitleColor)
             .padding([.leading, .trailing], UX.sectionPadding)
 
-            dividerView()
-
             content()
                 .padding([.top, .bottom], UX.contentPadding)
-
-            dividerView()
 
             // Optional description at the bottom
             if let description = description {
@@ -80,13 +75,6 @@ struct GenericSectionView<Content: View>: View {
                 .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
                 .foregroundColor(descriptionTextColor)
                 .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-
-    @ViewBuilder
-    private func dividerView() -> some View {
-        if #unavailable(iOS 26.0) {
-            Divider().frame(height: UX.dividerHeight)
         }
     }
 }

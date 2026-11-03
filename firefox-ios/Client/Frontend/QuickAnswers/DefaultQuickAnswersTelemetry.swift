@@ -18,30 +18,39 @@ final class DefaultQuickAnswersTelemetry: QuickAnswersTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.requested, extras: extras)
     }
 
-    func recordingStarted() {
-        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.recordingStarted)
+    func recordingStarted(isFollowUp: Bool) {
+        let extras = GleanMetrics.AiQuickAnswers.RecordingStartedExtra(isFollowUp: isFollowUp)
+        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.recordingStarted, extras: extras)
     }
 
-    func recordingCompleted(outcome: Bool, errorType: String?) {
+    func recordingCompleted(outcome: Bool, errorType: String?, isFollowUp: Bool) {
         let extras = GleanMetrics.AiQuickAnswers.RecordingCompletedExtra(
             errorType: errorType,
+            isFollowUp: isFollowUp,
             outcome: outcome
         )
         gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.recordingCompleted, extras: extras)
     }
 
-    func resultsStarted() {
+    func resultsStarted(isFollowUp: Bool) {
         resultsTimerId = gleanWrapper.startTiming(for: GleanMetrics.AiQuickAnswers.resultsTime)
-        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.resultsStarted)
+        let extras = GleanMetrics.AiQuickAnswers.ResultsStartedExtra(isFollowUp: isFollowUp)
+        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.resultsStarted, extras: extras)
     }
 
-    func resultsCompleted(outcome: Bool, errorType: String?, model: QuickAnswersKit.QuickAnswersModel) {
+    func resultsCompleted(
+        outcome: Bool,
+        errorType: String?,
+        model: QuickAnswersKit.QuickAnswersModel,
+        isFollowUp: Bool
+    ) {
         if let resultsTimerId {
             gleanWrapper.stopAndAccumulateTiming(for: GleanMetrics.AiQuickAnswers.resultsTime, timerId: resultsTimerId)
             self.resultsTimerId = nil
         }
         let extras = GleanMetrics.AiQuickAnswers.ResultsCompletedExtra(
             errorType: errorType,
+            isFollowUp: isFollowUp,
             model: model.rawValue,
             outcome: outcome
         )
