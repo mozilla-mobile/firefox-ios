@@ -873,8 +873,19 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     func testContextMenuDidEnd_bridgeReportsImageMidMenu_dismissedReusesShownOrigin() throws {
         let gleanWrapper = MockGleanWrapper()
         let subject = createSubject(gleanWrapper: gleanWrapper)
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
         let url = URL(string: "https://example.com/photo-link")!
+        let contextHelper = ContextMenuHelper(tab: tab)
+        tab.addContentScript(contextHelper, name: ContextMenuHelper.name())
         subject.pendingContextMenuTelemetry = (url: url, origin: .webLink)
+        contextHelper.elements = ContextMenuHelper.Elements(
+            link: url,
+            image: URL(string: "https://example.com/photo.jpg"),
+            title: "Photo",
+            alt: nil
+        )
 
         subject.contextMenuDidEnd(for: url)
 
