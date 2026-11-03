@@ -98,6 +98,40 @@ final class ContentBlockerTests: XCTestCase {
         XCTAssertEqual(subject.currentlyEnabledLists(), [ASAdBlockerListFetcher.adBlockerRecordID])
     }
 
+    func testNotifiedTabSetupRequired_whenTabHasNoUncommittedNavigation_reloadsTab() {
+        disableAllBlocking()
+        let tab = MockContentBlockerTab()
+        let subject = FirefoxTabContentBlocker(tab: tab, prefs: profile.prefs)
+
+        subject.notifiedTabSetupRequired()
+
+        XCTAssertEqual(tab.reloadCalled, 1)
+    }
+
+    func testNotifiedTabSetupRequired_whenTabHasUncommittedNavigation_doesNotReloadTab() {
+        disableAllBlocking()
+        let tab = MockContentBlockerTab()
+        tab.hasUncommittedNavigation = true
+        let subject = FirefoxTabContentBlocker(tab: tab, prefs: profile.prefs)
+
+        subject.notifiedTabSetupRequired()
+
+        XCTAssertEqual(tab.reloadCalled, 0)
+    }
+
+    func testNotifiedTabSetupRequired_whenTrackingProtectionEnabled_reloadsTabAfterRulesAreSetUp() async {
+        profile.prefs.setBool(true, forKey: ContentBlockingConfig.Prefs.EnabledKey)
+        let tab = MockContentBlockerTab()
+        let subject = FirefoxTabContentBlocker(tab: tab, prefs: profile.prefs)
+        let expectation = XCTestExpectation(description: "tab reloaded")
+        tab.onReload = { expectation.fulfill() }
+
+        subject.notifiedTabSetupRequired()
+
+        await fulfillment(of: [expectation], timeout: 2)
+        XCTAssertEqual(tab.reloadCalled, 1)
+    }
+
     func testReloadAdBlockerList_secondCallWithSameJSON_skipsRecompile() async {
         let mock = MockAdBlockerListFetcher(jsonToReturn: Self.validRuleJSON)
         ContentBlocker.shared.adBlockerListFetcher = mock
@@ -175,6 +209,11 @@ final class ContentBlockerTests: XCTestCase {
         XCTAssertNotEqual(hashAfterFirst, hashAfterSecond, "Different JSON should produce a new hash")
     }
 
+    private func disableAllBlocking() {
+        featureFlags.enabledFlags = []
+        profile.prefs.setBool(false, forKey: ContentBlockingConfig.Prefs.EnabledKey)
+    }
+
     private static let validRuleJSON = """
     [{"trigger":{"url-filter":".*ads.*"},"action":{"type":"block"}}]
     """
@@ -186,7 +225,14 @@ final class ContentBlockerTests: XCTestCase {
 
 private final class MockContentBlockerTab: ContentBlockerTab {
     var isPrivate = false
+    var hasUncommittedNavigation = false
+    var reloadCalled = 0
+    var onReload: (() -> Void)?
     func currentURL() -> URL? { return nil }
     func currentWebView() -> WKWebView? { return nil }
     func imageContentBlockingEnabled() -> Bool { return false }
+    func reload(bypassCache: Bool) {
+        reloadCalled += 1
+        onReload?()
+    }
 }

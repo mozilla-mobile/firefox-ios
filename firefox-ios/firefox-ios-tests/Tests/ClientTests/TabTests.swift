@@ -146,6 +146,34 @@ class TabTests: XCTestCase {
         XCTAssertEqual(tab.title, "Test Page Title", "Expected title to return the webView's title")
     }
 
+    // MARK: - hasUncommittedNavigation
+
+    func testHasUncommittedNavigation_whenWebViewIsNil_returnsFalse() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+
+        XCTAssertFalse(tab.hasUncommittedNavigation)
+    }
+
+    func testHasUncommittedNavigation_whenWebViewIsNotLoading_returnsFalse() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        mockTabWebView.loadedURL = URL(string: "https://www.mozilla.org")
+        mockTabWebView.mockIsLoading = false
+
+        XCTAssertFalse(tab.hasUncommittedNavigation)
+    }
+
+    func testHasUncommittedNavigation_whenLoadingURLIsNotTheCurrentBackForwardItem_returnsTrue() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        mockTabWebView.loadedURL = URL(string: "https://www.mozilla.org")
+        mockTabWebView.mockIsLoading = true
+
+        XCTAssertTrue(tab.hasUncommittedNavigation)
+    }
+
     @MainActor
     func testTabDoesntLeak() {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)

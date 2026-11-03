@@ -1079,6 +1079,13 @@ class Tab: NSObject,
 
     // MARK: - ContentBlockerTab
 
+    /// Whether the web view is loading a page that hasn't replaced the current back/forward list item yet,
+    /// for example a URL typed in the address bar before its response arrives.
+    var hasUncommittedNavigation: Bool {
+        guard let webView, webView.isLoading else { return false }
+        return webView.url != webView.backForwardList.currentItem?.url
+    }
+
     func currentURL() -> URL? {
         return url
     }
