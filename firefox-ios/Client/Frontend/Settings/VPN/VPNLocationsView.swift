@@ -14,7 +14,7 @@ struct VPNLocationsView: ThemeableView {
         static let rowTextSpacing: CGFloat = 4
         // TODO: FXIOS-16876 Replace the simulated delay and sample list
         static let simulatedLoadingNanoseconds: UInt64 = 2_000_000_000
-        static let sampleRegionCodes = ["CA", "DE", "FR", "GB", "JP", "NL", "SE", "US"]
+        static let sampleCountryCodes = ["CA", "DE", "FR", "GB", "JP", "NL", "SE", "US"]
     }
 
     @State var theme: Theme
@@ -58,6 +58,15 @@ struct VPNLocationsView: ThemeableView {
         .task { await loadLocations() }
     }
 
+    private var loadingIndicator: some View {
+        VPNHelpers.loadingIndicator(text: .VPN.LocationPicker.FindingLocationsText, theme: theme)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
+            .padding(.vertical, VPNHelpers.UX.rowVerticalPadding)
+            .accessibilityElement(children: .combine)
+            .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.Locations.loadingIndicator)
+    }
+
     // MARK: - Rows
 
     private func locationButton(countryCode: String, title: String, subtitle: String? = nil) -> some View {
@@ -65,6 +74,7 @@ struct VPNLocationsView: ThemeableView {
         let a11yIdentifier = countryCode == VPNServerManager.recommendedCountryCode
             ? AccessibilityIdentifiers.Settings.VPN.Locations.recommendedLocation
             : "\(AccessibilityIdentifiers.Settings.VPN.Locations.location).\(countryCode)"
+
         return Button {
             viewModel.selectLocation(countryCode)
         } label: {
@@ -95,15 +105,6 @@ struct VPNLocationsView: ThemeableView {
         .accessibilityIdentifier(a11yIdentifier)
     }
 
-    private var loadingIndicator: some View {
-        VPNHelpers.loadingIndicator(text: .VPN.LocationPicker.FindingLocationsText, theme: theme)
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
-            .padding(.vertical, VPNHelpers.UX.rowVerticalPadding)
-            .accessibilityElement(children: .combine)
-            .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.Locations.loadingIndicator)
-    }
-
     // MARK: - Actions
 
     private func loadLocations() async {
@@ -114,7 +115,7 @@ struct VPNLocationsView: ThemeableView {
             return
         }
         withAnimation {
-            countryCodes = viewModel.sortedByName(UX.sampleRegionCodes)
+            countryCodes = viewModel.sortedByName(UX.sampleCountryCodes)
             isLoadingCountries = false
         }
     }
