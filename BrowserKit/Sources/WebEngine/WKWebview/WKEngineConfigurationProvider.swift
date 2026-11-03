@@ -66,6 +66,12 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
 
     private let configuration: WKWebViewConfiguration
 
+    /// WebKit features that connect outside `proxyConfigurations`, disabled while the proxy is on:
+    /// - WebAuthn: validating a cross-domain passkey fetches `https://<rpId>/.well-known/webauthn`,
+    ///   handing the device's real IP to the relying party.
+    /// - WebTransport: its QUIC connections bypass the proxy entirely, including from workers.
+    static let proxyLeakingFeatures = ["WebAuthenticationEnabled", "WebTransportEnabled"]
+
     public init(configuration: WKWebViewConfiguration = WKWebViewConfiguration()) {
         self.configuration = configuration
     }
@@ -128,6 +134,9 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         configuration.userContentController = WKUserContentController()
         configuration.allowsInlineMediaPlayback = true
         configuration.dataDetectorTypes = DefaultWKEngineConfigurationProvider.defaultDataDetectorTypes
+        Self.proxyLeakingFeatures.forEach {
+            configuration.preferences.setFeature($0, enabled: !Self.isProxyEnabled)
+        }
 
         // TODO: FXIOS-8086 - Evaluate if ignoresViewportScaleLimits is still needed
         // We do this to go against the configuration of the <meta name="viewport">

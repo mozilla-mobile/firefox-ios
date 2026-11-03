@@ -9,13 +9,20 @@ import Shared
 @testable import Client
 
 final class NativeErrorPageHelperTests: XCTestCase {
+    private var userPreferences: MockUserFeaturePreferences!
+
     override func setUp() async throws {
         try await super.setUp()
         let profile = makeProfile()
-        await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
+        userPreferences = MockUserFeaturePreferences()
+        await DependencyHelperMock().bootstrapDependencies(
+            injectedProfile: profile,
+            injectedUserFeaturePreferences: userPreferences
+        )
     }
 
     override func tearDown() async throws {
+        userPreferences = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -184,6 +191,48 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertTrue(model.isRegularUI)
     }
 
+    func testParseErrorDetails_cannotConnectToHost_vpnOn_returnsVPNConnectionModel() {
+        setupNimbusNativeErrorPageTesting(isEnabled: true)
+        userPreferences.setPreferenceFor(.vpnFeature, to: true)
+        let url = URL(string: "https://example.com")!
+        let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorCannotConnectToHost, userInfo: [
+            NSURLErrorFailingURLErrorKey: url
+        ])
+        let helper = NativeErrorPageHelper(error: error)
+
+        let model = helper.parseErrorDetails()
+
+        XCTAssertEqual(model, .vpnConnection(VPNConnectionErrorModel(url: url)))
+    }
+
+    func testParseErrorDetails_cannotConnectToHost_vpnOff_doesNotReturnVPNConnectionModel() {
+        setupNimbusNativeErrorPageTesting(isEnabled: true)
+        userPreferences.setPreferenceFor(.vpnFeature, to: false)
+        let url = URL(string: "https://example.com")!
+        let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorCannotConnectToHost, userInfo: [
+            NSURLErrorFailingURLErrorKey: url
+        ])
+        let helper = NativeErrorPageHelper(error: error)
+
+        let model = helper.parseErrorDetails()
+
+        XCTAssertNotEqual(model, .vpnConnection(VPNConnectionErrorModel(url: url)))
+    }
+
+    func testParseErrorDetails_otherError_vpnOn_returnsGenericModel() {
+        setupNimbusNativeErrorPageTesting(isEnabled: true)
+        userPreferences.setPreferenceFor(.vpnFeature, to: true)
+        let url = URL(string: "https://example.com")!
+        let error = NSError(domain: NSURLErrorDomain, code: -1, userInfo: [
+            NSURLErrorFailingURLErrorKey: url
+        ])
+        let helper = NativeErrorPageHelper(error: error)
+
+        let model = helper.parseErrorDetails()
+
+        XCTAssertEqual(model, .generic(GenericErrorModel(url: url)))
+    }
+
     // MARK: - logCertificateErrorDetails
 
     func testLogCertificateErrorDetails_withUnderlyingError_logsDiagnosticsInMessageWithoutExtra() throws {
@@ -308,6 +357,19 @@ final class NativeErrorPageHelperTests: XCTestCase {
         XCTAssertEqual(model.url, testURL)
         XCTAssertNil(model.advancedSection)
         XCTAssertTrue(model.isRegularUI)
+    }
+
+    func testVPNConnectionModel_hasCorrectComputedProperties() {
+        let testURL = URL(string: "https://example.com")!
+        let model = ErrorPageModel.vpnConnection(VPNConnectionErrorModel(url: testURL))
+
+        XCTAssertEqual(model.title, .VPN.ErrorPage.Title)
+        XCTAssertEqual(model.description, .VPN.ErrorPage.Body)
+        XCTAssertEqual(model.foxImageName, ImageIdentifiers.NativeErrorPage.vpnConnectionError)
+        XCTAssertEqual(model.url, testURL)
+        XCTAssertNil(model.advancedSection)
+        XCTAssertTrue(model.isRegularUI)
+        XCTAssertFalse(model.isWayback)
     }
 
     func testGenericErrorModel_withoutURL_hasNilURL() {
