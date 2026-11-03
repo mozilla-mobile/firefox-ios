@@ -279,12 +279,13 @@ enum Experiments {
                         category: .experiments
                     )
             })
-            .onApply(callback: { _ in
+            .onApply(callback: { nimbus in
                     DefaultLogger.shared.log(
                         "Nimbus enrollment and experiments application complete",
                         level: .info,
                         category: .experiments
                     )
+                    sendFeatureFlags(from: nimbus.getActiveExperiments())
             })
             .onFetch(callback: { _ in
                 DefaultLogger.shared.log(
@@ -340,6 +341,12 @@ enum Experiments {
             }
         }
         return featureBranches
+    }
+
+    /// Attaches the enrolled feature branches to crash reports. Called each time Nimbus applies enrollments, at
+    /// startup and whenever they change mid-session, such as when the user opts out of studies.
+    static func sendFeatureFlags(from experiments: [EnrolledExperiment], to logger: Logger = DefaultLogger.shared) {
+        logger.setFeatureFlags(featureBranches(from: experiments))
     }
 }
 
