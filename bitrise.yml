@@ -60,6 +60,10 @@ pipelines:
         depends_on:
         - firefox_fullfunctional_iphone_build
         parallel: 4
+      firefox_fullfunctional_iphone_report:
+        depends_on:
+        - firefox_fullfunctional_iphone_shard
+        should_always_run: workflow
 
 workflows:
   firefox_accessibility_test:
@@ -786,8 +790,76 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
         - xctestrun: $FULLFUNCTIONAL_XCTESTRUN
         - xcodebuild_options: -collect-test-diagnostics never
+    - script@1:
+        title: Count failed tests in this shard
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            if [ -z "$BITRISE_XCRESULT_PATH" ]; then
+                FAILED_COUNT="no results"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
+            echo "Shard $BITRISE_IO_PARALLEL_INDEX failures: ${FAILED_COUNT:-no results}"
+            echo "${FAILED_COUNT:-no results}" > "$BITRISE_DEPLOY_DIR/fullfunctional_result.txt"
     - deploy-to-bitrise-io@2:
         is_always_run: true
+        inputs:
+        - pipeline_intermediate_files: $BITRISE_DEPLOY_DIR/fullfunctional_result.txt:FULLFUNCTIONAL_RESULT_$BITRISE_IO_PARALLEL_INDEX
+  firefox_fullfunctional_iphone_report:
+    description: Collect the failed test counts from all shards and report them to Slack
+    envs:
+    - FULLFUNCTIONAL_SHARD_COUNT: 4
+    steps:
+    - pull-intermediate-files@1: {}
+    - script@1:
+        title: Sum failed tests across shards
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            TOTAL=0
+            DETAILS=""
+            STATUS=":white_check_mark:"
+            COLOR="#3bc3a3"
+            for i in $(seq 0 $((FULLFUNCTIONAL_SHARD_COUNT - 1))); do
+                RESULT_FILE_VAR="FULLFUNCTIONAL_RESULT_$i"
+                RESULT_FILE="${!RESULT_FILE_VAR}"
+                if [ -n "$RESULT_FILE" ] && [ -f "$RESULT_FILE" ]; then
+                    COUNT=$(cat "$RESULT_FILE")
+                else
+                    COUNT="no results"
+                fi
+                if [[ "$COUNT" =~ ^[0-9]+$ ]]; then
+                    TOTAL=$((TOTAL + COUNT))
+                    [ "$COUNT" -gt 0 ] && STATUS=":x:" && COLOR="danger"
+                else
+                    STATUS=":x:"
+                    COLOR="danger"
+                fi
+                DETAILS="${DETAILS}Shard $((i + 1)): ${COUNT}"$'\n'
+            done
+            echo "Total failures: $TOTAL"
+            printf "%b" "$DETAILS"
+            envman add --key FULLFUNCTIONAL_SLACK_STATUS --value "$STATUS"
+            envman add --key FULLFUNCTIONAL_SLACK_COLOR --value "$COLOR"
+            envman add --key FULLFUNCTIONAL_SLACK_MESSAGE --value "Number of failed tests: $TOTAL"
+    - slack@4:
+        is_always_run: true
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
+        - footer: Created by Mobile Test Engineering
+        - pretext: "*Firefox-iOS* :firefox: *Full Functional Tests iPhone* ${FULLFUNCTIONAL_SLACK_STATUS}"
+        - color: "$FULLFUNCTIONAL_SLACK_COLOR"
+        - message: "$FULLFUNCTIONAL_SLACK_MESSAGE"
+        - timestamp: 'no'
+        - fields: |
+            Branch | ${BITRISE_GIT_BRANCH}
+        - buttons: |
+            Pipeline|${BITRISE_BUILD_URL}
   1_git_clone_and_post_clone:
     steps:
     - activate-ssh-key@4:
