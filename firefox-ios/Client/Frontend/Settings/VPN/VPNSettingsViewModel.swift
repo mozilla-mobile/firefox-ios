@@ -16,7 +16,7 @@ final class VPNSettingsViewModel {
 
     private(set) var isVPNEnabled: Bool
     private(set) var isVPNConnecting = false
-    private(set) var selectedRegionCode: String
+    private(set) var selectedCountryCode: String
     private let dataUsage: VPNDataUsage
 
     @ObservationIgnored private let prefs: Prefs
@@ -33,9 +33,19 @@ final class VPNSettingsViewModel {
     }
 
     var locationName: String {
-        selectedRegionCode == VPNServerManager.recommendedCountryCode
+        selectedCountryCode == VPNServerManager.recommendedCountryCode
             ? .VPN.Settings.LocationRecommended
-            : localeProvider.localizedRegionName(for: selectedRegionCode)
+            : countryName(for: selectedCountryCode)
+    }
+
+    func countryName(for countryCode: String) -> String {
+        localeProvider.localizedRegionName(for: countryCode)
+    }
+
+    func sortedByName(_ countryCodes: [String]) -> [String] {
+        countryCodes.sorted {
+            countryName(for: $0).localizedCompare(countryName(for: $1)) == .orderedAscending
+        }
     }
 
     init(
@@ -48,14 +58,15 @@ final class VPNSettingsViewModel {
         self.userPreferences = userPreferences
         self.localeProvider = localeProvider
         self.isVPNEnabled = userPreferences.getPreferenceFor(.vpnFeature)
-        self.selectedRegionCode = prefs.stringForKey(PrefsKeys.VPNSettings.selectedRegionCode)
+        self.selectedCountryCode = prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode)
             ?? VPNServerManager.recommendedCountryCode
         self.dataUsage = dataUsage
     }
 
-    func selectLocation(_ regionCode: String) {
-        selectedRegionCode = regionCode
-        prefs.setString(regionCode, forKey: PrefsKeys.VPNSettings.selectedRegionCode)
+    func selectLocation(_ countryCode: String) {
+        guard countryCode != selectedCountryCode else { return }
+        selectedCountryCode = countryCode
+        prefs.setString(countryCode, forKey: PrefsKeys.VPNSettings.selectedCountryCode)
     }
 
     // TODO: FXIOS-16876 Replace this with real VPN connection stuff

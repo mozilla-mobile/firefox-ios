@@ -8,13 +8,14 @@ import Shared
 
 @available(iOS 17.0, *)
 struct VPNLocationsRow: View {
+    let windowUUID: WindowUUID
+    let themeManager: ThemeManager
     let viewModel: VPNSettingsViewModel
     let theme: Theme
-    weak var viewController: VPNSettingsViewController?
 
     var body: some View {
-        Button {
-            viewController?.locationsTapped()
+        NavigationLink {
+            VPNLocationsView(windowUUID: windowUUID, themeManager: themeManager, viewModel: viewModel)
         } label: {
             HStack {
                 Text(String.VPN.Settings.LocationTitle)

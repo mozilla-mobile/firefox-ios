@@ -41,37 +41,11 @@ final class VPNSettingsViewControllerTests: XCTestCase {
         XCTAssertEqual(pushedController.url, VPNSettingsViewController.learnMoreURL)
     }
 
-    // MARK: - Locations
-    func test_locationsTapped_pushesVPNLocationsViewController() {
-        let subject = createSubject()
-        let navigationController = UINavigationController(rootViewController: subject)
-
-        subject.locationsTapped()
-
-        XCTAssertTrue(navigationController.topViewController is VPNLocationsViewController)
-    }
-
-    func test_onLocationSelected_savesSelection() throws {
-        let prefs = MockProfilePrefs()
-        let subject = createSubject(prefs: prefs)
-        let navigationController = UINavigationController(rootViewController: subject)
-
-        subject.locationsTapped()
-        let locationsController = try XCTUnwrap(navigationController.topViewController as? VPNLocationsViewController)
-        locationsController.loadViewIfNeeded()
-        let locationsHostingController = try XCTUnwrap(
-            locationsController.children.first as? UIHostingController<VPNLocationsView>
-        )
-        locationsHostingController.rootView.onLocationSelected("DE")
-
-        XCTAssertEqual(prefs.stringForKey(PrefsKeys.VPNSettings.selectedRegionCode), "DE")
-    }
-
     // MARK: - Helpers
-    private func createSubject(prefs: Prefs = MockProfilePrefs()) -> VPNSettingsViewController {
+    private func createSubject() -> VPNSettingsViewController {
         let subject = VPNSettingsViewController(
             windowUUID: .XCTestDefaultUUID,
-            prefs: prefs,
+            prefs: MockProfilePrefs(),
             themeManager: MockThemeManager()
         )
         trackForMemoryLeaks(subject)

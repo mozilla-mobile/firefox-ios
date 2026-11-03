@@ -13,7 +13,6 @@ final class VPNSettingsViewController: UIViewController {
 
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
-    private let localeProvider: LocaleProvider
     private let viewModel: VPNSettingsViewModel
     private lazy var hostingController = UIHostingController(
         rootView: VPNSettingsViewContainer(
@@ -32,7 +31,6 @@ final class VPNSettingsViewController: UIViewController {
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        self.localeProvider = localeProvider
         // TODO: FXIOS-16876 The view model will be held by VPNManager so it can be shared with VPNSetting
         self.viewModel = VPNSettingsViewModel(prefs: prefs, localeProvider: localeProvider)
         super.init(nibName: nil, bundle: nil)
@@ -60,19 +58,6 @@ final class VPNSettingsViewController: UIViewController {
     func learnMoreTapped() {
         let controller = SettingsContentViewController(windowUUID: windowUUID)
         controller.url = Self.learnMoreURL
-        navigationController?.pushViewController(controller, animated: true)
-    }
-
-    func locationsTapped() {
-        let controller = VPNLocationsViewController(
-            windowUUID: windowUUID,
-            selectedRegionCode: viewModel.selectedRegionCode,
-            themeManager: themeManager,
-            localeProvider: localeProvider,
-            onLocationSelected: { [weak self] regionCode in
-                self?.viewModel.selectLocation(regionCode)
-            }
-        )
         navigationController?.pushViewController(controller, animated: true)
     }
 }

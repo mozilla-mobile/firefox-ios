@@ -6,37 +6,29 @@ import Common
 import Shared
 import SwiftUI
 
+@available(iOS 17.0, *)
 struct VPNLocationsView: ThemeableView {
     private struct UX {
         static let outerPadding: CGFloat = 16
         static let sectionSpacing: CGFloat = 16
         static let rowTextSpacing: CGFloat = 4
         static let loadingSpacing: CGFloat = 8
+        // TODO: FXIOS-16876 Replace the simulated delay and sample list
         static let simulatedLoadingNanoseconds: UInt64 = 2_000_000_000
         static let sampleRegionCodes = ["CA", "DE", "FR", "GB", "JP", "NL", "SE", "US"]
     }
 
     @State var theme: Theme
-    @State private var regionCodes: [String] = []
-    @State private var isLoadingLocations = true
-    @State private var selectedRegionCode: String
+    @State private var countryCodes: [String] = []
+    @State private var isLoadingCountries = true
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    let onLocationSelected: (String) -> Void
-    private let localeProvider: LocaleProvider
+    let viewModel: VPNSettingsViewModel
 
-    init(
-        windowUUID: WindowUUID,
-        themeManager: ThemeManager,
-        selectedRegionCode: String = VPNServerManager.recommendedCountryCode,
-        localeProvider: LocaleProvider = SystemLocaleProvider(),
-        onLocationSelected: @escaping (String) -> Void = { _ in }
-    ) {
+    init(windowUUID: WindowUUID, themeManager: ThemeManager, viewModel: VPNSettingsViewModel) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        self._selectedRegionCode = State(initialValue: selectedRegionCode)
-        self.localeProvider = localeProvider
-        self.onLocationSelected = onLocationSelected
+        self.viewModel = viewModel
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 
@@ -45,16 +37,16 @@ struct VPNLocationsView: ThemeableView {
             VStack(alignment: .leading, spacing: UX.sectionSpacing) {
                 VPNHelpers.card(theme: theme) {
                     locationButton(
-                        regionCode: VPNServerManager.recommendedCountryCode,
+                        countryCode: VPNServerManager.recommendedCountryCode,
                         title: .VPN.LocationPicker.RecommendedMainText,
                         subtitle: String(format: .VPN.LocationPicker.RecommendedSubText, AppName.shortName.rawValue)
                     )
-                    ForEach(regionCodes, id: \.self) { regionCode in
+                    ForEach(countryCodes, id: \.self) { countryCode in
                         VPNHelpers.divider()
-                        locationButton(regionCode: regionCode, title: localeProvider.localizedRegionName(for: regionCode))
+                        locationButton(countryCode: countryCode, title: viewModel.countryName(for: countryCode))
                     }
                 }
-                if isLoadingLocations {
+                if isLoadingCountries {
                     loadingIndicator
                 }
             }
@@ -62,19 +54,20 @@ struct VPNLocationsView: ThemeableView {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .background(theme.colors.layer1.color)
+        .navigationTitle(String.VPN.Settings.LocationTitle)
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
         .task { await loadLocations() }
     }
 
     // MARK: - Rows
 
-    private func locationButton(regionCode: String, title: String, subtitle: String? = nil) -> some View {
-        let isSelected = selectedRegionCode == regionCode
-        let a11yIdentifier = regionCode == VPNServerManager.recommendedCountryCode
+    private func locationButton(countryCode: String, title: String, subtitle: String? = nil) -> some View {
+        let isSelected = viewModel.selectedCountryCode == countryCode
+        let a11yIdentifier = countryCode == VPNServerManager.recommendedCountryCode
             ? AccessibilityIdentifiers.Settings.VPN.Locations.recommendedLocation
-            : "\(AccessibilityIdentifiers.Settings.VPN.Locations.location).\(regionCode)"
+            : "\(AccessibilityIdentifiers.Settings.VPN.Locations.location).\(countryCode)"
         return Button {
-            selectLocation(regionCode)
+            viewModel.selectLocation(countryCode)
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: UX.rowTextSpacing) {
@@ -120,26 +113,16 @@ struct VPNLocationsView: ThemeableView {
 
     // MARK: - Actions
 
-    private func selectLocation(_ regionCode: String) {
-        guard regionCode != selectedRegionCode else { return }
-        selectedRegionCode = regionCode
-        onLocationSelected(regionCode)
-    }
-
-    // TODO: Replace the simulated delay and sample list with `VPNServerManager.listCountries()`
     private func loadLocations() async {
-        guard isLoadingLocations else { return }
+        guard isLoadingCountries else { return }
         do {
             try await Task.sleep(nanoseconds: UX.simulatedLoadingNanoseconds)
         } catch {
             return
         }
         withAnimation {
-            regionCodes = UX.sampleRegionCodes.sorted {
-                localeProvider.localizedRegionName(for: $0)
-                    .localizedCompare(localeProvider.localizedRegionName(for: $1)) == .orderedAscending
-            }
-            isLoadingLocations = false
+            countryCodes = viewModel.sortedByName(UX.sampleRegionCodes)
+            isLoadingCountries = false
         }
     }
 }

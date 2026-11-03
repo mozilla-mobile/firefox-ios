@@ -2448,7 +2448,6 @@
 		EEF4D8BD30781B26001DEC12 /* VPNSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF4D8BA30781B26001DEC12 /* VPNSettingTests.swift */; };
 		EEF4DD323078286F001DEC12 /* VPNSettingsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF4DD313078286F001DEC12 /* VPNSettingsViews.swift */; };
 		EEF7D8953088FB4500EF99B6 /* VPNLocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF7D8913088FB4500EF99B6 /* VPNLocationsView.swift */; };
-		EEF7D8963088FB4500EF99B6 /* VPNLocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF7D8923088FB4500EF99B6 /* VPNLocationsViewController.swift */; };
 		EEFBE6DA3091115100522F96 /* VPNSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFBE6D93091115100522F96 /* VPNSettingsViewControllerTests.swift */; };
 		F0A27D00FEE047EEB0A00001 /* UITraitCollection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A27D00FEE047EEB0A00002 /* UITraitCollection+Extension.swift */; };
 		F18859502A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F188594F2A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift */; };
@@ -12694,7 +12693,6 @@
 		EEF4D8BA30781B26001DEC12 /* VPNSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSettingTests.swift; sourceTree = "<group>"; };
 		EEF4DD313078286F001DEC12 /* VPNSettingsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSettingsViews.swift; sourceTree = "<group>"; };
 		EEF7D8913088FB4500EF99B6 /* VPNLocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNLocationsView.swift; sourceTree = "<group>"; };
-		EEF7D8923088FB4500EF99B6 /* VPNLocationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNLocationsViewController.swift; sourceTree = "<group>"; };
 		EEFBE6D93091115100522F96 /* VPNSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		EF0444EEBEA6A45A3E0F654C /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		EF56430D950BC270FDA83402 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
@@ -18136,7 +18134,6 @@
 				EE39C19D30990B1B00EB3C7C /* VPNToggleRow.swift */,
 				EE39C19E30990B1B00EB3C7C /* VPNUsageBar.swift */,
 				EEF7D8913088FB4500EF99B6 /* VPNLocationsView.swift */,
-				EEF7D8923088FB4500EF99B6 /* VPNLocationsViewController.swift */,
 				EEF4DD313078286F001DEC12 /* VPNSettingsViews.swift */,
 				EEF4D5C13077D958001DEC12 /* VPNSettingsViewController.swift */,
 			);
@@ -20912,7 +20909,6 @@
 				EBB8950C21939E4100EB91A0 /* FirefoxTabContentBlocker.swift in Sources */,
 				21618A632A422A3900A5189E /* ThemeMiddleware.swift in Sources */,
 				EEF7D8953088FB4500EF99B6 /* VPNLocationsView.swift in Sources */,
-				EEF7D8963088FB4500EF99B6 /* VPNLocationsViewController.swift in Sources */,
 				0E77DF0F2CB8220000B80BA1 /* GeneratedPasswordStorage.swift in Sources */,
 				BA1237C32DAE6D5700BB6333 /* AddressBarSettingsView.swift in Sources */,
 				B2981F8A2B71AD7A00132C1B /* AutofillAccessoryViewButtonItem.swift in Sources */,
