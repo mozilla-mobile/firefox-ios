@@ -15,11 +15,6 @@ class DefaultRouter: NSObject, Router {
         return navigationController.presentedViewController != nil
     }
 
-    var hasBottomSafeArea: Bool {
-        guard let viewController = navigationController as? UIViewController else { return false }
-        return viewController.view.safeAreaInsets.bottom > 0
-    }
-
     var navigationController: NavigationController
 
     init(navigationController: NavigationController) {
