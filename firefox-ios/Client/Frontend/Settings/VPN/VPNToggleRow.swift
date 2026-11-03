@@ -1,0 +1,43 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import SwiftUI
+import Common
+import Shared
+
+@available(iOS 17.0, *)
+struct VPNToggleRow: View {
+    let viewModel: VPNSettingsViewModel
+    let theme: Theme
+
+    private var accessibilityValue: String {
+        if viewModel.isVPNConnecting { return .VPN.Settings.Connecting }
+        return viewModel.isVPNEnabled ? .VPN.Settings.StatusOn : .VPN.Settings.StatusOff
+    }
+
+    var body: some View {
+        Toggle(isOn: Binding(get: { viewModel.isVPNEnabled },
+                             set: { viewModel.toggleVPN($0) })) {
+            HStack {
+                Text(String.VPN.Settings.ToggleTitle)
+                    .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                    .foregroundStyle(theme.colors.textPrimary.color)
+                Spacer()
+                if viewModel.isVPNConnecting {
+                    ProgressView()
+                        .accessibilityHidden(true)
+                    Text(String.VPN.Settings.Connecting)
+                        .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                        .foregroundStyle(theme.colors.textSecondary.color)
+                        .accessibilityHidden(true)
+                }
+            }
+        }
+        .toggleStyle(SwitchToggleStyle(tint: theme.colors.actionPrimary.color))
+        .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.vpnToggle)
+        .accessibilityValue(accessibilityValue)
+        .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
+        .padding(.vertical, VPNHelpers.UX.rowVerticalPadding)
+    }
+}

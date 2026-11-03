@@ -8,6 +8,7 @@ import XCTest
 
 @testable import Client
 
+@available(iOS 17.0, *)
 @MainActor
 final class VPNSettingsViewControllerTests: XCTestCase {
     override func setUp() async throws {
@@ -30,15 +31,11 @@ final class VPNSettingsViewControllerTests: XCTestCase {
     }
 
     // MARK: - Learn more
-    func test_onLearnMoreTapped_pushesSettingsContentViewControllerWithLearnMoreURL() throws {
+    func test_learnMoreTapped_pushesSettingsContentViewControllerWithLearnMoreURL() throws {
         let subject = createSubject()
         let navigationController = UINavigationController(rootViewController: subject)
-        subject.loadViewIfNeeded()
 
-        let hostingController = try XCTUnwrap(
-            subject.children.first as? UIHostingController<VPNSettingsViewContainer>
-        )
-        hostingController.rootView.onLearnMoreTapped()
+        subject.learnMoreTapped()
 
         let pushedController = try XCTUnwrap(navigationController.topViewController as? SettingsContentViewController)
         XCTAssertEqual(pushedController.url, VPNSettingsViewController.learnMoreURL)

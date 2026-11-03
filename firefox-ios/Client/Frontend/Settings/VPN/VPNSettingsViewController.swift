@@ -6,24 +6,20 @@ import Common
 import Shared
 import SwiftUI
 
+@available(iOS 17.0, *)
 final class VPNSettingsViewController: UIViewController {
     // TODO: replace this with the actual URL eventually
     static let learnMoreURL = SupportUtils.URLForTopic("vpn")
 
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
-    private let prefs: Prefs
+    private let viewModel: VPNSettingsViewModel
     private lazy var hostingController = UIHostingController(
         rootView: VPNSettingsViewContainer(
             windowUUID: windowUUID,
             themeManager: themeManager,
-            isVPNEnabled: prefs.boolForKey(PrefsKeys.VPNSettings.isEnabled) ?? false,
-            onVPNToggled: { [prefs = self.prefs] isEnabled in
-                prefs.setBool(isEnabled, forKey: PrefsKeys.VPNSettings.isEnabled)
-            },
-            onLearnMoreTapped: { [weak self] in
-                self?.learnMoreTapped()
-            }
+            viewModel: viewModel,
+            viewController: self
         )
     )
 
@@ -33,8 +29,9 @@ final class VPNSettingsViewController: UIViewController {
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.windowUUID = windowUUID
-        self.prefs = prefs
         self.themeManager = themeManager
+        // TODO: FXIOS-16876 The view model will be held by VPNManager so it can be shared with VPNSetting
+        self.viewModel = VPNSettingsViewModel(prefs: prefs)
         super.init(nibName: nil, bundle: nil)
         self.title = .VPN.Settings.Title
     }
@@ -65,7 +62,7 @@ final class VPNSettingsViewController: UIViewController {
         hostingController.didMove(toParent: self)
     }
 
-    private func learnMoreTapped() {
+    func learnMoreTapped() {
         let controller = SettingsContentViewController(windowUUID: windowUUID)
         controller.url = Self.learnMoreURL
         navigationController?.pushViewController(controller, animated: true)

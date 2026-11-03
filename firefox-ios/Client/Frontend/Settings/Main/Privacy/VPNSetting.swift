@@ -5,6 +5,7 @@
 import Common
 import Shared
 
+// TODO: FXIOS-16876 VPNSetting will get its view model from VPNManager instead of reading prefs and data usage itself
 final class VPNSetting: Setting {
     private weak var settingsDelegate: PrivacySettingsDelegate?
     private let profile: Profile?
@@ -28,6 +29,7 @@ final class VPNSetting: Setting {
         if !isEnabled {
             statusString = .VPN.Settings.StatusOff
         } else if dataUsage.isLimitReached {
+            // TODO: Clear the paused status when the monthly data limit resets
             statusString = .VPN.Settings.StatusPaused
         } else {
             statusString = .VPN.Settings.StatusOn
