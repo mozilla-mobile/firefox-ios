@@ -68,6 +68,10 @@ final class InstallationTelemetryService {
             do {
                 try await onForeground()
             } catch {
+                // [IHC] Careful, a refresh status update can call this error too. We probably want the error handling lower.
+                // Likely we want to log a fatal error to sentry for anything that prevents us from sending the telemetry,
+                // and a warning level breadcrumb just for an issue saving to the keychain any local updates (last seen
+                // timestamp).
                 logger.log("Could not update installation history",
                            level: .warning,
                            category: .telemetry,
@@ -89,73 +93,105 @@ final class InstallationTelemetryService {
         }
     }
 
-    /// When history is corrupt, saves only the available purchase date and app version to Glean.
-    private func recordAcquisitionOnly() async throws {
-        let result = await acquisition.fetch()
-        try Task.checkCancellation()
-        guard canCollect else { return }
-        recordAcquisition(result)
-        gleanWrapper.submit(ping: GleanMetrics.Pings.shared.installation)
-        installationPrefs.setBool(true, forKey: PrefsKeys.installationProcessedKey)
+    /// Gets the current install history from the keychain and then saves the newest values with current timestamps.
+    func getAndUpdateInstallationHistory() throws -> InstallationHistory {
+        let currentHistory = try history.load()
+        let previous: InstallationHistory?
+
+        switch currentHistory {
+        case .missing, .corrupt:
+            if currentHistory == .corrupt {
+                // TODO add fatal error sentry
+
+            }
+
+            // If history is missing or corrupt, the best we can do is set it again
+            let newHistory = InstallationHistory(
+                installCounter: 0,
+                lastSeenDate: dateProvider.now()
+            )
+
+            try history.save(
+                newHistory
+            )
+
+            return newHistory
+
+        case .valid(let currentInstallHistory):
+            let currentCounter = currentInstallHistory.installCounter
+            var nextCounter = currentCounter + 1
+
+            if nextCounter > Int64.max { nextCounter = Int64.max }
+
+            try history.save(
+                InstallationHistory(
+                    installCounter: nextCounter,
+                    lastSeenDate: dateProvider.now()
+                )
+            )
+
+            return currentInstallHistory
+        }
+    }
+
+    func getAppAcquisition() async throws -> AppAcquisition {
+        let acquisitionResult = await acquisition.fetch()
+
+        switch acquisitionResult {
+        case .available(let appAcquisition):
+            return appAcquisition
+
+        case .unavailable(let error):
+            throw error
+        }
     }
 
     /// Increments the install count and updates history for a new installation.
     /// Saves the count, previous last seen date, and available purchase details to Glean.
     private func processInstallationHistory() async throws {
-        let historyState = try history.load()
-        let previous: InstallationHistory?
-        switch historyState {
-        case .missing:
-            previous = nil
-        case .valid(let history):
-            previous = history
-        case .corrupt:
-            try await recordAcquisitionOnly()
-            return
-        }
+        // A. Get current keychain values + update values
+        let currentInstallHistory = try getAndUpdateInstallationHistory()
 
-        let previousCounter = previous?.installCounter ?? 0
-        guard previousCounter < Int64.max else { return }
-        let nextCounter = previousCounter + 1
+        // B. Get current app store receipt values
+        let appAcquisition = try await getAppAcquisition()
 
-        let acquisitionResult = await acquisition.fetch()
+        // FIXME Do we still need these somewhere?
         try Task.checkCancellation()
-        guard canCollect else { return }
+        guard canCollect else { return } // [IHC] Is this in case the user disabled telemetry while async work happened?
 
-        try history.save(
-            InstallationHistory(
-                installCounter: nextCounter,
-                lastSeenDate: dateProvider.now()
-            )
-        )
-
-        gleanWrapper.recordQuantity(
-            for: GleanMetrics.Installation.installCounter,
-            value: nextCounter
-        )
-
-        if let lastSeenDate = previous?.lastSeenDate {
-            gleanWrapper.recordDatetime(
-                for: GleanMetrics.Installation.lastSeenDate,
-                value: lastSeenDate
-            )
-        }
-
-        recordAcquisition(acquisitionResult)
+        // C. Record Glean telemetry (TODO - Move to InstallationTelemetry struct)
+        recordInstallationHistory(installationHistory: currentInstallHistory)
+        recordAcquisition(appAcquisition: appAcquisition)
+        // TODO also submit the ping from the telemetry struct
         gleanWrapper.submit(ping: GleanMetrics.Pings.shared.installation)
+
+        // D. Save done processing
         installationPrefs.setBool(true, forKey: PrefsKeys.installationProcessedKey)
     }
 
+    // TODO Move to telemetry struct
     /// Saves the original purchase date and app version to Glean when available.
-    private func recordAcquisition(_ result: AcquisitionOutcome) {
-        guard case .available(let info) = result else { return }
+    private func recordAcquisition(appAcquisition: AppAcquisition) {
         gleanWrapper.recordDatetime(
             for: GleanMetrics.Installation.originalPurchaseDate,
-            value: info.originalPurchaseDate
+            value: appAcquisition.originalPurchaseDate
         )
         gleanWrapper.recordString(
             for: GleanMetrics.Installation.originalAppVersion,
-            value: info.originalAppVersion
+            value: appAcquisition.originalAppVersion
+        )
+    }
+
+    // TODO Move to telemetry struct
+    private func recordInstallationHistory(installationHistory: InstallationHistory) {
+        gleanWrapper.recordQuantity(
+            for: GleanMetrics.Installation.installCounter,
+            value: installationHistory.installCounter
+        )
+
+        gleanWrapper.recordDatetime(
+            for: GleanMetrics.Installation.lastSeenDate,
+            value: installationHistory.lastSeenDate
         )
     }
 
