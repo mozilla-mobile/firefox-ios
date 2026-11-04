@@ -2427,6 +2427,7 @@
 		EE86E741304721AD003BB5BC /* OnboardingCardScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE86E73F304721AD003BB5BC /* OnboardingCardScheduler.swift */; };
 		EE86E743304721BA003BB5BC /* OnboardingDripDebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE86E742304721BA003BB5BC /* OnboardingDripDebugSettings.swift */; };
 		EE86EBA430477785003BB5BC /* OnboardingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE86EBA330477785003BB5BC /* OnboardingCardView.swift */; };
+		EE93AC00309BDA28002357CF /* VPNHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE93ABFF309BDA28002357CF /* VPNHelpersTests.swift */; };
 		EEB965112FBCCDFC00D6C232 /* PageRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9650E2FBCCDFC00D6C232 /* PageRoute.swift */; };
 		EEB965122FBCCDFC00D6C232 /* ReaderModeSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9650F2FBCCDFC00D6C232 /* ReaderModeSchemeHandler.swift */; };
 		EEB965162FBCCE7B00D6C232 /* ReaderModeSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB965132FBCCE7B00D6C232 /* ReaderModeSchemeHandlerTests.swift */; };
@@ -12666,6 +12667,7 @@
 		EE86E73F304721AD003BB5BC /* OnboardingCardScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardScheduler.swift; sourceTree = "<group>"; };
 		EE86E742304721BA003BB5BC /* OnboardingDripDebugSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDripDebugSettings.swift; sourceTree = "<group>"; };
 		EE86EBA330477785003BB5BC /* OnboardingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardView.swift; sourceTree = "<group>"; };
+		EE93ABFF309BDA28002357CF /* VPNHelpersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNHelpersTests.swift; sourceTree = "<group>"; };
 		EE994F2590D706FC0ADD4B42 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		EEA34C528147F2E7C3AB52C8 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEAB4DF28099E1BEA98A0B00 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
@@ -18138,6 +18140,7 @@
 		EEF4D8BB30781B26001DEC12 /* VPN */ = {
 			isa = PBXGroup;
 			children = (
+				EE93ABFF309BDA28002357CF /* VPNHelpersTests.swift */,
 				EE39C1A730990B3000EB3C7C /* VPNSettingsViewModelTests.swift */,
 				EEFBE6D93091115100522F96 /* VPNSettingsViewControllerTests.swift */,
 				EEF4D8BA30781B26001DEC12 /* VPNSettingTests.swift */,
@@ -21858,6 +21861,7 @@
 				39E186E32F7DAA7F00FD3FFA /* MerinoCategoryTests.swift in Sources */,
 				A5EC810B305417B0005A540F /* AdvancedAccountSettingViewControllerTests.swift in Sources */,
 				E1442FDA294782F7003680B0 /* UIPasteboard+Extension.swift in Sources */,
+				EE93AC00309BDA28002357CF /* VPNHelpersTests.swift in Sources */,
 				CB5541872F51E1B100256DA1 /* CertificateHelperTests.swift in Sources */,
 				C2D80BEB2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift in Sources */,
 				217C6A792F3A7A370085D9B9 /* BrowserViewControllerDynamicViewConstraintsTests.swift in Sources */,
