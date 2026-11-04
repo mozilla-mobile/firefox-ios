@@ -1318,6 +1318,9 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func showQuickAnswers(transitionType: QuickAnswersTransitionType) {
         guard !childCoordinators.contains(where: { $0 is QuickAnswersCoordinator }) else { return }
+        if case .sourceReveal = transitionType {
+            discardParkedQuickAnswers(reason: .newSession)
+        }
         let coordinator = QuickAnswersCoordinator(
             parentCoordinatorDelegate: self,
             prefs: profile.prefs,
@@ -1326,16 +1329,43 @@ final class BrowserCoordinator: BaseCoordinator,
             themeManager: themeManager,
             router: router,
             transitionType: transitionType,
-        ) { [weak self] navigationType in
-            switch navigationType {
-            case .url(let url):
-                self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
-            case .searchResult(let query):
-                self?.browserViewController.openSearchNewTab(query)
+            onNavigate: { [weak self] navigationType in
+                switch navigationType {
+                case .url(let url):
+                    self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
+                case .searchResult(let query):
+                    self?.browserViewController.openSearchNewTab(query)
+                }
+            },
+            onPark: { [weak self] in
+                self?.showQuickAnswersReturnPill()
             }
-        }
+        )
         add(child: coordinator)
-        coordinator.start()
+        coordinator.start { [weak self] in
+            guard transitionType == .returnToAnswer else { return }
+            self?.browserViewController.hideQuickAnswersReturnPill()
+        }
+    }
+
+    private func showQuickAnswersReturnPill() {
+        browserViewController.showQuickAnswersReturnPill(
+            question: quickAnswersSessionStorage.latestSession?.question,
+            onTap: { [weak self] _ in self?.resumeParkedQuickAnswers() },
+            onSwipeAway: { [weak self] in self?.discardParkedQuickAnswers(reason: .swipe) }
+        )
+    }
+
+    private func resumeParkedQuickAnswers() {
+        guard quickAnswersSessionStorage.latestSession != nil,
+              router.navigationController.presentedViewController == nil else { return }
+        showQuickAnswers(transitionType: .returnToAnswer)
+    }
+
+    private func discardParkedQuickAnswers(reason: QuickAnswersReturnPillDismissReason) {
+        guard quickAnswersSessionStorage.latestSession != nil else { return }
+        quickAnswersSessionStorage.removeAll()
+        browserViewController.hideQuickAnswersReturnPill()
     }
 
     func showGoogleLensPhotoPicker() {
@@ -1678,6 +1708,11 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - TabManagerDelegate
+
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {
+        guard !isRestoring, selectedTab.isPrivate != previousTab?.isPrivate else { return }
+        discardParkedQuickAnswers(reason: .privateModeToggled)
+    }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         // TabManager clears isRestoringTabs after notifying its delegates.

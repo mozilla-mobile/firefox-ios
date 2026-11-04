@@ -56,6 +56,12 @@ class MockBrowserViewController: BrowserViewController {
     var showDocumentLoadingViewCalled = 0
     var removeDocumentLoadingViewCalled = 0
 
+    var showQuickAnswersReturnPillCount = 0
+    var hideQuickAnswersReturnPillCount = 0
+    var lastReturnPillQuestion: String?
+    var lastReturnPillOnTap: ((Bool) -> Void)?
+    var lastReturnPillOnSwipeAway: (() -> Void)?
+
     var mockContentContainer = MockContentContainer()
 
     var viewControllerToPresent: UIViewController?
@@ -190,6 +196,21 @@ class MockBrowserViewController: BrowserViewController {
 
     override func removeDocumentLoadingView() {
         removeDocumentLoadingViewCalled += 1
+    }
+
+    override func showQuickAnswersReturnPill(
+        question: String?,
+        onTap: @escaping (Bool) -> Void,
+        onSwipeAway: @escaping () -> Void
+    ) {
+        showQuickAnswersReturnPillCount += 1
+        lastReturnPillQuestion = question
+        lastReturnPillOnTap = onTap
+        lastReturnPillOnSwipeAway = onSwipeAway
+    }
+
+    override func hideQuickAnswersReturnPill() {
+        hideQuickAnswersReturnPillCount += 1
     }
 
     override func willNavigateAway(from tab: Tab?) {}

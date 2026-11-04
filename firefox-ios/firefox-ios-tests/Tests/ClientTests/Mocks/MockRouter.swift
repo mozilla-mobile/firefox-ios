@@ -9,6 +9,7 @@ class MockRouter: NSObject, Router {
     var navigationController: NavigationController
     var rootViewController: UIViewController?
     var onPresent: (() -> Void)?
+    var onDismiss: (() -> Void)?
 
     var isPresenting: Bool {
         return presentCalled != 0
@@ -52,6 +53,7 @@ class MockRouter: NSObject, Router {
     func dismiss(animated: Bool, completion: (() -> Void)?) {
         savedCompletion = completion
         dismissCalled += 1
+        onDismiss?()
     }
 
     func push(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?) {
