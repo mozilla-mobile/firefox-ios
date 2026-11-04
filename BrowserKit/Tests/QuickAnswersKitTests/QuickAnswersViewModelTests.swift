@@ -410,6 +410,17 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(sessionStorage.latestSession?.question, "Hello world")
     }
 
+    func test_handleCitationTap_withCanParkFalse_returnsFalse() {
+        let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: true)
+        answerQuestion("Hello world", with: subject)
+
+        let didPark = subject.handleCitationTap(canPark: false)
+
+        XCTAssertFalse(didPark)
+        XCTAssertNil(sessionStorage.latestSession)
+        XCTAssertEqual(mockTelemetry.citationTappedCalledCount, 1)
+    }
+
     func test_handleCitationTap_recordsCitationTappedAndClosed() {
         let subject = createSubject()
 

@@ -60,6 +60,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     private weak var navigationHandler: QuickAnswersNavigationHandler?
     private let viewModel: QuickAnswersViewModel
     private let learnMoreURL: URL?
+    private let writeToPasteboard: (URL) -> Void
     private let stringsConfiguration: QuickAnswersViewConfiguration
     private lazy var errorHandler = ErrorHandler(
         presenter: self,
@@ -112,7 +113,8 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         themeManager: any ThemeManager,
         learnMoreURL: URL?,
         stringsConfiguration: QuickAnswersViewConfiguration,
-        notificationCenter: NotificationProtocol
+        notificationCenter: NotificationProtocol,
+        writeToPasteboard: @escaping (URL) -> Void = { UIPasteboard.general.url = $0 }
     ) {
         self.navigationHandler = navigationHandler
         self.currentWindowUUID = windowUUID
@@ -139,6 +141,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         )
         self.viewModel = viewModel
         self.learnMoreURL = learnMoreURL
+        self.writeToPasteboard = writeToPasteboard
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
         transitioningDelegate = transitionDelegate
@@ -283,9 +286,9 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         showResult(session.result)
     }
 
-    private func openCitation(_ navigationType: QuickAnswersNavigationType) {
+    private func openCitation(_ navigationType: QuickAnswersNavigationType, canPark: Bool = true) {
         triggerHaptic()
-        if viewModel.handleCitationTap() {
+        if viewModel.handleCitationTap(canPark: canPark) {
             navigationHandler?.parkQuickAnswers(with: navigationType)
         } else {
             navigationHandler?.dismissQuickAnswers(with: navigationType)
@@ -297,10 +300,11 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         case .openInNewTab(let url):
             openCitation(.newTab(url, isPrivate: false))
         case .openInNewPrivateTab(let url):
-            dismiss(with: .newTab(url, isPrivate: true))
+            openCitation(.newTab(url, isPrivate: true), canPark: false)
         case .bookmark(let url, let title):
             navigationHandler?.bookmarkCitation(url: url, title: title)
-        case .linkCopied:
+        case .copyLink(let url):
+            writeToPasteboard(url)
             triggerHaptic()
         case .shareLink(let url, let sourceView):
             presentShareSheet(for: url, from: sourceView)

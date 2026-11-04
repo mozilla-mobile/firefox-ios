@@ -227,10 +227,20 @@ final class QuickAnswersViewModel {
     }
 
     /// Records the tap and tears down the flow.
+    /// - Parameter canPark: Whether the answered session may be returned to. Pass false for destinations that end it anyway.
     /// - Returns: Whether there is an answered session the user can return to.
-    func handleCitationTap() -> Bool {
+    func handleCitationTap(canPark: Bool = true) -> Bool {
+        telemetry.citationTapped()
+    /// Records the tap and tears down the flow, keeping the answered session so the user can return to it.
+    /// - Parameter canPark: Whether the answered session may be returned to. Pass false for destinations that end it anyway.
+    /// - Returns: Whether there is an answered session the user can return to.
+    func handleCitationTap(canPark: Bool = true) -> Bool {
         telemetry.citationTapped()
         tearDown()
+        guard canPark else {
+            store.removeAllSessions()
+            return false
+        }
         return store.latestSession != nil
     }
 }

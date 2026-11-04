@@ -13,6 +13,7 @@ final class QuickAnswersViewControllerTests: XCTestCase {
     private var navigationHandler: MockNavigationHandler!
     private var service: MockTestQuickAnswersService!
     private var sessionStorage: QuickAnswersSessionStorage!
+    private var pasteboardURLs: [URL]!
     private let citationURL = URL(string: "https://example.com")!
 
     override func setUp() async throws {
@@ -20,12 +21,14 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         navigationHandler = MockNavigationHandler()
         service = MockTestQuickAnswersService()
         sessionStorage = QuickAnswersSessionStorage()
+        pasteboardURLs = []
     }
 
     override func tearDown() async throws {
         navigationHandler = nil
         service = nil
         sessionStorage = nil
+        pasteboardURLs = nil
         try await super.tearDown()
     }
 
@@ -193,6 +196,18 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         XCTAssertEqual(navigationHandler.parkCallCount, 0)
     }
 
+    func test_copyLinkMenuAction_writesURLToPasteboardWithoutLeavingQuickAnswers() throws {
+        sessionStorage.latestSession = makeSnapshot()
+        let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
+        subject.loadViewIfNeeded()
+
+        try performMenuAction(at: 3, in: subject)
+
+        XCTAssertEqual(pasteboardURLs, [citationURL])
+        XCTAssertEqual(navigationHandler.dismissCallCount, 0)
+        XCTAssertEqual(navigationHandler.parkCallCount, 0)
+    }
+
     // MARK: - Helper
     private func createSubject(
         transitionType: QuickAnswersTransitionType = .sourceReveal(sourceRect: .zero),
@@ -227,7 +242,10 @@ final class QuickAnswersViewControllerTests: XCTestCase {
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
             learnMoreURL: nil,
             stringsConfiguration: .mock,
-            notificationCenter: NotificationCenter.default
+            notificationCenter: NotificationCenter.default,
+            writeToPasteboard: { [weak self] in
+                self?.pasteboardURLs.append($0)
+            }
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
@@ -277,7 +295,7 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         )
         let menu = try XCTUnwrap(configuration.actionProvider?([]))
         let action = try XCTUnwrap(menu.children[index] as? UIAction)
-        action.trigger()
+        UIButton().sendAction(action)
     }
 
     private func findSubview<T: UIView>(of type: T.Type, in view: UIView) -> T? {

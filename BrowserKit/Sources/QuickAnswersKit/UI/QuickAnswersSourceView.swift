@@ -134,7 +134,7 @@ enum QuickAnswersCitationMenuAction: Equatable {
     case openInNewTab(URL)
     case openInNewPrivateTab(URL)
     case bookmark(url: URL, title: String)
-    case linkCopied
+    case copyLink(URL)
     case shareLink(URL, sourceView: UIView)
 }
 
@@ -142,7 +142,6 @@ final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, Th
     private enum UX {
         static let headerSpacing: CGFloat = 16.0
         static let rowSpacing: CGFloat = 12.0
-        static let previewCornerRadius: CGFloat = 30.0
         static let previewWindowMargins: CGFloat = 42.0
     }
 
@@ -160,7 +159,6 @@ final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, Th
     private var citationMenuStrings: QuickAnswersViewConfiguration.CitationMenuStrings?
     private var onSourceTapped: ((URL) -> Void)?
     private var onMenuAction: ((QuickAnswersCitationMenuAction) -> Void)?
-    var writeToPasteboard: (URL) -> Void = { UIPasteboard.general.url = $0 }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -246,16 +244,6 @@ final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, Th
 
     func contextMenuInteraction(
         _ interaction: UIContextMenuInteraction,
-        previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration
-    ) -> UITargetedPreview? {
-        guard let view = interaction.view else { return nil }
-        let parameters = UIPreviewParameters()
-        parameters.visiblePath = UIBezierPath(roundedRect: view.bounds, cornerRadius: UX.previewCornerRadius)
-        return UITargetedPreview(view: view, parameters: parameters)
-    }
-
-    func contextMenuInteraction(
-        _ interaction: UIContextMenuInteraction,
         willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration,
         animator: any UIContextMenuInteractionCommitAnimating
     ) {
@@ -282,8 +270,7 @@ final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, Th
                 self?.onMenuAction?(.bookmark(url: url, title: title))
             },
             makeAction(title: strings.copyLink, imageName: StandardImageIdentifiers.Large.link) { [weak self] in
-                self?.writeToPasteboard(url)
-                self?.onMenuAction?(.linkCopied)
+                self?.onMenuAction?(.copyLink(url))
             },
             makeAction(title: strings.shareLink, imageName: StandardImageIdentifiers.Large.shareApple) { [weak self] in
                 guard let row else { return }
@@ -324,8 +311,6 @@ private final class SourcePreviewViewController: UIViewController {
         static let faviconCornerRadius: CGFloat = 8.0
         static let thumbnailBorderWidth: CGFloat = 1.0
         static let faviconSize: CGFloat = 16.0
-        static let shadowRadius: CGFloat = 16.0
-        static let shadowOpacity: Float = 0.2
     }
 
     private let source: SearchResult.Source
@@ -335,11 +320,6 @@ private final class SourcePreviewViewController: UIViewController {
         return source.thumbnailURL != nil
     }
 
-    private let cardView: UIView = .build {
-        $0.layer.cornerRadius = UX.cornerRadius
-        $0.layer.cornerCurve = .continuous
-        $0.clipsToBounds = true
-    }
     private let thumbnailImageView: HeroImageView = .build()
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.body.scaledFont()
@@ -368,36 +348,28 @@ private final class SourcePreviewViewController: UIViewController {
     }
 
     private func setupSubviews() {
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = UX.shadowOpacity
-        view.layer.shadowRadius = UX.shadowRadius
-        view.layer.shadowOffset = .zero
-        view.addSubview(cardView)
-        cardView.addSubviews(thumbnailImageView, titleLabel)
+        view.layer.cornerRadius = UX.cornerRadius
+        view.layer.cornerCurve = .continuous
+        view.clipsToBounds = true
+        view.addSubviews(thumbnailImageView, titleLabel)
 
-        NSLayoutConstraint.activate([
-            cardView.topAnchor.constraint(equalTo: view.topAnchor),
-            cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            cardView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
         if hasThumbnail {
             titleLabel.isHidden = true
             thumbnailImageView.pinToSuperview()
         } else {
             NSLayoutConstraint.activate([
-                thumbnailImageView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: UX.padding),
-                thumbnailImageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.padding),
-                thumbnailImageView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.padding),
+                thumbnailImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.padding),
+                thumbnailImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.padding),
+                thumbnailImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.padding),
                 thumbnailImageView.heightAnchor.constraint(
                     equalTo: thumbnailImageView.widthAnchor,
                     multiplier: UX.fallbackThumbnailAspectRatio
                 ),
 
                 titleLabel.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor, constant: UX.imageSpacing),
-                titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.padding),
-                titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.padding),
-                titleLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -UX.padding),
+                titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.padding),
+                titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.padding),
+                titleLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.padding),
             ])
         }
     }
@@ -417,7 +389,7 @@ private final class SourcePreviewViewController: UIViewController {
 
     private func applyTheme() {
         guard let theme else { return }
-        cardView.backgroundColor = theme.colors.layer2
+        view.backgroundColor = theme.colors.layer2
         let heroImageColors = HeroImageViewColor(
             faviconTintColor: theme.colors.iconPrimary,
             faviconBackgroundColor: theme.colors.layer1,

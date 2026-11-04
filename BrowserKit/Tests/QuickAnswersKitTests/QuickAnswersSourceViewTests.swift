@@ -9,19 +9,16 @@ import XCTest
 @MainActor
 final class QuickAnswersSourceViewTests: XCTestCase {
     private var menuActions: [QuickAnswersCitationMenuAction]!
-    private var pasteboardURLs: [URL]!
     private let sourceURL = URL(string: "https://example.com/article")!
     private let sourceTitle = "Article"
 
     override func setUp() async throws {
         try await super.setUp()
         menuActions = []
-        pasteboardURLs = []
     }
 
     override func tearDown() async throws {
         menuActions = nil
-        pasteboardURLs = nil
         try await super.tearDown()
     }
 
@@ -68,7 +65,7 @@ final class QuickAnswersSourceViewTests: XCTestCase {
     func test_openInNewTabAction_reportsOpenInNewTab() throws {
         let subject = createSubject()
 
-        try makeActions(from: subject)[0].trigger()
+        try UIButton().sendAction(makeActions(from: subject)[0])
 
         XCTAssertEqual(menuActions, [.openInNewTab(sourceURL)])
     }
@@ -76,7 +73,7 @@ final class QuickAnswersSourceViewTests: XCTestCase {
     func test_openInNewPrivateTabAction_reportsOpenInNewPrivateTab() throws {
         let subject = createSubject()
 
-        try makeActions(from: subject)[1].trigger()
+        try UIButton().sendAction(makeActions(from: subject)[1])
 
         XCTAssertEqual(menuActions, [.openInNewPrivateTab(sourceURL)])
     }
@@ -84,25 +81,24 @@ final class QuickAnswersSourceViewTests: XCTestCase {
     func test_bookmarkAction_reportsBookmarkWithSourceTitle() throws {
         let subject = createSubject()
 
-        try makeActions(from: subject)[2].trigger()
+        try UIButton().sendAction(makeActions(from: subject)[2])
 
         XCTAssertEqual(menuActions, [.bookmark(url: sourceURL, title: sourceTitle)])
     }
 
-    func test_copyLinkAction_writesURLToPasteboardAndReportsLinkCopied() throws {
+    func test_copyLinkAction_reportsCopyLink() throws {
         let subject = createSubject()
 
-        try makeActions(from: subject)[3].trigger()
+        try UIButton().sendAction(makeActions(from: subject)[3])
 
-        XCTAssertEqual(pasteboardURLs, [sourceURL])
-        XCTAssertEqual(menuActions, [.linkCopied])
+        XCTAssertEqual(menuActions, [.copyLink(sourceURL)])
     }
 
     func test_shareLinkAction_reportsShareLinkAnchoredToRow() throws {
         let subject = createSubject()
         let row = try XCTUnwrap(findSubview(of: QuickAnswersSourceRow.self, in: subject))
 
-        try makeActions(from: subject)[4].trigger()
+        try UIButton().sendAction(makeActions(from: subject)[4])
 
         XCTAssertEqual(menuActions, [.shareLink(sourceURL, sourceView: row)])
     }
@@ -115,9 +111,6 @@ final class QuickAnswersSourceViewTests: XCTestCase {
     ) -> QuickAnswersSourceView {
         let subject = QuickAnswersSourceView()
         subject.configureStrings(sourcesHeader: "Sources", citationMenu: .mock)
-        subject.writeToPasteboard = { [weak self] in
-            self?.pasteboardURLs.append($0)
-        }
         subject.configure(
             with: sources ?? [makeSource(url: sourceURL)],
             onMenuAction: { [weak self] in
