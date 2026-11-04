@@ -1282,6 +1282,10 @@ public struct RemoteSettingsContext: Equatable, Hashable {
      * for example `Region` on Desktop and `RegionMiddleware` on Android.
      */
     public var country: String?
+    /**
+     * Exposed as `env.distribution`.  When unset, the env value is `"default"`, matching the
+     * Gecko client which reads the `distribution.id` pref with that fallback.
+     */
     public var distribution: String?
     /**
      * Extra attributes to add to the env for JEXL filtering.
@@ -1323,7 +1327,11 @@ public struct RemoteSettingsContext: Equatable, Hashable {
          * - By using a geolocation service, which determines country via the user's IP.
          * Firefox apps usually have a module that integrates with these services,
          * for example `Region` on Desktop and `RegionMiddleware` on Android.
-         */country: String? = nil, distribution: String? = nil, 
+         */country: String? = nil, 
+        /**
+         * Exposed as `env.distribution`.  When unset, the env value is `"default"`, matching the
+         * Gecko client which reads the `distribution.id` pref with that fallback.
+         */distribution: String? = nil, 
         /**
          * Extra attributes to add to the env for JEXL filtering.
          *
