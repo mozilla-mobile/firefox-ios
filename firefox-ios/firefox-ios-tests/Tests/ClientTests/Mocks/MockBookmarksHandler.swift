@@ -30,6 +30,8 @@ final class MockBookmarksHandler: BookmarksHandler, @unchecked Sendable {
     var getRecentBookmarksCallCount = 0
     var getRecentBookmarksResult: [BookmarkItemData]?
     var bookmarksInTreeValue = 0
+    var isBookmarkedValue = true
+    private(set) var lastIsBookmarkedURL: String?
 
     init() {}
 
@@ -90,7 +92,8 @@ final class MockBookmarksHandler: BookmarksHandler, @unchecked Sendable {
     }
 
     func isBookmarked(url: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void) {
-        completion(.success(true))
+        lastIsBookmarkedURL = url
+        completion(.success(isBookmarkedValue))
     }
 
     func deleteBookmarkNode(guid: GUID) -> Success {

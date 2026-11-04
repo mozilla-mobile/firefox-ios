@@ -1332,6 +1332,9 @@ final class BrowserCoordinator: BaseCoordinator,
             themeManager: themeManager,
             router: router,
             transitionType: transitionType,
+            bookmarksHandler: profile.places,
+            bookmarksSaver: DefaultBookmarksSaver(profile: profile),
+            bookmarksTelemetry: BookmarksTelemetry(gleanWrapper: glean),
             onNavigate: { [weak self] navigationType in
                 switch navigationType {
                 case .url(let url):
@@ -1345,9 +1348,6 @@ final class BrowserCoordinator: BaseCoordinator,
             },
             onPark: { [weak self] in
                 self?.showQuickAnswersReturnPill()
-            },
-            onBookmark: { [weak self] url, title in
-                self?.browserViewController.addBookmark(urlString: url.absoluteString, title: title)
             }
         )
         add(child: coordinator)

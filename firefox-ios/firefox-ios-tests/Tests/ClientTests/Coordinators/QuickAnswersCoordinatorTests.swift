@@ -15,6 +15,9 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
     private var parentCoordinator: MockParentCoordinator!
     private var themeManager: MockThemeManager!
     private var featureFlagsProvider: MockNimbusFeatureFlags!
+    private var bookmarksHandler: MockBookmarksHandler!
+    private var bookmarksSaver: MockBookmarksSaver!
+    private var gleanWrapper: MockGleanWrapper!
     private let testURL = URL(string: "https://example.com")!
     private let testQuery = "test search query"
     private let testTitle = "Test title"
@@ -25,6 +28,9 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         parentCoordinator = MockParentCoordinator()
         themeManager = MockThemeManager()
         featureFlagsProvider = MockNimbusFeatureFlags()
+        bookmarksHandler = MockBookmarksHandler()
+        bookmarksSaver = MockBookmarksSaver()
+        gleanWrapper = MockGleanWrapper()
         DependencyHelperMock().bootstrapDependencies()
     }
 
@@ -33,6 +39,9 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         parentCoordinator = nil
         themeManager = nil
         featureFlagsProvider = nil
+        bookmarksHandler = nil
+        bookmarksSaver = nil
+        gleanWrapper = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -144,15 +153,48 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
     }
 
     // MARK: - bookmarkCitation
-    func test_bookmarkCitation_callsOnBookmarkWithURLAndTitle() {
-        var bookmarks = [(url: URL, title: String)]()
-        let subject = createSubject(onBookmark: { bookmarks.append(($0, $1)) })
+    func test_bookmarkCitation_whenNotBookmarked_createsBookmarkAtTopWithURLAndTitle() {
+        bookmarksHandler.isBookmarkedValue = false
+        let subject = createSubject()
+
+        subject.bookmarkCitation(url: testURL, title: testTitle)
+        waitForBookmarkCreation()
+
+        XCTAssertEqual(bookmarksHandler.lastIsBookmarkedURL, testURL.absoluteString)
+        XCTAssertEqual(bookmarksSaver.savedBookmarkURL, testURL.absoluteString)
+        XCTAssertEqual(bookmarksSaver.savedBookmarkTitle, testTitle)
+        XCTAssertEqual(bookmarksSaver.savedBookmarkPosition, 0)
+    }
+
+    func test_bookmarkCitation_whenNotBookmarkedAndTitleIsBlank_usesURLAsTitle() {
+        bookmarksHandler.isBookmarkedValue = false
+        let subject = createSubject()
+
+        subject.bookmarkCitation(url: testURL, title: "  ")
+        waitForBookmarkCreation()
+
+        XCTAssertEqual(bookmarksSaver.savedBookmarkTitle, testURL.absoluteString)
+    }
+
+    func test_bookmarkCitation_whenNotBookmarked_recordsPageActionMenuBookmarkTelemetry() {
+        bookmarksHandler.isBookmarkedValue = false
+        let subject = createSubject()
+
+        subject.bookmarkCitation(url: testURL, title: testTitle)
+        waitForBookmarkCreation()
+
+        XCTAssertEqual(gleanWrapper.incrementLabeledCounterCalled, 1)
+        XCTAssertEqual(gleanWrapper.savedLabel as? String, BookmarksTelemetry.EventLabel.pageActionMenu.rawValue)
+    }
+
+    func test_bookmarkCitation_whenAlreadyBookmarked_doesNotCreateBookmarkOrRecordTelemetry() {
+        bookmarksHandler.isBookmarkedValue = true
+        let subject = createSubject()
 
         subject.bookmarkCitation(url: testURL, title: testTitle)
 
-        XCTAssertEqual(bookmarks.count, 1)
-        XCTAssertEqual(bookmarks.first?.url, testURL)
-        XCTAssertEqual(bookmarks.first?.title, testTitle)
+        XCTAssertEqual(bookmarksSaver.createBookmarkCalled, 0)
+        XCTAssertEqual(gleanWrapper.incrementLabeledCounterCalled, 0)
     }
 
     func test_bookmarkCitation_staysInQuickAnswers() {
@@ -272,11 +314,17 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         }
     }
 
+    private func waitForBookmarkCreation() {
+        let didCreateBookmark = expectation(for: NSPredicate { [weak self] _, _ in
+            return self?.bookmarksSaver.createBookmarkCalled == 1
+        }, evaluatedWith: nil)
+        wait(for: [didCreateBookmark], timeout: 2.0)
+    }
+
     private func createSubject(
         prefs: Prefs = MockProfilePrefs(),
         onNavigate: @escaping (QuickAnswersNavigationType) -> Void = { _ in },
         onPark: @escaping () -> Void = {},
-        onBookmark: @escaping (URL, String) -> Void = { _, _ in },
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> QuickAnswersCoordinator {
@@ -288,10 +336,12 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
             themeManager: themeManager,
             router: router,
             transitionType: .sourceReveal(sourceRect: .zero),
+            bookmarksHandler: bookmarksHandler,
+            bookmarksSaver: bookmarksSaver,
+            bookmarksTelemetry: BookmarksTelemetry(gleanWrapper: gleanWrapper),
             featureFlagsProvider: featureFlagsProvider,
             onNavigate: onNavigate,
-            onPark: onPark,
-            onBookmark: onBookmark
+            onPark: onPark
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

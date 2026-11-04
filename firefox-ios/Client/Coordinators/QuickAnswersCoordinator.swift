@@ -6,6 +6,7 @@ import Foundation
 import QuickAnswersKit
 import Common
 import Shared
+import Storage
 import UIKit
 
 enum QuickAnswersReturnPillDismissReason: String {
@@ -24,7 +25,9 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     private let featureFlagsProvider: FeatureFlagProviding
     private let onNavigate: (QuickAnswersNavigationType) -> Void
     private let onPark: () -> Void
-    private let onBookmark: (URL, String) -> Void
+    private let bookmarksHandler: BookmarksHandler
+    private let bookmarksSaver: BookmarksSaver
+    private let bookmarksTelemetry: BookmarksTelemetry
     private var shouldAnimateTransition: Bool {
         return !UIAccessibility.isReduceMotionEnabled
     }
@@ -39,10 +42,12 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         themeManager: ThemeManager,
         router: Router,
         transitionType: QuickAnswersTransitionType,
+        bookmarksHandler: BookmarksHandler,
+        bookmarksSaver: BookmarksSaver,
+        bookmarksTelemetry: BookmarksTelemetry = BookmarksTelemetry(),
         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         onNavigate: @escaping (QuickAnswersNavigationType) -> Void,
-        onPark: @escaping () -> Void,
-        onBookmark: @escaping (URL, String) -> Void
+        onPark: @escaping () -> Void
     ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.prefs = prefs
@@ -53,7 +58,9 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         self.featureFlagsProvider = featureFlagsProvider
         self.onNavigate = onNavigate
         self.onPark = onPark
-        self.onBookmark = onBookmark
+        self.bookmarksHandler = bookmarksHandler
+        self.bookmarksSaver = bookmarksSaver
+        self.bookmarksTelemetry = bookmarksTelemetry
         super.init(router: router)
     }
 
@@ -182,7 +189,22 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     }
 
     func bookmarkCitation(url: URL, title: String) {
-        onBookmark(url, title)
         UINotificationFeedbackGenerator().notificationOccurred(.success)
+        bookmarksHandler.isBookmarked(url: url.absoluteString) { [weak self] result in
+            if case .success(true) = result { return }
+            Task { @MainActor in
+                await self?.addBookmark(url: url, title: title)
+            }
+        }
+    }
+
+    private func addBookmark(url: URL, title: String) async {
+        let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        bookmarksTelemetry.addBookmark(eventLabel: .pageActionMenu)
+        await bookmarksSaver.createBookmark(
+            url: url.absoluteString,
+            title: trimmedTitle.isEmpty ? url.absoluteString : trimmedTitle,
+            position: 0
+        )
     }
 }
