@@ -9,6 +9,10 @@ final class SyncScreen {
     private let app: XCUIApplication
     private let sel: SyncSelectorsSet
 
+    private var fxaEmailField: XCUIElement {
+        app.webViews.textFields.element(boundBy: 0)
+    }
+
     init(app: XCUIApplication, selectors: SyncSelectorsSet = SyncSelectors()) {
         self.app = app
         self.sel = selectors
@@ -24,5 +28,46 @@ final class SyncScreen {
     /// same "Sync and Save Data" sign-in screen reachable from Settings.
     func tapSyncAndSaveData() {
         sel.SYNC_AND_SAVE_DATA_BUTTON.element(in: app).waitAndTap()
+    }
+
+    func openSyncAndSaveDataFromSettings() {
+        sel.SETTINGS_SYNC_AND_SAVE_DATA_ROW.element(in: app).waitAndTap()
+        BaseTestCase().mozWaitForElementToExist(
+            sel.SYNC_AND_SAVE_DATA_NAVIGATION_BAR.element(in: app),
+            timeout: TIMEOUT_LONG
+        )
+    }
+
+    /// Taps "Use email instead" and waits for the Firefox Account web view email field.
+    func tapUseEmailInstead() {
+        sel.EMAIL_SIGN_IN_BUTTON.element(in: app).waitAndTap()
+        BaseTestCase().mozWaitForElementToExist(fxaEmailField, timeout: TIMEOUT_LONG)
+    }
+
+    func assertEmailFieldPlaceholder(_ expected: String = "Enter your email") {
+        if #available(iOS 17, *) {
+            XCTAssertEqual(fxaEmailField.label, expected, "The mail placeholder does not show the correct value")
+        } else {
+            let placeholder = sel.EMAIL_PLACEHOLDER_TEXT.element(in: app)
+            BaseTestCase().mozWaitForElementToExist(placeholder)
+            if #available(iOS 16, *) {
+                XCTAssertEqual(placeholder.value as? String,
+                               expected,
+                               "The mail placeholder does not show the correct value")
+            }
+        }
+    }
+
+    /// Taps "Close" in the Firefox Account web view, which dismisses the whole presented sheet.
+    func closeFxAWebView() {
+        sel.FXA_WEBVIEW_CLOSE_BUTTON.element(in: app).waitAndTap()
+    }
+
+    func assertFxASheetDismissed(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(sel.FXA_WEBVIEW_NAVIGATION_BAR.element(in: app), timeout: timeout)
+        BaseTestCase().mozWaitForElementToNotExist(
+            sel.SYNC_AND_SAVE_DATA_NAVIGATION_BAR.element(in: app),
+            timeout: timeout
+        )
     }
 }

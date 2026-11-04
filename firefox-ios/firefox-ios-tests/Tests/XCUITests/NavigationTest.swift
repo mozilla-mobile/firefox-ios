@@ -34,11 +34,14 @@ class NavigationTest: FeatureFlaggedTestSuite {
     var browserScreen: BrowserScreen!
     var sslScreen: SSLWarningScreen!
     var mainMenuScreen: MainMenuScreen!
+    var syncScreen: SyncScreen!
 
     override func setUp() async throws {
         try await super.setUp()
 
         browserScreen = BrowserScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+        syncScreen = SyncScreen(app: app)
         // These tests launch the app themselves through a deeplink
         let deeplinkLaunchTests = ["testTapSigninShowsFxAFromSettings", "testPopUpBlocker",
                                    "testValidatePopUpWindows", "testOpenExternalLink",
@@ -121,50 +124,14 @@ class NavigationTest: FeatureFlaggedTestSuite {
     // https://mozilla.testrail.io/index.php?/cases/view/2441493
     func testTapSigninShowsFxAFromSettings() {
         launchIntoSettings()
-        // Open FxAccount from settings menu and check the Sign in to Firefox screen
-        let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
-            .staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton]
-        signInToFirefoxStaticText.waitAndTap()
-        checkFirefoxSyncScreenShownViaSettings()
+        syncScreen.openSyncAndSaveDataFromSettings()
+        syncScreen.tapUseEmailInstead()
+        syncScreen.assertEmailFieldPlaceholder()
 
-        // After that it is possible to go back to Settings
-        let closeButton = app.navigationBars["Client.FxAWebView"].buttons.element(boundBy: 0)
-        closeButton.waitAndTap()
-
-        let closeButtonFxView = app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar]
-            .buttons["Settings"]
-        closeButtonFxView.waitAndTap()
-    }
-
-    // Because the Settings menu does not stretch tot the top we need a different function to check
-    // if the Firefox Sync screen is shown
-    private func checkFirefoxSyncScreenShownViaSettings() {
-        mozWaitForElementToExist(
-            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
-            timeout: TIMEOUT_LONG
-        )
-        app.buttons["EmailSignIn.button"].waitAndTap()
-        mozWaitForElementToExist(app.webViews.textFields.element(boundBy: 0), timeout: TIMEOUT_LONG)
-
-        let email = app.webViews.textFields.element(boundBy: 0)
-        // Verify the placeholdervalues here for the textFields
-        let mailPlaceholder = "Enter your email"
-        var defaultMailPlaceholder: String
-        if #available(iOS 17, *) {
-            defaultMailPlaceholder = email.label
-            XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
-        } else if #available(iOS 16, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 16 {
-            if let value = app.staticTexts["Enter your email"].value as? String {
-                defaultMailPlaceholder = value
-                XCTAssertEqual(mailPlaceholder,
-                               defaultMailPlaceholder,
-                               "The mail placeholder does not show the correct value")
-            } else {
-                XCTFail("The mail placeholder value is not a String")
-            }
-        } else {
-            mozWaitForElementToExist(app.staticTexts[mailPlaceholder])
-        }
+        // Close dismisses the whole sheet and returns to the browser
+        syncScreen.closeFxAWebView()
+        syncScreen.assertFxASheetDismissed()
+        toolbarScreen.assertTabsButtonExists()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441494
