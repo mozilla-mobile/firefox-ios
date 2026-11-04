@@ -10,11 +10,19 @@ public struct QuickAnswersFeature: Equatable, Sendable {
     public let isOptInRedesignEnabled: Bool
     /// Whether follow up questions are enabled, so past exchanges are sent along with a new question.
     public let isFollowUpEnabled: Bool
+    /// Whether tapping a citation keeps the session so the user can return to the answer.
+    public let isReturnToAnswerEnabled: Bool
 
-    public init(model: QuickAnswersModel, isOptInRedesignEnabled: Bool, isFollowUpEnabled: Bool = false) {
+    public init(
+        model: QuickAnswersModel,
+        isOptInRedesignEnabled: Bool,
+        isFollowUpEnabled: Bool = false,
+        isReturnToAnswerEnabled: Bool = false
+    ) {
         self.model = model
         self.isOptInRedesignEnabled = isOptInRedesignEnabled
         self.isFollowUpEnabled = isFollowUpEnabled
+        self.isReturnToAnswerEnabled = isReturnToAnswerEnabled
     }
 
     /// Whether a new question is sent along with the previous exchanges, so it can follow up on them.

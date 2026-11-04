@@ -152,6 +152,24 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         )
     }
 
+    func test_resolvedFeature_withReturnToAnswerEnabled_setsFlag() {
+        setupNimbus(model: .exa)
+        featureFlagsProvider.enabledFlags = [.quickAnswersReturnToAnswer]
+        let subject = createSubject()
+
+        XCTAssertEqual(
+            subject.resolvedFeature(),
+            QuickAnswersKit.QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false, isReturnToAnswerEnabled: true)
+        )
+    }
+
+    func test_resolvedFeature_withReturnToAnswerDisabled_doesNotSetFlag() {
+        setupNimbus(model: .exa)
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.resolvedFeature().isReturnToAnswerEnabled)
+    }
+
     // MARK: - Helper Methods
     private func setupNimbus(model: Client.QuickAnswersModel) {
         FxNimbus.shared.features.quickAnswersFeature.with { _, _ in

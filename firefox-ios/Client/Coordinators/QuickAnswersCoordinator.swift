@@ -120,7 +120,8 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         return QuickAnswersKit.QuickAnswersFeature(
             model: resolvedModel(),
             isOptInRedesignEnabled: featureFlagsProvider.isEnabled(.quickAnswersOptInRedesign),
-            isFollowUpEnabled: featureFlagsProvider.isEnabled(.quickAnswersFollowUp)
+            isFollowUpEnabled: featureFlagsProvider.isEnabled(.quickAnswersFollowUp),
+            isReturnToAnswerEnabled: featureFlagsProvider.isEnabled(.quickAnswersReturnToAnswer)
         )
     }
 
