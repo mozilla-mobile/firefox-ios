@@ -1101,7 +1101,7 @@ class Tab: NSObject,
         class TAB_LEAK_DETECTED: UIButton { }
 
         guard let root = keyWindow.rootViewController else { fatalError() }
-        let uiTestScreen = UIScreen.main.bounds
+        let uiTestScreen = keyWindow.bounds
         let viewFrame = CGRect(x: uiTestScreen.width / 2.0,
                                y: uiTestScreen.height / 2.0,
                                width: 5,

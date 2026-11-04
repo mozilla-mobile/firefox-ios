@@ -47,8 +47,8 @@ class ReaderModeStyleViewModel {
         return isBottomPresented ? -ReaderModeStyleViewModel.UX.PresentationSpace : 0
     }
 
-    func sliderDidChange(value: CGFloat) {
-        UIScreen.main.brightness = value
+    func sliderDidChange(value: CGFloat, screen: UIScreen?) {
+        screen?.brightness = value
     }
 
     func selectTheme(_ theme: ReaderModeTheme) {
