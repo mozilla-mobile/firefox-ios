@@ -7,6 +7,7 @@ import ComponentLibrary
 
 public enum QuickAnswersTransitionType: Equatable, Sendable {
     case sourceReveal(sourceRect: CGRect)
+    case returnToAnswer
 }
 
 /// Both directions animate the scale of a soft edged circular mask centered on the source rect, so the

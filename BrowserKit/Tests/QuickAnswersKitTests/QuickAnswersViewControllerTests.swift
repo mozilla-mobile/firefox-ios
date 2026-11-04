@@ -36,11 +36,90 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         XCTAssertTrue(subject.transitioningDelegate is OptInTransitionAnimator)
     }
 
-    func testInit_withSourceRevealTransition_fallsBackToSourceRevealTransitionAnimator() {
+    func testInit_withSourceRevealTransition_fallsBackToReturnToBrowserTransitionAnimator() {
         let subject = createSubject(transitionType: .sourceReveal(sourceRect: .zero))
 
         let transitionAnimator = subject.transitioningDelegate as? OptInTransitionAnimator
-        XCTAssertTrue(transitionAnimator?.fallback is SourceRevealTransitionAnimator)
+        let returnAnimator = transitionAnimator?.fallback as? ReturnToBrowserTransitionAnimator
+        XCTAssertNotNil(returnAnimator)
+        XCTAssertTrue(returnAnimator?.fallback is SourceRevealTransitionAnimator)
+    }
+
+    func testInit_withReturnToAnswerTransition_usesCustomPresentationAndOptInTransitionAnimator() {
+        let subject = createSubject(transitionType: .returnToAnswer)
+
+        XCTAssertEqual(subject.modalPresentationStyle, .custom)
+        XCTAssertTrue(subject.transitioningDelegate is OptInTransitionAnimator)
+    }
+
+    func testInit_withReturnToAnswerTransition_fallsBackToReturnToBrowserTransitionAnimatorWithoutFallback() {
+        let subject = createSubject(transitionType: .returnToAnswer)
+
+        let transitionAnimator = subject.transitioningDelegate as? OptInTransitionAnimator
+        let returnAnimator = transitionAnimator?.fallback as? ReturnToBrowserTransitionAnimator
+        XCTAssertNotNil(returnAnimator)
+        XCTAssertNil(returnAnimator?.fallback)
+    }
+
+    func testInit_withReturnToAnswerTransition_returnsReturnAnimatorForPresentationAndDismissal() throws {
+        let subject = createSubject(transitionType: .returnToAnswer)
+        let transitionDelegate = try XCTUnwrap(subject.transitioningDelegate)
+
+        let presentation = transitionDelegate.animationController?(
+            forPresented: subject,
+            presenting: subject,
+            source: subject
+        )
+        let dismissal = transitionDelegate.animationController?(forDismissed: subject)
+
+        XCTAssertTrue(presentation is ReturnToBrowserTransitionAnimator)
+        XCTAssertTrue(dismissal is ReturnToBrowserTransitionAnimator)
+    }
+
+    // MARK: - Dismissal animator
+    func test_dismissalAnimator_withSourceRevealAndNoParkedSession_isSourceRevealTransitionAnimator() throws {
+        let subject = createSubject(transitionType: .sourceReveal(sourceRect: .zero))
+        let transitionDelegate = try XCTUnwrap(subject.transitioningDelegate)
+
+        let dismissal = transitionDelegate.animationController?(forDismissed: subject)
+
+        XCTAssertTrue(dismissal is SourceRevealTransitionAnimator)
+    }
+
+    func test_dismissalAnimator_withSourceRevealAndParkedSession_isReturnToBrowserTransitionAnimator() throws {
+        sessionStorage.latestSession = makeSnapshot()
+        let subject = createSubject(
+            transitionType: .sourceReveal(sourceRect: .zero),
+            isReturnToAnswerEnabled: true,
+            isReturningToAnswer: true
+        )
+        subject.loadViewIfNeeded()
+        try tapCitation(in: subject)
+        let transitionDelegate = try XCTUnwrap(subject.transitioningDelegate)
+
+        let dismissal = transitionDelegate.animationController?(forDismissed: subject)
+
+        XCTAssertTrue(dismissal is ReturnToBrowserTransitionAnimator)
+    }
+
+    // MARK: - Convenience init
+    func test_init_withReturnToAnswerTransition_restoresStoredSession() throws {
+        sessionStorage.latestSession = makeSnapshot()
+        let subject = createConvenienceSubject(transitionType: .returnToAnswer)
+
+        subject.loadViewIfNeeded()
+
+        XCTAssertNotNil(findSubview(of: QuickAnswersSourceRow.self, in: subject.view))
+    }
+
+    func test_init_withSourceRevealTransition_doesNotRestoreStoredSession() throws {
+        sessionStorage.latestSession = makeSnapshot()
+        let subject = createConvenienceSubject(transitionType: .sourceReveal(sourceRect: .zero))
+
+        subject.loadViewIfNeeded()
+
+        XCTAssertNil(findSubview(of: QuickAnswersSourceRow.self, in: subject.view))
+        XCTAssertNil(sessionStorage.latestSession)
     }
 
     // MARK: - Return To Answer
@@ -122,6 +201,33 @@ final class QuickAnswersViewControllerTests: XCTestCase {
             learnMoreURL: nil,
             stringsConfiguration: .mock,
             notificationCenter: NotificationCenter.default
+        )
+        trackForMemoryLeaks(subject, file: file, line: line)
+        return subject
+    }
+
+    private func createConvenienceSubject(
+        transitionType: QuickAnswersTransitionType,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> QuickAnswersViewController {
+        let subject = QuickAnswersViewController(
+            navigationHandler: navigationHandler,
+            transitionType: transitionType,
+            prefs: MockProfilePrefs(),
+            sessionStorage: sessionStorage,
+            windowUUID: .XCTestDefaultUUID,
+            themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
+            telemetry: MockQuickAnswersTelemetry(),
+            configFetcher: DefaultQuickAnswersConfigFetcher(
+                feature: QuickAnswersFeature(
+                    model: .exa,
+                    isOptInRedesignEnabled: false,
+                    isReturnToAnswerEnabled: true
+                )
+            ),
+            learnMoreURL: nil,
+            stringsConfiguration: .mock
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

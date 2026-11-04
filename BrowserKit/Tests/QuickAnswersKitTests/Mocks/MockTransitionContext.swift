@@ -8,11 +8,13 @@ final class MockTransitionContext: NSObject, UIViewControllerContextTransitionin
     let containerView = UIView()
     var toViewController: UIViewController?
     var toView: UIView?
+    var fromViewController: UIViewController?
+    var fromView: UIView?
     var finalFrame: CGRect = .zero
     var completeTransitionCallCount = 0
     var lastDidComplete: Bool?
 
-    var isAnimated: Bool { return true }
+    var isAnimated = true
     var isInteractive: Bool { return false }
     var transitionWasCancelled: Bool { return false }
     var presentationStyle: UIModalPresentationStyle { return .custom }
@@ -29,11 +31,11 @@ final class MockTransitionContext: NSObject, UIViewControllerContextTransitionin
     }
 
     func viewController(forKey key: UITransitionContextViewControllerKey) -> UIViewController? {
-        return key == .to ? toViewController : nil
+        return key == .to ? toViewController : fromViewController
     }
 
     func view(forKey key: UITransitionContextViewKey) -> UIView? {
-        return key == .to ? toView : nil
+        return key == .to ? toView : fromView
     }
 
     func initialFrame(for vc: UIViewController) -> CGRect {

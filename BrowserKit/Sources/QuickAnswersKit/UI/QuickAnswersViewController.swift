@@ -91,7 +91,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             viewModel: QuickAnswersViewModel(
                 prefs: prefs,
                 sessionStorage: sessionStorage,
-                isReturningToAnswer: false,
+                isReturningToAnswer: transitionType == .returnToAnswer,
                 telemetry: telemetry,
                 configFetcher: configFetcher
             ),
@@ -120,15 +120,22 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.stringsConfiguration = stringsConfiguration
-        let sourceRevealAnimator: SourceRevealTransitionAnimator = switch transitionType {
+        let returnAnimator = switch transitionType {
         case let .sourceReveal(sourceRect):
-            SourceRevealTransitionAnimator(sourceRect: sourceRect, isOptInVisible: viewModel.isOptInRequired)
+            ReturnToBrowserTransitionAnimator(
+                isActive: { [weak viewModel] in
+                    viewModel?.hasParkedSession ?? false
+                },
+                fallback: SourceRevealTransitionAnimator(sourceRect: sourceRect, isOptInVisible: viewModel.isOptInRequired)
+            )
+        case .returnToAnswer:
+            ReturnToBrowserTransitionAnimator(isActive: { true }, fallback: nil)
         }
         self.transitionDelegate = OptInTransitionAnimator(
             isOptInSheetPending: { [weak viewModel] in
                 viewModel?.isOptInSheetRequired ?? false
             },
-            fallback: sourceRevealAnimator
+            fallback: returnAnimator
         )
         self.viewModel = viewModel
         self.learnMoreURL = learnMoreURL
