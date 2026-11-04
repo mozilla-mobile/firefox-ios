@@ -310,8 +310,13 @@ final class BrowserViewControllerLayoutManager {
         if !isMinimized {
             activeConstraints = constraints.expanded
         } else if isBottomSearchBar, let locationViewFrame {
-            constraints.locationCenterY.constant = locationViewFrame.midY
-            constraints.locationLeading.constant = locationViewFrame.maxX + UX.minimizedReturnPillLocationSpacing
+            let leading = locationViewFrame.maxX + UX.minimizedReturnPillLocationSpacing
+            if constraints.locationCenterY.constant != locationViewFrame.midY {
+                constraints.locationCenterY.constant = locationViewFrame.midY
+            }
+            if constraints.locationLeading.constant != leading {
+                constraints.locationLeading.constant = leading
+            }
             activeConstraints = [constraints.locationCenterY, constraints.locationLeading]
         } else if parentView.safeAreaInsets.bottom > 0 {
             activeConstraints = constraints.bottomCenteredAboveHomeIndicator
@@ -320,7 +325,7 @@ final class BrowserViewControllerLayoutManager {
         }
 
         NSLayoutConstraint.deactivate(constraints.all.filter { $0.isActive && !activeConstraints.contains($0) })
-        NSLayoutConstraint.activate(activeConstraints)
+        NSLayoutConstraint.activate(activeConstraints.filter { !$0.isActive })
     }
 
     func removeQuickAnswersReturnPillConstraints() {

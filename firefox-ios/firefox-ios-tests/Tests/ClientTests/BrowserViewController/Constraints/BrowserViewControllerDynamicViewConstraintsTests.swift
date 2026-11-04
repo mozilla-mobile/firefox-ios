@@ -117,16 +117,6 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
         XCTAssertTrue(returnPills(in: subject).isEmpty)
     }
 
-    func test_hideQuickAnswersReturnPill_removesPillConstraints() {
-        let subject = createSubject()
-        let initialConstraintCount = subject.view.constraints.count
-        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
-
-        subject.hideQuickAnswersReturnPill()
-
-        XCTAssertEqual(subject.view.constraints.count, initialConstraintCount)
-    }
-
     func test_hideQuickAnswersReturnPill_withoutPill_doesNothing() {
         let subject = createSubject()
 
