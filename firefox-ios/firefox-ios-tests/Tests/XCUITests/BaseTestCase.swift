@@ -756,6 +756,9 @@ class BaseTestCase: XCTestCase {
         app.buttons["Close"].tapIfExists()
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
+        if !app.navigationBars["Appearance"].mozWaitForElementToExist(timeout: TIMEOUT, failOnTimeout: false) {
+            navigator.goto(DisplaySettings)
+        }
         mozWaitForElementToExist(app.navigationBars["Appearance"])
         if theme == "Dark" {
             navigator.performAction(Action.SelectDarkTheme)
