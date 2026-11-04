@@ -10,7 +10,11 @@ import Shared
 // MARK: - Protocol
 /// Creates a ResultsService with using MLPA (App Attest) authentication and LiteLLM.
 protocol ResultsServiceFactory {
-    func make(prefs: Prefs, configFetcher: QuickAnswersConfigFetcher) throws -> ResultsService
+    func make(
+        prefs: Prefs,
+        configFetcher: QuickAnswersConfigFetcher,
+        conversation: QuickAnswersConversation
+    ) throws -> ResultsService
 }
 
 // MARK: - Default Implementation
@@ -23,13 +27,14 @@ public struct DefaultResultsServiceFactory: ResultsServiceFactory {
 
     func make(
         prefs: Prefs,
-        configFetcher: QuickAnswersConfigFetcher
+        configFetcher: QuickAnswersConfigFetcher,
+        conversation: QuickAnswersConversation
     ) throws -> ResultsService {
         guard let client = makeLiteLLMClient(prefs: prefs, model: configFetcher.feature.model) else {
             throw ResultsServiceError.unableToCreateService
         }
 
-        return DefaultResultsService(client: client, configFetcher: configFetcher)
+        return DefaultResultsService(client: client, configFetcher: configFetcher, conversation: conversation)
     }
 
     // MARK: - Private Helpers

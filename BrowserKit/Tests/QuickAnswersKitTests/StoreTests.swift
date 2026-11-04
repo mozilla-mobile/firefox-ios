@@ -11,6 +11,7 @@ import TestKit
 @MainActor
 struct StoreTests {
     let prefs = MockProfilePrefs()
+    let sessionStorage = QuickAnswersSessionStorage()
 
     @Test
     func test_isOptInCompleted_whenNoValueStored_returnsFalse() {
@@ -29,9 +30,37 @@ struct StoreTests {
         #expect(prefs.boolForKey(PrefsKeys.QuickAnswers.optInCompleted) == true)
     }
 
+    @Test
+    func test_saveSession_setsLatestSession() {
+        let subject = createSubject()
+
+        subject.saveSession(makeSnapshot(question: "Question"))
+
+        #expect(subject.latestSession?.question == "Question")
+        #expect(sessionStorage.latestSession?.question == "Question")
+    }
+
+    @Test
+    func test_removeAllSessions_clearsLatestSession() {
+        let subject = createSubject()
+        subject.saveSession(makeSnapshot(question: "Question"))
+
+        subject.removeAllSessions()
+
+        #expect(subject.latestSession == nil)
+    }
+
     // MARK: - Helper
+    private func makeSnapshot(question: String) -> QuickAnswersSessionSnapshot {
+        return QuickAnswersSessionSnapshot(
+            question: question,
+            result: .empty(),
+            conversation: MockQuickAnswersConversation()
+        )
+    }
+
     private func createSubject() -> Store {
-        let subject = Store(prefs: prefs)
+        let subject = Store(prefs: prefs, sessionStorage: sessionStorage)
         return subject
     }
 }

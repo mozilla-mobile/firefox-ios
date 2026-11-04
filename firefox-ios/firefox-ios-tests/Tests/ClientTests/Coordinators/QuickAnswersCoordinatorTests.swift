@@ -206,6 +206,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         let subject = QuickAnswersCoordinator(
             parentCoordinatorDelegate: parentCoordinator,
             prefs: prefs,
+            sessionStorage: QuickAnswersSessionStorage(),
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             router: router,

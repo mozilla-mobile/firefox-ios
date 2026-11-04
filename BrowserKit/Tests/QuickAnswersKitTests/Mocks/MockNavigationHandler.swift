@@ -8,9 +8,16 @@
 final class MockNavigationHandler: QuickAnswersNavigationHandler {
     var dismissCallCount = 0
     var lastNavigationType: QuickAnswersNavigationType?
+    var parkCallCount = 0
+    var lastParkedNavigationType: QuickAnswersNavigationType?
 
     func dismissQuickAnswers(with navigationType: QuickAnswersNavigationType?) {
         dismissCallCount += 1
         lastNavigationType = navigationType
+    }
+
+    func parkQuickAnswers(with navigationType: QuickAnswersNavigationType) {
+        parkCallCount += 1
+        lastParkedNavigationType = navigationType
     }
 }

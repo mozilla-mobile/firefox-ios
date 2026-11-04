@@ -11,6 +11,7 @@ import UIKit
 final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHandler {
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let prefs: Prefs
+    private let sessionStorage: QuickAnswersSessionStorage
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
     private let transitionType: QuickAnswersTransitionType
@@ -25,6 +26,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     init(
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
         prefs: Prefs,
+        sessionStorage: QuickAnswersSessionStorage,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         router: Router,
@@ -34,6 +36,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.prefs = prefs
+        self.sessionStorage = sessionStorage
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.transitionType = transitionType
@@ -47,6 +50,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             navigationHandler: self,
             transitionType: transitionType,
             prefs: prefs,
+            sessionStorage: sessionStorage,
             windowUUID: windowUUID,
             themeManager: themeManager,
             telemetry: DefaultQuickAnswersTelemetry(),
@@ -149,5 +153,9 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         }
         router.dismiss(animated: shouldAnimateTransition)
         parentCoordinatorDelegate?.didFinish(from: self)
+    }
+
+    func parkQuickAnswers(with navigationType: QuickAnswersNavigationType) {
+        dismissQuickAnswers(with: navigationType)
     }
 }

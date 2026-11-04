@@ -12,6 +12,7 @@ import TestKit
 class DefaultQuickAnswersServiceTests {
     let testHelper = SwiftTestingHelper()
     let engine = MockTranscriptionEngine()
+    let conversation = MockQuickAnswersConversation()
     let resultsServiceFactory: MockResultsServiceFactory
 
     init() {
@@ -119,13 +120,21 @@ class DefaultQuickAnswersServiceTests {
         }
     }
 
+    @Test
+    func test_init_passesConversationToResultsServiceFactory() throws {
+        _ = try createSubject()
+
+        #expect((resultsServiceFactory.lastConversation as AnyObject?) === conversation)
+    }
+
     // MARK: - Helper
     private func createSubject() throws -> DefaultQuickAnswersService {
         let subject = try DefaultQuickAnswersService(
             engine: engine,
             configFetcher: MockQuickAnswersConfigFetcher(),
             resultsServiceFactory: resultsServiceFactory,
-            prefs: MockProfilePrefs()
+            prefs: MockProfilePrefs(),
+            conversation: conversation
         )
         testHelper.trackForMemoryLeaks(subject)
         return subject

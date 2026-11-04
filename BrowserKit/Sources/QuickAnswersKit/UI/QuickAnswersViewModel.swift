@@ -19,9 +19,13 @@ final class QuickAnswersViewModel {
     private let service: QuickAnswersService?
     private let telemetry: QuickAnswersTelemetry
     private let store: Store
+    private let conversation: QuickAnswersConversation
+    private var latestSnapshot: QuickAnswersSessionSnapshot?
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
     let feature: QuickAnswersFeature
+    /// The session this screen was opened to return to, rendered instead of starting a new flow.
+    let restoredSession: QuickAnswersSessionSnapshot?
     var onStateChange: ((State) -> Void)?
 
     /// The user-facing name of the model backing the request.
@@ -46,12 +50,23 @@ final class QuickAnswersViewModel {
         return isOptInRequired && feature.isOptInRedesignEnabled
     }
 
+    /// Whether a session is parked for the user to return to.
+    var hasParkedSession: Bool {
+        return store.latestSession != nil
+    }
+
     init(
         prefs: Prefs,
+        sessionStorage: QuickAnswersSessionStorage,
+        isReturningToAnswer: Bool,
         telemetry: QuickAnswersTelemetry,
         configFetcher: QuickAnswersConfigFetcher?,
-        makeService: (Prefs, QuickAnswersConfigFetcher) throws -> QuickAnswersService = { prefs, configFetcher in
-            try DefaultQuickAnswersService(configFetcher: configFetcher, prefs: prefs)
+        makeService: (
+            Prefs,
+            QuickAnswersConfigFetcher,
+            QuickAnswersConversation
+        ) throws -> QuickAnswersService = { prefs, configFetcher, conversation in
+            try DefaultQuickAnswersService(configFetcher: configFetcher, prefs: prefs, conversation: conversation)
         }
     ) {
         let configFetcher = configFetcher ?? DefaultQuickAnswersConfigFetcher(
@@ -62,15 +77,26 @@ final class QuickAnswersViewModel {
                 isReturnToAnswerEnabled: false
             )
         )
+        let store = Store(prefs: prefs, sessionStorage: sessionStorage)
+        let restoredSession = isReturningToAnswer && configFetcher.feature.isReturnToAnswerEnabled
+            ? store.latestSession
+            : nil
+        store.removeAllSessions()
+        let conversation = restoredSession?.conversation ?? DefaultQuickAnswersConversation()
         self.telemetry = telemetry
-        self.store = Store(prefs: prefs)
+        self.store = store
         self.feature = configFetcher.feature
+        self.restoredSession = restoredSession
+        self.latestSnapshot = restoredSession
+        self.conversation = conversation
         do {
-            self.service = try makeService(prefs, configFetcher)
+            self.service = try makeService(prefs, configFetcher, conversation)
         } catch {
             self.service = nil
         }
-        telemetry.quickAnswersRequested(model: model)
+        if restoredSession == nil {
+            telemetry.quickAnswersRequested(model: model)
+        }
     }
 
     /// Entry point for the flow: shows the opt-in screen until the user has consented,
@@ -172,9 +198,14 @@ final class QuickAnswersViewModel {
         telemetry.resultsStarted(isFollowUp: isFollowUp)
         let searchResult = await service.search(text: result.text)
         switch searchResult {
-        case .success(let result):
+        case .success(let searchResult):
             telemetry.resultsCompleted(outcome: true, errorType: nil, model: model, isFollowUp: isFollowUp)
-            onStateChange?(.showSearchResult(result, nil))
+            latestSnapshot = QuickAnswersSessionSnapshot(
+                question: result.text,
+                result: searchResult,
+                conversation: conversation
+            )
+            onStateChange?(.showSearchResult(searchResult, nil))
         case .failure(let error):
             telemetry.resultsCompleted(
                 outcome: false,
@@ -186,7 +217,13 @@ final class QuickAnswersViewModel {
         }
     }
 
-    func recordCitationTapped() {
+    /// Records the tap and tears down the flow, saving the answered session when the user can return to it.
+    /// - Returns: Whether the session was saved.
+    func handleCitationTap() -> Bool {
         telemetry.citationTapped()
+        dismiss()
+        guard feature.isReturnToAnswerEnabled, let latestSnapshot else { return false }
+        store.saveSession(latestSnapshot)
+        return true
     }
 }

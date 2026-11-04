@@ -32,10 +32,15 @@ final class DefaultQuickAnswersService: QuickAnswersService {
         resultsServiceFactory: ResultsServiceFactory = DefaultResultsServiceFactory(
             liteLLMCreator: LiteLLMCreator()
         ),
-        prefs: Prefs
+        prefs: Prefs,
+        conversation: QuickAnswersConversation
     ) throws {
         self.engine = engine ?? Self.makeDefaultEngine()
-        self.resultsService = try resultsServiceFactory.make(prefs: prefs, configFetcher: configFetcher)
+        self.resultsService = try resultsServiceFactory.make(
+            prefs: prefs,
+            configFetcher: configFetcher,
+            conversation: conversation
+        )
     }
 
     // MARK: Speech Service

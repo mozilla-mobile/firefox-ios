@@ -5,12 +5,15 @@
 import Foundation
 import Shared
 
-/// Persists user preferences related to the Quick Answers feature.
+/// Persists the opt-in of the Quick Answers feature, and keeps the parked session in memory.
+@MainActor
 struct Store {
     private let prefs: Prefs
+    private let sessionStorage: QuickAnswersSessionStorage
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs, sessionStorage: QuickAnswersSessionStorage) {
         self.prefs = prefs
+        self.sessionStorage = sessionStorage
     }
 
     /// Whether the user has accepted the Quick Answers opt-in.
@@ -18,8 +21,21 @@ struct Store {
         return prefs.boolForKey(PrefsKeys.QuickAnswers.optInCompleted) ?? false
     }
 
+    /// The session parked for the user to return to, if any.
+    var latestSession: QuickAnswersSessionSnapshot? {
+        return sessionStorage.latestSession
+    }
+
     /// Marks the Quick Answers opt-in as completed.
     func setOptInCompleted() {
         prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
+    }
+
+    func saveSession(_ session: QuickAnswersSessionSnapshot) {
+        sessionStorage.latestSession = session
+    }
+
+    func removeAllSessions() {
+        sessionStorage.removeAll()
     }
 }

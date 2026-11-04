@@ -8,9 +8,15 @@ import Shared
 final class MockResultsServiceFactory: ResultsServiceFactory {
     var makeCallCount = 0
     var shouldThrow = false
+    var lastConversation: QuickAnswersConversation?
 
-    func make(prefs: Prefs, configFetcher: QuickAnswersConfigFetcher) throws -> ResultsService {
+    func make(
+        prefs: Prefs,
+        configFetcher: QuickAnswersConfigFetcher,
+        conversation: QuickAnswersConversation
+    ) throws -> ResultsService {
         makeCallCount += 1
+        lastConversation = conversation
 
         if shouldThrow {
             throw ResultsServiceError.unableToCreateService
