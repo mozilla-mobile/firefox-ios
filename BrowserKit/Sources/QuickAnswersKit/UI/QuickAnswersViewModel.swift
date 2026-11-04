@@ -24,7 +24,6 @@ final class QuickAnswersViewModel {
     private var recordVoiceTask: Task<Void, Never>?
     private var searchResultTask: Task<Void, Never>?
     let feature: QuickAnswersFeature
-    /// The session this screen was opened to return to, rendered instead of starting a new flow.
     let restoredSession: QuickAnswersSessionSnapshot?
     var onStateChange: ((State) -> Void)?
 
@@ -50,7 +49,6 @@ final class QuickAnswersViewModel {
         return isOptInRequired && feature.isOptInRedesignEnabled
     }
 
-    /// Whether a session is parked for the user to return to.
     var hasParkedSession: Bool {
         return store.latestSession != nil
     }
