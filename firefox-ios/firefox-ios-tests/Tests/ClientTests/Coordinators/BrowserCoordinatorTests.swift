@@ -969,6 +969,76 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    func testShowQuickAnswers_withSourceRevealAndNoParkedSession_doesNotHidePill() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
+
+        XCTAssertEqual(browserViewController.hideQuickAnswersReturnPillCount, 0)
+    }
+
+    func testShowQuickAnswers_withReturnToAnswer_hidesPillOnPresentationCompletion() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showQuickAnswers(transitionType: .returnToAnswer)
+
+        XCTAssertEqual(browserViewController.hideQuickAnswersReturnPillCount, 0)
+        mockRouter.savedCompletion?()
+        XCTAssertEqual(browserViewController.hideQuickAnswersReturnPillCount, 1)
+    }
+
+    func testShowQuickAnswers_withSourceReveal_doesNotHidePillOnPresentationCompletion() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
+        mockRouter.savedCompletion?()
+
+        XCTAssertEqual(browserViewController.hideQuickAnswersReturnPillCount, 0)
+    }
+
+    func testQuickAnswersOnPark_showsPill() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
+        let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
+
+        coordinator.parkQuickAnswers(with: .url(URL(string: "https://example.com")!))
+
+        XCTAssertEqual(browserViewController.showQuickAnswersReturnPillCount, 1)
+        XCTAssertNotNil(browserViewController.lastReturnPillOnTap)
+        XCTAssertNotNil(browserViewController.lastReturnPillOnSwipeAway)
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testReturnPillTap_withoutParkedSession_doesNotPresentQuickAnswers() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
+        let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
+        coordinator.parkQuickAnswers(with: .url(URL(string: "https://example.com")!))
+
+        browserViewController.lastReturnPillOnTap?(false)
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testReturnPillSwipe_withoutParkedSession_doesNotHidePill() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
+        let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
+        coordinator.parkQuickAnswers(with: .url(URL(string: "https://example.com")!))
+
+        browserViewController.lastReturnPillOnSwipeAway?()
+
+        XCTAssertEqual(browserViewController.hideQuickAnswersReturnPillCount, 0)
+    }
+
     // MARK: - Shortcuts Library
 
     func testShowShortcutsLibrary_showsShortcutsLibrary() throws {

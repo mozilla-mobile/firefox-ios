@@ -46,6 +46,16 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertTrue(navigationController.viewControllers.first is QuickAnswersViewController)
     }
 
+    func test_start_withCompletion_passesItToRouterPresent() {
+        let subject = createSubject()
+        var didCallCompletion = false
+
+        subject.start { didCallCompletion = true }
+        router.savedCompletion?()
+
+        XCTAssertTrue(didCallCompletion)
+    }
+
     func test_dismissQuickAnswers_dismissesControllerAndNotifiesParent() {
         let subject = createSubject()
 
@@ -92,6 +102,33 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertTrue(didCallCallback, "The onNavigate closure should have been called")
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(router.dismissCalled, 1)
+    }
+
+    func test_parkQuickAnswers_navigatesCallsOnParkDismissesAndFinishes() {
+        var events = [String]()
+        router.onDismiss = { events.append("dismiss") }
+        let subject = createSubject(
+            onNavigate: { type in
+                XCTAssertEqual(type, .url(self.testURL))
+                events.append("navigate")
+            },
+            onPark: { events.append("park") }
+        )
+
+        subject.parkQuickAnswers(with: .url(testURL))
+
+        XCTAssertEqual(events, ["navigate", "park", "dismiss"])
+        XCTAssertEqual(router.dismissCalled, 1)
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+    }
+
+    func test_dismissQuickAnswers_doesNotCallOnPark() {
+        var didCallOnPark = false
+        let subject = createSubject(onPark: { didCallOnPark = true })
+
+        subject.dismissQuickAnswers(with: .url(testURL))
+
+        XCTAssertFalse(didCallOnPark)
     }
 
     func test_resolvedModel_withoutOverride_returnsNimbusModel() {
@@ -200,6 +237,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
     private func createSubject(
         prefs: Prefs = MockProfilePrefs(),
         onNavigate: @escaping (QuickAnswersNavigationType) -> Void = { _ in },
+        onPark: @escaping () -> Void = {},
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> QuickAnswersCoordinator {
@@ -212,7 +250,8 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
             router: router,
             transitionType: .sourceReveal(sourceRect: .zero),
             featureFlagsProvider: featureFlagsProvider,
-            onNavigate: onNavigate
+            onNavigate: onNavigate,
+            onPark: onPark
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
