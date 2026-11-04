@@ -11,11 +11,6 @@ struct VPNToggleRow: View {
     let viewModel: VPNSettingsViewModel
     let theme: Theme
 
-    private var accessibilityValue: String {
-        if viewModel.isVPNConnecting { return .VPN.Settings.Connecting }
-        return viewModel.isVPNEnabled ? .VPN.Settings.StatusOn : .VPN.Settings.StatusOff
-    }
-
     var body: some View {
         Toggle(isOn: Binding(get: { viewModel.isVPNEnabled },
                              set: { viewModel.toggleVPN($0) })) {
@@ -36,7 +31,7 @@ struct VPNToggleRow: View {
         }
         .toggleStyle(SwitchToggleStyle(tint: theme.colors.actionPrimary.color))
         .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.vpnToggle)
-        .accessibilityValue(accessibilityValue)
+        .accessibilityValue(viewModel.accessibilityValue)
         .padding(.horizontal, VPNHelpers.UX.horizontalPadding)
         .padding(.vertical, VPNHelpers.UX.rowVerticalPadding)
     }

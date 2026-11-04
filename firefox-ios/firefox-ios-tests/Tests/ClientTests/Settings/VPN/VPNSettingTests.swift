@@ -11,11 +11,13 @@ import XCTest
 final class VPNSettingTests: XCTestCase {
     private var delegate: MockSettingsFlowDelegate!
     private var settings: SettingsTableViewController!
+    private var userPreferences: MockUserFeaturePreferences!
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         delegate = MockSettingsFlowDelegate()
+        userPreferences = MockUserFeaturePreferences()
         settings = SettingsTableViewController(
             style: .plain,
             windowUUID: .XCTestDefaultUUID,
@@ -26,6 +28,7 @@ final class VPNSettingTests: XCTestCase {
     override func tearDown() async throws {
         delegate = nil
         settings = nil
+        userPreferences = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -95,6 +98,7 @@ final class VPNSettingTests: XCTestCase {
         let subject = VPNSetting(
             settings: settings,
             settingsDelegate: delegate,
+            userPreferences: userPreferences,
             dataUsage: dataUsage
         )
         trackForMemoryLeaks(subject)
@@ -102,8 +106,6 @@ final class VPNSettingTests: XCTestCase {
     }
 
     private func setVPNEnabled(_ isEnabled: Bool) {
-        let profile = makeProfile()
-        profile.prefs.setBool(isEnabled, forKey: PrefsKeys.VPNSettings.isEnabled)
-        settings.profile = profile
+        userPreferences.setPreferenceFor(.vpnFeature, to: isEnabled)
     }
 }

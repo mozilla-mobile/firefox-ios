@@ -177,8 +177,6 @@ public enum PrefsKeys {
     public enum VPNSettings {
         public static let endpointEnvironment = "vpnEndpointEnvironment"
         public static let lastUsedEnvironment = "vpnLastUsedEnvironment"
-        // TODO: FXIOS-16876 Will remove this key
-        public static let isEnabled = "vpnIsEnabled"
     }
 
     public enum UserFeatureFlagPrefs {

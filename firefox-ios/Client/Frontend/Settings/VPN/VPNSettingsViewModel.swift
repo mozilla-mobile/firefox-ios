@@ -2,10 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Observation
 import Shared
-// import UIKit
 
 @available(iOS 17.0, *)
 @MainActor
@@ -18,16 +18,23 @@ final class VPNSettingsViewModel {
     private(set) var isVPNConnecting = false
     private let dataUsage: VPNDataUsage
 
-    @ObservationIgnored private let prefs: Prefs
+    @ObservationIgnored private let userPreferences: UserFeaturePreferring
 
     var usedDataInGB: Double { dataUsage.clampedUsedDataInGB }
     var dataLimitInGB: Double { dataUsage.dataLimitInGB }
     var usageFraction: Double { dataUsage.usageFraction }
     var isLimitReached: Bool { dataUsage.isLimitReached }
+    var accessibilityValue: String {
+        if isVPNConnecting { return .VPN.Settings.Connecting }
+        return isVPNEnabled ? .VPN.Settings.StatusOn : .VPN.Settings.StatusOff
+    }
 
-    init(prefs: Prefs, dataUsage: VPNDataUsage = .placeholder) {
-        self.prefs = prefs
-        self.isVPNEnabled = prefs.boolForKey(PrefsKeys.VPNSettings.isEnabled) ?? false
+    init(
+        userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
+        dataUsage: VPNDataUsage = .placeholder
+    ) {
+        self.userPreferences = userPreferences
+        self.isVPNEnabled = userPreferences.getPreferenceFor(.vpnFeature)
         self.dataUsage = dataUsage
     }
 
@@ -35,7 +42,7 @@ final class VPNSettingsViewModel {
     func toggleVPN(_ isOn: Bool) {
         guard isOn else {
             isVPNEnabled = false
-            prefs.setBool(false, forKey: PrefsKeys.VPNSettings.isEnabled)
+            userPreferences.setPreferenceFor(.vpnFeature, to: false)
             return
         }
         guard !isVPNConnecting else { return }
@@ -45,7 +52,7 @@ final class VPNSettingsViewModel {
             guard let self else { return }
             isVPNConnecting = false
             isVPNEnabled = true
-            prefs.setBool(true, forKey: PrefsKeys.VPNSettings.isEnabled)
+            userPreferences.setPreferenceFor(.vpnFeature, to: true)
             UIAccessibility.post(notification: .announcement, argument: String.VPN.Settings.Connected)
         }
     }

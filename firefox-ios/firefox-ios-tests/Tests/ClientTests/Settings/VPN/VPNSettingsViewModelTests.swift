@@ -10,34 +10,34 @@ import XCTest
 @available(iOS 17.0, *)
 @MainActor
 final class VPNSettingsViewModelTests: XCTestCase {
-    private var prefs: MockProfilePrefs!
+    private var userPreferences: MockUserFeaturePreferences!
 
     override func setUp() async throws {
         try await super.setUp()
-        prefs = MockProfilePrefs()
+        userPreferences = MockUserFeaturePreferences()
     }
 
     override func tearDown() async throws {
-        prefs = nil
+        userPreferences = nil
         try await super.tearDown()
     }
 
-    func test_init_readsEnabledPref() {
-        prefs.setBool(true, forKey: PrefsKeys.VPNSettings.isEnabled)
+    func test_init_readsVPNFeaturePreference() {
+        userPreferences.setPreferenceFor(.vpnFeature, to: true)
 
         let subject = createSubject()
 
         XCTAssertTrue(subject.isVPNEnabled)
     }
 
-    func test_toggleVPN_off_disablesAndSavesPref() {
-        prefs.setBool(true, forKey: PrefsKeys.VPNSettings.isEnabled)
+    func test_toggleVPN_off_disablesAndSavesPreference() {
+        userPreferences.setPreferenceFor(.vpnFeature, to: true)
         let subject = createSubject()
 
         subject.toggleVPN(false)
 
         XCTAssertFalse(subject.isVPNEnabled)
-        XCTAssertEqual(prefs.boolForKey(PrefsKeys.VPNSettings.isEnabled), false)
+        XCTAssertFalse(userPreferences.getPreferenceFor(.vpnFeature))
     }
 
     func test_toggleVPN_on_startsConnecting() {
@@ -51,7 +51,7 @@ final class VPNSettingsViewModelTests: XCTestCase {
 
     // MARK: - Helpers
     private func createSubject() -> VPNSettingsViewModel {
-        let subject = VPNSettingsViewModel(prefs: prefs)
+        let subject = VPNSettingsViewModel(userPreferences: userPreferences)
         trackForMemoryLeaks(subject)
         return subject
     }
