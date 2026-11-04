@@ -45,10 +45,10 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
         screenState.tap(
             table.cells[AccessibilityIdentifiers.Settings.AppIconSelection.settingsRowTitle], to: AppIconSettings)
         registerSecretSettingsAccess(on: screenState, table: table, app: app)
-        // The root Settings screen is left with Done rather than a back button
-        screenState.backAction = {
-            app.buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
-        }
+        // On iPhone Duo the root Settings screen is left with Done rather than a back button
+        screenState.backAction = isIPhoneDuo()
+            ? { app.buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap() }
+            : navigationControllerBackAction(for: app)
     }
 
     map.addScreenState(AutofillPasswordSettings) { screenState in
