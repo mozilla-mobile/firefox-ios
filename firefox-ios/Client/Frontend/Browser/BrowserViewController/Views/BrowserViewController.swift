@@ -144,6 +144,8 @@ class BrowserViewController: UIViewController,
     // MARK: Lazy loading UI elements
     private var documentLoadingView: TemporaryDocumentLoadingView?
     private var quickAnswersReturnPill: QuickAnswersReturnPillView?
+    private var isAddressToolbarInOverlayMode = false
+    private var isShowingToast = false
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { view in
         view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.statusBarOverlay
@@ -2045,6 +2047,9 @@ class BrowserViewController: UIViewController,
 
         view.bringSubviewToFront(header)
         view.bringSubviewToFront(overKeyboardContainer)
+        if let quickAnswersReturnPill {
+            view.bringSubviewToFront(quickAnswersReturnPill)
+        }
         documentLoadingView.animateLoadingAppearanceIfNeeded()
         documentLoadingView.applyTheme(theme: currentTheme())
         self.documentLoadingView = documentLoadingView
@@ -2089,6 +2094,7 @@ class BrowserViewController: UIViewController,
         view.addSubview(pill)
         browserLayoutManager.setupQuickAnswersReturnPillConstraints(pill)
         updateQuickAnswersReturnPillLayout(animated: false)
+        updateQuickAnswersReturnPillVisibility()
     }
 
     func hideQuickAnswersReturnPill() {
@@ -2114,8 +2120,9 @@ class BrowserViewController: UIViewController,
         quickAnswersReturnPill.setMinimized(isMinimized, animated: animated)
     }
 
-    private func setQuickAnswersReturnPillVisible(_ isVisible: Bool) {
+    private func updateQuickAnswersReturnPillVisibility() {
         guard let quickAnswersReturnPill else { return }
+        let isVisible = !isAddressToolbarInOverlayMode && !isShowingToast
         quickAnswersReturnPill.isUserInteractionEnabled = isVisible
         UIView.animate(withDuration: UX.returnPillFadeDuration) {
             quickAnswersReturnPill.alpha = isVisible ? 1 : 0
@@ -4241,7 +4248,8 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
-        setQuickAnswersReturnPillVisible(false)
+        isAddressToolbarInOverlayMode = true
+        updateQuickAnswersReturnPillVisibility()
         guard let profile = profile as? BrowserProfile else { return }
 
         if isSwipingTabsEnabled {
@@ -4271,7 +4279,8 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
-        setQuickAnswersReturnPillVisible(true)
+        isAddressToolbarInOverlayMode = false
+        updateQuickAnswersReturnPillVisibility()
         if isSwipingTabsEnabled {
             let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
             if showNavToolbar {
@@ -5050,6 +5059,14 @@ extension BrowserViewController: TabManagerDelegate {
         if self.view.window == nil {
             self.pendingToast = toast
             return
+        }
+
+        isShowingToast = true
+        updateQuickAnswersReturnPillVisibility()
+        toast.onRemoval = { [weak self] in
+            guard let self else { return }
+            isShowingToast = view.subviews.contains { $0 is Toast }
+            updateQuickAnswersReturnPillVisibility()
         }
 
         scrollController.showToolbars(animated: false)

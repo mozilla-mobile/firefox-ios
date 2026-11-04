@@ -28,6 +28,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
     public var notificationCenter: NotificationProtocol = NotificationCenter.default
     var animationConstraint: NSLayoutConstraint?
     var completionHandler: (@MainActor (Bool) -> Void)?
+    var onRemoval: (@MainActor () -> Void)?
 
     weak var viewController: UIViewController?
 
@@ -121,6 +122,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
             }
         ) { finished in
             self.removeFromSuperview()
+            self.onRemoval?()
             if !buttonPressed {
                 self.completionHandler?(false)
             }
