@@ -366,7 +366,7 @@ final class InstallationTelemetryServiceTests: XCTestCase {
             XCTAssertEqual(GleanMetrics.Installation.originalPurchaseDate.testGetValue("installation"),
                            Calendar.current.startOfDay(for: purchaseDate))
             XCTAssertEqual(GleanMetrics.Installation.lastSeenDate.testGetValue("installation"),
-                           Calendar.current.startOfDay(for: previousDate))
+                           previousDate)
             pingSubmitted.fulfill()
         }
 
@@ -391,7 +391,7 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         let datetimes = try XCTUnwrap(metrics["datetime"] as? [String: Any])
         let lastSeenDate = try XCTUnwrap(datetimes["installation.last_seen_date"] as? String)
         let originalPurchaseDate = try XCTUnwrap(datetimes["installation.original_purchase_date"] as? String)
-        XCTAssertFalse(lastSeenDate.contains("T"))
+        XCTAssertEqual(ISO8601DateFormatter().date(from: lastSeenDate), previousDate)
         XCTAssertFalse(originalPurchaseDate.contains("T"))
 
         try await subject.onForeground()
