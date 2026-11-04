@@ -43,7 +43,7 @@ features:
           model: exa
           optInRedesign: true
           follow-up-enabled: true
-          return-to-answer-enabled: false
+          return-to-answer-enabled: true
 
 enums:
   QuickAnswersModel:
