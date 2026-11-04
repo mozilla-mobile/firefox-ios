@@ -156,7 +156,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         registerCallbacks()
         if let session = viewModel.restoredSession {
-            showRestoredSession(session)
+            UIView.performWithoutAnimation { showRestoredSession(session) }
         }
     }
 
