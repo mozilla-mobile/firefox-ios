@@ -220,3 +220,53 @@ ai.quick_answers:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
+  return_pill_shown:
+    type: event
+    description: |
+      Recorded when the Quick Answers return pill is shown after the user opens a citation.
+    bugs:
+      # TODO: replace with the GitHub issue of this feature.
+      - https://github.com/mozilla-mobile/firefox-ios/issues/XXXXX
+    data_reviews:
+      # TODO: replace with the data review request pull request.
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2027-06-01"
+  return_pill_tapped:
+    type: event
+    description: |
+      Recorded when the user taps the Quick Answers return pill to go back to the answer.
+    extra_keys:
+      is_minimized:
+        type: boolean
+        description: |
+          Whether the pill was in its minimized form (minimal address bar) when tapped.
+    bugs:
+      # TODO: replace with the GitHub issue of this feature.
+      - https://github.com/mozilla-mobile/firefox-ios/issues/XXXXX
+    data_reviews:
+      # TODO: replace with the data review request pull request.
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2027-06-01"
+  return_pill_dismissed:
+    type: event
+    description: |
+      Recorded when the Quick Answers return pill goes away without the user returning to the answer.
+    extra_keys:
+      reason:
+        type: string
+        description: |
+          Why the pill went away. One of `swipe`, `new_session` or `private_mode_toggled`. See the
+          `QuickAnswersReturnPillDismissReason` enum for the valid values.
+    bugs:
+      # TODO: replace with the GitHub issue of this feature.
+      - https://github.com/mozilla-mobile/firefox-ios/issues/XXXXX
+    data_reviews:
+      # TODO: replace with the data review request pull request.
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2027-06-01"

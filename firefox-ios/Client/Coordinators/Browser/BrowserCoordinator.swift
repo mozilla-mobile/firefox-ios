@@ -73,6 +73,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
     private var pendingOnboardingCardAction: OnboardingCardButtonAction = .none
     private let quickAnswersSessionStorage: QuickAnswersSessionStorage
+    private let quickAnswersPillTelemetry: QuickAnswersReturnPillTelemetry
 
     override var isDismissible: Bool { false }
 
@@ -89,6 +90,7 @@ final class BrowserCoordinator: BaseCoordinator,
          windowMerger: WindowMerging = MergeWindowsManager(),
          googleLensService: GoogleLensServicing = GoogleLensService(),
          quickAnswersSessionStorage: QuickAnswersSessionStorage = QuickAnswersSessionStorage(),
+         quickAnswersPillTelemetry: QuickAnswersReturnPillTelemetry = DefaultQuickAnswersTelemetry(),
          isCameraAvailable: @escaping @MainActor () -> Bool = {
              UIImagePickerController.isSourceTypeAvailable(.camera)
          }) {
@@ -108,6 +110,7 @@ final class BrowserCoordinator: BaseCoordinator,
         self.glean = glean
         self.googleLensService = googleLensService
         self.quickAnswersSessionStorage = quickAnswersSessionStorage
+        self.quickAnswersPillTelemetry = quickAnswersPillTelemetry
         self.isCameraAvailable = isCameraAvailable
         super.init(router: router)
 
@@ -1356,9 +1359,13 @@ final class BrowserCoordinator: BaseCoordinator,
 
     private func showQuickAnswersReturnPill() {
         guard let question = quickAnswersSessionStorage.latestSession?.question else { return }
+        quickAnswersPillTelemetry.returnPillShown()
         browserViewController.showQuickAnswersReturnPill(
             question: question,
-            onTap: { [weak self] _ in self?.resumeParkedQuickAnswers() },
+            onTap: { [weak self] isMinimized in
+                self?.quickAnswersPillTelemetry.returnPillTapped(isMinimized: isMinimized)
+                self?.resumeParkedQuickAnswers()
+            },
             onSwipeAway: { [weak self] in self?.discardParkedQuickAnswers(reason: .swipe) }
         )
     }
@@ -1371,6 +1378,7 @@ final class BrowserCoordinator: BaseCoordinator,
 
     private func discardParkedQuickAnswers(reason: QuickAnswersReturnPillDismissReason) {
         guard quickAnswersSessionStorage.latestSession != nil else { return }
+        quickAnswersPillTelemetry.returnPillDismissed(reason: reason)
         quickAnswersSessionStorage.removeAll()
         browserViewController.hideQuickAnswersReturnPill()
     }

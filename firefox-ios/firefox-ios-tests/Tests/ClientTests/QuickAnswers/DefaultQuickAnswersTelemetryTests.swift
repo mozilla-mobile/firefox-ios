@@ -231,6 +231,57 @@ final class DefaultQuickAnswersTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
+    func test_recordEvent_whenReturnPillShown_thenGleanIsCalled() throws {
+        let subject = createSubject()
+        let event = GleanMetrics.AiQuickAnswers.returnPillShown
+
+        subject.returnPillShown()
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
+        )
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    func test_recordEvent_whenReturnPillTapped_thenGleanIsCalled() throws {
+        let subject = createSubject()
+        let event = GleanMetrics.AiQuickAnswers.returnPillTapped
+        typealias EventExtrasType = GleanMetrics.AiQuickAnswers.ReturnPillTappedExtra
+
+        subject.returnPillTapped(isMinimized: true)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>
+        )
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 0)
+        XCTAssertEqual(savedExtras.isMinimized, true)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    func test_recordEvent_whenReturnPillDismissed_thenGleanIsCalled() throws {
+        let subject = createSubject()
+        let event = GleanMetrics.AiQuickAnswers.returnPillDismissed
+        typealias EventExtrasType = GleanMetrics.AiQuickAnswers.ReturnPillDismissedExtra
+
+        subject.returnPillDismissed(reason: .privateModeToggled)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>
+        )
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 0)
+        XCTAssertEqual(savedExtras.reason, "private_mode_toggled")
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
     private func createSubject(
         file: StaticString = #filePath,
         line: UInt = #line
