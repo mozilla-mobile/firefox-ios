@@ -385,7 +385,7 @@ func deleteKeychainSecClass(_ secClass: CFString,
     let protectedItems = KeychainProtectedItem.allCases.filter {
         $0.itemClass == secClass && (service == nil || $0.service == service)
     }
-    guard !protectedItems.isEmpty else {
+    if protectedItems.isEmpty {
         return keychain.delete(query: query)
     }
 
@@ -397,7 +397,7 @@ func deleteKeychainSecClass(_ secClass: CFString,
     guard status == errSecSuccess else {
         if status != errSecItemNotFound {
             DefaultLogger.shared.log("Failed to enumerate Keychain items: \(status)",
-                                     level: .warning,
+                                     level: .fatalError,
                                      category: .storage)
         }
         return status
