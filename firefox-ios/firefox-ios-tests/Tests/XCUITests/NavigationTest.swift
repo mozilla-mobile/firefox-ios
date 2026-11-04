@@ -42,6 +42,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         browserScreen = BrowserScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
         syncScreen = SyncScreen(app: app)
+        settingsScreen = SettingScreen(app: app)
         // These tests launch the app themselves through a deeplink
         let deeplinkLaunchTests = ["testTapSigninShowsFxAFromSettings", "testPopUpBlocker",
                                    "testValidatePopUpWindows", "testOpenExternalLink",
@@ -131,6 +132,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         // Close dismisses the whole sheet and returns to the browser
         syncScreen.closeFxAWebView()
         syncScreen.assertFxASheetDismissed()
+        settingsScreen.assertSettingsScreenDismissed()
         toolbarScreen.assertTabsButtonExists()
     }
 

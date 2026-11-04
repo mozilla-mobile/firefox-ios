@@ -9,10 +9,6 @@ final class SyncScreen {
     private let app: XCUIApplication
     private let sel: SyncSelectorsSet
 
-    private var fxaEmailField: XCUIElement {
-        app.webViews.textFields.element(boundBy: 0)
-    }
-
     init(app: XCUIApplication, selectors: SyncSelectorsSet = SyncSelectors()) {
         self.app = app
         self.sel = selectors
@@ -41,12 +37,14 @@ final class SyncScreen {
     /// Taps "Use email instead" and waits for the Firefox Account web view email field.
     func tapUseEmailInstead() {
         sel.EMAIL_SIGN_IN_BUTTON.element(in: app).waitAndTap()
-        BaseTestCase().mozWaitForElementToExist(fxaEmailField, timeout: TIMEOUT_LONG)
+        BaseTestCase().mozWaitForElementToExist(sel.FXA_EMAIL_FIELD.element(in: app), timeout: TIMEOUT_LONG)
     }
 
     func assertEmailFieldPlaceholder(_ expected: String = "Enter your email") {
         if #available(iOS 17, *) {
-            XCTAssertEqual(fxaEmailField.label, expected, "The mail placeholder does not show the correct value")
+            XCTAssertEqual(sel.FXA_EMAIL_FIELD.element(in: app).label,
+                           expected,
+                           "The mail placeholder does not show the correct value")
         } else {
             let placeholder = sel.EMAIL_PLACEHOLDER_TEXT.element(in: app)
             BaseTestCase().mozWaitForElementToExist(placeholder)

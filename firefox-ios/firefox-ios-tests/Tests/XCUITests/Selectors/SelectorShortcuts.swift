@@ -559,6 +559,16 @@ extension Selector {
         )
     }
 
+    /// Matches the first text field inside `container`, e.g. a form field in a web view.
+    static func textField(in container: Selector, description: String, groups: [String] = []) -> Selector {
+        Selector(
+            strategy: .textFieldInContainer(container: container),
+            value: "textField",
+            description: description,
+            groups: groups
+        )
+    }
+
     /// Matches the collection view holding an element whose identifier starts with `prefix`.
     static func collectionViewContainingIdPrefix(_ prefix: String,
                                                  description: String,

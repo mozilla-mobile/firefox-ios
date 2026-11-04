@@ -13,6 +13,8 @@ protocol SyncSelectorsSet {
     var SETTINGS_SYNC_AND_SAVE_DATA_ROW: Selector { get }
     var EMAIL_SIGN_IN_BUTTON: Selector { get }
     var EMAIL_PLACEHOLDER_TEXT: Selector { get }
+    var FXA_WEBVIEW: Selector { get }
+    var FXA_EMAIL_FIELD: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -79,9 +81,22 @@ struct SyncSelectors: SyncSelectorsSet {
         groups: ["sync"]
     )
 
+    let FXA_WEBVIEW = Selector.webView(
+        description: "Firefox Account web view",
+        groups: ["sync"]
+    )
+
+    var FXA_EMAIL_FIELD: Selector {
+        Selector.textField(
+            in: FXA_WEBVIEW,
+            description: "Email field of the Firefox Account web view",
+            groups: ["sync"]
+        )
+    }
+
     var all: [Selector] {
         [FIREFOX_SYNC_TITLE, SYNC_AND_SAVE_DATA_BUTTON, SYNC_AND_SAVE_DATA_NAVIGATION_BAR,
          FXA_WEBVIEW_NAVIGATION_BAR, FXA_WEBVIEW_CLOSE_BUTTON, SETTINGS_SYNC_AND_SAVE_DATA_ROW,
-         EMAIL_SIGN_IN_BUTTON, EMAIL_PLACEHOLDER_TEXT]
+         EMAIL_SIGN_IN_BUTTON, EMAIL_PLACEHOLDER_TEXT, FXA_WEBVIEW, FXA_EMAIL_FIELD]
     }
 }
