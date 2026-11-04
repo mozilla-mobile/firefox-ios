@@ -401,6 +401,10 @@ class BrowserViewController: UIViewController,
         && header.arrangedSubviews.isEmpty
     }
 
+    private var shouldPushAboveKeyboardContainer: Bool {
+        return isBottomSearchBar && tabManager.selectedTab?.isFindInPageMode != true
+    }
+
     /// The anchor `searchController.view`'s bottom is pinned to, based on the current search bar position.
     /// - Bottom search bar: `overKeyboardContainer.top`, which sits above the keyboard.
     /// - Top search bar: `view.bottom`, so the search view fills the screen
@@ -1874,30 +1878,22 @@ class BrowserViewController: UIViewController,
     }
 
     func updateConstraintsForKeyboard() {
-        if tabManager.selectedTab?.isFindInPageMode != true {
-            adjustBottomSearchBarForKeyboard()
-        }
+        adjustBottomSearchBarForKeyboard()
     }
 
     /// Updates the bottom constraint of `bottomContentStackView` (login snackbar, FindInPageBar).
-    /// Must be called whenever the keyboard or toolbar layout changes because the correct
-    /// anchor depends on both:
-    /// - **Bottom search bar**: the view is pinned to `overKeyboardContainer.top`, which
-    ///   already includes a keyboard spacer — no extra keyboard handling required.
-    /// - **Top search bar**: `overKeyboardContainer` collapses to `height = 0`, so its top
-    ///   sits above the nav toolbar and **below** the keyboard frame. A dedicated keyboard
-    ///   constraint (`= parentView.bottom - keyboardHeight`) must activate to keep snackbars
-    ///   and FindInPageBar above the keyboard.
+    /// Must be called whenever the keyboard or toolbar layout changes.
     private func updateBottomContentStackViewConstraints() {
-        browserLayoutManager.updateBottomContentStackViewConstraints(isBottomSearchBar: isBottomSearchBar,
-                                                                     keyboardState: keyboardState)
+        browserLayoutManager.updateBottomContentStackViewConstraints(
+            shouldPushAboveKeyboardContainer: shouldPushAboveKeyboardContainer,
+            keyboardState: keyboardState)
     }
 
     private func adjustBottomSearchBarForKeyboard() {
         let keyboardHeight = keyboardState?.intersectionHeightForView(view) ?? 0
         let isKeyboardVisible = keyboardHeight > 0
 
-        guard isBottomSearchBar, isKeyboardVisible else {
+        guard shouldPushAboveKeyboardContainer, isKeyboardVisible else {
             overKeyboardContainer.removeKeyboardSpacer()
             return
         }

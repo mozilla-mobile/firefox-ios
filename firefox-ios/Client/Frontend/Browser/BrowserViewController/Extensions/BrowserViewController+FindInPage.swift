@@ -8,12 +8,12 @@ extension BrowserViewController {
     func updateFindInPageVisibility(isVisible: Bool, tab: Tab? = nil, withSearchText searchText: String? = nil) {
         // TODO: The find interactions for iOS 16 close themselves, so once the min deployment target is iOS 16,
         // we may be able to remove the `isVisible` flag and let the system manage dismissal.
+        tabManager.selectedTab?.isFindInPageMode = isVisible && isBottomSearchBar
         if #available(iOS 16, *) {
             useSystemFindInteraction(isVisible: isVisible, withSearchText: searchText)
         } else {
             useCustomFindInteraction(isVisible: isVisible, tab: tab)
         }
-        tabManager.selectedTab?.isFindInPageMode = isVisible && isBottomSearchBar
     }
 
     @available(iOS 16, *)
@@ -58,7 +58,6 @@ extension BrowserViewController {
         ).isActive = true
 
         findInPageBar.applyTheme(theme: currentTheme())
-        updateConstraintsForFindInPageChanges()
 
         // We make the find-in-page bar the first responder below, causing the keyboard delegates
         // to fire. This, in turn, will animate the Find in Page container since we use the same
@@ -69,17 +68,12 @@ extension BrowserViewController {
     }
 
     private func removeFindInPage(_ findInPageBar: FindInPageBar, tab: Tab? = nil) {
+        self.iOS15FindInPageBar = nil
         findInPageBar.endEditing(true)
         let tab = tab ?? tabManager.selectedTab
         guard let webView = tab?.webView else { return }
         webView.evaluateJavascriptInDefaultContentWorld("__firefox__.findDone()")
         bottomContentStackView.removeArrangedView(findInPageBar)
-        self.iOS15FindInPageBar = nil
-        updateConstraintsForFindInPageChanges()
-    }
-
-    private func updateConstraintsForFindInPageChanges() {
-        updateConstraintsForKeyboard()
     }
 }
 
@@ -89,12 +83,10 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
     }
 
     func findInPage(didFindNextWithText text: String) {
-        iOS15FindInPageBar?.endEditing(true)
         find(text, function: "findNext")
     }
 
     func findInPage(didFindPreviousWithText text: String) {
-        iOS15FindInPageBar?.endEditing(true)
         find(text, function: "findPrevious")
     }
 
