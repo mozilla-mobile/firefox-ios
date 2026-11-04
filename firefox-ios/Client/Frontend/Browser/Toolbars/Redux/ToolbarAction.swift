@@ -16,7 +16,6 @@ struct ToolbarAction: Action {
     let url: URL?
     let searchTerm: String?
     let isPrivate: Bool?
-    let showMenuWarningBadge: Bool?
     let isShowingNavigationToolbar: Bool?
     let isShowingTopTabs: Bool?
     let canGoBack: Bool?
@@ -43,7 +42,6 @@ struct ToolbarAction: Action {
          url: URL? = nil,
          searchTerm: String? = nil,
          isPrivate: Bool? = nil,
-         showMenuWarningBadge: Bool? = nil,
          isShowingNavigationToolbar: Bool? = nil,
          isShowingTopTabs: Bool? = nil,
          canGoBack: Bool? = nil,
@@ -74,7 +72,6 @@ struct ToolbarAction: Action {
         self.url = url
         self.searchTerm = searchTerm
         self.isPrivate = isPrivate
-        self.showMenuWarningBadge = showMenuWarningBadge
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
         self.isShowingTopTabs = isShowingTopTabs
         self.canGoBack = canGoBack
@@ -137,6 +134,9 @@ enum ToolbarModernAction: ModernAction {
     /// The page's secure content status changed. `isWebsiteMode` is `false` for reader mode pages,
     /// where the lock icon isn't shown. The lock icon itself is derived from these in the Lens.
     case lockIconChanged(hasOnlySecureContent: Bool, isWebsiteMode: Bool)
+
+    /// The menu button's warning badge changed, for example when the account needs the user's attention.
+    case showMenuWarningBadge(isShown: Bool)
 }
 
 enum ToolbarActionType: ActionType {
@@ -145,7 +145,6 @@ enum ToolbarActionType: ActionType {
     case didSetTextInLocationView
     case borderPositionChanged
     case toolbarPositionChanged
-    case showMenuWarningBadge
     case didStartEditingUrl
     case cancelEdit
     case readerModeStateChanged

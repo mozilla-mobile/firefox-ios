@@ -170,6 +170,9 @@ struct ToolbarState: ScreenState, Sendable {
         case .translucencyDidChange(let isTranslucent):
             return state.copy(isTranslucent: isTranslucent)
 
+        case .showMenuWarningBadge(let isShown):
+            return state.copy(showMenuWarningBadge: isShown)
+
         case .didKeyboardRequestChange, .cancelEditOnHomepage, .didPasteSearchTerm, .lockIconChanged:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
             return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
@@ -215,9 +218,6 @@ struct ToolbarState: ScreenState, Sendable {
 
         case GeneralBrowserActionType.showToast:
             return handleShowToast(state: state, action: action)
-
-        case ToolbarActionType.showMenuWarningBadge:
-            return handleShowMenuWarningBadge(state: state, action: action)
 
         case ToolbarActionType.didSetTabScreenshot:
             return handleDidSetTabScreenshot(state: state, action: action)
@@ -295,15 +295,6 @@ struct ToolbarState: ScreenState, Sendable {
         // Update to use isAddressBarMinimized so the address bar is shown and the toast isn't presented a minimized bar.
         return state
             .copy(isAddressBarMinimized: false)
-    }
-
-    @MainActor
-    private static func handleShowMenuWarningBadge(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return state
-            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
-            .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
-            .copy(showMenuWarningBadge: toolbarAction.showMenuWarningBadge ?? state.showMenuWarningBadge)
     }
 
     @MainActor

@@ -430,17 +430,27 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                showMenuWarningBadge: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.showMenuWarningBadge
-            )
+            ToolbarModernAction.showMenuWarningBadge(isShown: true),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertTrue(newState.showMenuWarningBadge)
+    }
+
+    func test_showMenuWarningBadgeAction_fromAnotherWindow_doesNotChangeState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.showMenuWarningBadge(isShown: true),
+            WindowUUID()
+        )
+
+        XCTAssertFalse(newState.showMenuWarningBadge)
     }
 
     func test_numberOfTabsChangedAction_returnsExpectedState() {
