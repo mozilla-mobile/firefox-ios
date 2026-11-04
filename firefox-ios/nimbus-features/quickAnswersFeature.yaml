@@ -24,6 +24,11 @@ features:
           Enables asking follow up questions after an answer is shown.
         type: Boolean
         default: true
+      return-to-answer-enabled:
+        description: >
+          Keeps the Quick Answers session alive when a citation is tapped and shows a pill to return to it.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
@@ -31,12 +36,14 @@ features:
           model: exa
           optInRedesign: true
           follow-up-enabled: true
+          return-to-answer-enabled: false
       - channel: developer
         value:
           enabled: false
           model: exa
           optInRedesign: true
           follow-up-enabled: true
+          return-to-answer-enabled: true
 
 enums:
   QuickAnswersModel:

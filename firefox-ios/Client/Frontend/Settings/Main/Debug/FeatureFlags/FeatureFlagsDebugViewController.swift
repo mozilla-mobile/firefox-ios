@@ -292,6 +292,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .quickAnswersReturnToAnswer,
+                titleText: format(string: "Quick Answers Return to Answer"),
+                statusText: format(string: "Toggle to keep Quick Answers alive after tapping a citation")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .relayIntegration,
                 titleText: format(string: "Relay Email Masks"),
                 statusText: format(string: "Toggle to enable Relay mask feature")
