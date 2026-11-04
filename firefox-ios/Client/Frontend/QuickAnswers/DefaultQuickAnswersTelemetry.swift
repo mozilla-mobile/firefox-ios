@@ -5,7 +5,13 @@
 import Glean
 import QuickAnswersKit
 
-final class DefaultQuickAnswersTelemetry: QuickAnswersTelemetry {
+protocol QuickAnswersReturnPillTelemetry {
+    func returnPillShown()
+    func returnPillTapped(isMinimized: Bool)
+    func returnPillDismissed(reason: QuickAnswersReturnPillDismissReason)
+}
+
+final class DefaultQuickAnswersTelemetry: QuickAnswersTelemetry, QuickAnswersReturnPillTelemetry {
     private let gleanWrapper: GleanWrapper
     private var resultsTimerId: GleanTimerId?
 
@@ -77,5 +83,19 @@ final class DefaultQuickAnswersTelemetry: QuickAnswersTelemetry {
     func consentShown(agreed: Bool) {
         let extras = GleanMetrics.AiQuickAnswers.ConsentShownExtra(agreed: agreed)
         gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.consentShown, extras: extras)
+    }
+
+    func returnPillShown() {
+        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.returnPillShown)
+    }
+
+    func returnPillTapped(isMinimized: Bool) {
+        let extras = GleanMetrics.AiQuickAnswers.ReturnPillTappedExtra(isMinimized: isMinimized)
+        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.returnPillTapped, extras: extras)
+    }
+
+    func returnPillDismissed(reason: QuickAnswersReturnPillDismissReason) {
+        let extras = GleanMetrics.AiQuickAnswers.ReturnPillDismissedExtra(reason: reason.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.AiQuickAnswers.returnPillDismissed, extras: extras)
     }
 }

@@ -31,6 +31,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     private var glean: MockGleanWrapper!
     private var scrollDelegate: MockStatusBarScrollDelegate!
     private var browserViewController: MockBrowserViewController!
+    private var quickAnswersPillTelemetry: MockQuickAnswersReturnPillTelemetry!
     var mockStore: MockStoreForMiddleware<AppState>!
     private var homepageTabStateStore: HomepageTabStateStore!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
@@ -52,6 +53,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         glean = MockGleanWrapper()
         scrollDelegate = MockStatusBarScrollDelegate()
         browserViewController = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        quickAnswersPillTelemetry = MockQuickAnswersReturnPillTelemetry()
         homepageTabStateStore = HomepageTabStateStore()
         setupStore()
     }
@@ -67,6 +69,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         glean = nil
         scrollDelegate = nil
         browserViewController = nil
+        quickAnswersPillTelemetry = nil
         homepageTabStateStore = nil
         resetStore()
         DependencyHelperMock().reset()
@@ -1037,6 +1040,73 @@ final class BrowserCoordinatorTests: XCTestCase,
         browserViewController.lastReturnPillOnSwipeAway?()
 
         XCTAssertEqual(browserViewController.hideQuickAnswersReturnPillCount, 0)
+    }
+
+    func testQuickAnswersOnPark_recordsReturnPillShown() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
+        let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
+        XCTAssertEqual(quickAnswersPillTelemetry.shownCount, 0)
+
+        coordinator.parkQuickAnswers(with: .url(URL(string: "https://example.com")!))
+
+        XCTAssertEqual(quickAnswersPillTelemetry.shownCount, 1)
+    }
+
+    func testReturnPillTap_whenMinimized_recordsReturnPillTappedMinimized() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
+        let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
+        coordinator.parkQuickAnswers(with: .url(URL(string: "https://example.com")!))
+
+        browserViewController.lastReturnPillOnTap?(true)
+
+        XCTAssertEqual(quickAnswersPillTelemetry.tappedIsMinimizedValues, [true])
+    }
+
+    func testReturnPillTap_whenExpanded_recordsReturnPillTappedNotMinimized() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
+        let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
+        coordinator.parkQuickAnswers(with: .url(URL(string: "https://example.com")!))
+
+        browserViewController.lastReturnPillOnTap?(false)
+
+        XCTAssertEqual(quickAnswersPillTelemetry.tappedIsMinimizedValues, [false])
+    }
+
+    func testReturnPillSwipe_withoutParkedSession_doesNotRecordReturnPillDismissed() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
+        let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
+        coordinator.parkQuickAnswers(with: .url(URL(string: "https://example.com")!))
+
+        browserViewController.lastReturnPillOnSwipeAway?()
+
+        XCTAssertTrue(quickAnswersPillTelemetry.dismissedReasons.isEmpty)
+    }
+
+    func testShowQuickAnswers_withSourceRevealAndNoParkedSession_doesNotRecordReturnPillDismissed() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
+
+        XCTAssertTrue(quickAnswersPillTelemetry.dismissedReasons.isEmpty)
+    }
+
+    func testDidSelectedTabChange_privateToggleWithoutParkedSession_doesNotRecordReturnPillDismissed() {
+        let subject = createSubject()
+        let normalTab = MockTab(profile: profile, windowUUID: windowUUID)
+        let privateTab = MockTab(profile: profile, isPrivate: true, windowUUID: windowUUID)
+
+        subject.tabManager(tabManager, didSelectedTabChange: privateTab, previousTab: normalTab, isRestoring: false)
+
+        XCTAssertTrue(quickAnswersPillTelemetry.dismissedReasons.isEmpty)
     }
 
     // MARK: - Shortcuts Library
@@ -2165,6 +2235,7 @@ final class BrowserCoordinatorTests: XCTestCase,
                                          glean: glean,
                                          applicationHelper: applicationHelper,
                                          googleLensService: googleLensService,
+                                         quickAnswersPillTelemetry: quickAnswersPillTelemetry,
                                          isCameraAvailable: isCameraAvailable)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
@@ -2242,5 +2313,23 @@ private final class DismissSpyViewController: UIViewController {
         dismissCalled += 1
         onDismiss?()
         completion?()
+    }
+}
+
+private final class MockQuickAnswersReturnPillTelemetry: QuickAnswersReturnPillTelemetry {
+    private(set) var shownCount = 0
+    private(set) var tappedIsMinimizedValues = [Bool]()
+    private(set) var dismissedReasons = [QuickAnswersReturnPillDismissReason]()
+
+    func returnPillShown() {
+        shownCount += 1
+    }
+
+    func returnPillTapped(isMinimized: Bool) {
+        tappedIsMinimizedValues.append(isMinimized)
+    }
+
+    func returnPillDismissed(reason: QuickAnswersReturnPillDismissReason) {
+        dismissedReasons.append(reason)
     }
 }
