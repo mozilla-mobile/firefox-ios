@@ -13,12 +13,21 @@ protocol TranslationSettingsSelectorsSet {
     var LANGUAGE_PICKER_NAVBAR: Selector { get }
     var LANGUAGE_PICKER_LIST: Selector { get }
     var LANGUAGE_PICKER_SEARCH_FIELD: Selector { get }
-    var LANGUAGE_PICKER_CANCEL_BUTTON: Selector { get }
+    var LANGUAGE_PICKER_HEADER: Selector { get }
+    var LANGUAGE_PICKER_ROW: Selector { get }
+    var LANGUAGE_PICKER_CLOSE_BUTTON: Selector { get }
+    var LANGUAGE_PICKER_SEARCH_CLOSE_BUTTON_iOS26: Selector { get }
+    var KEYBOARD: Selector { get }
+    var PREFERRED_LANGUAGES_LIST: Selector { get }
     var EDIT_BUTTON: Selector { get }
     var DONE_BUTTON: Selector { get }
-    var REMOVE_LANGUAGE_ICON: Selector { get }
-    var REORDER_HANDLE: Selector { get }
     var all: [Selector] { get }
+    func languagePickerRows(containing text: String) -> Selector
+    func languagePickerOption(_ language: String) -> Selector
+    func preferredLanguage(_ language: String) -> Selector
+    func preferredLanguageCell(containing text: String) -> Selector
+    func removeLanguageIcon(inCellContaining text: String) -> Selector
+    func reorderHandle(inCellContaining text: String) -> Selector
 }
 
 struct TranslationSettingsSelectors: TranslationSettingsSelectorsSet {
@@ -31,7 +40,8 @@ struct TranslationSettingsSelectors: TranslationSettingsSelectorsSet {
         static let pickerTitle         = String.Settings.Translation.LanguagePicker.NavTitle
         static let pickerList          = AccessibilityIdentifiers.Settings.Translation.languagePickerList
         static let pickerSearch        = String.Settings.Translation.LanguagePicker.SearchPlaceholder
-        static let cancelLabels        = ["Cancel", "Close"]
+        static let pickerClose         = "Cancel"
+        static let pickerSearchClose   = "close"
         static let edit                = "Edit"
         static let done                = String.AppSettingsDone
         static let removeIcon          = "minus.circle.fill"
@@ -86,18 +96,53 @@ struct TranslationSettingsSelectors: TranslationSettingsSelectorsSet {
         groups: ["settings", "translation"]
     )
 
-    /// System cancel button: "Cancel" below iOS 26; on iOS 26 the sheet's X and the search bar's "close".
-    let LANGUAGE_PICKER_CANCEL_BUTTON = Selector(
-        strategy: .predicate(NSPredicate(
-            format: "elementType == %d AND (label ==[c] %@ OR label ==[c] %@ OR identifier ==[c] %@ OR identifier ==[c] %@)",
-            XCUIElement.ElementType.button.rawValue,
-            IDs.cancelLabels[0],
-            IDs.cancelLabels[1],
-            IDs.cancelLabels[0],
-            IDs.cancelLabels[1]
-        )),
-        value: IDs.cancelLabels.joined(separator: "|"),
-        description: "Cancel/X button of the 'Select Language' sheet or its search bar",
+    var LANGUAGE_PICKER_HEADER: Selector {
+        Selector.staticTextByExactLabel(
+            IDs.pickerTitle,
+            in: LANGUAGE_PICKER_NAVBAR,
+            description: "'Select Language' title in the sheet navigation bar",
+            groups: ["settings", "translation"]
+        )
+    }
+
+    var LANGUAGE_PICKER_ROW: Selector {
+        Selector.element(
+            .cell,
+            in: LANGUAGE_PICKER_LIST,
+            value: "cell",
+            description: "Any row of the 'Select Language' list",
+            groups: ["settings", "translation"]
+        )
+    }
+
+    /// The sheet's system Cancel item, an X on iOS 26. Below iOS 26 the search bar's Cancel takes its place while searching.
+    var LANGUAGE_PICKER_CLOSE_BUTTON: Selector {
+        Selector.buttonByLabel(
+            IDs.pickerClose,
+            in: LANGUAGE_PICKER_NAVBAR,
+            description: "Cancel (X) button that closes the 'Select Language' sheet",
+            groups: ["settings", "translation"]
+        )
+    }
+
+    /// iPhone on iOS 26 moves the active search field above the keyboard, with this button next to it in an unnamed
+    /// container. Its exact lowercase label sets it apart from the sheet's "Cancel".
+    let LANGUAGE_PICKER_SEARCH_CLOSE_BUTTON_iOS26 = Selector.buttonByLabel(
+        IDs.pickerSearchClose,
+        description: "'close' button that ends search in the 'Select Language' sheet (iPhone, iOS 26)",
+        groups: ["settings", "translation"]
+    )
+
+    let KEYBOARD = Selector.elementType(
+        .keyboard,
+        description: "Software keyboard",
+        groups: ["settings", "translation"]
+    )
+
+    /// The Translation settings list has no identifier, so this covers every collection view on screen.
+    let PREFERRED_LANGUAGES_LIST = Selector.elementType(
+        .collectionView,
+        description: "Translation settings list holding the Preferred Languages",
         groups: ["settings", "translation"]
     )
 
@@ -113,22 +158,70 @@ struct TranslationSettingsSelectors: TranslationSettingsSelectorsSet {
         groups: ["settings", "translation"]
     )
 
-    let REMOVE_LANGUAGE_ICON = Selector.imageId(
-        IDs.removeIcon,
-        description: "Delete (-) accessory on a Preferred Languages row in edit mode",
-        groups: ["settings", "translation"]
-    )
+    func languagePickerRows(containing text: String) -> Selector {
+        Selector.element(
+            .cell,
+            in: LANGUAGE_PICKER_LIST,
+            containing: NSPredicate(format: "elementType == %d AND label CONTAINS[c] %@",
+                                    XCUIElement.ElementType.staticText.rawValue,
+                                    text),
+            value: text,
+            description: "Rows of the 'Select Language' list whose text contains '\(text)'",
+            groups: ["settings", "translation"]
+        )
+    }
+
+    func languagePickerOption(_ language: String) -> Selector {
+        Selector.staticTextByExactLabel(
+            language,
+            in: LANGUAGE_PICKER_LIST,
+            description: "'\(language)' option in the 'Select Language' list",
+            groups: ["settings", "translation"]
+        )
+    }
+
+    func preferredLanguage(_ language: String) -> Selector {
+        Selector.staticTextByExactLabel(
+            language,
+            in: PREFERRED_LANGUAGES_LIST,
+            description: "'\(language)' in the Preferred Languages list",
+            groups: ["settings", "translation"]
+        )
+    }
+
+    func preferredLanguageCell(containing text: String) -> Selector {
+        Selector.cellContainingStaticText(
+            text,
+            in: PREFERRED_LANGUAGES_LIST,
+            description: "Preferred Languages row showing '\(text)'",
+            groups: ["settings", "translation"]
+        )
+    }
+
+    /// The edit-mode delete (-) accessory is exposed as an image, not a button.
+    func removeLanguageIcon(inCellContaining text: String) -> Selector {
+        Selector.imageId(
+            IDs.removeIcon,
+            in: preferredLanguageCell(containing: text),
+            description: "Delete (-) accessory on the '\(text)' Preferred Languages row in edit mode",
+            groups: ["settings", "translation"]
+        )
+    }
 
     /// System reorder control, labelled "Reorder <language>".
-    let REORDER_HANDLE = Selector.buttonLabelContains(
-        IDs.reorderHandle,
-        description: "Drag (reorder) handle on a Preferred Languages row",
-        groups: ["settings", "translation"]
-    )
+    func reorderHandle(inCellContaining text: String) -> Selector {
+        Selector.buttonLabelBeginsWith(
+            IDs.reorderHandle,
+            in: preferredLanguageCell(containing: text),
+            description: "Drag (reorder) handle on the '\(text)' Preferred Languages row",
+            groups: ["settings", "translation"]
+        )
+    }
 
     var all: [Selector] {
         [NAVBAR, BACK_BUTTON_iOS26, BACK_BUTTON, TRANSLATION_SWITCH, ADD_LANGUAGE_CELL, LANGUAGE_PICKER_NAVBAR,
-         LANGUAGE_PICKER_LIST, LANGUAGE_PICKER_SEARCH_FIELD, LANGUAGE_PICKER_CANCEL_BUTTON, EDIT_BUTTON, DONE_BUTTON,
-         REMOVE_LANGUAGE_ICON, REORDER_HANDLE]
+         LANGUAGE_PICKER_LIST, LANGUAGE_PICKER_SEARCH_FIELD, LANGUAGE_PICKER_HEADER, LANGUAGE_PICKER_ROW,
+         LANGUAGE_PICKER_CLOSE_BUTTON, LANGUAGE_PICKER_SEARCH_CLOSE_BUTTON_iOS26, KEYBOARD, PREFERRED_LANGUAGES_LIST,
+         EDIT_BUTTON, DONE_BUTTON]
     }
 }

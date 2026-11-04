@@ -186,7 +186,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
 
         translationSettingScreen.tapLanguagePickerSearchField()
         translationSettingScreen.assertLanguagePickerSearchIsActive()
-        translationSettingScreen.tapLanguagePickerCancelButton()
+        translationSettingScreen.tapLanguagePickerSearchCancelButton()
         translationSettingScreen.assertLanguagePickerSearchIsInactive()
 
         translationSettingScreen.searchLanguagePicker(for: "German")
@@ -197,7 +197,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
 
         translationSettingScreen.tapAddLanguage()
         translationSettingScreen.assertLanguagePickerIsDisplayed()
-        translationSettingScreen.tapLanguagePickerCancelButton()
+        translationSettingScreen.tapLanguagePickerCloseButton()
         translationSettingScreen.assertLanguagePickerIsDismissed()
     }
 

@@ -13,7 +13,17 @@ final class TranslationSettingsScreen {
     private var languagePickerNavBar: XCUIElement { sel.LANGUAGE_PICKER_NAVBAR.element(in: app) }
     private var languagePickerList: XCUIElement { sel.LANGUAGE_PICKER_LIST.element(in: app) }
     private var languagePickerSearchField: XCUIElement { sel.LANGUAGE_PICKER_SEARCH_FIELD.element(in: app) }
-    private var languagePickerCancelButton: XCUIElement { sel.LANGUAGE_PICKER_CANCEL_BUTTON.element(in: app) }
+    private var languagePickerCloseButton: XCUIElement { sel.LANGUAGE_PICKER_CLOSE_BUTTON.element(in: app) }
+    private var keyboard: XCUIElement { sel.KEYBOARD.element(in: app) }
+
+    /// iPhone on iOS 26 ends search with a "close" button in the field. Elsewhere the nav bar's Cancel does it:
+    /// below iOS 26 the search bar's Cancel replaces the sheet's, and iPad has no search cancel of its own.
+    private var languagePickerSearchCancelButton: XCUIElement {
+        if #available(iOS 26, *), !BaseTestCase().iPad() {
+            return sel.LANGUAGE_PICKER_SEARCH_CLOSE_BUTTON_iOS26.element(in: app)
+        }
+        return languagePickerCloseButton
+    }
 
     init(app: XCUIApplication, selectors: TranslationSettingsSelectorsSet = TranslationSettingsSelectors()) {
         self.app = app
@@ -75,26 +85,27 @@ final class TranslationSettingsScreen {
     func assertLanguagePickerIsDisplayed() {
         BaseTestCase().waitForElementsToExist([
             languagePickerNavBar,
-            languagePickerCancelButton,
+            languagePickerCloseButton,
             languagePickerSearchField
         ])
     }
 
     func assertLanguagePickerListIsNotEmpty() {
-        BaseTestCase().mozWaitForElementToExist(languagePickerList.cells.firstMatch)
-        XCTAssertGreaterThan(languagePickerList.cells.count, 1, "Expected the 'Select Language' list to show languages")
+        let rows = sel.LANGUAGE_PICKER_ROW
+        BaseTestCase().mozWaitForElementToExist(rows.element(in: app))
+        XCTAssertGreaterThan(rows.query(in: app).count, 1, "Expected the 'Select Language' list to show languages")
     }
 
     func tapLanguagePickerSearchField() {
         languagePickerSearchField.waitAndTap()
     }
 
-    /// Active search focuses the field and shows the keyboard and a cancel/X button; the header hides only on iPhone,
+    /// Active search focuses the field and shows the keyboard and a way to end it; the header hides only on iPhone,
     /// since the iPad form sheet keeps its navigation bar.
     func assertLanguagePickerSearchIsActive() {
-        BaseTestCase().waitForElementsToExist([app.keyboards.firstMatch, languagePickerCancelButton])
+        BaseTestCase().waitForElementsToExist([keyboard, languagePickerSearchCancelButton])
         XCTAssertTrue(languagePickerSearchField.waitForKeyboardFocus(), "The search field should have keyboard focus")
-        let header = languagePickerNavBar.staticTexts[sel.LANGUAGE_PICKER_NAVBAR.value]
+        let header = sel.LANGUAGE_PICKER_HEADER.element(in: app)
         if BaseTestCase().iPad() {
             BaseTestCase().mozWaitForElementToExist(header)
         } else {
@@ -102,12 +113,16 @@ final class TranslationSettingsScreen {
         }
     }
 
-    func tapLanguagePickerCancelButton() {
-        languagePickerCancelButton.waitAndTap()
+    func tapLanguagePickerSearchCancelButton() {
+        languagePickerSearchCancelButton.waitAndTap()
+    }
+
+    func tapLanguagePickerCloseButton() {
+        languagePickerCloseButton.waitAndTap()
     }
 
     func assertLanguagePickerSearchIsInactive() {
-        BaseTestCase().mozWaitForElementToNotExist(app.keyboards.firstMatch)
+        BaseTestCase().mozWaitForElementToNotExist(keyboard)
         assertLanguagePickerIsDisplayed()
     }
 
@@ -120,24 +135,20 @@ final class TranslationSettingsScreen {
 
     /// The matching row is already on screen before filtering, so poll until every row matches.
     func assertLanguagePickerListIsFiltered(to language: String, timeout: TimeInterval = TIMEOUT) {
-        let matchingText = NSPredicate(
-            format: "elementType == %d AND label CONTAINS[c] %@",
-            XCUIElement.ElementType.staticText.rawValue,
-            language
-        )
-        let matchingCells = languagePickerList.cells.containing(matchingText)
-        let deadline = Date().addingTimeInterval(timeout)
-        var isFiltered = false
-        repeat {
-            let cellCount = languagePickerList.cells.count
-            isFiltered = cellCount > 0 && matchingCells.count == cellCount
-            if !isFiltered { usleep(200_000) }
-        } while !isFiltered && Date() < deadline
-        XCTAssertTrue(isFiltered, "Expected only '\(language)' results in the 'Select Language' list")
+        let rows = sel.LANGUAGE_PICKER_ROW.query(in: app)
+        let matchingRows = sel.languagePickerRows(containing: language).query(in: app)
+        let predicate = NSPredicate { _, _ in
+            let rowCount = rows.count
+            return rowCount > 0 && matchingRows.count == rowCount
+        }
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: nil)
+        if XCTWaiter().wait(for: [expectation], timeout: timeout) != .completed {
+            XCTFail("Expected only '\(language)' results in the 'Select Language' list")
+        }
     }
 
     func selectLanguageInPicker(_ language: String) {
-        languagePickerList.staticTexts[language].waitAndTap()
+        sel.languagePickerOption(language).element(in: app).waitAndTap()
     }
 
     func assertLanguagePickerIsDismissed() {
@@ -145,11 +156,11 @@ final class TranslationSettingsScreen {
     }
 
     func assertPreferredLanguageExists(_ language: String) {
-        BaseTestCase().mozWaitForElementToExist(app.collectionViews.cells.staticTexts[language])
+        BaseTestCase().mozWaitForElementToExist(sel.preferredLanguage(language).element(in: app))
     }
 
     func assertPreferredLanguageDoesNotExist(_ language: String) {
-        BaseTestCase().mozWaitForElementToNotExist(app.collectionViews.cells.staticTexts[language])
+        BaseTestCase().mozWaitForElementToNotExist(sel.preferredLanguage(language).element(in: app))
     }
 
     func assertDeviceLanguageExists() {
@@ -165,40 +176,26 @@ final class TranslationSettingsScreen {
     }
 
     func assertLanguageIsRemovable(_ language: String) {
-        BaseTestCase().mozWaitForElementToExist(removeIcon(in: preferredLanguageCell(containingText: language)))
+        BaseTestCase().mozWaitForElementToExist(sel.removeLanguageIcon(inCellContaining: language).element(in: app))
     }
 
     func assertDeviceLanguageIsNotRemovable() {
         BaseTestCase().mozWaitForElementToExist(deviceLanguageCell)
-        XCTAssertFalse(removeIcon(in: deviceLanguageCell).exists, "The device language should have no remove (-) control")
+        XCTAssertFalse(sel.removeLanguageIcon(inCellContaining: deviceLanguage).element(in: app).exists,
+                       "The device language should have no remove (-) control")
     }
 
     func assertReorderHandleExists(for language: String) {
-        let handle = preferredLanguageCell(containingText: language).buttons.matching(
-            NSPredicate(format: "label BEGINSWITH %@", sel.REORDER_HANDLE.value)
-        ).firstMatch
-        BaseTestCase().mozWaitForElementToExist(handle)
+        BaseTestCase().mozWaitForElementToExist(sel.reorderHandle(inCellContaining: language).element(in: app))
     }
 
     func removeLanguage(_ language: String) {
-        removeIcon(in: preferredLanguageCell(containingText: language)).waitAndTap()
+        sel.removeLanguageIcon(inCellContaining: language).element(in: app).waitAndTap()
     }
+
+    private var deviceLanguage: String { String.Settings.Translation.PreferredLanguages.DeviceLanguage }
 
     private var deviceLanguageCell: XCUIElement {
-        preferredLanguageCell(containingText: String.Settings.Translation.PreferredLanguages.DeviceLanguage)
-    }
-
-    private func preferredLanguageCell(containingText text: String) -> XCUIElement {
-        let label = NSPredicate(
-            format: "elementType == %d AND label == %@",
-            XCUIElement.ElementType.staticText.rawValue,
-            text
-        )
-        return app.collectionViews.cells.containing(label).firstMatch
-    }
-
-    /// The edit-mode delete (-) accessory is exposed as an image, not a button.
-    private func removeIcon(in cell: XCUIElement) -> XCUIElement {
-        cell.images[sel.REMOVE_LANGUAGE_ICON.value]
+        sel.preferredLanguageCell(containing: deviceLanguage).element(in: app)
     }
 }

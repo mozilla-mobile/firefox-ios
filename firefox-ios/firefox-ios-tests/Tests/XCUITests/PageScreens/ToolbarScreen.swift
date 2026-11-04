@@ -345,14 +345,13 @@ final class ToolbarScreen {
 
     /// Checks the picker lists exactly one target language between its title and "Preferred Languages…".
     func assertTranslationLanguagePickerShowsSingleLanguage(_ languageOption: String) {
-        let sheet = translationLanguagePicker(titled: sel.TRANSLATE_LANGUAGE_PICKER_TITLE.value)
+        let title = sel.TRANSLATE_LANGUAGE_PICKER_TITLE.value
+        waitForTranslationLanguagePicker(titled: title)
         BaseTestCase().waitForElementsToExist([
-            sheet.buttons[languageOption],
+            sel.translateLanguagePickerOption(languageOption, inPickerTitled: title).element(in: app),
             sel.TRANSLATE_PREFERRED_LANGUAGES_OPTION.element(in: app)
         ])
-
-        let nonLanguageOptions = [sel.TRANSLATE_PREFERRED_LANGUAGES_OPTION.value, String.CancelString]
-        let languageOptions = sheet.buttons.matching(NSPredicate(format: "NOT (label IN %@)", nonLanguageOptions))
+        let languageOptions = sel.translateLanguagePickerLanguageOptions(inPickerTitled: title).query(in: app)
         XCTAssertEqual(languageOptions.count, 1, "Expected only '\(languageOption)' as a target language")
     }
 
@@ -360,11 +359,11 @@ final class ToolbarScreen {
     /// the remaining preferred languages and "Preferred Languages…".
     func assertActiveTranslationLanguagePicker(translatedTo language: String, otherLanguages: [String]) {
         let title = String(format: String.Translations.LanguagePicker.PageTranslatedTitle, language)
-        let sheet = translationLanguagePicker(titled: title)
+        waitForTranslationLanguagePicker(titled: title)
+        let options = [sel.TRANSLATE_SHOW_ORIGINAL_OPTION.value] + otherLanguages
+            + [sel.TRANSLATE_PREFERRED_LANGUAGES_OPTION.value]
         BaseTestCase().waitForElementsToExist(
-            [sheet.buttons[sel.TRANSLATE_SHOW_ORIGINAL_OPTION.value]]
-            + otherLanguages.map { sheet.buttons[$0] }
-            + [sheet.buttons[sel.TRANSLATE_PREFERRED_LANGUAGES_OPTION.value]]
+            options.map { sel.translateLanguagePickerOption($0, inPickerTitled: title).element(in: app) }
         )
     }
 
@@ -376,14 +375,9 @@ final class ToolbarScreen {
         BaseTestCase().mozWaitForElementToNotExist(sel.TRANSLATE_PREFERRED_LANGUAGES_OPTION.element(in: app))
     }
 
-    /// iOS 17 exposes the action sheet as an "Other" element labelled with its title, not as a Sheet.
-    private func translationLanguagePicker(titled title: String) -> XCUIElement {
-        BaseTestCase().mozWaitForElementToExist(
-            app.staticTexts.matching(NSPredicate(format: "label == %@", title)).firstMatch
-        )
-        return app.sheets.firstMatch.exists
-            ? app.sheets.firstMatch
-            : app.otherElements.matching(NSPredicate(format: "label == %@", title)).firstMatch
+    /// The picker's element type differs on iOS 17 (see actionSheet(titled:)), so wait for its title before scoping to it.
+    private func waitForTranslationLanguagePicker(titled title: String) {
+        BaseTestCase().mozWaitForElementToExist(sel.translateLanguagePickerTitle(title).element(in: app))
     }
 
     /// Selects English in the translation language picker action sheet when it is shown.

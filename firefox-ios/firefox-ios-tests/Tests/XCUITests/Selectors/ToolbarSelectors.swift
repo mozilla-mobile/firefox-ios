@@ -21,6 +21,10 @@ protocol ToolbarSelectorsSet {
     var TRANSLATE_LANGUAGE_PICKER_TITLE: Selector { get }
     var TRANSLATE_PREFERRED_LANGUAGES_OPTION: Selector { get }
     var TRANSLATE_SHOW_ORIGINAL_OPTION: Selector { get }
+    func translateLanguagePickerTitle(_ title: String) -> Selector
+    func translateLanguagePicker(titled title: String) -> Selector
+    func translateLanguagePickerOption(_ label: String, inPickerTitled title: String) -> Selector
+    func translateLanguagePickerLanguageOptions(inPickerTitled title: String) -> Selector
     var SUMMARIZE_BUTTON: Selector { get }
     var CONTEXTUAL_HINT_CLOSE_BUTTON: Selector { get }
     var GOOGLE_LENS_TIP_TITLE: Selector { get }
@@ -157,6 +161,44 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         description: "'Show Original' option in the translated-page language picker",
         groups: ["translation"]
     )
+
+    func translateLanguagePickerTitle(_ title: String) -> Selector {
+        Selector.staticTextByExactLabel(
+            title,
+            description: "'\(title)' title of the translation language picker",
+            groups: ["translation"]
+        )
+    }
+
+    func translateLanguagePicker(titled title: String) -> Selector {
+        Selector.actionSheet(
+            titled: title,
+            description: "Translation language picker action sheet titled '\(title)'",
+            groups: ["translation"]
+        )
+    }
+
+    func translateLanguagePickerOption(_ label: String, inPickerTitled title: String) -> Selector {
+        Selector.buttonByLabel(
+            label,
+            in: translateLanguagePicker(titled: title),
+            description: "'\(label)' option in the translation language picker titled '\(title)'",
+            groups: ["translation"]
+        )
+    }
+
+    /// Every option except "Preferred Languages…" and Cancel, i.e. the target languages.
+    func translateLanguagePickerLanguageOptions(inPickerTitled title: String) -> Selector {
+        Selector.element(
+            .button,
+            in: translateLanguagePicker(titled: title),
+            matching: NSPredicate(format: "NOT (label IN %@)",
+                                  [IDs.translatePreferredLanguagesOption, String.CancelString]),
+            value: title,
+            description: "Target language options in the translation language picker titled '\(title)'",
+            groups: ["translation"]
+        )
+    }
 
     let SUMMARIZE_BUTTON = Selector.buttonId(
         IDs.summarizeButton,
