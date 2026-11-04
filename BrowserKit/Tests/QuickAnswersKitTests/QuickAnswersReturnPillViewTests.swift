@@ -4,6 +4,7 @@
 
 @testable import QuickAnswersKit
 import TestKit
+import UIKit
 import XCTest
 
 @MainActor
@@ -13,6 +14,8 @@ final class QuickAnswersReturnPillViewTests: XCTestCase {
     private let question = "How tall is Mount Everest?"
     private let subtitle = "Tap to return"
     private let removeActionName = "Remove"
+    private let minimizedSize: CGFloat = 28.0
+    private let expandedHeight: CGFloat = 47.0
 
     override func setUp() async throws {
         try await super.setUp()
@@ -63,23 +66,23 @@ final class QuickAnswersReturnPillViewTests: XCTestCase {
     }
 
     // MARK: - setMinimized
-    func test_setMinimized_true_hidesLabels() {
+    func test_setMinimized_true_shrinksToMinimizedSize() {
         let subject = createSubject()
 
         subject.setMinimized(true, animated: false)
 
         XCTAssertTrue(subject.isMinimized)
-        XCTAssertEqual(subject.labelStack.alpha, 0.0)
+        XCTAssertEqual(fittingSize(of: subject), CGSize(width: minimizedSize, height: minimizedSize))
     }
 
-    func test_setMinimized_falseAfterTrue_showsLabels() {
+    func test_setMinimized_falseAfterTrue_restoresExpandedSize() {
         let subject = createSubject()
         subject.setMinimized(true, animated: false)
 
         subject.setMinimized(false, animated: false)
 
         XCTAssertFalse(subject.isMinimized)
-        XCTAssertEqual(subject.labelStack.alpha, 1.0)
+        XCTAssertEqual(fittingSize(of: subject).height, expandedHeight)
     }
 
     // MARK: - Helpers
@@ -91,5 +94,9 @@ final class QuickAnswersReturnPillViewTests: XCTestCase {
         subject.configure(question: question, subtitle: subtitle, accessibilityRemoveActionName: removeActionName)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    private func fittingSize(of subject: QuickAnswersReturnPillView) -> CGSize {
+        return subject.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     }
 }

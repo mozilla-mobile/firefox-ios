@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Shared
 import UIKit
 
 /// Floating pill that takes the user back to a parked Quick Answers session. The host owns its position.
@@ -43,7 +44,7 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
     private let icon = UIImage(named: StandardImageIdentifiers.Large.audioWave)
 
     private(set) var isMinimized = false
-    let labelStack: UIStackView = .build {
+    private let labelStack: UIStackView = .build {
         $0.axis = .vertical
     }
     private let titleLabel: UILabel = .build {
@@ -61,7 +62,7 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
     private let effectView: UIVisualEffectView = .build {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = UX.capsuleCornerRadius
-        if #available(iOS 26, *) {
+        if #available(iOS 26, *), !DeviceInfo.isRunningLiquidGlassEarlyBeta {
             let glassEffect = UIGlassEffect()
             glassEffect.isInteractive = true
             $0.effect = glassEffect
@@ -72,9 +73,11 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
     private let iconContainer: UIView = .build()
     private let iconBackgroundView: UIView = .build {
         $0.layer.cornerRadius = UX.iconContainerSize / 2
+        $0.clipsToBounds = true
     }
     private let iconBackgroundGradient: CAGradientLayer = {
         let layer = CAGradientLayer()
+        layer.frame = CGRect(x: 0.0, y: 0.0, width: UX.iconContainerSize, height: UX.iconContainerSize)
         layer.startPoint = UX.iconGradientStartPoint
         layer.endPoint = UX.iconGradientEndPoint
         return layer
@@ -120,6 +123,10 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
         guard isMinimized != self.isMinimized else { return }
         self.isMinimized = isMinimized
         let isReduceMotionEnabled = UIAccessibility.isReduceMotionEnabled
+        let layoutHost = superview ?? self
+        if animated {
+            layoutHost.layoutIfNeeded()
+        }
         if isMinimized {
             NSLayoutConstraint.deactivate(expandedConstraints)
             NSLayoutConstraint.activate(minimizedConstraints)
@@ -132,20 +139,17 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
             let contentAlpha: CGFloat = isMinimized ? 0.0 : 1.0
             self.labelStack.alpha = contentAlpha
             self.iconBackgroundView.alpha = contentAlpha
-            if !isReduceMotionEnabled {
-                (self.superview ?? self).layoutIfNeeded()
-            }
         }
         guard animated else {
             updateAppearance()
             return
         }
-        UIView.animate(withDuration: UX.minimizeDuration, delay: 0, options: .curveEaseOut, animations: updateAppearance)
-    }
-
-    override public func layoutSubviews() {
-        super.layoutSubviews()
-        iconBackgroundGradient.frame = iconBackgroundView.bounds
+        UIView.animate(withDuration: UX.minimizeDuration, delay: 0, options: .curveEaseOut) {
+            updateAppearance()
+            if !isReduceMotionEnabled {
+                layoutHost.layoutIfNeeded()
+            }
+        }
     }
 
     override public func accessibilityActivate() -> Bool {
@@ -284,7 +288,7 @@ public final class QuickAnswersReturnPillView: UIView, ThemeApplicable {
         titleLabel.textColor = colors.textPrimary
         subtitleLabel.textColor = colors.textSecondary
         layer.shadowColor = colors.shadowDefault.cgColor
-        if #unavailable(iOS 26) {
+        if effectView.effect is UIBlurEffect {
             effectView.contentView.backgroundColor = colors.layer1.withAlphaComponent(UX.tintAlpha)
             effectView.layer.borderWidth = UX.borderWidth
             effectView.layer.borderColor = colors.borderPrimary.cgColor
