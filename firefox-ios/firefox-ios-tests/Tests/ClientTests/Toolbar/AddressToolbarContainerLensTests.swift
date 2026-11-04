@@ -187,6 +187,60 @@ final class AddressToolbarContainerLensTests: XCTestCase {
 
     // MARK: - Helpers
 
+    // MARK: - lockIconState, derived from hasOnlySecureContent, isWebsiteMode and readerModeState
+
+    func testInit_withoutToolbarState_returnsNoLockIcon() {
+        let appState = AppState(presentedComponents: PresentedComponentsState(components: []))
+        let subject = AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
+
+        XCTAssertNil(subject.lockIconState.imageName)
+        XCTAssertNil(subject.lockIconState.a11yId)
+        XCTAssertTrue(subject.lockIconState.needsTheming)
+    }
+
+    func testInit_withoutSecureContentInfo_returnsNoLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: nil)
+
+        XCTAssertNil(subject.lockIconState.imageName)
+        XCTAssertNil(subject.lockIconState.a11yId)
+        XCTAssertTrue(subject.lockIconState.needsTheming)
+    }
+
+    func testInit_secureWebsite_returnsSecureLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: true, isWebsiteMode: true)
+
+        XCTAssertEqual(subject.lockIconState.imageName, StandardImageIdentifiers.Small.shieldCheckmarkFill)
+        XCTAssertEqual(subject.lockIconState.a11yId, AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon)
+        XCTAssertTrue(subject.lockIconState.needsTheming)
+    }
+
+    func testInit_insecureWebsite_returnsInsecureLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: false, isWebsiteMode: true)
+
+        XCTAssertEqual(subject.lockIconState.imageName, StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
+        XCTAssertEqual(subject.lockIconState.a11yId, AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff)
+        XCTAssertFalse(subject.lockIconState.needsTheming)
+    }
+
+    func testInit_notWebsiteMode_hidesLockIconButKeepsA11yId() {
+        let subject = createSubject(hasOnlySecureContent: true, isWebsiteMode: false)
+
+        XCTAssertNil(subject.lockIconState.imageName)
+        XCTAssertEqual(subject.lockIconState.a11yId, AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon)
+    }
+
+    func testInit_readerModeActive_hidesLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: true, isWebsiteMode: true, readerModeState: .active)
+
+        XCTAssertNil(subject.lockIconState.imageName)
+    }
+
+    func testInit_readerModeNoLongerActive_restoresLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: true, isWebsiteMode: true, readerModeState: .available)
+
+        XCTAssertEqual(subject.lockIconState.imageName, StandardImageIdentifiers.Small.shieldCheckmarkFill)
+    }
+
     private func createSubject(
         toolbarPosition: AddressToolbarPosition = .top,
         isShowingTopTabs: Bool = true,
@@ -200,13 +254,19 @@ final class AddressToolbarContainerLensTests: XCTestCase {
         url: URL? = nil,
         middleButton: NavigationBarMiddleButtonType = .newTab,
         showMenuWarningBadge: Bool = false,
-        toolbarLayout: ToolbarLayoutStyle = .version1
+        toolbarLayout: ToolbarLayoutStyle = .version1,
+        hasOnlySecureContent: Bool? = nil,
+        isWebsiteMode: Bool = true,
+        readerModeState: ReaderModeState? = nil
     ) -> AddressToolbarContainerLens {
         let addressToolbar = AddressBarState(windowUUID: windowUUID)
             .copy(url: url)
             .copy(isEditing: isEditing)
             .copy(isLoading: isLoading)
             .copy(isEmptySearch: isEmptySearch)
+            .copy(hasOnlySecureContent: hasOnlySecureContent)
+            .copy(isWebsiteMode: isWebsiteMode)
+            .copy(readerModeState: readerModeState)
 
         let toolbarState = ToolbarState(windowUUID: windowUUID)
             .copy(toolbarPosition: toolbarPosition)

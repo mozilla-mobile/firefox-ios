@@ -2674,19 +2674,10 @@ class BrowserViewController: UIViewController,
               let webViewURL = webView.url,
               selectedTabURL == webViewURL else { return }
 
-        let hasSecureContent = webView.hasOnlySecureContent
-        let lockIconState = toolbarHelper.getLockIconState(
-            hasOnlySecureContent: hasSecureContent,
-            isWebsiteMode: tabManager.selectedTab?.url?.isReaderModeURL == false
-        )
-
-        let action = ToolbarAction(
-            lockIconButtonA11yId: lockIconState.a11yId,
-            lockIconImageName: lockIconState.imageName,
-            lockIconNeedsTheming: lockIconState.needsTheming,
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.lockIconChanged)
-        store.dispatch(action)
+        let isWebsiteMode = tabManager.selectedTab?.url?.isReaderModeURL == false
+        store.dispatch(
+            ToolbarModernAction.lockIconChanged(hasOnlySecureContent: webView.hasOnlySecureContent,
+                                                isWebsiteMode: isWebsiteMode), forWindowUUID: windowUUID)
     }
 
     // MARK: - Update UI
@@ -2730,29 +2721,18 @@ class BrowserViewController: UIViewController,
             StandardImageIdentifiers.Small.notificationDotFill : nil
         }
 
-        var lockIconButtonA11yId: String?
-        var lockIconImageName: String?
-        var lockIconNeedsTheming = true
+        let hasOnlySecureContent = tab.webView?.hasOnlySecureContent
+        let isWebsiteMode = hasOnlySecureContent == nil ? nil : tab.url?.isReaderModeURL == false
 
-        if let hasSecureContent = tab.webView?.hasOnlySecureContent {
-            let lockIconState = toolbarHelper.getLockIconState(
-                hasOnlySecureContent: hasSecureContent,
-                isWebsiteMode: tab.url?.isReaderModeURL == false
-            )
-            lockIconImageName = lockIconState.imageName
-            lockIconButtonA11yId = lockIconState.a11yId
-            lockIconNeedsTheming = lockIconState.needsTheming
-        }
-
+        // TODO: Move the lock icon inputs to a modern action once `urlDidChange` migrates
         let action = ToolbarAction(
             url: tab.url?.displayURL,
             isPrivate: tab.isPrivate,
             isShowingNavigationToolbar: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection),
             canGoBack: tab.canGoBack,
             canGoForward: tab.canGoForward,
-            lockIconButtonA11yId: lockIconButtonA11yId,
-            lockIconImageName: lockIconImageName,
-            lockIconNeedsTheming: lockIconNeedsTheming,
+            hasOnlySecureContent: hasOnlySecureContent,
+            isWebsiteMode: isWebsiteMode,
             safeListedURLImageName: safeListedURLImageName,
             translationConfiguration: tab.translationConfiguration ?? TranslationConfiguration(
                 prefs: profile.prefs,

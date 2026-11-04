@@ -248,9 +248,9 @@ final class AddressToolbarContainerModel: Equatable {
         self.searchEngineName = searchEngineModel?.name ?? ""
         self.searchEngineImage = searchEngineModel?.image ?? UIImage()
         self.searchEnginesManager = searchEnginesManager
-        self.lockIconButtonA11yId = state.addressToolbar.lockIconButtonA11yId
-        self.lockIconImageName = state.addressToolbar.lockIconImageName
-        self.lockIconNeedsTheming = state.addressToolbar.lockIconNeedsTheming
+        self.lockIconButtonA11yId = addressToolbarContainerLens.lockIconState.a11yId
+        self.lockIconImageName = addressToolbarContainerLens.lockIconState.imageName
+        self.lockIconNeedsTheming = addressToolbarContainerLens.lockIconState.needsTheming
         self.safeListedURLImageName = state.addressToolbar.safeListedURLImageName
         self.url = state.addressToolbar.url
         self.isEmptySearch = state.addressToolbar.isEmptySearch

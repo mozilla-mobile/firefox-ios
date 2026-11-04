@@ -25,9 +25,8 @@ struct ToolbarAction: Action {
     let readerModeState: ReaderModeState?
     let addressBorderPosition: AddressToolbarBorderPosition?
     let displayNavBorder: Bool?
-    let lockIconButtonA11yId: String?
-    let lockIconImageName: String?
-    let lockIconNeedsTheming: Bool?
+    let hasOnlySecureContent: Bool?
+    let isWebsiteMode: Bool?
     let safeListedURLImageName: String?
     let isLoading: Bool?
     let middleButton: NavigationBarMiddleButtonType?
@@ -53,9 +52,8 @@ struct ToolbarAction: Action {
          readerModeState: ReaderModeState? = nil,
          addressBorderPosition: AddressToolbarBorderPosition = .none,
          displayNavBorder: Bool? = nil,
-         lockIconButtonA11yId: String? = nil,
-         lockIconImageName: String? = nil,
-         lockIconNeedsTheming: Bool? = nil,
+         hasOnlySecureContent: Bool? = nil,
+         isWebsiteMode: Bool? = nil,
          safeListedURLImageName: String? = nil,
          isLoading: Bool? = nil,
          shouldShowKeyboard: Bool? = nil,
@@ -84,9 +82,8 @@ struct ToolbarAction: Action {
         self.readerModeState = readerModeState
         self.addressBorderPosition = addressBorderPosition
         self.displayNavBorder = displayNavBorder
-        self.lockIconButtonA11yId = lockIconButtonA11yId
-        self.lockIconImageName = lockIconImageName
-        self.lockIconNeedsTheming = lockIconNeedsTheming
+        self.hasOnlySecureContent = hasOnlySecureContent
+        self.isWebsiteMode = isWebsiteMode
         self.safeListedURLImageName = safeListedURLImageName
         self.isLoading = isLoading
         self.canSummarize = canSummarize
@@ -136,12 +133,15 @@ enum ToolbarModernAction: ModernAction {
 
     /// The toolbar blur preference changed, for example when Reduce Transparency is toggled.
     case translucencyDidChange(isTranslucent: Bool)
+
+    /// The page's secure content status changed. `isWebsiteMode` is `false` for reader mode pages,
+    /// where the lock icon isn't shown. The lock icon itself is derived from these in the Lens.
+    case lockIconChanged(hasOnlySecureContent: Bool, isWebsiteMode: Bool)
 }
 
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case urlDidChange
-    case lockIconChanged
     case didSetTextInLocationView
     case borderPositionChanged
     case toolbarPositionChanged

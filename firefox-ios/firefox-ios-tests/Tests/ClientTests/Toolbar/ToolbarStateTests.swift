@@ -709,7 +709,8 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
                 isShowingNavigationToolbar: true,
                 canGoBack: true,
                 canGoForward: false,
-                lockIconImageName: StandardImageIdentifiers.Small.shieldCheckmarkFill,
+                hasOnlySecureContent: true,
+                isWebsiteMode: true,
                 safeListedURLImageName: nil,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange
