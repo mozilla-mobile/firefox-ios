@@ -32,6 +32,7 @@ enum SelectorStrategy {
     case collectionViewButtonByLabel(String)
     case otherElementsButtonByLabel(String)
     indirect case buttonInContainerByLabel(container: Selector, label: String) // button scoped to a container
+    indirect case textFieldInContainer(container: Selector) // first text field scoped to a container
     case collectionViewContainingIdPrefix(String) // collection view holding an element whose id has this prefix
     case switchCellContainingStaticText(String) // table cell holding a switch and a text with this label
 }
@@ -117,6 +118,8 @@ extension Selector {
             return app.otherElements.buttons[value]
         case .buttonInContainerByLabel(let container, let label):
             return container.element(in: app).buttons.matching(Self.labelOrIdentifier(label)).firstMatch
+        case .textFieldInContainer(let container):
+            return container.element(in: app).textFields.firstMatch
         case .collectionViewContainingIdPrefix(let prefix):
             return app.collectionViews.containing(NSPredicate(format: "identifier BEGINSWITH %@", prefix)).firstMatch
         case .switchCellContainingStaticText(let label):
@@ -200,6 +203,8 @@ extension Selector {
             return app.otherElements.buttons.matching(NSPredicate(format: "label == %@", value))
         case .buttonInContainerByLabel(let container, let label):
             return container.element(in: app).buttons.matching(Self.labelOrIdentifier(label))
+        case .textFieldInContainer(let container):
+            return container.element(in: app).textFields
         case .collectionViewContainingIdPrefix(let prefix):
             return app.collectionViews.containing(NSPredicate(format: "identifier BEGINSWITH %@", prefix))
         case .switchCellContainingStaticText(let label):

@@ -169,6 +169,10 @@ final class SettingScreen {
         BaseTestCase().mozWaitForElementToExist(table)
     }
 
+    func assertSettingsScreenDismissed(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(sel.MAIN_SETTINGS_TABLE.element(in: app), timeout: timeout)
+    }
+
     func assertLayout() {
         let title = sel.SETTINGS_TITLE.element(in: app)
         let done = sel.DONE_BUTTON.element(in: app)
