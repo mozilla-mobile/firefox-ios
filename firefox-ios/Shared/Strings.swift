@@ -3153,6 +3153,21 @@ extension String {
                 value: "Tap to return",
                 comment: "Helper text for the pill shown over web pages opened from within a Quick Answer result — tapping on the pill takes the user back to the answer."
             )
+
+            public static let FallbackTitle = MZLocalizedString(
+                key: "QuickAnswers.ReturnPill.FallbackTitle.v161",
+                tableName: "QuickAnswers",
+                value: "Quick Answer",
+                comment: "Title of the pill shown over web pages opened from within a Quick Answer result, used when the original question isn't available."
+            )
+
+            public static let RemoveAccessibilityAction = MZLocalizedString(
+                key: "QuickAnswers.ReturnPill.RemoveAccessibilityAction.v161",
+                tableName: "QuickAnswers",
+                value: "Remove",
+                comment: "VoiceOver custom action that removes the pill shown over web pages opened from within a Quick Answer result."
+            )
+
             public static let ReturnToQuickAnswerAccessibilityLabel = MZLocalizedString(
                 key: "QuickAnswers.ReturnPill.ReturnToQuickAnswerAccessibilityLabel.v158",
                 tableName: "QuickAnswers",

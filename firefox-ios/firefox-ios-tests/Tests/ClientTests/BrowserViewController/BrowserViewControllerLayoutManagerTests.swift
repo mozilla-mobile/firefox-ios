@@ -15,6 +15,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
     private var overKeyboardContainer: BaseAlphaStackView!
     private var bottomContentStackView: BaseAlphaStackView!
     private var navigationToolbarContainer: UIView!
+    private var returnPill: UIView!
     private var subviews: [UIView]!
     private var mockTabManager: MockTabManager!
     private var fakeKeyboardGuide: UILayoutGuide!
@@ -29,7 +30,15 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         overKeyboardContainer = BaseAlphaStackView()
         bottomContentStackView = BaseAlphaStackView()
         navigationToolbarContainer = UIView()
-        subviews = [headerView, bottomContainer, overKeyboardContainer, bottomContentStackView, navigationToolbarContainer]
+        returnPill = UIView()
+        subviews = [
+            headerView,
+            bottomContainer,
+            overKeyboardContainer,
+            bottomContentStackView,
+            navigationToolbarContainer,
+            returnPill
+        ]
         mockTabManager = MockTabManager()
     }
 
@@ -42,6 +51,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         overKeyboardContainer = nil
         bottomContentStackView = nil
         navigationToolbarContainer = nil
+        returnPill = nil
         fakeKeyboardGuide = nil
         fakeKeyboardHeightConstraint = nil
         try await super.tearDown()
@@ -461,6 +471,107 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         XCTAssertNotNil(basicConstraint)
     }
 
+    // MARK: - Quick Answers Return Pill
+
+    func test_setupQuickAnswersReturnPillConstraints_activatesExpandedConstraints() {
+        let subject = createSubject()
+
+        subject.setupQuickAnswersReturnPillConstraints(returnPill)
+
+        XCTAssertEqual(activeReturnPillAttributes(), [.bottom, .centerX, .leading])
+        let bottomConstraint = activeReturnPillConstraint(for: .bottom)
+        XCTAssertTrue(bottomConstraint?.secondItem === bottomContentStackView)
+        XCTAssertEqual(bottomConstraint?.secondAttribute, .top)
+    }
+
+    func test_updateQuickAnswersReturnPillConstraints_notMinimized_keepsExpandedConstraints() {
+        let subject = createSubject()
+        subject.setupQuickAnswersReturnPillConstraints(returnPill)
+
+        subject.updateQuickAnswersReturnPillConstraints(isMinimized: false,
+                                                        isBottomSearchBar: true,
+                                                        locationViewFrame: locationViewFrame)
+
+        XCTAssertEqual(activeReturnPillAttributes(), [.bottom, .centerX, .leading])
+    }
+
+    func test_updateQuickAnswersReturnPillConstraints_minimizedBottomSearchBar_followsLocationView() {
+        let subject = createSubject()
+        subject.setupQuickAnswersReturnPillConstraints(returnPill)
+
+        subject.updateQuickAnswersReturnPillConstraints(isMinimized: true,
+                                                        isBottomSearchBar: true,
+                                                        locationViewFrame: locationViewFrame)
+
+        XCTAssertEqual(activeReturnPillAttributes(), [.centerY, .leading])
+        XCTAssertEqual(activeReturnPillConstraint(for: .centerY)?.constant, locationViewFrame.midY)
+        XCTAssertGreaterThan(activeReturnPillConstraint(for: .leading)?.constant ?? 0, locationViewFrame.maxX)
+    }
+
+    func test_updateQuickAnswersReturnPillConstraints_minimizedBottomSearchBarWithoutFrame_centersAtBottom() {
+        let subject = createSubject()
+        subject.setupQuickAnswersReturnPillConstraints(returnPill)
+
+        subject.updateQuickAnswersReturnPillConstraints(isMinimized: true,
+                                                        isBottomSearchBar: true,
+                                                        locationViewFrame: nil)
+
+        XCTAssertEqual(activeReturnPillAttributes(), [.centerX, .bottom])
+    }
+
+    func test_updateQuickAnswersReturnPillConstraints_minimizedTopSearchBar_centersAtBottom() {
+        let subject = createSubject()
+        subject.setupQuickAnswersReturnPillConstraints(returnPill)
+
+        subject.updateQuickAnswersReturnPillConstraints(isMinimized: true,
+                                                        isBottomSearchBar: false,
+                                                        locationViewFrame: locationViewFrame)
+
+        XCTAssertEqual(activeReturnPillAttributes(), [.centerX, .bottom])
+    }
+
+    func test_updateQuickAnswersReturnPillConstraints_minimizedThenExpanded_restoresExpandedConstraints() {
+        let subject = createSubject()
+        subject.setupQuickAnswersReturnPillConstraints(returnPill)
+        subject.updateQuickAnswersReturnPillConstraints(isMinimized: true,
+                                                        isBottomSearchBar: true,
+                                                        locationViewFrame: locationViewFrame)
+
+        subject.updateQuickAnswersReturnPillConstraints(isMinimized: false,
+                                                        isBottomSearchBar: true,
+                                                        locationViewFrame: locationViewFrame)
+
+        XCTAssertEqual(activeReturnPillAttributes(), [.bottom, .centerX, .leading])
+    }
+
+    func test_updateQuickAnswersReturnPillConstraints_withoutSetup_doesNotActivateConstraints() {
+        let subject = createSubject()
+
+        subject.updateQuickAnswersReturnPillConstraints(isMinimized: true,
+                                                        isBottomSearchBar: true,
+                                                        locationViewFrame: locationViewFrame)
+
+        XCTAssertTrue(activeReturnPillAttributes().isEmpty)
+    }
+
+    func test_removeQuickAnswersReturnPillConstraints_deactivatesAllConstraints() {
+        let subject = createSubject()
+        subject.setupQuickAnswersReturnPillConstraints(returnPill)
+
+        subject.removeQuickAnswersReturnPillConstraints()
+
+        XCTAssertTrue(activeReturnPillAttributes().isEmpty)
+    }
+
+    func test_setupQuickAnswersReturnPillConstraints_calledTwice_keepsOneSetOfConstraints() {
+        let subject = createSubject()
+        subject.setupQuickAnswersReturnPillConstraints(returnPill)
+
+        subject.setupQuickAnswersReturnPillConstraints(returnPill)
+
+        XCTAssertEqual(activeReturnPillConstraints().count, 3)
+    }
+
     // MARK: - Constraint Count Baseline Tests
 
     func test_bottomContainer_bottomToolbar_constraintCount() {
@@ -498,6 +609,22 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
     }
 
     // MARK: - Private helpers
+
+    private var locationViewFrame: CGRect {
+        CGRect(x: 40, y: 760, width: 200, height: 30)
+    }
+
+    private func activeReturnPillConstraints() -> [NSLayoutConstraint] {
+        parentView.constraints.filter { $0.isActive && $0.firstItem === returnPill }
+    }
+
+    private func activeReturnPillAttributes() -> Set<NSLayoutConstraint.Attribute> {
+        Set(activeReturnPillConstraints().map(\.firstAttribute))
+    }
+
+    private func activeReturnPillConstraint(for attribute: NSLayoutConstraint.Attribute) -> NSLayoutConstraint? {
+        activeReturnPillConstraints().first { $0.firstAttribute == attribute }
+    }
 
     private func createSubject(keyboardTopAnchor: NSLayoutYAxisAnchor? = nil) -> BrowserViewControllerLayoutManager {
         subviews.forEach {

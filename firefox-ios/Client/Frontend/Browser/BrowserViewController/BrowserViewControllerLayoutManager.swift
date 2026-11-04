@@ -8,6 +8,26 @@ import Shared
 
 @MainActor
 final class BrowserViewControllerLayoutManager {
+    private enum UX {
+        static let returnPillBottomSpacing: CGFloat = 8
+        static let returnPillSideInset: CGFloat = 16
+        static let minimizedReturnPillLocationSpacing: CGFloat = 10
+        static let minimizedReturnPillHomeIndicatorOffset: CGFloat = 4
+        static let minimizedReturnPillBottomInset: CGFloat = 8
+    }
+
+    private struct ReturnPillConstraints {
+        let expanded: [NSLayoutConstraint]
+        let locationCenterY: NSLayoutConstraint
+        let locationLeading: NSLayoutConstraint
+        let bottomCentered: [NSLayoutConstraint]
+        let bottomCenteredAboveHomeIndicator: [NSLayoutConstraint]
+
+        var all: [NSLayoutConstraint] {
+            expanded + [locationCenterY, locationLeading] + bottomCentered + bottomCenteredAboveHomeIndicator
+        }
+    }
+
     private unowned let parentView: UIView
     private unowned let headerView: UIView
     private unowned let bottomContainer: BaseAlphaStackView
@@ -37,6 +57,9 @@ final class BrowserViewControllerLayoutManager {
     private var overKeyboardContainerTopZoomHeightConstraint: NSLayoutConstraint?
     private var overKeyboardContainerTopHeightConstraint: NSLayoutConstraint?
     private var overKeyboardContainerKeyboardConstraint: NSLayoutConstraint?
+
+    // Constraints to store - Quick Answers return pill
+    private var returnPillConstraints: ReturnPillConstraints?
 
     init(parentView: UIView,
          headerView: UIView,
@@ -241,6 +264,69 @@ final class BrowserViewControllerLayoutManager {
         } else {
             bottomContentStackViewBasicConstraint?.isActive = true
         }
+    }
+
+    // MARK: - Quick Answers Return Pill
+
+    /// Pins the pill above `bottomContentStackView`, whose bottom anchor already follows the bar position and keyboard.
+    /// The pill sizes itself, so only its position is constrained.
+    func setupQuickAnswersReturnPillConstraints(_ pill: UIView) {
+        removeQuickAnswersReturnPillConstraints()
+        let safeArea = parentView.safeAreaLayoutGuide
+
+        let constraints = ReturnPillConstraints(
+            expanded: [
+                pill.bottomAnchor.constraint(equalTo: bottomContentStackView.topAnchor,
+                                             constant: -UX.returnPillBottomSpacing),
+                pill.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
+                pill.leadingAnchor.constraint(greaterThanOrEqualTo: safeArea.leadingAnchor,
+                                              constant: UX.returnPillSideInset),
+            ],
+            locationCenterY: pill.centerYAnchor.constraint(equalTo: parentView.topAnchor),
+            locationLeading: pill.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
+            bottomCentered: [
+                pill.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
+                pill.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor,
+                                             constant: -UX.minimizedReturnPillBottomInset),
+            ],
+            bottomCenteredAboveHomeIndicator: [
+                pill.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
+                pill.centerYAnchor.constraint(equalTo: safeArea.bottomAnchor,
+                                              constant: -UX.minimizedReturnPillHomeIndicatorOffset),
+            ]
+        )
+        returnPillConstraints = constraints
+        NSLayoutConstraint.activate(constraints.expanded)
+    }
+
+    /// - Parameter locationViewFrame: The minimized location view frame in the parent view's coordinates.
+    ///   With a bottom address bar the minimized pill trails it. Otherwise it sits at the bottom of the screen.
+    func updateQuickAnswersReturnPillConstraints(isMinimized: Bool,
+                                                 isBottomSearchBar: Bool,
+                                                 locationViewFrame: CGRect?) {
+        guard let constraints = returnPillConstraints else { return }
+
+        let activeConstraints: [NSLayoutConstraint]
+        if !isMinimized {
+            activeConstraints = constraints.expanded
+        } else if isBottomSearchBar, let locationViewFrame {
+            constraints.locationCenterY.constant = locationViewFrame.midY
+            constraints.locationLeading.constant = locationViewFrame.maxX + UX.minimizedReturnPillLocationSpacing
+            activeConstraints = [constraints.locationCenterY, constraints.locationLeading]
+        } else if parentView.safeAreaInsets.bottom > 0 {
+            activeConstraints = constraints.bottomCenteredAboveHomeIndicator
+        } else {
+            activeConstraints = constraints.bottomCentered
+        }
+
+        NSLayoutConstraint.deactivate(constraints.all.filter { $0.isActive && !activeConstraints.contains($0) })
+        NSLayoutConstraint.activate(activeConstraints)
+    }
+
+    func removeQuickAnswersReturnPillConstraints() {
+        guard let constraints = returnPillConstraints else { return }
+        NSLayoutConstraint.deactivate(constraints.all)
+        returnPillConstraints = nil
     }
 
     // MARK: - Private helpers (header)

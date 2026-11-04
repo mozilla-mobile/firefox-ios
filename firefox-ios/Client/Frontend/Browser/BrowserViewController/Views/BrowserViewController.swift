@@ -48,6 +48,7 @@ class BrowserViewController: UIViewController,
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
         static let downloadToastDuration = DispatchTimeInterval.seconds(5)
         static let minimalHeaderOffset: CGFloat = 14
+        static let returnPillFadeDuration: TimeInterval = 0.2
     }
 
     /// Describes the state of the current search session. This state is used
@@ -142,6 +143,7 @@ class BrowserViewController: UIViewController,
 
     // MARK: Lazy loading UI elements
     private var documentLoadingView: TemporaryDocumentLoadingView?
+    private var quickAnswersReturnPill: QuickAnswersReturnPillView?
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { view in
         view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.statusBarOverlay
@@ -662,6 +664,7 @@ class BrowserViewController: UIViewController,
         updateMicrosurveyConstraints()
         updateAutoTranslatePromptConstraints()
         updateToolbarDisplay()
+        updateQuickAnswersReturnPillLayout(animated: false)
         addOrUpdateMaskViewIfNeeded()
 
         let action = GeneralBrowserMiddlewareAction(
@@ -686,6 +689,10 @@ class BrowserViewController: UIViewController,
             view.bringSubviewToFront(header)
         }
 
+        if let quickAnswersReturnPill {
+            view.bringSubviewToFront(quickAnswersReturnPill)
+        }
+
         if shouldUpdateBlurViews {
             updateBlurViews(scrollOffset: scrollOffset)
         }
@@ -694,6 +701,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Translucency and blur helpers
 
     func updateBlurViews(scrollOffset: CGFloat? = nil) {
+        updateQuickAnswersReturnPillLayout(animated: true)
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isToolbarCollapsed = store.state.componentState(
             ToolbarState.self,
@@ -1605,6 +1613,7 @@ class BrowserViewController: UIViewController,
         // This also required for iPad rotation
         addOrUpdateMaskViewIfNeeded()
         updateContentContainerTopConstraint()
+        updateQuickAnswersReturnPillLayout(animated: false)
 
         // Update available height for the homepage
         dispatchAvailableContentHeightChangedAction()
@@ -1704,6 +1713,7 @@ class BrowserViewController: UIViewController,
                 updateHeaderConstraints()
                 updateAddressToolbarContainerPosition(for: traitCollection)
                 updateZoomPageBarPlacement()
+                updateQuickAnswersReturnPillLayout(animated: false)
             }
             updateToolbarStateForTraitCollection(traitCollection)
         }
@@ -1820,10 +1830,13 @@ class BrowserViewController: UIViewController,
             )
             contentContainerTopConstraint?.isActive = true
 
-            let frontViews = shouldPinContentContainerToScreenTop
+            var frontViews: [UIView] = shouldPinContentContainerToScreenTop
                 ? [contentContainer, bottomBlurView, bottomContentStackView, bottomContainer, overKeyboardContainer]
                 : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
                    bottomContentStackView, bottomContainer, overKeyboardContainer]
+            if let quickAnswersReturnPill {
+                frontViews.append(quickAnswersReturnPill)
+            }
             frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
             if let searchView = searchController?.view, searchView.superview === view {
                 view.bringSubviewToFront(searchView)
@@ -2044,6 +2057,68 @@ class BrowserViewController: UIViewController,
         } completion: { _ in
             documentLoadingView.removeFromSuperview()
             self.documentLoadingView = nil
+        }
+    }
+
+    // MARK: - Quick Answers return pill
+
+    /// An already shown pill is only reconfigured, it keeps the closures it was created with.
+    func showQuickAnswersReturnPill(
+        question: String?,
+        onTap: @escaping (Bool) -> Void,
+        onSwipeAway: @escaping () -> Void
+    ) {
+        scrollController.showToolbars(animated: false)
+
+        let pill = quickAnswersReturnPill ?? QuickAnswersReturnPillView(
+            onTap: onTap,
+            onSwipeAway: { [weak self] in
+                onSwipeAway()
+                self?.hideQuickAnswersReturnPill()
+            }
+        )
+        pill.configure(
+            question: question ?? String.QuickAnswers.ReturnPill.FallbackTitle,
+            subtitle: String.QuickAnswers.ReturnPill.Subtitle,
+            accessibilityRemoveActionName: String.QuickAnswers.ReturnPill.RemoveAccessibilityAction
+        )
+        pill.applyTheme(theme: currentTheme())
+
+        guard quickAnswersReturnPill == nil else { return }
+        quickAnswersReturnPill = pill
+        view.addSubview(pill)
+        browserLayoutManager.setupQuickAnswersReturnPillConstraints(pill)
+        updateQuickAnswersReturnPillLayout(animated: false)
+    }
+
+    func hideQuickAnswersReturnPill() {
+        guard let quickAnswersReturnPill else { return }
+        browserLayoutManager.removeQuickAnswersReturnPillConstraints()
+        quickAnswersReturnPill.removeFromSuperview()
+        self.quickAnswersReturnPill = nil
+    }
+
+    private func updateQuickAnswersReturnPillLayout(animated: Bool) {
+        guard let quickAnswersReturnPill else { return }
+        let isMinimized = store.state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.isAddressBarMinimized == true
+
+        browserLayoutManager.updateQuickAnswersReturnPillConstraints(
+            isMinimized: isMinimized,
+            isBottomSearchBar: isBottomSearchBar,
+            locationViewFrame: addressToolbarContainer.locationViewFrame(in: view)
+        )
+        quickAnswersReturnPill.setMinimized(isMinimized, animated: animated)
+    }
+
+    private func setQuickAnswersReturnPillVisible(_ isVisible: Bool) {
+        guard let quickAnswersReturnPill else { return }
+        quickAnswersReturnPill.isUserInteractionEnabled = isVisible
+        UIView.animate(withDuration: UX.returnPillFadeDuration) {
+            quickAnswersReturnPill.alpha = isVisible ? 1 : 0
         }
     }
 
@@ -3982,6 +4057,7 @@ class BrowserViewController: UIViewController,
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         documentLoadingView?.applyTheme(theme: currentTheme)
+        quickAnswersReturnPill?.applyTheme(theme: currentTheme)
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
@@ -4165,6 +4241,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {
+        setQuickAnswersReturnPillVisible(false)
         guard let profile = profile as? BrowserProfile else { return }
 
         if isSwipingTabsEnabled {
@@ -4194,6 +4271,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
+        setQuickAnswersReturnPillVisible(true)
         if isSwipingTabsEnabled {
             let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
             if showNavToolbar {
