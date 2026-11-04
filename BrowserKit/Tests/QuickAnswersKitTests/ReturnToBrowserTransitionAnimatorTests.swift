@@ -12,7 +12,7 @@ final class ReturnToBrowserTransitionAnimatorTests: XCTestCase {
     private var controller: UIViewController!
     private var fallback: SourceRevealTransitionAnimator!
     private var transitionContext: MockTransitionContext!
-    private var window: UIView!
+    private var window: UIWindow!
     private var browserController: UIViewController!
     private var quickAnswersView: UIView!
     private var isActive = true
@@ -25,7 +25,8 @@ final class ReturnToBrowserTransitionAnimatorTests: XCTestCase {
         transitionContext = MockTransitionContext()
         transitionContext.containerView.frame = finalFrame
         transitionContext.finalFrame = finalFrame
-        window = UIView(frame: finalFrame)
+        window = UIWindow(frame: finalFrame)
+        window.isHidden = false
         browserController = UIViewController()
         browserController.view.frame = finalFrame
         window.addSubview(browserController.view)
@@ -38,6 +39,7 @@ final class ReturnToBrowserTransitionAnimatorTests: XCTestCase {
         controller = nil
         fallback = nil
         transitionContext = nil
+        window.isHidden = true
         window = nil
         browserController = nil
         quickAnswersView = nil

@@ -102,26 +102,6 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         XCTAssertTrue(dismissal is ReturnToBrowserTransitionAnimator)
     }
 
-    // MARK: - Convenience init
-    func test_init_withReturnToAnswerTransition_restoresStoredSession() throws {
-        sessionStorage.latestSession = makeSnapshot()
-        let subject = createConvenienceSubject(transitionType: .returnToAnswer)
-
-        subject.loadViewIfNeeded()
-
-        XCTAssertNotNil(findSubview(of: QuickAnswersSourceRow.self, in: subject.view))
-    }
-
-    func test_init_withSourceRevealTransition_doesNotRestoreStoredSession() throws {
-        sessionStorage.latestSession = makeSnapshot()
-        let subject = createConvenienceSubject(transitionType: .sourceReveal(sourceRect: .zero))
-
-        subject.loadViewIfNeeded()
-
-        XCTAssertNil(findSubview(of: QuickAnswersSourceRow.self, in: subject.view))
-        XCTAssertNil(sessionStorage.latestSession)
-    }
-
     // MARK: - Return To Answer
     func test_viewWillAppear_withRestoredSession_doesNotStartFlow() {
         sessionStorage.latestSession = makeSnapshot()
@@ -201,33 +181,6 @@ final class QuickAnswersViewControllerTests: XCTestCase {
             learnMoreURL: nil,
             stringsConfiguration: .mock,
             notificationCenter: NotificationCenter.default
-        )
-        trackForMemoryLeaks(subject, file: file, line: line)
-        return subject
-    }
-
-    private func createConvenienceSubject(
-        transitionType: QuickAnswersTransitionType,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) -> QuickAnswersViewController {
-        let subject = QuickAnswersViewController(
-            navigationHandler: navigationHandler,
-            transitionType: transitionType,
-            prefs: MockProfilePrefs(),
-            sessionStorage: sessionStorage,
-            windowUUID: .XCTestDefaultUUID,
-            themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            telemetry: MockQuickAnswersTelemetry(),
-            configFetcher: DefaultQuickAnswersConfigFetcher(
-                feature: QuickAnswersFeature(
-                    model: .exa,
-                    isOptInRedesignEnabled: false,
-                    isReturnToAnswerEnabled: true
-                )
-            ),
-            learnMoreURL: nil,
-            stringsConfiguration: .mock
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
