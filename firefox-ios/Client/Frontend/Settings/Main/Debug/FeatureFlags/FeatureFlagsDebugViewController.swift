@@ -122,6 +122,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .checkForReinstalls,
+                titleText: format(string: "Check for Reinstalls"),
+                statusText: format(string: "Toggle to enable app reinstallation checks")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .configurationProfile,
                 titleText: format(string: "Configuration Profile"),
                 statusText: format(string: "Toggle to offer opening .mobileconfig profiles in Safari")
