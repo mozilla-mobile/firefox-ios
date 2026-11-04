@@ -6,7 +6,7 @@ import XCTest
 
 /// The Top Tabs bar of iPad. Tabs scrolled out of the bar are absent from the accessibility tree.
 @MainActor
-final class TopTabsScreen {
+final class TopTabsIpadScreen {
     private let app: XCUIApplication
     private let sel: TopTabsSelectorsSet
     private let browserSel: BrowserSelectorsSet
@@ -27,6 +27,11 @@ final class TopTabsScreen {
     private func selectedTab(titled title: String) -> XCUIElement {
         let label = "\(title). \(String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel)"
         return collectionView.cells.matching(NSPredicate(format: "label == %@", label)).firstMatch
+    }
+
+    private func tab(titled title: String) -> XCUIElement {
+        let predicate = NSPredicate(format: "label == %@ OR label BEGINSWITH %@", title, "\(title).")
+        return collectionView.cells.matching(predicate).firstMatch
     }
 
     private func isInsideBar(_ tab: XCUIElement) -> Bool {
@@ -59,7 +64,13 @@ final class TopTabsScreen {
     }
 
     func assertSelectedTabIsScrolledOut(titled title: String) {
-        XCTAssertFalse(isPartlyInsideBar(selectedTab(titled: title)), "Selected tab '\(title)' is still shown in the Top Tabs bar")
+        XCTAssertFalse(isPartlyInsideBar(selectedTab(titled: title)),
+                       "Selected tab '\(title)' is still shown in the Top Tabs bar")
+    }
+
+    /// Whether any part of the tab is shown in the bar, selected or not.
+    func isTabShown(titled title: String) -> Bool {
+        isPartlyInsideBar(tab(titled: title))
     }
 
     /// A swipe can stop a few points short of the end, so the tab only needs to be back in view.
@@ -83,8 +94,7 @@ final class TopTabsScreen {
     }
 
     func assertTabDoesNotExist(titled title: String) {
-        let predicate = NSPredicate(format: "label == %@ OR label BEGINSWITH %@", title, "\(title).")
-        BaseTestCase().mozWaitForElementToNotExist(collectionView.cells.matching(predicate).firstMatch)
+        BaseTestCase().mozWaitForElementToNotExist(tab(titled: title))
     }
 
     /// Checks the tabs shown in the bar sit side by side with an equal gap and no overlap.

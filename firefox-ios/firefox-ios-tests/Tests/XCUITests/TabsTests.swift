@@ -814,18 +814,23 @@ class TabsTestsIpad: IpadOnlyTestCase {
         if skipPlatform { return }
         let browserScreen = BrowserScreen(app: app)
         let toolbarScreen = ToolbarScreen(app: app)
-        let topTabsScreen = TopTabsScreen(app: app)
+        let topTabsScreen = TopTabsIpadScreen(app: app)
         let tabTrayScreen = TabTrayScreen(app: app)
         // The first tab gets a page with its own title, so it can be told apart from the new tabs
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: TestPages.mozillaBook))
         waitUntilPageLoad()
 
-        // Step 1: '+' opens enough tabs to overflow the bar, which stays scrolled to the last one
-        for _ in 1...9 {
+        // Step 1: '+' opens tabs until the first one scrolls out of the bar, as its width varies by iPad
+        let maxTabs = 20
+        var tabCount = 1
+        while topTabsScreen.isTabShown(titled: TestLabels.mozillaBook), tabCount < maxTabs {
             toolbarScreen.tapOnNewTabButton()
+            tabCount += 1
+            toolbarScreen.assertTabsButtonValue(expectedCount: "\(tabCount)")
         }
-        toolbarScreen.assertTabsButtonValue(expectedCount: "10")
+        XCTAssertFalse(topTabsScreen.isTabShown(titled: TestLabels.mozillaBook),
+                       "The Top Tabs bar did not overflow after opening \(tabCount) tabs")
         topTabsScreen.assertPrivateModeButtonExists()
         toolbarScreen.assertNewTabButtonExists()
         topTabsScreen.assertSelectedTabIsShown(titled: homeTabName)
@@ -844,7 +849,7 @@ class TabsTestsIpad: IpadOnlyTestCase {
 
         // Step 4: the first tab is closed with its 'x' and the other tabs stay aligned
         topTabsScreen.closeSelectedTab(titled: TestLabels.mozillaBook)
-        toolbarScreen.assertTabsButtonValue(expectedCount: "9")
+        toolbarScreen.assertTabsButtonValue(expectedCount: "\(tabCount - 1)")
         topTabsScreen.assertTabDoesNotExist(titled: TestLabels.mozillaBook)
         topTabsScreen.assertTabsAreAligned()
 
