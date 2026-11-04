@@ -859,7 +859,7 @@ workflows:
         - fields: |
             Branch | ${BITRISE_GIT_BRANCH}
         - buttons: |
-            Pipeline|${BITRISE_BUILD_URL}
+            Pipeline|https://app.bitrise.io/app/${BITRISE_APP_SLUG}/pipelines/${BITRISEIO_PIPELINE_ID}
   1_git_clone_and_post_clone:
     steps:
     - activate-ssh-key@4:
