@@ -130,10 +130,20 @@ final class QuickAnswersSourceRow: UIView, ThemeApplicable {
     }
 }
 
+enum QuickAnswersCitationMenuAction: Equatable {
+    case openInNewTab(URL)
+    case openInNewPrivateTab(URL)
+    case bookmark(url: URL, title: String)
+    case linkCopied
+    case shareLink(URL, sourceView: UIView)
+}
+
 final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, ThemeApplicable {
     private enum UX {
         static let headerSpacing: CGFloat = 16.0
         static let rowSpacing: CGFloat = 12.0
+        static let previewCornerRadius: CGFloat = 30.0
+        static let previewWindowMargins: CGFloat = 42.0
     }
 
     private let headerLabel: UILabel = .build {
@@ -147,7 +157,10 @@ final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, Th
     }
 
     private var theme: Theme?
+    private var citationMenuStrings: QuickAnswersViewConfiguration.CitationMenuStrings?
     private var onSourceTapped: ((URL) -> Void)?
+    private var onMenuAction: ((QuickAnswersCitationMenuAction) -> Void)?
+    var writeToPasteboard: (URL) -> Void = { UIPasteboard.general.url = $0 }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -175,12 +188,18 @@ final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, Th
     }
 
     // MARK: - Configuration
-    func configureStrings(sourcesHeader: String) {
+    func configureStrings(sourcesHeader: String, citationMenu: QuickAnswersViewConfiguration.CitationMenuStrings) {
         headerLabel.text = sourcesHeader
+        citationMenuStrings = citationMenu
     }
 
-    func configure(with items: [SearchResult.Source], onSourceTapped: ((URL) -> Void)? = nil) {
+    func configure(
+        with items: [SearchResult.Source],
+        onSourceTapped: ((URL) -> Void)? = nil,
+        onMenuAction: ((QuickAnswersCitationMenuAction) -> Void)? = nil
+    ) {
         self.onSourceTapped = onSourceTapped
+        self.onMenuAction = onMenuAction
         rowsStackView.removeAllArrangedViews()
         items.forEach { item in
             let row = QuickAnswersSourceRow(source: item)
@@ -204,13 +223,35 @@ final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, Th
         _ interaction: UIContextMenuInteraction,
         configurationForMenuAtLocation location: CGPoint
     ) -> UIContextMenuConfiguration? {
-        guard let item = (interaction.view as? QuickAnswersSourceRow)?.source,
-              let url = item.url else { return nil }
+        guard let row = interaction.view as? QuickAnswersSourceRow,
+              let url = row.source.url else { return nil }
+        let item = row.source
         let theme = self.theme
+        let windowWidth = row.window?.bounds.width
         // The URL is stashed on the identifier so the preview commit can navigate to it.
-        return UIContextMenuConfiguration(identifier: url as NSURL, previewProvider: {
-            SourcePreviewViewController(source: item, theme: theme)
-        })
+        return UIContextMenuConfiguration(
+            identifier: url as NSURL,
+            previewProvider: {
+                SourcePreviewViewController(
+                    source: item,
+                    theme: theme,
+                    maxWidth: windowWidth.map { $0 - UX.previewWindowMargins }
+                )
+            },
+            actionProvider: { [weak self, weak row] _ in
+                self?.makeMenu(url: url, title: item.title, row: row)
+            }
+        )
+    }
+
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        guard let view = interaction.view else { return nil }
+        let parameters = UIPreviewParameters()
+        parameters.visiblePath = UIBezierPath(roundedRect: view.bounds, cornerRadius: UX.previewCornerRadius)
+        return UITargetedPreview(view: view, parameters: parameters)
     }
 
     func contextMenuInteraction(
@@ -224,6 +265,43 @@ final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, Th
         }
     }
 
+    // MARK: - Menu
+    private func makeMenu(url: URL, title: String, row: UIView?) -> UIMenu? {
+        guard let strings = citationMenuStrings else { return nil }
+        let actions = [
+            makeAction(title: strings.openInNewTab, imageName: StandardImageIdentifiers.Large.plus) { [weak self] in
+                self?.onMenuAction?(.openInNewTab(url))
+            },
+            makeAction(
+                title: strings.openInNewPrivateTab,
+                imageName: StandardImageIdentifiers.Large.privateMode
+            ) { [weak self] in
+                self?.onMenuAction?(.openInNewPrivateTab(url))
+            },
+            makeAction(title: strings.bookmarkLink, imageName: StandardImageIdentifiers.Large.bookmark) { [weak self] in
+                self?.onMenuAction?(.bookmark(url: url, title: title))
+            },
+            makeAction(title: strings.copyLink, imageName: StandardImageIdentifiers.Large.link) { [weak self] in
+                self?.writeToPasteboard(url)
+                self?.onMenuAction?(.linkCopied)
+            },
+            makeAction(title: strings.shareLink, imageName: StandardImageIdentifiers.Large.shareApple) { [weak self] in
+                guard let row else { return }
+                self?.onMenuAction?(.shareLink(url, sourceView: row))
+            },
+        ]
+        return UIMenu(title: url.normalizedHost ?? "", options: .displayInline, children: actions)
+    }
+
+    private func makeAction(title: String, imageName: String, handler: @escaping () -> Void) -> UIAction {
+        return UIAction(
+            title: title,
+            image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+        ) { _ in
+            handler()
+        }
+    }
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         self.theme = theme
@@ -232,35 +310,48 @@ final class QuickAnswersSourceView: UIView, UIContextMenuInteractionDelegate, Th
     }
 }
 
-/// The enlarged preview shown when long pressing a source row: a larger thumbnail and the full,
-/// untruncated title. Tapping it commits the same navigation as tapping the row.
+/// The enlarged preview shown when long pressing a source row: a card filled by the source thumbnail, or by the
+/// favicon and full title when the source has no thumbnail. Tapping it commits the same navigation as tapping the row.
 private final class SourcePreviewViewController: UIViewController {
     private enum UX {
         static let width: CGFloat = 260.0
         static let padding: CGFloat = 16.0
         static let imageSpacing: CGFloat = 12.0
-        static let thumbnailAspectRatio: CGFloat = 3.0 / 4.0
-        static let cornerRadius: CGFloat = 16.0
+        static let thumbnailHeightRatio: CGFloat = 418.0 / 351.0
+        static let fallbackThumbnailAspectRatio: CGFloat = 3.0 / 4.0
+        static let cornerRadius: CGFloat = 30.0
+        static let fallbackThumbnailCornerRadius: CGFloat = 16.0
         static let faviconCornerRadius: CGFloat = 8.0
         static let thumbnailBorderWidth: CGFloat = 1.0
         static let faviconSize: CGFloat = 16.0
+        static let shadowRadius: CGFloat = 16.0
+        static let shadowOpacity: Float = 0.2
     }
 
     private let source: SearchResult.Source
     private let theme: Theme?
-
-    private let thumbnailImageView: HeroImageView = .build {
-        $0.layer.cornerRadius = UX.cornerRadius
+    private let width: CGFloat
+    private var hasThumbnail: Bool {
+        return source.thumbnailURL != nil
     }
+
+    private let cardView: UIView = .build {
+        $0.layer.cornerRadius = UX.cornerRadius
+        $0.layer.cornerCurve = .continuous
+        $0.clipsToBounds = true
+    }
+    private let thumbnailImageView: HeroImageView = .build()
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.body.scaledFont()
         $0.numberOfLines = 0
         $0.adjustsFontForContentSizeCategory = true
     }
 
-    init(source: SearchResult.Source, theme: Theme?) {
+    /// - Parameter maxWidth: The width available for the card, nil when unconstrained.
+    init(source: SearchResult.Source, theme: Theme?, maxWidth: CGFloat?) {
         self.source = source
         self.theme = theme
+        self.width = min(UX.width, maxWidth ?? UX.width)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -277,26 +368,44 @@ private final class SourcePreviewViewController: UIViewController {
     }
 
     private func setupSubviews() {
-        view.addSubviews(thumbnailImageView, titleLabel)
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = UX.shadowOpacity
+        view.layer.shadowRadius = UX.shadowRadius
+        view.layer.shadowOffset = .zero
+        view.addSubview(cardView)
+        cardView.addSubviews(thumbnailImageView, titleLabel)
 
         NSLayoutConstraint.activate([
-            thumbnailImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.padding),
-            thumbnailImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.padding),
-            thumbnailImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.padding),
-            thumbnailImageView.heightAnchor.constraint(equalTo: thumbnailImageView.widthAnchor,
-                                                       multiplier: UX.thumbnailAspectRatio),
-
-            titleLabel.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor, constant: UX.imageSpacing),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.padding),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.padding),
-            titleLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -UX.padding),
+            cardView.topAnchor.constraint(equalTo: view.topAnchor),
+            cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            cardView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+        if hasThumbnail {
+            titleLabel.isHidden = true
+            thumbnailImageView.pinToSuperview()
+        } else {
+            NSLayoutConstraint.activate([
+                thumbnailImageView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: UX.padding),
+                thumbnailImageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.padding),
+                thumbnailImageView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.padding),
+                thumbnailImageView.heightAnchor.constraint(
+                    equalTo: thumbnailImageView.widthAnchor,
+                    multiplier: UX.fallbackThumbnailAspectRatio
+                ),
+
+                titleLabel.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor, constant: UX.imageSpacing),
+                titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.padding),
+                titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.padding),
+                titleLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -UX.padding),
+            ])
+        }
     }
 
     private func configure() {
         let heroImageViewModel = DefaultHeroImageViewModel(
             urlStringRequest: source.thumbnailURL?.absoluteString ?? source.url?.absoluteString ?? "",
-            generalCornerRadius: UX.cornerRadius,
+            generalCornerRadius: hasThumbnail ? 0.0 : UX.fallbackThumbnailCornerRadius,
             faviconCornerRadius: UX.faviconCornerRadius,
             faviconBorderWidth: UX.thumbnailBorderWidth,
             heroImageSize: .zero,
@@ -308,7 +417,7 @@ private final class SourcePreviewViewController: UIViewController {
 
     private func applyTheme() {
         guard let theme else { return }
-        view.backgroundColor = theme.colors.layer2
+        cardView.backgroundColor = theme.colors.layer2
         let heroImageColors = HeroImageViewColor(
             faviconTintColor: theme.colors.iconPrimary,
             faviconBackgroundColor: theme.colors.layer1,
@@ -320,8 +429,12 @@ private final class SourcePreviewViewController: UIViewController {
     }
 
     private func updatePreferredContentSize() {
+        guard !hasThumbnail else {
+            preferredContentSize = CGSize(width: width, height: width * UX.thumbnailHeightRatio)
+            return
+        }
         preferredContentSize = view.systemLayoutSizeFitting(
-            CGSize(width: UX.width, height: UIView.layoutFittingCompressedSize.height),
+            CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         )

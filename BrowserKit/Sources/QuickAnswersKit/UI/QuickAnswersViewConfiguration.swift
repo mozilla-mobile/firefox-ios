@@ -10,6 +10,7 @@ public struct QuickAnswersViewConfiguration: Sendable {
     public let contentView: ContentViewStrings
     public let privacyBanner: PrivacyBannerStrings
     public let errors: ErrorStrings
+    public let citationMenu: CitationMenuStrings
     public let closeAccessibilityLabel: String
     public let appName: String
 
@@ -148,12 +149,36 @@ public struct QuickAnswersViewConfiguration: Sendable {
         }
     }
 
+    /// Titles of the actions in the menu shown when long pressing a source.
+    public struct CitationMenuStrings: Sendable {
+        public let openInNewTab: String
+        public let openInNewPrivateTab: String
+        public let bookmarkLink: String
+        public let copyLink: String
+        public let shareLink: String
+
+        public init(
+            openInNewTab: String,
+            openInNewPrivateTab: String,
+            bookmarkLink: String,
+            copyLink: String,
+            shareLink: String
+        ) {
+            self.openInNewTab = openInNewTab
+            self.openInNewPrivateTab = openInNewPrivateTab
+            self.bookmarkLink = bookmarkLink
+            self.copyLink = copyLink
+            self.shareLink = shareLink
+        }
+    }
+
     public init(
         optIn: OptInStrings,
         optInRedesign: OptInRedesignStrings,
         contentView: ContentViewStrings,
         privacyBanner: PrivacyBannerStrings,
         errors: ErrorStrings,
+        citationMenu: CitationMenuStrings,
         closeAccessibilityLabel: String,
         appName: String
     ) {
@@ -162,6 +187,7 @@ public struct QuickAnswersViewConfiguration: Sendable {
         self.contentView = contentView
         self.privacyBanner = privacyBanner
         self.errors = errors
+        self.citationMenu = citationMenu
         self.closeAccessibilityLabel = closeAccessibilityLabel
         self.appName = appName
     }

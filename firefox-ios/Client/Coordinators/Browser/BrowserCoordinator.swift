@@ -1338,10 +1338,16 @@ final class BrowserCoordinator: BaseCoordinator,
                     self?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
                 case .searchResult(let query):
                     self?.browserViewController.openSearchNewTab(query)
+                case .newTab(let url, let isPrivate):
+                    guard let self else { return }
+                    browserViewController.openURLInNewTab(url, isPrivate: isPrivate)
                 }
             },
             onPark: { [weak self] in
                 self?.showQuickAnswersReturnPill()
+            },
+            onBookmark: { [weak self] url, title in
+                self?.browserViewController.addBookmark(urlString: url.absoluteString, title: title)
             }
         )
         add(child: coordinator)

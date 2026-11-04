@@ -182,7 +182,11 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
 
     private func makeContentView(isFollowUpQuestion: Bool) -> QuickAnswersContentView {
         let contentView: QuickAnswersContentView = .build()
-        contentView.configureStrings(stringsConfiguration.contentView, isFollowUpQuestion: isFollowUpQuestion)
+        contentView.configureStrings(
+            stringsConfiguration.contentView,
+            citationMenu: stringsConfiguration.citationMenu,
+            isFollowUpQuestion: isFollowUpQuestion
+        )
         contentView.onTranscriptVisibilityChange = { [weak self] isTranscriptVisible, transcript in
             UIView.animate(withDuration: UX.titleFadeDuration) {
                 self?.titleLabel.alpha = isTranscriptVisible ? 0.0 : 1.0
@@ -253,7 +257,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                 self?.viewModel.completeOptIn()
             },
             onLearnMore: { [weak self] url in
-                self?.dismiss(with: url)
+                self?.dismiss(with: .url(url))
             }
         )
     }
@@ -264,10 +268,14 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         contentView.configureResult(
             result.resultText,
             modelName: viewModel.modelDisplayName,
-            sources: result.sources
-        ) { [weak self] url in
-            self?.openCitation(url)
-        }
+            sources: result.sources,
+            onSourceTapped: { [weak self] url in
+                self?.openCitation(.url(url))
+            },
+            onMenuAction: { [weak self] action in
+                self?.handleCitationMenuAction(action)
+            }
+        )
     }
 
     private func showRestoredSession(_ session: QuickAnswersSessionSnapshot) {
@@ -275,13 +283,35 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         showResult(session.result)
     }
 
-    private func openCitation(_ url: URL) {
+    private func openCitation(_ navigationType: QuickAnswersNavigationType) {
         triggerHaptic()
         if viewModel.handleCitationTap() {
-            navigationHandler?.parkQuickAnswers(with: .url(url))
+            navigationHandler?.parkQuickAnswers(with: navigationType)
         } else {
-            navigationHandler?.dismissQuickAnswers(with: .url(url))
+            navigationHandler?.dismissQuickAnswers(with: navigationType)
         }
+    }
+
+    private func handleCitationMenuAction(_ action: QuickAnswersCitationMenuAction) {
+        switch action {
+        case .openInNewTab(let url):
+            openCitation(.newTab(url, isPrivate: false))
+        case .openInNewPrivateTab(let url):
+            dismiss(with: .newTab(url, isPrivate: true))
+        case .bookmark(let url, let title):
+            navigationHandler?.bookmarkCitation(url: url, title: title)
+        case .linkCopied:
+            triggerHaptic()
+        case .shareLink(let url, let sourceView):
+            presentShareSheet(for: url, from: sourceView)
+        }
+    }
+
+    private func presentShareSheet(for url: URL, from sourceView: UIView) {
+        let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = sourceView
+        activityViewController.popoverPresentationController?.sourceRect = sourceView.bounds
+        present(activityViewController, animated: true)
     }
 
     @available(iOS 17.0, *)
@@ -308,7 +338,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                 self?.viewModel.completeOptIn()
             },
             onLearnMore: { [weak self] in
-                self?.dismiss(with: self?.learnMoreURL)
+                self?.dismiss(with: self?.learnMoreURL.map(QuickAnswersNavigationType.url))
             },
             onDismiss: { [weak self] in
                 self?.dismiss(with: nil)
@@ -387,10 +417,10 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         viewModel.startFollowUp()
     }
 
-    private func dismiss(with url: URL?) {
+    private func dismiss(with navigationType: QuickAnswersNavigationType?) {
         triggerHaptic()
         viewModel.dismiss()
-        navigationHandler?.dismissQuickAnswers(with: url.flatMap(QuickAnswersNavigationType.url))
+        navigationHandler?.dismissQuickAnswers(with: navigationType)
     }
 
     private func triggerHaptic() {

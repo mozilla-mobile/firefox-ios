@@ -1002,6 +1002,34 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertEqual(browserViewController.hideQuickAnswersReturnPillCount, 0)
     }
 
+    func testQuickAnswersOnNavigate_withNewTab_opensURLInNewTabWithNormalPrivacy() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
+        let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
+        let url = URL(string: "https://example.com")!
+
+        coordinator.dismissQuickAnswers(with: .newTab(url, isPrivate: false))
+
+        XCTAssertEqual(browserViewController.openURLInNewTabCount, 1)
+        XCTAssertEqual(browserViewController.openURLInNewTabURL, url)
+        XCTAssertFalse(browserViewController.openURLInNewTabIsPrivate)
+    }
+
+    func testQuickAnswersOnNavigate_withPrivateNewTab_opensURLInNewPrivateTab() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showQuickAnswers(transitionType: .sourceReveal(sourceRect: .zero))
+        let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
+        let url = URL(string: "https://example.com")!
+
+        coordinator.dismissQuickAnswers(with: .newTab(url, isPrivate: true))
+
+        XCTAssertEqual(browserViewController.openURLInNewTabCount, 1)
+        XCTAssertEqual(browserViewController.openURLInNewTabURL, url)
+        XCTAssertTrue(browserViewController.openURLInNewTabIsPrivate)
+    }
+
     func testQuickAnswersOnPark_showsPill() throws {
         let subject = createSubject()
         subject.browserViewController = browserViewController

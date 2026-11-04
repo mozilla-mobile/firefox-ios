@@ -24,6 +24,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     private let featureFlagsProvider: FeatureFlagProviding
     private let onNavigate: (QuickAnswersNavigationType) -> Void
     private let onPark: () -> Void
+    private let onBookmark: (URL, String) -> Void
     private var shouldAnimateTransition: Bool {
         return !UIAccessibility.isReduceMotionEnabled
     }
@@ -40,7 +41,8 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         transitionType: QuickAnswersTransitionType,
         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         onNavigate: @escaping (QuickAnswersNavigationType) -> Void,
-        onPark: @escaping () -> Void
+        onPark: @escaping () -> Void,
+        onBookmark: @escaping (URL, String) -> Void
     ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.prefs = prefs
@@ -51,6 +53,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         self.featureFlagsProvider = featureFlagsProvider
         self.onNavigate = onNavigate
         self.onPark = onPark
+        self.onBookmark = onBookmark
         super.init(router: router)
     }
 
@@ -124,6 +127,13 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
                 genericErrorMessage: .QuickAnswers.Errors.GenericErrorMessage,
                 ok: .QuickAnswers.Errors.OK
             ),
+            citationMenu: .init(
+                openInNewTab: .ContextMenuOpenInNewTab,
+                openInNewPrivateTab: .ContextMenuOpenInNewPrivateTab,
+                bookmarkLink: .ContextMenuBookmarkLink,
+                copyLink: .ContextMenuCopyLink,
+                shareLink: .ContextMenuShareLink
+            ),
             closeAccessibilityLabel: .QuickAnswers.AccessibilityLabels.Close,
             appName: appName
         )
@@ -169,5 +179,10 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         onPark()
         router.dismiss(animated: shouldAnimateTransition)
         parentCoordinatorDelegate?.didFinish(from: self)
+    }
+
+    func bookmarkCitation(url: URL, title: String) {
+        onBookmark(url, title)
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
     }
 }

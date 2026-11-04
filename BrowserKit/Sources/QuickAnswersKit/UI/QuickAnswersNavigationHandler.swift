@@ -10,6 +10,8 @@ public enum QuickAnswersNavigationType: Equatable {
     case url(URL)
     /// Performs a search with the specified query string.
     case searchResult(String)
+    /// Opens the specified URL in a new tab, which is selected.
+    case newTab(URL, isPrivate: Bool)
 }
 
 /// Handles navigation for the `QuickAnswersViewController`
@@ -23,4 +25,7 @@ public protocol QuickAnswersNavigationHandler: AnyObject {
 
     /// Called instead of `dismissQuickAnswers(with:)` when a snapshot was saved so the user can return to the answer.
     func parkQuickAnswers(with navigationType: QuickAnswersNavigationType)
+
+    /// Bookmarks a citation, staying in Quick Answers.
+    func bookmarkCitation(url: URL, title: String)
 }

@@ -130,19 +130,66 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         service.speechResults = [SpeechResult(text: "Question", isFinal: true)]
         service.searchResult = .success(makeSnapshot().result)
         let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: false)
-        subject.loadViewIfNeeded()
-        subject.beginAppearanceTransition(true, animated: false)
-        subject.endAppearanceTransition()
-        let resultShown = expectation(for: NSPredicate { [weak subject] _, _ in
-            guard let subject else { return false }
-            return self.findSubview(of: QuickAnswersSourceRow.self, in: subject.view) != nil
-        }, evaluatedWith: nil)
-        wait(for: [resultShown], timeout: 2.0)
+        waitForResult(in: subject)
 
         try tapCitation(in: subject)
 
         XCTAssertEqual(navigationHandler.dismissCallCount, 1)
         XCTAssertEqual(navigationHandler.lastNavigationType, .url(citationURL))
+        XCTAssertEqual(navigationHandler.parkCallCount, 0)
+    }
+
+    // MARK: - Citation menu
+    func test_openInNewTabMenuAction_withFlagOn_parksWithNewTab() throws {
+        sessionStorage.latestSession = makeSnapshot()
+        let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
+        subject.loadViewIfNeeded()
+
+        try performMenuAction(at: 0, in: subject)
+
+        XCTAssertEqual(navigationHandler.parkCallCount, 1)
+        XCTAssertEqual(navigationHandler.lastParkedNavigationType, .newTab(citationURL, isPrivate: false))
+        XCTAssertEqual(navigationHandler.dismissCallCount, 0)
+        XCTAssertNotNil(sessionStorage.latestSession)
+    }
+
+    func test_openInNewTabMenuAction_withFlagOff_dismissesWithNewTab() throws {
+        service.speechResults = [SpeechResult(text: "Question", isFinal: true)]
+        service.searchResult = .success(makeSnapshot().result)
+        let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: false)
+        waitForResult(in: subject)
+
+        try performMenuAction(at: 0, in: subject)
+
+        XCTAssertEqual(navigationHandler.dismissCallCount, 1)
+        XCTAssertEqual(navigationHandler.lastNavigationType, .newTab(citationURL, isPrivate: false))
+        XCTAssertEqual(navigationHandler.parkCallCount, 0)
+    }
+
+    func test_openInNewPrivateTabMenuAction_withFlagOn_dismissesWithoutSavingSession() throws {
+        sessionStorage.latestSession = makeSnapshot()
+        let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
+        subject.loadViewIfNeeded()
+
+        try performMenuAction(at: 1, in: subject)
+
+        XCTAssertEqual(navigationHandler.dismissCallCount, 1)
+        XCTAssertEqual(navigationHandler.lastNavigationType, .newTab(citationURL, isPrivate: true))
+        XCTAssertEqual(navigationHandler.parkCallCount, 0)
+        XCTAssertNil(sessionStorage.latestSession)
+    }
+
+    func test_bookmarkMenuAction_bookmarksCitationWithoutLeavingQuickAnswers() throws {
+        sessionStorage.latestSession = makeSnapshot()
+        let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
+        subject.loadViewIfNeeded()
+
+        try performMenuAction(at: 2, in: subject)
+
+        XCTAssertEqual(navigationHandler.bookmarkCallCount, 1)
+        XCTAssertEqual(navigationHandler.lastBookmarkedURL, citationURL)
+        XCTAssertEqual(navigationHandler.lastBookmarkedTitle, "Source")
+        XCTAssertEqual(navigationHandler.dismissCallCount, 0)
         XCTAssertEqual(navigationHandler.parkCallCount, 0)
     }
 
@@ -210,6 +257,29 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         _ = sourceView.perform(NSSelectorFromString("didTapRow:"), with: tapGesture)
     }
 
+    private func waitForResult(in subject: QuickAnswersViewController) {
+        subject.loadViewIfNeeded()
+        subject.beginAppearanceTransition(true, animated: false)
+        subject.endAppearanceTransition()
+        let resultShown = expectation(for: NSPredicate { [weak subject] _, _ in
+            guard let subject else { return false }
+            return self.findSubview(of: QuickAnswersSourceRow.self, in: subject.view) != nil
+        }, evaluatedWith: nil)
+        wait(for: [resultShown], timeout: 2.0)
+    }
+
+    private func performMenuAction(at index: Int, in subject: QuickAnswersViewController) throws {
+        let sourceView = try XCTUnwrap(findSubview(of: QuickAnswersSourceView.self, in: subject.view))
+        let row = try XCTUnwrap(findSubview(of: QuickAnswersSourceRow.self, in: sourceView))
+        let interaction = try XCTUnwrap(row.interactions.first as? UIContextMenuInteraction)
+        let configuration = try XCTUnwrap(
+            sourceView.contextMenuInteraction(interaction, configurationForMenuAtLocation: .zero)
+        )
+        let menu = try XCTUnwrap(configuration.actionProvider?([]))
+        let action = try XCTUnwrap(menu.children[index] as? UIAction)
+        action.trigger()
+    }
+
     private func findSubview<T: UIView>(of type: T.Type, in view: UIView) -> T? {
         if let match = view as? T { return match }
         for subview in view.subviews {
@@ -244,8 +314,19 @@ extension QuickAnswersViewConfiguration {
             description: "Firefox doesn’t store your audio or questions"
         ),
         errors: .mock,
+        citationMenu: .mock,
         closeAccessibilityLabel: "Close",
         appName: "Firefox"
+    )
+}
+
+extension QuickAnswersViewConfiguration.CitationMenuStrings {
+    static let mock = QuickAnswersViewConfiguration.CitationMenuStrings(
+        openInNewTab: "Open in New Tab",
+        openInNewPrivateTab: "Open in New Private Tab",
+        bookmarkLink: "Bookmark Link",
+        copyLink: "Copy Link",
+        shareLink: "Share Link"
     )
 }
 

@@ -17,6 +17,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
     private var featureFlagsProvider: MockNimbusFeatureFlags!
     private let testURL = URL(string: "https://example.com")!
     private let testQuery = "test search query"
+    private let testTitle = "Test title"
 
     override func setUp() async throws {
         try await super.setUp()
@@ -104,6 +105,17 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.dismissCalled, 1)
     }
 
+    func test_dismissQuickAnswers_withNewTabType_callsCallback() {
+        var navigationTypes = [QuickAnswersNavigationType]()
+        let subject = createSubject(onNavigate: { navigationTypes.append($0) })
+
+        subject.dismissQuickAnswers(with: .newTab(testURL, isPrivate: true))
+
+        XCTAssertEqual(navigationTypes, [.newTab(testURL, isPrivate: true)])
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+        XCTAssertEqual(router.dismissCalled, 1)
+    }
+
     func test_parkQuickAnswers_navigatesCallsOnParkDismissesAndFinishes() {
         var events = [String]()
         router.onDismiss = { events.append("dismiss") }
@@ -131,6 +143,32 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         XCTAssertFalse(didCallOnPark)
     }
 
+    // MARK: - bookmarkCitation
+    func test_bookmarkCitation_callsOnBookmarkWithURLAndTitle() {
+        var bookmarks = [(url: URL, title: String)]()
+        let subject = createSubject(onBookmark: { bookmarks.append(($0, $1)) })
+
+        subject.bookmarkCitation(url: testURL, title: testTitle)
+
+        XCTAssertEqual(bookmarks.count, 1)
+        XCTAssertEqual(bookmarks.first?.url, testURL)
+        XCTAssertEqual(bookmarks.first?.title, testTitle)
+    }
+
+    func test_bookmarkCitation_staysInQuickAnswers() {
+        var didNavigate = false
+        var didPark = false
+        let subject = createSubject(onNavigate: { _ in didNavigate = true }, onPark: { didPark = true })
+
+        subject.bookmarkCitation(url: testURL, title: testTitle)
+
+        XCTAssertFalse(didNavigate)
+        XCTAssertFalse(didPark)
+        XCTAssertEqual(router.dismissCalled, 0)
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 0)
+    }
+
+    // MARK: - resolvedModel
     func test_resolvedModel_withoutOverride_returnsNimbusModel() {
         setupNimbus(model: .liner)
         let subject = createSubject()
@@ -238,6 +276,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         prefs: Prefs = MockProfilePrefs(),
         onNavigate: @escaping (QuickAnswersNavigationType) -> Void = { _ in },
         onPark: @escaping () -> Void = {},
+        onBookmark: @escaping (URL, String) -> Void = { _, _ in },
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> QuickAnswersCoordinator {
@@ -251,7 +290,8 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
             transitionType: .sourceReveal(sourceRect: .zero),
             featureFlagsProvider: featureFlagsProvider,
             onNavigate: onNavigate,
-            onPark: onPark
+            onPark: onPark,
+            onBookmark: onBookmark
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

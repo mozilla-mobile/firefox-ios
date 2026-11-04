@@ -188,11 +188,15 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
     }
 
     // MARK: - Configuration
-    func configureStrings(_ strings: QuickAnswersViewConfiguration.ContentViewStrings, isFollowUpQuestion: Bool) {
+    func configureStrings(
+        _ strings: QuickAnswersViewConfiguration.ContentViewStrings,
+        citationMenu: QuickAnswersViewConfiguration.CitationMenuStrings,
+        isFollowUpQuestion: Bool
+    ) {
         self.strings = strings
         placeholderLabel.text = isFollowUpQuestion ? strings.followUpPlaceholder : strings.placeholder
         searchingLabel.text = strings.answering
-        sourceView.configureStrings(sourcesHeader: strings.sources)
+        sourceView.configureStrings(sourcesHeader: strings.sources, citationMenu: citationMenu)
         privacyButton.configuration?.title = strings.aboutYourPrivacy
     }
 
@@ -272,7 +276,8 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         _ text: String,
         modelName: String,
         sources: [SearchResult.Source],
-        onSourceTapped: @escaping (URL) -> Void
+        onSourceTapped: @escaping (URL) -> Void,
+        onMenuAction: @escaping (QuickAnswersCitationMenuAction) -> Void
     ) {
         if let theme {
             transcriptLabel.applyForegroundColor(theme.colors.textPrimary)
@@ -281,7 +286,7 @@ final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicab
         searchingLabel.alpha = 0.0
         answerCardView.configure(header: strings?.answerHeader ?? "", body: text)
         footerLabel.text = String(format: strings?.footerFormat ?? "", modelName)
-        sourceView.configure(with: sources, onSourceTapped: onSourceTapped)
+        sourceView.configure(with: sources, onSourceTapped: onSourceTapped, onMenuAction: onMenuAction)
         hasDisplayedResults = true
         animateResultCascade()
         UIAccessibility.post(notification: .screenChanged, argument: self)

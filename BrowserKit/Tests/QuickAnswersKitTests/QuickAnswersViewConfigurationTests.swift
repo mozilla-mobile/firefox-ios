@@ -87,6 +87,23 @@ struct QuickAnswersViewConfigurationTests {
     }
 
     @Test
+    func testCitationMenuStrings_storesValues() {
+        let subject = QuickAnswersViewConfiguration.CitationMenuStrings(
+            openInNewTab: "new",
+            openInNewPrivateTab: "private",
+            bookmarkLink: "bookmark",
+            copyLink: "copy",
+            shareLink: "share"
+        )
+
+        #expect(subject.openInNewTab == "new")
+        #expect(subject.openInNewPrivateTab == "private")
+        #expect(subject.bookmarkLink == "bookmark")
+        #expect(subject.copyLink == "copy")
+        #expect(subject.shareLink == "share")
+    }
+
+    @Test
     func testErrorStrings_storesValues() {
         let subject = QuickAnswersViewConfiguration.ErrorStrings(
             permissionAlertTitle: "perm",
@@ -153,6 +170,13 @@ struct QuickAnswersViewConfigurationTests {
                 genericErrorMessage: "",
                 ok: ""
             ),
+            citationMenu: .init(
+                openInNewTab: "new",
+                openInNewPrivateTab: "private",
+                bookmarkLink: "bookmark",
+                copyLink: "copy",
+                shareLink: "share"
+            ),
             closeAccessibilityLabel: "close",
             appName: "Firefox"
         )
@@ -161,6 +185,7 @@ struct QuickAnswersViewConfigurationTests {
         #expect(subject.optInRedesign.title == "rt")
         #expect(subject.contentView.placeholder == "p")
         #expect(subject.privacyBanner.title == "pt")
+        #expect(subject.citationMenu.openInNewTab == "new")
         #expect(subject.closeAccessibilityLabel == "close")
         #expect(subject.appName == "Firefox")
     }
