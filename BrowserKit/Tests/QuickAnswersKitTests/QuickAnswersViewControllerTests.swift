@@ -44,7 +44,7 @@ final class QuickAnswersViewControllerTests: XCTestCase {
     }
 
     // MARK: - Return To Answer
-    func test_viewWillAppear_withRestoredSession_doesNotStartRecording() {
+    func test_viewWillAppear_withRestoredSession_doesNotStartFlow() {
         sessionStorage.latestSession = makeSnapshot()
         let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
 
@@ -52,7 +52,7 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         subject.beginAppearanceTransition(true, animated: false)
         subject.endAppearanceTransition()
 
-        XCTAssertEqual(service.recordVoiceCalledCount, 0)
+        XCTAssertNil(findSubview(of: OptInView.self, in: subject.view))
     }
 
     func test_citationTap_withRestoredSessionAndFlagOn_parksInsteadOfDismissing() throws {
@@ -74,8 +74,9 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         subject.loadViewIfNeeded()
         subject.beginAppearanceTransition(true, animated: false)
         subject.endAppearanceTransition()
-        let resultShown = expectation(for: NSPredicate { _, _ in
-            self.findSubview(of: QuickAnswersSourceRow.self, in: subject.view) != nil
+        let resultShown = expectation(for: NSPredicate { [weak subject] _, _ in
+            guard let subject else { return false }
+            return self.findSubview(of: QuickAnswersSourceRow.self, in: subject.view) != nil
         }, evaluatedWith: nil)
         wait(for: [resultShown], timeout: 2.0)
 
