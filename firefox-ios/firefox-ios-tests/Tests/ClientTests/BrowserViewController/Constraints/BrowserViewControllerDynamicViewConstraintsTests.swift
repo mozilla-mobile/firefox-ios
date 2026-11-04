@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import QuickAnswersKit
+import Shared
 import XCTest
 
 @testable import Client
@@ -78,7 +80,90 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
         XCTAssertEqual(initialFrame, finalFrame)
     }
 
+    // MARK: - Quick Answers Return Pill Tests
+
+    func test_showQuickAnswersReturnPill_addsPillToViewHierarchy() {
+        let subject = createSubject()
+
+        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
+
+        XCTAssertEqual(returnPills(in: subject).count, 1)
+    }
+
+    func test_showQuickAnswersReturnPill_calledTwice_keepsOnePill() {
+        let subject = createSubject()
+
+        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
+        subject.showQuickAnswersReturnPill(question: "Other question", onTap: { _ in }, onSwipeAway: {})
+
+        XCTAssertEqual(returnPills(in: subject).count, 1)
+    }
+
+    func test_showQuickAnswersReturnPill_withoutQuestion_labelsPillWithFallbackTitle() {
+        let subject = createSubject()
+
+        subject.showQuickAnswersReturnPill(question: nil, onTap: { _ in }, onSwipeAway: {})
+
+        XCTAssertEqual(returnPills(in: subject).first?.accessibilityLabel,
+                       String.QuickAnswers.ReturnPill.FallbackTitle)
+    }
+
+    func test_hideQuickAnswersReturnPill_removesPill() {
+        let subject = createSubject()
+        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
+
+        subject.hideQuickAnswersReturnPill()
+
+        XCTAssertTrue(returnPills(in: subject).isEmpty)
+    }
+
+    func test_hideQuickAnswersReturnPill_removesPillConstraints() {
+        let subject = createSubject()
+        let initialConstraintCount = subject.view.constraints.count
+        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
+
+        subject.hideQuickAnswersReturnPill()
+
+        XCTAssertEqual(subject.view.constraints.count, initialConstraintCount)
+    }
+
+    func test_hideQuickAnswersReturnPill_withoutPill_doesNothing() {
+        let subject = createSubject()
+
+        subject.hideQuickAnswersReturnPill()
+
+        XCTAssertTrue(returnPills(in: subject).isEmpty)
+    }
+
+    func test_showQuickAnswersReturnPill_afterHide_addsNewPill() {
+        let subject = createSubject()
+        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
+        subject.hideQuickAnswersReturnPill()
+
+        subject.showQuickAnswersReturnPill(question: "Question", onTap: { _ in }, onSwipeAway: {})
+
+        XCTAssertEqual(returnPills(in: subject).count, 1)
+    }
+
+    // MARK: - Location View Frame Tests
+
+    func test_locationViewFrame_inBrowserView_returnsFrame() {
+        let subject = createSubject()
+
+        XCTAssertNotNil(subject.addressToolbarContainer.locationViewFrame(in: subject.view))
+    }
+
+    func test_locationViewFrame_inUnrelatedView_returnsNil() {
+        let subject = createSubject()
+
+        XCTAssertNil(subject.addressToolbarContainer.locationViewFrame(in: UIView()))
+    }
+
     // MARK: - Private
+
+    private func returnPills(in subject: BrowserViewController) -> [QuickAnswersReturnPillView] {
+        subject.view.subviews.compactMap { $0 as? QuickAnswersReturnPillView }
+    }
 
     private func checkReaderModeHeightConstraint() {
         let subject = createSubject()

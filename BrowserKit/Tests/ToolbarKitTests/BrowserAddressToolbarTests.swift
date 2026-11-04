@@ -245,6 +245,25 @@ final class BrowserAddressToolbarTests: XCTestCase {
         XCTAssertEqual(actionCount, 1)
     }
 
+    // MARK: - locationViewFrame
+    @MainActor
+    func testLocationViewFrame_afterLayout_returnsNonEmptyFrame() {
+        let parent = UIView(frame: CGRect(x: 0, y: 0, width: 390, height: 100))
+        let subject = createConfiguredSubject()
+        subject.translatesAutoresizingMaskIntoConstraints = false
+        parent.addSubview(subject)
+        NSLayoutConstraint.activate([
+            subject.leadingAnchor.constraint(equalTo: parent.leadingAnchor),
+            subject.trailingAnchor.constraint(equalTo: parent.trailingAnchor),
+            subject.topAnchor.constraint(equalTo: parent.topAnchor),
+        ])
+        parent.layoutIfNeeded()
+
+        let frame = subject.locationViewFrame(in: parent)
+
+        XCTAssertFalse(frame.isEmpty)
+    }
+
     // MARK: Test helper
     @MainActor
     func createSubject(file: StaticString = #filePath, line: UInt = #line) -> BrowserAddressToolbar {

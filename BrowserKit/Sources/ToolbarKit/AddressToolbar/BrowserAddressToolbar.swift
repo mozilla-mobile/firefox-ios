@@ -237,6 +237,11 @@ public class BrowserAddressToolbar: UIView,
         locationView.setAutocompleteSuggestion(suggestion)
     }
 
+    /// The location view frame in `view`'s coordinates, including the minimized address bar transform.
+    public func locationViewFrame(in view: UIView) -> CGRect {
+        return locationView.convert(locationView.bounds, to: view)
+    }
+
     override public func becomeFirstResponder() -> Bool {
         super.becomeFirstResponder()
         return locationView.becomeFirstResponder()
