@@ -1357,16 +1357,16 @@ final class BrowserCoordinator: BaseCoordinator,
         browserViewController.showQuickAnswersReturnPill(
             question: question,
             onTap: { [weak self] isMinimized in
-                self?.quickAnswersPillTelemetry.returnPillTapped(isMinimized: isMinimized)
-                self?.resumeParkedQuickAnswers()
+                self?.resumeParkedQuickAnswers(isMinimized: isMinimized)
             },
             onSwipeAway: { [weak self] in self?.discardParkedQuickAnswers(reason: .swipe) }
         )
     }
 
-    private func resumeParkedQuickAnswers() {
+    private func resumeParkedQuickAnswers(isMinimized: Bool) {
         guard quickAnswersSessionStorage.latestSession != nil,
               router.navigationController.presentedViewController == nil else { return }
+        quickAnswersPillTelemetry.returnPillTapped(isMinimized: isMinimized)
         showQuickAnswers(transitionType: .returnToAnswer)
     }
 
