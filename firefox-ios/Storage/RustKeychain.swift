@@ -389,7 +389,7 @@ func deleteKeychainSecClass(_ secClass: CFString,
         return keychain.delete(query: query)
     }
 
-    // Use metadata and references to preserve history without reading credential data.
+    // List matching Keychain items, skip protected items, and delete the rest individually.
     query[kSecMatchLimit as String] = kSecMatchLimitAll
     query[kSecReturnAttributes as String] = true
     query[kSecReturnPersistentRef as String] = true
