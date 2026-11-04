@@ -397,7 +397,7 @@ func deleteKeychainSecClass(_ secClass: CFString,
     guard status == errSecSuccess else {
         if status != errSecItemNotFound {
             DefaultLogger.shared.log("Failed to enumerate Keychain items: \(status)",
-                                     level: .fatalError,
+                                     level: .fatal,
                                      category: .storage)
         }
         return status
