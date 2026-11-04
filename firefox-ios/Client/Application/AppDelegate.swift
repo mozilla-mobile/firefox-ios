@@ -161,6 +161,14 @@ class AppDelegate: UIResponder,
             }
         }
 
+        // reconnect if the VPN was on when the app was last closed
+        if #available(iOS 17.0, *), featureFlagsProvider.isEnabled(.vpnFeature) {
+            let vpnManager: VPNManager = AppContainer.shared.resolve()
+            if vpnManager.isRunning {
+                Task { await vpnManager.start() }
+            }
+        }
+
         if #available(iOS 17.0, *) {
             ResetTipsSetting.resetDatastoreIfNeeded(prefs: profile.prefs)
             do {

@@ -13,9 +13,15 @@ final class MockVPNServerManager: VPNServerManaging, @unchecked Sendable {
         countryCode: "US"
     )
     var selectServerCalled = 0
+    var selectServerCountryCodes: [String?] = []
 
     func selectServer(countryCode: String?, environment: VPNEnvironment) async -> VPNGuardian.Server? {
         selectServerCalled += 1
+        selectServerCountryCodes.append(countryCode)
         return server
+    }
+
+    func listCountries() async -> [VPNServerManager.Country] {
+        return []
     }
 }

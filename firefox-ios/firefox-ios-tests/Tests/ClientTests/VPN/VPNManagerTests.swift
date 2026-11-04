@@ -158,6 +158,15 @@ final class VPNManagerTests: XCTestCase {
         XCTAssertEqual(mockProxyConfigurator.params.count, 1)
     }
 
+    func testStart_selectsServerForSelectedRegion() async {
+        mockProfile.prefs.setString("DE", forKey: PrefsKeys.VPNSettings.selectedCountryCode)
+        let subject = createSubject()
+
+        await subject.start()
+
+        XCTAssertEqual(mockServerManager.selectServerCountryCodes, ["DE"])
+    }
+
     // MARK: - stop
 
     func testStop_clearsProxyAndSetsPreferenceForVPNToFalse() async throws {

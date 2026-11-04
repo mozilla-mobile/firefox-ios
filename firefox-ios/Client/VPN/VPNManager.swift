@@ -7,6 +7,7 @@ import Common
 import Shared
 import MozillaAppServices
 import Network
+import Observation
 import VPNKit
 import WebEngine
 
@@ -38,6 +39,7 @@ struct DefaultProxyConfigurator: ProxyConfigurator {
 }
 
 @available(iOS 17.0, *)
+@Observable
 final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
     private let logger: Logger
     private let environment: VPNEnvironment
@@ -45,10 +47,36 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
     private let serverManager: VPNServerManaging
     private let windowManager: WindowManager
     private let proxyApplier: ProxyConfigurator
+    private let prefs: Prefs
 
     // TODO: fxios-16876 This will get used when we wire up VPN Connection
     var isRunning: Bool {
         userPreferences.getPreferenceFor(.vpnFeature)
+    }
+
+    private(set) var isConnecting = false
+    // TODO: FXIOS-17238 guardian doesn't return usage yet, so the pass's usage stays nil
+    private var currentPass: VPNProxyPass?
+    private static let bytesPerGB = 1_000_000_000.0
+
+    var dataLimitInGB: Double {
+        guard let usage = currentPass?.usage else { return 0 }
+        return Double(usage.max) / Self.bytesPerGB
+    }
+
+    var usedDataInGB: Double {
+        guard let usage = currentPass?.usage else { return 0 }
+        return Double(min(max(usage.max - usage.remaining, 0), usage.max)) / Self.bytesPerGB
+    }
+
+    var usageFraction: Double {
+        guard let usage = currentPass?.usage, usage.max > 0 else { return 0 }
+        return usedDataInGB / dataLimitInGB
+    }
+
+    var isLimitReached: Bool {
+        guard let usage = currentPass?.usage else { return false }
+        return !usage.unlimited && usage.remaining <= 0
     }
 
     private var activeServer: VPNGuardian.Server?
@@ -72,9 +100,14 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
         )
         self.windowManager = windowManager
         self.proxyApplier = proxyApplier
+        self.prefs = profile.prefs
     }
 
     func start() async {
+        isConnecting = true
+        defer { isConnecting = false }
+        // so a failed reconnect leaves the VPN marked as off
+        userPreferences.setPreferenceFor(.vpnFeature, to: false)
         do {
             guard let guardian = self.guardian else {
                 throw VPNError.tokenProviderUnavailable
@@ -82,8 +115,8 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
 
             let pass = try await guardian.getPass()
 
-            // TODO: FXIOS-16873 When we implement location selection it will be passed in here
-            guard let server = await serverManager.selectServer(countryCode: nil, environment: environment) else {
+            let countryCode = prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode)
+            guard let server = await serverManager.selectServer(countryCode: countryCode, environment: environment) else {
                 throw VPNError.noServerFound
             }
 
@@ -95,6 +128,7 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
             let config = try self.buildProxyConfig(server: server, pass: pass)
             await self.applyProxyAndRebuildWebViews(configs: [config])
             self.activeServer = server
+            self.currentPass = pass
             self.userPreferences.setPreferenceFor(.vpnFeature, to: true)
             self.startPassRotation(after: pass)
         } catch {
@@ -108,6 +142,10 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
         await self.applyProxyAndRebuildWebViews(configs: [])
         self.activeServer = nil
         self.userPreferences.setPreferenceFor(.vpnFeature, to: false)
+    }
+
+    func listCountries() async -> [VPNServerManager.Country] {
+        return await serverManager.listCountries()
     }
 
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the new
@@ -125,6 +163,7 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
                           let server = self.activeServer else { return }
                     let config = try self.buildProxyConfig(server: server, pass: new)
                     self.proxyApplier.applyProxyConfigurations([config], forcingSessionReset: false)
+                    self.currentPass = new
                     self.logger.log(
                         "Rotated VPN proxy pass — next expiry \(new.expiresAt)",
                         level: .info,

@@ -11,22 +11,18 @@ import Shared
 @MainActor
 @Observable
 final class VPNSettingsViewModel {
-    // TODO: FXIOS-16876 this won't be needed once backend vpn stuff is wired up
-    private static let simulatedConnectingDuration: TimeInterval = 2
-
     private(set) var isVPNEnabled: Bool
-    private(set) var isVPNConnecting = false
     private(set) var selectedCountryCode: String
-    private let dataUsage: VPNDataUsage
 
     @ObservationIgnored private let prefs: Prefs
-    @ObservationIgnored private let userPreferences: UserFeaturePreferring
+    @ObservationIgnored private let vpnManager: VPNManager
     @ObservationIgnored private let localeProvider: LocaleProvider
 
-    var usedDataInGB: Double { dataUsage.clampedUsedDataInGB }
-    var dataLimitInGB: Double { dataUsage.dataLimitInGB }
-    var usageFraction: Double { dataUsage.usageFraction }
-    var isLimitReached: Bool { dataUsage.isLimitReached }
+    var isVPNConnecting: Bool { vpnManager.isConnecting }
+    var usedDataInGB: Double { vpnManager.usedDataInGB }
+    var dataLimitInGB: Double { vpnManager.dataLimitInGB }
+    var usageFraction: Double { vpnManager.usageFraction }
+    var isLimitReached: Bool { vpnManager.isLimitReached }
     var accessibilityValue: String {
         if isVPNConnecting { return .VPN.Settings.Connecting }
         return isVPNEnabled ? .VPN.Settings.StatusOn : .VPN.Settings.StatusOff
@@ -48,43 +44,51 @@ final class VPNSettingsViewModel {
         }
     }
 
+    func loadCountryCodes() async -> [String] {
+        let countryCodes = await vpnManager.listCountries().map(\.code)
+        return sortedByName(countryCodes.filter { $0 != VPNServerManager.recommendedCountryCode })
+    }
+
     init(
         prefs: Prefs,
-        userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
-        localeProvider: LocaleProvider = SystemLocaleProvider(),
-        dataUsage: VPNDataUsage = .placeholder
+        vpnManager: VPNManager,
+        localeProvider: LocaleProvider = SystemLocaleProvider()
     ) {
         self.prefs = prefs
-        self.userPreferences = userPreferences
+        self.vpnManager = vpnManager
         self.localeProvider = localeProvider
-        self.isVPNEnabled = userPreferences.getPreferenceFor(.vpnFeature)
+        self.isVPNEnabled = vpnManager.isRunning
         self.selectedCountryCode = prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode)
             ?? VPNServerManager.recommendedCountryCode
-        self.dataUsage = dataUsage
     }
 
     func selectLocation(_ countryCode: String) {
         guard countryCode != selectedCountryCode else { return }
         selectedCountryCode = countryCode
         prefs.setString(countryCode, forKey: PrefsKeys.VPNSettings.selectedCountryCode)
+
+        // if the VPN is running when the selected location changes, start a new connection
+        guard vpnManager.isRunning else { return }
+        Task {
+            await vpnManager.start()
+            isVPNEnabled = vpnManager.isRunning
+        }
     }
 
-    // TODO: FXIOS-16876 Replace this with real VPN connection stuff
     func toggleVPN(_ isOn: Bool) {
         guard isOn else {
             isVPNEnabled = false
-            userPreferences.setPreferenceFor(.vpnFeature, to: false)
+            Task { await vpnManager.stop() }
             return
         }
         guard !isVPNConnecting else { return }
 
-        isVPNConnecting = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + VPNSettingsViewModel.simulatedConnectingDuration) { [weak self] in
-            guard let self else { return }
-            isVPNConnecting = false
-            isVPNEnabled = true
-            userPreferences.setPreferenceFor(.vpnFeature, to: true)
-            UIAccessibility.post(notification: .announcement, argument: String.VPN.Settings.Connected)
+        Task {
+            await vpnManager.start()
+            isVPNEnabled = vpnManager.isRunning
+            if isVPNEnabled {
+                UIAccessibility.post(notification: .announcement, argument: String.VPN.Settings.Connected)
+            }
         }
     }
 }
