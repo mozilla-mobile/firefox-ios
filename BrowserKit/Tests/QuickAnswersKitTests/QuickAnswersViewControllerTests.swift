@@ -10,6 +10,25 @@ import TestKit
 
 @MainActor
 final class QuickAnswersViewControllerTests: XCTestCase {
+    private var navigationHandler: MockNavigationHandler!
+    private var service: MockTestQuickAnswersService!
+    private var sessionStorage: QuickAnswersSessionStorage!
+    private let citationURL = URL(string: "https://example.com")!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        navigationHandler = MockNavigationHandler()
+        service = MockTestQuickAnswersService()
+        sessionStorage = QuickAnswersSessionStorage()
+    }
+
+    override func tearDown() async throws {
+        navigationHandler = nil
+        service = nil
+        sessionStorage = nil
+        try await super.tearDown()
+    }
+
     func testInit_withSourceRevealTransition_usesCustomPresentationAndOptInTransitionAnimator() {
         let subject = createSubject(transitionType: .sourceReveal(sourceRect: .zero))
 
@@ -24,22 +43,76 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         XCTAssertTrue(transitionAnimator?.fallback is SourceRevealTransitionAnimator)
     }
 
+    // MARK: - Return To Answer
+    func test_viewWillAppear_withRestoredSession_doesNotStartRecording() {
+        sessionStorage.latestSession = makeSnapshot()
+        let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
+
+        subject.loadViewIfNeeded()
+        subject.beginAppearanceTransition(true, animated: false)
+        subject.endAppearanceTransition()
+
+        XCTAssertEqual(service.recordVoiceCalledCount, 0)
+    }
+
+    func test_citationTap_withRestoredSessionAndFlagOn_parksInsteadOfDismissing() throws {
+        sessionStorage.latestSession = makeSnapshot()
+        let subject = createSubject(isReturnToAnswerEnabled: true, isReturningToAnswer: true)
+        subject.loadViewIfNeeded()
+
+        try tapCitation(in: subject)
+
+        XCTAssertEqual(navigationHandler.parkCallCount, 1)
+        XCTAssertEqual(navigationHandler.lastParkedNavigationType, .url(citationURL))
+        XCTAssertEqual(navigationHandler.dismissCallCount, 0)
+    }
+
+    func test_citationTap_withFlagOff_dismissesInsteadOfParking() throws {
+        service.speechResults = [SpeechResult(text: "Question", isFinal: true)]
+        service.searchResult = .success(makeSnapshot().result)
+        let subject = createSubject(prefs: optInCompletedPrefs(), isReturnToAnswerEnabled: false)
+        subject.loadViewIfNeeded()
+        subject.beginAppearanceTransition(true, animated: false)
+        subject.endAppearanceTransition()
+        let resultShown = expectation(for: NSPredicate { _, _ in
+            self.findSubview(of: QuickAnswersSourceRow.self, in: subject.view) != nil
+        }, evaluatedWith: nil)
+        wait(for: [resultShown], timeout: 2.0)
+
+        try tapCitation(in: subject)
+
+        XCTAssertEqual(navigationHandler.dismissCallCount, 1)
+        XCTAssertEqual(navigationHandler.lastNavigationType, .url(citationURL))
+        XCTAssertEqual(navigationHandler.parkCallCount, 0)
+    }
+
     // MARK: - Helper
     private func createSubject(
-        transitionType: QuickAnswersTransitionType,
+        transitionType: QuickAnswersTransitionType = .sourceReveal(sourceRect: .zero),
+        prefs: Prefs = MockProfilePrefs(),
+        isReturnToAnswerEnabled: Bool = false,
+        isReturningToAnswer: Bool = false,
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> QuickAnswersViewController {
         let viewModel = QuickAnswersViewModel(
-            prefs: MockProfilePrefs(),
+            prefs: prefs,
+            sessionStorage: sessionStorage,
+            isReturningToAnswer: isReturningToAnswer,
             telemetry: MockQuickAnswersTelemetry(),
-            configFetcher: nil,
-            makeService: { _, _ in
-                MockTestQuickAnswersService()
+            configFetcher: DefaultQuickAnswersConfigFetcher(
+                feature: QuickAnswersFeature(
+                    model: .exa,
+                    isOptInRedesignEnabled: false,
+                    isReturnToAnswerEnabled: isReturnToAnswerEnabled
+                )
+            ),
+            makeService: { _, _, _ in
+                self.service
             }
         )
         let subject = QuickAnswersViewController(
-            navigationHandler: MockNavigationHandler(),
+            navigationHandler: navigationHandler,
             viewModel: viewModel,
             transitionType: transitionType,
             windowUUID: .XCTestDefaultUUID,
@@ -50,6 +123,38 @@ final class QuickAnswersViewControllerTests: XCTestCase {
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
+    }
+
+    private func makeSnapshot() -> QuickAnswersSessionSnapshot {
+        return QuickAnswersSessionSnapshot(
+            question: "Question",
+            result: SearchResult(
+                resultText: "Answer",
+                sources: [SearchResult.Source(title: "Source", url: citationURL, thumbnailURL: nil, faviconURL: nil)]
+            ),
+            conversation: MockQuickAnswersConversation()
+        )
+    }
+
+    private func optInCompletedPrefs() -> MockProfilePrefs {
+        let prefs = MockProfilePrefs()
+        prefs.setBool(true, forKey: PrefsKeys.QuickAnswers.optInCompleted)
+        return prefs
+    }
+
+    private func tapCitation(in subject: QuickAnswersViewController) throws {
+        let sourceView = try XCTUnwrap(findSubview(of: QuickAnswersSourceView.self, in: subject.view))
+        let row = try XCTUnwrap(findSubview(of: QuickAnswersSourceRow.self, in: sourceView))
+        let tapGesture = try XCTUnwrap(row.gestureRecognizers?.first { $0 is UITapGestureRecognizer })
+        _ = sourceView.perform(NSSelectorFromString("didTapRow:"), with: tapGesture)
+    }
+
+    private func findSubview<T: UIView>(of type: T.Type, in view: UIView) -> T? {
+        if let match = view as? T { return match }
+        for subview in view.subviews {
+            if let match = findSubview(of: type, in: subview) { return match }
+        }
+        return nil
     }
 }
 
