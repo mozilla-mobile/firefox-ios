@@ -53,7 +53,7 @@ final class InstallationTelemetryService {
     }
 
     private var isInstallationProcessed: Bool {
-        installationPrefs.boolForKey(PrefsKeys.installationProcessedKey) == true
+        return installationPrefs.boolForKey(PrefsKeys.installationProcessedKey)
     }
 
     private var canCollect: Bool {
