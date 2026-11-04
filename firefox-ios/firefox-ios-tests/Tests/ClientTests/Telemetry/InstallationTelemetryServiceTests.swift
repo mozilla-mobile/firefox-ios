@@ -27,9 +27,13 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         mockGleanWrapper = MockGleanWrapper()
         profilePrefs = MockProfilePrefs()
         profilePrefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
+        profilePrefs.setBool(true, forKey: AppConstants.prefSendUsageData)
         mockFeatureFlags = MockNimbusFeatureFlags()
         mockFeatureFlags.enabledFlags = [.checkForReinstalls]
         mockDateProvider = MockDateProvider(fixedDate: Date(timeIntervalSince1970: 1_760_000_000))
+        mockAcquisitionProvider.result = .available(
+            AppAcquisition(originalPurchaseDate: mockDateProvider.fixedDate, originalAppVersion: "42")
+        )
     }
 
     override func tearDown() async throws {
@@ -43,46 +47,71 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func testOnForeground_whenTermsAreNotAccepted_waitsForAcceptance() async throws {
+    func testUpdateInstallationHistory_whenUsagePreferenceIsMissing_usesEnabledDefault() async throws {
+        profilePrefs.removeObjectForKey(AppConstants.prefSendUsageData)
+
+        try await createSubject().updateInstallationHistory()
+
+        XCTAssertEqual(mockHistoryStore.value?.installCounter, 1)
+        XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 1)
+    }
+
+    func testUpdateInstallationHistory_whenTermsPreferenceIsMissing_waitsForAcceptance() async throws {
+        profilePrefs.removeObjectForKey(PrefsKeys.TermsOfUseAccepted)
+        let subject = createSubject()
+
+        try await subject.updateInstallationHistory()
+
+        XCTAssertEqual(mockHistoryStore.loadCalled, 0)
+        XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 0)
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
+
+        profilePrefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
+        try await subject.updateInstallationHistory()
+        XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
+    }
+
+    func testUpdateInstallationHistory_whenTermsAreNotAccepted_waitsForAcceptance() async throws {
         profilePrefs.setBool(false, forKey: PrefsKeys.TermsOfUseAccepted)
         let subject = createSubject()
-        try await subject.onForeground()
+        try await subject.updateInstallationHistory()
         XCTAssertEqual(mockHistoryStore.loadCalled, 0)
         XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 0)
 
         profilePrefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
-        try await subject.onForeground()
+        try await subject.updateInstallationHistory()
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
     }
 
-    func testOnForeground_checksFeatureFlagBeforeAndAfterAcquisition() async throws {
+    func testUpdateInstallationHistory_checksFeatureFlagBeforeAndAfterAcquisition() async throws {
         mockFeatureFlags.enabledFlags = []
         let subject = createSubject()
         XCTAssertNil(installationPrefs.boolForKey(PrefsKeys.installationProcessedKey))
-        try await subject.onForeground()
+        try await subject.updateInstallationHistory()
         XCTAssertEqual(mockHistoryStore.loadCalled, 0)
 
         mockFeatureFlags.enabledFlags = [.checkForReinstalls]
         mockAcquisitionProvider.onFetch = { self.mockFeatureFlags.enabledFlags = [] }
-        try await subject.onForeground()
+        try await subject.updateInstallationHistory()
         XCTAssertEqual(mockHistoryStore.saveCalled, 0)
         XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
 
         mockAcquisitionProvider.onFetch = nil
         mockFeatureFlags.enabledFlags = [.checkForReinstalls]
-        try await subject.onForeground()
+        try await subject.updateInstallationHistory()
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
     }
 
-    func testOnForeground_onFreshInstall_recordsMetricsOnce() async throws {
+    func testUpdateInstallationHistory_onFreshInstall_recordsMetricsOnce() async throws {
         let subject = createSubject()
         mockAcquisitionProvider.result = .available(
             AppAcquisition(originalPurchaseDate: mockDateProvider.fixedDate, originalAppVersion: "12345")
         )
 
-        try await subject.onForeground()
-        try await subject.onForeground()
-        try await createSubject().onForeground()
+        try await subject.updateInstallationHistory()
+        try await subject.updateInstallationHistory()
+        try await createSubject().updateInstallationHistory()
 
         XCTAssertEqual(mockHistoryStore.value,
                        InstallationHistory(installCounter: 1, lastSeenDate: mockDateProvider.fixedDate))
@@ -98,20 +127,22 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         XCTAssertTrue(mockGleanWrapper.savedPing as? Ping<NoReasonCodes> === GleanMetrics.Pings.shared.installation)
     }
 
-    func testOnForeground_onReinstall_recordsPreviousDateAndUpdatesHistory() async throws {
+    func testUpdateInstallationHistory_onReinstall_recordsPreviousDateAndUpdatesHistory() async throws {
         mockHistoryStore.value = InstallationHistory(installCounter: 3, lastSeenDate: Date(timeIntervalSince1970: 0))
 
-        try await createSubject().onForeground()
+        try await createSubject().updateInstallationHistory()
 
+        XCTAssertEqual(mockHistoryStore.loadCalled, 1)
+        XCTAssertEqual(mockHistoryStore.saveCalled, 1)
         XCTAssertEqual(mockHistoryStore.value,
                        InstallationHistory(installCounter: 4, lastSeenDate: mockDateProvider.fixedDate))
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [4])
-        XCTAssertEqual(mockGleanWrapper.savedValues as? [Date], [Date(timeIntervalSince1970: 0)])
+        XCTAssertEqual(mockGleanWrapper.savedValues.first as? Date, Date(timeIntervalSince1970: 0))
         XCTAssertEqual(mockGleanWrapper.submitPingCalled, 1)
     }
 
-    func testOnForeground_onExistingInstallation_initializesHistoryWithoutMetrics() async throws {
-        try await createSubject(hasSeenIntro: true).onForeground()
+    func testUpdateInstallationHistory_onExistingInstallation_initializesHistoryWithoutMetrics() async throws {
+        try await createSubject(hasSeenIntro: true).updateInstallationHistory()
 
         XCTAssertEqual(mockHistoryStore.value?.installCounter, 1)
         XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
@@ -119,105 +150,110 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
     }
 
-    func testOnForeground_onExistingInstallation_preservesCounter() async throws {
+    func testUpdateInstallationHistory_onExistingInstallation_preservesCounter() async throws {
         mockHistoryStore.value = InstallationHistory(installCounter: 5, lastSeenDate: .distantPast)
 
-        try await createSubject(hasSeenIntro: true).onForeground()
+        try await createSubject(hasSeenIntro: true).updateInstallationHistory()
 
+        XCTAssertEqual(mockHistoryStore.loadCalled, 1)
+        XCTAssertEqual(mockHistoryStore.saveCalled, 1)
         XCTAssertEqual(mockHistoryStore.value,
                        InstallationHistory(installCounter: 5, lastSeenDate: mockDateProvider.fixedDate))
         XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
     }
 
-    func testOnForeground_whenConsentIsPending_preservesStateAcrossServiceRecreation() async throws {
+    func testUpdateInstallationHistory_whenConsentIsPending_preservesStateAcrossServiceRecreation() async throws {
         profilePrefs.setBool(false, forKey: AppConstants.prefSendUsageData)
         let subject = createSubject()
-        try await subject.onForeground()
+        try await subject.updateInstallationHistory()
         XCTAssertEqual(mockHistoryStore.loadCalled, 0)
         XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 0)
 
         let recreated = createSubject(hasSeenIntro: true)
         profilePrefs.setBool(true, forKey: AppConstants.prefSendUsageData)
-        try await recreated.onForeground()
+        try await recreated.updateInstallationHistory()
 
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
     }
 
-    func testOnForeground_whenAlreadyProcessed_doesNotRepeatWithUnfinishedOnboarding() async throws {
-        try await createSubject().onForeground()
-        try await createSubject(hasSeenIntro: false).onForeground()
+    func testUpdateInstallationHistory_whenAlreadyProcessed_doesNotRepeatWithUnfinishedOnboarding() async throws {
+        try await createSubject().updateInstallationHistory()
+        try await createSubject(hasSeenIntro: false).updateInstallationHistory()
 
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
         XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 1)
     }
 
-    func testOnForeground_whenConsentIsReenabled_updatesDateWithoutRepeatingMetrics() async throws {
+    func testUpdateInstallationHistory_whenConsentIsReenabled_updatesDateWithoutRepeatingMetrics() async throws {
         let subject = createSubject()
-        try await subject.onForeground()
+        try await subject.updateInstallationHistory()
         profilePrefs.setBool(false, forKey: AppConstants.prefSendUsageData)
         mockDateProvider.fixedDate = mockDateProvider.fixedDate.addingTimeInterval(86_400)
-        try await subject.onForeground()
+        try await subject.updateInstallationHistory()
         XCTAssertNotEqual(mockHistoryStore.value?.lastSeenDate, mockDateProvider.fixedDate)
 
         profilePrefs.setBool(true, forKey: AppConstants.prefSendUsageData)
-        try await subject.onForeground()
+        try await subject.updateInstallationHistory()
 
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
         XCTAssertEqual(mockHistoryStore.value?.lastSeenDate, mockDateProvider.fixedDate)
     }
 
-    func testOnForeground_whenCallsOverlap_preservesPreviousDate() async throws {
+    func testUpdateInstallationHistory_whenCallsOverlap_preservesPreviousDate() async throws {
         mockHistoryStore.value = InstallationHistory(installCounter: 2, lastSeenDate: Date(timeIntervalSince1970: 0))
         let subject = createSubject()
         mockAcquisitionProvider.onFetch = {
-            try? await subject.onForeground()
+            try? await subject.updateInstallationHistory()
             XCTAssertEqual(self.mockHistoryStore.saveCalled, 0)
         }
 
-        try await subject.onForeground()
+        try await subject.updateInstallationHistory()
 
         XCTAssertEqual(mockHistoryStore.saveCalled, 1)
         XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 1)
-        XCTAssertEqual(mockGleanWrapper.savedValues as? [Date], [Date(timeIntervalSince1970: 0)])
+        XCTAssertEqual(mockGleanWrapper.savedValues.first as? Date, Date(timeIntervalSince1970: 0))
     }
 
-    func testOnForeground_whenConsentIsRevokedDuringAcquisition_leavesProcessingPending() async throws {
+    func testUpdateInstallationHistory_whenConsentIsRevokedDuringAcquisition_leavesProcessingPending() async throws {
         let previous = InstallationHistory(installCounter: 2, lastSeenDate: .distantPast)
         mockHistoryStore.value = previous
         let subject = createSubject()
         mockAcquisitionProvider.onFetch = { self.profilePrefs.setBool(false, forKey: AppConstants.prefSendUsageData) }
-        try await subject.onForeground()
+        try await subject.updateInstallationHistory()
         XCTAssertEqual(mockHistoryStore.value, previous)
         XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
         XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
 
         mockAcquisitionProvider.onFetch = nil
         profilePrefs.setBool(true, forKey: AppConstants.prefSendUsageData)
-        try await createSubject(hasSeenIntro: true).onForeground()
+        try await createSubject(hasSeenIntro: true).updateInstallationHistory()
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [3])
     }
 
-    func testOnForeground_whenSaveFails_leavesProcessingPendingAcrossLaunches() async throws {
+    func testUpdateInstallationHistory_whenSaveFails_leavesProcessingPendingAcrossLaunches() async throws {
         mockHistoryStore.saveError = InstallationHistoryError.keychain(-1)
         do {
-            try await createSubject().onForeground()
+            try await createSubject().updateInstallationHistory()
             XCTFail("Expected the storage failure")
         } catch InstallationHistoryError.keychain(-1) {
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
-        XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
+        XCTAssertNil(mockHistoryStore.value)
+        XCTAssertEqual(installationPrefs.boolForKey(PrefsKeys.installationProcessedKey), false)
         XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
 
         mockHistoryStore.saveError = nil
-        try await createSubject(hasSeenIntro: true).onForeground()
-        XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
+        try await createSubject(hasSeenIntro: true).updateInstallationHistory()
+        XCTAssertEqual(mockHistoryStore.value?.installCounter, 1)
+        XCTAssertEqual(mockGleanWrapper.savedQuantities, [1, 1])
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 1)
     }
 
-    func testOnForeground_whenLoadFails_doesNotProcessInstallation() async throws {
+    func testUpdateInstallationHistory_whenLoadFails_doesNotProcessInstallation() async throws {
         mockHistoryStore.loadError = InstallationHistoryError.keychain(-1)
         do {
-            try await createSubject().onForeground()
+            try await createSubject().updateInstallationHistory()
             XCTFail("Expected the storage failure")
         } catch InstallationHistoryError.keychain(-1) {
         } catch {
@@ -229,96 +265,141 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
     }
 
-    func testOnForeground_whenAcquisitionIsUnavailable_recordsDeviceHistoryOnly() async throws {
+    func testUpdateInstallationHistory_whenAcquisitionIsUnavailable_preservesHistoryAndRetriesOnce() async throws {
+        let previous = InstallationHistory(installCounter: 3, lastSeenDate: .distantPast)
         for failure in [AcquisitionFailure.unsupportedOS, .unverified, .storeKitFailure] {
             installationPrefs.clearAll()
-            mockHistoryStore.value = nil
+            mockHistoryStore.value = previous
             mockAcquisitionProvider.result = .unavailable(failure)
             let subject = createSubject()
-            try await subject.onForeground()
-            try await subject.onForeground()
+            do {
+                try await subject.updateInstallationHistory()
+                XCTFail("Expected the acquisition failure")
+            } catch is AcquisitionFailure {} catch {
+                XCTFail("Unexpected error: \(error)")
+            }
+            XCTAssertEqual(mockHistoryStore.value, previous)
+            XCTAssertEqual(installationPrefs.boolForKey(PrefsKeys.installationProcessedKey), false)
         }
-        XCTAssertEqual(mockGleanWrapper.savedQuantities, [1, 1, 1])
-        XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 3)
-        XCTAssertEqual(mockGleanWrapper.recordStringCalled, 0)
-        XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 0)
-        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 3)
-    }
+        XCTAssertEqual(mockHistoryStore.saveCalled, 0)
+        XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
 
-    func testOnForeground_whenHistoryIsCorrupt_recordsAcquisitionWithoutOverwritingHistory() async throws {
-        mockHistoryStore.isCorrupt = true
         mockAcquisitionProvider.result = .available(
             AppAcquisition(originalPurchaseDate: mockDateProvider.fixedDate, originalAppVersion: "42")
         )
-
         let subject = createSubject()
-        try await subject.onForeground()
-        try await subject.onForeground()
-        try await createSubject(hasSeenIntro: true).onForeground()
+        try await subject.updateInstallationHistory()
+        try await subject.updateInstallationHistory()
+        XCTAssertEqual(mockHistoryStore.value?.installCounter, 4)
+        XCTAssertEqual(mockGleanWrapper.savedQuantities, [4])
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 1)
+    }
 
-        XCTAssertEqual(mockHistoryStore.saveCalled, 0)
+    func testUpdateInstallationHistory_whenHistoryIsCorrupt_replacesHistoryAfterAcquisition() async throws {
+        mockHistoryStore.isCorrupt = true
+        let subject = createSubject()
+
+        try await subject.updateInstallationHistory()
+        try await subject.updateInstallationHistory()
+
+        XCTAssertEqual(mockHistoryStore.value,
+                       InstallationHistory(installCounter: 1, lastSeenDate: mockDateProvider.fixedDate))
         XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 1)
-        XCTAssertEqual(mockGleanWrapper.recordQuantityCalled, 0)
-        let savedDate = try XCTUnwrap(mockGleanWrapper.savedValues.first as? Date)
-        let savedDateMetric = try XCTUnwrap(mockGleanWrapper.savedEvents[0] as? DatetimeMetricType)
+        XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
         XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 1)
-        XCTAssertEqual(savedDate, mockDateProvider.fixedDate)
+        XCTAssertEqual(mockGleanWrapper.savedValues.first as? Date, mockDateProvider.fixedDate)
         XCTAssertEqual(mockGleanWrapper.savedValues.last as? String, "42")
-        XCTAssert(savedDateMetric === GleanMetrics.Installation.originalPurchaseDate)
         XCTAssertEqual(installationPrefs.boolForKey(PrefsKeys.installationProcessedKey), true)
         XCTAssertEqual(mockGleanWrapper.submitPingCalled, 1)
     }
 
-    func testOnForeground_whenHistoryIsCorruptAndAcquisitionIsUnavailable_recordsNoMetrics() async throws {
+    func testUpdateInstallationHistory_whenHistoryIsCorruptAndAcquisitionFails_leavesProcessingPending() async throws {
         mockHistoryStore.isCorrupt = true
+        mockAcquisitionProvider.result = .unavailable(.storeKitFailure)
 
-        try await createSubject().onForeground()
+        do {
+            try await createSubject().updateInstallationHistory()
+            XCTFail("Expected the acquisition failure")
+        } catch is AcquisitionFailure {} catch {
+            XCTFail("Unexpected error: \(error)")
+        }
 
         XCTAssertEqual(mockHistoryStore.saveCalled, 0)
+        XCTAssertTrue(mockHistoryStore.isCorrupt)
         XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
+        XCTAssertEqual(installationPrefs.boolForKey(PrefsKeys.installationProcessedKey), false)
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
+    }
+
+    func testUpdateInstallationHistory_whenProcessedHistoryIsCorrupt_resetsHistoryWithoutMetrics() async throws {
+        mockHistoryStore.isCorrupt = true
+
+        try await createSubject(hasSeenIntro: true).updateInstallationHistory()
+
+        XCTAssertEqual(mockHistoryStore.value,
+                       InstallationHistory(installCounter: 1, lastSeenDate: mockDateProvider.fixedDate))
+        XCTAssertEqual(mockHistoryStore.saveCalled, 1)
+        XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 0)
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
+    }
+
+    func testUpdateInstallationHistory_whenLastSeenRefreshFails_doesNotRepeatMetrics() async throws {
+        let subject = createSubject(hasSeenIntro: true)
+        mockHistoryStore.saveError = InstallationHistoryError.keychain(-1)
+
+        do {
+            try await subject.updateInstallationHistory()
+            XCTFail("Expected the storage failure")
+        } catch InstallationHistoryError.keychain(-1) {} catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+
+        XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 0)
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
         XCTAssertEqual(installationPrefs.boolForKey(PrefsKeys.installationProcessedKey), true)
     }
 
-    func testOnForeground_whenCounterCanReachMaximum_recordsMaximumCounter() async throws {
+    func testUpdateInstallationHistory_whenCounterCanReachMaximum_recordsMaximumCounter() async throws {
         mockHistoryStore.value = InstallationHistory(installCounter: Int64.max - 1, lastSeenDate: mockDateProvider.fixedDate)
 
-        try await createSubject().onForeground()
+        try await createSubject().updateInstallationHistory()
 
         XCTAssertEqual(mockHistoryStore.value?.installCounter, Int64.max)
         XCTAssertEqual(mockHistoryStore.saveCalled, 1)
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [Int64.max])
     }
 
-    func testOnForeground_whenCounterIsAtMaximum_skipsProcessing() async throws {
-        let previous = InstallationHistory(installCounter: .max, lastSeenDate: mockDateProvider.fixedDate)
-        mockHistoryStore.value = previous
+    func testUpdateInstallationHistory_whenCounterIsAtMaximum_preservesMaximumCounter() async throws {
+        mockHistoryStore.value = InstallationHistory(installCounter: .max, lastSeenDate: .distantPast)
 
-        try await createSubject().onForeground()
+        try await createSubject().updateInstallationHistory()
 
-        XCTAssertEqual(mockHistoryStore.value, previous)
-        XCTAssertEqual(mockHistoryStore.saveCalled, 0)
-        XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 0)
-        XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
-        XCTAssertEqual(mockGleanWrapper.recordQuantityCalled, 0)
-        XCTAssertEqual(installationPrefs.boolForKey(PrefsKeys.installationProcessedKey), false)
+        XCTAssertEqual(mockHistoryStore.value,
+                       InstallationHistory(installCounter: .max, lastSeenDate: mockDateProvider.fixedDate))
+        XCTAssertEqual(mockHistoryStore.saveCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.savedQuantities, [Int64.max])
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 1)
+        XCTAssertEqual(installationPrefs.boolForKey(PrefsKeys.installationProcessedKey), true)
     }
 
-    func testOnForeground_whenProfilePreferencesAreCleared_doesNotRepeatProcessing() async throws {
-        try await createSubject().onForeground()
+    func testUpdateInstallationHistory_whenProfilePreferencesAreCleared_doesNotRepeatProcessing() async throws {
+        try await createSubject().updateInstallationHistory()
         profilePrefs.setInt(1, forKey: PrefsKeys.IntroSeen)
         profilePrefs.clearAll()
         profilePrefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
+        profilePrefs.setBool(true, forKey: AppConstants.prefSendUsageData)
 
-        try await createSubject(hasSeenIntro: false).onForeground()
+        try await createSubject(hasSeenIntro: false).updateInstallationHistory()
 
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
     }
 
-    func testOnForeground_whenAcquisitionIsCancelled_leavesProcessingPending() async throws {
+    func testUpdateInstallationHistory_whenAcquisitionIsCancelled_leavesProcessingPending() async throws {
         let subject = createSubject()
         let task = Task {
             withUnsafeCurrentTask { $0?.cancel() }
-            try await subject.onForeground()
+            try await subject.updateInstallationHistory()
         }
         do {
             try await task.value
@@ -328,11 +409,11 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         }
         XCTAssertEqual(mockHistoryStore.saveCalled, 0)
         XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
-        try await createSubject(hasSeenIntro: true).onForeground()
+        try await createSubject(hasSeenIntro: true).updateInstallationHistory()
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
     }
 
-    func testOnForeground_submitsInstallationPingOnce() async throws {
+    func testUpdateInstallationHistory_submitsInstallationPingOnce() async throws {
         let path = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let configuration = Configuration(dataPath: path.path, httpClient: MockInstallationPingUploader())
         Glean.shared.enableTestingMode()
@@ -357,12 +438,14 @@ final class InstallationTelemetryServiceTests: XCTestCase {
                                                    installationPrefs: installationPrefs,
                                                    history: mockHistoryStore,
                                                    acquisition: mockAcquisitionProvider,
-                                                   gleanWrapper: DefaultGleanWrapper(),
                                                    featureFlagsProvider: mockFeatureFlags,
                                                    dateProvider: mockDateProvider)
         let pingSubmitted = expectation(description: "The installation ping was sent")
         let purchaseDate = mockDateProvider.fixedDate
         GleanMetrics.Pings.shared.installation.testBeforeNextSubmit { _ in
+            XCTAssertEqual(self.mockHistoryStore.value,
+                           InstallationHistory(installCounter: 2, lastSeenDate: self.mockDateProvider.fixedDate))
+            XCTAssertEqual(self.installationPrefs.boolForKey(PrefsKeys.installationProcessedKey), false)
             XCTAssertEqual(GleanMetrics.Installation.originalPurchaseDate.testGetValue("installation"),
                            Calendar.current.startOfDay(for: purchaseDate))
             XCTAssertEqual(GleanMetrics.Installation.lastSeenDate.testGetValue("installation"),
@@ -370,7 +453,7 @@ final class InstallationTelemetryServiceTests: XCTestCase {
             pingSubmitted.fulfill()
         }
 
-        try await subject.onForeground()
+        try await subject.updateInstallationHistory()
         await fulfillment(of: [pingSubmitted], timeout: 5.0)
         XCTAssertNil(GleanMetrics.Installation.installCounter.testGetValue("installation"))
         XCTAssertNil(GleanMetrics.Installation.lastSeenDate.testGetValue("installation"))
@@ -394,7 +477,7 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         XCTAssertEqual(ISO8601DateFormatter().date(from: lastSeenDate), previousDate)
         XCTAssertFalse(originalPurchaseDate.contains("T"))
 
-        try await subject.onForeground()
+        try await subject.updateInstallationHistory()
         XCTAssertFalse(gleanSubmitPingByNameSync("installation", nil))
         XCTAssertEqual(gleanGetStoredSubmittedPingsByName("installation").count, 1)
         XCTAssertTrue(gleanSubmitPingByNameSync("baseline", nil))
@@ -412,7 +495,7 @@ final class InstallationTelemetryServiceTests: XCTestCase {
                                             installationPrefs: installationPrefs,
                                             history: mockHistoryStore,
                                             acquisition: mockAcquisitionProvider,
-                                            gleanWrapper: mockGleanWrapper,
+                                            telemetry: InstallationTelemetry(gleanWrapper: mockGleanWrapper),
                                             featureFlagsProvider: mockFeatureFlags,
                                             dateProvider: mockDateProvider)
     }
@@ -439,6 +522,7 @@ private final class MockInstallationHistoryStore: InstallationHistoryStoring {
         if let saveError { throw saveError }
         saveCalled += 1
         value = history
+        isCorrupt = false
     }
 
     func resetForTesting() throws {
