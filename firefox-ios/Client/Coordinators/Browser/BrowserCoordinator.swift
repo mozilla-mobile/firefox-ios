@@ -1710,7 +1710,7 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - TabManagerDelegate
 
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {
-        guard !isRestoring, selectedTab.isPrivate != previousTab?.isPrivate else { return }
+        guard !isRestoring, let previousTab, selectedTab.isPrivate != previousTab.isPrivate else { return }
         discardParkedQuickAnswers(reason: .privateModeToggled)
     }
 
