@@ -4,7 +4,6 @@
 
 import Foundation
 import Common
-import Glean
 import Shared
 
 /// Tracks the install count and last seen date, along with the original purchase date and app version.
@@ -13,20 +12,28 @@ import Shared
 final class InstallationTelemetryService {
     private let history: InstallationHistoryStoring
     private let acquisition: AppAcquisitionProviding
-    private let gleanWrapper: GleanWrapper
+    private let telemetry: InstallationTelemetry
     private let profilePrefs: Prefs
     private let featureFlagsProvider: FeatureFlagProviding
     private let dateProvider: DateProvider
     private let installationPrefs: Prefs
     private let logger: Logger
     private var isProcessing = false
+    private var hasProcessedInstallation: Bool {
+        installationPrefs.boolForKey(PrefsKeys.installationProcessedKey) == true
+    }
+    private var canCollectTelemetry: Bool {
+        featureFlagsProvider.isEnabled(.checkForReinstalls) &&
+        profilePrefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == true &&
+        (profilePrefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
+    }
 
     init(
         profilePrefs: Prefs,
         installationPrefs: Prefs = NSUserDefaultsPrefs(prefix: "installationTelemetry", userDefaults: .standard),
         history: InstallationHistoryStoring = InstallationHistoryStore(),
         acquisition: AppAcquisitionProviding = StoreKitAppAcquisitionProvider(),
-        gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+        telemetry: InstallationTelemetry = InstallationTelemetry(),
         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
         dateProvider: DateProvider = SystemDateProvider(),
         logger: Logger = DefaultLogger.shared
@@ -34,7 +41,7 @@ final class InstallationTelemetryService {
         self.installationPrefs = installationPrefs
         self.history = history
         self.acquisition = acquisition
-        self.gleanWrapper = gleanWrapper
+        self.telemetry = telemetry
         self.profilePrefs = profilePrefs
         self.featureFlagsProvider = featureFlagsProvider
         self.dateProvider = dateProvider
@@ -52,85 +59,57 @@ final class InstallationTelemetryService {
         installationPrefs.setBool(hasSeenIntro, forKey: PrefsKeys.installationProcessedKey)
     }
 
-    private var isInstallationProcessed: Bool {
-        return installationPrefs.boolForKey(PrefsKeys.installationProcessedKey)
-    }
-
-    private var canCollect: Bool {
-        featureFlagsProvider.isEnabled(.checkForReinstalls) &&
-        profilePrefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == true &&
-        (profilePrefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
-    }
-
     func update() {
         guard !AppConstants.isRunningUnitTest else { return }
         Task {
             do {
-                try await onForeground()
+                try await updateInstallationHistory()
             } catch {
-                // [IHC] Careful, a refresh status update can call this error too. We probably want the error handling lower.
-                // Likely we want to log a fatal error to sentry for anything that prevents us from sending the telemetry,
-                // and a warning level breadcrumb just for an issue saving to the keychain any local updates (last seen
-                // timestamp).
                 logger.log("Could not update installation history",
-                           level: .warning,
+                           level: hasProcessedInstallation ? .warning : .fatal,
                            category: .telemetry,
                            description: error.localizedDescription)
             }
         }
     }
 
-    func onForeground() async throws {
-        guard canCollect, !isProcessing else { return }
+    func updateInstallationHistory() async throws {
+        guard canCollectTelemetry, !isProcessing else { return }
         initializeProcessingState()
         isProcessing = true
         defer { isProcessing = false }
 
-        if !isInstallationProcessed {
-            try await processInstallationHistory()
+        let currentHistory = try history.load()
+        let updatedHistory: InstallationHistory
+        if !hasProcessedInstallation {
+            updatedHistory = try await processNewInstallation(currentHistory: currentHistory)
         } else {
-            try refreshLastSeenDate()
+            updatedHistory = refreshLastSeenDate(currentHistory)
         }
+
+        guard canCollectTelemetry else { return }
+        try saveInstallationHistory(updatedHistory)
     }
 
-    /// Gets the current install history from the keychain and then saves the newest values with current timestamps.
-    func getAndUpdateInstallationHistory() throws -> InstallationHistory {
-        let currentHistory = try history.load()
-        let previous: InstallationHistory?
-
+    /// Prepares history for a new installation with an updated count and last-seen date.
+    private func historyForNewInstallation(_ currentHistory: InstallationHistoryState) -> InstallationHistory {
         switch currentHistory {
         case .missing, .corrupt:
-            if currentHistory == .corrupt {
-                // TODO add fatal error sentry
-
-            }
-
-            // If history is missing or corrupt, the best we can do is set it again
             let newHistory = InstallationHistory(
-                installCounter: 0,
+                installCounter: 1,
                 lastSeenDate: dateProvider.now()
             )
-
-            try history.save(
-                newHistory
-            )
-
             return newHistory
 
         case .valid(let currentInstallHistory):
             let currentCounter = currentInstallHistory.installCounter
-            var nextCounter = currentCounter + 1
+            var nextCounter = currentCounter
+            if currentCounter < Int64.max {
+                nextCounter += 1
+            }
 
-            if nextCounter > Int64.max { nextCounter = Int64.max }
-
-            try history.save(
-                InstallationHistory(
-                    installCounter: nextCounter,
-                    lastSeenDate: dateProvider.now()
-                )
-            )
-
-            return currentInstallHistory
+            return InstallationHistory(installCounter: nextCounter,
+                                       lastSeenDate: dateProvider.now())
         }
     }
 
@@ -146,72 +125,35 @@ final class InstallationTelemetryService {
         }
     }
 
-    /// Increments the install count and updates history for a new installation.
-    /// Saves the count, previous last seen date, and available purchase details to Glean.
-    private func processInstallationHistory() async throws {
-        // A. Get current keychain values + update values
-        let currentInstallHistory = try getAndUpdateInstallationHistory()
-
-        // B. Get current app store receipt values
+    /// Prepares the new history and records installation telemetry.
+    private func processNewInstallation(currentHistory: InstallationHistoryState) async throws -> InstallationHistory {
         let appAcquisition = try await getAppAcquisition()
-
-        // FIXME Do we still need these somewhere?
         try Task.checkCancellation()
-        guard canCollect else { return } // [IHC] Is this in case the user disabled telemetry while async work happened?
+        let installationHistory = historyForNewInstallation(currentHistory)
+        guard canCollectTelemetry else { return installationHistory }
 
-        // C. Record Glean telemetry (TODO - Move to InstallationTelemetry struct)
-        recordInstallationHistory(installationHistory: currentInstallHistory)
-        recordAcquisition(appAcquisition: appAcquisition)
-        // TODO also submit the ping from the telemetry struct
-        gleanWrapper.submit(ping: GleanMetrics.Pings.shared.installation)
-
-        // D. Save done processing
-        installationPrefs.setBool(true, forKey: PrefsKeys.installationProcessedKey)
+        telemetry.recordInstallationHistory(installationHistory: installationHistory, previousHistory: currentHistory)
+        telemetry.recordAcquisition(appAcquisition: appAcquisition)
+        return installationHistory
     }
 
-    // TODO Move to telemetry struct
-    /// Saves the original purchase date and app version to Glean when available.
-    private func recordAcquisition(appAcquisition: AppAcquisition) {
-        gleanWrapper.recordDatetime(
-            for: GleanMetrics.Installation.originalPurchaseDate,
-            value: appAcquisition.originalPurchaseDate
-        )
-        gleanWrapper.recordString(
-            for: GleanMetrics.Installation.originalAppVersion,
-            value: appAcquisition.originalAppVersion
-        )
-    }
-
-    // TODO Move to telemetry struct
-    private func recordInstallationHistory(installationHistory: InstallationHistory) {
-        gleanWrapper.recordQuantity(
-            for: GleanMetrics.Installation.installCounter,
-            value: installationHistory.installCounter
-        )
-
-        gleanWrapper.recordDatetime(
-            for: GleanMetrics.Installation.lastSeenDate,
-            value: installationHistory.lastSeenDate
-        )
+    private func saveInstallationHistory(_ installationHistory: InstallationHistory) throws {
+        try history.save(installationHistory)
+        if !hasProcessedInstallation {
+            telemetry.submit()
+            installationPrefs.setBool(true, forKey: PrefsKeys.installationProcessedKey)
+        }
     }
 
     /// Updates the last seen date on later foregrounds, keeping the same install count.
-    private func refreshLastSeenDate() throws {
-        let historyState = try history.load()
+    private func refreshLastSeenDate(_ historyState: InstallationHistoryState) -> InstallationHistory {
         let counter: Int64
         switch historyState {
-        case .missing:
+        case .missing, .corrupt:
             counter = 1
         case .valid(let history):
             counter = history.installCounter
-        case .corrupt:
-            return
         }
-        try history.save(
-            InstallationHistory(
-                installCounter: counter,
-                lastSeenDate: dateProvider.now()
-            )
-        )
+        return InstallationHistory(installCounter: counter, lastSeenDate: dateProvider.now())
     }
 }
