@@ -2871,7 +2871,7 @@ installation:
     expires: never
   last_seen_date:
     type: datetime
-    time_unit: day
+    time_unit: second
     description: |
       Last recorded activity date from the previous installation.
     lifetime: ping
