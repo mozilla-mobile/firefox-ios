@@ -6741,7 +6741,7 @@ extension String {
             key: "Wallpapers.EngagementSheet.Title.v161",
             tableName: "Wallpapers",
             value: "Try New Wallpapers to Make Firefox Yours",
-            comment: "The title of the bottom sheet that promotes new wallpapers.")
+            comment: "New wallpapers bottom banner: Title of the banner announcing new designs so users can personalize their Firefox experience")
         public static let EngagementSheetButton = MZLocalizedString(
             key: "Wallpapers.EngagementSheet.Button.v161",
             tableName: "Wallpapers",
