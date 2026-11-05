@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/mozilla/glean-swift",
         "state": {
           "branch": null,
-          "revision": "1cfdf2de91e0aedf597b44e72f83846367b9d596",
-          "version": "70.1.0"
+          "revision": "69cfeb8513a17d86c560e6df6dfefd97aa5cc700",
+          "version": "71.0.0"
         }
       },
       {
@@ -78,8 +78,8 @@
         "repositoryURL": "https://github.com/swhitty/SwiftDraw",
         "state": {
           "branch": null,
-          "revision": "2cfd97c753feafe23c767ad3cb4daaf5c5415272",
-          "version": "0.18.3"
+          "revision": "82699f4bdf2f075793cfa0d392eb27c59b41a3fe",
+          "version": "0.29.0"
         }
       },
       {
