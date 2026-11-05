@@ -102,16 +102,17 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
 
 private struct WallpaperEngagementView: ThemeableView {
     private struct UX {
-        static let imageSize: CGFloat = 200
+        static let imageSize = CGSize(width: 240, height: 200)
         static let imageTopPadding: CGFloat = 8
         // This is hardcoded and doesn't follow the design system, since it will change
         // according to the theme of each new wallpaper release (e.g. Christmas).
-        static let backdropColor = Color(UIColor(rgb: 0x8E5CD9))
-        static let backdropHeight: CGFloat = imageSize / 1.7
-        static let backdropOpacityStart: CGFloat = 0.5
-        static let backdropOpacityEnd: CGFloat = 0.0
-        static let backdropBlurRadius: CGFloat = 10.0
-        static let imageTitleSpacing: CGFloat = 0.0
+        static let backdropColor = Color(UIColor(rgb: 0x6B1E87))
+        static let backdropWidth: CGFloat = 340
+        static let backdropHeight: CGFloat = 100
+        static let backdropVerticalOffset: CGFloat = 100
+        static let backdropOpacity = 0.3
+        static let backdropBlurRadius: CGFloat = 37
+        static let imageTitleSpacing: CGFloat = 8.0
         static let contentBottomPadding: CGFloat = 24
         static let horizontalPadding: CGFloat = 24
         static let bottomPadding: CGFloat = 24
@@ -164,33 +165,29 @@ private struct WallpaperEngagementView: ThemeableView {
 
     private var promo: some View {
         promoImage
-            .frame(width: UX.imageSize, height: UX.imageSize)
+            .frame(width: UX.imageSize.width, height: UX.imageSize.height)
             .frame(maxWidth: .infinity)
-            .background(alignment: .bottom) {
+            .background(alignment: .top) {
                 backdrop
+                    .offset(.init(width: 0, height: UX.backdropVerticalOffset))
             }
             .accessibilityHidden(true)
     }
 
     private var backdrop: some View {
         Ellipse()
-            .fill(
-                EllipticalGradient(
-                    colors: [
-                        UX.backdropColor.opacity(UX.backdropOpacityStart),
-                        UX.backdropColor.opacity(UX.backdropOpacityEnd)
-                    ]
-                )
-            )
-            .frame(maxWidth: .infinity)
+            .fill(UX.backdropColor)
+            .frame(maxWidth: UX.backdropWidth)
             .frame(height: UX.backdropHeight)
             .blur(radius: UX.backdropBlurRadius)
-            .offset(CGSize(width: 0.0, height: UX.backdropHeight / 5))
+            .opacity(UX.backdropOpacity)
     }
 
     private var promoImage: some View {
+        // This image is going to change for each engagement run, and it will be embedded
+        // accordingly.
         Image(ImageIdentifiers.wallpaperEngagement)
             .resizable()
-            .scaledToFit()
+            .scaledToFill()
     }
 }
