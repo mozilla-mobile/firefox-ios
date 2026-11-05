@@ -7,6 +7,8 @@ import XCTest
 class FindInPageTests: BaseTestCase {
     var browserScreen: BrowserScreen!
     var findInPageScreen: FindInPageScreen!
+    var toolbarScreen: ToolbarScreen!
+    var mainMenuScreen: MainMenuScreen!
 
     private func navigateToOpenFindInPage(openSite: String) {
         navigator.openURL(openSite)
@@ -87,6 +89,37 @@ class FindInPageTests: BaseTestCase {
 
         navigator.goto(BrowserTab)
         findInPageScreen.assertSearchBarDisappeared(searchKeyword: searchTerm)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167639
+    // Regression
+    func testFindInPageFromMenuOption() {
+        browserScreen = BrowserScreen(app: app)
+        findInPageScreen = FindInPageScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+        mainMenuScreen = MainMenuScreen(app: app)
+        let searchTerm = "Mammon"
+        browserScreen.navigateToURL(path(forTestPage: TestPages.findInPage))
+        waitUntilPageLoad()
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapFindInPage()
+
+        findInPageScreen.assertFindInPageBarIsReadyForInput()
+        findInPageScreen.searchForText(searchTerm)
+        findInPageScreen.assertResultsCountIsDisplayed("1 of 1,000")
+
+        let firstMatchOriginY = findInPageScreen.firstPageTextOriginY()
+        findInPageScreen.tapNextResult()
+        findInPageScreen.assertResultsCountIsDisplayed("2 of 1,000")
+        findInPageScreen.tapPreviousResult()
+        findInPageScreen.assertResultsCountIsDisplayed("1 of 1,000")
+        findInPageScreen.tapPreviousResult()
+        findInPageScreen.assertResultsCountIsDisplayed("1,000 of 1,000")
+        findInPageScreen.assertPageScrolledDown(from: firstMatchOriginY)
+
+        findInPageScreen.tapDone()
+        findInPageScreen.assertSearchBarDisappeared(searchKeyword: searchTerm)
+        findInPageScreen.assertKeyboardIsDismissed()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323705

@@ -38,6 +38,14 @@ final class SettingScreen {
         doneButton.waitAndTap()
     }
 
+    /// Asserts the native settings table renders with the light app theme, judged by its average luminance.
+    func assertSettingsTableIsLight(timeout: TimeInterval = TIMEOUT) {
+        let table = sel.MAIN_SETTINGS_TABLE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(table, timeout: timeout)
+        let isLight = table.waitForLuminance(timeout: timeout) { $0 > 0.65 }
+        XCTAssertTrue(isLight, "The app theme should stay light, settings luminance: \(table.averageLuminance())")
+    }
+
     func rotateDevice(to orientation: UIDeviceOrientation) {
         XCUIDevice.shared.orientation = orientation
     }

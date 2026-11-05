@@ -22,6 +22,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     private var browser: BrowserScreen!
     private var toolbar: ToolbarScreen!
     private var homePage: HomePageScreen!
+    private var mainMenu: MainMenuScreen!
 
     typealias TopSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites
     let TopSiteCellgroup = XCUIApplication().links[TopSites.itemCell]
@@ -50,6 +51,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         browser = BrowserScreen(app: app)
         toolbar = ToolbarScreen(app: app)
         homePage = HomePageScreen(app: app)
+        mainMenu = MainMenuScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -310,7 +312,41 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         mozWaitForElementToExist(cell)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2861436
+    // https://mozilla.testrail.io/index.php?/cases/view/3167644
+    // Regression
+    func testAddToShortcutsOpensSavedWebsite() {
+        app.launch()
+        pinExampleDomainFromMainMenu()
+        topSites.assertTopSitePinned(named: TestLabels.exampleDomain)
+
+        topSites.tapOnPinnedSite(named: TestLabels.exampleDomain)
+        waitUntilPageLoad()
+        browser.assertAddressBarContains(value: "localhost")
+        browser.assertExampleDomainTextExists()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3167645
+    // Regression
+    func testRemoveFromShortcutsOption() {
+        app.launch()
+        pinExampleDomainFromMainMenu()
+        topSites.tapOnPinnedSite(named: TestLabels.exampleDomain)
+        waitUntilPageLoad()
+        browser.assertExampleDomainTextExists()
+
+        toolbar.tapSettingsMenuButton()
+        mainMenu.expandMenuIfNeeded()
+        mainMenu.assertRemoveFromShortcutsExists()
+        mainMenu.tapRemoveFromShortcuts()
+        mainMenu.assertMenuIsDismissed()
+        browser.assertAddressBarContains(value: "localhost")
+        browser.assertExampleDomainTextExists()
+
+        toolbar.tapOnNewTabButton()
+        topSites.assertVisible()
+        topSites.assertTopSiteDoesNotExist(named: TestLabels.exampleDomain)
+    }
+
     func testShortcutsToggle() {
         launchIntoSettings()
         //  Go to customize homepage
@@ -372,6 +408,16 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         homePage.validateHomePageLogo(isPrivate: false)
+    }
+
+    /// Opens the Example Domain page, pins it with the main menu's Add to Shortcuts, then opens a new tab.
+    private func pinExampleDomainFromMainMenu() {
+        browser.navigateToURLAndAssertExampleDomain(url_3)
+        waitUntilPageLoad()
+        toolbar.tapSettingsMenuButton()
+        mainMenu.expandMenuIfNeeded()
+        mainMenu.tapAddToShortcuts()
+        toolbar.tapOnNewTabButton()
     }
 
     private func addWebsiteToShortcut(website: String) {
