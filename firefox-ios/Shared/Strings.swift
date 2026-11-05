@@ -6740,17 +6740,12 @@ extension String {
         public static let EngagementSheetTitle = MZLocalizedString(
             key: "Wallpapers.EngagementSheet.Title.v161",
             tableName: "Wallpapers",
-            value: "A little fright. A fresh look.",
+            value: "Try New Wallpapers to Make Firefox Yours",
             comment: "The title of the bottom sheet that promotes new wallpapers.")
-        public static let EngagementSheetDescription = MZLocalizedString(
-            key: "Wallpapers.EngagementSheet.Description.v161",
-            tableName: "Wallpapers",
-            value: "Get into the Halloween spirit with our new wallpapers.",
-            comment: "The description of the bottom sheet that promotes new wallpapers.")
         public static let EngagementSheetButton = MZLocalizedString(
             key: "Wallpapers.EngagementSheet.Button.v161",
             tableName: "Wallpapers",
-            value: "Get Wallpapers",
+            value: "Explore Wallpapers",
             comment: "The button of the bottom sheet that promotes new wallpapers. Tapping it opens the wallpaper settings.")
     }
 }

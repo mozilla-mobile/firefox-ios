@@ -112,8 +112,6 @@ private struct WallpaperEngagementView: ThemeableView {
         static let backdropOpacityEnd: CGFloat = 0.0
         static let backdropBlurRadius: CGFloat = 10.0
         static let imageTitleSpacing: CGFloat = 0.0
-        static let titleSpacing: CGFloat = 8
-        static let textsHorizontalPadding: CGFloat = 40.0
         static let contentBottomPadding: CGFloat = 24
         static let horizontalPadding: CGFloat = 24
         static let bottomPadding: CGFloat = 24
@@ -145,17 +143,11 @@ private struct WallpaperEngagementView: ThemeableView {
             promo
                 .padding(.top, UX.imageTopPadding)
                 .padding(.bottom, UX.imageTitleSpacing)
-            VStack(spacing: UX.titleSpacing) {
-                Text(String.Wallpapers.EngagementSheetTitle)
-                    .font(FXFontStyles.Bold.title2.scaledSwiftUIFont())
-                    .foregroundColor(theme.colors.textPrimary.color)
-                Text(String.Wallpapers.EngagementSheetDescription)
-                    .font(FXFontStyles.Regular.callout.scaledSwiftUIFont())
-                    .foregroundColor(theme.colors.textSecondary.color)
-                    .padding(.horizontal, UX.textsHorizontalPadding)
-            }
-            .multilineTextAlignment(.center)
-            .padding(.bottom, UX.contentBottomPadding)
+            Text(String.Wallpapers.EngagementSheetTitle)
+                .font(FXFontStyles.Bold.title2.scaledSwiftUIFont())
+                .foregroundColor(theme.colors.textPrimary.color)
+                .multilineTextAlignment(.center)
+                .padding(.bottom, UX.contentBottomPadding)
             Button(action: onTapCTA) {
                 Text(String.Wallpapers.EngagementSheetButton)
             }
@@ -196,12 +188,9 @@ private struct WallpaperEngagementView: ThemeableView {
             .offset(CGSize(width: 0.0, height: UX.backdropHeight / 5))
     }
 
-    // Swap this image for the one matching each wallpaper advertising campaign.
     private var promoImage: some View {
-        Image(StandardImageIdentifiers.Large.image)
-            .renderingMode(.template)
+        Image(ImageIdentifiers.wallpaperEngagement)
             .resizable()
             .scaledToFit()
-            .foregroundColor(theme.colors.iconSecondary.color)
     }
 }
