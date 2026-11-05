@@ -1,0 +1,113 @@
+format_version: '8'
+
+pipelines:
+  pipeline_build_and_test_focus:
+    workflows:
+      focus_configure_build: {}
+      focus_ui_test:
+        depends_on:
+        - focus_configure_build
+        parallel: 1
+
+workflows:
+  NewXcodeVersions:
+    before_run:
+    - skip_macro_validation
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            YESTERDAY=`date -v -1d '+%Y-%m-%d'`
+
+            brew install jq
+
+            resp=$(curl -X GET -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -r '.[].commit.message | select(contains("Auto Update Bitrise.YML"))')
+            echo $resp
+            if [ -z "$resp" ]
+            then
+                echo "There is not any new commit, stop building"
+            else
+                echo "There is a new commit, continue building"
+                envman add --key NEW_XCODE_VERSION --value New_Version_Found
+            fi
+
+            if [[ $BITRISE_GIT_MESSAGE == BuildAndRun* ]]
+            then
+                echo "Scheduled build to run the rest of steps once xcode version has been updated"
+                envman add --key RUN_ALL_STEPS --value Run_All_Steps
+            fi
+
+        title: Check main branch for recent activity before continuing
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6: {}
+    - cache-pull@2: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
+        inputs:
+        - content: |-
+            brew trust mozilla-mobile/fxios
+            brew tap mozilla-mobile/fxios
+            brew install fxios
+            fxios bootstrap
+        title: Run bootstrap
+    - script@1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd firefox-ios/Client.xcodeproj
+            sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/' project.pbxproj
+            sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev - Share To/' project.pbxproj
+            sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev - WidgetKit/' project.pbxproj
+            sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/' project.pbxproj
+            sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox iOS Dev - Notification Service/' project.pbxproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set provisioning to Bitrise in xcodeproj
+    - script@1:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
+        title: NPM install and build
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            set -x
+
+            npm install
+            npm run build
+    - xcode-build-for-simulator@3:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
+        inputs:
+        - xcodebuild_options: -skipMacroValidation CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - scheme: Fennec
+        - simulator_device: iPhone 17
+    - xcode-test@6:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
+        inputs:
+        - scheme: Fennec
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=27.0
+    - deploy-to-bitrise-io@2: {}
+    - slack@4:
+        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
+        inputs:
+        - channel: "#firefox-ios"
+        - text: Build status using latest Xcode detected
+        - message: "The build run info: $BITRISE_GIT_MESSAGE"
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+    description: This Workflow is to build the app using latest xcode available in Bitrise
+    meta:
+      bitrise.io:
+        stack: osx-xcode-27.2.x-edge
+        machine_type_id: g2.mac.4large
