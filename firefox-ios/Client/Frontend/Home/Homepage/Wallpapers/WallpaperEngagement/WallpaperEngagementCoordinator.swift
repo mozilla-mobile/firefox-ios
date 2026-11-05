@@ -118,6 +118,7 @@ private struct WallpaperEngagementView: ThemeableView {
         static let bottomPadding: CGFloat = 24
         static let contentMaxWidth: CGFloat = 420
         static let buttonMaxWidth: CGFloat = 367
+        static let buttonHorizontalPadding: CGFloat = 40.0
     }
 
     let windowUUID: WindowUUID
@@ -154,6 +155,7 @@ private struct WallpaperEngagementView: ThemeableView {
             }
             .primaryButtonStyle(theme: theme)
             .frame(maxWidth: UX.buttonMaxWidth)
+            .padding(.horizontal, UX.buttonHorizontalPadding)
             .accessibilityIdentifier(AccessibilityIdentifiers.WallpaperEngagementSheet.ctaButton)
         }
         .padding(.horizontal, UX.horizontalPadding)
