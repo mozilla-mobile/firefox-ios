@@ -569,6 +569,82 @@ extension Selector {
         )
     }
 
+    /// Matches elements of `type` inside `container`, optionally filtered by `matching` and by what they contain.
+    static func element(_ type: XCUIElement.ElementType,
+                        in container: Selector,
+                        matching: NSPredicate? = nil,
+                        containing: NSPredicate? = nil,
+                        value: String,
+                        description: String,
+                        groups: [String] = []) -> Selector {
+        Selector(
+            strategy: .elementInContainer(container: container, type: type, matching: matching, containing: containing),
+            value: value,
+            description: description,
+            groups: groups
+        )
+    }
+
+    static func staticTextByExactLabel(_ label: String,
+                                       in container: Selector,
+                                       description: String,
+                                       groups: [String] = []) -> Selector {
+        element(.staticText,
+                in: container,
+                matching: NSPredicate(format: "label == %@", label),
+                value: label,
+                description: description,
+                groups: groups)
+    }
+
+    /// Matches cells inside `container` holding a text with this exact label.
+    static func cellContainingStaticText(_ label: String,
+                                         in container: Selector,
+                                         description: String,
+                                         groups: [String] = []) -> Selector {
+        element(.cell,
+                in: container,
+                containing: NSPredicate(format: "elementType == %d AND label == %@",
+                                        XCUIElement.ElementType.staticText.rawValue,
+                                        label),
+                value: label,
+                description: description,
+                groups: groups)
+    }
+
+    static func imageId(_ id: String, in container: Selector, description: String, groups: [String] = []) -> Selector {
+        element(.image,
+                in: container,
+                matching: NSPredicate(format: "identifier == %@", id),
+                value: id,
+                description: description,
+                groups: groups)
+    }
+
+    static func buttonLabelBeginsWith(_ prefix: String,
+                                      in container: Selector,
+                                      description: String,
+                                      groups: [String] = []) -> Selector {
+        element(.button,
+                in: container,
+                matching: NSPredicate(format: "label BEGINSWITH %@", prefix),
+                value: prefix,
+                description: description,
+                groups: groups)
+    }
+
+    static func elementType(_ type: XCUIElement.ElementType, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .predicate(NSPredicate(format: "elementType == %d", type.rawValue)),
+                 value: "\(type)",
+                 description: description,
+                 groups: groups)
+    }
+
+    /// Matches an alert-style action sheet: a Sheet element, or on iOS 17 the "Other" labelled with its title.
+    static func actionSheet(titled title: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .actionSheetByTitle(title), value: title, description: description, groups: groups)
+    }
+
     /// Matches the collection view holding an element whose identifier starts with `prefix`.
     static func collectionViewContainingIdPrefix(_ prefix: String,
                                                  description: String,
