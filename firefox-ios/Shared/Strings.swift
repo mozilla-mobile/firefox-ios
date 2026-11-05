@@ -6740,8 +6740,8 @@ extension String {
         public static let EngagementSheetTitle = MZLocalizedString(
             key: "Wallpapers.EngagementSheet.Title.v161",
             tableName: "Wallpapers",
-            value: "Try New Wallpapers to Make Firefox Yours",
-            comment: "New wallpapers bottom banner: Title of the banner announcing new designs so users can personalize their Firefox experience")
+            value: "Try New Wallpapers to Make %@ Yours",
+            comment: "New wallpapers bottom banner: Title of the banner announcing new designs so users can personalize their experience. %@ is the app name (e.g. Firefox).")
         public static let EngagementSheetButton = MZLocalizedString(
             key: "Wallpapers.EngagementSheet.Button.v161",
             tableName: "Wallpapers",

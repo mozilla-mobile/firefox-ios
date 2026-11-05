@@ -144,7 +144,7 @@ private struct WallpaperEngagementView: ThemeableView {
             promo
                 .padding(.top, UX.imageTopPadding)
                 .padding(.bottom, UX.imageTitleSpacing)
-            Text(String.Wallpapers.EngagementSheetTitle)
+            Text(String(format: String.Wallpapers.EngagementSheetTitle, AppName.shortName.rawValue))
                 .font(FXFontStyles.Bold.title2.scaledSwiftUIFont())
                 .foregroundColor(theme.colors.textPrimary.color)
                 .multilineTextAlignment(.center)
