@@ -699,16 +699,14 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.isEmptySearch)
     }
 
-    func test_didDeleteSearchTermAction_returnsExpectedState() {
+    func test_searchTermDidChangeAction_whenEmpty_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didDeleteSearchTerm
-            )
+            ToolbarModernAction.searchTermDidChange(isEmpty: true),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
@@ -718,16 +716,14 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.shouldSelectSearchTerm)
     }
 
-    func test_didEnterSearchTermAction_returnsExpectedState() {
+    func test_searchTermDidChangeAction_whenNotEmpty_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didEnterSearchTerm
-            )
+            ToolbarModernAction.searchTermDidChange(isEmpty: false),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
