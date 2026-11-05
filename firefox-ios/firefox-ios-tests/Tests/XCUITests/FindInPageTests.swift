@@ -10,6 +10,14 @@ class FindInPageTests: BaseTestCase {
     var toolbarScreen: ToolbarScreen!
     var mainMenuScreen: MainMenuScreen!
 
+    override func setUp() async throws {
+        try await super.setUp()
+        browserScreen = BrowserScreen(app: app)
+        findInPageScreen = FindInPageScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+        mainMenuScreen = MainMenuScreen(app: app)
+    }
+
     private func navigateToOpenFindInPage(openSite: String) {
         navigator.openURL(openSite)
         waitUntilPageLoad()
@@ -64,8 +72,6 @@ class FindInPageTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306851
     // Smoketest
     func testFindFromMenu() {
-        browserScreen = BrowserScreen(app: app)
-        findInPageScreen = FindInPageScreen(app: app)
         let searchTerm = "Book"
         userState.url = path(forTestPage: TestPages.mozillaBook)
         navigateToOpenFindInPage(openSite: userState.url!)
@@ -94,10 +100,6 @@ class FindInPageTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/3167639
     // Regression
     func testFindInPageFromMenuOption() {
-        browserScreen = BrowserScreen(app: app)
-        findInPageScreen = FindInPageScreen(app: app)
-        toolbarScreen = ToolbarScreen(app: app)
-        mainMenuScreen = MainMenuScreen(app: app)
         let searchTerm = "Mammon"
         browserScreen.navigateToURL(path(forTestPage: TestPages.findInPage))
         waitUntilPageLoad()
