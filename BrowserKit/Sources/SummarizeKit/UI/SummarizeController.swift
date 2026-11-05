@@ -175,6 +175,12 @@ public final class SummarizeController: UIViewController, Themeable {
         triggerImpactHaptics()
     }
 
+    override public func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard !isShowingSummary else { return }
+        backgroundEffectView.moveBlobsToTopHalf()
+    }
+
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         isInitialLandscape = view.bounds.width > view.bounds.height
@@ -220,9 +226,11 @@ public final class SummarizeController: UIViewController, Themeable {
 
     private func setupTitleAnimation() {
         summaryView.onTitleVisibilityChange = { [weak self] isTitleVisible in
+            let navigationTitleAlpha: CGFloat = isTitleVisible ? 0.0 : 1.0
+            guard let self, titleLabel.alpha != navigationTitleAlpha else { return }
             UIView.animate(withDuration: UX.titleFadeDuration) {
-                self?.titleLabel.alpha = isTitleVisible ? 0.0 : 1.0
-                self?.titleLabel.text = isTitleVisible ? nil : self?.webView.title
+                self.titleLabel.alpha = navigationTitleAlpha
+                self.titleLabel.text = isTitleVisible ? nil : self.webView.title
             }
         }
     }
@@ -253,7 +261,7 @@ public final class SummarizeController: UIViewController, Themeable {
 
         makeTopHalfBoundGuideBottomAnchor()
         backgroundEffectView.pinToSuperview()
-        backgroundEffectView.confineToTopHalf()
+        setContentScrollView(summaryView.scrollView, for: .top)
         NSLayoutConstraint.activate([
             topHalfBoundGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             topHalfBoundGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),

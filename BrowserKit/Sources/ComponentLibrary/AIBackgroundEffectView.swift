@@ -263,11 +263,6 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
     private let resultWash: GradientView = .build {
         $0.alpha = 0.0
     }
-    private var isConfinedToTopHalf = false
-    private var topHalfTransform: CGAffineTransform {
-        guard bounds.height > bounds.width else { return .identity }
-        return CGAffineTransform(translationX: 0.0, y: -bounds.height * UX.topHalfBlobsOffsetRatio)
-    }
 
     /// - Parameter parentController: the controller the blobs hosting controller is added to as a child.
     public init(parentController: UIViewController) {
@@ -304,24 +299,21 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
         )
         topTrailingGlow.startPoint = CGPoint(x: 1.0, y: 0.0)
         topTrailingGlow.endPoint = CGPoint(x: 0.0, y: 1.0)
-        if isConfinedToTopHalf {
-            blobsHostingController.view.transform = topHalfTransform
-        }
     }
 
-    /// Keeps the blobs in the top half of the view until a result is shown. Portrait only.
-    public func confineToTopHalf() {
-        isConfinedToTopHalf = true
-        setNeedsLayout()
+    /// Moves the blobs up to fill the top half of the view, until `showResult()` is called. Portrait only, so it
+    /// has to be called again when the view size changes.
+    public func moveBlobsToTopHalf() {
+        let isPortrait = bounds.height > bounds.width
+        blobsHostingController.view.transform = isPortrait
+            ? CGAffineTransform(translationX: 0.0, y: -bounds.height * UX.topHalfBlobsOffsetRatio)
+            : .identity
     }
 
     public func showResult() {
         blobsState.isPaused = true
-        if isConfinedToTopHalf {
-            isConfinedToTopHalf = false
-            UIView.animate(withDuration: UX.resultExpandDuration, delay: 0.0, options: .curveEaseInOut) { [self] in
-                blobsHostingController.view.transform = .identity
-            }
+        UIView.animate(withDuration: UX.resultExpandDuration, delay: 0.0, options: .curveEaseInOut) { [self] in
+            blobsHostingController.view.transform = .identity
         }
         UIView.animate(
             withDuration: UX.resultFadeDuration,
