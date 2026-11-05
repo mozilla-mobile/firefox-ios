@@ -3,75 +3,68 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import Foundation
 import UIKit
 
 struct SummaryViewModel {
     let title: String?
     let titleA11yId: String
-    let compactTitleA11yId: String
-
-    let brandViewModel: BrandViewConfiguration
-
-    let summary: NSAttributedString?
+    let brandLabel: String
+    let brandLabelA11yId: String
+    let summary: NSAttributedString
     let summaryA11yId: String
     let scrollContentBottomInset: CGFloat
 }
 
 final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeApplicable {
     private enum UX {
-        static let titleVisibilityThreshold: CGFloat = 30.0
-        static let titleVisibilityAnimationDuration: CGFloat = 0.1
+        static let titleVisibilityThreshold: CGFloat = 0.1
     }
     private enum Section: Int, CaseIterable {
-        case title, brand, summary
+        case title, answer
     }
+
     private let tableView: UITableView = .build {
         $0.backgroundColor = .clear
         $0.separatorStyle = .none
         $0.allowsSelection = false
         $0.showsVerticalScrollIndicator = false
-        $0.alpha = 0.0
+        $0.alwaysBounceVertical = false
+        $0.clipsToBounds = false
     }
     private var theme: Theme?
     private var model: SummaryViewModel?
-    /// A closure that is called in response to the tableView scroll.
-    /// The paramater provided is true when the title cell is showed.
-    var onDidChangeTitleCellVisibility: ((Bool) -> Void)?
-    override var alpha: CGFloat {
-        get {
-            return tableView.alpha
-        }
-        set {
-            tableView.alpha = newValue
-        }
-    }
+
+    var scrollView: UIScrollView { tableView }
+
+    /// Called on every scroll with whether the title is still visible.
+    var onTitleVisibilityChange: ((Bool) -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
+        setupSubviews()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setup() {
+    // MARK: - Setup
+    private func setupSubviews() {
         tableView.dataSource = self
         tableView.delegate = self
-
         tableView.register(cellType: SummaryTitleCell.self)
-        tableView.register(cellType: SummaryBrandCell.self)
-        tableView.register(cellType: SummaryTextCell.self)
+        tableView.register(cellType: SummaryAnswerCell.self)
+        addSubview(tableView)
+        tableView.pinToSuperview()
+    }
 
-        addSubviews(tableView)
-
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
+    // MARK: - Configuration
+    func configure(model: SummaryViewModel) {
+        self.model = model
+        if tableView.contentInset.bottom != model.scrollContentBottomInset {
+            tableView.contentInset.bottom = model.scrollContentBottomInset
+        }
+        tableView.reloadData()
     }
 
     // MARK: - UITableViewDataSource
@@ -90,20 +83,15 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
             if let cell = cell as? SummaryTitleCell {
                 cell.configure(text: model.title, a11yId: model.titleA11yId)
             }
-        case .brand:
-            cell = tableView.dequeueReusableCell(withIdentifier: SummaryBrandCell.cellIdentifier, for: indexPath)
-            if let cell = cell as? SummaryBrandCell {
+        case .answer:
+            cell = tableView.dequeueReusableCell(withIdentifier: SummaryAnswerCell.cellIdentifier, for: indexPath)
+            if let cell = cell as? SummaryAnswerCell {
                 cell.configure(
-                    text: model.brandViewModel.brandLabel,
-                    textA11yId: model.brandViewModel.brandLabelA11yId,
-                    logo: model.brandViewModel.brandImage,
-                    logoA11yId: model.brandViewModel.brandImageA11yId
+                    header: model.brandLabel,
+                    body: model.summary,
+                    headerA11yId: model.brandLabelA11yId,
+                    bodyA11yId: model.summaryA11yId
                 )
-            }
-        case .summary:
-            cell = tableView.dequeueReusableCell(withIdentifier: SummaryTextCell.cellIdentifier, for: indexPath)
-            if let cell = cell as? SummaryTextCell {
-                cell.configure(text: model.summary, a11yId: model.summaryA11yId)
             }
         }
         if let cell = cell as? ThemeApplicable, let theme {
@@ -112,38 +100,20 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
         return cell
     }
 
+    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
 
-    func configure(model: SummaryViewModel) {
-        self.model = model
-        tableView.contentInset = UIEdgeInsets(
-            top: 0.0,
-            left: 0.0,
-            bottom: model.scrollContentBottomInset,
-            right: 0.0
-        )
-        tableView.reloadData()
-    }
-
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let titleCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) else { return }
-        // Determine the threshold for showing/hiding the compact title.
-        // The threshold must include both the table view’s top contentInset
-        // and its safe area inset, since the contentOffset.y does not start
-        // at 0 but instead reflects these insets.
-        let topInset = abs(tableView.contentInset.top) + abs(tableView.safeAreaInsets.top)
-        let offset = scrollView.contentOffset.y + topInset - titleCell.frame.height
-        // hide or show the title cell gradually as the table view scrolls.
-        let titleCellAlpha = abs(offset / (titleCell.frame.height))
-
-        let isShowingTitleCell = offset < -UX.titleVisibilityThreshold
-        UIView.animate(withDuration: UX.titleVisibilityAnimationDuration) {
-            titleCell.alpha = titleCellAlpha
-            self.onDidChangeTitleCellVisibility?(isShowingTitleCell)
-        }
+        guard let titleCell = tableView.cellForRow(at: IndexPath(row: Section.title.rawValue, section: 0)),
+              titleCell.frame.height > 0.0 else { return }
+        let scrolledDistance = scrollView.contentOffset.y + scrollView.adjustedContentInset.top
+        let coveredFraction = min(max((scrolledDistance - titleCell.frame.minY) / titleCell.frame.height, 0.0), 1.0)
+        let visibleFraction = 1.0 - coveredFraction
+        titleCell.alpha = visibleFraction
+        onTitleVisibilityChange?(visibleFraction > UX.titleVisibilityThreshold)
     }
 
     // MARK: - ThemeApplicable
