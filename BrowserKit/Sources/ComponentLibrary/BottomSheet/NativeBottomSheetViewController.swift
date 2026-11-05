@@ -124,7 +124,8 @@ public class NativeBottomSheetViewController: UIViewController,
 
         backgroundView.pinToSuperview()
         NSLayoutConstraint.activate([
-            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.closeButtonPadding),
+            closeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                                                 constant: UX.closeButtonPadding),
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
                                              constant: UX.closeButtonPadding),
 
