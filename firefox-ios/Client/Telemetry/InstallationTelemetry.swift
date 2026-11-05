@@ -23,17 +23,16 @@ struct InstallationTelemetry {
         )
     }
 
-    func recordInstallationHistory(installationHistory: InstallationHistory,
-                                   previousHistory: InstallationHistoryState) {
+    func recordInstallationHistory(count: Int64, lastSeenDate: Date?) {
         gleanWrapper.recordQuantity(
             for: GleanMetrics.Installation.installCounter,
-            value: installationHistory.installCounter
+            value: count
         )
 
-        if case .valid(let previousHistory) = previousHistory {
+        if let lastSeenDate {
             gleanWrapper.recordDatetime(
                 for: GleanMetrics.Installation.lastSeenDate,
-                value: previousHistory.lastSeenDate
+                value: lastSeenDate
             )
         }
     }
