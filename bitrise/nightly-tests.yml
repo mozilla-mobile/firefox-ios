@@ -117,7 +117,7 @@ workflows:
     - FOCUS_IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.6
     - FOCUS_IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=18.6
     after_run:
-    - _focus_nightly_uitests
+    - _focus_uitests
 
   Focus_Nightly_Tests_iOS26:
     envs:
@@ -125,7 +125,7 @@ workflows:
     - FOCUS_IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
     - FOCUS_IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=26.5
     after_run:
-    - _focus_nightly_uitests
+    - _focus_uitests
 
   Focus_Nightly_Tests_iOS27:
     envs:
@@ -134,9 +134,9 @@ workflows:
     - FOCUS_IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
     - FOCUS_DUO_DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
     after_run:
-    - _focus_nightly_uitests
+    - _focus_uitests
 
-  _focus_nightly_uitests:
+  _focus_uitests:
     description: >-
       Compile Focus once and run both smoke tests and full functional tests on an iPhone and an iPad, plus iPhone Duo when FOCUS_DUO_DESTINATION is set.
     before_run:
