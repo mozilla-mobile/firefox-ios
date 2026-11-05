@@ -25,7 +25,7 @@ final class InstallationTelemetryService {
     private var canCollectTelemetry: Bool {
         featureFlagsProvider.isEnabled(.checkForReinstalls) &&
         profilePrefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == true &&
-        (profilePrefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
+        (profilePrefs.boolForKey(AppConstants.prefSendUsageData) == true)
     }
 
     init(
