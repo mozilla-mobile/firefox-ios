@@ -1,0 +1,53 @@
+format_version: '8'
+
+workflows:
+  SPM_Common_Steps:
+    before_run:
+    - skip_macro_validation
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        is_always_run: true
+        title: Read version from version.txt file
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            pwd
+            ls
+            # Read and trim version string
+            full_version=$(tr -d '[:space:]' < /Users/vagrant/git/version.txt)
+            version=$(echo "$full_version" | sed -E 's/^([0-9]+(\.[0-9]+)*).*/\1/')
+            echo "Version: $version"
+            # Save version in BITRISE_RELEASE_VERSION
+            envman add --key BITRISE_RELEASE_VERSION --value "$version"
+            envman add --key BITRISE_BETA_VERSION --value "$version"
+
+  # # FOCUS UTILITIES WORKFLOWS
+  focus-clone-and-build-dependencies:
+    description: Clones the repo and builds dependencies
+    before_run:
+    - SPM_Common_Steps
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            brew trust mozilla-mobile/fxios
+            brew tap mozilla-mobile/fxios
+            brew install fxios
+            fxios bootstrap -p focus
+        title: ContentBlockerGen
+
+  focus-set-default-browser-entitlement:
+    steps:
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" focus-ios/Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" focus-ios/Klar.entitlements
