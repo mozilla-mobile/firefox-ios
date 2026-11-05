@@ -5,7 +5,6 @@
 import SwiftUI
 import UIKit
 import Common
-import ComponentLibrary
 
 final class BlendedBlobsGradientState: ObservableObject {
     @Published var colors: [Color] = []
@@ -232,7 +231,7 @@ struct BlendedBlobsGradient: View {
 
 /// Layers the blended blobs between a glow in the top trailing corner and a wash that fades in once
 /// a result is shown.
-final class BackgroundEffectView: UIView, ThemeApplicable {
+public final class AIBackgroundEffectView: UIView, ThemeApplicable {
     private enum UX {
         static let resultBlobsAlpha: CGFloat = 0.5
         static let resultFadeDuration: TimeInterval = 0.3
@@ -263,7 +262,7 @@ final class BackgroundEffectView: UIView, ThemeApplicable {
     }
 
     /// - Parameter parentController: the controller the blobs hosting controller is added to as a child.
-    init(parentController: UIViewController) {
+    public init(parentController: UIViewController) {
         let blobsState = BlendedBlobsGradientState()
         self.blobsState = blobsState
         blobsHostingController = UIHostingController(rootView: BlendedBlobsGradient(state: blobsState))
@@ -273,7 +272,7 @@ final class BackgroundEffectView: UIView, ThemeApplicable {
         blobsHostingController.didMove(toParent: parentController)
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -299,7 +298,7 @@ final class BackgroundEffectView: UIView, ThemeApplicable {
         topTrailingGlow.endPoint = CGPoint(x: 0.0, y: 1.0)
     }
 
-    func showResult() {
+    public func showResult() {
         blobsState.isPaused = true
         UIView.animate(
             withDuration: UX.resultFadeDuration,
@@ -311,7 +310,7 @@ final class BackgroundEffectView: UIView, ThemeApplicable {
         }
     }
 
-    func hideResult(duration: TimeInterval) {
+    public func hideResult(duration: TimeInterval) {
         blobsState.isPaused = false
         UIView.animate(withDuration: duration, delay: 0.0, options: .curveEaseInOut) { [self] in
             blobsHostingController.view.alpha = 1.0
@@ -320,16 +319,16 @@ final class BackgroundEffectView: UIView, ThemeApplicable {
     }
 
     // MARK: - Presentation transition
-    func prepareForPresentationTransition() {
+    public func prepareForPresentationTransition() {
         blobsHostingController.view.transform = CGAffineTransform(translationX: 0.0, y: UX.presentationBlobsOffset)
     }
 
-    func applyPresentationTransition() {
+    public func applyPresentationTransition() {
         blobsHostingController.view.transform = .identity
     }
 
     // MARK: - ThemeApplicable
-    func applyTheme(theme: any Theme) {
+    public func applyTheme(theme: any Theme) {
         topTrailingGlow.colors = UX.topTrailingGlowOpacities.map {
             theme.colors.gradientAIStrongStop1.withAlphaComponent($0).cgColor
         }
