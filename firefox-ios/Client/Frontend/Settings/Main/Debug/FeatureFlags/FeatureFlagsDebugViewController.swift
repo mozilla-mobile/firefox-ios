@@ -306,6 +306,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .searchConfigV3,
+                titleText: format(string: "Search Config V3"),
+                statusText: format(string: "Toggle to switch to V3 search configuration (Remote Settings)")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .recentSearches,
                 titleText: format(string: "Search - Recent"),
                 statusText: format(string: "Toggle to enable the recent searches feature")
