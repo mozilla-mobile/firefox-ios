@@ -49,8 +49,20 @@
 /* On error page, this is the description for a generic error. %@ is the site url. */
 "NativeErrorPage.GenericError.Description.v134" = "Ejeren af %@ har ikke sat webstedet korrekt op og en sikker forbindelse kan ikke oprettes.";
 
+/* Additional explanation displayed on the native error page for the generic error. Lists possible causes and advises the user to check their connection settings and try again. */
+"NativeErrorPage.GenericError.Description.v158" = "Webstedet er muligvis midlertidigt utilgængeligt, det er muligvis flyttet til en anden adresse, eller din firewall eller proxy blokerer muligvis forbindelsen.\n\nKontroller dine forbindelsesindstillinger, og prøv igen.";
+
+/* First sentence of the generic error description when the requested URL is not available. %1$@ is the app name. */
+"NativeErrorPage.GenericError.Description.v158.withoutURL" = "%1$@ kunne ikke få kontakt med den ønskede URL.";
+
+/* First sentence of the generic error description when the requested URL is known. %1$@ is the app name and %2$@ is the requested URL. */
+"NativeErrorPage.GenericError.Description.v158.withURL" = "%1$@ kunne ikke oprette forbindelse til %2$@.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Vær forsigtig. Noget ser ikke rigtigt ud.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v158" = "Det ser ud til, at der er et problem med dette websted";
 
 /* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
 "NativeErrorPage.GoBackButton.v149" = "Gå tilbage (anbefalet)";
@@ -93,4 +105,10 @@
 
 /* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
 "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Søger på Wayback Machine efter en arkiveret version af denne side.";
+
+/* Body text of the error page shown when a website fails to load while the VPN is on. Suggests turning off the VPN first, then refreshing the page or checking the internet connection if that doesn't help. */
+"VPN.ErrorPage.Body.v160" = "Prøv at slå VPN fra. Hvis webstedet stadig ikke indlæses, skal du opdatere siden eller kontrollere din internetforbindelse.";
+
+/* Title of an error page shown when a website fails to load while the VPN is on and the exact cause is unknown. “Can't be reached” means the website couldn't be loaded. */
+"VPN.ErrorPage.Title.v160" = "Dette websted kan ikke nås.";
 

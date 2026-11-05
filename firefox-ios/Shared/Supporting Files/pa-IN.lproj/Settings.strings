@@ -463,8 +463,14 @@
 /* Description below the Recommended option in the VPN server location list. %1$@ is the app name (for example, Firefox). */
 "VPN.LocationPicker.RecommendedSubText.v160" = "%1$@ ਸਭ ਤੋਂ ਤੇਜ਼ ਟਿਕਾਣਾ ਲੱਭਦਾ ਹੈ।";
 
+/* Announced by VoiceOver on the VPN settings screen when the VPN finishes connecting after the user turns on the VPN switch. */
+"VPN.Settings.Connected.v161" = "VPN ਕਨੈਕਟ ਹੈ";
+
 /* Shown next to the VPN switch on the VPN settings screen while the VPN is connecting, right after the user turns it on. */
 "VPN.Settings.Connecting.v160" = "…ਕਨੈਕਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ";
+
+/* Read aloud by VoiceOver for the Data Limit section on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 gigabytes used”). The second sentence explains that the user’s free monthly VPN data resets on the first day of each month. */
+"VPN.Settings.DataLimit.AccessibilityValue.v161" = "%2$@ ਵਿੱਚੋਂ %1$@ ਗੀਗਾਬਾਈਟ ਵਰਤੇ ਗਏ। ਹਰ ਮਹੀਨੇ ਦੀ ਪਹਿਲੀ ਤਾਰੀਖ ਨੂੰ ਮੁੜ-ਸੈੱਟ ਹੁੰਦਾ ਹੈ।";
 
 /* Footer below the Data Limit section on the VPN settings screen. Explains when the user's free VPN data resets. %1$@ is the monthly limit in gigabytes (for example, 5.0). “GB” stands for gigabytes. */
 "VPN.Settings.DataLimitResetFooter.v160" = "ਹਰ ਮਹੀਨੇ ਦੀ ਪਹਿਲੀ ਤਾਰੀਖ ਨੂੰ %1$@ GB ਲਈ ਮੁੜ-ਸੈੱਟ ਹੁੰਦਾ ਹੈ";

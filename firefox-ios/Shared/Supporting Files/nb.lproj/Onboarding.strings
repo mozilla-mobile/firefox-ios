@@ -512,9 +512,18 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 /* Subheading on the VPN onboarding card. Explains how much VPN data the user gets every month at no cost. %1$@ is the monthly data limit in gigabytes (for example, 5). “GB” stands for gigabytes. */
 "VPN.Onboarding.LimitSubheading.v160" = "%1$@ GB, gratis hver måned";
 
+/* Body text below the “Browse From Multiple Locations” (VPN.Onboarding.LocationsSubheading.v160) subheading on the VPN onboarding card. Explains that choosing a VPN location makes it harder to tell where the user really is. “yours” refers to the user’s location. */
+"VPN.Onboarding.LocationsBody.v160" = "Velg en VPN-plassering for å gjøre det vanskeligere å spore din egen plassering.";
+
 /* Subheading on the VPN onboarding card. Explains that the user can choose which country their browsing appears to come from. */
 "VPN.Onboarding.LocationsSubheading.v160" = "Surf fra flere steder";
 
 /* Title of an onboarding card that introduces the built-in VPN. %1$@ is the app name (for example, Firefox). */
 "VPN.Onboarding.Title.v160" = "Prøv %1$@ sin innebygde VPN";
+
+/* Body text below the “More Privacy On Public Wi-Fi” (VPN.Onboarding.WifiSubheading.v160) subheading on the VPN onboarding card. %1$@ is the app name (for example, Firefox). */
+"VPN.Onboarding.WifiBody.v160" = "Få ekstra beskyttelse i %1$@ når du surfer på farten.";
+
+/* Subheading on the VPN onboarding card. Explains that the VPN gives the user more privacy when they use public Wi-Fi networks. */
+"VPN.Onboarding.WifiSubheading.v160" = "Bedre personvern på offentlig Wi-Fi";
 

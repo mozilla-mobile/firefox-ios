@@ -10,6 +10,21 @@
 /* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the title for the alert. */
 "Alerts.AddToCalendar.Title.v134" = "Күнтізбеге қосу керек пе?";
 
+/* Message of dialogue window. Prompts the user to confirm they want to download a configuration profile that can be installed in device settings. %@ is the name/domain of the website initiating the download, for example 'google.com' */
+"Alerts.ConfigurationProfile.Body.v160.1" = "%@ конфигурация профилін жүктеп алуды сұрайды. Оны Баптауларда тексеріп, орнатуға болады.";
+
+/* Message of dialogue window. Prompts the user to confirm they want to download a configuration profile that can be installed in device settings. This variant is displayed when the website initiating the download doesn't have a base domain to display. */
+"Alerts.ConfigurationProfile.BodyDefault.v160.1" = "Бұл сайт конфигурация профилін жүктеп алуды сұрайды. Оны Баптауларда тексеріп, орнатуға болады.";
+
+/* Secondary Button in dialogue window. If tapped, cancels the download and closes the window. */
+"Alerts.ConfigurationProfile.Button.Cancel.v160.1" = "Бас тарту";
+
+/* Primary Button in dialogue window. If tapped, confirms the user wants to download the configuration profile and the download starts. */
+"Alerts.ConfigurationProfile.Button.Continue.v160.1" = "Жалғастыру";
+
+/* Title of dialogue window. Prompts the user to confirm they want to download a configuration profile that can be installed in device settings. */
+"Alerts.ConfigurationProfile.Title.v160.1" = "Конфигурация профилін жүктеп алу керек пе?";
+
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
 "Alerts.FeltDeletion.Body.v122" = "Барлық жекелік беттерін жауып, тарихты, cookie файлдарын және басқа сайт деректерін өшіру.";
 

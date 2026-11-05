@@ -454,6 +454,9 @@
 /* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
 "Settings.Translation.ToggleTitle.v145" = "Çevirileri etkinleştir";
 
+/* Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to. */
+"VPN.LocationPicker.FindingLocationsText.v160" = "Konumlar aranıyor…";
+
 /* Option in the VPN server location list. Choosing it lets the app pick the server with the fastest connection. */
 "VPN.LocationPicker.RecommendedMainText.v160" = "Önerilen";
 
@@ -465,6 +468,18 @@
 
 /* Footer below the Data Limit section on the VPN settings screen. Explains when the user's free VPN data resets. %1$@ is the monthly limit in gigabytes (for example, 5.0). “GB” stands for gigabytes. */
 "VPN.Settings.DataLimitResetFooter.v160" = "Her ayın ilk günü %1$@ GB hakkınız sıfırlanır";
+
+/* Title of the section on the VPN settings screen that shows how much of the user's free monthly VPN data they have used. */
+"VPN.Settings.DataLimitTitle.v160" = "Veri kotası";
+
+/* Read aloud by VoiceOver for the data usage on the VPN settings screen. Same as the visible text, but with “gigabytes” written out instead of “GB”. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit (for example, “1.0 of 5.0 gigabytes used”). */
+"VPN.Settings.DataUsage.AccessibilityLabel.v160" = "%2$@/%1$@ gigabayt kullanıldı";
+
+/* Shown next to the Data Limit title on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 GB used”). “GB” stands for gigabytes. */
+"VPN.Settings.DataUsage.v160" = "%1$@/%2$@ GB kullanıldı";
+
+/* Short description below the title at the top of the VPN settings screen. Explains what the VPN does. */
+"VPN.Settings.Description.v160" = "Konumunuzu gizleyin, halka açık Wi-Fi ağlarında bile ekstra korumayla gezinin.";
 
 /* Link below the description at the top of the VPN settings screen. Tapping it opens a support article about the VPN. */
 "VPN.Settings.LearnMore.v160" = "Daha fazla bilgi al…";

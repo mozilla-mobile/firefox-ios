@@ -8,7 +8,7 @@
 "Summarizer.CloseButton.Label.v142" = "Schließen";
 
 /* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
-"Summarizer.Error.MissingPageContent.Message.v142" = "Die Seite wird noch geladen. Warten Sie, bis der Vorgang abgeschlossen ist, und klicken Sie dann auf Zusammenfassen.";
+"Summarizer.Error.MissingPageContent.Message.v142" = "Die Seite wird noch geladen. Warten Sie, bis der Vorgang abgeschlossen ist, und tippen Sie dann auf Zusammenfassen.";
 
 /* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
 "Summarizer.Error.RateLimited.Message.v142" = "Dies kann derzeit nicht verarbeitet werden. Versuchen Sie es später erneut!";

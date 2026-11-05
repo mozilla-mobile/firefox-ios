@@ -101,7 +101,7 @@
 "QuickAnswers.OptInRedesign.PrivateByDesignDescription.v158" = "Nous n’utilisons pas votre voix pour vous identifier.";
 
 /* Title of the second privacy row on the Quick Answers opt-in screen, explaining that the user's voice is not used to identify them. */
-"QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158" = "Conçu pour protéger votre vie privé";
+"QuickAnswers.OptInRedesign.PrivateByDesignTitle.v158" = "Conçu pour protéger votre vie privée";
 
 /* Title displayed on the Quick Answers opt-in screen that introduces the voice feature. */
 "QuickAnswers.OptInRedesign.Title.v158" = "Essayez les réponses rapides";
@@ -110,7 +110,7 @@
 "QuickAnswers.PrivacyBanner.Description.v158" = "%@ ne conserve ni vos enregistrements audio ni vos questions, n’utilise pas vos données pour entraîner des modèles d’IA et ne se sert pas de votre voix pour vous identifier.";
 
 /* Title of the privacy banner shown on the Quick Answers screen. */
-"QuickAnswers.PrivacyBanner.Title.v158" = "Conçu pour protéger votre vie privé";
+"QuickAnswers.PrivacyBanner.Title.v158" = "Conçu pour protéger votre vie privée";
 
 /* Feature name as displayed in the iOS Quick Action menu (contextual menu displayed when long-pressing the browser app icon) */
 "QuickAnswers.QuickActions.Title.v158" = "Réponses rapides";
