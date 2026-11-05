@@ -285,7 +285,7 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
         resultWash.pinToSuperview()
     }
 
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         topTrailingGlow.frame = CGRect(
             origin: .zero,
