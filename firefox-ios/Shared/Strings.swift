@@ -6744,6 +6744,22 @@ extension String {
     }
 }
 
+// MARK: - Wallpapers
+extension String {
+    public struct Wallpapers {
+        public static let EngagementSheetTitle = MZLocalizedString(
+            key: "Wallpapers.EngagementSheet.Title.v161",
+            tableName: "Wallpapers",
+            value: "Try New Wallpapers to Make %@ Yours",
+            comment: "New wallpapers bottom banner: Title of the banner announcing new designs so users can personalize their experience. %@ is the app name (e.g. Firefox).")
+        public static let EngagementSheetButton = MZLocalizedString(
+            key: "Wallpapers.EngagementSheet.Button.v161",
+            tableName: "Wallpapers",
+            value: "Explore Wallpapers",
+            comment: "New wallpapers bottom banner: Primary button - tapping it opens the wallpaper settings screen.")
+    }
+}
+
 // MARK: - Notification
 extension String {
     public struct Notification {

@@ -36,6 +36,7 @@ struct ImageIdentifiers {
     public static let radioButtonSelected = "radioButtonSelected"
     public static let radioButtonNotSelectedNova = "radioButtonNotSelectedNova"
     public static let radioButtonSelectedNova = "radioButtonSelectedNova"
+    public static let wallpaperEngagement = "wallpaperEngagement"
 
     public struct Appearance {
         public static let automaticBrowserThemeGradient = "automaticBrowserThemeGradient"

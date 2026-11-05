@@ -479,6 +479,11 @@ struct AccessibilityIdentifiers {
         }
     }
 
+    struct WallpaperEngagementSheet {
+        static let closeButton = "WallpaperEngagementSheet.closeButton"
+        static let ctaButton = "WallpaperEngagementSheet.ctaButton"
+    }
+
     struct Onboarding {
         static let backgroundImage = "Onboarding.BackgroundImage"
         static let onboarding = "onboarding."

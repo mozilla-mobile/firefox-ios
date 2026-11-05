@@ -65,5 +65,6 @@ include:
   - nimbus-features/translationsFeature.yaml
   - nimbus-features/trendingSearchesFeature.yaml
   - nimbus-features/vpnFeature.yaml
+  - nimbus-features/wallpaperEngagementSheetFeature.yaml
   - nimbus-features/waybackMachineFeature.yaml
   - nimbus-features/webViewDocumentFetchRefactorFeature.yaml

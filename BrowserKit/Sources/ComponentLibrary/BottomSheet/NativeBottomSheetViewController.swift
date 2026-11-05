@@ -5,12 +5,13 @@
 import UIKit
 import SwiftUI
 import Common
-import ComponentLibrary
 
-// TODO: FXIOS-14070 - migrate OnboardingBottomSheetViewController to ComponentLibrary and adopt it where needed. 
-public class OnboardingBottomSheetViewController: UIViewController,
-                                                  Themeable,
-                                                  Notifiable {
+/// A bottom sheet that relies on the system `UISheetPresentationController` with a self-sizing custom detent.
+/// Unlike `BottomSheetViewController`, which draws its own sheet (dimmed background, pan-to-dismiss and
+/// custom animations), this one gets the system glass appearance on iOS 26.
+public class NativeBottomSheetViewController: UIViewController,
+                                              Themeable,
+                                              Notifiable {
     private struct UX {
         static var closeButtonPadding: CGFloat {
             if #available(iOS 26, *) {
@@ -18,6 +19,7 @@ public class OnboardingBottomSheetViewController: UIViewController,
             }
             return 12.0
         }
+        static let backgroundAlpha: CGFloat = 0.8
     }
 
     public var themeManager: any Common.ThemeManager
@@ -122,7 +124,8 @@ public class OnboardingBottomSheetViewController: UIViewController,
 
         backgroundView.pinToSuperview()
         NSLayoutConstraint.activate([
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.closeButtonPadding),
+            closeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                                                 constant: UX.closeButtonPadding),
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
                                              constant: UX.closeButtonPadding),
 
@@ -180,7 +183,8 @@ public class OnboardingBottomSheetViewController: UIViewController,
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        view.backgroundColor = .clear
+        let backgroundAlpha = UIAccessibility.isReduceTransparencyEnabled ? 1.0 : UX.backgroundAlpha
+        view.backgroundColor = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
         // The background view is not needed when presenting a bottom sheet in iOS 26.
         // The bottom sheet presentation already contains the glass effect.
         if #unavailable(iOS 26.0) {

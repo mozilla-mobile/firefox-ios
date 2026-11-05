@@ -81,6 +81,7 @@ enum FeatureFlagID: String, CaseIterable {
     case unifiedSearch
     case videoIntroOnboarding
     case vpnFeature
+    case wallpaperEngagementSheet
     case waybackMachine
     case webViewDocumentFetchRefactor
 

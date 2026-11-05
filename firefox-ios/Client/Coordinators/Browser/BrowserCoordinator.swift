@@ -39,6 +39,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           ShareSheetCoordinatorDelegate,
                           WebCompatReportCoordinatorNavigationDelegate,
                           BrowsingSettingsDelegate,
+                          WallpaperEngagementCoordinatorDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -183,6 +184,31 @@ final class BrowserCoordinator: BaseCoordinator,
         if didEmbed {
             // [FXIOS-13651] Fix for WKWebView memory leak. (See comments on related PR.)
             webviewController?.update(webView: nil)
+        }
+
+        showWallpaperEngagementIfNeeded()
+    }
+
+    private func showWallpaperEngagementIfNeeded() {
+        let hasBlockingChild = childCoordinators.contains {
+            $0 is TermsOfUseCoordinator || $0 is WallpaperEngagementCoordinator
+        }
+        guard !hasBlockingChild,
+              !router.isPresenting else { return }
+
+        let coordinator = WallpaperEngagementCoordinator(
+            router: router,
+            windowUUID: windowUUID,
+            tabManager: tabManager,
+            prefs: profile.prefs
+        )
+        guard coordinator.shouldShow() else { return }
+        coordinator.parentCoordinator = self
+        coordinator.delegate = self
+        add(child: coordinator)
+        browserViewController.view.endEditing(true)
+        DispatchQueue.main.async {
+            coordinator.start()
         }
     }
 
@@ -1575,6 +1601,13 @@ final class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID
         )
         present(bottomSheetVC)
+    }
+
+    // MARK: - WallpaperEngagementCoordinatorDelegate
+
+    func wallpaperEngagementDidTapCTA(from coordinator: WallpaperEngagementCoordinator) {
+        remove(child: coordinator)
+        show(settings: .wallpaper)
     }
 
     // MARK: - ParentCoordinatorDelegate

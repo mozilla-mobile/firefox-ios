@@ -247,6 +247,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .vpnFeature:
             return checkVPNFeature()
 
+        case .wallpaperEngagementSheet:
+            return checkWallpaperEngagementSheetFeature()
+
         case .waybackMachine:
             return checkWaybackMachineFeature()
 
@@ -554,6 +557,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkVPNFeature() -> Bool {
         return nimbus.features.vpnFeature.value().enabled
+    }
+
+    private func checkWallpaperEngagementSheetFeature() -> Bool {
+        return nimbus.features.wallpaperEngagementSheetFeature.value().enabled
     }
 
     private func checkPrivacyDashboardFeature() -> Bool {
