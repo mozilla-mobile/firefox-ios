@@ -2,6 +2,8 @@
 
 Date: 2025-11-10
 
+Revised on: 2026-11-05
+
 ## Status
 
 Accepted
