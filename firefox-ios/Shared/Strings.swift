@@ -6746,7 +6746,7 @@ extension String {
             key: "Wallpapers.EngagementSheet.Button.v161",
             tableName: "Wallpapers",
             value: "Explore Wallpapers",
-            comment: "The button of the bottom sheet that promotes new wallpapers. Tapping it opens the wallpaper settings.")
+            comment: "New wallpapers bottom banner: Primary button - tapping it opens the wallpaper settings screen.")
     }
 }
 
