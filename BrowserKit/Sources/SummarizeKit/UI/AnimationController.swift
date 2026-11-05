@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import ComponentLibrary
 
 @MainActor
 protocol AnimationController {
@@ -42,13 +43,13 @@ struct DefaultAnimationController: AnimationController {
         static let animationDuration: CGFloat = 0.3
     }
 
-    let view: UIView
     let loadingLabel: UILabel
+    let loadingLogoView: UIView
     let snapshotContainer: UIView
     let snapshotView: UIView
     let summaryView: UIView
     let infoView: UIView
-    let backgroundGradient: CAGradientLayer
+    let backgroundView: AIBackgroundEffectView
     let borderOverlayController: UIViewController
 
     func animateViewDidAppear(
@@ -68,6 +69,7 @@ struct DefaultAnimationController: AnimationController {
         UIView.animate(withDuration: UX.initialTransformAnimationDuration) {
             snapshotView.layer.cornerRadius = UX.tabSnapshotCornerRadius
             loadingLabel.alpha = 1.0
+            loadingLogoView.alpha = 1.0
         } completion: { _ in
             completion()
         }
@@ -81,15 +83,16 @@ struct DefaultAnimationController: AnimationController {
         // Animate the summary view only if it wasn't showed yet
         guard summaryView.alpha == 0.0 else { return }
         triggerImpactHaptics()
+        backgroundView.showResult()
 
         UIView.animate(withDuration: UX.animationDuration) {
             borderOverlayController.willMove(toParent: nil)
             borderOverlayController.view.removeFromSuperview()
             borderOverlayController.removeFromParent()
-            backgroundGradient.removeFromSuperlayer()
             snapshotContainer.transform = snapshotTransform
             summaryView.alpha = 1.0
             loadingLabel.alpha = 0.0
+            loadingLogoView.alpha = 0.0
             loadingLabel.stopShimmering()
             applyTheme()
         } completion: { _ in
@@ -108,13 +111,12 @@ struct DefaultAnimationController: AnimationController {
         completion: @escaping () -> Void
     ) {
         loadingLabel.alpha = 0
-        let shouldInsertBackgroundGradient = backgroundGradient.superlayer == nil
+        loadingLogoView.alpha = 0
+        backgroundView.hideResult(duration: UX.animationDuration)
         UIView.animate(withDuration: UX.animationDuration) {
             summaryView.alpha = 0.0
             infoView.alpha = 1.0
             snapshotContainer.transform = snapshotTransform
-            guard shouldInsertBackgroundGradient else { return }
-            view.layer.insertSublayer(backgroundGradient, at: 0)
         } completion: { _ in
             completion()
         }
@@ -134,6 +136,7 @@ struct DefaultAnimationController: AnimationController {
         UIView.animate(withDuration: UX.animationDuration) {
             infoView.alpha = 0.0
             loadingLabel.alpha = 0.0
+            loadingLogoView.alpha = 0.0
             snapshotContainer.transform = snapshotTransform
             snapshotView.layer.cornerRadius = 0.0
         } completion: { _ in

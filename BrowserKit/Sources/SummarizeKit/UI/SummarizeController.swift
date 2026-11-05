@@ -28,18 +28,20 @@ public final class SummarizeController: UIViewController, Themeable {
         static let tabSnapshotShadowRadius: CGFloat = 64.0
         static let tabSnapshotShadowOffset = CGSize(width: 0.0, height: -10.0)
         static let tabSnapshotShadowOpacity: Float = 1.0
-        static let labelShimmeringColorAlpha: CGFloat = 0.5
+        static let labelShimmeringColorAlpha: CGFloat = 0.2
+        static let loadingLogoSize: CGFloat = 64.0
+        static let loadingLogoBottomSpacing: CGFloat = 10.0
         static let titleFadeDuration: TimeInterval = 0.1
     }
 
     lazy var animationController: AnimationController = DefaultAnimationController(
-        view: view,
         loadingLabel: loadingLabel,
+        loadingLogoView: loadingLogoView,
         snapshotContainer: tabSnapshotContainer,
         snapshotView: tabSnapshot,
         summaryView: summaryView,
         infoView: infoView,
-        backgroundGradient: backgroundGradient,
+        backgroundView: backgroundEffectView,
         borderOverlayController: borderOverlayHostingController
     )
     var snapshotLayoutCalculator: SnapshotLayoutCalculator = DefaultSnapshotLayoutCalculator()
@@ -57,10 +59,17 @@ public final class SummarizeController: UIViewController, Themeable {
 
     // MARK: - UI properties
     private let loadingLabel: UILabel = .build {
-        $0.font = FXFontStyles.Regular.body.scaledFont()
+        $0.font = FXFontStyles.Bold.subheadline.scaledFont()
         $0.alpha = 0
         $0.numberOfLines = 0
         $0.textAlignment = .center
+        $0.adjustsFontForContentSizeCategory = true
+    }
+    private let loadingLogoView: UIImageView = .build {
+        $0.image = UIImage(named: StandardImageIdentifiers.Large.logoFirefox)
+        $0.contentMode = .scaleAspectFit
+        $0.alpha = 0
+        $0.isAccessibilityElement = false
     }
     private lazy var closeButton: UIButton = .build { [weak self] in
         $0.setImage(
@@ -97,7 +106,7 @@ public final class SummarizeController: UIViewController, Themeable {
     private var tabSnapshotTopConstraint: NSLayoutConstraint?
     private lazy var tabSnapshotPanGesture = UIPanGestureRecognizer(target: self, action: #selector(onTabSnapshotPan))
 
-    private lazy var backgroundGradient = CAGradientLayer()
+    private lazy var backgroundEffectView = AIBackgroundEffectView(parentController: self)
     /// The Layout Guide for the top half of the bounds when in Portrait,
     /// Otherwise in Landscape it becomes equal to the controller's `view` layout guide.
     private let topHalfBoundGuide = UILayoutGuide()
@@ -164,7 +173,6 @@ public final class SummarizeController: UIViewController, Themeable {
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         triggerImpactHaptics()
-        view.layer.insertSublayer(backgroundGradient, at: 0)
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -177,8 +185,7 @@ public final class SummarizeController: UIViewController, Themeable {
             self?.setupDismissGestures()
         }
         // Ensure that the layout is resolved before shimmering
-        let textColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.textOnDark
-        loadingLabel.startShimmering(light: textColor, dark: textColor.withAlphaComponent(UX.labelShimmeringColorAlpha))
+        startShimmeringLoadingLabel()
     }
 
     override public func viewWillTransition(
@@ -220,10 +227,16 @@ public final class SummarizeController: UIViewController, Themeable {
         }
     }
 
+    private func startShimmeringLoadingLabel() {
+        let textColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.textPrimary
+        loadingLabel.startShimmering(light: textColor.withAlphaComponent(UX.labelShimmeringColorAlpha), dark: textColor)
+    }
+
     private func setupLayout() {
-        setupLoadingBackgroundGradient()
         view.addSubviews(
+            backgroundEffectView,
             summaryView,
+            loadingLogoView,
             loadingLabel,
             infoView,
             tabSnapshotContainer,
@@ -239,10 +252,18 @@ public final class SummarizeController: UIViewController, Themeable {
         view.addLayoutGuide(topHalfBoundGuide)
 
         makeTopHalfBoundGuideBottomAnchor()
+        backgroundEffectView.pinToSuperview()
         NSLayoutConstraint.activate([
             topHalfBoundGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             topHalfBoundGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topHalfBoundGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            loadingLogoView.widthAnchor.constraint(equalToConstant: UX.loadingLogoSize),
+            loadingLogoView.heightAnchor.constraint(equalToConstant: UX.loadingLogoSize),
+            loadingLogoView.centerXAnchor.constraint(equalTo: loadingLabel.centerXAnchor),
+            loadingLogoView.bottomAnchor.constraint(equalTo: loadingLabel.topAnchor,
+                                                    constant: -UX.loadingLogoBottomSpacing),
+            loadingLogoView.topAnchor.constraint(greaterThanOrEqualTo: topHalfBoundGuide.topAnchor),
 
             loadingLabel.topAnchor.constraint(greaterThanOrEqualTo: topHalfBoundGuide.topAnchor),
             loadingLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor,
@@ -283,7 +304,6 @@ public final class SummarizeController: UIViewController, Themeable {
         // remove any running animation cause they will look off on rotation
         tabSnapshotContainer.layer.removeAllAnimations()
 
-        setupLoadingBackgroundGradient()
         topHalfBoundGuideBottomAnchor?.isActive = false
         makeTopHalfBoundGuideBottomAnchor()
         tabSnapshotContainer.transform = isShowingSummary
@@ -300,17 +320,10 @@ public final class SummarizeController: UIViewController, Themeable {
         topHalfBoundGuideBottomAnchor?.isActive = true
     }
 
-    private func setupLoadingBackgroundGradient() {
-        backgroundGradient.frame = view.bounds
-        backgroundGradient.locations = [0.0, 1.0]
-        backgroundGradient.startPoint = CGPoint(x: 0.5, y: 0.0)
-        backgroundGradient.endPoint = CGPoint(x: 0.5, y: 1.0)
-    }
-
     private func summarize() {
         loadingLabel.alpha = 1.0
-        let textColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.textOnDark
-        loadingLabel.startShimmering(light: textColor, dark: textColor.withAlphaComponent(UX.labelShimmeringColorAlpha))
+        loadingLogoView.alpha = 1.0
+        startShimmeringLoadingLabel()
         infoView.alpha = 0.0
         viewModel.summarize(
             webView: webView,
@@ -485,10 +498,10 @@ public final class SummarizeController: UIViewController, Themeable {
         summaryView.backgroundColor = .clear
         summaryView.applyTheme(theme: theme)
         titleLabel.textColor = theme.colors.textPrimary
-        loadingLabel.textColor = theme.colors.textOnDark
+        loadingLabel.textColor = theme.colors.textSecondary
         tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
-        backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
-        closeButton.tintColor = summaryView.alpha == 0 ? theme.colors.iconOnColor : theme.colors.iconPrimary
+        closeButton.tintColor = theme.colors.iconPrimary
+        backgroundEffectView.applyTheme(theme: theme)
         infoView.applyTheme(theme: theme)
     }
 }
