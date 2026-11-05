@@ -1,16 +1,28 @@
 format_version: '8'
 
 pipelines:
+  pipeline_firefox_nightly_fullfunctional_iphone:
+    workflows:
+      Firefox_Nightly_Fullfunctional_Iphone: {}
+      firefox_fullfunctional_shard:
+        depends_on:
+        - Firefox_Nightly_Fullfunctional_Iphone
+        parallel: 4
+      firefox_fullfunctional_report:
+        depends_on:
+        - firefox_fullfunctional_shard
+        should_always_run: workflow
+
   pipeline_firefox_fullfunctional_iphone:
     workflows:
-      firefox_fullfunctional_iphone_build: {}
-      firefox_fullfunctional_iphone_shard:
+      Firefox_Fullfunctional_Iphone: {}
+      firefox_fullfunctional_shard:
         depends_on:
-        - firefox_fullfunctional_iphone_build
+        - Firefox_Fullfunctional_Iphone
         parallel: 4
-      firefox_fullfunctional_iphone_report:
+      firefox_fullfunctional_report:
         depends_on:
-        - firefox_fullfunctional_iphone_shard
+        - firefox_fullfunctional_shard
         should_always_run: workflow
 
 workflows:
@@ -307,10 +319,25 @@ workflows:
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=tests
 
+  Firefox_Nightly_Fullfunctional_Iphone:
+    envs:
+    - FULLFUNCTIONAL_SCHEME: Fennec
+    - FULLFUNCTIONAL_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    after_run:
+    - _firefox_fullfunctional_build
+
+  Firefox_Fullfunctional_Iphone:
+    envs:
+    - FULLFUNCTIONAL_SCHEME: Firefox
+    - FULLFUNCTIONAL_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    after_run:
+    - _firefox_fullfunctional_build
+
   _firefox_fullfunctional_params:
     description: >-
-      Resolve the parameters of pipeline_firefox_fullfunctional_iphone. Set FULLFUNCTIONAL_SCHEME and/or
-      FULLFUNCTIONAL_DESTINATION when triggering the pipeline to override the defaults (Fennec, iPhone 18 Pro on iOS 27.0).
+      Resolve the full functional test parameters. The entry workflows set FULLFUNCTIONAL_SCHEME and
+      FULLFUNCTIONAL_DESTINATION, and _firefox_fullfunctional_build shares them with the shard and report workflows.
+      Falls back to Fennec on iPhone 18 Pro (iOS 27.0) when they are not set.
     steps:
     - script@1:
         title: Resolve full functional test parameters
@@ -329,7 +356,7 @@ workflows:
             envman add --key FULLFUNCTIONAL_DESTINATION --value "$DESTINATION"
             envman add --key FULLFUNCTIONAL_DEVICE_LABEL --value "$DEVICE_LABEL"
 
-  firefox_fullfunctional_iphone_build:
+  _firefox_fullfunctional_build:
     description: Build the FULLFUNCTIONAL_SCHEME scheme and shard the full functional tests across 4 VMs
     before_run:
     - _firefox_fullfunctional_params
@@ -360,8 +387,14 @@ workflows:
         - pipeline_intermediate_files: |-
             BITRISE_TEST_SHARDS_PATH
             BITRISE_TEST_BUNDLE_PATH
+    - share-pipeline-variable@1:
+        inputs:
+        - variables: |-
+            FULLFUNCTIONAL_SCHEME
+            FULLFUNCTIONAL_DESTINATION
+            FULLFUNCTIONAL_DEVICE_LABEL
 
-  firefox_fullfunctional_iphone_shard:
+  firefox_fullfunctional_shard:
     description: Run one shard of the Firefox full functional tests
     before_run:
     - _firefox_fullfunctional_params
@@ -400,7 +433,7 @@ workflows:
         inputs:
         - pipeline_intermediate_files: $BITRISE_DEPLOY_DIR/fullfunctional_result.txt:FULLFUNCTIONAL_RESULT_$BITRISE_IO_PARALLEL_INDEX
 
-  firefox_fullfunctional_iphone_report:
+  firefox_fullfunctional_report:
     description: Collect the failed test counts from all shards and report them to Slack
     envs:
     - FULLFUNCTIONAL_SHARD_COUNT: 4
