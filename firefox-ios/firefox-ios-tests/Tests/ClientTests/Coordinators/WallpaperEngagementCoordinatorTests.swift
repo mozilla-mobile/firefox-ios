@@ -166,7 +166,7 @@ final class WallpaperEngagementCoordinatorTests: XCTestCase {
 
     private func makeTab(isPrivate: Bool = false, isHomePage: Bool = true) -> Tab {
         return MockTab(
-            profile: MockProfile(),
+            profile: AppContainer.shared.resolve(),
             isPrivate: isPrivate,
             windowUUID: .XCTestDefaultUUID,
             isHomePage: isHomePage
