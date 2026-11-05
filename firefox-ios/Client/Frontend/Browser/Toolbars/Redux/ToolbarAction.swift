@@ -31,8 +31,6 @@ struct ToolbarAction: Action {
     let middleButton: NavigationBarMiddleButtonType?
     let isTranslationsEnabled: Bool?
     let translationConfiguration: TranslationConfiguration?
-    let previousTabScreenshot: UIImage?
-    let nextTabScreenshot: UIImage?
     let isNovaDesignEnabled: Bool?
 
     init(toolbarPosition: SearchBarPosition? = nil,
@@ -58,8 +56,6 @@ struct ToolbarAction: Action {
          middleButton: NavigationBarMiddleButtonType? = nil,
          isTranslationsEnabled: Bool? = nil,
          translationConfiguration: TranslationConfiguration? = nil,
-         previousTabScreenshot: UIImage? = nil,
-         nextTabScreenshot: UIImage? = nil,
          isNovaDesignEnabled: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
@@ -87,8 +83,6 @@ struct ToolbarAction: Action {
         self.middleButton = middleButton
         self.isTranslationsEnabled = isTranslationsEnabled
         self.translationConfiguration = translationConfiguration
-        self.previousTabScreenshot = previousTabScreenshot
-        self.nextTabScreenshot = nextTabScreenshot
         self.isNovaDesignEnabled = isNovaDesignEnabled
     }
 }
@@ -137,6 +131,13 @@ enum ToolbarModernAction: ModernAction {
 
     /// The menu button's warning badge changed, for example when the account needs the user's attention.
     case showMenuWarningBadge(isShown: Bool)
+
+    /// Whether the navigation contextual hint can be shown. Enabled by a double tap on a navigation button,
+    /// and disabled once the hint is dismissed.
+    case navigationHintAvailabilityChanged(canShow: Bool)
+
+    /// The screenshots of the tabs next to the selected tab were loaded, used for the tab swipe preview.
+    case didSetTabScreenshot(previousTabScreenshot: UIImage?, nextTabScreenshot: UIImage?)
 }
 
 enum ToolbarActionType: ActionType {
@@ -153,13 +154,10 @@ enum ToolbarActionType: ActionType {
     case websiteLoadingStateDidChange
     case searchEngineDidChange
     case googleLensSettingDidChange
-    case navigationButtonDoubleTapped
-    case navigationHintFinishedPresenting
     case clearSearch
     case didDeleteSearchTerm
     case didEnterSearchTerm
     case didSummarizeSettingsChange
-    case didSetTabScreenshot
     // User submitted a search term to load the search request
     case didSubmitSearchTerm
     case didSetSearchTerm

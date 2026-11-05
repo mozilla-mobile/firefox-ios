@@ -561,36 +561,67 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.isShowingTopTabs)
     }
 
-    func test_navigationButtonDoubleTappedAction_returnsExpectedState() {
+    func test_navigationHintAvailabilityChangedAction_canShow_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.navigationButtonDoubleTapped
-            )
+            ToolbarModernAction.navigationHintAvailabilityChanged(canShow: true),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertTrue(newState.canShowNavigationHint)
     }
 
-    func test_navigationHintFinishedPresentingAction_returnsExpectedState() {
+    func test_navigationHintAvailabilityChangedAction_cannotShow_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.navigationHintFinishedPresenting
-            )
+        let hintShownState = initialState.copy(canShowNavigationHint: true)
+
+        let newState = reducer.modernReducer(
+            hintShownState,
+            ToolbarModernAction.navigationHintAvailabilityChanged(canShow: false),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertFalse(newState.canShowNavigationHint)
+    }
+
+    func test_didSetTabScreenshotAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+        let previousScreenshot = UIImage()
+        let nextScreenshot = UIImage()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.didSetTabScreenshot(
+                previousTabScreenshot: previousScreenshot,
+                nextTabScreenshot: nextScreenshot
+            ),
+            windowUUID
+        )
+
+        XCTAssertTrue(newState.previousTabScreenshot === previousScreenshot)
+        XCTAssertTrue(newState.nextTabScreenshot === nextScreenshot)
+    }
+
+    func test_didSetTabScreenshotAction_fromAnotherWindow_doesNotChangeState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.didSetTabScreenshot(previousTabScreenshot: UIImage(), nextTabScreenshot: UIImage()),
+            WindowUUID()
+        )
+
+        XCTAssertNil(newState.previousTabScreenshot)
+        XCTAssertNil(newState.nextTabScreenshot)
     }
 
     func test_didTapSearchEngineAction_returnsExpectedState() {
