@@ -4,7 +4,7 @@ Date: 2025-11-10
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
@@ -26,7 +26,7 @@ We will **adopt a three-tier documentation structure** using Confluence, Google 
 
 - **Confluence** will serve as the canonical home for finalized and evergreen documentation.  
   It will include:
-  - Engineering overviews and architecture  
+  - Engineering overviews
   - Team norms, onboarding materials, and operational processes  
   - Strategic and finalized proposals  
   - References to key external documents  
@@ -44,6 +44,7 @@ We will **adopt a three-tier documentation structure** using Confluence, Google 
 
 - **GitHub Wiki** will focus on **contributor enablement** — documentation that helps new or external contributors build, test, and submit changes to this repository.  
   It will include:
+  - Architecture documentation
   - Build and setup instructions  
   - Development workflows (branching, PRs, CI expectations)  
   - Coding standards and review guidelines  
