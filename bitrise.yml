@@ -53,6 +53,17 @@ pipelines:
         depends_on:
         - firefox_beta_scheme_build_for_test
         parallel: 5
+  pipeline_firefox_fullfunctional_iphone:
+    workflows:
+      firefox_fullfunctional_iphone_build: {}
+      firefox_fullfunctional_iphone_shard:
+        depends_on:
+        - firefox_fullfunctional_iphone_build
+        parallel: 4
+      firefox_fullfunctional_iphone_report:
+        depends_on:
+        - firefox_fullfunctional_iphone_shard
+        should_always_run: workflow
 
 workflows:
   firefox_accessibility_test:
@@ -727,6 +738,128 @@ workflows:
                 echo "BITRISEIO_PIPELINE_ID is set to $BITRISEIO_PIPELINE_ID"
             fi
         title: Detect standalone build
+  firefox_fullfunctional_iphone_build:
+    description: Build Fennec scheme and shard the full functional tests across 4 VMs
+    envs:
+    - FULLFUNCTIONAL_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    - skip_macro_validation
+    steps:
+    - restore-spm-cache@3:
+        is_always_run: true
+    - activate-build-cache-for-xcode@0: {}
+    - xcode-build-for-test@3:
+        title: Build Firefox iOS
+        inputs:
+        - scheme: Fennec
+        - configuration: Debug
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - test_plan: FullFunctionalTestPlan
+        - xcodebuild_options: ONLY_ACTIVE_ARCH=YES COMPILER_INDEX_STORE_ENABLE=NO
+        - destination: $FULLFUNCTIONAL_DESTINATION
+    - xcode-test-shard-calculation@0:
+        inputs:
+        - product_path: $BITRISE_XCTESTRUN_FILE_PATH
+        - shard_count: 4
+        - destination: $FULLFUNCTIONAL_DESTINATION
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - pipeline_intermediate_files: |-
+            BITRISE_TEST_SHARDS_PATH
+            BITRISE_TEST_BUNDLE_PATH
+  firefox_fullfunctional_iphone_shard:
+    description: Run one shard of the Firefox full functional tests
+    before_run:
+    - 1_git_clone_and_post_clone
+    steps:
+    - pull-intermediate-files@1: {}
+    - script@1:
+        title: Find FullFunctionalTestPlan xctestrun file
+        inputs:
+        - content: |-
+            set -euxo pipefail
+            XCTESTRUN=$(find "$BITRISE_TEST_BUNDLE_PATH" -name "Fennec_FullFunctionalTestPlan_*.xctestrun" | head -n 1)
+            envman add --key FULLFUNCTIONAL_XCTESTRUN --value "$XCTESTRUN"
+    - xcode-test-without-building@0:
+        title: Run full functional tests shard
+        inputs:
+        - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
+        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+        - xctestrun: $FULLFUNCTIONAL_XCTESTRUN
+        - xcodebuild_options: -collect-test-diagnostics never
+    - script@1:
+        title: Count failed tests in this shard
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            if [ -z "$BITRISE_XCRESULT_PATH" ]; then
+                FAILED_COUNT="no results"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
+            echo "Shard $BITRISE_IO_PARALLEL_INDEX failures: ${FAILED_COUNT:-no results}"
+            echo "${FAILED_COUNT:-no results}" > "$BITRISE_DEPLOY_DIR/fullfunctional_result.txt"
+    - deploy-to-bitrise-io@2:
+        is_always_run: true
+        inputs:
+        - pipeline_intermediate_files: $BITRISE_DEPLOY_DIR/fullfunctional_result.txt:FULLFUNCTIONAL_RESULT_$BITRISE_IO_PARALLEL_INDEX
+  firefox_fullfunctional_iphone_report:
+    description: Collect the failed test counts from all shards and report them to Slack
+    envs:
+    - FULLFUNCTIONAL_SHARD_COUNT: 4
+    steps:
+    - pull-intermediate-files@1: {}
+    - script@1:
+        title: Sum failed tests across shards
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            TOTAL=0
+            DETAILS=""
+            STATUS=":white_check_mark:"
+            COLOR="#3bc3a3"
+            for i in $(seq 0 $((FULLFUNCTIONAL_SHARD_COUNT - 1))); do
+                RESULT_FILE_VAR="FULLFUNCTIONAL_RESULT_$i"
+                RESULT_FILE="${!RESULT_FILE_VAR}"
+                if [ -n "$RESULT_FILE" ] && [ -f "$RESULT_FILE" ]; then
+                    COUNT=$(cat "$RESULT_FILE")
+                else
+                    COUNT="no results"
+                fi
+                if [[ "$COUNT" =~ ^[0-9]+$ ]]; then
+                    TOTAL=$((TOTAL + COUNT))
+                    [ "$COUNT" -gt 0 ] && STATUS=":x:" && COLOR="danger"
+                else
+                    STATUS=":x:"
+                    COLOR="danger"
+                fi
+                DETAILS="${DETAILS}Shard $((i + 1)): ${COUNT}"$'\n'
+            done
+            echo "Total failures: $TOTAL"
+            printf "%b" "$DETAILS"
+            envman add --key FULLFUNCTIONAL_SLACK_STATUS --value "$STATUS"
+            envman add --key FULLFUNCTIONAL_SLACK_COLOR --value "$COLOR"
+            envman add --key FULLFUNCTIONAL_SLACK_MESSAGE --value "Number of failed tests: $TOTAL"
+    - slack@4:
+        is_always_run: true
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
+        - footer: Created by Mobile Test Engineering
+        - pretext: "*Firefox-iOS* :firefox: *Full Functional Tests iPhone* ${FULLFUNCTIONAL_SLACK_STATUS}"
+        - color: "$FULLFUNCTIONAL_SLACK_COLOR"
+        - message: "$FULLFUNCTIONAL_SLACK_MESSAGE"
+        - timestamp: 'no'
+        - fields: |
+            Branch | ${BITRISE_GIT_BRANCH}
+        - buttons: |
+            Test Results|https://app.bitrise.io/app/${BITRISE_APP_SLUG}/pipelines/${BITRISEIO_PIPELINE_ID}?tab=tests
   1_git_clone_and_post_clone:
     steps:
     - activate-ssh-key@4:
