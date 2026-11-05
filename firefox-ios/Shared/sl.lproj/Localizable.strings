@@ -347,7 +347,7 @@
 "FirefoxHome.RecentHistory.Remove" = "Odstrani";
 
 /* On each Story on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
-"FirefoxHome.Stories.Minutes.v140" = "minut: %d";
+"FirefoxHome.Stories.Minutes.v140" = "min: %d";
 
 /* Label showing how many pages there is in a search group. %d represents a number */
 "FirefoxHomepage.Common.PagesCount.v112" = "Strani: %d";
@@ -425,7 +425,7 @@
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Naprava je bila odklopljena iz Firefox Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
-"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logtip Firefoxa, spremeni ozadje.";
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Logotip Firefoxa, spremeni ozadje.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Pomoč";
@@ -824,19 +824,19 @@
 "Menu.TrackingProtectionBlockedSocial.Title" = "Družbeni sledilci";
 
 /* The title that shows the number of cross-site URLs blocked */
-"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Spletni sledilci";
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Sledilci med spletnimi mesti";
 
 /* The title that shows the number of cryptomining scripts blocked */
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Kriptorudarji";
 
 /* Description of content trackers. */
-"Menu.TrackingProtectionDescription.ContentTrackers" = "Spletne strani lahko naložijo oglase, videoposnetke in drugo vsebino, ki vsebujejo skrite sledilce. Zavračanje te vsebine lahko pospeši nalaganje spletnih strani, vendar nekateri gumbi in obrazci morda ne bodo delovali.";
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Spletne strani lahko naložijo oglase, videoposnetke in drugo vsebino, ki vsebujejo skrite sledilce. Zavračanje te vsebine lahko pospeši nalaganje spletnih strani, vendar nekateri gumbi, obrazci in prijavna polja morda ne bodo delovali.";
 
 /* Description of cross-site trackers. */
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Ti piškotki vas spremljajo po straneh in zbirajo podatke o tem, kaj počnete na spletu. Namestijo jih tretje strani, kot so oglaševalci in analitična podjetja.";
 
 /* Description of cryptominers. */
-"Menu.TrackingProtectionDescription.CryptominersNew" = "Kriptorudarji izrabljajo zmogljivost vašega računalnika za rudarjenje digitalnega denarja. Rudarski skripti vam praznijo baterijo, upočasnjujejo računalnik in zasolijo račun za elektriko.";
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Kriptorudarji na skrivaj izrabljajo zmogljivost vašega računalnika za rudarjenje digitalnega denarja. Rudarski skripti vam praznijo baterijo, upočasnjujejo računalnik in zasolijo račun za elektriko.";
 
 /* Description of fingerprinters. */
 "Menu.TrackingProtectionDescription.Fingerprinters" = "Nastavitve vašega brskalnika in računalnika so edinstvene. Sledilci prstnih odtisov zbirajo te nastavitve, da ustvarijo vaš profil, s pomočjo katerega vam lahko sledijo med brskanjem.";
@@ -1013,7 +1013,7 @@
 "Search.SuggestSectionTitle.v102" = "Firefoxovi predlogi";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
-"Search.ThirdPartyEngines.AddMessage" = "Novi isklanik se bo pojavil v vrstici za hitro iskanje.";
+"Search.ThirdPartyEngines.AddMessage" = "Novi iskalnik se bo pojavil v vrstici za hitro iskanje.";
 
 /* The success message that appears after a user sucessfully adds a new search engine */
 "Search.ThirdPartyEngines.AddSuccess" = "Iskalnik dodan!";
@@ -1082,7 +1082,7 @@
 "SendTo.NotSignedIn.Message" = "Odprite Firefox, pojdite v Nastavitve in se prijavite za nadaljevanje.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Niste prijavljeni v vaš Firefox Račun.";
+"SendTo.NotSignedIn.Title" = "Niste prijavljeni v svoj Firefox Račun.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Pošlji";
@@ -1169,7 +1169,7 @@
 "Settings.BlockOpeningExternalApps.Title" = "Zavrni odpiranje zunanjih aplikacij";
 
 /* Button in Data Management that clears all items. */
-"Settings.ClearAllWebsiteData.Clear.Button" = "Izbriši vse podatke spletne strani";
+"Settings.ClearAllWebsiteData.Clear.Button" = "Izbriši vse podatke spletnih strani";
 
 /* Button in settings that clears private data for the selected items. */
 "Settings.ClearPrivateData.Clear.Button" = "Počisti zasebne podatke";
@@ -1808,7 +1808,7 @@
 "Yesterday" = "Včeraj";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "V Firefoxu na drugih napravah nimate odprtih drugih zavihkov.";
+"You don’t have any tabs open in Firefox on your other devices." = "V Firefoxu na drugih napravah nimate odprtih zavihkov.";
 
 /* Your Rights settings section title */
 "Your Rights" = "Vaše pravice";

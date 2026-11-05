@@ -125,7 +125,7 @@
 "Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148" = "Nicht jetzt";
 
 /* Title for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "Benachrichtigungen helfen Ihnen, %@ noch sicherer zu machen";
+"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "Benachrichtigungen helfen Ihnen, mit %@ noch sicherer zu surfen";
 
 /* Button to turn on notifications in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "Benachrichtigungen aktivieren";
@@ -239,7 +239,7 @@
 "Onboarding.Modern.Sync.Description.v140" = "Nehmen Sie Ihre Lesezeichen, Chronik und Passwörter auf jedem Gerät mit.";
 
 /* Description for the Sync card in the v2 onboarding flow. */
-"Onboarding.Modern.Sync.Description.v145" = "Ihre Lesezeichen, Passwörter und mehr werden mit jedem Gerät synchronisiert. Alles ist durch Verschlüsselung geschützt, sodass nur Sie darauf zugreifen können.";
+"Onboarding.Modern.Sync.Description.v145" = "Ihre Lesezeichen, Passwörter und mehr werden auf allen Geräten synchronisiert. Alles ist durch Verschlüsselung geschützt, sodass nur Sie darauf zugreifen können.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "Mit Synchronisierung beginnen";
@@ -311,7 +311,7 @@
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "Helfen Sie uns, %@ zu verbessern";
 
 /* Subtitle for the Terms of Service screen in the onboarding process. The '\n' symbols denote empty lines separating the first link parameter from the rest of the text. */
-"Onboarding.Modern.TermsOfService.Subtitle.v140" = "Laden Sie Websites blitzschnell\nAutomatischer Tracking-Schutz\nSynchronisiere auf allen deinen Geräten";
+"Onboarding.Modern.TermsOfService.Subtitle.v140" = "Laden Sie Websites blitzschnell\nAutomatischer Tracking-Schutz\nSynchronisieren Sie auf allen Ihren Geräten";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
 "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "Indem Sie fortfahren, stimmen Sie den %@ zu.";
@@ -353,7 +353,7 @@
 "Onboarding.Modern.Welcome.Title.v140" = "Verabschieden Sie sich von gruseliger Werbung";
 
 /* Title for the welcome card in the v2 onboarding flow. */
-"Onboarding.Modern.Welcome.Title.v145" = "Verabschieden Sie sich von gruseligen Verfolgern";
+"Onboarding.Modern.Welcome.Title.v145" = "Verabschieden Sie sich von gruseligen Trackern";
 
 /* Body of the home screen popup requesting permission to send notifications. It emphasizes how notifications keep you updated on news. %@ is a placeholder for the app name (e.g., Firefox). */
 "Onboarding.MultiDay.HomeScreenNotificationsPopup.BodyText.v159" = "Bleiben Sie über die neuesten Nachrichten zu %@ auf dem Laufenden.";
@@ -384,7 +384,7 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 "Onboarding.MultiDay.SyncCard.AcceptButtonText.v159" = "Bei Sync anmelden";
 
 /* Body of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information). */
-"Onboarding.MultiDay.SyncCard.BodyText.v159" = "Holen Sie sich Passwörter, Chronik und mehr auf jedem Gerät.";
+"Onboarding.MultiDay.SyncCard.BodyText.v159" = "Holen Sie sich sofort Passwörter, Chronik und mehr auf jedem Gerät.";
 
 /* Title of the onboarding card that prompts users to enable syncing for their account data so they can access it across devices (e.g., history, passwords, payment information). */
 "Onboarding.MultiDay.SyncCard.Title.v159" = "Synchronisieren Sie Ihre Daten";
@@ -486,13 +486,13 @@ Secondary button on the onboarding card that prompts users to enable syncing for
 "Onboarding.Welcome.ActionTreatementA.v114" = "Als Standardbrowser festlegen";
 
 /* Accessibility label for close button that dismisses the welcome onboarding screen. %@ is the app name (e.g. Firefox). */
-"Onboarding.Welcome.Close.AccessibilityLabel.v121" = "%@ Onboarding beenden und schließen";
+"Onboarding.Welcome.Close.AccessibilityLabel.v121" = "%@-Onboarding beenden und schließen";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Description.TreatementA.v120" = "Unser gemeinnütziger Browser verhindert, dass Unternehmen heimlich Ihre Aktivitäten im Internet verfolgen.";
+"Onboarding.Welcome.Description.TreatementA.v120" = "Unser von einer gemeinnützigen Organisation unterstützter Browser verhindert, dass Unternehmen heimlich Ihre Aktivitäten im Internet verfolgen.";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
-"Onboarding.Welcome.Description.v120" = "Unser gemeinnütziger Browser verhindert, dass Unternehmen heimlich Ihre Aktivitäten im Internet verfolgen.";
+"Onboarding.Welcome.Description.v120" = "Unser von einer gemeinnützigen Organisation unterstützter Browser verhindert, dass Unternehmen heimlich Ihre Aktivitäten im Internet verfolgen.";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Weitere Informationen finden Sie in unserem Datenschutzhinweis";

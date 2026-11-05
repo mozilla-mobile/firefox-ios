@@ -466,6 +466,9 @@
 /* Shown next to the VPN switch on the VPN settings screen while the VPN is connecting, right after the user turns it on. */
 "VPN.Settings.Connecting.v160" = "Σύνδεση…";
 
+/* Footer below the Data Limit section on the VPN settings screen. Explains when the user's free VPN data resets. %1$@ is the monthly limit in gigabytes (for example, 5.0). “GB” stands for gigabytes. */
+"VPN.Settings.DataLimitResetFooter.v160" = "Γίνεται επαναφορά στα %1$@ GB την πρώτη μέρα κάθε μήνα";
+
 /* Title of the section on the VPN settings screen that shows how much of the user's free monthly VPN data they have used. */
 "VPN.Settings.DataLimitTitle.v160" = "Όριο δεδομένων";
 

@@ -8,7 +8,7 @@
 "Summarizer.CloseButton.Label.v142" = "Fermer";
 
 /* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
-"Summarizer.Error.MissingPageContent.Message.v142" = "La page est en cours de chargement. Veuillez attendre qu’elle soit complètement chargée, puis cliquez sur « Résumer ».";
+"Summarizer.Error.MissingPageContent.Message.v142" = "La page est en cours de chargement. Veuillez attendre qu’elle soit complètement chargée, puis appuyez sur « Résumer ».";
 
 /* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
 "Summarizer.Error.RateLimited.Message.v142" = "Impossible de résumer cette page pour l’instant. Veuillez réessayer ultérieurement.";
