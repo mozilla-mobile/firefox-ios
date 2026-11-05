@@ -307,11 +307,32 @@ workflows:
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=tests
 
+  _firefox_fullfunctional_params:
+    description: >-
+      Resolve the parameters of pipeline_firefox_fullfunctional_iphone. Set FULLFUNCTIONAL_SCHEME and/or
+      FULLFUNCTIONAL_DESTINATION when triggering the pipeline to override the defaults (Fennec, iPhone 18 Pro on iOS 27.0).
+    steps:
+    - script@1:
+        title: Resolve full functional test parameters
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euo pipefail
+            SCHEME="${FULLFUNCTIONAL_SCHEME:-Fennec}"
+            DESTINATION="${FULLFUNCTIONAL_DESTINATION:-platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0}"
+            DEVICE=$(sed -nE 's/.*name=([^,]+).*/\1/p' <<< "$DESTINATION")
+            OS=$(sed -nE 's/.*OS=([^,]+).*/\1/p' <<< "$DESTINATION")
+            DEVICE_LABEL="${DEVICE:-unknown device}${OS:+ (iOS $OS)}"
+            echo "Scheme: $SCHEME"
+            echo "Destination: $DESTINATION"
+            envman add --key FULLFUNCTIONAL_SCHEME --value "$SCHEME"
+            envman add --key FULLFUNCTIONAL_DESTINATION --value "$DESTINATION"
+            envman add --key FULLFUNCTIONAL_DEVICE_LABEL --value "$DEVICE_LABEL"
+
   firefox_fullfunctional_iphone_build:
-    description: Build Fennec scheme and shard the full functional tests across 4 VMs
-    envs:
-    - FULLFUNCTIONAL_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    description: Build the FULLFUNCTIONAL_SCHEME scheme and shard the full functional tests across 4 VMs
     before_run:
+    - _firefox_fullfunctional_params
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
@@ -323,7 +344,7 @@ workflows:
     - xcode-build-for-test@3:
         title: Build Firefox iOS
         inputs:
-        - scheme: Fennec
+        - scheme: $FULLFUNCTIONAL_SCHEME
         - configuration: Debug
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
         - test_plan: FullFunctionalTestPlan
@@ -343,6 +364,7 @@ workflows:
   firefox_fullfunctional_iphone_shard:
     description: Run one shard of the Firefox full functional tests
     before_run:
+    - _firefox_fullfunctional_params
     - 1_git_clone_and_post_clone
     steps:
     - pull-intermediate-files@1: {}
@@ -351,13 +373,13 @@ workflows:
         inputs:
         - content: |-
             set -euxo pipefail
-            XCTESTRUN=$(find "$BITRISE_TEST_BUNDLE_PATH" -name "Fennec_FullFunctionalTestPlan_*.xctestrun" | head -n 1)
+            XCTESTRUN=$(find "$BITRISE_TEST_BUNDLE_PATH" -name "${FULLFUNCTIONAL_SCHEME}_FullFunctionalTestPlan_*.xctestrun" | head -n 1)
             envman add --key FULLFUNCTIONAL_XCTESTRUN --value "$XCTESTRUN"
     - xcode-test-without-building@0:
         title: Run full functional tests shard
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
-        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+        - destination: $FULLFUNCTIONAL_DESTINATION
         - xctestrun: $FULLFUNCTIONAL_XCTESTRUN
         - xcodebuild_options: -collect-test-diagnostics never
     - script@1:
@@ -382,6 +404,8 @@ workflows:
     description: Collect the failed test counts from all shards and report them to Slack
     envs:
     - FULLFUNCTIONAL_SHARD_COUNT: 4
+    before_run:
+    - _firefox_fullfunctional_params
     steps:
     - pull-intermediate-files@1: {}
     - script@1:
@@ -423,11 +447,13 @@ workflows:
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
         - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
         - footer: Created by Mobile Test Engineering
-        - pretext: "*Firefox-iOS* :firefox: *Full Functional Tests iPhone* ${FULLFUNCTIONAL_SLACK_STATUS}"
+        - pretext: "*Firefox-iOS* :firefox: *Full Functional Tests ${FULLFUNCTIONAL_SCHEME} - ${FULLFUNCTIONAL_DEVICE_LABEL}* ${FULLFUNCTIONAL_SLACK_STATUS}"
         - color: "$FULLFUNCTIONAL_SLACK_COLOR"
         - message: "$FULLFUNCTIONAL_SLACK_MESSAGE"
         - timestamp: 'no'
         - fields: |
             Branch | ${BITRISE_GIT_BRANCH}
+            Scheme | ${FULLFUNCTIONAL_SCHEME}
+            Device | ${FULLFUNCTIONAL_DEVICE_LABEL}
         - buttons: |
             Test Results|https://app.bitrise.io/app/${BITRISE_APP_SLUG}/pipelines/${BITRISEIO_PIPELINE_ID}?tab=tests
