@@ -66,7 +66,7 @@ public final class SummarizeController: UIViewController, Themeable {
         $0.adjustsFontForContentSizeCategory = true
     }
     private let loadingLogoView: UIImageView = .build {
-        $0.image = UIImage(named: StandardImageIdentifiers.Large.logoFirefox)
+        $0.image = UIImage(named: StandardImageIdentifiers.Large.logoFirefox)?.withRenderingMode(.alwaysTemplate)
         $0.contentMode = .scaleAspectFit
         $0.alpha = 0
         $0.isAccessibilityElement = false
@@ -253,6 +253,7 @@ public final class SummarizeController: UIViewController, Themeable {
 
         makeTopHalfBoundGuideBottomAnchor()
         backgroundEffectView.pinToSuperview()
+        backgroundEffectView.confineToTopHalf()
         NSLayoutConstraint.activate([
             topHalfBoundGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             topHalfBoundGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -499,6 +500,7 @@ public final class SummarizeController: UIViewController, Themeable {
         summaryView.applyTheme(theme: theme)
         titleLabel.textColor = theme.colors.textPrimary
         loadingLabel.textColor = theme.colors.textSecondary
+        loadingLogoView.tintColor = theme.colors.textOnDark
         tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
         closeButton.tintColor = theme.colors.iconPrimary
         backgroundEffectView.applyTheme(theme: theme)

@@ -237,6 +237,9 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
         static let resultFadeDuration: TimeInterval = 0.3
         static let resultFadeDelay: TimeInterval = 0.2
         static let presentationBlobsOffset: CGFloat = 50.0
+        /// Moves the blobs center from two thirds to a quarter of the height, so they fill the top half.
+        static let topHalfBlobsOffsetRatio: CGFloat = 5.0 / 12.0
+        static let resultExpandDuration: TimeInterval = 0.5
         static let topTrailingGlowOpacities: [CGFloat] = [0.25, 0.1, 0.0]
         /// Vertical wash laid over the blobs once a result is shown, so the answer stays readable.
         static let resultWashStops: [(location: NSNumber, opacity: CGFloat)] = [
@@ -259,6 +262,11 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
     private let blobsHostingController: UIHostingController<BlendedBlobsGradient>
     private let resultWash: GradientView = .build {
         $0.alpha = 0.0
+    }
+    private var isConfinedToTopHalf = false
+    private var topHalfTransform: CGAffineTransform {
+        guard bounds.height > bounds.width else { return .identity }
+        return CGAffineTransform(translationX: 0.0, y: -bounds.height * UX.topHalfBlobsOffsetRatio)
     }
 
     /// - Parameter parentController: the controller the blobs hosting controller is added to as a child.
@@ -296,10 +304,25 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
         )
         topTrailingGlow.startPoint = CGPoint(x: 1.0, y: 0.0)
         topTrailingGlow.endPoint = CGPoint(x: 0.0, y: 1.0)
+        if isConfinedToTopHalf {
+            blobsHostingController.view.transform = topHalfTransform
+        }
+    }
+
+    /// Keeps the blobs in the top half of the view until a result is shown. Portrait only.
+    public func confineToTopHalf() {
+        isConfinedToTopHalf = true
+        setNeedsLayout()
     }
 
     public func showResult() {
         blobsState.isPaused = true
+        if isConfinedToTopHalf {
+            isConfinedToTopHalf = false
+            UIView.animate(withDuration: UX.resultExpandDuration, delay: 0.0, options: .curveEaseInOut) { [self] in
+                blobsHostingController.view.transform = .identity
+            }
+        }
         UIView.animate(
             withDuration: UX.resultFadeDuration,
             delay: UX.resultFadeDelay,
