@@ -10,6 +10,21 @@
 /* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the title for the alert. */
 "Alerts.AddToCalendar.Title.v134" = "Kalendarjoju pśidaś?";
 
+/* Message of dialogue window. Prompts the user to confirm they want to download a configuration profile that can be installed in device settings. %@ is the name/domain of the website initiating the download, for example 'google.com' */
+"Alerts.ConfigurationProfile.Body.v160.1" = "%@ se pšaša, lěc móžo konfiguraciski profil ześěgnuś. Móžośo jen w nastajenjach pśeglědowaś a instalěrowaś.";
+
+/* Message of dialogue window. Prompts the user to confirm they want to download a configuration profile that can be installed in device settings. This variant is displayed when the website initiating the download doesn't have a base domain to display. */
+"Alerts.ConfigurationProfile.BodyDefault.v160.1" = "Toś to sedło se pšaša, lěc móžo konfiguraciski profil ześěgnuś. Móžośo jen w nastajenjach pśeglědowaś a instalěrowaś.";
+
+/* Secondary Button in dialogue window. If tapped, cancels the download and closes the window. */
+"Alerts.ConfigurationProfile.Button.Cancel.v160.1" = "Pśetergnuś";
+
+/* Primary Button in dialogue window. If tapped, confirms the user wants to download the configuration profile and the download starts. */
+"Alerts.ConfigurationProfile.Button.Continue.v160.1" = "Dalej";
+
+/* Title of dialogue window. Prompts the user to confirm they want to download a configuration profile that can be installed in device settings. */
+"Alerts.ConfigurationProfile.Title.v160.1" = "Konfiguraciski profil ześěgnuś?";
+
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
 "Alerts.FeltDeletion.Body.v122" = "Zacyńśo wšykne priwatne rejtariki a lašujśo historiju, cookieje a wšykne druge sedłowe daty.";
 

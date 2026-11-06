@@ -454,17 +454,38 @@
 /* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
 "Settings.Translation.ToggleTitle.v145" = "Slå på omsettingar";
 
+/* Text displayed on the locations screen when the app loads a list of locations for the user to pick from. “Locations” here means the locations of VPN servers the user can connect to. */
+"VPN.LocationPicker.FindingLocationsText.v160" = "Finn plasseringar…";
+
 /* Option in the VPN server location list. Choosing it lets the app pick the server with the fastest connection. */
 "VPN.LocationPicker.RecommendedMainText.v160" = "Tilrådd";
+
+/* Description below the Recommended option in the VPN server location list. %1$@ is the app name (for example, Firefox). */
+"VPN.LocationPicker.RecommendedSubText.v160" = "%1$@ finn den raskaste plasseringa.";
+
+/* Announced by VoiceOver on the VPN settings screen when the VPN finishes connecting after the user turns on the VPN switch. */
+"VPN.Settings.Connected.v161" = "VPN tilkopla";
 
 /* Shown next to the VPN switch on the VPN settings screen while the VPN is connecting, right after the user turns it on. */
 "VPN.Settings.Connecting.v160" = "Koplar til…";
 
+/* Read aloud by VoiceOver for the Data Limit section on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 gigabytes used”). The second sentence explains that the user’s free monthly VPN data resets on the first day of each month. */
+"VPN.Settings.DataLimit.AccessibilityValue.v161" = "%1$@ av %2$@ gigabyte brukte. Blir tilbakestilt den første i kvar månad.";
+
+/* Footer below the Data Limit section on the VPN settings screen. Explains when the user's free VPN data resets. %1$@ is the monthly limit in gigabytes (for example, 5.0). “GB” stands for gigabytes. */
+"VPN.Settings.DataLimitResetFooter.v160" = "Blir tilbakestilt til %1$@ GB den første i kvar månad";
+
 /* Title of the section on the VPN settings screen that shows how much of the user's free monthly VPN data they have used. */
 "VPN.Settings.DataLimitTitle.v160" = "Datagrense";
 
+/* Read aloud by VoiceOver for the data usage on the VPN settings screen. Same as the visible text, but with “gigabytes” written out instead of “GB”. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit (for example, “1.0 of 5.0 gigabytes used”). */
+"VPN.Settings.DataUsage.AccessibilityLabel.v160" = "%1$@ av %2$@ gigabyte brukt";
+
 /* Shown next to the Data Limit title on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 GB used”). “GB” stands for gigabytes. */
 "VPN.Settings.DataUsage.v160" = "%1$@ av %2$@ GB brukt";
+
+/* Short description below the title at the top of the VPN settings screen. Explains what the VPN does. */
+"VPN.Settings.Description.v160" = "Surf med ekstra vern ved å skjule plasseringa di, også på offentleg Wi-Fi.";
 
 /* Link below the description at the top of the VPN settings screen. Tapping it opens a support article about the VPN. */
 "VPN.Settings.LearnMore.v160" = "Les meir…";

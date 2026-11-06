@@ -1,5 +1,5 @@
 /* Sub label error string that gets shown when user enters incorrect input for their expiration date on their credit card in the text box. */
-"CreditCard.ErrorState.CardExpirationDateSublabel.v112" = "Vnesite veljavno leto poteka";
+"CreditCard.ErrorState.CardExpirationDateSublabel.v112" = "Vnesite veljaven datum poteka";
 
 /* Sub label error string that gets shown when user enters incorrect input for their number printed on their credit card in the text box. */
 "CreditCard.ErrorState.CardNumberSublabel.v112" = "Vnesite veljavno številko kartice";

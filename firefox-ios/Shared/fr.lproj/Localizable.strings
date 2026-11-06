@@ -656,7 +656,7 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "En savoir plus";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Pour utiliser la fonctionnalité de remplissage automatique, vous devez avoir un code d’appareil actif.";
+"Logins.PasscodeRequirement.Warning" = "Pour utiliser le remplissage automatique de Firefox, vous devez activer un code d’accès sur votre appareil.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Emportez vos mots de passe partout avec vous";
@@ -926,7 +926,7 @@
 "ProtectionStatus.Secure" = "Connexion sécurisée";
 
 /* Title for quick-search engines settings section. */
-"Quick-Search Engines" = "Moteurs de recherches rapides";
+"Quick-Search Engines" = "Moteurs de recherche rapides";
 
 /* A label indicating the action that a user can rate the Firefox app in the App store. */
 "Ratings.Settings.RateOnAppStore" = "Noter sur l’App Store";
@@ -1589,7 +1589,7 @@
 "Settings.WebsiteData.ConfirmPrompt" = "Cette action effacera l’ensemble des données de sites et est irréversible.";
 
 /* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
-"Settings.WebsiteData.SelectedConfirmPrompt" = "Cette action effacera l’ensemble des éléments sélectionnés et est irréversible.";
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Cette action effacera les éléments sélectionnés et est irréversible.";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Données des sites";

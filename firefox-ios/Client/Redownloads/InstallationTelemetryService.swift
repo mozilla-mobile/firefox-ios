@@ -25,7 +25,7 @@ final class InstallationTelemetryService {
     private var canCollectTelemetry: Bool {
         featureFlagsProvider.isEnabled(.checkForReinstalls) &&
         profilePrefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == true &&
-        (profilePrefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
+        (profilePrefs.boolForKey(AppConstants.prefSendUsageData) == true)
     }
 
     init(
@@ -132,7 +132,11 @@ final class InstallationTelemetryService {
         let installationHistory = historyForNewInstallation(currentHistory)
         guard canCollectTelemetry else { return installationHistory }
 
-        telemetry.recordInstallationHistory(installationHistory: installationHistory, previousHistory: currentHistory)
+        var previousLastSeenDate: Date?
+        if case .valid(let history) = currentHistory {
+            previousLastSeenDate = history.lastSeenDate
+        }
+        telemetry.recordInstallationHistory(count: installationHistory.installCounter, lastSeenDate: previousLastSeenDate)
         telemetry.recordAcquisition(appAcquisition: appAcquisition)
         return installationHistory
     }

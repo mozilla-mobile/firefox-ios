@@ -8,7 +8,7 @@
 "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettings.Label.v133" = "ძიების პარამეტრები";
 
 /* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility label for the title of that sheet. */
-"UnifiedSearch.SearchEngineSelection.AccessibilityLabels.TopTitle.Label.v133" = "ძიებისთვის ამჯერად გამოიყენეთ:";
+"UnifiedSearch.SearchEngineSelection.AccessibilityLabels.TopTitle.Label.v133" = "საძიებოდ გამოიყენეთ:";
 
 /* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This string is the label for the button at the bottom of the list. When this row is tapped, the app's search settings screen appears. */
 "UnifiedSearch.SearchEngineSelection.SearchSettings.Title.v133" = "ძიების პარამეტრები";

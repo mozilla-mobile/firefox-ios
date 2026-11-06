@@ -2,7 +2,7 @@
 "Upgrade.SyncSign.Action.v114" = "Prijava";
 
 /* Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.SyncSign.Description.v114" = "Nadaljujte tam, kjer ste končali - z zavihki iz drugih naprav, ki so zdaj na vaši domači strani.";
+"Upgrade.SyncSign.Description.v114" = "Nadaljujte tam, kjer ste končali – z zavihki iz drugih naprav, ki so zdaj na vaši domači strani.";
 
 /* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.SyncSign.Title.v114" = "Preklapljanje med zasloni je preprostejše kot kdajkoli prej";

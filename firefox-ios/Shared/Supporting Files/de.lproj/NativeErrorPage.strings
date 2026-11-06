@@ -26,7 +26,7 @@
 "NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "Weitere Informationen";
 
 /* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
-"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "Weiter zu %@ (risikant)";
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "Weiter zu %@ (riskant)";
 
 /* On certificate error page, this is the title warning the user about a potential security issue. */
 "NativeErrorPage.BadCertDomain.TitleLabel.v149" = "Seien Sie vorsichtig. Irgendetwas sieht nicht gut aus.";
@@ -68,7 +68,7 @@
 "NativeErrorPage.GoBackButton.v149" = "Zurück (empfohlen)";
 
 /* On error page, this is the description for no internet connection. */
-"NativeErrorPage.NoInternetConnection.Description.v131" = "Versuchen Sie, auf einem anderen Gerät eine Verbindung herzustellen. Überprüfen Sie Ihr Modem oder Router. Trennen Sie die WLAN-Verbindung und stellen Sie die Verbindung wieder her.";
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Versuchen Sie, auf einem anderen Gerät eine Verbindung herzustellen. Überprüfen Sie Ihr Modem oder Ihren Router. Trennen Sie die WLAN-Verbindung und stellen Sie die Verbindung wieder her.";
 
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Anscheinend gibt es ein Problem mit Ihrer Internetverbindung.";
@@ -101,7 +101,7 @@
 "NativeErrorPage.Wayback.Error.SearchWayback.v155" = "Archivierte Version anzeigen";
 
 /* Title of the error page when the app is unable to connect to the server and will show a wayback fallback. */
-"NativeErrorPage.Wayback.Error.Title.v154" = "Fehler: Verbindung fehlgeschlagen";
+"NativeErrorPage.Wayback.Error.Title.v154" = "Verbindung fehlgeschlagen";
 
 /* Accessibility hint read by VoiceOver describing what happens when the 'Check for earlier version' button is clicked. */
 "NativeErrorPage.Wayback.Error.WaybackButtonA11yHint.v154" = "Durchsucht die Wayback Machine nach einer archivierten Version dieser Seite.";

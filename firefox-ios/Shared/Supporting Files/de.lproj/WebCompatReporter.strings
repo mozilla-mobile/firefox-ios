@@ -80,7 +80,7 @@
 "WebCompatReporter.Preview.Data.PageURL.v155" = "URL der Seite";
 
 /* Bullet on the Report Preview screen, for the screen's physical pixels per layout point. */
-"WebCompatReporter.Preview.Data.PixelDensity.v155" = "Pixelgröße Ihres Bildschirms";
+"WebCompatReporter.Preview.Data.PixelDensity.v155" = "Pixeldichte Ihres Bildschirms";
 
 /* Bullet on the Report Preview screen, for whether the page was open in private browsing. */
 "WebCompatReporter.Preview.Data.PrivateBrowsingStatus.v155" = "Status des privaten Modus: An oder aus";
@@ -119,7 +119,7 @@
 "WebCompatReporter.SubOption.ButtonsNotWorking.v154" = "Schaltflächen oder Links funktionieren nicht";
 
 /* A specific sub-option under the 'Video or audio does not play' issue category in the Report a Website Issue form. */
-"WebCompatReporter.SubOption.CaptionsMissing.v154" = "Bildunterschriften fehlen";
+"WebCompatReporter.SubOption.CaptionsMissing.v154" = "Untertitel fehlen";
 
 /* A specific sub-option under the 'Design is broken' issue category in the Report a Website Issue form. */
 "WebCompatReporter.SubOption.ImagesNotLoaded.v154" = "Grafiken werden nicht geladen";

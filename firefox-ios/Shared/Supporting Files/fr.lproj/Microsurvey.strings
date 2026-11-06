@@ -53,7 +53,7 @@
 "Microsurvey.Survey.PrivacyPolicyLink.v127" = "Politique de confidentialité";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was not selected. */
-"Microsurvey.Survey.RadioButton.Unselected.AccessibilityLabel.v129" = "Désélectionné";
+"Microsurvey.Survey.RadioButton.Unselected.AccessibilityLabel.v129" = "Non sélectionné";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label used to announce that the sheet has appeared. */
 "Microsurvey.Survey.Sheet.AccessibilityLabel.v130" = "Enquête";

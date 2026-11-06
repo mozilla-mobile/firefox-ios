@@ -38,35 +38,30 @@ final class InstallationTelemetryTests: XCTestCase {
         XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
     }
 
-    func testRecordInstallationHistory_recordsNewCountAndPreviousLastSeenDate() throws {
+    func testRecordInstallationHistory_recordsCountAndLastSeenDate() throws {
         let subject = InstallationTelemetry(gleanWrapper: mockGleanWrapper)
-        let previous = InstallationHistory(installCounter: 3, lastSeenDate: Date(timeIntervalSince1970: 45_296))
-        let current = InstallationHistory(installCounter: 4, lastSeenDate: Date(timeIntervalSince1970: 1_760_000_000))
+        let lastSeenDate = Date(timeIntervalSince1970: 45_296)
 
-        subject.recordInstallationHistory(installationHistory: current, previousHistory: .valid(previous))
+        subject.recordInstallationHistory(count: 4, lastSeenDate: lastSeenDate)
 
         let counterMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? QuantityMetricType)
         let dateMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.last as? DatetimeMetricType)
         XCTAssert(counterMetric === GleanMetrics.Installation.installCounter)
         XCTAssert(dateMetric === GleanMetrics.Installation.lastSeenDate)
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [4])
-        XCTAssertEqual(mockGleanWrapper.savedValues.first as? Date, previous.lastSeenDate)
+        XCTAssertEqual(mockGleanWrapper.savedValues.first as? Date, lastSeenDate)
         XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 1)
         XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
     }
 
-    func testRecordInstallationHistory_withoutValidHistory_omitsLastSeenDate() {
-        for previousHistory in [InstallationHistoryState.missing, .corrupt] {
-            mockGleanWrapper = MockGleanWrapper()
-            let subject = InstallationTelemetry(gleanWrapper: mockGleanWrapper)
-            let current = InstallationHistory(installCounter: 1, lastSeenDate: Date(timeIntervalSince1970: 1_760_000_000))
+    func testRecordInstallationHistory_withoutLastSeenDate_omitsLastSeenDate() {
+        let subject = InstallationTelemetry(gleanWrapper: mockGleanWrapper)
 
-            subject.recordInstallationHistory(installationHistory: current, previousHistory: previousHistory)
+        subject.recordInstallationHistory(count: 1, lastSeenDate: nil)
 
-            XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
-            XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 0)
-            XCTAssertTrue(mockGleanWrapper.savedValues.isEmpty)
-        }
+        XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
+        XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 0)
+        XCTAssertTrue(mockGleanWrapper.savedValues.isEmpty)
     }
 
     func testSubmit_submitsInstallationPing() {

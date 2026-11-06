@@ -5,5 +5,5 @@
 "ScanQRCode.ConfirmOpenURL.DenyButton.v129" = "Zavrni";
 
 /* Text of the prompt to ask user permission to open a URL from a scanned QR code. %@ is the app name (e.g. Firefox). */
-"ScanQRCode.ConfirmOpenURL.Message.v129" = "Dovoli odpiranje %@?";
+"ScanQRCode.ConfirmOpenURL.Message.v129" = "Ali dovolite, da %@ odpre povezavo?";
 

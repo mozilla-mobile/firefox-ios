@@ -2,7 +2,7 @@
 "Close Private Tabs" = "Zapri zasebne zavihke";
 
 /* Context menu option for opening a link in a new private tab */
-"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Odpri v zasebnem zavihku";
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Odpri v novem zasebnem zavihku";
 
 /* Description text displayed when there are no open tabs while in private mode */
 "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ne bo hranil vaše zgodovine in piškotkov, novi zaznamki pa bodo shranjeni.";
