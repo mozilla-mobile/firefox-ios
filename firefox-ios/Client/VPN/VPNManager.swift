@@ -10,10 +10,19 @@ import Network
 import VPNKit
 import WebEngine
 
+/// Changes `VPNManager` reports so `VPNMiddleware` can decide which side effects to trigger.
+enum VPNEvent: Equatable {
+    /// A pass was applied, either on start or rotation.
+    case passUpdated(VPNProxyPass)
+    case rotationFailed
+}
+
 @MainActor
 protocol VPNRunnable {
     var isRunning: Bool { get }
-    func start() async
+    /// Single-consumer stream of `VPNEvent`s, observed by `VPNMiddleware`.
+    var events: AsyncStream<VPNEvent> { get }
+    func start() async throws
     func stop() async
 }
 
@@ -38,20 +47,22 @@ struct DefaultProxyConfigurator: ProxyConfigurator {
 }
 
 @available(iOS 17.0, *)
-final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
+final class VPNManager: VPNRunnable {
     private let logger: Logger
     private let environment: VPNEnvironment
     private let guardian: VPNGuardianProviding?
     private let serverManager: VPNServerManaging
     private let windowManager: WindowManager
     private let proxyApplier: ProxyConfigurator
+    private let eventsContinuation: AsyncStream<VPNEvent>.Continuation
+    let events: AsyncStream<VPNEvent>
+
+    private var activeServer: VPNGuardian.Server?
 
     // TODO: fxios-16876 This will get used when we wire up VPN Connection
     var isRunning: Bool {
-        userPreferences.getPreferenceFor(.vpnFeature)
+        activeServer != nil
     }
-
-    private var activeServer: VPNGuardian.Server?
     private var rotationTask: Task<Void, Never>?
 
     init(
@@ -72,35 +83,33 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
         )
         self.windowManager = windowManager
         self.proxyApplier = proxyApplier
+        let (events, eventsContinuation) = AsyncStream<VPNEvent>.makeStream()
+        self.events = events
+        self.eventsContinuation = eventsContinuation
     }
 
-    func start() async {
-        do {
-            guard let guardian = self.guardian else {
-                throw VPNError.tokenProviderUnavailable
-            }
-
-            let pass = try await guardian.getPass()
-
-            // TODO: FXIOS-16873 When we implement location selection it will be passed in here
-            guard let server = await serverManager.selectServer(countryCode: nil, environment: environment) else {
-                throw VPNError.noServerFound
-            }
-
-            self.logger.log(
-                "Got Guardian proxy pass — expires \(pass.expiresAt), usage \(String(describing: pass.usage)); server \(server.hostname):\(server.port) (\(server.city), \(server.countryCode))",
-                level: .info,
-                category: .vpn
-            )
-            let config = try self.buildProxyConfig(server: server, pass: pass)
-            await self.applyProxyAndRebuildWebViews(configs: [config])
-            self.activeServer = server
-            self.userPreferences.setPreferenceFor(.vpnFeature, to: true)
-            self.startPassRotation(after: pass)
-            self.showDataLimitAlertIfNeeded(for: pass)
-        } catch {
-            self.logger.log("VPN start failed: \(error)", level: .warning, category: .vpn)
+    func start() async throws {
+        guard let guardian = self.guardian else {
+            throw VPNError.tokenProviderUnavailable
         }
+
+        let pass = try await guardian.getPass()
+
+        // TODO: FXIOS-16873 When we implement location selection it will be passed in here
+        guard let server = await serverManager.selectServer(countryCode: nil, environment: environment) else {
+            throw VPNError.noServerFound
+        }
+
+        self.logger.log(
+            "Got Guardian proxy pass — expires \(pass.expiresAt), usage \(String(describing: pass.usage)); server \(server.hostname):\(server.port) (\(server.city), \(server.countryCode))",
+            level: .info,
+            category: .vpn
+        )
+        let config = try self.buildProxyConfig(server: server, pass: pass)
+        await self.applyProxyAndRebuildWebViews(configs: [config])
+        self.activeServer = server
+        self.startPassRotation(after: pass)
+        self.eventsContinuation.yield(.passUpdated(pass))
     }
 
     func stop() async {
@@ -108,7 +117,6 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
         self.rotationTask = nil
         await self.applyProxyAndRebuildWebViews(configs: [])
         self.activeServer = nil
-        self.userPreferences.setPreferenceFor(.vpnFeature, to: false)
     }
 
     /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the new
@@ -126,7 +134,7 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
                           let server = self.activeServer else { return }
                     let config = try self.buildProxyConfig(server: server, pass: new)
                     self.proxyApplier.applyProxyConfigurations([config], forcingSessionReset: false)
-                    self.showDataLimitAlertIfNeeded(for: new)
+                    self.eventsContinuation.yield(.passUpdated(new))
                     self.logger.log(
                         "Rotated VPN proxy pass — next expiry \(new.expiresAt)",
                         level: .info,
@@ -139,31 +147,9 @@ final class VPNManager: VPNRunnable, UserFeaturePreferenceProvider {
                     level: .warning,
                     category: .vpn
                 )
-                self?.showFailureAlert()
+                self?.eventsContinuation.yield(.rotationFailed)
             }
         }
-    }
-
-    private func showFailureAlert() {
-        guard let windowUUID = alertWindowUUID() else { return }
-        store.dispatch(VPNAlertModernAction.showFailureAlert, forWindowUUID: windowUUID)
-    }
-
-    private func showDataLimitAlertIfNeeded(for pass: VPNProxyPass) {
-        guard let usage = pass.usage,
-              !usage.unlimited,
-              usage.remaining <= 0,
-              let windowUUID = alertWindowUUID() else { return }
-        store.dispatch(VPNAlertModernAction.showDataLimitAlert(dataLimitBytes: usage.max), forWindowUUID: windowUUID)
-    }
-
-    /// The foreground window, falling back to any open window, so VPN alerts only show once.
-    private func alertWindowUUID() -> WindowUUID? {
-        let windows = windowManager.windows
-        let activeWindowUUID = windows.first {
-            $0.value.sceneCoordinator?.window?.windowScene?.activationState == .foregroundActive
-        }?.key
-        return activeWindowUUID ?? windows.keys.first
     }
 
     /// Tear down every webview, wait for WebKit to process the resulting load cancellations,

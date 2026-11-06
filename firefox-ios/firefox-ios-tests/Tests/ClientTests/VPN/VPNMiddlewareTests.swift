@@ -3,14 +3,18 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Redux
 import TestKit
+import VPNKit
 import XCTest
 @testable import Client
 
 @MainActor
-final class VPNMiddlewareTests: XCTestCase {
+final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
+    var mockStore: MockStoreForMiddleware<AppState>!
     private var mockProfile: MockProfile!
     private var mockVPNManager: MockVPNManager!
+    private var mockUserPreferences: MockUserFeaturePreferences!
     private var windowManager: WindowManagerImplementation!
     // `AppWindowInfo.tabManager` is weak, so the tab managers are held here.
     private var firstTabManager: MockTabManager!
@@ -23,21 +27,74 @@ final class VPNMiddlewareTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = makeProfile()
         mockVPNManager = MockVPNManager()
+        mockUserPreferences = MockUserFeaturePreferences()
         windowManager = WindowManagerImplementation(tabDataStore: MockTabDataStore())
         firstTabManager = MockTabManager(windowUUID: firstWindowUUID)
         secondTabManager = MockTabManager(windowUUID: secondWindowUUID)
         windowManager.newBrowserWindowConfigured(AppWindowInfo(tabManager: firstTabManager), uuid: firstWindowUUID)
         windowManager.newBrowserWindowConfigured(AppWindowInfo(tabManager: secondTabManager), uuid: secondWindowUUID)
+        setupStore()
     }
 
     override func tearDown() async throws {
         mockProfile = nil
         mockVPNManager = nil
+        mockUserPreferences = nil
         windowManager = nil
         firstTabManager = nil
         secondTabManager = nil
         DependencyHelperMock().reset()
+        resetStore()
         try await super.tearDown()
+    }
+
+    // MARK: - Start / stop
+
+    func testStart_startsVPNAndSetsPreference() async {
+        let subject = createSubject()
+
+        await dispatchAndWaitForPreference(.start, to: subject)
+
+        XCTAssertEqual(mockVPNManager.startCalled, 1)
+        XCTAssertEqual(mockUserPreferences.boolPreferences[.vpnFeature], true)
+    }
+
+    func testStart_whenStartFails_doesNotSetPreference() async {
+        mockVPNManager.startError = URLError(.notConnectedToInternet)
+        let started = expectation(description: "VPN start attempted")
+        mockVPNManager.onStart = { started.fulfill() }
+        let preferenceSet = expectation(description: "Preference set")
+        preferenceSet.isInverted = true
+        mockUserPreferences.onSetPreference = { preferenceSet.fulfill() }
+        let subject = createSubject()
+
+        subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.start, firstWindowUUID)
+        await fulfillment(of: [started, preferenceSet], timeout: 0.2)
+
+        XCTAssertNil(mockUserPreferences.boolPreferences[.vpnFeature])
+    }
+
+    func testStop_stopsVPNAndClearsPreference() async {
+        mockUserPreferences.boolPreferences[.vpnFeature] = true
+        let subject = createSubject()
+
+        await dispatchAndWaitForPreference(.stop, to: subject)
+
+        XCTAssertEqual(mockVPNManager.stopCalled, 1)
+        XCTAssertEqual(mockUserPreferences.boolPreferences[.vpnFeature], false)
+        XCTAssertTrue(firstTabManager.removeTabCalledWith.isEmpty)
+        XCTAssertTrue(firstTabManager.removeAllTabsCalledWith.isEmpty)
+    }
+
+    // MARK: - Alert choices
+
+    func testAlertChoice_clearsPreference() async {
+        mockUserPreferences.boolPreferences[.vpnFeature] = true
+        let subject = createSubject()
+
+        await dispatchAndWaitForPreference(.continueWithoutVPN, to: subject)
+
+        XCTAssertEqual(mockUserPreferences.boolPreferences[.vpnFeature], false)
     }
 
     func testContinueWithoutVPN_stopsVPNWithoutClosingTabs() async {
@@ -107,10 +164,100 @@ final class VPNMiddlewareTests: XCTestCase {
         XCTAssertEqual(mockVPNManager.stopCalled, 0)
     }
 
+    // MARK: - VPN events
+
+    func testPassUpdated_withNoDataRemaining_dispatchesDataLimitAlert() async throws {
+        let subject = createSubject()
+
+        try await yieldAndWaitForDispatch(.passUpdated(makePass(remaining: 0, unlimited: false)), subject: subject)
+
+        let action = try XCTUnwrap(mockStore.dispatchedModernActions.first as? VPNAlertModernAction)
+        guard case .showDataLimitAlert(let dataLimitBytes) = action else {
+            return XCTFail("Expected showDataLimitAlert, got \(action)")
+        }
+        XCTAssertEqual(dataLimitBytes, 1_000)
+    }
+
+    func testPassUpdated_withDataRemaining_doesNotDispatch() async {
+        let subject = createSubject()
+
+        await yieldAndWaitForNoDispatch(.passUpdated(makePass(remaining: 500, unlimited: false)), subject: subject)
+    }
+
+    func testPassUpdated_withUnlimitedUsage_doesNotDispatch() async {
+        let subject = createSubject()
+
+        await yieldAndWaitForNoDispatch(.passUpdated(makePass(remaining: 0, unlimited: true)), subject: subject)
+    }
+
+    func testPassUpdated_withNoUsage_doesNotDispatch() async {
+        let subject = createSubject()
+
+        await yieldAndWaitForNoDispatch(.passUpdated(makePass(usage: nil)), subject: subject)
+    }
+
+    func testRotationFailed_dispatchesFailureAlert() async throws {
+        let subject = createSubject()
+
+        try await yieldAndWaitForDispatch(.rotationFailed, subject: subject)
+
+        let action = try XCTUnwrap(mockStore.dispatchedModernActions.first as? VPNAlertModernAction)
+        guard case .showFailureAlert = action else {
+            return XCTFail("Expected showFailureAlert, got \(action)")
+        }
+    }
+
     // MARK: - Helpers
 
+    func setupAppState() -> AppState {
+        return AppState()
+    }
+
     private func createSubject() -> VPNMiddleware {
-        return VPNMiddleware(windowManager: windowManager, logger: MockLogger(), vpnManager: mockVPNManager)
+        return VPNMiddleware(
+            windowManager: windowManager,
+            logger: MockLogger(),
+            userPreferences: mockUserPreferences,
+            vpnManager: mockVPNManager
+        )
+    }
+
+    private func yieldAndWaitForDispatch(_ event: VPNEvent, subject: VPNMiddleware) async throws {
+        let dispatched = expectation(description: "Alert dispatched")
+        mockStore.dispatchCalled = { dispatched.fulfill() }
+        mockVPNManager.eventsStream.continuation.yield(event)
+        await fulfillment(of: [dispatched], timeout: 1)
+        XCTAssertEqual(mockStore.dispatchedModernActions.count, 1)
+    }
+
+    private func yieldAndWaitForNoDispatch(_ event: VPNEvent, subject: VPNMiddleware) async {
+        let dispatched = expectation(description: "Alert dispatched")
+        dispatched.isInverted = true
+        mockStore.dispatchCalled = { dispatched.fulfill() }
+        mockVPNManager.eventsStream.continuation.yield(event)
+        await fulfillment(of: [dispatched], timeout: 0.2)
+        XCTAssertTrue(mockStore.dispatchedModernActions.isEmpty)
+    }
+
+    private func makePass(remaining: Int64, unlimited: Bool) -> VPNProxyPass {
+        return makePass(usage: VPNProxyUsage(max: 1_000, remaining: remaining, reset: Date(), unlimited: unlimited))
+    }
+
+    private func makePass(usage: VPNProxyUsage?) -> VPNProxyPass {
+        return VPNProxyPass(
+            bearerToken: "token",
+            notBefore: Date(),
+            expiresAt: Date().addingTimeInterval(3600),
+            usage: usage
+        )
+    }
+
+    /// Waits for the preference write, the last step of starting or stopping.
+    private func dispatchAndWaitForPreference(_ action: VPNModernAction, to subject: VPNMiddleware) async {
+        let preferenceSet = expectation(description: "Preference set")
+        mockUserPreferences.onSetPreference = { preferenceSet.fulfill() }
+        subject.vpnProvider.modernMiddleware(AppState(), action, firstWindowUUID)
+        await fulfillment(of: [preferenceSet], timeout: 1)
     }
 
     /// The middleware handles actions in a `Task`, so this waits for `stop()`, its last step.

@@ -4,8 +4,10 @@
 
 import Redux
 
-/// User choices from the VPN alerts. Each one turns the VPN off.
 enum VPNModernAction: ModernAction {
+    case start
+    case stop
+    // User choices from the VPN alerts. Each one turns the VPN off.
     case continueWithoutVPN
     case closeThisTab
     case closeAllTabs
