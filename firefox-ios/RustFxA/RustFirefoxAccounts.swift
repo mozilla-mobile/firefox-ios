@@ -67,6 +67,19 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
         ) { [weak self] _ in
             self?.update()
         }
+
+        // The account manager can disconnect on its own (e.g. before re-pairing from the
+        // auth-issues state) without going through `disconnect()`, so drop the cached
+        // profile here too.
+        NotificationCenter.default.addObserver(
+            forName: .accountLoggedOut,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self else { return }
+            clearUserProfileCache()
+            NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
+        }
     }
 
     /** Must be called before this class is fully usable. Until this function is complete,
