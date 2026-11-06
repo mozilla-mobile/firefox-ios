@@ -5,8 +5,11 @@
 import Common
 import Shared
 
+// TODO: FXIOS-16876 VPNSetting will get its view model from VPNManager instead of reading prefs and data usage itself
 final class VPNSetting: Setting {
     private weak var settingsDelegate: PrivacySettingsDelegate?
+    private let userPreferences: UserFeaturePreferring
+    private let dataUsage: VPNDataUsage
 
     override var accessoryView: UIImageView? {
         guard let theme else { return nil }
@@ -20,16 +23,26 @@ final class VPNSetting: Setting {
     override var style: UITableViewCell.CellStyle { return .value1 }
 
     override var status: NSAttributedString? {
-        // TODO: - Figure out how we tell if the VPN is on, for now default to off
-        let statusString = String.VPN.Settings.StatusOff
+        let isEnabled = userPreferences.getPreferenceFor(.vpnFeature)
+        let statusString: String
+        if dataUsage.isLimitReached {
+            // TODO: Clear the paused status when the monthly data limit resets
+            statusString = .VPN.Settings.StatusPaused
+        } else {
+            statusString = isEnabled ? .VPN.Settings.StatusOn : .VPN.Settings.StatusOff
+        }
         return NSAttributedString(string: statusString)
     }
 
     init(
         settings: SettingsTableViewController,
         settingsDelegate: PrivacySettingsDelegate?,
+        userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
+        dataUsage: VPNDataUsage = .placeholder
     ) {
         self.settingsDelegate = settingsDelegate
+        self.userPreferences = userPreferences
+        self.dataUsage = dataUsage
         let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(

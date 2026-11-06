@@ -368,9 +368,8 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedVPN() {
-        let viewController = VPNSettingsViewController(
-            windowUUID: windowUUID
-        )
+        guard #available(iOS 17.0, *) else { return }
+        let viewController = VPNSettingsViewController(windowUUID: windowUUID)
         router.push(viewController)
     }
 

@@ -4,18 +4,58 @@
 
 import Common
 import Shared
+import SwiftUI
 
-final class VPNSettingsViewController: SettingsTableViewController {
-    init(windowUUID: WindowUUID) {
-        super.init(style: .grouped, windowUUID: windowUUID)
-        self.title = .VPN.Settings.Title
+@available(iOS 17.0, *)
+final class VPNSettingsViewController: UIViewController {
+    // TODO: replace this with the actual URL eventually
+    static let learnMoreURL = SupportUtils.URLForTopic("vpn")
+
+    private let windowUUID: WindowUUID
+    private let themeManager: ThemeManager
+    private let viewModel: VPNSettingsViewModel
+    private lazy var hostingController = UIHostingController(
+        rootView: VPNSettingsViewContainer(
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            viewModel: viewModel,
+            viewController: self
+        )
+    )
+
+    init(
+        windowUUID: WindowUUID,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
+    ) {
+        self.windowUUID = windowUUID
+        self.themeManager = themeManager
+        // TODO: FXIOS-16876 The view model will be held by VPNManager so it can be shared with VPNSetting
+        self.viewModel = VPNSettingsViewModel()
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private var theme: Theme {
-        themeManager.getCurrentTheme(for: windowUUID)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupHostingController()
+    }
+
+    private func setupHostingController() {
+        guard let hostingView = hostingController.view else { return }
+        hostingView.frame = view.bounds
+        hostingView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+        addChild(hostingController)
+        view.addSubview(hostingView)
+        hostingController.didMove(toParent: self)
+    }
+
+    func learnMoreTapped() {
+        let controller = SettingsContentViewController(windowUUID: windowUUID)
+        controller.url = Self.learnMoreURL
+        navigationController?.pushViewController(controller, animated: true)
     }
 }
