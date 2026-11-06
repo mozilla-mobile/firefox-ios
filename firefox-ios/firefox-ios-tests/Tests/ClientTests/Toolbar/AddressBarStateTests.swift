@@ -682,19 +682,18 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(resumedState.shouldShowKeyboard)
     }
 
-    func test_clearSearchAction_returnsExpectedState() {
-        let initialState = createSubject()
+    func test_searchTermDidClearAction_returnsExpectedState() {
+        let initialState = createSubject().copy(searchTerm: "text").copy(isEmptySearch: false)
         let reducer = addressBarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.clearSearch
-            )
+            ToolbarModernAction.searchTermDidClear,
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertNil(newState.searchTerm)
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.isEmptySearch)
     }
@@ -731,25 +730,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.didStartTyping)
         XCTAssertFalse(newState.isEmptySearch)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
-    }
-
-    func test_didSetSearchTermAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = addressBarReducer()
-        let searchTerm = "Search Term"
-
-        let newState = reducer.legacyReducer(
-            initialState,
-            ToolbarAction(
-                searchTerm: searchTerm,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didSetSearchTerm
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.searchTerm, searchTerm)
-        XCTAssertFalse(newState.didStartTyping)
     }
 
     func test_didStartTypingAction_returnsExpectedState() {
