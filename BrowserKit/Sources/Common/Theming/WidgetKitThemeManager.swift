@@ -39,7 +39,7 @@ public final class WidgetKitThemeManager: ThemeManager {
     }
 
     private func systemTheme() -> Theme {
-        return UIScreen.main.traitCollection.userInterfaceStyle == .dark
+        return UITraitCollection.current.userInterfaceStyle == .dark
             ? NovaDarkTheme()
             : NovaLightTheme()
     }
