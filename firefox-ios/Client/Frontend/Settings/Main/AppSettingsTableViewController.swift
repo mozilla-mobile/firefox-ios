@@ -566,6 +566,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
         hiddenDebugOptions.append(RefreshVPNSessionSetting(settings: self))
         hiddenDebugOptions.append(FetchVPNProxyTokenSetting(settings: self))
         hiddenDebugOptions.append(ClearVPNSessionSetting(settings: self))
+        hiddenDebugOptions.append(ShowVPNFailureAlertSetting(settings: self))
+        hiddenDebugOptions.append(ShowVPNDataLimitAlertSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(InstallationDetailsSetting(settings: self))
         hiddenDebugOptions.append(ResetInstallationHistorySetting(settings: self))

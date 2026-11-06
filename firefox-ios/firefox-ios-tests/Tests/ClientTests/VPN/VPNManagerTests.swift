@@ -16,7 +16,6 @@ final class VPNManagerTests: XCTestCase {
     private var mockProfile: MockProfile!
     private var mockTabManager: MockTabManager!
     private var mockWindowManager: MockWindowManager!
-    private var mockUserPreferences: MockUserFeaturePreferences!
     private var mockGuardian: MockVPNGuardian!
     private var mockServerManager: MockVPNServerManager!
     private var mockProxyConfigurator: MockProxyConfigurator!
@@ -32,15 +31,13 @@ final class VPNManagerTests: XCTestCase {
             tabManager: mockTabManager
         )
         mockWindowManager.overrideWindows = true
-        mockUserPreferences = MockUserFeaturePreferences()
         mockGuardian = MockVPNGuardian()
         mockServerManager = MockVPNServerManager()
         mockProxyConfigurator = MockProxyConfigurator()
         mockAuthCreator = MockVPNAuthCreator()
         DependencyHelperMock().bootstrapDependencies(
             injectedProfile: mockProfile,
-            injectedWindowManager: mockWindowManager,
-            injectedUserFeaturePreferences: mockUserPreferences
+            injectedWindowManager: mockWindowManager
         )
     }
 
@@ -50,7 +47,6 @@ final class VPNManagerTests: XCTestCase {
         mockProfile = nil
         mockTabManager = nil
         mockWindowManager = nil
-        mockUserPreferences = nil
         mockGuardian = nil
         mockServerManager = nil
         mockProxyConfigurator = nil
@@ -60,21 +56,20 @@ final class VPNManagerTests: XCTestCase {
 
     // MARK: - start
 
-    func testStart_setsPreferenceForVPNToTrue() async {
+    func testStart_setsIsRunning() async throws {
         let subject = createSubject()
 
-        await subject.start()
+        try await subject.start()
 
-        XCTAssertEqual(mockUserPreferences.boolPreferences[.vpnFeature], true)
         XCTAssertTrue(subject.isRunning)
     }
 
-    func testStart_startsPassRotation() async {
+    func testStart_startsPassRotation() async throws {
         let rotationStarted = expectation(description: "Pass rotation started")
         mockGuardian.onPassRotation = { rotationStarted.fulfill() }
         let subject = createSubject()
 
-        await subject.start()
+        try await subject.start()
         await fulfillment(of: [rotationStarted], timeout: 1)
 
         XCTAssertEqual(mockGuardian.passRotationInitialPasses.map(\.bearerToken), ["initial-token"])
@@ -82,7 +77,7 @@ final class VPNManagerTests: XCTestCase {
 
     func testStart_whenPassRotates_appliesProxyWithoutSessionReset() async throws {
         let subject = createSubject()
-        await subject.start()
+        try await subject.start()
         let rotationApplied = expectation(description: "Rotated pass applied")
         mockProxyConfigurator.onApply = { rotationApplied.fulfill() }
 
@@ -100,7 +95,7 @@ final class VPNManagerTests: XCTestCase {
     func testStart_KicksOffWebViewReloadAndProxyApplication() async throws {
         let subject = createSubject()
 
-        await subject.start()
+        try await subject.start()
 
         XCTAssertEqual(mockTabManager.tearDownWebViewsForProxyChangeCalled, 1)
         XCTAssertEqual(mockTabManager.restoreSelectedTabForProxyChangeCalled, 1)
@@ -110,11 +105,11 @@ final class VPNManagerTests: XCTestCase {
         XCTAssertTrue(params.forcingSessionReset)
     }
 
-    func testStart_whenGetPassFails_doesNotApplyProxyOrSetPreference() async {
+    func testStart_whenGetPassFails_throwsAndDoesNotApplyProxy() async {
         mockGuardian.passResult = .failure(URLError(.notConnectedToInternet))
         let subject = createSubject()
 
-        await subject.start()
+        await assertStartThrows(subject)
 
         XCTAssertEqual(mockServerManager.selectServerCalled, 0)
         XCTAssertTrue(mockProxyConfigurator.params.isEmpty)
@@ -123,11 +118,11 @@ final class VPNManagerTests: XCTestCase {
         XCTAssertFalse(subject.isRunning)
     }
 
-    func testStart_whenNoServerFound_doesNotApplyProxyOrSetPreference() async {
+    func testStart_whenNoServerFound_throwsAndDoesNotApplyProxy() async {
         mockServerManager.server = nil
         let subject = createSubject()
 
-        await subject.start()
+        await assertStartThrows(subject)
 
         XCTAssertEqual(mockServerManager.selectServerCalled, 1)
         XCTAssertTrue(mockProxyConfigurator.params.isEmpty)
@@ -136,10 +131,10 @@ final class VPNManagerTests: XCTestCase {
         XCTAssertFalse(subject.isRunning)
     }
 
-    func testStart_whenTokenProviderUnavailable_doesNotApplyProxyOrSetPreference() async {
+    func testStart_whenTokenProviderUnavailable_throwsAndDoesNotApplyProxy() async {
         let subject = createSubject(injectGuardian: false)
 
-        await subject.start()
+        await assertStartThrows(subject)
 
         XCTAssertEqual(mockAuthCreator.makeTokenProviderCalled, 1)
         XCTAssertEqual(mockServerManager.selectServerCalled, 0)
@@ -148,25 +143,66 @@ final class VPNManagerTests: XCTestCase {
         XCTAssertFalse(subject.isRunning)
     }
 
-    func testStart_selectsServerFromServerManager() async {
+    func testStart_selectsServerFromServerManager() async throws {
         mockProfile.prefs.setString(VPNEnvironment.prod.rawValue, forKey: PrefsKeys.VPNSettings.endpointEnvironment)
         let subject = createSubject()
 
-        await subject.start()
+        try await subject.start()
 
         XCTAssertEqual(mockServerManager.selectServerCalled, 1)
         XCTAssertEqual(mockProxyConfigurator.params.count, 1)
     }
 
+    // MARK: - events
+
+    func testStart_emitsPassUpdated() async throws {
+        let subject = createSubject()
+        var iterator = subject.events.makeAsyncIterator()
+
+        try await subject.start()
+
+        let event = await iterator.next()
+        guard case .passUpdated(let pass) = event else {
+            return XCTFail("Expected passUpdated, got \(String(describing: event))")
+        }
+        XCTAssertEqual(pass.bearerToken, "initial-token")
+    }
+
+    func testPassRotation_emitsPassUpdated() async throws {
+        let subject = createSubject()
+        var iterator = subject.events.makeAsyncIterator()
+        try await subject.start()
+        _ = await iterator.next()
+
+        mockGuardian.rotation.continuation.yield(makePass(token: "rotated-token"))
+
+        let event = await iterator.next()
+        guard case .passUpdated(let pass) = event else {
+            return XCTFail("Expected passUpdated, got \(String(describing: event))")
+        }
+        XCTAssertEqual(pass.bearerToken, "rotated-token")
+    }
+
+    func testPassRotationFailure_emitsRotationFailed() async throws {
+        let subject = createSubject()
+        var iterator = subject.events.makeAsyncIterator()
+        try await subject.start()
+        _ = await iterator.next()
+
+        mockGuardian.rotation.continuation.finish(throwing: URLError(.notConnectedToInternet))
+
+        let event = await iterator.next()
+        XCTAssertEqual(event, .rotationFailed)
+    }
+
     // MARK: - stop
 
-    func testStop_clearsProxyAndSetsPreferenceForVPNToFalse() async throws {
+    func testStop_clearsProxyAndStopsRunning() async throws {
         let subject = createSubject()
-        await subject.start()
+        try await subject.start()
 
         await subject.stop()
 
-        XCTAssertEqual(mockUserPreferences.boolPreferences[.vpnFeature], false)
         XCTAssertFalse(subject.isRunning)
         XCTAssertEqual(mockTabManager.tearDownWebViewsForProxyChangeCalled, 2)
         XCTAssertEqual(mockTabManager.restoreSelectedTabForProxyChangeCalled, 2)
@@ -189,6 +225,15 @@ final class VPNManagerTests: XCTestCase {
         )
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func assertStartThrows(_ subject: VPNManager,
+                                   file: StaticString = #filePath,
+                                   line: UInt = #line) async {
+        do {
+            try await subject.start()
+            XCTFail("Expected start to throw", file: file, line: line)
+        } catch {}
     }
 
     private func makePass(token: String) -> VPNProxyPass {
