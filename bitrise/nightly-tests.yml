@@ -128,7 +128,7 @@ workflows:
     after_run:
     - _firefox_fullfunctional_build
 
-  Focus_Nightly_Tests_iOS18:
+  Focus_Tests_iOS18:
     envs:
     - SLACK_TITLE: Smoketest and Full Functional Tests iPhone and iPad (iOS 18.6)
     - IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.6
@@ -136,7 +136,7 @@ workflows:
     after_run:
     - _focus_smoke_fullfunctional_tests
 
-  Focus_Nightly_Tests_iOS26:
+  Focus_Tests_iOS26:
     envs:
     - SLACK_TITLE: Smoketest and Full Functional Tests iPhone and iPad (iOS 26.5)
     - IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
@@ -144,7 +144,7 @@ workflows:
     after_run:
     - _focus_smoke_fullfunctional_tests
 
-  Focus_Nightly_Tests_iOS27:
+  Focus_Tests_iOS27:
     envs:
     - SLACK_TITLE: Smoketest and Full Functional Tests iPhone, iPad and iPhone Duo (iOS 27.0)
     - IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
