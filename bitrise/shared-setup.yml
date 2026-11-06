@@ -1,0 +1,180 @@
+format_version: '8'
+
+workflows:
+  # # FIREFOX SETUP WORKFLOWS
+  1_git_clone_and_post_clone:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+            BRANCH=$BITRISE_GIT_BRANCH
+
+            if [[ $BRANCH == update-spm-new-rust-component-tag-* ]]
+            then
+                echo "Building with new Rust-Component version"
+                envman add --key NEW_RC_VERSION --value New_RC_Version
+            fi
+        title: Save Branch Name
+    - cache-pull@2: {}
+
+  2_certificate_and_profile:
+    steps:
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+            cd firefox-ios/Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Developer"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity to iPhone Developer
+    - script@1:
+        inputs:
+        - content: |-
+            brew trust mozilla-mobile/fxios
+            brew tap mozilla-mobile/fxios
+            brew install fxios
+            fxios bootstrap
+        title: Run bootstrap
+    - script@1:
+        title: Run swiftlint
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -euo pipefail
+
+            cd "$BITRISE_SOURCE_DIR"
+
+            # Use the version pinned in .swiftlint-version rather than whichever
+            # version the stack happens to ship, so that CI and local runs match
+            SWIFTLINT=$(./scripts/install-swiftlint.sh)
+            "$SWIFTLINT" version
+
+            # Lint from the repo root and don't pass a config file, to make use
+            # of nested configurations. Violations are written to stdout, while
+            # progress and the summary go to stderr.
+            REPORT="$BITRISE_DEPLOY_DIR/swiftlint_report.txt"
+            set +e
+            "$SWIFTLINT" lint > "$REPORT"
+            set -e
+
+            cat "$REPORT"
+
+            # Publish the violations as a test report as well, so that swiftlint
+            # gets its own entry on the pull request alongside the UI test ones.
+            # SwiftLint takes a single reporter per run, so this is a second pass
+            # rather than a second output format; it hits SwiftLint's cache from
+            # the run above. A run with no violations still writes a test suite,
+            # which is what keeps the entry visible when linting passes.
+            if [ -n "${BITRISE_TEST_RESULT_DIR:-}" ]; then
+                RESULT_DIR="$BITRISE_TEST_RESULT_DIR/swiftlint"
+                mkdir -p "$RESULT_DIR"
+                set +e
+                "$SWIFTLINT" lint --reporter junit > "$RESULT_DIR/swiftlint.xml"
+                set -e
+                echo '{"test-name":"swiftlint"}' > "$RESULT_DIR/test-info.json"
+            else
+                echo "BITRISE_TEST_RESULT_DIR is unset, skipping the swiftlint test report"
+            fi
+
+            # Left unset when there are no violations, which the next step reads
+            if [ -s "$REPORT" ]; then
+                envman add --key SWIFTLINT_REPORT --valuefile "$REPORT"
+            fi
+    - deploy-to-bitrise-io@2: {}
+    - script@1:
+        inputs:
+        - content: |-
+            set -e
+            echo "$SWIFTLINT_REPORT"
+            if [ ! -z "$SWIFTLINT_REPORT" ] ;then
+            # The file is not-empty.
+                echo "Failing build since there are swiftlint errors"
+                exit 1
+            fi
+        title: Fail build if swiftlint fails
+
+  3_provisioning_and_npm_installation:
+    steps:
+    - script@1:
+        title: NPM install and build
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            set -x
+
+            npm install
+            npm run build
+
+  skip_macro_validation:
+    steps:
+    - script@1:
+        title: Skip validation for Swift macros and SPM plugins
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            # Skip validation for Swift macros
+            defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+
+  SPM_Common_Steps:
+    before_run:
+    - skip_macro_validation
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6: {}
+    - certificate-and-profile-installer@1: {}
+    - script@1:
+        is_always_run: true
+        title: Read version from version.txt file
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            pwd
+            ls
+            # Read and trim version string
+            full_version=$(tr -d '[:space:]' < /Users/vagrant/git/version.txt)
+            version=$(echo "$full_version" | sed -E 's/^([0-9]+(\.[0-9]+)*).*/\1/')
+            echo "Version: $version"
+            # Save version in BITRISE_RELEASE_VERSION
+            envman add --key BITRISE_RELEASE_VERSION --value "$version"
+            envman add --key BITRISE_BETA_VERSION --value "$version"
+
+  # # FOCUS UTILITIES WORKFLOWS
+  focus-clone-and-build-dependencies:
+    description: Clones the repo and builds dependencies
+    before_run:
+    - SPM_Common_Steps
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            brew trust mozilla-mobile/fxios
+            brew tap mozilla-mobile/fxios
+            brew install fxios
+            fxios bootstrap -p focus
+        title: ContentBlockerGen
+
+  focus-set-default-browser-entitlement:
+    steps:
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" focus-ios/Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" focus-ios/Klar.entitlements

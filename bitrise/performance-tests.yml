@@ -1,0 +1,396 @@
+format_version: '8'
+
+workflows:
+  Bitrise_Performance_Test:
+    steps:
+    - cache-pull@2:
+        is_always_run: true
+    - xcode-test@6:
+        inputs:
+        - project_path: firefox-ios/Client.xcodeproj
+        - scheme: Fennec
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
+        - test_plan: PerformanceTestPlan
+    - script@1:
+        is_always_run: true
+        title: Create perfherder data object
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+            # get dependency
+            cd ./test-fixtures && git clone https://github.com/clarmso/xcresult_extract.git
+
+            echo $BITRISE_XCRESULT_PATH
+            ls
+            ls $BITRISE_XCRESULT_PATH
+
+            cp -r $BITRISE_XCRESULT_PATH /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test/
+            echo "DerivedData/Client/Log/Tests"
+            ls /Users/vagrant/Library/Developer/Xcode/DerivedData
+            CLIENT_PATH=$(ls /Users/vagrant/Library/Developer/Xcode/DerivedData | grep 'Client-')
+            mv /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec-test.xcresult
+
+            ls /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test
+
+            xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH --legacy
+            ls ..
+            python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec
+            cat data.txt
+            sed 's/.*=//;s/'\''/"/g' data.txt > test.json
+            cat test.json
+            python3 perfTestTransform.py
+            mkdir -p "$BITRISE_DEPLOY_DIR"
+            mv perfherder-data.json $BITRISE_DEPLOY_DIR
+    - deploy-to-bitrise-io@2: {}
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    - skip_macro_validation
+    # Pinned to the pre-Xcode-27 stack: this canary branch deliberately leaves the
+    # performance tests unchanged so their measurements stay comparable to main.
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.5.x
+        machine_type_id: g2.mac.4large
+
+  Archive_and_Run_Robo_Test:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    - skip_macro_validation
+    steps:
+    - xcode-archive@6:
+        inputs:
+        - project_path: firefox-ios/Client.xcodeproj
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 9G8J6YA743
+        - export_method: development
+        - distribution_method: development
+        - export_development_team: 9G8J6YA743
+        - output_tool: xcodebuild
+        - scheme: Fennec_Enterprise
+        - configuration: Fennec_Enterprise
+    - deploy-to-bitrise-io@2: {}
+    - script@1:
+        title: Update Google Cloud SDK Components
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            gcloud components install beta --quiet
+            gcloud components update --quiet
+    - script@1:
+        title: Firebase Test Lab Execution
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+            set -o pipefail
+
+            curl -o /tmp/key-file.json $BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL
+            gcloud version
+            gcloud auth activate-service-account -q --key-file /tmp/key-file.json
+            gcloud config set project "$GOOGLE_CLOUD_PROJECT"
+            GCLOUD_OUTPUT=$(gcloud beta firebase test ios run \
+                --type robo \
+                --app "$BITRISE_IPA_PATH" \
+                --device=model=iphonese3,version=18.4 \
+                --results-bucket=firefox_ios_test_artifacts \
+                --no-record-video \
+                --timeout=10m \
+                --client-details=matrixLabel="Bitrise" \
+                --quiet 2>&1)
+
+            GCLOUD_EXITCODE=$? # this will get the right-most command from the gcloud subshell
+            echo "GCLOUD_EXITCODE: $GCLOUD_EXITCODE"
+
+            # There is a chance the gcloud cli returns a custom array of exit codes, so we will need
+            #    to parse the output to get the exit codes and potentially trigger our own failure
+            # In the case of an Inconclusive Test, we still haven't confirmed what stand-in exit code
+            #   is returned, so we will need to update this script once we know what it is.
+            # We also don't know what order the exit codes will be returned in, so we will need to
+            #   parse the output to get the exit codes and then assign them to variables.
+
+            envman add --key GCLOUD_EXIT_CODE --value "$GCLOUD_EXITCODE"
+            MATRIX_WEBLINK=$(echo "$GCLOUD_OUTPUT" | grep 'https://console.firebase.google.com/project' | awk -F '[][]' '{print $2}' | head -n 1)
+            envman add --key MATRIX_WEBLINK --value "$MATRIX_WEBLINK"
+    - script@1:
+        title: Modify Slack Message Based on GCLOUD_EXIT_CODE
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # unpack GLCOUD_EXIT_CODE from string to int, if gcloud returns string instead of int for exit code
+            if [ $((GCLOUD_EXIT_CODE)) -ne 0 ]; then
+                SLACK_MESSAGE_PRETEXT="*Firefox-iOS* :firefox: *Archive/Robo Test* :x:"
+            else
+                SLACK_MESSAGE_PRETEXT="*Firefox-iOS* :firefox: *Archive/Robo Test* :white_check_mark:"
+            fi
+            envman add --key SLACK_MESSAGE_PRETEXT --value "$SLACK_MESSAGE_PRETEXT"
+    - slack@4:
+        is_always_run: true
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
+        - footer: Created by Mobile Test Engineering
+        - pretext_on_error: "${SLACK_MESSAGE_PRETEXT}"
+        - pretext: "${SLACK_MESSAGE_PRETEXT}"
+        - timestamp: 'no'
+        - fields: |
+            Task | ${BITRISE_BUILD_URL}
+            Commit | ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
+            Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
+            Branch | ${BITRISE_GIT_BRANCH}
+            Result | ${MATRIX_WEBLINK}
+        - buttons: |
+            App|${BITRISE_APP_URL}
+            #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
+            Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.2.x
+        machine_type_id: g2.mac.4large
+
+  Firebase_Performance_Test:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    - skip_macro_validation
+    steps:
+    - xcode-archive@6:
+        inputs:
+        - project_path: firefox-ios/Client.xcodeproj
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 9G8J6YA743
+        - export_method: development
+        - distribution_method: development
+        - export_development_team: 9G8J6YA743
+        - output_tool: xcodebuild
+        - scheme: Fennec_Enterprise
+        - configuration: Fennec_Enterprise
+        - xcconfig_content: ENABLE_DEBUG_DYLIB=NO
+    - deploy-to-bitrise-io@2: {}
+    - script@1:
+        title: Firebase Build for Testing Physical Devices
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -euxo pipefail
+
+            DERIVED_DATA_DIR="/Users/vagrant/git/DerivedData"
+            PROJECT="/Users/vagrant/git/firefox-ios/Client.xcodeproj"
+            SCHEME="Fennec_Enterprise"
+            SDK="iphoneos"
+            DESTINATION="generic/platform=iOS"
+            PRODUCTS_DIR="${DERIVED_DATA_DIR}/Build/Products"
+            TEST_PLAN="${SCHEME}_PerformanceTestPlan"
+
+            echo "-- build-for-testing --"
+            mkdir DerivedData
+            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile -project firefox-ios/Client.xcodeproj
+            xcodebuild build-for-testing -project "$PROJECT" \
+                -scheme "$SCHEME" \
+                -sdk "$SDK" \
+                -destination "$DESTINATION" \
+                -derivedDataPath "${DERIVED_DATA_DIR}" \
+                -skipMacroValidation
+                ENABLE_DEBUG_DYLIB=NO
+
+            echo "-- verify build artifacts --"
+
+            if [[ ! -d "$PRODUCTS_DIR" ]]; then
+                echo "Error: $PRODUCTS_DIR was not created. Check your build steps and try again."
+                exit 1
+            fi
+
+            if [[ -z $(find "$PRODUCTS_DIR" -type f -name "${TEST_PLAN}*.xctestrun") ]]; then
+                echo "Error: Missing $TEST_PLAN. Check your scheme and ensure the Test Plan is added."
+                echo "The files in $PRODUCTS_DIR are:"
+                ls -l "$PRODUCTS_DIR"
+                echo "The available test plans for this scheme, $SCHEME, are:"
+                awk '/<TestPlanReference/,/<\/TestPlanReference>/' \
+                    "${PROJECT}/xcshareddata/xcschemes/${SCHEME}.xcscheme" | \
+                    grep "reference" | \
+                    cut -d '"' -f 2 | \
+                    sed -n 's|container:Tests/\(.*\).xctestplan|\1|p'
+                exit 1
+            fi
+
+            if [[ ! -d "${PRODUCTS_DIR}/${SCHEME}-${SDK}" ]]; then
+                echo "Error: Missing sdk for iPhone OS. Check your build sdk argument and try again."
+                echo "The files in $PRODUCTS_DIR are:"
+                ls -l "$PRODUCTS_DIR"
+                echo "The available sdks in this environment are:"
+                xcodebuild -showsdks | grep -E 'iphoneos|iphonesimulator'
+                exit 1
+            fi
+    - script@1:
+        title: Create .zip artifact for Firebase Testing
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -euxo pipefail
+
+            PRODUCTS_DIR="/Users/vagrant/git/DerivedData/Build/Products"
+            SCHEME="Fennec_Enterprise"
+            SDK="iphoneos"
+            TEST_PLAN="${SCHEME}_PerformanceTestPlan"
+            TARGET_ARCHIVE="/Users/vagrant/git/Fennec_Enterprise.zip"
+
+            echo "-- create .zip artifact --"
+            # do not double-quote $TEST_PLAN, as it is a wildcard and we need it to expand
+            ( cd "$PRODUCTS_DIR" && zip -r "${SCHEME}.zip" "${SCHEME}-${SDK}" ${TEST_PLAN}*.xctestrun )
+            mv "${PRODUCTS_DIR}/${SCHEME}.zip" "$TARGET_ARCHIVE"
+    - cache-pull@2:
+        inputs:
+        - cache_paths: "$HOME/google-cloud-sdk"
+    - script@1:
+        title: Install Google Cloud SDK
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+
+            if [ -e $HOME/google-cloud-sdk ]; then
+              echo "Google Cloud SDK found, skipping installation..."
+            else
+              echo "Google Cloud SDK not found, installing..."
+              curl https://sdk.cloud.google.com > install.sh
+              bash install.sh --disable-prompts
+              source $HOME/google-cloud-sdk/path.bash.inc
+            fi
+    - script@1:
+        title: Pin Python version
+        inputs:
+        - content: |-
+            brew install python@3.11
+            brew unlink python@3.12 || true
+            brew unlink python@3.11 || true
+            brew link --force python@3.11
+    - cache-push@2:
+        inputs:
+        - cache_paths: "$HOME/google-cloud-sdk"
+        - ignore_check_on_paths: "!/Users/vagrant/Library/Developer/Xcode/DerivedData/**"
+        - compress_archive: "true"
+    - script@1:
+        title: Run Performance Tests in Firebase Test Lab
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            TIMESTAMP=$(date "+%Y%m%d%H%M%S")
+            RESULTS_DIR="firefox_ios_performance_tests_${TIMESTAMP}"
+            GOOGLE_CLOUD_BUCKET="firefox_ios_test_artifacts"
+            DEVICE_MODEL="iphonese3" # if updating device model and version, also update firebase-performance.kind
+            DEVICE_VERSION="26.3"
+            XCRESULT_PATH="gs://${GOOGLE_CLOUD_BUCKET}/${RESULTS_DIR}/${DEVICE_MODEL}-${DEVICE_VERSION}-en-portrait/TestLogs/"
+            TARGET_ARCHIVE="/Users/vagrant/git/Fennec_Enterprise.zip" # this should be the same as the artifact created in the previous step
+
+            curl -o /tmp/key-file.json "$BITRISEIO_GOOGLE_APPLICATION_CREDENTIALS_URL"
+            $HOME/google-cloud-sdk/bin/gcloud version
+            $HOME/google-cloud-sdk/bin/gcloud auth activate-service-account -q --key-file /tmp/key-file.json
+            $HOME/google-cloud-sdk/bin/gcloud config set project "$GOOGLE_CLOUD_PROJECT"
+
+            FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
+                --test "$TARGET_ARCHIVE" \
+                --xcode-version=26.2 \
+                --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
+                --client-details=matrixLabel="Bitrise" \
+                --num-flaky-test-attempts=2 \
+                --results-bucket="$GOOGLE_CLOUD_BUCKET" \
+                --results-dir="$RESULTS_DIR")
+
+            FIREBASE_XCRESULT_PATH=$("${HOME}/google-cloud-sdk/bin/gcloud" storage ls "$XCRESULT_PATH" | grep -F ".xcresult")
+            envman add --key FIREBASE_XCRESULT_PATH --value "$FIREBASE_XCRESULT_PATH"
+    - script@1:
+        is_always_run: true
+        title: Create Perfherder Data Object from Firebase
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -ex
+
+            # get dependency
+            cd ./test-fixtures && git clone https://github.com/clarmso/xcresult_extract.git
+
+            # pull firebase xcresult and rename it to extract measurement data
+            mkdir test_firebase_xcresult
+
+            $HOME/google-cloud-sdk/bin/gcloud storage cp -r "$FIREBASE_XCRESULT_PATH" ./test_firebase_xcresult &
+
+            # Get the process ID of the backgrounded gcloud storage command
+            PID=$!
+
+            TIMEOUT=60
+            CHECK_INTERVAL=5
+            ITERATIONS=$((TIMEOUT / CHECK_INTERVAL))
+
+            for ((i = 0; i < ITERATIONS; i++)); do
+                echo "Waiting for gcloud storage to complete..."
+                sleep $CHECK_INTERVAL
+                if ! ps -p $PID > /dev/null; then
+                    wait $PID
+                    STATUS=$?
+                    if [ $STATUS -ne 0 ]; then
+                        echo "gcloud storage cp failed with exit code $STATUS"
+                        exit $STATUS
+                    fi
+                    break
+                fi
+            done
+
+            # if gcloud storage is still running after 60s, it is hanging and needs to be killed
+            if ps -p $PID > /dev/null; then
+                echo "The gcloud storage command exceeded the timeout. Stopping and removing contents..."
+                kill -9 $PID
+
+                rm -rf ./test_firebase_xcresult
+                mkdir ./test_firebase_xcresult
+                echo "Retrying xcresult copy without multi-processing..."
+                CLOUDSDK_STORAGE_PROCESS_COUNT=1 CLOUDSDK_STORAGE_THREAD_COUNT=1 $HOME/google-cloud-sdk/bin/gcloud storage cp -r "$FIREBASE_XCRESULT_PATH" ./test_firebase_xcresult
+            fi
+
+            mv ./test_firebase_xcresult/*.xcresult ./test_firebase_xcresult/Test-Fennec-test.xcresult
+
+            # firebase xcresult needs to be in the Test dir created during earlier build-for-testing step
+            FIREBASE_XCRESULT="./test_firebase_xcresult/Test-Fennec-test.xcresult"
+            CLIENT_PATH=$(ls /Users/vagrant/Library/Developer/Xcode/DerivedData | grep 'Client-')
+            BITRISE_XCRESULT="/Users/vagrant/Library/Developer/Xcode/DerivedData/${CLIENT_PATH}/Logs/Test/Test-Fennec-test.xcresult"
+            mv "$FIREBASE_XCRESULT" "$BITRISE_XCRESULT"
+
+            # create and print perf data object for perfherder ingest via taskcluster log output
+            xcrun xcresulttool graph --path "$BITRISE_XCRESULT" --legacy
+            ls ..
+            # If this ever breaks, check the xcresult_extract.py function find_xcresult_path
+            # and figure out exactly what it is doing because we are using Fennec as the scheme
+            # and it works for both Fennec and Fennec_Enterprise, but I don't know why.
+            # I would change it here but I am too afraid to break it.
+            python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec
+            cat data.txt
+            sed 's/.*=//;s/'\''/"/g' data.txt > test.json
+            cat test.json
+            python3 perfTestTransform.py
+            mkdir -p "$BITRISE_DEPLOY_DIR"
+            mv perfherder-data.json $BITRISE_DEPLOY_DIR
+    - deploy-to-bitrise-io@2: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.2.x
+        machine_type_id: g2.mac.large
+
+  # Firefox_Unit_Tests_iOS_Versions ensures all unit tests pass on the supported iOS versions.
+  # This workflow runs weekly on Tuesday.
+  # The results are reported to #tmp-firefox-ios-unit-tests.
