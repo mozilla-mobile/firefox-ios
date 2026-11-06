@@ -13,11 +13,14 @@ protocol MainMenuSelectorSet {
 	var SIGN_IN_CELL: Selector { get }
     var SETTINGS_CELL: Selector { get }
     var BOOKMARK_PAGE: Selector { get }
+    var ADD_TO_SHORTCUTS: Selector { get }
+    var REMOVE_FROM_SHORTCUTS: Selector { get }
     var SITE_PROTECTIONS: Selector { get }
     var PAGE_ZOOM: Selector { get }
     var READER_VIEW: Selector { get }
-    var READER_VIEW_STATUS_ON: Selector { get }
-    var READER_VIEW_STATUS_OFF: Selector { get }
+    var MENU_ITEM_STATUS_ON: Selector { get }
+    var MENU_ITEM_STATUS_OFF: Selector { get }
+    var WEBSITE_DARK_MODE: Selector { get }
     var FIND_IN_PAGE: Selector { get }
     var SUMMARIZE_PAGE: Selector { get }
     var REPORT_BROKEN_SITE: Selector { get }
@@ -35,12 +38,15 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         static let signIn = AccessibilityIdentifiers.MainMenu.signIn
         static let settings  = AccessibilityIdentifiers.MainMenu.settings
         static let bookmarkPage = AccessibilityIdentifiers.MainMenu.bookmarkPage
+        static let addToShortcuts = AccessibilityIdentifiers.MainMenu.addToShortcuts
+        static let removeFromShortcuts = String.MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts
         static let siteProtections = "Protections"
         static let pageZoom = AccessibilityIdentifiers.MainMenu.zoom
         static let readerView = AccessibilityIdentifiers.MainMenu.readerView
-        // The row status has no accessibility identifier, it is matched on its label
-        static let readerViewStatusOn = "On"
-        static let readerViewStatusOff = "Off"
+        // Info-cell statuses (Reader View, Desktop Site, Website Dark Mode) have no identifier, match on label
+        static let menuItemStatusOn = "On"
+        static let menuItemStatusOff = "Off"
+        static let websiteDarkMode = AccessibilityIdentifiers.MainMenu.nightMode
         static let findInPage = AccessibilityIdentifiers.MainMenu.findInPage
         static let summarizePage = AccessibilityIdentifiers.MainMenu.summarizePage
         static let reportBrokenSite = AccessibilityIdentifiers.MainMenu.reportBrokenSite
@@ -100,6 +106,19 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         groups: ["MainMenu"]
     )
 
+    let ADD_TO_SHORTCUTS = Selector.tableCellById(
+        IDs.addToShortcuts,
+        description: "Add to Shortcuts cell in the expanded Main Menu",
+        groups: ["MainMenu"]
+    )
+
+    // Shares the Add to Shortcuts identifier, only the label changes once the page is pinned
+    let REMOVE_FROM_SHORTCUTS = Selector.cellByLabel(
+        IDs.removeFromShortcuts,
+        description: "Remove from Shortcuts cell in the expanded Main Menu",
+        groups: ["MainMenu"]
+    )
+
     let PAGE_ZOOM = Selector.tableCellById(
         IDs.pageZoom,
         description: "Page Zoom cell in the expanded Main Menu",
@@ -112,15 +131,21 @@ struct MainMenuSelectors: MainMenuSelectorSet {
         groups: ["MainMenu"]
     )
 
-    let READER_VIEW_STATUS_ON = Selector.staticTextByLabel(
-        IDs.readerViewStatusOn,
-        description: "On status of the Reader View cell in the expanded Main Menu",
+    let MENU_ITEM_STATUS_ON = Selector.staticTextByLabel(
+        IDs.menuItemStatusOn,
+        description: "On status label inside a Main Menu info cell",
         groups: ["MainMenu"]
     )
 
-    let READER_VIEW_STATUS_OFF = Selector.staticTextByLabel(
-        IDs.readerViewStatusOff,
-        description: "Off status of the Reader View cell in the expanded Main Menu",
+    let MENU_ITEM_STATUS_OFF = Selector.staticTextByLabel(
+        IDs.menuItemStatusOff,
+        description: "Off status label inside a Main Menu info cell",
+        groups: ["MainMenu"]
+    )
+
+    let WEBSITE_DARK_MODE = Selector.tableCellById(
+        IDs.websiteDarkMode,
+        description: "Website Dark Mode cell in the expanded Main Menu",
         groups: ["MainMenu"]
     )
 
@@ -150,7 +175,7 @@ struct MainMenuSelectors: MainMenuSelectorSet {
 
     var all: [Selector] { [DESKTOP_SITE, BOOKMARKS_BUTTON, HISTORY_BUTTON, DOWNLOADS_BUTTON,
                            PASSWORDS_BUTTON, SIGN_IN_CELL, SETTINGS_CELL, BOOKMARK_PAGE,
-                           SITE_PROTECTIONS, PAGE_ZOOM, READER_VIEW, READER_VIEW_STATUS_ON,
-                           READER_VIEW_STATUS_OFF, FIND_IN_PAGE, SUMMARIZE_PAGE, REPORT_BROKEN_SITE,
-                           CLOSE_BUTTON] }
+                           ADD_TO_SHORTCUTS, REMOVE_FROM_SHORTCUTS, SITE_PROTECTIONS, PAGE_ZOOM,
+                           READER_VIEW, MENU_ITEM_STATUS_ON, MENU_ITEM_STATUS_OFF, WEBSITE_DARK_MODE,
+                           FIND_IN_PAGE, SUMMARIZE_PAGE, REPORT_BROKEN_SITE, CLOSE_BUTTON] }
 }
