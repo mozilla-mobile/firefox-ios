@@ -156,6 +156,28 @@ final class BrowserScreen {
         assertExampleDomainTextExists(timeout: timeout)
     }
 
+    /// Loads the Book of Mozilla test page and asserts it, retrying once for the same reason as
+    /// `navigateToURLAndAssertMobileUserAgent` (https://github.com/mozilla-mobile/firefox-ios/issues/35933).
+    func navigateToURLAndAssertBookOfMozilla(_ url: String, timeout: TimeInterval = TIMEOUT) {
+        navigateToURL(url)
+        if bookOfMozillaPageContentExists(timeout: timeout) {
+            return
+        }
+        navigateToURL(url)
+        assertBookOfMozillaPageDisplayed(timeout: timeout)
+    }
+
+    /// Loads `url` and asserts the address bar shows `host`, retrying once for the same reason as
+    /// `navigateToURLAndAssertMobileUserAgent` (https://github.com/mozilla-mobile/firefox-ios/issues/35933).
+    func navigateToURLAndAssertAddressBarContains(_ url: String, host: String, timeout: TimeInterval = TIMEOUT) {
+        navigateToURL(url)
+        if addressBarContains(host, timeout: timeout) {
+            return
+        }
+        navigateToURL(url)
+        assertAddressBarContains(value: host, timeout: timeout)
+    }
+
     func assertDesktopUserAgentIsDisplayed(timeout: TimeInterval = TIMEOUT) {
         assertUserAgentTextExists("DESKTOP_UA", timeout: timeout)
     }
