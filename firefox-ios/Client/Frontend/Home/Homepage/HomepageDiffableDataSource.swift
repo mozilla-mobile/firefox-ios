@@ -51,7 +51,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
         case addShortcutTile(TextColor?)
-        case topSiteEmpty
+        case topSiteEmpty(Int)
         case searchBar
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
@@ -103,7 +103,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
 
         var canHandleLongPress: Bool {
             switch self {
-            case .addShortcutTile:
+            case .addShortcutTile, .topSiteEmpty:
                 return false
             default:
                 return true
@@ -200,6 +200,16 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         guard topSitesState.shouldShowSection else { return nil }
         let maxVisibleItemCount = topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
         guard maxVisibleItemCount > 0 else { return nil }
+
+        // Keep the section at its full size until the first fetch comes back, otherwise everything
+        // below it jumps down when the tiles are inserted on launch.
+        guard topSitesState.hasRetrievedTopSites else {
+            return TopSitesSnapshotData(
+                items: (0..<maxVisibleItemCount).map { .topSiteEmpty($0) },
+                numberOfTilesPerRow: topSitesState.numberOfTilesPerRow,
+                shouldShowSectionHeader: false
+            )
+        }
 
         let topSitesItems: [HomeItem] = topSitesState.topSitesData.prefix(
             maxVisibleItemCount
