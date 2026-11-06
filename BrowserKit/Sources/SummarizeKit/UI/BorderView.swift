@@ -38,9 +38,9 @@ private struct AdjustableBlurBorder: View {
 struct BorderView: View {
     var theme: Theme
     private enum UX {
-        static let borderWidth: CGFloat = 50
+        static let borderWidth: CGFloat = 20
         static let cornerRadius: CGFloat = 55
-        static let blurRadius: CGFloat = 25
+        static let blurRadius: CGFloat = 20
     }
     var body: some View {
         GeometryReader { proxy in

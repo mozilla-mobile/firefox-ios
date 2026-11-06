@@ -113,7 +113,11 @@ public final class SummarizeController: UIViewController, Themeable {
     private var tabSnapshotTopConstraint: NSLayoutConstraint?
     private lazy var tabSnapshotPanGesture = UIPanGestureRecognizer(target: self, action: #selector(onTabSnapshotPan))
 
-    private lazy var backgroundEffectView = AIBackgroundEffectView(parentController: self, blobsMotion: .stepped)
+    private lazy var backgroundEffectView = AIBackgroundEffectView(
+        parentController: self,
+        blobsMotion: .stepped,
+        blobsLandscapeLayout: .centered
+    )
     /// The Layout Guide for the top half of the bounds when in Portrait,
     /// Otherwise in Landscape it becomes equal to the controller's `view` layout guide.
     private let topHalfBoundGuide = UILayoutGuide()

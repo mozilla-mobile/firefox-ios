@@ -38,6 +38,14 @@ public enum AIBackgroundBlobsMotion {
     }
 }
 
+/// Where the blobs sit when the canvas is wider than tall.
+public enum AIBackgroundBlobsLandscapeLayout {
+    /// Large blobs centered below the bottom edge, so only their upper part shows.
+    case bottomEdge
+    /// The portrait arrangement, centered in the canvas.
+    case centered
+}
+
 final class BlendedBlobsGradientState: ObservableObject {
     @Published var colors: [Color] = []
     /// Freezes the blobs on their current frame.
@@ -112,6 +120,9 @@ struct BlendedBlobsGradient: View {
         static let portraitMaskHeightRatio: CGFloat = 1.0 / 1.1
         /// Vertical position of the portrait mask center, relative to the canvas height.
         static let portraitMaskCenterYRatio: CGFloat = 1.0 / 1.3
+        /// Size of the centered landscape mask, relative to the canvas.
+        static let centeredMaskWidthRatio: CGFloat = 1.5
+        static let centeredMaskHeightRatio: CGFloat = 2.0
     }
 
     private struct Blob: Identifiable {
@@ -124,6 +135,7 @@ struct BlendedBlobsGradient: View {
 
     @ObservedObject var state: BlendedBlobsGradientState
     let motion: AIBackgroundBlobsMotion
+    let landscapeLayout: AIBackgroundBlobsLandscapeLayout
 
     var body: some View {
         GeometryReader { geo in
@@ -148,7 +160,9 @@ struct BlendedBlobsGradient: View {
         }
         .mask {
             EllipticalGradient(
-                gradient: SwiftUI.Gradient(stops: isLandscape(size) ? UX.landscapeMaskStops : UX.portraitMaskStops),
+                gradient: SwiftUI.Gradient(
+                    stops: isLandscape(size) && !isCenteredLandscape(size) ? UX.landscapeMaskStops : UX.portraitMaskStops
+                ),
                 center: .center
             )
             .frame(width: maskFrame.width, height: maskFrame.height)
@@ -161,8 +175,14 @@ struct BlendedBlobsGradient: View {
         return size.width > size.height
     }
 
+    private func isCenteredLandscape(_ size: CGSize) -> Bool {
+        return isLandscape(size) && landscapeLayout == .centered
+    }
+
     private func regionHeight(in size: CGSize) -> CGFloat {
-        let ratio = isLandscape(size) ? UX.landscapeRegionHeightRatio : UX.portraitRegionHeightRatio
+        let ratio = isLandscape(size) && !isCenteredLandscape(size)
+            ? UX.landscapeRegionHeightRatio
+            : UX.portraitRegionHeightRatio
         return size.height * ratio
     }
 
@@ -170,6 +190,11 @@ struct BlendedBlobsGradient: View {
     /// in the lower part of the canvas. In landscape it overflows the canvas horizontally and is
     /// centered on the bottom edge, so only its upper half, as tall as the blobs region, is visible.
     private func maskFrame(in size: CGSize) -> CGRect {
+        if isCenteredLandscape(size) {
+            let width = size.width * UX.centeredMaskWidthRatio
+            let height = size.height * UX.centeredMaskHeightRatio
+            return CGRect(x: (size.width - width) / 2.0, y: (size.height - height) / 2.0, width: width, height: height)
+        }
         guard !isLandscape(size) else {
             let width = size.width * UX.landscapeMaskWidthRatio
             let height = regionHeight(in: size) * 2.0
@@ -193,7 +218,7 @@ struct BlendedBlobsGradient: View {
         let pulsation = 1.0 + UX.pulsationAmplitude * CGFloat(sin(time * UX.pulsationSpeed))
 
         return state.colors.enumerated().map { index, color in
-            let (baseCenter, blobRadii) = isLandscape(size)
+            let (baseCenter, blobRadii) = isLandscape(size) && !isCenteredLandscape(size)
                 ? landscapeLayout(at: index, in: size)
                 : portraitLayout(at: index, in: size)
             let driftAngle = time * value(at: index, in: UX.speeds)
@@ -219,10 +244,14 @@ struct BlendedBlobsGradient: View {
         return (
             CGPoint(
                 x: size.width / 2.0 + cos(angle) * orbitRadius,
-                y: size.height - regionHeight / 2.0 + sin(angle) * orbitRadius
+                y: regionCenterY(in: size) + sin(angle) * orbitRadius
             ),
             CGSize(width: blobRadius, height: blobRadius)
         )
+    }
+
+    private func regionCenterY(in size: CGSize) -> CGFloat {
+        return isCenteredLandscape(size) ? size.height / 2.0 : size.height - regionHeight(in: size) / 2.0
     }
 
     private func landscapeLayout(at index: Int, in size: CGSize) -> (center: CGPoint, radii: CGSize) {
@@ -301,11 +330,20 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
     /// - Parameters:
     ///   - parentController: the controller the blobs hosting controller is added to as a child.
     ///   - blobsMotion: how the blobs move over time.
-    public init(parentController: UIViewController, blobsMotion: AIBackgroundBlobsMotion = .smooth) {
+    ///   - blobsLandscapeLayout: where the blobs sit in landscape.
+    public init(
+        parentController: UIViewController,
+        blobsMotion: AIBackgroundBlobsMotion = .smooth,
+        blobsLandscapeLayout: AIBackgroundBlobsLandscapeLayout = .bottomEdge
+    ) {
         let blobsState = BlendedBlobsGradientState()
         self.blobsState = blobsState
         blobsHostingController = UIHostingController(
-            rootView: BlendedBlobsGradient(state: blobsState, motion: blobsMotion)
+            rootView: BlendedBlobsGradient(
+                state: blobsState,
+                motion: blobsMotion,
+                landscapeLayout: blobsLandscapeLayout
+            )
         )
         super.init(frame: .zero)
         parentController.addChild(blobsHostingController)
