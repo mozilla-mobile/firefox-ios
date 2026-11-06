@@ -537,6 +537,32 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.displayNavBorder, false)
     }
 
+    func testMicrosurveyPromptInitialize_whileEditingAddressBar_doesNotDispatchBorderUpdate() throws {
+        mockStore = MockStoreForMiddleware(state: setupAppStateWithEditingAddressBar())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let subject = createSubject(manager: toolbarManager)
+        let action = MicrosurveyPromptMiddlewareAction(
+            windowUUID: windowUUID,
+            actionType: MicrosurveyPromptMiddlewareActionType.initialize)
+        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
+    func testMicrosurveyPromptClosePrompt_whileEditingAddressBar_doesNotDispatchBorderUpdate() throws {
+        mockStore = MockStoreForMiddleware(state: setupAppStateWithEditingAddressBar())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        let subject = createSubject(manager: toolbarManager)
+        let action = MicrosurveyPromptAction(
+            windowUUID: windowUUID,
+            actionType: MicrosurveyPromptActionType.closePrompt)
+        subject.toolbarProvider.legacyMiddleware(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
     // MARK: - MicrosurveyPromptAction
     func testMicrosurveyPromptClosePrompt_withTopToolbar_dispatchesToolbarPositionChanged() throws {
         let subject = createSubject(manager: toolbarManager)
@@ -1324,6 +1350,26 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     func setupToolbarBottomPositionAppState() -> AppState {
         var toolbarState = ToolbarState(windowUUID: windowUUID)
         toolbarState.toolbarPosition = .bottom
+
+        return AppState(
+            presentedComponents: PresentedComponentsState(
+                components: [
+                    .browserViewController(
+                        BrowserViewControllerState(
+                            windowUUID: windowUUID
+                        )
+                    ),
+                    .toolbar(toolbarState)
+                ]
+            )
+        )
+    }
+
+    private func setupAppStateWithEditingAddressBar() -> AppState {
+        var addressBarState = AddressBarState(windowUUID: windowUUID)
+        addressBarState.isEditing = true
+        var toolbarState = ToolbarState(windowUUID: windowUUID)
+        toolbarState.addressToolbar = addressBarState
 
         return AppState(
             presentedComponents: PresentedComponentsState(
