@@ -751,6 +751,18 @@ public protocol SuggestClientProtocol: AnyObject, Sendable {
      */
     func getSuggestions(query: String, options: SuggestOptions) throws  -> String?
     
+    /**
+     * Ends the current search session.
+     *
+     * A new session, with a new session ID and the sequence number reset to 0,
+     * is started on the next call to [`SuggestClient::get_suggestions`].
+     *
+     * Consumers should call this whenever a search session ends (e.g. the user
+     * navigates away from the address bar). Consumers may also call it to end a
+     * long-lived session after a certain duration for better privacy protection.
+     */
+    func resetSession() 
+    
 }
 /**
  * A client for the merino suggest endpoint.
@@ -838,6 +850,24 @@ open func getSuggestions(query: String, options: SuggestOptions)throws  -> Strin
         FfiConverterTypeSuggestOptions_lower(options),uniffiCallStatus
     )
 })
+}
+    
+    /**
+     * Ends the current search session.
+     *
+     * A new session, with a new session ID and the sequence number reset to 0,
+     * is started on the next call to [`SuggestClient::get_suggestions`].
+     *
+     * Consumers should call this whenever a search session ends (e.g. the user
+     * navigates away from the address bar). Consumers may also call it to end a
+     * long-lived session after a certain duration for better privacy protection.
+     */
+open func resetSession()  {try! rustCall() {
+        uniffiCallStatus in
+    uniffi_merino_fn_method_suggestclient_reset_session(
+            self.uniffiCloneHandle(),uniffiCallStatus
+    )
+}
 }
     
 
@@ -2940,6 +2970,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_merino_checksum_method_suggestclient_get_suggestions() != 56465) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_merino_checksum_method_suggestclient_reset_session() != 54784) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_merino_checksum_constructor_curatedrecommendationsclient_new() != 60403) {
