@@ -279,6 +279,16 @@ final class TrackingProtectionScreen {
     }
 
     @MainActor
+    func turnOnPanelTrackingProtectionIfNeeded() {
+        let toggle = sel.PANEL_TRACKING_PROTECTION_SWITCH.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(toggle)
+        if toggle.value as? String == "0" {
+            toggle.waitAndTap()
+        }
+        assertPanelTrackingProtectionSwitchValue(isOn: true)
+    }
+
+    @MainActor
     func tapPrivacySettings() {
         sel.PANEL_PRIVACY_SETTINGS_BUTTON.element(in: app).waitAndTap()
     }

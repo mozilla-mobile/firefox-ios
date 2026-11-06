@@ -223,6 +223,7 @@ class TrackingProtectionTests: BaseTestCase {
 
         openConnectionPanel()
         trackingProtectionScreen.assertPanelTrackingProtectionSwitchValue(isOn: true)
+        restoreProtectionsIfTestFails(url: "https://www.mozilla.org/", host: "mozilla.org")
         trackingProtectionScreen.tapPanelTrackingProtectionSwitch()
         trackingProtectionScreen.assertPanelHeader(domain: "mozilla.org")
         trackingProtectionScreen.assertProtectionsOffPanelStructure()
@@ -250,6 +251,7 @@ class TrackingProtectionTests: BaseTestCase {
 
         // Step 3: turn protections off, then repeat steps 1-2
         rotateDevice(to: .portrait)
+        restoreProtectionsIfTestFails(url: "https://www.mozilla.org/", host: "mozilla.org")
         trackingProtectionScreen.tapPanelTrackingProtectionSwitch()
         trackingProtectionScreen.closePanel()
         waitUntilPageLoad()
@@ -359,6 +361,22 @@ class TrackingProtectionTests: BaseTestCase {
     private func openConnectionPanel() {
         toolbarScreen.tapSettingsMenuButton()
         mainMenuScreen.tapSiteProtections()
+    }
+
+    /// Turning protections off safelists the site in Caches, which ClearProfile keeps. If the test fails
+    /// before turning them back on, this teardown block relaunches the app and turns them on for `url`.
+    private func restoreProtectionsIfTestFails(url: String, host: String) {
+        addTeardownBlock { @MainActor [self] in
+            guard testRun?.hasSucceeded == false else { return }
+            XCUIDevice.shared.orientation = .portrait
+            app.terminate()
+            app.launch()
+            browserScreen.navigateToURLAndAssertAddressBarContains(url, host: host)
+            waitUntilPageLoad()
+            openConnectionPanel()
+            trackingProtectionScreen.turnOnPanelTrackingProtectionIfNeeded()
+            trackingProtectionScreen.closePanel()
+        }
     }
 
     private func assertConnectionPanelAndProtectionSettings(domain: String, secure: Bool) {

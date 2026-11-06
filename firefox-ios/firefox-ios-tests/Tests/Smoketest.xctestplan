@@ -625,6 +625,7 @@
         "TrackingProtectionTests\/testSecureConnectionButton()",
         "TrackingProtectionTests\/testSecureSiteConnectionElements()",
         "TrackingProtectionTests\/testSecurityCertificateLink()",
+        "TrackingProtectionTests\/testStandardProtectionLevel()",
         "TrackingProtectionTests\/testStrictTrackingProtection()",
         "TrackingProtectionTests\/testTrackingProtectionButtonMenu()",
         "TranslationsTests",
