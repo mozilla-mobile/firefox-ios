@@ -66,7 +66,7 @@ pipelines:
 workflows:
   Firefox_Nightly_SmokeTest_Iphone:
     envs:
-    - SLACK_TITLE: Nightly Smoketest iPhone
+    - SLACK_TITLE: Nightly Smoketest iPhone (Fennec Scheme)
     - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - SCHEME: Fennec
     after_run:
@@ -74,7 +74,7 @@ workflows:
 
   Firefox_SmokeTest_Iphone:
     envs:
-    - SLACK_TITLE: Smoketest Firefox scheme iPhone
+    - SLACK_TITLE: Smoketest iPhone
     - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - SCHEME: Firefox
     after_run:
@@ -82,7 +82,7 @@ workflows:
 
   Firefox_SmokeTest_Ipad:
     envs:
-    - SLACK_TITLE: Smoketest Firefox scheme iPad
+    - SLACK_TITLE: Smoketest iPad
     - DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
     - SCHEME: Firefox
     after_run:
@@ -90,7 +90,7 @@ workflows:
 
   Firefox_SmokeTest_IphoneDuo:
     envs:
-    - SLACK_TITLE: Smoketest Firefox scheme iPhone Duo
+    - SLACK_TITLE: Smoketest iPhone Duo
     - DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
     - SCHEME: Firefox
     after_run:
@@ -98,7 +98,7 @@ workflows:
 
   Firefox_Nightly_Fullfunctional_Iphone:
     envs:
-    - SLACK_TITLE: Nightly Full Functional Tests iPhone
+    - SLACK_TITLE: Nightly Full Functional Tests iPhone (Fennec Scheme)
     - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - SCHEME: Fennec
     after_run:
@@ -106,7 +106,7 @@ workflows:
 
   Firefox_Fullfunctional_Iphone:
     envs:
-    - SLACK_TITLE: Full Functional Tests Firefox scheme iPhone
+    - SLACK_TITLE: Full Functional Tests iPhone
     - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - SCHEME: Firefox
     after_run:
@@ -114,7 +114,7 @@ workflows:
 
   Firefox_Tests_iOS18:
     envs:
-    - SLACK_TITLE: Smoketest and Full Functional Tests Firefox scheme iPhone (iOS 18.6)
+    - SLACK_TITLE: Smoketest and Full Functional Tests iPhone (iOS 18.6)
     - DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.6
     - SCHEME: Firefox
     after_run:
@@ -122,7 +122,7 @@ workflows:
 
   Firefox_Tests_iOS26:
     envs:
-    - SLACK_TITLE: Smoketest and Full Functional Tests Firefox scheme iPhone (iOS 26.5)
+    - SLACK_TITLE: Smoketest and Full Functional Tests iPhone (iOS 26.5)
     - DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
     - SCHEME: Firefox
     after_run:
@@ -130,7 +130,7 @@ workflows:
 
   Focus_Nightly_Tests_iOS18:
     envs:
-    - SLACK_TITLE: Nightly Smoketest and Full Functional Tests (iPhone and iPad, iOS 18.6)
+    - SLACK_TITLE: Smoketest and Full Functional Tests iPhone and iPad (iOS 18.6)
     - IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.6
     - IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=18.6
     after_run:
@@ -138,7 +138,7 @@ workflows:
 
   Focus_Nightly_Tests_iOS26:
     envs:
-    - SLACK_TITLE: Nightly Smoketest and Full Functional Tests (iPhone and iPad, iOS 26.5)
+    - SLACK_TITLE: Smoketest and Full Functional Tests iPhone and iPad (iOS 26.5)
     - IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
     - IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=26.5
     after_run:
@@ -146,7 +146,7 @@ workflows:
 
   Focus_Nightly_Tests_iOS27:
     envs:
-    - SLACK_TITLE: Nightly Smoketest and Full Functional Tests (iPhone, iPad and iPhone Duo, iOS 27.0)
+    - SLACK_TITLE: Smoketest and Full Functional Tests iPhone, iPad and iPhone Duo (iOS 27.0)
     - IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
     - FOCUS_DUO_DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
@@ -154,7 +154,7 @@ workflows:
     - _focus_smoke_fullfunctional_tests
 
   firefox_smoketest_run:
-    description: Run the Firefox smoke tests from the build shared by the pipeline
+    description: Run the Firefox smoke tests
     before_run:
     - 1_git_clone_and_post_clone
     steps:
@@ -181,32 +181,12 @@ workflows:
         - destination: $DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/${SCHEME}_FullFunctionalTestPlan_iphonesimulator27.1-arm64.xctestrun
         - xcodebuild_options: $XCODEBUILD_OPTIONS
-    - script@1:
-        title: Count failed tests in this shard
-        is_always_run: true
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            ./bitrise/scripts/fullfunctional_failures.sh count
     - deploy-to-bitrise-io@2:
         is_always_run: true
-        inputs:
-        - pipeline_intermediate_files: $BITRISE_DEPLOY_DIR/fullfunctional_result.txt:FULLFUNCTIONAL_RESULT_$BITRISE_IO_PARALLEL_INDEX
 
   firefox_fullfunctional_report:
-    description: Collect the failed test counts from all shards and report them to Slack
-    envs:
-    - FULLFUNCTIONAL_SHARD_COUNT: 4
-    before_run:
-    - 1_git_clone_and_post_clone
+    description: Report the full functional test result to Slack
     steps:
-    - pull-intermediate-files@1: {}
-    - script@1:
-        title: Sum failed tests across shards
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            ./bitrise/scripts/fullfunctional_failures.sh sum
     - slack@4:
         is_always_run: true
         inputs:
@@ -226,15 +206,13 @@ workflows:
         - fields: |
             Branch | ${BITRISE_GIT_BRANCH}
             Scheme | ${SCHEME}
-            Failed Tests | ${FAILED_TEST_COUNT}
         - buttons: |
             Build Log|https://app.bitrise.io/app/${BITRISE_APP_SLUG}/pipelines/${BITRISEIO_PIPELINE_ID}
             Test Report|https://app.bitrise.io/app/${BITRISE_APP_SLUG}/pipelines/${BITRISEIO_PIPELINE_ID}?tab=tests
 
   _firefox_smoketest:
     description: >-
-      Shared steps for the Firefox smoke test workflows. Callers set SCHEME, DESTINATION
-      and SLACK_TITLE.
+      Shared steps for the Firefox smoke tests workflows.
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -260,18 +238,6 @@ workflows:
         inputs:
         - destination: $DESTINATION
         - xcodebuild_options: $XCODEBUILD_OPTIONS
-    - script@1:
-        title: Count failed tests
-        is_always_run: true
-        inputs:
-        - content: |
-            echo "Analyzing test results from: $BITRISE_XCRESULT_PATH"
-            xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json > result.json --legacy
-
-            FAILED_COUNT=$(jq -r '.metrics.testsFailedCount._value // 0' result.json)
-            echo "Total number of failures: $FAILED_COUNT"
-
-            envman add --key FAILED_TEST_COUNT --value "$FAILED_COUNT"
     - deploy-to-bitrise-io@2:
         is_always_run: true
     - slack@4:
@@ -293,14 +259,49 @@ workflows:
         - fields: |
             Branch | ${BITRISE_GIT_BRANCH}
             Scheme | ${SCHEME}
-            Failed Tests | ${FAILED_TEST_COUNT}
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=tests
 
+  _firefox_fullfunctional_build:
+    description: Build Firefox iOS and run the full functional tests using multiple shards.
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    - skip_macro_validation
+    steps:
+    - restore-spm-cache@3:
+        is_always_run: true
+    - activate-build-cache-for-xcode@0: {}
+    - xcode-build-for-test@3:
+        title: Build Firefox iOS
+        inputs:
+        - scheme: $SCHEME
+        - configuration: Debug
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - xcodebuild_options: $XCODEBUILD_OPTIONS
+        - destination: $DESTINATION
+    - xcode-test-shard-calculation@0:
+        inputs:
+        - product_path: $BITRISE_TEST_BUNDLE_PATH/${SCHEME}_FullFunctionalTestPlan_iphonesimulator27.1-arm64.xctestrun
+        - shard_count: 4
+        - destination: $DESTINATION
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - pipeline_intermediate_files: |-
+            BITRISE_TEST_SHARDS_PATH
+            BITRISE_TEST_BUNDLE_PATH
+    - share-pipeline-variable@1:
+        inputs:
+        - variables: |-
+            SCHEME
+            DESTINATION
+            SLACK_TITLE
+
   _focus_smoke_fullfunctional_tests:
     description: >-
-      Compile Focus once and run both smoke tests and full functional tests on an iPhone, iPad and iPhone Duo (when applicable).
+      Compile Focus. Run both smoke tests and full functional tests on iPhone, iPad and iPhone Duo (when applicable).
     before_run:
     - focus-clone-and-build-dependencies
     - focus-set-default-browser-entitlement
@@ -384,39 +385,3 @@ workflows:
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=tests
-
-  _firefox_fullfunctional_build:
-    description: Build Firefox iOS using the scheme and split the full functional tests into 4 shards.
-    before_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    - 3_provisioning_and_npm_installation
-    - skip_macro_validation
-    steps:
-    - restore-spm-cache@3:
-        is_always_run: true
-    - activate-build-cache-for-xcode@0: {}
-    - xcode-build-for-test@3:
-        title: Build Firefox iOS
-        inputs:
-        - scheme: $SCHEME
-        - configuration: Debug
-        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
-        - xcodebuild_options: $XCODEBUILD_OPTIONS
-        - destination: $DESTINATION
-    - xcode-test-shard-calculation@0:
-        inputs:
-        - product_path: $BITRISE_TEST_BUNDLE_PATH/${SCHEME}_FullFunctionalTestPlan_iphonesimulator27.1-arm64.xctestrun
-        - shard_count: 4
-        - destination: $DESTINATION
-    - deploy-to-bitrise-io@2:
-        inputs:
-        - pipeline_intermediate_files: |-
-            BITRISE_TEST_SHARDS_PATH
-            BITRISE_TEST_BUNDLE_PATH
-    - share-pipeline-variable@1:
-        inputs:
-        - variables: |-
-            SCHEME
-            DESTINATION
-            SLACK_TITLE
