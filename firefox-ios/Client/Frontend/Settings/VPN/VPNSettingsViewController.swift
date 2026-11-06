@@ -32,7 +32,6 @@ final class VPNSettingsViewController: UIViewController {
         // TODO: FXIOS-16876 The view model will be held by VPNManager so it can be shared with VPNSetting
         self.viewModel = VPNSettingsViewModel()
         super.init(nibName: nil, bundle: nil)
-        self.title = .VPN.Settings.Title
     }
 
     required init?(coder: NSCoder) {
@@ -46,18 +45,11 @@ final class VPNSettingsViewController: UIViewController {
 
     private func setupHostingController() {
         guard let hostingView = hostingController.view else { return }
-        hostingView.translatesAutoresizingMaskIntoConstraints = false
+        hostingView.frame = view.bounds
+        hostingView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
         addChild(hostingController)
         view.addSubview(hostingView)
-
-        NSLayoutConstraint.activate([
-            hostingView.topAnchor.constraint(equalTo: view.topAnchor),
-            hostingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            hostingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            hostingView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-
         hostingController.didMove(toParent: self)
     }
 

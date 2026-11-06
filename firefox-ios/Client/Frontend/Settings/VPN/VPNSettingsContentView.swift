@@ -9,8 +9,7 @@ import Shared
 @available(iOS 17.0, *)
 struct VPNSettingsContentView: View {
     private struct UX {
-        static let globeViewPadding: CGFloat = 12
-        static let globeViewBottomPadding: CGFloat = 16
+        static let globeViewPadding: CGFloat = 16
         static let titleVerticalPadding: CGFloat = 4
         static let descriptionLineHeight: CGFloat = 21
         static let learnMoreBottomPadding: CGFloat = 10
@@ -29,7 +28,6 @@ struct VPNSettingsContentView: View {
         VStack(alignment: .leading) {
             VPNGlobeView(theme: theme)
                 .padding(UX.globeViewPadding)
-                .padding(.bottom, UX.globeViewBottomPadding)
             Text(String.VPN.Settings.Title)
                 .font(FXFontStyles.Bold.title3.scaledSwiftUIFont())
                 .foregroundStyle(theme.colors.textPrimary.color)
