@@ -140,6 +140,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return state
                 .copy(hasOnlySecureContent: hasOnlySecureContent)
                 .copy(isWebsiteMode: isWebsiteMode)
+        case .searchTermDidClear:
+            return handleSearchTermDidClearAction(state: state)
         default:
             return defaultState(from: state)
         }
@@ -192,17 +194,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.didSetTextInLocationView:
             return handleDidSetTextInLocationViewAction(state: state, action: action)
 
-        case ToolbarActionType.clearSearch:
-            return handleClearSearchAction(state: state, action: action)
-
         case ToolbarActionType.didDeleteSearchTerm:
             return handleDidDeleteSearchTermAction(state: state, action: action)
 
         case ToolbarActionType.didEnterSearchTerm:
             return handleDidEnterSearchTermAction(state: state, action: action)
-
-        case ToolbarActionType.didSetSearchTerm:
-            return handleDidSetSearchTermAction(state: state, action: action)
 
         case ToolbarActionType.didStartTyping:
             return handleDidStartTypingAction(state: state, action: action)
@@ -420,10 +416,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             .copy(isEmptySearch: isEmptySearch)
     }
 
-    @MainActor
-    private static func handleClearSearchAction(state: Self, action: Action) -> Self {
-        guard action is ToolbarAction else { return defaultState(from: state) }
-
+    private static func handleSearchTermDidClearAction(state: Self) -> Self {
         return state
             .copy(searchTerm: nil)
             .copy(isEditing: true)
@@ -456,14 +449,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             .copy(shouldSelectSearchTerm: false)
             .copy(didStartTyping: true)
             .copy(isEmptySearch: isEmptySearch)
-    }
-
-    private static func handleDidSetSearchTermAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-
-        return state
-            .copy(searchTerm: toolbarAction.searchTerm)
-            .copy(didStartTyping: false)
     }
 
     private static func handleDidStartTypingAction(state: Self, action: Action) -> Self {
