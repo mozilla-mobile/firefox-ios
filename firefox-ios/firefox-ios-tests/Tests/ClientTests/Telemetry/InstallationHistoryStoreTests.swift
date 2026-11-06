@@ -103,7 +103,7 @@ final class InstallationHistoryStoreTests: XCTestCase {
         XCTAssertTrue(keychain.addedItems.isEmpty)
     }
 
-    #if DEBUG || MOCKABLE_STORE
+    #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
     func testResetDeletesOnlyHistoryAndAcceptsMissingItem() throws {
         keychain.deleteStatus = errSecItemNotFound
 

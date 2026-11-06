@@ -567,6 +567,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
         hiddenDebugOptions.append(FetchVPNProxyTokenSetting(settings: self))
         hiddenDebugOptions.append(ClearVPNSessionSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
+        hiddenDebugOptions.append(InstallationDetailsSetting(settings: self))
+        hiddenDebugOptions.append(ResetInstallationHistorySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
         if featureFlagsProvider.isEnabled(.multiDayOnboarding) {
             hiddenDebugOptions.append(AdvanceOnboardingDripSetting(settings: self, settingsDelegate: self))

@@ -21,7 +21,7 @@ enum InstallationHistoryState: Equatable {
 protocol InstallationHistoryStoring {
     func load() throws -> InstallationHistoryState
     func save(_ history: InstallationHistory) throws
-    #if DEBUG || MOCKABLE_STORE
+    #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
     func resetForTesting() throws
     #endif
 }
@@ -98,7 +98,7 @@ struct InstallationHistoryStore: InstallationHistoryStoring {
         }
     }
 
-    #if DEBUG || MOCKABLE_STORE
+    #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
     func resetForTesting() throws {
         let status = keychain.delete(query: itemQuery)
         guard status == errSecSuccess || status == errSecItemNotFound else {
