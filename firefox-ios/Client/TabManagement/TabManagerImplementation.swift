@@ -846,12 +846,11 @@ final class TabManagerImplementation: NSObject,
         guard let index = currentTabs.firstIndex(of: tab) else { return }
 
         store.dispatch(
-            ToolbarAction(
+            ToolbarModernAction.didSetTabScreenshot(
                 previousTabScreenshot: currentTabs[safe: index-1]?.screenshot,
-                nextTabScreenshot: currentTabs[safe: index+1]?.screenshot,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didSetTabScreenshot
-            )
+                nextTabScreenshot: currentTabs[safe: index+1]?.screenshot
+            ),
+            forWindowUUID: windowUUID
         )
     }
 

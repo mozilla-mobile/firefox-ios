@@ -16,7 +16,6 @@ struct ToolbarAction: Action {
     let url: URL?
     let searchTerm: String?
     let isPrivate: Bool?
-    let showMenuWarningBadge: Bool?
     let isShowingNavigationToolbar: Bool?
     let isShowingTopTabs: Bool?
     let canGoBack: Bool?
@@ -32,8 +31,6 @@ struct ToolbarAction: Action {
     let middleButton: NavigationBarMiddleButtonType?
     let isTranslationsEnabled: Bool?
     let translationConfiguration: TranslationConfiguration?
-    let previousTabScreenshot: UIImage?
-    let nextTabScreenshot: UIImage?
     let isNovaDesignEnabled: Bool?
 
     init(toolbarPosition: SearchBarPosition? = nil,
@@ -43,7 +40,6 @@ struct ToolbarAction: Action {
          url: URL? = nil,
          searchTerm: String? = nil,
          isPrivate: Bool? = nil,
-         showMenuWarningBadge: Bool? = nil,
          isShowingNavigationToolbar: Bool? = nil,
          isShowingTopTabs: Bool? = nil,
          canGoBack: Bool? = nil,
@@ -60,8 +56,6 @@ struct ToolbarAction: Action {
          middleButton: NavigationBarMiddleButtonType? = nil,
          isTranslationsEnabled: Bool? = nil,
          translationConfiguration: TranslationConfiguration? = nil,
-         previousTabScreenshot: UIImage? = nil,
-         nextTabScreenshot: UIImage? = nil,
          isNovaDesignEnabled: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
@@ -74,7 +68,6 @@ struct ToolbarAction: Action {
         self.url = url
         self.searchTerm = searchTerm
         self.isPrivate = isPrivate
-        self.showMenuWarningBadge = showMenuWarningBadge
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
         self.isShowingTopTabs = isShowingTopTabs
         self.canGoBack = canGoBack
@@ -90,8 +83,6 @@ struct ToolbarAction: Action {
         self.middleButton = middleButton
         self.isTranslationsEnabled = isTranslationsEnabled
         self.translationConfiguration = translationConfiguration
-        self.previousTabScreenshot = previousTabScreenshot
-        self.nextTabScreenshot = nextTabScreenshot
         self.isNovaDesignEnabled = isNovaDesignEnabled
     }
 }
@@ -137,6 +128,16 @@ enum ToolbarModernAction: ModernAction {
     /// The page's secure content status changed. `isWebsiteMode` is `false` for reader mode pages,
     /// where the lock icon isn't shown. The lock icon itself is derived from these in the Lens.
     case lockIconChanged(hasOnlySecureContent: Bool, isWebsiteMode: Bool)
+
+    /// The menu button's warning badge changed, for example when the account needs the user's attention.
+    case showMenuWarningBadge(isShown: Bool)
+
+    /// Whether the navigation contextual hint can be shown. Enabled by a double tap on a navigation button,
+    /// and disabled once the hint is dismissed.
+    case navigationHintAvailabilityChanged(canShow: Bool)
+
+    /// The screenshots of the tabs next to the selected tab were loaded, used for the tab swipe preview.
+    case didSetTabScreenshot(previousTabScreenshot: UIImage?, nextTabScreenshot: UIImage?)
 }
 
 enum ToolbarActionType: ActionType {
@@ -145,7 +146,6 @@ enum ToolbarActionType: ActionType {
     case didSetTextInLocationView
     case borderPositionChanged
     case toolbarPositionChanged
-    case showMenuWarningBadge
     case didStartEditingUrl
     case cancelEdit
     case readerModeStateChanged
@@ -154,13 +154,10 @@ enum ToolbarActionType: ActionType {
     case websiteLoadingStateDidChange
     case searchEngineDidChange
     case googleLensSettingDidChange
-    case navigationButtonDoubleTapped
-    case navigationHintFinishedPresenting
     case clearSearch
     case didDeleteSearchTerm
     case didEnterSearchTerm
     case didSummarizeSettingsChange
-    case didSetTabScreenshot
     // User submitted a search term to load the search request
     case didSubmitSearchTerm
     case didSetSearchTerm
