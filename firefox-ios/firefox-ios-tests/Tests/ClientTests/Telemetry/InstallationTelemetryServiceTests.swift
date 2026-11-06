@@ -47,10 +47,21 @@ final class InstallationTelemetryServiceTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func testUpdateInstallationHistory_whenUsagePreferenceIsMissing_usesEnabledDefault() async throws {
+    func testUpdateInstallationHistory_whenUsagePreferenceIsMissing_waitsForConsent() async throws {
         profilePrefs.removeObjectForKey(AppConstants.prefSendUsageData)
+        let subject = createSubject()
 
-        try await createSubject().updateInstallationHistory()
+        try await subject.updateInstallationHistory()
+
+        XCTAssertEqual(mockHistoryStore.loadCalled, 0)
+        XCTAssertEqual(mockHistoryStore.saveCalled, 0)
+        XCTAssertEqual(mockAcquisitionProvider.fetchCalled, 0)
+        XCTAssertTrue(mockGleanWrapper.savedEvents.isEmpty)
+        XCTAssertTrue(mockGleanWrapper.savedQuantities.isEmpty)
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 0)
+
+        profilePrefs.setBool(true, forKey: AppConstants.prefSendUsageData)
+        try await subject.updateInstallationHistory()
 
         XCTAssertEqual(mockHistoryStore.value?.installCounter, 1)
         XCTAssertEqual(mockGleanWrapper.savedQuantities, [1])
