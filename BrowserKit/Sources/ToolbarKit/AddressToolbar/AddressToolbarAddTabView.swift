@@ -10,7 +10,7 @@ public final class AddressToolbarAddTabView: UIView,
                                              ThemeApplicable {
     private lazy var plusIconView: UIImageView  = .build {
         $0.alpha = 0.0
-        $0.image = UIImage(named: StandardImageIdentifiers.Large.plus)
+        $0.image = UIImage(named: StandardImageIdentifiers.Large.plus)?.withRenderingMode(.alwaysTemplate)
     }
 
     public init() {
