@@ -137,6 +137,10 @@ enum ToolbarModernAction: ModernAction {
     /// The page's secure content status changed. `isWebsiteMode` is `false` for reader mode pages,
     /// where the lock icon isn't shown. The lock icon itself is derived from these in the Lens.
     case lockIconChanged(hasOnlySecureContent: Bool, isWebsiteMode: Bool)
+
+    /// The text in the address bar changed between empty and non-empty while editing. Only sent when
+    /// `isEmpty` differs from the current state, not on every keystroke.
+    case searchTermDidChange(isEmpty: Bool)
 }
 
 enum ToolbarActionType: ActionType {
@@ -157,8 +161,6 @@ enum ToolbarActionType: ActionType {
     case navigationButtonDoubleTapped
     case navigationHintFinishedPresenting
     case clearSearch
-    case didDeleteSearchTerm
-    case didEnterSearchTerm
     case didSummarizeSettingsChange
     case didSetTabScreenshot
     // User submitted a search term to load the search request

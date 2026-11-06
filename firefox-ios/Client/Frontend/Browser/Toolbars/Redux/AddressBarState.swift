@@ -140,6 +140,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             return state
                 .copy(hasOnlySecureContent: hasOnlySecureContent)
                 .copy(isWebsiteMode: isWebsiteMode)
+        case .searchTermDidChange(let isEmpty):
+            return handleSearchTermDidChangeAction(state: state, isEmpty: isEmpty)
         default:
             return defaultState(from: state)
         }
@@ -194,12 +196,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         case ToolbarActionType.clearSearch:
             return handleClearSearchAction(state: state, action: action)
-
-        case ToolbarActionType.didDeleteSearchTerm:
-            return handleDidDeleteSearchTermAction(state: state, action: action)
-
-        case ToolbarActionType.didEnterSearchTerm:
-            return handleDidEnterSearchTermAction(state: state, action: action)
 
         case ToolbarActionType.didSetSearchTerm:
             return handleDidSetSearchTermAction(state: state, action: action)
@@ -430,32 +426,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
             .copy(isEmptySearch: true)
     }
 
-    @MainActor
-    private static func handleDidDeleteSearchTermAction(state: Self, action: Action) -> Self {
-        guard action is ToolbarAction else { return defaultState(from: state) }
-
-        let isEditing = true
-        let isEmptySearch = true
-
+    private static func handleSearchTermDidChangeAction(state: Self, isEmpty: Bool) -> Self {
         return state
-            .copy(isEditing: isEditing)
+            .copy(isEditing: true)
             .copy(shouldSelectSearchTerm: false)
             .copy(didStartTyping: true)
-            .copy(isEmptySearch: isEmptySearch)
-    }
-
-    @MainActor
-    private static func handleDidEnterSearchTermAction(state: Self, action: Action) -> Self {
-        guard action is ToolbarAction else { return defaultState(from: state) }
-
-        let isEditing = true
-        let isEmptySearch = false
-
-        return state
-            .copy(isEditing: isEditing)
-            .copy(shouldSelectSearchTerm: false)
-            .copy(didStartTyping: true)
-            .copy(isEmptySearch: isEmptySearch)
+            .copy(isEmptySearch: isEmpty)
     }
 
     private static func handleDidSetSearchTermAction(state: Self, action: Action) -> Self {
