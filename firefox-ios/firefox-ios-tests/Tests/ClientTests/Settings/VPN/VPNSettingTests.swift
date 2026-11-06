@@ -47,10 +47,10 @@ final class VPNSettingTests: XCTestCase {
 
     // MARK: - Status
 
-    func test_status_whenVPNDisabled_isOff() {
+    func test_status_whenVPNLimitReached_isPaused() {
         setVPNEnabled(false)
         let subject = createSubject(dataUsage: VPNDataUsage(usedDataInGB: 5, dataLimitInGB: 5))
-        XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusOff)
+        XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusPaused)
     }
 
     func test_status_whenVPNEnabledAndUnderLimit_isOn() {
@@ -59,10 +59,10 @@ final class VPNSettingTests: XCTestCase {
         XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusOn)
     }
 
-    func test_status_whenVPNEnabledAndLimitReached_isPaused() {
-        setVPNEnabled(true)
-        let subject = createSubject(dataUsage: VPNDataUsage(usedDataInGB: 5, dataLimitInGB: 5))
-        XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusPaused)
+    func test_status_whenVPNOffAndUnderLimit_isOff() {
+        setVPNEnabled(false)
+        let subject = createSubject(dataUsage: VPNDataUsage(usedDataInGB: 4, dataLimitInGB: 5))
+        XCTAssertEqual(subject.status?.string, .VPN.Settings.StatusOff)
     }
 
     // MARK: - Accessory
