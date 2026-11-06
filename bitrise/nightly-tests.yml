@@ -66,89 +66,89 @@ pipelines:
 workflows:
   Firefox_Nightly_SmokeTest_Iphone:
     envs:
-    - SCHEME: Fennec
-    - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - SLACK_TITLE: Nightly Smoketest iPhone
+    - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    - SCHEME: Fennec
     after_run:
     - _firefox_smoketest
 
   Firefox_SmokeTest_Iphone:
     envs:
-    - SCHEME: Firefox
-    - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - SLACK_TITLE: Smoketest Firefox scheme iPhone
+    - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    - SCHEME: Firefox
     after_run:
     - _firefox_smoketest
 
   Firefox_SmokeTest_Ipad:
     envs:
-    - SCHEME: Firefox
-    - DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
     - SLACK_TITLE: Smoketest Firefox scheme iPad
+    - DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
+    - SCHEME: Firefox
     after_run:
     - _firefox_smoketest
 
   Firefox_SmokeTest_IphoneDuo:
     envs:
-    - SCHEME: Firefox
-    - DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
     - SLACK_TITLE: Smoketest Firefox scheme iPhone Duo
+    - DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
+    - SCHEME: Firefox
     after_run:
     - _firefox_smoketest
 
   Firefox_Nightly_Fullfunctional_Iphone:
     envs:
-    - SCHEME: Fennec
-    - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - SLACK_TITLE: Nightly Full Functional Tests iPhone
+    - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    - SCHEME: Fennec
     after_run:
     - _firefox_fullfunctional_build
 
   Firefox_Fullfunctional_Iphone:
     envs:
-    - SCHEME: Firefox
-    - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - SLACK_TITLE: Full Functional Tests Firefox scheme iPhone
+    - DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    - SCHEME: Firefox
     after_run:
     - _firefox_fullfunctional_build
 
   Firefox_Tests_iOS18:
     envs:
-    - SCHEME: Firefox
-    - DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.6
     - SLACK_TITLE: Smoketest and Full Functional Tests Firefox scheme iPhone (iOS 18.6)
+    - DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.6
+    - SCHEME: Firefox
     after_run:
     - _firefox_fullfunctional_build
 
   Firefox_Tests_iOS26:
     envs:
-    - SCHEME: Firefox
-    - DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
     - SLACK_TITLE: Smoketest and Full Functional Tests Firefox scheme iPhone (iOS 26.5)
+    - DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
+    - SCHEME: Firefox
     after_run:
     - _firefox_fullfunctional_build
 
   Focus_Nightly_Tests_iOS18:
     envs:
     - SLACK_TITLE: Nightly Smoketest and Full Functional Tests (iPhone and iPad, iOS 18.6)
-    - FOCUS_IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.6
-    - FOCUS_IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=18.6
+    - IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.6
+    - IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=18.6
     after_run:
     - _focus_smoke_fullfunctional_tests
 
   Focus_Nightly_Tests_iOS26:
     envs:
     - SLACK_TITLE: Nightly Smoketest and Full Functional Tests (iPhone and iPad, iOS 26.5)
-    - FOCUS_IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
-    - FOCUS_IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=26.5
+    - IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
+    - IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=26.5
     after_run:
     - _focus_smoke_fullfunctional_tests
 
   Focus_Nightly_Tests_iOS27:
     envs:
     - SLACK_TITLE: Nightly Smoketest and Full Functional Tests (iPhone, iPad and iPhone Duo, iOS 27.0)
-    - FOCUS_IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
-    - FOCUS_IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
+    - IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    - IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
     - FOCUS_DUO_DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
     after_run:
     - _focus_smoke_fullfunctional_tests
@@ -312,13 +312,13 @@ workflows:
         - configuration: FocusDebug
         - project_path: focus-ios/Blockzilla.xcodeproj
         - xcodebuild_options: $XCODEBUILD_OPTIONS
-        - destination: $FOCUS_IPHONE_DESTINATION
+        - destination: $IPHONE_DESTINATION
     - xcode-test-without-building@0:
         title: "Focus Smoketest - iPhone"
         is_always_run: true
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
-        - destination: $FOCUS_IPHONE_DESTINATION
+        - destination: $IPHONE_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
         - xcodebuild_options: $XCODEBUILD_OPTIONS
     - xcode-test-without-building@0:
@@ -326,7 +326,7 @@ workflows:
         is_always_run: true
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
-        - destination: $FOCUS_IPHONE_DESTINATION
+        - destination: $IPHONE_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_FullFunctionalTests_iphonesimulator27.1-arm64.xctestrun
         - xcodebuild_options: $XCODEBUILD_OPTIONS
     - xcode-test-without-building@0:
@@ -334,7 +334,7 @@ workflows:
         is_always_run: true
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
-        - destination: $FOCUS_IPAD_DESTINATION
+        - destination: $IPAD_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
         - xcodebuild_options: $XCODEBUILD_OPTIONS
     - xcode-test-without-building@0:
@@ -342,7 +342,7 @@ workflows:
         is_always_run: true
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
-        - destination: $FOCUS_IPAD_DESTINATION
+        - destination: $IPAD_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_FullFunctionalTests_iphonesimulator27.1-arm64.xctestrun
         - xcodebuild_options: $XCODEBUILD_OPTIONS
     - xcode-test-without-building@0:
