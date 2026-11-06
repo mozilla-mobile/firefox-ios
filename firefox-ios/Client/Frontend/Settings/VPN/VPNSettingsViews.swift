@@ -18,7 +18,7 @@ struct VPNSettingsViewContainer: ThemeableView {
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     let viewModel: VPNSettingsViewModel
-    // see VPNSettingsContentView for the only reason we need this
+    // needed only for navigation from the Learn More button
     weak var viewController: VPNSettingsViewController?
 
     init(
@@ -53,7 +53,7 @@ struct VPNSettingsViewContainer: ThemeableView {
         VPNHelpers.card(theme: theme) {
             VPNSettingsContentView(theme: theme, viewController: viewController)
             VPNHelpers.divider()
-            VPNLocationsRow(theme: theme)
+            VPNLocationsRow(windowUUID: windowUUID, themeManager: themeManager, viewModel: viewModel, theme: theme)
             VPNHelpers.divider()
             VPNToggleRow(viewModel: viewModel, theme: theme)
         }

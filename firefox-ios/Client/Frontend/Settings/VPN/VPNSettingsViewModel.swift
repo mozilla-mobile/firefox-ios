@@ -16,9 +16,12 @@ final class VPNSettingsViewModel {
 
     private(set) var isVPNEnabled: Bool
     private(set) var isVPNConnecting = false
+    private(set) var selectedCountryCode: String
     private let dataUsage: VPNDataUsage
 
+    @ObservationIgnored private let prefs: Prefs
     @ObservationIgnored private let userPreferences: UserFeaturePreferring
+    @ObservationIgnored private let localeProvider: LocaleProvider
 
     var usedDataInGB: Double { dataUsage.clampedUsedDataInGB }
     var dataLimitInGB: Double { dataUsage.dataLimitInGB }
@@ -29,13 +32,41 @@ final class VPNSettingsViewModel {
         return isVPNEnabled ? .VPN.Settings.StatusOn : .VPN.Settings.StatusOff
     }
 
+    var locationName: String {
+        selectedCountryCode == VPNServerManager.recommendedCountryCode
+            ? .VPN.Settings.LocationRecommended
+            : countryName(for: selectedCountryCode)
+    }
+
+    func countryName(for countryCode: String) -> String {
+        localeProvider.localizedRegionName(for: countryCode)
+    }
+
+    func sortedByName(_ countryCodes: [String]) -> [String] {
+        countryCodes.sorted {
+            countryName(for: $0).localizedCompare(countryName(for: $1)) == .orderedAscending
+        }
+    }
+
     init(
+        prefs: Prefs,
         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
+        localeProvider: LocaleProvider = SystemLocaleProvider(),
         dataUsage: VPNDataUsage = .placeholder
     ) {
+        self.prefs = prefs
         self.userPreferences = userPreferences
+        self.localeProvider = localeProvider
         self.isVPNEnabled = userPreferences.getPreferenceFor(.vpnFeature)
+        self.selectedCountryCode = prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode)
+            ?? VPNServerManager.recommendedCountryCode
         self.dataUsage = dataUsage
+    }
+
+    func selectLocation(_ countryCode: String) {
+        guard countryCode != selectedCountryCode else { return }
+        selectedCountryCode = countryCode
+        prefs.setString(countryCode, forKey: PrefsKeys.VPNSettings.selectedCountryCode)
     }
 
     // TODO: FXIOS-16876 Replace this with real VPN connection stuff

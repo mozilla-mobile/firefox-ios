@@ -10,14 +10,17 @@ import XCTest
 @available(iOS 17.0, *)
 @MainActor
 final class VPNSettingsViewModelTests: XCTestCase {
+    private var prefs: MockProfilePrefs!
     private var userPreferences: MockUserFeaturePreferences!
 
     override func setUp() async throws {
         try await super.setUp()
+        prefs = MockProfilePrefs()
         userPreferences = MockUserFeaturePreferences()
     }
 
     override func tearDown() async throws {
+        prefs = nil
         userPreferences = nil
         try await super.tearDown()
     }
@@ -49,9 +52,30 @@ final class VPNSettingsViewModelTests: XCTestCase {
         XCTAssertFalse(subject.isVPNEnabled)
     }
 
+    func test_selectLocation_updatesAndSavesSelection() {
+        let subject = createSubject()
+
+        subject.selectLocation("DE")
+
+        XCTAssertEqual(subject.selectedCountryCode, "DE")
+        XCTAssertEqual(prefs.stringForKey(PrefsKeys.VPNSettings.selectedCountryCode), "DE")
+    }
+
+    func test_sortedByName_sortsByLocalizedCountryName() {
+        let subject = createSubject()
+
+        let sorted = subject.sortedByName(["CH", "ES", "DE"])
+
+        XCTAssertEqual(sorted, ["DE", "ES", "CH"])
+    }
+
     // MARK: - Helpers
     private func createSubject() -> VPNSettingsViewModel {
-        let subject = VPNSettingsViewModel(userPreferences: userPreferences)
+        let subject = VPNSettingsViewModel(
+            prefs: prefs,
+            userPreferences: userPreferences,
+            localeProvider: MockLocaleProvider()
+        )
         trackForMemoryLeaks(subject)
         return subject
     }

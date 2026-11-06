@@ -6,17 +6,23 @@ import SwiftUI
 import Common
 import Shared
 
+@available(iOS 17.0, *)
 struct VPNLocationsRow: View {
+    let windowUUID: WindowUUID
+    let themeManager: ThemeManager
+    let viewModel: VPNSettingsViewModel
     let theme: Theme
 
     var body: some View {
-        Button {} label: {
+        NavigationLink {
+            VPNLocationsView(windowUUID: windowUUID, themeManager: themeManager, viewModel: viewModel)
+        } label: {
             HStack {
                 Text(String.VPN.Settings.LocationTitle)
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                     .foregroundStyle(theme.colors.textPrimary.color)
                 Spacer()
-                Text(String.VPN.Settings.LocationRecommended)
+                Text(viewModel.locationName)
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                     .foregroundStyle(theme.colors.textSecondary.color)
                 Image(StandardImageIdentifiers.Large.chevronRight)
@@ -31,7 +37,7 @@ struct VPNLocationsRow: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(String.VPN.Settings.LocationTitle)
-        .accessibilityValue(String.VPN.Settings.LocationRecommended)
+        .accessibilityValue(viewModel.locationName)
         .accessibilityIdentifier(AccessibilityIdentifiers.Settings.VPN.locationSetting)
     }
 }

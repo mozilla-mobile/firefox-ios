@@ -45,6 +45,7 @@ final class VPNSettingsViewControllerTests: XCTestCase {
     private func createSubject() -> VPNSettingsViewController {
         let subject = VPNSettingsViewController(
             windowUUID: .XCTestDefaultUUID,
+            prefs: MockProfilePrefs(),
             themeManager: MockThemeManager()
         )
         trackForMemoryLeaks(subject)

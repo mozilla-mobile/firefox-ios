@@ -20,11 +20,7 @@ struct VPNToggleRow: View {
                     .foregroundStyle(theme.colors.textPrimary.color)
                 Spacer()
                 if viewModel.isVPNConnecting {
-                    ProgressView()
-                        .accessibilityHidden(true)
-                    Text(String.VPN.Settings.Connecting)
-                        .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
-                        .foregroundStyle(theme.colors.textSecondary.color)
+                    VPNHelpers.loadingIndicator(text: .VPN.Settings.Connecting, theme: theme)
                         .accessibilityHidden(true)
                 }
             }
