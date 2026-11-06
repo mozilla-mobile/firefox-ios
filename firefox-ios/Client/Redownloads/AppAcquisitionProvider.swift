@@ -10,7 +10,7 @@ struct AppAcquisition: Equatable {
     let originalAppVersion: String
 }
 
-enum AcquisitionFailure {
+enum AcquisitionFailure: Error {
     case unsupportedOS
     case unverified
     case storeKitFailure
