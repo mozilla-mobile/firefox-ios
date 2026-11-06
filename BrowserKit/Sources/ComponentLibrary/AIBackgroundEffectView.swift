@@ -6,6 +6,38 @@ import SwiftUI
 import UIKit
 import Common
 
+/// How the blobs move over time.
+public enum AIBackgroundBlobsMotion {
+    /// A slow, continuous drift.
+    case smooth
+    /// A faster drift that advances in steps, each eased with a `cubic-bezier(0, 0, 0, 1)` curve.
+    case stepped
+
+    fileprivate struct UX {
+        static let steppedSpeedMultiplier: TimeInterval = 2.5
+        static let steppedStepDuration: TimeInterval = 1.0
+    }
+
+    /// Maps the wall clock time to the time the blobs are animated with.
+    func animationTime(at time: TimeInterval) -> TimeInterval {
+        switch self {
+        case .smooth:
+            return time
+        case .stepped:
+            let duration = UX.steppedStepDuration
+            let step = (time / duration).rounded(.down)
+            let progress = (time - step * duration) / duration
+            return (step + Self.easeOut(progress)) * duration * UX.steppedSpeedMultiplier
+        }
+    }
+
+    /// `cubic-bezier(0, 0, 0, 1)`: with those control points x(s) = s³ and y(s) = 3s² - 2s³.
+    private static func easeOut(_ progress: TimeInterval) -> TimeInterval {
+        let s = cbrt(progress)
+        return 3 * s * s - 2 * s * s * s
+    }
+}
+
 final class BlendedBlobsGradientState: ObservableObject {
     @Published var colors: [Color] = []
     /// Freezes the blobs on their current frame.
@@ -91,12 +123,14 @@ struct BlendedBlobsGradient: View {
     }
 
     @ObservedObject var state: BlendedBlobsGradientState
+    let motion: AIBackgroundBlobsMotion
 
     var body: some View {
         GeometryReader { geo in
             if !UIAccessibility.isReduceMotionEnabled {
                 TimelineView(.animation(minimumInterval: UX.frameInterval, paused: state.isPaused)) { timeline in
-                    scene(at: timeline.date.timeIntervalSinceReferenceDate, size: geo.size)
+                    let time = motion.animationTime(at: timeline.date.timeIntervalSinceReferenceDate)
+                    scene(at: time, size: geo.size)
                 }
             } else {
                 scene(at: 0, size: geo.size)
@@ -264,11 +298,15 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
         $0.alpha = 0.0
     }
 
-    /// - Parameter parentController: the controller the blobs hosting controller is added to as a child.
-    public init(parentController: UIViewController) {
+    /// - Parameters:
+    ///   - parentController: the controller the blobs hosting controller is added to as a child.
+    ///   - blobsMotion: how the blobs move over time.
+    public init(parentController: UIViewController, blobsMotion: AIBackgroundBlobsMotion = .smooth) {
         let blobsState = BlendedBlobsGradientState()
         self.blobsState = blobsState
-        blobsHostingController = UIHostingController(rootView: BlendedBlobsGradient(state: blobsState))
+        blobsHostingController = UIHostingController(
+            rootView: BlendedBlobsGradient(state: blobsState, motion: blobsMotion)
+        )
         super.init(frame: .zero)
         parentController.addChild(blobsHostingController)
         setupSubviews()
