@@ -9,7 +9,7 @@ import Shared
 
 /// View that presents the day's onboarding cards
 struct OnboardingFlowView: View, ThemeableView {
-    private struct UX {
+    private enum UX {
         static let bodyPadding: CGFloat = 0
         static let hiddenOpacity: CGFloat = 0
         static let radialGradientCentre = UnitPoint(x: 0.9, y: 0.1)
@@ -120,7 +120,7 @@ struct OnboardingFlowView: View, ThemeableView {
 }
 
 struct OnboardingCardView: View {
-    private struct UX {
+    private enum UX {
         static let maxImageHeight: CGFloat = 500
         static let titleLineSpacing: CGFloat = 2
 

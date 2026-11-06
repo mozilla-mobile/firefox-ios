@@ -14,7 +14,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
     private var homeTopSite: TopSiteConfiguration?
 
-    struct UX {
+    enum UX {
         static let imageBackgroundSize = CGSize(width: 60, height: 60)
         static let addShortcutIconSize = CGSize(width: 24, height: 24)
         static let pinIconSize = CGSize(width: 8, height: 8)

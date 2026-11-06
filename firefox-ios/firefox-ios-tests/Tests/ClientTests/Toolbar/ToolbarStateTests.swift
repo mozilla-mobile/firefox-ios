@@ -9,7 +9,6 @@ import Common
 @testable import Client
 
 final class ToolbarStateTests: XCTestCase, StoreTestUtility {
-    let storeUtilityHelper = StoreTestUtilityHelper()
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockStore: MockStoreForMiddleware<AppState>!
     var mockProfile: MockProfile!

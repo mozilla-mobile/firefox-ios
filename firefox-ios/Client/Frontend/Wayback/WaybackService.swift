@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class WaybackService {
+enum WaybackService {
     struct Snapshot: Decodable {
         public let available: Bool
         public let url: String

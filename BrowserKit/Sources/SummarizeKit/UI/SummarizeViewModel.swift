@@ -70,7 +70,7 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
             )
         }
     }
-    struct Constants {
+    enum Constants {
         static let summaryDelay: CGFloat = 4.0
         static let minWordsAcceptedToShow = 2000
         /// 100 ms delay

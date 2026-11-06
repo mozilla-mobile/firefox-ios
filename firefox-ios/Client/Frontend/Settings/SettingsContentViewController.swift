@@ -15,7 +15,7 @@ let DefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on 
  * the user to navigate back to Settings.
  */
 class SettingsContentViewController: UIViewController, WKNavigationDelegate, Themeable {
-    private struct UX {
+    private enum UX {
         static let errorLeadingTrailingPadding: CGFloat = 20
         static let errorHeightPadding: CGFloat = 44
     }

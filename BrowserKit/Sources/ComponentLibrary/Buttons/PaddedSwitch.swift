@@ -7,7 +7,7 @@ import Common
 import UIKit
 
 public final class PaddedSwitch: UIView, ThemeApplicable {
-    struct UX {
+    enum UX {
         static let padding: CGFloat = 8
     }
 

@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    struct UX {
+    enum UX {
         static let sectionLabelWidth = 150.0
         static let sectionLabelTopMargin = 20.0
         static let sectionLabelMargin = 20.0

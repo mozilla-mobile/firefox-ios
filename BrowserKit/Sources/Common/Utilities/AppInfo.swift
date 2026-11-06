@@ -4,7 +4,7 @@
 
 import Foundation
 
-open class AppInfo {
+public enum AppInfo {
     /// Return the main application bundle. If this is called from an extension, the containing app bundle is returned.
     public static var applicationBundle: Bundle {
         let bundle = Bundle.main

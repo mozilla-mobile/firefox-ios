@@ -17,7 +17,7 @@ class MainMenuViewController: UIViewController,
                               Notifiable,
                               FeatureFlaggable,
                               StoreSubscriber {
-    private struct UX {
+    private enum UX {
         static let hintViewCornerRadius: CGFloat = 20
         static let hintViewHeight: CGFloat = 140
         static let hintViewMargin: CGFloat = 20

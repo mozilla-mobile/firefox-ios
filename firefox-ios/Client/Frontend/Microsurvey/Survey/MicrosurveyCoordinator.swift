@@ -15,7 +15,7 @@ protocol MicrosurveyCoordinatorDelegate: AnyObject {
 }
 
 final class MicrosurveyCoordinator: BaseCoordinator, MicrosurveyCoordinatorDelegate {
-    private struct UTMParams {
+    private enum UTMParams {
         static let source = "modal"
         static let campaign = "microsurvey"
     }

@@ -17,7 +17,7 @@ struct NavigationBarMiddleButtonSelectionView: View {
         return Color(theme?.colors.layer5 ?? UIColor.clear)
     }
 
-    private struct UX {
+    private enum UX {
         static let sectionPadding: CGFloat = 8
     }
 

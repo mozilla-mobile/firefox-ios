@@ -52,7 +52,7 @@ final class OptInViewController: UIViewController {
 /// Content of the Quick Answers opt-in sheet. In a compact vertical size class the content is split in
 /// two columns, the intro on the leading side and the privacy info scrolling under the continue button.
 struct OptInSheetView: ThemeableView {
-    private struct UX {
+    private enum UX {
         static let contentSpacing: CGFloat = 32.0
         static let contentHorizontalPadding: CGFloat = 40.0
         static let contentMaxWidth: CGFloat = 420.0
@@ -68,7 +68,7 @@ struct OptInSheetView: ThemeableView {
         static let rowTextSpacing: CGFloat = 2.0
         static let heroImageSize: CGFloat = 86.0
 
-        struct Compact {
+        enum Compact {
             static let introSpacing: CGFloat = 20.0
             static let privacyInfoSpacing: CGFloat = 20.0
             static let heroImageSize: CGFloat = 72.0

@@ -8,7 +8,7 @@ import Foundation
 /// Please see `StandardImageIdentifiers` for the standard ones.
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
-struct ImageIdentifiers {
+enum ImageIdentifiers {
     public static let badgeMask = "badge-mask"
     public static let firefoxFavicon = "faviconFox"
     public static let foxConfirmation = "foxConfirmation"
@@ -38,19 +38,19 @@ struct ImageIdentifiers {
     public static let radioButtonSelectedNova = "radioButtonSelectedNova"
     public static let wallpaperEngagement = "wallpaperEngagement"
 
-    public struct Appearance {
+    public enum Appearance {
         public static let automaticBrowserThemeGradient = "automaticBrowserThemeGradient"
         public static let lightBrowserThemeGradient = "lightBrowserThemeGradient"
         public static let darkBrowserThemeGradient = "darkBrowserThemeGradient"
     }
 
-    public struct AddressBar {
+    public enum AddressBar {
         public static let addressBarIllustrationBottom = "addressBarIllustrationBottom"
         public static let addressBarIllustrationTop = "addressBarIllustrationTop"
     }
 
-    public struct Onboarding {
-        public struct HeaderImages {
+    public enum Onboarding {
+        public enum HeaderImages {
             public static let welcomev106 = "onboardingWelcome"
             public static let syncv106 = "onboardingSync"
             public static let notification = "onboardingNotification"
@@ -68,7 +68,7 @@ struct ImageIdentifiers {
             public static let trackersBrandRefresh = "onboardingTrackersBrandRefresh"
         }
 
-        public struct MultipleChoiceButtonImages {
+        public enum MultipleChoiceButtonImages {
             public static let themeSystem = "onboardingThemeSystem"
             public static let themeDark = "onboardingThemeDark"
             public static let themeLight = "onboardingThemeLight"
@@ -81,26 +81,26 @@ struct ImageIdentifiers {
             public static let toolbarBottomJapan = "onboardingToolbarIconBottomJapan"
         }
 
-        public struct ContinuousOnboarding {
+        public enum ContinuousOnboarding {
             public static let notification = "kitOnboardingNotifications"
             public static let notificationCard = "kitCircle"
             public static let sync = "kitOnboardingSync"
         }
     }
 
-    public struct NativeErrorPage {
+    public enum NativeErrorPage {
         public static let noInternetConnection = "noInternetConnection"
         public static let securityError = "securityError"
         public static let vpnConnectionError = "vpnConnectionError"
     }
 
-    public struct TrackingProtection {
+    public enum TrackingProtection {
         public static let protectionAlert = "protectionPanelAlert"
         public static let protectionOff = "protectionPanelOff"
         public static let protectionOn = "protectionPanelOn"
     }
 
-    public struct Translations {
+    public enum Translations {
         public static let translationActive = "translateActive"
     }
 }

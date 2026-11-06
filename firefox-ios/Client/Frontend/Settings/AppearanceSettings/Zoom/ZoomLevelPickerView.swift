@@ -11,7 +11,7 @@ struct ZoomLevelPickerView: View {
     private let zoomManager: ZoomPageManager
     private let onZoomLevelChanged: (ZoomLevel) -> Void
 
-    private struct UX {
+    private enum UX {
         static let chevronImageIdentifier = "chevron.down"
         static let sectionPadding: CGFloat = 16
         static let verticalPadding: CGFloat = 12

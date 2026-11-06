@@ -7,7 +7,7 @@ import Foundation
 import UIKit
 
 class Toast: UIView, ThemeApplicable, Notifiable {
-    struct UX {
+    enum UX {
         static let toastHeightWithoutShadow: CGFloat = 56
         static let toastHeightWithShadow: CGFloat = 68
         static let toastDismissAfter = DispatchTimeInterval.milliseconds(4500) // 4.5 seconds.

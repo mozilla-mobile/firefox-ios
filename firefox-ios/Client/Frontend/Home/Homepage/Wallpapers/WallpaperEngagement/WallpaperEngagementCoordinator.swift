@@ -101,7 +101,7 @@ final class WallpaperEngagementCoordinator: BaseCoordinator {
 }
 
 private struct WallpaperEngagementView: ThemeableView {
-    private struct UX {
+    private enum UX {
         static let imageSize = CGSize(width: 240, height: 200)
         static let imageTopPadding: CGFloat = 8
         // This is hardcoded and doesn't follow the design system, since it will change

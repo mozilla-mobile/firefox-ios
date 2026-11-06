@@ -155,7 +155,7 @@ class GleanUsageReportingMetricsService {
         unsetUsageProfileId()
     }
 
-    struct Constants {
+    enum Constants {
         static let profileId = "profileId"
         static let canaryUUID = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee")!
     }

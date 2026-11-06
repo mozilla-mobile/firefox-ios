@@ -8,7 +8,7 @@ import Shared
 
 /// Storage for user activity information used for conversion funnelling
 struct ConversionDataManager: Sendable {
-    private struct Keys {
+    private enum Keys {
         static let firstDayAfterInstallTimestamp = "com.moz.conversion.firstDayAfterInstallTimestamp"
         static let activeDayIndices = "com.moz.conversion.activeDayIndices"
         static let searchedDayIndices = "com.moz.conversion.searchedDayIndices"

@@ -6,7 +6,7 @@ import Common
 import Foundation
 import Shared
 
-class URIFixup {
+enum URIFixup {
     static func getURL(_ entry: String) -> URL? {
         if let url = URL(string: entry),
             InternalURL.isValid(url: url) {

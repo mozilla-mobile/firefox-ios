@@ -11,7 +11,7 @@ class SyncedTabCell: UICollectionViewCell,
                      ThemeApplicable,
                      Blurrable,
                      Notifiable {
-    struct UX {
+    enum UX {
         static let heroImageSize = CGSize(width: 108, height: 80)
         static let syncedDeviceImageSize = CGSize(width: 24, height: 24)
         static let tabStackTopAnchorConstant: CGFloat = 72

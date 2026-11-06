@@ -10,7 +10,7 @@ protocol TabTrayAnimationDelegate: AnyObject {
 
 @MainActor
 final class TabTrayThemeAnimator {
-    struct UX {
+    enum UX {
         static let animationDuration: CFTimeInterval = 0.25
     }
 

@@ -4,7 +4,7 @@
 
 import UIKit
 
-struct UX {
+enum UX {
     static let doneDialogAnimationDuration: TimeInterval = 0.2
     static let durationToShowDoneDialog: TimeInterval = UX.doneDialogAnimationDuration + 0.8
     static let alphaForFullscreenOverlay: CGFloat = 0.3

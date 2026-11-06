@@ -10,7 +10,7 @@ import UIKit
 final class NewsTransitionHeaderCell: UICollectionReusableView,
                                       ReusableCell,
                                       ThemeApplicable {
-    struct UX {
+    enum UX {
         /// The scroll distance of the homepage over which the headers will crossfade
         static let transitionDistance: CGFloat = 96
         /// Overall header transition progress where the picker starts moving; 0.2 means 20% into the transition.

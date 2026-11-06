@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-public struct ReaderModeUtils {
+public enum ReaderModeUtils {
     // Content Security Policy for readerized pages. Disallows everything except images from anywhere,
     // and styles (including inline styles) and fonts from origin.
     // Must stay on a single line: CFNetwork and HTTPURLResponse drop multi-line header values.

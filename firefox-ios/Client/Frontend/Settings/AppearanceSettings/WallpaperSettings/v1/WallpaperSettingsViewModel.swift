@@ -28,9 +28,9 @@ final class WallpaperSettingsViewModel: @unchecked Sendable {
         }
     }
 
-    struct Constants {
-        struct Strings {
-            struct Toast {
+    enum Constants {
+        enum Strings {
+            enum Toast {
                 static let label: String = stringIds.WallpaperUpdatedToastLabel
                 static let button: String = stringIds.WallpaperUpdatedToastButton
             }

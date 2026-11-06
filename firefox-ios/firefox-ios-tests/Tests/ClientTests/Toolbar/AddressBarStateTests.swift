@@ -12,7 +12,6 @@ import SummarizeKit
 
 final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
-    let storeUtilityHelper = StoreTestUtilityHelper()
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockProfile: MockProfile!
 

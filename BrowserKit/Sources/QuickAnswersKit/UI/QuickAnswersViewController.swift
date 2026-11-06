@@ -8,7 +8,7 @@ import Shared
 
 // TODO: - FXIOS-16295 improve VoiceOver by adding notification announcement before and after recording.
 public final class QuickAnswersViewController: UIViewController, Themeable {
-    private struct UX {
+    private enum UX {
         static let titleFadeDuration: TimeInterval = 0.1
         static let presentationNavigationBarOffset: CGFloat = -20.0
         static let backdropFadeDuration: TimeInterval = 0.2

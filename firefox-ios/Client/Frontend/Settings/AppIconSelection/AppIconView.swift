@@ -34,7 +34,7 @@ struct AppIconView: ThemeableView {
         self.theme = themeManager.resolveTheme(for: windowUUID, privateOverride: false)
     }
 
-    struct UX {
+    enum UX {
         static let checkmarkImageIdentifier = "checkmark"
         static let cornerRadius: CGFloat = 10
         static let itemPaddingHorizontal: CGFloat = 10

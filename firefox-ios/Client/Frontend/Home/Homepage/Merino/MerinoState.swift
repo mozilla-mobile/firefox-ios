@@ -16,7 +16,7 @@ struct MerinoState: StateType, Equatable {
     let hasMerinoResponseContent: Bool
     let shouldShowSection: Bool
 
-    struct Constants {
+    enum Constants {
         static let footerURL = SupportUtils.URLForPocketLearnMore
     }
 

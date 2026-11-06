@@ -31,7 +31,7 @@ final class TabDisplayView: UIView,
                       TabCellDelegate,
                       SwipeAnimatorDelegate,
                       InsetUpdatable {
-    struct UX {
+    enum UX {
         static let cornerRadius: CGFloat = 6.0
     }
 

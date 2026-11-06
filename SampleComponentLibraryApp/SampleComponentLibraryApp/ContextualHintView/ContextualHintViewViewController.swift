@@ -9,7 +9,7 @@ import UIKit
 
 class ContextualHintViewViewController: UIViewController, Themeable {
     private lazy var hintView: ContextualHintView = .build { _ in }
-    private struct UX {
+    private enum UX {
         static let contextualHintWidth: CGFloat = 350
         static let contextualHintLandscapeExtraWidth: CGFloat = 60
     }

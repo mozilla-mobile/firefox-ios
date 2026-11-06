@@ -9,7 +9,7 @@ import ComponentLibrary
 /// The card displaying a Quick Answers result: a gradient header and the answer body, laid over a
 /// material background.
 final class QuickAnswersAnswerCardView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let cornerRadius: CGFloat = 38.0
         static let borderWidth: CGFloat = 0.25
         static let padding: CGFloat = 20.0

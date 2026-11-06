@@ -5,7 +5,7 @@
 import Foundation
 import Network
 
-public struct NetworkUtils {
+public enum NetworkUtils {
     private enum DefaultRequestConstants {
         static let timeout: TimeInterval = 5
         static let accept = "application/json"

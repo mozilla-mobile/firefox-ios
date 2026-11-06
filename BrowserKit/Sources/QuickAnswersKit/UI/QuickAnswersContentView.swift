@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 final class QuickAnswersContentView: UIView, UIScrollViewDelegate, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let footerSpacing: CGFloat = 2.0
         static let privacyIconSize = CGSize(width: 18.0, height: 18.0)
         static let privacyIconPadding: CGFloat = 2.0

@@ -5,7 +5,7 @@
 import struct Storage.RemoteTab
 
 /// Creates a remote tab which is used to sync tabs to a sync account
-struct RemoteTabCreator {
+enum RemoteTabCreator {
     @MainActor
     static func toRemoteTab(from tab: Tab) -> RemoteTab? {
         guard !tab.isPrivate else {

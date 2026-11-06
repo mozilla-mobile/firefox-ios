@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 
 struct GenericSelectableItemCellView: View {
-    private struct UX {
+    private enum UX {
         static let horizontalSpacing: CGFloat = 16
         static let minHeight: CGFloat = 24
     }
