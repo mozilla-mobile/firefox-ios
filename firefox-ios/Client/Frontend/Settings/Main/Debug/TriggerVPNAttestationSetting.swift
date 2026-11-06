@@ -195,3 +195,39 @@ final class ClearVPNSessionSetting: VPNDebugSetting {
         return "Cleared stored DSJ and App Attest key."
     }
 }
+
+/// Shows the VPN failure alert through the same Redux path `VPNManager` uses.
+final class ShowVPNFailureAlertSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        guard let theme else { return nil }
+        return NSAttributedString(
+            string: "VPN: Show Failure Alert",
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        store.dispatch(VPNAlertModernAction.showFailureAlert, forWindowUUID: settings.windowUUID)
+    }
+}
+
+/// Shows the VPN data limit alert through the same Redux path `VPNManager` uses.
+final class ShowVPNDataLimitAlertSetting: HiddenSetting {
+    // Arbitrary 50 GB limit, only used for the alert copy
+    private let dataLimitBytes: Int64 = 50_000_000_000
+
+    override var title: NSAttributedString? {
+        guard let theme else { return nil }
+        return NSAttributedString(
+            string: "VPN: Show Data Limit Alert",
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        store.dispatch(
+            VPNAlertModernAction.showDataLimitAlert(dataLimitBytes: dataLimitBytes),
+            forWindowUUID: settings.windowUUID
+        )
+    }
+}
