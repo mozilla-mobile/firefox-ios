@@ -14,11 +14,15 @@ protocol ContentBlockerTab: AnyObject {
     @MainActor
     var isPrivate: Bool { get }
     @MainActor
+    var hasUncommittedNavigation: Bool { get }
+    @MainActor
     func currentURL() -> URL?
     @MainActor
     func currentWebView() -> WKWebView?
     @MainActor
     func imageContentBlockingEnabled() -> Bool
+    @MainActor
+    func reload(bypassCache: Bool)
 }
 
 @MainActor
