@@ -49,6 +49,7 @@ protocol BrowserSelectorsSet {
     var TEXT_SELECTION_MENU_MORE: Selector { get }
     var ADDRESS_BAR_LEADING_SKELETON: Selector { get }
     var ADDRESS_BAR_TRAILING_SKELETON: Selector { get }
+    var WEB_VIEW: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
@@ -346,6 +347,11 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "swipingTabs"]
     )
 
+    let WEB_VIEW = Selector.webView(
+        description: "Web view showing the current page",
+        groups: ["browser"]
+    )
+
     func linkElement(named name: String) -> Selector {
         Selector.linkById(
             name,
@@ -391,6 +397,6 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            CONTEXT_MENU_PASTE_AND_GO, CONTEXT_MENU_PASTE,
                            CONTEXT_MENU_COPY_ADDRESS, TEXT_SELECTION_MENU_COPY, TEXT_SELECTION_MENU_SHARE,
                            TEXT_SELECTION_MENU_MORE, ADDRESS_BAR_LEADING_SKELETON,
-                           ADDRESS_BAR_TRAILING_SKELETON]
+                           ADDRESS_BAR_TRAILING_SKELETON, WEB_VIEW]
     }
 }

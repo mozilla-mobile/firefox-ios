@@ -74,6 +74,27 @@ final class MainMenuScreen {
         bookmarks.waitAndTap()
     }
 
+    /// Taps "More" to show the expanded options; iOS 16 reopens the menu already expanded.
+    func expandMenuIfNeeded() {
+        expandTabMenuIfNeeded(in: app)
+    }
+
+    func tapFindInPage() {
+        sel.FIND_IN_PAGE.element(in: app).waitAndTap()
+    }
+
+    func tapAddToShortcuts() {
+        sel.ADD_TO_SHORTCUTS.element(in: app).waitAndTap()
+    }
+
+    func assertRemoveFromShortcutsExists(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.REMOVE_FROM_SHORTCUTS.element(in: app), timeout: timeout)
+    }
+
+    func tapRemoveFromShortcuts() {
+        sel.REMOVE_FROM_SHORTCUTS.element(in: app).waitAndTap()
+    }
+
     func tapBookmarkPage() {
         let bookmarkPage = sel.BOOKMARK_PAGE.element(in: app)
         BaseTestCase().mozWaitForElementToExist(bookmarkPage)
@@ -119,10 +140,30 @@ final class MainMenuScreen {
     }
 
     func assertReaderViewIs(on isOn: Bool, timeout: TimeInterval = TIMEOUT) {
-        let readerView = sel.READER_VIEW.element(in: app)
-        let status = isOn ? sel.READER_VIEW_STATUS_ON : sel.READER_VIEW_STATUS_OFF
-        BaseTestCase().mozWaitForElementToExist(readerView, timeout: timeout)
-        BaseTestCase().mozWaitForElementToExist(readerView.staticTexts[status.value], timeout: timeout)
+        assertStatus(of: sel.READER_VIEW, isOn: isOn, timeout: timeout)
+    }
+
+    func assertWebsiteDarkModeIs(on isOn: Bool, timeout: TimeInterval = TIMEOUT) {
+        assertStatus(of: sel.WEBSITE_DARK_MODE, isOn: isOn, timeout: timeout)
+    }
+
+    func tapWebsiteDarkMode() {
+        sel.WEBSITE_DARK_MODE.element(in: app).waitAndTap()
+    }
+
+    func assertDesktopSiteIs(on isOn: Bool, timeout: TimeInterval = TIMEOUT) {
+        assertStatus(of: sel.DESKTOP_SITE, isOn: isOn, timeout: timeout)
+    }
+
+    private func assertStatus(of item: Selector, isOn: Bool, timeout: TimeInterval) {
+        let cell = item.element(in: app)
+        let status = isOn ? sel.MENU_ITEM_STATUS_ON : sel.MENU_ITEM_STATUS_OFF
+        BaseTestCase().mozWaitForElementToExist(cell, timeout: timeout)
+        BaseTestCase().mozWaitForElementToExist(cell.staticTexts[status.value], timeout: timeout)
+    }
+
+    func tapDesktopSite() {
+        sel.DESKTOP_SITE.element(in: app).waitAndTap()
     }
 
     func tapReaderView() {

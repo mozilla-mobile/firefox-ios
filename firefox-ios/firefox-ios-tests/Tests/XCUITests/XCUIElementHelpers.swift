@@ -325,4 +325,40 @@ extension XCUIElement {
         self.typeText(text)
         return true
     }
+
+    /// Mean relative luminance of the element's on-screen pixels, from 0 (black) to 1 (white).
+    func averageLuminance() -> Double {
+        guard let image = screenshot().image.cgImage else { return 0 }
+        let side = 32
+        var pixels = [UInt8](repeating: 0, count: side * side * 4)
+        let drawn = pixels.withUnsafeMutableBytes { buffer -> Bool in
+            guard let context = CGContext(
+                data: buffer.baseAddress,
+                width: side,
+                height: side,
+                bitsPerComponent: 8,
+                bytesPerRow: side * 4,
+                space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+            ) else { return false }
+            context.draw(image, in: CGRect(x: 0, y: 0, width: side, height: side))
+            return true
+        }
+        guard drawn else { return 0 }
+        var total = 0.0
+        for offset in stride(from: 0, to: pixels.count, by: 4) {
+            total += 0.2126 * Double(pixels[offset])
+                + 0.7152 * Double(pixels[offset + 1])
+                + 0.0722 * Double(pixels[offset + 2])
+        }
+        return total / Double(side * side) / 255
+    }
+
+    /// Waits until `averageLuminance()` satisfies `condition`. Returns false on timeout instead of failing.
+    @discardableResult
+    func waitForLuminance(timeout: TimeInterval = TIMEOUT, _ condition: @escaping (Double) -> Bool) -> Bool {
+        let predicate = NSPredicate { _, _ in condition(self.averageLuminance()) }
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: nil)
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
 }

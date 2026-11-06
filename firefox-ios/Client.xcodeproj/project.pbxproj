@@ -34305,7 +34305,7 @@
 			repositoryURL = "https://github.com/mozilla/glean-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 70.1.0;
+				version = 71.0.0;
 			};
 		};
 		43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */ = {
@@ -34331,8 +34331,6 @@
 				kind = exactVersion;
 				version = 9.32.0;
 			};
-			traits = (
-			);
 		};
 		5A984D322C8A31A0007938C9 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;

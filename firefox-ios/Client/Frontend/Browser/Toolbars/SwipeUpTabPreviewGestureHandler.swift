@@ -248,8 +248,8 @@ final class SwipeUpTabPreviewGestureHandler: NSObject, UIGestureRecognizerDelega
             }
         case .openTabTray:
             // This delay keeps the tabPreview on screen long enough for the tab tray to appear before disappearing
-            DispatchQueue.main.asyncAfter(deadline: .now() + UX.dismissPreviewDelay) {
-                self.tabPreview.dismissForTabTray()
+            DispatchQueue.main.asyncAfter(deadline: .now() + UX.dismissPreviewDelay) { [tabPreview] in
+                tabPreview.dismissForTabTray()
             }
             toolbarTelemetry.addressBarDragged(outcome: ToolbarTelemetry.PanGestureOutcomes.tabTrayOpened)
             store.dispatch(
