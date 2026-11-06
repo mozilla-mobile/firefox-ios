@@ -6,8 +6,8 @@ import SwiftUI
 import Common
 import Shared
 
-struct VPNHelpers {
-    struct UX {
+enum VPNHelpers {
+    enum UX {
         static let horizontalPadding: CGFloat = 16
         static let rowVerticalPadding: CGFloat = 12
         static let cardCornerRadius: CGFloat = 26

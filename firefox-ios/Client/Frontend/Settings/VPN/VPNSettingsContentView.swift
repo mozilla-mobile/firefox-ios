@@ -8,7 +8,7 @@ import Shared
 
 @available(iOS 17.0, *)
 struct VPNSettingsContentView: View {
-    private struct UX {
+    private enum UX {
         static let globeViewPadding: CGFloat = 16
         static let titleVerticalPadding: CGFloat = 4
         static let descriptionLineHeight: CGFloat = 21

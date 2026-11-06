@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 
 struct VPNGlobeView: View {
-    private struct UX {
+    private enum UX {
         static let iconSize: CGFloat = 44
         static let containerSize: CGFloat = 60
         static let containerCornerRadius: CGFloat = 16

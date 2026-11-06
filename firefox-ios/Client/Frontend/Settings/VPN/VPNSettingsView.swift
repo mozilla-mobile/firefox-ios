@@ -8,7 +8,7 @@ import Shared
 
 @available(iOS 17.0, *)
 struct VPNSettingsViewContainer: ThemeableView {
-    private struct UX {
+    private enum UX {
         static let cardOuterPadding: CGFloat = 16
         static let cardSpacing: CGFloat = 16
         static let footerTopSpacing: CGFloat = 8
