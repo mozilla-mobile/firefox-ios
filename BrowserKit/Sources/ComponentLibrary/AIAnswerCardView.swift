@@ -105,6 +105,14 @@ public final class AIAnswerCardView: UIView, ThemeApplicable {
         applyAccessibilityIdentifiers(headerA11yId: headerA11yId, bodyA11yId: bodyA11yId)
     }
 
+    /// Cross-fades the body text change, keeping the card's clipping and corners untouched.
+    public func fadeBodyChange(duration: TimeInterval) {
+        let transition = CATransition()
+        transition.type = .fade
+        transition.duration = duration
+        bodyLabel.layer.add(transition, forKey: "bodyFade")
+    }
+
     private func applyAccessibilityIdentifiers(headerA11yId: String?, bodyA11yId: String?) {
         headerLabel.accessibilityIdentifier = headerA11yId
         bodyLabel.accessibilityIdentifier = bodyA11yId

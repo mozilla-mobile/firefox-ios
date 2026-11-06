@@ -30,7 +30,7 @@ public final class SummarizeController: UIViewController, Themeable {
         static let tabSnapshotShadowOpacity: Float = 1.0
         static let labelShimmeringColorAlpha: CGFloat = 0.2
         static let loadingLogoSize: CGFloat = 64.0
-        static let loadingLogoBottomSpacing: CGFloat = 10.0
+        static let loadingStackSpacing: CGFloat = 10.0
         static let titleFadeDuration: TimeInterval = 0.1
     }
 
@@ -70,6 +70,13 @@ public final class SummarizeController: UIViewController, Themeable {
         $0.contentMode = .scaleAspectFit
         $0.alpha = 0
         $0.isAccessibilityElement = false
+    }
+    private lazy var loadingStackView: UIStackView = .build {
+        $0.axis = .vertical
+        $0.alignment = .center
+        $0.spacing = UX.loadingStackSpacing
+        $0.addArrangedSubview(self.loadingLogoView)
+        $0.addArrangedSubview(self.loadingLabel)
     }
     private lazy var closeButton: UIButton = .build { [weak self] in
         $0.setImage(
@@ -236,7 +243,7 @@ public final class SummarizeController: UIViewController, Themeable {
     }
 
     private func startShimmeringLoadingLabel() {
-        let textColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.textPrimary
+        let textColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.textOnDark
         loadingLabel.startShimmering(light: textColor.withAlphaComponent(UX.labelShimmeringColorAlpha), dark: textColor)
     }
 
@@ -244,8 +251,7 @@ public final class SummarizeController: UIViewController, Themeable {
         view.addSubviews(
             backgroundEffectView,
             summaryView,
-            loadingLogoView,
-            loadingLabel,
+            loadingStackView,
             infoView,
             tabSnapshotContainer,
             borderOverlayHostingController.view
@@ -269,19 +275,15 @@ public final class SummarizeController: UIViewController, Themeable {
 
             loadingLogoView.widthAnchor.constraint(equalToConstant: UX.loadingLogoSize),
             loadingLogoView.heightAnchor.constraint(equalToConstant: UX.loadingLogoSize),
-            loadingLogoView.centerXAnchor.constraint(equalTo: loadingLabel.centerXAnchor),
-            loadingLogoView.bottomAnchor.constraint(equalTo: loadingLabel.topAnchor,
-                                                    constant: -UX.loadingLogoBottomSpacing),
-            loadingLogoView.topAnchor.constraint(greaterThanOrEqualTo: topHalfBoundGuide.topAnchor),
 
-            loadingLabel.topAnchor.constraint(greaterThanOrEqualTo: topHalfBoundGuide.topAnchor),
-            loadingLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor,
-                                                  constant: UX.summaryLabelHorizontalPadding),
-            loadingLabel.centerYAnchor.constraint(equalTo: topHalfBoundGuide.centerYAnchor),
-            loadingLabel.centerXAnchor.constraint(equalTo: topHalfBoundGuide.centerXAnchor),
-            loadingLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor,
-                                                   constant: -UX.summaryLabelHorizontalPadding),
-            loadingLabel.bottomAnchor.constraint(lessThanOrEqualTo: topHalfBoundGuide.bottomAnchor),
+            loadingStackView.centerXAnchor.constraint(equalTo: topHalfBoundGuide.centerXAnchor),
+            loadingStackView.centerYAnchor.constraint(equalTo: topHalfBoundGuide.centerYAnchor),
+            loadingStackView.topAnchor.constraint(greaterThanOrEqualTo: topHalfBoundGuide.topAnchor),
+            loadingStackView.bottomAnchor.constraint(lessThanOrEqualTo: topHalfBoundGuide.bottomAnchor),
+            loadingStackView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor,
+                                                      constant: UX.summaryLabelHorizontalPadding),
+            loadingStackView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor,
+                                                       constant: -UX.summaryLabelHorizontalPadding),
 
             infoView.centerXAnchor.constraint(equalTo: topHalfBoundGuide.centerXAnchor),
             infoView.centerYAnchor.constraint(equalTo: topHalfBoundGuide.centerYAnchor),
@@ -507,7 +509,7 @@ public final class SummarizeController: UIViewController, Themeable {
         summaryView.backgroundColor = .clear
         summaryView.applyTheme(theme: theme)
         titleLabel.textColor = theme.colors.textPrimary
-        loadingLabel.textColor = theme.colors.textSecondary
+        loadingLabel.textColor = theme.colors.textOnDark
         loadingLogoView.tintColor = theme.colors.textOnDark
         tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
         closeButton.tintColor = theme.colors.iconPrimary
