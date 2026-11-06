@@ -170,7 +170,8 @@ struct ToolbarState: ScreenState, Sendable {
         case .translucencyDidChange(let isTranslucent):
             return state.copy(isTranslucent: isTranslucent)
 
-        case .didKeyboardRequestChange, .cancelEditOnHomepage, .didPasteSearchTerm, .lockIconChanged:
+        case .didKeyboardRequestChange, .cancelEditOnHomepage, .didPasteSearchTerm, .lockIconChanged,
+             .searchTermDidClear:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
             return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
                                                                                     action,
@@ -200,9 +201,9 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.didSetTextInLocationView,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
             ToolbarActionType.websiteLoadingStateDidChange,
-            ToolbarMiddlewareActionType.googleLensAvailabilityDidChange, ToolbarActionType.clearSearch,
+            ToolbarMiddlewareActionType.googleLensAvailabilityDidChange,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
-            ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
+            ToolbarActionType.didStartTyping,
             ToolbarActionType.readerModeStateChanged,
             ToolbarActionType.navigationMiddleButtonDidChange,
             TranslationsActionType.didStartTranslatingPage,

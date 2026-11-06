@@ -137,6 +137,10 @@ enum ToolbarModernAction: ModernAction {
     /// The page's secure content status changed. `isWebsiteMode` is `false` for reader mode pages,
     /// where the lock icon isn't shown. The lock icon itself is derived from these in the Lens.
     case lockIconChanged(hasOnlySecureContent: Bool, isWebsiteMode: Bool)
+
+    /// The user tapped the address bar's clear button. Clears the stored search term and leaves the
+    /// address bar editing with an empty search.
+    case searchTermDidClear
 }
 
 enum ToolbarActionType: ActionType {
@@ -156,14 +160,12 @@ enum ToolbarActionType: ActionType {
     case googleLensSettingDidChange
     case navigationButtonDoubleTapped
     case navigationHintFinishedPresenting
-    case clearSearch
     case didDeleteSearchTerm
     case didEnterSearchTerm
     case didSummarizeSettingsChange
     case didSetTabScreenshot
     // User submitted a search term to load the search request
     case didSubmitSearchTerm
-    case didSetSearchTerm
     case didStartTyping
     case navigationMiddleButtonDidChange
 }
