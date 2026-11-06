@@ -149,7 +149,7 @@ workflows:
     - SLACK_TITLE: Smoketest and Full Functional Tests iPhone, iPad and iPhone Duo (iOS 27.0)
     - IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
     - IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
-    - FOCUS_DUO_DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
+    - DUO_DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
     after_run:
     - _focus_smoke_fullfunctional_tests
 
@@ -223,7 +223,7 @@ workflows:
         is_always_run: true
     - activate-build-cache-for-xcode@0: {}
     - xcode-build-for-test@3:
-        title: "Build Firefox iOS"
+        title: Build Firefox iOS
         timeout: 360
         inputs:
         - scheme: $SCHEME
@@ -233,7 +233,7 @@ workflows:
         - xcodebuild_options: $XCODEBUILD_OPTIONS
         - destination: $DESTINATION
     - xcode-test-without-building@0:
-        title: "Run all smoke tests"
+        title: Run all smoke tests
         timeout: 3000
         inputs:
         - destination: $DESTINATION
@@ -307,7 +307,7 @@ workflows:
     - focus-set-default-browser-entitlement
     steps:
     - xcode-build-for-test@3:
-        title: "Build Focus iOS"
+        title: Build Focus iOS
         inputs:
         - scheme: Focus
         - configuration: FocusDebug
@@ -315,51 +315,51 @@ workflows:
         - xcodebuild_options: $XCODEBUILD_OPTIONS
         - destination: $IPHONE_DESTINATION
     - xcode-test-without-building@0:
-        title: "Focus Smoketest - iPhone"
+        title: Focus Smoketest - iPhone
         is_always_run: true
-        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+        run_if: '{{getenv "BITRISE_TEST_BUNDLE_PATH" | ne ""}}'
         inputs:
         - destination: $IPHONE_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
         - xcodebuild_options: $XCODEBUILD_OPTIONS
     - xcode-test-without-building@0:
-        title: "Focus Full Functional Tests - iPhone"
+        title: Focus Full Functional Tests - iPhone
         is_always_run: true
-        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+        run_if: '{{getenv "BITRISE_TEST_BUNDLE_PATH" | ne ""}}'
         inputs:
         - destination: $IPHONE_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_FullFunctionalTests_iphonesimulator27.1-arm64.xctestrun
         - xcodebuild_options: $XCODEBUILD_OPTIONS
     - xcode-test-without-building@0:
-        title: "Focus Smoketest - iPad"
+        title: Focus Smoketest - iPad
         is_always_run: true
-        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+        run_if: '{{getenv "BITRISE_TEST_BUNDLE_PATH" | ne ""}}'
         inputs:
         - destination: $IPAD_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
         - xcodebuild_options: $XCODEBUILD_OPTIONS
     - xcode-test-without-building@0:
-        title: "Focus Full Functional Tests - iPad"
+        title: Focus Full Functional Tests - iPad
         is_always_run: true
-        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+        run_if: '{{getenv "BITRISE_TEST_BUNDLE_PATH" | ne ""}}'
         inputs:
         - destination: $IPAD_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_FullFunctionalTests_iphonesimulator27.1-arm64.xctestrun
         - xcodebuild_options: $XCODEBUILD_OPTIONS
     - xcode-test-without-building@0:
-        title: "Focus Smoketest - iPhone Duo"
+        title: Focus Smoketest - iPhone Duo
         is_always_run: true
-        run_if: '{{and (getenv "FOCUS_DUO_DESTINATION" | ne "") (enveq "BITRISE_TEST_BUNDLE_PATH" "" | not)}}'
+        run_if: '{{and (getenv "DUO_DESTINATION" | ne "") (getenv "BITRISE_TEST_BUNDLE_PATH" | ne "")}}'
         inputs:
-        - destination: $FOCUS_DUO_DESTINATION
+        - destination: $DUO_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
         - xcodebuild_options: $XCODEBUILD_OPTIONS
     - xcode-test-without-building@0:
-        title: "Focus Full Functional Tests - iPhone Duo"
+        title: Focus Full Functional Tests - iPhone Duo
         is_always_run: true
-        run_if: '{{and (getenv "FOCUS_DUO_DESTINATION" | ne "") (enveq "BITRISE_TEST_BUNDLE_PATH" "" | not)}}'
+        run_if: '{{and (getenv "DUO_DESTINATION" | ne "") (getenv "BITRISE_TEST_BUNDLE_PATH" | ne "")}}'
         inputs:
-        - destination: $FOCUS_DUO_DESTINATION
+        - destination: $DUO_DESTINATION
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_FullFunctionalTests_iphonesimulator27.1-arm64.xctestrun
         - xcodebuild_options: $XCODEBUILD_OPTIONS
     - deploy-to-bitrise-io@2:
