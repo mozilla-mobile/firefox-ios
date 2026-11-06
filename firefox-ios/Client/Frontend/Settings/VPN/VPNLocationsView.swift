@@ -8,7 +8,7 @@ import SwiftUI
 
 @available(iOS 17.0, *)
 struct VPNLocationsView: ThemeableView {
-    private struct UX {
+    private enum UX {
         static let outerPadding: CGFloat = 16
         static let sectionSpacing: CGFloat = 16
         static let rowTextSpacing: CGFloat = 4
