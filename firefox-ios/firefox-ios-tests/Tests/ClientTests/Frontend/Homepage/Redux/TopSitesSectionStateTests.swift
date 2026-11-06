@@ -26,6 +26,7 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(initialState.topSitesData, [])
         XCTAssertFalse(initialState.shouldShowSectionHeader)
         XCTAssertFalse(initialState.shouldShowAddShortcutTile)
+        XCTAssertFalse(initialState.hasRetrievedTopSites)
     }
 
     @MainActor
@@ -53,6 +54,25 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(newState.topSitesData.count, 1)
         XCTAssertEqual(newState.topSitesData.compactMap { $0.title }, ["hello"])
+        XCTAssertTrue(newState.hasRetrievedTopSites)
+    }
+
+    @MainActor
+    func test_retrievedUpdatedSitesAction_withNoSites_marksTopSitesAsRetrieved() {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            TopSitesAction(
+                topSites: [],
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        XCTAssertEqual(newState.topSitesData, [])
+        XCTAssertTrue(newState.hasRetrievedTopSites)
     }
 
     @MainActor

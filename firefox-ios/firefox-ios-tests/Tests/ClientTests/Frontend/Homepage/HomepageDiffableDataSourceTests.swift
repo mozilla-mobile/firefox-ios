@@ -54,10 +54,44 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         )
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 2)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .spacer])
+        XCTAssertEqual(snapshot.numberOfSections, 3)
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, placeholderTopSitesSection, .spacer])
         XCTAssertEqual(snapshot.numberOfItems(inSection: .header), 1)
         XCTAssertEqual(snapshot.numberOfItems(inSection: .spacer), 1)
+    }
+
+    @MainActor
+    func test_updateSnapshot_beforeTopSitesAreRetrieved_showsPlaceholderTiles() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+        let state = HomepageState(windowUUID: .XCTestDefaultUUID)
+
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
+
+        let snapshot = dataSource.snapshot()
+        let items = snapshot.itemIdentifiers(inSection: placeholderTopSitesSection)
+        let expectedCount = state.topSitesState.numberOfRows * state.topSitesState.numberOfTilesPerRow
+        XCTAssertEqual(items.count, expectedCount)
+        XCTAssertTrue(items.allSatisfy { item in
+            if case .topSiteEmpty = item { return true }
+            return false
+        })
+    }
+
+    @MainActor
+    func test_updateSnapshot_afterTopSitesAreRetrievedWithNoSites_hidesSection() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+        let state = HomepageState.reducer.legacyReducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            TopSitesAction(
+                topSites: [],
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
+
+        XCTAssertEqual(dataSource.snapshot().sectionIdentifiers, [.header, .spacer])
     }
 
     @MainActor
@@ -100,6 +134,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 20)
         let expectedSections: [HomepageSection] = [
             .header,
+            .topSites(.systemCyan, TopSitesSectionLayoutProvider.UX.minCards, false),
             .spacer,
             .pocket(.systemCyan)
         ]
@@ -302,6 +337,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 20)
         let expectedSections: [HomepageSection] = [
             .header,
+            placeholderTopSitesSection,
             .spacer,
             .pocket(nil)
         ]
@@ -406,6 +442,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         let expectedSections: [HomepageSection] = [
             .header,
             .messageCard,
+            placeholderTopSitesSection,
             .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
@@ -444,6 +481,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         XCTAssertEqual(snapshot.numberOfItems(inSection: .bookmarks(nil)), 1)
         let expectedSections: [HomepageSection] = [
             .header,
+            placeholderTopSitesSection,
             .bookmarks(nil),
             .spacer
         ]
@@ -477,6 +515,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         XCTAssertEqual(snapshot.numberOfItems(inSection: .jumpBackIn(nil, mockSectionConfig)), 1)
         let expectedSections: [HomepageSection] = [
             .header,
+            placeholderTopSitesSection,
             .jumpBackIn(nil, mockSectionConfig),
             .spacer
         ]
@@ -504,6 +543,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .trackerBlockerModule).first, .trackerBlockerModule(0))
         let expectedSections: [HomepageSection] = [
             .header,
+            placeholderTopSitesSection,
             .trackerBlockerModule,
             .spacer
         ]
@@ -576,6 +616,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         let expectedSections: [HomepageSection] = [
             .header,
             .privacyNotice,
+            placeholderTopSitesSection,
             .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
@@ -592,6 +633,10 @@ final class HomepageDiffableDataSourceTests: XCTestCase, FeatureFlagTestUtility 
         let item = HomepageItem.header(headerState(showQuickAnswersButton: false), nil, false)
 
         XCTAssertNil(item.telemetryItemType)
+    }
+
+    private var placeholderTopSitesSection: HomepageSection {
+        .topSites(nil, TopSitesSectionLayoutProvider.UX.minCards, false)
     }
 
     private func headerState(showQuickAnswersButton: Bool) -> HeaderState {
