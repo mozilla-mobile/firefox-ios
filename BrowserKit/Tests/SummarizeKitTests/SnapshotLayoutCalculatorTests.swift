@@ -17,12 +17,20 @@ struct SnapshotLayoutCalculatorTests {
     private let portraitContext = LayoutContext(
         viewSize: CGSize(width: 375, height: 667),
         traitCollection: UITraitCollection(horizontalSizeClass: .compact),
-        tabSnapshotTopOffset: 50
+        tabSnapshotTopOffset: 50,
+        isInitialLandscape: false
     )
     private let landscapeContext = LayoutContext(
         viewSize: CGSize(width: 667, height: 375),
         traitCollection: UITraitCollection(horizontalSizeClass: .compact),
-        tabSnapshotTopOffset: 0
+        tabSnapshotTopOffset: 0,
+        isInitialLandscape: true
+    )
+    private let rotatedContext = LayoutContext(
+        viewSize: CGSize(width: 375, height: 667),
+        traitCollection: UITraitCollection(horizontalSizeClass: .compact),
+        tabSnapshotTopOffset: 50,
+        isInitialLandscape: true
     )
 
     // MARK: - Summary Transform
@@ -52,12 +60,11 @@ struct SnapshotLayoutCalculatorTests {
 
     @Test
     func test_calculateSummaryTransform_whenInterfaceRotated() {
-        var subject = createSubject()
-        subject.didRotateInterface = true
+        let subject = createSubject()
 
-        let transform = subject.calculateSummaryTransform(context: portraitContext)
+        let transform = subject.calculateSummaryTransform(context: rotatedContext)
 
-        let expectedY = portraitContext.viewSize.height
+        let expectedY = rotatedContext.viewSize.height
         #expect(transform.tx == 0)
         #expect(transform.ty == expectedY)
     }
@@ -87,12 +94,11 @@ struct SnapshotLayoutCalculatorTests {
 
     @Test
     func test_calculateInfoTransform_whenInterfaceRotated() {
-        var subject = createSubject()
-        subject.didRotateInterface = true
+        let subject = createSubject()
 
-        let transform = subject.calculateInfoTransform(context: portraitContext)
+        let transform = subject.calculateInfoTransform(context: rotatedContext)
 
-        let expectedY = portraitContext.viewSize.height
+        let expectedY = rotatedContext.viewSize.height
         #expect(transform.tx == 0)
         #expect(transform.ty == expectedY)
     }
@@ -109,12 +115,11 @@ struct SnapshotLayoutCalculatorTests {
 
     @Test
     func test_calculateDismissTransform_whenInterfaceRotated() {
-        var subject = createSubject()
-        subject.didRotateInterface = true
+        let subject = createSubject()
 
-        let transform = subject.calculateDismissTransform(context: portraitContext)
+        let transform = subject.calculateDismissTransform(context: rotatedContext)
 
-        let expectedY = portraitContext.viewSize.height
+        let expectedY = rotatedContext.viewSize.height
         #expect(transform.tx == 0)
         #expect(transform.ty == expectedY)
     }
@@ -144,24 +149,11 @@ struct SnapshotLayoutCalculatorTests {
 
     @Test
     func test_calculateViewDidAppearTransform_whenInterfaceRotated() {
-        var subject = createSubject()
-        subject.didRotateInterface = true
-
-        let transform = subject.calculateViewDidAppearTransform(context: portraitContext)
-
-        let expectedY = portraitContext.viewSize.height
-        #expect(transform.tx == 0)
-        #expect(transform.ty == expectedY)
-    }
-
-    // MARK: - Did Rotate Transform
-    @Test
-    func test_calculateDidRotateTransform() {
         let subject = createSubject()
 
-        let transform = subject.calculateDidRotateTransform(context: portraitContext)
+        let transform = subject.calculateViewDidAppearTransform(context: rotatedContext)
 
-        let expectedY = portraitContext.viewSize.height
+        let expectedY = rotatedContext.viewSize.height
         #expect(transform.tx == 0)
         #expect(transform.ty == expectedY)
     }

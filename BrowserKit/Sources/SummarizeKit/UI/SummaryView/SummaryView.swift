@@ -19,7 +19,7 @@ struct SummaryViewModel {
 }
 
 final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let titleVisibilityThreshold: CGFloat = 30.0
         static let titleVisibilityAnimationDuration: CGFloat = 0.1
     }

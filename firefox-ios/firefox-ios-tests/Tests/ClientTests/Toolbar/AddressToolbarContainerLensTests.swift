@@ -141,7 +141,105 @@ final class AddressToolbarContainerLensTests: XCTestCase {
         XCTAssertEqual(subject.browserActions[2].numberOfTabs, 2)
     }
 
+    // MARK: - navigationToolbarActions, derived straight from ToolbarState (no action involved)
+
+    func testInit_navigationToolbarActions_onHomepage_returnsSearchMiddleAction() {
+        let subject = createSubject(url: nil, middleButton: .home)
+
+        XCTAssertEqual(subject.navigationToolbarActions.map(\.actionType), [.back, .forward, .search, .menu, .tabs])
+    }
+
+    func testInit_navigationToolbarActions_onWebsite_returnsConfiguredMiddleAction() {
+        let subjectHomeButton = createSubject(url: url, middleButton: .home)
+        XCTAssertEqual(subjectHomeButton.navigationToolbarActions[2].actionType, .home)
+
+        let subjectNewTab = createSubject(url: url, middleButton: .newTab)
+        XCTAssertEqual(subjectNewTab.navigationToolbarActions[2].actionType, .newTab)
+    }
+
+    func testInit_navigationToolbarActions_returnsBackAndForwardEnabledState() {
+        let subject = createSubject(canGoBack: true, canGoForward: false)
+
+        XCTAssertEqual(subject.navigationToolbarActions[0].isEnabled, true)
+        XCTAssertEqual(subject.navigationToolbarActions[1].isEnabled, false)
+    }
+
+    func testInit_navigationToolbarActions_returnsNumberOfTabs() {
+        let subject = createSubject(numberOfTabs: 2)
+
+        XCTAssertEqual(subject.navigationToolbarActions[4].actionType, .tabs)
+        XCTAssertEqual(subject.navigationToolbarActions[4].numberOfTabs, 2)
+    }
+
+    func testInit_navigationToolbarActions_withMenuWarningBadge_returnsBadgedMenuAction() {
+        let subject = createSubject(showMenuWarningBadge: true)
+
+        XCTAssertEqual(subject.navigationToolbarActions[3].actionType, .menu)
+        XCTAssertNotNil(subject.navigationToolbarActions[3].badgeImageName)
+        XCTAssertNotNil(subject.navigationToolbarActions[3].maskImageName)
+    }
+
+    func testInit_navigationToolbarActions_versionTwoLayout_returnsTabsBeforeMenu() {
+        let subject = createSubject(toolbarLayout: .version2)
+
+        XCTAssertEqual(subject.navigationToolbarActions.map(\.actionType), [.back, .forward, .search, .tabs, .menu])
+    }
+
     // MARK: - Helpers
+
+    // MARK: - lockIconState, derived from hasOnlySecureContent, isWebsiteMode and readerModeState
+
+    func testInit_withoutToolbarState_returnsNoLockIcon() {
+        let appState = AppState(presentedComponents: PresentedComponentsState(components: []))
+        let subject = AddressToolbarContainerLens(appState: appState, uuid: windowUUID)
+
+        XCTAssertNil(subject.lockIconState.imageName)
+        XCTAssertNil(subject.lockIconState.a11yId)
+        XCTAssertTrue(subject.lockIconState.needsTheming)
+    }
+
+    func testInit_withoutSecureContentInfo_returnsNoLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: nil)
+
+        XCTAssertNil(subject.lockIconState.imageName)
+        XCTAssertNil(subject.lockIconState.a11yId)
+        XCTAssertTrue(subject.lockIconState.needsTheming)
+    }
+
+    func testInit_secureWebsite_returnsSecureLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: true, isWebsiteMode: true)
+
+        XCTAssertEqual(subject.lockIconState.imageName, StandardImageIdentifiers.Small.shieldCheckmarkFill)
+        XCTAssertEqual(subject.lockIconState.a11yId, AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon)
+        XCTAssertTrue(subject.lockIconState.needsTheming)
+    }
+
+    func testInit_insecureWebsite_returnsInsecureLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: false, isWebsiteMode: true)
+
+        XCTAssertEqual(subject.lockIconState.imageName, StandardImageIdentifiers.Small.shieldSlashFillMulticolor)
+        XCTAssertEqual(subject.lockIconState.a11yId, AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff)
+        XCTAssertFalse(subject.lockIconState.needsTheming)
+    }
+
+    func testInit_notWebsiteMode_hidesLockIconButKeepsA11yId() {
+        let subject = createSubject(hasOnlySecureContent: true, isWebsiteMode: false)
+
+        XCTAssertNil(subject.lockIconState.imageName)
+        XCTAssertEqual(subject.lockIconState.a11yId, AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon)
+    }
+
+    func testInit_readerModeActive_hidesLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: true, isWebsiteMode: true, readerModeState: .active)
+
+        XCTAssertNil(subject.lockIconState.imageName)
+    }
+
+    func testInit_readerModeNoLongerActive_restoresLockIcon() {
+        let subject = createSubject(hasOnlySecureContent: true, isWebsiteMode: true, readerModeState: .available)
+
+        XCTAssertEqual(subject.lockIconState.imageName, StandardImageIdentifiers.Small.shieldCheckmarkFill)
+    }
 
     private func createSubject(
         toolbarPosition: AddressToolbarPosition = .top,
@@ -153,13 +251,22 @@ final class AddressToolbarContainerLensTests: XCTestCase {
         isEmptySearch: Bool = true,
         isLoading: Bool = false,
         numberOfTabs: Int = 1,
-        url: URL? = nil
+        url: URL? = nil,
+        middleButton: NavigationBarMiddleButtonType = .newTab,
+        showMenuWarningBadge: Bool = false,
+        toolbarLayout: ToolbarLayoutStyle = .version1,
+        hasOnlySecureContent: Bool? = nil,
+        isWebsiteMode: Bool = true,
+        readerModeState: ReaderModeState? = nil
     ) -> AddressToolbarContainerLens {
         let addressToolbar = AddressBarState(windowUUID: windowUUID)
             .copy(url: url)
             .copy(isEditing: isEditing)
             .copy(isLoading: isLoading)
             .copy(isEmptySearch: isEmptySearch)
+            .copy(hasOnlySecureContent: hasOnlySecureContent)
+            .copy(isWebsiteMode: isWebsiteMode)
+            .copy(readerModeState: readerModeState)
 
         let toolbarState = ToolbarState(windowUUID: windowUUID)
             .copy(toolbarPosition: toolbarPosition)
@@ -169,6 +276,9 @@ final class AddressToolbarContainerLensTests: XCTestCase {
             .copy(canGoBack: canGoBack)
             .copy(canGoForward: canGoForward)
             .copy(numberOfTabs: numberOfTabs)
+            .copy(showMenuWarningBadge: showMenuWarningBadge)
+            .copy(toolbarLayout: toolbarLayout)
+            .copy(navigationToolbar: NavigationBarState(windowUUID: windowUUID).copy(middleButton: middleButton))
 
         let appState = AppState(presentedComponents: PresentedComponentsState(components: [.toolbar(toolbarState)]))
         return AddressToolbarContainerLens(appState: appState, uuid: windowUUID)

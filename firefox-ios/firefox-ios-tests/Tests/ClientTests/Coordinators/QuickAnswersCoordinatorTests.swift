@@ -141,6 +141,17 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
         )
     }
 
+    func test_resolvedFeature_withFollowUpEnabled_returnsFeatureWithFollowUp() {
+        setupNimbus(model: .exa)
+        featureFlagsProvider.enabledFlags = [.quickAnswersFollowUp]
+        let subject = createSubject()
+
+        XCTAssertEqual(
+            subject.resolvedFeature(),
+            QuickAnswersKit.QuickAnswersFeature(model: .exa, isOptInRedesignEnabled: false, isFollowUpEnabled: true)
+        )
+    }
+
     // MARK: - Helper Methods
     private func setupNimbus(model: Client.QuickAnswersModel) {
         FxNimbus.shared.features.quickAnswersFeature.with { _, _ in

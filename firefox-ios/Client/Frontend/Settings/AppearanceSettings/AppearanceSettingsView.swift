@@ -52,7 +52,7 @@ struct AppearanceSettingsView: ThemeableView {
         return Color(theme.colors.layer1)
     }
 
-    private struct UX {
+    private enum UX {
         static let spacing: CGFloat = 24
         static let cornerRadius: CGFloat = 24
         static var spacingCurrentOS: CGFloat {

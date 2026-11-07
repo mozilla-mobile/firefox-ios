@@ -11,7 +11,7 @@ import Shared
 @available(iOS 17, *)
 @MainActor
 class DownloadLiveActivityWrapper: DownloadProgressDelegate {
-    private struct UX {
+    private enum UX {
         static let updateCooldown = 0.75 // Update Cooldown in Seconds
     }
 

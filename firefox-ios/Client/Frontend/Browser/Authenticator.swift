@@ -10,7 +10,7 @@ import Common
 import struct MozillaAppServices.LoginEntry
 import struct MozillaAppServices.Login
 
-class Authenticator {
+enum Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3
 
     @MainActor

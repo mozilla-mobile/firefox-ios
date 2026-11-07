@@ -656,7 +656,7 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Weitere Informationen";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Um die Funktion „Automatisches Ausfüllen“ für Firefox verwenden zu können, muss ein Gerätepasssatz aktiviert sein.";
+"Logins.PasscodeRequirement.Warning" = "Um die Funktion „Automatisches Ausfüllen“ für Firefox verwenden zu können, muss ein Gerätecode aktiviert sein.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Nehmen Sie Ihre Passwörter überall mit";
@@ -830,7 +830,7 @@
 "Menu.TrackingProtectionCryptominersBlocked.Title" = "Heimliche Digitalwährungsberechner (Krypto-Miner)";
 
 /* Description of content trackers. */
-"Menu.TrackingProtectionDescription.ContentTrackers" = "Websites können externe Anzeigen, Videos und andere Inhalten laden, die verborgene Tracker enthalten. Wenn Sie dies blockieren, werden Websites möglicherweise schneller geladen, aber einige Schaltflächen, Formulare und Anmeldefelder funktionieren möglicherweise nicht.";
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Websites können externe Anzeigen, Videos und andere Inhalte laden, die verborgene Tracker enthalten. Wenn Sie dies blockieren, werden Websites möglicherweise schneller geladen, aber einige Schaltflächen, Formulare und Anmeldefelder funktionieren möglicherweise nicht.";
 
 /* Description of cross-site trackers. */
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Diese Cookies verfolgen Sie von einer Website zur anderen, um Daten über Ihre Online-Aktivitäten zu sammeln. Sie werden von Dritten wie Werbetreibenden und Analyseunternehmen gesetzt.";
@@ -839,7 +839,7 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Cryptominer nutzen heimlich die Rechenleistung Ihres Systems, um digitales Geld zu generieren. Cryptomining-Skripte belasten Ihren Akku, verlangsamen Ihren Computer und können Ihre Stromrechnung erhöhen.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "Die Einstellungen in Ihrem Browser und auf Ihrem Computer sind eindeutig. Fingerabdrücke erfassen eine Vielzahl dieser einzigartigen Einstellungen, um ein Profil von Ihnen zu erstellen, mit dem Sie beim Surfen verfolgt werden können.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Die Einstellungen in Ihrem Browser und auf Ihrem Computer sind eindeutig. Identifizierer (Fingerprinter) erfassen eine Vielzahl dieser einzigartigen Einstellungen, um ein Profil von Ihnen zu erstellen, mit dem Sie beim Surfen verfolgt werden können.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Soziale Netzwerke platzieren Tracker auf anderen Websites, um ein vollständigeres und gezielteres Profil von Ihnen zu erstellen. Das Blockieren dieser Tracker reduziert, wie viel Social-Media-Unternehmen von Ihren Online-Aktivitäten mitbekommen.";
@@ -1088,7 +1088,7 @@
 "SendTo.SendAction.Text" = "Senden";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
-"SentTab_TabArrivingNotification_NoDevice_body" = "Neuen Tab von andere Gerät erhalten.";
+"SentTab_TabArrivingNotification_NoDevice_body" = "Neuen Tab von einem anderen Gerät erhalten.";
 
 /* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_title" = "Tab erhalten";
@@ -1331,7 +1331,7 @@
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ klassisch";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
-"Settings.Home.Option.Wallpaper.CollectionTitle" = "ÖFFNUNGSBILDSCHIRM";
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "STARTBILDSCHIRM";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
 "Settings.Home.Option.Wallpaper.LearnMore.v106" = "Weitere Informationen";
@@ -1439,7 +1439,7 @@
 "Settings.Passwords.FingerPrintReason.v103" = "Nutzen Sie jetzt Ihren Fingerabdruck, um auf Passwörter zuzugreifen.";
 
 /* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
-"Settings.Passwords.OnboardingMessage.v103" = "Ihre Passwörter sind jetzt durch Face ID, Touch ID oder einen Gerätepasssatz geschützt.";
+"Settings.Passwords.OnboardingMessage.v103" = "Ihre Passwörter sind jetzt durch Face ID, Touch ID oder einen Gerätecode geschützt.";
 
 /* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
 "Settings.Passwords.SavePasswords.v103" = "Passwörter speichern";
@@ -1646,7 +1646,7 @@
 "Sync.SyncingEllipsis.Label" = "Synchronisation läuft…";
 
 /* Title for Sync status message when Sync failed due to being offline */
-"SyncState.Offline.Title" = "Sync ist offline.";
+"SyncState.Offline.Title" = "Sync ist offline";
 
 /* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray (%1$@), along with the total number of tabs (%2$@). E.g. “Tab 2 of 5” says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
 "Tab %@ of %@" = "Tab %1$@ von %2$@";
@@ -1661,7 +1661,7 @@
 "Tabs Tray" = "Tab-Ablage";
 
 /* The button to undo the delete all tabs */
-"Tabs.DeleteAllUndo.Button" = "Wiederherstellen";
+"Tabs.DeleteAllUndo.Button" = "Rückgängig";
 
 /* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Inaktive Tabs anzeigen";

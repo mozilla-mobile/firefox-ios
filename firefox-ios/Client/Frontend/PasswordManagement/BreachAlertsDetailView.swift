@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 class BreachAlertsDetailView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let verticalSpacing: CGFloat = 8.0
         static let horizontalMargin: CGFloat = 14
         static let shadowRadius: CGFloat = 8

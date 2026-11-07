@@ -59,7 +59,7 @@ struct TabDisplayOrder: Codable {
 /// but the code is not as clear as it could be since this class had multiple purposes.
 @MainActor
 class TopTabDisplayManager: NSObject {
-    private struct UX {
+    private enum UX {
         static let tabCornerRadius: CGFloat = 8
     }
 

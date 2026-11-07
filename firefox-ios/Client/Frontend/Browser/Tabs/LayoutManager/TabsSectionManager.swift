@@ -6,7 +6,7 @@ import Foundation
 
 @MainActor
 final class TabsSectionManager {
-    struct UX {
+    enum UX {
         static let cellAbsoluteHeight: CGFloat = 200
         static let cardSpacing: CGFloat = 16
         static let experimentCardSpacing: CGFloat = 52

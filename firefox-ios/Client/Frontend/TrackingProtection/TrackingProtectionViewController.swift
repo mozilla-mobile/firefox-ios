@@ -11,8 +11,8 @@ import Redux
 import X509
 import Storage
 
-struct TPMenuUX {
-    struct UX {
+enum TPMenuUX {
+    enum UX {
         static let popoverTopDistance: CGFloat = 16
         static let horizontalMargin: CGFloat = 16
         static let viewCornerRadius: CGFloat = 8
@@ -32,7 +32,7 @@ struct TPMenuUX {
         }
         static let backgroundAlpha: CGFloat = 0.80
         static let novaBackgroundAlpha: CGFloat = 0.95
-        struct Line {
+        enum Line {
             static let height: CGFloat = 0.5
         }
     }

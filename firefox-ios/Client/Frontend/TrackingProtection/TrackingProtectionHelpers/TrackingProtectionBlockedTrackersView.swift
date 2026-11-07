@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 final class TrackingProtectionBlockedTrackersView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let trackersLabelConstraintConstant = 16.0
     }
 

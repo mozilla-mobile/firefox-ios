@@ -29,6 +29,11 @@ class BrowsingTest: BaseTestCase {
         waitForHittable(shareButton)
         shareButton.tap()
 
+        // The iPhone Duo simulator has no Reminders app, so it isn't offered in the share sheet
+        if iPhoneDuo() {
+            return
+        }
+
         // Launch external app
         let RemindersApp: XCUIElement
         if #available(iOS 17, *) {

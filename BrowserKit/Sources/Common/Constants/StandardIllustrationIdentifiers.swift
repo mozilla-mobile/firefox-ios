@@ -7,9 +7,9 @@ import Foundation
 /// This struct defines all the standard illustration identifiers used in the app.
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
-public struct StandardIllustrationIdentifiers {
+public enum StandardIllustrationIdentifiers {
     // Custom illustrations exported at feature-specific dimensions
-    public struct Exports {
+    public enum Exports {
         public static let picShieldCheckmark = "picShieldCheckmark"
     }
 }

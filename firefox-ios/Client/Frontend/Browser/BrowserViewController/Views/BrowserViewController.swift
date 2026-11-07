@@ -414,6 +414,11 @@ class BrowserViewController: UIViewController,
     let tabManager: TabManager
     var googleLensSearches = [TabUUID: GoogleLensSearchState]()
     let googleLensTelemetry: GoogleLensTelemetry
+    /// The origin captured when a web context menu was shown, kept until its matching dismiss is
+    /// reported. `ContextMenuHelper.elements` can be overwritten by the JS bridge while a menu is open,
+    /// so `dismissed` telemetry must reuse this instead of re-deriving it from that mutable state. See FXIOS-14918.
+    var pendingContextMenuTelemetry: (url: URL, origin: ContextMenuTelemetry.OriginExtra)?
+    let contextMenuTelemetry: ContextMenuTelemetry
     let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
     private(set) var browserViewControllerState: BrowserViewControllerState?
@@ -502,6 +507,7 @@ class BrowserViewController: UIViewController,
         self.appAuthenticator = appAuthenticator
         self.searchEnginesManager = searchEnginesManager
         self.googleLensTelemetry = GoogleLensTelemetry(gleanWrapper: gleanWrapper)
+        self.contextMenuTelemetry = ContextMenuTelemetry(gleanWrapper: gleanWrapper)
         self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         self.bookmarksHandler = profile.places
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
@@ -1067,8 +1073,9 @@ class BrowserViewController: UIViewController,
             handleAutoTranslatePrompt(state: state)
         }
 
-        if let readerMode = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
-            if readerMode.state == .active && !contentContainer.hasHomepage {
+        if let selectedTab = tabManager.selectedTab,
+           selectedTab.getContentScript(name: ReaderMode.name()) is ReaderMode {
+            if isShowingReaderMode(tab: selectedTab) && !contentContainer.hasHomepage {
                 showReaderModeBar(animated: false)
             } else {
                 hideReaderModeBar(animated: false)
@@ -1404,13 +1411,8 @@ class BrowserViewController: UIViewController,
         updateBlurViews()
         addOrUpdateMaskViewIfNeeded()
 
-        store.dispatch(
-            ToolbarAction(
-                isTranslucent: toolbarHelper.shouldBlur(),
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.translucencyDidChange
-            )
-        )
+        store.dispatch(ToolbarModernAction.translucencyDidChange(isTranslucent: toolbarHelper.shouldBlur()),
+                       forWindowUUID: windowUUID)
     }
 
     /// As part of the homepage search bar work, we want to only hide the toolbar when the homepage search bar appears.
@@ -2479,13 +2481,7 @@ class BrowserViewController: UIViewController,
         )?.shouldAnimate
 
         guard shouldAnimate == false else { return }
-        store.dispatch(
-            ToolbarAction(
-                shouldAnimate: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.animationStateChanged
-            )
-        )
+        store.dispatch(ToolbarModernAction.animationStateChanged(shouldAnimate: true), forWindowUUID: windowUUID)
     }
 
     // MARK: - Webview property changed
@@ -2678,19 +2674,10 @@ class BrowserViewController: UIViewController,
               let webViewURL = webView.url,
               selectedTabURL == webViewURL else { return }
 
-        let hasSecureContent = webView.hasOnlySecureContent
-        let lockIconState = toolbarHelper.getLockIconState(
-            hasOnlySecureContent: hasSecureContent,
-            isWebsiteMode: tabManager.selectedTab?.url?.isReaderModeURL == false
-        )
-
-        let action = ToolbarAction(
-            lockIconButtonA11yId: lockIconState.a11yId,
-            lockIconImageName: lockIconState.imageName,
-            lockIconNeedsTheming: lockIconState.needsTheming,
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.lockIconChanged)
-        store.dispatch(action)
+        let isWebsiteMode = tabManager.selectedTab?.url?.isReaderModeURL == false
+        store.dispatch(
+            ToolbarModernAction.lockIconChanged(hasOnlySecureContent: webView.hasOnlySecureContent,
+                                                isWebsiteMode: isWebsiteMode), forWindowUUID: windowUUID)
     }
 
     // MARK: - Update UI
@@ -2734,29 +2721,18 @@ class BrowserViewController: UIViewController,
             StandardImageIdentifiers.Small.notificationDotFill : nil
         }
 
-        var lockIconButtonA11yId: String?
-        var lockIconImageName: String?
-        var lockIconNeedsTheming = true
+        let hasOnlySecureContent = tab.webView?.hasOnlySecureContent
+        let isWebsiteMode = hasOnlySecureContent == nil ? nil : tab.url?.isReaderModeURL == false
 
-        if let hasSecureContent = tab.webView?.hasOnlySecureContent {
-            let lockIconState = toolbarHelper.getLockIconState(
-                hasOnlySecureContent: hasSecureContent,
-                isWebsiteMode: tab.url?.isReaderModeURL == false
-            )
-            lockIconImageName = lockIconState.imageName
-            lockIconButtonA11yId = lockIconState.a11yId
-            lockIconNeedsTheming = lockIconState.needsTheming
-        }
-
+        // TODO: Move the lock icon inputs to a modern action once `urlDidChange` migrates
         let action = ToolbarAction(
             url: tab.url?.displayURL,
             isPrivate: tab.isPrivate,
             isShowingNavigationToolbar: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection),
             canGoBack: tab.canGoBack,
             canGoForward: tab.canGoForward,
-            lockIconButtonA11yId: lockIconButtonA11yId,
-            lockIconImageName: lockIconImageName,
-            lockIconNeedsTheming: lockIconNeedsTheming,
+            hasOnlySecureContent: hasOnlySecureContent,
+            isWebsiteMode: isWebsiteMode,
             safeListedURLImageName: safeListedURLImageName,
             translationConfiguration: tab.translationConfiguration ?? TranslationConfiguration(
                 prefs: profile.prefs,
@@ -2944,13 +2920,7 @@ class BrowserViewController: UIViewController,
         case .tabTray:
             updateZoomPageBarVisibility(visible: false)
             focusOnTabSegment()
-            store.dispatch(
-                ToolbarAction(
-                    shouldAnimate: false,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.animationStateChanged
-                )
-            )
+            store.dispatch(ToolbarModernAction.animationStateChanged(shouldAnimate: false), forWindowUUID: windowUUID)
         case .share:
             // User tapped the Share button in the toolbar
             guard let button = state.buttonTapped else { return }
@@ -3591,8 +3561,9 @@ class BrowserViewController: UIViewController,
             // This let's the user spam the Cmd+T button without lots of responder changes.
             guard let self, tab == self.tabManager.selectedTab else { return }
 
+            store.dispatch(ToolbarModernAction.animationStateChanged(shouldAnimate: true),
+                           forWindowUUID: self.windowUUID)
             let action = ToolbarAction(searchTerm: searchText,
-                                       shouldAnimate: true,
                                        windowUUID: self.windowUUID,
                                        actionType: ToolbarActionType.didStartEditingUrl)
             store.dispatch(action)
@@ -4915,7 +4886,7 @@ extension BrowserViewController: TabManagerDelegate {
         if let url = selectedTab.webView?.url, InternalURL.scheme != url.scheme,
            let readerMode = selectedTab.getContentScript(name: ReaderMode.name()) as? ReaderMode {
             updateReaderModeState(for: selectedTab, readerModeState: readerMode.state)
-            if readerMode.state == .active {
+            if isShowingReaderMode(tab: selectedTab) {
                 showReaderModeBar(animated: false)
             } else {
                 hideReaderModeBar(animated: false)
@@ -5046,10 +5017,7 @@ extension BrowserViewController: TabManagerDelegate {
               toolbarState.numberOfTabs != count
         else { return }
 
-        let action = ToolbarAction(numberOfTabs: count,
-                                   windowUUID: windowUUID,
-                                   actionType: ToolbarActionType.numberOfTabsChanged)
-        store.dispatch(action)
+        store.dispatch(ToolbarModernAction.numberOfTabsChanged(count: count), forWindowUUID: windowUUID)
     }
 }
 

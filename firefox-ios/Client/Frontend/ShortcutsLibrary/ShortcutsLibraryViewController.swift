@@ -12,7 +12,7 @@ class ShortcutsLibraryViewController: UIViewController,
                                       StoreSubscriber,
                                       Themeable,
                                       DismissalNotifiable {
-    struct UX {
+    enum UX {
         static let shortcutsSectionTopInset: CGFloat = 24
     }
 

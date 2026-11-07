@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-internal struct PagingCarouselUX {
+internal enum PagingCarouselUX {
     static let itemWidthRatio: CGFloat = 0.85
     static let interItemSpacing: CGFloat = 12
     static let scrollAnimationDuration: CGFloat = 0.3

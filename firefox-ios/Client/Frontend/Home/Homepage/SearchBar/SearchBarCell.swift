@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
-    struct UX {
+    enum UX {
         static let shadowRadius: CGFloat = 14
         static let shadowOffset = CGSize(width: 0, height: 2)
         static let shadowOpacity: Float = 1

@@ -10,7 +10,7 @@ enum WallpaperType: String {
     case other
 }
 
-struct WallpaperFilenameIdentifiers {
+enum WallpaperFilenameIdentifiers {
     static let thumbnail = "_thumbnail"
     static let portrait = "_portrait"
     static let landscape = "_landscape"

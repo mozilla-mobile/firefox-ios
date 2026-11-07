@@ -42,7 +42,7 @@ final class SearchViewController: SiteTableViewController,
                                   Notifiable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
-    private struct UX {
+    private enum UX {
         static let buttonsHeight: CGFloat = 44 // Equivalent to toolbar height, fixed at the moment
         static let engineButtonWidth: CGFloat = buttonsHeight * 1.4
         static let EngineButtonBackgroundColor = UIColor.clear.cgColor
@@ -85,7 +85,7 @@ final class SearchViewController: SiteTableViewController,
     private var bottomConstraintWithoutKeyboard: NSLayoutConstraint?
 
     private var isCompact: Bool {
-        return UIScreen.main.traitCollection.horizontalSizeClass == .compact
+        return traitCollection.horizontalSizeClass == .compact
     }
 
     private let searchEngineStackView: UIStackView = .build { stackView in

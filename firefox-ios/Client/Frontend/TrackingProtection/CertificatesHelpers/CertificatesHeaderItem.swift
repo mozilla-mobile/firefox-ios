@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 final class CertificatesHeaderItem: UIView, ThemeApplicable {
-    struct UX {
+    enum UX {
         static let headerItemIndicatorHeight = 4.0
         static let headerItemsSpacing = 10.0
     }

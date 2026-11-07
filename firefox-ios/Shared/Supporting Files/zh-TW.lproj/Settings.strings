@@ -395,7 +395,7 @@
 "Settings.TechnicalData.Link.v136" = "更多資訊";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v136" = "關於您的裝置、硬體設定，以及您的使用方式，可幫助我們為所有使用者改進 %@ 功能、效能與穩定度。";
+"Settings.TechnicalData.Message.v136" = "關於您的裝置、硬體設定，以及您的使用方式，可幫助我們改善 %@ 的功能、效能與穩定度。";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "傳送技術與互動資料";
@@ -463,8 +463,14 @@
 /* Description below the Recommended option in the VPN server location list. %1$@ is the app name (for example, Firefox). */
 "VPN.LocationPicker.RecommendedSubText.v160" = "%1$@ 自動尋找最快位置。";
 
+/* Announced by VoiceOver on the VPN settings screen when the VPN finishes connecting after the user turns on the VPN switch. */
+"VPN.Settings.Connected.v161" = "已連線至 VPN";
+
 /* Shown next to the VPN switch on the VPN settings screen while the VPN is connecting, right after the user turns it on. */
 "VPN.Settings.Connecting.v160" = "連線中…";
+
+/* Read aloud by VoiceOver for the Data Limit section on the VPN settings screen. %1$@ is the amount of VPN data used this month and %2$@ is the monthly limit, both in gigabytes (for example, “1.0 of 5.0 gigabytes used”). The second sentence explains that the user’s free monthly VPN data resets on the first day of each month. */
+"VPN.Settings.DataLimit.AccessibilityValue.v161" = "已使用 %2$@ GB 中的 %1$@ GB，每月 1 日重設。";
 
 /* Footer below the Data Limit section on the VPN settings screen. Explains when the user's free VPN data resets. %1$@ is the monthly limit in gigabytes (for example, 5.0). “GB” stands for gigabytes. */
 "VPN.Settings.DataLimitResetFooter.v160" = "每月月初重設為 %1$@ GB。";

@@ -15,7 +15,7 @@ import Foundation
 /// Note that not all applications use the Subject. For example OmniFocus ignores it, so we need to do both.
 
 class TitleActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
-    private struct ActivityIdentifiers {
+    private enum ActivityIdentifiers {
         static let whatsApp = "net.whatsapp.WhatsApp.ShareExtension"
     }
 

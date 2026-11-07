@@ -9,7 +9,6 @@ import Common
 @testable import Client
 
 final class ToolbarStateTests: XCTestCase, StoreTestUtility {
-    let storeUtilityHelper = StoreTestUtilityHelper()
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockStore: MockStoreForMiddleware<AppState>!
     var mockProfile: MockProfile!
@@ -358,16 +357,72 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                shouldAnimate: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.animationStateChanged)
+            ToolbarModernAction.animationStateChanged(shouldAnimate: false),
+            windowUUID
         )
 
         XCTAssertNotEqual(newState.shouldAnimate, initialState.shouldAnimate)
         XCTAssertFalse(newState.shouldAnimate)
+    }
+
+    func test_animationStateChanged_afterDisabled_restoresAnimation() {
+        let subject = createSubject()
+        let reducer = toolbarReducer()
+        let disabledState = reducer.modernReducer(
+            subject,
+            ToolbarModernAction.animationStateChanged(shouldAnimate: false),
+            windowUUID
+        )
+
+        let newState = reducer.modernReducer(
+            disabledState,
+            ToolbarModernAction.animationStateChanged(shouldAnimate: true),
+            windowUUID
+        )
+
+        XCTAssertFalse(disabledState.shouldAnimate)
+        XCTAssertTrue(newState.shouldAnimate)
+    }
+
+    func test_animationStateChanged_fromAnotherWindow_doesNotChangeState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.animationStateChanged(shouldAnimate: false),
+            WindowUUID()
+        )
+
+        XCTAssertTrue(newState.shouldAnimate)
+    }
+
+    func test_translucencyDidChange_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.translucencyDidChange(isTranslucent: !initialState.isTranslucent),
+            windowUUID
+        )
+
+        XCTAssertNotEqual(newState.isTranslucent, initialState.isTranslucent)
+    }
+
+    func test_translucencyDidChange_fromAnotherWindow_doesNotChangeState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            ToolbarModernAction.translucencyDidChange(isTranslucent: !initialState.isTranslucent),
+            WindowUUID()
+        )
+
+        XCTAssertEqual(newState.isTranslucent, initialState.isTranslucent)
     }
 
     func test_showMenuWarningBadgeAction_returnsExpectedState() {
@@ -391,18 +446,16 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                numberOfTabs: 2,
-                isShowingTopTabs: false,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.numberOfTabsChanged
-            )
+            ToolbarModernAction.numberOfTabsChanged(count: 2),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.numberOfTabs, 2)
+        XCTAssertEqual(newState.addressToolbar, initialState.addressToolbar)
+        XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
     func test_toolbarPositionChangedAction_returnsExpectedState() {
@@ -620,9 +673,10 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_keyboardDidHideAction_fromAnotherWindow_doesNotRestoreAddressBar() {
+        let subject = createSubject()
         let reducer = toolbarReducer()
         let minimizedState = reducer.modernReducer(
-            createSubject(),
+            subject,
             ToolbarModernAction.userDidScroll(minimizeAddressBar: true),
             windowUUID
         )
@@ -654,7 +708,8 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
                 isShowingNavigationToolbar: true,
                 canGoBack: true,
                 canGoForward: false,
-                lockIconImageName: StandardImageIdentifiers.Small.shieldCheckmarkFill,
+                hasOnlySecureContent: true,
+                isWebsiteMode: true,
                 safeListedURLImageName: nil,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange

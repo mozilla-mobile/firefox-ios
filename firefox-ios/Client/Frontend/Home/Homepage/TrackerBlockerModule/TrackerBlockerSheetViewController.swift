@@ -16,7 +16,7 @@ import UIKit
 /// `preferredContentSize`, because the default page sheet there is a fixed-height card that would leave a gap
 /// below the content.
 final class TrackerBlockerSheetViewController: UIViewController, Themeable, Notifiable {
-    private struct UX {
+    private enum UX {
         static let contentHorizontalPadding: CGFloat = 22
         static let contentTopPadding: CGFloat = 44
         static let contentBottomPadding: CGFloat = 16

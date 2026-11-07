@@ -15,25 +15,31 @@ protocol StateLens: Equatable {
 }
 
 ///  Computes the toolbar derived action lists (`leadingPageActions`, `trailingPageActions`,
-///  `navigationActions`, `browserActions`) from `ToolbarState`
+///  `navigationActions`, `browserActions`, `navigationToolbarActions`) from `ToolbarState`
 struct AddressToolbarContainerLens: StateLens {
     let toolbarState: ToolbarState
     let leadingPageActions: [ToolbarActionConfiguration]
     let trailingPageActions: [ToolbarActionConfiguration]
     let navigationActions: [ToolbarActionConfiguration]
     let browserActions: [ToolbarActionConfiguration]
+    let navigationToolbarActions: [ToolbarActionConfiguration]
+    let lockIconState: LockIconState
 
     // MARK: - Private initializers
     private init(toolbarState: ToolbarState,
                  leadingPageActions: [ToolbarActionConfiguration],
                  trailingPageActions: [ToolbarActionConfiguration],
                  navigationActions: [ToolbarActionConfiguration],
-                 browserActions: [ToolbarActionConfiguration]) {
+                 browserActions: [ToolbarActionConfiguration],
+                 navigationToolbarActions: [ToolbarActionConfiguration],
+                 lockIconState: LockIconState) {
         self.toolbarState = toolbarState
         self.leadingPageActions = leadingPageActions
         self.trailingPageActions = trailingPageActions
         self.navigationActions = navigationActions
         self.browserActions = browserActions
+        self.navigationToolbarActions = navigationToolbarActions
+        self.lockIconState = lockIconState
     }
 
     private init(windowUUID: WindowUUID) {
@@ -41,7 +47,9 @@ struct AddressToolbarContainerLens: StateLens {
                   leadingPageActions: [],
                   trailingPageActions: [],
                   navigationActions: [],
-                  browserActions: [])
+                  browserActions: [],
+                  navigationToolbarActions: [],
+                  lockIconState: .none)
     }
 
     // MARK: - Lens initialization
@@ -90,11 +98,31 @@ struct AddressToolbarContainerLens: StateLens {
             isPrivateMode: toolbarState.isPrivateMode,
             isNovaDesignEnabled: addressToolbar.isNovaDesignEnabled)
 
+        let navigationToolbarActions = NavigationActionsBuilder.getNavigationToolbarActions(
+            isHomepage: addressToolbar.url == nil,
+            canGoBack: toolbarState.canGoBack,
+            canGoForward: toolbarState.canGoForward,
+            middleButton: toolbarState.navigationToolbar.middleButton,
+            toolbarLayout: toolbarState.toolbarLayout,
+            tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
+            numberOfTabs: toolbarState.numberOfTabs,
+            showWarningBadge: toolbarState.showMenuWarningBadge,
+            previousTabScreenshot: toolbarState.previousTabScreenshot,
+            nextTabScreenshot: toolbarState.nextTabScreenshot,
+            isPrivateMode: toolbarState.isPrivateMode,
+            isNovaDesignEnabled: toolbarState.navigationToolbar.isNovaDesignEnabled)
+
+        let lockIconState = LockIconState(
+            hasOnlySecureContent: addressToolbar.hasOnlySecureContent,
+            isWebsiteMode: addressToolbar.isWebsiteMode && addressToolbar.readerModeState != .active)
+
         self.init(toolbarState: toolbarState,
                   leadingPageActions: leadingPageActions,
                   trailingPageActions: trailingPageActions,
                   navigationActions: navigationActions,
-                  browserActions: browserActions)
+                  browserActions: browserActions,
+                  navigationToolbarActions: navigationToolbarActions,
+                  lockIconState: lockIconState)
     }
 
     private static func shouldHaveAlternativeLocationColor(toolbarState: ToolbarState) -> Bool {

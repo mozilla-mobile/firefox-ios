@@ -8,7 +8,7 @@ import Common
 
 class BlockedTrackersTableView: UITableView,
                                 UITableViewDelegate {
-    private struct UX {
+    private enum UX {
         static let estimatedRowHeight: CGFloat = 44
         static let headerPreferredHeight: CGFloat = 24
     }

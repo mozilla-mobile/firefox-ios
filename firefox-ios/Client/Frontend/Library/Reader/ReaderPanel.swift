@@ -9,7 +9,7 @@ import Common
 
 import enum MozillaAppServices.VisitType
 
-private struct ReadingListTableViewCellUX {
+private enum ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
 
     static let ReadIndicatorWidth: CGFloat = 16  // image width

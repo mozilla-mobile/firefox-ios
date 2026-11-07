@@ -9,6 +9,12 @@ public protocol QuickAnswersConfigFetcher: Sendable {
     func fetch() async throws -> QuickAnswersConfig
 }
 
+extension QuickAnswersConfigFetcher {
+    var supportsAssistantRole: Bool {
+        return feature.model.supportsAssistantRole
+    }
+}
+
 public struct DefaultQuickAnswersConfigFetcher: QuickAnswersConfigFetcher {
     private static let exaInstructions = """
     Answer in 1 sentence. Remove any superscript numbers from the response like [1], [2] and other citations numbers.

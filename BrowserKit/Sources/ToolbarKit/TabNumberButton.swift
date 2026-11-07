@@ -7,7 +7,7 @@ import Common
 
 final class TabNumberButton: ToolbarButton, TabCountable {
     // MARK: - UX Constants
-    struct UX {
+    enum UX {
         static let cornerRadius: CGFloat = 2
         static let dimmedOpacity: CGFloat = 0.2
         static let titleFont = FXFontStyles.Bold.caption2.systemFont()

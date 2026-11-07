@@ -5,7 +5,7 @@
 import Foundation
 import UniformTypeIdentifiers
 
-struct MIMEType {
+enum MIMEType {
     static let Bitmap = "image/bmp"
     static let CSS = "text/css"
     static let GIF = "image/gif"
@@ -20,6 +20,7 @@ struct MIMEType {
     static let PNG = "image/png"
     static let WebP = "image/webp"
     static let Calendar = "text/calendar"
+    static let ConfigurationProfile = "application/x-apple-aspen-config"
     static let USDZ = "model/vnd.usdz+zip"
     static let Reality = "model/vnd.reality"
     static let OpenDocument = "application/msword"

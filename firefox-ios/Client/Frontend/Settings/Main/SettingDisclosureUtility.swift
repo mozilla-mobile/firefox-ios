@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-struct SettingDisclosureUtility {
+enum SettingDisclosureUtility {
     @MainActor
     static func buildDisclosureIndicator(theme: Theme) -> UIImageView {
         let disclosureIndicator = UIImageView()

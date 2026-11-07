@@ -122,6 +122,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .checkForReinstalls,
+                titleText: format(string: "Check for Reinstalls"),
+                statusText: format(string: "Toggle to enable app reinstallation checks")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .configurationProfile,
+                titleText: format(string: "Configuration Profile"),
+                statusText: format(string: "Toggle to offer opening .mobileconfig profiles in Safari")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .customReaderModeScheme,
                 titleText: format(string: "Custom Reader Mode Scheme"),
                 statusText: format(string: "Toggle to serve reader mode via the readermode:// scheme handler")
@@ -271,6 +285,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .quickAnswersFollowUp,
+                titleText: format(string: "Quick Answers Follow Up"),
+                statusText: format(string: "Toggle to enable follow up questions in Quick Answers")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .relayIntegration,
                 titleText: format(string: "Relay Email Masks"),
                 statusText: format(string: "Toggle to enable Relay mask feature")
@@ -281,6 +302,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .reportBrokenSite,
                 titleText: format(string: "Report Broken Site"),
                 statusText: format(string: "Toggle Report Broken Site")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .searchConfigV3,
+                titleText: format(string: "Search Config V3"),
+                statusText: format(string: "Toggle to switch to V3 search configuration (Remote Settings)")
             ) { [weak self] _ in
                 self?.reloadView()
             },

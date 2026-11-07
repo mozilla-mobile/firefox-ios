@@ -19,7 +19,7 @@ struct InfoViewModel {
 class InfoView: UIView,
                 UITextViewDelegate,
                  ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let labelHorizontalPadding: CGFloat = 44.0
         static let actionButtonTopPadding: CGFloat = 32.0
         static let actionButtonInsets = NSDirectionalEdgeInsets(

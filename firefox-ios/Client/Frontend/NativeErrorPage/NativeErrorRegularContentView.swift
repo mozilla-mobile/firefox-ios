@@ -28,7 +28,7 @@ enum WaybackButtonState: Equatable {
 /// Encapsulates the "no internet / generic error" action area: a reload button,
 /// and optionally a secondary wayback area (button, loading state, or a failure card).
 final class NativeErrorRegularContentView: UIView, ThemeApplicable, UITextViewDelegate {
-    private struct UX {
+    private enum UX {
         static let cardCornerRadius: CGFloat = 12
         static let cardInsets = NSDirectionalEdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12)
         static let cardTopSpacing: CGFloat = 8

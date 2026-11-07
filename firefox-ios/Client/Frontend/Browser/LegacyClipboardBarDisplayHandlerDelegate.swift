@@ -13,7 +13,7 @@ protocol LegacyClipboardBarDisplayHandlerDelegate: AnyObject {
 }
 
 final class LegacyClipboardBarDisplayHandler: ClipboardBarDisplayHandler, Notifiable {
-    struct UX {
+    enum UX {
         static let toastDelay = DispatchTimeInterval.milliseconds(10000)
     }
 

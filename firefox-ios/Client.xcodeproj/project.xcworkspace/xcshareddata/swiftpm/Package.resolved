@@ -1,5 +1,5 @@
 {
-  "originHash" : "e7404401c1215852b570f6834c531f39cbf1d9d6cb652546b4c0dac229d6945b",
+  "originHash" : "f09e6836496aa9b4eb72937b67d328ad47d1b9d403aa482795609fb856d608c9",
   "pins" : [
     {
       "identity" : "a-star",
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/glean-swift",
       "state" : {
-        "revision" : "1cfdf2de91e0aedf597b44e72f83846367b9d596",
-        "version" : "70.1.0"
+        "revision" : "69cfeb8513a17d86c560e6df6dfefd97aa5cc700",
+        "version" : "71.0.0"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "3a22ecd00ad1398747bfd587e44df82716908dd3",
-        "version" : "9.10.0"
+        "revision" : "4e1e4ba9ce329f91ad6bfb63bab6da576a3f348c",
+        "version" : "9.32.0"
       }
     },
     {

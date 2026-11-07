@@ -90,7 +90,7 @@ open class KeyboardHelper: NSObject, Notifiable {
 
     open class var defaultHelper: KeyboardHelper {
         @MainActor
-        struct Singleton {
+        enum Singleton {
             static let instance = KeyboardHelper()
         }
         return Singleton.instance

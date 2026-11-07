@@ -32,7 +32,7 @@ final class LegacyTabScrollController: NSObject,
                                        SearchBarLocationProvider,
                                        LegacyTabScrollProvider,
                                        Notifiable {
-    private struct UX {
+    private enum UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
         static let minimalAddressBarAnimationDuration: CGFloat = 0.4

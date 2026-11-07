@@ -18,18 +18,25 @@ features:
         description: >
           Shows the redesigned opt-in as a sheet over the browser.
         type: Boolean
-        default: false
+        default: true
+      follow-up-enabled:
+        description: >
+          Enables asking follow up questions after an answer is shown.
+        type: Boolean
+        default: true
     defaults:
       - channel: beta
         value:
           enabled: false
           model: exa
-          optInRedesign: false
+          optInRedesign: true
+          follow-up-enabled: true
       - channel: developer
         value:
           enabled: false
           model: exa
           optInRedesign: true
+          follow-up-enabled: true
 
 enums:
   QuickAnswersModel:

@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct AddressLocaleFeatureValidator {
+enum AddressLocaleFeatureValidator {
     static let supportedRegions = ["CA", "US", "FR", "DE", "GB", "JP"]
 
     static func isValidRegion(for regionCode: String) -> Bool {

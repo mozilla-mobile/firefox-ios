@@ -9,7 +9,7 @@ import UIKit
 class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView,
                                        ReusableCell,
                                        ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let topBottomMargin: CGFloat = 24
         static let layoutPriority: Float = 999
     }

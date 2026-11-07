@@ -25,7 +25,7 @@ final class StatusBarOverlay: UIView,
                         StatusBarScrollDelegate,
                         SearchBarLocationProvider,
                         Notifiable {
-    private struct UX {
+    private enum UX {
         static let overlayAppearanceAnimationDuration: TimeInterval = 0.2
     }
 

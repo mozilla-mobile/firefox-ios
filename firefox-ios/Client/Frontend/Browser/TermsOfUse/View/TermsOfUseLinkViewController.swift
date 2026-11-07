@@ -13,7 +13,7 @@ final class TermsOfUseLinkViewController: UIViewController,
                                           WKNavigationDelegate {
     weak var coordinator: TermsOfUseCoordinatorDelegate?
 
-    private struct UX {
+    private enum UX {
         static let progressBarHeight: CGFloat = 2
     }
 

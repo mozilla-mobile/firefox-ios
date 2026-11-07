@@ -27,16 +27,30 @@ struct LayoutContextTests {
         #expect(!subject.isLandscapeLayout)
     }
 
+    @Test
+    func test_isRotated_whenInInitialOrientation() {
+        let subject = createSubject(width: 375, height: 667, isInitialLandscape: false)
+        #expect(!subject.isRotated)
+    }
+
+    @Test
+    func test_isRotated_whenNotInInitialOrientation() {
+        let subject = createSubject(width: 375, height: 667, isInitialLandscape: true)
+        #expect(subject.isRotated)
+    }
+
     private func createSubject(
         width: CGFloat,
         height: CGFloat,
-        horizontalSizeClass: UIUserInterfaceSizeClass = .compact
+        horizontalSizeClass: UIUserInterfaceSizeClass = .compact,
+        isInitialLandscape: Bool = false
     ) -> LayoutContext {
         let traitCollection = UITraitCollection(horizontalSizeClass: horizontalSizeClass)
         return LayoutContext(
             viewSize: CGSize(width: width, height: height),
             traitCollection: traitCollection,
-            tabSnapshotTopOffset: 0.0
+            tabSnapshotTopOffset: 0.0,
+            isInitialLandscape: isInitialLandscape
         )
     }
 }

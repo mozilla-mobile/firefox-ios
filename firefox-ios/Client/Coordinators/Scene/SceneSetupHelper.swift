@@ -59,7 +59,7 @@ struct SceneSetupHelper {
                             windowUUID: WindowUUID,
                             screenshotServiceDelegate: UIScreenshotServiceDelegate) -> UIWindow {
         guard let windowScene = (scene as? UIWindowScene) else {
-            return BrowserWindow(frame: UIScreen.main.bounds, uuid: windowUUID)
+            return BrowserWindow(frame: .zero, uuid: windowUUID)
         }
 
         windowScene.screenshotService?.delegate = screenshotServiceDelegate

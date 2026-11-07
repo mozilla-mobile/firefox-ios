@@ -164,11 +164,19 @@ struct ToolbarState: ScreenState, Sendable {
                 .copy(isAddressBarMinimized: false)
                 .copy(isAccessoryViewVisible: false)
 
-        case .didKeyboardRequestChange, .cancelEditOnHomepage, .didPasteSearchTerm:
+        case .animationStateChanged(let shouldAnimate):
+            return state.copy(shouldAnimate: shouldAnimate)
+
+        case .translucencyDidChange(let isTranslucent):
+            return state.copy(isTranslucent: isTranslucent)
+
+        case .didKeyboardRequestChange, .cancelEditOnHomepage, .didPasteSearchTerm, .lockIconChanged:
             // AddressBarState is a nested sub-state, forwards modern call to AddressBarState
             return state.copy(addressToolbar: AddressBarState.reducer.modernReducer(state.addressToolbar,
                                                                                     action,
                                                                                     actionWindowUUID))
+        case .numberOfTabsChanged(let count):
+            return state.copy(numberOfTabs: count)
         }
     }
 
@@ -189,14 +197,12 @@ struct ToolbarState: ScreenState, Sendable {
             return handleDidLoadToolbars(state: state, action: action)
 
         case ToolbarActionType.borderPositionChanged, ToolbarActionType.urlDidChange,
-            ToolbarActionType.lockIconChanged,
             ToolbarActionType.didSetTextInLocationView,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
             ToolbarActionType.websiteLoadingStateDidChange,
             ToolbarMiddlewareActionType.googleLensAvailabilityDidChange, ToolbarActionType.clearSearch,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
-            ToolbarActionType.animationStateChanged, ToolbarActionType.translucencyDidChange,
             ToolbarActionType.readerModeStateChanged,
             ToolbarActionType.navigationMiddleButtonDidChange,
             TranslationsActionType.didStartTranslatingPage,
@@ -212,9 +218,6 @@ struct ToolbarState: ScreenState, Sendable {
 
         case ToolbarActionType.showMenuWarningBadge:
             return handleShowMenuWarningBadge(state: state, action: action)
-
-        case ToolbarActionType.numberOfTabsChanged:
-            return handleNumberOfTabsChanged(state: state, action: action)
 
         case ToolbarActionType.didSetTabScreenshot:
             return handleDidSetTabScreenshot(state: state, action: action)
@@ -280,8 +283,6 @@ struct ToolbarState: ScreenState, Sendable {
             .copy(isShowingTopTabs: toolbarAction?.isShowingTopTabs ?? state.isShowingTopTabs)
             .copy(canGoBack: toolbarAction?.canGoBack ?? state.canGoBack)
             .copy(canGoForward: toolbarAction?.canGoForward ?? state.canGoForward)
-            .copy(shouldAnimate: toolbarAction?.shouldAnimate ?? state.shouldAnimate)
-            .copy(isTranslucent: toolbarAction?.isTranslucent ?? state.isTranslucent)
             .copy(isTranslationsEnabled: actionIsTranslationsEnabled ?? state.isTranslationsEnabled)
     }
 
@@ -303,15 +304,6 @@ struct ToolbarState: ScreenState, Sendable {
             .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
             .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
             .copy(showMenuWarningBadge: toolbarAction.showMenuWarningBadge ?? state.showMenuWarningBadge)
-    }
-
-    @MainActor
-    private static func handleNumberOfTabsChanged(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return state
-            .copy(addressToolbar: AddressBarState.reducer.legacyReducer(state.addressToolbar, toolbarAction))
-            .copy(navigationToolbar: NavigationBarState.reducer.legacyReducer(state.navigationToolbar, toolbarAction))
-            .copy(numberOfTabs: toolbarAction.numberOfTabs ?? state.numberOfTabs)
     }
 
     @MainActor

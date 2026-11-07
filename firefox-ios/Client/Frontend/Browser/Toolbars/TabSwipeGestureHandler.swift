@@ -25,7 +25,7 @@ final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, Store
 
     typealias SubscriberStateType = ToolbarState
     // MARK: - UX Constants
-    private struct UX {
+    private enum UX {
         // Offset used to ensure the skeleton address bar animates in alignment with the address bar.
         static let transformOffset: CGFloat = 24
         static let offset: CGFloat = 48
@@ -279,13 +279,8 @@ final class TabSwipeGestureHandler: NSObject, UIGestureRecognizerDelegate, Store
             if shouldCompleteTransition {
                 webPagePreview.isHidden = true
                 webPagePreview.alpha = 1
-                store.dispatch(
-                    ToolbarAction(
-                        shouldAnimate: false,
-                        windowUUID: windowUUID,
-                        actionType: ToolbarActionType.animationStateChanged
-                    )
-                )
+                store.dispatch(ToolbarModernAction.animationStateChanged(shouldAnimate: false),
+                               forWindowUUID: windowUUID)
                 // Reset the positions and select the new tab if the transition was completed.
                 addressToolbarContainer.applyTransform(.identity, shouldAddNewTab: shouldShowNewTab)
                 contentContainer.transform = .identity

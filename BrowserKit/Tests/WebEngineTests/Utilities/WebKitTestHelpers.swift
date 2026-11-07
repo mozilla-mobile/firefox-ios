@@ -10,7 +10,7 @@ import XCTest
 /// fully initialized instances. This helper loads a lightweight `WKWebView`
 /// navigation and captures the frame and origin values that WebKit supplies.
 @MainActor
-final class WebKitTestHelpers {
+enum WebKitTestHelpers {
     final class FakeWKNavigationDelegate: NSObject, WKNavigationDelegate {
         let expect: XCTestExpectation
         var capturedFrame: WKFrameInfo?

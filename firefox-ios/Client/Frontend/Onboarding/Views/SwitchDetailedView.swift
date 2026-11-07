@@ -15,7 +15,7 @@ struct SwitchDetailedViewModel {
 }
 
 final class SwitchDetailedView: UIView, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let actionContentViewMargin: CGFloat = 11
         static let actionContentViewRightMargin: CGFloat = 16
         static let contentDistance: CGFloat = 12

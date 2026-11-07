@@ -7,7 +7,7 @@ import Foundation
 import UIKit
 
 final class SummaryBrandCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let logoSize: CGFloat = 16.0
         static let subViewsSidePadding: CGFloat = 6.0
         static let brandLabelLeadingPadding: CGFloat = 8.0

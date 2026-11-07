@@ -51,6 +51,75 @@ final class TrackingProtectionScreen {
     }
 
     @MainActor
+    func assertPanelHeader(domain: String) {
+        let subtitle = sel.PANEL_SUBTITLE_LABEL.element(in: app)
+        BaseTestCase().waitForElementsToExist(
+            [sel.PANEL_TITLE_LABEL.element(in: app), subtitle, sel.PANEL_CLOSE_BUTTON.element(in: app)]
+        )
+        XCTAssertEqual(subtitle.label, domain, "Expected the panel header to show the website domain")
+    }
+
+    @MainActor
+    func assertPanelConnectionIs(secure: Bool) {
+        let statusButton = sel.SECURITY_STATUS_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(statusButton)
+        let expectedLabel: String = secure ?
+            .Menu.EnhancedTrackingProtection.connectionSecureLabel :
+            .Menu.EnhancedTrackingProtection.connectionUnsecureLabel
+        XCTAssertEqual(statusButton.label, expectedLabel, "Unexpected connection status in the panel")
+    }
+
+    @MainActor
+    func assertPanelTrackingProtectionSwitchValue(isOn: Bool) {
+        let toggle = sel.PANEL_TRACKING_PROTECTION_SWITCH.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(toggle)
+        XCTAssertEqual(toggle.value as? String,
+                       isOn ? "1" : "0",
+                       "Unexpected Enhanced Tracking Protection switch value in the panel")
+    }
+
+    @MainActor
+    func tapPrivacySettings() {
+        sel.PANEL_PRIVACY_SETTINGS_BUTTON.element(in: app).waitAndTap()
+    }
+
+    /// Checks the Tracking Protection settings opened from the panel: navigation bar, switch and levels.
+    @MainActor
+    func assertTrackingProtectionSettingsOpenedFromPanel() {
+        let standardCell = sel.SETTINGS_STANDARD_CELL.element(in: app)
+        let strictCell = sel.SETTINGS_STRICT_CELL.element(in: app)
+        BaseTestCase().waitForElementsToExist(
+            [
+                sel.SETTINGS_NAVIGATION_BAR.element(in: app),
+                sel.SETTINGS_BACK_BUTTON.element(in: app),
+                sel.SETTINGS_DONE_BUTTON.element(in: app),
+                standardCell,
+                strictCell
+            ]
+        )
+        assertTrackingProtectionSwitchValue(isOn: true)
+        XCTAssertTrue(standardCell.staticTexts[String.TrackingProtectionOptionBlockListLevelStandard].exists,
+                      "Expected the Standard (default) protection level option")
+        XCTAssertTrue(strictCell.staticTexts[String.TrackingProtectionOptionBlockListLevelStrict].exists,
+                      "Expected the Strict protection level option")
+    }
+
+    @MainActor
+    func closePanel() {
+        sel.PANEL_CLOSE_BUTTON.element(in: app).waitAndTap()
+    }
+
+    @MainActor
+    func selectStrictProtectionLevel() {
+        sel.SETTINGS_STRICT_CELL.element(in: app).waitAndTap()
+    }
+
+    @MainActor
+    func closeTrackingProtectionSettings() {
+        sel.SETTINGS_DONE_BUTTON.element(in: app).waitAndTap()
+    }
+
+    @MainActor
     func closeConnectionDetails() {
         sel.DETAILS_CLOSE_BUTTON.element(in: app).waitAndTap()
     }

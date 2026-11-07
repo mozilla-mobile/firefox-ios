@@ -1,0 +1,18 @@
+# The configuration for the wallpaperEngagementSheetFeature feature
+features:
+  wallpaper-engagement-sheet-feature:
+    description: >
+      Controls the wallpaper engagement bottom sheet shown on the homepage
+      when new wallpapers are available. Only meant to be used with rollouts.
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+      marketing-slug:
+        description: >
+          Identifies the wallpaper campaign. The sheet is shown once per slug,
+          so a new value is needed for every wallpaper drop.
+        type: String
+        default: ""

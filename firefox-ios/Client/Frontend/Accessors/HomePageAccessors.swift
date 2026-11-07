@@ -11,7 +11,7 @@ import Shared
 
 // This HomePagePref is only used when setting the HomePage on the newTab
 // and not setting a custom URL for the Home button.
-class NewTabHomePageAccessors {
+enum NewTabHomePageAccessors {
     static func getHomePage(_ prefs: Prefs) -> URL? {
         let string = prefs.stringForKey(PrefsKeys.NewTabCustomUrlPrefKey) ?? getDefaultHomePageString(prefs)
         guard let urlString = string else { return nil }
@@ -23,7 +23,7 @@ class NewTabHomePageAccessors {
     }
 }
 
-class HomeButtonHomePageAccessors {
+enum HomeButtonHomePageAccessors {
     static func getHomePage(_ prefs: Prefs) -> URL? {
         let string = prefs.stringForKey(PrefsKeys.HomeButtonHomePageURL)
         guard let urlString = string else { return nil }

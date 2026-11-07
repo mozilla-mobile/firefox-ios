@@ -10,7 +10,7 @@ protocol TextFieldTableViewCellDelegate: AnyObject {
 }
 
 class TextFieldTableViewCell: UITableViewCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let HorizontalMargin: CGFloat = 16
         static let VerticalMargin: CGFloat = 10
         static let TitleLabelFont = UIFont.systemFont(ofSize: 12)

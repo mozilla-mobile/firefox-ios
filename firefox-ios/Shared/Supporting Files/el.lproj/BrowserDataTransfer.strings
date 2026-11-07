@@ -13,6 +13,9 @@
 /* Button that dismisses the alert shown after Firefox finishes importing data from another browser. */
 "BrowserDataTransfer.ImportSuccess.GotItButton.v160" = "Το κατάλαβα";
 
+/* Message of the alert shown after Firefox finishes importing data from another browser. %@ is the app name (e.g. Firefox). */
+"BrowserDataTransfer.ImportSuccess.Message.v160" = "Τα δεδομένα που εισαγάγατε είναι έτοιμα για χρήση στο %@.";
+
 /* Title of the alert shown after Firefox finishes importing data from another browser. %@ is the name of the other browser, for example Safari. */
 "BrowserDataTransfer.ImportSuccess.Title.v160" = "Η εισαγωγή από το %@ ολοκληρώθηκε";
 
@@ -24,4 +27,7 @@
 
 /* On the Data Management screen in Settings, the header of the section that contains the actions to import data from, or export data to, another browser installed on the device. */
 "BrowserDataTransfer.Settings.SectionTitle.v160" = "Εισαγωγή και εξαγωγή δεδομένων";
+
+/* On the Data Management screen in Settings, the footer below the import and export buttons explaining which kinds of data can be moved between the app and another browser. %1$@ is the app name (e.g. Firefox), used in both places. */
+"BrowserDataTransfer.Settings.SupportedDataFooter.v160" = "Προσθέστε σελιδοδείκτες, ιστορικό και λίστες ανάγνωσης στο %1$@ ή εξαγάγετε τα δεδομένα σας από το %1$@ σε άλλο πρόγραμμα περιήγησης.";
 

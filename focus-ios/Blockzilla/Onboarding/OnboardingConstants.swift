@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct OnboardingConstants {
+enum OnboardingConstants {
     static let onboardingDidAppear = "OnboardingDidAppear"
     static let ignoreOnboardingExperiment = "IgnoreOnboardingExperiment"
     static let showOldOnboarding = "ShowOldOnboarding"

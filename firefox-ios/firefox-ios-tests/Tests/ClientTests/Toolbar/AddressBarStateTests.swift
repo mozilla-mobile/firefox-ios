@@ -12,7 +12,6 @@ import SummarizeKit
 
 final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
-    let storeUtilityHelper = StoreTestUtilityHelper()
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockProfile: MockProfile!
 
@@ -39,8 +38,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.borderPosition)
         XCTAssertNil(initialState.url)
         XCTAssertNil(initialState.searchTerm)
-        XCTAssertNil(initialState.lockIconButtonA11yId)
-        XCTAssertNil(initialState.lockIconImageName)
+        XCTAssertNil(initialState.hasOnlySecureContent)
+        XCTAssertFalse(initialState.isWebsiteMode)
         XCTAssertNil(initialState.safeListedURLImageName)
         XCTAssertFalse(initialState.isEditing)
         XCTAssertFalse(initialState.shouldShowKeyboard)
@@ -70,8 +69,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.borderPosition, .top)
         XCTAssertNil(newState.url)
         XCTAssertNil(newState.searchTerm)
-        XCTAssertNil(newState.lockIconButtonA11yId)
-        XCTAssertNil(newState.lockIconImageName)
+        XCTAssertNil(newState.hasOnlySecureContent)
+        XCTAssertFalse(newState.isWebsiteMode)
         XCTAssertNil(newState.safeListedURLImageName)
         XCTAssertFalse(newState.isEditing)
         XCTAssertFalse(newState.shouldShowKeyboard)
@@ -388,21 +387,57 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
-        let newState = reducer.legacyReducer(
+        let newState = reducer.modernReducer(
             initialState,
-            ToolbarAction(
-                lockIconButtonA11yId: "test_lock_icon_a11y_id",
-                lockIconImageName: "test_lock_icon_image",
-                lockIconNeedsTheming: true,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.lockIconChanged
-            )
+            ToolbarModernAction.lockIconChanged(hasOnlySecureContent: true, isWebsiteMode: true),
+            windowUUID
         )
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
-        XCTAssertEqual(newState.lockIconButtonA11yId, "test_lock_icon_a11y_id")
-        XCTAssertEqual(newState.lockIconImageName, "test_lock_icon_image")
-        XCTAssertEqual(newState.lockIconNeedsTheming, true)
+        XCTAssertEqual(newState.hasOnlySecureContent, true)
+        XCTAssertTrue(newState.isWebsiteMode)
+    }
+
+    func test_urlDidChangeAction_withLockIconInputs_returnsExpectedState() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer.legacyReducer(
+            initialState,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                hasOnlySecureContent: false,
+                isWebsiteMode: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.hasOnlySecureContent, false)
+        XCTAssertTrue(newState.isWebsiteMode)
+    }
+
+    func test_urlDidChangeAction_withoutLockIconInputs_keepsPreviousValues() {
+        setupStore()
+        let reducer = addressBarReducer()
+        let secureState = reducer.modernReducer(
+            createSubject(),
+            ToolbarModernAction.lockIconChanged(hasOnlySecureContent: true, isWebsiteMode: true),
+            windowUUID
+        )
+
+        let newState = reducer.legacyReducer(
+            secureState,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.hasOnlySecureContent, true)
+        XCTAssertTrue(newState.isWebsiteMode)
     }
 
     func test_userDidScrollAction_returnsExpectedState() {
@@ -759,7 +794,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
                 isShowingNavigationToolbar: isShowingNavigationToolbar,
                 canGoBack: true,
                 canGoForward: false,
-                lockIconImageName: StandardImageIdentifiers.Small.shieldCheckmarkFill,
+                hasOnlySecureContent: true,
+                isWebsiteMode: true,
                 safeListedURLImageName: nil,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange

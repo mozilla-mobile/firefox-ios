@@ -5,8 +5,8 @@
 import Foundation
 
 @MainActor
-struct TopSitesSectionLayoutProvider {
-    struct UX {
+enum TopSitesSectionLayoutProvider {
+    enum UX {
         static let estimatedCellSize = CGSize(width: 85, height: 94)
         static let minCards = 4
     }

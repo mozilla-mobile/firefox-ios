@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 class DevicePickerTableViewHeaderCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let tableHeaderTextFont = UIFont.systemFont(ofSize: 16)
         static let tableHeaderTextPaddingLeft: CGFloat = 20
     }

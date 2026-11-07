@@ -48,6 +48,18 @@ final class BrowserScreen {
         }
     }
 
+    /// Typing over a selected URL replaces it, so the field starts with `typedText`, possibly followed by an
+    /// inline autocompletion, and none of `previousValue` is left.
+    func assertAddressBarReplaced(_ previousValue: String, byTyping typedText: String, timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(addressBar, timeout: timeout)
+        let predicate = NSPredicate(format: "value BEGINSWITH %@ AND NOT (value CONTAINS %@)", typedText, previousValue)
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: addressBar)
+        guard XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed else {
+            XCTFail("Expected '\(typedText)' to replace '\(previousValue)', found '\(addressBar.value as? String ?? "nil")'")
+            return
+        }
+    }
+
     func assertSearchEngineLogoExists(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(searchEngineLogo, timeout: timeout)
         XCTAssertTrue(searchEngineLogo.isLeftOf(rightElement: addressBar))
@@ -112,6 +124,15 @@ final class BrowserScreen {
         XCTAssertTrue(element.exists, "Expected UA text '\(text)' was not found in the web view.")
     }
 
+    /// Asserts the page renders dark (Website Dark Mode on) or light, judged by the web view's average luminance.
+    func assertWebContentIs(dark isDark: Bool, timeout: TimeInterval = TIMEOUT) {
+        let webView = sel.WEB_VIEW.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(webView, timeout: timeout)
+        let matches = webView.waitForLuminance(timeout: timeout) { isDark ? $0 < 0.35 : $0 > 0.65 }
+        let expected = isDark ? "dark" : "light"
+        XCTAssertTrue(matches, "The web content should be \(expected), luminance: \(webView.averageLuminance())")
+    }
+
     /// Loads a UA test page and asserts the mobile UA, retrying once: a fresh-profile content blocker reload
     /// cancels the first navigation. Remove the retry once https://github.com/mozilla-mobile/firefox-ios/issues/35933 is fixed.
     func navigateToURLAndAssertMobileUserAgent(_ url: String, timeout: TimeInterval = TIMEOUT) {
@@ -122,6 +143,17 @@ final class BrowserScreen {
         }
         navigateToURL(url)
         assertMobileUserAgentIsDisplayed(timeout: timeout)
+    }
+
+    /// Loads the Example Domain test page and asserts it, retrying once for the same reason as
+    /// `navigateToURLAndAssertMobileUserAgent` (https://github.com/mozilla-mobile/firefox-ios/issues/35933).
+    func navigateToURLAndAssertExampleDomain(_ url: String, timeout: TimeInterval = TIMEOUT) {
+        navigateToURL(url)
+        if exampleDomainTextExists(timeout: timeout) {
+            return
+        }
+        navigateToURL(url)
+        assertExampleDomainTextExists(timeout: timeout)
     }
 
     func assertDesktopUserAgentIsDisplayed(timeout: TimeInterval = TIMEOUT) {
@@ -416,6 +448,13 @@ final class BrowserScreen {
 
     func assertCancelButtonOnUrlBarExists() {
         BaseTestCase().mozWaitForElementToExist(cancelButton)
+    }
+
+    func scrollPageDown() {
+        let webView = app.webViews.firstMatch
+        BaseTestCase().mozWaitForElementToExist(webView)
+        webView.swipeUp()
+        webView.swipeUp()
     }
 
     func assertPrivateBrowsingLabelExist() {

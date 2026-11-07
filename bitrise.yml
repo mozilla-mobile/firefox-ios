@@ -53,6 +53,17 @@ pipelines:
         depends_on:
         - firefox_beta_scheme_build_for_test
         parallel: 5
+  pipeline_firefox_fullfunctional_iphone:
+    workflows:
+      firefox_fullfunctional_iphone_build: {}
+      firefox_fullfunctional_iphone_shard:
+        depends_on:
+        - firefox_fullfunctional_iphone_build
+        parallel: 4
+      firefox_fullfunctional_iphone_report:
+        depends_on:
+        - firefox_fullfunctional_iphone_shard
+        should_always_run: workflow
 
 workflows:
   firefox_accessibility_test:
@@ -124,7 +135,7 @@ workflows:
         - title: ''
         - author_name: ''
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
-        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
         - footer: Created by Mobile Test Engineering
         - pretext_on_error: "*Firefox-iOS* :firefox: *Accessibility Tests* :x:"
         - pretext: "*Firefox-iOS* :firefox: *Accessibility Tests* :white_check_mark:"
@@ -297,7 +308,7 @@ workflows:
         - title: ''
         - author_name: ''
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
-        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
         - footer: Created by Mobile Test Engineering
         - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
         - pretext: "*Firefox-iOS* :firefox: *Build/XCUITests* :white_check_mark:"
@@ -678,7 +689,7 @@ workflows:
         - title: ''
         - author_name: ''
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
-        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
         - footer: Created by Mobile Test Engineering
         - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
         - pretext: "*Firefox-iOS* :firefox: *Build/XCUITests* :white_check_mark:"
@@ -727,6 +738,128 @@ workflows:
                 echo "BITRISEIO_PIPELINE_ID is set to $BITRISEIO_PIPELINE_ID"
             fi
         title: Detect standalone build
+  firefox_fullfunctional_iphone_build:
+    description: Build Fennec scheme and shard the full functional tests across 4 VMs
+    envs:
+    - FULLFUNCTIONAL_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    - skip_macro_validation
+    steps:
+    - restore-spm-cache@3:
+        is_always_run: true
+    - activate-build-cache-for-xcode@0: {}
+    - xcode-build-for-test@3:
+        title: Build Firefox iOS
+        inputs:
+        - scheme: Fennec
+        - configuration: Debug
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - test_plan: FullFunctionalTestPlan
+        - xcodebuild_options: ONLY_ACTIVE_ARCH=YES COMPILER_INDEX_STORE_ENABLE=NO
+        - destination: $FULLFUNCTIONAL_DESTINATION
+    - xcode-test-shard-calculation@0:
+        inputs:
+        - product_path: $BITRISE_XCTESTRUN_FILE_PATH
+        - shard_count: 4
+        - destination: $FULLFUNCTIONAL_DESTINATION
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - pipeline_intermediate_files: |-
+            BITRISE_TEST_SHARDS_PATH
+            BITRISE_TEST_BUNDLE_PATH
+  firefox_fullfunctional_iphone_shard:
+    description: Run one shard of the Firefox full functional tests
+    before_run:
+    - 1_git_clone_and_post_clone
+    steps:
+    - pull-intermediate-files@1: {}
+    - script@1:
+        title: Find FullFunctionalTestPlan xctestrun file
+        inputs:
+        - content: |-
+            set -euxo pipefail
+            XCTESTRUN=$(find "$BITRISE_TEST_BUNDLE_PATH" -name "Fennec_FullFunctionalTestPlan_*.xctestrun" | head -n 1)
+            envman add --key FULLFUNCTIONAL_XCTESTRUN --value "$XCTESTRUN"
+    - xcode-test-without-building@0:
+        title: Run full functional tests shard
+        inputs:
+        - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
+        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+        - xctestrun: $FULLFUNCTIONAL_XCTESTRUN
+        - xcodebuild_options: -collect-test-diagnostics never
+    - script@1:
+        title: Count failed tests in this shard
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            if [ -z "$BITRISE_XCRESULT_PATH" ]; then
+                FAILED_COUNT="no results"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
+            echo "Shard $BITRISE_IO_PARALLEL_INDEX failures: ${FAILED_COUNT:-no results}"
+            echo "${FAILED_COUNT:-no results}" > "$BITRISE_DEPLOY_DIR/fullfunctional_result.txt"
+    - deploy-to-bitrise-io@2:
+        is_always_run: true
+        inputs:
+        - pipeline_intermediate_files: $BITRISE_DEPLOY_DIR/fullfunctional_result.txt:FULLFUNCTIONAL_RESULT_$BITRISE_IO_PARALLEL_INDEX
+  firefox_fullfunctional_iphone_report:
+    description: Collect the failed test counts from all shards and report them to Slack
+    envs:
+    - FULLFUNCTIONAL_SHARD_COUNT: 4
+    steps:
+    - pull-intermediate-files@1: {}
+    - script@1:
+        title: Sum failed tests across shards
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            TOTAL=0
+            DETAILS=""
+            STATUS=":white_check_mark:"
+            COLOR="#3bc3a3"
+            for i in $(seq 0 $((FULLFUNCTIONAL_SHARD_COUNT - 1))); do
+                RESULT_FILE_VAR="FULLFUNCTIONAL_RESULT_$i"
+                RESULT_FILE="${!RESULT_FILE_VAR}"
+                if [ -n "$RESULT_FILE" ] && [ -f "$RESULT_FILE" ]; then
+                    COUNT=$(cat "$RESULT_FILE")
+                else
+                    COUNT="no results"
+                fi
+                if [[ "$COUNT" =~ ^[0-9]+$ ]]; then
+                    TOTAL=$((TOTAL + COUNT))
+                    [ "$COUNT" -gt 0 ] && STATUS=":x:" && COLOR="danger"
+                else
+                    STATUS=":x:"
+                    COLOR="danger"
+                fi
+                DETAILS="${DETAILS}Shard $((i + 1)): ${COUNT}"$'\n'
+            done
+            echo "Total failures: $TOTAL"
+            printf "%b" "$DETAILS"
+            envman add --key FULLFUNCTIONAL_SLACK_STATUS --value "$STATUS"
+            envman add --key FULLFUNCTIONAL_SLACK_COLOR --value "$COLOR"
+            envman add --key FULLFUNCTIONAL_SLACK_MESSAGE --value "Number of failed tests: $TOTAL"
+    - slack@4:
+        is_always_run: true
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
+        - footer: Created by Mobile Test Engineering
+        - pretext: "*Firefox-iOS* :firefox: *Full Functional Tests iPhone* ${FULLFUNCTIONAL_SLACK_STATUS}"
+        - color: "$FULLFUNCTIONAL_SLACK_COLOR"
+        - message: "$FULLFUNCTIONAL_SLACK_MESSAGE"
+        - timestamp: 'no'
+        - fields: |
+            Branch | ${BITRISE_GIT_BRANCH}
+        - buttons: |
+            Test Results|https://app.bitrise.io/app/${BITRISE_APP_SLUG}/pipelines/${BITRISEIO_PIPELINE_ID}?tab=tests
   1_git_clone_and_post_clone:
     steps:
     - activate-ssh-key@4:
@@ -1045,7 +1178,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-27.2.x-edge
+        stack: osx-xcode-27.2.x
         machine_type_id: g2.mac.4large
   L10nBuild:
     before_run:
@@ -1849,7 +1982,7 @@ workflows:
         - title: ''
         - author_name: ''
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
-        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
         - footer: Created by Mobile Test Engineering
         - pretext_on_error: "${SLACK_MESSAGE_PRETEXT}"
         - pretext: "${SLACK_MESSAGE_PRETEXT}"
@@ -2002,7 +2135,7 @@ workflows:
             RESULTS_DIR="firefox_ios_performance_tests_${TIMESTAMP}"
             GOOGLE_CLOUD_BUCKET="firefox_ios_test_artifacts"
             DEVICE_MODEL="iphonese3" # if updating device model and version, also update firebase-performance.kind
-            DEVICE_VERSION="18.4"
+            DEVICE_VERSION="26.3"
             XCRESULT_PATH="gs://${GOOGLE_CLOUD_BUCKET}/${RESULTS_DIR}/${DEVICE_MODEL}-${DEVICE_VERSION}-en-portrait/TestLogs/"
             TARGET_ARCHIVE="/Users/vagrant/git/Fennec_Enterprise.zip" # this should be the same as the artifact created in the previous step
 
@@ -2256,9 +2389,9 @@ workflows:
         - title: ''
         - author_name: ''
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
-        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
         - footer: Created by Mobile Test Engineering
-        - footer_icon_on_error: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer_icon_on_error: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
         - footer_on_error: Created by Mobile Test Engineering
         - pretext_on_error: "*Firefox-iOS* :firefox: *${SYNC_SLACK_TITLE}* :x:"
         - message_on_error: "*Failed tests:*\n${SYNC_FAILED_TESTS}"
@@ -2423,6 +2556,202 @@ workflows:
             fxios bootstrap -p focus
         title: ContentBlockerGen
 
+  Focus_Nightly_Tests_iOS18:
+    envs:
+    - FOCUS_IOS_VERSION: "18.6"
+    - FOCUS_IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.6
+    - FOCUS_IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=18.6
+    after_run:
+    - _focus_nightly_uitests
+
+  Focus_Nightly_Tests_iOS26:
+    envs:
+    - FOCUS_IOS_VERSION: "26.5"
+    - FOCUS_IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
+    - FOCUS_IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=26.5
+    after_run:
+    - _focus_nightly_uitests
+
+  Focus_Nightly_Tests_iOS27:
+    envs:
+    - FOCUS_IOS_VERSION: "27.0"
+    - FOCUS_IPHONE_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    - FOCUS_IPAD_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
+    - FOCUS_DUO_DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
+    after_run:
+    - _focus_nightly_uitests
+
+  _focus_nightly_uitests:
+    description: >-
+      Compile Focus once and run both smoke tests and full functional tests on an iPhone and an iPad, plus iPhone Duo when FOCUS_DUO_DESTINATION is set.
+    before_run:
+    - focus-clone-and-build-dependencies
+    - focus-set-default-browser-entitlement
+    steps:
+    - xcode-build-for-test@3:
+        title: "Build Focus iOS"
+        inputs:
+        - scheme: Focus
+        - configuration: FocusDebug
+        - project_path: focus-ios/Blockzilla.xcodeproj
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -skipMacroValidation'
+        - destination: $FOCUS_IPHONE_DESTINATION
+    - xcode-test-without-building@0:
+        title: "Focus Smoketest - iPhone"
+        is_always_run: true
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+        inputs:
+        - destination: $FOCUS_IPHONE_DESTINATION
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+    - script@1:
+        title: "Count failed tests - Smoketest - iPhone"
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            if [ -z "$BITRISE_TEST_BUNDLE_PATH" ]; then
+                FAILED_COUNT="build failed"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
+            echo "Smoketest (iPhone) failures: ${FAILED_COUNT:-n/a}"
+            envman add --key FOCUS_FAILED_SMOKETEST_IPHONE --value "${FAILED_COUNT:-n/a}"
+    - xcode-test-without-building@0:
+        title: "Focus Full Functional Tests - iPhone"
+        is_always_run: true
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+        inputs:
+        - destination: $FOCUS_IPHONE_DESTINATION
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_FullFunctionalTests_iphonesimulator27.1-arm64.xctestrun
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+    - script@1:
+        title: "Count failed tests - Full Functional Tests - iPhone"
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            if [ -z "$BITRISE_TEST_BUNDLE_PATH" ]; then
+                FAILED_COUNT="build failed"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
+            echo "Full Functional Tests (iPhone) failures: ${FAILED_COUNT:-n/a}"
+            envman add --key FOCUS_FAILED_FULL_FUNCTIONAL_IPHONE --value "${FAILED_COUNT:-n/a}"
+    - xcode-test-without-building@0:
+        title: "Focus Smoketest - iPad"
+        is_always_run: true
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+        inputs:
+        - destination: $FOCUS_IPAD_DESTINATION
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+    - script@1:
+        title: "Count failed tests - Smoketest - iPad"
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            if [ -z "$BITRISE_TEST_BUNDLE_PATH" ]; then
+                FAILED_COUNT="build failed"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
+            echo "Smoketest (iPad) failures: ${FAILED_COUNT:-n/a}"
+            envman add --key FOCUS_FAILED_SMOKETEST_IPAD --value "${FAILED_COUNT:-n/a}"
+    - xcode-test-without-building@0:
+        title: "Focus Full Functional Tests - iPad"
+        is_always_run: true
+        run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
+        inputs:
+        - destination: $FOCUS_IPAD_DESTINATION
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_FullFunctionalTests_iphonesimulator27.1-arm64.xctestrun
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+    - script@1:
+        title: "Count failed tests - Full Functional Tests - iPad"
+        is_always_run: true
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            if [ -z "$BITRISE_TEST_BUNDLE_PATH" ]; then
+                FAILED_COUNT="build failed"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
+            echo "Full Functional Tests (iPad) failures: ${FAILED_COUNT:-n/a}"
+            envman add --key FOCUS_FAILED_FULL_FUNCTIONAL_IPAD --value "${FAILED_COUNT:-n/a}"
+    - xcode-test-without-building@0:
+        title: "Focus Smoketest - iPhone Duo"
+        is_always_run: true
+        run_if: '{{and (getenv "FOCUS_DUO_DESTINATION" | ne "") (enveq "BITRISE_TEST_BUNDLE_PATH" "" | not)}}'
+        inputs:
+        - destination: $FOCUS_DUO_DESTINATION
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator27.1-arm64.xctestrun
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+    - script@1:
+        title: "Count failed tests - Smoketest - iPhone Duo"
+        is_always_run: true
+        run_if: '{{getenv "FOCUS_DUO_DESTINATION" | ne ""}}'
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            if [ -z "$BITRISE_TEST_BUNDLE_PATH" ]; then
+                FAILED_COUNT="build failed"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
+            echo "Smoketest (iPhone Duo) failures: ${FAILED_COUNT:-n/a}"
+            envman add --key FOCUS_FAILED_SMOKETEST_DUO --value "${FAILED_COUNT:-n/a}"
+    - xcode-test-without-building@0:
+        title: "Focus Full Functional Tests - iPhone Duo"
+        is_always_run: true
+        run_if: '{{and (getenv "FOCUS_DUO_DESTINATION" | ne "") (enveq "BITRISE_TEST_BUNDLE_PATH" "" | not)}}'
+        inputs:
+        - destination: $FOCUS_DUO_DESTINATION
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_FullFunctionalTests_iphonesimulator27.1-arm64.xctestrun
+        - xcodebuild_options: '"ONLY_ACTIVE_ARCH=YES" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -collect-test-diagnostics never'
+    - script@1:
+        title: "Count failed tests - Full Functional Tests - iPhone Duo"
+        is_always_run: true
+        run_if: '{{getenv "FOCUS_DUO_DESTINATION" | ne ""}}'
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            if [ -z "$BITRISE_TEST_BUNDLE_PATH" ]; then
+                FAILED_COUNT="build failed"
+            else
+                FAILED_COUNT=$(xcrun xcresulttool get --path "$BITRISE_XCRESULT_PATH" --format json --legacy 2>/dev/null | jq -r '.metrics.testsFailedCount._value // 0')
+            fi
+            echo "Full Functional Tests (iPhone Duo) failures: ${FAILED_COUNT:-n/a}"
+            envman add --key FOCUS_FAILED_FULL_FUNCTIONAL_DUO --value "${FAILED_COUNT:-n/a}"
+            envman add --key FOCUS_DUO_SLACK_LINE --value "Failed tests on iPhone Duo - Smoketest: ${FOCUS_FAILED_SMOKETEST_DUO:-n/a}, Full Functional Tests: ${FAILED_COUNT:-n/a}"
+    - deploy-to-bitrise-io@2:
+        is_always_run: true
+    - slack@4:
+        is_always_run: true
+        inputs:
+        - title: ''
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
+        - footer: Created by Mobile Test Engineering
+        - footer_icon_on_error: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
+        - footer_on_error: Created by Mobile Test Engineering
+        - pretext_on_error: "*Focus-iOS* *Nightly Smoketest and Full Functional Tests (iPhone and iPad, iOS ${FOCUS_IOS_VERSION})* :x:"
+        - message_on_error: |-
+            Failed tests on iPhone - Smoketest: ${FOCUS_FAILED_SMOKETEST_IPHONE}, Full Functional Tests: ${FOCUS_FAILED_FULL_FUNCTIONAL_IPHONE}
+            Failed tests on iPad - Smoketest: ${FOCUS_FAILED_SMOKETEST_IPAD}, Full Functional Tests: ${FOCUS_FAILED_FULL_FUNCTIONAL_IPAD}
+            ${FOCUS_DUO_SLACK_LINE}
+        - color_on_error: danger
+        - pretext: "*Focus-iOS* *Nightly Smoketest and Full Functional Tests (iPhone and iPad, iOS ${FOCUS_IOS_VERSION})* :white_check_mark:"
+        - message: ''
+        - timestamp: 'no'
+        - fields: |
+            Branch | ${BITRISE_GIT_BRANCH}
+        - buttons: |
+            Build Log|${BITRISE_BUILD_URL}
+            Test Report|${BITRISE_BUILD_URL}?tab=tests
+
   focus-set-project-version:
     steps:
     - set-xcode-build-number@1:
@@ -2447,6 +2776,41 @@ workflows:
         title: Set OpenInFocus version numbers
 
   Firefox_Nightly_SmokeTest_Iphone:
+    envs:
+    - SMOKETEST_SCHEME: Fennec
+    - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    - SMOKETEST_SLACK_TITLE: Nightly Smoketest iPhone
+    after_run:
+    - _firefox_smoketest
+
+  Firefox_SmokeTest_Iphone:
+    envs:
+    - SMOKETEST_SCHEME: Firefox
+    - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+    - SMOKETEST_SLACK_TITLE: Smoketest Firefox scheme iPhone
+    after_run:
+    - _firefox_smoketest
+
+  Firefox_SmokeTest_Ipad:
+    envs:
+    - SMOKETEST_SCHEME: Firefox
+    - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPad (A16),OS=27.0
+    - SMOKETEST_SLACK_TITLE: Smoketest Firefox scheme iPad
+    after_run:
+    - _firefox_smoketest
+
+  Firefox_SmokeTest_IphoneDuo:
+    envs:
+    - SMOKETEST_SCHEME: Firefox
+    - SMOKETEST_DESTINATION: platform=iOS Simulator,name=iPhone Duo,OS=27.1
+    - SMOKETEST_SLACK_TITLE: Smoketest Firefox scheme iPhone Duo
+    after_run:
+    - _firefox_smoketest
+
+  _firefox_smoketest:
+    description: >-
+      Shared steps for the Firefox smoke test workflows. Callers set SMOKETEST_SCHEME, SMOKETEST_DESTINATION
+      and SMOKETEST_SLACK_TITLE.
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -2460,18 +2824,17 @@ workflows:
         title: "Build Firefox iOS"
         timeout: 360
         inputs:
-        - scheme: Fennec
+        - scheme: $SMOKETEST_SCHEME
         - configuration: Debug
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
         - test_plan: Smoketest
         - xcodebuild_options: ONLY_ACTIVE_ARCH=YES COMPILER_INDEX_STORE_ENABLE=NO
-        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
+        - destination: $SMOKETEST_DESTINATION
     - xcode-test-without-building@0:
         title: "Run all smoke tests"
         timeout: 3000
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 18 Pro,OS=27.0
-        - xctestrun: "$BITRISE_XCTESTRUN_FILE_PATH"
+        - destination: $SMOKETEST_DESTINATION
         - xcodebuild_options: -collect-test-diagnostics never
     - script@1:
         title: Count failed tests
@@ -2493,17 +2856,18 @@ workflows:
         - title: ''
         - author_name: ''
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
-        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer_icon: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
         - footer: Created by Mobile Test Engineering
-        - footer_icon_on_error: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer_icon_on_error: https://emoji.slack-edge.com/T07DB2PSS3W/testops-notify/55edcdb3371320b6.png
         - footer_on_error: Created by Mobile Test Engineering
-        - pretext_on_error: "*Firefox-iOS* :firefox: *Nightly Smoketest iPhone* :x:"
+        - pretext_on_error: "*Firefox-iOS* :firefox: *${SMOKETEST_SLACK_TITLE}* :x:"
         - message_on_error: "Number of failed tests: ${SMOKETEST_FAILED_TEST_COUNT}"
         - color_on_error: danger
-        - pretext: "*Firefox-iOS* :firefox: *Nightly Smoketest iPhone* :white_check_mark:"
+        - pretext: "*Firefox-iOS* :firefox: *${SMOKETEST_SLACK_TITLE}* :white_check_mark:"
         - message: ''
         - timestamp: 'no'
-        - fields: ''
+        - fields: |
+            Branch | ${BITRISE_GIT_BRANCH}
         - buttons: |
             Build Log|${BITRISE_BUILD_URL}
             Test Report|${BITRISE_BUILD_URL}?tab=tests

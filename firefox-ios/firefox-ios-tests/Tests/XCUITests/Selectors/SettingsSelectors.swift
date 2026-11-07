@@ -6,6 +6,7 @@ import XCTest
 
 protocol SettingsSelectorsSet {
     var SETTINGS_TABLE: Selector { get }
+    var MAIN_SETTINGS_TABLE: Selector { get }
     var DONE_BUTTON: Selector { get }
     var SETTINGS_TITLE: Selector { get }
 
@@ -86,6 +87,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let navigationBarItem = AccessibilityIdentifiers.Settings.navigationBarItem
         static let connectSetting = AccessibilityIdentifiers.Settings.ConnectSetting.title
         static let settingTitle = "Settings"
+        static let mainSettingsTable = AccessibilityIdentifiers.Settings.tableViewController
         static let toolbarCellSettings = AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting
         static let bottomToolbarButton = AccessibilityIdentifiers.Settings.SearchBar.bottomSetting
         static let topToolbarButton = AccessibilityIdentifiers.Settings.SearchBar.topSetting
@@ -106,6 +108,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
     // Core Element Selector
     let SETTINGS_TABLE = Selector.firstTable(
         description: "Main settings table view (first table in hierarchy)",
+        groups: ["settings"]
+    )
+
+    let MAIN_SETTINGS_TABLE = Selector.tableIdOrLabel(
+        IDs.mainSettingsTable,
+        description: "Main settings table, matched by its identifier",
         groups: ["settings"]
     )
 
@@ -436,7 +444,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
     }
 
     var all: [Selector] {
-        [SETTINGS_TABLE, DONE_BUTTON, SETTINGS_TITLE, AUTOFILLS_PASSWORDS_CELL, CLEAR_DATA_CELL,
+        [SETTINGS_TABLE, MAIN_SETTINGS_TABLE, DONE_BUTTON, SETTINGS_TITLE, AUTOFILLS_PASSWORDS_CELL, CLEAR_DATA_CELL,
          CLOSE_PRIVATE_TABS_SWITCH, CONTENT_BLOCKER_CELL, NOTIFICATIONS_CELL,
          PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
          CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,

@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 
 struct GenericItemCellView: View {
-    private struct UX {
+    private enum UX {
         static let horizontalSpacing: CGFloat = 16
         static let verticalSpacing: CGFloat = 8
         static let dividerHeight: CGFloat = 0.7

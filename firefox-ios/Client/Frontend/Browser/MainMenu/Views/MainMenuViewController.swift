@@ -17,7 +17,7 @@ class MainMenuViewController: UIViewController,
                               Notifiable,
                               FeatureFlaggable,
                               StoreSubscriber {
-    private struct UX {
+    private enum UX {
         static let hintViewCornerRadius: CGFloat = 20
         static let hintViewHeight: CGFloat = 140
         static let hintViewMargin: CGFloat = 20
@@ -405,7 +405,7 @@ class MainMenuViewController: UIViewController,
             window.addSubview(hintView)
 
             let contentHeight =  UX.hintViewHeight + menuContent.frame.height + UX.hintViewMargin
-            let safeHeight = UIScreen.main.bounds.height - UX.topMarginCFR
+            let safeHeight = window.bounds.height - UX.topMarginCFR
             if safeHeight < contentHeight {
                 hintView.topAnchor.constraint(equalTo: menuContent.topAnchor,
                                               constant: UX.hintViewMargin).isActive = true

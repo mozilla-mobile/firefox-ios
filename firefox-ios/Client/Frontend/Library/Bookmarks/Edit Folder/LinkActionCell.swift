@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 final class LinkActionCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    private enum UX {
         static let horizontalPadding: CGFloat = 16.0
         static let verticalPadding: CGFloat = 11.0
     }

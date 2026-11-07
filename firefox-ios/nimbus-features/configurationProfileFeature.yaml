@@ -1,0 +1,18 @@
+# The configuration for the configurationProfileFeature feature
+features:
+  configuration-profile-feature:
+    description: >
+      Offers to open configuration profiles (.mobileconfig) in Safari so iOS can install them
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true

@@ -13,7 +13,7 @@ final class TestOnboarding: OnboardingEventsHandling {
     func dismissTooltip(route: Onboarding.ToolTipRoute) {}
 }
 
-final class OnboardingFactory {
+enum OnboardingFactory {
     static func makeOnboardingEventsHandler(_ shouldShowNewOnboarding: () -> Bool) -> OnboardingEventsHandling {
         let getShownTips: () -> Set<ToolTipRoute> = {
             return UserDefaults

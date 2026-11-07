@@ -72,6 +72,12 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .cellularDataRestrictedErrorPage:
             return checkCellularDataRestrictedErrorPageFeature()
 
+        case .checkForReinstalls:
+            return checkForReinstallsFeature()
+
+        case .configurationProfile:
+            return checkConfigurationProfileFeature()
+
         case .customReaderModeScheme:
             return checkCustomReaderModeSchemeFeature()
 
@@ -160,6 +166,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .quickAnswersOptInRedesign:
             return checkQuickAnswersOptInRedesignFeature()
 
+        case .quickAnswersFollowUp:
+            return checkQuickAnswersFollowUpFeature()
+
         case .recentSearches:
             return checkRecentSearchesFeature()
 
@@ -237,6 +246,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .vpnFeature:
             return checkVPNFeature()
+
+        case .wallpaperEngagementSheet:
+            return checkWallpaperEngagementSheetFeature()
 
         case .waybackMachine:
             return checkWaybackMachineFeature()
@@ -351,6 +363,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.quickAnswersFeature.value().optInRedesign
     }
 
+    private func checkQuickAnswersFollowUpFeature() -> Bool {
+        return nimbus.features.quickAnswersFeature.value().followUpEnabled
+    }
+
     private func checkStartAtHomeFeature(for featureID: FeatureFlagID) -> StartAtHome {
         let config = nimbus.features.startAtHomeFeature.value()
         let nimbusSetting = config.setting
@@ -411,6 +427,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkImprovedAppStoreReviewTriggerFeature() -> Bool {
         return nimbus.features.improvedAppStoreReviewTriggerFeature.value().enabled
+    }
+
+    private func checkForReinstallsFeature() -> Bool {
+        return nimbus.features.checkForReinstallsFeature.value().enabled
     }
 
     // MARK: - Summarizer Feature
@@ -539,12 +559,20 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         return nimbus.features.vpnFeature.value().enabled
     }
 
+    private func checkWallpaperEngagementSheetFeature() -> Bool {
+        return nimbus.features.wallpaperEngagementSheetFeature.value().enabled
+    }
+
     private func checkPrivacyDashboardFeature() -> Bool {
         return nimbus.features.privacyDashboardFeature.value().enabled
     }
 
     private func checkCellularDataRestrictedErrorPageFeature() -> Bool {
         return nimbus.features.cellularDataRestrictedErrorPageFeature.value().enabled
+    }
+
+    private func checkConfigurationProfileFeature() -> Bool {
+        return nimbus.features.configurationProfileFeature.value().enabled
     }
 
     private func checkMultiDayOnboardingFeature() -> Bool {

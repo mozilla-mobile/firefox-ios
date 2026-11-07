@@ -7,7 +7,7 @@ import UIKit
 
 /// The view model used to configure a `BottomSheetViewController`
 public struct BottomSheetViewModel {
-    public struct UX {
+    public enum UX {
         public static var cornerRadius: CGFloat {
             if #available(iOS 26.0, *) {
                 return 24

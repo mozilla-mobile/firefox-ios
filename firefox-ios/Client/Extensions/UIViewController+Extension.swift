@@ -24,8 +24,8 @@ enum NavigationItemText {
     }
 }
 
-struct ViewControllerConsts {
-    struct PreferredSize {
+enum ViewControllerConsts {
+    enum PreferredSize {
         static let IntroViewController = CGSize(width: 570, height: 755)
         static let DBOnboardingViewController = CGSize(width: 624, height: 680)
     }
