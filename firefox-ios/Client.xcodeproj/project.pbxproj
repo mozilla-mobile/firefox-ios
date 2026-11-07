@@ -2509,6 +2509,7 @@
 		FEEDFACE000000000000FC01 /* VPNKit in Frameworks */ = {isa = PBXBuildFile; productRef = FEEDFACE000000000000FC02 /* VPNKit */; };
 		FF0002AA2F000002000BBBBB /* ClearablesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0002AA2F000001000BBBBB /* ClearablesTests.swift */; };
 		FF0005AD2F000004000BBBBB /* MockQuickAnswersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0005AC2F000003000BBBBB /* MockQuickAnswersStore.swift */; };
+		5A1B2C3D4E5F60718293A4B2 /* ClipboardBarDisplayHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B2C3D4E5F60718293A4B1 /* ClipboardBarDisplayHandlerTests.swift */; };
 		CDD7D2B885574E4CB64841D5 /* InstallationTelemetryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8372AC9FB424B628EBF88C4 /* InstallationTelemetryService.swift */; };
 		575F2A83BBC44B708183F928 /* InstallationTelemetryServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9265DC73B6F84B12B461E19B /* InstallationTelemetryServiceTests.swift */; };
 		A9FB64F32F044586AF061F51 /* InstallationTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804500B94A2E44F9A4D703D9 /* InstallationTelemetryTests.swift */; };
@@ -12845,6 +12846,7 @@
 		FFAD000CC3D68F506946CC2F /* DefaultVPNTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultVPNTelemetry.swift; sourceTree = "<group>"; };
 		FFC049AA898EF4096E22F595 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/ClearHistoryConfirm.strings"; sourceTree = "<group>"; };
 		FFEB4308B5A82E56F1EEEC56 /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		5A1B2C3D4E5F60718293A4B1 /* ClipboardBarDisplayHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardBarDisplayHandlerTests.swift; sourceTree = "<group>"; };
 		A8372AC9FB424B628EBF88C4 /* InstallationTelemetryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationTelemetryService.swift; sourceTree = "<group>"; };
 		9265DC73B6F84B12B461E19B /* InstallationTelemetryServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationTelemetryServiceTests.swift; sourceTree = "<group>"; };
 		804500B94A2E44F9A4D703D9 /* InstallationTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationTelemetryTests.swift; sourceTree = "<group>"; };
@@ -17516,6 +17518,7 @@
 				8A1E3BE828CBC57E003388C4 /* SearchEngines */,
 				2173326629CCD259007F20C7 /* LegacyTabScrollControllerTests.swift */,
 				21872A222E3CFEA500241A8A /* TabScrollHandlerTests.swift */,
+				5A1B2C3D4E5F60718293A4B1 /* ClipboardBarDisplayHandlerTests.swift */,
 				21EA33802EC67FCA00D20D90 /* ToolbarAnimatorTest.swift */,
 				7FA6190FE4B33D9B108A2179 /* ToolbarMemoryLeakTests.swift */,
 				8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */,
@@ -21728,6 +21731,7 @@
 				81DAB2F72C89004D00F4BE98 /* MainMenuMiddlewareTests.swift in Sources */,
 				5A70EF19295E2E1600790249 /* DependencyHelperMock.swift in Sources */,
 				61497F3C2F687B5A00BC5ACA /* AIControlsSettingTests.swift in Sources */,
+				5A1B2C3D4E5F60718293A4B2 /* ClipboardBarDisplayHandlerTests.swift in Sources */,
 				CB4BB1112F954E8B003A181D /* NativeErrorPageHelperTests.swift in Sources */,
 				8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */,
 				8A8482F02BE1602500F9007B /* MicrosurveyPromptStateTests.swift in Sources */,
