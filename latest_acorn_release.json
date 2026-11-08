@@ -1,9 +1,9 @@
 {
-    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/428122629",
-    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/428122629/assets",
-    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/428122629/assets{?name,label}",
-    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.150.0",
-    "id": 428122629,
+    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/435463867",
+    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/435463867/assets",
+    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/435463867/assets{?name,label}",
+    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.152.0",
+    "id": 435463867,
     "author": {
         "login": "maggie-atkinson",
         "id": 175737951,
@@ -25,18 +25,18 @@
         "user_view_type": "public",
         "site_admin": false
     },
-    "node_id": "RE_kwDOI1CID84ZhKIF",
-    "tag_name": "v1.150.0",
+    "node_id": "RE_kwDOI1CID84Z9Ka7",
+    "tag_name": "v1.152.0",
     "target_commitish": "main",
-    "name": "v1.150.0",
+    "name": "v1.152.0",
     "draft": false,
     "immutable": false,
     "prerelease": false,
-    "created_at": "2026-10-29T16:28:38Z",
-    "updated_at": "2026-10-29T16:31:39Z",
-    "published_at": "2026-10-29T16:31:09Z",
+    "created_at": "2026-11-05T16:44:25Z",
+    "updated_at": "2026-11-05T16:46:21Z",
+    "published_at": "2026-11-05T16:46:21Z",
     "assets": [],
-    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.150.0",
-    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.150.0",
-    "body": "# [Changelog]\r\n### [v1.150.0]\r\n### Added\r\n#### Desktop\r\n\r\n- SVG\r\n  - authentication-16.svg\r\n\r\n### Changed\r\n#### Desktop\r\n\r\n- SVG\r\n  - administrators-16.svg\r\n  - content-analysis-16.svg\r\n  - service-accounts-16.svg\r\n\r\n### Removed\r\n#### Desktop\r\n\r\n- SVG\r\n  - pdf-duotone-16.svg"
+    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.152.0",
+    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.152.0",
+    "body": "# [Changelog]\r\n### [v1.152.0]\r\n### Added\r\n#### Desktop\r\n\r\n- SVG\r\n    - car-16.svg\r\n    - car-20.svg\r\n    - grid-add-16.svg\r\n    - hotel-16.svg\r\n    - hotel-20.svg"
 }
