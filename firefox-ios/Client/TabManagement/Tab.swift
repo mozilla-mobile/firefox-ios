@@ -415,6 +415,11 @@ class Tab: NSObject,
     /// and any feature-owned state (e.g. `translationConfiguration`) is cleared.
     var onNextCommit: (() -> Void)?
 
+    /// Whether a main frame navigation has started but hasn't committed or failed yet. Set in
+    /// `webView(_:didStartProvisionalNavigation:)` and cleared in `webView(_:didCommit:)` and
+    /// `webView(_:didFailProvisionalNavigation:withError:)`.
+    var hasProvisionalNavigation = false
+
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
 
@@ -1079,11 +1084,17 @@ class Tab: NSObject,
 
     // MARK: - ContentBlockerTab
 
-    /// Whether the web view is loading a page that hasn't replaced the current back/forward list item yet,
-    /// for example a URL typed in the address bar before its response arrives.
+    /// Whether the web view is loading a page that hasn't committed yet, for example a URL typed in the
+    /// address bar before its response arrives. Same-document navigations and a committed page that is still
+    /// loading subresources don't count.
+    ///
+    /// `hasProvisionalNavigation` covers redirects, back/forward navigations and restored tabs, where WebKit
+    /// already makes the target the current back/forward list item before the commit. The URL check covers
+    /// the time between `load(_:)` and `didStartProvisionalNavigation`, when `url` is already the new one.
+    /// Checking `isLoading` first ignores a flag left behind by a navigation the delegate never heard about.
     var hasUncommittedNavigation: Bool {
         guard let webView, webView.isLoading else { return false }
-        return webView.url != webView.backForwardList.currentItem?.url
+        return hasProvisionalNavigation || webView.url != webView.backForwardList.currentItem?.url
     }
 
     func currentURL() -> URL? {

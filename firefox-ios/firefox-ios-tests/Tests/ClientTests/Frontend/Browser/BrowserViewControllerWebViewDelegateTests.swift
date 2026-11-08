@@ -613,6 +613,46 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         XCTAssertNotNil(tab.translationConfiguration)
     }
 
+    // MARK: - Provisional navigation
+
+    @MainActor
+    func testWebViewDidStartProvisionalNavigation_whenTabIsNotSelected_setsHasProvisionalNavigation() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!, didStartProvisionalNavigation: nil)
+
+        XCTAssertTrue(tab.hasProvisionalNavigation)
+    }
+
+    @MainActor
+    func testWebViewDidCommit_clearsHasProvisionalNavigation() {
+        let subject = createSubject()
+        let tab = createTab()
+        tab.hasProvisionalNavigation = true
+        (tab.webView as? MockTabWebView)?.loadedURL = URL(string: "https://example.com")
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!, didCommit: nil)
+
+        XCTAssertFalse(tab.hasProvisionalNavigation)
+    }
+
+    @MainActor
+    func testWebViewDidFailProvisionalNavigation_clearsHasProvisionalNavigation() {
+        let subject = createSubject()
+        let tab = createTab()
+        tab.hasProvisionalNavigation = true
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!,
+                        didFailProvisionalNavigation: nil,
+                        withError: NSError(domain: "WebKitErrorDomain", code: 102))
+
+        XCTAssertFalse(tab.hasProvisionalNavigation)
+    }
+
     // This test is being skipped because there are some very strange side effects
     // in webView didFinish because the profile database is not being stubbed out
     // TODO: FXIOS-13435 to look in to this
