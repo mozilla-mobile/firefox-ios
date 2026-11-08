@@ -263,7 +263,9 @@ final class HistoryPanelViewModel: @unchecked Sendable {
     }
 
     private func deleteSingle(site: Site) {
-        dateGroupedSites.remove(site)
+        dateGroupedSites.allItems()
+            .filter { $0.url == site.url }
+            .forEach { dateGroupedSites.remove($0) }
         self.profile.places.deleteVisitsFor(url: site.url).uponQueue(.main) { _ in
             NotificationCenter.default.post(name: .TopSitesUpdated, object: nil)
         }
