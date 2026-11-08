@@ -404,6 +404,15 @@ final class URLExtensionTests: XCTestCase {
         XCTAssertEqual(URL(string: readerModeURL)!.decodeReaderModeURL, url)
     }
 
+    func testDecodeReaderModeURLPreservesQueryItems() throws {
+        for query in ["foo", "foo=", "foo=bar"] {
+            let url = try XCTUnwrap(URL(string: "https://example.com/?\(query)"))
+            let encoded = try XCTUnwrap(url.absoluteString.addingPercentEncoding(withAllowedCharacters: .alphanumerics))
+            let readerURL = try XCTUnwrap(URL(string: "about:reader?url=\(encoded)"))
+            XCTAssertEqual(readerURL.decodeReaderModeURL, url, query)
+        }
+    }
+
     func testDecodeReaderModeURLGivenNotAReaderModeURLThenNil() {
         let url = "http://google.com"
         XCTAssertNil(URL(string: url)!.decodeReaderModeURL)
@@ -467,6 +476,13 @@ final class URLExtensionTests: XCTestCase {
         let genericUrl = url.safeEncodedUrl
         XCTAssertNotNil(genericUrl)
         XCTAssertTrue(genericUrl!.absoluteString.contains("javascript:alert(%26%2339;XSS%26%2339;)"))
+    }
+
+    func testSafeEncodedUrlPreservesQuery() throws {
+        for query in ["foo&empty=&bar=value", "percent=100%25", "encoded=%2541"] {
+            let url = try XCTUnwrap(URL(string: "https://example.com/?\(query)"))
+            XCTAssertEqual(url.safeEncodedUrl?.absoluteString, url.absoluteString, query)
+        }
     }
 
     func testSafeEncodedUrlGivenEmptyPath() {
