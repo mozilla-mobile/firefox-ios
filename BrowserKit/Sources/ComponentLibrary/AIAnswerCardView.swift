@@ -38,7 +38,7 @@ public final class AIAnswerCardView: UIView, ThemeApplicable {
     private var headerGradientColors: [UIColor] = []
     private var usesAttributedBody = false
 
-    public override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
     }
@@ -74,7 +74,7 @@ public final class AIAnswerCardView: UIView, ThemeApplicable {
         ])
     }
 
-    public override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         applyHeaderGradient()
     }
