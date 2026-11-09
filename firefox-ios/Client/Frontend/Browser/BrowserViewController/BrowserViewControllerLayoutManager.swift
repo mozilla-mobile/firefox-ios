@@ -208,26 +208,26 @@ final class BrowserViewControllerLayoutManager {
     /// Must be called on keyboard and toolbar changes. Bottom search bar relies on `overKeyboardContainer`
     /// growing with the keyboard spacer. Top search bar needs an explicit keyboard constraint because
     /// `overKeyboardContainer` collapses to `height = 0`, leaving its top below the keyboard frame.
-    func updateBottomContentStackViewConstraints(isBottomSearchBar: Bool,
+    func updateBottomContentStackViewConstraints(shouldPushAboveKeyboardContainer: Bool,
                                                  keyboardState: KeyboardState?) {
         // Deactivate all mutually exclusive constraints before activating the appropriate one.
         bottomContentStackViewOverKeyboardConstraint?.isActive = false
         bottomContentStackViewKeyboardConstraint?.isActive = false
         bottomContentStackViewBasicConstraint?.isActive = false
 
-        guard !isBottomSearchBar else {
-            updateBottomContentStackViewBottomSearchBar()
+        guard !shouldPushAboveKeyboardContainer else {
+            pinBottomContentAboveOverKeyboardContainer()
             return
         }
 
-        updateBottomContentStackViewTopSearchBar(keyboardState: keyboardState)
+        pinBottomContentAboveKeyboardOrToolbar(keyboardState: keyboardState)
     }
 
-    private func updateBottomContentStackViewBottomSearchBar() {
+    private func pinBottomContentAboveOverKeyboardContainer() {
         bottomContentStackViewOverKeyboardConstraint?.isActive = true
     }
 
-    private func updateBottomContentStackViewTopSearchBar(keyboardState: KeyboardState?) {
+    private func pinBottomContentAboveKeyboardOrToolbar(keyboardState: KeyboardState?) {
         let keyboardHeight = keyboardState?.intersectionHeightForView(parentView) ?? 0
         let isKeyboardVisible = keyboardHeight > 0
 

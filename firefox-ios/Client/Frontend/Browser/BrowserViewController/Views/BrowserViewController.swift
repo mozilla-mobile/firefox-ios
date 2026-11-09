@@ -401,6 +401,13 @@ class BrowserViewController: UIViewController,
         && header.arrangedSubviews.isEmpty
     }
 
+    /// If find in page is on we skip pushing the above keyboard container to mimic
+    /// what happens on the newer system find in page bar where no spacer is added,
+    /// the address bar is covered, and the bar follows the keyboard.
+    private var shouldPushAboveKeyboardContainer: Bool {
+        return isBottomSearchBar && tabManager.selectedTab?.isFindInPageMode != true
+    }
+
     /// The anchor `searchController.view`'s bottom is pinned to, based on the current search bar position.
     /// - Bottom search bar: `overKeyboardContainer.top`, which sits above the keyboard.
     /// - Top search bar: `view.bottom`, so the search view fills the screen
@@ -837,7 +844,7 @@ class BrowserViewController: UIViewController,
 
         // update keyboard's related view constraints if is visible 
         if keyboardState != nil {
-            updateConstraintsForKeyboard()
+            adjustBottomSearchBarForKeyboard()
         }
     }
 
@@ -1862,7 +1869,7 @@ class BrowserViewController: UIViewController,
         topTouchAreaHeightConstraint?.constant = isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight
 
         updateOverKeyboardContainerConstraints()
-        updateConstraintsForKeyboard()
+        adjustBottomSearchBarForKeyboard()
         updateBottomContentStackViewConstraints()
 
         super.updateViewConstraints()
@@ -1874,31 +1881,21 @@ class BrowserViewController: UIViewController,
             hasZoomPageBar: zoomPageBar?.superview === overKeyboardContainer)
     }
 
-    func updateConstraintsForKeyboard() {
-        if tabManager.selectedTab?.isFindInPageMode != true {
-            adjustBottomSearchBarForKeyboard()
-        }
-    }
-
     /// Updates the bottom constraint of `bottomContentStackView` (login snackbar, FindInPageBar).
-    /// Must be called whenever the keyboard or toolbar layout changes because the correct
-    /// anchor depends on both:
-    /// - **Bottom search bar**: the view is pinned to `overKeyboardContainer.top`, which
-    ///   already includes a keyboard spacer — no extra keyboard handling required.
-    /// - **Top search bar**: `overKeyboardContainer` collapses to `height = 0`, so its top
-    ///   sits above the nav toolbar and **below** the keyboard frame. A dedicated keyboard
-    ///   constraint (`= parentView.bottom - keyboardHeight`) must activate to keep snackbars
-    ///   and FindInPageBar above the keyboard.
+    /// Must be called whenever the keyboard or toolbar layout changes.
+    /// With a bottom search bar, if find in page is on then the keyboard spacer
+    /// is skipped so the bottom content pins above the keyboard instead.
     private func updateBottomContentStackViewConstraints() {
-        browserLayoutManager.updateBottomContentStackViewConstraints(isBottomSearchBar: isBottomSearchBar,
-                                                                     keyboardState: keyboardState)
+        browserLayoutManager.updateBottomContentStackViewConstraints(
+            shouldPushAboveKeyboardContainer: shouldPushAboveKeyboardContainer,
+            keyboardState: keyboardState)
     }
 
     private func adjustBottomSearchBarForKeyboard() {
         let keyboardHeight = keyboardState?.intersectionHeightForView(view) ?? 0
         let isKeyboardVisible = keyboardHeight > 0
 
-        guard isBottomSearchBar, isKeyboardVisible else {
+        guard shouldPushAboveKeyboardContainer, isKeyboardVisible else {
             overKeyboardContainer.removeKeyboardSpacer()
             return
         }
@@ -5089,7 +5086,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         updateKeyboardState(state)
 
-        updateConstraintsForKeyboard()
+        adjustBottomSearchBarForKeyboard()
         updateBottomContentStackViewConstraints()
 
         if isSwipingTabsEnabled {
@@ -5122,7 +5119,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             store.dispatch(action, forWindowUUID: windowUUID)
         }
         updateKeyboardState(nil)
-        updateConstraintsForKeyboard()
+        adjustBottomSearchBarForKeyboard()
         updateBottomContentStackViewConstraints()
 
         UIView.animate(
@@ -5159,7 +5156,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         // Keep the keyboard spacer and bottom constraints in sync as the keyboard frame changes
         // (e.g. accessory-view height changes, interactive scroll-to-dismiss). Without this the
         // spacer holds its previous height and leaves a gap below the address bar.
-        updateConstraintsForKeyboard()
+        adjustBottomSearchBarForKeyboard()
         updateBottomContentStackViewConstraints()
     }
 

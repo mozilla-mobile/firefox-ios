@@ -214,4 +214,8 @@ extension FindInPageBar: UITextFieldDelegate {
         }
         return true
     }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        delegate?.findInPageDidPressClose()
+    }
 }
