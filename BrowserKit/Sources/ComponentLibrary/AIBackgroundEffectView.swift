@@ -298,11 +298,9 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
     private enum UX {
         static let resultBlobsAlpha: CGFloat = 0.5
         static let resultFadeDuration: TimeInterval = 0.3
-        static let resultFadeDelay: TimeInterval = 0.2
         static let presentationBlobsOffset: CGFloat = 50.0
         /// Moves the blobs center from two thirds to a quarter of the height, so they fill the top half.
         static let topHalfBlobsOffsetRatio: CGFloat = 5.0 / 12.0
-        static let resultExpandDuration: TimeInterval = 0.5
         static let topTrailingGlowOpacities: [CGFloat] = [0.25, 0.1, 0.0]
         /// Vertical wash laid over the blobs once a result is shown, so the answer stays readable.
         static let resultWashStops: [(location: NSNumber, opacity: CGFloat)] = [
@@ -323,6 +321,10 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
     }()
     private let blobsState: BlendedBlobsGradientState
     private let blobsHostingController: UIHostingController<BlendedBlobsGradient>
+    /// A frozen copy of the blobs in their result position, cross-faded with the live blobs when a
+    /// result is shown so nothing has to travel across the screen.
+    private let resultBlobsState = BlendedBlobsGradientState()
+    private let resultBlobsHostingController: UIHostingController<BlendedBlobsGradient>
     private let resultWash: GradientView = .build {
         $0.alpha = 0.0
     }
@@ -345,10 +347,20 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
                 landscapeLayout: blobsLandscapeLayout
             )
         )
+        resultBlobsState.isPaused = true
+        resultBlobsHostingController = UIHostingController(
+            rootView: BlendedBlobsGradient(
+                state: resultBlobsState,
+                motion: blobsMotion,
+                landscapeLayout: blobsLandscapeLayout
+            )
+        )
         super.init(frame: .zero)
         parentController.addChild(blobsHostingController)
+        parentController.addChild(resultBlobsHostingController)
         setupSubviews()
         blobsHostingController.didMove(toParent: parentController)
+        resultBlobsHostingController.didMove(toParent: parentController)
     }
 
     public required init?(coder: NSCoder) {
@@ -359,8 +371,12 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
         layer.addSublayer(topTrailingGlow)
         let blobsView: UIView = blobsHostingController.view
         blobsView.backgroundColor = .clear
-        addSubviews(blobsView, resultWash)
+        let resultBlobsView: UIView = resultBlobsHostingController.view
+        resultBlobsView.backgroundColor = .clear
+        resultBlobsView.alpha = 0.0
+        addSubviews(blobsView, resultBlobsView, resultWash)
         blobsView.pinToSuperview()
+        resultBlobsView.pinToSuperview()
         resultWash.pinToSuperview()
     }
 
@@ -388,15 +404,9 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
 
     public func showResult() {
         blobsState.isPaused = true
-        UIView.animate(withDuration: UX.resultExpandDuration, delay: 0.0, options: .curveEaseInOut) { [self] in
-            blobsHostingController.view.transform = .identity
-        }
-        UIView.animate(
-            withDuration: UX.resultFadeDuration,
-            delay: UX.resultFadeDelay,
-            options: .curveEaseInOut
-        ) { [self] in
-            blobsHostingController.view.alpha = UX.resultBlobsAlpha
+        UIView.animate(withDuration: UX.resultFadeDuration, delay: 0.0, options: .curveEaseInOut) { [self] in
+            blobsHostingController.view.alpha = 0.0
+            resultBlobsHostingController.view.alpha = UX.resultBlobsAlpha
             resultWash.alpha = 1.0
         }
     }
@@ -405,6 +415,7 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
         blobsState.isPaused = false
         UIView.animate(withDuration: duration, delay: 0.0, options: .curveEaseInOut) { [self] in
             blobsHostingController.view.alpha = 1.0
+            resultBlobsHostingController.view.alpha = 0.0
             resultWash.alpha = 0.0
         }
     }
@@ -423,11 +434,13 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
         topTrailingGlow.colors = UX.topTrailingGlowOpacities.map {
             theme.colors.gradientAIStrongStop1.withAlphaComponent($0).cgColor
         }
-        blobsState.colors = [
+        let blobColors = [
             theme.colors.gradientAIStrongStop1.color,
             theme.colors.gradientAIStrongStop2.color,
             theme.colors.gradientAIStrongStop3.color
         ]
+        blobsState.colors = blobColors
+        resultBlobsState.colors = blobColors
         resultWash.configure(
             gradient: Gradient(colors: UX.resultWashStops.map {
                 theme.colors.layer1.withAlphaComponent($0.opacity)

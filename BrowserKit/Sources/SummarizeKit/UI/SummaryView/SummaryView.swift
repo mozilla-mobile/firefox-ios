@@ -28,7 +28,6 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
         $0.separatorStyle = .none
         $0.allowsSelection = false
         $0.showsVerticalScrollIndicator = false
-        $0.showsHorizontalScrollIndicator = false
         $0.alwaysBounceVertical = false
         $0.clipsToBounds = false
     }
@@ -57,13 +56,6 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
         tableView.register(cellType: SummaryAnswerCell.self)
         addSubview(tableView)
         tableView.pinToSuperview()
-    }
-
-    /// `.always` also adds the horizontal safe area, which would make the content scroll sideways in landscape.
-    override func safeAreaInsetsDidChange() {
-        super.safeAreaInsetsDidChange()
-        scrollView.contentInset.left = -safeAreaInsets.left
-        scrollView.contentInset.right = -safeAreaInsets.right
     }
 
     // MARK: - Configuration
