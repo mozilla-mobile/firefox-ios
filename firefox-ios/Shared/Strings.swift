@@ -6878,7 +6878,7 @@ extension String {
 
         public enum SiteProtection {
             public static let ReaderModeSubtitle = MZLocalizedString(
-                key: "MainMenu.SiteProtection.Protections.ReaderModeSubtitle.v160",
+                key: "MainMenu.SiteProtection.Protections.ReaderModeSubtitle.v162",
                 tableName: "MainMenu",
                 value: "Reader Mode",
                 comment: "On the main menu, this is the subtitle shown under the site title when the current page is displayed in Reader Mode.")
