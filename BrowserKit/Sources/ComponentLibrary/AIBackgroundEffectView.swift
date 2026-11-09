@@ -76,6 +76,8 @@ struct BlendedBlobsGradient: View {
         /// Height of the region the blobs are laid out in, relative to the canvas height.
         static let portraitRegionHeightRatio: CGFloat = 2.0 / 3.0
         static let landscapeRegionHeightRatio: CGFloat = 1.0 / 2.5
+        /// The centered landscape region spans the canvas height so the blobs cover the whole screen.
+        static let centeredLandscapeRegionHeightRatio: CGFloat = 1.0
         /// Radius of the circular path each blob drifts along, relative to the blob radius.
         static let motionRatio: CGFloat = 0.08
         static let pulsationAmplitude: CGFloat = 0.04
@@ -121,8 +123,8 @@ struct BlendedBlobsGradient: View {
         /// Vertical position of the portrait mask center, relative to the canvas height.
         static let portraitMaskCenterYRatio: CGFloat = 1.0 / 1.3
         /// Size of the centered landscape mask, relative to the canvas.
-        static let centeredMaskWidthRatio: CGFloat = 1.5
-        static let centeredMaskHeightRatio: CGFloat = 2.0
+        static let centeredMaskWidthRatio: CGFloat = 2.0
+        static let centeredMaskHeightRatio: CGFloat = 2.5
     }
 
     private struct Blob: Identifiable {
@@ -180,9 +182,14 @@ struct BlendedBlobsGradient: View {
     }
 
     private func regionHeight(in size: CGSize) -> CGFloat {
-        let ratio = isLandscape(size) && !isCenteredLandscape(size)
-            ? UX.landscapeRegionHeightRatio
-            : UX.portraitRegionHeightRatio
+        let ratio: CGFloat
+        if isCenteredLandscape(size) {
+            ratio = UX.centeredLandscapeRegionHeightRatio
+        } else if isLandscape(size) {
+            ratio = UX.landscapeRegionHeightRatio
+        } else {
+            ratio = UX.portraitRegionHeightRatio
+        }
         return size.height * ratio
     }
 
