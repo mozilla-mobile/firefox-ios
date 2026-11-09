@@ -268,6 +268,55 @@ final class MerinoStateTests: XCTestCase {
         )
 
         XCTAssertFalse(state.hasMerinoResponseContent)
+        XCTAssertTrue(state.shouldShowSection)
+    }
+
+    @MainActor
+    func test_handleMerinoStoriesAction_withEmptyThenPopulatedResponse_showsSection() {
+        let reducer = pocketReducer()
+        let emptyState = reducer(
+            createSubject(),
+            MerinoAction(
+                merinoStoryResponse: MerinoStoryResponse(stories: []),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
+            )
+        )
+        let populatedState = reducer(
+            emptyState,
+            MerinoAction(
+                merinoStoryResponse: MerinoStoryResponse(stories: [createStoryConfiguration(title: "story1")]),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
+            )
+        )
+
+        XCTAssertTrue(populatedState.hasMerinoResponseContent)
+        XCTAssertTrue(populatedState.shouldShowSection)
+        XCTAssertEqual(populatedState.visibleStories(selectedNewsfeedCategoryID: nil).map(\.title), ["story1"])
+    }
+
+    @MainActor
+    func test_handleMerinoStoriesAction_withToggleOff_keepsSectionHidden() {
+        let reducer = pocketReducer()
+        let toggledOffState = reducer(
+            createSubject(),
+            MerinoAction(
+                isEnabled: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MerinoActionType.toggleShowSectionSetting
+            )
+        )
+        let state = reducer(
+            toggledOffState,
+            MerinoAction(
+                merinoStoryResponse: MerinoStoryResponse(stories: [createStoryConfiguration(title: "story1")]),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
+            )
+        )
+
+        XCTAssertTrue(state.hasMerinoResponseContent)
         XCTAssertFalse(state.shouldShowSection)
     }
 

@@ -96,7 +96,6 @@ struct MerinoState: StateType, Equatable {
         return state
             .copy(merinoData: merinoResponse)
             .copy(hasMerinoResponseContent: merinoContentExists)
-            .copy(shouldShowSection: merinoContentExists && state.shouldShowSection)
     }
 
     private static func handleSettingsToggleAction(_ action: Action, state: MerinoState) -> MerinoState {
