@@ -46,7 +46,6 @@ final class TrackingProtectionModelTests: XCTestCase {
     ) -> TrackingProtectionModel {
         let subject = TrackingProtectionModel(userDefaults: nil,
                                               url: url,
-                                              connectionSecure: connectionSecure,
                                               globalETPIsEnabled: globalETPIsEnabled,
                                               contentBlockerStatus: contentBlockerStatus,
                                               contentBlockerStats: contentBlockerStats,
