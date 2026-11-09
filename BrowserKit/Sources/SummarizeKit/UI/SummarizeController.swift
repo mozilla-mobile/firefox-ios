@@ -271,7 +271,7 @@ public final class SummarizeController: UIViewController, Themeable {
 
         makeTopHalfBoundGuideBottomAnchor()
         backgroundEffectView.pinToSuperview()
-        setContentScrollView(summaryView.scrollView, for: .top)
+//        setContentScrollView(summaryView.scrollView, for: .top)
         NSLayoutConstraint.activate([
             topHalfBoundGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             topHalfBoundGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
