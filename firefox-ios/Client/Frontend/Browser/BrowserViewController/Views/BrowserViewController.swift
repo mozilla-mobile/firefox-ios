@@ -835,7 +835,7 @@ class BrowserViewController: UIViewController,
 
         // update keyboard's related view constraints if is visible 
         if keyboardState != nil {
-            updateConstraintsForKeyboard()
+            adjustBottomSearchBarForKeyboard()
         }
     }
 
@@ -1865,7 +1865,7 @@ class BrowserViewController: UIViewController,
         topTouchAreaHeightConstraint?.constant = isBottomSearchBar ? 0 : UX.showHeaderTapAreaHeight
 
         updateOverKeyboardContainerConstraints()
-        updateConstraintsForKeyboard()
+        adjustBottomSearchBarForKeyboard()
         updateBottomContentStackViewConstraints()
 
         super.updateViewConstraints()
@@ -1875,10 +1875,6 @@ class BrowserViewController: UIViewController,
         browserLayoutManager.updateOverKeyboardContainerConstraints(
             isBottomSearchBar: isBottomSearchBar,
             hasZoomPageBar: zoomPageBar?.superview === overKeyboardContainer)
-    }
-
-    func updateConstraintsForKeyboard() {
-        adjustBottomSearchBarForKeyboard()
     }
 
     /// Updates the bottom constraint of `bottomContentStackView` (login snackbar, FindInPageBar).
@@ -5115,7 +5111,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         updateKeyboardState(state)
 
-        updateConstraintsForKeyboard()
+        adjustBottomSearchBarForKeyboard()
         updateBottomContentStackViewConstraints()
 
         if isSwipingTabsEnabled {
@@ -5148,7 +5144,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             store.dispatch(action, forWindowUUID: windowUUID)
         }
         updateKeyboardState(nil)
-        updateConstraintsForKeyboard()
+        adjustBottomSearchBarForKeyboard()
         updateBottomContentStackViewConstraints()
 
         UIView.animate(
@@ -5185,7 +5181,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         // Keep the keyboard spacer and bottom constraints in sync as the keyboard frame changes
         // (e.g. accessory-view height changes, interactive scroll-to-dismiss). Without this the
         // spacer holds its previous height and leaves a gap below the address bar.
-        updateConstraintsForKeyboard()
+        adjustBottomSearchBarForKeyboard()
         updateBottomContentStackViewConstraints()
     }
 
