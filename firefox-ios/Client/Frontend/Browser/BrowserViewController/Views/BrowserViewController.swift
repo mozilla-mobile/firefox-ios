@@ -401,6 +401,8 @@ class BrowserViewController: UIViewController,
         && header.arrangedSubviews.isEmpty
     }
 
+    /// If find in page is on we do not add the spacer since we will pin the find in page bar
+    /// to the keyboard and we will cover the address bar.
     private var shouldPushAboveKeyboardContainer: Bool {
         return isBottomSearchBar && tabManager.selectedTab?.isFindInPageMode != true
     }
@@ -1879,6 +1881,8 @@ class BrowserViewController: UIViewController,
 
     /// Updates the bottom constraint of `bottomContentStackView` (login snackbar, FindInPageBar).
     /// Must be called whenever the keyboard or toolbar layout changes.
+    /// With a bottom search bar, if find in page is on then the keyboard spacer
+    /// is skipped so the bottom content pins above the keyboard instead.
     private func updateBottomContentStackViewConstraints() {
         browserLayoutManager.updateBottomContentStackViewConstraints(
             shouldPushAboveKeyboardContainer: shouldPushAboveKeyboardContainer,
