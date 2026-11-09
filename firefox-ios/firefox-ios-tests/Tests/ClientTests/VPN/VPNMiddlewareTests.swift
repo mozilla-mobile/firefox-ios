@@ -70,7 +70,6 @@ final class VPNMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.vpnProvider.modernMiddleware(AppState(), VPNModernAction.start, firstWindowUUID)
         await fulfillment(of: [started, preferenceSet], timeout: 0.2)
-//        withExtendedLifetime(subject) {}
 
         XCTAssertNil(mockUserPreferences.boolPreferences[.vpnFeature])
     }
