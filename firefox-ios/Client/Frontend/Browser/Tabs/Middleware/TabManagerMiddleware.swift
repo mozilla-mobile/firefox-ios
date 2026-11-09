@@ -960,7 +960,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
 
         let subtitle: String?
         if selectedTab.url?.isReaderModeURL == true {
-            subtitle = "Reader Mode (Do not forget to localize)"
+            subtitle = .MainMenu.SiteProtection.ReaderModeSubtitle
         } else {
             subtitle = selectedTab.url?.siteURL.baseDomain
         }

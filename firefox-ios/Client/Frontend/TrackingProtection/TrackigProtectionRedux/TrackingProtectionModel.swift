@@ -84,7 +84,7 @@ class TrackingProtectionModel {
     }
 
     var websiteTitle: String {
-        return url.isReaderModeURL ? "Reader Mode DO NOT FORGET LOCALIZE" : originalURL.baseDomain ?? ""
+        return url.isReaderModeURL ? .MainMenu.SiteProtection.ReaderModeSubtitle : originalURL.baseDomain ?? ""
     }
 
     var connectionSecure: Bool {
