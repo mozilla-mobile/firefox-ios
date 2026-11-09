@@ -6880,7 +6880,7 @@ extension String {
             public static let ReaderModeSubtitle = MZLocalizedString(
                 key: "MainMenu.SiteProtection.Protections.ReaderModeSubtitle.v162",
                 tableName: "MainMenu",
-                value: "Reader Mode",
+                value: "Reader View",
                 comment: "On the main menu, this is the subtitle shown under the site title when the current page is displayed in Reader Mode.")
             public static let Protections = MZLocalizedString(
                 key: "MainMenu.SiteProtection.Protections.Title.v153",
