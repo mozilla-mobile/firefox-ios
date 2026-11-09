@@ -385,13 +385,16 @@ public final class AIBackgroundEffectView: UIView, ThemeApplicable {
         blobsHostingController.view.transform = transform
     }
 
-    /// Freezes and hides the blobs right away, then fades them back in, in their result position, once
-    /// `blobsRevealDelay` has elapsed.
+    /// Freezes the blobs and fades them to their result alpha once `blobsRevealDelay` has elapsed. If they were
+    /// transformed, they are hidden right away and reset to their result position.
     public func showResult(blobsRevealDelay: TimeInterval = 0.0) {
         blobsState.isPaused = true
         let blobsView: UIView = blobsHostingController.view
-        blobsView.alpha = 0.0
-        blobsView.transform = .identity
+        // avoid showing the move down of the blobs by setting its alpha to 0.0
+        if blobsView.transform != .identity {
+            blobsView.alpha = 0.0
+            blobsView.transform = .identity
+        }
         UIView.animate(withDuration: UX.resultFadeDuration, delay: 0.0, options: .curveEaseInOut) { [self] in
             resultWash.alpha = 1.0
         }
