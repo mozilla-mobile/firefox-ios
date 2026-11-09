@@ -161,6 +161,13 @@ open class FxAccountManager: @unchecked Sendable {
     ) {
         fxaFsmQueue.async {
             let actualScopes = scopes.isEmpty ? self.applicationScopes : scopes
+            // The Rust state machine has no `AuthIssues -> BeginPairingFlow` transition, so an account
+            // whose sync is paused could never re-pair. Disconnect first so pairing starts from
+            // `.disconnected`, as on a fresh install.
+            if self.state == .authIssues {
+                FxALog.info("beginPairingAuthentication: disconnecting account in authIssues before pairing.")
+                self.processEvent(.disconnect)
+            }
             self.processEvent(.beginPairingFlow(pairingUrl: pairingUrl, service: "", scopes: actualScopes, entrypoint: entrypoint))
             let result: Result<URL, Error>
             if case let .authenticating(oauthUrl, _) = self.state, let url = URL(string: oauthUrl) {
