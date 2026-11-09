@@ -23,6 +23,7 @@ class ButtonToast: Toast {
         static let buttonBorderWidth: CGFloat = 1
         static let topBottomButtonPadding: CGFloat = 8
         static let animationDuration: TimeInterval = 0.3
+        static let imageSize: CGFloat = 24
     }
 
     // MARK: - UI
@@ -38,6 +39,16 @@ class ButtonToast: Toast {
         stackView.setContentCompressionResistancePriority(.required, for: .vertical)
         stackView.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
+
+    // Accessibility layout: checkmark sits on the same line as the filename (baseline aligned),
+    // with the button on the next row, indented to align with the filename's leading edge.
+    private var titleRowStackView: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.alignment = .firstBaseline
+        stackView.spacing = UX.stackViewSpacing
+    }
+
+    private var buttonContainerView: UIView = .build()
 
     private var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
@@ -61,6 +72,12 @@ class ButtonToast: Toast {
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.titleLabel?.minimumScaleFactor = 0.1
     }
+
+    private var hasImage = false
+    private var hasDescription = false
+    /// The tappable action view added by `setupPaddedButton` (the rounded button, or the
+    /// paste control in `PasteControlToast`).
+    var actionView: UIView?
 
     // Pass themeManager to call on init
     init(viewModel: ButtonToastViewModel,
@@ -96,22 +113,21 @@ class ButtonToast: Toast {
 
     private func createView(viewModel: ButtonToastViewModel) -> UIView {
         if let imageName = viewModel.imageName {
+            hasImage = true
             imageView = UIImageView(image: UIImage.templateImageNamed(imageName))
-            contentStackView.addArrangedSubview(imageView)
+            imageView.translatesAutoresizingMaskIntoConstraints = false
         }
 
         titleLabel.text = viewModel.labelText
-        labelStackView.addArrangedSubview(titleLabel)
         if let descriptionText = viewModel.descriptionText {
+            hasDescription = true
             titleLabel.lineBreakMode = .byClipping
             titleLabel.numberOfLines = 1 // if showing a description we can't wrap to the second line
             titleLabel.adjustsFontSizeToFitWidth = true
 
             descriptionLabel.text = descriptionText
-            labelStackView.addArrangedSubview(descriptionLabel)
         }
 
-        contentStackView.addArrangedSubview(labelStackView)
         setupPaddedButton(stackView: contentStackView, buttonText: viewModel.buttonText)
         toastView.addSubview(contentStackView)
 
@@ -121,13 +137,13 @@ class ButtonToast: Toast {
             contentStackView.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -UX.spacing),
             contentStackView.topAnchor.constraint(equalTo: toastView.topAnchor, constant: UX.spacing)
         ])
+        applyStandardLayout()
         return toastView
     }
 
     func setupPaddedButton(stackView: UIStackView, buttonText: String?) {
         guard let buttonText = buttonText else { return }
 
-        stackView.addArrangedSubview(roundedButton)
         roundedButton.setTitle(buttonText, for: [])
 
         NSLayoutConstraint.activate([
@@ -137,7 +153,114 @@ class ButtonToast: Toast {
                 equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.width + 2 * UX.buttonPadding)
         ])
 
-        roundedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonPressed)))
+        roundedButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        actionView = roundedButton
+    }
+
+    // MARK: - Layout
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass {
+            adjustLayoutForA11ySizeCategory()
+        }
+    }
+
+    // The toast's traits are unspecified at init time and traitCollectionDidChange is not
+    // reliably called when the toast is added to the hierarchy, so re-evaluate the layout
+    // once the toast is attached and has inherited its environment.
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if superview != nil {
+            adjustLayoutForA11ySizeCategory()
+        }
+    }
+
+    override func adjustLayoutForA11ySizeCategory() {
+        let contentSizeCategory = traitCollection.preferredContentSizeCategory == .unspecified
+            ? UIApplication.shared.preferredContentSizeCategory
+            : traitCollection.preferredContentSizeCategory
+        if Self.usesAccessibilityLayout(contentSizeCategory: contentSizeCategory,
+                                        horizontalSizeClass: traitCollection.horizontalSizeClass) {
+            applyAccessibilityLayout()
+        } else {
+            applyStandardLayout()
+        }
+
+        setNeedsLayout()
+    }
+
+    // Decide with the size class (not the device type): compact widths get the stacked
+    // accessibility layout, regular widths keep enough room for the single-line layout.
+    static func usesAccessibilityLayout(contentSizeCategory: UIContentSizeCategory,
+                                        horizontalSizeClass: UIUserInterfaceSizeClass) -> Bool {
+        contentSizeCategory.isAccessibilityCategory && horizontalSizeClass == .compact
+    }
+
+    private func applyStandardLayout() {
+        contentStackView.axis = .horizontal
+        contentStackView.alignment = .center
+        contentStackView.distribution = .fill
+
+        if hasImage {
+            move(imageView, to: contentStackView, at: 0)
+        }
+        move(titleLabel, to: labelStackView, at: 0)
+        if hasDescription {
+            move(descriptionLabel, to: labelStackView, at: 1)
+        }
+        move(labelStackView, to: contentStackView, at: hasImage ? 1 : 0)
+        if let actionView {
+            move(actionView, to: contentStackView, at: contentStackView.arrangedSubviews.count)
+        }
+    }
+
+    private func applyAccessibilityLayout() {
+        contentStackView.axis = .vertical
+        contentStackView.alignment = .leading
+        contentStackView.distribution = .fill
+
+        if hasImage {
+            move(imageView, to: titleRowStackView, at: 0)
+        }
+        move(titleLabel, to: titleRowStackView, at: hasImage ? 1 : 0)
+        move(titleRowStackView, to: contentStackView, at: 0)
+
+        if hasDescription {
+            move(descriptionLabel, to: contentStackView, at: 1)
+        }
+
+        if let actionView {
+            buttonContainerView.translatesAutoresizingMaskIntoConstraints = false
+            move(actionView, toContainer: buttonContainerView)
+            move(buttonContainerView, to: contentStackView, at: contentStackView.arrangedSubviews.count)
+
+            // Indent the button so it aligns with the filename's leading edge.
+            let leadingInset = hasImage ? UX.imageSize + UX.stackViewSpacing : 0
+            NSLayoutConstraint.activate([
+                actionView.leadingAnchor.constraint(equalTo: buttonContainerView.leadingAnchor,
+                                                    constant: leadingInset),
+                actionView.topAnchor.constraint(equalTo: buttonContainerView.topAnchor),
+                actionView.bottomAnchor.constraint(equalTo: buttonContainerView.bottomAnchor),
+                actionView.trailingAnchor.constraint(lessThanOrEqualTo: buttonContainerView.trailingAnchor)
+            ])
+        }
+    }
+
+    private func move(_ view: UIView, to stackView: UIStackView, at index: Int) {
+        if let currentStack = view.superview as? UIStackView {
+            currentStack.removeArrangedSubview(view)
+        }
+        view.removeFromSuperview()
+        stackView.insertArrangedSubview(view, at: index)
+    }
+
+    private func move(_ view: UIView, toContainer container: UIView) {
+        if let currentStack = view.superview as? UIStackView {
+            currentStack.removeArrangedSubview(view)
+        }
+        view.removeFromSuperview()
+        container.addSubview(view)
     }
 
     override func applyTheme(theme: Theme) {
@@ -149,21 +272,6 @@ class ButtonToast: Toast {
         roundedButton.setTitleColor(theme.isNova ? theme.colors.textToast : theme.colors.textInverted, for: [])
         let borderColor = theme.isNova ? theme.colors.borderAccentToast : theme.colors.borderInverted
         roundedButton.layer.borderColor = borderColor.cgColor
-    }
-
-    override func adjustLayoutForA11ySizeCategory() {
-        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        if contentSizeCategory.isAccessibilityCategory {
-            contentStackView.axis = .vertical
-            contentStackView.alignment = .leading
-            contentStackView.distribution = .fillProportionally
-        } else {
-            contentStackView.axis = .horizontal
-            contentStackView.alignment = .center
-            contentStackView.distribution = .fill
-        }
-
-        setNeedsLayout()
     }
 
     // MARK: - Button action
@@ -205,8 +313,8 @@ class PasteControlToast: ButtonToast {
     }
 
     override func setupPaddedButton(stackView: UIStackView, buttonText: String?) {
-        stackView.addArrangedSubview(pasteControl)
         pasteControl.setContentCompressionResistancePriority(.required, for: .horizontal)
+        actionView = pasteControl
     }
 
     override func applyTheme(theme: Theme) {

@@ -25,6 +25,7 @@
 
 /* Begin PBXBuildFile section */
 		4FCDEF5F026340238201E234 /* TabGroupsFeatureFlagTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8322BA101049DBB4826444 /* TabGroupsFeatureFlagTests.swift */; };
+		FEEDBEE50000000000000002 /* ButtonToastTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEDBEE50000000000000001 /* ButtonToastTests.swift */; };
 		032CE5F62EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032CE5F52EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift */; };
 		033A5FCC2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A5FCB2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift */; };
 		033A62002E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A61FF2E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift */; };
@@ -2885,6 +2886,7 @@
 
 /* Begin PBXFileReference section */
 		CD8322BA101049DBB4826444 /* TabGroupsFeatureFlagTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupsFeatureFlagTests.swift; sourceTree = "<group>"; };
+		FEEDBEE50000000000000001 /* ButtonToastTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ButtonToastTests.swift; path = Toasts/ButtonToastTests.swift; sourceTree = "<group>"; };
 		001348F79CA80B94DCD3E535 /* km */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = km; path = km.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		00218A431FC749D7BC8EC05D /* homepageStoryCategoriesOn.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = homepageStoryCategoriesOn.json; sourceTree = "<group>"; };
 		003141C6B19507C79B6C399C /* ga */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -18390,6 +18392,7 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				FEEDBEE50000000000000001 /* ButtonToastTests.swift */,
 				BD7A00000000000000000002 /* BrowserDataTransfer */,
 				EC405C123007DC820003DE07 /* WaybackTests */,
 				EECF6B623006864D006FD44E /* SwipeGestureFeatureFlagProviderTests.swift */,
@@ -21795,6 +21798,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEEDBEE50000000000000002 /* ButtonToastTests.swift in Sources */,
 				B0A92F022F31000100DB1EA2 /* TemporaryFiles.swift in Sources */,
 				2151EF572F2AB94A007B67A6 /* BrowserViewControllerConstraintTests.swift in Sources */,
 				8C50DD752F56E1D00020E5C4 /* PreferredTranslationLanguagesManagerTests.swift in Sources */,
