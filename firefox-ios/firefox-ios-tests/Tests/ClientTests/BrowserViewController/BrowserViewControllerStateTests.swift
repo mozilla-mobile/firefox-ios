@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Redux
 import XCTest
 import SummarizeKit
@@ -58,6 +59,37 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer.legacyReducer(initialState, action)
 
         XCTAssertEqual(newState.displayView, .googleLensCamera)
+    }
+
+    func testShowVPNFailureAlertAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let newState = reducer.modernReducer(initialState, VPNAlertModernAction.showFailureAlert, .XCTestDefaultUUID)
+
+        XCTAssertEqual(newState.displayView, .vpnFailureAlert)
+    }
+
+    func testShowVPNDataLimitAlertAction_setsDisplayViewWithDataLimit() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let newState = reducer.modernReducer(
+            initialState,
+            VPNAlertModernAction.showDataLimitAlert(dataLimitBytes: 5_000_000_000),
+            .XCTestDefaultUUID
+        )
+
+        XCTAssertEqual(newState.displayView, .vpnDataLimitAlert(dataLimitBytes: 5_000_000_000))
+    }
+
+    func testShowVPNFailureAlertAction_forAnotherWindow_doesNotSetDisplayView() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let newState = reducer.modernReducer(initialState, VPNAlertModernAction.showFailureAlert, WindowUUID())
+
+        XCTAssertNil(newState.displayView)
     }
 
     func testShowPasswordGeneratorAction() {

@@ -102,6 +102,7 @@ let middlewares = [
     TermsOfUseMiddleware().termsOfUseProvider,
     TranslationsMiddleware().translationsProvider,
     TranslationSettingsMiddleware().translationSettingsProvider,
+    VPNMiddleware().vpnProvider,
     WebCompatReporterMiddleware().webCompatReporterProvider
 ]
 
